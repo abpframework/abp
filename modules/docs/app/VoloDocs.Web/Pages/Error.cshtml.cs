@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
-using Volo.Abp.Domain.Entities;
 
 namespace VoloDocs.Web.Pages
 {
@@ -14,7 +12,7 @@ namespace VoloDocs.Web.Pages
     {
         public string ErrorMessage { get; set; }
 
-        public async Task<ActionResult> OnGetAsync(string statusCode)
+        public ActionResult OnGet(string statusCode)
         {
             try
             {
@@ -27,19 +25,6 @@ namespace VoloDocs.Web.Pages
                 if (statusFeature != null)
                 {
                     Logger.LogWarning("Handled {0} error for URL: {1}", statusCode, statusFeature.OriginalPath);
-                }
-
-                var exceptionHandlerPathFeature = HttpContext.Features.Get<IExceptionHandlerPathFeature>();
-                if (exceptionHandlerPathFeature != null)
-                {
-                    var exception = exceptionHandlerPathFeature.Error;
-                    var path = exceptionHandlerPathFeature.Path;
-
-                    if (exception is EntityNotFoundException)
-                    {
-                        ErrorMessage = exception.Message;
-                        return Page();
-                    }
                 }
 
                 var isValidStatusCode = Enum.IsDefined(typeof(HttpStatusCode), errorStatusCode);

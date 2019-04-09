@@ -14956,3 +14956,728 @@ Autofac.Core.DependencyResolutionException: An error occurred during the activat
 2019-04-09 13:59:12.799 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 204.696ms
 2019-04-09 13:59:12.799 +03:00 [INF] Request finished in 224.5892ms 200 text/plain; charset=utf-8
 2019-04-09 13:59:12.799 +03:00 [INF] Request finished in 224.38ms 200 text/plain; charset=utf-8
+2019-04-09 16:32:56.539 +03:00 [INF] Starting web host.
+2019-04-09 16:33:04.627 +03:00 [INF] User profile is available. Using 'C:\Users\alper\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-04-09 16:33:04.757 +03:00 [INF] Loaded modules:
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Docs.DocsDomainSharedModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Docs.DocsApplicationContractsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Docs.DocsHttpApiModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2019-04-09 16:33:04.757 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.DocsWebModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.Admin.DocsAdminApplicationContractsModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.Admin.DocsAdminHttpApiModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.Admin.DocsAdminWebModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.DocsDomainModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.DocsApplicationModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.Admin.DocsAdminApplicationModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Docs.EntityFrameworkCore.DocsEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Users.EntityFrameworkCore.AbpUsersEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-04-09 16:33:04.758 +03:00 [INF] - VoloDocs.EntityFrameworkCore.VoloDocsEntityFrameworkCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2019-04-09 16:33:04.758 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.Account.Web.AbpAccountWebModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.PermissionManagement.Web.AbpPermissionManagementWebModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule
+2019-04-09 16:33:04.759 +03:00 [INF] - Volo.Docs.VoloDocsWebModule
+2019-04-09 16:33:04.832 +03:00 [DBG] No class found with auto mapping attributes.
+2019-04-09 16:33:10.687 +03:00 [INF] Initialized all modules.
+2019-04-09 16:33:11.023 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/  
+2019-04-09 16:33:11.023 +03:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:55008/  0
+2019-04-09 16:33:11.089 +03:00 [INF] Request finished in 64.7725ms 200 
+2019-04-09 16:33:15.097 +03:00 [INF] Route matched with {page = "/Index", action = "", controller = "", area = ""}. Executing page /Index
+2019-04-09 16:33:15.370 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.IndexModel.OnGet with arguments (null) - ModelState is "Valid"
+2019-04-09 16:33:15.598 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RedirectToPageResult.
+2019-04-09 16:33:15.614 +03:00 [INF] Executing RedirectToPageResult, redirecting to ./Documents/Project/Index.
+2019-04-09 16:33:15.618 +03:00 [INF] Executed page /Index in 517.919ms
+2019-04-09 16:33:15.628 +03:00 [INF] Request finished in 4609.2234ms 302 
+2019-04-09 16:33:15.635 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest/Index  
+2019-04-09 16:33:16.158 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:33:16.240 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:33:18.059 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:33:18.082 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:33:18.733 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:33:19.026 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:33:19.026 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:33:19.500 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:33:19.544 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:33:19.549 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:33:19.549 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:33:20.314 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 16,12 ms.
+2019-04-09 16:33:20.335 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 3,12 ms.
+2019-04-09 16:33:20.907 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 13,38 ms.
+2019-04-09 16:33:20.928 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 5,33 ms.
+2019-04-09 16:33:20.947 +03:00 [INF] Executed page /Documents/Project/Index in 4789.1756000000005ms
+2019-04-09 16:33:20.952 +03:00 [INF] Request finished in 5317.5098ms 200 text/html; charset=utf-8
+2019-04-09 16:33:21.067 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Pages/Identity/Shared/change-password-modal.js?_v=636904039952747260  
+2019-04-09 16:33:21.078 +03:00 [INF] The file /Pages/Identity/Shared/change-password-modal.js was not modified
+2019-04-09 16:33:21.080 +03:00 [INF] Request finished in 13.4386ms 304 application/javascript
+2019-04-09 16:33:21.096 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Pages/Identity/Shared/personal-settings-modal.js?_v=636904039952747260  
+2019-04-09 16:33:21.096 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:33:21.097 +03:00 [INF] The file /Pages/Identity/Shared/personal-settings-modal.js was not modified
+2019-04-09 16:33:21.097 +03:00 [INF] Request finished in 1.6289ms 304 application/javascript
+2019-04-09 16:33:21.102 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:33:21.135 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:33:21.135 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:33:21.299 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:33:21.301 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:33:21.351 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.352 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.353 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:21.575 +03:00 [DBG] ActionApiDescriptionModel.Create: Account.LoginByLogin
+2019-04-09 16:33:21.594 +03:00 [DBG] ActionApiDescriptionModel.Create: Account.CheckPasswordByLogin
+2019-04-09 16:33:21.595 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpServiceProxyScript.GetAllByModel
+2019-04-09 16:33:21.596 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpLanguages.SwitchByCultureAndUiCultureAndReturnUrl
+2019-04-09 16:33:21.599 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApplicationConfigurationScript.Get
+2019-04-09 16:33:21.603 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApplicationConfiguration.GetAsync
+2019-04-09 16:33:21.604 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApiDefinition.Get
+2019-04-09 16:33:21.605 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAsyncById
+2019-04-09 16:33:21.686 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetListAsyncByInput
+2019-04-09 16:33:21.688 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.CreateAsyncByInput
+2019-04-09 16:33:21.688 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.UpdateAsyncByIdAndInput
+2019-04-09 16:33:21.689 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.DeleteAsyncById
+2019-04-09 16:33:21.689 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAllListAsync
+2019-04-09 16:33:21.689 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetAsyncById
+2019-04-09 16:33:21.690 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetListAsyncByInput
+2019-04-09 16:33:21.690 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.CreateAsyncByInput
+2019-04-09 16:33:21.691 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateAsyncByIdAndInput
+2019-04-09 16:33:21.691 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.DeleteAsyncById
+2019-04-09 16:33:21.692 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetRolesAsyncById
+2019-04-09 16:33:21.692 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateRolesAsyncByIdAndInput
+2019-04-09 16:33:21.692 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.FindByUsernameAsyncByUsername
+2019-04-09 16:33:21.692 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.FindByEmailAsyncByEmail
+2019-04-09 16:33:21.693 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.FindByIdAsyncById
+2019-04-09 16:33:21.693 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.FindByUserNameAsyncByUserName
+2019-04-09 16:33:21.693 +03:00 [DBG] ActionApiDescriptionModel.Create: Profile.GetAsync
+2019-04-09 16:33:21.693 +03:00 [DBG] ActionApiDescriptionModel.Create: Profile.UpdateAsyncByInput
+2019-04-09 16:33:21.694 +03:00 [DBG] ActionApiDescriptionModel.Create: Profile.ChangePasswordAsyncByCurrentPasswordAndNewPassword
+2019-04-09 16:33:21.694 +03:00 [DBG] ActionApiDescriptionModel.Create: Permissions.GetAsyncByProviderNameAndProviderKey
+2019-04-09 16:33:21.694 +03:00 [DBG] ActionApiDescriptionModel.Create: Permissions.UpdateAsyncByProviderNameAndProviderKeyAndInput
+2019-04-09 16:33:21.696 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.GetListAsyncByInput
+2019-04-09 16:33:21.777 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.GetAsyncById
+2019-04-09 16:33:21.778 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.CreateAsyncByInput
+2019-04-09 16:33:21.779 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.UpdateAsyncByIdAndInput
+2019-04-09 16:33:21.780 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.DeleteAsyncById
+2019-04-09 16:33:21.780 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsProject.GetListAsync
+2019-04-09 16:33:21.781 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsProject.GetAsyncByShortName
+2019-04-09 16:33:21.781 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsProject.GetVersionsAsyncByShortName
+2019-04-09 16:33:21.781 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetAsyncByInput
+2019-04-09 16:33:21.781 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetDefaultAsyncByInput
+2019-04-09 16:33:21.782 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetNavigationAsyncByInput
+2019-04-09 16:33:21.782 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetResourceAsyncByInput
+2019-04-09 16:33:21.782 +03:00 [DBG] ActionApiDescriptionModel.Create: DocumentResource.GetResourceByInput
+2019-04-09 16:33:21.819 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 515.8778ms.
+2019-04-09 16:33:21.819 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 514.9321ms.
+2019-04-09 16:33:21.828 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:33:21.829 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:33:21.830 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 694.8137ms
+2019-04-09 16:33:21.830 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 694.88600000000008ms
+2019-04-09 16:33:21.830 +03:00 [INF] Request finished in 733.5427ms 200 text/plain; charset=utf-8
+2019-04-09 16:33:21.830 +03:00 [INF] Request finished in 728.3869ms 200 text/plain; charset=utf-8
+2019-04-09 16:33:21.949 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/favicon.ico  
+2019-04-09 16:33:22.320 +03:00 [INF] Route matched with {page = "/Error", action = "", controller = "", area = ""}. Executing page /Error
+2019-04-09 16:33:22.324 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.ErrorModel.OnGet with arguments (["404"]) - ModelState is "Valid"
+2019-04-09 16:33:22.326 +03:00 [WRN] Handled 404 error for URL: /favicon.ico
+2019-04-09 16:33:22.327 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:33:22.718 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,26 ms.
+2019-04-09 16:33:23.427 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:23.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:23.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:33:24.420 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 4,23 ms.
+2019-04-09 16:33:24.422 +03:00 [INF] Executed page /Error in 2101.4831ms
+2019-04-09 16:33:24.422 +03:00 [INF] Request finished in 2472.9622ms 404 text/html; charset=utf-8
+2019-04-09 16:34:02.240 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest  
+2019-04-09 16:34:02.241 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:02.245 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:02.557 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:34:02.557 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:34:02.866 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:34:02.946 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:34:02.946 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:34:03.221 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:34:03.223 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:34:03.224 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:34:03.224 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:03.230 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,90 ms.
+2019-04-09 16:34:03.232 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 0,78 ms.
+2019-04-09 16:34:03.240 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 7,70 ms.
+2019-04-09 16:34:03.243 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,83 ms.
+2019-04-09 16:34:03.243 +03:00 [INF] Executed page /Documents/Project/Index in 1002.0196000000001ms
+2019-04-09 16:34:03.243 +03:00 [INF] Request finished in 1003.1489ms 200 text/html; charset=utf-8
+2019-04-09 16:34:03.322 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:34:03.324 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:34:03.326 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:03.329 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:03.432 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:34:03.432 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:34:03.433 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.2424ms.
+2019-04-09 16:34:03.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.433 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:03.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.433 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 104.74520000000001ms
+2019-04-09 16:34:03.434 +03:00 [INF] Request finished in 112.2609ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:03.433 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.434 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.434 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.434 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.434 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.434 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.435 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.435 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.435 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.435 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.435 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:03.570 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 137.3855ms.
+2019-04-09 16:34:03.570 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:03.570 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 244.07240000000002ms
+2019-04-09 16:34:03.570 +03:00 [INF] Request finished in 246.6899ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:06.077 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp  
+2019-04-09 16:34:06.095 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:06.099 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:06.429 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:34:06.429 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:34:06.732 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:34:06.795 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:34:06.795 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:34:07.240 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:34:07.241 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:34:07.241 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:34:07.241 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:07.247 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,04 ms.
+2019-04-09 16:34:07.248 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 0,57 ms.
+2019-04-09 16:34:07.257 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 8,32 ms.
+2019-04-09 16:34:07.260 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,78 ms.
+2019-04-09 16:34:07.260 +03:00 [INF] Executed page /Documents/Project/Index in 1164.8887ms
+2019-04-09 16:34:07.261 +03:00 [INF] Request finished in 1183.7392ms 200 text/html; charset=utf-8
+2019-04-09 16:34:07.268 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp  
+2019-04-09 16:34:07.269 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:07.273 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:07.457 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:34:07.457 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:34:07.458 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:07.461 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:07.529 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:34:07.529 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.067ms.
+2019-04-09 16:34:07.529 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:07.531 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 72.714700000000008ms
+2019-04-09 16:34:07.532 +03:00 [INF] Request finished in 74.6662ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:07.560 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:34:07.561 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.561 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.561 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.561 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.561 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.561 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.562 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.563 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:07.709 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 148.922ms.
+2019-04-09 16:34:07.710 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:07.710 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 248.94500000000002ms
+2019-04-09 16:34:07.710 +03:00 [INF] Request finished in 253.7079ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:07.769 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:34:07.769 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:34:08.044 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:34:08.122 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:34:08.123 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:34:08.448 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:34:08.449 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:34:08.449 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:34:08.449 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:08.455 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,05 ms.
+2019-04-09 16:34:08.456 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 0,42 ms.
+2019-04-09 16:34:08.460 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 3,80 ms.
+2019-04-09 16:34:08.462 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,25 ms.
+2019-04-09 16:34:08.462 +03:00 [INF] Executed page /Documents/Project/Index in 1193.6285ms
+2019-04-09 16:34:08.463 +03:00 [INF] Request finished in 1194.6206ms 200 text/html; charset=utf-8
+2019-04-09 16:34:11.219 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp2  
+2019-04-09 16:34:11.220 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:11.221 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:12.299 +03:00 [INF] Executed page /Documents/Project/Index in 1079.5698ms
+2019-04-09 16:34:12.351 +03:00 [ERR] Handled a global exception: Project with the name abp2 not found!
+2019-04-09 16:34:12.351 +03:00 [INF] Request finished in 1131.653ms 302 
+2019-04-09 16:34:12.358 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/  
+2019-04-09 16:34:12.358 +03:00 [INF] Route matched with {page = "/Index", action = "", controller = "", area = ""}. Executing page /Index
+2019-04-09 16:34:12.360 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.IndexModel.OnGet with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:12.415 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RedirectToPageResult.
+2019-04-09 16:34:12.416 +03:00 [INF] Executing RedirectToPageResult, redirecting to ./Documents/Project/Index.
+2019-04-09 16:34:12.416 +03:00 [INF] Executed page /Index in 58.0977ms
+2019-04-09 16:34:12.417 +03:00 [INF] Request finished in 58.8662ms 302 
+2019-04-09 16:34:12.423 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest/Index  
+2019-04-09 16:34:12.424 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:12.425 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:12.664 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:34:12.664 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:34:12.999 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:34:13.068 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:34:13.069 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:34:13.330 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:34:13.332 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:34:13.332 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:34:13.333 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:13.341 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,65 ms.
+2019-04-09 16:34:13.342 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 0,80 ms.
+2019-04-09 16:34:13.350 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 7,53 ms.
+2019-04-09 16:34:13.352 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,55 ms.
+2019-04-09 16:34:13.353 +03:00 [INF] Executed page /Documents/Project/Index in 929.0899ms
+2019-04-09 16:34:13.353 +03:00 [INF] Request finished in 929.8233ms 200 text/html; charset=utf-8
+2019-04-09 16:34:13.389 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:34:13.389 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:34:13.390 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:13.390 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:13.495 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:34:13.495 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:34:13.496 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.1612ms.
+2019-04-09 16:34:13.496 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.496 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.497 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.497 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.497 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:13.497 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.497 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.497 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.497 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 107.26050000000001ms
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Request finished in 108.5833ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.498 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:13.631 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 134.9043ms.
+2019-04-09 16:34:13.631 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:13.631 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 240.90650000000002ms
+2019-04-09 16:34:13.631 +03:00 [INF] Request finished in 242.0917ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:17.453 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp34  
+2019-04-09 16:34:17.455 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:17.457 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:18.574 +03:00 [INF] Executed page /Documents/Project/Index in 1118.9671ms
+2019-04-09 16:34:18.639 +03:00 [ERR] Handled a global exception: Project with the name abp34 not found!
+2019-04-09 16:34:18.639 +03:00 [INF] Request finished in 1185.5665ms 302 
+2019-04-09 16:34:18.651 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/  
+2019-04-09 16:34:18.651 +03:00 [INF] Route matched with {page = "/Index", action = "", controller = "", area = ""}. Executing page /Index
+2019-04-09 16:34:18.657 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.IndexModel.OnGet with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:18.720 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RedirectToPageResult.
+2019-04-09 16:34:18.720 +03:00 [INF] Executing RedirectToPageResult, redirecting to ./Documents/Project/Index.
+2019-04-09 16:34:18.720 +03:00 [INF] Executed page /Index in 68.5552ms
+2019-04-09 16:34:18.720 +03:00 [INF] Request finished in 69.7214ms 302 
+2019-04-09 16:34:18.726 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest/Index  
+2019-04-09 16:34:18.727 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:18.728 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:18.954 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:34:18.954 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:34:19.190 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:34:19.247 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:34:19.247 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:34:19.502 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:34:19.503 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:34:19.503 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:34:19.503 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:19.509 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,62 ms.
+2019-04-09 16:34:19.510 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 0,88 ms.
+2019-04-09 16:34:19.515 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 4,42 ms.
+2019-04-09 16:34:19.518 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,55 ms.
+2019-04-09 16:34:19.519 +03:00 [INF] Executed page /Documents/Project/Index in 792.0229ms
+2019-04-09 16:34:19.519 +03:00 [INF] Request finished in 792.6583ms 200 text/html; charset=utf-8
+2019-04-09 16:34:19.546 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:34:19.546 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:34:19.547 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:19.547 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:19.592 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:34:19.593 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.16840000000000002ms.
+2019-04-09 16:34:19.595 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:19.595 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 47.6366ms
+2019-04-09 16:34:19.595 +03:00 [INF] Request finished in 48.7881ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:19.637 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.637 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.638 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:19.730 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 93.3657ms.
+2019-04-09 16:34:19.730 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:19.730 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 183.1147ms
+2019-04-09 16:34:19.730 +03:00 [INF] Request finished in 184.047ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:23.463 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents  
+2019-04-09 16:34:23.857 +03:00 [INF] Route matched with {page = "/Documents/Index", action = "", controller = "", area = ""}. Executing page /Documents/Index
+2019-04-09 16:34:23.862 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.IndexModel.OnGet with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:23.928 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RedirectToPageResult.
+2019-04-09 16:34:23.930 +03:00 [INF] Executing RedirectToPageResult, redirecting to ./Project/Index.
+2019-04-09 16:34:23.930 +03:00 [INF] Executed page /Documents/Index in 72.559300000000007ms
+2019-04-09 16:34:23.930 +03:00 [INF] Request finished in 466.4762ms 302 
+2019-04-09 16:34:23.939 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest/Index  
+2019-04-09 16:34:23.940 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 16:34:23.945 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 16:34:24.224 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 16:34:24.224 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 16:34:24.484 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 16:34:24.541 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 16:34:24.541 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 16:34:24.774 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 16:34:24.777 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 16:34:24.777 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 16:34:24.777 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:24.783 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 1,57 ms.
+2019-04-09 16:34:24.785 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 0,53 ms.
+2019-04-09 16:34:24.793 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 7,36 ms.
+2019-04-09 16:34:24.795 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,09 ms.
+2019-04-09 16:34:24.795 +03:00 [INF] Executed page /Documents/Project/Index in 854.6651ms
+2019-04-09 16:34:24.795 +03:00 [INF] Request finished in 856.4195ms 200 text/html; charset=utf-8
+2019-04-09 16:34:24.825 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:34:24.828 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:24.828 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:34:24.829 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:24.882 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:34:24.917 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.062400000000000004ms.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 88.225400000000008ms
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Request finished in 89.2871ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.917 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.918 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.918 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:24.918 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:25.016 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 132.1354ms.
+2019-04-09 16:34:25.016 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:25.016 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 188.5877ms
+2019-04-09 16:34:25.017 +03:00 [INF] Request finished in 191.35ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:27.014 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents2  
+2019-04-09 16:34:27.015 +03:00 [INF] Route matched with {page = "/Error", action = "", controller = "", area = ""}. Executing page /Error
+2019-04-09 16:34:27.017 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.ErrorModel.OnGet with arguments (["404"]) - ModelState is "Valid"
+2019-04-09 16:34:27.017 +03:00 [WRN] Handled 404 error for URL: /documents2
+2019-04-09 16:34:27.017 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 16:34:27.021 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 2,31 ms.
+2019-04-09 16:34:27.023 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.024 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.024 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.035 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 7,89 ms.
+2019-04-09 16:34:27.035 +03:00 [INF] Executed page /Error in 19.777ms
+2019-04-09 16:34:27.036 +03:00 [INF] Request finished in 21.4864ms 404 text/html; charset=utf-8
+2019-04-09 16:34:27.071 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 16:34:27.071 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 16:34:27.072 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:27.072 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 16:34:27.172 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 16:34:27.172 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 16:34:27.173 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 0.1085ms.
+2019-04-09 16:34:27.173 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.173 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.173 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:27.173 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.173 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 101.1858ms
+2019-04-09 16:34:27.173 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.173 +03:00 [INF] Request finished in 101.9387ms 200 text/plain; charset=utf-8
+2019-04-09 16:34:27.173 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.173 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.174 +03:00 [INF] Authorization failed.
+2019-04-09 16:34:27.288 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 115.59570000000001ms.
+2019-04-09 16:34:27.288 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 16:34:27.289 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 216.80880000000002ms
+2019-04-09 16:34:27.289 +03:00 [INF] Request finished in 218.1401ms 200 text/plain; charset=utf-8
+2019-04-09 17:13:49.802 +03:00 [INF] Starting web host.
+2019-04-09 17:13:58.189 +03:00 [INF] User profile is available. Using 'C:\Users\alper\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2019-04-09 17:13:58.321 +03:00 [INF] Loaded modules:
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Docs.DocsDomainSharedModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Docs.DocsApplicationContractsModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-04-09 17:13:58.321 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.DocsHttpApiModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.DocsWebModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.Admin.DocsAdminApplicationContractsModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.Admin.DocsAdminHttpApiModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.Admin.DocsAdminWebModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.DocsDomainModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.DocsApplicationModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.Admin.DocsAdminApplicationModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.EntityFrameworkCore.DocsEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Users.EntityFrameworkCore.AbpUsersEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-04-09 17:13:58.322 +03:00 [INF] - VoloDocs.EntityFrameworkCore.VoloDocsEntityFrameworkCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Account.Web.AbpAccountWebModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationContractsModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationContractsModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityHttpApiModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.HttpApi.AbpPermissionManagementHttpApiModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.Web.AbpPermissionManagementWebModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.Web.AbpIdentityWebModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementApplicationModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityApplicationModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule
+2019-04-09 17:13:58.322 +03:00 [INF] - Volo.Docs.VoloDocsWebModule
+2019-04-09 17:13:58.374 +03:00 [DBG] No class found with auto mapping attributes.
+2019-04-09 17:14:04.027 +03:00 [INF] Initialized all modules.
+2019-04-09 17:14:04.428 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/  
+2019-04-09 17:14:04.428 +03:00 [INF] Request starting HTTP/1.1 DEBUG http://localhost:55008/  0
+2019-04-09 17:14:04.494 +03:00 [INF] Request finished in 65.2845ms 200 
+2019-04-09 17:14:07.384 +03:00 [INF] Route matched with {page = "/Index", action = "", controller = "", area = ""}. Executing page /Index
+2019-04-09 17:14:07.720 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.IndexModel.OnGet with arguments (null) - ModelState is "Valid"
+2019-04-09 17:14:07.917 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RedirectToPageResult.
+2019-04-09 17:14:07.933 +03:00 [INF] Executing RedirectToPageResult, redirecting to ./Documents/Project/Index.
+2019-04-09 17:14:07.937 +03:00 [INF] Executed page /Index in 550.2594ms
+2019-04-09 17:14:07.943 +03:00 [INF] Request finished in 3516.3441ms 302 
+2019-04-09 17:14:07.950 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/documents/abp/latest/Index  
+2019-04-09 17:14:08.347 +03:00 [INF] Route matched with {page = "/Documents/Project/Index", action = "", controller = "", area = ""}. Executing page /Documents/Project/Index
+2019-04-09 17:14:08.415 +03:00 [INF] Executing handler method Volo.Docs.Pages.Documents.Project.IndexModel.OnGetAsync with arguments (null) - ModelState is "Valid"
+2019-04-09 17:14:11.199 +03:00 [INF] Not found in the cache. Requesting Index.md from the store...
+2019-04-09 17:14:11.224 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/Index.md
+2019-04-09 17:14:12.644 +03:00 [INF] Document retrieved: Index.md
+2019-04-09 17:14:12.958 +03:00 [INF] Not found in the cache. Requesting docs-nav.json from the store...
+2019-04-09 17:14:12.958 +03:00 [INF] Downloading content from Github (DownloadWebContentAsStringAsync): https://raw.githubusercontent.com/abpframework/abp/0.15.0/docs/en/docs-nav.json
+2019-04-09 17:14:13.978 +03:00 [INF] Document retrieved: docs-nav.json
+2019-04-09 17:14:14.004 +03:00 [INF] Executed handler method OnGetAsync, returned result .
+2019-04-09 17:14:14.006 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-04-09 17:14:14.006 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 17:14:14.623 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 10,28 ms.
+2019-04-09 17:14:14.639 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 1,45 ms.
+2019-04-09 17:14:14.980 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 8,34 ms.
+2019-04-09 17:14:14.996 +03:00 [DBG] Added bundle 'Volo.Docs.Pages.Documents.Project.IndexModel' to the page in 2,36 ms.
+2019-04-09 17:14:15.008 +03:00 [INF] Executed page /Documents/Project/Index in 6660.8751ms
+2019-04-09 17:14:15.012 +03:00 [INF] Request finished in 7061.5367ms 200 text/html; charset=utf-8
+2019-04-09 17:14:15.127 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Pages/Identity/Shared/change-password-modal.js?_v=636904157402542376  
+2019-04-09 17:14:15.145 +03:00 [INF] Sending file. Request path: '/Pages/Identity/Shared/change-password-modal.js'. Physical path: '/Pages/Identity/Shared/change-password-modal.js'
+2019-04-09 17:14:15.145 +03:00 [INF] Request finished in 17.7864ms 200 application/javascript
+2019-04-09 17:14:15.150 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Pages/Identity/Shared/personal-settings-modal.js?_v=636904157402542376  
+2019-04-09 17:14:15.152 +03:00 [INF] Sending file. Request path: '/Pages/Identity/Shared/personal-settings-modal.js'. Physical path: '/Pages/Identity/Shared/personal-settings-modal.js'
+2019-04-09 17:14:15.152 +03:00 [INF] Request finished in 1.9218ms 200 application/javascript
+2019-04-09 17:14:15.156 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ApplicationConfigurationScript  
+2019-04-09 17:14:15.156 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/Abp/ServiceProxyScript  
+2019-04-09 17:14:15.198 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 17:14:15.198 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-04-09 17:14:15.369 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-04-09 17:14:15.371 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-04-09 17:14:15.398 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.399 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.400 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:15.605 +03:00 [DBG] ActionApiDescriptionModel.Create: Account.LoginByLogin
+2019-04-09 17:14:15.613 +03:00 [DBG] ActionApiDescriptionModel.Create: Account.CheckPasswordByLogin
+2019-04-09 17:14:15.613 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpServiceProxyScript.GetAllByModel
+2019-04-09 17:14:15.613 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpLanguages.SwitchByCultureAndUiCultureAndReturnUrl
+2019-04-09 17:14:15.614 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApplicationConfigurationScript.Get
+2019-04-09 17:14:15.614 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApplicationConfiguration.GetAsync
+2019-04-09 17:14:15.614 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApiDefinition.Get
+2019-04-09 17:14:15.614 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAsyncById
+2019-04-09 17:14:15.614 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetListAsyncByInput
+2019-04-09 17:14:15.614 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.CreateAsyncByInput
+2019-04-09 17:14:15.615 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.UpdateAsyncByIdAndInput
+2019-04-09 17:14:15.615 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.DeleteAsyncById
+2019-04-09 17:14:15.615 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityRole.GetAllListAsync
+2019-04-09 17:14:15.615 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetAsyncById
+2019-04-09 17:14:15.616 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetListAsyncByInput
+2019-04-09 17:14:15.616 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.CreateAsyncByInput
+2019-04-09 17:14:15.616 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateAsyncByIdAndInput
+2019-04-09 17:14:15.616 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.DeleteAsyncById
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.GetRolesAsyncById
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.UpdateRolesAsyncByIdAndInput
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.FindByUsernameAsyncByUsername
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUser.FindByEmailAsyncByEmail
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.FindByIdAsyncById
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: IdentityUserLookup.FindByUserNameAsyncByUserName
+2019-04-09 17:14:15.617 +03:00 [DBG] ActionApiDescriptionModel.Create: Profile.GetAsync
+2019-04-09 17:14:15.618 +03:00 [DBG] ActionApiDescriptionModel.Create: Profile.UpdateAsyncByInput
+2019-04-09 17:14:15.618 +03:00 [DBG] ActionApiDescriptionModel.Create: Profile.ChangePasswordAsyncByCurrentPasswordAndNewPassword
+2019-04-09 17:14:15.618 +03:00 [DBG] ActionApiDescriptionModel.Create: Permissions.GetAsyncByProviderNameAndProviderKey
+2019-04-09 17:14:15.619 +03:00 [DBG] ActionApiDescriptionModel.Create: Permissions.UpdateAsyncByProviderNameAndProviderKeyAndInput
+2019-04-09 17:14:15.619 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.GetListAsyncByInput
+2019-04-09 17:14:15.619 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.GetAsyncById
+2019-04-09 17:14:15.619 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.CreateAsyncByInput
+2019-04-09 17:14:15.619 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.UpdateAsyncByIdAndInput
+2019-04-09 17:14:15.620 +03:00 [DBG] ActionApiDescriptionModel.Create: ProjectsAdmin.DeleteAsyncById
+2019-04-09 17:14:15.620 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsProject.GetListAsync
+2019-04-09 17:14:15.620 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsProject.GetAsyncByShortName
+2019-04-09 17:14:15.620 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsProject.GetVersionsAsyncByShortName
+2019-04-09 17:14:15.620 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetAsyncByInput
+2019-04-09 17:14:15.620 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetDefaultAsyncByInput
+2019-04-09 17:14:15.621 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetNavigationAsyncByInput
+2019-04-09 17:14:15.621 +03:00 [DBG] ActionApiDescriptionModel.Create: DocsDocument.GetResourceAsyncByInput
+2019-04-09 17:14:15.621 +03:00 [DBG] ActionApiDescriptionModel.Create: DocumentResource.GetResourceByInput
+2019-04-09 17:14:15.758 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 383.5263ms.
+2019-04-09 17:14:15.764 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 17:14:15.765 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 395.9024ms.
+2019-04-09 17:14:15.765 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 567.2442ms
+2019-04-09 17:14:15.765 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-04-09 17:14:15.766 +03:00 [INF] Request finished in 609.2171ms 200 text/plain; charset=utf-8
+2019-04-09 17:14:15.766 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 567.9022ms
+2019-04-09 17:14:15.766 +03:00 [INF] Request finished in 610.2427ms 200 text/plain; charset=utf-8
+2019-04-09 17:14:15.873 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:55008/favicon.ico  
+2019-04-09 17:14:16.186 +03:00 [INF] Route matched with {page = "/Error", action = "", controller = "", area = ""}. Executing page /Error
+2019-04-09 17:14:16.188 +03:00 [INF] Executing handler method VoloDocs.Web.Pages.ErrorModel.OnGet with arguments (["404"]) - ModelState is "Valid"
+2019-04-09 17:14:16.189 +03:00 [WRN] Handled 404 error for URL: /favicon.ico
+2019-04-09 17:14:16.189 +03:00 [INF] Executed handler method OnGet, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-04-09 17:14:16.498 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 0,78 ms.
+2019-04-09 17:14:17.028 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:17.033 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:17.033 +03:00 [INF] Authorization failed.
+2019-04-09 17:14:17.639 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 3,37 ms.
+2019-04-09 17:14:17.640 +03:00 [INF] Executed page /Error in 1454.5294000000001ms
+2019-04-09 17:14:17.641 +03:00 [INF] Request finished in 1767.7667ms 404 text/html; charset=utf-8

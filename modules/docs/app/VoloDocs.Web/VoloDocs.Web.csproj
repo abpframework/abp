@@ -4,8 +4,9 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
   </PropertyGroup>
- 
+
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\en.json" />
@@ -37,5 +38,5 @@
   <ItemGroup>
     <Folder Include="Assets\Images\" />
   </ItemGroup>
-  
+
 </Project>
