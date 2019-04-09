@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Uow;
 
-namespace Volo.Docs.Utils
+namespace VoloDocs.Web.Utils
 {
     public class GlobalExceptionHandlerMiddleware
     {
@@ -26,8 +26,6 @@ namespace Volo.Docs.Utils
             catch (Exception ex)
             {
                  _logger.LogError("Handled a global exception: " + ex.Message, ex);
-
-                httpContext.Response.Redirect("/");
             }
         }
     }
