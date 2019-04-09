@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Volo.Abp.DynamicProxy
@@ -6,6 +7,7 @@ namespace Volo.Abp.DynamicProxy
 	{
 		public virtual int GetValue(int v)
 		{
+            Thread.Sleep(5);
 			return v;
 		}
 

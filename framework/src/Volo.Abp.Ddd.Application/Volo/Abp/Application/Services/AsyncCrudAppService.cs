@@ -34,10 +34,8 @@ namespace Volo.Abp.Application.Services
 
     public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput>
         : AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TCreateInput>
-        where TGetAllInput : IPagedAndSortedResultRequest
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
-        where TCreateInput : IEntityDto<TKey>
     {
         protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)

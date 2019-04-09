@@ -49,7 +49,7 @@ namespace Volo.Abp.Auditing
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
-                invocation.Proceed();
+                await invocation.ProceedAsync();
                 return;
             }
 
