@@ -4,9 +4,4 @@
     {
 
     }
-
-    public class DocsApplicationTestBase : DocsTestBase<DocsApplicationTestModule>
-    {
-
-    }
 }
