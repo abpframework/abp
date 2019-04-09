@@ -34,6 +34,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\**\*.*" />
     <Content Remove="Localization\Resources\Docs\Web\en.json" />
+    <Content Remove="Localization\Resources\Docs\Web\pt-BR.json" />
     <Content Remove="Localization\Resources\Docs\Web\tr.json" />
     <Content Remove="Pages\Docs\Admin\Projects\Create.cshtml" />
     <Content Remove="Pages\Docs\Admin\Projects\Edit.cshtml" />

@@ -26,6 +26,7 @@
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
+    <Content Remove="Localization\Resources\AbpSettingManagement\pt-BR.json" />
     <Content Remove="Properties\launchSettings.json" />
     <None Remove="Pages\Identity\Shared\personal-settings-modal.js" />
     <None Include="Properties\launchSettings.json" />
