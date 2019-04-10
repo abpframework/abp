@@ -3,9 +3,9 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class CurrentClaimsPrincipalTenantResolveContributor : TenantResolveContributorBase
+    public class CurrentUserTenantResolveContributor : TenantResolveContributorBase
     {
-        public const string ContributorName = "CurrentClaims";
+        public const string ContributorName = "CurrentUser";
 
         public override string Name => ContributorName;
 
