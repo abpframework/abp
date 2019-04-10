@@ -18,6 +18,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     UserId = table.Column<Guid>(nullable: true),
                     UserName = table.Column<string>(maxLength: 256, nullable: true),
                     TenantId = table.Column<Guid>(nullable: true),
+                    TenantName = table.Column<string>(nullable: true),
                     ImpersonatorUserId = table.Column<Guid>(nullable: true),
                     ImpersonatorTenantId = table.Column<Guid>(nullable: true),
                     ExecutionTime = table.Column<DateTime>(nullable: false),
@@ -102,6 +103,7 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     TenantId = table.Column<Guid>(nullable: true),
                     ChangeTime = table.Column<DateTime>(nullable: false),
                     ChangeType = table.Column<byte>(nullable: false),
+                    EntityTenantId = table.Column<Guid>(nullable: true),
                     EntityId = table.Column<string>(maxLength: 128, nullable: false),
                     EntityTypeFullName = table.Column<string>(maxLength: 128, nullable: false),
                     ExtraProperties = table.Column<string>(nullable: true)

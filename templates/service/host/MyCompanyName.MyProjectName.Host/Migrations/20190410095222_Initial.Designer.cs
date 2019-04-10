@@ -10,7 +10,7 @@ using MyCompanyName.MyProjectName.Host;
 namespace MyCompanyName.MyProjectName.Host.Migrations
 {
     [DbContext(typeof(DemoAppDbContext))]
-    [Migration("20190320142412_Initial")]
+    [Migration("20190410095222_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -83,6 +83,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
+
+                    b.Property<string>("TenantName");
 
                     b.Property<string>("Url")
                         .HasColumnName("Url")
@@ -162,6 +164,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         .IsRequired()
                         .HasColumnName("EntityId")
                         .HasMaxLength(128);
+
+                    b.Property<Guid?>("EntityTenantId");
 
                     b.Property<string>("EntityTypeFullName")
                         .IsRequired()
