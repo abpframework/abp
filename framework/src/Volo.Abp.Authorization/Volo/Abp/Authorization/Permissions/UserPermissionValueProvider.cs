@@ -20,7 +20,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
-            var userId = CurrentUser.Id.ToString();
+            var userId = CurrentUser.Id?.ToString();
 
             if (userId == null)
             {

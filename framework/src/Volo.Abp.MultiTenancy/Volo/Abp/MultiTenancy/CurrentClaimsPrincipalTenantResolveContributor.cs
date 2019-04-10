@@ -18,7 +18,7 @@ namespace Volo.Abp.MultiTenancy
             }
 
             context.Handled = true;
-            context.TenantIdOrName = currentUser.TenantId.ToString();
+            context.TenantIdOrName = currentUser.TenantId?.ToString();
         }
     }
 }
