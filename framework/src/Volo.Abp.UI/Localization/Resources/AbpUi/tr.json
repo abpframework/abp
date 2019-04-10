@@ -24,6 +24,7 @@
     "Actions": "İşlemler",
     "Delete": "Sil",
     "Edit": "Düzenle",
+    "Refresh": "Yenile",
     "ProcessingWithThreeDot": "İşleniyor...",
     "LoadingWithThreeDot": "Yükleniyor...",
     "Welcome": "Hoşgeldiniz",
@@ -40,10 +41,11 @@
     "PagerInfo": "_TOTAL_ kayıttan _START_ ile _END_ arası gösteriliyor.",
     "PagerInfoEmpty": "0 kayıttan 0 ile 0 arası gösteriliyor.",
     "PagerInfoFiltered": "(_MAX_ kayıt arasından filtrelendi)",
-    "NoDataAvailableInDatatable": "Tabloda kayır mevcut değil.",
+    "NoDataAvailableInDatatable": "Tabloda kayıt mevcut değil.",
     "PagerShowMenuEntries": "Sayfada _MENU_ kayıt göster.",
     "DatatableActionDropdownDefaultText": "İşlemler",
     "ChangePassword": "Şifre değiştir",
-    "PersonalInfo": "Profilim"
+    "PersonalInfo": "Profilim",
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var."
   }
 }

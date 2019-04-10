@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -17,6 +18,8 @@ namespace Volo.Abp.PermissionManagement
         protected IPermissionDefinitionManager PermissionDefinitionManager { get; }
 
         protected IGuidGenerator GuidGenerator { get; }
+
+        protected ICurrentTenant CurrentTenant { get; }
 
         protected IReadOnlyList<IPermissionManagementProvider> ManagementProviders => _lazyProviders.Value;
 
@@ -29,9 +32,11 @@ namespace Volo.Abp.PermissionManagement
             IPermissionGrantRepository permissionGrantRepository,
             IServiceProvider serviceProvider,
             IGuidGenerator guidGenerator,
-            IOptions<PermissionManagementOptions> options)
+            IOptions<PermissionManagementOptions> options,
+            ICurrentTenant currentTenant)
         {
             GuidGenerator = guidGenerator;
+            CurrentTenant = currentTenant;
             PermissionGrantRepository = permissionGrantRepository;
             PermissionDefinitionManager = permissionDefinitionManager;
             Options = options.Value;
@@ -64,7 +69,21 @@ namespace Volo.Abp.PermissionManagement
 
         public async Task SetAsync(string permissionName, string providerName, string providerKey, bool isGranted)
         {
-            var currentGrantInfo = await GetAsync(permissionName, providerName, providerKey);
+            var permission = PermissionDefinitionManager.Get(permissionName);
+
+            if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' has not compatible with the provider named '{providerName}'");
+            }
+
+            if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+            {
+                //TODO: BusinessException
+                throw new ApplicationException($"The permission named '{permission.Name}' has multitenancy side '{permission.MultiTenancySide}' which is not compatible with the current multitenancy side '{CurrentTenant.GetMultiTenancySide()}'");
+            }
+
+            var currentGrantInfo = await GetInternalAsync(permission, providerName, providerKey);
             if (currentGrantInfo.IsGranted == isGranted)
             {
                 return;
@@ -73,19 +92,30 @@ namespace Volo.Abp.PermissionManagement
             var provider = ManagementProviders.FirstOrDefault(m => m.Name == providerName);
             if (provider == null)
             {
+                //TODO: BusinessException
                 throw new AbpException("Unknown permission management provider: " + providerName);
             }
 
             await provider.SetAsync(permissionName, providerKey, isGranted);
         }
 
-        protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permissionDefinition, string providerName, string providerKey)
+        protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
         {
-            var result = new PermissionWithGrantedProviders(permissionDefinition.Name, false);
+            var result = new PermissionWithGrantedProviders(permission.Name, false);
+
+            if (!permission.MultiTenancySide.HasFlag(CurrentTenant.GetMultiTenancySide()))
+            {
+                return result;
+            }
+
+            if (permission.Providers.Any() && !permission.Providers.Contains(providerName))
+            {
+                return result;
+            }
 
             foreach (var provider in ManagementProviders)
             {
-                var providerResult = await provider.CheckAsync(permissionDefinition.Name, providerName, providerKey);
+                var providerResult = await provider.CheckAsync(permission.Name, providerName, providerKey);
                 if (providerResult.IsGranted)
                 {
                     result.IsGranted = true;

@@ -16,5 +16,12 @@ namespace Volo.Abp.MultiTenancy
 
             return currentTenant.Id.Value;
         }
+
+        public static MultiTenancySides GetMultiTenancySide(this ICurrentTenant currentTenant)
+        {
+            return currentTenant.Id.HasValue
+                ? MultiTenancySides.Tenant
+                : MultiTenancySides.Host;
+        }
     }
 }

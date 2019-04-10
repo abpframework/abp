@@ -92,6 +92,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
             auditLog = auditLogScope.Log;
             auditLogAction = _auditingHelper.CreateAuditLogAction(
+                auditLog,
                 context.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType(),
                 context.ActionDescriptor.AsControllerActionDescriptor().MethodInfo,
                 context.ActionArguments

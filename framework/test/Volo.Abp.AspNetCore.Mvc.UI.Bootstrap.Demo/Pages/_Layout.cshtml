@@ -20,7 +20,7 @@
     <abp-style-bundle name="@StandardBundles.Styles.Global" />
     <link href="~/css/demo.min.css" rel="stylesheet" />
 
-    @RenderSection("styles", false)
+    @await RenderSectionAsync("styles", false)
 </head>
 <body>
 
@@ -30,7 +30,7 @@
 
     <abp-script-bundle name="@StandardBundles.Scripts.Global" />
 
-    @RenderSection("scripts", false)
+    @await RenderSectionAsync("scripts", false)
 
 </body>
 </html>

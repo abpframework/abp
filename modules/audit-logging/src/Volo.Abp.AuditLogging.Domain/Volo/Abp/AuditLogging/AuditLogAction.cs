@@ -32,11 +32,11 @@ namespace Volo.Abp.AuditLogging
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public AuditLogAction(Guid id, Guid auditLogId, AuditLogActionInfo actionInfo)
+        public AuditLogAction(Guid id, Guid auditLogId, AuditLogActionInfo actionInfo, Guid? tenantId = null)
         {
 
             Id = id;
-            TenantId = actionInfo.TenantId;
+            TenantId = tenantId;
             AuditLogId = auditLogId;
             ExecutionTime = actionInfo.ExecutionTime;
             ExecutionDuration = actionInfo.ExecutionDuration;

@@ -17,6 +17,7 @@ $solutions = (
     "modules/background-jobs",
     "modules/blogging",
     "modules/docs",
+    "modules/client-simulation",
     "abp_io"
 )
 
@@ -74,7 +75,7 @@ $projects = (
     "framework/src/Volo.Abp.Localization.Abstractions",
     "framework/src/Volo.Abp.MemoryDb",
     "framework/src/Volo.Abp.MongoDB",
-    "framework/src/Volo.Abp.MultiTenancy.Abstractions",
+    "framework/src/Volo.Abp.MultiTenancy",
     "framework/src/Volo.Abp.ObjectMapping",
     "framework/src/Volo.Abp.RabbitMQ",
     "framework/src/Volo.Abp.Security",
@@ -193,6 +194,10 @@ $projects = (
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.EntityFrameworkCore",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB",
+    
+    # modules/client-simulation
+    "modules/client-simulation/src/Volo.ClientSimulation",
+    "modules/client-simulation/src/Volo.ClientSimulation.Web",
     
     # abp_io/SolutionTemplating
     "abp_io/src/Volo.Utils.SolutionTemplating"

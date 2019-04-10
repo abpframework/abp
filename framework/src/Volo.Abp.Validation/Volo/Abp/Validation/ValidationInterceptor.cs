@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Aspects;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
@@ -24,6 +25,19 @@ namespace Volo.Abp.Validation
             Validate(invocation);
 
             invocation.Proceed();
+        }
+
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        {
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Validation))
+            {
+                await invocation.ProceedAsync();
+                return;
+            }
+
+            Validate(invocation);
+
+            await invocation.ProceedAsync();
         }
 
         protected virtual void Validate(IAbpMethodInvocation invocation)

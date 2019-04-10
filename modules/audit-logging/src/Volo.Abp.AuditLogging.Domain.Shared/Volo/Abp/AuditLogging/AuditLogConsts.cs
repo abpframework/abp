@@ -23,5 +23,7 @@
         public const int MaxHttpMethodLength = 16;
 
         public const int MaxUserNameLength = 256;
+
+        public const int MaxTenantNameLength = 64;
     }
 }

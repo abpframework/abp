@@ -20,6 +20,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
@@ -33,6 +34,8 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.PermissionManagement;
 //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.Web;
+
 //</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
@@ -43,7 +46,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpTenantManagementWebModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -174,6 +178,12 @@ namespace MyCompanyName.MyProjectName
 
             app.UseVirtualFiles();
             app.UseAuthentication();
+
+            if (MyProjectNameConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();
@@ -195,22 +205,9 @@ namespace MyCompanyName.MyProjectName
             {
                 AsyncHelper.RunSync(async () =>
                 {
-                    var identitySeedResult = await scope.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            "1q2w3E*"
-                        );
-
-                    if (identitySeedResult.CreatedAdminRole)
-                    {
-                        await scope.ServiceProvider
-                            .GetRequiredService<IPermissionDataSeeder>()
-                            .SeedAsync(
-                                RolePermissionValueProvider.ProviderName,
-                                "admin",
-                                IdentityPermissions.GetAll().Union(MyProjectNamePermissions.GetAll())
-                            );
-                    }
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 });
             }
         }

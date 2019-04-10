@@ -24,6 +24,7 @@
     "Actions": "Actions",
     "Delete": "Delete",
     "Edit": "Edit",
+    "Refresh": "Refresh",
     "ProcessingWithThreeDot": "Processing...",
     "LoadingWithThreeDot": "Loading...",
     "Welcome": "Welcome",
@@ -44,6 +45,7 @@
     "PagerShowMenuEntries": "Show _MENU_ entries",
     "DatatableActionDropdownDefaultText": "Actions",
     "ChangePassword": "Change password",
-    "PersonalInfo": "My profile"
+    "PersonalInfo": "My profile",
+    "AreYouSureYouWantToCancelEditingWarningMessage": "You have unsaved changes."
   }
 }
