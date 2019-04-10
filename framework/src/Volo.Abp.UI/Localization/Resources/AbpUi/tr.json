@@ -46,6 +46,6 @@
     "DatatableActionDropdownDefaultText": "İşlemler",
     "ChangePassword": "Şifre değiştir",
     "PersonalInfo": "Profilim",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Yaptığınız değişiklikler kaybolacak."
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var."
   }
 }

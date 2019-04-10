@@ -46,6 +46,6 @@
     "DatatableActionDropdownDefaultText": "Actions",
     "ChangePassword": "Change password",
     "PersonalInfo": "My profile",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Your changes will be lost."
+    "AreYouSureYouWantToCancelEditingWarningMessage": "You have unsaved changes."
   }
 }

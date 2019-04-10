@@ -131,14 +131,12 @@
         });
     };
 
-    $.fn.needConfirmationOnUnsavedClose = function () {
+    $.fn.needConfirmationOnUnsavedClose = function ($modal) {
         var $form = $(this);
         var formSaved = false;
         var unEditedForm = JSON.stringify($form.serializeFormToObject());
 
-        var modal = $(this).find('.modal');
-
-        $(modal).on("hide.bs.modal", function (e) {
+        $modal.on("hide.bs.modal", function (e) {
             var currentForm = JSON.stringify($form.serializeFormToObject());
             var thereAreUnsavedChanges = currentForm !== unEditedForm;
 
@@ -148,13 +146,13 @@
                     function (result) {
                         if (result) {
                             formSaved = true;
-                            $(modal).modal('toggle');
+                            $modal.modal('hide');
                         }
                     });
             }
         });
 
-        $(this).bind('ajax:complete',function () {
+        $(this).on('abp-ajax-success',function () {
             formSaved = true;
         });
     };
