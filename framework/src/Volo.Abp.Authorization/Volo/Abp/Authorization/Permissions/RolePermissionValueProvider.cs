@@ -1,27 +1,24 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Security.Claims;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Authorization.Permissions
 {
     public class RolePermissionValueProvider : PermissionValueProvider
     {
-        protected ICurrentUser CurrentUser { get; }
-
         public const string ProviderName = "Role";
 
         public override string Name => ProviderName;
 
-        public RolePermissionValueProvider(ICurrentUser currentUser, IPermissionStore permissionStore)
+        public RolePermissionValueProvider(IPermissionStore permissionStore)
             : base(permissionStore)
         {
-            CurrentUser = currentUser;
+
         }
 
         public override async Task<PermissionGrantResult> CheckAsync(PermissionValueCheckContext context)
         {
-            var roles = CurrentUser.Roles;
+            var roles = context.Principal?.FindAll(AbpClaimTypes.Role).Select(c => c.Value).ToArray();
 
             if (roles == null || !roles.Any())
             {
