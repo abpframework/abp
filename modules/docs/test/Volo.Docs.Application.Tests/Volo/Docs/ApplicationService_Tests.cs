@@ -36,7 +36,10 @@ namespace Volo.Docs
         [Fact]
         public async Task GetVersionsAsync()
         {
-            // TODO: Need to mock WebClient and Octokit components
+            var versions = await _projectAppService.GetVersionsAsync("ABP");
+            versions.ShouldNotBeNull();
+            versions.Items.Count.ShouldBe(1);
+            versions.Items.ShouldContain(x => x.Name == "0.15.0" && x.DisplayName == "0.15.0");
         }
     }
 }
