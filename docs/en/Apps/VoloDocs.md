@@ -27,7 +27,7 @@ http://apps.abp.io/VoloDocs/VoloDocs.zip
 
 ## Folder Structure
 
-When you extract the VoloDocs.Release zip file, you see a `Web` folder and a `Migrator` folder. `Web` folder contains the website files and `Migrator` contains the application to build your database. Before publishing your website, you need to create a new database or update your existing database to the latest. If this is the first time you install VoloDocs, `Migrator` will create a new database for you, otherwise it updates to the latest version. The only setting you need to configure, is the `ConnectionString` which is located in the `appsettings.json` file. See the next section for how to configure your VoloDocs application.
+When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Migrator` folder. `Web` folder contains the website files and `Migrator` contains the application to build your database. Before publishing your website, you need to create a new database or update your existing database to the latest. If this is the first time you install VoloDocs, `Migrator` will create a new database for you, otherwise it updates to the latest version. The only setting you need to configure, is the `ConnectionString` which is located in the `appsettings.json` file. See the next section to learn how to configure your VoloDocs application.
 
 ## Steps by Step Deployment
 
@@ -52,12 +52,12 @@ When you extract the VoloDocs.Release zip file, you see a `Web` folder and a `Mi
    - #### Publishing to IIS 
 
       - Move `Web`  folder to your `wwwroot ` folder.
-      - Rename `Web` folder to `VoloDocs`  (Now you have `C:\inetpub\wwwroot\VoloDocs`).![Add IIS Website](images/volodocs-iis-add-website.png)
+      - Rename `Web` folder to `VoloDocs`  (Now you have `C:\inetpub\wwwroot\VoloDocs`).![Add IIS Website](../images/volodocs-iis-add-website.png)
       - The `VoloDocs` application pool is being created automatically. Open **Application Pools**  and double click `VoloDocs` application pool and set 
         - **.NET CLR version**: `No Managed Code`
         - **Managed pipeline mode**: `Integrated`
 
-      ![Add IIS Website](images/volodocs-iis-application-pool.png)
+      ![Add IIS Website](../images/volodocs-iis-application-pool.png)
 
       
 
@@ -123,7 +123,7 @@ When you extract the VoloDocs.Release zip file, you see a `Web` folder and a `Mi
 
    * **Navigation document name**: `docs-nav.json`
 
-   * **Minimum version**: <empty>
+   * **Minimum version**: <empty> *(hides the previous versions)*
 
    * **Main web site URL**: `/`
 
@@ -131,11 +131,33 @@ When you extract the VoloDocs.Release zip file, you see a `Web` folder and a `Mi
 
    * **GitHub root URL**: `https://github.com/abpframework/abp/tree/{version}/docs/en/`
 
-   * **GitHub access token**: <retrieve from GitHub>
+   * **GitHub access token**: [see how to retrieve GitHub access token](#retrieving-github-access-token)
 
-   * **GitHub user agent**: <your username>
+   * **GitHub user agent**: [see how to learn your GitHub username](#learn-your-github-username)
 
      
+
+     ##### Retrieving GitHub Access Token
+
+     To create a personal access token in GitHub, you need to visit the **Settings** of the user account and under **Developer settings** you will find **Personal access tokens**. Select **Generate new token**, enter in a name as the Token description and enable the repo checkbox. Alternatively, to enter generate new token, browse to https://github.com/settings/tokens/new.
+
+     ###### Generate Token for Public Repositories
+
+     To access public repositories, check `public_repo` under the `repo` section. This will enable VoloDocs to access your public GitHub repositories. If you want to access your private GitHub repository 
+
+     ![Retrieve GitHub Access Token for Public Repo](../images/github-access-token-public-repo.jpg)
+
+     ###### Generate Token for Private Repositories
+
+     To access public repositories, check `public_repo` under the `repo` section. This will enable VoloDocs to access your public GitHub repositories. If you want to access your private GitHub repository 
+
+     ![Retrieve GitHub Access Token for Private Repo](../images/github-access-token-private-repo.jpg)
+
+     ###### Learn Your GitHub Username
+
+     To learn your GitHub username, click on your profile picture on the top-right corner of the GitHub page.
+
+     ![Your GitHub Username](../images/github-myusername.jpg)
 
    After you save the project, go to root website address and you will see your documentation.
 
