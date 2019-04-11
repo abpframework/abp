@@ -1,12 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -29,14 +25,14 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Docs;
 using Volo.Docs.Admin;
 using Volo.Docs.Localization;
-using Volo.Docs.Utils;
 using VoloDocs.EntityFrameworkCore;
 using VoloDocs.Web.Utils;
 
-namespace Volo.Docs
-{  
+namespace VoloDocs.Web
+{
     [DependsOn(
         typeof(DocsWebModule),
         typeof(DocsAdminWebModule),
@@ -103,13 +99,6 @@ namespace Volo.Docs
                     options.CustomSchemaIds(type => type.FullName);
                 });
 
-            var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
-            Configure<RequestLocalizationOptions>(options =>
-            {
-                options.DefaultRequestCulture = new RequestCulture("en");
-                options.SupportedCultures = cultures;
-                options.SupportedUICultures = cultures;
-            });
 
             Configure<VirtualFileSystemOptions>(options =>
             {
@@ -118,6 +107,10 @@ namespace Volo.Docs
 
             Configure<AbpLocalizationOptions>(options =>
             {
+                options
+                    .Languages
+                    .Add(new LanguageInfo("en", "en", "English"));
+
                 options.Resources
                     .Get<DocsResource>()
                     .AddBaseTypes(typeof(AbpValidationResource))
@@ -151,7 +144,7 @@ namespace Volo.Docs
 
             app.UseAuthentication();
 
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseAbpRequestLocalization();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
             app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
