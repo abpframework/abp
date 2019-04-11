@@ -123,7 +123,7 @@ When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Mig
 
    * **Navigation document name**: `docs-nav.json`
 
-   * **Minimum version**: <empty> *(hides the previous versions)*
+   * **Minimum version**: *leave empty* *(hides the previous versions)*
 
    * **Main web site URL**: `/`
 
@@ -143,13 +143,13 @@ When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Mig
 
      ###### Generate Token for Public Repositories
 
-     To access public repositories, check `public_repo` under the `repo` section. This will enable VoloDocs to access your public GitHub repositories. If you want to access your private GitHub repository 
+     To access public repositories, check `public_repo` under the `repo` section. This will enable VoloDocs to access your public GitHub repositories. Click `Generate Token` button on the bottom of the page.
 
      ![Retrieve GitHub Access Token for Public Repo](../images/github-access-token-public-repo.jpg)
 
      ###### Generate Token for Private Repositories
 
-     To access public repositories, check `public_repo` under the `repo` section. This will enable VoloDocs to access your public GitHub repositories. If you want to access your private GitHub repository 
+     To access public repositories, check all items under the `repo` section. This will enable VoloDocs to access your private GitHub repositories. Click `Generate Token` button on the bottom of the page.
 
      ![Retrieve GitHub Access Token for Private Repo](../images/github-access-token-private-repo.jpg)
 
@@ -159,9 +159,11 @@ When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Mig
 
      ![Your GitHub Username](../images/github-myusername.jpg)
 
+   
+
    After you save the project, go to root website address and you will see your documentation.
 
-   * `http://<yourwebsite>/documents`
+   `http://<yourwebsite>/documents`
 
 
 
