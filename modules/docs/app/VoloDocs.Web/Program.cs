@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace Volo.Docs
+namespace VoloDocs.Web
 {
     public class Program
     {

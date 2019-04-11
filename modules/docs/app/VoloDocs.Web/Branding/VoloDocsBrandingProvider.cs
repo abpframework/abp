@@ -2,7 +2,7 @@
 using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Docs.Branding
+namespace VoloDocs.Web.Branding
 {
     [Dependency(ReplaceServices = true)]
     public class VoloDocsBrandingProvider : DefaultBrandingProvider
