@@ -125,7 +125,7 @@ When you extract the VoloDocs.Release zip file, you see a `Web` folder and a `Mi
 
    * **Minimum version**: <empty>
 
-   * **Main web site URL**: /
+   * **Main web site URL**: `/`
 
    * **Latest version branch name**: <empty>
 
