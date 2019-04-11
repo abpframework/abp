@@ -121,13 +121,13 @@ When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Mig
 
    * **Default document name**: `Index`
 
-   * **Navigation document name**: `docs-nav.json`
+   * **Navigation document name**: `docs-nav.json` ([see the sample navigation](https://github.com/abpframework/abp/blob/master/docs/en/docs-nav.json))
 
    * **Minimum version**: *leave empty* *(hides the previous versions)*
 
    * **Main web site URL**: `/`
 
-   * **Latest version branch name**: <empty>
+   * **Latest version branch name**: leave empty ()
 
    * **GitHub root URL**: `https://github.com/abpframework/abp/tree/{version}/docs/en/`
 
@@ -135,7 +135,7 @@ When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Mig
 
    * **GitHub user agent**: [see how to learn your GitHub username](#learn-your-github-username)
 
-     
+     ![Creating a new project](../images/docs-create-project.jpg)
 
      ##### Retrieving GitHub Access Token
 
