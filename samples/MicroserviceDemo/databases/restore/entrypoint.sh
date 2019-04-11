@@ -25,7 +25,7 @@ done
 /opt/mssql-tools/bin/sqlcmd \
    -S sqlserver -U SA -P $SA_PASSWORD \
    -d MsDemo_Identity \
-   -Q 'UPDATE IdentityServerClientRedirectUris SET RedirectUri = "http://localhost:51512/signin-oidc" WHERE ClientId = "3C8A6051-2030-1977-707F-39ED0F2F4527"
-       UPDATE IdentityServerClientRedirectUris SET RedirectUri = "http://localhost:51513/signin-oidc" WHERE ClientId = "D1190176-2529-D6AB-ED4C-39ED0F2F4557"
-       UPDATE IdentityServerClientPostLogoutRedirectUris SET PostLogoutRedirectUri = "http://localhost:51512/signout-callback-oidc" WHERE ClientId = "3C8A6051-2030-1977-707F-39ED0F2F4527"
-       UPDATE IdentityServerClientPostLogoutRedirectUris SET PostLogoutRedirectUri = "http://localhost:51513/signout-callback-oidc" WHERE ClientId = "D1190176-2529-D6AB-ED4C-39ED0F2F4557"'
+   -Q 'UPDATE IdentityServerClientRedirectUris SET RedirectUri = "http://localhost:51512/signin-oidc" WHERE RedirectUri = "http://localhost:51954/signin-oidc"
+       UPDATE IdentityServerClientRedirectUris SET RedirectUri = "http://localhost:51513/signin-oidc" WHERE RedirectUri = "http://localhost:53435/signin-oidc"
+       UPDATE IdentityServerClientPostLogoutRedirectUris SET PostLogoutRedirectUri = "http://localhost:51512/signout-callback-oidc" WHERE PostLogoutRedirectUri = "http://localhost:51954/signout-callback-oidc"
+       UPDATE IdentityServerClientPostLogoutRedirectUris SET PostLogoutRedirectUri = "http://localhost:51513/signout-callback-oidc" WHERE PostLogoutRedirectUri = "http://localhost:53435/signout-callback-oidc"'
