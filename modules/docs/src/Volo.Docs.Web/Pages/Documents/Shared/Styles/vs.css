@@ -72,7 +72,7 @@
               font-weight: 700;
               padding: 7px 0;
               display: block;
-              border-bottom: 1px solid #eeeff3; }
+              border-bottom: 0; }
               .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
                 color: #000; }
               .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a.last-link {
@@ -82,7 +82,7 @@
               color: #999;
               padding: 7px 0;
               display: block;
-              border-bottom: 1px solid #eeeff3; }
+              border-bottom: 0; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-tree-list ul li .plus-icon {
               font-size: .85em;
               transition: .3s;
@@ -321,7 +321,7 @@
       color: #aaa; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a {
       color: #aaa;
-      border-bottom: 1px solid #333; }
+      border-bottom: 0; }
       .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a:hover {
         color: #fff; }
       .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li a .plus-icon {
@@ -349,7 +349,7 @@
       color: #555;
       padding: 7px 0;
       display: block;
-      border-bottom: 1px solid #333; }
+      border-bottom: 0; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-tree-list ul li.selected-tree > a {
       color: #fff;
       transition: .4s; }
