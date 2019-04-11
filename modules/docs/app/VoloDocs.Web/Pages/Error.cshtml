@@ -1,11 +1,14 @@
 ﻿@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Docs.Localization
 @model VoloDocs.Web.Pages.ErrorModel
+@inject IHtmlLocalizer<DocsResource> L
 @{
     <div class="text-center">
         <pre>
             @Model.ErrorMessage
         </pre>
 
-        <a href="/" class="btn btn-outline-primary">Home Page</a>
+        <a href="/" class="btn btn-outline-primary">@L["BackToWebsite"]</a>
     </div>
 }
