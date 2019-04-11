@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.AspNetCore.Uow;
+using Volo.Abp.Domain.Entities;
+using Volo.Docs;
 
 namespace VoloDocs.Web.Utils
 {
@@ -11,7 +13,7 @@ namespace VoloDocs.Web.Utils
         private readonly RequestDelegate _next;
         private readonly ILogger<AbpUnitOfWorkMiddleware> _logger;
 
-        public GlobalExceptionHandlerMiddleware(RequestDelegate next,  ILogger<AbpUnitOfWorkMiddleware> logger)
+        public GlobalExceptionHandlerMiddleware(RequestDelegate next, ILogger<AbpUnitOfWorkMiddleware> logger)
         {
             _logger = logger;
             _next = next;
@@ -25,7 +27,18 @@ namespace VoloDocs.Web.Utils
             }
             catch (Exception ex)
             {
-                 _logger.LogError("Handled a global exception: " + ex.Message, ex);
+                _logger.LogError("Handled a global exception: " + ex.Message, ex);
+
+                if (ex.Message.StartsWith("404 error") ||
+                    ex is EntityNotFoundException ||
+                    ex is DocumentNotFoundException)
+                {
+                    httpContext.Response.Redirect("/error/404");
+                }
+                else
+                {
+                    httpContext.Response.Redirect("/error/500");
+                }
             }
         }
     }
