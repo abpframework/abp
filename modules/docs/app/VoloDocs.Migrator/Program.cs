@@ -43,20 +43,18 @@ namespace VoloDocs.Migrator
         {
             Console.Write("\nThis program updates an existing database or creates a new one if not exists.\n" +
                           "The following connection string will be used:\n\n" +
-                          new string('=', 70) + "\n" +
-                          connectionString + "\n" +
-                          new string('=', 70) + "\n\n" +
+                          connectionString + "\n\n" +
                           "Are you sure you want to run the migration? (y/n) ");
 
             if (Console.ReadKey().Key == ConsoleKey.Y)
             {
-                Console.WriteLine("\nMigrating...");
+                Console.WriteLine("\n\nMigrating database...");
 
                 try
                 {
                     dbContext.Database.Migrate();
 
-                    Console.WriteLine("\nCompleted.");
+                    Console.WriteLine("Migration completed.");
                 }
                 catch (Exception ex)
                 {
@@ -89,7 +87,7 @@ namespace VoloDocs.Migrator
             Console.Write("\nGenerating migration scripts...");
 
             File.WriteAllText(ScriptFile, dbContext.Database.GenerateCreateScript());
-            
+
             Console.Write("\nMigration script has been created to Script.txt file");
         }
     }
