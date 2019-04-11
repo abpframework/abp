@@ -17,7 +17,7 @@ namespace Volo.Abp.IdentityServer
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceRepository _identityResourceRepository;
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
-        //private readonly IPersistentGrantRepository _persistentGrantRepository;
+        private readonly IPersistentGrantRepository _persistentGrantRepository;
         private readonly AbpIdentityServerTestData _testData;
 
         public AbpIdentityServerTestDataBuilder(
@@ -26,8 +26,8 @@ namespace Volo.Abp.IdentityServer
             IClientRepository clientRepository,
             IIdentityResourceRepository identityResourceRepository,
             IIdentityClaimTypeRepository identityClaimTypeRepository,
-            AbpIdentityServerTestData testData
-            /*IPersistentGrantRepository persistentGrantRepository*/)
+            AbpIdentityServerTestData testData,
+            IPersistentGrantRepository persistentGrantRepository)
         {
             _testData = testData;
             _guidGenerator = guidGenerator;
@@ -35,7 +35,7 @@ namespace Volo.Abp.IdentityServer
             _clientRepository = clientRepository;
             _identityResourceRepository = identityResourceRepository;
             _identityClaimTypeRepository = identityClaimTypeRepository;
-            //_persistentGrantRepository = persistentGrantRepository;
+            _persistentGrantRepository = persistentGrantRepository;
         }
 
         public void Build()
@@ -49,9 +49,25 @@ namespace Volo.Abp.IdentityServer
 
         private void AddPersistedGrants()
         {
-            //_persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create()));
-            //_persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create()));
-            //_persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create()));
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+
+                Key = "PersistedGrantKey1",
+                SubjectId = "PersistedGrantSubjectId1",
+                ClientId = "PersistedGrantClientId1",
+                Type = "PersistedGrantType1"
+            });
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "PersistedGrantKey2",
+                SubjectId = "PersistedGrantSubjectId2"
+            });
+
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "PersistedGrantKey3",
+                SubjectId = "PersistedGrantSubjectId3"
+            });
         }
 
         private void AddIdentityResources()
