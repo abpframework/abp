@@ -155,7 +155,7 @@ When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Mig
 
      ###### Learn Your GitHub Username
 
-     To learn your GitHub username, click on your profile picture on the top-right corner of the GitHub page.
+     To learn your GitHub username, click on your profile picture on the top-right corner of the GitHub page. You will see your username right after the text "Signed in as ..."
 
      ![Your GitHub Username](../images/github-myusername.jpg)
 
