@@ -21,9 +21,15 @@ https://github.com/abpframework/abp/tree/master/modules/docs
 
 ## Download
 
-You can download the VoloDocs release from the following link:
+You can download the VoloDocs release from the following links:
 
-http://apps.abp.io/VoloDocs/VoloDocs.zip *(will be ready soon...)*
+http://apps.abp.io/VoloDocs/VoloDocs.win-x64.zip - **Windows 64 bit**
+
+http://apps.abp.io/VoloDocs/VoloDocs.win-x86.zip - **Windows 32 bit**
+
+http://apps.abp.io/VoloDocs/VoloDocs.osx-x64.zip - **MacOS**
+
+http://apps.abp.io/VoloDocs/VoloDocs.linux-x64.zip - **Linux**
 
 ## Folder Structure
 

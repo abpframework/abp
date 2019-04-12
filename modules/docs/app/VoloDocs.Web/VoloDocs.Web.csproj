@@ -43,10 +43,4 @@
     <None Include="wwwroot\assets\images\Logo.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="run.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
