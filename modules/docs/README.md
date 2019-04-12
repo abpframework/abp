@@ -7,7 +7,7 @@ This module is used to create technical documentation web sites. [abp.io](https:
 
 ### Main Features
 
-* Can read documents from a Github repository.
+* Retrieves documents from a Github repository.
 * Supports Markdown document formatting.
 * Supports versioning (integrated to Github releases).
 * Supports multiple projects.
