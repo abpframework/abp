@@ -49,6 +49,15 @@
                     });
                 });
             });
+
+            $(function () {
+                $(".custom-scroll-content").mCustomScrollbar({
+                    theme: "minimal-dark"
+                });
+                $(".custom-scroll-container > .col-4").mCustomScrollbar({
+                    theme: "minimal-dark"
+                });
+            });
         };
     };
 })(jQuery);

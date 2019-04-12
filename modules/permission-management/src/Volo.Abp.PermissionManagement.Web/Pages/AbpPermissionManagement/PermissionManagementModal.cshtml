@@ -9,30 +9,6 @@
     Layout = null;
 }
 
-@*TO DO : Following styles and scripts will move*@
-<style>
-    .custom-scroll-container > .col-4 {
-        overflow: hidden;
-        overflow-y: auto;
-        max-height: 499px;
-        display: block; 
-        position: relative; 
-        z-index: 123;
-    }
-    .custom-scroll-content {
-        max-height: 440px; 
-    }
-</style>
-<script>
-    $(function () {
-        $(".custom-scroll-content").mCustomScrollbar({
-            theme: "minimal-dark"
-        });
-        $(".custom-scroll-container > .col-4").mCustomScrollbar({
-            theme: "minimal-dark"
-        });
-    });
-</script>
 <form method="post" asp-page="/AbpPermissionManagement/PermissionManagementModal" data-script-class="abp.modals.PermissionManagement">
     <abp-modal size="Large">
         <abp-modal-header title="@(L["Permissions"].Value) - @Model.EntityDisplayName"></abp-modal-header>
