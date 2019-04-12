@@ -33,7 +33,7 @@ http://apps.abp.io/VoloDocs/VoloDocs.linux-x64.zip - **Linux**
 
 ## Folder Structure
 
-When you extract the `VoloDocs.zip` file, you will see a `Web` folder and a `Migrator` folder. `Web` folder contains the website files and `Migrator` contains the application to build your database. Before publishing your website, you need to create a new database or update your existing database to the latest. If this is the first time you install VoloDocs, `Migrator` will create a new database for you, otherwise it updates to the latest version. The only setting you need to configure, is the `ConnectionString` which is located in the `appsettings.json` file. See the next section to learn how to configure your VoloDocs application.
+When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `Migrator` folder. The `Web` folder contains the website files and `Migrator` contains the application to build your database. Before publishing your website, you need to create a new database or update your existing database to the latest. If this is the first time you install VoloDocs, `Migrator` will create a new database for you, otherwise it updates to the latest version. The only setting you need to configure, is the `ConnectionString` which is located in the `appsettings.json` file. See the next section to learn how to configure your VoloDocs application.
 
 ## Steps by Step Deployment
 
