@@ -1,5 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
+  <Import Project="..\..\common.props" />
+
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Acme.BookStore</RootNamespace>
@@ -8,6 +10,7 @@
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PreserveCompilationContext>true</PreserveCompilationContext>
+    <MvcRazorExcludeRefAssembliesFromPublish>false</MvcRazorExcludeRefAssembliesFromPublish>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +18,12 @@
     <Content Remove="Logs\**" />
     <EmbeddedResource Remove="Logs\**" />
     <None Remove="Logs\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Books\CreateModal.cshtml" />
+    <None Include="Pages\Books\EditModal.cshtml" />
+    <None Include="Pages\Books\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,11 +35,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
-    <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.13.0" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.13.0" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.13.0" />
-    <PackageReference Include="Volo.Abp.Account.Web" Version="0.13.0" />
+    <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.15.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.15.0" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.15.0" />
+    <PackageReference Include="Volo.Abp.Account.Web" Version="0.15.0" />
   </ItemGroup>
 
 </Project>
