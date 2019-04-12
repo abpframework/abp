@@ -1,0 +1,18 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Documents": "Documentos",
+    "BackToWebsite": "Voltar para o site",
+    "Contributors": "Contribuidores",
+    "ShareOn": "Compartilhar em:",
+    "Version": "Versão",
+    "Edit": "Editar",
+    "Delete": "Excluir",
+    "InThisDocument": "Neste documento",
+    "GoToTop": "Ir pra o topo",
+    "Projects": "Projeto(s)",
+    "NoProjectWarning": "Ainda não há projetos!",
+    "DocumentNotFound": "Oops, o documento solicitado foi encontrado",
+    "NavigationDocumentNotFound": "Esta versão não possui um documento de navegação!"
+  }
+}

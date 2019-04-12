@@ -115,7 +115,6 @@ namespace MyCompanyName.MyProjectName.DemoApp
             app.UseAbpRequestLocalization();
             app.UseAuditing();
 
-
             app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())
