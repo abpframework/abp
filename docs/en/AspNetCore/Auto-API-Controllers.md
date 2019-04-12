@@ -80,7 +80,7 @@ Then the route for getting a book will be '**/api/volosoft/book-store/book/{id}*
   * Removing '**Async**' postfix. If the method name is 'GetPhonesAsync' then it becomes 'GetPhones'.
   * Removing **HTTP method prefix**. 'GetList', 'GetAll', 'Get', 'Put', 'Update', 'Delete', 'Remove', 'Create', 'Add', 'Insert', 'Post' and 'Patch' prefixes are removed based on the selected HTTP method. So, 'GetPhones' becomes 'Phones' since 'Get' prefix is a duplicate for a GET request.
   * Converting the result to **camelCase**.
-  * If the resulting action name is **empty** then it's not added to the route. If it's not empty, it's added to the route (like '/phones'). For 'GetAllAsync' method name it will be empty, for 'GetPhonesAsync' method name is will be 'phones'.
+  * If the resulting action name is **empty** then it's not added to the route. If it's not empty, it's added to the route (like '/phones'). For 'GetAllAsync' method name it will be empty, for 'GetPhonesAsync' method name it will be 'phones'.
   * Normalization can be customized by setting the `UrlActionNameNormalizer` option. It's an action delegate that is called for every method.
 * If there is another parameter with 'Id' postfix, then it's also added to the route as the final route segment (like '/phoneId').
 

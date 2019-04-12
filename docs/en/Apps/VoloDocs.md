@@ -9,7 +9,7 @@ VoloDocs is a cross-platform web application that allows you to easily create be
 - Serves documents from your GitHub repository.
 - Supports Markdown / HTML document formatting.
 - Supports versioning (integrated to GitHub releases).
-- Support multiple projects.
+- Supports multiple projects.
 - Allows users to edit a document on GitHub.
 - Cross-platform; deployable to Windows / Linux / macOS.
 
@@ -23,7 +23,7 @@ https://github.com/abpframework/abp/tree/master/modules/docs
 
 You can download the VoloDocs release from the following link:
 
-http://apps.abp.io/VoloDocs/VoloDocs.zip
+http://apps.abp.io/VoloDocs/VoloDocs.zip *(will be ready soon...)*
 
 ## Folder Structure
 
