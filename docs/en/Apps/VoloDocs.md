@@ -9,7 +9,7 @@ VoloDocs is a cross-platform web application that allows you to easily create be
 - Serves documents from your GitHub repository.
 - Supports Markdown / HTML document formatting.
 - Supports versioning (integrated to GitHub releases).
-- Support multiple projects.
+- Supports multiple projects.
 - Allows users to edit a document on GitHub.
 - Cross-platform; deployable to Windows / Linux / macOS.
 
