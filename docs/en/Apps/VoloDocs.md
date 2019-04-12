@@ -31,6 +31,8 @@ http://apps.abp.io/VoloDocs/VoloDocs.osx-x64.zip - **MacOS**
 
 http://apps.abp.io/VoloDocs/VoloDocs.linux-x64.zip - **Linux**
 
+Notice that, all installations are self-contained deployments. It means all the required third-party dependencies along with the version of .NET Core is included. So you don't need to install any .NET Core SDK / Runtime.
+
 ## Folder Structure
 
 When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `Migrator` folder. The `Web` folder contains the website files and `Migrator` contains the application to build your database. Before publishing your website, you need to create a new database or update your existing database to the latest. If this is the first time you install VoloDocs, `Migrator` will create a new database for you, otherwise it updates to the latest version. The only setting you need to configure, is the `ConnectionString` which is located in the `appsettings.json` file. See the next section to learn how to configure your VoloDocs application.
@@ -51,11 +53,11 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
    If you want to run 
 
-- ### Publishing Website
+- ### Deploying Website
 
    In the previous step, you created or updated your database. Ensure that your database exists on the specified connection string. 
 
-   - #### Publishing to IIS 
+   - #### Deploying to IIS 
 
       - Move `Web`  folder to your `wwwroot ` folder.
       - Rename `Web` folder to `VoloDocs`  (Now you have `C:\inetpub\wwwroot\VoloDocs`).![Add IIS Website](../images/volodocs-iis-add-website.png)
@@ -75,17 +77,13 @@ When you extract the `VoloDocs.*.zip` file, you will see a `Web` folder and a `M
 
       - Further information about hosting VoloDocs check out [Microsoft's official document for hosting ASP.NET Core application on IIS](https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis).
 
-   - #### Publishing to Azure
+   - #### Deploying to Azure
 
       Microsoft has a good document on how to deploy your ASP.NET Core web app to Azure App Service. We recommend you to read this document https://docs.microsoft.com/en-us/azure/app-service/app-service-web-get-started-dotnet.
 
     - #### Running the Application From Command Line 
 
-      Alternatively you can run the application from command line, navigate to `VoloDocs\Web` folder and run the below command in your command line for Windows:
-
-      ```powershell
-      dotnet VoloDocs.Web.dll
-      ```
+      Alternatively you can run the application from command line, navigate to `VoloDocs\Web` folder and run `VoloDocs.Web.exe` for Windows or `VoloDocs.Web` for MacOS / Linux.
 
 - ### First Run
 
@@ -171,6 +169,9 @@ After you save the project, go to root website address and you will see your doc
 
 `http://<yourwebsite>/documents`
 
+### Any Issues?
 
+If you encounter any problem or issues about installation, usage or report a bug, follow the link:
 
+https://github.com/abpframework/abp/issues/new
 
