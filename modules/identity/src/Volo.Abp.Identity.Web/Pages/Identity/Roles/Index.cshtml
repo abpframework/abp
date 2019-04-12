@@ -12,6 +12,11 @@
     PageLayout.Content.BreadCrumb.Add(L["Menu:IdentityManagement"].Value);
     PageLayout.Content.MenuItemName = IdentityMenuNames.Roles;
 }
+@section styles {
+    <abp-style-bundle name="@typeof(IndexModel).FullName">
+        <abp-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
+    </abp-style-bundle>
+}
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
