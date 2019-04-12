@@ -1,4 +1,4 @@
-# docs module
+# Docs Module
 This module is used to create technical documentation web sites. [abp.io](https://abp.io) web site uses this module for its documentation.
 
 ### Screenshot
