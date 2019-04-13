@@ -32,6 +32,33 @@ namespace Volo.Abp.TenantManagement
             return FindConnectionString(Data.ConnectionStrings.DefaultConnectionStringName);
         }
 
+        public virtual void SetDefaultConnectionString(string defaultConnectionString)
+        {
+            var defaultConnectionStringName =
+                ConnectionStrings.FirstOrDefault(x => x.Name == Data.ConnectionStrings.DefaultConnectionStringName);
+
+            if (defaultConnectionStringName != null)
+            {
+                defaultConnectionStringName.SetValue(defaultConnectionString);
+            }
+            else
+            {
+                ConnectionStrings.Add(new TenantConnectionString(Id, Data.ConnectionStrings.DefaultConnectionStringName,
+                    defaultConnectionString));
+            }
+        }
+
+        public virtual void RemoveDefaultConnectionString()
+        {
+            var defaultConnectionStringName =
+                ConnectionStrings.FirstOrDefault(x => x.Name == Data.ConnectionStrings.DefaultConnectionStringName);
+
+            if (defaultConnectionStringName != null)
+            {
+                ConnectionStrings.Remove(defaultConnectionStringName);
+            }
+        }
+
         [CanBeNull]
         public virtual string FindConnectionString(string name)
         {
