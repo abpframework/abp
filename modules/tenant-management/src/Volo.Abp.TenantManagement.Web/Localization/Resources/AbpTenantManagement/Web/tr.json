@@ -6,6 +6,9 @@
     "NewTenant": "Yeni müşteri",
     "TenantName": "Müşteri adı",
     "DisplayName:TenantName": "Müşteri adı",
-    "TenantDeletionConfirmationMessage": "'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?"
+    "TenantDeletionConfirmationMessage": "'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?",
+    "ConnectionStrings": "Bağlantı dizeleri",
+    "DisplayName:DefaultConnectionString": "Varsayılan Bağlantı Dize",
+    "DisplayName:UseSharedDatabase": "Paylaşılan Veritabanını kullanın"
   }
 }

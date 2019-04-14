@@ -1,9 +1,10 @@
-﻿(function () {
+(function () {
 
     var l = abp.localization.getResource('AbpTenantManagement');
     var _tenantAppService = volo.abp.tenantManagement.tenant;
 
     var _editModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/EditModal');
+    var _connectionStringsModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/ConnectionStringsModal');
     var _createModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/CreateModal');
     var _featuresModal = new abp.ModalManager(abp.appPath + 'FeatureManagement/FeatureManagementModal');
 
@@ -28,6 +29,17 @@
                                         });
                                     }
                                 },
+	                            {
+                                    text: l('ConnectionStrings'),
+		                            visible: function () {
+			                            return true; //TODO: Check permission
+		                            },
+		                            action: function (data) {
+			                            _connectionStringsModal.open({
+				                            id: data.record.id
+			                            });
+		                            }
+	                            },
                                 {
                                     text: l('Features'),
                                     visible: function () {
