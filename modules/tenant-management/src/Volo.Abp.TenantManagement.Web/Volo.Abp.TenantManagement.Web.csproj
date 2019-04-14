@@ -24,7 +24,6 @@
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <Content Remove="Properties\launchSettings.json" />
-    <None Remove="Pages\TenantManagement\Tenants\ConnectionStringsModal.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
