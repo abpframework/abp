@@ -8,9 +8,9 @@ namespace Volo.Abp.TenantManagement
     {
         Task<string> GetDefaultConnectionStringAsync(Guid id);
 
-        Task SetDefaultConnectionStringAsync(Guid id, string defaultConnectionString);
+        Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString);
 
-        Task RemoveDefaultConnectionStringAsync(Guid id);
+        Task DeleteDefaultConnectionStringAsync(Guid id);
 
     }
 }

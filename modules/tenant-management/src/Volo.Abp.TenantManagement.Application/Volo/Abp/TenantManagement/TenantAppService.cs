@@ -86,16 +86,18 @@ namespace Volo.Abp.TenantManagement
             return tenant?.FindDefaultConnectionString();
         }
 
-        public async Task SetDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
+        public async Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
         {
             var tenant = await TenantRepository.GetAsync(id);
             tenant.SetDefaultConnectionString(defaultConnectionString);
+            await TenantRepository.UpdateAsync(tenant);
         }
 
-        public async Task RemoveDefaultConnectionStringAsync(Guid id)
+        public async Task DeleteDefaultConnectionStringAsync(Guid id)
         {
             var tenant = await TenantRepository.GetAsync(id);
             tenant.RemoveDefaultConnectionString();
+            await TenantRepository.UpdateAsync(tenant);
         }
     }
 }

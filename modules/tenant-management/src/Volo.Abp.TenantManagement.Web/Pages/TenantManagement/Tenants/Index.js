@@ -4,9 +4,12 @@
     var _tenantAppService = volo.abp.tenantManagement.tenant;
 
     var _editModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/EditModal');
-    var _connectionStringsModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/ConnectionStringsModal');
     var _createModal = new abp.ModalManager(abp.appPath + 'TenantManagement/Tenants/CreateModal');
     var _featuresModal = new abp.ModalManager(abp.appPath + 'FeatureManagement/FeatureManagementModal');
+    var _connectionStringsModal = new abp.ModalManager({
+        viewUrl: abp.appPath + 'TenantManagement/Tenants/ConnectionStringsModal',
+        modalClass: 'TenantConnectionStringManagement'
+    });
 
     $(function () {
 

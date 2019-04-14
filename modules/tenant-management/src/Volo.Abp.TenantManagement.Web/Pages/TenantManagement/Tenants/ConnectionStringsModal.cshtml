@@ -24,12 +24,3 @@
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>
-
-<script>
-
-    $("#Tenant_UseSharedDatabase").change(function() {
-        $("#Tenant_DefaultConnectionString_Wrap").toggleClass("d-none");
-        $(this).val($(this).prop("checked"));
-    });
-
-</script>

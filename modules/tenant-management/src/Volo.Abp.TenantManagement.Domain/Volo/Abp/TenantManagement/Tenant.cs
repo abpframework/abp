@@ -32,37 +32,44 @@ namespace Volo.Abp.TenantManagement
             return FindConnectionString(Data.ConnectionStrings.DefaultConnectionStringName);
         }
 
-        public virtual void SetDefaultConnectionString(string defaultConnectionString)
+        [CanBeNull]
+        public virtual string FindConnectionString(string name)
         {
-            var defaultConnectionStringName =
-                ConnectionStrings.FirstOrDefault(x => x.Name == Data.ConnectionStrings.DefaultConnectionStringName);
+            return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
+        }
 
-            if (defaultConnectionStringName != null)
+        public virtual void SetDefaultConnectionString(string connectionString)
+        {
+            SetConnectionString(Data.ConnectionStrings.DefaultConnectionStringName, connectionString);
+        }
+
+        public virtual void SetConnectionString(string name, string connectionString)
+        {
+            var tenantConnectionString = ConnectionStrings.FirstOrDefault(x => x.Name == name);
+
+            if (tenantConnectionString != null)
             {
-                defaultConnectionStringName.SetValue(defaultConnectionString);
+                tenantConnectionString.SetValue(connectionString);
             }
             else
             {
-                ConnectionStrings.Add(new TenantConnectionString(Id, Data.ConnectionStrings.DefaultConnectionStringName,
-                    defaultConnectionString));
+                ConnectionStrings.Add(new TenantConnectionString(Id, name, connectionString));
             }
         }
 
         public virtual void RemoveDefaultConnectionString()
         {
-            var defaultConnectionStringName =
-                ConnectionStrings.FirstOrDefault(x => x.Name == Data.ConnectionStrings.DefaultConnectionStringName);
-
-            if (defaultConnectionStringName != null)
-            {
-                ConnectionStrings.Remove(defaultConnectionStringName);
-            }
+            RemoveConnectionString(Data.ConnectionStrings.DefaultConnectionStringName);
         }
 
-        [CanBeNull]
-        public virtual string FindConnectionString(string name)
+        public virtual void RemoveConnectionString(string name)
         {
-            return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
+            var tenantConnectionString = ConnectionStrings.FirstOrDefault(x => x.Name == name);
+
+            if (tenantConnectionString != null)
+            {
+                ConnectionStrings.Remove(tenantConnectionString);
+            }
         }
 
         internal void SetName([NotNull] string name)
