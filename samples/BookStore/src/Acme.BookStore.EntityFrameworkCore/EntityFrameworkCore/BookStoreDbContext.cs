@@ -10,8 +10,9 @@ namespace Acme.BookStore.EntityFrameworkCore
     [ConnectionStringName("Default")]
     public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
     {
-        public DbSet<Book> Book { get; set; }
         public DbSet<AppUser> Users { get; set; }
+
+        public DbSet<Book> Books { get; set; }
 
         public BookStoreDbContext(DbContextOptions<BookStoreDbContext> options)
             : base(options)
