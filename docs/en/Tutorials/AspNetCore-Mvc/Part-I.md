@@ -84,7 +84,7 @@ EF Core requires you to relate entities with your DbContext. The easiest way to 
 ````C#
     public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
     {
-        public DbSet<Book> Book { get; set; }
+        public DbSet<Book> Books { get; set; }
 		...
     }
 ````

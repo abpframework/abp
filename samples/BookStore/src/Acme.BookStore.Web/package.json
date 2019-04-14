@@ -1,8 +1,8 @@
 {
   "version": "0.1.0",
-  "name": "volo.supportapp",
+  "name": "Acme.BookStore",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.1"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.9"
   }
 }

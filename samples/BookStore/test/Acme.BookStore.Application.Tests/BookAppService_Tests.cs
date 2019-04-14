@@ -48,7 +48,6 @@ namespace Acme.BookStore
             result.Id.ShouldNotBe(Guid.Empty);
             result.Name.ShouldBe("New test book 42");
         }
-
         [Fact]
         public async Task Should_Not_Create_A_Book_Without_Name()
         {

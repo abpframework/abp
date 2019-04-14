@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Acme.BookStore
 {
-    [Table("Books")]
+    [Table(BookStoreConsts.DbTablePrefix+"Books")]
     public class Book : AuditedAggregateRoot<Guid>
     {
         [Required]
