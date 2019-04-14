@@ -4,8 +4,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.AspNetCore.Authentication.OAuth</AssemblyName>
-    <PackageId>Volo.Abp.AspNetCore.Authentication.OAuth</PackageId>
+    <AssemblyName>Volo.Abp.AspNetCore.Authentication.JwtBearer</AssemblyName>
+    <PackageId>Volo.Abp.AspNetCore.Authentication.JwtBearer</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OAuth" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
   </ItemGroup>
 
 </Project>
