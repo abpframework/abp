@@ -24,7 +24,7 @@
 
 ### 创建Book实体
 
-在 **领域层** 定义[实体](../../Entities.md)(`Acme.BookStore.Domain` 中).这个项目最主要的实体就是`Book`:
+在 **领域层** 定义[实体](../../Entities.md)(`Acme.BookStore.Domain` 项目中).这个项目最主要的实体就是`Book`:
 
 ````C#
 using System;
@@ -50,14 +50,14 @@ namespace Acme.BookStore
 }
 ````
 
-* ABP有两个基本的实体基类: `AggregateRoot` 和 `Entity`.**Aggregate Root**是 **领域驱动设计(DDD)** 中的概念.查看[实体](../../Entities.md)的更多信息和最佳实践.
-* `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了(`CreationTime`, `CreatorId`, `LastModificationTime`... 等.)审计属性.
-* `Book`实体的主键类型是`Guid`类型.
+* ABP有两个基本的实体基类: `AggregateRoot` 和 `Entity`.**Aggregate Root**是 **领域驱动设计(DDD)** 的概念之一.更多信息和最佳实践请查看[实体文档](../../Entities.md).
+* `Book`实体继承了`AuditedAggregateRoot`,`AuditedAggregateRoot`类在`AggregateRoot`类的基础上添加了一些审计属性(`CreationTime`, `CreatorId`, `LastModificationTime`... 等.).
+* `Guid`是`Book`实体的主键类型.
 * 使用 **数据注解** 为EF Core添加映射.或者你也可以使用 EF Core 自带的[fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling).
 
 #### BookType枚举
 
-下面是所有要用到的`BookType`枚举:
+上面所用到的`BookType`枚举定义如下:
 
 ````C#
 namespace Acme.BookStore
@@ -79,19 +79,19 @@ namespace Acme.BookStore
 
 #### 将Book实体添加到DbContext中
 
-EF Core需要你将实体和DbContext建立关联.最简单的做法是在`Acme.BookStore.EntityFrameworkCore`项目的`BookStoreDbContext`类中添加`DbSet`属性.如:
+EF Core需要你将实体和DbContext建立关联.最简单的做法是在`Acme.BookStore.EntityFrameworkCore`项目的`BookStoreDbContext`类中添加`DbSet`属性.如下所示:
 
 ````C#
 public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 {
-    public DbSet<Book> Book { get; set; }
+    public DbSet<Book> Books { get; set; }
     ...
 }
 ````
 
 #### 添加新的Migration并更新数据库
 
-这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **Package Manager Console (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations`作为默认的项目然后执行下面的命令:
+这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **程序包管理器控制台(Package Manager Console) (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations`作为默认的项目然后执行下面的命令:
 
 ![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration-v2.png)
 
@@ -136,10 +136,10 @@ namespace Acme.BookStore
 }
 ````
 
-* **DTO**类被用来在 **基础设施层** 和 **应用层** **传递数据**.查看[DTO文档](../../Data-Transfer-Objects.md)查看更多信息.
-* 为了在页面上展示书籍信息,`BookDto`被用来将书籍数据传递到基础设施层.
+* **DTO**类被用来在 **表示层** 和 **应用层** **传递数据**.查看[DTO文档](../../Data-Transfer-Objects.md)查看更多信息.
+* 为了在页面上展示书籍信息,`BookDto`被用来将书籍数据传递到表示层.
 * `BookDto`继承自 `AuditedEntityDto<Guid>`.跟上面定义的`Book`类一样具有一些审计属性.
-* `[AutoMapFrom(typeof(Book))]`用来创建从`Book`类到`BookDto`的映射.使用这种方法.你可以将`Book`对象自动转换成`BookDto`对象(而不是手动复制所有的属性).
+* `[AutoMapFrom(typeof(Book))]`用来创建从`Book`类到`BookDto`的AutoMapper映射.使用这种方法.你可以将`Book`对象自动转换成`BookDto`对象(而不是手动复制所有的属性).
 
 #### CreateUpdateBookDto
 
@@ -171,7 +171,7 @@ namespace Acme.BookStore
 }
 ````
 
-* 这个DTO类在创建和更新书籍的时候被使用,用来从页面获取图书信息.
+* 这个DTO类被用于在创建或更新书籍的时候从用户界面获取图书信息.
 * 类中的属性定义了数据注解(如`[Required]`)用来定义有效性验证.ABP会自动校验DTO的数据有效性.
 
 #### IBookAppService
@@ -191,14 +191,14 @@ namespace Acme.BookStore
             Guid, //Book实体的主键
             PagedAndSortedResultRequestDto, //获取书籍的时候用于分页和排序
             CreateUpdateBookDto, //用于创建书籍
-            CreateUpdateBookDto> //用户更新书籍
+            CreateUpdateBookDto> //用于更新书籍
     {
 
     }
 }
 ````
 
-* 为应用服务定义接口不是必须的,不过,我们推荐这么做.
+* 为应用服务定义接口不是必须的,不过,这是推荐的最佳实践.
 * `IAsyncCrudAppService`中定义了基础的 **CRUD**方法:`GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` 和 `DeleteAsync`.不需要扩展它.取而代之,你可以继承空的`IApplicationService`接口定义你自己的方法.
 * `IAsyncCrudAppService`有一些变体,你可以为每一个方法使用单个或者多个的DTO.(译者注:意思是类似EntityDto和UpdateEntityDto可以用同一个,也可以分别单独指定
 )
@@ -231,14 +231,14 @@ namespace Acme.BookStore
 ````
 
 * `BookAppService`继承了`AsyncCrudAppService<...>`.`AsyncCrudAppService<...>`实现了上面定义的CRUD方法.
-* `BookAppService`注入了`IRepository<Book, Guid>`,`IRepository<Book, Guid>`是默认为`Book`创建的仓储.ABP会自动为每一个聚合根(或实体)创建仓储.参考[仓储](../../Repositories.md).
-*  `BookAppService`使用了 `IObjectMapper` 将`Book`转换成`BookDto`,将`CreateUpdateBookDto`转换成`Book`.启动模板中使用了[AutoMapper](http://automapper.org/)作为映射工具.你可以像上面那样使用`AutoMapFrom` 和 `AutoMapTo`定义映射.查看[AutoMapper继承](../../AutoMapper-Integration.md)获取更多信息.
+* `BookAppService`注入了`IRepository<Book, Guid>`,`IRepository<Book, Guid>`是默认为`Book`创建的仓储.ABP会自动为每一个聚合根(或实体)创建仓储.参考[仓储文档](../../Repositories.md).
+*  `BookAppService`使用了 `IObjectMapper` 将`Book`转换成`BookDto`,将`CreateUpdateBookDto`转换成`Book`.启动模板中使用了[AutoMapper](http://automapper.org/)作为对象映射提供程序.你可以像上面那样使用`AutoMapFrom` 和 `AutoMapTo`定义映射.查看[AutoMapper集成文档](../../AutoMapper-Integration.md)获取更多信息.
 
 ### 自动生成API Controllers
 
 你通常需要创建 **Controllers** 将应用服务暴露为 **HTTP API**.这样浏览器或第三方客户端可以通过AJAX的方式访问它们.
 
-ABP可以 **自动地** (../../AspNetCore/Auto-API-Controllers.md)将应用服务转换成MVC API Controllers.
+ABP可以通过约定 **自动地** (../../AspNetCore/Auto-API-Controllers.md)将应用服务转换成MVC API Controllers.
 
 #### Swagger UI
 
@@ -250,13 +250,13 @@ ABP可以 **自动地** (../../AspNetCore/Auto-API-Controllers.md)将应用服�
 
 ### 动态JavaScript代理
 
-通过AJAX的方式调用HTTP API接口是很常见的,你可以使用`$.ajax`或这其他的工具来调用接口.当然,ABP中提供了更好的方式.
+在Javascript端通过AJAX的方式调用HTTP API接口是很常见的,你可以使用`$.ajax`或这其他的工具来调用接口.当然,ABP中提供了更好的方式.
 
 ABP **自动** 为所有的API接口创建了JavaScript **代理**.因此,你可以像调用 **JavaScript function**一样调用任何接口.
 
 #### 在浏览器的开发者控制台中测试接口
 
-你可以使用你最爱的浏览器的 **开发者控制台** 中轻松测试JavaScript代理.运行程序,并打开浏览器的 **开发者工具**(快捷键:F12),切换到 **Console**,输入下面的代码并回车:
+你可以使用你钟爱的浏览器的 **开发者控制台** 中轻松测试JavaScript代理.运行程序,并打开浏览器的 **开发者工具**(快捷键:F12),切换到 **Console** 标签,输入下面的代码并回车:
 
 ````js
 acme.bookStore.book.getList({}).done(function (result) { console.log(result); });
@@ -265,14 +265,14 @@ acme.bookStore.book.getList({}).done(function (result) { console.log(result); })
 * `acme.bookStore`是`BookAppService`的命名空间,转换成了[驼峰命名](https://en.wikipedia.org/wiki/Camel_case).
 * `book`是`BookAppService`转换后的名字(去除了AppService后缀并转成了驼峰命名).
 * `getList`是定义在`AsyncCrudAppService`基类中的`GetListAsync`方法转换后的名字(去除了Async后缀并转成了驼峰命名).
-* `{}`参数用来传递一个空的对象给`GetListAsync`方法.GetListAsync期望的参数是`PagedAndSortedResultRequestDto`类型,`PagedAndSortedResultRequestDto`类型中定义了分页和排序.
+* `{}`参数用来传递一个空的对象给`GetListAsync`方法.GetListAsync期望的参数是`PagedAndSortedResultRequestDto`类型的对象,`PagedAndSortedResultRequestDto`类型中定义了分页和排序选项.
 * `getList`方法返回了一个`promise`.因此,你可以传递一个回调函数到`done`(或者`then`)方法中来获取服务返回的结果.
 
 运行这段代码会产生下面的输出:
 
 ![bookstore-test-js-proxy-getlist](images/bookstore-test-js-proxy-getlist.png)
 
-你可以看到服务器返回的 **book list**.你还可以切换到开发者工具的 **network** 查看客户端和服务器的连接:
+你可以看到服务器返回的 **book list**.你还可以切换到开发者工具的 **network** 查看客户端到服务器端的通讯信息:
 
 ![bookstore-test-js-proxy-getlist-network](images/bookstore-test-js-proxy-getlist-network.png)
 
@@ -292,10 +292,10 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 
 ### 创建书籍页面
 
-现在我们来创建一些可见的可用的东西,我们使用[Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start)代替经典的MVC.微软也推荐使用Razor Pages UI
+现在我们来创建一些可见和可用的东西,取代经典的MVC,我们使用微软推荐的[Razor Pages UI](https://docs.microsoft.com/en-us/aspnet/core/tutorials/razor-pages/razor-pages-start).
 
 
-在 `Acme.BookStore.Web`项目的`Pages`文件夹下创建一个新的文件夹叫`Books`并添加一个名叫`Index.cshtml`的Razor Page.
+在 `Acme.BookStore.Web`项目的`Pages`文件夹下创建一个新的文件夹叫`Books`并添加一个名为`Index.cshtml`的Razor Page.
 
 ![bookstore-add-index-page](images/bookstore-add-index-page.png)
 
@@ -310,7 +310,7 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 <h2>Books</h2>
 ````
 
-* 改变Razor View Page Model默认的继承,使页面的 **inherits** 来自`BookStorePageBase`类(代替`PageModel`).`BookStorePageBase`类来自启动模板并提供了一些公开的属性/方法,这些属性/方法可以被所有的页面使用.
+* 修改Razor View Page Model的默认继承,使页面 **继承** 自`BookStorePageBase`类(代替`PageModel`).`BookStorePageBase`类来自于启动模板,它提供了一些公开的可以被所有的页面使用的属性/方法.
 
 #### 将Books页面添加到主菜单
 
@@ -349,11 +349,11 @@ context.Menu.AddItem(
 
 ![bookstore-menu-items](images/bookstore-menu-items.png)
 
-点击菜单就会调转到新增书籍的页面.
+点击Books菜单项就会跳转到新增的书籍页面.
 
 #### 书籍列表
 
-我们会在页面上使用JQuery插件[Datatables.net](https://datatables.net/)来展示列表.Datatables可以完全通过AJAX工作,所以它很快而且有良好的用户体验.启动模板中已经配置好了Datatables,因此你可以在你的页面中直接使用,不需要引用样式和脚本文件.
+我们会在页面上使用JQuery插件[Datatables.net](https://datatables.net/)来展示列表.Datatables可以完全通过AJAX工作,所以它很快而且有良好的用户体验.启动模板中已经配置好了Datatables插件,因此你可以在你的页面中直接使用,不需要引用样式和脚本文件.
 
 ##### 修改Index.cshtml
 
@@ -388,7 +388,7 @@ context.Menu.AddItem(
 </abp-card>
 ````
 
-* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro)可以将添加外部的 **scripts**添加到页面中.它比标准的`script`标签多了很多额外的功能.它可以处理 **最小化**和 **版本**.查看[bundling & minification 文档](../../AspNetCore/Bundling-Minification.md)获取更多信息.
+* `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro)用于将外部的 **脚本** 添加到页面中.它比标准的`script`标签多了很多额外的功能.它可以处理 **最小化**和 **版本**.查看[捆绑 & 压缩文档](../../AspNetCore/Bundling-Minification.md)获取更多信息.
 * `abp-card` 和 `abp-table` 是为Twitter Bootstrap的[card component](http://getbootstrap.com/docs/4.1/components/card/)封装的 **tag helpers**.ABP中有很多tag helpers,可以很方便的使用大多数[bootstrap](https://getbootstrap.com/)组件.你也可以使用原生的HTML标签代替tag helpers.使用tag helper可以通过智能提示和编译时类型检查减少HTML代码并防止错误.查看[tag helpers 文档](../../AspNetCore/Tag-Helpers.md).
 * 你可以像上面本地化菜单一样 **本地化** 列名.
 
