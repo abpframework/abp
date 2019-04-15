@@ -9,5 +9,13 @@ namespace Volo.Abp.Validation
         {
             context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
         }
+
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpValidationOptions>(options =>
+            {
+                options.ValidationContributor.Add<MethodInvocationValidator>();
+            });
+        }
     }
 }

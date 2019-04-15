@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -91,6 +91,18 @@ namespace Volo.Abp.FluentValidation
                 }));
         }
 
+        [Fact]
+        public void NotValidateMyMethod_Test()
+        {
+            var output = _myAppService.NotValidateMyMethod(new MyMethodInput4
+            {
+                MyStringValue4 = "444"
+            });
+
+            output.ShouldBe("444");
+        }
+
+
         [DependsOn(typeof(AbpAutofacModule))]
         [DependsOn(typeof(AbpFluentValidationModule))]
         public class TestModule : AbpModule
@@ -101,7 +113,7 @@ namespace Volo.Abp.FluentValidation
                 {
                     if (typeof(IMyAppService).IsAssignableFrom(onServiceRegistredContext.ImplementationType))
                     {
-                        onServiceRegistredContext.Interceptors.TryAdd<FluentValidationInterceptor>();
+                        onServiceRegistredContext.Interceptors.TryAdd<ValidationInterceptor>();
                     }
                 });
             }
@@ -117,6 +129,8 @@ namespace Volo.Abp.FluentValidation
             string MyMethod(MyMethodInput input);
 
             Task<string> MyMethodAsync(MyMethodInput input);
+
+            string NotValidateMyMethod(MyMethodInput4 input);
         }
 
         public class MyAppService : IMyAppService, ITransientDependency
@@ -131,17 +145,15 @@ namespace Volo.Abp.FluentValidation
                 return Task.FromResult(input.MyStringValue + input.MyMethodInput2.MyStringValue2 +
                                        input.MyMethodInput3.MyStringValue3);
             }
+
+            public string NotValidateMyMethod(MyMethodInput4 input)
+            {
+                return input.MyStringValue4;
+            }
         }
 
-        public class MyMethodInput : AbstractValidator<MyMethodInput>
+        public class MyMethodInput
         {
-            public MyMethodInput()
-            {
-                RuleFor(x => x.MyStringValue).Equal("aaa");
-                RuleFor(x => x.MyMethodInput2.MyStringValue2).Equal("bbb");
-                RuleFor(customer => customer.MyMethodInput3).SetValidator(new MyMethodInput3());
-            }
-
             public string MyStringValue { get; set; }
 
             public MyMethodInput2 MyMethodInput2 { get; set; }
@@ -154,14 +166,41 @@ namespace Volo.Abp.FluentValidation
             public string MyStringValue2 { get; set; }
         }
 
-        public class MyMethodInput3 : AbstractValidator<MyMethodInput3>
+        public class MyMethodInput3
         {
-            public MyMethodInput3()
+
+            public string MyStringValue3 { get; set; }
+        }
+
+        public class MyMethodInput4
+        {
+            public string MyStringValue4 { get; set; }
+        }
+
+        public class MyMethodInputValidator : AbstractValidator<MyMethodInput>
+        {
+            public MyMethodInputValidator()
+            {
+                RuleFor(x => x.MyStringValue).Equal("aaa");
+                RuleFor(x => x.MyMethodInput2.MyStringValue2).Equal("bbb");
+                RuleFor(customer => customer.MyMethodInput3).SetValidator(new MyMethodInput3Validator());
+            }
+        }
+
+        public class MethodInputBaseValidator : AbstractValidator<MyMethodInput3>
+        {
+            public MethodInputBaseValidator()
+            {
+                RuleFor(x => x.MyStringValue3).NotNull();
+            }
+        }
+
+        public class MyMethodInput3Validator : MethodInputBaseValidator
+        {
+            public MyMethodInput3Validator()
             {
                 RuleFor(x => x.MyStringValue3).Equal("ccc");
             }
-
-            public string MyStringValue3 { get; set; }
         }
     }
 }
