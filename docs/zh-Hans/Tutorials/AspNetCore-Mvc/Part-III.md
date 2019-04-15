@@ -58,7 +58,7 @@ namespace Acme.BookStore
 }
 ````
 
-* 这里直接使用了identity模块实现的 `IIdentityDataSeeder` 接口,创建了一个admin角色和admin用户.你同样可以在你的测试代码中直接使用这些代码.
+* 这里直接使用了identity模块实现的 `IIdentityDataSeeder` 接口,创建了一个admin角色和admin用户.你可以在测试代码中使用它们.
 * 你可以在 `BuildInternalAsync` 方法中添加你自己的测试数据.
 
 按下方所示修改 `BookStoreTestDataBuilder` 类:
