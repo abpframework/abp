@@ -20,6 +20,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
@@ -32,6 +33,8 @@ using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.Web;
+
 
 namespace Acme.BookStore
 {
@@ -41,7 +44,8 @@ namespace Acme.BookStore
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpTenantManagementWebModule)
         )]
     public class BookStoreWebModule : AbpModule
     {
@@ -160,6 +164,12 @@ namespace Acme.BookStore
 
             app.UseVirtualFiles();
             app.UseAuthentication();
+
+            if (BookStoreConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();
@@ -181,22 +191,9 @@ namespace Acme.BookStore
             {
                 AsyncHelper.RunSync(async () =>
                 {
-                    var identitySeedResult = await scope.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            "1q2w3E*"
-                        );
-
-                    if (identitySeedResult.CreatedAdminRole)
-                    {
-                        await scope.ServiceProvider
-                            .GetRequiredService<IPermissionDataSeeder>()
-                            .SeedAsync(
-                                RolePermissionValueProvider.ProviderName,
-                                "admin",
-                                IdentityPermissions.GetAll().Union(BookStorePermissions.GetAll())
-                            );
-                    }
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 });
             }
         }

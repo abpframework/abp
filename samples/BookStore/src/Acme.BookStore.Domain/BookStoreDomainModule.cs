@@ -2,11 +2,14 @@
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore
@@ -16,7 +19,9 @@ namespace Acme.BookStore
         typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpAuditingModule),
         typeof(BackgroundJobsDomainModule),
-        typeof(AbpAuditLoggingDomainModule)
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpFeatureManagementDomainModule)
         )]
     public class BookStoreDomainModule : AbpModule
     {
@@ -33,6 +38,11 @@ namespace Acme.BookStore
                     .Add<BookStoreResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/BookStore");
+            });
+
+            Configure<MultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = BookStoreConsts.IsMultiTenancyEnabled;
             });
         }
     }

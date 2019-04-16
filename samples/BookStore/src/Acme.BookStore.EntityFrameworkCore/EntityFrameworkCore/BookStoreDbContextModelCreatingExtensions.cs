@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp;
 using Volo.Abp.Users;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
@@ -13,12 +14,11 @@ namespace Acme.BookStore.EntityFrameworkCore
 
             /* Configure your own tables/entities inside here */
 
-            //builder.Entity<YourEntity>(b =>
-            //{
-            //    b.ToTable(BookStoreConsts.DbTablePrefix + "YourEntities", BookStoreConsts.DbSchema);
-
-            //    //...
-            //});
+            builder.Entity<Book>(b =>
+            {
+                b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
+                b.ConfigureExtraProperties();
+            });
         }
 
         public static void ConfigureCustomUserProperties<TUser>(this EntityTypeBuilder<TUser> b)
