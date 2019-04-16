@@ -45,6 +45,7 @@
     "PagerShowMenuEntries": "Mostrando _MENU_ registros",
     "DatatableActionDropdownDefaultText": "Ações",
     "ChangePassword": "Alterar Senha",
-    "PersonalInfo": "Perfil"
+    "PersonalInfo": "Perfil",
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Você tem alterações não salvas."
   }
 }
