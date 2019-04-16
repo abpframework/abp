@@ -11,7 +11,8 @@ namespace Volo.Abp.FluentValidation
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public FluentMethodInvocationValidator(IServiceProvider serviceProvider)
+        public FluentMethodInvocationValidator(
+            IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
@@ -22,21 +23,28 @@ namespace Volo.Abp.FluentValidation
 
             foreach (var parameterValue in context.ParameterValues)
             {
-                var serverType = typeof(IValidator<>).MakeGenericType(parameterValue.GetType());
-
-                if (_serviceProvider.GetService(serverType) is IValidator validator)
+                var serviceType = typeof(IValidator<>).MakeGenericType(parameterValue.GetType());
+                var validator = _serviceProvider.GetService(serviceType) as IValidator;
+                if (validator == null)
                 {
-                    var result = validator.Validate(parameterValue);
-                    if (!result.IsValid)
-                    {
-                        validationResult.Errors.AddRange(result.Errors.Select(error =>
-                            new ValidationResult(error.ErrorMessage)));
-                    }
+                    continue;
+                }
+
+                var result = validator.Validate(parameterValue);
+                if (!result.IsValid)
+                {
+                    validationResult.Errors.AddRange(
+                        result.Errors.Select(
+                            error =>
+                                new ValidationResult(error.ErrorMessage)
+                        )
+                    );
                 }
             }
 
             if (validationResult.Errors.Any())
             {
+                //TODO: How to localize messages?
                 throw new AbpValidationException(
                     "Method arguments are not valid! See ValidationErrors for details.",
                     context.Errors

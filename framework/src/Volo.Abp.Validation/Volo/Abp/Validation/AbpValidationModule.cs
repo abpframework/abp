@@ -14,7 +14,7 @@ namespace Volo.Abp.Validation
         {
             Configure<AbpValidationOptions>(options =>
             {
-                options.ValidationContributor.Add<MethodInvocationValidator>();
+                options.MethodValidationContributors.Add<MethodInvocationValidator>();
             });
         }
     }

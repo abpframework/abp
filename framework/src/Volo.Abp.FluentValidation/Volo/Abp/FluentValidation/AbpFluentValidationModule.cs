@@ -4,7 +4,9 @@ using Volo.Abp.Validation;
 
 namespace Volo.Abp.FluentValidation
 {
-    [DependsOn(typeof(AbpValidationModule))]
+    [DependsOn(
+        typeof(AbpValidationModule)
+        )]
     public class AbpFluentValidationModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -16,7 +18,7 @@ namespace Volo.Abp.FluentValidation
         {
             Configure<AbpValidationOptions>(options =>
             {
-                options.ValidationContributor.Add<FluentMethodInvocationValidator>();
+                options.MethodValidationContributors.Add<FluentMethodInvocationValidator>();
             });
         }
     }

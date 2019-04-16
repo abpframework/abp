@@ -47,7 +47,7 @@ namespace Volo.Abp.Validation
 
         protected virtual void Validate(IAbpMethodInvocation invocation)
         {
-            foreach (var validationContributor in _abpValidationOptions.ValidationContributor)
+            foreach (var validationContributor in _abpValidationOptions.MethodValidationContributors)
             {
                 var validator = (IMethodInvocationValidator) _serviceProvider.GetRequiredService(validationContributor);
 

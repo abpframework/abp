@@ -9,17 +9,21 @@ namespace Volo.Abp.FluentValidation
     {
         public override void AddType(IServiceCollection services, Type type)
         {
-            if (typeof(IValidator).IsAssignableFrom(type))
+            if (!typeof(IValidator).IsAssignableFrom(type))
             {
-                var dtoType = GetFirstGenericArgumentOrNull(type, 1);
-                if (dtoType != null)
-                {
-                    var serverType = typeof(IValidator<>).MakeGenericType(dtoType);
-                    var serviceDescriptor = ServiceDescriptor.Describe(serverType, type, ServiceLifetime.Transient);
-
-                    services.Add(serviceDescriptor);
-                }
+                return;
             }
+
+            var validatingType = GetFirstGenericArgumentOrNull(type, 1);
+            if (validatingType == null)
+            {
+                return;
+            }
+
+            services.AddTransient(
+                typeof(IValidator<>).MakeGenericType(validatingType),
+                type
+            );
         }
 
         private static Type GetFirstGenericArgumentOrNull(Type type, int depth)
@@ -30,6 +34,7 @@ namespace Volo.Abp.FluentValidation
             {
                 return null;
             }
+
             if (type.IsGenericType && type.GetGenericArguments().Length >= 1)
             {
                 return type.GetGenericArguments()[0];
