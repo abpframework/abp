@@ -6,12 +6,12 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
     public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbContext>
     {
-        public DbSet<Book> Book { get; set; }
         public BookStoreMigrationsDbContext(DbContextOptions<BookStoreMigrationsDbContext> options) 
             : base(options)
         {
@@ -29,6 +29,7 @@ namespace Acme.BookStore.EntityFrameworkCore
             builder.ConfigureBackgroundJobs();
             builder.ConfigureAuditLogging();
             builder.ConfigureIdentity();
+            builder.ConfigureTenantManagement();
 
             /* Configure customizations for entities from the modules included  */
 
