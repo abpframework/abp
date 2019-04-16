@@ -89,6 +89,18 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 }
 ````
 
+#### 配置你的Book实体
+
+从`Acme.BookStore.EntityFrameworkCore` 项目中打开 BookStoreDbContextModelCreatingExtensions.cs 文件, 在 ConfigureBookStore 方法最后添加如下代码来配置Book实体:
+
+````C#
+	builder.Entity<Book>(b =>
+        {
+           b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
+           b.ConfigureExtraProperties();
+        });
+````
+
 #### 添加新的Migration并更新数据库
 
 这个启动模板使用了[EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/)来创建并维护数据库结构.打开 **程序包管理器控制台(Package Manager Console) (PMC)** (工具/Nuget包管理器菜单),选择 `Acme.BookStore.EntityFrameworkCore.DbMigrations`作为默认的项目然后执行下面的命令:

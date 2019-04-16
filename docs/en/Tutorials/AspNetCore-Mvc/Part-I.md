@@ -89,6 +89,18 @@ EF Core requires you to relate entities with your DbContext. The easiest way to 
     }
 ````
 
+#### Configure Your Book Entity
+
+Open BookStoreDbContextModelCreatingExtensions.cs file from the `Acme.BookStore.EntityFrameworkCore` project, add following code to the end of ConfigureBookStore method to configure Book entity:
+
+````C#
+	builder.Entity<Book>(b =>
+        {
+           b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
+           b.ConfigureExtraProperties();
+        });
+````
+
 #### Add New Migration & Update the Database
 
 The Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
