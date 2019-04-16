@@ -23,35 +23,6 @@
 }
 
 <div class="vs-blog">
-    @*<div class="vs-blog-header">
-            <div class="vs-blog-title">
-                <div class="row">
-                    <div class="col">
-                        <h1 class="my-0 display-inline-block">
-                            @Model.Blog.Name
-                            <small class="text-muted">
-                                @if (string.IsNullOrWhiteSpace(Model.TagName))
-                                {
-                                    @L["BLOG"]
-                                }
-                                else
-                                {
-                                    @Html.Raw("#")@Model.TagName
-                                }
-                            </small>
-                        </h1>
-                    </div>
-                    <div class="col-sm-4 text-right">
-                        <br />
-                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
-                        {
-                            <a asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
-                            <span class="vs-seperator">|</span>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
     <div class="pb-3">
         <div class="row">
             <div class="col-md-8">
@@ -76,7 +47,7 @@
                                     <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
                                 </h2>
                                 <p class="article-sum">
-                                    @Html.Raw(GetShortContent(post.Content)))
+                                    @Html.Raw(GetShortContent(post.Content))
                                 </p>
                                 <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
 
