@@ -53,6 +53,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Castle.Core",
+    "framework/src/Volo.Abp.Cli",
     "framework/src/Volo.Abp.Core",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",
