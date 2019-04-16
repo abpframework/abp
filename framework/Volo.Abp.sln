@@ -1,7 +1,7 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2036
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}"
 EndProject
@@ -220,6 +220,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Authentication.JwtBearer", "src\Volo.Abp.AspNetCore.Authentication.JwtBearer\Volo.Abp.AspNetCore.Authentication.JwtBearer.csproj", "{46C6336C-A1D8-4858-98CE-6F4C698C5A77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Cli", "src\Volo.Abp.Cli\Volo.Abp.Cli.csproj", "{69168816-4394-4DDA-BB6B-C21983D37F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FluentValidation", "src\Volo.Abp.FluentValidation\Volo.Abp.FluentValidation.csproj", "{43D5FE61-ECBF-4B16-AD95-0043E18EB93A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.FluentValidation.Tests", "test\Volo.Abp.FluentValidation.Tests\Volo.Abp.FluentValidation.Tests.csproj", "{E9E1714F-7ED2-4BD1-BA4A-BA06E398288A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -651,6 +655,14 @@ Global
 		{46C6336C-A1D8-4858-98CE-6F4C698C5A77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46C6336C-A1D8-4858-98CE-6F4C698C5A77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46C6336C-A1D8-4858-98CE-6F4C698C5A77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43D5FE61-ECBF-4B16-AD95-0043E18EB93A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43D5FE61-ECBF-4B16-AD95-0043E18EB93A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43D5FE61-ECBF-4B16-AD95-0043E18EB93A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43D5FE61-ECBF-4B16-AD95-0043E18EB93A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9E1714F-7ED2-4BD1-BA4A-BA06E398288A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9E1714F-7ED2-4BD1-BA4A-BA06E398288A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9E1714F-7ED2-4BD1-BA4A-BA06E398288A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9E1714F-7ED2-4BD1-BA4A-BA06E398288A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{69168816-4394-4DDA-BB6B-C21983D37F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{69168816-4394-4DDA-BB6B-C21983D37F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{69168816-4394-4DDA-BB6B-C21983D37F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -766,6 +778,8 @@ Global
 		{575BEFA1-19C2-49B1-8D31-B5D4472328DE} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{6C161F55-54B6-42A5-B177-3B0ED50323C1} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{46C6336C-A1D8-4858-98CE-6F4C698C5A77} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{43D5FE61-ECBF-4B16-AD95-0043E18EB93A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{E9E1714F-7ED2-4BD1-BA4A-BA06E398288A} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{69168816-4394-4DDA-BB6B-C21983D37F0B} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

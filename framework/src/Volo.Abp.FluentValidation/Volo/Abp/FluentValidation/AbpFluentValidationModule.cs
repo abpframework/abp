@@ -1,20 +1,22 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
 
-namespace Volo.Abp.Validation
+namespace Volo.Abp.FluentValidation
 {
-    public class AbpValidationModule : AbpModule
+    [DependsOn(typeof(AbpValidationModule))]
+    public class AbpFluentValidationModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+            context.Services.AddConventionalRegistrar(new AbpFluentValidationConventionalRegistrar());
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpValidationOptions>(options =>
             {
-                options.ValidationContributor.Add<MethodInvocationValidator>();
+                options.ValidationContributor.Add<FluentMethodInvocationValidator>();
             });
         }
     }
