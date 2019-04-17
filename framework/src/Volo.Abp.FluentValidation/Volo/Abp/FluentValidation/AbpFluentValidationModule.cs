@@ -18,7 +18,7 @@ namespace Volo.Abp.FluentValidation
         {
             Configure<AbpValidationOptions>(options =>
             {
-                options.MethodValidationContributors.Add<FluentMethodInvocationValidator>();
+                options.ObjectValidationContributors.Add<FluentValidator>();
             });
         }
     }

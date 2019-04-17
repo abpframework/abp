@@ -8,12 +8,12 @@ namespace Volo.Abp.Validation
     {
         public List<Type> IgnoredTypes { get; }
 
-        public ITypeList<IMethodInvocationValidator> MethodValidationContributors { get; set; }
+        public ITypeList<IObjectValidator> ObjectValidationContributors { get; set; }
 
         public AbpValidationOptions()
         {
             IgnoredTypes = new List<Type>();
-            MethodValidationContributors = new TypeList<IMethodInvocationValidator>();
+            ObjectValidationContributors = new TypeList<IObjectValidator>();
         }
     }
 }

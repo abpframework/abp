@@ -16,6 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
 
             if (validationResult.Errors.Any())
             {
+                //TODO: How to localize messages?
                 throw new AbpValidationException(
                     "ModelState is not valid! See ValidationErrors for details.",
                     validationResult.Errors

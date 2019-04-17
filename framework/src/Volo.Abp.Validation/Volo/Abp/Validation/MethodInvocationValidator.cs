@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Reflection;
 
@@ -9,12 +11,15 @@ namespace Volo.Abp.Validation
 {
     public class MethodInvocationValidator : IMethodInvocationValidator, ITransientDependency
     {
-        private readonly IObjectValidator _objectValidator;
+        private readonly AbpValidationOptions _abpValidationOptions;
+        private readonly IServiceProvider _serviceProvider;
 
-        public MethodInvocationValidator(IObjectValidator objectValidator)
+        public MethodInvocationValidator(IOptions<AbpValidationOptions> abpValidationOptions, IServiceProvider serviceProvider)
         {
-            _objectValidator = objectValidator;
+            _serviceProvider = serviceProvider;
+            _abpValidationOptions = abpValidationOptions.Value;
         }
+
 
         public virtual void Validate(MethodInvocationValidationContext context)
         {
@@ -76,6 +81,7 @@ namespace Volo.Abp.Validation
 
         protected virtual void ThrowValidationError(MethodInvocationValidationContext context)
         {
+            //TODO: How to localize messages?
             throw new AbpValidationException(
                 "Method arguments are not valid! See ValidationErrors for details.",
                 context.Errors
@@ -96,7 +102,13 @@ namespace Volo.Abp.Validation
                              parameterInfo.IsOut ||
                              TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
 
-            context.Errors.AddRange(_objectValidator.GetErrors(parameterValue, parameterInfo.Name, allowNulls));
+            foreach (var objectValidation in _abpValidationOptions.ObjectValidationContributors)
+            {
+                var validator = (IObjectValidator)_serviceProvider.GetRequiredService(objectValidation);
+
+                context.Errors.AddRange(validator.GetErrors(parameterValue, parameterInfo.Name, allowNulls));
+            }
+
         }
     }
 }
