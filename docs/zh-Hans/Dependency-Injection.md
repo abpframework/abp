@@ -2,9 +2,11 @@
 
 ABP的依赖注入系统是基于Microsoft的[依赖注入扩展](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection)库（Microsoft.Extensions.DependencyInjection nuget包）开发的.因此,它的文档在ABP中也是有效的.
 
+> 虽然ABP框架没有对任何第三方DI提供程序的核心依赖, 但它必须使用一个提供程序来支持动态代理(dynamic proxying)和一些高级特性以便ABP特性能正常工作.启动模板中已安装了Autofac. 更多信息请参阅 [Autofac 集成](Autofac-Integration.md) 文档.
+
 ### 模块化
 
-由于ABP是一个模块化框架,因此每个模块都通过依赖注入定义它自己的服务并通过它自己的单独[模块类](Module-Development-Basics.md)进行注册.例:
+由于ABP是一个模块化框架,因此每个模块都定义它自己的服务并在它自己的单独[模块类](Module-Development-Basics.md)中通过依赖注入进行注册.例:
 
 ````C#
 public class BlogModule : AbpModule
@@ -69,15 +71,15 @@ public class BlogPostAppService : ApplicationService
 }
 ````
 
-``BlogPostAppService`` 由于它是从已知的基类派生的,因此会自动注册transient.
+``BlogPostAppService`` 由于它是从已知的基类派生的,因此会自动注册为transient生命周期.
 
 #### 依赖接口
 
 如果实现这些接口,则会自动将类注册到依赖注入:
 
-* ``ITransientDependency`` 注册为transient.
-* ``ISingletonDependency`` 注册为singleton.
-* ``IScopedDependency`` 注册为scoped.
+* ``ITransientDependency`` 注册为transient生命周期.
+* ``ISingletonDependency`` 注册为singleton生命周期.
+* ``IScopedDependency`` 注册为scoped生命周期.
 
 示例:
 
@@ -87,9 +89,9 @@ public class TaxCalculator : ITransientDependency
 }
 ````
 
-``TaxCalculator``因为实现了``ITransientDependency``,所以它会自动注册为transient.
+``TaxCalculator``因为实现了``ITransientDependency``,所以它会自动注册为transient生命周期.
 
-#### Dependency 属性
+#### Dependency 特性
 
 配置依赖注入服务的另一种方法是使用``DependencyAttribute``.它具有以下属性:
 
@@ -108,9 +110,9 @@ public class TaxCalculator
 
 ````
 
-``Dependency``如果定义``Lifetime``属性,则具有比其他依赖接口更高的优先级. 
+如果定义了``Lifetime``属性,则``Dependency``特性具有比其他依赖接口更高的优先级. 
 
-#### ExposeServices 属性 
+#### ExposeServices 特性 
 
 ``ExposeServicesAttribute``用于控制相关类提供了什么服务.例: 
 
@@ -133,7 +135,7 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 
 #### 组合到一起
 
-只要有意义,就可以组合属性和接口.
+只要有意义,特性和接口是可以组合在一起使用的.
 
 ````C#
 [Dependency(ReplaceServices = true)]
@@ -189,7 +191,7 @@ public class TaxAppService : ApplicationService
 
 ``TaxAppService``在构造方法中得到``ITaxCalculator``.依赖注入系统在运行时自动提供所请求的服务.
 
-构造方法注入是将依赖项注入类的优先方式.这样,除非提供了所有构造方法注入的依赖项,否则无法构造类.因此,该类明确的声明了它必需的服务.
+构造方法注入是将依赖项注入类的首选方式.这样,除非提供了所有构造方法注入的依赖项,否则无法构造类.因此,该类明确的声明了它必需的服务.
 
 #### 属性注入
 
@@ -265,6 +267,55 @@ using (var scope = _serviceProvider.CreateScope())
 ````
 
 两个服务在创建的scope被处理时（在using块的末尾）释放.
+
+## 高级特性
+
+### IServiceCollection.OnRegistred 事件
+
+你可能想在注册到依赖注入的每个服务上执行一个操作, 在你的模块的 `PreConfigureServices` 方法中, 使用 `OnRegistred` 方法注册一个回调(callback) , 如下所示:
+
+````csharp
+public class AppModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.OnRegistred(ctx =>
+        {
+            var type = ctx.ImplementationType;
+            //...
+        });
+    }
+}
+````
+
+`ImplementationType` 提供了服务类型. 该回调(callback)通常用于向服务添加拦截器. 例如:
+
+````csharp
+public class AppModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.OnRegistred(ctx =>
+        {
+            if (ctx.ImplementationType.IsDefined(typeof(MyLogAttribute), true))
+            {
+                ctx.Interceptors.TryAdd<MyLogInterceptor>();
+            }
+        });
+    }
+}
+````
+
+这个示例判断一个服务类是否具有 `MyLogAttribute` 特性, 如果有的话就添加一个 `MyLogInterceptor` 到拦截器集合中.
+
+> 注意, 如果服务类公开了多于一个服务或接口, `OnRegistred` 回调(callback)可能被同一服务类多次调用. 因此, 较安全的方法是使用 `Interceptors.TryAdd` 方法而不是 `Interceptors.Add` 方法. 请参阅动态代理(dynamic proxying)/拦截器 [文档](Dynamic-Proxying-Interceptors.md).
+
+## 第三方提供程序
+
+虽然ABP框架没有对任何第三方DI提供程序的核心依赖, 但它必须使用一个提供程序来支持动态代理(dynamic proxying)和一些高级特性以便ABP特性能正常工作.
+
+启动模板中已安装了Autofac. 更多信息请参阅 [Autofac 集成](Autofac-Integration.md) 文档.
+
 
 ### 请参阅
 
