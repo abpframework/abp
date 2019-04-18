@@ -263,7 +263,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureFullAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
-            where T : FullAuditedAggregateRoot
+            where T : class
         {
             b.As<EntityTypeBuilder>().TryConfigureFullAuditedAggregateRoot();
         }
