@@ -20,3 +20,11 @@
 body {
     background-size: cover;
 }
+
+.applications-container {
+    .card-body {
+        p {
+            min-height: 7em;
+        }
+    }
+}

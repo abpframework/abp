@@ -81,7 +81,7 @@ namespace MyCompanyName.MyProjectName.Host
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "http://localhost:61517";
+                    options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = false;
 
                     options.ApiName = "api1";

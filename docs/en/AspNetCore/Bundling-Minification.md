@@ -194,7 +194,7 @@ services.Configure<BundlingOptions>(options =>
     options
         .ScriptBundles
         .Configure("MyGlobalBundle", bundle => {
-            bundle.AddContributors(typeof(MyExtensionStyleBundleContributor));
+            bundle.AddContributors(typeof(MyExtensionGlobalStyleContributor));
         });        
 });
 ````
@@ -279,9 +279,9 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 
 Using the built-in contributors for standard packages;
 
-* Prevents you typing **invalid  the resource paths**.
+* Prevents you typing **the invalid resource paths**.
 * Prevents changing your contributor if the resource **path changes** (the dependant contributor will handle it).
-* Prevents multiple modules adding the **duplicate the files**.
+* Prevents multiple modules adding the **duplicate files**.
 * Manages **dependencies recursively** (adds dependencies of dependencies, if necessary).
 
 #### Volo.Abp.AspNetCore.Mvc.UI.Packages Package

@@ -124,8 +124,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             return GetLabelAsHtmlUsingTagHelper(context, output) + GetRequiredSymbol(context, output);
         }
-
-
+        
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.DisplayRequiredSymbol)

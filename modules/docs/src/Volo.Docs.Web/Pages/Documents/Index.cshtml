@@ -1,5 +1,4 @@
 ﻿@page
-@using Castle.Core.Internal
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Docs
 @using Volo.Docs.Localization
@@ -11,18 +10,17 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
-        <abp-style src="/assets/fa/css/font-awesome.min.css" />
     </abp-style-bundle>
 }
 <div class="p-5">
 
-    @if (Model.Projects.IsNullOrEmpty())
+    @if (Model.Projects == null || !Model.Projects.Any())
     {
         <div class="alert alert-secondary text-center" role="alert">
             @L["NoProjectWarning"]
         </div>
     }
-    @if (Model.Projects.Count > 0)
+    else
     {
         <h1>@L["Projects"]</h1>
         <p>

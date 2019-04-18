@@ -17,6 +17,7 @@ $solutions = (
     "modules/background-jobs",
     "modules/blogging",
     "modules/docs",
+    "modules/client-simulation",
     "abp_io"
 )
 
@@ -24,8 +25,10 @@ $solutions = (
 $projects = (
 
     # framework    
+    "framework/src/Volo.Abp",
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
     "framework/src/Volo.Abp.AspNetCore",
+    "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
@@ -50,6 +53,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Castle.Core",
+    "framework/src/Volo.Abp.Cli",
     "framework/src/Volo.Abp.Core",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",
@@ -193,6 +197,10 @@ $projects = (
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.Domain",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.EntityFrameworkCore",
     "modules/background-jobs/src/Volo.Abp.BackgroundJobs.MongoDB",
+    
+    # modules/client-simulation
+    "modules/client-simulation/src/Volo.ClientSimulation",
+    "modules/client-simulation/src/Volo.ClientSimulation.Web",
     
     # abp_io/SolutionTemplating
     "abp_io/src/Volo.Utils.SolutionTemplating"

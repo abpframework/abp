@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement.MongoDB
 {
     [DependsOn(
-        typeof(AbpFeatureManagementTestBaseModule),
+        typeof(FeatureManagementTestBaseModule),
         typeof(AbpFeatureManagementMongoDbModule)
         )]
     public class AbpFeatureManagementMongoDbTestModule : AbpModule

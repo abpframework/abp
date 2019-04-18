@@ -1,6 +1,7 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "BirthDate": "Aniversário" 
+    "BirthDate": "Aniversário",
+    "Value1": "Valor Um"
   }
 }

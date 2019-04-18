@@ -1,66 +1,80 @@
-.hero-section {    
-    padding:  0;
-    .hero-articles {  
-        position: relative;  
-        overflow: hidden;   
-        .hero-content {  
+.hero-section {
+    padding: 0;
+
+    .hero-articles {
+        position: relative;
+        overflow: hidden;
+
+        .hero-content {
             position: absolute;
             left: 12%;
             right: 12%;
             bottom: 80px;
-            z-index: 4; 
+            z-index: 4;
             text-align: center;
+
             h2 {
                 margin-top: 0;
                 font-size: 2.5em;
                 font-weight: bold;
             }
-            a { 
+
+            a {
                 color: white;
                 text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
             }
-            p {   
+
+            p {
                 color: white;
-            } 
+            }
         }
-        .tags { 
-            .tag { 
-                background: rgba(208, 208, 208, 0.3);  
-                color: #fff !important;  
-                &:hover { 
-                    background: white; 
+
+        .tags {
+            .tag {
+                background: rgba(208, 208, 208, 0.3);
+                color: #fff !important;
+
+                &:hover {
+                    background: white;
                     color: black !important;
                 }
             }
         }
-        
-        .article-owner {      
-            text-align: center; 
-            position: relative; 
+
+        .article-owner {
+            text-align: center;
+            position: relative;
             z-index: 12;
+
             .article-infos {
-                color: black; 
+                color: black;
+
                 a {
-                    color: black; 
+                    color: black;
                 }
+
                 .seperator {
                     margin: 0 4px;
                     color: rgba(255, 255, 255, 0.2);
                 }
-                img.article-avatar { 
+
+                img.article-avatar {
                     width: 64px;
-                    margin:  -25px 10px 0px 0;
+                    margin: -25px 10px 0px 0;
                     border: 3px solid #fff;
                     display: inline-block;
-                    border-radius: 50%; 
+                    border-radius: 50%;
                 }
             }
-        }   
-        .img-container {   
-            background: black;  
+        }
+
+        .img-container {
+            min-height: 320px;
+
             img {
-                filter: grayscale(10%); 
-            } 
+                filter: grayscale(10%);
+            }
+
             &::after {
                 content: "";
                 display: block;
@@ -69,19 +83,20 @@
                 bottom: 0px;
                 width: 100%;
                 top: 1% !important;
-                background: linear-gradient(to bottom,rgba(0, 0, 0, 0) 0,rgba(0, 0, 0, 0.91) 89%,rgba(0, 0, 0, 0.93) 93%) !important;
+                background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.75) 89%, rgba(0, 0, 0, 0.78) 93%) !important;
                 transition: .2s all ease-in-out;
                 opacity: .9;
             }
-        }  
-        &:hover {  
+        }
+
+        &:hover {
             .img-container {
-                &::after {  
+                &::after {
                     opacity: 1;
                 }
             }
-        } 
-    }  
+        }
+    }
 } 
 
 .article-owner {       
@@ -189,8 +204,9 @@
 
 
 .img-container {
-    position: relative; 
+    position: relative;
     overflow: hidden;
-    border-radius: 4px;
+    border-radius: 4px; 
+    background: gainsboro; 
 } 
  

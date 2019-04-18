@@ -45,6 +45,7 @@
       "PagerShowMenuEntries": "显示 _MENU_ 实体",
       "DatatableActionDropdownDefaultText": "操作",
       "ChangePassword": "修改密码",
-      "PersonalInfo": "个人信息"
+      "PersonalInfo": "个人信息",
+      "AreYouSureYouWantToCancelEditingWarningMessage": "你有未保存的更改."
     }
   }

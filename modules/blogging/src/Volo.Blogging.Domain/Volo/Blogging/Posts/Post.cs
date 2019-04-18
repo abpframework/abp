@@ -23,7 +23,6 @@ namespace Volo.Blogging.Posts
         [CanBeNull]
         public virtual string Content { get; set; }
 
-        [CanBeNull]
         public virtual int ReadCount { get; protected set; }
 
         public virtual Collection<PostTag> Tags { get; protected set; }
@@ -33,10 +32,9 @@ namespace Volo.Blogging.Posts
             
         }
 
-        public Post(Guid id, Guid blogId, Guid creatorId, [NotNull] string title, [NotNull] string coverImage, [NotNull] string url)
+        public Post(Guid id, Guid blogId, [NotNull] string title, [NotNull] string coverImage, [NotNull] string url)
         {
             Id = id;
-            CreatorId = creatorId;
             BlogId = blogId;
             Title = Check.NotNullOrWhiteSpace(title, nameof(title));
             Url = Check.NotNullOrWhiteSpace(url, nameof(url));
