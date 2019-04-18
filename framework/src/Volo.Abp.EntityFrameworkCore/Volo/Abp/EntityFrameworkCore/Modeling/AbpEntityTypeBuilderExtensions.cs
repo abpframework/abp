@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
@@ -14,6 +15,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
     {
         public static void ConfigureByConvention(this EntityTypeBuilder b)
         {
+            b.TryConfigureFullAuditedAggregateRoot();
             b.TryConfigureConcurrencyStamp();
             b.TryConfigureExtraProperties();
             b.TryConfigureMayHaveCreator();
@@ -257,6 +259,22 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                 b.Property(nameof(IMultiTenant.TenantId))
                     .IsRequired(false)
                     .HasColumnName(nameof(IMultiTenant.TenantId));
+            }
+        }
+
+        public static void ConfigureFullAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
+            where T : FullAuditedAggregateRoot
+        {
+            b.As<EntityTypeBuilder>().TryConfigureFullAuditedAggregateRoot();
+        }
+
+        public static void TryConfigureFullAuditedAggregateRoot(this EntityTypeBuilder b)
+        {
+            if (b.Metadata.ClrType.IsSubclassOf(typeof(FullAuditedAggregateRoot)))
+            {
+                b.As<EntityTypeBuilder>().TryConfigureFullAudited();
+                b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
+                b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
             }
         }
 
