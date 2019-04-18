@@ -203,12 +203,13 @@ This method votes a question and returns the current score of the question.
 #### Manipulating / Deleting Entities
 
 * **Do** always get all the related entities from repositories to perform the operations on them.
+* **Do** call repository's Update/UpdateAsync method after updating an entity. Because, not all database APIs support change tracking & auto update.
 
 #### Using Other Application Services
 
 * **Do not** use other application services of the same module/application. Instead;
   * Use domain layer to perform the required task.
-  * Extract a new class and share between the application services to accomplish the code reuse when necessary.
+  * Extract a new class and share between the application services to accomplish the code reuse when necessary. But be careful to don't couple two use cases. They may seem similar at the beginning, but may evolve to different directions by time. So, use code sharing carefully.
 * **Can** use application services of others only if;
   * They are parts of another module / microservice.
   * The current module has only reference to the application contracts of the used module.

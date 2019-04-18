@@ -42,5 +42,20 @@ namespace Volo.Abp.TenantManagement
         {
             return _service.DeleteAsync(id);
         }
+
+        public Task<string> GetDefaultConnectionStringAsync(Guid id)
+        {
+            return _service.GetDefaultConnectionStringAsync(id);
+        }
+
+        public Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
+        {
+            return _service.UpdateDefaultConnectionStringAsync(id, defaultConnectionString);
+        }
+
+        public Task DeleteDefaultConnectionStringAsync(Guid id)
+        {
+            return _service.DeleteDefaultConnectionStringAsync(id);
+        }
     }
 }

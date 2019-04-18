@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Docs.Admin
+﻿namespace Volo.Docs.Admin
 {
     public class DocsAdminPermissions
     {

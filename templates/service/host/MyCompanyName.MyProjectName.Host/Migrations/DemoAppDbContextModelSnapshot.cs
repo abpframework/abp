@@ -82,6 +82,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
 
+                    b.Property<string>("TenantName");
+
                     b.Property<string>("Url")
                         .HasColumnName("Url")
                         .HasMaxLength(256);
@@ -160,6 +162,8 @@ namespace MyCompanyName.MyProjectName.Host.Migrations
                         .IsRequired()
                         .HasColumnName("EntityId")
                         .HasMaxLength(128);
+
+                    b.Property<Guid?>("EntityTenantId");
 
                     b.Property<string>("EntityTypeFullName")
                         .IsRequired()

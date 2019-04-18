@@ -6,6 +6,9 @@
     "NewTenant": "Novo Inquilino",
     "TenantName": "Inquilino",
     "DisplayName:TenantName": "Inquilino",
-    "TenantDeletionConfirmationMessage": "Inquilino '{0}' será excluído. Tem certeza?"
+    "TenantDeletionConfirmationMessage": "Inquilino '{0}' será excluído. Tem certeza?",
+    "ConnectionStrings": "Cordas de Conexão",
+    "DisplayName:DefaultConnectionString": "String de Conexão Padrão",
+    "DisplayName:UseSharedDatabase": "Use o banco de dados compartilhado"
   }
 }

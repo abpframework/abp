@@ -18,9 +18,9 @@
     "DisplayName:DefaultDocumentName": "Default document name",
     "DisplayName:NavigationDocumentName": "Navigation document name",
     "DisplayName:MinimumVersion": "Minimum version",
-    "DisplayName:MainWebsiteUrl": "Main web site url",
+    "DisplayName:MainWebsiteUrl": "Main web site URL",
     "DisplayName:LatestVersionBranchName": "Latest version branch name",
-    "DisplayName:GitHubRootUrl": "GitHub root url",
+    "DisplayName:GitHubRootUrl": "GitHub root URL",
     "DisplayName:GitHubAccessToken": "GitHub access token"
   }
 }

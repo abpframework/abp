@@ -53,11 +53,11 @@ namespace Acme.BookStore
             var connection = new SqliteConnection("Data Source=:memory:");
             connection.Open();
 
-            var options = new DbContextOptionsBuilder<BookStoreDbContext>()
+            var options = new DbContextOptionsBuilder<BookStoreMigrationsDbContext>()
                 .UseSqlite(connection)
                 .Options;
 
-            using (var context = new BookStoreDbContext(options))
+            using (var context = new BookStoreMigrationsDbContext(options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
             }

@@ -25,8 +25,10 @@ $solutions = (
 $projects = (
 
     # framework    
+    "framework/src/Volo.Abp",
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
     "framework/src/Volo.Abp.AspNetCore",
+    "framework/src/Volo.Abp.AspNetCore.Authentication.JwtBearer",
     "framework/src/Volo.Abp.AspNetCore.Authentication.OAuth",
     "framework/src/Volo.Abp.AspNetCore.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc",
@@ -51,6 +53,7 @@ $projects = (
     "framework/src/Volo.Abp.BackgroundWorkers",
     "framework/src/Volo.Abp.Caching",
     "framework/src/Volo.Abp.Castle.Core",
+    "framework/src/Volo.Abp.Cli",
     "framework/src/Volo.Abp.Core",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",

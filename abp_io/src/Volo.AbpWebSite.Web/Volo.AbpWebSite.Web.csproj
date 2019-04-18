@@ -54,6 +54,7 @@
 
   <ItemGroup>
     <Folder Include="Downloads\" />
+    <Folder Include="wwwroot\assets\applications\" />
   </ItemGroup>
 
 </Project>

@@ -84,9 +84,21 @@ EF Core requires you to relate entities with your DbContext. The easiest way to 
 ````C#
     public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
     {
-        public DbSet<Book> Book { get; set; }
+        public DbSet<Book> Books { get; set; }
 		...
     }
+````
+
+#### Configure Your Book Entity
+
+Open BookStoreDbContextModelCreatingExtensions.cs file from the `Acme.BookStore.EntityFrameworkCore` project, add following code to the end of ConfigureBookStore method to configure Book entity:
+
+````C#
+	builder.Entity<Book>(b =>
+        {
+           b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
+           b.ConfigureExtraProperties();
+        });
 ````
 
 #### Add New Migration & Update the Database
