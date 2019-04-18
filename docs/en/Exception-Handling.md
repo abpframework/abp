@@ -9,7 +9,7 @@ ABP provides a built-in infrastructure and offers a standard model for handling 
 
 ### Automatic Exception Handling
 
-`AbpExceptionFilter` handles an exception if **any of the following conditions** are meet:
+`AbpExceptionFilter` handles an exception if **any of the following conditions** are met:
 
 * Exception is thrown by a **controller action** which returns an **object result** (not a view result).
 * The request is an AJAX request (`X-Requested-With` HTTP header value is `XMLHttpRequest`).
