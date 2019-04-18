@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.Cli.Args;
 
-namespace Volo.Abp.Cli
+namespace Volo.Abp.Cli.Commands
 {
     public interface IConsoleCommand
     {
-        Task ExecuteAsync();
+        Task ExecuteAsync(CommandLineArgs commandLineArgs);
     }
 }

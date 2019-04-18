@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Args;
+using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli
+namespace Volo.Abp.Cli.Commands
 {
-    public class MainHelpCommand : IConsoleCommand
+    public class MainHelpCommand : ITransientDependency
     {
-        public MainHelpCommand(CommandLineArgs commandLineArgs)
-        {
-            
-        }
-
-        public Task ExecuteAsync()
+        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             Console.WriteLine("*********** ABP CLI ****************");
             Console.WriteLine();

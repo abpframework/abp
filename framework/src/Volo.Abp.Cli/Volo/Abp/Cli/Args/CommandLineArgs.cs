@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using System.Text;
 using JetBrains.Annotations;
-using Volo.Abp.Cli.Args;
 
-namespace Volo.Abp.Cli
+namespace Volo.Abp.Cli.Args
 {
     public class CommandLineArgs
     {

@@ -1,21 +1,41 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Args;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.SolutionTemplating;
+using Volo.Abp.SolutionTemplating.Building;
 
-namespace Volo.Abp.Cli
+namespace Volo.Abp.Cli.Commands
 {
-    public class NewProjectCommand : IConsoleCommand
+    public class NewProjectCommand : IConsoleCommand, ITransientDependency
     {
-        protected CommandLineArgs CommandLineArgs { get; }
+        protected SolutionBuilder SolutionBuilder { get; }
 
-        public NewProjectCommand(CommandLineArgs commandLineArgs)
+        public NewProjectCommand(SolutionBuilder solutionBuilder)
         {
-            CommandLineArgs = commandLineArgs;
+            SolutionBuilder = solutionBuilder;
         }
 
-        public Task ExecuteAsync()
+        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
+            if (commandLineArgs.Target == null)
+            {
+                Console.WriteLine("Project name is missing.");
+                Console.WriteLine("Usage:");
+                Console.WriteLine("  abp new <project-name>");
+                Console.WriteLine("Example:");
+                Console.WriteLine("  abp new Acme.BookStore");
+            }
+
             Console.WriteLine("TODO: Create new project");
-            return Task.CompletedTask;
+
+            //await SolutionBuilder.BuildAsync(
+            //    null,
+            //    commandLineArgs.Target,
+            //    DatabaseProvider.EntityFrameworkCore,
+            //    "...",
+            //    true
+            //);
         }
     }
 }

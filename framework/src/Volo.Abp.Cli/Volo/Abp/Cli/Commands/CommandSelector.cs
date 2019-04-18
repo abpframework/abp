@@ -1,20 +1,22 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System;
+using Volo.Abp.Cli.Args;
+using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.Cli
+namespace Volo.Abp.Cli.Commands
 {
     public class CommandSelector : ICommandSelector, ITransientDependency
     {
-        public IConsoleCommand Select(CommandLineArgs commandLineArgs)
+        public Type Select(CommandLineArgs commandLineArgs)
         {
             //TODO: Create options to define commands
             //TODO: Get from dependency injection instead of new?
 
             if (commandLineArgs.Command == "new")
             {
-                return new NewProjectCommand(commandLineArgs);
+                return typeof(NewProjectCommand);
             }
 
-            return new MainHelpCommand(commandLineArgs);
+            return typeof(MainHelpCommand);
         }
     }
 }
