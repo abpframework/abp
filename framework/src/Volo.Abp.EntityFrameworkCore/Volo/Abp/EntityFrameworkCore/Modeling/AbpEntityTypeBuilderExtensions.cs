@@ -15,7 +15,6 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
     {
         public static void ConfigureByConvention(this EntityTypeBuilder b)
         {
-            b.TryConfigureFullAuditedAggregateRoot();
             b.TryConfigureConcurrencyStamp();
             b.TryConfigureExtraProperties();
             b.TryConfigureMayHaveCreator();
@@ -263,20 +262,13 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         }
 
         public static void ConfigureFullAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
-            where T : class
+            where T : class 
         {
-            b.As<EntityTypeBuilder>().TryConfigureFullAuditedAggregateRoot();
+            b.As<EntityTypeBuilder>().TryConfigureFullAudited();
+            b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
+            b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
         }
 
-        public static void TryConfigureFullAuditedAggregateRoot(this EntityTypeBuilder b)
-        {
-            if (b.Metadata.ClrType.IsSubclassOf(typeof(FullAuditedAggregateRoot)))
-            {
-                b.As<EntityTypeBuilder>().TryConfigureFullAudited();
-                b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
-                b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
-            }
-        }
 
         //TODO: Add other interfaces (IAuditedObject<TUser>...)
     }
