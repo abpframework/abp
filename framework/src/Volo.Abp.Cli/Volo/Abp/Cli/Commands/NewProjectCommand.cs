@@ -20,14 +20,16 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                Console.WriteLine("Project name is missing.");
+                Console.WriteLine("Solution name is missing.");
                 Console.WriteLine("Usage:");
                 Console.WriteLine("  abp new <project-name>");
                 Console.WriteLine("Example:");
                 Console.WriteLine("  abp new Acme.BookStore");
+                return;
             }
 
-            Console.WriteLine("TODO: Create new project");
+            Console.WriteLine("Creating a new solution");
+            Console.WriteLine("Solution name: " + commandLineArgs.Target);
 
             //await SolutionBuilder.BuildAsync(
             //    null,
