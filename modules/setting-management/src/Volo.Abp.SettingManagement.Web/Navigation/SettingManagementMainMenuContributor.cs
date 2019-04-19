@@ -23,8 +23,8 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementPageOptions>>().Value;
             var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
             if (
-                !settingManagementPageOptions.Contributors.Any()
-                || !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext))
+                !settingManagementPageOptions.Contributors.Any() ||
+                !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext))
                 )
             {
                 return;
