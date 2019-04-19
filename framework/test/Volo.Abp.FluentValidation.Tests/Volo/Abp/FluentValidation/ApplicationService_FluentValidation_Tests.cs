@@ -101,8 +101,7 @@ namespace Volo.Abp.FluentValidation
 
             output.ShouldBe("444");
         }
-
-
+        
         [DependsOn(typeof(AbpAutofacModule))]
         [DependsOn(typeof(AbpFluentValidationModule))]
         public class TestModule : AbpModule
