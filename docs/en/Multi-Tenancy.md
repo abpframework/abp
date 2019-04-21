@@ -90,32 +90,6 @@ namespace MyCompany.MyProject
 
 TODO: ...
 
-### Volo.Abp.MultiTenancy Package
-
-Volo.Abp.MultiTenancy is the actual package that makes your application multi-tenant. Install it into your project using PMC:
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-Then you can add **AbpMultiTenancyModule** dependency to your module:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> If you add AbpMultiTenancyModule dependency to your module, then you don't need to add AbpMultiTenancyModule dependency separately since AbpMultiTenancyModule already depends on it.
-
 #### Determining Current Tenant
 
 The first thing for a multi-tenant application is to determine the current tenant on the runtime. Volo.Abp.MultiTenancy package only provides abstractions (named as tenant resolver) for determining the current tenant, however it does not have any implementation out of the box.

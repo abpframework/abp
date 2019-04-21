@@ -90,32 +90,6 @@ namespace MyCompany.MyProject
 
 TODO: ...
 
-### Volo.Abp.MultiTenancy
-
-Volo.Abp.MultiTenancy 才是让你的程序实现多租户的真正的包.使用PMC将它安装到你的项目中:
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-然后添加 **AbpMultiTenancyModule** 依赖到你的模块中:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> 如果你添加了AbpMultiTenancyModule依赖,就不需要再另外添加AbpMultiTenancyModule依赖了,因为AbpMultiTenancyModule已经依赖它了.
-
 #### 确定当前租户
 
 多租户的应用程序运行的时候首先要做的就是确定当前租户.
