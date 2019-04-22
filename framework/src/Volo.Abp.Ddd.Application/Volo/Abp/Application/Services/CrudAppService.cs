@@ -17,8 +17,8 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TEntityDto, TEntityDto>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
@@ -29,8 +29,8 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput>
-        : CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TCreateInput>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
+        : CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
         where TCreateInput : IEntityDto<TKey>
@@ -42,9 +42,9 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
-       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>,
-        ICrudAppService<TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
+    public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
+        ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity<TKey>
            where TEntityDto : IEntityDto<TKey>
     {
@@ -62,9 +62,9 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual PagedResultDto<TEntityDto> GetAll(TGetAllInput input)
+        public virtual PagedResultDto<TEntityDto> GetList(TGetListInput input)
         {
-            CheckGetAllPolicy();
+            CheckGetListPolicy();
 
             var query = CreateFilteredQuery(input);
 
@@ -122,9 +122,9 @@ namespace Volo.Abp.Application.Services
             CheckPolicy(GetPolicyName);
         }
 
-        protected virtual void CheckGetAllPolicy()
+        protected virtual void CheckGetListPolicy()
         {
-            CheckPolicy(GetAllPolicyName);
+            CheckPolicy(GetListPolicyName);
         }
 
         protected virtual void CheckCreatePolicy()
