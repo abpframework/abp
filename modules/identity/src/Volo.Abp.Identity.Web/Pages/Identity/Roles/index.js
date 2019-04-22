@@ -22,9 +22,7 @@
                             [
                                 {
                                     text: l('Edit'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Roles.Update'),
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
@@ -33,9 +31,7 @@
                                 },
                                 {
                                     text: l('Permissions'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Roles.ManagePermissions'),
                                     action: function (data) {
                                         _permissionsModal.open({
                                             providerName: 'Role',
@@ -46,7 +42,7 @@
                                 {
                                     text: l('Delete'),
                                     visible: function (data) {
-                                        return !data.isStatic; //TODO: Check permission
+                                        return !data.isStatic && abp.auth.isGranted('AbpIdentity.Roles.Delete'); //TODO: Check permission
                                     },
                                     confirmMessage: function (data) { return l('RoleDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {

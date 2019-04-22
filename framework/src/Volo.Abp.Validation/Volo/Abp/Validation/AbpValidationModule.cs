@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Validation
@@ -8,13 +10,24 @@ namespace Volo.Abp.Validation
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
             context.Services.OnRegistred(ValidationInterceptorRegistrar.RegisterIfNeeded);
+            AutoAddObjectValidationContributors(context.Services);
         }
 
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        private static void AutoAddObjectValidationContributors(IServiceCollection services)
         {
-            Configure<AbpValidationOptions>(options =>
+            var contributorTypes = new List<Type>();
+
+            services.OnRegistred(context =>
             {
-                options.MethodValidationContributors.Add<MethodInvocationValidator>();
+                if (typeof(IObjectValidationContributor).IsAssignableFrom(context.ImplementationType))
+                {
+                    contributorTypes.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<AbpValidationOptions>(options =>
+            {
+                options.ObjectValidationContributors.AddIfNotContains(contributorTypes);
             });
         }
     }

@@ -11,6 +11,7 @@
             public const string Update = Default + ".Update";
             public const string Delete = Default + ".Delete";
             public const string ManageFeatures = Default + ".ManageFeatures";
+            public const string ManageConnectionStrings = Default + ".ManageConnectionStrings";
         }
 
         public static string[] GetAll()
@@ -22,7 +23,8 @@
                 Tenants.Create,
                 Tenants.Update,
                 Tenants.Delete,
-                Tenants.ManageFeatures
+                Tenants.ManageFeatures,
+                Tenants.ManageConnectionStrings
             };
         }
     }
