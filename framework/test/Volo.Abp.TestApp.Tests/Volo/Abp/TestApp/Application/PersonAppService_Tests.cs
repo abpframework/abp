@@ -16,7 +16,7 @@ namespace Volo.Abp.TestApp.Application
         }
 
         [Fact]
-        public async Task GetAll()
+        public async Task GetList()
         {
             var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
             people.Items.Count.ShouldBeGreaterThan(0);
