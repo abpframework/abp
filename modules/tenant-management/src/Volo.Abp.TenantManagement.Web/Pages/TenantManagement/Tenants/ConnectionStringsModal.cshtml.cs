@@ -52,7 +52,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
             public bool UseSharedDatabase { get; set; }
 
-            [StringLength(TenantConnectionStringConsts.MaxNameLength)]
+            [StringLength(TenantConnectionStringConsts.MaxValueLength)]
             public string DefaultConnectionString { get; set; }
         }
     }
