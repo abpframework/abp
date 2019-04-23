@@ -3,6 +3,8 @@
     "texts": {
       "Permissions": "权限",
       "OnlyProviderPermissons": "只有这个提供商",
-      "All": "所有"
+      "All": "所有",
+    "SelectAllInAllTabs": "授予所有权限",
+    "SelectAllInThisTab": "全选"
     }
   }
