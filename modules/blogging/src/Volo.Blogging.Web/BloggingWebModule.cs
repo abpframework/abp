@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -47,7 +48,7 @@ namespace Volo.Blogging
                 options.Resources
                     .Get<BloggingResource>()
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiModule))
+                    .AddBaseTypes(typeof(AbpUiResource))
                     .AddVirtualJson("/Localization/Resources/Blogging/Web");
             });
 
