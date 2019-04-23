@@ -21,6 +21,7 @@
       "DisplayName:MainWebsiteUrl": "主网站网址",
       "DisplayName:LatestVersionBranchName": "最新版本的分支名称",
       "DisplayName:GitHubRootUrl": "GitHub根网址",
-      "DisplayName:GitHubAccessToken": "GitHub访问令牌"
-    }
+      "DisplayName:GitHubAccessToken": "GitHub访问令牌",
+      "DisplayName:GitHubUserAgent": "GitHub用户代理"
   }
+}
