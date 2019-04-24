@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
@@ -10,13 +10,11 @@ namespace Volo.Abp.Validation
 {
     public class ValidationInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly AbpValidationOptions _abpValidationOptions;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IMethodInvocationValidator _methodInvocationValidator;
 
-        public ValidationInterceptor(IServiceProvider serviceProvider, IOptions<AbpValidationOptions> abpValidationOptions)
+        public ValidationInterceptor(IMethodInvocationValidator methodInvocationValidator)
         {
-            _serviceProvider = serviceProvider;
-            _abpValidationOptions = abpValidationOptions.Value;
+            _methodInvocationValidator = methodInvocationValidator;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
@@ -47,18 +45,13 @@ namespace Volo.Abp.Validation
 
         protected virtual void Validate(IAbpMethodInvocation invocation)
         {
-            foreach (var validationContributor in _abpValidationOptions.MethodValidationContributors)
-            {
-                var validator = (IMethodInvocationValidator) _serviceProvider.GetRequiredService(validationContributor);
-
-                validator.Validate(
-                    new MethodInvocationValidationContext(
-                        invocation.TargetObject,
-                        invocation.Method,
-                        invocation.Arguments
-                    )
-                );
-            }
+            _methodInvocationValidator.Validate(
+                new MethodInvocationValidationContext(
+                    invocation.TargetObject,
+                    invocation.Method,
+                    invocation.Arguments
+                )
+            );
         }
     }
 }

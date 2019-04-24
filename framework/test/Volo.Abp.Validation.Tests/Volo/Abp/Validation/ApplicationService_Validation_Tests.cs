@@ -16,7 +16,7 @@ namespace Volo.Abp.Validation
 
         public ApplicationService_Validation_Tests()
         {
-            _myAppService = ServiceProvider.GetRequiredService<IMyAppService>();
+            _myAppService = GetRequiredService<IMyAppService>();
         }
 
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
