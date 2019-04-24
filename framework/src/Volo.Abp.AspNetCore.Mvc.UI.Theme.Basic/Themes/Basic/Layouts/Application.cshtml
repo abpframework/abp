@@ -29,6 +29,10 @@
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
+    <div id="AbpContentToolbar">
+        @RenderSection("content_toolbar", false)
+    </div>
+
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         @RenderBody()
