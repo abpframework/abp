@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore\Volo.Abp.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\OrganizationService.Domain.Shared\OrganizationService.Domain.Shared.csproj" />
+    <ProjectReference Include="..\OrganizationService.Domain\OrganizationService.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

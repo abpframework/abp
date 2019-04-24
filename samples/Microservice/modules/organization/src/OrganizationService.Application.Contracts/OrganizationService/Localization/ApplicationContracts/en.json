@@ -1,0 +1,10 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:OrganizationService": "OrganizationService Management",
+    "Permission:AbpOrganizations": "AbpOrganizations",
+    "Permission:AbpOrganizations:Edit": "Edit",
+    "Permission:AbpOrganizations:Delete": "Delete",
+    "Permission:AbpOrganizations:Create": "Create"
+  }
+}

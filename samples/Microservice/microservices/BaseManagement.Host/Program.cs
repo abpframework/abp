@@ -30,7 +30,7 @@ namespace BaseManagement.Host
                     {
                         AutoRegisterTemplate = true,
                         AutoRegisterTemplateVersion = AutoRegisterTemplateVersion.ESv6,
-                        IndexFormat = "msdemo-log-{0:yyyy.MM}"
+                        IndexFormat = "ms-log-{0:yyyy.MM}"
                     })
                 .CreateLogger();
 
