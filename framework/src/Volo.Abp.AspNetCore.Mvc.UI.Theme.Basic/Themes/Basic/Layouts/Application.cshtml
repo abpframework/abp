@@ -28,13 +28,12 @@
 <body class="abp-application-layout">
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
-
-    <div id="AbpContentToolbar">
-        @RenderSection("content_toolbar", false)
-    </div>
-
+    
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
+        <div id="AbpContentToolbar" class="text-right">
+            @RenderSection("content_toolbar", false)
+        </div>
         @RenderBody()
     </div>
 
