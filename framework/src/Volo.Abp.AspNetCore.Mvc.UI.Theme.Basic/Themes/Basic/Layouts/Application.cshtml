@@ -31,7 +31,7 @@
     
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
-        <div id="AbpContentToolbar" class="text-right">
+        <div id="AbpContentToolbar" class="text-right mb-3">
             @RenderSection("content_toolbar", false)
         </div>
         @RenderBody()
