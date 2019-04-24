@@ -206,7 +206,8 @@ namespace Volo.Docs.GitHub.Documents
         {
             return rootUrl
                 .Replace("github.com", "raw.githubusercontent.com")
-                .ReplaceFirst("/tree/", "/").EnsureEndsWith('/');
+                .ReplaceFirst("/tree/", "/")
+                .EnsureEndsWith('/');
         }
     }
 }
