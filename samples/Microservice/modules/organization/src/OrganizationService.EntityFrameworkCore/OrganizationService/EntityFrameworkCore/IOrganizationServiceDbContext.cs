@@ -7,6 +7,8 @@ namespace OrganizationService.EntityFrameworkCore
     [ConnectionStringName("OrganizationService")]
     public interface IOrganizationServiceDbContext : IEfCoreDbContext
     {
-         DbSet<AbpOrganization> AbpOrganizations { get; }
+         DbSet<Organization> AbpOrganizations { get; }
+
+        DbSet<UserOrganization> UserOrganizations { get; set; }
     }
 }

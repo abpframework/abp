@@ -11,7 +11,8 @@ namespace OrganizationService.EntityFrameworkCore
 
         public static string Schema { get; set; } = OrganizationServiceConsts.DefaultDbSchema;
 
-        public DbSet<AbpOrganization> AbpOrganizations { get; set; }
+        public DbSet<Organization> AbpOrganizations { get; set; }
+        public DbSet<UserOrganization> UserOrganizations { get; set; }
 
         public OrganizationServiceDbContext(DbContextOptions<OrganizationServiceDbContext> options) 
             : base(options)

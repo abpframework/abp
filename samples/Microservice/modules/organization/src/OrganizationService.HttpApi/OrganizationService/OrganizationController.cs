@@ -11,38 +11,38 @@ namespace OrganizationService
     [RemoteService]
     [Area("organization")]
     [Route("api/organization/abpOrganization")]
-    public class AbpOrganizationController : AbpController, IOrganizationAppService
+    public class OrganizationController : AbpController, IOrganizationAppService
     {
         private readonly IOrganizationAppService _abpOrganizationAppService;
 
-        public AbpOrganizationController(IOrganizationAppService abpOrganizationAppService)
+        public OrganizationController(IOrganizationAppService abpOrganizationAppService)
         {
             _abpOrganizationAppService = abpOrganizationAppService;
         }
 
         [HttpGet]
         [Route("")]
-        public Task<PagedResultDto<AbpOrganizationDto>> GetListAsync(AbpOrganizationPagedRequestDto input)
+        public Task<PagedResultDto<OrganizationDto>> GetListAsync(OrganizationPagedRequestDto input)
         {
             return _abpOrganizationAppService.GetListAsync(input);
         }
 
         [HttpGet]
         [Route("{id}")]
-        public Task<AbpOrganizationDto> GetAsync(Guid id)
+        public Task<OrganizationDto> GetAsync(Guid id)
         {
             return _abpOrganizationAppService.GetAsync(id);
         }
 
         [HttpPost]
-        public Task<AbpOrganizationDto> CreateAsync(CreateUpdateAbpOrganizationDto input)
+        public Task<OrganizationDto> CreateAsync(CreateUpdateAbpOrganizationDto input)
         {
             return _abpOrganizationAppService.CreateAsync(input);
         }
 
         [HttpPut]
         [Route("{id}")]
-        public Task<AbpOrganizationDto> UpdateAsync(Guid id, CreateUpdateAbpOrganizationDto input)
+        public Task<OrganizationDto> UpdateAsync(Guid id, CreateUpdateAbpOrganizationDto input)
         {
             return _abpOrganizationAppService.UpdateAsync(id, input);
         }

@@ -18,7 +18,7 @@ using Volo.Abp.Application.Dtos;
 namespace OrganizationService
 {
 
-    public class AbpOrganizationPagedRequestDto : PagedAndSortedResultRequestDto
+    public class OrganizationPagedRequestDto : PagedAndSortedResultRequestDto
     {
         public Guid? ParentId { get; set; }
     }

@@ -11,12 +11,12 @@ using Volo.Abp.Domain.Repositories;
 namespace OrganizationService
 {
     [Authorize(OrganizationServicePermissions.AbpOrganizations.Default)]
-    public class OrganizationAppService : AsyncCrudAppService<AbpOrganization, AbpOrganizationDto, Guid, AbpOrganizationPagedRequestDto,
+    public class OrganizationAppService : AsyncCrudAppService<Organization, OrganizationDto, Guid, OrganizationPagedRequestDto,
         CreateUpdateAbpOrganizationDto, CreateUpdateAbpOrganizationDto>, IOrganizationAppService
     {
-        private readonly IRepository<AbpOrganization, Guid> _repository;
+        private readonly IRepository<Organization, Guid> _repository;
 
-        public OrganizationAppService(IRepository<AbpOrganization, Guid> repository)
+        public OrganizationAppService(IRepository<Organization, Guid> repository)
             : base(repository)
         {
             _repository = repository;
@@ -25,15 +25,15 @@ namespace OrganizationService
             base.DeletePolicyName = OrganizationServicePermissions.AbpOrganizations.Delete;
         }
 
-        protected override IQueryable<AbpOrganization> CreateFilteredQuery(AbpOrganizationPagedRequestDto input)
+        protected override IQueryable<Organization> CreateFilteredQuery(OrganizationPagedRequestDto input)
         {
             return base.CreateFilteredQuery(input).Where(r => r.ParentId == input.ParentId);
         }
 
 
-        public override async Task<PagedResultDto<AbpOrganizationDto>> GetListAsync(AbpOrganizationPagedRequestDto input)
+        public override async Task<PagedResultDto<OrganizationDto>> GetListAsync(OrganizationPagedRequestDto input)
         {
-            PagedResultDto<AbpOrganizationDto> baseResults = await base.GetListAsync(input);
+            PagedResultDto<OrganizationDto> baseResults = await base.GetListAsync(input);
 
             foreach (var baseResultsItem in baseResults.Items)
             {

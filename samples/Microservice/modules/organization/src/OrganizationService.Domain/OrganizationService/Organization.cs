@@ -20,13 +20,13 @@ using Volo.Abp.Domain.Entities.Auditing;
 
 namespace OrganizationService
 {
-    public class AbpOrganization : Entity<Guid>
+    public class Organization : Entity<Guid>
     {
-        public AbpOrganization()
+        public Organization()
         {
         }
 
-        public AbpOrganization(string code, string name)
+        public Organization(string code, string name)
         {
             Code = code ?? throw new ArgumentNullException(nameof(code));
             Name = name ?? throw new ArgumentNullException(nameof(name));
@@ -39,6 +39,7 @@ namespace OrganizationService
         public string Name { get; set; }
         public int Sort { get; set; }
         public string Remark { get; set; }
+
 
     }
 }

@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "Permission:BaseManagement": "Base Management",
+    "Permission:BaseManagement": "BaseManagement",
     "Permission:BaseTypes": "BaseTypes",
     "Permission:BaseTypes:Edit": "Edit",
     "Permission:BaseTypes:Delete": "Delete",

@@ -17,9 +17,9 @@ namespace OrganizationService.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
             
-            builder.Entity<AbpOrganization>(b =>
+            builder.Entity<Organization>(b =>
             {
-                b.ToTable(options.TablePrefix + "AbpOrganizations", options.Schema);
+                b.ToTable(options.TablePrefix + "Organizations", options.Schema);
        
                 //b.ConfigureAudited();
 
@@ -27,9 +27,23 @@ namespace OrganizationService.EntityFrameworkCore
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BaseConsts.MaxNameLength);
                 b.Property(x => x.Remark).HasMaxLength(BaseConsts.MaxRemarkLength);
 
+
+
             });
 
-       
+            builder.Entity<UserOrganization>(b =>
+            {
+                b.ToTable(options.TablePrefix + "UserOrganizations", options.Schema);
+
+                //b.ConfigureAudited();
+
+                b.Property(x => x.UserId).IsRequired();
+                b.Property(x => x.OrganizationId).IsRequired();
+
+                b.HasOne(r => r.Organization).WithMany().HasForeignKey(r => r.OrganizationId).IsRequired();
+
+            });
+
         }
     }
 }

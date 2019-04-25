@@ -1,7 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "Permission:OrganizationService": "OrganizationService Management",
+    "Permission:OrganizationService": "OrganizationService",
     "Permission:AbpOrganizations": "AbpOrganizations",
     "Permission:AbpOrganizations:Edit": "Edit",
     "Permission:AbpOrganizations:Delete": "Delete",

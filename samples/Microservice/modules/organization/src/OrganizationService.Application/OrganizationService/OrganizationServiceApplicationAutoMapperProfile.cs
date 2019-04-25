@@ -7,8 +7,8 @@ namespace OrganizationService
     {
         public OrganizationServiceApplicationAutoMapperProfile()
         {
-            CreateMap<AbpOrganization, AbpOrganizationDto>();
-            CreateMap<CreateUpdateAbpOrganizationDto, AbpOrganization>();
+            CreateMap<Organization, OrganizationDto>();
+            CreateMap<CreateUpdateAbpOrganizationDto, Organization>();
             
         }
     }

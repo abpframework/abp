@@ -40,6 +40,9 @@
     <ProjectReference Include="..\..\modules\base\src\BaseManagement.Application.Contracts\BaseManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\modules\base\src\BaseManagement.EntityFrameworkCore\BaseManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\base\src\BaseManagement.HttpApi\BaseManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\modules\organization\src\OrganizationService.Application.Contracts\OrganizationService.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\modules\organization\src\OrganizationService.EntityFrameworkCore\OrganizationService.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\modules\organization\src\OrganizationService.HttpApi\OrganizationService.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

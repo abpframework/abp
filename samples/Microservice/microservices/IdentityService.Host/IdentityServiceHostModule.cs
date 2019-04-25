@@ -7,6 +7,8 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using BaseManagement;
 using BaseManagement.EntityFrameworkCore;
+using OrganizationService;
+using OrganizationService.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging;
@@ -42,6 +44,11 @@ namespace IdentityService.Host
         typeof(BaseManagementHttpApiModule),
         typeof(BaseManagementEntityFrameworkCoreModule),
         typeof(BaseManagementApplicationContractsModule),
+
+        //组织机构 
+        typeof(OrganizationServiceHttpApiModule),
+        typeof(OrganizationServiceEntityFrameworkCoreModule),
+        typeof(OrganizationServiceApplicationContractsModule),
 
         typeof(AuditLoggingApplicationContractsModule)
         )]

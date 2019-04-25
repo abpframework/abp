@@ -4,7 +4,7 @@ using Volo.Abp.Application.Dtos;
 
 namespace OrganizationService
 {
-    public class AbpOrganizationDto : EntityDto<Guid>
+    public class OrganizationDto : EntityDto<Guid>
     {
         public Guid? ParentId { get; set; }
         public string Code { get; set; }

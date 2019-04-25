@@ -147,6 +147,14 @@ export default [{
         title: '基础资料字典管理'
       },
       component: () => import('@/view/base/baseItem.vue')
+    },{
+      path: 'organization',
+      name: 'OrganizationService.AbpOrganizations',
+      meta: {
+        icon: 'ios-build-outline',
+        title: '部门管理'
+      },
+      component: () => import('@/view/rbac/organization.vue')
     }]
   },
   {

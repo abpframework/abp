@@ -303,3 +303,4 @@ samples/MicroserviceDemo/applications/AuthServer.Host/AuthServer.Host.xml
 samples/Microservice/microservices/AuditLogging.Host/Logs/logs.txt
 samples/Microservice/microservices/BaseManagement.Host/Logs/logs.txt
 modules/docs/app/Volo.DocsTestApp/Logs/logs.txt
+samples/Microservice/microservices/OrganizationService.Host/Logs/logs.txt

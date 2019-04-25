@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
+using Volo.Abp.Identity;
 
 namespace BackendAdminAppGateway.Host
 {
