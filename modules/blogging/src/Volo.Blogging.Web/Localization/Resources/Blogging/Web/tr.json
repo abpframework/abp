@@ -36,6 +36,12 @@
     "CoverImage": "Kapak resmi",
     "CreateANewPost": "Yeni Yazı oluştur",
     "CreateANewBlog": "Yeni Blog Ekle",
-    "WhatIsNew": "Yeniler"
+    "WhatIsNew": "Yeniler",
+    "Name": "İsim",
+    "ShortName": "Kısa isim",
+    "CreationTime": "Yaratma zamanı",
+    "Description": "Açıklama",
+    "Blogs": "Bloglar",
+    "Tags": "Etiketler"
   }
 }
