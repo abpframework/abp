@@ -165,5 +165,42 @@ namespace Volo.Abp.Reflection
             property = currentType.GetProperty(properties.Last());
             property.SetValue(obj, value);
         }
+
+
+        /// <summary>
+        /// Get all the constant values in the specified type (including the base type).
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static string[] GetAllConstants(Type type)
+        {
+            var constants = new List<string>();
+            GetAllConstantsRecursively(constants, type, 1);
+            return constants.ToArray();
+        }
+
+        private static void GetAllConstantsRecursively(List<string> constants, Type type, int currentDepth)
+        {
+            const int maxRecursiveParameterValidationDepth = 8;
+
+            if (currentDepth > maxRecursiveParameterValidationDepth)
+            {
+                return;
+            }
+
+            constants.AddRange(
+                type.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                    .Where(x => x.IsLiteral && !x.IsInitOnly)
+                    .Select(x => x.GetValue(null).ToString())
+            );
+
+            var nestedTypes = type.GetNestedTypes(BindingFlags.Public);
+
+            foreach (var nestedType in nestedTypes)
+            {
+                GetAllConstantsRecursively(constants, nestedType, currentDepth + 1);
+            }
+        }
+
     }
 }
