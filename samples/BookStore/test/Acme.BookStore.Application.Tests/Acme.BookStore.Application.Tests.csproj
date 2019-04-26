@@ -22,7 +22,7 @@
     <PackageReference Include="xunit.extensibility.execution" Version="2.4.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
     <PackageReference Include="Microsoft.Data.Sqlite" Version="2.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.4" />
   </ItemGroup>
 
 </Project>
