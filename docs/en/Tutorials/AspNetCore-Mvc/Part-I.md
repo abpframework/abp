@@ -151,7 +151,7 @@ namespace Acme.BookStore
 * **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](../../Data-Transfer-Objects.md) for more details.
 * `BookDto` is used to transfer book data to the presentation layer in order to show the book information on the UI.
 * `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` class defined above.
-* `[AutoMapFrom(typeof(Book))]` is used to create AutoMapper mapping from the `Book` class to the `BookDto` class. In this way, you get automatic convertion of `Book` objects to `BookDto` objects (instead of manually copy all properties).
+* `[AutoMapFrom(typeof(Book))]` is used to create AutoMapper mapping from the `Book` class to the `BookDto` class. In this way, you get automatic conversion of `Book` objects to `BookDto` objects (instead of manually copy all properties).
 
 #### CreateUpdateBookDto
 
@@ -425,7 +425,7 @@ $(function () {
 ````
 
 * `abp.libs.datatables.createAjax` is a helper function to adapt ABP's dynamic JavaScript API proxies to Datatable's format.
-* `abp.libs.datatables.normalizeConfiguration` is another helper function. There's no requirment to use it, but it simplifies the datatables configuration by providing conventional values for missing options.
+* `abp.libs.datatables.normalizeConfiguration` is another helper function. There's no requirement to use it, but it simplifies the datatables configuration by providing conventional values for missing options.
 * `acme.bookStore.book.getList` is the function to get list of books (you have seen it before).
 * See [Datatable's documentation](https://datatables.net/manual/) for more configuration options.
 

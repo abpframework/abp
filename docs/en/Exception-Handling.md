@@ -29,7 +29,7 @@ Error Message is an instance of the `RemoteServiceErrorResponse` class. The simp
 }
 ````
 
-There are **optional fields** those can be filled based upon the exception that has occured.
+There are **optional fields** those can be filled based upon the exception that has occurred.
 
 ##### Error Code
 
@@ -70,7 +70,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
     "code": "App:010046",
     "message": "Your request is not valid, please correct and try again!",
     "validationErrors": [{
-      "message": "Username should be minimum lenght of 3.",
+      "message": "Username should be minimum length of 3.",
       "members": ["userName"]
     },
     {
