@@ -61,10 +61,10 @@
                     render: function (data, type, row) {
                         var name = '<span>' + data + '</span>';
                         if (row.isDefault) {
-                            name += '<span class="badge badge-pill badge-success ml-1">Default</span>';
+                            name += '<span class="badge badge-pill badge-success ml-1">' + l('DisplayName:IsDefault') + '</span>';
                         }
                         if (row.isPublic) {
-                            name += '<span class="badge badge-pill badge-info ml-1">Public</span>';
+                            name += '<span class="badge badge-pill badge-info ml-1">' + l('DisplayName:IsPublic') + '</span>';
                         }
                         return name;
                     }
