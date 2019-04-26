@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Reflection;
 
 namespace Acme.BookStore.Permissions
 {
@@ -12,7 +13,7 @@ namespace Acme.BookStore.Permissions
         public static string[] GetAll()
         {
             //Return an array of all permissions
-            return Array.Empty<string>();
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(BookStorePermissions));
         }
     }
 }
