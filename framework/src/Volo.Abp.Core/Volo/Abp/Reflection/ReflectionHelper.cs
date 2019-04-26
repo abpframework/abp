@@ -172,35 +172,34 @@ namespace Volo.Abp.Reflection
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static string[] GetAllConstants(Type type)
-        {
-            var constants = new List<string>();
-            GetAllConstantsRecursively(constants, type, 1);
-            return constants.ToArray();
-        }
-
-        private static void GetAllConstantsRecursively(List<string> constants, Type type, int currentDepth)
+        public static string[] GetPublicConstantsRecursively(Type type)
         {
             const int maxRecursiveParameterValidationDepth = 8;
 
-            if (currentDepth > maxRecursiveParameterValidationDepth)
-            {
-                return;
-            }
+            var publicConstants = new List<string>();
 
-            constants.AddRange(
-                type.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+            void Recursively(List<string> constants, Type targetType, int currentDepth)
+            {
+                if (currentDepth > maxRecursiveParameterValidationDepth)
+                {
+                    return;
+                }
+
+                constants.AddRange(targetType.GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                     .Where(x => x.IsLiteral && !x.IsInitOnly)
-                    .Select(x => x.GetValue(null).ToString())
-            );
+                    .Select(x => x.GetValue(null).ToString()));
 
-            var nestedTypes = type.GetNestedTypes(BindingFlags.Public);
+                var nestedTypes = targetType.GetNestedTypes(BindingFlags.Public);
 
-            foreach (var nestedType in nestedTypes)
-            {
-                GetAllConstantsRecursively(constants, nestedType, currentDepth + 1);
+                foreach (var nestedType in nestedTypes)
+                {
+                    Recursively(constants, nestedType, currentDepth + 1);
+                }
             }
-        }
 
+            Recursively(publicConstants, type, 1);
+
+            return publicConstants.ToArray();
+        }
     }
 }

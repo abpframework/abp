@@ -10,9 +10,9 @@ namespace Volo.Abp.Reflection
 
 
         [Fact]
-        public void GetAllConstants_Test()
+        public void GetPublicConstantsRecursively_Test()
         {
-            var constants = ReflectionHelper.GetAllConstants(typeof(BaseRole));
+            var constants = ReflectionHelper.GetPublicConstantsRecursively(typeof(BaseRole));
 
             constants.ShouldNotBeEmpty();
             constants.Length.ShouldBe(1);
@@ -20,9 +20,9 @@ namespace Volo.Abp.Reflection
         }
 
         [Fact]
-        public void GetAllConstants_Inherit_Test()
+        public void GetPublicConstantsRecursively_Inherit_Test()
         {
-            var constants = ReflectionHelper.GetAllConstants(typeof(Roles));
+            var constants = ReflectionHelper.GetPublicConstantsRecursively(typeof(Roles));
 
             constants.ShouldNotBeEmpty();
             constants.Length.ShouldBe(2);
@@ -32,9 +32,9 @@ namespace Volo.Abp.Reflection
 
 
         [Fact]
-        public void GetAllConstants_NestedTypes_Test()
+        public void GetPublicConstantsRecursively_NestedTypes_Test()
         {
-            var constants = ReflectionHelper.GetAllConstants(typeof(IdentityPermissions));
+            var constants = ReflectionHelper.GetPublicConstantsRecursively(typeof(IdentityPermissions));
 
             constants.ShouldNotBeEmpty();
             constants.Except(IdentityPermissions.GetAll()).Count().ShouldBe(0);
