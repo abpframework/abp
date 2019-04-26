@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -31,31 +32,59 @@ namespace Volo.Abp.Application.Services
         IAuditingEnabled,
         ITransientDependency
     {
+        public IServiceProvider ServiceProvider { get; set; }
+        protected readonly object ServiceProviderLock = new object();
+        protected TService LazyGetRequiredService<TService>(ref TService reference)
+        {
+            if (reference == null)
+            {
+                lock (ServiceProviderLock)
+                {
+                    if (reference == null)
+                    {
+                        reference = ServiceProvider.GetRequiredService<TService>();
+                    }
+                }
+            }
+
+            return reference;
+        }
+
         public static string[] CommonPostfixes { get; set; } = { "AppService", "ApplicationService", "Service" };
 
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
-        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
+        public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
+        private IUnitOfWorkManager _unitOfWorkManager;
 
-        public IObjectMapper ObjectMapper { get; set; }
+        public IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
+        private IObjectMapper _objectMapper;
 
         public IGuidGenerator GuidGenerator { get; set; }
 
-        public ILoggerFactory LoggerFactory { get; set; }
+        public ILoggerFactory LoggerFactory => LazyGetRequiredService(ref _loggerFactory);
+        private ILoggerFactory _loggerFactory;
 
-        public ICurrentTenant CurrentTenant { get; set; }
+        public ICurrentTenant CurrentTenant => LazyGetRequiredService(ref _currentTenant);
+        private ICurrentTenant _currentTenant;
 
-        public ICurrentUser CurrentUser { get; set; }
+        public ICurrentUser CurrentUser => LazyGetRequiredService(ref _currentUser);
+        private ICurrentUser _currentUser;
 
-        public ISettingProvider SettingProvider { get; set; }
+        public ISettingProvider SettingProvider => LazyGetRequiredService(ref _settingProvider);
+        private ISettingProvider _settingProvider;
 
-        public IClock Clock { get; set; }
+        public IClock Clock => LazyGetRequiredService(ref _clock);
+        private IClock _clock;
 
-        public IAuthorizationService AuthorizationService { get; set; }
+        public IAuthorizationService AuthorizationService => LazyGetRequiredService(ref _authorizationService);
+        private IAuthorizationService _authorizationService;
 
-        public IFeatureChecker FeatureChecker { get; set; }
+        public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
+        private IFeatureChecker _featureChecker;
 
-        public IStringLocalizerFactory StringLocalizerFactory { get; set; }
+        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        private IStringLocalizerFactory _stringLocalizerFactory;
 
         public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
         private IStringLocalizer _localizer;
