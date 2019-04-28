@@ -39,7 +39,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
                 return new EntityEto(keys);
             }
 
-            //TODO: Also add KeysAsString property to resulting json for compability with the EntityEto!
+            //TODO: Also add KeysAsString property to resulting json for compatibility with the EntityEto!
             return ObjectMapper.Map(entityType, etoType, entityObj);
         }
     }

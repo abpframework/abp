@@ -70,7 +70,7 @@ ABP提供了用于处理Web应用程序异常的标准模型.
     "code": "App:010046",
     "message": "Your request is not valid, please correct and try again!",
     "validationErrors": [{
-      "message": "Username should be minimum lenght of 3.",
+      "message": "Username should be minimum length of 3.",
       "members": ["userName"]
     },
     {

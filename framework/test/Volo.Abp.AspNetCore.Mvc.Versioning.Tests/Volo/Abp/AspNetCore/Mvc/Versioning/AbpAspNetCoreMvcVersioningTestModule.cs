@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                     opts.ApiVersions.Add(new ApiVersion(2, 0));
                 });
 
-                //1.0 Compatability version
+                //1.0 Compatibility version
                 options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
                 {
                     opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat.TodoAppService).Namespace;
