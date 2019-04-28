@@ -12,9 +12,7 @@ import {
   localRead
 } from '@/libs/util'
 import beforeClose from '@/router/before-close'
-import {
-  saveErrorLogger
-} from '@/api/data'
+
 import router from '@/router'
 import routers from '@/router/routers'
 import config from '@/config'
@@ -125,9 +123,9 @@ export default {
         userGuid,
         userName
       }
-      saveErrorLogger(info).then(() => {
-        commit('addError', data)
-      })
+      // saveErrorLogger(info).then(() => {
+      //   commit('addError', data)
+      // })
     }
   }
 }

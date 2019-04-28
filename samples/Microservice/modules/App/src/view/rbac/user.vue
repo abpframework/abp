@@ -152,10 +152,10 @@ import {
   loadUser,
   editUser,
   deleteUser,
-  batchCommand,
   saveUserRoles
 } from "@/api/rbac/user";
 import { loadRoleListByUserGuid, loadSimpleList } from "@/api/rbac/role";
+
 export default {
   name: "rbac_user_page",
   components: {
@@ -373,7 +373,7 @@ export default {
       return this.formModel.selection;
     },
     selectedRowsId() {
-      return this.formModel.selection.map(x => x.guid);
+      return this.formModel.selection.map(x => x.id);
     }
   },
   methods: {
@@ -464,21 +464,11 @@ export default {
       });
     },
     handleDelete(params) {
-      this.doDelete(params.row.guid);
-    },
-    doDelete(ids) {
-      if (!ids) {
-        this.$Message.warning("请选择至少一条数据");
-        return;
-      }
-      deleteUser(ids).then(res => {
-        if (res.data.code === 200) {
-          this.$Message.success(res.data.message);
-          this.loadUserList();
-          this.formModel.selection = [];
-        } else {
-          this.$Message.warning(res.data.message);
-        }
+      var that=this;
+      deleteUser(params.row.id).then(res => {
+          that.$Message.success('删除成功!');
+          that.loadUserList();
+          that.formModel.selection = [];
       });
     },
     handlePageChanged(page) {

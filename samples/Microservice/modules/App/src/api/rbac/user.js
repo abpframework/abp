@@ -42,20 +42,5 @@ export const deleteUser = (ids) => {
   })
 }
 
-// batch command
-export const batchCommand = (data) => {
-  return axios.request({
-    url: 'rbac/user/batch',
-    method: 'get',
-    params: data
-  })
-}
 
-// save user roles
-export const saveUserRoles = (data) => {
-  return axios.request({
-    url: 'rbac/user/save_roles',
-    method: 'post',
-    data
-  })
-}
+

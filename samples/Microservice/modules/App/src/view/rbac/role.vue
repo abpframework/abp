@@ -135,8 +135,7 @@ import {
   createRole,
   loadRole,
   editRole,
-  deleteRole,
-  batchCommand
+  deleteRole
 } from "@/api/rbac/role";
 
 import { editPermission, loadPermissionTree } from "@/api/rbac/permission";
