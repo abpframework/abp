@@ -77,11 +77,11 @@ namespace BasicAspNetCoreApplication
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(ServiceConfigurationContext context)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            context.Services.AddApplication<AppModule>();
+            services.AddApplication<AppModule>();
 
-            return context.Services.BuildServiceProviderFromFactory();
+            return services.BuildServiceProviderFromFactory();
         }
 
         public void Configure(IApplicationBuilder app)
