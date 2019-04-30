@@ -65,12 +65,16 @@ namespace Volo.Abp.Domain.Entities.Events
                 false
             );
 
-            await TriggerEventWithEntity(
-                DistributedEventBus,
-                typeof(EntityCreatedEto<>),
-                EntityToEtoMapper.Map(entity),
-                false
-            );
+            var eto = EntityToEtoMapper.Map(entity);
+            if (eto != null)
+            {
+                await TriggerEventWithEntity(
+                    DistributedEventBus,
+                    typeof(EntityCreatedEto<>),
+                    eto,
+                    false
+                );
+            }
         }
 
         public virtual async Task TriggerEntityUpdatingEventAsync(object entity)
@@ -92,12 +96,16 @@ namespace Volo.Abp.Domain.Entities.Events
                 false
             );
 
-            await TriggerEventWithEntity(
-                DistributedEventBus,
-                typeof(EntityUpdatedEto<>),
-                EntityToEtoMapper.Map(entity),
-                false
-            );
+            var eto = EntityToEtoMapper.Map(entity);
+            if (eto != null)
+            {
+                await TriggerEventWithEntity(
+                    DistributedEventBus,
+                    typeof(EntityUpdatedEto<>),
+                    eto,
+                    false
+                );
+            }
         }
 
         public virtual async Task TriggerEntityDeletingEventAsync(object entity)
@@ -119,12 +127,16 @@ namespace Volo.Abp.Domain.Entities.Events
                 false
             );
 
-            await TriggerEventWithEntity(
-                DistributedEventBus,
-                typeof(EntityDeletedEto<>),
-                EntityToEtoMapper.Map(entity),
-                false
-            );
+            var eto = EntityToEtoMapper.Map(entity);
+            if (eto != null)
+            {
+                await TriggerEventWithEntity(
+                    DistributedEventBus,
+                    typeof(EntityDeletedEto<>),
+                    EntityToEtoMapper.Map(entity),
+                    false
+                );
+            }
         }
 
         protected virtual async Task TriggerEventsInternalAsync(EntityChangeReport changeReport)
