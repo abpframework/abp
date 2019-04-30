@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus.Distributed;
@@ -28,7 +27,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
             var entity = entityObj as IEntity;
             if (entity == null)
             {
-                throw new ArgumentException($"{nameof(entityObj)} should be an entity and implement the '{typeof(IEntity).AssemblyQualifiedName}' interface!");
+                return null;
             }
 
             var entityType = ProxyHelper.UnProxy(entity).GetType();
@@ -36,7 +35,7 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
             if (etoType == null)
             {
                 var keys = entity.GetKeys().JoinAsString(",");
-                return new EntityEto(keys);
+                return new EntityEto(entityType.FullName, keys);
             }
 
             //TODO: Also add KeysAsString property to resulting json for compatibility with the EntityEto!

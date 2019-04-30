@@ -48,35 +48,83 @@ namespace Volo.Abp.Domain.Entities.Events
 
         public virtual async Task TriggerEntityCreatingEventAsync(object entity)
         {
-            await TriggerEventWithEntity(LocalEventBus, typeof(EntityCreatingEventData<>), entity, true);
+            await TriggerEventWithEntity(
+                LocalEventBus,
+                typeof(EntityCreatingEventData<>),
+                entity,
+                true
+            );
         }
 
         public virtual async Task TriggerEntityCreatedEventOnUowCompletedAsync(object entity)
         {
-            await TriggerEventWithEntity(LocalEventBus, typeof(EntityCreatedEventData<>), entity, false);
-            await TriggerEventWithEntity(DistributedEventBus, typeof(EntityCreatedEto<>), EntityToEtoMapper.Map(entity), false);
+            await TriggerEventWithEntity(
+                LocalEventBus,
+                typeof(EntityCreatedEventData<>),
+                entity,
+                false
+            );
+
+            await TriggerEventWithEntity(
+                DistributedEventBus,
+                typeof(EntityCreatedEto<>),
+                EntityToEtoMapper.Map(entity),
+                false
+            );
         }
 
         public virtual async Task TriggerEntityUpdatingEventAsync(object entity)
         {
-            await TriggerEventWithEntity(LocalEventBus, typeof(EntityUpdatingEventData<>), entity, true);
+            await TriggerEventWithEntity(
+                LocalEventBus,
+                typeof(EntityUpdatingEventData<>),
+                entity,
+                true
+            );
         }
 
         public virtual async Task TriggerEntityUpdatedEventOnUowCompletedAsync(object entity)
         {
-            await TriggerEventWithEntity(LocalEventBus, typeof(EntityUpdatedEventData<>), entity, false);
-            await TriggerEventWithEntity(DistributedEventBus, typeof(EntityUpdatedEto<>), EntityToEtoMapper.Map(entity), false);
+            await TriggerEventWithEntity(
+                LocalEventBus,
+                typeof(EntityUpdatedEventData<>),
+                entity,
+                false
+            );
+
+            await TriggerEventWithEntity(
+                DistributedEventBus,
+                typeof(EntityUpdatedEto<>),
+                EntityToEtoMapper.Map(entity),
+                false
+            );
         }
 
         public virtual async Task TriggerEntityDeletingEventAsync(object entity)
         {
-            await TriggerEventWithEntity(LocalEventBus, typeof(EntityDeletingEventData<>), entity, true);
+            await TriggerEventWithEntity(
+                LocalEventBus,
+                typeof(EntityDeletingEventData<>),
+                entity,
+                true
+            );
         }
 
         public virtual async Task TriggerEntityDeletedEventOnUowCompletedAsync(object entity)
         {
-            await TriggerEventWithEntity(LocalEventBus, typeof(EntityDeletedEventData<>), entity, false);
-            await TriggerEventWithEntity(DistributedEventBus, typeof(EntityDeletedEto<>), EntityToEtoMapper.Map(entity), false);
+            await TriggerEventWithEntity(
+                LocalEventBus,
+                typeof(EntityDeletedEventData<>),
+                entity,
+                false
+            );
+
+            await TriggerEventWithEntity(
+                DistributedEventBus,
+                typeof(EntityDeletedEto<>),
+                EntityToEtoMapper.Map(entity),
+                false
+            );
         }
 
         protected virtual async Task TriggerEventsInternalAsync(EntityChangeReport changeReport)
