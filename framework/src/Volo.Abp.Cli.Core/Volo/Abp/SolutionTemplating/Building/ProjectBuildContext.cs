@@ -1,28 +1,37 @@
 ﻿using JetBrains.Annotations;
+using Volo.Abp.ProjectBuilding;
 using Volo.Abp.SolutionTemplating.Files;
 
 namespace Volo.Abp.SolutionTemplating.Building
 {
     public class ProjectBuildContext
     {
-        public ProjectBuildRequest Request { get; }
+        [NotNull]
+        public TemplateFile TemplateFile { get; }
 
-        public string TemplatesFolder { get; }
+        [NotNull]
+        public string Version { get; }
 
+        [NotNull]
+        public ProjectBuildArgs BuildArgs { get; }
+
+        [NotNull]
         public TemplateInfo Template { get; }
 
         public FileEntryList Files { get; set; }
 
         public ProjectResult Result { get; set; }
         
-        public ProjectBuildContext(
-            [NotNull] TemplateInfo template,
-            ProjectBuildRequest request,
-            string templatesFolder)
+        public ProjectBuildContext([NotNull] TemplateInfo template,
+            [NotNull] TemplateFile templateFile,
+            [NotNull] ProjectBuildArgs buildArgs,
+            [NotNull] string version)
         {
             Template = Check.NotNull(template, nameof(template));
-            Request = request;
-            TemplatesFolder = templatesFolder;
+            TemplateFile = Check.NotNull(templateFile, nameof(templateFile));
+            BuildArgs = Check.NotNull(buildArgs, nameof(buildArgs));
+            Version = Check.NotNullOrWhiteSpace(version, nameof(version));
+
             Result = new ProjectResult();
         }
     }

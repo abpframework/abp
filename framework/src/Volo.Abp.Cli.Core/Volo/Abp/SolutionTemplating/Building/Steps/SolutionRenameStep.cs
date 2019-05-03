@@ -13,8 +13,8 @@ namespace Volo.Abp.SolutionTemplating.Building.Steps
                 context.Files,
                 "MyCompanyName",
                 "MyProjectName",
-                context.Request.SolutionName.CompanyName,
-                context.Request.SolutionName.ProjectName
+                context.BuildArgs.SolutionName.CompanyName,
+                context.BuildArgs.SolutionName.ProjectName
             ).Run();
         }
 

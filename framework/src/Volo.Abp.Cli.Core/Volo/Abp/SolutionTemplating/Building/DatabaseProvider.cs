@@ -1,8 +1,8 @@
 ﻿namespace Volo.Abp.SolutionTemplating.Building
 {
-    public enum DatabaseProvider : byte
+    public enum DatabaseProvider
     {
-        Irrelevant = 0,
+        NotSpecified = 0,
         EntityFrameworkCore = 1,
         MongoDb = 2
     }

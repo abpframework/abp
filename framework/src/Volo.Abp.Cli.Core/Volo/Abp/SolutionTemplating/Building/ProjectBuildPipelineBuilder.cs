@@ -8,7 +8,6 @@ namespace Volo.Abp.SolutionTemplating.Building
         {
             var pipeline = new ProjectBuildPipeline();
 
-            pipeline.Steps.Add(new GithubDownloadStep());
             pipeline.Steps.Add(new FileEntryListReadStep());
             pipeline.Steps.AddRange(context.Template.GetCustomSteps(context));
             pipeline.Steps.Add(new NugetReferenceReplaceStep());
