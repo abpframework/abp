@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using Ionic.Zip;
 using Microsoft.Extensions.Logging;
@@ -30,10 +29,14 @@ namespace Volo.Abp.Cli.Commands
             {
                 Logger.LogWarning("Project name is missing.");
                 Logger.LogWarning("Usage:");
-                Logger.LogWarning("  abp new <project-name> [-t <template-name>]");
+                Logger.LogWarning("  abp new <project-name> [-t|--template] [-d|--database-provider]");
+                Logger.LogWarning("");
+                Logger.LogWarning("");
+                Logger.LogWarning("");
                 Logger.LogWarning("Examples:");
                 Logger.LogWarning("  abp new Acme.BookStore");
-                Logger.LogWarning("  abp new Acme.BookStore mvc");
+                Logger.LogWarning("  abp new Acme.BookStore -t mvc-module");
+                Logger.LogWarning("  abp new Acme.BookStore -t mvc -d mongodb");
                 return;
             }
 
@@ -84,7 +87,7 @@ namespace Volo.Abp.Cli.Commands
             public static class DatabaseProvider
             {
                 public const string Short = "d";
-                public const string Long = "databaseProvider";
+                public const string Long = "database-provider";
             }
         }
     }

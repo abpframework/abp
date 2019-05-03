@@ -252,4 +252,4 @@ paket-files/
 *.sln.iml
 
 # MyProjectName
-src/MyCompanyName.MyProjectName.Web/Logs/logs.txt
+app/MyCompanyName.MyProjectName.DemoApp/Logs/logs.txt
