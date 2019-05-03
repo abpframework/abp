@@ -1,10 +1,9 @@
-﻿using Volo.Abp.Domain;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Cli
 {
     [DependsOn(
-        typeof(AbpDddDomainModule)
+        typeof(AbpCliCoreModule)
     )]
     public class AbpCliModule : AbpModule
     {
