@@ -1,4 +1,6 @@
-﻿namespace MyCompanyName.MyProjectName
+﻿using Volo.Abp.Reflection;
+
+namespace MyCompanyName.MyProjectName
 {
     public class MyProjectNamePermissions
     {
@@ -6,10 +8,7 @@
 
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(MyProjectNamePermissions));
         }
     }
 }

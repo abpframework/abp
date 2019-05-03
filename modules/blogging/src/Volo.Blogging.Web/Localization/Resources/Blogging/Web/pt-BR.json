@@ -36,6 +36,12 @@
     "CoverImage": "Imagem de Capa",
     "CreateANewPost": "Criar uma nova Postagem",
     "CreateANewBlog": "Criar um novo Blog",
-    "WhatIsNew": "O que há de novo?"
+    "WhatIsNew": "O que há de novo?",
+    "Name": "Nome",
+    "ShortName": "Nome Curto",
+    "CreationTime": "Hora da criação",
+    "Description": "Descrição",
+    "Blogs": "Blogs",
+    "Tags": "Etiquetas"
   }
 }

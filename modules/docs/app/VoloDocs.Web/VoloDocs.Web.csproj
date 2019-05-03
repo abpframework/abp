@@ -9,8 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\en.json" />
-    <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\tr.json" />
+    <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\*.json" />
   </ItemGroup>
 
   <ItemGroup>

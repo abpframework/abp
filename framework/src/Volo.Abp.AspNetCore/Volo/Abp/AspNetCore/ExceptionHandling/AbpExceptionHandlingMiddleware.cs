@@ -36,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 // We can't do anything if the response has already started, just abort.
                 if (httpContext.Response.HasStarted)
                 {
-                    _logger.LogWarning("An exception occured, but response has already started!");
+                    _logger.LogWarning("An exception occurred, but response has already started!");
                     throw;
                 }
 

@@ -319,4 +319,4 @@ public class AppModule : AbpModule
 
 ### 请参阅
 
-* [ASP.NET Core依赖注入最佳实践,提示和技巧](https://medium.com/volosoft/asp-net-core-dependency-injection-best-practices-tips-tricks-c6e9c67f9d96)
+* [ASP.NET Core依赖注入最佳实践,提示和技巧](https://cn.abp.io/blog/Abp/asp-net-core-dependency-injection-best-practices-tips-tricks)

@@ -36,6 +36,12 @@
       "CoverImage": "封面图",
       "CreateANewPost": "创建一个新帖子",
       "CreateANewBlog": "创建一个新博客",
-      "WhatIsNew": "最新消息"
-    }
+      "WhatIsNew": "最新消息",
+      "Name": "名称",
+      "ShortName": "简称",
+      "CreationTime": "创建时间",
+      "Description": "描述",
+      "Blogs": "博客",
+      "Tags": "标签"
   }
+}
