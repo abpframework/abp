@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Events;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli
@@ -7,7 +9,20 @@ namespace Volo.Abp.Cli
     {
         private static void Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<AbpCliModule>())
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Information()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                //.WriteTo.File("Logs/logs.txt") //TODO: Write logs to a global path
+                .WriteTo.Console()
+                .CreateLogger();
+
+            using (var application = AbpApplicationFactory.Create<AbpCliModule>(
+                options =>
+                {
+                    options.UseAutofac();
+                    options.Services.AddLogging(c => c.AddSerilog());
+                }))
             {
                 application.Initialize();
 

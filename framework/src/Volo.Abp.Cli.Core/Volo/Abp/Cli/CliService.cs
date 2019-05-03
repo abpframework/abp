@@ -2,15 +2,20 @@
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ProjectBuilding;
 
 namespace Volo.Abp.Cli
 {
     public class CliService : ITransientDependency
     {
         public static string Version => typeof(AbpCliCoreModule).Assembly.GetFileVersion();
+
+        public ILogger<CliService> Logger { get; set; }
 
         protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
         protected ICommandSelector CommandSelector { get; }
@@ -24,12 +29,14 @@ namespace Volo.Abp.Cli
             CommandLineArgumentParser = commandLineArgumentParser;
             CommandSelector = commandSelector;
             ServiceScopeFactory = serviceScopeFactory;
+
+            Logger = NullLogger<CliService>.Instance;
         }
 
         public async Task RunAsync(string[] args)
         {
-            Console.WriteLine("ABP CLI (abp.io)");
-            Console.WriteLine("Version: " + Version);
+            Logger.LogInformation("ABP CLI (abp.io)");
+            Logger.LogInformation("Version: " + Version);
 
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);

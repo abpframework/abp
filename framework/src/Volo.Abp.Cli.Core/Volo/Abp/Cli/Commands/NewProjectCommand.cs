@@ -2,6 +2,8 @@
 using System.IO;
 using System.Threading.Tasks;
 using Ionic.Zip;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ProjectBuilding;
@@ -12,28 +14,32 @@ namespace Volo.Abp.Cli.Commands
 {
     public class NewProjectCommand : IConsoleCommand, ITransientDependency
     {
+        public ILogger<NewProjectCommand> Logger { get; set; }
+
         protected ProjectBuilder ProjectBuilder { get; }
 
         public NewProjectCommand(ProjectBuilder projectBuilder)
         {
             ProjectBuilder = projectBuilder;
+
+            Logger = NullLogger<NewProjectCommand>.Instance;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             if (commandLineArgs.Target == null)
             {
-                Console.WriteLine("Project name is missing.");
-                Console.WriteLine("Usage:");
-                Console.WriteLine("  abp new <project-name> [-t <template-name>]");
-                Console.WriteLine("Examples:");
-                Console.WriteLine("  abp new Acme.BookStore");
-                Console.WriteLine("  abp new Acme.BookStore mvc");
+                Logger.LogWarning("Project name is missing.");
+                Logger.LogWarning("Usage:");
+                Logger.LogWarning("  abp new <project-name> [-t <template-name>]");
+                Logger.LogWarning("Examples:");
+                Logger.LogWarning("  abp new Acme.BookStore");
+                Logger.LogWarning("  abp new Acme.BookStore mvc");
                 return;
             }
 
-            Console.WriteLine("Creating a new solution");
-            Console.WriteLine("Solution name: " + commandLineArgs.Target);
+            Logger.LogInformation("Creating a new project...");
+            Logger.LogInformation("Project name: " + commandLineArgs.Target);
 
             var result = await ProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
