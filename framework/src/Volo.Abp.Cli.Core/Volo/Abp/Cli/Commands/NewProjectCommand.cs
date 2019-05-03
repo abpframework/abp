@@ -28,10 +28,13 @@ namespace Volo.Abp.Cli.Commands
             if (commandLineArgs.Target == null)
             {
                 Logger.LogWarning("Project name is missing.");
+                Logger.LogWarning("");
                 Logger.LogWarning("Usage:");
                 Logger.LogWarning("  abp new <project-name> [-t|--template] [-d|--database-provider]");
                 Logger.LogWarning("");
-                Logger.LogWarning("");
+                Logger.LogWarning("Options:");
+                Logger.LogWarning("-t|--template <template-name>");
+                Logger.LogWarning("-d|--database-provider <database-provider>");
                 Logger.LogWarning("");
                 Logger.LogWarning("Examples:");
                 Logger.LogWarning("  abp new Acme.BookStore");
