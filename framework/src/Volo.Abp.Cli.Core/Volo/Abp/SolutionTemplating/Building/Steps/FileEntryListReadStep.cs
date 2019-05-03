@@ -9,16 +9,16 @@ namespace Volo.Abp.SolutionTemplating.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
-            context.Files = GetEntriesFromZipFile(context.Template.FilePath);
+            context.Files = GetEntriesFromZipFile(context.TemplateFile.FileBytes);
         }
 
-        private static FileEntryList GetEntriesFromZipFile(string filePath, string rootFolder = null)
+        private static FileEntryList GetEntriesFromZipFile(byte[] fileBytes)
         {
-            using (var templateFileStream = File.OpenRead(filePath))
+            using (var memoryStream = new MemoryStream(fileBytes))
             {
-                using (var templateZipFile = ZipFile.Read(templateFileStream))
+                using (var templateZipFile = ZipFile.Read(memoryStream))
                 {
-                    return templateZipFile.ToFileEntryList(rootFolder);
+                    return templateZipFile.ToFileEntryList();
                 }
             }
         }

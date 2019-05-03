@@ -23,6 +23,16 @@ namespace Volo.Abp.ProjectBuilding
 
             var templateInfo = GetTemplateInfo(args);
 
+            args.TemplateName = templateInfo.Name;
+
+            if (args.DatabaseProvider == DatabaseProvider.NotSpecified)
+            {
+                if (templateInfo.DefaultDatabaseProvider != DatabaseProvider.NotSpecified)
+                {
+                    args.DatabaseProvider = templateInfo.DefaultDatabaseProvider;
+                }
+            }
+
             var templateFile = await TemplateStore.GetAsync(args.TemplateName, version);
 
             var context = new ProjectBuildContext(

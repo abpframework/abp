@@ -1,11 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.SolutionTemplating.Building
 {
     public abstract class TemplateInfo
     {
-        public string FilePath { get; set; }
+        public string Name { get; }
+
+        public DatabaseProvider DefaultDatabaseProvider { get; }
+
+        protected TemplateInfo(
+            [NotNull] string name, 
+            DatabaseProvider defaultDatabaseProvider = DatabaseProvider.NotSpecified)
+        {
+            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            DefaultDatabaseProvider = Check.NotNull(defaultDatabaseProvider, nameof(defaultDatabaseProvider));
+        }
 
         public virtual IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
         {

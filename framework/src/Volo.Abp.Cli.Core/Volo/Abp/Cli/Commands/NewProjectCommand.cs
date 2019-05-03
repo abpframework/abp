@@ -7,7 +7,6 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.ProjectBuilding;
 using Volo.Abp.SolutionTemplating;
 using Volo.Abp.SolutionTemplating.Building;
-using Volo.Abp.SolutionTemplating.Zipping;
 
 namespace Volo.Abp.Cli.Commands
 {

@@ -12,7 +12,7 @@ namespace Volo.Abp.ProjectBuilding
         [CanBeNull]
         public string TemplateName { get; set; }
 
-        public DatabaseProvider DatabaseProvider { get; }
+        public DatabaseProvider DatabaseProvider { get; set; }
 
         public ProjectBuildArgs(
             [NotNull] SolutionName solutionName, 

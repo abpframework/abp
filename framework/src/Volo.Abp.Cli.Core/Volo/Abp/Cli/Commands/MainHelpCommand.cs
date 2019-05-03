@@ -5,7 +5,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class MainHelpCommand : ITransientDependency
+    public class MainHelpCommand : IConsoleCommand, ITransientDependency
     {
         public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {

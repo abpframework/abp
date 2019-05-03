@@ -6,6 +6,16 @@ namespace Volo.Abp.ProjectBuilding.Templates
 {
     public class MvcApplicationTemplate : TemplateInfo
     {
+        /// <summary>
+        /// "mvc".
+        /// </summary>
+        public const string TemplateName = "mvc";
+
+        public MvcApplicationTemplate()
+            : base(TemplateName, DatabaseProvider.EntityFrameworkCore)
+        {
+        }
+
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
         {
             var steps = new List<ProjectBuildPipelineStep>();
