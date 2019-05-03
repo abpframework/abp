@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.ProjectBuilding.Building;
 using Volo.Abp.ProjectBuilding.Templates;
-using Volo.Abp.SolutionTemplating.Building;
 
 namespace Volo.Abp.ProjectBuilding
 {

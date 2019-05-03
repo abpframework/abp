@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.SolutionTemplating
+namespace Volo.Abp.ProjectBuilding
 {
     public class SolutionName
     {

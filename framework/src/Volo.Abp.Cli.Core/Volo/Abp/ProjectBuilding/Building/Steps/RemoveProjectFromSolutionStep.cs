@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Volo.Abp.SolutionTemplating.Building.Steps
+namespace Volo.Abp.ProjectBuilding.Building.Steps
 {
     public class RemoveProjectFromSolutionStep : ProjectBuildPipelineStep
     {

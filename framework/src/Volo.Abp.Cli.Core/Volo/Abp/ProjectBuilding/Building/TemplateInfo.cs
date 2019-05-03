@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.SolutionTemplating.Building
+namespace Volo.Abp.ProjectBuilding.Building
 {
     public abstract class TemplateInfo
     {

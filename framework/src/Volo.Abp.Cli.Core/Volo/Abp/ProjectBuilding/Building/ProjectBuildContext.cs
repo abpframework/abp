@@ -1,8 +1,7 @@
 ﻿using JetBrains.Annotations;
-using Volo.Abp.ProjectBuilding;
-using Volo.Abp.SolutionTemplating.Files;
+using Volo.Abp.ProjectBuilding.Files;
 
-namespace Volo.Abp.SolutionTemplating.Building
+namespace Volo.Abp.ProjectBuilding.Building
 {
     public class ProjectBuildContext
     {

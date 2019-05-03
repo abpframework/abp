@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Ionic.Zip;
-using Volo.Abp.SolutionTemplating.Files;
+using Volo.Abp.ProjectBuilding.Files;
 
-namespace Volo.Abp.SolutionTemplating.Zipping
+namespace Volo.Abp.ProjectBuilding.Zipping
 {
     public static class ZipFileExtensions
     {

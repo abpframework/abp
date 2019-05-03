@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Volo.Abp.SolutionTemplating.Github
+namespace Volo.Abp.ProjectBuilding.Github
 {
     [JsonObject]
     public class GithubRelease

@@ -7,8 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ProjectBuilding;
-using Volo.Abp.SolutionTemplating;
-using Volo.Abp.SolutionTemplating.Building;
+using Volo.Abp.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -56,6 +55,8 @@ namespace Volo.Abp.Cli.Commands
                     templateZipFile.ExtractAll(Directory.GetCurrentDirectory(), ExtractExistingFileAction.Throw);
                 }
             }
+
+            Logger.LogInformation($"Successfully created the project '{commandLineArgs.Target}'");
         }
 
         protected virtual DatabaseProvider GetDatabaseProviderOrNull(CommandLineArgs commandLineArgs)

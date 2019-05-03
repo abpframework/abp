@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Volo.Abp.SolutionTemplating;
 
 namespace Volo.Abp.ProjectBuilding
 {

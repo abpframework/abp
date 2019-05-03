@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
-using Volo.Abp.SolutionTemplating;
-using Volo.Abp.SolutionTemplating.Building;
+using Volo.Abp.ProjectBuilding.Building;
 
 namespace Volo.Abp.ProjectBuilding
 {

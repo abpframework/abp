@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Volo.Abp.SolutionTemplating.Files;
+using Volo.Abp.ProjectBuilding.Files;
 
-namespace Volo.Abp.SolutionTemplating.Building.Steps
+namespace Volo.Abp.ProjectBuilding.Building.Steps
 {
     public class SolutionRenameStep : ProjectBuildPipelineStep
     {

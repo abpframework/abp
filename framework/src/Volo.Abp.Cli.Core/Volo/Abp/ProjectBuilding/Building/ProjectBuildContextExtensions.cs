@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Volo.Abp.SolutionTemplating.Files;
+using Volo.Abp.ProjectBuilding.Files;
 
-namespace Volo.Abp.SolutionTemplating.Building
+namespace Volo.Abp.ProjectBuilding.Building
 {
     public static class ProjectBuildContextExtensions
     {

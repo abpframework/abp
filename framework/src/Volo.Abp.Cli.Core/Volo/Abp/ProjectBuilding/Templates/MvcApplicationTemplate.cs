@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Volo.Abp.SolutionTemplating.Building;
-using Volo.Abp.SolutionTemplating.Building.Steps;
+using Volo.Abp.ProjectBuilding.Building;
+using Volo.Abp.ProjectBuilding.Building.Steps;
 
 namespace Volo.Abp.ProjectBuilding.Templates
 {

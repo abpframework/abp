@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.SolutionTemplating.Building
+﻿namespace Volo.Abp.ProjectBuilding.Building
 {
     public class ProjectResult
     {

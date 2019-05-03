@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Volo.Abp.SolutionTemplating.Building
+namespace Volo.Abp.ProjectBuilding.Building
 {
     public class GithubRepositoryInfo
     {

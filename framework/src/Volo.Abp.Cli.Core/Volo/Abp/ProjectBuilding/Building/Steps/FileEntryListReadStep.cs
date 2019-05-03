@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using Ionic.Zip;
-using Volo.Abp.SolutionTemplating.Files;
-using Volo.Abp.SolutionTemplating.Zipping;
+using Volo.Abp.ProjectBuilding.Files;
+using Volo.Abp.ProjectBuilding.Zipping;
 
-namespace Volo.Abp.SolutionTemplating.Building.Steps
+namespace Volo.Abp.ProjectBuilding.Building.Steps
 {
     public class FileEntryListReadStep : ProjectBuildPipelineStep
     {

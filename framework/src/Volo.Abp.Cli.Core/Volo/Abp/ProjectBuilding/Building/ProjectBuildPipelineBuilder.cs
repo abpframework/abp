@@ -1,6 +1,6 @@
-﻿using Volo.Abp.SolutionTemplating.Building.Steps;
+﻿using Volo.Abp.ProjectBuilding.Building.Steps;
 
-namespace Volo.Abp.SolutionTemplating.Building
+namespace Volo.Abp.ProjectBuilding.Building
 {
     public static class ProjectBuildPipelineBuilder
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Volo.Abp.SolutionTemplating.Files
+namespace Volo.Abp.ProjectBuilding.Files
 {
     public class FileEntry
     {

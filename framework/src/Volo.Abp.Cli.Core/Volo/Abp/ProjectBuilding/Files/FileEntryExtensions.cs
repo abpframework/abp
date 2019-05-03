@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Volo.Abp.SolutionTemplating.Files
+namespace Volo.Abp.ProjectBuilding.Files
 {
     public static class FileEntryExtensions
     {

@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Cli;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.SolutionTemplating;
-using Volo.Abp.SolutionTemplating.Building;
+using Volo.Abp.ProjectBuilding.Building;
 
 namespace Volo.Abp.ProjectBuilding
 {

@@ -1,7 +1,7 @@
 using System;
 using Ionic.Zip;
 
-namespace Volo.Abp.SolutionTemplating.Files
+namespace Volo.Abp.ProjectBuilding.Files
 {
     public static class FileEntryListExtensions
     {
