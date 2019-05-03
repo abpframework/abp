@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Cli;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
 
@@ -19,7 +20,7 @@ namespace Volo.Abp.ProjectBuilding
 
         public async Task<TemplateFile> GetAsync(string templateName, string version)
         {
-            var localCacheFolder = "C:\\Temp\\abp-template-cache\\" + version;
+            var localCacheFolder = Path.Combine(CliPaths.TemplateCachePath, version);
             DirectoryHelper.CreateIfNotExists(localCacheFolder);
 
             var localCacheFile = Path.Combine(localCacheFolder, templateName + ".zip");

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Events;
+using System.IO;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli
@@ -13,7 +14,7 @@ namespace Volo.Abp.Cli
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
-                //.WriteTo.File("Logs/logs.txt") //TODO: Write logs to a global path
+                .WriteTo.File(Path.Combine(CliPaths.CliLogPath, "abp-cli-logs.txt"))
                 .WriteTo.Console()
                 .CreateLogger();
 
