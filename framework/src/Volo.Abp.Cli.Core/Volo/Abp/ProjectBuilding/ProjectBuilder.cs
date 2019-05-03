@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Cli;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.SolutionTemplating;
 using Volo.Abp.SolutionTemplating.Building;
@@ -19,8 +20,6 @@ namespace Volo.Abp.ProjectBuilding
         
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
-            var version = "0.16.0"; //TODO: Should get from somewhere!
-
             var templateInfo = GetTemplateInfo(args);
 
             args.TemplateName = templateInfo.Name;
@@ -32,6 +31,8 @@ namespace Volo.Abp.ProjectBuilding
                     args.DatabaseProvider = templateInfo.DefaultDatabaseProvider;
                 }
             }
+
+            var version = CliService.Version;
 
             var templateFile = await TemplateStore.GetAsync(args.TemplateName, version);
 
