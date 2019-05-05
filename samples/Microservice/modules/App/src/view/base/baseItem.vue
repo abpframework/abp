@@ -19,8 +19,48 @@ a<template>
       >
         <div slot="search">
           <section class="dnc-toolbar-wrap">
-            <Row :gutter="16">
-              <Col span="24" class="dnc-toolbar-btns">
+             <Row :gutter="16">
+               <Col span="16">
+                <Form inline>
+                  <FormItem>
+                    <Dropdown
+                        trigger="click"
+                        :transfer="true"
+                        placement="bottom-start"
+                        style="min-width:80px;"
+                        @on-visible-change="handleSearchTypeTreeVisibleChange"
+                      >
+                        <Button type="primary">
+                          <span v-text="stores.baseItem.query.typeName"></span>
+                          <Icon type="ios-arrow-down"></Icon>
+                        </Button>
+                        <div class="text-left pad10" slot="list" style="min-width:360px;">
+                          <div>
+                            <Button
+                              type="primary"
+                              size="small"
+                              icon="ios-search"
+                              @click="handleRefreshSearchTypeTreeData"
+                            >刷新菜单</Button>
+                            <Button
+                              class="ml3"
+                              type="primary"
+                              size="small"
+                              icon="md-close"
+                              @click="handleClearSearchTypeTreeSelection"
+                            >清空</Button>
+                          </div>
+                          <Tree
+                            class="text-left dropdown-tree"
+                            :data="stores.baseItem.sources.typeTree.data"
+                            @on-select-change="handleSearchTypeTreeSelectChange"
+                          ></Tree>
+                        </div>
+                      </Dropdown>
+                  </FormItem>
+                </Form>
+              </Col>
+              <Col span="8" class="dnc-toolbar-btns">
                 <ButtonGroup class="mr3">
                   <Button icon="md-refresh" title="刷新" @click="loadbaseItemList"></Button>
                 </ButtonGroup>
@@ -59,7 +99,7 @@ a<template>
                       ref="tree"
                       class="text-left dropdown-tree"
                       :data="formModel.data"
-                      @on-select-change="handleMenuTreeSelectChange"
+                      @on-select-change="handleTypeTreeSelectChange"
                     ></Tree>
                   </div>
                 </Dropdown>
@@ -144,8 +184,9 @@ export default {
             totalCount: 0,
             MaxResultCount: 20,
             SkipCount: 0,
-            Filter: "",
-            Sorting: "sort"
+            Sorting: "sort",
+            typeName: "请选择...",
+            BaseTypeGuid:""
           },
           sources: {
             statusSources: [
@@ -156,14 +197,18 @@ export default {
             statusFormSources: [
               { value: 0, text: "禁用" },
               { value: 1, text: "正常" }
-            ]
+            ],
+             typeTree: {
+              inited: false,
+              data: []
+            },
           },
           columns: [
             { type: "selection", width: 50, key: "handle" },
             { title: "编码名称", key: "code", width: 150 },
             { title: "名称", key: "name", width: 250 },
             { title: "排序码", key: "sort", width: 250 },
-            { title: "备注", key: "remark", width: 350 },
+            { title: "备注", key: "remark"},
             {
               title: "操作",
               align: "center",
@@ -274,15 +319,14 @@ export default {
       });
     },
     handlePageChanged(page) {
-      this.stores.baseItem.query.SkipCount =
-        (page - 1) * this.stores.baseItem.query.MaxResultCount;
+      this.stores.baseItem.query.SkipCount =  (page - 1) * this.stores.baseItem.query.MaxResultCount;
       this.loadbaseItemList();
     },
     handlePageSizeChanged(MaxResultCount) {
       this.stores.baseItem.query.MaxResultCount = MaxResultCount;
       this.loadbaseItemList();
     },
-    handleMenuTreeSelectChange(nodes) {
+    handleTypeTreeSelectChange(nodes) {
       var node = nodes[0];
       if (node) {
         this.formModel.parentGuid = node.guid;
@@ -368,10 +412,37 @@ export default {
           });
         }
       }
+    },
+    handleSearchTypeTreeSelectChange(nodes) {
+      var node = nodes[0];
+      if (node) {
+        this.stores.baseItem.query.BaseTypeGuid = node.guid;
+        this.stores.baseItem.query.typeName = node.title;
+      }
+      this.loadbaseItemList();
+    },
+    handleSearchTypeTreeVisibleChange(visible) {
+      if (visible && !this.stores.baseItem.sources.typeTree.inited) {
+        this.stores.baseItem.sources.typeTree.inited = true;
+        getViewTrees({}).then(res => {
+          this.stores.baseItem.sources.typeTree.data = res.data;
+        });
+      }
+    },
+   handleRefreshSearchTypeTreeData() {
+     getViewTrees({}).then(res => {
+        this.stores.baseItem.sources.typeTree.data = res.data;
+      });
+    },
+    handleClearSearchTypeTreeSelection() {
+      this.stores.baseItem.query.BaseTypeGuid = "";
+      this.stores.baseItem.query.typeName = "请选择...";
+      this.loadbaseItemList();
     }
   },
   mounted() {
     this.loadbaseItemList();
+    this.handleRefreshSearchTypeTreeData()
   }
 };
 </script>

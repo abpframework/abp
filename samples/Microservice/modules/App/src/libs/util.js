@@ -12,7 +12,7 @@ const {
   useI18n
 } = config
 
-export const TOKEN_KEY = 'token'
+export const TOKEN_KEY = 'TOKEN_KEY'
 
 export const setToken = (token) => {
   localStorage.setItem(TOKEN_KEY, token);

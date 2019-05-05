@@ -300,7 +300,6 @@ export default {
               title: "公用角色",
               key: "isPublic",
               align: "center",
-              width: 80,
               render: (h, params) => {
                 let status = params.row.isPublic;
                 let statusColor = "success";

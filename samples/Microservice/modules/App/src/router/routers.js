@@ -64,42 +64,6 @@ export default [{
     }]
   },
   {
-    path: '/demo',
-    name: 'demo',
-    component: Main,
-    meta: {
-      icon:"logo-buffer",
-      title:"示例菜单"
-    },
-    children: [{
-      path: 'demo-page',
-      name: 'demo_page',
-      meta: {
-        title: '示例页面',
-        icon: 'md-home'
-      },
-      component: () => import('@/view/demo/demo-page')
-    }]
-  },
-  {
-    path: '/message',
-    name: 'message',
-    component: Main,
-    meta: {
-      hideInBread: true,
-      hideInMenu: true
-    },
-    children: [{
-      path: 'message_page',
-      name: 'message_page',
-      meta: {
-        icon: 'md-notifications',
-        title: '消息中心'
-      },
-      component: () => import('@/view/single-page/message/index.vue')
-    }]
-  },
-  {
     path: '/rbac',
     name: 'AbpIdentity',
     meta: {
@@ -124,7 +88,7 @@ export default [{
       },
       component: () => import( /* webpackChunkName: "rbac" */ '@/view/rbac/role.vue')
     }, {
-      path: 'audit',
+      path: 'auditlog',
       name: 'AuditLogging.AuditLog',
       meta: {
         icon: 'md-menu',
@@ -132,15 +96,15 @@ export default [{
       },
       component: () => import('@/view/auditlog/auditlog.vue')
     }, {
-      path: 'baseType',
+      path: 'basetype',
       name: 'BaseManagement.BaseType',
       meta: {
         icon: 'md-aperture',
         title: '基础资料字典类别管理'
       },
-      component: () => import( /* webpackChunkName: "rbac" */ '@/view/base/baseType.vue')
+      component: () => import('@/view/base/baseType.vue')
     },{
-      path: 'baseItem',
+      path: 'baseitem',
       name: 'BaseManagement.BaseItem',
       meta: {
         icon: 'ios-hammer',
@@ -155,59 +119,14 @@ export default [{
         title: '部门管理'
       },
       component: () => import('@/view/rbac/organization.vue')
-    }]
-  },
-  {
-    path: '/tools_methods',
-    name: 'tools_methods',
-    meta: {
-      hideInBread: true
-    },
-    component: Main,
-    children: [{
-      path: 'tools_methods_page',
-      name: 'tools_methods_page',
+    },{
+      path: 'profile',
+      name:'profile',
       meta: {
-        icon: 'ios-hammer',
-        title: '工具方法',
-        beforeCloseName: 'before_close_normal'
+        icon: 'ios-happy-outline',
+        title: '个人资料'
       },
-      component: () => import('@/view/tools-methods/tools-methods.vue')
-    }]
-  },
-  {
-    path: '/error_store',
-    name: 'error_store',
-    meta: {
-      hideInBread: true
-    },
-    component: Main,
-    children: [{
-      path: 'error_store_page',
-      name: 'error_store_page',
-      meta: {
-        icon: 'ios-bug',
-        title: '错误收集'
-      },
-      component: () => import('@/view/error-store/error-store.vue')
-    }]
-  },
-  {
-    path: '/error_logger',
-    name: 'error_logger',
-    meta: {
-      hideInBread: true,
-      hideInMenu: true
-    },
-    component: Main,
-    children: [{
-      path: 'error_logger_page',
-      name: 'error_logger_page',
-      meta: {
-        icon: 'ios-bug',
-        title: '错误收集'
-      },
-      component: () => import('@/view/single-page/error-logger.vue')
+      component: () => import('@/view/rbac/profile.vue')
     }]
   },
   {

@@ -40,7 +40,7 @@ export const createBaseType = (data) => {
   }
 
 
-  export const getViewTrees = (data) => {
+  export const getBaseTypeViewTrees = (data) => {
     return axios.request({
       url: 'baseManagement/baseType/getViewTrees',
       method: 'get'

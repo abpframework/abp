@@ -67,7 +67,7 @@ import {
   createBaseType,
   loadBaseType,
   editBaseType,
-  getViewTrees
+  getBaseTypeViewTrees
 } from "@/api/base/baseType";
 
 export default {
@@ -291,7 +291,7 @@ export default {
       this.formModel.opened = true;
       this.formModel.parentName = "";
       this.formModel.parentGuid=""
-      this.getViewTrees(null);
+      this.getBaseTypeViewTrees(null);
     },
     edit(data) {
       this.formModel.mode = "edit";
@@ -304,7 +304,7 @@ export default {
         that.formModel.parentName='';
         that.formModel.parentGuid=res.data.parentId;
 
-        this.getViewTrees(data.id).then(() => {
+        this.getBaseTypeViewTrees(data.id).then(() => {
           var selectNodes = that.$refs.tree.getSelectedNodes();
           if (selectNodes.length > 0) {
             that.formModel.parentName = selectNodes[0].title;
@@ -312,14 +312,15 @@ export default {
         });
       });
     },
-    getViewTrees(id) {
+    getBaseTypeViewTrees(id) {
       var that = this;
-      return getViewTrees({
+      return getBaseTypeViewTrees({
         id: id
       }).then(res => {
         that.formModel.data = res.data;
       });
     },
+    
     handleSubmit() {
       let valid = this.validateRoleForm();
       var that = this;

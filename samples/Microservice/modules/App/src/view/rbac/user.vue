@@ -237,7 +237,6 @@ export default {
             { title: "手机号", key: "phoneNumber", width: 150 },
             {
               title: "创建时间",
-              width: 200,
               ellipsis: true,
               tooltip: true,
               key: "creationTime"

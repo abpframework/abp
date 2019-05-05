@@ -29,7 +29,7 @@ export default {
   methods: {
     openErrorLoggerPage () {
       this.$router.push({
-        name: 'error_logger_page'
+        name: 'AuditLogging.AuditLog'
       })
     }
   }
