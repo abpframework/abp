@@ -100,6 +100,7 @@ namespace Volo.Abp.Application.Services
             var entity = GetEntityById(id);
             
             MapToEntity(input, entity);
+            Repository.Update(entity);
             CurrentUnitOfWork.SaveChanges();
 
             return MapToEntityDto(entity);
