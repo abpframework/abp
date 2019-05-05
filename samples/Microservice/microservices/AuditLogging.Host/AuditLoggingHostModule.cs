@@ -128,28 +128,8 @@ namespace AuditLogging.Host
             });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
-
-            AsyncHelper.RunSync(() => SeedDataAsync(context.ServiceProvider));
+            
         }
-
-        public async Task SeedDataAsync(IServiceProvider serviceProvider)
-        {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                //var blogRepository = scope.ServiceProvider.GetRequiredService<IAuditLogRepository>();
-                //var guidGenerator = scope.ServiceProvider.GetRequiredService<IGuidGenerator>();
-
-                //if (await blogRepository.FindByShortNameAsync("abp") == null)
-                //{
-                //    await blogRepository.InsertAsync(
-                //        new Blog(
-                //            guidGenerator.Create(),
-                //            "ABP Blog",
-                //            "abp"
-                //        )
-                //    );
-                //}
-            }
-        }
+        
     }
 }

@@ -671,6 +671,7 @@ export default {
         permissions: permissions
       }).then(res => {
         this.$Message.success("配置权限成功!");
+        this.permissionModal.opened = false;
       });
     }
   },

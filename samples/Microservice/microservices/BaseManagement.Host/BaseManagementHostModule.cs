@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using BaseManagement.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Auditing;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -30,7 +31,10 @@ namespace BaseManagement.Host
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpHttpClientIdentityModelModule),
+
         typeof(BaseManagementHttpApiModule),
         typeof(BaseManagementEntityFrameworkCoreModule),
         typeof(BaseManagementApplicationModule),

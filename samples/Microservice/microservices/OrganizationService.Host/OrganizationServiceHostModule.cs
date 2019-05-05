@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using OrganizationService.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Auditing;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -30,7 +31,10 @@ namespace OrganizationService.Host
         typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        //日志记录
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpHttpClientIdentityModelModule),
+        //组织机构模块
         typeof(OrganizationServiceHttpApiModule),
         typeof(OrganizationServiceEntityFrameworkCoreModule),
         typeof(OrganizationServiceApplicationModule),

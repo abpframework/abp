@@ -35,7 +35,7 @@ namespace IdentityService.Host
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
 
-        //审计日志
+        //用户角色管理
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpIdentityApplicationModule),

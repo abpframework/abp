@@ -18,6 +18,7 @@
         @on-refresh="handleRefresh"
         @on-page-change="handlePageChanged"
         @on-page-size-change="handlePageSizeChanged"
+        @on-permission="handlePermission"
       >
         <div slot="search">
           <section class="dnc-toolbar-wrap">
@@ -141,6 +142,36 @@
         <Button style="margin-left: 8px" icon="md-close" @click="formModel.opened = false">取 消</Button>
       </div>
     </Drawer>
+
+      <Drawer
+      title="角色权限配置"
+      v-model="permissionModal.opened"
+      width="600"
+      :mask-closable="false"
+      :mask="false"
+      :styles="styles"
+    >
+      <Form ref="permissionRole" :model="permissionModal" label-position="left">
+        <FormItem label="用户Id" prop="entityDisplayName" label-position="left">
+          <Input v-model="permissionModal.entityDisplayName" disabled/>
+        </FormItem>
+        <FormItem>
+          <Row :gutter="16">
+            <Tabs type="card">
+              <template v-for="item in permissionModal.groups">
+                <TabPane :label="item.displayName" :name="item.name">
+                  <Tree ref="tree" show-checkbox check-directly :data="item.permissions"></Tree>
+                </TabPane>
+              </template>
+            </Tabs>
+          </Row>
+        </FormItem>
+      </Form>
+      <div class="demo-drawer-footer">
+        <Button icon="md-checkmark-circle" type="primary" @click="handleSubmitPermission">保 存</Button>
+        <Button style="margin-left: 8px" icon="md-close" @click="permissionModal.opened = false">取 消</Button>
+      </div>
+    </Drawer>
   </div>
 </template>
 
@@ -154,7 +185,9 @@ import {
   deleteUser,
   saveUserRoles
 } from "@/api/rbac/user";
+
 import { loadRoleListByUserGuid, loadSimpleList } from "@/api/rbac/role";
+import { editPermission, loadPermissionTree } from "@/api/rbac/permission";
 
 export default {
   name: "rbac_user_page",
@@ -163,6 +196,13 @@ export default {
   },
   data() {
     return {
+     permissionModal: {
+        opened: false,
+        rolePermission: [],
+        name: "",
+        entityDisplayName: "",
+        groups: []
+      },
       formModel: {
         opened: false,
         title: "创建用户",
@@ -335,14 +375,43 @@ export default {
                     ]
                   );
                 },
-                (h, params, vm) => {
-                  return h("Tooltip", {
-                    props: {
-                      placement: "left",
-                      transfer: true,
-                      delay: 1000
-                    }
-                  });
+                 (h, params, vm) => {
+                  return h(
+                    "Tooltip",
+                    {
+                      props: {
+                        placement: "left",
+                        transfer: true,
+                        delay: 1000
+                      }
+                    },
+                    [
+                      h("Button", {
+                        props: {
+                          shape: "circle",
+                          size: "small",
+                          icon: "ios-cog",
+                          type: "primary"
+                        },
+                        on: {
+                          click: () => {
+                            vm.$emit("on-permission", params);
+                            vm.$emit("input", params.tableData);
+                          }
+                        }
+                      }),
+                      h(
+                        "p",
+                        {
+                          slot: "content",
+                          style: {
+                            whiteSpace: "normal"
+                          }
+                        },
+                        "配置权限"
+                      )
+                    ]
+                  );
                 }
               ]
             }
@@ -510,6 +579,75 @@ export default {
       } else {
         this.formAssignRole.ownedRoles = defaults;
       }
+    },
+    handleSubmitPermission() {
+      var that = this;
+      var permissions = [];
+      that.permissionModal.groups.forEach(r => {
+        r.permissions.forEach(i => {
+          permissions.push({
+            name: i.name,
+            isGranted: i.checked
+          });
+          i.children.forEach(j => {
+            permissions.push({
+              name: j.name,
+              isGranted: j.checked
+            });
+          });
+        });
+      });
+
+      editPermission("User", that.permissionModal.name, {
+        permissions: permissions
+      }).then(res => {
+        this.$Message.success("配置权限成功!");
+        this.permissionModal.opened = false;
+      });
+    },
+    handlePermission(params) {
+      this.permissionModal.opened = true;
+      var that = this;
+      loadPermissionTree({
+        providerName: "User",
+        providerKey: params.row.id
+      }).then(res => {
+        that.permissionModal.name = params.row.id;
+        that.permissionModal.entityDisplayName = res.data.entityDisplayName;
+        that.permissionModal.rolePermission.length = 0;
+        // that.permissionModal.rolePermission = that.dfsTreeData(res.data.groups);
+        var newObj = [];
+        res.data.groups.forEach(element => {
+          element.permissions = that.dfsTreeData(element.permissions);
+          newObj.push(element);
+        });
+        that.permissionModal.groups = newObj;
+      });
+    },
+   dfsTreeData(permissions) {
+      var newTrees = [];
+      var that = this;
+      var parentNames = permissions.filter(item => item.parentName == null);
+      parentNames.forEach(item => {
+        var treeData = {
+          title: item.displayName,
+          expand: true,
+          name: item.name,
+          checked: item.isGranted,
+          children: []
+        };
+        var childrens = permissions.filter(it => it.parentName == item.name);
+        childrens.forEach(r => {
+          treeData.children.push({
+            title: r.displayName,
+            name: r.name,
+            checked: r.isGranted,
+            expand: true
+          });
+        });
+        newTrees.push(treeData);
+      });
+      return newTrees;
     }
   },
   mounted() {

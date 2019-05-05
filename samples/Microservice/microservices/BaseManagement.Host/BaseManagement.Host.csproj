@@ -38,6 +38,7 @@
     <ProjectReference Include="..\..\modules\base\src\BaseManagement.Application\BaseManagement.Application.csproj" />
     <ProjectReference Include="..\..\modules\base\src\BaseManagement.EntityFrameworkCore\BaseManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\modules\base\src\BaseManagement.HttpApi\BaseManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.EntityFrameworkCore\Volo.Abp.AuditLogging.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
