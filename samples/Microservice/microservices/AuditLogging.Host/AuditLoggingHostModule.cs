@@ -37,9 +37,11 @@ namespace AuditLogging.Host
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpHttpClientIdentityModelModule),
+
         typeof(AuditLoggingHttpApiModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AuditLogApplicationModule),
+
         typeof(AbpIdentityHttpApiClientModule)
         )]
     public class AuditLoggingHostModule : AbpModule

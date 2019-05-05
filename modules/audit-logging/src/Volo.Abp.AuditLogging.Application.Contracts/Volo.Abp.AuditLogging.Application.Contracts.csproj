@@ -8,17 +8,7 @@
 
   <ItemGroup>
     <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\en.json" />
-    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\pt-BR.json" />
-    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\tr.json" />
     <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\zh-Hans.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\tr.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\pt-BR.json" />
   </ItemGroup>
 
   <ItemGroup>

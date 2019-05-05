@@ -25,7 +25,7 @@ namespace Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging
         {
             var bloggingGroup = context.AddGroup(AuditLoggingPermissions.GroupName, L("Permission:AuditLogging"));
 
-            var blogs = bloggingGroup.AddPermission(AuditLoggingPermissions.AuditLoggs.Default, L("Permission:AuditLogging"));
+            var blogs = bloggingGroup.AddPermission(AuditLoggingPermissions.AuditLoggs.Default, L("Permission:AuditLogging:AuditLog"));
         }
 
 

@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
-    "Permission:AuditLogging": "审计日志"
+    "Permission:AuditLogging": "审计日志",
+    "Permission:AuditLogging:AuditLog": "审计日志列表权限"
   }
 }

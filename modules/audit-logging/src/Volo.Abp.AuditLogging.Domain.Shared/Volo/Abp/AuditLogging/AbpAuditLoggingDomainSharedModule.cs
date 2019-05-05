@@ -5,6 +5,9 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.AuditLogging
 {
+    [DependsOn(
+        typeof(AbpLocalizationModule)
+    )]
     public class AbpAuditLoggingDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
