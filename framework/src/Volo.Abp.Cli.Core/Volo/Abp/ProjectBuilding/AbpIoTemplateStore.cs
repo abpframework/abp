@@ -20,7 +20,7 @@ namespace Volo.Abp.ProjectBuilding
 
         public async Task<TemplateFile> GetAsync(string templateName, string version)
         {
-            var localCacheFolder = Path.Combine(CliPaths.TemplateCachePath, version);
+            var localCacheFolder = Path.Combine(CliPaths.TemplateCache, version);
             DirectoryHelper.CreateIfNotExists(localCacheFolder);
 
             var localCacheFile = Path.Combine(localCacheFolder, templateName + ".zip");

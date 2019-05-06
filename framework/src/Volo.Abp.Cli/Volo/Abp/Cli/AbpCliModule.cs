@@ -9,6 +9,9 @@ namespace Volo.Abp.Cli
     )]
     public class AbpCliModule : AbpModule
     {
-
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            
+        }
     }
 }
