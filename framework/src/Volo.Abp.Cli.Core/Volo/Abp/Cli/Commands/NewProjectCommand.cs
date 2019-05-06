@@ -10,17 +10,17 @@ using Volo.Abp.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class NewProjectCommand : IConsoleCommand, ITransientDependency
+    public class NewCommand : IConsoleCommand, ITransientDependency
     {
-        public ILogger<NewProjectCommand> Logger { get; set; }
+        public ILogger<NewCommand> Logger { get; set; }
 
         protected ProjectBuilder ProjectBuilder { get; }
 
-        public NewProjectCommand(ProjectBuilder projectBuilder)
+        public NewCommand(ProjectBuilder projectBuilder)
         {
             ProjectBuilder = projectBuilder;
 
-            Logger = NullLogger<NewProjectCommand>.Instance;
+            Logger = NullLogger<NewCommand>.Instance;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)

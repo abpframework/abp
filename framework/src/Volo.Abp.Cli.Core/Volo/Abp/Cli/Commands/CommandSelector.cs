@@ -9,14 +9,18 @@ namespace Volo.Abp.Cli.Commands
         public Type Select(CommandLineArgs commandLineArgs)
         {
             //TODO: Create options to define commands
-            //TODO: Get from dependency injection instead of new?
 
             if (commandLineArgs.Command == "new")
             {
-                return typeof(NewProjectCommand);
+                return typeof(NewCommand);
             }
 
-            return typeof(MainHelpCommand);
+            if (commandLineArgs.Command == "add")
+            {
+                return typeof(AddCommand);
+            }
+
+            return typeof(HelpCommand);
         }
     }
 }
