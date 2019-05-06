@@ -55,13 +55,13 @@ namespace Volo.Abp.ProjectModification
         private bool TryToFillProjectOrSolutionName(AddModuleArgs args)
         {
             var projectFiles = FindFiles(Directory.GetCurrentDirectory(), ".csproj");
-            if (projectFiles.Count == 1)
+            if (projectFiles.Length == 1)
             {
                 args.ProjectFile = projectFiles.First();
                 return true;
             }
 
-            if (projectFiles.Count > 1)
+            if (projectFiles.Length > 1)
             {
                 Logger.LogWarning(
                     "There are multiple project (.csproj) files in the current directory. Please specify one of the files below:");
@@ -76,13 +76,13 @@ namespace Volo.Abp.ProjectModification
             }
 
             var solutionFiles = FindFiles(Directory.GetCurrentDirectory(), ".sln");
-            if (solutionFiles.Count == 1)
+            if (solutionFiles.Length == 1)
             {
                 args.SolutionFile = solutionFiles.First();
                 return true;
             }
 
-            if (solutionFiles.Count > 1)
+            if (solutionFiles.Length > 1)
             {
                 Logger.LogWarning(
                     "There are multiple solution (.sln) files in the current directory. Please specify one of the files below:");
@@ -129,9 +129,9 @@ namespace Volo.Abp.ProjectModification
         }
 
 
-        private List<string> FindFiles(string directory, string fileExtension)
+        private string[] FindFiles(string directory, string fileExtension)
         {
-            throw new NotImplementedException();
+            return Directory.GetFiles(directory, "*" + fileExtension);
         }
     }
 }
