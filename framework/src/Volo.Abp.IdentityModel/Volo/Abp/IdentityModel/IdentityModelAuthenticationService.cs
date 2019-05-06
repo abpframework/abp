@@ -1,78 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using IdentityModel;
+﻿using IdentityModel;
 using IdentityModel.Client;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.IdentityModel
 {
     [Dependency(ReplaceServices = true)]
-    public class IdentityModelHttpClientAuthenticator : IIdentityModelHttpClientAuthenticator, ITransientDependency
+    public class IdentityModelAuthenticationService : IIdentityModelAuthenticationService, ITransientDependency
     {
-        public ILogger<IdentityModelHttpClientAuthenticator> Logger { get; set; }
+        public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
         protected IdentityClientOptions ClientOptions { get; }
-        
-        public IdentityModelHttpClientAuthenticator(
+
+        public IdentityModelAuthenticationService(
             IOptions<IdentityClientOptions> options)
         {
             ClientOptions = options.Value;
-            Logger = NullLogger<IdentityModelHttpClientAuthenticator>.Instance;
+            Logger = NullLogger<IdentityModelAuthenticationService>.Instance;
         }
 
-        public async Task AuthenticateAsync(IdentityModelHttpClientAuthenticateContext context)
+        public async Task<bool> TryAuthenticateAsync(
+            [NotNull] HttpClient client,
+            string identityClientName = null)
         {
-            var accessToken = await GetAccessTokenFromServerOrNullAsync(context);
-
-            if (accessToken != null)
+            var accessToken = await GetAccessTokenOrNullAsync(identityClientName);
+            if (accessToken == null)
             {
-                //TODO: "Bearer" should be configurable
-                context.Client.DefaultRequestHeaders.Authorization
-                    = new AuthenticationHeaderValue("Bearer", accessToken);
+                return false;
             }
+
+            SetAccessToken(client, accessToken);
+            return true;
+
         }
 
-        protected virtual async Task<string> GetAccessTokenFromServerOrNullAsync(IdentityModelHttpClientAuthenticateContext context)
+        protected virtual async Task<string> GetAccessTokenOrNullAsync(string identityClientName)
         {
-            //TODO: Better logging
-
-            var configuration = GetClientConfiguration(context);
-
+            var configuration = GetClientConfiguration(identityClientName);
             if (configuration == null)
             {
-                Logger.LogWarning($"Could not find {nameof(IdentityClientConfiguration)} for {context.IdentityClientName}. Either define a configuration for {context.IdentityClientName} or set a default configuration.");
+                Logger.LogWarning($"Could not find {nameof(IdentityClientConfiguration)} for {identityClientName}. Either define a configuration for {identityClientName} or set a default configuration.");
                 return null;
             }
 
+            return await GetAccessTokenAsync(configuration);
+        }
+
+        public virtual async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
+        {
             var discoveryResponse = await GetDiscoveryResponse(configuration);
             if (discoveryResponse.IsError)
             {
-                Logger.LogError($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
-                return null;
+                throw new AbpException($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
             var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
             if (tokenResponse.IsError)
             {
-                Logger.LogError($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
-                return null;
+                throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
             }
 
             return tokenResponse.AccessToken;
         }
 
-        private IdentityClientConfiguration GetClientConfiguration(IdentityModelHttpClientAuthenticateContext context)
+        protected virtual void SetAccessToken(HttpClient client, string accessToken)
         {
-            if (context.IdentityClientName.IsNullOrEmpty())
+            //TODO: "Bearer" should be configurable
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        }
+
+        private IdentityClientConfiguration GetClientConfiguration(string identityClientName = null)
+        {
+            if (identityClientName.IsNullOrEmpty())
             {
                 return ClientOptions.IdentityClients.Default;
             }
 
-            return ClientOptions.IdentityClients.GetOrDefault(context.IdentityClientName) ??
+            return ClientOptions.IdentityClients.GetOrDefault(identityClientName) ??
                    ClientOptions.IdentityClients.Default;
         }
 
