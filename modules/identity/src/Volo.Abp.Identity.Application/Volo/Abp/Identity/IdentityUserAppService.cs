@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Security.Encryption;
 
 namespace Volo.Abp.Identity
 {
@@ -11,13 +12,19 @@ namespace Volo.Abp.Identity
     {
         private readonly IdentityUserManager _userManager;
         private readonly IIdentityUserRepository _userRepository;
+        private readonly IStringEncryptionService _encryptionService;
+        private readonly IdentityUserStore _identityUserStore;
+        private readonly IUserEmailer _userEmailer;
 
         public IdentityUserAppService(
             IdentityUserManager userManager,
-            IIdentityUserRepository userRepository)
+            IIdentityUserRepository userRepository, IUserEmailer userEmailer, IStringEncryptionService encryptionService, IdentityUserStore identityUserStore)
         {
             _userManager = userManager;
             _userRepository = userRepository;
+            _userEmailer = userEmailer;
+            _encryptionService = encryptionService;
+            _identityUserStore = identityUserStore;
         }
 
         //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
@@ -59,6 +66,13 @@ namespace Volo.Abp.Identity
             await UpdateUserByInput(user, input);
 
             await CurrentUnitOfWork.SaveChangesAsync();
+
+            //Send activation email
+            if (input.SendActivationEmail)
+            {
+                user.SetNewEmailConfirmationCode();
+                await _userEmailer.SendEmailActivationLinkAsync(user, input.Password);
+            }
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
@@ -118,6 +132,19 @@ namespace Volo.Abp.Identity
             );
         }
 
+        public async Task EmailConfirmation(EmailConfirmationInput model)
+        {
+            var userId = _encryptionService.Decrypt(model.UserId);
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null || user.EmailConfirmationCode.IsNullOrEmpty() ||user.EmailConfirmationCode != model.ConfirmationCode)
+            {
+                throw new UserFriendlyException("邮箱验证已失效", "请您务必通过点击邮件中的重置链接进入本页面.如果已经这样做了,还存在问题,请重试一遍邮箱验证操作!");
+            }
+
+            await _identityUserStore.SetEmailConfirmedAsync(user, true);
+        }
+
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
             (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
@@ -132,6 +159,7 @@ namespace Volo.Abp.Identity
             {
                 (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
             }
+
         }
     }
 }

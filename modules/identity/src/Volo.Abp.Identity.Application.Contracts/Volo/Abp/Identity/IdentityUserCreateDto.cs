@@ -7,5 +7,8 @@ namespace Volo.Abp.Identity
         [Required]
         [StringLength(IdentityUserConsts.MaxPasswordLength)]
         public string Password { get; set; }
+
+        [Required]
+        public bool SendActivationEmail { get; set; }
     }
 }

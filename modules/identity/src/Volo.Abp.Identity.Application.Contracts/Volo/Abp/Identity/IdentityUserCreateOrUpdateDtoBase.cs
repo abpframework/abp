@@ -29,5 +29,6 @@ namespace Volo.Abp.Identity
 
         [CanBeNull]
         public string[] RoleNames { get; set; }
+
     }
 }

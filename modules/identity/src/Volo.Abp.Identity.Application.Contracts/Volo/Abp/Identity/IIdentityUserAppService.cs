@@ -14,5 +14,7 @@ namespace Volo.Abp.Identity
         Task<IdentityUserDto> FindByUsernameAsync(string username);
 
         Task<IdentityUserDto> FindByEmailAsync(string email);
+
+        Task EmailConfirmation(EmailConfirmationInput model);
     }
 }

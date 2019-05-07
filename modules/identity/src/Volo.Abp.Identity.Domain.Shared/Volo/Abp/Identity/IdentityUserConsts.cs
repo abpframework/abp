@@ -25,5 +25,7 @@ namespace Volo.Abp.Identity
         public const int MaxSecurityStampLength = 256;
 
         public const int MaxConcurrencyStampLength = 256;
+
+        public const int MaxEmailConfirmationCodeLength = 328;
     }
 }

@@ -55,6 +55,8 @@ namespace Volo.Abp.Identity
         /// <value>True if the email address has been confirmed, otherwise false.</value>
         public virtual bool EmailConfirmed { get; protected internal set; }
 
+        public virtual string EmailConfirmationCode { get; protected internal set; }
+
         /// <summary>
         /// Gets or sets a salted and hashed representation of the password for this user.
         /// </summary>
@@ -149,6 +151,11 @@ namespace Volo.Abp.Identity
             Tokens = new Collection<IdentityUserToken>();
 
             ExtraProperties = new Dictionary<string, object>();
+        }
+
+        public virtual void SetNewEmailConfirmationCode()
+        {
+            EmailConfirmationCode = Guid.NewGuid().ToString("N").Truncate(IdentityUserConsts.MaxEmailConfirmationCodeLength);
         }
 
         public virtual void AddRole(Guid roleId)

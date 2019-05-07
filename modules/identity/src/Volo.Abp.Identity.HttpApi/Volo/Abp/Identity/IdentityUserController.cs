@@ -64,5 +64,11 @@ namespace Volo.Abp.Identity
         {
             return _userAppService.FindByEmailAsync(email);
         }
+
+        [HttpPut("emailConfirmation")]
+        public virtual Task EmailConfirmation(EmailConfirmationInput model)
+        {
+            return _userAppService.EmailConfirmation(model);
+        }
     }
 }

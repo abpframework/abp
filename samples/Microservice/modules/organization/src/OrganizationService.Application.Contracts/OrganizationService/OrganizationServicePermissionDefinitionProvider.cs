@@ -14,8 +14,6 @@ namespace OrganizationService
             baseTypes.AddChild(OrganizationServicePermissions.AbpOrganizations.Update, L("Permission:AbpOrganizations:Edit"));
             baseTypes.AddChild(OrganizationServicePermissions.AbpOrganizations.Delete, L("Permission:AbpOrganizations:Delete"));
             baseTypes.AddChild(OrganizationServicePermissions.AbpOrganizations.Create, L("Permission:AbpOrganizations:Create"));
-
-   
         }
 
         private static LocalizableString L(string name)

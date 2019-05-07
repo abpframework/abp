@@ -586,6 +586,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
 
             user.EmailConfirmed = confirmed;
+            user.EmailConfirmationCode = null;
 
             return Task.CompletedTask;
         }

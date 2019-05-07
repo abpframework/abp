@@ -19,8 +19,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging
 {
-    [DependsOn(typeof(AbpDddApplicationModule))]
-    [DependsOn(typeof(AbpAuditLoggingDomainSharedModule))]
+    [DependsOn(typeof(AbpAuditLoggingDomainSharedModule), typeof(AbpDddApplicationModule))]
     public class AuditLoggingApplicationContractsModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -32,8 +31,8 @@ namespace Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<AuditLoggingResource>("en")
-                    .AddVirtualJson("/Volo/Abp/AuditLogging/Localization/ApplicationContracts");
+                    .Get<AuditLoggingResource>()
+                    .AddVirtualJson("/Volo/Abp/AuditLogging/Localization/Resources/ApplicationContracts");
             });
         }
     }
