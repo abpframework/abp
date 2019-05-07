@@ -38,7 +38,7 @@ namespace Autofac.Extensions.DependencyInjection
         /// <summary>
         /// Initializes a new instance of the <see cref="AutofacServiceProviderFactory"/> class.
         /// </summary>
-        /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/> that adds component registrations to the conatiner.</param>
+        /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/> that adds component registrations to the container.</param>
         public AutofacServiceProviderFactory(Action<ContainerBuilder> configurationAction = null)
         {
             _configurationAction = configurationAction ?? (builder => { });

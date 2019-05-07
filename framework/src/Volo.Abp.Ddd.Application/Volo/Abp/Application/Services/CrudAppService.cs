@@ -86,9 +86,7 @@ namespace Volo.Abp.Application.Services
             CheckCreatePolicy();
 
             var entity = MapToEntity(input);
-
-            Repository.Insert(entity);
-            CurrentUnitOfWork.SaveChanges();
+            Repository.Insert(entity, autoSave: true);
 
             return MapToEntityDto(entity);
         }
@@ -98,9 +96,8 @@ namespace Volo.Abp.Application.Services
             CheckUpdatePolicy();
 
             var entity = GetEntityById(id);
-            
             MapToEntity(input, entity);
-            CurrentUnitOfWork.SaveChanges();
+            Repository.Update(entity, autoSave: true);
 
             return MapToEntityDto(entity);
         }

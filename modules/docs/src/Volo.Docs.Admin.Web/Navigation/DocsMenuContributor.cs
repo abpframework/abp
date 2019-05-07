@@ -19,12 +19,15 @@ namespace Volo.Docs.Admin.Navigation
 
         private async Task ConfigureMainMenu(MenuConfigurationContext context)
         {
+
+            var administrationMenu = context.Menu.GetAdministration();
+
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<DocsResource>>();
 
             var rootMenuItem = new ApplicationMenuItem(DocsMenuNames.GroupName, l["Menu:DocumentManagement"], icon: "fa fa-book");
 
-            context.Menu.AddItem(rootMenuItem);
+            administrationMenu.AddItem(rootMenuItem);
 
             if (await authorizationService.IsGrantedAsync(DocsAdminPermissions.Projects.Default))
             {

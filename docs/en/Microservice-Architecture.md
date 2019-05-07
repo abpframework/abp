@@ -19,7 +19,7 @@ One of the major goals of the ABP framework is to provide a convenient infrastru
 
 ## Microservice for New Applications
 
-One common advise to start a new solution is **always to start with a monolith**, keep it modular and split into microservices once the monolith becomes a problem. This makes your progress fast in the beginning especially if your team is small and you don't want to deal with challanges of the microservice architecture. 
+One common advise to start a new solution is **always to start with a monolith**, keep it modular and split into microservices once the monolith becomes a problem. This makes your progress fast in the beginning especially if your team is small and you don't want to deal with challenges of the microservice architecture. 
 
 However, developing such a well-modular application can be a problem since it is **hard to keep modules isolated** from each other as you would do it for microservices (see [Stefan Tilkov's article](https://martinfowler.com/articles/dont-start-monolith.html) about that). Microservice architecture naturally forces you to develop well isolated services, but in a modular monolithic application it's easy to tight couple modules to each other and design **weak module boundaries** and API contracts.
 

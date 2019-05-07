@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.TenantManagement
+﻿using Volo.Abp.Reflection;
+
+namespace Volo.Abp.TenantManagement
 {
     public static class TenantManagementPermissions
     {
@@ -16,16 +18,7 @@
 
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName,
-                Tenants.Default,
-                Tenants.Create,
-                Tenants.Update,
-                Tenants.Delete,
-                Tenants.ManageFeatures,
-                Tenants.ManageConnectionStrings
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(TenantManagementPermissions));
         }
     }
 }

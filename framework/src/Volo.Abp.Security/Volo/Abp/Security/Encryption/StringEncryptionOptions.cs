@@ -15,7 +15,7 @@ namespace Volo.Abp.Security.Encryption
 
         /// <summary>
         /// Default password to encrypt/decrypt texts.
-        /// It's recommented to set to another value for security.
+        /// It's recommended to set to another value for security.
         /// Default value: "gsKnGZ041HLL4IM8"
         /// </summary>
         public string DefaultPassPhrase { get; set; }
