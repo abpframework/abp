@@ -14,13 +14,13 @@ namespace ConsoleClientDemo
     {
         private readonly IIdentityUserAppService _userAppService;
         private readonly IProductAppService _productAppService;
-        private readonly IIdentityModelHttpClientAuthenticator _authenticator;
+        private readonly IIdentityModelAuthenticationService _authenticator;
         private readonly RemoteServiceOptions _remoteServiceOptions;
 
         public ClientDemoService(
             IIdentityUserAppService userAppService,
             IProductAppService productAppService,
-            IIdentityModelHttpClientAuthenticator authenticator, 
+            IIdentityModelAuthenticationService authenticator, 
             IOptions<RemoteServiceOptions> remoteServiceOptions)
         {
             _userAppService = userAppService;
@@ -38,7 +38,7 @@ namespace ConsoleClientDemo
 
         /// <summary>
         /// Shows how to manually create an HttpClient and authenticate using the
-        /// IIdentityModelHttpClientAuthenticator service.
+        /// IIdentityModelAuthenticationService service.
         /// </summary>
         private async Task TestWithHttpClient()
         {
@@ -49,7 +49,7 @@ namespace ConsoleClientDemo
             {
                 using (var client = new HttpClient())
                 {
-                    await _authenticator.AuthenticateAsync(client);
+                    await _authenticator.TryAuthenticateAsync(client);
 
                     var url = GetServerUrl() + "Test/Index";
 
@@ -75,7 +75,7 @@ namespace ConsoleClientDemo
         /// <summary>
         /// Shows how to use application service interfaces (IIdentityUserAppService in this sample)
         /// to call a remote service which is possible by the dynamic http client proxy system.
-        /// No need to use IIdentityModelHttpClientAuthenticator since the dynamic http client proxy
+        /// No need to use IIdentityModelAuthenticationService since the dynamic http client proxy
         /// system internally uses it. You just inject a service (IIdentityUserAppService)
         /// and call a method (GetListAsync) like a local method.
         /// </summary>
@@ -104,7 +104,7 @@ namespace ConsoleClientDemo
         /// <summary>
         /// Shows how to use application service interfaces (IProductAppService in this sample)
         /// to call a remote service which is possible by the dynamic http client proxy system.
-        /// No need to use IIdentityModelHttpClientAuthenticator since the dynamic http client proxy
+        /// No need to use IIdentityModelAuthenticationService since the dynamic http client proxy
         /// system internally uses it. You just inject a service (IProductAppService)
         /// and call a method (GetListAsync) like a local method.
         /// </summary>
