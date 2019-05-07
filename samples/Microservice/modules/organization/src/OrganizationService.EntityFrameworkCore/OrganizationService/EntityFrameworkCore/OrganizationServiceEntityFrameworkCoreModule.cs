@@ -15,7 +15,12 @@ namespace OrganizationService.EntityFrameworkCore
             context.Services.AddAbpDbContext<OrganizationServiceDbContext>(options =>
             {
                 options.AddDefaultRepositories<IOrganizationServiceDbContext>(true);
+
+                options.AddRepository<Organization, EfCoreOrganizationRepository>();
+
             });
+
+       
         }
     }
 }

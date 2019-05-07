@@ -22,7 +22,13 @@ namespace OrganizationService
 {
     public class UserOrganization : Entity<Guid>
     {
-        private UserOrganization()
+        public UserOrganization(Guid userId, Guid organizationId)
+        {
+            UserId = userId;
+            OrganizationId = organizationId;
+        }
+
+        private UserOrganization(Guid? id)
         {
         }
         public Guid UserId{get;set;}

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Users;
 
 namespace OrganizationService
 {
@@ -14,5 +16,9 @@ namespace OrganizationService
                 CreateUpdateAbpOrganizationDto> //Used to update a book
     {
         List<ViewTree> GetViewTrees(Guid? guid);
+
+        Task<List<ViewTree>> GetUserViewTrees(Guid? userId);
+
+        Task SetOrganizationsAsync(SetUserOrgaizationDto orgaizationDto);
     }
 }

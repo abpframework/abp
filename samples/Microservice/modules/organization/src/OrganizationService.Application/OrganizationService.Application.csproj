@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="OrganizationService\OrganizationAppService.cs~RF987f536.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\OrganizationService.Application.Contracts\OrganizationService.Application.Contracts.csproj" />
     <ProjectReference Include="..\OrganizationService.Domain\OrganizationService.Domain.csproj" />

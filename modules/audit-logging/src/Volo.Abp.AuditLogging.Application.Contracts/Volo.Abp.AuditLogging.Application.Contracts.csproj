@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\en.json" />
-    <None Remove="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\zh-Hans.json" />
+    <None Remove="Volo\Abp\AuditLogging\Localization\ApplicationContracts\en.json" />
+    <None Remove="Volo\Abp\AuditLogging\Localization\ApplicationContracts\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\en.json" />
-    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\Resources\ApplicationContracts\zh-Hans.json" />
+    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\ApplicationContracts\en.json" />
+    <EmbeddedResource Include="Volo\Abp\AuditLogging\Localization\ApplicationContracts\zh-Hans.json" />
   </ItemGroup>
 
   <ItemGroup>

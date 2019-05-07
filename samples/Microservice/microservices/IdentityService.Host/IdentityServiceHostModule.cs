@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using BaseManagement;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using OrganizationService;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
-using BaseManagement;
-using BaseManagement.EntityFrameworkCore;
-using OrganizationService;
-using OrganizationService.EntityFrameworkCore;
 using Volo.Abp;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.Application.Contracts.Volo.Abp.AuditLogging;
@@ -41,15 +39,12 @@ namespace IdentityService.Host
         typeof(AbpIdentityApplicationModule),
 
         //基础资料
-        typeof(BaseManagementHttpApiModule),
-        typeof(BaseManagementEntityFrameworkCoreModule),
         typeof(BaseManagementApplicationContractsModule),
 
         //组织机构 
-        typeof(OrganizationServiceHttpApiModule),
-        typeof(OrganizationServiceEntityFrameworkCoreModule),
         typeof(OrganizationServiceApplicationContractsModule),
 
+        //审计日志
         typeof(AuditLoggingApplicationContractsModule)
         )]
     public class IdentityServiceHostModule : AbpModule

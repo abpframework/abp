@@ -303,7 +303,6 @@ export default {
 
         that.formModel.parentName='';
         that.formModel.parentGuid=res.data.parentId;
-
         this.getViewTrees(data.id).then(() => {
           var selectNodes = that.$refs.tree.getSelectedNodes();
           if (selectNodes.length > 0) {

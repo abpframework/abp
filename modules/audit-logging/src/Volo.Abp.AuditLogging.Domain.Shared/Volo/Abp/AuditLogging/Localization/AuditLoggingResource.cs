@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.AuditLogging.Localization
 {
-    [LocalizationResourceName("AuditLogging")]
+    [LocalizationResourceName("AbpAuditLogging")]
     public class AuditLoggingResource
     {
     }

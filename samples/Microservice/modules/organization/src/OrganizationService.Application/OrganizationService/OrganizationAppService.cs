@@ -15,11 +15,15 @@ namespace OrganizationService
         CreateUpdateAbpOrganizationDto, CreateUpdateAbpOrganizationDto>, IOrganizationAppService
     {
         private readonly IRepository<Organization, Guid> _repository;
+        private readonly IOrganizationRepository _organizationRepository;
+        private readonly OrganizationManager _organizationManager;
 
-        public OrganizationAppService(IRepository<Organization, Guid> repository)
+        public OrganizationAppService(IRepository<Organization, Guid> repository, OrganizationManager organizationManager, IOrganizationRepository organizationRepository)
             : base(repository)
         {
             _repository = repository;
+            _organizationManager = organizationManager;
+            _organizationRepository = organizationRepository;
             base.CreatePolicyName = OrganizationServicePermissions.AbpOrganizations.Create;
             base.UpdatePolicyName = OrganizationServicePermissions.AbpOrganizations.Update;
             base.DeletePolicyName = OrganizationServicePermissions.AbpOrganizations.Delete;
@@ -43,6 +47,7 @@ namespace OrganizationService
             return baseResults;
         }
 
+
         public List<ViewTree> GetViewTrees(Guid? guid)
         {
             List<ViewTree> viewTrees = _repository.GetList().Select(r => new ViewTree()
@@ -61,6 +66,40 @@ namespace OrganizationService
             }
 
             return viewTrees.ComboboxTreeJson();
+        }
+
+        public async Task<List<ViewTree>> GetUserViewTrees(Guid? userId)
+        {
+            List<ViewTree> viewTrees = _repository.GetList().Select(r => new ViewTree()
+            {
+                Guid = r.Id,
+                Title = r.Name,
+                //Selected = guid == r.ParentId ? true : false,
+                ParentGuid = r.ParentId
+            }).ToList();
+
+            if (userId != null)
+            {
+                List<Organization> organizations =await _organizationRepository.GetOrganizationsAsync((Guid)userId);
+
+                organizations.ForEach(u =>
+                {
+                    viewTrees.ForEach(r =>
+                    {
+                        if (r.Guid == u.Id)
+                        {
+                            r.Checked = true;
+                        }
+                    });
+                });
+            }
+
+            return viewTrees.ComboboxTreeJson();
+        }
+
+        public async Task SetOrganizationsAsync(SetUserOrgaizationDto orgaizationDto)
+        {
+            await _organizationManager.SetOrganizationsAsync(orgaizationDto.UserId, orgaizationDto.OrganizationIds);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace OrganizationService
 
         private static LocalizableString L(string name)
         {
-            return LocalizableString.Create<OrganizationServiceResource>(name);
+             return LocalizableString.Create<OrganizationServiceResource>(name);
         }
     }
 }

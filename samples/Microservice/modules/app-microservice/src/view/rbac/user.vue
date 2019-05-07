@@ -127,6 +127,35 @@
             </FormItem>
           </Col>
         </Row>
+        <Row>
+          <Col span="24">
+            <FormItem label-position="left">
+              <Input v-model="formModel.parentName" placeholder="请选择部门" :readonly="true">
+                <Dropdown
+                  slot="append"
+                  trigger="custom"
+                  :visible="formModel.visible"
+                  placement="bottom-end"
+                  @on-clickoutside="clickoutside"
+                >
+                  <Button type="primary" @click="formModel.visible=true">
+                    选择...
+                    <Icon type="ios-arrow-down"></Icon>
+                  </Button>
+                  <div class="text-left pad10" slot="list" style="min-width:540px;">
+                    <Tree
+                      ref="depTree"
+                      show-checkbox
+                      class="text-left dropdown-tree"
+                      :data="formModel.organizationData"
+                      @on-check-change="handleMenuTreeSelectChange"
+                    ></Tree>
+                  </div>
+                </Dropdown>
+              </Input>
+            </FormItem>
+          </Col>
+        </Row>
         <FormItem>
           <Transfer
             :data="formAssignRole.roles"
@@ -143,7 +172,7 @@
       </div>
     </Drawer>
 
-      <Drawer
+    <Drawer
       title="角色权限配置"
       v-model="permissionModal.opened"
       width="600"
@@ -185,9 +214,9 @@ import {
   deleteUser,
   saveUserRoles
 } from "@/api/rbac/user";
-
 import { loadRoleListByUserGuid, loadSimpleList } from "@/api/rbac/role";
 import { editPermission, loadPermissionTree } from "@/api/rbac/permission";
+import { getUserViewTrees, setOrganizations } from "@/api/rbac/organization";
 
 export default {
   name: "rbac_user_page",
@@ -196,7 +225,8 @@ export default {
   },
   data() {
     return {
-     permissionModal: {
+      providerName:"User",
+      permissionModal: {
         opened: false,
         rolePermission: [],
         name: "",
@@ -208,6 +238,10 @@ export default {
         title: "创建用户",
         mode: "create",
         selection: [],
+        organizationIds: [],
+        parentName: "",
+        organizationData: [],
+        visible: false,
         fields: {
           id: "",
           password: "",
@@ -375,7 +409,7 @@ export default {
                     ]
                   );
                 },
-                 (h, params, vm) => {
+                (h, params, vm) => {
                   return h(
                     "Tooltip",
                     {
@@ -465,10 +499,15 @@ export default {
       this.handleOpenFormWindow();
     },
     handleEdit(params) {
+      var id = params.row.id;
       this.handleSwitchFormModeToEdit();
       this.handleResetFormUser();
-      this.doLoadUser(params.row.id);
-      this.loadUserRoleList(params.row.id);
+      this.doLoadUser(id);
+      this.loadUserRoleList(id);
+      this.getUserViewTrees({ id: id }).then(res => {
+        var nodes = this.$refs.depTree.getCheckedNodes();
+        this.handleMenuTreeSelectChange(nodes);
+      });
     },
     handleSelect(selection, row) {},
     handleSelectionChange(selection) {
@@ -483,6 +522,7 @@ export default {
       this.handleOpenFormWindow();
       this.handleResetFormUser();
       this.loadUserRoleList();
+      this.getUserViewTrees(null);
     },
     handleSubmitUser() {
       let valid = this.validateUserForm();
@@ -501,17 +541,28 @@ export default {
     doCreateUser() {
       this.formModel.fields.roleNames = this.formAssignRole.ownedRoles;
       createUser(this.formModel.fields).then(res => {
-        this.$Message.success("新增用户成功");
-        this.handleCloseFormWindow();
-        this.loadUserList();
+        setOrganizations({
+          userId: res.id,
+          organizationIds: this.formModel.organizationIds
+        }).then(r => {
+          this.$Message.success("新增用户成功");
+          this.handleCloseFormWindow();
+          this.loadUserList();
+        });
       });
     },
     doEditUser() {
       this.formModel.fields.roleNames = this.formAssignRole.ownedRoles;
+      var that = this;
       editUser(this.formModel.fields).then(res => {
-        this.$Message.success("修改成功");
-        this.handleCloseFormWindow();
-        this.loadUserList();
+        setOrganizations({
+          userId: res.data.id,
+          organizationIds: that.formModel.organizationIds
+        }).then(r => {
+          this.$Message.success("修改成功");
+          this.handleCloseFormWindow();
+          this.loadUserList();
+        });
       });
     },
     validateUserForm() {
@@ -532,11 +583,11 @@ export default {
       });
     },
     handleDelete(params) {
-      var that=this;
+      var that = this;
       deleteUser(params.row.id).then(res => {
-          that.$Message.success('删除成功!');
-          that.loadUserList();
-          that.formModel.selection = [];
+        that.$Message.success("删除成功!");
+        that.loadUserList();
+        that.formModel.selection = [];
       });
     },
     handlePageChanged(page) {
@@ -598,7 +649,7 @@ export default {
         });
       });
 
-      editPermission("User", that.permissionModal.name, {
+      editPermission(this.providerName, that.permissionModal.name, {
         permissions: permissions
       }).then(res => {
         this.$Message.success("配置权限成功!");
@@ -609,7 +660,7 @@ export default {
       this.permissionModal.opened = true;
       var that = this;
       loadPermissionTree({
-        providerName: "User",
+        providerName:this.providerName,
         providerKey: params.row.id
       }).then(res => {
         that.permissionModal.name = params.row.id;
@@ -624,30 +675,71 @@ export default {
         that.permissionModal.groups = newObj;
       });
     },
-   dfsTreeData(permissions) {
+    isDisabled(isGranted, grantedProviders) {
+      return (
+        isGranted &&
+        grantedProviders.filter(it => it.providerName != this.providerName).length > 0
+      );
+    },
+    getShownName(item) {
+      if (!this.isDisabled(item.isGranted,item.grantedProviders)) {
+         return item.displayName;
+      }
+      return (
+        item.displayName +
+        "(" +
+        item.grantedProviders
+          .filter(it => it.providerName != this.providerName).map(r=>{return r.providerName})
+          .join(",") +
+        ")"
+      );
+    },
+    dfsTreeData(permissions) {
       var newTrees = [];
       var that = this;
       var parentNames = permissions.filter(item => item.parentName == null);
       parentNames.forEach(item => {
         var treeData = {
-          title: item.displayName,
+          title: this.getShownName(item),
           expand: true,
           name: item.name,
           checked: item.isGranted,
-          children: []
+          children: [],
+          disabled: that.isDisabled(item.isGranted, item.grantedProviders)
         };
         var childrens = permissions.filter(it => it.parentName == item.name);
         childrens.forEach(r => {
           treeData.children.push({
-            title: r.displayName,
+            title: this.getShownName(r),
             name: r.name,
             checked: r.isGranted,
-            expand: true
+            expand: true,
+            disabled: that.isDisabled(r.isGranted, r.grantedProviders)
           });
         });
         newTrees.push(treeData);
       });
       return newTrees;
+    },
+    getUserViewTrees(id) {
+      var that = this;
+      return getUserViewTrees(id).then(res => {
+        that.formModel.organizationData = res.data;
+      });
+    },
+    handleMenuTreeSelectChange(nodes) {
+      var name = [];
+      var ids = [];
+      this.formModel.organizationIds.length = 0;
+      nodes.forEach(r => {
+        name.push(r.title);
+        ids.push(r.guid);
+      });
+      this.formModel.organizationIds = ids;
+      this.formModel.parentName = name.join(";");
+    },
+    clickoutside(event) {
+      this.formModel.visible = false;
     }
   },
   mounted() {

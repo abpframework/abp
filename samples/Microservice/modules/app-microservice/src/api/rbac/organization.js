@@ -47,3 +47,19 @@ export const createOrganization = (data) => {
       ,params:data
     })
   }
+
+  export const getUserViewTrees = (data) => {
+    return axios.request({
+      url: 'organization/abpOrganization/getUserViewTrees',
+      method: 'get'
+      ,params:data
+    })
+  }
+
+  export const setOrganizations = (data) => {
+    return axios.request({
+      url: 'organization/abpOrganization/setOrganizations',
+      method: 'post',
+      data
+    })
+  }
