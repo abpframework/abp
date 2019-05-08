@@ -7,11 +7,11 @@ namespace Volo.Blogging.Tagging
 {
     public interface ITagRepository : IBasicRepository<Tag, Guid>
     {
-        Task<List<Tag>> GetListAsync();
+        Task<List<Tag>> GetListAsync(Guid blogId);
 
-        Task<Tag> GetByNameAsync(string name);
+        Task<Tag> GetByNameAsync(Guid blogId, string name);
 
-        Task<Tag> FindByNameAsync(string name);
+        Task<Tag> FindByNameAsync(Guid blogId, string name);
 
         Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids);
 

@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs.DemoApp.Shared;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
-using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Modularity;
@@ -21,16 +19,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var configuration = ConfigurationHelper.BuildConfiguration();
-
-            context.Services.SetConfiguration(configuration);
-
-            context.Services.Configure<DbConnectionOptions>(options =>
-            {
-                options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
-            });
-
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(opts =>
                 {
@@ -38,7 +27,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
                 });
             });
 
-            context.Services.Configure<BackgroundJobWorkerOptions>(options =>
+            Configure<BackgroundJobWorkerOptions>(options =>
             {
                 //Configure for fast running
                 options.JobPollPeriod = 1000;

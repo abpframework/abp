@@ -46,6 +46,11 @@ namespace Volo.Abp.Users
             return _principalAccessor.Principal?.Claims.Where(c => c.Type == claimType).ToArray() ?? EmptyClaimsArray;
         }
 
+        public virtual Claim[] GetAllClaims()
+        {
+            return _principalAccessor.Principal?.Claims.ToArray() ?? EmptyClaimsArray;
+        }
+
         public bool IsInRole(string roleName)
         {
             return FindClaims(AbpClaimTypes.Role).Any(c => c.Value == roleName);

@@ -1,8 +1,8 @@
-## Localization
+# Localization
 
 ABP's localization system is seamlessly integrated to the `Microsoft.Extensions.Localization` package and compatible with the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization). It adds some useful features and enhancements to make it easier to use in real life application scenarios.
 
-### Volo.Abp.Localization Package
+## Volo.Abp.Localization Package
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
@@ -28,9 +28,9 @@ namespace MyCompany.MyProject
 }
 ```
 
-#### Creating A Localization Resource
+## Creating A Localization Resource
 
-A localization resource is used to group related localization strings together and separate them from other localization strings of the application. A module generally defines its own localization resource. Localization resource is just a plain class. Example:
+A localization resource is used to group related localization strings together and separate them from other localization strings of the application. A [module](Module-Development-Basics.md) generally defines its own localization resource. Localization resource is just a plain class. Example:
 
 ````C#
 public class TestResource
@@ -46,13 +46,14 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Configure<VirtualFileSystemOptions>(options =>
+        Configure<VirtualFileSystemOptions>(options =>
         {
             options.FileSets.AddEmbedded<MyModule>();
         });
 
-        context.Services.Configure<AbpLocalizationOptions>(options =>
-        {        
+        Configure<AbpLocalizationOptions>(options =>
+        {
+            //Define a new localization resource (TestResource)
             options.Resources
                 .Add<TestResource>("en")
                 .AddVirtualJson("/Localization/Resources/Test");
@@ -65,7 +66,7 @@ In this example;
 
 * Added a new localization resource with "en" (English) as the default culture.
 * Used JSON files to store the localization strings.
-* JSON files are embedded into the assembly using the [virtual file system](Virtual-File-System.md).
+* JSON files are embedded into the assembly using `VirtualFileSystemOptions` (see [virtual file system](Virtual-File-System.md)).
 
 JSON files are located under "/Localization/Resources/Test" project folder as shown below:
 
@@ -85,7 +86,7 @@ A JSON localization file content is shown below:
 * Every localization file should define the `culture` code for the file (like "en" or "en-US").
 * `texts` section just contains key-value collection of the localization strings (keys may have spaces too).
 
-##### Short Localization Resource Name
+### Short Localization Resource Name
 
 Localization resources are also available in the client (JavaScript) side. So, setting a short name for the localization resource makes it easy to use localization texts. Example:
 
@@ -98,7 +99,7 @@ public class TestResource
 
 See the Getting Localized Test / Client Side section below.
 
-##### Inherit From Other Resources
+### Inherit From Other Resources
 
 A resource can inherit from other resources which makes possible to re-use existing localization strings without referring the existing resource. Example:
 
@@ -124,7 +125,7 @@ services.Configure<AbpLocalizationOptions>(options =>
 * A resource may inherit from multiple resources.
 * If the new resource defines the same localized string, it overrides the string.
 
-##### Extending Existing Resource
+### Extending Existing Resource
 
 Inheriting from a resource creates a new resource without modifying the existing one. In some cases, you may want to not create a new resource but directly extend an existing resource. Example:
 
@@ -139,13 +140,13 @@ services.Configure<AbpLocalizationOptions>(options =>
 
 * If an extension file defines the same localized string, it overrides the string.
 
-#### Getting Localized Texts
+## Getting Localized Texts
 
-##### Server Side
+### Server Side
 
 Getting the localized text on the server side is pretty standard.
 
-###### Simplest Usage In A Class
+#### Simplest Usage In A Class
 
 ````C#
 public class MyService
@@ -164,7 +165,7 @@ public class MyService
 }
 ````
 
-###### Simplest Usage In A Razor View/Page
+#### Simplest Usage In A Razor View/Page
 
 ````c#
 @inject IHtmlLocalizer<TestResource> Localizer
@@ -174,7 +175,7 @@ public class MyService
 
 Refer to the [Microsoft's localization documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) for details about using localization on the server side.
 
-##### Client Side
+### Client Side
 
 ABP provides JavaScript services to use the same localized texts in the client side.
 

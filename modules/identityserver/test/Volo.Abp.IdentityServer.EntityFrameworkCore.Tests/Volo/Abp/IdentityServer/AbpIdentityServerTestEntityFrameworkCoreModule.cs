@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
@@ -10,9 +9,11 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.IdentityServer
 {
-    [DependsOn(typeof(AbpAutofacModule))]
-    [DependsOn(typeof(AbpIdentityServerEntityFrameworkCoreModule))]
-    [DependsOn(typeof(AbpIdentityEntityFrameworkCoreModule))]
+    [DependsOn(
+        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpIdentityServerTestBaseModule)
+        )]
     public class AbpIdentityServerTestEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -21,7 +22,7 @@ namespace Volo.Abp.IdentityServer
 
             var databaseName = Guid.NewGuid().ToString();
 
-            context.Services.Configure<AbpDbContextOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
                 options.Configure(abpDbContextConfigurationContext =>
                 {
@@ -29,7 +30,7 @@ namespace Volo.Abp.IdentityServer
                 });
             });
 
-            context.Services.Configure<UnitOfWorkDefaultOptions>(options =>
+            Configure<UnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });

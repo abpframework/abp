@@ -3,6 +3,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Emailing
 {
@@ -60,7 +61,7 @@ namespace Volo.Abp.Emailing
         {
             if (normalize)
             {
-                NormalizeMail(mail);
+                await NormalizeMailAsync(mail);
             }
 
             await SendEmailAsync(mail);
@@ -68,6 +69,12 @@ namespace Volo.Abp.Emailing
 
         public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
+            if (!BackgroundJobManager.IsAvailable())
+            {
+                await SendAsync(to, subject, body, isBodyHtml);
+                return;
+            }
+
             await BackgroundJobManager.EnqueueAsync(
                 new BackgroundEmailSendingJobArgs
                 {
@@ -83,7 +90,7 @@ namespace Volo.Abp.Emailing
         {
             if (normalize)
             {
-                NormalizeMail(mail);
+                AsyncHelper.RunSync(() => NormalizeMailAsync(mail));
             }
 
             SendEmail(mail);
@@ -107,13 +114,13 @@ namespace Volo.Abp.Emailing
         /// Sets encodings to UTF8 if they are not set before.
         /// </summary>
         /// <param name="mail">Mail to be normalized</param>
-        protected virtual void NormalizeMail(MailMessage mail)
+        protected virtual async Task NormalizeMailAsync(MailMessage mail)
         {
             if (mail.From == null || mail.From.Address.IsNullOrEmpty())
             {
                 mail.From = new MailAddress(
-                    Configuration.DefaultFromAddress,
-                    Configuration.DefaultFromDisplayName,
+                    await Configuration.GetDefaultFromAddressAsync(),
+                    await Configuration.GetDefaultFromDisplayNameAsync(),
                     Encoding.UTF8
                     );
             }

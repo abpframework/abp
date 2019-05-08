@@ -1,8 +1,6 @@
-﻿using Volo.Abp.DependencyInjection;
-
-namespace Volo.Abp.Authorization.Permissions
+﻿namespace Volo.Abp.Authorization.Permissions
 {
-    public interface IPermissionDefinitionProvider : ISingletonDependency
+    public interface IPermissionDefinitionProvider
     {
         void Define(IPermissionDefinitionContext context);
     }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 using Volo.Abp.Threading;
 
@@ -8,13 +10,14 @@ namespace Volo.Abp.Identity
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
-        typeof(AbpIdentityDomainModule)
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpAuthorizationModule)
         )]
     public class AbpIdentityTestBaseModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAlwaysAllowPermissionChecker();
+            context.Services.AddAlwaysAllowAuthorization();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -26,8 +29,8 @@ namespace Volo.Abp.Identity
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                var dataSeeder = scope.ServiceProvider.GetRequiredService<IIdentityDataSeeder>();
-                AsyncHelper.RunSync(() => dataSeeder.SeedAsync("1q2w3E*"));
+                var dataSeeder = scope.ServiceProvider.GetRequiredService<IDataSeeder>();
+                AsyncHelper.RunSync(() => dataSeeder.SeedAsync());
 
                 scope.ServiceProvider
                     .GetRequiredService<AbpIdentityTestDataBuilder>()

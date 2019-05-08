@@ -37,7 +37,7 @@ namespace Autofac.Extensions.DependencyInjection
         /// Adds the <see cref="AutofacServiceProviderFactory"/> to the service collection.
         /// </summary>
         /// <param name="services">The service collection to add the factory to.</param>
-        /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/> that adds component registrations to the conatiner.</param>
+        /// <param name="configurationAction">Action on a <see cref="ContainerBuilder"/> that adds component registrations to the container.</param>
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddAutofac(this IServiceCollection services, Action<ContainerBuilder> configurationAction = null)
         {

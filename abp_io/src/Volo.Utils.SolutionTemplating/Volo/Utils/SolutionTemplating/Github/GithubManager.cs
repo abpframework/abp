@@ -15,7 +15,7 @@ namespace Volo.Utils.SolutionTemplating.Github
 
         public string GetVersion(ProjectBuildContext context)
         {
-            if (context.Request.Version.StartsWith("Branch:"))
+            if (context.Request.Version.StartsWith("Branch:", StringComparison.OrdinalIgnoreCase))
             {
                 //TODO: Should not cache branch files!
                 return context.Request.Version.Substring("Branch:".Length);

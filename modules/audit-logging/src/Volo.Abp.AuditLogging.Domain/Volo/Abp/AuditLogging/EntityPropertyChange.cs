@@ -26,10 +26,14 @@ namespace Volo.Abp.AuditLogging
 
         }
 
-        public EntityPropertyChange(IGuidGenerator guidGenerator, Guid entityChangeId, EntityPropertyChangeInfo entityChangeInfo)
+        public EntityPropertyChange(
+            IGuidGenerator guidGenerator, 
+            Guid entityChangeId, 
+            EntityPropertyChangeInfo entityChangeInfo,
+            Guid? tenantId = null)
         {
             Id = guidGenerator.Create();
-            TenantId = entityChangeInfo.TenantId;
+            TenantId = tenantId;
             EntityChangeId = entityChangeId;
             NewValue = entityChangeInfo.NewValue.Truncate(EntityPropertyChangeConsts.MaxNewValueLength);
             OriginalValue = entityChangeInfo.OriginalValue.Truncate(EntityPropertyChangeConsts.MaxOriginalValueLength);

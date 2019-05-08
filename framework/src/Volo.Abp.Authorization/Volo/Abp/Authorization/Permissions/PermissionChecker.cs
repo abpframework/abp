@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 
 namespace Volo.Abp.Authorization.Permissions
@@ -18,6 +20,8 @@ namespace Volo.Abp.Authorization.Permissions
 
         protected ICurrentPrincipalAccessor PrincipalAccessor { get; }
 
+        protected ICurrentTenant CurrentTenant { get; }
+
         protected PermissionOptions Options { get; }
 
         private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
@@ -26,10 +30,12 @@ namespace Volo.Abp.Authorization.Permissions
             IOptions<PermissionOptions> options,
             IServiceProvider serviceProvider,
             ICurrentPrincipalAccessor principalAccessor,
-            IPermissionDefinitionManager permissionDefinitionManager)
+            IPermissionDefinitionManager permissionDefinitionManager, 
+            ICurrentTenant currentTenant)
         {
             PrincipalAccessor = principalAccessor;
             PermissionDefinitionManager = permissionDefinitionManager;
+            CurrentTenant = currentTenant;
             Options = options.Value;
 
             _lazyProviders = new Lazy<List<IPermissionValueProvider>>(
@@ -40,31 +46,49 @@ namespace Volo.Abp.Authorization.Permissions
                 true
             );
         }
-        
-        public virtual Task<PermissionGrantInfo> CheckAsync(string name)
+
+        public virtual Task<bool> IsGrantedAsync(string name)
         {
-            return CheckAsync(PrincipalAccessor.Principal, name);
+            return IsGrantedAsync(PrincipalAccessor.Principal, name);
         }
 
-        public virtual async Task<PermissionGrantInfo> CheckAsync(ClaimsPrincipal claimsPrincipal, string name)
+        public virtual async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
         {
             Check.NotNull(name, nameof(name));
 
-            var context = new PermissionValueCheckContext(
-                PermissionDefinitionManager.Get(name),
-                claimsPrincipal
-            );
+            var permission = PermissionDefinitionManager.Get(name);
 
+            var multiTenancySide = claimsPrincipal?.GetMultiTenancySide()
+                                   ?? CurrentTenant.GetMultiTenancySide();
+
+            if (!permission.MultiTenancySide.HasFlag(multiTenancySide))
+            {
+                return false;
+            }
+
+            var isGranted = false;
+            var context = new PermissionValueCheckContext(permission, claimsPrincipal);
             foreach (var provider in ValueProviders)
             {
-                var result = await provider.CheckAsync(context);
-                if (result.IsGranted)
+                if (context.Permission.Providers.Any() &&
+                    !context.Permission.Providers.Contains(provider.Name))
                 {
-                    return new PermissionGrantInfo(context.Permission.Name, true, provider.Name, result.ProviderKey);
+                    continue;
+                }
+
+                var result = await provider.CheckAsync(context);
+
+                if (result == PermissionGrantResult.Granted)
+                {
+                    isGranted = true;
+                }
+                else if (result == PermissionGrantResult.Prohibited)
+                {
+                    return false;
                 }
             }
 
-            return new PermissionGrantInfo(context.Permission.Name, false);
+            return isGranted;
         }
     }
 }

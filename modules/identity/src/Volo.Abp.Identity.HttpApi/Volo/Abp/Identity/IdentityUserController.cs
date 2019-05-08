@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
@@ -54,16 +53,6 @@ namespace Volo.Abp.Identity
             return _userAppService.UpdateRolesAsync(id, input);
         }
 
-        public virtual Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id)
-        {
-            return _userAppService.GetPermissionsAsync(id);
-        }
-
-        public virtual Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input)
-        {
-            return _userAppService.UpdatePermissionsAsync(id, input);
-        }
-
         [HttpGet]
         public virtual Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
@@ -74,11 +63,6 @@ namespace Volo.Abp.Identity
         public virtual Task<IdentityUserDto> FindByEmailAsync(string email)
         {
             return _userAppService.FindByEmailAsync(email);
-        }
-
-        public Task ChangePasswordAsync(string currentPassword, string newPassword)
-        {
-            return _userAppService.ChangePasswordAsync(currentPassword, newPassword);
         }
     }
 }

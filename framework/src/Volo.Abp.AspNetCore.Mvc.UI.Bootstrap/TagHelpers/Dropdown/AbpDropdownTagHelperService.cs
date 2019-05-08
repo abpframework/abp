@@ -8,6 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             output.TagName = "div";
+            output.Attributes.AddClass("dropdown");
             output.Attributes.AddClass("btn-group");
 
             SetDirection(context, output);

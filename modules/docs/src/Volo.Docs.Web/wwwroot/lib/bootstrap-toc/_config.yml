@@ -1,6 +1,0 @@
-baseurl: /bootstrap-toc
-markdown: kramdown
-kramdown:
-  input: GFM
-exclude:
-  - node_modules/

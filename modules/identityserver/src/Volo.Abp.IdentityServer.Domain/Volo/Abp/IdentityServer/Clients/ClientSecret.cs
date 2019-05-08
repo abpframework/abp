@@ -28,6 +28,11 @@ namespace Volo.Abp.IdentityServer.Clients
             ClientId = clientId;
         }
 
+        public virtual bool Equals(Guid clientId, [NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+        {
+            return ClientId == clientId && Value == value && Type == type;
+        }
+
         public override object[] GetKeys()
         {
             return new object[] { ClientId, Type, Value };

@@ -1,32 +1,40 @@
 ﻿using System.IO;
+using System.Linq;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Acme.BookStore.EntityFrameworkCore;
 using Acme.BookStore.Localization.BookStore;
 using Acme.BookStore.Menus;
+using Acme.BookStore.Permissions;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
+using Volo.Abp.AspNetCore.Mvc.UI;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
-using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Threading;
+using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.PermissionManagement;
+using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.Web;
+
 
 namespace Acme.BookStore
 {
@@ -36,7 +44,8 @@ namespace Acme.BookStore
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpTenantManagementWebModule)
         )]
     public class BookStoreWebModule : AbpModule
     {
@@ -56,52 +65,47 @@ namespace Acme.BookStore
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
-            ConfigureDatabaseServices(context.Services, configuration);
-            ConfigureAutoMapper(context.Services);
-            ConfigureVirtualFileSystem(context.Services, hostingEnvironment);
-            ConfigureLocalizationServices(context.Services);
-            ConfigureNavigationServices(context.Services);
-            ConfigureAutoApiControllers(context.Services);
+            ConfigureDatabaseServices();
+            ConfigureAutoMapper();
+            ConfigureVirtualFileSystem(hostingEnvironment);
+            ConfigureLocalizationServices();
+            ConfigureNavigationServices();
+            ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
-
-            context.Services.AddAssemblyOf<BookStoreWebModule>();
         }
 
-        private static void ConfigureDatabaseServices(IServiceCollection services, IConfigurationRoot configuration)
+        private void ConfigureDatabaseServices()
         {
-            services.Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbContextOptions>(options =>
             {
-                options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
+                options.UseSqlServer();
             });
-
-            services.Configure<AbpDbContextOptions>(options => { options.UseSqlServer(); });
         }
 
-        private static void ConfigureAutoMapper(IServiceCollection services)
+        private void ConfigureAutoMapper()
         {
-            services.Configure<AbpAutoMapperOptions>(options =>
+            Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BookStoreWebAutoMapperProfile>();
             });
         }
 
-        private static void ConfigureVirtualFileSystem(IServiceCollection services, IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPyhsical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
-                    
+                    options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
                 });
             }
         }
 
-        private static void ConfigureLocalizationServices(IServiceCollection services)
+        private void ConfigureLocalizationServices()
         {
-            services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<BookStoreResource>()
@@ -111,33 +115,36 @@ namespace Acme.BookStore
                     );
 
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             });
         }
 
-        private static void ConfigureNavigationServices(IServiceCollection services)
+        private void ConfigureNavigationServices()
         {
-            services.Configure<NavigationOptions>(options =>
+            Configure<NavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new BookStoreMenuContributor());
             });
         }
 
-        private static void ConfigureAutoApiControllers(IServiceCollection services)
+        private void ConfigureAutoApiControllers()
         {
-            services.Configure<AbpAspNetCoreMvcOptions>(options =>
+            Configure<AbpAspNetCoreMvcOptions>(options =>
             {
                 options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
             });
         }
 
-        private static void ConfigureSwaggerServices(IServiceCollection services)
+        private void ConfigureSwaggerServices(IServiceCollection services)
         {
             services.AddSwaggerGen(
                 options =>
                 {
                     options.SwaggerDoc("v1", new Info { Title = "BookStore API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
                 });
         }
 
@@ -158,6 +165,11 @@ namespace Acme.BookStore
             app.UseVirtualFiles();
             app.UseAuthentication();
 
+            if (BookStoreConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
+
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();
@@ -166,31 +178,24 @@ namespace Acme.BookStore
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
             });
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "defaultWithArea",
-                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
+            app.UseAuditing();
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            app.UseMvcWithDefaultRouteAndArea();
 
             SeedDatabase(context);
         }
 
         private static void SeedDatabase(ApplicationInitializationContext context)
         {
-            AsyncHelper.RunSync(async () =>
+            using (var scope = context.ServiceProvider.CreateScope())
             {
-                await context.ServiceProvider
-                    .GetRequiredService<IIdentityDataSeeder>()
-                    .SeedAsync(
-                        "1q2w3E*",
-                        IdentityPermissions.GetAll() //.Union(BookStorePermissions.GetAll())
-                    );
-            });
+                AsyncHelper.RunSync(async () =>
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                });
+            }
         }
     }
 }

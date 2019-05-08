@@ -21,6 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         public ILogger<BundleManager> Logger { get; set; }
 
         protected readonly BundlingOptions Options;
+        protected readonly BundleContributorOptions ContributorOptions;
         protected readonly IWebContentFileProvider WebContentFileProvider;
         protected readonly IHostingEnvironment HostingEnvironment;
         protected readonly IScriptBundler ScriptBundler;
@@ -32,6 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public BundleManager(
             IOptions<BundlingOptions> options,
+            IOptions<BundleContributorOptions> contributorOptions,
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
             IHostingEnvironment hostingEnvironment,
@@ -41,6 +43,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IWebContentFileProvider webContentFileProvider,
             IWebRequestResources requestResources)
         {
+            Options = options.Value;
+            ContributorOptions = contributorOptions.Value;
             HostingEnvironment = hostingEnvironment;
             ScriptBundler = scriptBundler;
             ServiceProvider = serviceProvider;
@@ -49,7 +53,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             WebContentFileProvider = webContentFileProvider;
             RequestResources = requestResources;
             StyleBundler = styleBundler;
-            Options = options.Value;
 
             Logger = NullLogger<BundleManager>.Instance;
         }
@@ -202,7 +205,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         protected virtual List<BundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)
         {
             var contributors = new List<BundleContributor>();
+
             AddContributorsWithBaseBundles(contributors, bundles, bundleName);
+
+            for (var i = 0; i < contributors.Count; ++i)
+            {
+                var extensions = ContributorOptions.Extensions(contributors[i].GetType()).GetAll();
+                if (extensions.Count > 0)
+                {
+                    contributors.InsertRange(i + 1, extensions);
+                    i += extensions.Count;
+                }
+            }
+
             return contributors;
         }
 

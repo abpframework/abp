@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Authorization.TestServices;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
@@ -18,14 +17,6 @@ namespace Volo.Abp.Authorization
                 {
                     onServiceRegistredContext.Interceptors.TryAdd<AuthorizationInterceptor>();
                 }
-            });
-        }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.TryAdd<AuthorizationTestPermissionDefinitionProvider>();
             });
         }
     }

@@ -2,6 +2,7 @@
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers;
+using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
 {
@@ -20,13 +21,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
             output.Attributes.AddClass("breadcrumb-item");
             output.Attributes.AddClass(AbpBreadcrumbItemActivePlaceholder);
 
-            var list = GetValueFromContext<List<BreadcrumbItem>>(context, BreadcrumbItemsContent);
+            var list = context.GetValue<List<BreadcrumbItem>>(BreadcrumbItemsContent);
 
             output.Content.SetHtmlContent(GetInnerHtml(context, output));
             
             list.Add(new BreadcrumbItem
             {
-                Html = RenderTagHelperOutput(output, _encoder),
+                Html = output.Render(_encoder),
                 Active = TagHelper.Active
             });
 

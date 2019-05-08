@@ -39,7 +39,7 @@ namespace Volo.Abp
             services.AddSingleton<IModuleContainer>(this);
 
             services.AddCoreServices();
-            services.AddCoreAbpServices(this);
+            services.AddCoreAbpServices(this, options);
 
             Modules = LoadModules(services, options);
         }
@@ -56,7 +56,7 @@ namespace Volo.Abp
 
         public virtual void Dispose()
         {
-
+            //TODO: Shutdown if not done before?
         }
         
         protected virtual void SetServiceProvider(IServiceProvider serviceProvider)

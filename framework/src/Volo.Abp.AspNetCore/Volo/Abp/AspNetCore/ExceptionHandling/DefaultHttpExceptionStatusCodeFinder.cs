@@ -39,6 +39,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                     : HttpStatusCode.Unauthorized;
             }
 
+            //TODO: Handle SecurityException..?
+            
             if (exception is AbpValidationException)
             {
                 return HttpStatusCode.BadRequest;
@@ -58,7 +60,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
             {
                 return HttpStatusCode.Forbidden;
             }
-
+            
             return HttpStatusCode.InternalServerError;
         }
     }

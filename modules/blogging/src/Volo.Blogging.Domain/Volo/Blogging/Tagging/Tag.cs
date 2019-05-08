@@ -7,6 +7,8 @@ namespace Volo.Blogging.Tagging
 {
     public class Tag : FullAuditedAggregateRoot<Guid>
     {
+        public virtual Guid BlogId { get; protected set; }
+
         public virtual string Name { get; protected set; }
 
         public virtual string Description { get; protected set; }
@@ -18,9 +20,10 @@ namespace Volo.Blogging.Tagging
 
         }
 
-        public Tag([NotNull] string name, int usageCount = 0, string description = null)
+        public Tag(Guid blogId, [NotNull] string name, int usageCount = 0, string description = null)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
+            BlogId = blogId;
             Description = description;
             UsageCount = usageCount;
         }
@@ -41,6 +44,13 @@ namespace Volo.Blogging.Tagging
             {
                 return;
             }
+
+            if (UsageCount - number <= 0)
+            {
+                UsageCount = 0;
+                return;
+            }
+
             UsageCount -= number;
         }
 

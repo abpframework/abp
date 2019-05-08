@@ -4,6 +4,6 @@ namespace Volo.Abp.Sms
 {
     public interface ISmsSender
     {
-        Task SendAsync(string phoneNumber, string text);
+        Task SendAsync(SmsMessage smsMessage);
     }
 }

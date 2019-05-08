@@ -1,8 +1,12 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.Application;
+using Volo.Abp.Modularity;
 
 namespace Volo.Docs
 {
-    [DependsOn(typeof(DocsDomainSharedModule))]
+    [DependsOn(
+        typeof(DocsDomainSharedModule),
+        typeof(AbpDddApplicationModule)
+        )]
     public class DocsApplicationContractsModule : AbpModule
     {
         

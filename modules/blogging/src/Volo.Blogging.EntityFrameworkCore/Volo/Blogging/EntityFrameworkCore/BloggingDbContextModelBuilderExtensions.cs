@@ -27,7 +27,7 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Users", options.Schema);
 
-                b.ConfigureAbpUser(options);
+                b.ConfigureAbpUser();
                 b.ConfigureExtraProperties();
             });
 
@@ -35,7 +35,7 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Blogs", options.Schema);
 
-                b.ConfigureFullAudited();
+                b.ConfigureFullAuditedAggregateRoot();
 
                 b.Property(x => x.Name).IsRequired().HasMaxLength(BlogConsts.MaxNameLength).HasColumnName(nameof(Blog.Name));
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(BlogConsts.MaxShortNameLength).HasColumnName(nameof(Blog.ShortName));
@@ -46,8 +46,8 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Posts", options.Schema);
 
-                b.ConfigureFullAudited();
-                
+                b.ConfigureFullAuditedAggregateRoot();
+
                 b.Property(x => x.BlogId).HasColumnName(nameof(Post.BlogId));
                 b.Property(x => x.Title).IsRequired().HasMaxLength(PostConsts.MaxTitleLength).HasColumnName(nameof(Post.Title));
                 b.Property(x => x.CoverImage).IsRequired().HasColumnName(nameof(Post.CoverImage));
@@ -63,8 +63,8 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Comments", options.Schema);
 
-                b.ConfigureFullAudited();
-                
+                b.ConfigureFullAuditedAggregateRoot();
+
                 b.Property(x => x.Text).IsRequired().HasMaxLength(CommentConsts.MaxTextLength).HasColumnName(nameof(Comment.Text));
                 b.Property(x => x.RepliedCommentId).HasColumnName(nameof(Comment.RepliedCommentId));
                 b.Property(x => x.PostId).IsRequired().HasColumnName(nameof(Comment.PostId));
@@ -77,8 +77,8 @@ namespace Volo.Blogging.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Tags", options.Schema);
 
-                b.ConfigureFullAudited();
-                
+                b.ConfigureFullAuditedAggregateRoot();
+
                 b.Property(x => x.Name).IsRequired().HasMaxLength(TagConsts.MaxNameLength).HasColumnName(nameof(Tag.Name));
                 b.Property(x => x.Description).HasMaxLength(TagConsts.MaxDescriptionLength).HasColumnName(nameof(Tag.Description));
                 b.Property(x => x.UsageCount).HasColumnName(nameof(Tag.UsageCount));

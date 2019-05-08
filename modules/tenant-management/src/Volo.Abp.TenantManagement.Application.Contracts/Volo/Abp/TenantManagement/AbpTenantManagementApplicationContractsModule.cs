@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Application;
-using Volo.Abp.Authorization.Permissions;
+﻿using Volo.Abp.Application;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
@@ -14,17 +12,12 @@ namespace Volo.Abp.TenantManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<AbpTenantManagementPermissionDefinitionProvider>();
-            });
-
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTenantManagementApplicationContractsModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Get<AbpTenantManagementResource>()

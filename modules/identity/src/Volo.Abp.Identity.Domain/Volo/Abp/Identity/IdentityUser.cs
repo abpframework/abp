@@ -6,14 +6,14 @@ using System.Security.Claims;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
-using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
+using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUser : AggregateRoot<Guid>, IHasConcurrencyStamp, IUser, IHasExtraProperties
+    public class IdentityUser : FullAuditedAggregateRoot<Guid>, IUser, IMapTo<UserEto>
     {
         public virtual Guid? TenantId { get; protected set; }
 
@@ -27,6 +27,16 @@ namespace Volo.Abp.Identity
         /// </summary>
         [DisableAuditing]
         public virtual string NormalizedUserName { get; protected internal set; }
+
+        /// <summary>
+        /// Gets or sets the Name for the user.
+        /// </summary>
+        public virtual string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Surame for the user.
+        /// </summary>
+        public virtual string Surname { get; set; }
 
         /// <summary>
         /// Gets or sets the email address for this user.
@@ -56,12 +66,6 @@ namespace Volo.Abp.Identity
         /// </summary>
         [DisableAuditing]
         public virtual string SecurityStamp { get; protected internal set; }
-
-        /// <summary>
-        /// A random value that must change whenever a user is persisted to the store
-        /// </summary>
-        [DisableAuditing]
-        public virtual string ConcurrencyStamp { get; set; }
 
         /// <summary>
         /// Gets or sets a telephone number for the user.
@@ -121,14 +125,12 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
-        public Dictionary<string, object> ExtraProperties { get; protected set; }
-
         protected IdentityUser()
         {
             ExtraProperties = new Dictionary<string, object>();
         }
 
-        public IdentityUser(Guid id, [NotNull] string userName, [NotNull] string email, Guid? tenantId = null)
+        public IdentityUser(Guid id, [NotNull] string userName, string email = null, Guid? tenantId = null)
         {
             Check.NotNull(userName, nameof(userName));
 
@@ -137,7 +139,7 @@ namespace Volo.Abp.Identity
             UserName = userName;
             NormalizedUserName = userName.ToUpperInvariant();
             Email = email;
-            NormalizedEmail = email.ToUpperInvariant();
+            NormalizedEmail = email?.ToUpperInvariant();
             ConcurrencyStamp = Guid.NewGuid().ToString();
             SecurityStamp = Guid.NewGuid().ToString();
 
@@ -197,6 +199,13 @@ namespace Volo.Abp.Identity
             {
                 AddClaim(guidGenerator, claim);
             }
+        }
+
+        public virtual IdentityUserClaim FindClaim([NotNull] Claim claim)
+        {
+            Check.NotNull(claim, nameof(claim));
+
+            return Claims.FirstOrDefault(c => c.ClaimType == claim.Type && c.ClaimValue == claim.Value);
         }
 
         public virtual void ReplaceClaim([NotNull] Claim claim, [NotNull] Claim newClaim)
@@ -270,6 +279,37 @@ namespace Volo.Abp.Identity
         public override string ToString()
         {
             return $"{base.ToString()}, UserName = {UserName}";
+        }
+
+        UserEto IMapTo<UserEto>.MapTo()
+        {
+            //TODO: Instead, consider to user automapper (but it makes dependency just for a small code part)??
+
+            return new UserEto
+            {
+                Name = Name,
+                Email = Email,
+                EmailConfirmed = EmailConfirmed,
+                Id = Id,
+                PhoneNumber = PhoneNumber,
+                PhoneNumberConfirmed = PhoneNumberConfirmed,
+                Surname = Surname,
+                TenantId = TenantId,
+                UserName = UserName
+            };
+        }
+
+        void IMapTo<UserEto>.MapTo(UserEto destination)
+        {
+            destination.Name = Name;
+            destination.Email = Email;
+            destination.EmailConfirmed = EmailConfirmed;
+            destination.Id = Id;
+            destination.PhoneNumber = PhoneNumber;
+            destination.PhoneNumberConfirmed = PhoneNumberConfirmed;
+            destination.Surname = Surname;
+            destination.TenantId = TenantId;
+            destination.UserName = UserName;
         }
     }
 }

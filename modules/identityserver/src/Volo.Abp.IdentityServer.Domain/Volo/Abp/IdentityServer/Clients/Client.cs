@@ -4,12 +4,11 @@ using System.Linq;
 using IdentityServer4;
 using IdentityServer4.Models;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities;
-using Volo.Abp.Guids;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class Client : AggregateRoot<Guid>
+    public class Client : FullAuditedAggregateRoot<Guid>
     {
         public virtual string ClientId { get; set; }
 
@@ -144,13 +143,19 @@ namespace Volo.Abp.IdentityServer.Clients
             AllowedGrantTypes.Add(new ClientGrantType(Id, grantType));
         }
 
-        public virtual void AddGrantTypes(IEnumerable<string> grantTypes)
+        public virtual void RemoveAllAllowedGrantTypes()
         {
-            AllowedGrantTypes.AddRange(
-                grantTypes.Select(
-                    grantType => new ClientGrantType(Id, grantType)
-                )
-            );
+            AllowedGrantTypes.Clear();
+        }
+
+        public virtual void RemoveGrantType(string grantType)
+        {
+            AllowedGrantTypes.RemoveAll(r => r.GrantType == grantType);
+        }
+
+        public virtual ClientGrantType FindGrantType(string grantType)
+        {
+            return AllowedGrantTypes.FirstOrDefault(r => r.GrantType == grantType);
         }
 
         public virtual void AddSecret([NotNull] string value, DateTime? expiration = null, string type = IdentityServerConstants.SecretTypes.SharedSecret, string description = null)
@@ -158,14 +163,34 @@ namespace Volo.Abp.IdentityServer.Clients
             ClientSecrets.Add(new ClientSecret(Id, value, expiration, type, description));
         }
 
-        public virtual void RemoveAllSecrets()
+        public virtual void RemoveSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
         {
-            ClientSecrets.Clear();
+            ClientSecrets.RemoveAll(s => s.Value == value && s.Type == type);
+        }
+
+        public virtual ClientSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+        {
+            return ClientSecrets.FirstOrDefault(s => s.Type == type && s.Value == value);
         }
 
         public virtual void AddScope([NotNull] string scope)
         {
             AllowedScopes.Add(new ClientScope(Id, scope));
+        }
+
+        public virtual void RemoveAllScopes()
+        {
+            AllowedScopes.Clear();
+        }
+
+        public virtual void RemoveScope(string scope)
+        {
+            AllowedScopes.RemoveAll(r => r.Scope == scope);
+        }
+
+        public virtual ClientScope FindScope(string scope)
+        {
+            return AllowedScopes.FirstOrDefault(r => r.Scope == scope);
         }
 
         public virtual void AddCorsOrigin([NotNull] string origin)
@@ -183,24 +208,109 @@ namespace Volo.Abp.IdentityServer.Clients
             PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri(Id, postLogoutRedirectUri));
         }
 
-        public virtual void AddIdentityProviderRestriction([NotNull] string provider)
+        public virtual void RemoveAllCorsOrigins()
         {
-            IdentityProviderRestrictions.Add(new ClientIdPRestriction(Id, provider));
+            AllowedCorsOrigins.Clear();
         }
 
-        public virtual void AddProperty([NotNull] string key)
+        public virtual void RemoveCorsOrigin(string uri)
         {
-            Properties.Add(new ClientProperty(Id, key));
+            AllowedCorsOrigins.RemoveAll(c => c.Origin == uri);
         }
 
-        public virtual void AddClaim(IGuidGenerator guidGenerator, [NotNull] string type, string value)
+        public virtual void RemoveAllRedirectUris()
         {
-            Claims.Add(new ClientClaim(guidGenerator.Create(), Id, type, value));
+            RedirectUris.Clear();
+        }
+
+        public virtual void RemoveRedirectUri(string uri)
+        {
+            RedirectUris.RemoveAll(r => r.RedirectUri == uri);
+        }
+
+        public virtual void RemoveAllPostLogoutRedirectUris()
+        {
+            PostLogoutRedirectUris.Clear();
+        }
+
+        public virtual void RemovePostLogoutRedirectUri(string uri)
+        {
+            PostLogoutRedirectUris.RemoveAll(p => p.PostLogoutRedirectUri == uri);
+        }
+
+        public virtual ClientCorsOrigin FindCorsOrigin(string uri)
+        {
+            return AllowedCorsOrigins.FirstOrDefault(c => c.Origin == uri);
+        }
+
+        public virtual ClientRedirectUri FindRedirectUri(string uri)
+        {
+            return RedirectUris.FirstOrDefault(r => r.RedirectUri == uri);
+        }
+
+        public virtual ClientPostLogoutRedirectUri FindPostLogoutRedirectUri(string uri)
+        {
+            return PostLogoutRedirectUris.FirstOrDefault(p => p.PostLogoutRedirectUri == uri);
+        }
+
+        public virtual void AddProperty([NotNull] string key, [NotNull] string value)
+        {
+            Properties.Add(new ClientProperty(Id, key,value));
+        }
+
+        public virtual void RemoveAllProperties()
+        {
+            Properties.Clear();
+        }
+
+        public virtual void RemoveProperty(string key, string value)
+        {
+            Properties.RemoveAll(c => c.Value == value && c.Key == key);
+        }
+
+        public virtual ClientProperty FindProperty(string key, string value)
+        {
+            return Properties.FirstOrDefault(c => c.Key == key && c.Value == value);
+        }
+
+        public virtual void AddClaim([NotNull] string value, string type)
+        {
+            Claims.Add(new ClientClaim(Id, type, value));
         }
 
         public virtual void RemoveAllClaims()
         {
             Claims.Clear();
+        }
+
+        public virtual void RemoveClaim(string value, string type)
+        {
+            Claims.RemoveAll(c => c.Value == value && c.Type == type);
+        }
+
+        public virtual ClientClaim FindClaim(string value, string type)
+        {
+            return Claims.FirstOrDefault(c => c.Type == type && c.Value == value);
+        }
+
+        public virtual void AddIdentityProviderRestriction([NotNull] string provider)
+        {
+            IdentityProviderRestrictions.Add(new ClientIdPRestriction(Id, provider));
+        }
+
+        public virtual void RemoveAllIdentityProviderRestrictions()
+        {
+            IdentityProviderRestrictions.Clear();
+        }
+
+        public virtual void RemoveIdentityProviderRestriction(string provider)
+        {
+            IdentityProviderRestrictions.RemoveAll(r => r.Provider == provider);
+        }
+
+        public virtual ClientIdPRestriction FindIdentityProviderRestriction(string provider)
+        {
+            return IdentityProviderRestrictions.FirstOrDefault(r => r.Provider == provider);
         }
     }
 }

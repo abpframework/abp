@@ -16,7 +16,7 @@ namespace Volo.Abp.Validation
 
         public ApplicationService_Validation_Tests()
         {
-            _myAppService = ServiceProvider.GetRequiredService<IMyAppService>();
+            _myAppService = GetRequiredService<IMyAppService>();
         }
 
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
@@ -143,6 +143,22 @@ namespace Volo.Abp.Validation
         public void Should_Allow_Null_For_Nullable_Enums()
         {
             _myAppService.MyMethodWithNullableEnum(null);
+        }
+
+        [Fact]
+        public void Should_Validate_Emails()
+        {
+            //Valid
+            ValidationHandler.IsValidEmailAddress("john.doe@domain.com").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("ip@1.2.3.123").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("pharaoh@egyptian.museum").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("john.doe+regexbuddy@gmail.com").ShouldBe(true);
+            ValidationHandler.IsValidEmailAddress("Mike.O'Dell@ireland.com").ShouldBe(true);
+
+            //Invalid
+            ValidationHandler.IsValidEmailAddress("1024x768@60Hz").ShouldBe(false);
+            ValidationHandler.IsValidEmailAddress("not.a.valid.email").ShouldBe(false);
+            ValidationHandler.IsValidEmailAddress("john@aol...com").ShouldBe(false);
         }
 
         [DependsOn(typeof(AbpAutofacModule))]

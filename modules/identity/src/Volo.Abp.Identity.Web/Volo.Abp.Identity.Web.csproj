@@ -21,6 +21,8 @@
 
   <ItemGroup>
     <Content Remove="Pages\**\*.cshtml" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Pages\**\*.css" />
     <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />

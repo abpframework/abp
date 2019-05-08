@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
@@ -20,6 +21,8 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
             builder.Entity<Tenant>(b =>
             {
                 b.ToTable(tablePrefix + "Tenants", schema);
+
+                b.ConfigureFullAuditedAggregateRoot();
 
                 b.Property(t => t.Name).IsRequired().HasMaxLength(TenantConsts.MaxNameLength);
 

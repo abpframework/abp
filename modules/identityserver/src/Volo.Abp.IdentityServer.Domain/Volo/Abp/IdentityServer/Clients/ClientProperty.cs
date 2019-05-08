@@ -17,12 +17,18 @@ namespace Volo.Abp.IdentityServer.Clients
 
         }
 
-        protected internal ClientProperty(Guid clientId, [NotNull] string key)
+        public virtual bool Equals(Guid clientId, [NotNull] string key, string value)
+        {
+            return ClientId == clientId && Key == key && Value == value;
+        }
+
+        protected internal ClientProperty(Guid clientId, [NotNull] string key, [NotNull] string value)
         {
             Check.NotNull(key, nameof(key));
 
             ClientId = clientId;
             Key = key;
+            Value = value;
         }
 
         public override object[] GetKeys()

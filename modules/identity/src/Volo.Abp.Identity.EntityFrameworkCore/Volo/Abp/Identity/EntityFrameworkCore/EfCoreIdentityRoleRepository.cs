@@ -13,12 +13,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 {
     public class EfCoreIdentityRoleRepository : EfCoreRepository<IIdentityDbContext, IdentityRole, Guid>, IIdentityRoleRepository
     {
-        private readonly IGuidGenerator _guidGenerator;
-
-        public EfCoreIdentityRoleRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider, IGuidGenerator guidGenerator)
+        public EfCoreIdentityRoleRepository(IDbContextProvider<IIdentityDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
-            _guidGenerator = guidGenerator;
         }
 
         public virtual async Task<IdentityRole> FindByNormalizedNameAsync(
@@ -43,37 +40,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        public async Task UpdateClaimsAsync(Guid id, List<IdentityRoleClaim> claims)
-        {
-            var dbSet = DbContext.Set<IdentityRoleClaim>();
-
-            var oldClaims = dbSet.Where(c => c.RoleId == id).ToList();
-
-            foreach (var oldClaim in oldClaims)
-            {
-                dbSet.Remove(oldClaim);
-            }
-
-            foreach (var claim in claims)
-            {
-                dbSet.Add(new IdentityRoleClaim(_guidGenerator.Create(), id, claim.ClaimType, claim.ClaimValue, CurrentTenant.Id));
-            }
-        }
-
-        public async Task<List<IdentityRoleClaim>> GetClaimsAsync(Guid id, CancellationToken cancellationToken = default)
-        {
-            var query = from roleClaim in DbContext.Set<IdentityRoleClaim>()
-                where roleClaim.RoleId == id
-                select roleClaim;
-
-            return await query.ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        public virtual async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return await this.LongCountAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityRole> WithDetails()

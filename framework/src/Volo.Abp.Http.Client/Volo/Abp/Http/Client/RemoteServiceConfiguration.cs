@@ -1,10 +1,26 @@
-﻿namespace Volo.Abp.Http.Client
-{
-    public class RemoteServiceConfiguration
-    {
-        public string BaseUrl { get; set; }
+﻿using System.Collections.Generic;
 
-        public string Version { get; set; }
+namespace Volo.Abp.Http.Client
+{
+    public class RemoteServiceConfiguration : Dictionary<string, string>
+    {
+        /// <summary>
+        /// Base Url.
+        /// </summary>
+        public string BaseUrl
+        {
+            get => this.GetOrDefault(nameof(BaseUrl));
+            set => this[nameof(BaseUrl)] = value;
+        }
+
+        /// <summary>
+        /// Version.
+        /// </summary>
+        public string Version
+        {
+            get => this.GetOrDefault(nameof(Version));
+            set => this[nameof(Version)] = value;
+        }
 
         public RemoteServiceConfiguration()
         {
@@ -13,8 +29,8 @@
 
         public RemoteServiceConfiguration(string baseUrl, string version = null)
         {
-            BaseUrl = baseUrl;
-            Version = version;
+            this[nameof(BaseUrl)] = baseUrl;
+            this[nameof(Version)] = version;
         }
     }
 }

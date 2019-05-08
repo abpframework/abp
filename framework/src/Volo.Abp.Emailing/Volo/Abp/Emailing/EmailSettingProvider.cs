@@ -14,12 +14,12 @@ namespace Volo.Abp.Emailing
                 new SettingDefinition(EmailSettingNames.Smtp.Host, "127.0.0.1"),
                 new SettingDefinition(EmailSettingNames.Smtp.Port, "25"),
                 new SettingDefinition(EmailSettingNames.Smtp.UserName),
-                new SettingDefinition(EmailSettingNames.Smtp.Password),
+                new SettingDefinition(EmailSettingNames.Smtp.Password, isEncrypted: true),
                 new SettingDefinition(EmailSettingNames.Smtp.Domain),
                 new SettingDefinition(EmailSettingNames.Smtp.EnableSsl, "false"),
                 new SettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials, "true"),
-                new SettingDefinition(EmailSettingNames.DefaultFromAddress),
-                new SettingDefinition(EmailSettingNames.DefaultFromDisplayName)
+                new SettingDefinition(EmailSettingNames.DefaultFromAddress, "noreply@abp.io"),
+                new SettingDefinition(EmailSettingNames.DefaultFromDisplayName, "ABP application")
             );
         }
     }

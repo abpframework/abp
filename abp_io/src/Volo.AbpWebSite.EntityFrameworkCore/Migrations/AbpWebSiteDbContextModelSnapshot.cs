@@ -15,7 +15,7 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
+                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -24,14 +24,23 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
                     b.Property<string>("Description")
                         .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsStatic");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(128);
+                        .HasMaxLength(256);
 
                     b.Property<string>("Regex")
                         .HasMaxLength(512);
@@ -53,7 +62,23 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnName("IsDefault");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnName("IsPublic");
+
+                    b.Property<bool>("IsStatic")
+                        .HasColumnName("IsStatic");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -106,9 +131,20 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
@@ -122,12 +158,27 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
+
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("LockoutEnabled")
                         .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnName("NormalizedEmail")
@@ -155,6 +206,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnName("SecurityStamp")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Surname")
+                        .HasColumnName("Surname")
+                        .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
@@ -248,9 +303,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("UserId");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                        .HasMaxLength(64);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<Guid?>("TenantId");
 
@@ -318,6 +374,8 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 
@@ -333,6 +391,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<string>("Description")
                         .HasColumnName("Description")
                         .HasMaxLength(1024);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -365,6 +426,8 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 
@@ -376,6 +439,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -416,6 +482,8 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("BlogId")
                         .HasColumnName("BlogId");
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Content")
                         .HasColumnName("Content")
                         .HasMaxLength(1048576);
@@ -435,6 +503,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -490,6 +561,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("BlogId");
+
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
 
@@ -505,6 +580,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<string>("Description")
                         .HasColumnName("Description")
                         .HasMaxLength(512);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
@@ -535,6 +613,8 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp");
+
                     b.Property<string>("Email")
                         .HasColumnName("Email")
                         .HasMaxLength(256);
@@ -547,6 +627,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(64);
+
                     b.Property<string>("PhoneNumber")
                         .HasColumnName("PhoneNumber")
                         .HasMaxLength(16);
@@ -555,6 +639,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnName("PhoneNumberConfirmed")
                         .HasDefaultValue(false);
+
+                    b.Property<string>("Surname")
+                        .HasColumnName("Surname")
+                        .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
@@ -574,6 +662,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
+
                     b.Property<string>("DefaultDocumentName")
                         .IsRequired()
                         .HasMaxLength(128);
@@ -585,9 +677,12 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Format");
 
-                    b.Property<string>("GoogleCustomSearchId");
+                    b.Property<string>("LatestVersionBranchName")
+                        .HasMaxLength(128);
 
                     b.Property<string>("MainWebsiteUrl");
+
+                    b.Property<string>("MinimumVersion");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -612,13 +707,22 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
+
                     b.Property<int>("CreationDuration");
 
-                    b.Property<DateTime>("CreationTime");
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
 
-                    b.Property<Guid?>("CreatorId");
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
 
                     b.Property<byte>("DatabaseProvider");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
 
                     b.Property<string>("ProjectName")
                         .IsRequired()

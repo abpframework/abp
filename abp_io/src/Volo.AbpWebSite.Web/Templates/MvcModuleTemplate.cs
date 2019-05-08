@@ -1,5 +1,4 @@
-﻿
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Volo.Utils.SolutionTemplating.Building;
 
 namespace Volo.AbpWebSite.Templates

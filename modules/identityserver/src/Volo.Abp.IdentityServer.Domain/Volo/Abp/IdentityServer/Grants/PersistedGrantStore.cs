@@ -2,13 +2,12 @@
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Stores;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.IdentityServer.Grants
 {
-    public class PersistedGrantStore : IPersistedGrantStore, ITransientDependency
+    public class PersistedGrantStore : IPersistedGrantStore
     {
         private readonly IPersistentGrantRepository _persistentGrantRepository;
         private readonly IObjectMapper _objectMapper;

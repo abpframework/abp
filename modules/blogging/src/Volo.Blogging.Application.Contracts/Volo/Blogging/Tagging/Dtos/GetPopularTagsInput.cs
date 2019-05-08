@@ -1,4 +1,6 @@
-﻿namespace Volo.Blogging.Tagging.Dtos
+﻿using System;
+
+namespace Volo.Blogging.Tagging.Dtos
 {
     public class GetPopularTagsInput
     {

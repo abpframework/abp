@@ -1,6 +1,4 @@
-﻿using Volo.Abp.Ui.Navigation.Urls;
-
-namespace Volo.Abp.Ui.Navigation.Urls
+﻿namespace Volo.Abp.Ui.Navigation.Urls
 {
     public class AppUrlOptions
     {

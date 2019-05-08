@@ -1,36 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
+using System;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityClaimType : Entity<Guid>
+    public class IdentityClaimType : AggregateRoot<Guid>
     {
         public virtual string Name { get; protected set; }
 
-        public virtual bool Required { get; protected set; }
+        public virtual bool Required { get; set; }
 
         public virtual bool IsStatic { get; protected set; }
 
-        public virtual string Regex { get; protected set; }
+        public virtual string Regex { get; set; }
 
-        public virtual string RegexDescription { get; protected set; }
+        public virtual string RegexDescription { get; set; }
 
-        public virtual string Description { get; protected set; }
+        public virtual string Description { get; set; }
 
         public virtual IdentityClaimValueType ValueType { get; protected set; }
 
         protected IdentityClaimType()
         {
+
         }
 
-        public IdentityClaimType(Guid id, [NotNull] string name, bool required, bool isStatic, [CanBeNull]string regex, [CanBeNull]string regexDescription, [CanBeNull] string description, IdentityClaimValueType valueType  = IdentityClaimValueType.String)
+        public IdentityClaimType(
+            Guid id,
+            [NotNull] string name,
+            bool required = false,
+            bool isStatic = false,
+            [CanBeNull] string regex = null,
+            [CanBeNull] string regexDescription = null,
+            [CanBeNull] string description = null,
+            IdentityClaimValueType valueType = IdentityClaimValueType.String)
         {
-            Check.NotNull(name, nameof(name));
-
-            Name = name;
+            Id = id;
+            Name = Check.NotNull(name, nameof(name));
             Required = required;
             IsStatic = isStatic;
             Regex = regex;
@@ -38,7 +44,5 @@ namespace Volo.Abp.Identity
             Description = description;
             ValueType = valueType;
         }
-
-
     }
 }

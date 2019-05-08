@@ -8,8 +8,8 @@ namespace Volo.Abp.MultiTenancy
         public static void AddDomainTenantResolver(this TenantResolveOptions options, string domainFormat)
         {
             options.TenantResolvers.InsertAfter(
-                r => r is CurrentClaimsPrincipalTenantResolveContributer,
-                new DomainTenantResolveContributer(domainFormat)
+                r => r is CurrentUserTenantResolveContributor,
+                new DomainTenantResolveContributor(domainFormat)
             );
         }
     }

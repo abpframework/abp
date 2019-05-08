@@ -37,29 +37,13 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public virtual async Task<long> GetTotalCount()
+        public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
         {
-            return await DbSet.CountAsync();
-        }
-
-        public override async Task<Client> UpdateAsync(Client entity, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-
-            var secrets = DbContext.Set<ClientSecret>().Where(s => s.ClientId == entity.Id);
-
-            foreach (var secret in secrets)
-            {
-                DbContext.Set<ClientSecret>().Remove(secret);
-            }
-
-            var claims = DbContext.Set<ClientClaim>().Where(s => s.ClientId == entity.Id);
-
-            foreach (var claim in claims)
-            {
-                DbContext.Set<ClientClaim>().Remove(claim);
-            }
-
-            return await base.UpdateAsync(entity, autoSave, cancellationToken);
+            return await DbSet
+                .AsNoTracking()
+                .SelectMany(x => x.AllowedCorsOrigins.Select(y => y.Origin))
+                .Distinct()
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<Client> WithDetails()

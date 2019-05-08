@@ -12,12 +12,7 @@ namespace Volo.Blogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<BloggingPermissionDefinitionProvider>();
-            });
-
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingApplicationContractsModule>();
             });

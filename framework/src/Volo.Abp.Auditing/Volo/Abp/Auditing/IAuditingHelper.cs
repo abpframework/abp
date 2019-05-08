@@ -11,8 +11,18 @@ namespace Volo.Abp.Auditing
 
         AuditLogInfo CreateAuditLogInfo();
 
-        AuditLogActionInfo CreateAuditLogAction(Type type, MethodInfo method, object[] arguments);
+        AuditLogActionInfo CreateAuditLogAction(
+            AuditLogInfo auditLog,
+            Type type,
+            MethodInfo method,
+            object[] arguments
+        );
 
-        AuditLogActionInfo CreateAuditLogAction(Type type, MethodInfo method, IDictionary<string, object> arguments);
+        AuditLogActionInfo CreateAuditLogAction(
+            AuditLogInfo auditLog,
+            Type type,
+            MethodInfo method,
+            IDictionary<string, object> arguments
+        );
     }
 }

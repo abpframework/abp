@@ -14,12 +14,15 @@
             <abp-tabs name="create-user-modal-tabs">
                 <abp-tab title="@L["UserInformations"].Value">
                     @* TODO: Can we use dynamic form? *@
-                    <input asp-for="UserInfo.Id"/>
-                    <abp-input asp-for="UserInfo.UserName"/>
-                    <abp-input asp-for="UserInfo.Email"/>
-                    <abp-input asp-for="UserInfo.PhoneNumber"/>
-                    <abp-input asp-for="UserInfo.LockoutEnabled"/>
-                    <abp-input asp-for="UserInfo.TwoFactorEnabled"/>
+                    <input asp-for="UserInfo.Id" />
+                    <input asp-for="UserInfo.ConcurrencyStamp" />
+                    <abp-input asp-for="UserInfo.UserName" />
+                    <abp-input asp-for="UserInfo.Name" />
+                    <abp-input asp-for="UserInfo.Surname" />
+                    <abp-input asp-for="UserInfo.Email" />
+                    <abp-input asp-for="UserInfo.PhoneNumber" />
+                    <abp-input asp-for="UserInfo.LockoutEnabled" />
+                    <abp-input asp-for="UserInfo.TwoFactorEnabled" />
                 </abp-tab>
                 <abp-tab title="@L["Roles"].Value">
                     @for (var i = 0; i < Model.Roles.Length; i++)
@@ -29,7 +32,6 @@
                     }
                 </abp-tab>
             </abp-tabs>
-            <div asp-validation-summary="All"></div>
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>

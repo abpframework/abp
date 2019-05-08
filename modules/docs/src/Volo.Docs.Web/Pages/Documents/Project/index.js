@@ -3,7 +3,7 @@
     $(function () {
 
         var initNavigationFilter = function (navigationContainerId) {
-
+         
             var $navigation = $("#" + navigationContainerId);
 
             var getShownDocumentLinks = function () {
@@ -23,12 +23,12 @@
             };
 
             var filterDocumentItems = function (filterText) {
-
                 $navigation.find(".mCSB_container .opened").removeClass("opened");
                 $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
 
                 if (!filterText) {
                     $navigation.find(".mCSB_container > li").show();
+                    $navigation.find(".mCSB_container .selected-tree > ul").show();
                     return;
                 }
 
@@ -57,7 +57,7 @@
                 });
             };
 
-            $(".docs-page .docs-filter input[type='search']").keyup(function (e) {
+            $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
                 filterDocumentItems(e.target.value);
 
                 if (e.key === "Enter") {
@@ -77,9 +77,38 @@
             });
         };
 
+        var initSocialShareLinks = function () {
+            var pageHeader = $(".docs-body").find("h1, h2").first().text();
+
+            var projectName = $('#ProjectName')[0].innerText;
+
+            $('#TwitterShareLink').attr('href',
+                'https://twitter.com/intent/tweet?text=' + encodeURI(pageHeader + " | " + projectName + " | " + window.location.href)
+            );
+
+            $('#LinkedinShareLink').attr('href',
+                'https://www.linkedin.com/shareArticle?'
+                + 'url=' + encodeURI(window.location.href) + '&'
+                + 'mini=true&'
+                + "summary=" + encodeURI(projectName) + '&'
+                + "title=" + encodeURI(pageHeader) + '&'
+                + "source=" + encodeURI($('#GoToMainWebSite').attr('href'))
+            );
+
+            $('#EmailShareLink').attr('href',
+                'mailto:?'
+                + 'body=' + encodeURI('I want you to look at ' + window.location.href) + '&'
+                + "subject=" + encodeURI(pageHeader + ' | ' + projectName) + '&'
+            );
+        };
+
         initNavigationFilter("sidebar-scroll");
 
         initAnchorTags(".docs-page .docs-body");
+
+        initSocialShareLinks();
+
     });
 
 })(jQuery);
+

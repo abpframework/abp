@@ -13,6 +13,7 @@ namespace Volo.AbpWebSite.Pages
     {
         private readonly SolutionBuilder _solutionBuilder;
         private readonly IConfigurationAccessor _configurationAccessor;
+        public const string ProjectNameRegEx = @"^[a-zA-Z_][a-zA-Z0-9_]*(\.[a-zA-Z_][a-zA-Z0-9_]*)*$";
 
         public TemplatesModel(SolutionBuilder solutionBuilder, IConfigurationAccessor configurationAccessor)
         {
@@ -63,6 +64,9 @@ namespace Volo.AbpWebSite.Pages
                 case "MvcModule":
                     DatabaseProvider = DatabaseProvider.Irrelevant;
                     return new MvcModuleTemplate(_configurationAccessor.Configuration);
+                case "Service":
+                    DatabaseProvider = DatabaseProvider.Irrelevant;
+                    return new ServiceTemplate(_configurationAccessor.Configuration);
                 case "MvcApp":
                 default:
                     return new MvcApplicationTemplate(_configurationAccessor.Configuration);

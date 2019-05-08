@@ -1,10 +1,10 @@
-﻿## Module Development
+﻿# Module Development
 
-### Introduction
+## Introduction
 
-ABP is itself a modular framework. It also provides an infrastructure and architectural model to develop your own modules.
+ABP is a **modular application framework** which consists of dozens of **nuget packages**. It also provides a complete infrastructure to build your own application modules which may have entities, services, database integration, APIs, UI components and so on.
 
-### Module Class
+## Module Class
 
 Every module should define a module class. The simplest way of defining a module class is to create a class derived from ``AbpModule`` as shown below:
 
@@ -16,9 +16,9 @@ public class BlogModule : AbpModule
 
 ````
 
-#### Configuring Dependency Injection & Other Modules
+### Configuring Dependency Injection & Other Modules
 
-##### ConfigureServices Method
+#### ConfigureServices Method
 
 ``ConfigureServices`` is the main method to add your services to the dependency injection system and configure other modules. Example:
 
@@ -42,7 +42,7 @@ public class BlogModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //Configure default connection string for the application
-        context.Services.Configure<DbConnectionOptions>(options =>
+        Configure<DbConnectionOptions>(options =>
         {
             options.ConnectionStrings.Default = "......";
         });
@@ -52,15 +52,15 @@ public class BlogModule : AbpModule
 
 See Configuration (TODO: link) document for more about the configuration system.
 
-##### Pre & Post Configure Services
+#### Pre & Post Configure Services
 
 ``AbpModule`` class also defines ``PreConfigureServices`` and ``PostConfigureServices`` methods to override and write your code just before and just after ``ConfigureServices``. Notice that the code you have written into these methods will be executed before/after the ``ConfigureServices`` methods of all other modules.
 
-#### Application Initialization
+### Application Initialization
 
 Once all the services of all modules are configured, the application starts by initializing all modules. In this phase, you can resolve services from ``IServiceProvider`` since it's ready and available.
 
-##### OnApplicationInitialization Method
+#### OnApplicationInitialization Method
 
 You can override ``OnApplicationInitialization`` method to execute code while application is being started. Example:
 
@@ -102,15 +102,15 @@ public class AppModule : AbpModule
 
 You can also perform startup logic if your module requires it
 
-##### Pre & Post Application Initialization
+#### Pre & Post Application Initialization
 
 ``AbpModule`` class also defines ``OnPreApplicationInitialization`` and ``OnPostApplicationInitialization`` methods to override and write your code just before and just after ``OnApplicationInitialization``. Notice that the code you have written into these methods will be executed before/after the ``OnApplicationInitialization`` methods of all other modules.
 
-#### Application Shutdown
+### Application Shutdown
 
-Lastly, you can override ``OnApplicationShutdown`` method if you want to execute some code while application is beign shutdown.
+Lastly, you can override ``OnApplicationShutdown`` method if you want to execute some code while application is being shutdown.
 
-### Module Dependencies
+## Module Dependencies
 
 In a modular application, it's not unusual for one module to depend upon another module(s). An Abp module must declare ``[DependsOn]`` attribute if it does have a dependcy upon another module, as shown below:
 
@@ -126,3 +126,10 @@ public class BlogModule
 You can use multiple ``DependsOn`` attribute or pass multiple module types to a single ``DependsOn`` attribute depending on your preference.
 
 A depended module may depend on another module, but you only need to define your direct dependencies. ABP investigates the dependency graph for the application at startup and initializes/shutdowns modules in the correct order.
+
+## Framework Modules vs Application Modules
+
+There are **two types of modules.** They don't have any structural difference but categorized by functionality and purpose:
+
+- **Framework modules**: These are **core modules of the framework** like caching, emailing, theming, security, serialization, validation, EF Core integration, MongoDB integration... etc. They do not have application/business functionalities but makes your daily development easier by providing common infrastructure, integration and abstractions.
+- **Application modules**: These modules implement **specific application/business functionalities** like blogging, document management, identity management, tenant management... etc. They generally have their own entities, services, APIs and UI components. See [pre-built application modules](Modules/Index.md).

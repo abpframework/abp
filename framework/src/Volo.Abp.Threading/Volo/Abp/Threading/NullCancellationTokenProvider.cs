@@ -6,7 +6,7 @@ namespace Volo.Abp.Threading
     {
         public static NullCancellationTokenProvider Instance { get; } = new NullCancellationTokenProvider();
 
-        public CancellationToken Token { get; } = default;
+        public CancellationToken Token { get; } = CancellationToken.None;
 
         private NullCancellationTokenProvider()
         {

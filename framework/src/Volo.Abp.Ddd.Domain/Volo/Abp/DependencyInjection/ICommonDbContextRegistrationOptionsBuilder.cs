@@ -51,9 +51,9 @@ namespace Volo.Abp.DependencyInjection
         /// Uses given class(es) for default repositories.
         /// </summary>
         /// <param name="repositoryImplementationType">Repository implementation type</param>
-        /// <param name="repositoryImplementationTypeWithouTKey">Repository implementation type (without primary key)</param>
+        /// <param name="repositoryImplementationTypeWithoutKey">Repository implementation type (without primary key)</param>
         /// <returns></returns>
-        ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithouTKey);
+        ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithoutKey);
 
         /// <summary>
         /// Replaces given DbContext type with this DbContext type.

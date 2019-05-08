@@ -20,8 +20,8 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput>
-        : AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TEntityDto, TEntityDto>
+    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetListInput>
+        : AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TEntityDto, TEntityDto>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
@@ -32,12 +32,10 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput>
-        : AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TCreateInput>
-        where TGetAllInput : IPagedAndSortedResultRequest
+    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput>
+        : AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
-        where TCreateInput : IEntityDto<TKey>
     {
         protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
@@ -46,9 +44,9 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
-       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>,
-        IAsyncCrudAppService<TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput>
+    public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
+        IAsyncCrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity<TKey>
            where TEntityDto : IEntityDto<TKey>
     {
@@ -68,9 +66,9 @@ namespace Volo.Abp.Application.Services
             return MapToEntityDto(entity);
         }
 
-        public virtual async Task<PagedResultDto<TEntityDto>> GetListAsync(TGetAllInput input)
+        public virtual async Task<PagedResultDto<TEntityDto>> GetListAsync(TGetListInput input)
         {
-            await CheckGetAllPolicyAsync();
+            await CheckGetListPolicyAsync();
 
             var query = CreateFilteredQuery(input);
 
@@ -92,9 +90,7 @@ namespace Volo.Abp.Application.Services
             await CheckCreatePolicyAsync();
 
             var entity = MapToEntity(input);
-
-            await Repository.InsertAsync(entity);
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await Repository.InsertAsync(entity, autoSave: true);
 
             return MapToEntityDto(entity);
         }
@@ -104,11 +100,9 @@ namespace Volo.Abp.Application.Services
             await CheckUpdatePolicyAsync();
 
             var entity = await GetEntityByIdAsync(id);
-
             //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
-
             MapToEntity(input, entity);
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await Repository.UpdateAsync(entity, autoSave: true);
 
             return MapToEntityDto(entity);
         }
@@ -130,9 +124,9 @@ namespace Volo.Abp.Application.Services
             await CheckPolicyAsync(GetPolicyName);
         }
 
-        protected virtual async Task CheckGetAllPolicyAsync()
+        protected virtual async Task CheckGetListPolicyAsync()
         {
-            await CheckPolicyAsync(GetAllPolicyName);
+            await CheckPolicyAsync(GetListPolicyName);
         }
 
         protected virtual async Task CheckCreatePolicyAsync()

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Shouldly;
@@ -14,10 +15,28 @@ namespace Volo.Abp.Localization
     public class AbpLocalization_Tests : AbpIntegratedTest<AbpLocalization_Tests.TestModule>
     {
         private readonly IStringLocalizer<LocalizationTestResource> _localizer;
+        private readonly IStringLocalizerFactory _localizerFactory;
 
         public AbpLocalization_Tests()
         {
             _localizer = GetRequiredService<IStringLocalizer<LocalizationTestResource>>();
+            _localizerFactory = GetRequiredService<IStringLocalizerFactory>();
+        }
+
+        [Fact]
+        public void AbpStringLocalizerExtensions_GetInternalLocalizer()
+        {
+            var internalLocalizer = _localizer.GetInternalLocalizer();
+            internalLocalizer.ShouldNotBeNull();
+            internalLocalizer.ShouldBeOfType<AbpDictionaryBasedStringLocalizer>();
+        }
+
+        [Fact]
+        public void AbpStringLocalizerExtensions_GetInternalLocalizer_Using_LocalizerFactory()
+        {
+            var internalLocalizer = _localizerFactory.Create(typeof(LocalizationTestResource)).GetInternalLocalizer();
+            internalLocalizer.ShouldNotBeNull();
+            internalLocalizer.ShouldBeOfType<AbpDictionaryBasedStringLocalizer>();
         }
 
         [Fact]
@@ -104,23 +123,130 @@ namespace Volo.Abp.Localization
             _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
         }
 
+        [Fact]
+        public void GetAllStrings_With_Parents()
+        {
+            using (AbpCultureHelper.Use("tr"))
+            {
+                var localizedStrings = _localizer.GetAllStrings(true).ToList();
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "FortyTwo" &&
+                          ls.Value == "Forty Two" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+        }
+
+        [Fact]
+        public void GetAllStrings_Without_Parents()
+        {
+            using (AbpCultureHelper.Use("tr"))
+            {
+                var localizedStrings = _localizer.GetAllStrings(false).ToList();
+
+                localizedStrings.ShouldNotContain(
+                    ls => ls.Name == "FortyTwo"
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+        }
+
+        [Fact]
+        public void GetAllStrings_With_Inheritance()
+        {
+            using (AbpCultureHelper.Use("tr"))
+            {
+                var localizedStrings = _localizer
+                    .GetAllStrings(true, includeBaseLocalizers: true)
+                    .ToList();
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "USA" &&
+                          ls.Value == "Amerika Birleşik Devletleri" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "SeeYou" &&
+                          ls.Value == "See you" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+        }
+
+        [Fact]
+        public void GetAllStrings_Without_Inheritance()
+        {
+            using (AbpCultureHelper.Use("tr"))
+            {
+                var localizedStrings = _localizer
+                    .GetAllStrings(true, includeBaseLocalizers: false)
+                    .ToList();
+
+                localizedStrings.ShouldNotContain(
+                    ls => ls.Name == "USA"
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Evren" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "SeeYou" &&
+                          ls.Value == "See you" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+        }
+
         [DependsOn(typeof(AbpTestBaseModule))]
         [DependsOn(typeof(AbpLocalizationModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                context.Services.Configure<VirtualFileSystemOptions>(options =>
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<TestModule>();
                 });
 
-                context.Services.Configure<AbpLocalizationOptions>(options =>
+                Configure<AbpLocalizationOptions>(options =>
                 {
-                    options.Resources.Add<LocalizationTestValidationResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
-                    options.Resources.Add<LocalizationTestCountryNamesResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");
-                    options.Resources.Add<LocalizationTestResource>("en").AddVirtualJson("/Volo/Abp/Localization/TestResources/Source");
-                    options.Resources.Get<LocalizationTestResource>().AddVirtualJson("/Volo/Abp/Localization/TestResources/SourceExt");
+                    options.Resources
+                        .Add<LocalizationTestValidationResource>("en")
+                        .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/Validation");
+
+                    options.Resources
+                        .Add<LocalizationTestCountryNamesResource>("en")
+                        .AddVirtualJson("/Volo/Abp/Localization/TestResources/Base/CountryNames");
+
+                    options.Resources
+                        .Add<LocalizationTestResource>("en")
+                        .AddVirtualJson("/Volo/Abp/Localization/TestResources/Source");
+
+                    options.Resources
+                        .Get<LocalizationTestResource>()
+                        .AddVirtualJson("/Volo/Abp/Localization/TestResources/SourceExt");
                 });
             }
         }

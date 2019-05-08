@@ -4,7 +4,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.SettingManagement
 {
-    public class Setting : Entity<Guid>
+    public class Setting : Entity<Guid>, IAggregateRoot<Guid>
     {
         [NotNull]
         public virtual string Name { get; protected set; }

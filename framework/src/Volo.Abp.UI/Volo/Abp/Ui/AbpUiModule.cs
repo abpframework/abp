@@ -13,14 +13,16 @@ namespace Volo.Abp.UI
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpUiModule>();
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Add<AbpUiResource>("en").AddVirtualJson("/Localization/Resources/AbpUi");
+                options.Resources
+                    .Add<AbpUiResource>("en")
+                    .AddVirtualJson("/Localization/Resources/AbpUi");
             });
         }
     }

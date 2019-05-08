@@ -58,7 +58,7 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
                 //Register all embedded files of this assembly to the virtual file system
                 options.FileSets.AddEmbedded<MyModule>();
@@ -108,7 +108,7 @@ Embedding a file into a module assembly and being able to use it from another pr
 
 Let's assume that you're developing a module that contains an embedded JavaScript file. Whenever you change this file you must re-compile the project, re-start the application and refresh the browser page to take the change. Obviously, this is very time consuming and tedious.
 
-What is needed is the ability for the application to directly use the physical file at development time and a have a browser refresh reflect any change made in the JavaScript file. The `ReplaceEmbeddedByPyhsical` method makes all this possible. 
+What is needed is the ability for the application to directly use the physical file at development time and a have a browser refresh reflect any change made in the JavaScript file. The `ReplaceEmbeddedByPhysical` method makes all this possible. 
 
 The example below shows an application that depends on a module (`MyModule`) that itself contains embedded files.  The application can reach the source code of the module at development time. 
 
@@ -122,10 +122,10 @@ public class MyWebAppModule : AbpModule
 
         if (hostingEnvironment.IsDevelopment()) //only for development time
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                //ReplaceEmbeddedByPyhsical gets the root folder of the MyModule project
-                options.FileSets.ReplaceEmbeddedByPyhsical<MyModule>(
+                //ReplaceEmbeddedByPhysical gets the root folder of the MyModule project
+                options.FileSets.ReplaceEmbeddedByPhysical<MyModule>(
                     Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyModuleProject", Path.DirectorySeparatorChar))
                 );
             });

@@ -13,7 +13,7 @@ ABP内置了简单,动态,强大,模块化的方式.
 
 > 默认情况下已在启动模板安装此软件包. 大多数情况下,你不需要手动安装它.
 
-将`Volo.Abp.AspNetCore.Mvc.UI.Bundling` nuget包安装到您的项目中:
+将`Volo.Abp.AspNetCore.Mvc.UI.Bundling` nuget包安装到你的项目中:
 
 ````
 install-package Volo.Abp.AspNetCore.Mvc.UI.Bundling
@@ -115,7 +115,7 @@ public class MyWebModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Configure<BundlingOptions>(options =>
+        Configure<BundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -132,7 +132,7 @@ public class MyWebModule : AbpModule
 }
 ````
 
-> 您可以在脚本和样式包中使用相同的名称(*MyGlobalBundle*), 因为它们被添加到不同的集合(`ScriptBundles`和`StyleBundles`).
+> 你可以在脚本和样式包中使用相同的名称(*MyGlobalBundle*), 因为它们被添加到不同的集合(`ScriptBundles`和`StyleBundles`).
 
 在定义bundle之后, 可以使用上面定义的相同tag helpers将其包括在页面中. 例如:
 
@@ -153,7 +153,7 @@ public class MyWebExtensionModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        context.Services.Configure<BundlingOptions>(options =>
+        Configure<BundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -196,7 +196,7 @@ services.Configure<BundlingOptions>(options =>
     options
         .ScriptBundles
         .Configure("MyGlobalBundle", bundle => {
-            bundle.AddContributors(typeof(MyExtensionStyleBundleContributor));
+            bundle.AddContributors(typeof(MyExtensionGlobalStyleContributor));
         });        
 });
 ````
@@ -214,7 +214,7 @@ services.Configure<BundlingOptions>(options =>
 
 `abp-style`和`abp-script`标签可以使用`type`属性(而不是`src`属性), 如本示例所示. 添加bundle贡献者时, 其依赖关系也会自动添加到bundle中.
 
-#### Contributor Dependencies
+#### 贡献者依赖关系
 
 bundle贡献者可以与其他贡献者具有一个或多个依赖关系.
 例如:
@@ -227,9 +227,39 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 }
 ````
 
-添加bundle贡献者时,其依赖关系将 **自动并递归** 添加. **依赖顺序** 通过阻止 **重复** 添加的依赖关系. 即使它们处于分离的束中,也会阻止重复. ABP在页面中组织所有bundle并消除重复.
+添加bundle贡献者时,其依赖关系将 **自动并递归** 添加. **依赖顺序** 通过阻止 **重复** 添加的依赖关系. 即使它们处于分离的bundle中,也会阻止重复. ABP在页面中组织所有bundle并消除重复.
 
-创建贡献者和定义依赖关系是一种跨不同模块组织包创建的方法.
+创建贡献者和定义依赖关系是一种跨不同模块组织bundle创建的方法.
+
+
+#### 贡献者扩展
+
+在某些高级应用场景中, 当用到一个bundle贡献者时，你可能想做一些额外的配置. 贡献者扩展可以和被扩展的贡献者无缝衔接.
+
+下面的示例为 prism.js 脚本库添加一些样式:
+
+````csharp
+public class MyPrismjsStyleExtension : BundleContributor
+{
+    public override void ConfigureBundle(BundleConfigurationContext context)
+    {
+        context.Files.AddIfNotContains("/libs/prismjs/plugins/toolbar/prism-toolbar.css");
+    }
+}
+````
+
+然后你可以配置 `BundleContributorOptions` 去扩展已存在的 `PrismjsStyleBundleContributor`.
+
+````csharp
+Configure<BundleContributorOptions>(options =>
+{
+    options
+        .Extensions<PrismjsStyleBundleContributor>()
+        .Add<MyPrismjsStyleExtension>();
+});
+````
+
+任何时候当 `PrismjsStyleBundleContributor` 被添加到bundle中时, `MyPrismjsStyleExtension` 也会被自动添加.
 
 #### 访问 IServiceProvider
 
@@ -239,7 +269,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 
 将特定的NPM包资源(js,css文件)添加到包中对于该包非常简单. 例如, 你总是为bootstrap NPM包添加`bootstrap.css`文件.
 
-所有[标准NPM包](Client-Side-Package-Management.md)都有内置的贡献者. 例如,如果你的贡献者依赖于引导程序,你可以声明它,而不是自己添加bootstrap.css.
+所有[标准NPM包](Client-Side-Package-Management.md)都有内置的贡献者. 例如,如果你的贡献者依赖于bootstrap,你可以声明它,而不是自己添加bootstrap.css.
 
 ````C#
 [DependsOn(typeof(BootstrapStyleContributor))] //Define the bootstrap style dependency
@@ -261,7 +291,7 @@ public class MyExtensionStyleBundleContributor : BundleContributor
 > 默认情况下已在启动模板安装此软件包. 大多数情况下,你不需要手动安装它.
 
 标准包贡献者在`Volo.Abp.AspNetCore.Mvc.UI.Packages` NuGet包中定义.
-安装到你的项目中:
+将它安装到你的项目中:
 
 ````
 install-package Volo.Abp.AspNetCore.Mvc.UI.Packages
@@ -283,9 +313,9 @@ namespace MyCompany.MyProject
 }
 ````
 
-#### Bundle Inheritance
+#### Bundle 继承
 
-在某些特定情况下, 可能需要从其他bundle创建一个 **新** bundle **继承**, 从bundle继承(递归)继承该bundle的所有文件/贡献者. 然后派生的bundle可以添加或修改文件/贡献者**而无需修改**原始包.
+在某些特定情况下, 可能需要从其他bundle创建一个 **新** bundle **继承**, 从bundle继承(递归)会继承该bundle的所有文件/贡献者. 然后派生的bundle可以添加或修改文件/贡献者**而无需修改**原始bundle.
 例如:
 
 ````c#
@@ -311,7 +341,7 @@ services.Configure<BundlingOptions>(options =>
 
 建议为应用程序定义多个包, 每个包用于不同的目的.
 
-* **全局包**: 应用程序中的每个页面都包含全局样式/脚本包. 主题已经定义了全局样式和脚本包. 您的模块可以为他们做出贡献.
+* **全局包**: 应用程序中的每个页面都包含全局样式/脚本包. 主题已经定义了全局样式和脚本包. 你的模块可以为他们做出贡献.
 * **布局包**: 这是针对单个布局的特定包. 仅包含在所有页面之间共享的资源使用布局. 使用bundling tag helpers创建捆绑包是一种很好的做法.
 * **模块包**: 用于单个模块页面之间的共享资源.
 * **页面包**: 为每个页面创建的特定包. 使用bundling tag helpers创建捆绑包作为最佳实践.

@@ -26,6 +26,7 @@
 示例:
 
 ```c#
+[Serializable]
 public class IssueDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -34,6 +35,7 @@ public class IssueDto : FullAuditedEntityDto<Guid>
     public Collection<IssueLabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class IssueLabelDto
 {
     public Guid IssueId { get; set; }
@@ -54,6 +56,7 @@ public class IssueLabelDto
 示例:
 
 ````C#
+[Serializable]
 public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -62,12 +65,14 @@ public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
     public Collection<LabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class MilestoneDto : EntityDto<Guid>
 {
     public string Name { get; set; }
     public bool IsClosed { get; set; }
 }
 
+[Serializable]
 public class LabelDto : EntityDto<Guid>
 {
     public string Name { get; set; }
@@ -86,7 +91,7 @@ public class LabelDto : EntityDto<Guid>
 
 * **推荐** 为异步方法使用 **Async** 后缀.
 * **不推荐** 在方法名中重复实体的名称.
-  * 例如: 在 `IProductAppService` 中定义`GetProductAsync(...)` 而不是 `GetAsync(...)` .
+  * 例如: 在 `IProductAppService` 中定义`GetAsync(...)` 而不是 `GetProductAsync(...)` .
 
 ##### 获取单一实体
 
@@ -104,7 +109,7 @@ Task<QuestionWithDetailsDto> GetAsync(Guid id);
 * **推荐** 如果需要获取单个DTO可以使用参数进行 **过滤**, **排序** 和 **分页**.
   * **推荐** 尽可能让过滤参数可选.
   * **推荐** 将排序与分页属性设置为可选, 并且提供默认值.
-  * **推荐** 限制最大页数大小 (基本性能考虑).
+  * **推荐** 限制最大页数大小 (基于性能考虑).
 * **推荐** 返回 **详细DTO**集合. 示例:
 
 ````C#
@@ -116,7 +121,7 @@ Task<List<QuestionWithDetailsDto>> GetListAsync(QuestionListQueryDto queryDto);
 * **推荐** 使用 `CreateAsync` 做为**方法名**.
 * **推荐** 使用**专门的输入DTO**来创建实体.
 * **推荐** 使用 **data annotations** 进行输入验证.
-  * 尽可能在**领域**之间共享常量(通过域**domain shared** package定义的常量).
+  * 尽可能在**领域**之间共享常量(通过**domain shared** package定义的常量).
 * **推荐** 只需要创建实体的**最少**信息, 但是提供了其他可选属性.
 
 示例**方法**:
@@ -128,6 +133,7 @@ Task<QuestionWithDetailsDto> CreateAsync(CreateQuestionDto questionDto);
 输入**DTO**:
 
 ````C#
+[Serializable]
 public class CreateQuestionDto
 {
     [Required]
@@ -147,7 +153,7 @@ public class CreateQuestionDto
 - **推荐** 使用**专门的输入DTO**来更新实体.
 - **推荐** 获取实体的id做为分离的原始参数. 不要包含更新DTO.
 - **推荐** 使用 **data annotations** 进行输入验证.
-  - 尽可能在**领域**之间共享常量(通过域**domain shared** package定义的常量).
+  - 尽可能在**领域**之间共享常量(通过**domain shared** package定义的常量).
 - **推荐** 返回更新实体的**详细**DTO.
 
 示例:
@@ -181,11 +187,13 @@ Task<int> VoteAsync(Guid id, VoteType type);
 * **推荐** 在**应用层**实现应用服务接口.
   * **推荐** 使用命名约定. 如: 为 `IProductAppService` 接口创建 `ProductAppService` 类.
   * **推荐** 继承自 `ApplicationService` 基类.
+* **推荐** 将所有的公开方法定义为 **virtual**, 以便开发人员继承和覆盖它们.
+* **不推荐** 定义 **private** 方法. 应该定义为 **protected virtual**, 这样开发人员可以继承和覆盖它们.
 
 #### 使用仓储
 
 * **推荐** 使用专门设计的仓储 (如 `IProductRepository`).
-* **不推荐** 使用泛型仓储 (如 `IRepository<Product>`).
+* **不推荐** 使用泛型仓储 (如 `IRepository<Product>`).z`
 
 #### 查询数据
 
@@ -194,12 +202,13 @@ Task<int> VoteAsync(Guid id, VoteType type);
 #### 操作/删除 实体
 
 * **推荐** 总是从数据库中获取所有的相关实体以对他们执行操作.
+* **推荐** 更新实体后调用存储的Update/UpdateAsync方法.因为并非所有数据库API都支持更改跟踪和自动更新.
 
 #### 使用其他应用服务
 
 * **不推荐** 使用相同 **模块/应用程序** 的其他应用服务. 相反;
   * 使用领域层执行所需的任务.
-  * 提取新类并在应用程序服务之间共享, 在必要时代码重用.
+  * 提取新类并在应用程序服务之间共享, 在必要时代码重用. 但要小心不要结合两个用例. 它们在开始时可能看起来相似, 但可能会随时间演变为不同的方向. 请谨慎使用代码共享.
 * **可以** 在以下情况下使用其他应用服务;
   * 它们是另一个模块/微服务的一部分.
   * 当前模块仅引用已使用模块的application contracts.

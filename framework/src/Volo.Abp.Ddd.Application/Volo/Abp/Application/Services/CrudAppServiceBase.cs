@@ -4,6 +4,7 @@ using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
 {
@@ -11,7 +12,8 @@ namespace Volo.Abp.Application.Services
     /// This is a common base class for CrudAppService and AsyncCrudAppService classes.
     /// Inherit either from CrudAppService or AsyncCrudAppService, not from this class.
     /// </summary>
-    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetAllInput, TCreateInput, TUpdateInput> : ApplicationService
+    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput> :
+        ApplicationService
         where TEntity : class, IEntity<TKey>
         where TEntityDto : IEntityDto<TKey>
     {
@@ -19,7 +21,7 @@ namespace Volo.Abp.Application.Services
         
         protected virtual string GetPolicyName { get; set; }
 
-        protected virtual string GetAllPolicyName { get; set; }
+        protected virtual string GetListPolicyName { get; set; }
 
         protected virtual string CreatePolicyName { get; set; }
 
@@ -37,7 +39,7 @@ namespace Volo.Abp.Application.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetAllInput input)
+        protected virtual IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetListInput input)
         {
             //Try to sort query if available
             var sortInput = input as ISortedResultRequest;
@@ -64,7 +66,7 @@ namespace Volo.Abp.Application.Services
         /// </summary>
         /// <param name="query">The query.</param>
         /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> ApplyPaging(IQueryable<TEntity> query, TGetAllInput input)
+        protected virtual IQueryable<TEntity> ApplyPaging(IQueryable<TEntity> query, TGetListInput input)
         {
             //Try to use paging if available
             var pagedInput = input as IPagedResultRequest;
@@ -91,7 +93,7 @@ namespace Volo.Abp.Application.Services
         /// methods.
         /// </summary>
         /// <param name="input">The input.</param>
-        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetAllInput input)
+        protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetListInput input)
         {
             return Repository;
         }

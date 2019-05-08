@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Settings
 {
-    public abstract class SettingValueProvider : ISettingValueProvider, ISingletonDependency
+    public abstract class SettingValueProvider : ISettingValueProvider, ISingletonDependency //TODO: to transient?
     {
         public abstract string Name { get; }
 
@@ -14,10 +14,6 @@ namespace Volo.Abp.Settings
             SettingStore = settingStore;
         }
 
-        public abstract Task<string> GetOrNullAsync(SettingDefinition setting, string providerKey);
-
-        public abstract Task SetAsync(SettingDefinition setting, string value, string providerKey);
-
-        public abstract Task ClearAsync(SettingDefinition setting, string providerKey);
+        public abstract Task<string> GetOrNullAsync(SettingDefinition setting);
     }
 }

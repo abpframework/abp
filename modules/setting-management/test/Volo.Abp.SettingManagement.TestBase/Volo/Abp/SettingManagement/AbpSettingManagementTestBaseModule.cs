@@ -11,14 +11,6 @@ namespace Volo.Abp.SettingManagement
         typeof(AbpSettingManagementDomainModule))]
     public class AbpSettingManagementTestBaseModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.Configure<SettingOptions>(options =>
-            {
-                options.DefinitionProviders.Add<TestSettingDefinitionProvider>();
-            });
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

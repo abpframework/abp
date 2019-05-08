@@ -2,20 +2,17 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.Identity;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpIdentityEntityFrameworkCoreTestModule))]
+    [DependsOn(
+        typeof(AbpIdentityEntityFrameworkCoreTestModule),
+        typeof(AbpIdentityTestBaseModule),
+        typeof(AbpPermissionManagementDomainIdentityModule)
+        )]
     public class AbpIdentityDomainTestModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.Configure<PermissionOptions>(options =>
-            {
-                options.DefinitionProviders.Add<IdentityTestPermissionDefinitionProvider>();
-            });
-        }
-
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

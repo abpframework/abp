@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
+    [Serializable]
     public class DocumentWithDetailsDto
     {
         public string Title { get; set; }
@@ -28,77 +27,6 @@ namespace Volo.Docs.Documents
 
         public ProjectDto Project { get; set; }
 
-        public bool SuccessfullyRetrieved { get; set; }
-    }
-
-    public class NavigationNode
-    {
-        [JsonProperty("text")]
-        public string Text { get; set; }
-
-        [JsonProperty("path")]
-        public string Path { get; set; }
-
-        [JsonProperty("items")]
-        public List<NavigationNode> Items { get; set; }
-
-        public bool IsLeaf => !HasChildItems;
-
-        public bool HasChildItems => Items != null && Items.Any();
-
-        public bool IsEmpty => Text == null && Path == null;
-
-        public bool IsSelected(string documentName)
-        {
-            if (documentName == null)
-            {
-                return false;
-            }
-
-            if (string.Equals(documentName, Path, StringComparison.OrdinalIgnoreCase))
-            {
-                return true;
-            }
-
-            if (Items == null)
-            {
-                return false;
-            }
-
-            foreach (var childItem in Items)
-            {
-                if (childItem.IsSelected(documentName))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    public class NavigationWithDetailsDto : DocumentWithDetailsDto
-    {
-        [JsonProperty("items")]
-        public NavigationNode RootNode { get; set; }
-
-        public void ConvertItems()
-        {
-            if (!SuccessfullyRetrieved || Content.IsNullOrEmpty())
-            {
-                RootNode = new NavigationNode();
-                return;
-            }
-
-            try
-            {
-                RootNode = JsonConvert.DeserializeObject<NavigationNode>(Content);
-            }
-            catch (JsonException)
-            {
-                //todo: should log the exception?
-                RootNode = new NavigationNode();
-            }
-        }
+        public List<DocumentContributorDto> Contributors { get; set; }
     }
 }

@@ -22,12 +22,14 @@ namespace Volo.Docs.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Projects", options.Schema);
 
+                b.ConfigureConcurrencyStamp();
+                b.ConfigureExtraProperties();
+
                 b.Property(x => x.Name).IsRequired().HasMaxLength(ProjectConsts.MaxNameLength);
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(ProjectConsts.MaxShortNameLength);
                 b.Property(x => x.DefaultDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxDefaultDocumentNameLength);
                 b.Property(x => x.NavigationDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxNavigationDocumentNameLength);
-
-                b.ConfigureExtraProperties();
+                b.Property(x => x.LatestVersionBranchName).HasMaxLength(ProjectConsts.MaxLatestVersionBranchNameLength);
             });
         }
     }

@@ -7,12 +7,13 @@
     var _dataTable = $('#BlogsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
-        paging: true,
+        paging: false,
+        info: false,
         searching: false,
         autoWidth: false,
         scrollCollapse: true,
         order: [[3, "desc"]],
-        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getListPaged),
+        ajax: abp.libs.datatables.createAjax(volo.blogging.blogs.getList),
         columnDefs: [
             {
                 rowAction: {
@@ -20,9 +21,7 @@
                         [
                             {
                                 text: l('Edit'),
-                                visible: function () {
-                                    return true; //TODO: Check permission
-                                },
+                                visible: abp.auth.isGranted('Blogging.Blog.Update'),
                                 action: function (data) {
                                     _editModal.open({
                                         blogId: data.record.id
@@ -31,9 +30,7 @@
                             },
                             {
                                 text: l('Delete'),
-                                visible: function () {
-                                    return true; //TODO: Check permission
-                                },
+                                visible: abp.auth.isGranted('Blogging.Blog.Delete'),
                                 confirmMessage: function (data) { return l('BlogDeletionWarningMessage') },
                                 action: function (data) {
                                     volo.blogging.blogs

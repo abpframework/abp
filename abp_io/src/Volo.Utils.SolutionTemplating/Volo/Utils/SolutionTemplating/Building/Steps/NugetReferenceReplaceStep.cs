@@ -16,7 +16,8 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
             new NugetReferenceReplacer(
                 context.Files,
                 "MyCompanyName",
-                "MyProjectName"
+                "MyProjectName",
+                context.Template.Version
             ).Run();
         }
 
@@ -27,12 +28,12 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
             private readonly string _projectNamePlaceHolder;
             private readonly string _latestNugetPackageVersion;
 
-            public NugetReferenceReplacer(List<FileEntry> entries, string companyNamePlaceHolder, string projectNamePlaceHolder)
+            public NugetReferenceReplacer(List<FileEntry> entries, string companyNamePlaceHolder, string projectNamePlaceHolder, string latestNugetPackageVersion)
             {
                 _entries = entries;
                 _companyNamePlaceHolder = companyNamePlaceHolder;
                 _projectNamePlaceHolder = projectNamePlaceHolder;
-                _latestNugetPackageVersion = GetLatestNugetPackageVersion();
+                _latestNugetPackageVersion = latestNugetPackageVersion;
             }
 
             public void Run()
@@ -54,7 +55,14 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
 
                 doc.Load(GenerateStreamFromString(content));
 
-                return ProcessReferenceNodes(doc.DocumentNode.SelectNodes("//projectreference[@include]"), content);
+                var nodes = doc.DocumentNode.SelectNodes("//projectreference[@include]");
+
+                if (nodes == null)
+                {
+                    return content;
+                }
+
+                return ProcessReferenceNodes(nodes, content);
             }
 
             private string ProcessReferenceNodes(HtmlNodeCollection nodes, string content)
@@ -102,38 +110,6 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
                 writer.Flush();
                 stream.Position = 0;
                 return stream;
-            }
-
-            private string GetLatestNugetPackageVersion()
-            {
-                //TODO: This should get it from the related release! Not always from the master!
-
-                var commonPropsUrl = "https://raw.githubusercontent.com/abpframework/abp/master/common.props";
-                var content = "";
-                using (var webClient = new WebClient())
-                {
-                    try
-                    {
-                        content = webClient.DownloadString(commonPropsUrl);
-                    }
-                    catch (Exception)
-                    {
-                        throw new Exception("The Common.pros doesn't exist on github or removed to anywhere else.");
-                    }
-                }
-
-                var doc = new HtmlDocument();
-
-                doc.Load(GenerateStreamFromString(content));
-
-                try
-                {
-                    return doc.DocumentNode.SelectNodes("//version").FirstOrDefault().InnerHtml.Trim();
-                }
-                catch (Exception e)
-                {
-                    return "";
-                }
             }
         }
     }

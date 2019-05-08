@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\common.props" />
+
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
 
@@ -12,6 +14,8 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.MongoDB\Volo.Abp.Identity.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\background-jobs\src\Volo.Abp.BackgroundJobs.MongoDB\Volo.Abp.BackgroundJobs.MongoDB.csproj" />
     <ProjectReference Include="..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.MongoDB\Volo.Abp.AuditLogging.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.MongoDB\Volo.Abp.TenantManagement.MongoDB.csproj" />
+    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.MongoDB\Volo.Abp.FeatureManagement.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>

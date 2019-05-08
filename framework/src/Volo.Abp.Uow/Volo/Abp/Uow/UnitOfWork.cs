@@ -18,6 +18,10 @@ namespace Volo.Abp.Uow
 
         public bool IsReserved { get; set; }
 
+        public bool IsDisposed { get; private set; }
+
+        public bool IsCompleted { get; private set; }
+
         public string ReservationName { get; set; }
 
         protected List<Func<Task>> CompletedHandlers { get; } = new List<Func<Task>>();
@@ -32,8 +36,7 @@ namespace Volo.Abp.Uow
         private readonly UnitOfWorkDefaultOptions _defaultOptions;
 
         private Exception _exception;
-        private bool _isCompleted;
-        private bool _isDisposed;
+        private bool _isCompleting;
         private bool _isRolledback;
 
         public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options)
@@ -101,8 +104,10 @@ namespace Volo.Abp.Uow
 
             try
             {
+                _isCompleting = true;
                 SaveChanges();
                 CommitTransactions();
+                IsCompleted = true;
                 OnCompleted();
             }
             catch (Exception ex)
@@ -123,8 +128,10 @@ namespace Volo.Abp.Uow
 
             try
             {
+                _isCompleting = true;
                 await SaveChangesAsync(cancellationToken);
                 await CommitTransactionsAsync();
+                IsCompleted = true;
                 await OnCompletedAsync();
             }
             catch (Exception ex)
@@ -250,16 +257,16 @@ namespace Volo.Abp.Uow
 
         public virtual void Dispose()
         {
-            if (_isDisposed)
+            if (IsDisposed)
             {
                 return;
             }
 
-            _isDisposed = true;
+            IsDisposed = true;
 
             DisposeTransactions();
 
-            if (!_isCompleted || _exception != null)
+            if (!IsCompleted || _exception != null)
             {
                 OnFailed();
             }
@@ -283,14 +290,11 @@ namespace Volo.Abp.Uow
 
         private void PreventMultipleComplete()
         {
-            if (_isCompleted)
+            if (IsCompleted || _isCompleting)
             {
                 throw new AbpException("Complete is called before!");
             }
-
-            _isCompleted = true;
         }
-
 
         protected virtual void RollbackAll()
         {

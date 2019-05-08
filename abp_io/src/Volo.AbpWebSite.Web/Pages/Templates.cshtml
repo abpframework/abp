@@ -1,5 +1,6 @@
 ﻿@page
 @using Volo.AbpWebSite
+@using Volo.AbpWebSite.Pages
 @model Volo.AbpWebSite.Pages.TemplatesModel
 @{
     ViewBag.PageTitle = "Get Started";
@@ -13,7 +14,7 @@
         @using (Html.BeginForm(FormMethod.Post))
         {
             <div class="row border">
-                <div class="col p-5 ">
+                <div class="col-lg-7 p-5 ">
                     <h2>
                         <span class="text-primary">Create</span>
                         <span class="text-success">New Project</span>
@@ -24,7 +25,7 @@
 
                     <div class="form-group">
                         <label for="CompanyAndProjectName">Project Name (as <i>YourProjectName</i> or <i>YourCompanyName.YourProjectName</i>):</label>
-                        <input class="form-control" name="CompanyAndProjectName" value="@Model.CompanyAndProjectName">
+                        <input class="form-control" name="CompanyAndProjectName" id="CompanyAndProjectName" value="@Model.CompanyAndProjectName" data-regex="^@(TemplatesModel.ProjectNameRegEx)?$">
                     </div>
 
                     <div class="form-group">
@@ -32,6 +33,7 @@
                         <select class="form-control" id="ProjectType" name="ProjectType">
                             <option value="MvcApp">ASP.NET Core Mvc Application</option>
                             <option value="MvcModule">ASP.NET Core Mvc Module</option>
+                            <option value="Service">ASP.NET Core API Module (without UI)</option>
                         </select>
                     </div>
 
@@ -62,7 +64,7 @@
                     </div>
 
                 </div>
-                <div class="col-md-5 bg-light p-5">
+                <div class="col-lg-5 bg-light p-5">
                     <h4>The Startup Project</h4>
                     <p>See <a href="/documents/abp/latest/Getting-Started-AspNetCore-MVC-Template" target="_blank">the documentation</a> to understand how to run the downloaded project.</p>
 
@@ -77,3 +79,4 @@
 
     </div>
 </div>
+<input hidden id="ProjectRegex" value="@TemplatesModel.ProjectNameRegEx"/>

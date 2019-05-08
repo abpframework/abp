@@ -37,9 +37,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.ListGroup
         {
             output.Attributes.AddClass("list-group-item");
 
-            if (TagHelper.Active ?? false) output.Attributes.AddClass("active");
-            if (TagHelper.Disabled ?? false) output.Attributes.AddClass("disabled");
-            if (TagHelper.Type != AbpListItemType.Default) { output.Attributes.AddClass("list-group-item-" + TagHelper.Type.ToString().ToLowerInvariant()); }
+            if (TagHelper.Active ?? false)
+            {
+                output.Attributes.AddClass("active");
+            }
+
+            if (TagHelper.Disabled ?? false)
+            {
+                output.Attributes.AddClass("disabled");
+            }
+
+            if (TagHelper.Type != AbpListItemType.Default)
+            {
+                output.Attributes.AddClass("list-group-item-" + TagHelper.Type.ToString().ToLowerInvariant());
+            }
         }
 
         protected virtual void MakeLinkIfHrefIsSet()

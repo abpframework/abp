@@ -1,9 +1,12 @@
-﻿using Volo.Abp.Modularity;
+﻿using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.Modularity;
 
 namespace Volo.Docs
 {
     [DependsOn(
-        typeof(DocsApplicationContractsModule))]
+        typeof(DocsApplicationContractsModule),
+        typeof(AbpAspNetCoreMvcModule)
+        )]
     public class DocsHttpApiModule : AbpModule
     {
         

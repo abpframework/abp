@@ -1,0 +1,10 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Permission:DocumentManagement": "Gerenciar Documentos",
+    "Permission:Projects": "Projetos",
+    "Permission:Edit": "Editar",
+    "Permission:Delete": "Excluir",
+    "Permission:Create": "Criar"
+  }
+}

@@ -109,7 +109,7 @@ Just added a **New book** button to the **top right** of the table:
 
 ![bookstore-new-book-button](images/bookstore-new-book-button.png)
 
-Open the `wwwroot/pages/books/index.js` and add the following code just after the datatable configuration:
+Open the `pages/books/index.js` and add the following code just after the datatable configuration:
 
 ````js
 var createModal = new abp.ModalManager(abp.appPath + 'Books/CreateModal');
@@ -268,7 +268,7 @@ Open the `Pages/Books/Index.cshtml` page and change the table section as shown b
 
 * Just added a new `th` tag for the "Actions".
 
-Open the `wwwroot/pages/books/index.js` and replace the content as below:
+Open the `pages/books/index.js` and replace the content as below:
 
 ````js
 $(function () {
@@ -279,6 +279,12 @@ $(function () {
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
     var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+        processing: true,
+        serverSide: true,
+        paging: true,
+        searching: false,
+        autoWidth: false,
+        scrollCollapse: true,
         order: [[1, "asc"]],
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
@@ -327,7 +333,7 @@ You can run the application and edit any book by selecting the edit action.
 
 ### Deleting an Existing Book
 
-Open the `wwwroot/pages/books/index.js` and add a new item to the `rowAction` `items`:
+Open the `pages/books/index.js` and add a new item to the `rowAction` `items`:
 
 ````js
 {

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using JetBrains.Annotations;
 
 namespace Volo.Abp.IO
 {
@@ -7,16 +8,42 @@ namespace Volo.Abp.IO
     /// </summary>
     public static class DirectoryHelper
     {
-        /// <summary>
-        /// Creates a new directory if it does not exists.
-        /// </summary>
-        /// <param name="directory">Directory to create</param>
         public static void CreateIfNotExists(string directory)
         {
             if (!Directory.Exists(directory))
             {
                 Directory.CreateDirectory(directory);
             }
+        }
+
+        public static bool IsSubDirectoryOf([NotNull] string parentDirectoryPath, [NotNull] string childDirectoryPath)
+        {
+            Check.NotNull(parentDirectoryPath, nameof(parentDirectoryPath));
+            Check.NotNull(childDirectoryPath, nameof(childDirectoryPath));
+
+            return IsSubDirectoryOf(
+                new DirectoryInfo(parentDirectoryPath),
+                new DirectoryInfo(childDirectoryPath)
+            );
+        }
+
+        public static bool IsSubDirectoryOf([NotNull] DirectoryInfo parentDirectory, [NotNull]  DirectoryInfo childDirectory)
+        {
+            Check.NotNull(parentDirectory, nameof(parentDirectory));
+            Check.NotNull(childDirectory, nameof(childDirectory));
+
+            if (parentDirectory.FullName == childDirectory.FullName)
+            {
+                return true;
+            }
+
+            var parentOfChild = childDirectory.Parent;
+            if (parentOfChild == null)
+            {
+                return false;
+            }
+
+            return IsSubDirectoryOf(parentDirectory, parentOfChild);
         }
     }
 }

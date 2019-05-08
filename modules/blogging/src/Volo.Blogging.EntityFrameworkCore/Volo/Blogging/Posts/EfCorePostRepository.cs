@@ -7,6 +7,7 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Blogging.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Volo.Blogging.Posts
 {
@@ -18,9 +19,9 @@ namespace Volo.Blogging.Posts
 
         }
 
-        public List<Post> GetPostsByBlogId(Guid id)
+        public async Task<List<Post>> GetPostsByBlogId(Guid id)
         {
-            return DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToList();
+            return await DbSet.Where(p => p.BlogId == id).OrderByDescending(p=>p.CreationTime).ToListAsync();
         }
 
         public async Task<Post> GetPostByUrl(Guid blogId, string url)
@@ -33,6 +34,11 @@ namespace Volo.Blogging.Posts
             }
 
             return post;
+        }
+
+        public override IQueryable<Post> WithDetails()
+        {
+            return GetQueryable().IncludeDetails();
         }
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
@@ -12,14 +11,8 @@ namespace Volo.Abp.Identity
 
         Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input);
 
-        Task<GetPermissionListResultDto> GetPermissionsAsync(Guid id);
-
-        Task UpdatePermissionsAsync(Guid id, UpdatePermissionsDto input);
-
         Task<IdentityUserDto> FindByUsernameAsync(string username);
 
         Task<IdentityUserDto> FindByEmailAsync(string email);
-
-        Task ChangePasswordAsync(string currentPassword, string newPassword);
     }
 }

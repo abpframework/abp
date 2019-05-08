@@ -4,6 +4,11 @@
     {
         Default,
         Small,
-        Large
+        Medium,
+        Large,
+        Block,
+        Block_Small,
+        Block_Medium,
+        Block_Large,
     }
 }

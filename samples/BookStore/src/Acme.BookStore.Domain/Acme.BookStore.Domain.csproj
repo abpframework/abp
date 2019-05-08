@@ -1,17 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\common.props" />
+  
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Acme.BookStore</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Identity.Domain" Version="0.4.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.1.1" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.Auditing" Version="0.16.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="\Localization\BookStore\*.json" />
+    <EmbeddedResource Include="Localization\BookStore\*.json" />
   </ItemGroup>
 
 </Project>

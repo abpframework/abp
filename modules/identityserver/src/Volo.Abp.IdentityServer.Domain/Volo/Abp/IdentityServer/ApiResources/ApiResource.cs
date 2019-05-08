@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using IdentityServer4;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiResource : AggregateRoot<Guid>
+    public class ApiResource : FullAuditedAggregateRoot<Guid>
     {
         [NotNull]
         public virtual string Name { get; protected set; }
@@ -57,16 +58,27 @@ namespace Volo.Abp.IdentityServer.ApiResources
             Secrets.Add(new ApiSecret(Id, value, expiration, type, description));
         }
 
-        public virtual void AddScope(
+        public virtual void RemoveSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+        {
+            Secrets.RemoveAll(s => s.Value == value && s.Type == type);
+        }
+
+        public virtual ApiSecret FindSecret([NotNull] string value, string type = IdentityServerConstants.SecretTypes.SharedSecret)
+        {
+            return Secrets.FirstOrDefault(s => s.Type == type && s.Value == value);
+        }
+
+        public virtual ApiScope AddScope(
             [NotNull] string name,
             string displayName = null,
             string description = null,
             bool required = false,
             bool emphasize = false,
-            bool showInDiscoveryDocument = true,
-            ApiScopeClaim[] userClaims = null)
+            bool showInDiscoveryDocument = true)
         {
-            Scopes.Add(new ApiScope(Id, name, displayName, description, required, emphasize, showInDiscoveryDocument));
+            var scope = new ApiScope(Id, name, displayName, description, required, emphasize, showInDiscoveryDocument);
+            Scopes.Add(scope);
+            return scope;
         }
 
         public virtual void AddUserClaim([NotNull] string type)
@@ -77,6 +89,16 @@ namespace Volo.Abp.IdentityServer.ApiResources
         public virtual void RemoveAllUserClaims()
         {
             UserClaims.Clear();
+        }
+
+        public virtual void RemoveClaim(string type)
+        {
+            UserClaims.RemoveAll(c => c.Type == type);
+        }
+
+        public virtual ApiResourceClaim FindClaim(string type)
+        {
+            return UserClaims.FirstOrDefault(c => c.Type == type);
         }
 
         public virtual void RemoveAllSecrets()
@@ -91,6 +113,16 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 scope.RemoveAllUserClaims();
             }
             Scopes.Clear();
+        }
+
+        public virtual void RemoveScope(string name)
+        {
+            Scopes.RemoveAll(r => r.Name == name);
+        }
+
+        public virtual ApiScope FindScope(string name)
+        {
+            return Scopes.FirstOrDefault(r => r.Name == name);
         }
     }
 }

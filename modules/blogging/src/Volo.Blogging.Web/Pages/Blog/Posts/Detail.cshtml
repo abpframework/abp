@@ -15,7 +15,6 @@
 @section scripts {
     <abp-script-bundle name="@typeof(DetailModel).FullName">
         <abp-script src="/Pages/Blog/Posts/detail.js" />
-        <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
     </abp-script-bundle>
 }
 @section styles {
@@ -24,7 +23,7 @@
     </abp-style-bundle>
 }
 
-<abp-input asp-for="FocusCommentId"/>
+<abp-input asp-for="FocusCommentId" />
 
 <div class="vs-blog">
     <div class="row">
@@ -47,11 +46,18 @@
                     <div class="article-owner">
                         <div class="article-infos">
                             <div class="user-card">
+                                @if (Model.Post.Writer != null)
+                                {
+                                    <a>
+                                        <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                    </a>
+                                }
                                 <a>
-                                    <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                </a>
-                                <a>
-                                    <strong> @(Model.Post.Writer == null ? "" : Model.Post.Writer.UserName)</strong>, @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
+                                    @if (Model.Post.Writer != null)
+                                    {
+                                        <strong>@(Model.Post.Writer.UserName),</strong>
+                                    }
+                                    @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
                                 </a>
                                 <span class="vs-seperator">|</span>
                                 <a>
@@ -65,14 +71,14 @@
                                 {
                                     <span class="seperator">|</span>
                                     <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
-                                        <i class="fa fa-pencil"></i>  @L["Edit"]
+                                        <i class="fa fa-pencil"></i> @L["Edit"]
                                     </a>
                                 }
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id == Model.Post.CreatorId))
                                 {
                                     <span class="seperator">|</span>
                                     <a href="#" id="DeletePostLink" data-postid="@Model.Post.Id" data-blogShortName="@Model.BlogShortName">
-                                        <i class="fa fa-trash"></i>  @L["Delete"]
+                                        <i class="fa fa-trash"></i> @L["Delete"]
                                     </a>
                                 }
                             </div>
@@ -97,39 +103,33 @@
 
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <div class="tags">
-                <h5>@L["TagsInThisArticle"]</h5>
-                @foreach (var tag in Model.Post.Tags)
-                {
-                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                }
-            </div>
-
-            @*<a class="btn btn-blue float-right" TODO: Disabled temporary
-               href="@Model.GetTwitterShareUrl(Model.Post.Title, HttpContext.Request.GetEncodedUrl(), "@" + (Model.Blog.Twitter??""))" target="_blank">
-                <i class="fa fa-twitter"></i>
-                @L["ShareOnTwitter"]
-            </a>*@
-
-            @if (hasCommentingPermission)
+            @if (Model.Post.Tags.Count > 0)
             {
-                <div class="comment-form mt-4">
-                    <div class="vs-blog-title mb-0">
-                        <h3>@L["LeaveComment"]</h3>
-                    </div>
-                    <div class="clearfix bg-light p-4">
-                        <div>
-                            <form method="post">
-                                <input name="postId" value="@Model.Post.Id" hidden />
-                                <input name="repliedCommentId" id="repliedCommentId" hidden />
-                                <div class="form-group">
-                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                </div>
-                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                            </form>
-                        </div>
-                    </div>
+                <div class="tags">
+                    <h5>@L["TagsInThisArticle"]</h5>
+                    @foreach (var tag in Model.Post.Tags)
+                    {
+                        <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                    }
                 </div>
+            }
+
+
+            @if (Model.CommentsWithReplies.Count > 0)
+            {
+                <abp-row v-align="Start">
+                    <abp-column size-sm="_12">
+                        <p class="float-left"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
+                        @if (hasCommentingPermission)
+                        {
+                            <a abp-button="Primary" class="btn-rounded float-right active" href="#LeaveComment">@L["LeaveComment"]</a>
+                        }
+                        else
+                        {
+                            <a abp-button="Primary" class="btn-rounded float-right active" asp-page="/Account/Login" target="_blank">@L["LeaveComment"]</a>
+                        }
+                    </abp-column>
+                </abp-row>
             }
 
             <div class="comment-area">
@@ -177,7 +177,7 @@
                                     <div class="clearfix bg-light p-4">
                                         <h3 class="mt-0">
                                             @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
-                                            
+
                                         </h3>
                                         <div>
                                             <form method="post">
@@ -254,7 +254,7 @@
                                             <div class="comment-form mt-4 replyForm">
                                                 <div class="clearfix bg-light p-4">
                                                     <h3 class="mt-0">
-                                                        @L["ReplyTo",commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
+                                                        @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
                                                     </h3>
                                                     <div>
                                                         <form method="post">
@@ -294,6 +294,31 @@
                     </div>
                 }
             </div>
+
+            @if (hasCommentingPermission)
+            {
+                <div class="comment-form mt-4" id="LeaveComment">
+                    <div class="vs-blog-title mb-0">
+                        <h3>@L["LeaveComment"]</h3>
+                    </div>
+                    <div class="clearfix bg-light p-4">
+                        <div>
+                            <form method="post">
+                                <input name="postId" value="@Model.Post.Id" hidden />
+                                <input name="repliedCommentId" id="repliedCommentId" hidden />
+                                <div class="form-group">
+                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                </div>
+                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <a abp-button="Primary" class="btn-rounded float-right active mt-3" asp-page="/Account/Login" target="_blank">@L["LeaveComment"]</a>
+            }
         </div>
     </div>
 </div>

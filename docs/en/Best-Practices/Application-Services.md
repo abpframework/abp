@@ -26,6 +26,7 @@
 Example:
 
 ```c#
+[Serializable]
 public class IssueDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -34,6 +35,7 @@ public class IssueDto : FullAuditedEntityDto<Guid>
     public Collection<IssueLabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class IssueLabelDto
 {
     public Guid IssueId { get; set; }
@@ -54,6 +56,7 @@ public class IssueLabelDto
 Example:
 
 ````C#
+[Serializable]
 public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
 {
     public string Title { get; set; }
@@ -62,12 +65,14 @@ public class IssueWithDetailsDto : FullAuditedEntityDto<Guid>
     public Collection<LabelDto> Labels { get; set; }
 }
 
+[Serializable]
 public class MilestoneDto : EntityDto<Guid>
 {
     public string Name { get; set; }
     public bool IsClosed { get; set; }
 }
 
+[Serializable]
 public class LabelDto : EntityDto<Guid>
 {
     public string Name { get; set; }
@@ -129,6 +134,7 @@ Task<QuestionWithDetailsDto> CreateAsync(CreateQuestionDto questionDto);
 The related **DTO**:
 
 ````C#
+[Serializable]
 public class CreateQuestionDto
 {
     [Required]
@@ -182,6 +188,8 @@ This method votes a question and returns the current score of the question.
 * **Do** implement application service interfaces in the **application layer**.
   * **Do** use the naming convention. Ex: Create `ProductAppService` class for the `IProductAppService` interface.
   * **Do** inherit from the `ApplicationService` base class.
+* **Do** make all public methods **virtual**, so developers may inherit and override them.
+* **Do not** make **private** methods. Instead make them **protected virtual**, so developers may inherit and override them.
 
 #### Using Repositories
 
@@ -195,12 +203,13 @@ This method votes a question and returns the current score of the question.
 #### Manipulating / Deleting Entities
 
 * **Do** always get all the related entities from repositories to perform the operations on them.
+* **Do** call repository's Update/UpdateAsync method after updating an entity. Because, not all database APIs support change tracking & auto update.
 
 #### Using Other Application Services
 
 * **Do not** use other application services of the same module/application. Instead;
   * Use domain layer to perform the required task.
-  * Extract a new class and share between the application services to accomplish the code reuse when necessary.
+  * Extract a new class and share between the application services to accomplish the code reuse when necessary. But be careful to don't couple two use cases. They may seem similar at the beginning, but may evolve to different directions by time. So, use code sharing carefully.
 * **Can** use application services of others only if;
   * They are parts of another module / microservice.
   * The current module has only reference to the application contracts of the used module.

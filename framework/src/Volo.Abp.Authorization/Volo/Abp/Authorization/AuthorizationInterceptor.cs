@@ -35,7 +35,7 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            AsyncHelper.RunSync(() => AuthorizeAsync(invocation));
+            await AuthorizeAsync(invocation);
             await invocation.ProceedAsync();
         }
 

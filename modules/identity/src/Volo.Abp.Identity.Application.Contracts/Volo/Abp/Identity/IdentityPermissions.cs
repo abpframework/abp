@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Identity
+﻿using Volo.Abp.Reflection;
+
+namespace Volo.Abp.Identity
 {
     public static class IdentityPermissions
     {
@@ -22,22 +24,14 @@
             public const string ManagePermissions = Default + ".ManagePermissions";
         }
 
+        public static class UserLookup
+        {
+            public const string Default = GroupName + ".UserLookup";
+        }
+
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName,
-                Roles.Default,
-                Roles.Create,
-                Roles.Update,
-                Roles.Delete,
-                Roles.ManagePermissions,
-                Users.Default,
-                Users.Create,
-                Users.Update,
-                Users.Delete,
-                Users.ManagePermissions
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(IdentityPermissions));
         }
     }
 }

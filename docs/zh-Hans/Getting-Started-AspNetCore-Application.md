@@ -1,6 +1,6 @@
 ﻿## 在AspNet Core MVC Web Application中使用ABP 
 
-本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. You generally want to start with a ***[startup template](https://abp.io/Templates)***
+本教程将介绍如何开始以最少的依赖关系开始使用ABP开发. 
 
 通常情况下你需要下载一个 ***[启动模板](https://abp.io/Templates)***
 
@@ -77,11 +77,11 @@ namespace BasicAspNetCoreApplication
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(ServiceConfigurationContext context)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            context.Services.AddApplication<AppModule>();
+            services.AddApplication<AppModule>();
 
-            return context.Services.BuildServiceProviderFromFactory();
+            return services.BuildServiceProviderFromFactory();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -155,6 +155,26 @@ services.AddApplication<AppModule>(options =>
     options.UseAutofac(); // 集成 Autofac
 });
 ````
+
+4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器)：
+
+ ````csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BuildWebHostInternal(args).Run();
+    }
+     public static IWebHost BuildWebHostInternal(string[] args) =>
+        new WebHostBuilder()
+            .UseKestrel()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIISIntegration()
+            .UseStartup<Startup>()
+            .Build();
+}
+````
+
 
 ### 源码
 

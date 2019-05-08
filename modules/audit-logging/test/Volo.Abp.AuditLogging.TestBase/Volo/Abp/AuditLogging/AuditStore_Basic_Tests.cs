@@ -78,7 +78,6 @@ namespace Volo.Abp.AuditLogging
             insertedLog.EntityChanges.First().PropertyChanges.Count.ShouldBeGreaterThan(0);
         }
 
-
         [Fact]
         public async Task Should_Get_List_Of_Audit_Logs()
         {

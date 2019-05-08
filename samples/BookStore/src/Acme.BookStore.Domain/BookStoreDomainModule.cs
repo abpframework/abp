@@ -1,26 +1,38 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Acme.BookStore.Localization.BookStore;
-using Acme.BookStore.Settings;
+﻿using Acme.BookStore.Localization.BookStore;
+using Volo.Abp.Auditing;
+using Volo.Abp.AuditLogging;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
-using Volo.Abp.Settings;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore
 {
-    [DependsOn(typeof(AbpIdentityDomainModule))]
+    [DependsOn(
+        typeof(AbpIdentityDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
+        typeof(AbpAuditingModule),
+        typeof(BackgroundJobsDomainModule),
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(AbpTenantManagementDomainModule),
+        typeof(AbpFeatureManagementDomainModule)
+        )]
     public class BookStoreDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.Configure<VirtualFileSystemOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<BookStoreDomainModule>();
+                options.FileSets.AddEmbedded<BookStoreDomainModule>("Acme.BookStore");
             });
 
-            context.Services.Configure<AbpLocalizationOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
                     .Add<BookStoreResource>("en")
@@ -28,12 +40,10 @@ namespace Acme.BookStore
                     .AddVirtualJson("/Localization/BookStore");
             });
 
-            context.Services.Configure<SettingOptions>(options =>
+            Configure<MultiTenancyOptions>(options =>
             {
-                options.DefinitionProviders.Add<BookStoreSettingDefinitionProvider>();
+                options.IsEnabled = BookStoreConsts.IsMultiTenancyEnabled;
             });
-
-            context.Services.AddAssemblyOf<BookStoreDomainModule>();
         }
     }
 }

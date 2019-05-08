@@ -22,7 +22,7 @@ public class Person : Entity<int>
 }
 ```
 
-> If you do not want derive your entity from the base `Entity<TKey>` class, you can directly implement `IEntity<TKey>` interface.
+> If you do not want to derive your entity from the base `Entity<TKey>` class, you can directly implement `IEntity<TKey>` interface.
 
 `Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `int` in the sample above. It can be other types like `string`, `Guid`, `long` or whatever you need.
 
@@ -41,7 +41,7 @@ public class UserRole : Entity
     
     public DateTime CreationTime { get; set; }
 
-    public Phone()
+    public UserRole()
     {
             
     }
@@ -57,9 +57,9 @@ For the example above, the composite key is composed of `UserId` and `RoleId`. F
 
 Entities with composite keys should implement the `GetKeys()` method as shown above.
 
-Notice that you also need to define keys of the entity in your **object-to-relational mapping** (ORM) configuration.
+Notice that you also need to define keys of the entity in your **object-relational mapping** (ORM) configuration.
 
-> Composite primary keys has a restriction with repositories. Since it has not known Id property, you can not use `IRepository<TEntity, TKey>` for these entities. However, you can always use `IRepository<TEntity>`. See repository documentation (TODO: link) for more.
+> Composite primary keys has a restriction with repositories. Since it has not known Id property, you can not use `IRepository<TEntity, TKey>` for these entities. However, you can always use `IRepository<TEntity>`. See [repositories documentation](Repositories.md) for more.
 
 ### AggregateRoot Class
 
@@ -67,7 +67,7 @@ Notice that you also need to define keys of the entity in your **object-to-relat
 
 `AggregateRoot` class extends the `Entity` class. So, it also has an `Id` property by default.
 
-> Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See repository documentation (TODO: link) for more. 
+> Notice that ABP creates default repositories only for aggregate roots by default. However, it's possible to include all entities. See [repositories documentation](Repositories.md) for more. 
 
 ABP does not force you to use aggregate roots, you can in fact use the `Entity` class as defined before. However, if you want to implement DDD and want to create aggregate root classes, there are some best practices you may want to consider:
 
@@ -160,7 +160,7 @@ public class OrderLine : Entity
 
 > If you do not want to derive your aggregate root from the base `AggregateRoot<TKey>` class, you can directly implement the `IAggregateRoot<TKey>` interface.
 
-`Order` is an **aggregate root** with `Guid` type `Id` property. It has a collection of `OrderLine` entities. `OrderLine` is another entity with a composite primary key (`OrderLine`  and ` ProductId`).
+`Order` is an **aggregate root** with `Guid` type `Id` property. It has a collection of `OrderLine` entities. `OrderLine` is another entity with a composite primary key (`OrderId`  and ` ProductId`).
 
 While this example may not implement all the best practices of an aggregate root, it still follows good practices:
 

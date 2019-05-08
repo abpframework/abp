@@ -10,9 +10,6 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public class PermissionDefinitionManager : IPermissionDefinitionManager, ISingletonDependency
     {
-        protected List<IPermissionDefinitionProvider> Providers => _lazyProviders.Value;
-        private readonly Lazy<List<IPermissionDefinitionProvider>> _lazyProviders;
-
         protected IDictionary<string, PermissionGroupDefinition> PermissionGroupDefinitions => _lazyPermissionGroupDefinitions.Value;
         private readonly Lazy<Dictionary<string, PermissionGroupDefinition>> _lazyPermissionGroupDefinitions;
 
@@ -30,9 +27,15 @@ namespace Volo.Abp.Authorization.Permissions
             _serviceProvider = serviceProvider;
             Options = options.Value;
 
-            _lazyProviders = new Lazy<List<IPermissionDefinitionProvider>>(CreatePermissionProviders, true);
-            _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(CreatePermissionDefinitions, true);
-            _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(CreatePermissionGroupDefinitions, true);
+            _lazyPermissionDefinitions = new Lazy<Dictionary<string, PermissionDefinition>>(
+                CreatePermissionDefinitions,
+                isThreadSafe: true
+            );
+
+            _lazyPermissionGroupDefinitions = new Lazy<Dictionary<string, PermissionGroupDefinition>>(
+                CreatePermissionGroupDefinitions,
+                isThreadSafe: true
+            );
         }
 
         public virtual PermissionDefinition Get(string name)
@@ -64,14 +67,6 @@ namespace Volo.Abp.Authorization.Permissions
             return PermissionGroupDefinitions.Values.ToImmutableList();
         }
 
-        protected virtual List<IPermissionDefinitionProvider> CreatePermissionProviders()
-        {
-            return Options
-                .DefinitionProviders
-                .Select(p => _serviceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
-                .ToList();
-        }
-
         protected virtual Dictionary<string, PermissionDefinition> CreatePermissionDefinitions()
         {
             var permissions = new Dictionary<string, PermissionDefinition>();
@@ -87,7 +82,9 @@ namespace Volo.Abp.Authorization.Permissions
             return permissions;
         }
 
-        protected virtual void AddPermissionToDictionaryRecursively(Dictionary<string, PermissionDefinition> permissions, PermissionDefinition permission)
+        protected virtual void AddPermissionToDictionaryRecursively(
+            Dictionary<string, PermissionDefinition> permissions, 
+            PermissionDefinition permission)
         {
             if (permissions.ContainsKey(permission.Name))
             {
@@ -106,9 +103,17 @@ namespace Volo.Abp.Authorization.Permissions
         {
             var context = new PermissionDefinitionContext();
 
-            foreach (var provider in Providers)
+            using (var scope = _serviceProvider.CreateScope())
             {
-                provider.Define(context);
+                var providers = Options
+                    .DefinitionProviders
+                    .Select(p => scope.ServiceProvider.GetRequiredService(p) as IPermissionDefinitionProvider)
+                    .ToList();
+
+                foreach (var provider in providers)
+                {
+                    provider.Define(context);
+                }
             }
 
             return context.Groups;

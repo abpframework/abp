@@ -5,3 +5,4 @@
 * **推荐** 定义 **public getter 和 setter** 的DTO成员 .
 * **推荐** 使用 **data annotations** **验证** service输入DTO的属性.
 * **不推荐** 在DTO中添加任何 **逻辑**, 在必要的时候可以实现  `IValidatableObject` 接口.
+* **推荐** 为所有的DTO标记 **[Serializable]** Attribute. 因为它们已经是可序列化的, 开发人员可能会希望进行二进制序列化.

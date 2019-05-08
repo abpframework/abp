@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Projects;
@@ -11,88 +13,124 @@ namespace Volo.Docs.Documents
     public class DocumentAppService : ApplicationService, IDocumentAppService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IDistributedCache<List<string>> _distributedCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
+        protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
+        protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
 
         public DocumentAppService(
             IProjectRepository projectRepository,
-            IDistributedCache<List<string>> distributedCache,
-            IDocumentStoreFactory documentStoreFactory)
+            IDocumentStoreFactory documentStoreFactory,
+            IDistributedCache<DocumentWithDetailsDto> documentCache,
+            IDistributedCache<DocumentResourceDto> resourceCache)
         {
             _projectRepository = projectRepository;
-            _distributedCache = distributedCache;
             _documentStoreFactory = documentStoreFactory;
+            DocumentCache = documentCache;
+            ResourceCache = resourceCache;
         }
 
-        public async Task<DocumentWithDetailsDto> GetByNameAsync(string projectShortName, string documentName, string version, bool normalize)
+        public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), documentName, version, normalize);
+            return await GetDocumentWithDetailsDto(
+                project,
+                input.Name,
+                input.Version
+            );
         }
 
-        public async Task<NavigationWithDetailsDto> GetNavigationDocumentAsync(string projectShortName, string version, bool normalize)
+        public virtual async Task<DocumentWithDetailsDto> GetDefaultAsync(GetDefaultDocumentInput input)
         {
-            var project = await _projectRepository.FindByShortNameAsync(projectShortName);
+            var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(
-                await GetDocument(ObjectMapper.Map<Project, ProjectDto>(project), project.NavigationDocumentName,
-                    version, normalize));
+            return await GetDocumentWithDetailsDto(
+                project,
+                project.DefaultDocumentName,
+                input.Version
+            );
         }
 
-        public async Task<DocumentWithDetailsDto> GetDocument(ProjectDto project, string documentName, string version, bool normalize)
+        public virtual async Task<DocumentWithDetailsDto> GetNavigationAsync(GetNavigationDocumentInput input)
         {
-            if (project == null)
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            return await GetDocumentWithDetailsDto(
+                project,
+                project.NavigationDocumentName,
+                input.Version
+            );
+        }
+
+        public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
+        {
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+            var cacheKey = $"Resource@{project.ShortName}#{input.Name}#{input.Version}";
+
+            async Task<DocumentResourceDto> GetResourceAsync()
             {
-                throw new ArgumentNullException(nameof(project));
+                var store = _documentStoreFactory.Create(project.DocumentStoreType);
+                var documentResource = await store.GetResource(project, input.Name, input.Version);
+
+                return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
             }
 
-            if (string.IsNullOrWhiteSpace(documentName))
+            if (Debugger.IsAttached)
             {
-                documentName = project.DefaultDocumentName;
+                return await GetResourceAsync();
             }
 
-            IDocumentStore documentStore = _documentStoreFactory.Create(project.DocumentStoreType);
-
-            Document document = await documentStore.FindDocumentByNameAsync(project.ExtraProperties, project.Format, documentName, version);
-
-            var dto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
-
-            dto.Project = project;
-
-            return dto;
+            return await ResourceCache.GetOrAddAsync(
+                cacheKey,
+                GetResourceAsync,
+                () => new DistributedCacheEntryOptions
+                {
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(6),
+                    SlidingExpiration = TimeSpan.FromMinutes(30)
+                }
+            );
         }
 
-        public async Task<List<string>> GetVersions(string projectShortName, string defaultDocumentName, Dictionary<string, object> projectExtraProperties,
-            string documentStoreType, string documentName)
+        protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
+            Project project,
+            string documentName,
+            string version)
         {
-            if (string.IsNullOrWhiteSpace(documentName))
+            var cacheKey = $"Document@{project.ShortName}#{documentName}#{version}";
+
+            async Task<DocumentWithDetailsDto> GetDocumentAsync()
             {
-                documentName = defaultDocumentName;
+                Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
+                var store = _documentStoreFactory.Create(project.DocumentStoreType);
+                var document = await store.GetDocumentAsync(project, documentName, version);
+                Logger.LogInformation($"Document retrieved: {documentName}");
+                return CreateDocumentWithDetailsDto(project, document);
             }
 
-            var documentStore = _documentStoreFactory.Create(documentStoreType);
-
-            var versions = await GetVersionsFromCache(projectShortName);
-
-            if (versions == null)
+            if (Debugger.IsAttached)
             {
-                versions = await documentStore.GetVersions(projectExtraProperties, documentName);
-                await SetVersionsToCache(projectShortName, versions);
+                return await GetDocumentAsync();
             }
 
-            return versions;
+            return await DocumentCache.GetOrAddAsync(
+                cacheKey,
+                GetDocumentAsync,
+                () => new DistributedCacheEntryOptions
+                {
+                    //TODO: Configurable?
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(2),
+                    SlidingExpiration = TimeSpan.FromMinutes(30)
+                }
+            );
         }
 
-        private async Task<List<string>> GetVersionsFromCache(string projectShortName)
+        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
         {
-            return await _distributedCache.GetAsync(projectShortName);
-        }
-
-        private async Task SetVersionsToCache(string projectShortName, List<string> versions)
-        {
-            var options = new DistributedCacheEntryOptions() { SlidingExpiration = TimeSpan.FromDays(1) };
-            await _distributedCache.SetAsync(projectShortName, versions, options);
+            var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
+            documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
+            documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
+            return documentDto;
         }
     }
 }

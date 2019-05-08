@@ -4,6 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
+    [Dependency(ReplaceServices = true)]
     public class RabbitMqBackgroundJobManager : IBackgroundJobManager, ITransientDependency
     {
         private readonly IJobQueueManager _jobQueueManager;

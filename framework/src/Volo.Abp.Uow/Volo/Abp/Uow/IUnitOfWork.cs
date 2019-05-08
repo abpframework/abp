@@ -20,6 +20,10 @@ namespace Volo.Abp.Uow
 
         bool IsReserved { get; }
 
+        bool IsDisposed { get; }
+
+        bool IsCompleted { get; }
+
         string ReservationName { get; }
 
         void SetOuter([CanBeNull] IUnitOfWork outer);

@@ -10,12 +10,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services.GetSingletonInstance<IHostingEnvironment>();
         }
 
-        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, AbpAspNetCoreConfigurationOptions options = null)
+        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)
         {
             return services.GetHostingEnvironment().BuildConfiguration(options);
         }
 
-        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, AbpAspNetCoreConfigurationOptions options = null)
+        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)
         {
             var configuration = services.BuildConfiguration(options);
             services.SetConfiguration(configuration);

@@ -8,20 +8,48 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Collapse
     {
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            output.TagName = "button";
-            output.Attributes.AddClass("btn");
-            output.Attributes.Add("data-toggle","collapse");
-            output.Attributes.Add("aria-expanded","false");
-            output.Attributes.Add("type","button");
-            output.Attributes.Add("data-target", "#" +TagHelper.BodyId);
-            output.Attributes.Add("aria-controls", TagHelper.BodyId);
+            
 
+            AddCommonAttributes(context, output);
 
-            if (TagHelper.ButonType != AbpButtonType.Default)
+            if (output.TagName == "abp-button" || output.TagName == "button")
             {
-                output.Attributes.AddClass("btn-" + TagHelper.ButonType.ToString().ToLowerInvariant());
+                AddButtonAttributes(context,output);
+            }
+            else if (output.TagName == "a")
+            {
+                AddLinkAttributes(context, output);
             }
         }
-        
+
+        protected virtual void AddCommonAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            output.Attributes.Add("data-toggle", "collapse");
+            output.Attributes.Add("aria-expanded", "false");
+            output.Attributes.Add("aria-controls", TagHelper.BodyId);
+        }
+
+        protected virtual void AddButtonAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.BodyId.Trim().Split(' ').Length > 1)
+            {
+                output.Attributes.Add("data-target", ".multi-collapse");
+                return;
+            }
+
+            output.Attributes.Add("data-target", "#" + TagHelper.BodyId);
+        }
+
+        protected virtual void AddLinkAttributes(TagHelperContext context, TagHelperOutput output)
+        {
+            if (TagHelper.BodyId.Trim().Split(' ').Length > 1)
+            {
+                output.Attributes.Add("href", ".multi-collapse");
+                return;
+            }
+
+            output.Attributes.Add("href", "#" + TagHelper.BodyId);
+        }
+
     }
 }

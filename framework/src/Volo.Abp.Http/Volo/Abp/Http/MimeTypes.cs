@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Http
+﻿using System;
+
+namespace Volo.Abp.Http
 {
     /* Taken from https://gist.github.com/markwhitaker/b29c0142360714688a7cf863ab33e5c9 */
 
@@ -30,6 +32,7 @@
             public const string XPkcs12 = "application/x-pkcs12";
             public const string XShockwaveFlash = "application/x-shockwave-flash";
             public const string XSilverlightApp = "application/x-silverlight-app";
+            public const string XWwwFormUrlencoded = "application/x-www-form-urlencoded";
             public const string XhtmlXml = "application/xhtml+xml";
             public const string Xml = "application/xml";
             public const string XmlDtd = "application/xml-dtd";
@@ -82,6 +85,27 @@
             public const string Ogg = "video/ogg";
             public const string Quicktime = "video/quicktime";
             public const string Webm = "video/webm";
+        }
+
+        public static string GetByExtension(string extension)
+        {
+            extension = extension.RemovePreFix(".").ToLowerInvariant();
+
+            switch (extension)
+            {
+                case "png":
+                    return Image.Png;
+                case "gif":
+                    return Image.Gif;
+                case "jpg":
+                case "jpeg":
+                    return Image.Jpeg;
+
+                //TODO: Add other extensions too..
+
+                default:
+                    return Application.OctetStream;
+            }
         }
     }
 }

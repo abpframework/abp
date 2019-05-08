@@ -17,13 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         where TTagHelper : TagHelper
     {
         protected const string FormGroupContents = "FormGroupContents";
-        protected const string NavItemContents = "FormGroupContents";
         protected const string TabItems = "TabItems";
         protected const string AccordionItems = "AccordionItems";
         protected const string BreadcrumbItemsContent = "BreadcrumbItemsContent";
         protected const string CarouselItemsContent = "CarouselItemsContent";
         protected const string TabItemsDataTogglePlaceHolder = "{_data_toggle_Placeholder_}";
-        protected const string TabItemsVerticalPillPlaceHolder = "{_vertical_pill_Placeholder_}";
         protected const string TabItemNamePlaceHolder = "{_Tab_Tag_Name_Placeholder_}";
         protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
         protected const string AbpTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
@@ -31,9 +29,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string AbpTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";
         protected const string AbpBreadcrumbItemActivePlaceholder = "{_Breadcrumb_Active_Placeholder_}";
         protected const string AbpCarouselItemActivePlaceholder = "{_CarouselItem_Active_Placeholder_}";
-        protected const string AbpNavItemActivePlaceholder = "{_NavItem_Active_Placeholder_}";
-        protected const string AbpNavItemResponsiveFlexPlaceholder = "{_NavItem_Responsive_Flex_Placeholder_}";
-        protected const string AbpNavItemResponsiveAlignPlaceholder = "{_NavItem_Responsive_Align_Placeholder_}";
         protected const string AbpTabItemSelectedPlaceholder = "{_Tab_Selected_Placeholder_}";
         protected const string AbpAccordionParentIdPlaceholder = "{_Parent_Accordion_Id_}";
 
@@ -55,92 +50,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         {
             Process(context, output);
             return Task.CompletedTask;
-        }
-
-        protected virtual TagHelperOutput GetInnerTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
-        {
-            var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
-            {
-                TagMode = tagMode
-            };
-
-            var innerContext = new TagHelperContext(attributeList, context.Items, Guid.NewGuid().ToString());
-
-            if (runAsync)
-            {
-                AsyncHelper.RunSync(() => tagHelper.ProcessAsync(innerContext, innerOutput));
-            }
-            else
-            {
-                tagHelper.Process(innerContext, innerOutput);
-            }
-
-            return innerOutput;
-        }
-
-        protected virtual string RenderTagHelper(TagHelperAttributeList attributeList, TagHelperContext context, TagHelper tagHelper, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
-        {
-            var innerOutput = GetInnerTagHelper(attributeList, context, tagHelper, tagName, tagMode, runAsync);
-
-            return RenderTagHelperOutput(innerOutput, htmlEncoder);
-        }
-
-        protected virtual string RenderTagHelperOutput(TagHelperOutput output, HtmlEncoder htmlEncoder)
-        {
-            using (var writer = new StringWriter())
-            {
-                output.WriteTo(writer, htmlEncoder);
-                return writer.ToString();
-            }
-        }
-
-        protected virtual T GetAttribute<T>(ModelExplorer property) where T : Attribute
-        {
-            return property?.Metadata?.ContainerType?.GetTypeInfo()?.GetProperty(property.Metadata.PropertyName)?.GetCustomAttribute<T>();
-        }
-
-        protected virtual List<FormGroupItem> GetFormGroupContentsList(TagHelperContext context, out bool surpress)
-        {
-            var items = GetValueFromContext<List<FormGroupItem>>(context, FormGroupContents);
-            surpress = items != null;
-
-            return items ?? new List<FormGroupItem>();
-        }
-
-        protected virtual T GetValueFromContext<T>(TagHelperContext context, string key)
-        {
-            if (!context.Items.ContainsKey(key))
-            {
-                return default(T);
-            }
-            
-            return (T)context.Items[key];
-        }
-
-        protected virtual string GetIdAttributeAsString(TagHelperOutput inputTag)
-        {
-            var idAttr = inputTag.Attributes.FirstOrDefault(a => a.Name == "id");
-
-            return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
-        }
-
-        protected virtual int GetInputOrder(ModelExplorer explorer)
-        {
-            return GetAttribute<DisplayOrder>(explorer)?.Number ?? DisplayOrder.Default;
-        }
-
-        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
-        {
-            var list = GetFormGroupContentsList(context, out surpress);
-
-            if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
-            {
-                list.Add(new FormGroupItem
-                {
-                    HtmlContent = html,
-                    Order = order
-                });
-            }
         }
     }
 }

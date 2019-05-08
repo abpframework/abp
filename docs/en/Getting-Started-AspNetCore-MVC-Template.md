@@ -1,5 +1,7 @@
 ## ASP.NET Core MVC Template
 
+This tutorials explains how to create a new ASP.NET Core MVC web application using the startup template, configure and run it.
+
 ### Creating a new project
 
 Go to [the template creation page](https://abp.io/Templates), enter a project name and create your project as shown below:
@@ -17,9 +19,9 @@ The downloaded project requires;
 
 ### The Solution Structure
 
-Extract the zip file downloaded and open in **Visual Studio 2017 (15.7.0+)**:
+Extract the zip file downloaded and open in **Visual Studio 2017 (15.9.0+)**:
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
 
 The solution has a layered structure (based on Domain Driven Design) where;
 
@@ -27,6 +29,8 @@ The solution has a layered structure (based on Domain Driven Design) where;
 * ``.Application`` is the application layer.
 * ``.Web`` is the presentation layer.
 * ``.EntityFrameworkCore`` is the EF Core integration package.
+
+EF Core database migrations are separated to a project named `.EntityFrameworkCore.DbMigrations`.
 
 The solution also contains unit & integration test projects properly configured to work with **EF Core** & **SQLite in-memory** database.
 
@@ -48,9 +52,9 @@ Right click to the `.Web` project and select **Set as StartUp Project**:
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 
-Open the **Package Manager Console**, select `.EntityFrameworkCore` project as the **Default Project** and run the `Update-Database` command:
+Open the **Package Manager Console**, select `.EntityFrameworkCore.DbMigrations` project as the **Default Project** and run the `Update-Database` command:
 
-![pcm-update-database](images/pcm-update-database.png)
+![pcm-update-database](images/pcm-update-database-v2.png)
 
 This will create a new database based on the configured connection string.
 

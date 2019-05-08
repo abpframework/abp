@@ -35,7 +35,7 @@ namespace Volo.Blogging.Posts
 
         private async Task<bool> HasDeletePermission(AuthorizationHandlerContext context, Post resource)
         {
-            if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Comments.Delete))
+            if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Posts.Delete))
             {
                 return true;
             }
@@ -50,7 +50,7 @@ namespace Volo.Blogging.Posts
                 return true;
             }
 
-            if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Comments.Update))
+            if (await _permissionChecker.IsGrantedAsync(context.User, BloggingPermissions.Posts.Update))
             {
                 return true;
             }

@@ -10,23 +10,31 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.TagName = "div";
             output.Attributes.AddClass("col");
 
-            ProcessSizeClass(output, TagHelper.Size, "");
-            ProcessSizeClass(output, TagHelper.SizeSm, "-sm");
-            ProcessSizeClass(output, TagHelper.SizeMd, "-md");
-            ProcessSizeClass(output, TagHelper.SizeLg, "-lg");
-            ProcessSizeClass(output, TagHelper.SizeXl, "-xl");
-
-            ProcessOffsetClass(output, TagHelper.Offset, "");
-            ProcessOffsetClass(output, TagHelper.OffsetSm, "-sm");
-            ProcessOffsetClass(output, TagHelper.OffsetMd, "-md");
-            ProcessOffsetClass(output, TagHelper.OffsetLg, "-lg");
-            ProcessOffsetClass(output, TagHelper.OffsetXl, "-xl");
-
-            ProcessColumnOrder(output);
-            ProcessVerticalAlign(output);
+            ProcessSizeClasses(context, output);
+            ProcessOffsetClasses(context, output);
+            ProcessColumnOrder(context, output);
+            ProcessVerticalAlign(context, output);
         }
 
-        protected virtual void ProcessSizeClass(TagHelperOutput output, ColumnSize size, string breakpoint)
+        protected virtual void ProcessSizeClasses(TagHelperContext context, TagHelperOutput output)
+        {
+            ProcessSizeClass(context, output, TagHelper.Size, "");
+            ProcessSizeClass(context, output, TagHelper.SizeSm, "-sm");
+            ProcessSizeClass(context, output, TagHelper.SizeMd, "-md");
+            ProcessSizeClass(context, output, TagHelper.SizeLg, "-lg");
+            ProcessSizeClass(context, output, TagHelper.SizeXl, "-xl");
+        }
+
+        protected virtual void ProcessOffsetClasses(TagHelperContext context, TagHelperOutput output)
+        {
+            ProcessOffsetClass(context, output, TagHelper.Offset, "");
+            ProcessOffsetClass(context, output, TagHelper.OffsetSm, "-sm");
+            ProcessOffsetClass(context, output, TagHelper.OffsetMd, "-md");
+            ProcessOffsetClass(context, output, TagHelper.OffsetLg, "-lg");
+            ProcessOffsetClass(context, output, TagHelper.OffsetXl, "-xl");
+        }
+
+        protected virtual void ProcessSizeClass(TagHelperContext context, TagHelperOutput output, ColumnSize size, string breakpoint)
         {
             if (size == ColumnSize.Undefined)
             {
@@ -47,7 +55,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.Attributes.AddClass(classString);
         }
 
-        protected virtual void ProcessOffsetClass(TagHelperOutput output, ColumnSize size, string breakpoint)
+        protected virtual void ProcessOffsetClass(TagHelperContext context, TagHelperOutput output, ColumnSize size, string breakpoint)
         {
             if (size == ColumnSize.Undefined)
             {
@@ -68,7 +76,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.Attributes.AddClass(classString);
         }
 
-        protected virtual void ProcessVerticalAlign(TagHelperOutput output)
+        protected virtual void ProcessVerticalAlign(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.VAlign == VerticalAlign.Default)
             {
@@ -78,7 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Grid
             output.Attributes.AddClass("align-self-" + TagHelper.VAlign.ToString().ToLowerInvariant());
         }
 
-        protected virtual void ProcessColumnOrder(TagHelperOutput output)
+        protected virtual void ProcessColumnOrder(TagHelperContext context, TagHelperOutput output)
         {
             if (TagHelper.ColumnOrder == ColumnOrder.Undefined)
             {
