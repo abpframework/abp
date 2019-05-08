@@ -32,10 +32,9 @@ using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.TenantManagement.Web;
 //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.Web;
-
 //</TEMPLATE-REMOVE>
 
 namespace MyCompanyName.MyProjectName
