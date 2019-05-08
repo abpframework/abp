@@ -1,8 +1,9 @@
 ﻿using Volo.Abp.Modularity;
 
-namespace Volo.Abp
+namespace Volo.Abp.Specifications
 {
     public class AbpSpecificationsModule : AbpModule
     {
+
     }
 }
