@@ -21,9 +21,9 @@ namespace Volo.Abp.ProjectBuilding.Building.Steps
             var lines = file.GetLines();
             for (var i = 0; i < lines.Length; i++)
             {
-                if (lines[i].Contains("ProjectReference") && lines[i].Contains("MyCompanyName.MyProjectName.EntityFrameworkCore"))
+                if (lines[i].Contains("ProjectReference") && lines[i].Contains("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"))
                 {
-                    lines[i] = lines[i].Replace("EntityFrameworkCore", "MongoDB");
+                    lines[i] = lines[i].Replace("EntityFrameworkCore.DbMigrations", "MongoDB");
                     file.SetLines(lines);
                     return;
                 }
