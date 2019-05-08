@@ -13,7 +13,10 @@ namespace Volo.Abp.Cli
 {
     public class CliService : ITransientDependency
     {
-        public static string Version => typeof(AbpCliCoreModule).Assembly.GetFileVersion();
+        //public static string Version => typeof(AbpCliCoreModule).Assembly
+        //    .GetFileVersion()
+        //    .RemovePostFix(".0");
+        public static string Version => "0.17.0.0";
 
         public ILogger<CliService> Logger { get; set; }
 
