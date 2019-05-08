@@ -24,6 +24,14 @@ export default [{
       hideInMenu: true
     },
     component: () => import('@/view/login/login.vue')
+  },{
+    path: '/email-confirm',
+    name: 'email-confirm',
+    meta: {
+      title: 'email-confirm - 邮件激活',
+      hideInMenu: true
+    },
+    component: () => import('@/view/login/email-confirm.vue')
   },
   {
     path: '/',

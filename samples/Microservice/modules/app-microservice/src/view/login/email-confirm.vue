@@ -8,7 +8,7 @@
     <div class="content content-front">
       <div class="login">
         <div class="login-con">
-          <Card icon="log-in" title="欢迎登录" :bordered="false">
+          <Card icon="log-in" title="欢迎激活" :bordered="false">
             <div class="form-con">
               <login-form
                 @on-success-valid="handleSubmit"
@@ -26,6 +26,8 @@
 <script>
 import LoginForm from "_c/login-form";
 import { mapActions } from "vuex";
+import {emailConfirmation} from '@/api/rbac/user.js';
+
 export default {
   components: {
     LoginForm
@@ -35,6 +37,27 @@ export default {
       processing: false,
       loading: false
     };
+  },
+  mounted:function(){
+    var query=this.$route.query
+      emailConfirmation({
+          userId:query.userId,
+          confirmationCode:query.confirmationCode
+      }).then(res=>{
+             this.$Message.loading({
+              duration: 0,
+              closable: false,
+              content: '激活成功！您可使用邮件或登录名进行登录!'
+            });
+           setTimeout(() => {
+                this.$router.push({
+                  name: "login"
+                });
+                setTimeout(() => {
+                  this.$Message.destroy();
+                }, 1000);
+              }, 1500);
+      });
   },
   methods: {
     ...mapActions(["handleLogin", "getUserInfo"]),
@@ -66,13 +89,6 @@ export default {
             this.$Message.error(res.data.data);
           }
         })
-        .catch(error => {
-          target.loading = false;
-              // this.$Message.error({
-              //   content: "网络出错,请检查你的网络或者服务是否可用",
-              //   duration: 5
-              // });
-        });
     }
   }
 };

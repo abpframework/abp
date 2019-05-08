@@ -100,7 +100,20 @@
           </Col>
         </Row>
         <Row :gutter="16">
-          <Col span="12">
+          <Col span="8" v-show="formModel.fields.id==''">
+            <FormItem label="是否发送激活邮件" label-position="left">
+              <i-switch
+                size="large"
+                v-model="formModel.fields.sendActivationEmail"
+                :true-value="true"
+                :false-value="false"
+              >
+                <span slot="open">是</span>
+                <span slot="close">否</span>
+              </i-switch>
+            </FormItem>
+          </Col>
+          <Col span="8">
             <FormItem label="是否启用禁用" label-position="left">
               <i-switch
                 size="large"
@@ -113,7 +126,7 @@
               </i-switch>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="8">
             <FormItem label="双身份验证" label-position="left">
               <i-switch
                 size="large"
@@ -243,6 +256,7 @@ export default {
         organizationData: [],
         visible: false,
         fields: {
+          sendActivationEmail:false,
           id: "",
           password: "",
           userName: "",

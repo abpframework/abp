@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain;
+using Volo.Abp.Emailing;
 using Volo.Abp.Emailing.Templates;
 using Volo.Abp.Emailing.Templates.Virtual;
 using Volo.Abp.EventBus.Distributed;
@@ -18,7 +19,8 @@ namespace Volo.Abp.Identity
     [DependsOn(
         typeof(AbpDddDomainModule),
         typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpUsersDomainModule)
+        typeof(AbpUsersDomainModule),
+        typeof(AbpEmailingModule)
         )]
     public class AbpIdentityDomainModule : AbpModule
     {

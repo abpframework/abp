@@ -54,7 +54,9 @@ namespace Volo.Abp.Identity
         /// </summary>
         /// <value>True if the email address has been confirmed, otherwise false.</value>
         public virtual bool EmailConfirmed { get; protected internal set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual string EmailConfirmationCode { get; protected internal set; }
 
         /// <summary>

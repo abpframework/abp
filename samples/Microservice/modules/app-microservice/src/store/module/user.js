@@ -8,16 +8,13 @@ import {
   hasRead,
   removeReaded,
   restoreTrash,
-  // getUnreadCount
 } from '@/api/user'
 import {
   setToken,
   getToken,
   setTagNavListInLocalstorage,
 } from '@/libs/util'
-import {
-  getUnion
-} from '@/libs/tools'
+
 import staticRouters from '@/router/static-routers'
 
 export default {
@@ -173,7 +170,6 @@ export default {
                   commit('setPermissions', res.data)
             });
             // commit('setAccess', data.access)
-            // commit('setPages', getUnion(data.pages, staticRouters))
             // commit('setPermissions', data.permissions)
             // commit("setUserType", data.user_type);
             commit('setHasGetInfo', true)

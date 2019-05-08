@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity
                 throw new ApplicationException("应该设置电子邮件确认码以发送电子邮件激活链接.");
             }
 
-            var link =  "localhost:9000/Account/EmailConfirmation" +
+            var link =  "http://localhost:9000/email-confirm" +
                        "?userId=" + Uri.EscapeDataString(_encryptionService.Encrypt(user.Id.ToString())) +
                        "&confirmationCode=" + Uri.EscapeDataString(user.EmailConfirmationCode);
            var emailConfrimedTemplate= await _emailTemplateProvider.GetAsync(IdentitySettingNames.User.EmailConfirmed);

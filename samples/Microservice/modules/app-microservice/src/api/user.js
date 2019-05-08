@@ -9,12 +9,23 @@ export const login = ({
   password
 }) => {
   // return _axios.get(authUrl + '?username=' + userName + '&password=' + password)
-  return _axios.post('http://localhost:64999/api/account/token',{
-    "userNameOrEmailAddress": userName,
-    "password": password,
-    "rememberMe": true,
-    "tenanId": ""
-  });
+  // return _axios.post('http://localhost:64999/api/account/token',{
+  //   "userNameOrEmailAddress": userName,
+  //   "password": password,
+  //   "rememberMe": true,
+  //   "tenanId": ""
+  // });
+ return axios.request({
+    url: 'http://localhost:64999/api/account/token',
+    method: 'post',
+    data:{
+      "userNameOrEmailAddress": userName,
+      "password": password,
+      "rememberMe": true,
+      "tenanId": ""
+    },
+    withPrefix: false
+  })
 }
 
 export const getUserInfo = (token) => {

@@ -78,6 +78,8 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             public bool TwoFactorEnabled { get; set; } = true;
 
             public bool LockoutEnabled { get; set; } = true;
+
+            public bool SendActivationEmail { get; set; } = false;
         }
 
         public class AssignedRoleViewModel

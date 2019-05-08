@@ -44,3 +44,10 @@ export const deleteUser = (ids) => {
 
 
 
+export const emailConfirmation = (data) => {
+  return axios.request({
+    url: 'identity/identityUser/emailConfirmation',
+    method: 'put',
+    data
+  })
+}

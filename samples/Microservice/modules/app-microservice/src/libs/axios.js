@@ -60,6 +60,7 @@ class HttpRequest {
     if (error.response && error.response.status) {
       statusCode = error.response.status;
     }
+    debugger
     switch (statusCode) {
       case 400:
         message = "接口服务错误,原因:[" + error.response.data.error.message + '(' + error.response.data.error.details + ')' + "]";
@@ -68,13 +69,14 @@ class HttpRequest {
         message = "接口服务错误,原因:未授权的访问(没有权限或者登录已超时)";
         break;
       case 403:
-        message = "接口服务错误,原因:[" + error.response.data.error.code + '(' + error.response.data.error.message + ')' + "]";
+      //error.response.data.error.code 
+        message = "接口服务错误,原因:[" +statusCode+ '(' + error.response.data.error.message + ')' + "]";
         break;
       case 500:
         message = "接口服务错误,原因:[" + error.response.statusText + "]";
         break;
       case -1:
-        message = "网络出错,请检查你的网络或者服务是否可用<br />请求地址:[" + error.config.url + "]";
+        message = "网络出错,请检查你的网络或者服务是否可用<br />请求地址:[" +statusCode+ '('  + error.config.url +  ')' +"]";
         break;
     }
     Modal.error({

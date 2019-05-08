@@ -30,12 +30,12 @@ namespace Volo.Abp.Identity
                 new SettingDefinition(EmailSettingNames.Smtp.Host, "smtp.163.com"),
                 new SettingDefinition(EmailSettingNames.Smtp.Port, "25"),
                 new SettingDefinition(EmailSettingNames.Smtp.UserName, "igeekfan@163.com"),
-                new SettingDefinition(EmailSettingNames.Smtp.Password, "abc520", isEncrypted: true),
+                new SettingDefinition(EmailSettingNames.Smtp.Password, "abc520"),
                 new SettingDefinition(EmailSettingNames.Smtp.Domain),
                 new SettingDefinition(EmailSettingNames.Smtp.EnableSsl, "true"),
-                new SettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials, "true"),
+                new SettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials, "false"),
                 new SettingDefinition(EmailSettingNames.DefaultFromAddress, "igeekfan@163.com"),
-                new SettingDefinition(EmailSettingNames.DefaultFromDisplayName, "ABP application")
+                new SettingDefinition(EmailSettingNames.DefaultFromDisplayName, "ABP")
 
             );
         }

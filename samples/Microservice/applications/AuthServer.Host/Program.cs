@@ -15,7 +15,7 @@ namespace AuthServer.Host
             //TODO: Temporary: it's not good to read appsettings.json here just to configure logging
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("appsettings.json", optional:true)
                 .AddEnvironmentVariables()
                 .Build();
 

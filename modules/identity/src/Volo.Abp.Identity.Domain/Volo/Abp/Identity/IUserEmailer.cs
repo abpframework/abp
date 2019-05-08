@@ -11,10 +11,11 @@
 * 修改说明：
 */
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Services;
 
 namespace Volo.Abp.Identity
 {
-    public interface IUserEmailer
+    public interface IUserEmailer:IDomainService
     {
         /// <summary>
         /// 发送电子邮件激活链接到用户的电子邮件地址。

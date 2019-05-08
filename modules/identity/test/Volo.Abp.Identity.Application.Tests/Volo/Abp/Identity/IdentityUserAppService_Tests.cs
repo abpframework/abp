@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Shouldly;
+using System;
 using System.Threading.Tasks;
-using Shouldly;
-using Volo.Abp.Data;
 using Xunit;
 
 namespace Volo.Abp.Identity
@@ -134,7 +133,7 @@ namespace Volo.Abp.Identity
         {
             //Get user
             var johnNash = await _userAppService.GetAsync(_testData.UserJohnId);
-            
+
             //Act
 
             var input = new IdentityUserUpdateDto
@@ -226,6 +225,16 @@ namespace Volo.Abp.Identity
         private static string CreateRandomPhoneNumber()
         {
             return RandomHelper.GetRandom(10000000, 100000000).ToString();
+        }
+
+        [Fact]
+        public async Task EmailConfirmation()
+        {
+            await _userAppService.EmailConfirmation(new EmailConfirmationInput()
+            {
+                ConfirmationCode = "8e98b4294d66438684719b91456bad7d",
+                UserId = "ComLzVcAite9dulX5AE6vqjSw5/FgLgSfbJBcY04Q5qNTowKp23CiEWrwzOQpSbS"
+            });
         }
     }
 }
