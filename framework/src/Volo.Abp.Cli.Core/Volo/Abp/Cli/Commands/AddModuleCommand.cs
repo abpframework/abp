@@ -36,7 +36,7 @@ namespace Volo.Abp.Cli.Commands
             );
         }
 
-        private string GetSolutionFile(CommandLineArgs commandLineArgs)
+        protected virtual string GetSolutionFile(CommandLineArgs commandLineArgs)
         {
             var providedSolutionFile = PathHelper.NormalizePath(
                 commandLineArgs.Options.GetOrNull(

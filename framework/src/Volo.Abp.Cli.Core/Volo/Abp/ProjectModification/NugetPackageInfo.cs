@@ -6,7 +6,7 @@
 
         public string ModuleClass { get; set; }
 
-        public int Target { get; set; } //TODO: Enum?
+        public NugetPackageTarget Target { get; set; }
 
         public NpmPackageInfo DependedNpmPackage { get; set; }
     }

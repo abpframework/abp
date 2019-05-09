@@ -1,13 +1,16 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Cli;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.ProjectModification
@@ -36,29 +39,45 @@ namespace Volo.Abp.ProjectModification
 
         public async Task AddAsync(string projectFile, string packageName)
         {
-            var packageInfo = await FindNugetPackageInfoAsync(packageName);
-            if (packageInfo == null)
-            {
-                return;
-            }
-
-            Logger.LogInformation($"Installing '{packageName}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
-            var procStartInfo = new ProcessStartInfo("dotnet", "add package " + packageName);
-            Process.Start(procStartInfo).WaitForExit();
-
-            var moduleFile = ModuleClassFinder.Find(projectFile).First();
-            //TODO: Handle multiple module classes!
-            ModuleClassDependcyAdder.Add(moduleFile, packageInfo.ModuleClass);
-
-            if (packageInfo.DependedNpmPackage != null)
-            {
-                await NpmPackageAdder.AddAsync(Path.GetDirectoryName(projectFile), packageInfo.DependedNpmPackage);
-            }
-
-            Logger.LogInformation("Successfully installed.");
+            await AddAsync(
+                projectFile,
+                await FindNugetPackageInfoAsync(packageName)
+            );
         }
 
-        private async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string moduleName)
+        public async Task AddAsync(string projectFile, NugetPackageInfo package)
+        {
+            using (DirectoryHelper.ChangeCurrentDirectory(Path.GetDirectoryName(projectFile)))
+            {
+                Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
+
+                var procStartInfo = new ProcessStartInfo("dotnet", "add package " + package.Name);
+                Process.Start(procStartInfo).WaitForExit();
+
+                var moduleFiles = ModuleClassFinder.Find(projectFile);
+                if (moduleFiles.Count == 0)
+                {
+                    throw new CliUsageException($"Could not find a class derived from AbpModule in the project {projectFile}");
+                }
+
+                if (moduleFiles.Count > 1)
+                {
+                    throw new CliUsageException($"There are multiple classes derived from AbpModule in the project {projectFile}: " + moduleFiles.JoinAsString(", "));
+                }
+
+                ModuleClassDependcyAdder.Add(moduleFiles.First(), package.ModuleClass);
+
+                if (package.DependedNpmPackage != null)
+                {
+                    await NpmPackageAdder.AddAsync(Path.GetDirectoryName(projectFile), package.DependedNpmPackage);
+                }
+
+                Logger.LogInformation("Successfully installed.");
+            }
+        }
+
+
+        protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string moduleName)
         {
             using (var client = new HttpClient())
             {
@@ -70,14 +89,10 @@ namespace Volo.Abp.ProjectModification
                 {
                     if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        Logger.LogError($"ERROR: '{moduleName}' module could not be found.");
-                    }
-                    else
-                    {
-                        Logger.LogError($"ERROR: Remote server returns '{response.StatusCode}'");
+                        throw new CliUsageException($"'{moduleName}' nuget package could not be found!");
                     }
 
-                    return null;
+                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.IO;
 
 namespace Volo.Abp.ProjectModification
 {
@@ -26,15 +27,16 @@ namespace Volo.Abp.ProjectModification
 
             Logger.LogInformation($"Installing '{npmPackage.Name}' package to the project '{packageJsonFilePath}'...");
 
-            Logger.LogInformation("yarn add " + npmPackage.Name + "...");
-            var procStartInfo = new ProcessStartInfo("cmd.exe", "/C yarn add " + npmPackage.Name);
-            procStartInfo.WindowStyle = ProcessWindowStyle.Normal;
-            Process.Start(procStartInfo).WaitForExit();
+            using (DirectoryHelper.ChangeCurrentDirectory(directory))
+            {
+                Logger.LogInformation("yarn add " + npmPackage.Name + "... " + Directory.GetCurrentDirectory());
+                var procStartInfo = new ProcessStartInfo("cmd.exe", "/C yarn add " + npmPackage.Name);
+                Process.Start(procStartInfo).WaitForExit();
 
-            Logger.LogInformation("gulp...");
-            procStartInfo = new ProcessStartInfo("cmd.exe", "/C gulp");
-            procStartInfo.WindowStyle = ProcessWindowStyle.Normal;
-            Process.Start(procStartInfo).WaitForExit();
+                Logger.LogInformation("gulp... " + Directory.GetCurrentDirectory());
+                procStartInfo = new ProcessStartInfo("cmd.exe", "/C gulp");
+                Process.Start(procStartInfo).WaitForExit();
+            }
 
             return Task.CompletedTask;
         }
