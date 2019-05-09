@@ -54,7 +54,7 @@ namespace Volo.Blogging.EntityFrameworkCore
                 b.Property(x => x.Url).IsRequired().HasMaxLength(PostConsts.MaxUrlLength).HasColumnName(nameof(Post.Url));
                 b.Property(x => x.Content).IsRequired(false).HasMaxLength(PostConsts.MaxContentLength).HasColumnName(nameof(Post.Content));
 
-                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.PostId);
+                b.HasMany(p => p.Tags).WithOne().HasForeignKey(qt => qt.PostId);
 
                 b.HasOne<Blog>().WithMany().IsRequired().HasForeignKey(p => p.BlogId);
             });
