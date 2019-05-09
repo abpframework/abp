@@ -5,6 +5,8 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ProjectModification
 {
+    //TODO: Don't add if added before!
+
     public class ModuleClassDependcyAdder : ITransientDependency
     {
         public virtual void Add(string path, string module)
