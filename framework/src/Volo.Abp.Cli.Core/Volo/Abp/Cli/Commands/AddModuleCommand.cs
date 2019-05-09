@@ -7,16 +7,16 @@ using Volo.Abp.ProjectModification;
 
 namespace Volo.Abp.Cli.Commands
 {
-    public class AddCommand : IConsoleCommand, ITransientDependency
+    public class AddModuleCommand : IConsoleCommand, ITransientDependency
     {
-        public ILogger<AddCommand> Logger { get; set; }
+        public ILogger<AddModuleCommand> Logger { get; set; }
 
         protected ModuleAdder ModuleAdder { get; }
 
-        public AddCommand(ModuleAdder moduleAdder)
+        public AddModuleCommand(ModuleAdder moduleAdder)
         {
             ModuleAdder = moduleAdder;
-            Logger = NullLogger<AddCommand>.Instance;
+            Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)

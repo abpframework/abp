@@ -15,12 +15,12 @@ namespace Volo.Abp.ProjectModification
     {
         public ILogger<ModuleAdder> Logger { get; set; }
 
-        protected ProjectModuleAdder ProjectModuleAdder { get; }
+        protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
         protected SolutionModuleAdder SolutionModuleAdder { get; }
 
-        public ModuleAdder(ProjectModuleAdder projectModuleAdder, SolutionModuleAdder solutionModuleAdder)
+        public ModuleAdder(ProjectNugetPackageAdder projectNugetPackageAdder, SolutionModuleAdder solutionModuleAdder)
         {
-            ProjectModuleAdder = projectModuleAdder;
+            ProjectNugetPackageAdder = projectNugetPackageAdder;
             SolutionModuleAdder = solutionModuleAdder;
 
             Logger = NullLogger<ModuleAdder>.Instance;
@@ -43,7 +43,7 @@ namespace Volo.Abp.ProjectModification
 
             if (!args.ProjectFile.IsNullOrEmpty())
             {
-                await ProjectModuleAdder.AddAsync(args.ProjectFile, args.ModuleName);
+                await ProjectNugetPackageAdder.AddAsync(args.ProjectFile, args.ModuleName);
             }
 
             if (!args.SolutionFile.IsNullOrEmpty())
