@@ -18,13 +18,19 @@ namespace Volo.Abp.ProjectModification
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNpmPackageAdder NpmPackageAdder { get; }
+        protected AbpModuleClassFinder ModuleClassFinder { get; }
+        protected ModuleClassDependcyAdder ModuleClassDependcyAdder { get; }
 
         public ProjectNugetPackageAdder(
             IJsonSerializer jsonSerializer,
-            ProjectNpmPackageAdder npmPackageAdder)
+            ProjectNpmPackageAdder npmPackageAdder,
+            AbpModuleClassFinder moduleClassFinder,
+            ModuleClassDependcyAdder moduleClassDependcyAdder)
         {
             JsonSerializer = jsonSerializer;
             NpmPackageAdder = npmPackageAdder;
+            ModuleClassFinder = moduleClassFinder;
+            ModuleClassDependcyAdder = moduleClassDependcyAdder;
             Logger = NullLogger<ProjectNugetPackageAdder>.Instance;
         }
 
@@ -40,8 +46,9 @@ namespace Volo.Abp.ProjectModification
             var procStartInfo = new ProcessStartInfo("dotnet", "add package " + packageName);
             Process.Start(procStartInfo).WaitForExit();
 
-            var moduleFile = new AbpModuleFinder().Find(projectFile).First();
-            new DependsOnAdder().Add(moduleFile, packageInfo.ModuleClass);
+            var moduleFile = ModuleClassFinder.Find(projectFile).First();
+            //TODO: Handle multiple module classes!
+            ModuleClassDependcyAdder.Add(moduleFile, packageInfo.ModuleClass);
 
             if (packageInfo.DependedNpmPackage != null)
             {

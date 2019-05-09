@@ -1,12 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ProjectModification
 {
-    public class DependsOnAdder
+    public class ModuleClassDependcyAdder : ITransientDependency
     {
-        public void Add(string path, string module)
+        public virtual void Add(string path, string module)
         {
             ParseModuleNameAndNameSpace(module, out var nameSpace, out var moduleName);
 
@@ -22,7 +23,7 @@ namespace Volo.Abp.ProjectModification
             File.WriteAllText(path, file);
         }
 
-        private void ParseModuleNameAndNameSpace(string module, out string nameSpace, out string moduleName)
+        protected virtual void ParseModuleNameAndNameSpace(string module, out string nameSpace, out string moduleName)
         {
             var words = module?.Split('.');
 
@@ -37,7 +38,7 @@ namespace Volo.Abp.ProjectModification
             nameSpace = string.Join(".", words.Take(words.Length - 1));
         }
 
-        private string GetUsingStatement(string nameSpace)
+        protected virtual string GetUsingStatement(string nameSpace)
         {
             return "using " + nameSpace + ";";
         }
