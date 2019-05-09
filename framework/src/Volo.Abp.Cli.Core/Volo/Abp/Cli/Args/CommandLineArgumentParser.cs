@@ -16,7 +16,7 @@ namespace Volo.Abp.Cli.Args
 
             var argumentList = args.ToList();
 
-            //Get command
+            //Command
 
             var command = argumentList[0];
             argumentList.RemoveAt(0);
@@ -26,7 +26,7 @@ namespace Volo.Abp.Cli.Args
                 return new CommandLineArgs(command);
             }
 
-            //Get target
+            //Target
 
             var target = argumentList[0];
             if (target.StartsWith("-"))
@@ -43,7 +43,7 @@ namespace Volo.Abp.Cli.Args
                 return new CommandLineArgs(command, target);
             }
 
-            //Get options
+            //Options
 
             var commandLineArgs = new CommandLineArgs(command, target);
 

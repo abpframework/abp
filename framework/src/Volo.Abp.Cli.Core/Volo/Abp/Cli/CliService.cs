@@ -1,28 +1,22 @@
 ﻿using System;
-using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.ProjectBuilding;
 
 namespace Volo.Abp.Cli
 {
     public class CliService : ITransientDependency
     {
-        //public static string Version => typeof(AbpCliCoreModule).Assembly
-        //    .GetFileVersion()
-        //    .RemovePostFix(".0");
-        public static string Version => "0.17.0.0";
-
         public ILogger<CliService> Logger { get; set; }
 
         protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
         protected ICommandSelector CommandSelector { get; }
-        public IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
         public CliService(
             ICommandLineArgumentParser commandLineArgumentParser,
@@ -38,8 +32,8 @@ namespace Volo.Abp.Cli
 
         public async Task RunAsync(string[] args)
         {
-            Logger.LogInformation("ABP CLI (abp.io)");
-            Logger.LogInformation("Version: " + Version);
+            Logger.LogInformation($"ABP CLI, version {VersionHelper.Version}.");
+            Logger.LogInformation("https://abp.io");
 
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);
@@ -47,7 +41,19 @@ namespace Volo.Abp.Cli
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var command = (IConsoleCommand)scope.ServiceProvider.GetRequiredService(commandType);
-                await command.ExecuteAsync(commandLineArgs);
+
+                try
+                {
+                    await command.ExecuteAsync(commandLineArgs);
+                }
+                catch (CliUsageException usageException)
+                {
+                    Logger.LogWarning(usageException.Message);
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogException(ex);
+                }
             }
         }
     }

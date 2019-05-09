@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Cli;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ProjectBuilding.Building;
 
@@ -31,7 +32,7 @@ namespace Volo.Abp.ProjectBuilding
                 }
             }
 
-            var version = CliService.Version;
+            var version = VersionHelper.Version;
 
             var templateFile = await TemplateStore.GetAsync(args.TemplateName, version);
 

@@ -1,7 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using System.IO;
+using System.Text;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ProjectModification;
 
@@ -11,11 +15,11 @@ namespace Volo.Abp.Cli.Commands
     {
         public ILogger<AddModuleCommand> Logger { get; set; }
 
-        protected ModuleAdder ModuleAdder { get; }
+        protected SolutionModuleAdder SolutionModuleAdder { get; }
 
-        public AddModuleCommand(ModuleAdder moduleAdder)
+        public AddModuleCommand(SolutionModuleAdder solutionModuleAdder)
         {
-            ModuleAdder = moduleAdder;
+            SolutionModuleAdder = solutionModuleAdder;
             Logger = NullLogger<AddModuleCommand>.Instance;
         }
 
@@ -23,18 +27,75 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                Logger.LogWarning("Module name is missing.");
-                AddCommandHelper.WriteUsage(Logger);
-                return;
+                throw new CliUsageException("Module name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
             }
 
-            await ModuleAdder.AddModuleAsync(
-                new AddModuleArgs(
-                    commandLineArgs.Target,
-                    commandLineArgs.Options.GetOrNull(Options.Solution.Short, Options.Solution.Long),
-                    commandLineArgs.Options.GetOrNull(Options.Project.Short, Options.Project.Long)
+            await SolutionModuleAdder.AddAsync(
+                GetSolutionFile(commandLineArgs),
+                commandLineArgs.Target
+            );
+        }
+
+        private string GetSolutionFile(CommandLineArgs commandLineArgs)
+        {
+            var providedSolutionFile = PathHelper.NormalizePath(
+                commandLineArgs.Options.GetOrNull(
+                    AddPackageCommand.Options.Project.Short,
+                    AddPackageCommand.Options.Project.Long
                 )
             );
+
+            if (!providedSolutionFile.IsNullOrWhiteSpace())
+            {
+                return providedSolutionFile;
+            }
+
+            var foundSolutionFiles = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln");
+            if (foundSolutionFiles.Length == 1)
+            {
+                return foundSolutionFiles[0];
+            }
+
+            if (foundSolutionFiles.Length == 0)
+            {
+                throw new CliUsageException("'abp add-module' command should be used inside a folder contaning a .sln file!");
+            }
+
+            //foundSolutionFiles.Length > 1
+
+            var sb = new StringBuilder("There are multiple solution (.sln) files in the current directory. Please specify one of the files below:");
+
+            foreach (var foundSolutionFile in foundSolutionFiles)
+            {
+                sb.AppendLine("* " + foundSolutionFile);
+            }
+
+            sb.AppendLine("Example:");
+            sb.AppendLine($"abp add-module {commandLineArgs.Target} -p {foundSolutionFiles[0]}");
+
+            throw new CliUsageException(sb.ToString());
+        }
+
+        protected virtual string GetUsageInfo()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("'add-module' command is used to add a multi-package ABP module to a solution.");
+            sb.AppendLine("It should be used in a folder containing a .sln file.");
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("  abp add-module <module-name> [-s|--solution]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
+            sb.AppendLine("");
+            sb.AppendLine("Examples:");
+            sb.AppendLine("  abp add Volo.Blogging                      Adds the module to the current soluton.");
+            sb.AppendLine("  abp add Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
+            sb.AppendLine("");
+
+            return sb.ToString();
         }
 
         public static class Options
@@ -43,12 +104,6 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "s";
                 public const string Long = "solution";
-            }
-
-            public static class Project
-            {
-                public const string Short = "p";
-                public const string Long = "project";
             }
         }
     }
