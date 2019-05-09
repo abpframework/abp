@@ -11,34 +11,29 @@ namespace Volo.Abp.ProjectModification
     {
         public virtual List<string> Find(string csprojFilePath)
         {
-            var modules = new List<string>();
+            var moduleFilePaths = new List<string>();
 
             var csFiles = GetAllCsFilesUnderDirectory(Path.GetDirectoryName(csprojFilePath), new List<string>());
 
             foreach (var csFile in csFiles)
             {
-                var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
-
-                var namespaceSyntaxs = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>();
-
-                foreach (var namespaceSyntax in namespaceSyntaxs)
+                if (IsDerivedFromAbpModule(csFile))
                 {
-                    var classDeclarationSyntaxs = namespaceSyntax.DescendantNodes().OfType<ClassDeclarationSyntax>();
-                    var syntaxsArray = classDeclarationSyntaxs as ClassDeclarationSyntax[] ?? classDeclarationSyntaxs.ToArray();
-
-                    foreach (var classDeclaration in syntaxsArray)
-                    {
-                        var classDerivedFromAbpModule = classDeclaration.BaseList?.Types.FirstOrDefault(t => t.ToString().Contains("AbpModule"));
-
-                        if (classDerivedFromAbpModule != null)
-                        {
-                            modules.Add(csFile);
-                        }
-                    }
+                    moduleFilePaths.Add(csFile);
                 }
             }
 
-            return modules;
+            return moduleFilePaths;
+        }
+
+        private bool IsDerivedFromAbpModule(string csFile)
+        {
+            var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
+            var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().First();
+            var classDeclaration = (namespaceSyntax.DescendantNodes().OfType<ClassDeclarationSyntax>()).First();
+
+            return classDeclaration.BaseList?.Types
+                .Any(t => t.ToString().Contains("AbpModule")) ?? false;
         }
 
         protected virtual List<string> GetAllCsFilesUnderDirectory(string path, List<string> allCsFileList)
