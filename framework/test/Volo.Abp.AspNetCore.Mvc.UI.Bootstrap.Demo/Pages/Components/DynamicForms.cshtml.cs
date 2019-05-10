@@ -139,6 +139,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             [SelectItems(nameof(CountryList))]
             [Display(Name = "Neighbor Countries")]
             public List<string> NeighborCountries { get; set; }
+
+            [DynamicFormIgnore]
+            public string IgnoredProperty { get; set; }
         }
 
         public enum CarType

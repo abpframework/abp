@@ -35,10 +35,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 TagHelper.AspFor.Name,
                 SurroundInnerHtmlAndGet(context, output, innerHtml, isCheckbox),
                 order,
-                out var surpress
+                out var suppress
             );
 
-            if (surpress)
+            if (suppress)
             {
                 output.SuppressOutput();
             }
@@ -389,10 +389,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
         }
 
-        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
         {
             var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
-            surpress = list == null;
+            suppress = list == null;
 
             if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
             {

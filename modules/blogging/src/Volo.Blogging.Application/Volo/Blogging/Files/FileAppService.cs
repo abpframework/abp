@@ -23,6 +23,17 @@ namespace Volo.Blogging.Files
         {
             Check.NotNullOrWhiteSpace(name, nameof(name));
 
+            if (!Directory.Exists(Options.FileUploadLocalFolder))
+            {
+                Directory.CreateDirectory(Options.FileUploadLocalFolder);
+                return Task.FromResult(
+                    new RawFileDto
+                    {
+                        Bytes = new byte[0]
+                    }
+                );
+            }
+
             var filePath = Path.Combine(Options.FileUploadLocalFolder, name);
 
             return Task.FromResult(
@@ -53,6 +64,11 @@ namespace Volo.Blogging.Files
             var uniqueFileName = GenerateUniqueFileName(Path.GetExtension(input.Name));
             var filePath = Path.Combine(Options.FileUploadLocalFolder, uniqueFileName);
 
+            if (!Directory.Exists(Options.FileUploadLocalFolder))
+            {
+                Directory.CreateDirectory(Options.FileUploadLocalFolder);
+            }
+            
             File.WriteAllBytes(filePath, input.Bytes); //TODO: Previously was using WriteAllBytesAsync, but it's only in .netcore.
 
             return Task.FromResult(new FileUploadOutputDto

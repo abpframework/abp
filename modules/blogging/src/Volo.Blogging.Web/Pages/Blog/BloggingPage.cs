@@ -55,6 +55,11 @@ namespace Volo.Blogging.Pages.Blog
 
         public IHtmlContent RenderMarkdownToHtml(string content)
         {
+            if(content.IsNullOrWhiteSpace())
+            {
+                return new HtmlString("");
+            }
+            
             byte[] bytes = Encoding.Default.GetBytes(content);
             var utf8Content = Encoding.UTF8.GetString(bytes);
 

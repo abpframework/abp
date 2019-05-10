@@ -37,7 +37,7 @@ namespace Volo.Abp.Auditing
 
             using (var scope = _auditingManager.BeginScope())
             {
-                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "fourty-two", Value2 = 42 });
+                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
                 await scope.SaveAsync();
             }
 

@@ -1,1 +1,0 @@
-@dotnet VoloDocs.Web.dll

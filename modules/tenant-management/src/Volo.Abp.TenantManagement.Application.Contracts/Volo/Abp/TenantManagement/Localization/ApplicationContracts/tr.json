@@ -5,6 +5,7 @@
     "Permission:Create": "Oluşturma",
     "Permission:Edit": "Düzenleme",
     "Permission:Delete": "Silme",
+    "Permission:ManageConnectionStrings": "Bağlantı cümlelerini yönet",
     "Permission:ManageFeatures": "Özellikleri yönet"
   }
 }
