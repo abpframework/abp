@@ -5,9 +5,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.ProjectModification;
 
 namespace Volo.Abp.Cli.Commands
 {

@@ -4,9 +4,9 @@ using Ionic.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.ProjectBuilding;
-using Volo.Abp.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.Commands
 {
