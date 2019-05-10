@@ -9,11 +9,11 @@ namespace Volo.Abp.Cli.Commands
     {
         public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            Console.WriteLine("*********** ABP CLI ****************");
             Console.WriteLine();
             Console.WriteLine("Usage:");
             Console.WriteLine();
             Console.WriteLine("  abp <command> <target> [options]");
+            Console.WriteLine();
             return Task.CompletedTask;
         }
     }
