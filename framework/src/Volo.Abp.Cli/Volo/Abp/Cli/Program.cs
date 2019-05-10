@@ -13,6 +13,8 @@ namespace Volo.Abp.Cli
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .MinimumLevel.Override("Volo.Abp", LogEventLevel.Warning)
+                .MinimumLevel.Override("Volo.Abp.Cli", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File(Path.Combine(CliPaths.Log, "abp-cli-logs.txt"))
                 .WriteTo.Console()

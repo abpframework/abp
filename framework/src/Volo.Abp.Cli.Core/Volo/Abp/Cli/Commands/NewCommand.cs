@@ -27,6 +27,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
+                Logger.LogInformation("");
                 Logger.LogWarning("Project name is missing.");
                 Logger.LogWarning("");
                 Logger.LogWarning("Usage:");
