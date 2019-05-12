@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,6 +7,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
 using Volo.Abp.Json;
@@ -50,8 +50,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 Logger.LogInformation($"Installing '{package.Name}' package to the project '{Path.GetFileNameWithoutExtension(projectFile)}'...");
 
-                var procStartInfo = new ProcessStartInfo("dotnet", "add package " + package.Name);
-                Process.Start(procStartInfo).WaitForExit();
+                CmdHelper.Run("dotnet", "add package " + package.Name);
 
                 var moduleFiles = ModuleClassFinder.Find(projectFile);
                 if (moduleFiles.Count == 0)
