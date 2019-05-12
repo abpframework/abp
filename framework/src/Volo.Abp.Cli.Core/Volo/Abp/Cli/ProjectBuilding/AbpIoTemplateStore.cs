@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using System;
 using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -36,8 +36,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
         }
 
         public async Task<TemplateFile> GetAsync(
-            string name, 
-            string version, 
+            string name,
+            string version,
             DatabaseProvider databaseProvider,
             string projectName)
         {
@@ -55,8 +55,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             using (var client = new System.Net.Http.HttpClient())
             {
-                client.Timeout = TimeSpan.FromMinutes(5);
-                var downloadUrl = Options.AbpIoWwwUrlRoot + "api/download/template/";
+                client.Timeout = TimeSpan.FromMinutes(3);
+
+                if (File.Exists(CliPaths.AccessToken))
+                {
+                    var accessToken = File.ReadAllText(CliPaths.AccessToken, Encoding.UTF8);
+                    if (!accessToken.IsNullOrEmpty())
+                    {
+                        client.SetBearerToken(accessToken);
+                    }
+                }
 
                 var serializedPostDataAsString = JsonSerializer.Serialize(new
                 {
@@ -66,6 +74,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     projectName = projectName
                 });
 
+                var downloadUrl = Options.AbpIoWwwUrlRoot + "api/download/template/";
                 var responseMessage = await client.PostAsync(
                     downloadUrl,
                     new StringContent(serializedPostDataAsString, Encoding.UTF8, MimeTypes.Application.Json),
