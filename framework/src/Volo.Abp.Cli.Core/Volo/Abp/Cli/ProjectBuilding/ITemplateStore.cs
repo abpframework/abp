@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding
@@ -7,9 +8,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
     {
         Task<TemplateFile> GetAsync(
             string name,
-            string version,
             DatabaseProvider databaseProvider,
-            string projectName
+            string projectName,
+            [CanBeNull] string version = null
         );
     }
 }

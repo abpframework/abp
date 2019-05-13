@@ -9,9 +9,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
         public TemplateFile TemplateFile { get; }
 
         [NotNull]
-        public string Version { get; }
-
-        [NotNull]
         public ProjectBuildArgs BuildArgs { get; }
 
         [NotNull]
@@ -21,15 +18,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
         public ProjectResult Result { get; set; }
         
-        public ProjectBuildContext([NotNull] TemplateInfo template,
+        public ProjectBuildContext(
+            [NotNull] TemplateInfo template,
             [NotNull] TemplateFile templateFile,
-            [NotNull] ProjectBuildArgs buildArgs,
-            [NotNull] string version)
+            [NotNull] ProjectBuildArgs buildArgs)
         {
             Template = Check.NotNull(template, nameof(template));
             TemplateFile = Check.NotNull(templateFile, nameof(templateFile));
             BuildArgs = Check.NotNull(buildArgs, nameof(buildArgs));
-            Version = Check.NotNullOrWhiteSpace(version, nameof(version));
 
             Result = new ProjectResult();
         }

@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
-using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli
@@ -32,7 +32,7 @@ namespace Volo.Abp.Cli
 
         public async Task RunAsync(string[] args)
         {
-            Logger.LogInformation($"ABP CLI, version {VersionHelper.Version}.");
+            Logger.LogInformation($"ABP CLI, version {GetCliVersion()}.");
             Logger.LogInformation("https://abp.io");
 
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
@@ -55,6 +55,14 @@ namespace Volo.Abp.Cli
                     Logger.LogException(ex);
                 }
             }
+        }
+
+        private static string GetCliVersion()
+        {
+            return typeof(CliService)
+                .Assembly
+                .GetFileVersion()
+                .RemovePostFix(".0");
         }
     }
 }

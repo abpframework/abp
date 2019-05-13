@@ -31,11 +31,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 }
             }
 
-            var version = VersionHelper.Version;
-
             var templateFile = await TemplateStore.GetAsync(
                 args.TemplateName,
-                version,
                 args.DatabaseProvider,
                 args.SolutionName.FullName
             );
@@ -43,8 +40,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var context = new ProjectBuildContext(
                 templateInfo,
                 templateFile,
-                args,
-                version
+                args
             );
 
             ProjectBuildPipelineBuilder.Build(context).Execute(context);

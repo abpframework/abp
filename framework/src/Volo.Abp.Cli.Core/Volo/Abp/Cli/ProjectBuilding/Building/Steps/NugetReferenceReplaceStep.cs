@@ -14,7 +14,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 context.Files,
                 "MyCompanyName",
                 "MyProjectName",
-                context.Version
+                context.TemplateFile.Version
             ).Run();
         }
 
