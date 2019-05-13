@@ -91,8 +91,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
-            sb.AppendLine("  abp add Volo.Blogging                      Adds the module to the current soluton.");
-            sb.AppendLine("  abp add Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
+            sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current soluton.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
             sb.AppendLine("");
 
             return sb.ToString();
