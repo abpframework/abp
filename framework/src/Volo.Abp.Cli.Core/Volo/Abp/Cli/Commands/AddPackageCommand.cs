@@ -91,8 +91,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  -p|--project <project-file>    Specify the project file explicitly.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
-            sb.AppendLine("  abp add Volo.Abp.FluentValidation                                  Adds the package to the current project.");
-            sb.AppendLine("  abp add Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the package to the current project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
             sb.AppendLine("");
 
             return sb.ToString();
