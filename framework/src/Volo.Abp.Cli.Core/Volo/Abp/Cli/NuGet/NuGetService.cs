@@ -31,7 +31,7 @@ namespace Volo.Abp.Cli.NuGet
                 client.Timeout = TimeSpan.FromSeconds(30);
                 
                 var responseMessage = await client.GetAsync(
-                    $"https://api.nuget.org/v3-flatcontainer/${packageId.ToLowerInvariant()}/index.json",
+                    $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json",
                     CancellationTokenProvider.Token);
                 if (!responseMessage.IsSuccessStatusCode)
                 {
