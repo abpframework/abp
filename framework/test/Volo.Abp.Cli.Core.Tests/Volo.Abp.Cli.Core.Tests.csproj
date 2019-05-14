@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
-    <ProjectReference Include="..\..\src\Volo.Abp.Cli\Volo.Abp.Cli.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Cli.Core\Volo.Abp.Cli.Core.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
 

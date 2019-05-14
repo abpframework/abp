@@ -4,6 +4,6 @@
     {
         public string Name { get; set; }
 
-        public int ApplicationType { get; set; } //TODO: Enum?
+        public NpmApplicationType ApplicationType { get; set; }
     }
 }

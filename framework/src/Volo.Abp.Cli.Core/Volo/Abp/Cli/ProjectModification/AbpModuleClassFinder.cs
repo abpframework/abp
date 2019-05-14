@@ -13,7 +13,10 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var moduleFilePaths = new List<string>();
 
-            var csFiles = GetAllCsFilesUnderDirectory(Path.GetDirectoryName(csprojFilePath), new List<string>());
+            var csFiles = new DirectoryInfo(Path.GetDirectoryName(csprojFilePath))
+                .GetFiles("*Module.cs", SearchOption.AllDirectories) //TODO: Module assumption is not so good!
+                .Select(f => f.FullName)
+                .ToList();
 
             foreach (var csFile in csFiles)
             {
@@ -34,26 +37,6 @@ namespace Volo.Abp.Cli.ProjectModification
 
             return classDeclaration.BaseList?.Types
                 .Any(t => t.ToString().Contains("AbpModule")) ?? false;
-        }
-
-        protected virtual List<string> GetAllCsFilesUnderDirectory(string path, List<string> allCsFileList)
-        {
-            var directory = new DirectoryInfo(path);
-            var files = directory.GetFiles("*.cs").Select(f => f.DirectoryName + "\\" + f.Name).ToList();
-
-            foreach (var s in files)
-            {
-                allCsFileList.Add(s);
-            }
-
-            var directories = directory.GetDirectories().Select(d => path + "\\" + d.Name).ToList();
-
-            foreach (var subDirectory in directories)
-            {
-                allCsFileList = GetAllCsFilesUnderDirectory(subDirectory, allCsFileList);
-            }
-
-            return allCsFileList;
         }
     }
 }

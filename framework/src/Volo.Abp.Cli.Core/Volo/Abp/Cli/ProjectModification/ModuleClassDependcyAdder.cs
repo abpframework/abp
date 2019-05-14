@@ -78,7 +78,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual string GetDependsOnAttribute(string moduleName)
         {
-            return "[DependsOn(" + moduleName + ")]" + Environment.NewLine + "    ";
+            return "[DependsOn(typeof(" + moduleName + "))]" + Environment.NewLine + "    ";
         }
 
         protected virtual string GetUsingStatement(string nameSpace)

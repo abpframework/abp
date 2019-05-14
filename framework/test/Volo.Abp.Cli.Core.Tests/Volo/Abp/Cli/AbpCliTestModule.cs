@@ -4,7 +4,7 @@ namespace Volo.Abp.Cli
 {
     [DependsOn(
         typeof(AbpTestBaseModule),
-        typeof(AbpCliModule)
+        typeof(AbpCliCoreModule)
         )]
     public class AbpCliTestModule : AbpModule
     {

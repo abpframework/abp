@@ -65,15 +65,9 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 ModuleClassDependcyAdder.Add(moduleFiles.First(), package.ModuleClass);
 
-                if (package.DependedNpmPackage != null)
-                {
-                    await NpmPackageAdder.AddAsync(Path.GetDirectoryName(projectFile), package.DependedNpmPackage);
-                }
-
                 Logger.LogInformation("Successfully installed.");
             }
         }
-
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string moduleName)
         {
