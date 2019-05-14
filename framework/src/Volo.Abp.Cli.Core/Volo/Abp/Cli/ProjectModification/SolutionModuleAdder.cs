@@ -50,7 +50,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
         }
 
-        private string FindTargetProjectFile(string[] projectFiles, NugetPackageTarget target)
+        private string FindTargetProjectFile(string[] projectFiles, NuGetPackageTarget target)
         {
             if (!projectFiles.Any())
             {
@@ -67,32 +67,32 @@ namespace Volo.Abp.Cli.ProjectModification
 
             switch (target)
             {
-                case NugetPackageTarget.Web:
+                case NuGetPackageTarget.Web:
                     return FindProjectEndsWith(assemblyNames, ".Web");
-                case NugetPackageTarget.EntityFrameworkCore:
+                case NuGetPackageTarget.EntityFrameworkCore:
                     return FindProjectEndsWith(assemblyNames, ".EntityFrameworkCore") ??
                            FindProjectEndsWith(assemblyNames, ".Web");
-                case NugetPackageTarget.MongoDB:
+                case NuGetPackageTarget.MongoDB:
                     return FindProjectEndsWith(assemblyNames, ".MongoDB") ??
                            FindProjectEndsWith(assemblyNames, ".Web");
-                case NugetPackageTarget.Application:
+                case NuGetPackageTarget.Application:
                     return FindProjectEndsWith(assemblyNames, ".Application") ??
                            FindProjectEndsWith(assemblyNames, ".Web");
-                case NugetPackageTarget.ApplicationContracts:
+                case NuGetPackageTarget.ApplicationContracts:
                     return FindProjectEndsWith(assemblyNames, ".Application.Contracts");
-                case NugetPackageTarget.Domain:
+                case NuGetPackageTarget.Domain:
                     return FindProjectEndsWith(assemblyNames, ".Domain") ??
                            FindProjectEndsWith(assemblyNames, ".Application") ??
                            FindProjectEndsWith(assemblyNames, ".Web");
-                case NugetPackageTarget.DomainShared:
+                case NuGetPackageTarget.DomainShared:
                     return FindProjectEndsWith(assemblyNames, ".Domain.Shared");
-                case NugetPackageTarget.HttpApi:
+                case NuGetPackageTarget.HttpApi:
                     return FindProjectEndsWith(assemblyNames, ".HttpApi") ??
                            FindProjectEndsWith(assemblyNames, ".Web");
-                case NugetPackageTarget.HttpApiClient:
+                case NuGetPackageTarget.HttpApiClient:
                     return FindProjectEndsWith(assemblyNames, ".HttpApi.Client");
                 default:
-                    throw new ApplicationException($"{nameof(NugetPackageTarget)} has not implemented: {target}");
+                    throw new ApplicationException($"{nameof(NuGetPackageTarget)} has not implemented: {target}");
             }
         }
 

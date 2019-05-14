@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Cli.ProjectModification
 {
-    public enum NugetPackageTarget : byte
+    public enum NuGetPackageTarget : byte
     {
         DomainShared = 1,
         Domain = 2,

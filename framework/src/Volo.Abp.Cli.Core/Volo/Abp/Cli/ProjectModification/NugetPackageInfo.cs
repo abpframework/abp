@@ -6,7 +6,7 @@
 
         public string ModuleClass { get; set; }
 
-        public NugetPackageTarget Target { get; set; }
+        public NuGetPackageTarget Target { get; set; }
 
         public NpmPackageInfo DependedNpmPackage { get; set; }
     }
