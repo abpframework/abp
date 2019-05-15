@@ -4,14 +4,14 @@ using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
-    public class MvcApplicationTemplate : TemplateInfo
+    public class MvcTemplate : TemplateInfo
     {
         /// <summary>
         /// "mvc".
         /// </summary>
         public const string TemplateName = "mvc";
 
-        public MvcApplicationTemplate()
+        public MvcTemplate()
             : base(TemplateName, DatabaseProvider.EntityFrameworkCore)
         {
         }
@@ -21,6 +21,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
             var steps = new List<ProjectBuildPipelineStep>();
             SwitchDatabaseProvider(context, steps);
             RemoveOtherDatabaseProviders(context, steps);
+            ChangeLocalhostPort(steps);
             return steps;
         }
 
@@ -46,6 +47,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
             }
+        }
+
+        private void ChangeLocalhostPort(List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(
+                new ChangeLocalhostPortStep(
+                    "/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json",
+                    53929,
+                    53932
+                )
+            );
         }
     }
 }

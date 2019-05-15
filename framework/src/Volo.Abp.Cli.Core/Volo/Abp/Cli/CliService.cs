@@ -73,7 +73,7 @@ namespace Volo.Abp.Cli
                 if (!latestVersion.IsNullOrEmpty() && currentVersion != latestVersion)
                 {
                     Logger.LogInformation("");
-                    Logger.LogWarning("ABP CLI has a newer version. Please update to get the latest features and fixes.");
+                    Logger.LogWarning("ABP CLI has a newer version (" + latestVersion + "). Please update to get the latest features and fixes.");
                     Logger.LogWarning("");
                     Logger.LogWarning("Update Command: ");
                     Logger.LogWarning("    dotnet tool update -g Volo.Abp.Cli");

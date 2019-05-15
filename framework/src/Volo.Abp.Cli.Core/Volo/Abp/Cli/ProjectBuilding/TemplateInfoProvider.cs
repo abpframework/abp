@@ -9,15 +9,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
     {
         public TemplateInfo GetDefault()
         {
-            return Get(MvcApplicationTemplate.TemplateName);
+            return Get(MvcTemplate.TemplateName);
         }
 
         public TemplateInfo Get(string name)
         {
             switch (name)
             {
-                case MvcApplicationTemplate.TemplateName:
-                    return new MvcApplicationTemplate();
+                case MvcTemplate.TemplateName:
+                    return new MvcTemplate();
                 case MvcModuleTemplate.TemplateName:
                     return new MvcModuleTemplate();
                 case ServiceTemplate.TemplateName:
