@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
+using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli
@@ -17,15 +18,18 @@ namespace Volo.Abp.Cli
         protected ICommandLineArgumentParser CommandLineArgumentParser { get; }
         protected ICommandSelector CommandSelector { get; }
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected NuGetService NuGetService { get; }
 
         public CliService(
             ICommandLineArgumentParser commandLineArgumentParser,
             ICommandSelector commandSelector,
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IHybridServiceScopeFactory serviceScopeFactory,
+            NuGetService nugetService)
         {
             CommandLineArgumentParser = commandLineArgumentParser;
             CommandSelector = commandSelector;
             ServiceScopeFactory = serviceScopeFactory;
+            NuGetService = nugetService;
 
             Logger = NullLogger<CliService>.Instance;
         }
@@ -35,6 +39,8 @@ namespace Volo.Abp.Cli
             Logger.LogInformation($"ABP CLI, version {GetCliVersion()}.");
             Logger.LogInformation("https://abp.io");
 
+            await CheckHasNewVersion();
+            
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);
 
@@ -57,6 +63,19 @@ namespace Volo.Abp.Cli
             }
         }
 
+        private async Task CheckHasNewVersion()
+        {
+            var currentVersion = GetCliVersion();
+            var latestVersion = await NuGetService.GetLatestVersionAsync("Volo.Abp.Cli");
+            
+            if (!string.IsNullOrEmpty(latestVersion) && currentVersion != latestVersion)
+            {
+                Logger.LogInformation("");
+                Logger.LogWarning("Cli has a new version. Please update.");
+                Logger.LogWarning("Update Command: dotnet tool update -g Volo.Abp.Cli");
+            }
+        }
+        
         private static string GetCliVersion()
         {
             return typeof(CliService)
