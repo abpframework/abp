@@ -7,9 +7,9 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
-    public class AbpModuleClassFinder : ITransientDependency
+    public class DerivedClassFinder : ITransientDependency
     {
-        public virtual List<string> Find(string csprojFilePath)
+        public virtual List<string> Find(string csprojFilePath, string baseClass)
         {
             var moduleFilePaths = new List<string>();
 
@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var csFile in csFiles)
             {
-                if (IsDerivedFromAbpModule(csFile))
+                if (IsDerivedFromAbpModule(csFile, baseClass))
                 {
                     moduleFilePaths.Add(csFile);
                 }
@@ -29,14 +29,14 @@ namespace Volo.Abp.Cli.ProjectModification
             return moduleFilePaths;
         }
 
-        private bool IsDerivedFromAbpModule(string csFile)
+        protected bool IsDerivedFromAbpModule(string csFile, string baseClass)
         {
             var root = CSharpSyntaxTree.ParseText(File.ReadAllText(csFile)).GetRoot();
             var namespaceSyntax = root.DescendantNodes().OfType<NamespaceDeclarationSyntax>().First();
             var classDeclaration = (namespaceSyntax.DescendantNodes().OfType<ClassDeclarationSyntax>()).First();
 
             return classDeclaration.BaseList?.Types
-                .Any(t => t.ToString().Contains("AbpModule")) ?? false;
+                .Any(t => t.ToString().Equals(baseClass)) ?? false;
         }
     }
 }

@@ -20,13 +20,13 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected IJsonSerializer JsonSerializer { get; }
         protected ProjectNpmPackageAdder NpmPackageAdder { get; }
-        protected AbpModuleClassFinder ModuleClassFinder { get; }
+        protected DerivedClassFinder ModuleClassFinder { get; }
         protected ModuleClassDependcyAdder ModuleClassDependcyAdder { get; }
 
         public ProjectNugetPackageAdder(
             IJsonSerializer jsonSerializer,
             ProjectNpmPackageAdder npmPackageAdder,
-            AbpModuleClassFinder moduleClassFinder,
+            DerivedClassFinder moduleClassFinder,
             ModuleClassDependcyAdder moduleClassDependcyAdder)
         {
             JsonSerializer = jsonSerializer;
@@ -52,7 +52,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 CmdHelper.Run("dotnet", "add package " + package.Name);
 
-                var moduleFiles = ModuleClassFinder.Find(projectFile);
+                var moduleFiles = ModuleClassFinder.Find(projectFile, "AbpModule");
                 if (moduleFiles.Count == 0)
                 {
                     throw new CliUsageException($"Could not find a class derived from AbpModule in the project {projectFile}");
