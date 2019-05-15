@@ -10,14 +10,14 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameMigrationsDbContext))]
-    [Migration("20190402131334_Initial")]
+    [Migration("20190515120718_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -263,6 +263,32 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.HasIndex("IsAbandoned", "NextTryTime");
 
                     b.ToTable("AbpBackgroundJobs");
+                });
+
+            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProviderName")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+
+                    b.ToTable("AbpFeatureValues");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>

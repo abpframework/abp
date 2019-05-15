@@ -1,5 +1,4 @@
 ﻿using MyCompanyName.MyProjectName.Localization.MyProjectName;
-using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -9,19 +8,20 @@ using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(BackgroundJobsDomainModule),
+        typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpAuditingModule),
-        typeof(BackgroundJobsDomainModule),
-        typeof(AbpAuditLoggingDomainModule),
-        typeof(AbpTenantManagementDomainModule),
-        typeof(AbpFeatureManagementDomainModule)
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpTenantManagementDomainModule)
         )]
     public class MyProjectNameDomainModule : AbpModule
     {
