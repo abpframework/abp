@@ -12,4 +12,4 @@ namespace Volo.Abp.Cli
 
         private static readonly string AbpRootPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".abp");
     }
-}
+}   

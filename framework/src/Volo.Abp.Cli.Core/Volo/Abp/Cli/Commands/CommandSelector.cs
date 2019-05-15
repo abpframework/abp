@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
 
@@ -17,7 +17,12 @@ namespace Volo.Abp.Cli.Commands
 
         public Type Select(CommandLineArgs commandLineArgs)
         {
-            return Options.Commands.GetOrDefault(commandLineArgs.Command) 
+            if (commandLineArgs.Command.IsNullOrWhiteSpace())
+            {
+                return typeof(HelpCommand);
+            }
+
+            return Options.Commands.GetOrDefault(commandLineArgs.Command)
                    ?? typeof(HelpCommand);
         }
     }

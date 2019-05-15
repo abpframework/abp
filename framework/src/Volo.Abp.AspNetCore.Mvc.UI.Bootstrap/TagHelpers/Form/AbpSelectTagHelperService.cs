@@ -187,8 +187,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
 
-            var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
+            var selectItems = new List<SelectListItem>();
+            var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
+            var enumType = explorer.ModelType;
+
+            if (isNullableType)
+            {
+                enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+                selectItems.Add(new SelectListItem());
+            }
+
+            selectItems.AddRange(enumType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
+                .Select((t, i) => 
+                    new SelectListItem
+                    {
+                        Value = ((int) Enum.Parse(enumType, t.Name)).ToString(),
+                        Text = GetLocalizedPropertyName(localizer, enumType, t.Name)
+                    }).ToList());
 
             return selectItems;
         }

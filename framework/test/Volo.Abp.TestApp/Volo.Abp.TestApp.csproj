@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.TestBase\Volo.Abp.TestBase.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Specifications\Volo.Abp.Specifications.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
