@@ -30,9 +30,13 @@ namespace Volo.Abp.Cli.Commands
                 throw new CliUsageException("Module name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
             }
 
+            var skipDbMigrations = Convert.ToBoolean(
+                commandLineArgs.Options.GetOrNull(Options.Solution.SkipDbMigrations) ?? "false");
+
             await SolutionModuleAdder.AddAsync(
                 GetSolutionFile(commandLineArgs),
-                commandLineArgs.Target
+                commandLineArgs.Target,
+                skipDbMigrations
             );
         }
 
@@ -93,6 +97,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Examples:");
             sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current soluton.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --SkipDbMigrations false    Adds the module to the given soluton but doesn't add-migration.");
             sb.AppendLine("");
 
             return sb.ToString();
@@ -104,6 +109,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "s";
                 public const string Long = "solution";
+                public const string SkipDbMigrations = "skip-db-migrations";
             }
         }
     }
