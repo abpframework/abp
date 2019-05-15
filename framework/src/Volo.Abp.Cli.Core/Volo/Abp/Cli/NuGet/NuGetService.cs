@@ -24,7 +24,7 @@ namespace Volo.Abp.Cli.NuGet
             CancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public async Task<string> GetLatestVersionAsync(string packageId)
+        public async Task<string> GetLatestVersionAsync(string packageId,bool includePreviews = false)
         {
             using (var client = new HttpClient())
             {
@@ -41,6 +41,12 @@ namespace Volo.Abp.Cli.NuGet
                 var result = await responseMessage.Content.ReadAsStringAsync();
 
                 var versions = JsonSerializer.Deserialize<NuGetVersionResultDto>(result).Versions;
+                if (!includePreviews)
+                {
+                    versions = versions
+                        .Where(x => !x.Contains("beta") && !x.Contains("preview") && !x.Contains("alpha") && !x.Contains("rc"))
+                        .ToList();
+                }
 
                 return versions.Count > 0 ? versions.Last() : null;
             }
