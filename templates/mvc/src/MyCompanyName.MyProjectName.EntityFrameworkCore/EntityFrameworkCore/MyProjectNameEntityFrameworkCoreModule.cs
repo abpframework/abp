@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
+using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -32,6 +33,11 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
                  * default repositories only for aggregate roots
                  */
                 options.AddDefaultRepositories(includeAllEntities: true);
+            });
+
+            Configure<AbpDbContextOptions>(options =>
+            {
+                options.UseSqlServer();
             });
         }
     }

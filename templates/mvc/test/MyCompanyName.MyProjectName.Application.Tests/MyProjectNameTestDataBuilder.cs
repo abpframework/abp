@@ -1,28 +1,17 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
-using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName
 {
-    public class MyProjectNameTestDataBuilder : ITransientDependency
+    public class MyProjectNameTestDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
-        private readonly IDataSeeder _dataSeeder;
-
-        public MyProjectNameTestDataBuilder(IDataSeeder dataSeeder)
+        public Task SeedAsync(DataSeedContext context)
         {
-            _dataSeeder = dataSeeder;
-        }
+            /* Seed additional test data...
+             */
 
-        public void Build()
-        {
-            AsyncHelper.RunSync(BuildInternalAsync);
-        }
-
-        public async Task BuildInternalAsync()
-        {
-            await _dataSeeder.SeedAsync();
+            return Task.CompletedTask;
         }
     }
 }

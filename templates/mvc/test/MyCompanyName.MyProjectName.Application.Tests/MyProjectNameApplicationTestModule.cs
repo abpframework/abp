@@ -38,11 +38,6 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            SeedTestData(context);
-        }
-
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
             _sqliteConnection.Dispose();
@@ -63,16 +58,6 @@ namespace MyCompanyName.MyProjectName
             }
 
             return connection;
-        }
-
-        private static void SeedTestData(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                scope.ServiceProvider
-                    .GetRequiredService<MyProjectNameTestDataBuilder>()
-                    .Build();
-            }
         }
     }
 }
