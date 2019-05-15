@@ -14,7 +14,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var moduleFilePaths = new List<string>();
 
             var csFiles = new DirectoryInfo(Path.GetDirectoryName(csprojFilePath))
-                .GetFiles("*Module.cs", SearchOption.AllDirectories) //TODO: Module assumption is not so good!
+                .GetFiles("*.cs", SearchOption.AllDirectories)
                 .Select(f => f.FullName)
                 .ToList();
 
