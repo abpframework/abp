@@ -1,8 +1,8 @@
-FROM microsoft/dotnet:2.2-aspnetcore-runtime-alpine AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS base
 WORKDIR /app
 EXPOSE 80
 
-FROM microsoft/dotnet:2.2-sdk-alpine AS build
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2 AS build
 WORKDIR /src
 COPY . .
 WORKDIR "/src/samples/Microservice/gateways/BackendAdminAppGateway.Host"
