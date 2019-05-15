@@ -13,13 +13,15 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var file = File.ReadAllText(path);
 
-            if (file.Contains(GetUsingStatement(nameSpace)) && file.Contains(moduleName))
+            if (!file.Contains(GetUsingStatement(nameSpace)) )
             {
-                return;
+                file = InsertUsingStatement(file, nameSpace);
             }
 
-            file = InsertDependsOnAttribute(file, moduleName);
-            file = InsertUsingStatement(file, nameSpace);
+            if (!file.Contains(moduleName) )
+            {
+                file = InsertDependsOnAttribute(file, moduleName);
+            }
 
             File.WriteAllText(path, file);
         }
