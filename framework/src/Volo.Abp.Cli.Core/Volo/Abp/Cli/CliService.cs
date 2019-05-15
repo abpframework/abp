@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli
             Logger.LogInformation($"ABP CLI, version {GetCliVersion()}.");
             Logger.LogInformation("https://abp.io");
 
-            await CheckHasNewVersion();
+            await CheckForNewVersion();
             
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);
@@ -63,25 +63,47 @@ namespace Volo.Abp.Cli
             }
         }
 
-        private async Task CheckHasNewVersion()
+        private async Task CheckForNewVersion()
         {
-            var currentVersion = GetCliVersion();
-            var latestVersion = await NuGetService.GetLatestVersionAsync("Volo.Abp.Cli");
-            
-            if (!string.IsNullOrEmpty(latestVersion) && currentVersion != latestVersion)
+            try
             {
-                Logger.LogInformation("");
-                Logger.LogWarning("Cli has a new version. Please update.");
-                Logger.LogWarning("Update Command: dotnet tool update -g Volo.Abp.Cli");
+                var currentVersion = GetCliVersion();
+                var latestVersion = await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
+
+                if (!latestVersion.IsNullOrEmpty() && currentVersion != latestVersion)
+                {
+                    Logger.LogInformation("");
+                    Logger.LogWarning("ABP CLI has a newer version. Please update to get the latest features and fixes.");
+                    Logger.LogWarning("");
+                    Logger.LogWarning("Update Command: ");
+                    Logger.LogWarning("    dotnet tool update -g Volo.Abp.Cli");
+                    Logger.LogWarning("");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning("Could not get the latest version infom from NuGet.org:");
+                Logger.LogWarning(e.Message);
             }
         }
         
         private static string GetCliVersion()
         {
-            return typeof(CliService)
+            var version = typeof(CliService)
                 .Assembly
-                .GetFileVersion()
-                .RemovePostFix(".0");
+                .GetFileVersion();
+
+            /* Assembly versions are like "2.4.0.0", but NuGet removes the last "0" here,
+             * like "2.4.0".
+             * So, we need to remove it from the assembly version to match to the NuGet version.
+             */
+
+            if (version.Split('.').Length == 4)
+            {
+                version = version.RemovePostFix(".0");
+            }
+
+            return version;
         }
     }
 }
