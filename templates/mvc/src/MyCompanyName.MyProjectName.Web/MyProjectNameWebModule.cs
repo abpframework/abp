@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Linq;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Menus;
-using MyCompanyName.MyProjectName.Permissions;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -17,21 +15,17 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
-using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.PermissionManagement;
 using Volo.Abp.TenantManagement.Web;
 //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
 using Volo.Abp.EntityFrameworkCore;
@@ -91,6 +85,11 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
+                /* use `true` for the `validate` parameter if you want to
+                 * validate the profile on application startup.
+                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more
+                 * about configuration validation.
+                 */
                 options.AddProfile<MyProjectNameWebAutoMapperProfile>();
             });
         }
@@ -123,7 +122,6 @@ namespace MyCompanyName.MyProjectName
                 options.Resources
                     .Get<MyProjectNameResource>()
                     .AddBaseTypes(
-                        typeof(AbpValidationResource),
                         typeof(AbpUiResource)
                     );
 
@@ -155,10 +153,11 @@ namespace MyCompanyName.MyProjectName
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new Info {Title = "MyProjectName API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
-                });
+                }
+            );
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
