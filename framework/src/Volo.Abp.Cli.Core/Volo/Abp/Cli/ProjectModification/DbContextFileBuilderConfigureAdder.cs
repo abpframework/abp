@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
@@ -9,8 +8,9 @@ namespace Volo.Abp.Cli.ProjectModification
 {
     public class DbContextFileBuilderConfigureAdder : ITransientDependency
     {
-        protected UsingStatementAdder UsingStatementAdder { get; }
         public ILogger<DbContextFileBuilderConfigureAdder> Logger { get; set; }
+
+        protected UsingStatementAdder UsingStatementAdder { get; }
 
         public DbContextFileBuilderConfigureAdder(UsingStatementAdder usingStatementAdder)
         {
@@ -73,12 +73,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected string GetLineToAdd(string moduleConfiguration)
         {
-            return "builder." + moduleConfiguration.Split('.').Last() + "();";
+            return "builder." + moduleConfiguration.Split(':')[1] + "();";
         }
 
         protected string GetNamespace(string moduleConfiguration)
         {
-            return string.Join(".", moduleConfiguration.Split('.').Reverse().Skip(2).Reverse());
+            return string.Join(".", moduleConfiguration.Split(':')[0]);
         }
     }
 }
