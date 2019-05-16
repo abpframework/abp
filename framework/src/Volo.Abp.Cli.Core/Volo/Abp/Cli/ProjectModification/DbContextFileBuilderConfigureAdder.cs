@@ -78,7 +78,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected string GetNamespace(string moduleConfiguration)
         {
-            return string.Join(".", moduleConfiguration.Split('.').Reverse().Skip(2));
+            return string.Join(".", moduleConfiguration.Split('.').Reverse().Skip(2).Reverse());
         }
     }
 }
