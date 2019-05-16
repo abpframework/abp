@@ -97,7 +97,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
-
+            
             if (dbMigrationsProject == null)
             {
                 Logger.LogDebug("Solution doesn't have a \".DbMigrations\" project.");
