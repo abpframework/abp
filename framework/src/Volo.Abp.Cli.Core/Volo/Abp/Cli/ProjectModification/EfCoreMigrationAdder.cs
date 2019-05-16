@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
@@ -11,7 +12,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var moduleName = ParseModuleName(module);
             var migrationName = "Added_" + moduleName + "_Module" + GetUniquePostFix();
 
-            var process = Process.Start("CMD.exe", "/C cd \"" + csprojFile + "\" & dotnet ef migrations add " + migrationName);
+            var process = Process.Start("CMD.exe", "/C cd \"" + Path.GetDirectoryName(csprojFile) + "\" & dotnet ef migrations add " + migrationName);
             process.WaitForExit();
 
             if (updateDatabase)
@@ -22,7 +23,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected void UpdateDatabase(string csprojFile)
         {
-            var process = Process.Start("CMD.exe", "/C cd \"" + csprojFile + "\" & dotnet ef database update");
+            var process = Process.Start("CMD.exe", "/C cd \"" + Path.GetDirectoryName(csprojFile) + "\" & dotnet ef database update");
             process.WaitForExit();
         }
 
