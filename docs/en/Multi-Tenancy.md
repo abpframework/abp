@@ -56,7 +56,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-IMultiTenant requires to define a **TenantId** property in the implementing entity (See entity documentation (TODO: link) for more about entities).
+IMultiTenant requires to define a **TenantId** property in the implementing entity (See [entity documentation](Entities.md) for more about entities).
 
 #### Obtain Current Tenant's Id
 
