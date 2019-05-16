@@ -21,6 +21,6 @@ There are some **free and open source** application modules developed and mainta
 * **Permission Management**: Used to persist permissions.
 * **Setting Management**: Used to persist settings.
 * **Tenant Management**: Used to manage tenants for a [multi-tenant](../Multi-Tenancy.md) application.
-* **Users**: Used the abstract users, so other modules can depend on this instead of the Identity module.
+* **Users**: Used to abstract users, so other modules can depend on this instead of the Identity module.
 
 Documenting the modules is in the progress. See [this repository](https://github.com/abpframework/abp/tree/master/modules) for source code of all modules.
