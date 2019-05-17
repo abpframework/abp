@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.Collections;
 using Volo.Abp.Emailing.Templates.Virtual;
 
 namespace Volo.Abp.Emailing.Templates
@@ -7,9 +8,9 @@ namespace Volo.Abp.Emailing.Templates
     {
         public List<IEmailTemplateProviderContributor> Providers { get; }
 
-        public EmailTemplateDefinitionDictionary Templates { get; }
-
         public string DefaultLayout { get; set; }
+
+        public ITypeList<IEmailTemplateDefinitionProvider> DefinitionProviders { get; }
 
         public EmailTemplateOptions()
         {
@@ -18,9 +19,9 @@ namespace Volo.Abp.Emailing.Templates
                 new VirtualFileEmailTemplateProviderContributor()
             };
 
-            Templates = new EmailTemplateDefinitionDictionary();
-
             DefaultLayout = StandardEmailTemplates.DefaultLayout;
+
+            DefinitionProviders = new TypeList<IEmailTemplateDefinitionProvider>();
         }
     }
 }

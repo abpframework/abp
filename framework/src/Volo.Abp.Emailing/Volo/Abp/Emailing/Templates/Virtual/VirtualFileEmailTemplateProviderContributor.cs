@@ -33,10 +33,8 @@ namespace Volo.Abp.Emailing.Templates.Virtual
         {
             return contributorContext
                 .ServiceProvider
-                .GetRequiredService<IOptions<EmailTemplateOptions>>()
-                .Value
-                .Templates
-                .GetOrDefault(contributorContext.Name);
+                .GetRequiredService<IEmailTemplateDefinitionManager>()
+                .GetOrNull(contributorContext.Name);
         }
 
         protected virtual IFileInfo FindVirtualFileInfo(EmailTemplateProviderContributorContext contributorContext, EmailTemplateDefinition templateDefinition)

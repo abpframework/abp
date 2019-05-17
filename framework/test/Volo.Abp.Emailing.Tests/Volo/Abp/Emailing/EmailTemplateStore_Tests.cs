@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Emailing.Templates;
 using Xunit;
@@ -7,6 +7,11 @@ namespace Volo.Abp.Emailing
 {
     public class EmailTemplateStore_Tests : AbpIntegratedTest<AbpEmailingTestModule>
     {
+        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
+        {
+            options.UseAutofac();
+        }
+
         private readonly IEmailTemplateProvider _emailTemplateProvider;
 
         public EmailTemplateStore_Tests()

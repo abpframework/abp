@@ -1,6 +1,8 @@
-﻿using Volo.Abp.BackgroundJobs;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Emailing.Templates;
-using Volo.Abp.Emailing.Templates.Virtual;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
@@ -16,6 +18,11 @@ namespace Volo.Abp.Emailing
         )]
     public class AbpEmailingModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            AutoAddDefinitionProviders(context.Services);
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<VirtualFileSystemOptions>(options =>
@@ -27,18 +34,26 @@ namespace Volo.Abp.Emailing
             {
                 options.AddJob<BackgroundEmailSendingJob>();
             });
+        }
 
-            Configure<EmailTemplateOptions>(options =>
+        private static void AutoAddDefinitionProviders(IServiceCollection services)
+        {
+            var definitionProviders = new List<Type>();
+
+            services.OnRegistred(context =>
             {
-                options.Templates
-                    .Add(
-                        new EmailTemplateDefinition(StandardEmailTemplates.DefaultLayout, isLayout: true, layout: null)
-                            .SetVirtualFilePath("/Volo/Abp/Emailing/Templates/DefaultLayout.html")
-                    ).Add(
-                        new EmailTemplateDefinition(StandardEmailTemplates.SimpleMessage)
-                            .SetVirtualFilePath("/Volo/Abp/Emailing/Templates/SimpleMessageTemplate.html")
-                    );
+
+                if (typeof(IEmailTemplateDefinitionProvider).IsAssignableFrom(context.ImplementationType))
+                {
+                    definitionProviders.Add(context.ImplementationType);
+                }
+            });
+
+            services.Configure<EmailTemplateOptions>(options =>
+            {
+                options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });
         }
+
     }
 }

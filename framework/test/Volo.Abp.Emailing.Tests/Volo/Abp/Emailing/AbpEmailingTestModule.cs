@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Emailing.Templates;
-using Volo.Abp.Emailing.Templates.Virtual;
-using Volo.Abp.Modularity;
+﻿using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Emailing
@@ -16,13 +13,6 @@ namespace Volo.Abp.Emailing
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingTestModule>();
-            });
-
-            Configure<EmailTemplateOptions>(options =>
-            {
-                options.Templates["template1"] =
-                    new EmailTemplateDefinition("template1")
-                        .SetVirtualFilePath("/Volo/Abp/Emailing/TestTemplates/template1.html");
             });
         }
     }
