@@ -9,6 +9,7 @@ using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
 using Volo.Docs.Projects;
+using Volo.Docs.Yaml;
 
 namespace Volo.Docs.Pages.Documents.Project
 {
@@ -40,15 +41,18 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
+        private readonly IYamlMetadataParser _yamlMetadataParser;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
-            IProjectAppService projectAppService)
+            IProjectAppService projectAppService,
+            IYamlMetadataParser yamlMetadataParser)
         {
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
+            _yamlMetadataParser = yamlMetadataParser;
         }
 
         public async Task OnGetAsync()
@@ -214,7 +218,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 //TODO: Handle it!
                 throw;
             }
-
+            
+            ParseYamlMetadataHeader();
             ConvertDocumentContentToHtml();
         }
 
@@ -237,6 +242,19 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+
+        private void ParseYamlMetadataHeader()
+        {
+            var metadata = _yamlMetadataParser.ParseOrNull(Document.Content);
+            if (metadata == null)
+            {
+                return;
+            }
+
+            Document.Title = metadata.Title;
+            Document.Author = metadata.Author;
+            Document.Description = metadata.Description;
         }
     }
 }

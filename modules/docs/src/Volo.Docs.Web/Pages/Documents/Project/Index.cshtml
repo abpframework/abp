@@ -5,37 +5,45 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
 @using Volo.Docs
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @inject IThemeManager ThemeManager
 @inject IHtmlLocalizer<DocsResource> L
+@inject IBrandingProvider BrandingProvider
 @model IndexModel
 @{
+    ViewBag.Title = Model.Document.Title == null ? 
+        BrandingProvider.AppName :
+        Model.Document.Title + " - " + BrandingProvider.AppName;
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
 }
+
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-script type="@typeof(PrismjsStyleBundleContributor)" />
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)" />
-        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css" />
-        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
+        <abp-script type="@typeof(PrismjsStyleBundleContributor)"/>
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)"/>
+        <abp-style src="/Pages/Documents/Project/bootstrap-toc.css"/>
+        <abp-style src="/Pages/Documents/Shared/Styles/vs.css"/>
     </abp-style-bundle>
 }
+
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
-        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)" />
-        <abp-script type="@typeof(ClipboardScriptBundleContributor)" />
-        <abp-script type="@typeof(AnchorJsScriptBundleContributor)" />
-        <abp-script type="@typeof(PrismjsScriptBundleContributor)" />
-        <abp-script type="@typeof(PopperJsScriptBundleContributor)" />
-        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js" />
-        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js" />
-        <abp-script src="/Pages/Documents/Project/index.js" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
+        <abp-script type="@typeof(ClipboardScriptBundleContributor)"/>
+        <abp-script type="@typeof(AnchorJsScriptBundleContributor)"/>
+        <abp-script type="@typeof(PrismjsScriptBundleContributor)"/>
+        <abp-script type="@typeof(PopperJsScriptBundleContributor)"/>
+        <abp-script src="/Pages/Documents/Project/bootstrap-toc.js"/>
+        <abp-script src="/Pages/Documents/Shared/Scripts/vs.js"/>
+        <abp-script src="/Pages/Documents/Project/index.js"/>
     </abp-script-bundle>
 }
+
 <div class="docs-page" data-spy="scroll" data-target="#docs-sticky-index">
     <div class="row justify-content-end">
         <div class="col-md-3 docs-sidebar dark-sidebar">
@@ -107,16 +115,18 @@
                         </div>
                     }
 
-                    <div class="docs-version"> 
+                    <div class="docs-version">
                         <div class="version-select">
                             <div class="input-group">
                                 <div class="input-group-prepend">
-                                    <label class="input-group-text"><i class="fa fa-filter"></i></label>
+                                    <label class="input-group-text">
+                                        <i class="fa fa-filter"></i>
+                                    </label>
                                 </div>
 
                                 <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
                             </div>
-                        </div> 
+                        </div>
                     </div>
 
                     @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
@@ -133,7 +143,8 @@
                             project-format="@Model.Project.Format"
                             selected-document-name="@Model.DocumentNameWithExtension"
                             id="sidebar-scroll"
-                            class="nav nav-list"></ul>
+                            class="nav nav-list">
+                        </ul>
                     }
                 </div>
 
@@ -160,7 +171,8 @@
 
                     @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                     {
-                        <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                        <a href="@Model.Document.EditLink" target="_blank">
+                            <i class="fa fa-edit"></i> @L["Edit"]</a>
                     }
                 </div>
 
@@ -174,7 +186,7 @@
                                 {
                                     <a href="@contributor.UserProfileUrl" target="_blank">
                                         <img src="@contributor.AvatarUrl"
-                                             class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
+                                             class="contributors-avatar" height="21" width="21" title="@contributor.Username"/>
                                     </a>
                                 }
                             </div>
@@ -200,13 +212,13 @@
 
                     <div class="row">
                         <div class="col p-0 py-3">
-                            <a href="javascript:;" class="scroll-top-btn"><i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
+                            <a href="javascript:;" class="scroll-top-btn">
+                                <i class="fa fa-chevron-up"></i> @L["GoToTop"]</a>
                         </div>
                     </div>
 
                 </div>
             </div>
-
         }
         else
         {
