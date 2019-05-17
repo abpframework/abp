@@ -6,16 +6,17 @@ namespace Volo.Docs.Markdown
 {
     public class MarkDigMarkdownConverter : IMarkdownConverter, ISingletonDependency
     {
-        readonly MarkdownPipeline _markdownPipeline;
+        private readonly MarkdownPipeline _markdownPipeline;
 
         public MarkDigMarkdownConverter()
         {
             _markdownPipeline = new MarkdownPipelineBuilder()
-              .UseAutoLinks()
-              .UseBootstrap()
-              .UseGridTables()
-              .UsePipeTables()
-              .Build();
+                .UseYamlFrontMatter()
+                .UseAutoLinks()
+                .UseBootstrap()
+                .UseGridTables()
+                .UsePipeTables()
+                .Build();
         }
 
         public virtual string ConvertToHtml(string markdown)
