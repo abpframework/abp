@@ -1,24 +1,22 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Localization.MyProjectName;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Data;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
-using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.Threading;
-using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
+        typeof(MyProjectNameDomainSharedModule),
         typeof(AbpAuditLoggingDomainModule),
         typeof(BackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
@@ -31,22 +29,9 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<MyProjectNameDomainModule>("MyCompanyName.MyProjectName");
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<MyProjectNameResource>("en")
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/MyProjectName");
-            });
-
             Configure<MultiTenancyOptions>(options =>
             {
-                options.IsEnabled = MyProjectNameConsts.IsMultiTenancyEnabled;
+                options.IsEnabled = MultiTenancyConsts.IsMultiTenancyEnabled;
             });
         }
 
@@ -57,6 +42,9 @@ namespace MyCompanyName.MyProjectName
 
         private void SeedDatabase(ApplicationInitializationContext context)
         {
+            /* Seeding in the application startup can be a problem in a clustered environment.
+             * See https://github.com/abpframework/abp/issues/1123
+             */
             using (var scope = context.ServiceProvider.CreateScope())
             {
                 AsyncHelper.RunSync(async () =>
