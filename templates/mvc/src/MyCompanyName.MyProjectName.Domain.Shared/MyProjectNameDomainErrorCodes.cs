@@ -2,6 +2,6 @@
 {
     public static class MyProjectNameDomainErrorCodes
     {
-        //Add your business exception error codes here...
+        /* You can add your business exception error codes here, as constants */
     }
 }
