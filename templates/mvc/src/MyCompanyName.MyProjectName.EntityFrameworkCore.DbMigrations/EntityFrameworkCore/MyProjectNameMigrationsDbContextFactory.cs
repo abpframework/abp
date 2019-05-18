@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
+    /* This class is needed for EF Core console commands
+     * (like Add-Migration and Update-Database commands) */
     public class MyProjectNameMigrationsDbContextFactory : IDesignTimeDbContextFactory<MyProjectNameMigrationsDbContext>
     {
         public MyProjectNameMigrationsDbContext CreateDbContext(string[] args)
