@@ -12,6 +12,14 @@ namespace Volo.Abp.PermissionManagement
         )]
     public class AbpPermissionManagementTestBaseModule : AbpModule
     {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.Configure<PermissionManagementOptions>(options =>
+            {
+                options.ManagementProviders.Add<TestPermissionManagementProvider>();
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             SeedTestData(context);

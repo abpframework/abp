@@ -77,12 +77,16 @@ namespace Volo.Abp.IdentityModel
         }
 
         public IdentityClientConfiguration(
+            string authority,
+            string scope,
             string clientId, 
             string clientSecret, 
             string grantType = OidcConstants.GrantTypes.ClientCredentials,
             string userName = null,
             string userPassword = null)
         {
+            this[nameof(Authority)] = authority;
+            this[nameof(Scope)] = scope;
             this[nameof(ClientId)] = clientId;
             this[nameof(ClientSecret)] = clientSecret;
             this[nameof(GrantType)] = grantType;

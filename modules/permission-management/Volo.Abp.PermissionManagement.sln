@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B559B878-38F7-49CC-BC06-43A32D68C1A7}"
 EndProject
@@ -29,9 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManageme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.MongoDB.Tests", "test\Volo.Abp.PermissionManagement.MongoDB.Tests\Volo.Abp.PermissionManagement.MongoDB.Tests.csproj", "{AFA65E08-1F17-4BBE-96A6-80F3CFE22A75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.HttpApi", "src\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj", "{9E0B517E-F02E-436F-9695-7CF12795D34C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.HttpApi", "src\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj", "{9E0B517E-F02E-436F-9695-7CF12795D34C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.HttpApi.Client", "src\Volo.Abp.PermissionManagement.HttpApi.Client\Volo.Abp.PermissionManagement.HttpApi.Client.csproj", "{1CD80519-9431-48DB-B0EA-291A73FF9F49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.PermissionManagement.HttpApi.Client", "src\Volo.Abp.PermissionManagement.HttpApi.Client\Volo.Abp.PermissionManagement.HttpApi.Client.csproj", "{1CD80519-9431-48DB-B0EA-291A73FF9F49}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.PermissionManagement.Application.Tests", "test\Volo.Abp.PermissionManagement.Application.Tests\Volo.Abp.PermissionManagement.Application.Tests.csproj", "{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{1CD80519-9431-48DB-B0EA-291A73FF9F49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CD80519-9431-48DB-B0EA-291A73FF9F49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CD80519-9431-48DB-B0EA-291A73FF9F49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{AFA65E08-1F17-4BBE-96A6-80F3CFE22A75} = {63DA4A89-5908-4F37-B7E6-525AEEF20C77}
 		{9E0B517E-F02E-436F-9695-7CF12795D34C} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
 		{1CD80519-9431-48DB-B0EA-291A73FF9F49} = {B559B878-38F7-49CC-BC06-43A32D68C1A7}
+		{A0F72F5F-3713-4E06-ADB7-15ADFDCB79B1} = {63DA4A89-5908-4F37-B7E6-525AEEF20C77}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8FC7DF78-5E2D-489F-9D43-147D2ABAA112}

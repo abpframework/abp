@@ -1,6 +1,6 @@
 # Auto API Controllers
 
-Once you create an [application service](Application-Services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.
+Once you create an [application service](../Application-Services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.
 
 ABP can **automagically** configures your application services as MVC API Controllers by convention. Most of time you don't care about its detailed configuration, but it's possible fully customize it.
 
@@ -80,7 +80,7 @@ Then the route for getting a book will be '**/api/volosoft/book-store/book/{id}*
   * Removing '**Async**' postfix. If the method name is 'GetPhonesAsync' then it becomes 'GetPhones'.
   * Removing **HTTP method prefix**. 'GetList', 'GetAll', 'Get', 'Put', 'Update', 'Delete', 'Remove', 'Create', 'Add', 'Insert', 'Post' and 'Patch' prefixes are removed based on the selected HTTP method. So, 'GetPhones' becomes 'Phones' since 'Get' prefix is a duplicate for a GET request.
   * Converting the result to **camelCase**.
-  * If the resulting action name is **empty** then it's not added to the route. If it's not empty, it's added to the route (like '/phones'). For 'GetAllAsync' method name it will be empty, for 'GetPhonesAsync' method name is will be 'phones'.
+  * If the resulting action name is **empty** then it's not added to the route. If it's not empty, it's added to the route (like '/phones'). For 'GetAllAsync' method name it will be empty, for 'GetPhonesAsync' method name it will be 'phones'.
   * Normalization can be customized by setting the `UrlActionNameNormalizer` option. It's an action delegate that is called for every method.
 * If there is another parameter with 'Id' postfix, then it's also added to the route as the final route segment (like '/phoneId').
 
@@ -106,7 +106,7 @@ public class PersonAppService : ApplicationService
 
 ### TypePredicate Option
 
-You can further filter classes to become an API controller by providing the `TypePedicate` option:
+You can further filter classes to become an API controller by providing the `TypePredicate` option:
 
 ````csharp
 services.Configure<AbpAspNetCoreMvcOptions>(options =>

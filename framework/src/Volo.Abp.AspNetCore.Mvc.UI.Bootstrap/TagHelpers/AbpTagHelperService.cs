@@ -17,13 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         where TTagHelper : TagHelper
     {
         protected const string FormGroupContents = "FormGroupContents";
-        protected const string NavItemContents = "FormGroupContents";
         protected const string TabItems = "TabItems";
         protected const string AccordionItems = "AccordionItems";
         protected const string BreadcrumbItemsContent = "BreadcrumbItemsContent";
         protected const string CarouselItemsContent = "CarouselItemsContent";
         protected const string TabItemsDataTogglePlaceHolder = "{_data_toggle_Placeholder_}";
-        protected const string TabItemsVerticalPillPlaceHolder = "{_vertical_pill_Placeholder_}";
         protected const string TabItemNamePlaceHolder = "{_Tab_Tag_Name_Placeholder_}";
         protected const string AbpFormContentPlaceHolder = "{_AbpFormContentPlaceHolder_}";
         protected const string AbpTabItemActivePlaceholder = "{_Tab_Active_Placeholder_}";
@@ -31,9 +29,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
         protected const string AbpTabItemShowActivePlaceholder = "{_Tab_Show_Active_Placeholder_}";
         protected const string AbpBreadcrumbItemActivePlaceholder = "{_Breadcrumb_Active_Placeholder_}";
         protected const string AbpCarouselItemActivePlaceholder = "{_CarouselItem_Active_Placeholder_}";
-        protected const string AbpNavItemActivePlaceholder = "{_NavItem_Active_Placeholder_}";
-        protected const string AbpNavItemResponsiveFlexPlaceholder = "{_NavItem_Responsive_Flex_Placeholder_}";
-        protected const string AbpNavItemResponsiveAlignPlaceholder = "{_NavItem_Responsive_Align_Placeholder_}";
         protected const string AbpTabItemSelectedPlaceholder = "{_Tab_Selected_Placeholder_}";
         protected const string AbpAccordionParentIdPlaceholder = "{_Parent_Accordion_Id_}";
 

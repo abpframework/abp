@@ -45,6 +45,7 @@
     "PagerShowMenuEntries": "Sayfada _MENU_ kayıt göster.",
     "DatatableActionDropdownDefaultText": "İşlemler",
     "ChangePassword": "Şifre değiştir",
-    "PersonalInfo": "Profilim"
+    "PersonalInfo": "Profilim",
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var."
   }
 }

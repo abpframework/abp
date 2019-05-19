@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.AbpWebSite.Application
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.AbpWebSite.EntityFrameworkCore", "src\Volo.AbpWebSite.EntityFrameworkCore\Volo.AbpWebSite.EntityFrameworkCore.csproj", "{028C05DB-61BF-41EF-B9AD-614A43CD0A7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Utils.SolutionTemplating", "src\Volo.Utils.SolutionTemplating\Volo.Utils.SolutionTemplating.csproj", "{742FCDDD-537C-42CC-AF16-A92C094D4B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Utils.SolutionTemplating", "src\Volo.Utils.SolutionTemplating\Volo.Utils.SolutionTemplating.csproj", "{742FCDDD-537C-42CC-AF16-A92C094D4B1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -38,6 +38,40 @@ namespace Volo.Abp.TenantManagement
             return ConnectionStrings.FirstOrDefault(c => c.Name == name)?.Value;
         }
 
+        public virtual void SetDefaultConnectionString(string connectionString)
+        {
+            SetConnectionString(Data.ConnectionStrings.DefaultConnectionStringName, connectionString);
+        }
+
+        public virtual void SetConnectionString(string name, string connectionString)
+        {
+            var tenantConnectionString = ConnectionStrings.FirstOrDefault(x => x.Name == name);
+
+            if (tenantConnectionString != null)
+            {
+                tenantConnectionString.SetValue(connectionString);
+            }
+            else
+            {
+                ConnectionStrings.Add(new TenantConnectionString(Id, name, connectionString));
+            }
+        }
+
+        public virtual void RemoveDefaultConnectionString()
+        {
+            RemoveConnectionString(Data.ConnectionStrings.DefaultConnectionStringName);
+        }
+
+        public virtual void RemoveConnectionString(string name)
+        {
+            var tenantConnectionString = ConnectionStrings.FirstOrDefault(x => x.Name == name);
+
+            if (tenantConnectionString != null)
+            {
+                ConnectionStrings.Remove(tenantConnectionString);
+            }
+        }
+
         internal void SetName([NotNull] string name)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name), TenantConsts.MaxNameLength);

@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Volo.Abp.Reflection;
 
 namespace MyCompanyName.MyProjectName.Permissions
 {
@@ -12,7 +12,7 @@ namespace MyCompanyName.MyProjectName.Permissions
         public static string[] GetAll()
         {
             //Return an array of all permissions
-            return Array.Empty<string>();
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(MyProjectNamePermissions));
         }
     }
 }

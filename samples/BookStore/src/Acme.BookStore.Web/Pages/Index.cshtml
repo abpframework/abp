@@ -2,6 +2,9 @@
 @using Acme.BookStore.Pages
 @inherits BookStorePageBase
 @model IndexModel
+@section styles {
+    <link href="~/pages/index.css" rel="stylesheet" />
+}
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>

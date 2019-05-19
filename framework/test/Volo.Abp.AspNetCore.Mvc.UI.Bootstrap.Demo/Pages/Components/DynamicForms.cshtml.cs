@@ -124,6 +124,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             public CarType MyCarType { get; set; }
 
             [Required]
+            [Display(Name = "My Car Type Nullable")]
+            public CarType? MyCarTypeNullable { get; set; }
+
+            [Required]
             [AbpRadioButton(Inline = true)]
             [Display(Name = "Your Car Type")]
             public CarType YourCarType { get; set; }
@@ -139,6 +143,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo.Pages.Components
             [SelectItems(nameof(CountryList))]
             [Display(Name = "Neighbor Countries")]
             public List<string> NeighborCountries { get; set; }
+
+            [DynamicFormIgnore]
+            public string IgnoredProperty { get; set; }
         }
 
         public enum CarType

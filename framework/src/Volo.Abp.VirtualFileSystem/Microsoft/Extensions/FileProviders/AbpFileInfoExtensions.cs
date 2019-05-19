@@ -1,6 +1,7 @@
 ﻿using JetBrains.Annotations;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using Volo.Abp;
 
 namespace Microsoft.Extensions.FileProviders
@@ -28,6 +29,32 @@ namespace Microsoft.Extensions.FileProviders
                 {
                     return streamReader.ReadToEnd();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Reads file content as byte[].
+        /// </summary>
+        public static byte[] ReadBytes([NotNull] this IFileInfo fileInfo)
+        {
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                return stream.GetAllBytes();
+            }
+        }
+
+        /// <summary>
+        /// Reads file content as byte[].
+        /// </summary>
+        public static async Task<byte[]> ReadBytesAsync([NotNull] this IFileInfo fileInfo)
+        {
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            using (var stream = fileInfo.CreateReadStream())
+            {
+                return await stream.GetAllBytesAsync();
             }
         }
     }
