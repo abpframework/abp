@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Linq;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Application.Services
 {
@@ -90,6 +90,13 @@ namespace Volo.Abp.Application.Services
             await CheckCreatePolicyAsync();
 
             var entity = MapToEntity(input);
+            
+            if(entity is IMultiTenant)
+
+            {
+                TryToSetTenantId(entity);
+            }
+
             await Repository.InsertAsync(entity, autoSave: true);
 
             return MapToEntityDto(entity);
