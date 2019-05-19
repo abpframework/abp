@@ -7,6 +7,7 @@ using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
@@ -29,6 +30,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
+        typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
@@ -161,7 +163,7 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseAuthentication();
 
-            if (MyProjectNameConsts.IsMultiTenancyEnabled)
+            if (MultiTenancyConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }

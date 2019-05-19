@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 
@@ -19,9 +20,9 @@ namespace MyCompanyName.MyProjectName.Menus
 
         private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
-            if (!MyProjectNameConsts.IsMultiTenancyEnabled)
+            if (!MultiTenancyConsts.IsMultiTenancyEnabled)
             {
-                ApplicationMenuItem administration = context.Menu.GetAdministration();
+                var administration = context.Menu.GetAdministration();
                 administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
             }
 
