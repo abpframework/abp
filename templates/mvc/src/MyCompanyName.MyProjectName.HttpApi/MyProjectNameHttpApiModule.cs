@@ -2,6 +2,7 @@
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.TenantManagement;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -9,6 +10,7 @@ namespace MyCompanyName.MyProjectName
         typeof(MyProjectNameApplicationContractsModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpPermissionManagementHttpApiModule),
+        typeof(AbpTenantManagementHttpApiModule),
         typeof(AbpFeatureManagementHttpApiModule)
         )]
     public class MyProjectNameHttpApiModule : AbpModule
