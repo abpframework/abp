@@ -16,8 +16,8 @@ namespace MyCompanyName.MyProjectName.MongoDb
 
             modelBuilder.Entity<AppUser>(b =>
             {
-                /* Sharing the same "AbpUsers" collection with the Identity module (IdentityUser entity).
-                 */
+                /* Sharing the same "AbpUsers" collection
+                 * with the Identity module's IdentityUser class. */
                 b.CollectionName = "AbpUsers";
             });
         }
