@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.NuGet;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli
@@ -70,7 +72,7 @@ namespace Volo.Abp.Cli
         private void CheckDependencies()
         {
             var installedNpmPackages = GetInstalledNpmPackages();
-
+            
             if (!installedNpmPackages.Contains(" yarn@"))
             {
                 InstallYarn();
@@ -87,9 +89,9 @@ namespace Volo.Abp.Cli
 
             using (var process = new Process())
             {
-                process.StartInfo = new ProcessStartInfo("CMD.exe")
+                process.StartInfo = new ProcessStartInfo(CmdHelper.GetFileName())
                 {
-                    Arguments = "/C npm list -g --depth 0",
+                    Arguments = CmdHelper.GetArguments("npm list -g --depth 0"),
                     UseShellExecute = false,
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
@@ -113,15 +115,13 @@ namespace Volo.Abp.Cli
         private void InstallYarn()
         {
             Logger.LogInformation("Installing yarn...");
-            var process = Process.Start("CMD.exe", "/C npm install yarn -g");
-            process.WaitForExit();
+            CmdHelper.RunCmd("npm install yarn -g");
         }
 
         private void InstallGulp()
         {
             Logger.LogInformation("Installing gulp...");
-            var process = Process.Start("CMD.exe", "/C npm install gulp -g");
-            process.WaitForExit();
+            CmdHelper.RunCmd("npm install gulp -g");
         }
 
         private async Task CheckForNewVersion()
