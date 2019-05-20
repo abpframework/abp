@@ -4,6 +4,7 @@ using System.Linq.Dynamic.Core;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.Application.Services
@@ -149,6 +150,23 @@ namespace Volo.Abp.Application.Services
             }
 
             ObjectMapper.Map(updateInput, entity);
+        }
+        
+        protected virtual void TryToSetTenantId(TEntity entity)
+        {
+            var tenantId = CurrentTenant.Id;
+
+            if (tenantId == null)
+            {
+                return;
+            }
+
+            var propertyInfo = entity.GetType().GetProperty(nameof(IMultiTenant.TenantId));
+
+            if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
+            {
+                propertyInfo.SetValue(entity, tenantId, null);
+            }
         }
     }
 }
