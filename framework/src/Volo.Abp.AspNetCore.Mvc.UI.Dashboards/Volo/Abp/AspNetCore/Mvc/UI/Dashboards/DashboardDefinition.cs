@@ -1,16 +1,22 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Localization;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
+namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 {
-    public class WidgetDefinition
+    public class DashboardDefinition
     {
         /// <summary>
-        /// Unique name of the widget.
+        /// Unique name of the dashboard.
         /// </summary>
         [NotNull]
         public string Name { get; }
+
+        /// <summary>
+        /// A list of Widgets available for this dashboard.
+        /// </summary>
+        public List<DashboardWidgetConfiguration> AvailableWidgets { get; }
 
         /// <summary>
         /// Display name of the widget.
@@ -23,22 +29,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         }
         private ILocalizableString _displayName;
 
-        [NotNull]
-        public Type ViewComponentType { get; set; }
-
-        [CanBeNull]
-        public WidgetDimensions DefaultDimensions { get; set; }
-
-        public WidgetDefinition(
+        public DashboardDefinition(
             [NotNull] string name,
-            [NotNull] Type viewComponentType,
-            [CanBeNull] ILocalizableString displayName,
-            [CanBeNull] WidgetDimensions defaultDimensions = null)
+            [CanBeNull] ILocalizableString displayName)
         {
-            DefaultDimensions = defaultDimensions;
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
-            ViewComponentType = Check.NotNull(viewComponentType, nameof(viewComponentType));
             DisplayName = displayName ?? new FixedLocalizableString(name);
+
+            AvailableWidgets = new List<DashboardWidgetConfiguration>();
         }
     }
 }
