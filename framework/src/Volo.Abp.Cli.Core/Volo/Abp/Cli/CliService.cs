@@ -103,13 +103,8 @@ namespace Volo.Abp.Cli
                     {
                         output = stdOut.ReadToEnd();
                         output += stdErr.ReadToEnd();
-
-                        stdErr.Close();
-                        stdOut.Close();
                     }
                 }
-
-                process.Close();
             }
 
             return output;
