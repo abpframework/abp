@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc;
@@ -8,31 +10,31 @@ using Volo.Abp.AspNetCore.Mvc.Versioning;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
-    public static class AbpApiVersioningOptionsExtensions
+    public static class AbpApiVersioningExtensions
     {
-        public static void ConfigureAbp(this ApiVersioningOptions options, IServiceCollection services)
+        public static IServiceCollection AddAbpApiVersioning(this IServiceCollection services, Action<ApiVersioningOptions> setupAction)
         {
-            //TODO: Use new builder will be released with Api Versioning 2.1 instead of reflection!
-
             services.AddTransient<IRequestedApiVersion, HttpContextRequestedApiVersion>();
+            services.AddTransient<IApiControllerSpecification, AbpConventionalApiControllerSpecification>();
 
-            services.Configure<AbpAspNetCoreMvcOptions>(op =>
+            services.AddApiVersioning(setupAction);
+
+            return services;
+        }
+
+        public static void ConfigureAbp(this ApiVersioningOptions options, AbpAspNetCoreMvcOptions mvcOptions)
+        {
+            foreach (var setting in mvcOptions.ConventionalControllers.ConventionalControllerSettings)
             {
-                //TODO: Configuring api version should be done directly inside ConfigureAbp,
-                //TODO: not in a callback that will be called by MVC later! For that, we immediately need to controllerAssemblySettings
-
-                foreach (var setting in op.ConventionalControllers.ConventionalControllerSettings)
+                if (setting.ApiVersionConfigurer == null)
                 {
-                    if (setting.ApiVersionConfigurer == null)
-                    {
-                        ConfigureApiVersionsByConvention(options, setting);
-                    }
-                    else
-                    {
-                        setting.ApiVersionConfigurer.Invoke(options);
-                    }
+                    ConfigureApiVersionsByConvention(options, setting);
                 }
-            });
+                else
+                {
+                    setting.ApiVersionConfigurer.Invoke(options);
+                }
+            }
         }
 
         private static void ConfigureApiVersionsByConvention(ApiVersioningOptions options, ConventionalControllerSetting setting)
