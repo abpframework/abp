@@ -154,9 +154,14 @@ namespace Volo.Abp.Application.Services
         
         protected virtual void TryToSetTenantId(TEntity entity)
         {
+            if (entity is IMultiTenant tenantEntity && tenantEntity.TenantId.HasValue)
+            {
+                return;
+            }
+            
             var tenantId = CurrentTenant.Id;
 
-            if (tenantId == null)
+            if (!tenantId.HasValue)
             {
                 return;
             }
