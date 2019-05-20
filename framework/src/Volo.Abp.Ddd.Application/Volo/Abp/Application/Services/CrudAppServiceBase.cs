@@ -156,7 +156,7 @@ namespace Volo.Abp.Application.Services
         {
             var tenantId = CurrentTenant.Id;
 
-            if (tenantId == null)
+            if (!tenantId.HasValue)
             {
                 return;
             }
@@ -167,6 +167,11 @@ namespace Volo.Abp.Application.Services
             {
                 propertyInfo.SetValue(entity, tenantId, null);
             }
+        }
+
+        protected virtual bool HasTenantIdProperty(TEntity entity)
+        {
+            return entity.GetType().GetProperty(nameof(IMultiTenant.TenantId)) != null;
         }
     }
 }
