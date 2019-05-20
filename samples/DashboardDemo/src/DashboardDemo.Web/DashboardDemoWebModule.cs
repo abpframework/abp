@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Menus;
+using DashboardDemo.Pages.widgets;
 using DashboardDemo.Permissions;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
@@ -18,6 +19,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
@@ -35,7 +37,6 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.Web;
-
 
 namespace DashboardDemo
 {
@@ -69,6 +70,7 @@ namespace DashboardDemo
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureWidgets();
             ConfigureDatabaseServices();
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
@@ -76,6 +78,15 @@ namespace DashboardDemo
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+        }
+
+        private void ConfigureWidgets()
+        {
+            Configure<WidgetOptions>(options =>
+            {
+                options.Widgets.Add(new WidgetDefinition("MyWidget", typeof(MyWidgetViewComponentModel),
+                    new LocalizableString(typeof(DashboardDemoResource), "MyWidgett")));
+            });
         }
 
         private void ConfigureDatabaseServices()

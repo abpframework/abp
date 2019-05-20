@@ -1,18 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
     public interface IWidgetRenderer : ITransientDependency
     {
-        Task<object> RenderAsync(string mywidget);
-    }
-
-    public class WidgetRenderer : IWidgetRenderer
-    {
-        public Task<object> RenderAsync(string mywidget)
-        {
-            throw new System.NotImplementedException();
-        }
+        Task<IHtmlContent> RenderAsync(IViewComponentHelper component, string mywidget);
     }
 }
