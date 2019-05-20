@@ -1,0 +1,19 @@
+﻿@page
+@using DashboardDemo.Pages
+@inherits DashboardDemoPageBase
+@model IndexModel
+@section styles {
+    <link href="~/pages/index.css" rel="stylesheet" />
+}
+<abp-card>
+    <abp-card-header>@L["Welcome"]</abp-card-header>
+    <abp-card-body>
+        <p>@L["LongWelcomeMessage"]</p>
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
+        }
+        <hr/>
+        <p class="text-right"><a href="http://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+    </abp-card-body>
+</abp-card>
