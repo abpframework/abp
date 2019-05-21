@@ -28,7 +28,7 @@
 @if (!CurrentUser.IsAuthenticated)
 {
     <div class="text-center">
-        <img src="~/images/anonymous-user.png" width="200" /><br/><br />
+        <i class="fa fa-user d-block" style="font-size: 10em; color: #aaa"></i><br/><br />
         <a abp-button="Primary" asp-page="/Account/Login">Login</a>
     </div>
 }

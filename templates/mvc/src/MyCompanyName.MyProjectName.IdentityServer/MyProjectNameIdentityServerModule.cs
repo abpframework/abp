@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization.MyProjectName;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -15,8 +16,10 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Ui.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 
@@ -49,11 +52,6 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             });
 
-            context.Services.AddDistributedRedisCache(options =>
-            {
-                options.Configuration = configuration["Redis:Configuration"];
-            });
-
             Configure<AbpAuditingOptions>(options =>
             {
                 options.IsEnabledForGetRequests = true;
@@ -76,10 +74,25 @@ namespace MyCompanyName.MyProjectName
                 });
             }
 
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].RootUrl = "https://localhost:44348/";
+            });
+
+            Configure<BackgroundJobOptions>(options =>
+            {
+                options.IsJobExecutionEnabled = false;
+            });
+
+            context.Services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = configuration["Redis:Configuration"];
+            });
+
             //TODO: ConnectionMultiplexer.Connect call has problem since redis may not be ready when this service has started!
             var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
             context.Services.AddDataProtection()
-                .PersistKeysToStackExchangeRedis(redis, "AbpIo-DataProtection-Keys");
+                .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -88,6 +101,11 @@ namespace MyCompanyName.MyProjectName
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseAuthentication();
+            if (MultiTenancyConsts.IsMultiTenancyEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
