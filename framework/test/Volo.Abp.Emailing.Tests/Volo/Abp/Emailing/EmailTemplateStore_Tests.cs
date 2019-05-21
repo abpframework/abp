@@ -40,5 +40,13 @@ namespace Volo.Abp.Emailing
 
             template.Content.ShouldContain("<body>\r\n    " + "Please confirm your email address by clicking the link below.");
         }
+
+
+        [Fact]
+        public async Task Should_Get_Registered_Template_With_Localize()
+        {
+            var template = await _emailTemplateProvider.GetAsync("template3", "tr");
+            template.Content.ShouldContain("Merhaba Abp");
+        }
     }
 }

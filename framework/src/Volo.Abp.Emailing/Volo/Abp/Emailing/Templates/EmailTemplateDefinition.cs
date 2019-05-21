@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Emailing.Templates
@@ -18,9 +17,12 @@ namespace Volo.Abp.Emailing.Templates
 
         public EmailTemplateContributorList Contributors { get; }
 
-        public string DefaultCultureName { get; set; }
+        public string DefaultCultureName { get; }
 
-        public EmailTemplateDefinition([NotNull]string name, Type localizationResource = null, bool isLayout = false, string layout = DefaultLayoutPlaceHolder, string defaultCultureName = null)
+        public bool SingleTemplateFile { get; }
+
+        public EmailTemplateDefinition([NotNull] string name, Type localizationResource = null, bool isLayout = false,
+            string layout = DefaultLayoutPlaceHolder, string defaultCultureName = null, bool singleTemplateFile = false)
         {
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             LocalizationResource = localizationResource;
@@ -28,6 +30,7 @@ namespace Volo.Abp.Emailing.Templates
             IsLayout = isLayout;
             Layout = layout;
             DefaultCultureName = defaultCultureName;
+            SingleTemplateFile = singleTemplateFile;
         }
     }
 }

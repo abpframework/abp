@@ -36,7 +36,7 @@ namespace Volo.Abp.Emailing.Templates
             if (emailTemplateDefinition == null)
             {
                 // TODO: Localized message
-                throw new AbpException("email template name not definition");
+                throw new AbpException($"email template {name} not definition");
             }
 
             var emailTemplateString = emailTemplateDefinition.Contributors.GetOrNull(cultureName);
@@ -55,7 +55,11 @@ namespace Volo.Abp.Emailing.Templates
                 var emailTemplate = new EmailTemplate(emailTemplateString, emailTemplateDefinition);
 
                 await SetLayoutAsync(emailTemplateDefinition, emailTemplate, cultureName);
-                await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName);
+
+                if (emailTemplateDefinition.SingleTemplateFile)
+                {
+                    await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName);
+                }
 
                 return emailTemplate;
             }
@@ -92,10 +96,19 @@ namespace Volo.Abp.Emailing.Templates
             }
 
             var localizer = StringLocalizerFactory.Create(emailTemplateDefinition.LocalizationResource);
-
-            emailTemplate.SetContent(
-                TemplateLocalizer.Localize(localizer.WithCulture(new CultureInfo(cultureName)), emailTemplate.Content)
-            );
+            if (cultureName != null)
+            {
+                emailTemplate.SetContent(
+                    TemplateLocalizer.Localize(localizer.WithCulture(new CultureInfo(cultureName)),
+                        emailTemplate.Content)
+                );
+            }
+            else
+            {
+                emailTemplate.SetContent(
+                    TemplateLocalizer.Localize(localizer, emailTemplate.Content)
+                );
+            }
 
             return Task.CompletedTask;
         }

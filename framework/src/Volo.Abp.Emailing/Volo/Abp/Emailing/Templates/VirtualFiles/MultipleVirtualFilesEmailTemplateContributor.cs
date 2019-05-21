@@ -6,7 +6,7 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Emailing.Templates.VirtualFiles
 {
-    public class VirtualFileEmailTemplateContributor : IEmailTemplateContributor
+    public class MultipleVirtualFilesEmailTemplateContributor : IEmailTemplateContributor
     {
         private readonly string _virtualPath;
 
@@ -16,7 +16,7 @@ namespace Volo.Abp.Emailing.Templates.VirtualFiles
 
         private readonly object _syncObj = new object();
 
-        public VirtualFileEmailTemplateContributor(string virtualPath)
+        public MultipleVirtualFilesEmailTemplateContributor(string virtualPath)
         {
             _virtualPath = virtualPath;
         }

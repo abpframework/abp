@@ -5,7 +5,14 @@
         public static EmailTemplateDefinition AddTemplateVirtualFile(
             this EmailTemplateDefinition emailTemplateDefinition, string path)
         {
-            emailTemplateDefinition.Contributors.Add(new VirtualFileEmailTemplateContributor(path));
+            emailTemplateDefinition.Contributors.Add(new SingleVirtualFileEmailTemplateContributor(path));
+            return emailTemplateDefinition;
+        }
+
+        public static EmailTemplateDefinition AddTemplateVirtualFiles(
+            this EmailTemplateDefinition emailTemplateDefinition, string path)
+        {
+            emailTemplateDefinition.Contributors.Add(new MultipleVirtualFilesEmailTemplateContributor(path));
             return emailTemplateDefinition;
         }
     }
