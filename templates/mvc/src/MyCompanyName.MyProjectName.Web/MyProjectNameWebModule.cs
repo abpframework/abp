@@ -48,7 +48,9 @@ namespace MyCompanyName.MyProjectName
                 options.AddAssemblyResource(
                     typeof(MyProjectNameResource),
                     typeof(MyProjectNameDomainModule).Assembly,
+                    typeof(MyProjectNameDomainSharedModule).Assembly,
                     typeof(MyProjectNameApplicationModule).Assembly,
+                    typeof(MyProjectNameApplicationContractsModule).Assembly,
                     typeof(MyProjectNameWebModule).Assembly
                 );
             });
@@ -61,7 +63,6 @@ namespace MyCompanyName.MyProjectName
             
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureConventionalControllers();
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
@@ -87,7 +88,7 @@ namespace MyCompanyName.MyProjectName
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -100,14 +101,6 @@ namespace MyCompanyName.MyProjectName
                     //</TEMPLATE-REMOVE>
                 });
             }
-        }
-
-        private void ConfigureConventionalControllers()
-        {
-            Configure<AbpAspNetCoreMvcOptions>(options =>
-            {
-                options.ConventionalControllers.Create(typeof(MyProjectNameApplicationModule).Assembly);
-            });
         }
 
         private void ConfigureLocalizationServices()

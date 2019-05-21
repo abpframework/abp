@@ -13,7 +13,7 @@ using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName
 {
-    public class IdentityDataSeeder : IDataSeedContributor, ITransientDependency
+    public class IdentityServerDataSeeder : IDataSeedContributor, ITransientDependency
     {
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IClientRepository _clientRepository;
@@ -21,7 +21,7 @@ namespace MyCompanyName.MyProjectName
         private readonly IGuidGenerator _guidGenerator;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
 
-        public IdentityDataSeeder(
+        public IdentityServerDataSeeder(
             IClientRepository clientRepository,
             IApiResourceRepository apiResourceRepository,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
@@ -103,8 +103,8 @@ namespace MyCompanyName.MyProjectName
                 commonScopes,
                 new[] { "hybrid" },
                 commonSecret,
-                redirectUri: "https://localhost:44903/signin-oidc",
-                postLogoutRedirectUri: "https://localhost:44903/signout-callback-oidc"
+                redirectUri: "https://localhost:44314/signin-oidc",
+                postLogoutRedirectUri: "https://localhost:44314/signout-callback-oidc"
             );
         }
 
