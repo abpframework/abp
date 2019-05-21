@@ -1,0 +1,218 @@
+2019-05-21 19:29:14.723 +03:00 [INF] Starting MyCompanyName.MyProjectName.IdentityServer.
+2019-05-21 19:29:18.620 +03:00 [INF] Loaded ABP modules:
+2019-05-21 19:29:18.621 +03:00 [INF] - Volo.Abp.Castle.AbpCastleCoreModule
+2019-05-21 19:29:18.621 +03:00 [INF] - Volo.Abp.Autofac.AbpAutofacModule
+2019-05-21 19:29:18.621 +03:00 [INF] - Volo.Abp.Data.AbpDataModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Timing.AbpTimingModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Json.AbpJsonModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Security.AbpSecurityModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Threading.AbpThreadingModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.MultiTenancy.AbpMultiTenancyModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Auditing.AbpAuditingModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.EventBus.AbpEventBusModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Guids.AbpGuidsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Uow.AbpUnitOfWorkModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.ObjectMapping.AbpObjectMappingModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Domain.AbpDddDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.VirtualFileSystem.AbpVirtualFileSystemModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationAbstractionsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Settings.AbpSettingsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Localization.AbpLocalizationModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Users.AbpUsersAbstractionModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Users.AbpUsersDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Identity.AbpIdentityDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Http.AbpHttpAbstractionsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Http.AbpHttpModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Authorization.AbpAuthorizationModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.UI.AbpUiModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Validation.AbpValidationModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.AbpAspNetCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.ApiVersioning.AbpApiVersioningAbstractionsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Features.AbpFeaturesModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Application.AbpDddApplicationModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcContractsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.AbpAspNetCoreMvcModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.UI.Navigation.AbpUiNavigationModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.AbpAspNetCoreMvcUiModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.AbpAspNetCoreMvcUiBootstrapModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Bundling.AbpAspNetCoreMvcUiBundlingModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Packages.AbpAspNetCoreMvcUiPackagesModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.AbpAspNetCoreMvcUiThemeSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Account.Web.AbpAccountWebModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.IdentityServer.AbpIdentityServerDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AutoMapper.AbpAutoMapperModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Serialization.AbpSerializationModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Caching.AbpCachingModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.IdentityServer.AbpIdentityServerDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Account.Web.AbpAccountWebIdentityServerModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.MultiTenancy.AbpAspNetCoreMultiTenancyModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.AbpAspNetCoreMvcUiMultiTenancyModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.AbpAspNetCoreMvcUiBasicThemeModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.BackgroundJobs.BackgroundJobsDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.TenantManagement.AbpTenantManagementDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainSharedModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.AuditLogging.AbpAuditLoggingDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.BackgroundJobs.AbpBackgroundJobsAbstractionsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.BackgroundWorkers.AbpBackgroundWorkersModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.BackgroundJobs.AbpBackgroundJobsModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.BackgroundJobs.BackgroundJobsDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.FeatureManagement.AbpFeatureManagementDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.PermissionManagement.AbpPermissionManagementDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.PermissionManagement.Identity.AbpPermissionManagementDomainIdentityModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.SettingManagement.AbpSettingManagementDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.TenantManagement.AbpTenantManagementDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameDomainModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.AbpEntityFrameworkCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Users.EntityFrameworkCore.AbpUsersEntityFrameworkCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.Identity.EntityFrameworkCore.AbpIdentityEntityFrameworkCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.IdentityServer.EntityFrameworkCore.AbpIdentityServerEntityFrameworkCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.PermissionManagement.EntityFrameworkCore.AbpPermissionManagementEntityFrameworkCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.SettingManagement.EntityFrameworkCore.AbpSettingManagementEntityFrameworkCoreModule
+2019-05-21 19:29:18.622 +03:00 [INF] - Volo.Abp.EntityFrameworkCore.SqlServer.AbpEntityFrameworkCoreSqlServerModule
+2019-05-21 19:29:18.623 +03:00 [INF] - Volo.Abp.BackgroundJobs.EntityFrameworkCore.BackgroundJobsEntityFrameworkCoreModule
+2019-05-21 19:29:18.623 +03:00 [INF] - Volo.Abp.AuditLogging.EntityFrameworkCore.AbpAuditLoggingEntityFrameworkCoreModule
+2019-05-21 19:29:18.623 +03:00 [INF] - Volo.Abp.TenantManagement.EntityFrameworkCore.AbpTenantManagementEntityFrameworkCoreModule
+2019-05-21 19:29:18.623 +03:00 [INF] - Volo.Abp.FeatureManagement.EntityFrameworkCore.AbpFeatureManagementEntityFrameworkCoreModule
+2019-05-21 19:29:18.623 +03:00 [INF] - MyCompanyName.MyProjectName.EntityFrameworkCore.MyProjectNameEntityFrameworkCoreModule
+2019-05-21 19:29:18.623 +03:00 [INF] - MyCompanyName.MyProjectName.MyProjectNameIdentityServerModule
+2019-05-21 19:29:18.673 +03:00 [DBG] No class found with auto mapping attributes.
+2019-05-21 19:29:19.193 +03:00 [DBG] Started background worker: Volo.Abp.BackgroundJobs.BackgroundJobWorker
+2019-05-21 19:29:23.422 +03:00 [DBG] Using Identity.Application as default scheme for authentication
+2019-05-21 19:29:23.424 +03:00 [DBG] Using Identity.External as default scheme for sign-in
+2019-05-21 19:29:23.424 +03:00 [DBG] Using Identity.External as default scheme for sign-out
+2019-05-21 19:29:23.424 +03:00 [DBG] Using Identity.Application as default scheme for challenge
+2019-05-21 19:29:23.424 +03:00 [DBG] Using Identity.Application as default scheme for forbid
+2019-05-21 19:29:23.595 +03:00 [INF] Initialized all ABP modules.
+2019-05-21 19:29:23.852 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/  
+2019-05-21 19:29:25.901 +03:00 [INF] Route matched with {page = "/Index", controller = "", area = "", action = ""}. Executing page /Index
+2019-05-21 19:29:25.918 +03:00 [INF] Executing handler method MyCompanyName.MyProjectName.Pages.IndexModel.OnGet with arguments (null) - ModelState is "Valid"
+2019-05-21 19:29:25.921 +03:00 [INF] Executed handler method OnGet, returned result .
+2019-05-21 19:29:25.923 +03:00 [INF] Executing an implicit handler method - ModelState is "Valid"
+2019-05-21 19:29:25.923 +03:00 [INF] Executed an implicit handler method, returned result Microsoft.AspNetCore.Mvc.RazorPages.PageResult.
+2019-05-21 19:29:26.405 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 12.19 ms.
+2019-05-21 19:29:27.899 +03:00 [DBG] Added bundle 'Basic.Global' to the page in 6.60 ms.
+2019-05-21 19:29:27.917 +03:00 [INF] Executed page /Index in 2013.1232ms
+2019-05-21 19:29:27.939 +03:00 [INF] Request finished in 4090.773ms 200 text/html; charset=utf-8
+2019-05-21 19:29:27.973 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/select2/css/select2.min.css?_v=636940509263940874  
+2019-05-21 19:29:27.978 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/datatables.net-bs4/css/dataTables.bootstrap4.css?_v=636940509263990868  
+2019-05-21 19:29:27.978 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/toastr/toastr.min.css?_v=636940509264360935  
+2019-05-21 19:29:27.980 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/bootstrap/css/bootstrap.css?_v=636940509264050884  
+2019-05-21 19:29:27.986 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/font-awesome/css/font-awesome.css?_v=636940509264060877  
+2019-05-21 19:29:27.989 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/themes/basic/layout.css?_v=636865245316804823  
+2019-05-21 19:29:27.994 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css?_v=636662026164862248  
+2019-05-21 19:29:27.996 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/images/anonymous-user.png  
+2019-05-21 19:29:27.996 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/core/abp.js?_v=636940509264020889  
+2019-05-21 19:29:27.996 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/jquery/jquery.js?_v=636940509263920871  
+2019-05-21 19:29:27.998 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/bootstrap/js/bootstrap.bundle.js?_v=636940509263900879  
+2019-05-21 19:29:27.998 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/jquery-form/jquery.form.min.js?_v=636940509263890886  
+2019-05-21 19:29:27.999 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/lodash/lodash.min.js?_v=636940509263920871  
+2019-05-21 19:29:28.007 +03:00 [INF] Request finished in 10.9251ms 404 
+2019-05-21 19:29:28.010 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/jquery/abp.jquery.js?_v=636940509264080894  
+2019-05-21 19:29:28.010 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js?_v=636940509263940874  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/select2/js/select2.min.js?_v=636940509263970939  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/jquery-validation/jquery.validate.js?_v=636940509263970939  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js?_v=636904835517311463  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/datatables.net/js/jquery.dataTables.js?_v=636940509263910876  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/toastr/toastr.min.js?_v=636940509264500893  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js?_v=636765015235358393  
+2019-05-21 19:29:28.011 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/datatables.net-bs4/js/dataTables.bootstrap4.js?_v=636940509264050884  
+2019-05-21 19:29:28.012 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js?_v=636634793200502732  
+2019-05-21 19:29:28.012 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/Abp/ApplicationConfigurationScript  
+2019-05-21 19:29:28.012 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/sweetalert/sweetalert.min.js?_v=636940509263930871  
+2019-05-21 19:29:28.012 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js?_v=636634793200502732  
+2019-05-21 19:29:28.013 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js?_v=636887539062131627  
+2019-05-21 19:29:28.017 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js?_v=636634793200502732  
+2019-05-21 19:29:28.019 +03:00 [INF] Sending file. Request path: '/libs/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js'
+2019-05-21 19:29:28.019 +03:00 [INF] Sending file. Request path: '/themes/basic/layout.css'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\wwwroot\themes\basic\layout.css'
+2019-05-21 19:29:28.019 +03:00 [INF] Sending file. Request path: '/libs/jquery-validation/jquery.validate.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\jquery-validation\jquery.validate.js'
+2019-05-21 19:29:28.020 +03:00 [INF] Sending file. Request path: '/libs/toastr/toastr.min.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\toastr\toastr.min.js'
+2019-05-21 19:29:28.020 +03:00 [INF] Sending file. Request path: '/libs/toastr/toastr.min.css'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\toastr\toastr.min.css'
+2019-05-21 19:29:28.020 +03:00 [INF] Sending file. Request path: '/libs/jquery-form/jquery.form.min.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\jquery-form\jquery.form.min.js'
+2019-05-21 19:29:28.019 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-styles.css'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\datatables\datatables-styles.css'
+2019-05-21 19:29:28.021 +03:00 [INF] Sending file. Request path: '/libs/datatables.net-bs4/css/dataTables.bootstrap4.css'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\datatables.net-bs4\css\dataTables.bootstrap4.css'
+2019-05-21 19:29:28.021 +03:00 [INF] Sending file. Request path: '/libs/abp/core/abp.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\abp\core\abp.js'
+2019-05-21 19:29:28.019 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/toastr/abp-toastr.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\toastr\abp-toastr.js'
+2019-05-21 19:29:28.021 +03:00 [INF] Sending file. Request path: '/libs/font-awesome/css/font-awesome.css'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\font-awesome\css\font-awesome.css'
+2019-05-21 19:29:28.020 +03:00 [INF] Sending file. Request path: '/libs/select2/css/select2.min.css'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\select2\css\select2.min.css'
+2019-05-21 19:29:28.021 +03:00 [INF] Sending file. Request path: '/libs/abp/jquery/abp.jquery.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\abp\jquery\abp.jquery.js'
+2019-05-21 19:29:28.022 +03:00 [INF] Sending file. Request path: '/libs/datatables.net-bs4/js/dataTables.bootstrap4.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\datatables.net-bs4\js\dataTables.bootstrap4.js'
+2019-05-21 19:29:28.022 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\jquery\jquery-extensions.js'
+2019-05-21 19:29:28.022 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\jquery-form\jquery-form-extensions.js'
+2019-05-21 19:29:28.023 +03:00 [INF] Sending file. Request path: '/libs/sweetalert/sweetalert.min.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\sweetalert\sweetalert.min.js'
+2019-05-21 19:29:28.023 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\bootstrap\dom-event-handlers.js'
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 29.2905ms 200 text/css
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 27.3499ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 46.266ms 200 text/css
+2019-05-21 19:29:28.024 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\datatables\datatables-extensions.js'
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 12.3092ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 13.0503ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 11.3196ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/Pages/Abp/MultiTenancy/tenant-switch.js?_v=636939432321551868  
+2019-05-21 19:29:28.024 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js?_v=636904835517291459  
+2019-05-21 19:29:28.025 +03:00 [INF] Request finished in 13.2101ms 200 application/javascript
+2019-05-21 19:29:28.025 +03:00 [INF] Request finished in 13.2976ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 6.8548ms 200 application/javascript
+2019-05-21 19:29:28.025 +03:00 [INF] Request finished in 13.8746ms 200 application/javascript
+2019-05-21 19:29:28.026 +03:00 [INF] Request finished in 27.552ms 200 application/javascript
+2019-05-21 19:29:28.026 +03:00 [INF] Request finished in 40.218ms 200 text/css
+2019-05-21 19:29:28.026 +03:00 [INF] Request finished in 15.6663ms 200 application/javascript
+2019-05-21 19:29:28.026 +03:00 [INF] Request finished in 53.2194ms 200 text/css
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 45.8168ms 200 text/css
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 34.9987ms 200 text/css
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 13.3727ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/sweetalert/abp-sweetalert.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\sweetalert\abp-sweetalert.js'
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 11.8742ms 200 application/javascript
+2019-05-21 19:29:28.026 +03:00 [INF] Request finished in 14.4046ms 200 application/javascript
+2019-05-21 19:29:28.024 +03:00 [INF] Request finished in 11.9112ms 200 application/javascript
+2019-05-21 19:29:28.025 +03:00 [INF] Sending file. Request path: '/Pages/Abp/MultiTenancy/tenant-switch.js'. Physical path: '/Pages/Abp/MultiTenancy/tenant-switch.js'
+2019-05-21 19:29:28.027 +03:00 [INF] Request finished in 2.3959ms 200 application/javascript
+2019-05-21 19:29:28.027 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/libs/timeago/jquery.timeago.js?_v=636940509263970939  
+2019-05-21 19:29:28.027 +03:00 [INF] Sending file. Request path: '/libs/lodash/lodash.min.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\lodash\lodash.min.js'
+2019-05-21 19:29:28.027 +03:00 [INF] Sending file. Request path: '/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\wwwroot\libs\abp\aspnetcore-mvc-ui-theme-shared\bootstrap\modal-manager.js'
+2019-05-21 19:29:28.027 +03:00 [INF] Request finished in 2.9826ms 200 application/javascript
+2019-05-21 19:29:28.027 +03:00 [INF] Request finished in 29.0983ms 200 application/javascript
+2019-05-21 19:29:28.027 +03:00 [INF] Sending file. Request path: '/libs/timeago/jquery.timeago.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\timeago\jquery.timeago.js'
+2019-05-21 19:29:28.027 +03:00 [INF] Request finished in 0.8874ms 200 application/javascript
+2019-05-21 19:29:28.030 +03:00 [INF] Sending file. Request path: '/libs/select2/js/select2.min.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\select2\js\select2.min.js'
+2019-05-21 19:29:28.030 +03:00 [INF] Request finished in 19.7487ms 200 application/javascript
+2019-05-21 19:29:28.031 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/css/bootstrap.css'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\bootstrap\css\bootstrap.css'
+2019-05-21 19:29:28.031 +03:00 [INF] Request finished in 50.36ms 200 text/css
+2019-05-21 19:29:28.033 +03:00 [INF] Sending file. Request path: '/libs/bootstrap/js/bootstrap.bundle.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\bootstrap\js\bootstrap.bundle.js'
+2019-05-21 19:29:28.033 +03:00 [INF] Request finished in 35.5559ms 200 application/javascript
+2019-05-21 19:29:28.033 +03:00 [INF] Sending file. Request path: '/libs/jquery/jquery.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\jquery\jquery.js'
+2019-05-21 19:29:28.033 +03:00 [INF] Request finished in 37.0761ms 200 application/javascript
+2019-05-21 19:29:28.034 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/themes/basic/layout.js?_v=636865245316814831  
+2019-05-21 19:29:28.034 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/Abp/ServiceProxyScript  
+2019-05-21 19:29:28.035 +03:00 [INF] Sending file. Request path: '/themes/basic/layout.js'. Physical path: 'D:\Github\abp\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic\wwwroot\themes\basic\layout.js'
+2019-05-21 19:29:28.035 +03:00 [INF] Request finished in 0.9199ms 200 application/javascript
+2019-05-21 19:29:28.036 +03:00 [INF] Route matched with {area = "Abp", action = "Get", controller = "AbpApplicationConfigurationScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc)
+2019-05-21 19:29:28.039 +03:00 [INF] Sending file. Request path: '/libs/datatables.net/js/jquery.dataTables.js'. Physical path: 'D:\Github\abp\templates\mvc\src\MyCompanyName.MyProjectName.IdentityServer\wwwroot\libs\datatables.net\js\jquery.dataTables.js'
+2019-05-21 19:29:28.039 +03:00 [INF] Request finished in 27.3354ms 200 application/javascript
+2019-05-21 19:29:28.053 +03:00 [INF] Route matched with {area = "Abp", action = "GetAll", controller = "AbpServiceProxyScript", page = ""}. Executing action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc)
+2019-05-21 19:29:28.077 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) - Validation state: "Valid"
+2019-05-21 19:29:28.099 +03:00 [INF] Executing action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) with arguments (["Volo.Abp.AspNetCore.Mvc.ProxyScripting.ServiceProxyGenerationModel"]) - Validation state: "Valid"
+2019-05-21 19:29:28.145 +03:00 [DBG] ActionApiDescriptionModel.Create: Account.LoginByLogin
+2019-05-21 19:29:28.153 +03:00 [DBG] ActionApiDescriptionModel.Create: Account.CheckPasswordByLogin
+2019-05-21 19:29:28.154 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApplicationConfiguration.GetAsync
+2019-05-21 19:29:28.154 +03:00 [DBG] ActionApiDescriptionModel.Create: AbpApiDefinition.Get
+2019-05-21 19:29:28.173 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 69.9603ms.
+2019-05-21 19:29:28.174 +03:00 [INF] Executed action method Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc), returned result Microsoft.AspNetCore.Mvc.ObjectResult in 96.8627ms.
+2019-05-21 19:29:28.181 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-05-21 19:29:28.181 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2019-05-21 19:29:28.182 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ProxyScripting.AbpServiceProxyScriptController.GetAll (Volo.Abp.AspNetCore.Mvc) in 128.9437ms
+2019-05-21 19:29:28.182 +03:00 [INF] Request finished in 147.9173ms 200 text/plain; charset=utf-8
+2019-05-21 19:29:28.184 +03:00 [INF] Executed action Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.AbpApplicationConfigurationScriptController.Get (Volo.Abp.AspNetCore.Mvc) in 147.7084ms
+2019-05-21 19:29:28.334 +03:00 [DBG] Added 0 entity changes to the current audit log
+2019-05-21 19:29:28.334 +03:00 [DBG] Added 0 entity changes to the current audit log
+2019-05-21 19:29:28.338 +03:00 [INF] Request finished in 325.8857ms 200 text/plain; charset=utf-8
+2019-05-21 19:29:28.850 +03:00 [INF] Request starting HTTP/1.1 GET http://localhost:44348/favicon.ico  
+2019-05-21 19:29:28.851 +03:00 [INF] Request finished in 1.3289ms 404 
+2019-05-21 19:30:36.900 +03:00 [INF] Request starting HTTP/1.1 POST http://127.0.0.1:26810/iisintegration  0
+2019-05-21 19:30:36.901 +03:00 [INF] Request finished in 0.3428ms 202 

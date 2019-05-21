@@ -6,7 +6,7 @@ namespace MyCompanyName.MyProjectName
     {
         public MyProjectNameWebAutoMapperProfile()
         {
-            //Define your AutoMapper configuration here...
+            //Define your AutoMapper configuration here for the Web project.
         }
     }
 }
