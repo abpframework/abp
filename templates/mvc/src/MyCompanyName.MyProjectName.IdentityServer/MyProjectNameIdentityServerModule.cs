@@ -89,10 +89,13 @@ namespace MyCompanyName.MyProjectName
                 options.Configuration = configuration["Redis:Configuration"];
             });
 
-            //TODO: ConnectionMultiplexer.Connect call has problem since redis may not be ready when this service has started!
-            var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
-            context.Services.AddDataProtection()
-                .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+                context.Services
+                    .AddDataProtection()
+                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+            }
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

@@ -58,9 +58,10 @@ namespace MyCompanyName.MyProjectName
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
-
+            
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
+            ConfigureConventionalControllers();
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
@@ -99,6 +100,14 @@ namespace MyCompanyName.MyProjectName
                     //</TEMPLATE-REMOVE>
                 });
             }
+        }
+
+        private void ConfigureConventionalControllers()
+        {
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers.Create(typeof(MyProjectNameApplicationModule).Assembly);
+            });
         }
 
         private void ConfigureLocalizationServices()
