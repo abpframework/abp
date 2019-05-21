@@ -107,7 +107,7 @@ namespace MyCompanyName.MyProjectName
                     options.Scope.Add("role");
                     options.Scope.Add("email");
                     options.Scope.Add("phone");
-                    options.Scope.Add("MyProjectNameApi");
+                    options.Scope.Add("MyProjectName");
 
                     options.ClaimActions.MapAbpClaimTypes();
                 });

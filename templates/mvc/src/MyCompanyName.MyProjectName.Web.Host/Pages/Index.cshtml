@@ -18,7 +18,9 @@
         <p>@L["LongWelcomeMessage"]</p>
         @if (!CurrentUser.IsAuthenticated)
         {
-            <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
+            <form method="POST">
+                <input type="submit" asp-page-handler="Login" value="LOGIN" class="btn btn-login" />
+            </form>
         }
         <hr />
         <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>

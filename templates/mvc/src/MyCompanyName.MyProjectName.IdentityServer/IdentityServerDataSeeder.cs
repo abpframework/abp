@@ -100,7 +100,7 @@ namespace MyCompanyName.MyProjectName
 
             await CreateClientAsync(
                 "MyProjectName_Web",
-                commonScopes,
+                commonScopes.Union(new[] { "MyProjectName" }),
                 new[] { "hybrid" },
                 commonSecret,
                 redirectUri: "https://localhost:44314/signin-oidc",
