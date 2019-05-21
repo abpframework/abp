@@ -5,8 +5,7 @@
         public static void AddWidgets<T>(this WidgetOptions options)
             where T : IWidgetDefinitionProvider, new()
         {
-            var provider = new T();
-            var widgets = provider.GetDefinitions();
+            var widgets = new T().GetDefinitions();
             options.Widgets.AddRange(widgets);
         }
     }

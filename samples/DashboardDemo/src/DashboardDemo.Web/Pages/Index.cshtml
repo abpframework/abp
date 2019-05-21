@@ -1,6 +1,11 @@
 ﻿@page
+@inject IOptions<DashboardOptions> OptionsDashboadOptions
+@inject IStringLocalizerFactory localizer
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 @using DashboardDemo.Pages
 @using DashboardDemo.Widgets
+@using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
 @inherits DashboardDemoPageBase
 @inject IWidgetRenderer WidgetRenderer
@@ -14,3 +19,8 @@
         @await WidgetRenderer.RenderAsync(Component, WidgetNames.MyWidget)
     </abp-card-body>
 </abp-card>
+
+@foreach (var dashboard in OptionsDashboadOptions.Value.Dashboards)
+{
+    <a href="/@dashboard.Name">Go to @dashboard.DisplayName.Localize(localizer)</a>
+}

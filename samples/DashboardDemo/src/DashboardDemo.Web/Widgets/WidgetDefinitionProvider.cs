@@ -16,6 +16,11 @@ namespace DashboardDemo.Widgets
                     WidgetNames.MyWidget,
                     typeof(MyWidgetViewComponentModel),
                     new LocalizableString(typeof(DashboardDemoResource), "MyWidgett")
+                ),
+                new WidgetDefinition(
+                    WidgetNames.DemoStatistics,
+                    typeof(DemoStatisticsViewComponentModel),
+                    new LocalizableString(typeof(DashboardDemoResource), "DemoStatistics")
                 )
             };
         }

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using DashboardDemo.Dashboards;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -72,6 +73,7 @@ namespace DashboardDemo
             var configuration = context.Services.GetConfiguration();
 
             ConfigureWidgets();
+            ConfigureDashboards();
             ConfigureDatabaseServices();
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
@@ -86,6 +88,14 @@ namespace DashboardDemo
             Configure<WidgetOptions>(options =>
             {
                 options.AddWidgets<WidgetDefinitionProvider>();
+            });
+        }
+
+        private void ConfigureDashboards()
+        {
+            Configure<DashboardOptions>(options =>
+            {
+                options.AddDashboards<DashboardDefinitionProvider>();
             });
         }
 
