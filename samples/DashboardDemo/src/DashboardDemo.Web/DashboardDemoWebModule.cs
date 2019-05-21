@@ -84,8 +84,7 @@ namespace DashboardDemo
         {
             Configure<WidgetOptions>(options =>
             {
-                options.Widgets.Add(new WidgetDefinition("MyWidget", typeof(MyWidgetViewComponentModel),
-                    new LocalizableString(typeof(DashboardDemoResource), "MyWidgett")));
+                options.AddWidgets<WidgetDefinitionProvider>();
             });
         }
 

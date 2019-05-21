@@ -24,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         private ILocalizableString _displayName;
 
         [NotNull]
-        public Type ViewComponentType { get; set; }
+        public Type ViewComponentType { get; }
 
         [CanBeNull]
         public WidgetDimensions DefaultDimensions { get; set; }
