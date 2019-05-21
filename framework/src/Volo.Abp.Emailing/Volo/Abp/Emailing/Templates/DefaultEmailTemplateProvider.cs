@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Emailing.Templates.Virtual;
+﻿using Volo.Abp.Emailing.Templates.VirtualFiles;
 
 namespace Volo.Abp.Emailing.Templates
 {
@@ -7,10 +7,10 @@ namespace Volo.Abp.Emailing.Templates
         public override void Define(IEmailTemplateDefinitionContext context)
         {
             context.Add(new EmailTemplateDefinition(StandardEmailTemplates.DefaultLayout, isLayout: true, layout: null)
-                .SetVirtualFilePath("/Volo/Abp/Emailing/Templates/DefaultLayout.html"));
+                .AddTemplateVirtualFile("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Layout"));
 
             context.Add(new EmailTemplateDefinition(StandardEmailTemplates.SimpleMessage)
-                .SetVirtualFilePath("/Volo/Abp/Emailing/Templates/SimpleMessageTemplate.html"));
+                .AddTemplateVirtualFile("/Volo/Abp/Emailing/Templates/DefaultEmailTemplates/Message"));
         }
     }
 }

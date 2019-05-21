@@ -14,8 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\Templates\*.html" />
-    <None Remove="Volo\Abp\Emailing\Templates\*.html" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Templates\DefaultEmailTemplates\*\*.tpl" />
+    <None Remove="Volo\Abp\Emailing\Templates\DefaultEmailTemplates\*\*.tpl" />
   </ItemGroup>
 
   <ItemGroup>

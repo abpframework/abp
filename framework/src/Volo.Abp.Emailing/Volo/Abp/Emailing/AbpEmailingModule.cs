@@ -55,5 +55,21 @@ namespace Volo.Abp.Emailing
             });
         }
 
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                var emailTemplateDefinitionManager =
+                    scope.ServiceProvider.GetRequiredService<IEmailTemplateDefinitionManager>();
+
+                foreach (var templateDefinition in emailTemplateDefinitionManager.GetAll())
+                {
+                    foreach (var contributor in templateDefinition.Contributors)
+                    {
+                        contributor.Initialize(new EmailTemplateInitializationContext(templateDefinition, scope.ServiceProvider));
+                    }
+                }
+            }
+        }
     }
 }

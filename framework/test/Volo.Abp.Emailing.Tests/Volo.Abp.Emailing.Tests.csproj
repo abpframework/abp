@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\TestTemplates\*.*" />
-    <None Remove="Volo\Abp\Emailing\TestTemplates\*.*" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\TestTemplates\*\*.tpl" />
+    <None Remove="Volo\Abp\Emailing\TestTemplates\*\*.tpl" />
   </ItemGroup>
 
   <ItemGroup>
