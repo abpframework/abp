@@ -9,6 +9,7 @@ using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Menus;
 using DashboardDemo.Pages.widgets;
 using DashboardDemo.Permissions;
+using DashboardDemo.Widgets;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;

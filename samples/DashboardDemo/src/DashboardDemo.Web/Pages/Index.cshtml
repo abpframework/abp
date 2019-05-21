@@ -1,5 +1,6 @@
 ﻿@page
 @using DashboardDemo.Pages
+@using DashboardDemo.Widgets
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
 @inherits DashboardDemoPageBase
 @inject IWidgetRenderer WidgetRenderer
@@ -10,6 +11,6 @@
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>
-        @await WidgetRenderer.RenderAsync(Component, "MyWidget")
+        @await WidgetRenderer.RenderAsync(Component, WidgetNames.MyWidget)
     </abp-card-body>
 </abp-card>
