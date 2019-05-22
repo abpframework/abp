@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
+﻿using Shouldly;
 using System.Threading.Tasks;
 using Volo.Abp.Identity;
 using Xunit;
@@ -17,7 +16,7 @@ namespace MyCompanyName.MyProjectName.Samples
 
         public SampleAppServiceTests()
         {
-            _userAppService = ServiceProvider.GetRequiredService<IIdentityUserAppService>();
+            _userAppService = GetRequiredService<IIdentityUserAppService>();
         }
 
         [Fact]

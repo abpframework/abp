@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Users;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
@@ -23,8 +22,8 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
 
         public SampleRepositoryTests()
         {
-            _appUserRepository = ServiceProvider.GetRequiredService<IRepository<AppUser, Guid>>();
-            _unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
+            _appUserRepository = GetRequiredService<IRepository<AppUser, Guid>>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
