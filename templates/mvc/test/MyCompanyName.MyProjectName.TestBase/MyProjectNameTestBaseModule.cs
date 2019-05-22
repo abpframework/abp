@@ -3,6 +3,7 @@ using MyCompanyName.MyProjectName.Data;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
+using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName
@@ -17,6 +18,11 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            Configure<BackgroundJobOptions>(options =>
+            {
+                options.IsJobExecutionEnabled = false;
+            });
+
             context.Services.AddAlwaysAllowAuthorization();
         }
 
