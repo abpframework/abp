@@ -4,6 +4,7 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 @using DashboardDemo.Pages
+@using DashboardDemo.Pages.widgets
 @using DashboardDemo.Widgets
 @using Microsoft.Extensions.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
@@ -16,7 +17,7 @@
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>
-        @await WidgetRenderer.RenderAsync(Component, WidgetNames.MyWidget)
+        @await WidgetRenderer.RenderAsync(Component, MyWidgetViewComponent.WidgetName)
     </abp-card-body>
 </abp-card>
 

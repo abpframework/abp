@@ -17,35 +17,27 @@ namespace DashboardDemo.Dashboards
             var myDashboard = new DashboardDefinition(
                 DashboardNames.MyDashboard,
                 LocalizableString.Create<DashboardDemoResource>("MyDashboard")
-            );
+                )
+                .WithWidget(DemoStatisticsViewComponent.WidgetName)
+                .WithWidget(MyWidgetViewComponent.WidgetName);
 
-            myDashboard.AvailableWidgets.Add(
-                new DashboardWidgetConfiguration(WidgetNames.MyWidget)
-                );
-            myDashboard.AvailableWidgets.Add(
-                new DashboardWidgetConfiguration(WidgetNames.DemoStatistics, new WidgetDimensions(8,2))
-            );
-
-
-            var dashboards = new List<DashboardDefinition>
+            return new List<DashboardDefinition>
             {
                 myDashboard
             };
-
-            return dashboards;
         }
     }
 
     [DependsOn(
         typeof(AbpBasicDashboardScriptContributor),
-        typeof(MyDashboardScriptBundleContributor),
+        typeof(MyWidgetViewComponentScriptBundleContributor),
         typeof(DemoStatisticsScriptContributor)
         )]
     public class MyDashboardScriptBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            
+
         }
     }
 }

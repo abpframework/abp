@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 {
     public class WidgetLocation
     {

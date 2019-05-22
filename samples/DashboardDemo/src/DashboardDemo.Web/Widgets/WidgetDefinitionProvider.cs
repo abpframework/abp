@@ -13,14 +13,14 @@ namespace DashboardDemo.Widgets
             return new List<WidgetDefinition>
             {
                 new WidgetDefinition(
-                    WidgetNames.MyWidget,
-                    typeof(MyWidgetViewComponentModel),
-                    LocalizableString.Create<DashboardDemoResource>("MyWidgett")
+                    MyWidgetViewComponent.WidgetName,
+                    typeof(MyWidgetViewComponent),
+                    LocalizableString.Create<DashboardDemoResource>(MyWidgetViewComponent.DisplayName)
                 ),
                 new WidgetDefinition(
-                    WidgetNames.DemoStatistics,
-                    typeof(DemoStatisticsViewComponentModel),
-                    LocalizableString.Create<DashboardDemoResource>("DemoStatistics")
+                    DemoStatisticsViewComponent.WidgetName,
+                    typeof(DemoStatisticsViewComponent),
+                    LocalizableString.Create<DashboardDemoResource>(DemoStatisticsViewComponent.DisplayName)
                 )
             };
         }
