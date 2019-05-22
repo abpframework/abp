@@ -10,6 +10,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 {
     public interface IDashboardRenderer : ITransientDependency
     {
-        Task<IHtmlContent> RenderAsync(IViewComponentHelper componentHelper, string dashboardName, object args = null);
+        Task<IHtmlContent> RenderAsync(IViewComponentHelper componentHelper, object args = null);
     }
 }

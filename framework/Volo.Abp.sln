@@ -234,9 +234,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Specifications.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Cli.Core.Tests", "test\Volo.Abp.Cli.Core.Tests\Volo.Abp.Cli.Core.Tests.csproj", "{F006B0B4-F25D-4511-9FB3-F17AA44BDCEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Widgets", "src\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj", "{EE1AAB08-3FBD-487F-B0B4-BEBA4B69528A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Widgets", "src\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj", "{EE1AAB08-3FBD-487F-B0B4-BEBA4B69528A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Dashboards", "src\Volo.Abp.AspNetCore.Mvc.UI.Dashboards\Volo.Abp.AspNetCore.Mvc.UI.Dashboards.csproj", "{054D766D-5992-460E-A4D8-936D80BE2C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Dashboards", "src\Volo.Abp.AspNetCore.Mvc.UI.Dashboards\Volo.Abp.AspNetCore.Mvc.UI.Dashboards.csproj", "{054D766D-5992-460E-A4D8-936D80BE2C1A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

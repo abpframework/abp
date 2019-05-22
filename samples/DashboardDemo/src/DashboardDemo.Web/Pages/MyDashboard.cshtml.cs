@@ -10,8 +10,8 @@ namespace DashboardDemo.Pages
     {
         public DashboardDefinition Dashboard { get; set; }
 
-        private readonly DashboardOptions _dashboardOptions;
-        private readonly WidgetOptions _widgetOptions;
+        public readonly DashboardOptions _dashboardOptions;
+        public readonly WidgetOptions _widgetOptions;
 
         public MyDashboardModel(IOptions<DashboardOptions> dashboardOptions, IOptions<WidgetOptions> widgetOptions)
         {

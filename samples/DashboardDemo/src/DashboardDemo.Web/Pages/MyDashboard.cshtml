@@ -1,7 +1,10 @@
 ﻿@page
+@using DashboardDemo.Dashboards
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
 @inject IWidgetRenderer WidgetRenderer
+@inject IDashboardRenderer DashboardRenderer
 @inject IStringLocalizerFactory localizer
 @model DashboardDemo.Pages.MyDashboardModel
 @{
@@ -9,19 +12,5 @@
 @section scripts {
     <abp-script-bundle name="MyDashboard" />
 }
-<h2>@Model.Dashboard.DisplayName.Localize(localizer)</h2>
-<abp-row>
-    @foreach (var widgetConfiguration in Model.Dashboard.AvailableWidgets)
-    {
-        var widgetDefinition = Model.GetWidget(widgetConfiguration.WidgetName);
-        widgetDefinition.DefaultDimensions = widgetConfiguration.Dimensions ?? widgetDefinition.DefaultDimensions ?? new WidgetDimensions(5,5);
 
-        <abp-column class="col-@widgetDefinition.DefaultDimensions.Width"
-                    style="height: @(widgetDefinition.DefaultDimensions.Height * 100)px"
-                    abp-border="Danger">
-            
-            @await WidgetRenderer.RenderAsync(Component, widgetDefinition.Name)
-        </abp-column>
-    }
-
-</abp-row>
+@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard, dashboardOptions = Model._dashboardOptions, widgetOptions = Model._widgetOptions })
