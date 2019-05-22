@@ -7,9 +7,9 @@ using Volo.Abp.Localization;
 
 namespace DashboardDemo.Dashboards
 {
-    public class DashboardDefinitionProvider : IDashboardDefinitionProvider
+    public static class DashboardDefinitionProvider
     {
-        public List<DashboardDefinition> GetDefinitions()
+        public static List<DashboardDefinition> GetDefinitions()
         {
             var myDashboard = new DashboardDefinition(
                 DashboardNames.MyDashboard,

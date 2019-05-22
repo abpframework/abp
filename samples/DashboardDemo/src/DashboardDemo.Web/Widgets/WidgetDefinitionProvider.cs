@@ -6,9 +6,9 @@ using Volo.Abp.Localization;
 
 namespace DashboardDemo.Widgets
 {
-    public class WidgetDefinitionProvider : IWidgetDefinitionProvider
+    public static class WidgetDefinitionProvider
     {
-        public List<WidgetDefinition> GetDefinitions()
+        public static List<WidgetDefinition> GetDefinitions()
         {
             return new List<WidgetDefinition>
             {

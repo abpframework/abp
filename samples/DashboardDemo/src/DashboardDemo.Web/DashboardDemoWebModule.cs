@@ -87,7 +87,7 @@ namespace DashboardDemo
         {
             Configure<WidgetOptions>(options =>
             {
-                options.AddWidgets<WidgetDefinitionProvider>();
+                options.Widgets.AddRange(WidgetDefinitionProvider.GetDefinitions());
             });
         }
 
@@ -95,7 +95,7 @@ namespace DashboardDemo
         {
             Configure<DashboardOptions>(options =>
             {
-                options.AddDashboards<DashboardDefinitionProvider>();
+                options.Dashboards.AddRange(DashboardDefinitionProvider.GetDefinitions());
             });
         }
 
