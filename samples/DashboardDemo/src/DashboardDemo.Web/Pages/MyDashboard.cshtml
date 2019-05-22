@@ -6,6 +6,9 @@
 @model DashboardDemo.Pages.MyDashboardModel
 @{
 }
+@section scripts {
+    <abp-script-bundle name="MyDashboard" />
+}
 <h2>@Model.Dashboard.DisplayName.Localize(localizer)</h2>
 <abp-row>
     @foreach (var widgetConfiguration in Model.Dashboard.AvailableWidgets)

@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using DashboardDemo.Localization.DashboardDemo;
+using DashboardDemo.Pages.widgets;
 using DashboardDemo.Widgets;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Localization;
+using Volo.Abp.Modularity;
 
 namespace DashboardDemo.Dashboards
 {
@@ -13,7 +16,7 @@ namespace DashboardDemo.Dashboards
         {
             var myDashboard = new DashboardDefinition(
                 DashboardNames.MyDashboard,
-                new LocalizableString(typeof(DashboardDemoResource), "MyDashboard")
+                LocalizableString.Create<DashboardDemoResource>("MyDashboard")
             );
 
             myDashboard.AvailableWidgets.Add(
@@ -30,6 +33,19 @@ namespace DashboardDemo.Dashboards
             };
 
             return dashboards;
+        }
+    }
+
+    [DependsOn(
+        typeof(AbpBasicDashboardScriptContributor),
+        typeof(MyDashboardScriptBundleContributor),
+        typeof(DemoStatisticsScriptContributor)
+        )]
+    public class MyDashboardScriptBundleContributor : BundleContributor
+    {
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            
         }
     }
 }

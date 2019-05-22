@@ -15,12 +15,12 @@ namespace DashboardDemo.Widgets
                 new WidgetDefinition(
                     WidgetNames.MyWidget,
                     typeof(MyWidgetViewComponentModel),
-                    new LocalizableString(typeof(DashboardDemoResource), "MyWidgett")
+                    LocalizableString.Create<DashboardDemoResource>("MyWidgett")
                 ),
                 new WidgetDefinition(
                     WidgetNames.DemoStatistics,
                     typeof(DemoStatisticsViewComponentModel),
-                    new LocalizableString(typeof(DashboardDemoResource), "DemoStatistics")
+                    LocalizableString.Create<DashboardDemoResource>("DemoStatistics")
                 )
             };
         }

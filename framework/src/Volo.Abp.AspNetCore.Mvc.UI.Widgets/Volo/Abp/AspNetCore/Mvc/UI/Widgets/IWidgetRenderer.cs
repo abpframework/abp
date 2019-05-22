@@ -7,6 +7,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
     public interface IWidgetRenderer : ITransientDependency
     {
-        Task<IHtmlContent> RenderAsync(IViewComponentHelper component, string mywidget);
+        Task<IHtmlContent> RenderAsync(IViewComponentHelper componentHelper, string widgetName, object args = null);
     }
 }

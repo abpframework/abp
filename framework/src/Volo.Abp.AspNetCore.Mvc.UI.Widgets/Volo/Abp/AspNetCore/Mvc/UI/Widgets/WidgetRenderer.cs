@@ -15,12 +15,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             _widgetOptions = widgetOptions.Value;
         }
 
-        public async Task<IHtmlContent> RenderAsync(IViewComponentHelper component, string mywidget)
+        public async Task<IHtmlContent> RenderAsync(IViewComponentHelper componentHelper, string widgetName, object args = null)
         {
-            var componentType = _widgetOptions.Widgets.Single(w=>w.Name.Equals(mywidget)).ViewComponentType; 
-            var args = new object();
+            var componentType = _widgetOptions.Widgets.Single(w=>w.Name.Equals(widgetName)).ViewComponentType;
 
-            return await component.InvokeAsync(componentType, args);
+            return await componentHelper.InvokeAsync(componentType, args ?? new object());
         }
     }
 }

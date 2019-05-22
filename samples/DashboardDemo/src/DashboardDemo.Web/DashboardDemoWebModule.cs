@@ -18,6 +18,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
@@ -96,6 +97,14 @@ namespace DashboardDemo
             Configure<DashboardOptions>(options =>
             {
                 options.Dashboards.AddRange(DashboardDefinitionProvider.GetDefinitions());
+            });
+
+            Configure<BundlingOptions>(options =>
+            {
+                options.ScriptBundles.Add("MyDashboard", configuration =>
+                    {
+                        configuration.AddContributors(typeof(MyDashboardScriptBundleContributor));
+                    });
             });
         }
 
