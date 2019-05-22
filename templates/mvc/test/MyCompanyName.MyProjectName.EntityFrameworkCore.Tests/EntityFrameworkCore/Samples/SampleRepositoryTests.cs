@@ -6,34 +6,25 @@ using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Users;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace MyCompanyName.MyProjectName.Samples
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
 {
-    public class SampleTests : MyProjectNameApplicationTestBase
+    /* This is just an example test class.
+     * Normally, you don't test ABP framework code
+     * (like default AppUser repository IRepository<AppUser, Guid> here).
+     * Only test your custom repository methods.
+     */
+    public class SampleRepositoryTests : MyProjectNameEntityFrameworkCoreTestBase
     {
-        private readonly IIdentityUserAppService _userAppService;
         private readonly IRepository<AppUser, Guid> _appUserRepository;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public SampleTests()
+        public SampleRepositoryTests()
         {
-            _userAppService = ServiceProvider.GetRequiredService<IIdentityUserAppService>();
             _appUserRepository = ServiceProvider.GetRequiredService<IRepository<AppUser, Guid>>();
             _unitOfWorkManager = ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-        }
-
-        [Fact]
-        public async Task Initial_Data_Should_Contain_Admin_User()
-        {
-            //Act
-            var result = await _userAppService.GetListAsync(new GetIdentityUsersInput());
-
-            //Assert
-            result.TotalCount.ShouldBeGreaterThan(0);
-            result.Items.ShouldContain(u => u.UserName == "admin");
         }
 
         [Fact]

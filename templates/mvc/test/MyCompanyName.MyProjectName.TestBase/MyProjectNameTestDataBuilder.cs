@@ -8,8 +8,7 @@ namespace MyCompanyName.MyProjectName
     {
         public Task SeedAsync(DataSeedContext context)
         {
-            /* Seed additional test data...
-             */
+            /* Seed additional test data... */
 
             return Task.CompletedTask;
         }
