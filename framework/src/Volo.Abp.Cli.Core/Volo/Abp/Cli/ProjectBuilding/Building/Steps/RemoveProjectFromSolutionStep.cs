@@ -22,7 +22,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         public override void Execute(ProjectBuildContext context)
         {
-            context.Files.RemoveAll(file => file.Name.StartsWith(_projectFolderPath));
+            var projectFolderWithSlash = _projectFolderPath + "/";
+            context.Files.RemoveAll(file => file.Name.StartsWith(projectFolderWithSlash));
+            context.Files.RemoveAll(file => file.Name == _projectFolderPath);
             var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
             solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));

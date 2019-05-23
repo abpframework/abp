@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using MyCompanyName.MyProjectName.Localization.MyProjectName;
 using MyCompanyName.MyProjectName.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
+using Microsoft.Extensions.Configuration;
+using MyCompanyName.MyProjectName.Localization;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc;
@@ -22,6 +24,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.Ui.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -29,11 +32,12 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
+        typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpAccountWebModule),
+        typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpTenantManagementWebModule)
         )]
@@ -46,7 +50,9 @@ namespace MyCompanyName.MyProjectName
                 options.AddAssemblyResource(
                     typeof(MyProjectNameResource),
                     typeof(MyProjectNameDomainModule).Assembly,
+                    typeof(MyProjectNameDomainSharedModule).Assembly,
                     typeof(MyProjectNameApplicationModule).Assembly,
+                    typeof(MyProjectNameApplicationContractsModule).Assembly,
                     typeof(MyProjectNameWebModule).Assembly
                 );
             });
@@ -57,12 +63,33 @@ namespace MyCompanyName.MyProjectName
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureUrls(configuration);
+            ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+        }
+
+        private void ConfigureUrls(IConfigurationRoot configuration)
+        {
+            Configure<AppUrlOptions>(options =>
+            {
+                options.Applications["MVC"].RootUrl = configuration["AppSelfUrl"];
+            });
+        }
+
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        {
+            context.Services.AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "MyProjectName";
+                });
         }
 
         private void ConfigureAutoMapper()
@@ -84,7 +111,7 @@ namespace MyCompanyName.MyProjectName
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -160,11 +187,14 @@ namespace MyCompanyName.MyProjectName
 
             app.UseVirtualFiles();
             app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
 
-            if (MyProjectNameConsts.IsMultiTenancyEnabled)
+            if (MultiTenancyConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            app.UseIdentityServer();
 
             app.UseAbpRequestLocalization();
 

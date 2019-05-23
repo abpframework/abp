@@ -1,6 +1,7 @@
 ﻿using System;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Templates;
+using Volo.Abp.Cli.ProjectBuilding.Templates.Mvc;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectBuilding

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using MyCompanyName.MyProjectName.Localization.MyProjectName;
+using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.Menus;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.TestBase;
