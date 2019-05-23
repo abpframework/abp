@@ -1,0 +1,16 @@
+﻿@page
+@using DashboardDemo.Dashboards
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
+@inject IWidgetRenderer WidgetRenderer
+@inject IDashboardRenderer DashboardRenderer
+@inject IStringLocalizerFactory localizer
+@model DashboardDemo.Pages.MyDashboardModel
+@{
+}
+@section scripts {
+    <abp-script-bundle name="MyDashboard" />
+}
+
+@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard, dashboardOptions = Model._dashboardOptions, widgetOptions = Model._widgetOptions })
