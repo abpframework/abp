@@ -54,10 +54,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
             if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.Web.Tests"));
+
                 steps.Add(new MvcTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
-                //TODO: Rename Web.Host to Web
-                //TODO: Rename HttpApi.Host to HttpApi
+                steps.Add(new MvcTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.Host", "MyCompanyName.MyProjectName.HttpApi"));
             }
             else
             {
