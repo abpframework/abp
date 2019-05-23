@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
@@ -11,7 +10,7 @@ using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.IdentityServer
 {
     public class IdentityServerDataSeeder : IDataSeedContributor, ITransientDependency
     {
@@ -99,6 +98,8 @@ namespace MyCompanyName.MyProjectName
                 "MyProjectName"
             };
 
+            /* MyProjectName_Web client is only needed if you created tiered
+             * solution. Otherwise, delete this client. */
             await CreateClientAsync(
                 "MyProjectName_Web",
                 commonScopes,
