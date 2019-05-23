@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Users;
 using Shouldly;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
@@ -18,12 +17,10 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
     public class SampleRepositoryTests : MyProjectNameEntityFrameworkCoreTestBase
     {
         private readonly IRepository<AppUser, Guid> _appUserRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public SampleRepositoryTests()
         {
             _appUserRepository = GetRequiredService<IRepository<AppUser, Guid>>();
-            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
@@ -32,7 +29,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
             /* Need to manually start Unit Of Work because
              * FirstOrDefaultAsync should be executed while db connection / context is available.
              */
-            using (var uow = _unitOfWorkManager.Begin())
+            await WithUnitOfWorkAsync(async () =>
             {
                 //Act
                 var adminUser = await _appUserRepository
@@ -41,9 +38,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore.Samples
 
                 //Assert
                 adminUser.ShouldNotBeNull();
-
-                await uow.CompleteAsync();
-            }
+            });
         }
     }
 }

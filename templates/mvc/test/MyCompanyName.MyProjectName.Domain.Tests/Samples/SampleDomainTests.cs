@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Identity;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace MyCompanyName.MyProjectName.Samples
@@ -15,12 +14,10 @@ namespace MyCompanyName.MyProjectName.Samples
     {
         private readonly IIdentityUserRepository _identityUserRepository;
         private readonly IdentityUserManager _identityUserManager;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public SampleDomainTests()
         {
             _identityUserRepository = GetRequiredService<IIdentityUserRepository>();
-            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
             _identityUserManager = GetRequiredService<IdentityUserManager>();
         }
 
@@ -32,16 +29,14 @@ namespace MyCompanyName.MyProjectName.Samples
             /* Need to manually start Unit Of Work because
              * FirstOrDefaultAsync should be executed while db connection / context is available.
              */
-            using (var uow = _unitOfWorkManager.Begin())
+            await WithUnitOfWorkAsync(async () =>
             {
                 adminUser = await _identityUserRepository
                     .FindByNormalizedUserNameAsync("ADMIN");
 
                 await _identityUserManager.SetEmailAsync(adminUser, "newemail@abp.io");
                 await _identityUserRepository.UpdateAsync(adminUser);
-
-                await uow.CompleteAsync();
-            }
+            });
 
             adminUser = await _identityUserRepository.FindByNormalizedUserNameAsync("ADMIN");
             adminUser.Email.ShouldBe("newemail@abp.io");

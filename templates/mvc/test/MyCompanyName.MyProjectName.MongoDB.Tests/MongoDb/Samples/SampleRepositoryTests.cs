@@ -4,7 +4,6 @@ using MyCompanyName.MyProjectName.Users;
 using MongoDB.Driver.Linq;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Uow;
 using Xunit;
 
 namespace MyCompanyName.MyProjectName.MongoDb.Samples
@@ -17,12 +16,10 @@ namespace MyCompanyName.MyProjectName.MongoDb.Samples
     public class SampleRepositoryTests : MyProjectNameMongoDbTestBase
     {
         private readonly IRepository<AppUser, Guid> _appUserRepository;
-        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public SampleRepositoryTests()
         {
             _appUserRepository = GetRequiredService<IRepository<AppUser, Guid>>();
-            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
@@ -31,7 +28,7 @@ namespace MyCompanyName.MyProjectName.MongoDb.Samples
             /* Need to manually start Unit Of Work because
              * FirstOrDefaultAsync should be executed while db connection / context is available.
              */
-            using (var uow = _unitOfWorkManager.Begin())
+            await WithUnitOfWorkAsync(async () =>
             {
                 //Act
                 var adminUser = await _appUserRepository
@@ -40,9 +37,7 @@ namespace MyCompanyName.MyProjectName.MongoDb.Samples
 
                 //Assert
                 adminUser.ShouldNotBeNull();
-
-                await uow.CompleteAsync();
-            }
+            });
         }
     }
 }
