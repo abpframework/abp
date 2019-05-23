@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Menus;
+using DashboardDemo.Pages;
 using DashboardDemo.Pages.widgets;
 using DashboardDemo.Permissions;
 using DashboardDemo.Widgets;
@@ -101,9 +102,13 @@ namespace DashboardDemo
 
             Configure<BundlingOptions>(options =>
             {
-                options.ScriptBundles.Add("MyDashboard", configuration =>
+                options.ScriptBundles.Add(DashboardNames.MyDashboard, configuration =>
                     {
                         configuration.AddContributors(typeof(MyDashboardScriptBundleContributor));
+                    });
+                options.StyleBundles.Add(DashboardNames.MyDashboard, configuration =>
+                    {
+                        configuration.AddContributors(typeof(MyDashboardStyleBundleContributor));
                     });
             });
         }

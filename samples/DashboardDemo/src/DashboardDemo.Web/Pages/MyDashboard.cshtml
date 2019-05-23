@@ -9,8 +9,11 @@
 @model DashboardDemo.Pages.MyDashboardModel
 @{
 }
+@section styles {
+    <abp-style-bundle name="@DashboardNames.MyDashboard" />
+}
 @section scripts {
     <abp-script-bundle name="@DashboardNames.MyDashboard" />
 }
 
-@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard})
+@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard })

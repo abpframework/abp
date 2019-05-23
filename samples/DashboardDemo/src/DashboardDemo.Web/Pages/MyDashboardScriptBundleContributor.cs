@@ -3,7 +3,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.Modularity;
 
-namespace DashboardDemo.Dashboards
+namespace DashboardDemo.Pages
 {
     [DependsOn(
         typeof(AbpBasicDashboardScriptContributor),
