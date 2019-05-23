@@ -21,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard
         {
             var dashboard = _dashboardOptions.Dashboards.Single(d => d.Name.Equals(dashboardName));
 
-            var model = new DashboardViewModel(dashboard, _widgetOptions);
+            var model = new DashboardViewModel(dashboard, _widgetOptions.Widgets);
 
             return View("~/Volo/Abp/AspNetCore/Mvc/UI/Dashboards/Components/Dashboard/Default.cshtml", model);
         }
