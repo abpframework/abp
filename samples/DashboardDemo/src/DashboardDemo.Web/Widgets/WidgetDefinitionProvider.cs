@@ -22,7 +22,7 @@ namespace DashboardDemo.Widgets
                     RoleListWidgetViewComponent.WidgetName,
                     typeof(RoleListWidgetViewComponent),
                     LocalizableString.Create<DashboardDemoResource>(RoleListWidgetViewComponent.DisplayName),
-                    new WidgetDimensions(6,4)
+                    new WidgetDimensions(6,3)
                 )
             };
         }
