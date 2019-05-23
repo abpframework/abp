@@ -3,7 +3,7 @@ using Volo.Abp.Cli.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 {
-    public class SwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPipelineStep
+    public class MvcTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPipelineStep
     {
         public override void Execute(ProjectBuildContext context)
         {

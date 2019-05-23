@@ -32,7 +32,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
         {
             if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
             {
-                steps.Add(new SwitchEntityFrameworkCoreToMongoDbStep());
+                steps.Add(new MvcTemplateSwitchEntityFrameworkCoreToMongoDbStep());
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
@@ -55,6 +55,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.Web.Tests"));
+                steps.Add(new MvcTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
                 //TODO: Rename Web.Host to Web
                 //TODO: Rename HttpApi.Host to HttpApi
             }
