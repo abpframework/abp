@@ -9,13 +9,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard
     public class DashboardViewModel
     {
         public DashboardDefinition Dashboard { get; set; }
-        public DashboardOptions DashboardOptions { get; set; }
+
         public WidgetOptions WidgetOptions { get; set; }
 
-        public DashboardViewModel(string dashboardName, DashboardOptions dashboardOptions, WidgetOptions widgetOptions)
+        public DashboardViewModel(DashboardDefinition dashboard, WidgetOptions widgetOptions)
         {
-            Dashboard = dashboardOptions.Dashboards.Single(d => d.Name.Equals(dashboardName));
-            DashboardOptions = dashboardOptions;
+            Dashboard = dashboard;
             WidgetOptions = widgetOptions;
         }
 

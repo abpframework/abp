@@ -11,7 +11,7 @@
         var widgetDefinition = Model.GetWidget(widgetConfiguration.WidgetName);
         widgetDefinition.DefaultDimensions = widgetConfiguration.Dimensions ?? widgetDefinition.DefaultDimensions ?? new WidgetDimensions(5, 5);
 
-        <abp-column class="col-@widgetDefinition.DefaultDimensions.Width"
+        <abp-column class="col-@(widgetDefinition.DefaultDimensions.Width) m-2"
                     style="height: @(widgetDefinition.DefaultDimensions.Height * 100)px"
                     abp-border="Danger">
 

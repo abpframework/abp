@@ -8,9 +8,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard
 {
     public class DashboardViewComponent : AbpViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(string dashboardName, DashboardOptions dashboardOptions, WidgetOptions widgetOptions)
+        private readonly DashboardOptions _dashboardOptions;
+        private readonly WidgetOptions _widgetOptions;
+
+        public DashboardViewComponent(IOptions<DashboardOptions> dashboardOptions, IOptions<WidgetOptions> widgetOptions)
         {
-            var model = new DashboardViewModel(dashboardName, dashboardOptions, widgetOptions);
+            _dashboardOptions = dashboardOptions.Value;
+            _widgetOptions = widgetOptions.Value;
+        }
+
+        public IViewComponentResult Invoke(string dashboardName)
+        {
+            var dashboard = _dashboardOptions.Dashboards.Single(d => d.Name.Equals(dashboardName));
+
+            var model = new DashboardViewModel(dashboard, _widgetOptions);
+
             return View("~/Volo/Abp/AspNetCore/Mvc/UI/Dashboards/Components/Dashboard/Default.cshtml", model);
         }
     }

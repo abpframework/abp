@@ -10,7 +10,7 @@
 @{
 }
 @section scripts {
-    <abp-script-bundle name="MyDashboard" />
+    <abp-script-bundle name="@DashboardNames.MyDashboard" />
 }
 
-@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard, dashboardOptions = Model._dashboardOptions, widgetOptions = Model._widgetOptions })
+@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard})

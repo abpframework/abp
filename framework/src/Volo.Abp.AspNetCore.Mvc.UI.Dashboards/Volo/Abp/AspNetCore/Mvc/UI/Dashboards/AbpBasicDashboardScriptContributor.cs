@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace DashboardDemo.Dashboards
+namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 {
     public class AbpBasicDashboardScriptContributor : BundleContributor
     {
