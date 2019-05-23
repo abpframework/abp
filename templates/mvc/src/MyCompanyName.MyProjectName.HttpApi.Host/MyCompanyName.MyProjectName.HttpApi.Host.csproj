@@ -19,14 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.HttpApi\Volo.Abp.Identity.HttpApi.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.HttpApi\Volo.Abp.PermissionManagement.HttpApi.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.HttpApi\Volo.Abp.TenantManagement.HttpApi.csproj" />
-    <ProjectReference Include="..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.HttpApi\Volo.Abp.FeatureManagement.HttpApi.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.AspNetCore.MultiTenancy\Volo.Abp.AspNetCore.MultiTenancy.csproj" />
+    <ProjectReference Include="..\..\..\..\..\abp\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.Application\MyCompanyName.MyProjectName.Application.csproj" />
     <ProjectReference Include="..\MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations\MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\MyCompanyName.MyProjectName.HttpApi\MyCompanyName.MyProjectName.HttpApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>

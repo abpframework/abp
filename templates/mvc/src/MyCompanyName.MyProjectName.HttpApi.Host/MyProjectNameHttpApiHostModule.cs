@@ -12,25 +12,18 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
-using Volo.Abp.FeatureManagement;
-using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.HttpApi;
-using Volo.Abp.TenantManagement;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
+        typeof(MyProjectNameHttpApiModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreModule),
-        typeof(AbpIdentityHttpApiModule),
-        typeof(AbpPermissionManagementHttpApiModule),
-        typeof(AbpTenantManagementHttpApiModule),
-        typeof(AbpFeatureManagementHttpApiModule)
+        typeof(MyProjectNameEntityFrameworkCoreModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
