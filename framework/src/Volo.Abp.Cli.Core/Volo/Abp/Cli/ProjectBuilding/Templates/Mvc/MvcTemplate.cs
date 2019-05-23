@@ -23,7 +23,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
-            ChangeLocalhostPort(steps);
 
             return steps;
         }
@@ -55,7 +54,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.Web.Tests"));
-
                 steps.Add(new MvcTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
             }
             else
@@ -63,20 +61,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                steps.Add(new MyTemplateChangeConsoleTestClientPortSettingsStep());
             }
-        }
-
-        private void ChangeLocalhostPort(List<ProjectBuildPipelineStep> steps)
-        {
-            //Disabled this since port change is complext and should be re-considered later
-
-            //steps.Add(
-            //    new ChangeLocalhostPortStep(
-            //        "/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json",
-            //        53929,
-            //        53932
-            //    )
-            //);
         }
     }
 }
