@@ -2,11 +2,9 @@
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Pages.widgets;
 using DashboardDemo.Widgets;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Localization;
-using Volo.Abp.Modularity;
 
 namespace DashboardDemo.Dashboards
 {
@@ -25,19 +23,6 @@ namespace DashboardDemo.Dashboards
             {
                 myDashboard
             };
-        }
-    }
-
-    [DependsOn(
-        typeof(AbpBasicDashboardScriptContributor),
-        typeof(MyWidgetViewComponentScriptBundleContributor),
-        typeof(DemoStatisticsScriptContributor)
-        )]
-    public class MyDashboardScriptBundleContributor : BundleContributor
-    {
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-
         }
     }
 }
