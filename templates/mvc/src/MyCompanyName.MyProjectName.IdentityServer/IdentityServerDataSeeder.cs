@@ -95,16 +95,24 @@ namespace MyCompanyName.MyProjectName
                 "profile",
                 "role",
                 "phone",
-                "address"
+                "address",
+                "MyProjectName"
             };
 
             await CreateClientAsync(
                 "MyProjectName_Web",
-                commonScopes.Union(new[] { "MyProjectName" }),
+                commonScopes,
                 new[] { "hybrid" },
                 commonSecret,
                 redirectUri: "https://localhost:44314/signin-oidc",
                 postLogoutRedirectUri: "https://localhost:44314/signout-callback-oidc"
+            );
+
+            await CreateClientAsync(
+                "MyCompanyName_ConsoleTestApp",
+                commonScopes,
+                new[] { "password", "client_credentials" },
+                commonSecret
             );
         }
 
