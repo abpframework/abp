@@ -2,6 +2,7 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Application.Services
 {
@@ -86,6 +87,12 @@ namespace Volo.Abp.Application.Services
             CheckCreatePolicy();
 
             var entity = MapToEntity(input);
+            
+            if(entity is IMultiTenant && !HasTenantIdProperty(entity))
+            {
+                TryToSetTenantId(entity);
+            }
+            
             Repository.Insert(entity, autoSave: true);
 
             return MapToEntityDto(entity);
