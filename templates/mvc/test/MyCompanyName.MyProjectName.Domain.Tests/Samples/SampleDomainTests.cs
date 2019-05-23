@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Shouldly;
 using Volo.Abp.Identity;
 using Volo.Abp.Uow;
@@ -12,7 +11,7 @@ namespace MyCompanyName.MyProjectName.Samples
      * (like IdentityUserManager here).
      * Only test your own domain services.
      */
-    public class SampleDomainTests : MyProjectNameEntityFrameworkCoreTestBase
+    public class SampleDomainTests : MyProjectNameDomainTestBase
     {
         private readonly IIdentityUserRepository _identityUserRepository;
         private readonly IdentityUserManager _identityUserManager;
