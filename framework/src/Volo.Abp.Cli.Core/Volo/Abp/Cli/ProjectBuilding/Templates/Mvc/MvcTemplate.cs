@@ -39,13 +39,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "test/MyCompanyName.MyProjectName.MongoDB.Tests"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
             }
         }
 
@@ -54,7 +54,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
             if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "test/MyCompanyName.MyProjectName.Web.Tests"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.Web.Tests"));
                 //TODO: Rename Web.Host to Web
                 //TODO: Rename HttpApi.Host to HttpApi
             }
