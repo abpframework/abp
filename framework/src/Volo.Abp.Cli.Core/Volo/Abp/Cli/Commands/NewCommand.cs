@@ -52,8 +52,9 @@ namespace Volo.Abp.Cli.Commands
             var result = await ProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
                     SolutionName.Parse(commandLineArgs.Target),
+                    commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long),
                     GetDatabaseProviderOrNull(commandLineArgs),
-                    commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long)
+                    commandLineArgs.Options
                 )
             );
 
