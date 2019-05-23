@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Uow;
 using Xunit;
 
-namespace MyCompanyName.MyProjectName.MongoDB.Samples
+namespace MyCompanyName.MyProjectName.MongoDb.Samples
 {
     /* This is just an example test class.
      * Normally, you don't test ABP framework code

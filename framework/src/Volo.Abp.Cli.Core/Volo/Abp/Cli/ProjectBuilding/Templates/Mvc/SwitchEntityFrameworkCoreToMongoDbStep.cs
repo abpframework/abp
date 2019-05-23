@@ -87,7 +87,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             ChangeModuleDependency(
                 context,
-                "/src/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
+                "/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDb",
                 "MyProjectNameEntityFrameworkCoreModule",

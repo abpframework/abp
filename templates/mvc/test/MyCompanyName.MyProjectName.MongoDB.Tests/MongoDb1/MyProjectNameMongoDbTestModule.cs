@@ -1,10 +1,9 @@
 ﻿using Mongo2Go;
-using MyCompanyName.MyProjectName.MongoDb;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 
-namespace MyCompanyName.MyProjectName.MongoDB
+namespace MyCompanyName.MyProjectName.MongoDb
 {
     [DependsOn(
         typeof(MyProjectNameTestBaseModule),
