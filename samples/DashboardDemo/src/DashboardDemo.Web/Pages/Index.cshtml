@@ -13,14 +13,17 @@
 @model IndexModel
 @section styles {
     <link href="~/pages/index.css" rel="stylesheet" />
+    <abp-style-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+}
+@section scripts {
+    <abp-script-bundle name="@UserCountWidgetViewComponent.WidgetName" />
 }
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>
-        @await WidgetRenderer.RenderAsync(Component, MyWidgetViewComponent.WidgetName)
+        @await WidgetRenderer.RenderAsync(Component, UserCountWidgetViewComponent.WidgetName)
     </abp-card-body>
 </abp-card>
-
 @foreach (var dashboard in OptionsDashboadOptions.Value.Dashboards)
 {
     <a href="/@dashboard.Name">Go to @dashboard.DisplayName.Localize(localizer)</a>

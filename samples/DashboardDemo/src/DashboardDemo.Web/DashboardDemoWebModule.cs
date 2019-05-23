@@ -106,10 +106,18 @@ namespace DashboardDemo
                     {
                         configuration.AddContributors(typeof(MyDashboardScriptBundleContributor));
                     });
+                options.ScriptBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+                {
+                    configuration.AddContributors(typeof(UserCountWidgetScriptBundleContributor));
+                });
                 options.StyleBundles.Add(DashboardNames.MyDashboard, configuration =>
                     {
                         configuration.AddContributors(typeof(MyDashboardStyleBundleContributor));
                     });
+                options.StyleBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+                {
+                    configuration.AddContributors(typeof(UserCountWidgetStyleBundleContributor));
+                });
             });
         }
 

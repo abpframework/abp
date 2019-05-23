@@ -7,11 +7,11 @@ namespace DashboardDemo.Pages.widgets
 {
     [DependsOn(typeof(BootstrapStyleContributor))]
     [DependsOn(typeof(HighlightJsStyleContributor))]
-    public class MyWidgetStyleBundleContributor : BundleContributor
+    public class UserCountWidgetStyleBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/MyDashboard.css");
+            context.Files.Add("/Pages/widgets/UserCountWidget.css");
         }
     }
 }

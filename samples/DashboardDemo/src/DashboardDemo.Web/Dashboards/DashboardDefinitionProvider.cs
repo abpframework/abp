@@ -16,8 +16,8 @@ namespace DashboardDemo.Dashboards
                 DashboardNames.MyDashboard,
                 LocalizableString.Create<DashboardDemoResource>("MyDashboard")
                 )
-                .WithWidget(DemoStatisticsViewComponent.WidgetName)
-                .WithWidget(MyWidgetViewComponent.WidgetName);
+                .WithWidget(RoleListWidgetViewComponent.WidgetName)
+                .WithWidget(UserCountWidgetViewComponent.WidgetName);
 
             return new List<DashboardDefinition>
             {
