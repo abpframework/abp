@@ -25,6 +25,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target.IsNullOrEmpty())
             {
+                Logger.LogInformation("");
                 Logger.LogWarning("Username is missing.");
                 LogHelp();
                 return;
@@ -34,6 +35,7 @@ namespace Volo.Abp.Cli.Commands
             var password = ConsoleHelper.ReadSecret();
             if (password.IsNullOrWhiteSpace())
             {
+                Logger.LogInformation("");
                 Logger.LogWarning("Password is missing.");
                 LogHelp();
                 return;
@@ -41,7 +43,7 @@ namespace Volo.Abp.Cli.Commands
 
             await AuthService.LoginAsync(commandLineArgs.Target, password);
 
-            Console.WriteLine($"Successfully logged in as '{commandLineArgs.Target}'");
+            Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
         }
 
         private void LogHelp()

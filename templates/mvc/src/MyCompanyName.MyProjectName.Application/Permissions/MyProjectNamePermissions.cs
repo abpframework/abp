@@ -1,5 +1,4 @@
-﻿using System;
-using Volo.Abp.Reflection;
+﻿using Volo.Abp.Reflection;
 
 namespace MyCompanyName.MyProjectName.Permissions
 {

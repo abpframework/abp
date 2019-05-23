@@ -22,7 +22,7 @@ namespace Volo.Abp.Cli.Auth
             var accessToken = await AuthenticationService.GetAccessTokenAsync(
                 new IdentityClientConfiguration(
                     "https://localhost:44333", //TODO: Configure
-                    "role email abpio_www",
+                    "role email abpio_www abpio_commercial",
                     "abp-cli",
                     "1q2w3e*",
                     OidcConstants.GrantTypes.Password,

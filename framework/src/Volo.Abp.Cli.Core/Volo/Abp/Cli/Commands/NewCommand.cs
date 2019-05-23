@@ -4,9 +4,9 @@ using Ionic.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectBuilding;
+using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.ProjectBuilding;
-using Volo.Abp.ProjectBuilding.Building;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -27,6 +27,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
+                Logger.LogInformation("");
                 Logger.LogWarning("Project name is missing.");
                 Logger.LogWarning("");
                 Logger.LogWarning("Usage:");
