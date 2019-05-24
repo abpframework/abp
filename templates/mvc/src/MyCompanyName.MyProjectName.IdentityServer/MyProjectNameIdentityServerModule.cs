@@ -77,7 +77,7 @@ namespace MyCompanyName.MyProjectName
 
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = "https://localhost:44348/";
+                options.Applications["MVC"].RootUrl = configuration["AppSelfUrl"];
             });
 
             Configure<BackgroundJobOptions>(options =>

@@ -69,7 +69,7 @@ namespace MyCompanyName.MyProjectName
             var configuration = context.Services.GetConfiguration();
 
             ConfigureUrls(configuration);
-            ConfigureAuthentication(context);
+            ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices();
@@ -90,7 +90,7 @@ namespace MyCompanyName.MyProjectName
             Configure<MultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsMultiTenancyEnabled; });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
         {
             context.Services.AddAuthentication(options =>
                 {
@@ -104,12 +104,12 @@ namespace MyCompanyName.MyProjectName
                 })
                 .AddOpenIdConnect("oidc", options =>
                 {
-                    options.Authority = "https://localhost:44348";
+                    options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = true;
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
-                    options.ClientId = "MyProjectName_Web";
-                    options.ClientSecret = "1q2w3e*";
+                    options.ClientId = configuration["AuthServer:ClientId"];
+                    options.ClientSecret = configuration["AuthServer:ClientSecret"];
 
                     options.SaveTokens = true;
                     options.GetClaimsFromUserInfoEndpoint = true;

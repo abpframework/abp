@@ -33,7 +33,7 @@ namespace MyCompanyName.MyProjectName
             var hostingEnvironment = context.Services.GetHostingEnvironment();
 
             ConfigureConventionalControllers();
-            ConfigureAuthentication(context);
+            ConfigureAuthentication(context, configuration);
             ConfigureSwagger(context);
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
@@ -64,12 +64,12 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
         {
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
                 {
-                    options.Authority = "https://localhost:44348";
+                    options.Authority = configuration["AuthServer:Authority"];
                     options.RequireHttpsMetadata = true;
                     options.ApiName = "MyProjectName";
                 });

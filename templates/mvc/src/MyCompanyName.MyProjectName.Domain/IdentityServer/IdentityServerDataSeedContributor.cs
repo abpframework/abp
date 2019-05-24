@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.Configuration;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
@@ -12,26 +14,29 @@ using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName.IdentityServer
 {
-    public class IdentityServerDataSeeder : IDataSeedContributor, ITransientDependency
+    public class IdentityServerDataSeedContributor : IDataSeedContributor, ITransientDependency
     {
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
+        private readonly IConfigurationAccessor _configurationAccessor;
 
-        public IdentityServerDataSeeder(
+        public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
             IApiResourceRepository apiResourceRepository,
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
-            IPermissionDataSeeder permissionDataSeeder)
+            IPermissionDataSeeder permissionDataSeeder,
+            IConfigurationAccessor configurationAccessor)
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
+            _configurationAccessor = configurationAccessor;
         }
 
         [UnitOfWork]
@@ -98,23 +103,38 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 "MyProjectName"
             };
 
-            /* MyProjectName_Web client is only needed if you created a tiered
-             * solution. Otherwise, delete this client. */
-            await CreateClientAsync(
-                "MyProjectName_Web",
-                commonScopes,
-                new[] { "hybrid" },
-                commonSecret,
-                redirectUri: "https://localhost:44314/signin-oidc",
-                postLogoutRedirectUri: "https://localhost:44314/signout-callback-oidc"
-            );
+            var configurationSection = _configurationAccessor.Configuration.GetSection("IdentityServer:Clients");
 
-            await CreateClientAsync(
-                "MyCompanyName_ConsoleTestApp",
-                commonScopes,
-                new[] { "password", "client_credentials" },
-                commonSecret
-            );
+            //Web Client
+            var webClientId = configurationSection["MyProjectName_Web:ClientId"];
+            if (!webClientId.IsNullOrWhiteSpace())
+            {
+                var webClientRootUrl = configurationSection["MyProjectName_Web:RootUrl"].EnsureEndsWith('/');
+
+                /* MyProjectName_Web client is only needed if you created a tiered
+                 * solution. Otherwise, you can delete this client. */
+
+                await CreateClientAsync(
+                    webClientId,
+                    commonScopes,
+                    new[] { "hybrid" },
+                    commonSecret,
+                    redirectUri: $"{webClientRootUrl}signin-oidc",
+                    postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
+                );
+            }
+
+            //Console Test Client
+            var consoleClientId = configurationSection["MyProjectName_ConsoleTestApp:ClientId"];
+            if (!consoleClientId.IsNullOrWhiteSpace())
+            {
+                await CreateClientAsync(
+                    consoleClientId,
+                    commonScopes,
+                    new[] { "password", "client_credentials" },
+                    commonSecret
+                );
+            }
         }
 
         private async Task<Client> CreateClientAsync(
