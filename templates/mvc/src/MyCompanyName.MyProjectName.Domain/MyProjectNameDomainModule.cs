@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.AuditLogging;
@@ -49,15 +50,7 @@ namespace MyCompanyName.MyProjectName
             /* Seeding in the application startup can be a problem in a clustered environment.
              * See https://github.com/abpframework/abp/issues/1123
              */
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                AsyncHelper.RunSync(async () =>
-                {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                });
-            }
+            DataSeedHelper.Seed(context);
         }
     }
 }

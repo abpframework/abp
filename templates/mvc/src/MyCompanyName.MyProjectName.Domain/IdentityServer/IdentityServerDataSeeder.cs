@@ -98,7 +98,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                 "MyProjectName"
             };
 
-            /* MyProjectName_Web client is only needed if you created tiered
+            /* MyProjectName_Web client is only needed if you created a tiered
              * solution. Otherwise, delete this client. */
             await CreateClientAsync(
                 "MyProjectName_Web",
