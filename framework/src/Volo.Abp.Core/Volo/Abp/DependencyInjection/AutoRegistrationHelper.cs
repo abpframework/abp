@@ -8,7 +8,7 @@ namespace Volo.Abp.DependencyInjection
 {
     public static class AutoRegistrationHelper
     {
-        public static IEnumerable<Type> GetExposedServices(IServiceCollection services, Type type)
+        public static List<Type> GetExposedServices(IServiceCollection services, Type type)
         {
             var typeInfo = type.GetTypeInfo();
 
@@ -23,10 +23,10 @@ namespace Volo.Abp.DependencyInjection
                 return customExposedServices;
             }
 
-            return GetDefaultExposedServices(services, type);
+            return GetDefaultExposedServices(type);
         }
 
-        private static IEnumerable<Type> GetDefaultExposedServices(IServiceCollection services, Type type)
+        private static List<Type> GetDefaultExposedServices(Type type)
         {
             var serviceTypes = new List<Type>();
 
@@ -44,16 +44,6 @@ namespace Volo.Abp.DependencyInjection
                 if (type.Name.EndsWith(interfaceName))
                 {
                     serviceTypes.Add(interfaceType);
-                }
-            }
-
-            var exposeActions = services.GetExposingActionList();
-            if (exposeActions.Any())
-            {
-                var args = new OnServiceExposingContext(type, serviceTypes);
-                foreach (var action in services.GetExposingActionList())
-                {
-                    action(args);
                 }
             }
 
