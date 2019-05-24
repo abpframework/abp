@@ -73,7 +73,7 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             using (var client = new HttpClient())
             {
-                var url = "https://localhost:44328/api/app/nugetPackage/byName/?name=" + moduleName;
+                var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/byName/?name=" + moduleName;
 
                 var response = await client.GetAsync(url);
 
