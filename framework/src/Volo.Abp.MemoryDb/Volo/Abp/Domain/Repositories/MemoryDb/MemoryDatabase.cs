@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
@@ -16,9 +17,12 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             _entityIdGenerators = new ConcurrentDictionary<Type, InMemoryIdGenerator>();
         }
 
-        public List<TEntity> Collection<TEntity>()
+        public IMemoryDatabaseCollection<TEntity> Collection<TEntity>()
+            where TEntity : class, IEntity
         {
-            return _sets.GetOrAdd(typeof(TEntity), _ => new List<TEntity>()) as List<TEntity>;
+            return _sets.GetOrAdd(typeof(TEntity),
+                    _ => new MemoryDatabaseCollection<TEntity>(new MemoryDbBinarySerializer())) as
+                MemoryDatabaseCollection<TEntity>;
         }
 
         public TKey GenerateNextId<TEntity, TKey>()
