@@ -7,6 +7,7 @@ using MyCompanyName.MyProjectName.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
@@ -195,18 +196,19 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseIdentityServer();
-
             app.UseAbpRequestLocalization();
-
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-
             app.UseAuditing();
-
             app.UseMvcWithDefaultRouteAndArea();
+
+            /* Seeding in the application startup can be a problem in a clustered environment.
+            * See https://github.com/abpframework/abp/issues/1123
+            */
+            DataSeedHelper.Seed(context);
         }
     }
 }

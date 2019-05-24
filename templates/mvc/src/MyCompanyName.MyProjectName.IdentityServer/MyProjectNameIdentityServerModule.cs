@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using MyCompanyName.MyProjectName.Data;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -105,14 +106,21 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
+
             if (MultiTenancyConsts.IsMultiTenancyEnabled)
             {
                 app.UseMultiTenancy();
             }
+
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
+
+            /* Seeding in the application startup can be a problem in a clustered environment.
+             * See https://github.com/abpframework/abp/issues/1123
+             */
+            DataSeedHelper.Seed(context);
         }
     }
 }

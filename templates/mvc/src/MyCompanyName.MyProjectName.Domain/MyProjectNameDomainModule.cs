@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Data;
-using MyCompanyName.MyProjectName.MultiTenancy;
-using Volo.Abp;
+﻿using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
-using Volo.Abp.Data;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
@@ -14,7 +10,6 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -38,19 +33,6 @@ namespace MyCompanyName.MyProjectName
             {
                 options.IsEnabled = MultiTenancyConsts.IsMultiTenancyEnabled;
             });
-        }
-
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
-        {
-            SeedDatabase(context);
-        }
-
-        private void SeedDatabase(ApplicationInitializationContext context)
-        {
-            /* Seeding in the application startup can be a problem in a clustered environment.
-             * See https://github.com/abpframework/abp/issues/1123
-             */
-            DataSeedHelper.Seed(context);
         }
     }
 }
