@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +26,11 @@ namespace Volo.Abp.DependencyInjection
                 return;
             }
 
-            foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(services, type))
+            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
+
+            TriggerServiceExposing(services, type, serviceTypes);
+
+            foreach (var serviceType in serviceTypes)
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
 
@@ -39,6 +45,19 @@ namespace Volo.Abp.DependencyInjection
                 else
                 {
                     services.Add(serviceDescriptor);
+                }
+            }
+        }
+
+        protected virtual void TriggerServiceExposing(IServiceCollection services, Type type, List<Type> serviceTypes)
+        {
+            var exposeActions = services.GetExposingActionList();
+            if (exposeActions.Any())
+            {
+                var args = new OnServiceExposingContext(type, serviceTypes);
+                foreach (var action in exposeActions)
+                {
+                    action(args);
                 }
             }
         }

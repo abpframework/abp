@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -7,6 +10,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.NuGet;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli
@@ -40,7 +44,9 @@ namespace Volo.Abp.Cli
             Logger.LogInformation("https://abp.io");
 
             await CheckForNewVersion();
-            
+
+            CheckDependencies();
+
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);
 
@@ -61,6 +67,61 @@ namespace Volo.Abp.Cli
                     Logger.LogException(ex);
                 }
             }
+        }
+
+        private void CheckDependencies()
+        {
+            var installedNpmPackages = GetInstalledNpmPackages();
+            
+            if (!installedNpmPackages.Contains(" yarn@"))
+            {
+                InstallYarn();
+            }
+            if (!installedNpmPackages.Contains(" gulp@"))
+            {
+                InstallGulp();
+            }
+        }
+
+        private string GetInstalledNpmPackages()
+        {
+            var output = "";
+
+            using (var process = new Process())
+            {
+                process.StartInfo = new ProcessStartInfo(CmdHelper.GetFileName())
+                {
+                    Arguments = CmdHelper.GetArguments("npm list -g --depth 0"),
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+                process.Start();
+
+                using (var stdOut = process.StandardOutput)
+                {
+                    using (var stdErr = process.StandardError)
+                    {
+                        output = stdOut.ReadToEnd();
+                        output += stdErr.ReadToEnd();
+                    }
+                }
+            }
+
+            return output;
+        }
+
+        private void InstallYarn()
+        {
+            Logger.LogInformation("Installing yarn...");
+            CmdHelper.RunCmd("npm install yarn -g");
+        }
+
+        private void InstallGulp()
+        {
+            Logger.LogInformation("Installing gulp...");
+            CmdHelper.RunCmd("npm install gulp -g");
         }
 
         private async Task CheckForNewVersion()
@@ -86,7 +147,7 @@ namespace Volo.Abp.Cli
                 Logger.LogWarning(e.Message);
             }
         }
-        
+
         private static string GetCliVersion()
         {
             var version = typeof(CliService)

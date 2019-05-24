@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Timing;
@@ -68,6 +70,23 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
         private IFeatureChecker _featureChecker;
+
+        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        private IStringLocalizerFactory _stringLocalizerFactory;
+
+        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
+        private IStringLocalizer _localizer;
+
+        protected Type LocalizationResource
+        {
+            get => _localizationResource;
+            set
+            {
+                _localizationResource = value;
+                _localizer = null;
+            }
+        }
+        private Type _localizationResource = typeof(DefaultResource);
 
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 
