@@ -12,7 +12,7 @@ namespace Volo.Abp.DependencyInjection
         {
             //Act
 
-            var exposedServices = AutoRegistrationHelper.GetExposedServices(new ServiceCollection(), typeof(DefaultDerivedService)).ToList();
+            var exposedServices = ExposedServiceExplorer.GetExposedServices(typeof(DefaultDerivedService));
 
             //Assert
 
@@ -27,7 +27,7 @@ namespace Volo.Abp.DependencyInjection
         {
             //Act
 
-            var exposedServices = AutoRegistrationHelper.GetExposedServices(new ServiceCollection(), typeof(ExplicitDerivedService)).ToList();
+            var exposedServices = ExposedServiceExplorer.GetExposedServices(typeof(ExplicitDerivedService));
 
             //Assert
 

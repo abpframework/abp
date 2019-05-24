@@ -26,7 +26,7 @@ namespace Volo.Abp.DependencyInjection
                 return;
             }
 
-            var serviceTypes = AutoRegistrationHelper.GetExposedServices(services, type);
+            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
 
             TriggerServiceExposing(services, type, serviceTypes);
 

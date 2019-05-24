@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+namespace Volo.Abp.DependencyInjection
+{
+    public static class ExposedServiceExplorer
+    {
+        public static List<Type> GetExposedServices(Type type)
+        {
+            return type
+                .GetCustomAttributes()
+                .OfType<IExposedServiceTypesProvider>()
+                .SelectMany(p => p.GetExposedServiceTypes(type))
+                .ToList();
+        }
+    }
+}
