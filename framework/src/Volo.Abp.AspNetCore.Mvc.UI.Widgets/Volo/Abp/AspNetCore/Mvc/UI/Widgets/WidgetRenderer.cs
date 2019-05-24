@@ -17,9 +17,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 
         public async Task<IHtmlContent> RenderAsync(IViewComponentHelper componentHelper, string widgetName, object args = null)
         {
-            var componentType = _widgetOptions.Widgets.Single(w=>w.Name.Equals(widgetName)).ViewComponentType;
+            var widget = _widgetOptions.Widgets.Single(w=>w.Name.Equals(widgetName));
 
-            return await componentHelper.InvokeAsync(componentType, args ?? new object());
+            return await componentHelper.InvokeAsync(widget.ViewComponentType, args ?? new object());
         }
     }
 }

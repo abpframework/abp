@@ -2,6 +2,7 @@
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Pages.widgets;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 
 namespace DashboardDemo.Widgets
@@ -10,20 +11,26 @@ namespace DashboardDemo.Widgets
     {
         public static List<WidgetDefinition> GetDefinitions()
         {
+            var userCountWidget = new WidgetDefinition(
+                    UserCountWidgetViewComponent.WidgetName,
+                    LocalizableString.Create<DashboardDemoResource>(UserCountWidgetViewComponent.DisplayName),
+                    typeof(UserCountWidgetViewComponent)
+                )
+                .SetDefaultDimension(6, 3)
+                .AddRequiredPermission(IdentityPermissions.Users.Default);
+
+            var roleListWidget = new WidgetDefinition(
+                    RoleListWidgetViewComponent.WidgetName,
+                    LocalizableString.Create<DashboardDemoResource>(RoleListWidgetViewComponent.DisplayName),
+                    typeof(RoleListWidgetViewComponent)
+                )
+                .SetDefaultDimension(6, 3)
+                .AddRequiredPermission(IdentityPermissions.Roles.Default);
+
             return new List<WidgetDefinition>
             {
-                new WidgetDefinition(
-                    UserCountWidgetViewComponent.WidgetName,
-                    typeof(UserCountWidgetViewComponent),
-                    LocalizableString.Create<DashboardDemoResource>(UserCountWidgetViewComponent.DisplayName),
-                    new WidgetDimensions(4,2)
-                ),
-                new WidgetDefinition(
-                    RoleListWidgetViewComponent.WidgetName,
-                    typeof(RoleListWidgetViewComponent),
-                    LocalizableString.Create<DashboardDemoResource>(RoleListWidgetViewComponent.DisplayName),
-                    new WidgetDimensions(6,3)
-                )
+                userCountWidget,
+                roleListWidget
             };
         }
     }
