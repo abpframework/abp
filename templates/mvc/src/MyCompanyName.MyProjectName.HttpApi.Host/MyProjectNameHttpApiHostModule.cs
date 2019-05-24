@@ -23,7 +23,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreModule)
+        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {

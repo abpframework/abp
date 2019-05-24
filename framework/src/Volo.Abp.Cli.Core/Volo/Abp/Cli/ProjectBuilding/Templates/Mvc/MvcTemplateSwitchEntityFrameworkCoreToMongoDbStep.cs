@@ -21,7 +21,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 "/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDb",
-                "MyProjectNameEntityFrameworkCoreModule",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -44,7 +44,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 "/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDb",
-                "MyProjectNameEntityFrameworkCoreModule",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -67,7 +67,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 "/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDb",
-                "MyProjectNameEntityFrameworkCoreModule",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
 
@@ -76,8 +76,31 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 "/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
             );
 
+            //MyCompanyName.MyProjectName.DbMigrator
+
+            ChangeProjectReference(
+                context,
+                "/src/MyCompanyName.MyProjectName.DbMigrator/MyCompanyName.MyProjectName.DbMigrator.csproj",
+                "EntityFrameworkCore.DbMigrations",
+                "MongoDB"
+            );
+
+            ChangeModuleDependency(
+                context,
+                "/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDb",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                "MyProjectNameMongoDbModule"
+            );
+
+            ChangeConnectionStringToMongoDb(
+                context,
+                "/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json"
+            );
+
             //MyCompanyName.MyProjectName.Domain.Tests
-            
+
             ChangeProjectReference(
                 context,
                 "/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
@@ -90,7 +113,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 "/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDb",
-                "MyProjectNameEntityFrameworkCoreTestModule",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbTestModule"
             );
         }

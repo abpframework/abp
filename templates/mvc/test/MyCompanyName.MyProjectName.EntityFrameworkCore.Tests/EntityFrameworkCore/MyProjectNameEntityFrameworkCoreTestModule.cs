@@ -10,7 +10,7 @@ using Volo.Abp.Modularity;
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(MyProjectNameEntityFrameworkCoreModule),
+        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
         typeof(MyProjectNameTestBaseModule)
         )]
     public class MyProjectNameEntityFrameworkCoreTestModule : AbpModule

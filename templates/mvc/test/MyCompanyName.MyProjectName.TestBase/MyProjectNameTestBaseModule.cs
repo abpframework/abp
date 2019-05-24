@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Data;
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -33,7 +34,15 @@ namespace MyCompanyName.MyProjectName
 
         private static void SeedTestData(ApplicationInitializationContext context)
         {
-            DataSeedHelper.Seed(context);
+            AsyncHelper.RunSync(async () =>
+            {
+                using (var scope = context.ServiceProvider.CreateScope())
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                }
+            });
         }
     }
 }
