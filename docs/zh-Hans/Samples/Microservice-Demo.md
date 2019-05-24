@@ -148,7 +148,7 @@ Visual Studio解决方案由多个项目组成,每个项目在系统中具有不
 
 - **AuthServer.Host**: 托管IdentityServer4以向其他服务和应用程序提供身份验证服务. 它是一个单点登录服务器,包含登录页面.
 - **BackendAdminApp.Host**: 这是一个后端管理应用程序,用于托管身份和产品管理模块的UI.
-- **PubicWebSite.Host**: 作为包含简单产品列表页面和博客模块UI的公共网站.
+- **PublicWebSite.Host**: 作为包含简单产品列表页面和博客模块UI的公共网站.
 - **ConsoleClientDemo**: 一个简单的控制台应用程序,用于演示C＃应用程序中使用服务.
 
 ### 网关/BFF(前端后端)
@@ -276,8 +276,7 @@ context.Services.AddAuthentication(options =>
 
 * 它将"Cookies"身份验证添加为主要身份验证类型.
 * "oidc"身份验证配置为使用AuthServer应用程序作为身份验证服务器.
-* 它需要额外的身份范围(scopes) *role*, *email* and *phone*.
-* It requires the API resource scopes *BackendAdminAppGateway*, *IdentityService* and *ProductService* because it will use these services as APIs.
+* 它需要额外的身份范围(scopes) *role*, *email* 和 *phone*.
 * 它需要API资源范围 *BackendAdminAppGateway*, *IdentityService* 和 *ProductService*,因为它将这些服务用作API.
 
 IdentityServer客户端设置存储在`appsettings.json`文件中:
@@ -576,8 +575,6 @@ Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的�
 ````
 
 `ReRoutes`是一个URL映射数组. `GlobalConfiguration`部分中的`BaseUrl`是该网关的URL(Ocelot需要知道自己的URL). 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
-
-Ocelot is a finalizer ASP.NET Core middleware and should be written as the last item in the pipeline:
 
 Ocelot是一个终结ASP.NET核心中间件,应该写成管道中的最后一项:
 
@@ -935,7 +932,7 @@ context.Services.AddAuthentication("Bearer")
 
 #### IdentityServer Client
 
-此微服务还通过内部网关使用Identity微服务API, 因为在某些情况下它需要查询用户详细信息(username, email, phone, name and surname). 因此,它也是IdentityServer的客户端,并在`appsettings.json`文件中定义了一个部分:
+此微服务还通过内部网关使用Identity微服务API, 因为在某些情况下它需要查询用户详细信息(username, email, phone, name 和 surname). 因此,它也是IdentityServer的客户端,并在`appsettings.json`文件中定义了一个部分:
 
 ````json
 "IdentityClients": {
@@ -1334,7 +1331,7 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 AddDistributedEvent(new ProductStockCountChangedEto(Id, StockCount, stockCount));
 ````
 
-`ProductStockCountChangedEto` was defined as shown below:
+`ProductStockCountChangedEto` 定义如下:
 
 ````csharp
 [Serializable]
