@@ -7,28 +7,44 @@ namespace Volo.Abp.DependencyInjection
 {
     public class ExposeServicesAttribute : Attribute, IExposedServiceTypesProvider
     {
-        public Type[] ExposedServiceTypes { get; }
-        
-        public ExposeServicesAttribute(params Type[] exposedServiceTypes)
+        public Type[] ServiceTypes { get; }
+
+        public bool? IncludeDefaults { get; set; }
+
+        public bool? IncludeSelf { get; set; }
+
+        public ExposeServicesAttribute(params Type[] serviceTypes)
         {
-            ExposedServiceTypes = exposedServiceTypes ?? new Type[0];
+            ServiceTypes = serviceTypes ?? new Type[0];
         }
 
         public Type[] GetExposedServiceTypes(Type targetType)
         {
-            if (ExposedServiceTypes.Any())
+            var serviceList = ServiceTypes.ToList();
+
+            if (IncludeDefaults == true)
             {
-                return ExposedServiceTypes;
+                foreach (var type in GetDefaultServices(targetType))
+                {
+                    serviceList.AddIfNotContains(type);
+                }
+
+                if (IncludeSelf != false)
+                {
+                    serviceList.AddIfNotContains(targetType);
+                }
+            }
+            else if (IncludeSelf == true)
+            {
+                serviceList.AddIfNotContains(targetType);
             }
 
-            return GetDefaultExposedServices(targetType).ToArray();
+            return serviceList.ToArray();
         }
 
-        private static List<Type> GetDefaultExposedServices(Type type)
+        private static List<Type> GetDefaultServices(Type type)
         {
             var serviceTypes = new List<Type>();
-
-            serviceTypes.Add(type);
 
             foreach (var interfaceType in type.GetTypeInfo().GetInterfaces())
             {

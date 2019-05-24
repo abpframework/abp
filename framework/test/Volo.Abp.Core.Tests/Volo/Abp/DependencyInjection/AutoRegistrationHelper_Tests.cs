@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Shouldly;
-using System.Linq;
+﻿using Shouldly;
 using Xunit;
 
 namespace Volo.Abp.DependencyInjection
