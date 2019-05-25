@@ -21,16 +21,18 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             builder.Entity<Question>(b =>
             {
                 //Configure table & schema name
-                //b.ToTable(options.TablePrefix + "Questions", options.Schema);
-                
+                b.ToTable(options.TablePrefix + "Questions", options.Schema);
+            
+                b.ConfigureFullAuditedAggregateRoot();
+            
                 //Properties
-                //b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
+                b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
                 
-                //Configure relations
-                //b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
+                //Relations
+                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
 
-                //Configure indexes
-                //b.HasIndex(q => q.CreationTime);
+                //Indexes
+                b.HasIndex(q => q.CreationTime);
             });
             */
         }

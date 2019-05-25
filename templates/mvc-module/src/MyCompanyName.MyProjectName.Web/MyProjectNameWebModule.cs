@@ -42,14 +42,16 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources
                     .Get<MyProjectNameResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/MyProjectName");
+                    .AddBaseTypes(typeof(AbpUiResource))
+                    .AddVirtualJson("/Localization/MyProjectName/Web");
             });
 
             Configure<AbpAutoMapperOptions>(options =>
             {
+                /* Using `true` for the `validate` parameter to
+                 * validate the profile on application startup.
+                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more info
+                 * about the configuration validation. */
                 options.AddProfile<MyProjectNameWebAutoMapperProfile>(validate: true);
             });
 

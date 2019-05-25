@@ -15,9 +15,4 @@
     <ProjectReference Include="..\MyCompanyName.MyProjectName.Domain.Shared\MyCompanyName.MyProjectName.Domain.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Localization\MyProjectName\Domain\*.json" />
-    <Content Remove="Localization\MyProjectName\Domain\*.json" />
-  </ItemGroup>
-
 </Project>

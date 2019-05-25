@@ -2,6 +2,7 @@
 using Volo.Abp.Localization;
 using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -22,6 +23,7 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources
                     .Add<MyProjectNameResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName/DomainShared");
             });
 
