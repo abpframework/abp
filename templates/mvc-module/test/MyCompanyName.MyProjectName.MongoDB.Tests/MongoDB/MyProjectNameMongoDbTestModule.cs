@@ -19,7 +19,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
 
             Configure<DbConnectionOptions>(options =>
             {
-                options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
+                options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString + "|MyProjectName";
             });
         }
 
