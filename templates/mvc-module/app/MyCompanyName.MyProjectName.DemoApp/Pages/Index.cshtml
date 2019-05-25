@@ -1,4 +1,6 @@
 ﻿@page
+@using Localization.Resources.AbpUi
+@using Microsoft.Extensions.Localization
 @model MyCompanyName.MyProjectName.DemoApp.Pages.IndexModel
-<h3>Welcome to the MyProjectName demo application.</h3>
-<a href="/Account/Login">Login</a>
+@inject IStringLocalizer<AbpUiResource> Localizer
+<a href="/Account/Login">@Localizer["Login"]</a>
