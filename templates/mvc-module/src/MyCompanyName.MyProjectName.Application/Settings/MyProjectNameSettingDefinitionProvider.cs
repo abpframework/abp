@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Settings;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Settings
 {
     public class MyProjectNameSettingDefinitionProvider : SettingDefinitionProvider
     {

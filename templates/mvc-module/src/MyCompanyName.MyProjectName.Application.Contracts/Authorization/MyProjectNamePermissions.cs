@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Reflection;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Authorization
 {
     public class MyProjectNamePermissions
     {
