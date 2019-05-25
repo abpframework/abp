@@ -4,20 +4,20 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace />
+    <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyCompanyName.MyProjectName.Domain.Shared\MyCompanyName.MyProjectName.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Domain\Volo.Abp.Ddd.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="MyCompanyName\MyProjectName\Localization\Domain\*.json" />
+    <ProjectReference Include="..\MyCompanyName.MyProjectName.Domain.Shared\MyCompanyName.MyProjectName.Domain.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="MyCompanyName\MyProjectName\Localization\Domain\*.json" />
+    <EmbeddedResource Include="Localization\MyProjectName\Domain\*.json" />
+    <Content Remove="Localization\MyProjectName\Domain\*.json" />
   </ItemGroup>
 
 </Project>
