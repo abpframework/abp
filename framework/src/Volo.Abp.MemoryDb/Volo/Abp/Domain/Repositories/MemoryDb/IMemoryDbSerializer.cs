@@ -1,9 +1,11 @@
-﻿namespace Volo.Abp.Domain.Repositories.MemoryDb
+﻿using System;
+
+namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
     public interface IMemoryDbSerializer
     {
-        object Serialize(object obj);
+        byte[] Serialize(object obj);
 
-        object Deserialize(object obj);
+        object Deserialize(byte[] value, Type type);
     }
 }

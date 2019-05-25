@@ -9,7 +9,5 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         void Update(TEntity entity);
 
         void Remove(TEntity entity);
-
-        bool Contains(TEntity entity);
     }
 }

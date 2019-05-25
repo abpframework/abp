@@ -3,7 +3,6 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.TestApp.Domain
 {
-    [Serializable]
     public class City : AggregateRoot<Guid>
     {
         public string Name { get; set; }
