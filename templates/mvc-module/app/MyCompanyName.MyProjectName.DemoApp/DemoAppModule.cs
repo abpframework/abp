@@ -23,6 +23,9 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
@@ -32,16 +35,19 @@ namespace MyCompanyName.MyProjectName.DemoApp
         typeof(MyProjectNameWebModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
+        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule),
+        typeof(AbpIdentityEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpAutofacModule),
+        typeof(AbpTenantManagementWebModule),
+        typeof(AbpTenantManagementApplicationModule),
+        typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
     public class DemoAppModule : AbpModule

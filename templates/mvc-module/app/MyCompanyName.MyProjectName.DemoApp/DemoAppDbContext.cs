@@ -4,6 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.DemoApp
 {
@@ -22,6 +23,7 @@ namespace MyCompanyName.MyProjectName.DemoApp
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
             modelBuilder.ConfigureIdentity();
+            modelBuilder.ConfigureTenantManagement();
             modelBuilder.ConfigureMyProjectName();
         }
     }
