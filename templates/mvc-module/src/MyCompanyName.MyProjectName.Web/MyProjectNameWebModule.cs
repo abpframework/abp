@@ -6,16 +6,17 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
-    [DependsOn(typeof(MyProjectNameHttpApiModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
-    [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(
+        typeof(MyProjectNameHttpApiModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAutoMapperModule)
+        )]
     public class MyProjectNameWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
