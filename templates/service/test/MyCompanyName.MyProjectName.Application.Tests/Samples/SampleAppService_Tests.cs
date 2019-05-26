@@ -1,21 +1,23 @@
 ﻿using System.Threading.Tasks;
+using Shouldly;
 using Xunit;
 
 namespace MyCompanyName.MyProjectName.Samples
 {
-    public class SampleAppService_Tests : MyProjectNameDomainTestBase
+    public class SampleAppService_Tests : MyProjectNameApplicationTestBase
     {
-        //private readonly SampleAppService _sampleAppService;
+        private readonly ISampleAppService _sampleAppService;
 
         public SampleAppService_Tests()
         {
-            //_sampleAppService = GetRequiredService<SampleAppService>();
+            _sampleAppService = GetRequiredService<ISampleAppService>();
         }
 
         [Fact]
-        public async Task Method1Async()
+        public async Task GetAsync()
         {
-
+            var result = await _sampleAppService.GetAsync();
+            result.Value.ShouldBe(42);
         }
     }
 }

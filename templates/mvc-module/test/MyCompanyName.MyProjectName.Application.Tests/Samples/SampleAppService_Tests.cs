@@ -3,7 +3,7 @@ using Xunit;
 
 namespace MyCompanyName.MyProjectName.Samples
 {
-    public class SampleAppService_Tests : MyProjectNameDomainTestBase
+    public class SampleAppService_Tests : MyProjectNameApplicationTestBase
     {
         //private readonly SampleAppService _sampleAppService;
 
