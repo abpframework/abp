@@ -19,5 +19,12 @@ namespace MyCompanyName.MyProjectName.Samples
             var result = await _sampleAppService.GetAsync();
             result.Value.ShouldBe(42);
         }
+
+        [Fact]
+        public async Task GetAuthorizedAsync()
+        {
+            var result = await _sampleAppService.GetAuthorizedAsync();
+            result.Value.ShouldBe(42);
+        }
     }
 }

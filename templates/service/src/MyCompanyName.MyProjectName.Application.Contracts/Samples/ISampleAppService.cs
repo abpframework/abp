@@ -6,5 +6,7 @@ namespace MyCompanyName.MyProjectName.Samples
     public interface ISampleAppService : IApplicationService
     {
         Task<SampleDto> GetAsync();
+
+        Task<SampleDto> GetAuthorizedAsync();
     }
 }
