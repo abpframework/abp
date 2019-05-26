@@ -3,18 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace MyCompanyName.MyProjectName.Host
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public class DemoAppDbContextFactory : IDesignTimeDbContextFactory<DemoAppDbContext>
+    public class MyProjectHttpApiHostMigrationsDbContextFactory : IDesignTimeDbContextFactory<MyProjectHttpApiHostMigrationsDbContext>
     {
-        public DemoAppDbContext CreateDbContext(string[] args)
+        public MyProjectHttpApiHostMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<DemoAppDbContext>()
+            var builder = new DbContextOptionsBuilder<MyProjectHttpApiHostMigrationsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 
-            return new DemoAppDbContext(builder.Options);
+            return new MyProjectHttpApiHostMigrationsDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()

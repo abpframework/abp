@@ -6,11 +6,11 @@ using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
-namespace IdentityServerHost
+namespace IdentityServerHost.EntityFrameworkCore
 {
-    public class DemoAppDbContext : AbpDbContext<DemoAppDbContext>
+    public class IdentityServerHostMigrationsDbContext : AbpDbContext<IdentityServerHostMigrationsDbContext>
     {
-        public DemoAppDbContext(DbContextOptions<DemoAppDbContext> options)
+        public IdentityServerHostMigrationsDbContext(DbContextOptions<IdentityServerHostMigrationsDbContext> options)
             : base(options)
         {
 

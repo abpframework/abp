@@ -3,18 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace IdentityServerHost
+namespace IdentityServerHost.EntityFrameworkCore
 {
-    public class DemoAppDbContextFactory : IDesignTimeDbContextFactory<DemoAppDbContext>
+    public class IdentityServerHostMigrationsDbContextFactory : IDesignTimeDbContextFactory<IdentityServerHostMigrationsDbContext>
     {
-        public DemoAppDbContext CreateDbContext(string[] args)
+        public IdentityServerHostMigrationsDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<DemoAppDbContext>()
+            var builder = new DbContextOptionsBuilder<IdentityServerHostMigrationsDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 
-            return new DemoAppDbContext(builder.Options);
+            return new IdentityServerHostMigrationsDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()

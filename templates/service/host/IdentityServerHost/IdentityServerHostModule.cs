@@ -1,8 +1,13 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
+﻿using IdentityServerHost.MultiTenancy;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.DataProtection;
+using StackExchange.Redis;
 using Volo.Abp;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -10,17 +15,25 @@ using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Threading;
 
 namespace IdentityServerHost
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(AbpAspNetCoreMvcModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+        typeof(AbpAutofacModule),
+        typeof(AbpEntityFrameworkCoreSqlServerModule),
         typeof(AbpIdentityAspNetCoreModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule)
+        typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+        typeof(AbpSettingManagementEntityFrameworkCoreModule)
         )]
     public class IdentityServerHostModule : AbpModule
     {
@@ -29,28 +42,29 @@ namespace IdentityServerHost
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.BuildConfiguration();
 
-            Configure<DbConnectionOptions>(options =>
-            {
-                options.ConnectionStrings.Default = configuration.GetConnectionString("Default");
-            });
-
             Configure<AbpDbContextOptions>(options =>
             {
                 options.UseSqlServer();
             });
 
-            Configure<IISOptions>(iis =>
+            Configure<AbpLocalizationOptions>(options =>
             {
-                iis.AuthenticationDisplayName = "Windows";
-                iis.AutomaticAuthentication = false;
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                //...you can add other languages
             });
 
-            context.Services.AddDistributedSqlServerCache(options =>
+            context.Services.AddDistributedRedisCache(options =>
             {
-                options.ConnectionString = configuration.GetConnectionString("SqlServerCache");
-                options.SchemaName = "dbo";
-                options.TableName = "TestCache";
+                options.Configuration = configuration["Redis:Configuration"];
             });
+
+            if (!hostingEnvironment.IsDevelopment())
+            {
+                var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+                context.Services
+                    .AddDataProtection()
+                    .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
+            }
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -58,11 +72,14 @@ namespace IdentityServerHost
             var app = context.GetApplicationBuilder();
             
             app.UseVirtualFiles();
-
             app.UseAuthentication();
-
+            if (MultiTenancyConsts.IsEnabled)
+            {
+                app.UseMultiTenancy();
+            }
             app.UseIdentityServer();
-
+            app.UseAbpRequestLocalization();
+            app.UseAuditing();
             app.UseMvcWithDefaultRoute();
 
             SeedData(context);
@@ -70,12 +87,15 @@ namespace IdentityServerHost
 
         private void SeedData(ApplicationInitializationContext context)
         {
-            using (var scope = context.ServiceProvider.CreateScope())
+            AsyncHelper.RunSync(async () =>
             {
-                scope.ServiceProvider
-                    .GetRequiredService<IdentityServerDataSeeder>()
-                    .Seed();
-            }
+                using (var scope = context.ServiceProvider.CreateScope())
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                }
+            });
         }
     }
 }

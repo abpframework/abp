@@ -4,14 +4,18 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace MyCompanyName.MyProjectName.Host
+namespace MyCompanyName.MyProjectName
 {
     public class Program
     {
         public static int Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
+#if DEBUG
                 .MinimumLevel.Debug()
+#else
+                .MinimumLevel.Information()
+#endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
