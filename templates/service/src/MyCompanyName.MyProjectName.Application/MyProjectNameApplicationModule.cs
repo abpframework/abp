@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
+﻿using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
-using Volo.Abp.Settings;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -16,6 +14,10 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
+                /* Using `true` for the `validate` parameter to
+                 * validate the profile on application startup.
+                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more info
+                 * about the configuration validation. */
                 options.AddProfile<MyProjectNameApplicationAutoMapperProfile>(validate: true);
             });
         }

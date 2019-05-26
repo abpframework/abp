@@ -1,27 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Localization;
+﻿using Volo.Abp.Modularity;
 using Volo.Abp.Localization;
+using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Modularity;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(MyProjectNameDomainSharedModule)
-        )]
-    public class MyProjectNameDomainModule : AbpModule
+        typeof(AbpLocalizationModule)
+    )]
+    public class MyProjectNameDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameDomainModule>();
+                options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options.Resources.Get<MyProjectNameResource>().AddVirtualJson("/MyCompanyName/MyProjectName/Localization/Domain");
+                options.Resources
+                    .Add<MyProjectNameResource>("en")
+                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddVirtualJson("/Localization/MyProjectName/DomainShared");
             });
 
             Configure<ExceptionLocalizationOptions>(options =>

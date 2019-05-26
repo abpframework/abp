@@ -1,7 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Localization;
+﻿using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Application;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -25,7 +23,7 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources
                     .Get<MyProjectNameResource>()
-                    .AddVirtualJson("/MyCompanyName/MyProjectName/Localization/ApplicationContracts");
+                    .AddVirtualJson("/Localization/MyProjectName/ApplicationContracts");
             });
         }
     }

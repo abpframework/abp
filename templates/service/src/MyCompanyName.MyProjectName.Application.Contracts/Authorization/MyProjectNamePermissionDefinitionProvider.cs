@@ -2,7 +2,7 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Authorization
 {
     public class MyProjectNamePermissionDefinitionProvider : PermissionDefinitionProvider
     {
