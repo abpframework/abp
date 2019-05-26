@@ -2,7 +2,9 @@
 using Volo.Abp;
 using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -26,12 +28,15 @@ namespace MyCompanyName.MyProjectName
 
         private static void SeedTestData(ApplicationInitializationContext context)
         {
-            using (var scope = context.ServiceProvider.CreateScope())
+            AsyncHelper.RunSync(async () =>
             {
-                scope.ServiceProvider
-                    .GetRequiredService<MyProjectNameTestDataBuilder>()
-                    .Build();
-            }
+                using (var scope = context.ServiceProvider.CreateScope())
+                {
+                    await scope.ServiceProvider
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
+                }
+            });
         }
     }
 }
