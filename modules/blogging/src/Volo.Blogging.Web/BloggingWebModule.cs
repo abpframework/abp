@@ -17,9 +17,9 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule),
-        typeof(AbpAspNetCoreMvcUiBundlingModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AspNetCoreMvcUiBootstrapModule),
+        typeof(AspNetCoreMvcUiBundlingModule),
+        typeof(AutoMapperModule)
     )]
     public class BloggingWebModule : AbpModule
     {

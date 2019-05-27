@@ -13,7 +13,7 @@ namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsDomainSharedModule),
-        typeof(AbpDddDomainModule)
+        typeof(DddDomainModule)
         )]
     public class DocsDomainModule : AbpModule
     {

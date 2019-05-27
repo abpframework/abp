@@ -9,8 +9,8 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.RabbitMq
 {
     [DependsOn(
         typeof(DemoAppSharedModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpBackgroundJobsRabbitMqModule)
+        typeof(AutofacModule),
+        typeof(BackgroundJobsRabbitMqModule)
     )]
     public class DemoAppRabbitMqModule : AbpModule
     {

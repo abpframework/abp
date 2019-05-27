@@ -6,8 +6,8 @@ namespace Volo.Abp.BackgroundJobs
 {
     [DependsOn(
         typeof(BackgroundJobsDomainSharedModule),
-        typeof(AbpBackgroundJobsModule),
-        typeof(AbpAutoMapperModule)
+        typeof(BackgroundJobsModule),
+        typeof(AutoMapperModule)
         )]
     public class BackgroundJobsDomainModule : AbpModule //TODO: Rename to AbpBackgroundJobsDomainModule
     {

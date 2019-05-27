@@ -8,7 +8,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpLocalizationModule)
+        typeof(LocalizationModule)
     )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {
@@ -23,7 +23,7 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources
                     .Add<MyProjectNameResource>("en")
-                    .AddBaseTypes(typeof(AbpValidationResource))
+                    .AddBaseTypes(typeof(ValidationResource))
                     .AddVirtualJson("/Localization/MyProjectName/DomainShared");
             });
 

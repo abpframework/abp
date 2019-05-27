@@ -9,7 +9,7 @@ namespace Volo.Docs.Admin
 {
     [DependsOn(
         typeof(DocsDomainSharedModule),
-        typeof(AbpDddApplicationModule)
+        typeof(DddApplicationModule)
         )]
     public class DocsAdminApplicationContractsModule : AbpModule
     {

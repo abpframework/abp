@@ -5,7 +5,7 @@ using Volo.Abp.AuditLogging.EntityFrameworkCore;
 
 namespace Volo.Abp.AuditLogging
 {
-    public class AuditLogsTestBase : AuditLoggingTestBase<AbpAuditLoggingTestModule>
+    public class AuditLogsTestBase : AuditLoggingTestBase<AuditLoggingTestModule>
     {
         protected virtual void UsingDbContext(Action<IAuditLoggingDbContext> action)
         {

@@ -18,7 +18,7 @@ using Volo.Abp.UI.Navigation;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
+        typeof(AspNetCoreTestBaseModule),
         typeof(MyProjectNameWebModule),
         typeof(MyProjectNameApplicationTestModule)
     )]

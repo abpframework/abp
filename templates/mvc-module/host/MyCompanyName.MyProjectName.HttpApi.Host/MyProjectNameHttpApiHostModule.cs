@@ -26,12 +26,12 @@ namespace MyCompanyName.MyProjectName
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
         typeof(MyProjectNameHttpApiModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule)
+        typeof(AspNetCoreMultiTenancyModule),
+        typeof(AutofacModule),
+        typeof(EntityFrameworkCoreSqlServerModule),
+        typeof(AuditLoggingEntityFrameworkCoreModule),
+        typeof(PermissionManagementEntityFrameworkCoreModule),
+        typeof(SettingManagementEntityFrameworkCoreModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {

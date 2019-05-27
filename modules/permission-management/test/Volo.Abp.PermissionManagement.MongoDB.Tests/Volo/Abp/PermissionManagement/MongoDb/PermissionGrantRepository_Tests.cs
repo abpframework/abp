@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.PermissionManagement.MongoDb
 {
-    public class PermissionGrantRepository_Tests : PermissionGrantRepository_Tests<AbpPermissionManagementMongoDbTestModule>
+    public class PermissionGrantRepository_Tests : PermissionGrantRepository_Tests<PermissionManagementMongoDbTestModule>
     {
 
     }

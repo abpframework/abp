@@ -6,7 +6,7 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
+        typeof(HttpClientModule))]
     public class BloggingHttpApiClientModule : AbpModule
     {
         public const string RemoteServiceName = "Blogging";

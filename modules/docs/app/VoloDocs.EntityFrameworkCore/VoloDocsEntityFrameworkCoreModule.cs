@@ -9,10 +9,10 @@ namespace VoloDocs.EntityFrameworkCore
 {
     [DependsOn(
         typeof(DocsEntityFrameworkCoreModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule))]
+        typeof(IdentityEntityFrameworkCoreModule),
+        typeof(PermissionManagementEntityFrameworkCoreModule),
+        typeof(SettingManagementEntityFrameworkCoreModule),
+        typeof(EntityFrameworkCoreSqlServerModule))]
     public class VoloDocsEntityFrameworkCoreModule : AbpModule
     {
         

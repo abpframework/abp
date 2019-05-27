@@ -15,14 +15,14 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpAuditLoggingDomainSharedModule),
+        typeof(AuditLoggingDomainSharedModule),
         typeof(BackgroundJobsDomainSharedModule),
-        typeof(AbpFeatureManagementDomainSharedModule),
-        typeof(AbpIdentityDomainSharedModule),
-        typeof(AbpIdentityServerDomainSharedModule),
-        typeof(AbpPermissionManagementDomainSharedModule),
-        typeof(AbpSettingManagementDomainSharedModule),
-        typeof(AbpTenantManagementDomainSharedModule)
+        typeof(FeatureManagementDomainSharedModule),
+        typeof(IdentityDomainSharedModule),
+        typeof(IdentityServerDomainSharedModule),
+        typeof(PermissionManagementDomainSharedModule),
+        typeof(SettingManagementDomainSharedModule),
+        typeof(TenantManagementDomainSharedModule)
         )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {

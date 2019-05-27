@@ -20,8 +20,8 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AutofacModule),
+        typeof(AspNetCoreMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
         )]

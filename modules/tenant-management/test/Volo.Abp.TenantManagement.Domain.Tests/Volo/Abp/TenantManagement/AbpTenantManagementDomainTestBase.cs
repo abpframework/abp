@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Volo.Abp.TenantManagement
 {
-    public class AbpTenantManagementDomainTestBase : TenantManagementTestBase<AbpSettingManagementDomainTestModule>
+    public class AbpTenantManagementDomainTestBase : TenantManagementTestBase<SettingManagementDomainTestModule>
     {
 
     }

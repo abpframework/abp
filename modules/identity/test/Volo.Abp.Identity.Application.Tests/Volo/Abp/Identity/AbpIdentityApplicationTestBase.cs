@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Identity
 {
-    public class AbpIdentityApplicationTestBase : AbpIdentityExtendedTestBase<AbpIdentityApplicationTestModule>
+    public class AbpIdentityApplicationTestBase : AbpIdentityExtendedTestBase<IdentityApplicationTestModule>
     {
 
     }

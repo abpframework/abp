@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class PersistentGrantRepository_Tests : PersistentGrantRepository_Tests<AbpIdentityServerTestEntityFrameworkCoreModule>
+    public class PersistentGrantRepository_Tests : PersistentGrantRepository_Tests<IdentityServerTestEntityFrameworkCoreModule>
     {
 
     }

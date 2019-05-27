@@ -5,7 +5,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule)
+        typeof(HttpClientIdentityModelModule)
         )]
     public class MyProjectNameConsoleApiClientModule : AbpModule
     {

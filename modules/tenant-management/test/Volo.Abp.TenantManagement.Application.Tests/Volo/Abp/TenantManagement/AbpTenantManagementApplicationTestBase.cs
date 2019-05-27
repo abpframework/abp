@@ -3,7 +3,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
 namespace Volo.Abp.TenantManagement
 {
-    public abstract class AbpTenantManagementApplicationTestBase : TenantManagementTestBase<AbpTenantManagementApplicationTestModule>
+    public abstract class AbpTenantManagementApplicationTestBase : TenantManagementTestBase<TenantManagementApplicationTestModule>
     {
         protected virtual void UsingDbContext(Action<ITenantManagementDbContext> action)
         {

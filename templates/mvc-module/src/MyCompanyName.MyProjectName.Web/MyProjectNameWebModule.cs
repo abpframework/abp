@@ -14,8 +14,8 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AspNetCoreMvcUiThemeSharedModule),
+        typeof(AutoMapperModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -43,7 +43,7 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources
                     .Get<MyProjectNameResource>()
-                    .AddBaseTypes(typeof(AbpUiResource))
+                    .AddBaseTypes(typeof(UiResource))
                     .AddVirtualJson("/Localization/MyProjectName/Web");
             });
 

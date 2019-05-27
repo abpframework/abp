@@ -10,10 +10,10 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(MyProjectNameDomainModule),
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpTenantManagementApplicationModule),
-        typeof(AbpFeatureManagementApplicationModule)
+        typeof(IdentityApplicationModule),
+        typeof(PermissionManagementApplicationModule),
+        typeof(TenantManagementApplicationModule),
+        typeof(FeatureManagementApplicationModule)
         )]
     public class MyProjectNameApplicationModule : AbpModule
     {

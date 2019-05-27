@@ -5,7 +5,7 @@ namespace Volo.Docs.Admin
 {
     [DependsOn(
         typeof(DocsAdminApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule)
+        typeof(AspNetCoreMvcModule)
         )]
     public class DocsAdminHttpApiModule : AbpModule
     {

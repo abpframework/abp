@@ -15,15 +15,15 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameDomainSharedModule),
-        typeof(AbpAuditLoggingDomainModule),
+        typeof(AuditLoggingDomainModule),
         typeof(BackgroundJobsDomainModule),
-        typeof(AbpFeatureManagementDomainModule),
-        typeof(AbpIdentityDomainModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpIdentityServerDomainModule),
-        typeof(AbpPermissionManagementDomainIdentityServerModule),
-        typeof(AbpSettingManagementDomainModule),
-        typeof(AbpTenantManagementDomainModule)
+        typeof(FeatureManagementDomainModule),
+        typeof(IdentityDomainModule),
+        typeof(PermissionManagementDomainIdentityModule),
+        typeof(IdentityServerDomainModule),
+        typeof(PermissionManagementDomainIdentityServerModule),
+        typeof(SettingManagementDomainModule),
+        typeof(TenantManagementDomainModule)
         )]
     public class MyProjectNameDomainModule : AbpModule
     {

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.FeatureManagement
 {
-    public class FeatureValueCacheItemInvalidator_Tests : FeatureManagementTestBase<AbpFeatureManagementDomainTestModule>
+    public class FeatureValueCacheItemInvalidator_Tests : FeatureManagementTestBase<FeatureManagementDomainTestModule>
     {
         private IDistributedCache<FeatureValueCacheItem> _cache;
         private IFeatureValueRepository _featureValueRepository;

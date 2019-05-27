@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BackgroundJobs.DemoApp.Shared
 {
     [DependsOn(
-        typeof(AbpBackgroundJobsAbstractionsModule)
+        typeof(BackgroundJobsAbstractionsModule)
         )]
     public class DemoAppSharedModule : AbpModule
     {

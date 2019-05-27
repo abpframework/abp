@@ -18,11 +18,11 @@ using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity.Web
 {
-    [DependsOn(typeof(AbpIdentityHttpApiModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiBootstrapModule))]
-    [DependsOn(typeof(AbpAutoMapperModule))]
-    [DependsOn(typeof(AbpPermissionManagementWebModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
+    [DependsOn(typeof(IdentityHttpApiModule))]
+    [DependsOn(typeof(AspNetCoreMvcUiBootstrapModule))]
+    [DependsOn(typeof(AutoMapperModule))]
+    [DependsOn(typeof(PermissionManagementWebModule))]
+    [DependsOn(typeof(AspNetCoreMvcUiThemeSharedModule))]
     public class AbpIdentityWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

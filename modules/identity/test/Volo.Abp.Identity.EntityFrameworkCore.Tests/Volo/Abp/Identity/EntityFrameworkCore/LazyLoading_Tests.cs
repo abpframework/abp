@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
-    public class LazyLoading_Tests : LazyLoading_Tests<AbpIdentityEntityFrameworkCoreTestModule>
+    public class LazyLoading_Tests : LazyLoading_Tests<IdentityEntityFrameworkCoreTestModule>
     {
         protected override void BeforeAddApplication(IServiceCollection services)
         {

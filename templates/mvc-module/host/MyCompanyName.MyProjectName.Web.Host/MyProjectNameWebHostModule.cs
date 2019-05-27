@@ -40,16 +40,16 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(MyProjectNameWebModule),
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(AbpAspNetCoreAuthenticationOAuthModule),
-        typeof(AbpAspNetCoreMvcClientModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpHttpClientIdentityModelModule),
-        typeof(AbpIdentityWebModule),
-        typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpTenantManagementWebModule),
-        typeof(AbpTenantManagementHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AspNetCoreAuthenticationOAuthModule),
+        typeof(AspNetCoreMvcClientModule),
+        typeof(AspNetCoreMvcUiBasicThemeModule),
+        typeof(AutofacModule),
+        typeof(HttpClientIdentityModelModule),
+        typeof(IdentityWebModule),
+        typeof(IdentityHttpApiClientModule),
+        typeof(TenantManagementWebModule),
+        typeof(TenantManagementHttpApiClientModule),
+        typeof(PermissionManagementHttpApiClientModule)
         )]
     public class MyProjectNameWebHostModule : AbpModule
     {
@@ -152,13 +152,13 @@ namespace MyCompanyName.MyProjectName
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}MyCompanyName.MyProjectName.Application.Contracts", Path.DirectorySeparatorChar)));
                     //<TEMPLATE-REMOVE>
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<UiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<PermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<IdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
                     //</TEMPLATE-REMOVE>
                 });
             }

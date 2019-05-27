@@ -7,7 +7,7 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public class AbpPermissionManagementApplicationTestBase : PermissionManagementTestBase<AbpPermissionManagementApplicationTestModule>
+    public class AbpPermissionManagementApplicationTestBase : PermissionManagementTestBase<PermissionManagementApplicationTestModule>
     {
         protected Guid? CurrentUserId { get; set; }
 

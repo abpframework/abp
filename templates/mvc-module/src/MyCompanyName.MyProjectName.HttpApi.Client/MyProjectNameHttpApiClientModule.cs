@@ -6,7 +6,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpHttpClientModule))]
+        typeof(HttpClientModule))]
     public class MyProjectNameHttpApiClientModule : AbpModule
     {
         public const string RemoteServiceName = "MyProjectName";

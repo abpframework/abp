@@ -6,7 +6,7 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
     [DependsOn(
         typeof(BackgroundJobsDomainModule),
-        typeof(AbpEntityFrameworkCoreModule)
+        typeof(EntityFrameworkCoreModule)
     )]
     public class BackgroundJobsEntityFrameworkCoreModule : AbpModule
     {

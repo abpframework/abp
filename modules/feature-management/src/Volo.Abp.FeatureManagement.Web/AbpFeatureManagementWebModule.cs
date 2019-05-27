@@ -13,9 +13,9 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(AbpFeatureManagementHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpAutoMapperModule)
+        typeof(FeatureManagementHttpApiModule),
+        typeof(AspNetCoreMvcUiThemeSharedModule),
+        typeof(AutoMapperModule)
         )]
     public class AbpFeatureManagementWebModule : AbpModule
     {

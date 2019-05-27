@@ -9,9 +9,9 @@ using Volo.Abp.Threading;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpAuthorizationModule),
+        typeof(AutofacModule),
+        typeof(TestBaseModule),
+        typeof(AuthorizationModule),
         typeof(MyProjectNameDomainModule)
         )]
     public class MyProjectNameTestBaseModule : AbpModule

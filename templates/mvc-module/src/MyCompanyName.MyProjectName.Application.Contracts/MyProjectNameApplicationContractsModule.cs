@@ -8,7 +8,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameDomainSharedModule),
-        typeof(AbpDddApplicationModule)
+        typeof(DddApplicationModule)
         )]
     public class MyProjectNameApplicationContractsModule : AbpModule
     {

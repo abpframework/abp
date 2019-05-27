@@ -4,7 +4,7 @@ using Volo.Abp.Modularity;
 namespace Volo.ClientSimulation
 {
     [DependsOn(
-        typeof(AbpHttpClientIdentityModelModule)
+        typeof(HttpClientIdentityModelModule)
         )]
     public class ClientSimulationModule : AbpModule
     {

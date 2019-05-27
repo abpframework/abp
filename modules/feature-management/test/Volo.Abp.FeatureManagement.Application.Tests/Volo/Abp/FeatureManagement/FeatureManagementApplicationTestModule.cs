@@ -3,8 +3,8 @@
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(AbpFeatureManagementApplicationModule),
-        typeof(AbpFeatureManagementDomainTestModule)
+        typeof(FeatureManagementApplicationModule),
+        typeof(FeatureManagementDomainTestModule)
         )]
     public class FeatureManagementApplicationTestModule : AbpModule
     {
