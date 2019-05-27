@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
-using MyCompanyName.MyProjectName.DemoApp.MultiTenancy;
+using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
