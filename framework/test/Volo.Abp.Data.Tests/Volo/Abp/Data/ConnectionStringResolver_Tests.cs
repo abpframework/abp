@@ -37,7 +37,7 @@ namespace Volo.Abp.Data
             _connectionStringResolver.Resolve(Database2Name).ShouldBe(DefaultConnString);
         }
 
-        [DependsOn(typeof(AbpDataModule))]
+        [DependsOn(typeof(DataModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)

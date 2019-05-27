@@ -4,7 +4,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(typeof(EntityFrameworkCoreModule))]
     public class AbpEfCoreTestSecondContextModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

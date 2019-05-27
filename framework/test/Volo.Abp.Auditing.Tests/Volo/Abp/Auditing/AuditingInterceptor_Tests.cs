@@ -47,8 +47,8 @@ namespace Volo.Abp.Auditing
         }
 
         [DependsOn(
-            typeof(AbpAuditingModule),
-            typeof(AbpAutofacModule)
+            typeof(AuditingModule),
+            typeof(AutofacModule)
             )]
         public class TestModule : AbpModule
         {

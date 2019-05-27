@@ -6,8 +6,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.Emailing
 {
     [DependsOn(
-        typeof(AbpEmailingModule),
-        typeof(AbpTestBaseModule))]
+        typeof(EmailingModule),
+        typeof(TestBaseModule))]
     public class AbpEmailingTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

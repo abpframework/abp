@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Serialization
 {
-    [DependsOn(typeof(AbpSerializationModule))]
+    [DependsOn(typeof(SerializationModule))]
     public class AbpSerializationTestModule : AbpModule
     {
 

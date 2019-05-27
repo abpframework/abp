@@ -3,8 +3,8 @@
 namespace Volo.Abp.Security
 {
     [DependsOn(
-        typeof(AbpSecurityModule),
-        typeof(AbpTestBaseModule)
+        typeof(SecurityModule),
+        typeof(TestBaseModule)
         )]
     public class AbpSecurityTestModule : AbpModule
     {

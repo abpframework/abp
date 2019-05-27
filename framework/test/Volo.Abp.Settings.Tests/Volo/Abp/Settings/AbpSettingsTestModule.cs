@@ -4,9 +4,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.Settings
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpSettingsModule),
-        typeof(AbpTestBaseModule)
+        typeof(AutofacModule),
+        typeof(SettingsModule),
+        typeof(TestBaseModule)
         )]
     public class AbpSettingsTestModule : AbpModule
     {

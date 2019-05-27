@@ -161,8 +161,8 @@ namespace Volo.Abp.Validation
             ValidationHandler.IsValidEmailAddress("john@aol...com").ShouldBe(false);
         }
 
-        [DependsOn(typeof(AbpAutofacModule))]
-        [DependsOn(typeof(AbpValidationModule))]
+        [DependsOn(typeof(AutofacModule))]
+        [DependsOn(typeof(ValidationModule))]
         public class TestModule : AbpModule
         {
             public override void PreConfigureServices(ServiceConfigurationContext context)

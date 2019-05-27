@@ -7,7 +7,7 @@ using Volo.Abp.TestApp;
 
 namespace Volo.Abp.Http
 {
-    [DependsOn(typeof(AbpAspNetCoreMvcTestModule), typeof(AbpHttpClientModule))]
+    [DependsOn(typeof(AbpAspNetCoreMvcTestModule), typeof(HttpClientModule))]
     public class AbpHttpTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

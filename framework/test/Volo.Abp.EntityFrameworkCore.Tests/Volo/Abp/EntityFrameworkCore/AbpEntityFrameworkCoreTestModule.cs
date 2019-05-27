@@ -13,9 +13,9 @@ using Volo.Abp.TestApp.EntityFrameworkCore;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
-    [DependsOn(typeof(AbpEntityFrameworkCoreModule))]
+    [DependsOn(typeof(EntityFrameworkCoreModule))]
     [DependsOn(typeof(TestAppModule))]
-    [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AutofacModule))]
     [DependsOn(typeof(AbpEfCoreTestSecondContextModule))]
     public class AbpEntityFrameworkCoreTestModule : AbpModule
     {

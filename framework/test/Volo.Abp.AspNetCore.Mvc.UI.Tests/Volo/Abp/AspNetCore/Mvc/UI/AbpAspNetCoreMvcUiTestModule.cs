@@ -6,9 +6,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Mvc.UI
 {
     [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpAspNetCoreMvcUiBundlingModule),
-        typeof(AbpAutofacModule)
+        typeof(AspNetCoreTestBaseModule),
+        typeof(AspNetCoreMvcUiBundlingModule),
+        typeof(AutofacModule)
     )]
     public class AbpAspNetCoreMvcUiTestModule : AbpModule
     {

@@ -17,10 +17,10 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
+        typeof(AspNetCoreTestBaseModule),
         typeof(AbpMemoryDbTestModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAutofacModule)
+        typeof(AspNetCoreMvcModule),
+        typeof(AutofacModule)
         )]
     public class AbpAspNetCoreMvcTestModule : AbpModule
     {

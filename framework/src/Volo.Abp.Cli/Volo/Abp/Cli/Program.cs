@@ -24,7 +24,7 @@ namespace Volo.Abp.Cli
                 .WriteTo.Console()
                 .CreateLogger();
 
-            using (var application = AbpApplicationFactory.Create<AbpCliModule>(
+            using (var application = AbpApplicationFactory.Create<CliModule>(
                 options =>
                 {
                     options.UseAutofac();

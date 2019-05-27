@@ -7,8 +7,8 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule)
+        typeof(AspNetCoreMvcUiBasicThemeModule),
+        typeof(AutofacModule)
         )]
     public class AbpAspNetCoreMvcUiBootstrapDemoModule : AbpModule
     {

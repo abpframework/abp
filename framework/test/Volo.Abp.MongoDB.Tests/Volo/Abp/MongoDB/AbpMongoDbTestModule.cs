@@ -9,7 +9,7 @@ using Volo.Abp.TestApp.MongoDb;
 namespace Volo.Abp.MongoDB
 {
     [DependsOn(
-        typeof(AbpMongoDbModule),
+        typeof(MongoDbModule),
         typeof(TestAppModule)
         )]
     public class AbpMongoDbTestModule : AbpModule

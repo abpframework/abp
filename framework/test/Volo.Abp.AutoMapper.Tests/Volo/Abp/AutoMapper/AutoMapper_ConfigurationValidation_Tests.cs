@@ -23,7 +23,7 @@ namespace Volo.Abp.AutoMapper
             _objectMapper.Map<MySourceClass, MyClassNonValidated>(new MySourceClass {Value = "42"}).ValueNotMatched.ShouldBe(null);
         }
 
-        [DependsOn(typeof(AbpAutoMapperModule))]
+        [DependsOn(typeof(AutoMapperModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)

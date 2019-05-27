@@ -11,8 +11,8 @@ namespace Volo.Abp.MemoryDb
 {
     [DependsOn(
         typeof(TestAppModule), 
-        typeof(AbpMemoryDbModule), 
-        typeof(AbpAutofacModule))]
+        typeof(MemoryDbModule), 
+        typeof(AutofacModule))]
     public class AbpMemoryDbTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

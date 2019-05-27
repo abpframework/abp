@@ -9,10 +9,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.AspNetCore.Mvc.Versioning
 {
     [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpHttpClientModule)
+        typeof(AspNetCoreTestBaseModule),
+        typeof(AspNetCoreMvcModule),
+        typeof(AutofacModule),
+        typeof(HttpClientModule)
         )]
     public class AbpAspNetCoreMvcVersioningTestModule : AbpModule
     {

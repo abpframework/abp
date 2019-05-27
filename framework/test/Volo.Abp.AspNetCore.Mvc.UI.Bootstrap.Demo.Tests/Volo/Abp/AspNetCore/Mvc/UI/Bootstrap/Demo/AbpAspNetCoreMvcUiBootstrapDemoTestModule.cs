@@ -5,7 +5,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
     [DependsOn(
         typeof(AbpAspNetCoreMvcUiBootstrapDemoModule),
-        typeof(AbpAspNetCoreTestBaseModule)
+        typeof(AspNetCoreTestBaseModule)
     )]
     public class AbpAspNetCoreMvcUiBootstrapDemoTestModule : AbpModule
     {

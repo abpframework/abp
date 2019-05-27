@@ -5,8 +5,8 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.Authorization
 {
-    [DependsOn(typeof(AbpAutofacModule))]
-    [DependsOn(typeof(AbpAuthorizationModule))]
+    [DependsOn(typeof(AutofacModule))]
+    [DependsOn(typeof(AuthorizationModule))]
     public class AbpAuthorizationTestModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
