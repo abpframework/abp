@@ -24,10 +24,12 @@ using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel;
+using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Ui.Navigation.Urls;
 using Volo.Abp.UI;
@@ -46,7 +48,9 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpFeatureManagementWebModule),
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpTenantManagementWebModule)
+        typeof(AbpIdentityHttpApiClientModule),
+        typeof(AbpTenantManagementWebModule),
+        typeof(AbpTenantManagementHttpApiClientModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -108,7 +112,7 @@ namespace MyCompanyName.MyProjectName
                 .AddOpenIdConnect("oidc", options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = false;
                     options.ResponseType = OpenIdConnectResponseType.CodeIdToken;
 
                     options.ClientId = configuration["AuthServer:ClientId"];
