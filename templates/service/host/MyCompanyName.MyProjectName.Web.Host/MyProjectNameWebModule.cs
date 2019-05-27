@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using MyCompanyName.MyProjectName.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using Microsoft.AspNetCore.Authentication;
@@ -34,7 +33,6 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Ui.Navigation.Urls;
 using Volo.Abp.UI;
-using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
