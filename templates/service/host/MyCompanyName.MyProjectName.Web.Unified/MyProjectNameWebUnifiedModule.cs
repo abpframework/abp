@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.IO;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.Swagger;
-using System.IO;
 using MyCompanyName.MyProjectName.MultiTenancy;
+using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
@@ -29,12 +30,13 @@ using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Threading;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName.DemoApp
+namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameWebModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreModule),
+        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
@@ -50,7 +52,7 @@ namespace MyCompanyName.MyProjectName.DemoApp
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule)
         )]
-    public class DemoAppModule : AbpModule
+    public class MyProjectNameWebUnifiedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
@@ -88,7 +90,6 @@ namespace MyCompanyName.MyProjectName.DemoApp
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Portuguese (Brazilian)"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "Chinese"));
-                //...add other languages
             });
 
             Configure<MultiTenancyOptions>(options =>

@@ -10,7 +10,7 @@ namespace MyCompanyName.MyProjectName
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<MyProjectNameWebModule>(options =>
+            services.AddApplication<MyProjectNameWebHostModule>(options =>
             {
                 options.UseAutofac();
             });

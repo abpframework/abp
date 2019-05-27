@@ -3,18 +3,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 
-namespace MyCompanyName.MyProjectName.DemoApp
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public class DemoAppDbContextFactory : IDesignTimeDbContextFactory<DemoAppDbContext>
+    public class UnifiedDbContextFactory : IDesignTimeDbContextFactory<UnifiedDbContext>
     {
-        public DemoAppDbContext CreateDbContext(string[] args)
+        public UnifiedDbContext CreateDbContext(string[] args)
         {
             var configuration = BuildConfiguration();
 
-            var builder = new DbContextOptionsBuilder<DemoAppDbContext>()
+            var builder = new DbContextOptionsBuilder<UnifiedDbContext>()
                 .UseSqlServer(configuration.GetConnectionString("Default"));
 
-            return new DemoAppDbContext(builder.Options);
+            return new UnifiedDbContext(builder.Options);
         }
 
         private static IConfigurationRoot BuildConfiguration()

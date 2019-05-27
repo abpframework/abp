@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace MyCompanyName.MyProjectName.DemoApp
+namespace MyCompanyName.MyProjectName
 {
     public class Program
     {

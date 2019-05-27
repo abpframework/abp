@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MyCompanyName.MyProjectName.EntityFrameworkCore;
+using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 
-namespace MyCompanyName.MyProjectName.DemoApp
+namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    public class DemoAppDbContext : AbpDbContext<DemoAppDbContext>
+    public class UnifiedDbContext : AbpDbContext<UnifiedDbContext>
     {
-        public DemoAppDbContext(DbContextOptions<DemoAppDbContext> options)
+        public UnifiedDbContext(DbContextOptions<UnifiedDbContext> options)
             : base(options)
         {
 
@@ -22,6 +22,7 @@ namespace MyCompanyName.MyProjectName.DemoApp
 
             modelBuilder.ConfigurePermissionManagement();
             modelBuilder.ConfigureSettingManagement();
+            modelBuilder.ConfigureAuditLogging();
             modelBuilder.ConfigureIdentity();
             modelBuilder.ConfigureTenantManagement();
             modelBuilder.ConfigureMyProjectName();

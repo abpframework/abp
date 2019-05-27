@@ -255,3 +255,4 @@ paket-files/
 host/MyCompanyName.MyProjectName.IdentityServer/Logs/logs.txt
 host/MyCompanyName.MyProjectName.HttpApi.Host/Logs/logs.txt
 host/MyCompanyName.MyProjectName.Web.Host/Logs/logs.txt
+host/MyCompanyName.MyProjectName.Web.Unified/Logs/logs.txt

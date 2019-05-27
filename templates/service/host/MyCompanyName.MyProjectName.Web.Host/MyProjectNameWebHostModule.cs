@@ -38,7 +38,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(MyProjectNameHttpApiModule),
+        typeof(MyProjectNameWebModule),
         typeof(MyProjectNameHttpApiClientModule),
         typeof(AbpAspNetCoreAuthenticationOAuthModule),
         typeof(AbpAspNetCoreMvcClientModule),
@@ -51,7 +51,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementHttpApiClientModule),
         typeof(AbpPermissionManagementHttpApiClientModule)
         )]
-    public class MyProjectNameWebModule : AbpModule
+    public class MyProjectNameWebHostModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
@@ -61,7 +61,7 @@ namespace MyCompanyName.MyProjectName
                     typeof(MyProjectNameResource),
                     typeof(MyProjectNameDomainSharedModule).Assembly,
                     typeof(MyProjectNameApplicationContractsModule).Assembly,
-                    typeof(MyProjectNameWebModule).Assembly
+                    typeof(MyProjectNameWebHostModule).Assembly
                 );
             });
         }
