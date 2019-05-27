@@ -22,10 +22,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Localization\MyProjectName\Web\*.json" />
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
+    <EmbeddedResource Include="wwwroot\**\*.*" />
     <Content Remove="Localization\MyProjectName\Web\*.json" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
+    <Content Remove="wwwroot\**\*.*" />
   </ItemGroup>
 
   <ItemGroup>
