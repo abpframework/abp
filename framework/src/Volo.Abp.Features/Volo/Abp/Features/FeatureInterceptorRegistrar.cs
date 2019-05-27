@@ -7,7 +7,7 @@ namespace Volo.Abp.Features
 {
     public static class FeatureInterceptorRegistrar
     {
-        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+        public static void RegisterIfNeeded(IOnServiceRegisteredContext context)
         {
             if (ShouldIntercept(context.ImplementationType))
             {

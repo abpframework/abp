@@ -6,7 +6,7 @@ namespace Volo.Abp.Auditing
 {
     public static class AuditingInterceptorRegistrar
     {
-        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+        public static void RegisterIfNeeded(IOnServiceRegisteredContext context)
         {
             if (ShouldIntercept(context.ImplementationType))
             {

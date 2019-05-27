@@ -49,12 +49,12 @@ namespace Volo.Abp
 
             if (value.Length > maxLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or lesser than {maxLength}!", parameterName);
             }
 
             if (minLength > 0 && value.Length < minLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or greater than {minLength}!", parameterName);
             }
 
             return value;
@@ -74,12 +74,12 @@ namespace Volo.Abp
 
             if (value.Length > maxLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or lesser than {maxLength}!", parameterName);
             }
 
             if (minLength > 0 && value.Length < minLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or greater than {minLength}!", parameterName);
             }
 
             return value;
@@ -99,12 +99,12 @@ namespace Volo.Abp
 
             if (value.Length > maxLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or lesser than {maxLength}!", parameterName);
             }
 
             if (minLength > 0 && value.Length < minLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or greater than {minLength}!", parameterName);
             }
 
             return value;
@@ -136,13 +136,13 @@ namespace Volo.Abp
 
                 if (value.Length < minLength)
                 {
-                    throw new ArgumentException($"{parameterName} length must be equal to or bigger than {minLength}!", parameterName);
+                    throw new ArgumentException($"{parameterName} length must be equal to or greater than {minLength}!", parameterName);
                 }
             }
 
             if (value != null && value.Length > maxLength)
             {
-                throw new ArgumentException($"{parameterName} length must be equal to or lower than {maxLength}!", parameterName);
+                throw new ArgumentException($"{parameterName} length must be equal to or lesser than {maxLength}!", parameterName);
             }
 
             return value;

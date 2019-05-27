@@ -38,7 +38,7 @@ namespace Autofac.Builder
         private static IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> InvokeRegistrationActions<TLimit, TActivatorData, TRegistrationStyle>(this IRegistrationBuilder<TLimit, TActivatorData, TRegistrationStyle> registrationBuilder, ServiceRegistrationActionList registrationActionList, Type serviceType, Type implementationType) 
             where TActivatorData : ReflectionActivatorData
         {
-            var serviceRegistredArgs = new OnServiceRegistredContext(serviceType, implementationType);
+            var serviceRegistredArgs = new OnServiceRegisteredContext(serviceType, implementationType);
 
             foreach (var registrationAction in registrationActionList)
             {

@@ -4,7 +4,7 @@ namespace Volo.Abp.Validation
 {
     public static class ValidationInterceptorRegistrar
     {
-        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+        public static void RegisterIfNeeded(IOnServiceRegisteredContext context)
         {
             if (typeof(IValidationEnabled).IsAssignableFrom(context.ImplementationType))
             {

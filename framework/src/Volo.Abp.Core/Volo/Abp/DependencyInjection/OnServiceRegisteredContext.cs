@@ -5,7 +5,7 @@ using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.DependencyInjection
 {
-    public class OnServiceRegistredContext : IOnServiceRegistredContext
+    public class OnServiceRegisteredContext : IOnServiceRegisteredContext
     {
         public virtual ITypeList<IAbpInterceptor> Interceptors { get; }
 
@@ -13,7 +13,7 @@ namespace Volo.Abp.DependencyInjection
 
         public virtual Type ImplementationType { get; }
 
-        public OnServiceRegistredContext(Type serviceType, [NotNull] Type implementationType)
+        public OnServiceRegisteredContext(Type serviceType, [NotNull] Type implementationType)
         {
             ServiceType = Check.NotNull(serviceType, nameof(serviceType));
             ImplementationType = Check.NotNull(implementationType, nameof(implementationType));

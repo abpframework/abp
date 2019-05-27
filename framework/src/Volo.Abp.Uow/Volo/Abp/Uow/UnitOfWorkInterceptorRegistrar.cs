@@ -5,7 +5,7 @@ namespace Volo.Abp.Uow
 {
     public static class UnitOfWorkInterceptorRegistrar
     {
-        public static void RegisterIfNeeded(IOnServiceRegistredContext context)
+        public static void RegisterIfNeeded(IOnServiceRegisteredContext context)
         {
             if (UnitOfWorkHelper.IsUnitOfWorkType(context.ImplementationType.GetTypeInfo()))
             {

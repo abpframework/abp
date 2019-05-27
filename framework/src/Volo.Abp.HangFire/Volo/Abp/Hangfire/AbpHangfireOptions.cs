@@ -40,6 +40,8 @@ namespace Volo.Abp.Hangfire
             ServerOptions = ServerOptions ?? serviceProvider.GetService<BackgroundJobServerOptions>() ?? new BackgroundJobServerOptions();
             AdditionalProcesses = AdditionalProcesses ?? serviceProvider.GetServices<IBackgroundProcess>();
 
+			// TODO: Depreciated method.  Will be removed in Version 2.0 of Hangfire
+
             return new BackgroundJobServer(ServerOptions, Storage, AdditionalProcesses,
                 ServerOptions.FilterProvider ?? serviceProvider.GetRequiredService<IJobFilterProvider>(),
                 ServerOptions.Activator ?? serviceProvider.GetRequiredService<JobActivator>(),

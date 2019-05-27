@@ -4,7 +4,7 @@ using Volo.Abp.DynamicProxy;
 
 namespace Volo.Abp.DependencyInjection
 {
-    public interface IOnServiceRegistredContext
+    public interface IOnServiceRegisteredContext
     {
         ITypeList<IAbpInterceptor> Interceptors { get; }
 
