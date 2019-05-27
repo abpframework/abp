@@ -40,7 +40,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
                 ));
 
                 steps.Add(new RemoveProjectFromSolutionStep(
-                    "MyCompanyName.MyProjectName.Web",
+                    "MyCompanyName.MyProjectName.Web.Unified",
                     projectFolderPath: "/host/MyCompanyName.MyProjectName.Web.Unified"
                 ));
             }
