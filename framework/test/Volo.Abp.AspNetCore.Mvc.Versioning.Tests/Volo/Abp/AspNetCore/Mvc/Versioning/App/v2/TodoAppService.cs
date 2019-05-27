@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application.Services;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v2
 {
     public class TodoAppService : ApplicationService, ITodoAppService
     {
@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat
 
         public string Get(int id)
         {
-            return "Compat-" + id + "-" + GetVersionOrNone();
+            return id + "-" + GetVersionOrNone();
         }
 
         private string GetVersionOrNone()

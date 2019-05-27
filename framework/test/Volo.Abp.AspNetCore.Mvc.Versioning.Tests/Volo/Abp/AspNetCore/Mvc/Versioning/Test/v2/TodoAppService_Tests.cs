@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat;
+using Volo.Abp.AspNetCore.Mvc.Versioning.App.v2;
 using Xunit;
 
-namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.Compat
+namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.v2
 {
     public class TodoAppService_Tests : AspNetCoreMvcVersioningTestBase
     {
@@ -14,10 +14,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.Compat
             _todoAppService = ServiceProvider.GetRequiredService<ITodoAppService>();
         }
 
-        [Fact(Skip = "It stopped working after ASP.NET Core 2.2 Upgrade. Should work on that.")]
+        [Fact]
         public void Get()
         {
-            _todoAppService.Get(42).ShouldBe("Compat-42-1.0");
+            _todoAppService.Get(42).ShouldBe("42-2.0");
         }
     }
 }

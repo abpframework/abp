@@ -85,7 +85,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 method,
                 apiDescription.RelativePath,
                 apiDescription.HttpMethod,
-                setting?.ApiVersions.Select(v => v.ToString()).ToList() ?? new List<string>() //TODO: Also get from ApiVersion attributes if available..?
+                GetSupportedVersions(controllerType, method, setting)
             ));
 
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);
@@ -124,6 +124,29 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             return methodNameBuilder.ToString();
+        }
+
+        private static List<string> GetSupportedVersions(Type controllerType, MethodInfo method, ConventionalControllerSetting setting)
+        {
+            var supportedVersions = new List<ApiVersion>();
+
+            var mapToAttributes = method.GetCustomAttributes<MapToApiVersionAttribute>().ToArray();
+            if (mapToAttributes.Any())
+            {
+                supportedVersions.AddRange(
+                    mapToAttributes.SelectMany(a => a.Versions)
+                );
+            }
+            else
+            {
+                supportedVersions.AddRange(
+                    controllerType.GetCustomAttributes<ApiVersionAttribute>().SelectMany(a => a.Versions)
+                );
+
+                setting?.ApiVersions.ForEach(supportedVersions.Add);
+            }
+
+            return supportedVersions.Select(v => v.ToString()).Distinct().ToList();
         }
 
         private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method, ApiDescription apiDescription)
