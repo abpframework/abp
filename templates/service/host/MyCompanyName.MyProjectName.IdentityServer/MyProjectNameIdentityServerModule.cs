@@ -88,6 +88,7 @@ namespace MyCompanyName.MyProjectName
         {
             var app = context.GetApplicationBuilder();
             
+            app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
             if (MultiTenancyConsts.IsEnabled)

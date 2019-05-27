@@ -72,7 +72,9 @@ namespace MyCompanyName.MyProjectName
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
-                //...you can add other languages
+                options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
             });
 
             context.Services.AddAuthentication("Bearer")
@@ -115,7 +117,7 @@ namespace MyCompanyName.MyProjectName
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
             app.UseAuditing();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRouteAndArea();
         }
     }
 }

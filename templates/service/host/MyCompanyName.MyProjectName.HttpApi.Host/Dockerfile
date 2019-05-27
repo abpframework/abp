@@ -5,7 +5,7 @@ EXPOSE 80
 FROM microsoft/dotnet:2.2-sdk AS build
 WORKDIR /src
 COPY . .
-WORKDIR /src/templates/service/host/MyCompanyName.MyProjectName.Host
+WORKDIR /src/templates/service/host/MyCompanyName.MyProjectName.HttpApi.Host
 RUN dotnet restore -nowarn:msb3202,nu1503
 RUN dotnet build --no-restore -c Release -o /app
 
@@ -15,4 +15,4 @@ RUN dotnet publish --no-restore -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "MyCompanyName.MyProjectName.Host.dll"]
+ENTRYPOINT ["dotnet", "MyCompanyName.MyProjectName.HttpApi.Host.dll"]
