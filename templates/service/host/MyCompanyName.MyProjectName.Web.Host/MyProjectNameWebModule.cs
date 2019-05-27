@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -27,7 +27,9 @@ using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Web;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.Ui.Navigation.Urls;
@@ -48,7 +50,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpTenantManagementWebModule),
-        typeof(AbpTenantManagementHttpApiClientModule)
+        typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpPermissionManagementHttpApiClientModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -74,7 +77,6 @@ namespace MyCompanyName.MyProjectName
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureNavigationServices();
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
             ConfigureRedis(context, configuration, hostingEnvironment);
@@ -125,7 +127,8 @@ namespace MyCompanyName.MyProjectName
                     options.Scope.Add("phone");
                     options.Scope.Add("MyProjectName");
 
-                    options.ClaimActions.MapAbpClaimTypes();
+                    options.ClaimActions.MapJsonKey(AbpClaimTypes.UserName, "name");
+                    options.ClaimActions.DeleteClaim("name");
                 });
         }
 
@@ -161,14 +164,6 @@ namespace MyCompanyName.MyProjectName
                     //</TEMPLATE-REMOVE>
                 });
             }
-        }
-
-        private void ConfigureNavigationServices()
-        {
-            Configure<NavigationOptions>(options =>
-            {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
-            });
         }
 
         private void ConfigureSwaggerServices(IServiceCollection services)

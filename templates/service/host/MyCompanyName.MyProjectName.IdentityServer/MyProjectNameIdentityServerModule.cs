@@ -25,6 +25,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.HttpApi;
+using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
@@ -45,6 +46,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityApplicationModule),
         typeof(AbpIdentityHttpApiModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
+        typeof(AbpPermissionManagementDomainIdentityModule),
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpPermissionManagementHttpApiModule),
