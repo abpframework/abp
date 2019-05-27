@@ -39,6 +39,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityWebModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpTenantManagementWebModule)
         )]
     public class MyProjectNameWebModule : AbpModule

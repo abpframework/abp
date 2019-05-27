@@ -7,6 +7,7 @@ using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -51,6 +52,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(MyProjectNameApplicationContractsModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
@@ -91,7 +93,15 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Applications["MVC"].RootUrl = configuration["AppSelfUrl"];
             });
-            
+
+            context.Services.AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = configuration["AuthServer:ApiName"];
+                });
+
             context.Services.AddDistributedRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
@@ -113,6 +123,7 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
