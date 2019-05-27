@@ -22,7 +22,6 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
@@ -45,7 +44,6 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAspNetCoreMvcClientModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAutofacModule),
-        typeof(AbpFeatureManagementWebModule),
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpIdentityHttpApiClientModule),
@@ -79,6 +77,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureNavigationServices();
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
+            ConfigureRedis(context, configuration, hostingEnvironment);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)

@@ -76,7 +76,7 @@ namespace MyCompanyName.MyProjectName
             {
                 httpClient.SetBearerToken(accessToken);
 
-                var url = _configurationAccessor.Configuration["RemoteServices:Default:BaseUrl"] +
+                var url = _configurationAccessor.Configuration["RemoteServices:MyProjectName:BaseUrl"] +
                           "api/MyProjectName/sample/authorized";
 
                 var responseMessage = await httpClient.GetAsync(url);
@@ -137,7 +137,7 @@ namespace MyCompanyName.MyProjectName
             {
                 httpClient.SetBearerToken(tokenResponse.AccessToken);
 
-                var url = _configurationAccessor.Configuration["RemoteServices:Default:BaseUrl"] +
+                var url = _configurationAccessor.Configuration["RemoteServices:MyProjectName:BaseUrl"] +
                           "api/MyProjectName/sample/authorized";
 
                 var responseMessage = await httpClient.GetAsync(url);
