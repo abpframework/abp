@@ -121,7 +121,12 @@ namespace MyCompanyName.MyProjectName
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            
+
+            if (!context.GetEnvironment().IsDevelopment())
+            {
+                app.UseHsts();
+            }
+            app.UseHttpsRedirection();
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
