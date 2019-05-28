@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -207,8 +207,10 @@ namespace MyCompanyName.MyProjectName
             else
             {
                 app.UseErrorPage();
+                app.UseHsts();
             }
 
+            app.UseHttpsRedirection();
             app.UseVirtualFiles();
             app.UseAuthentication();
 

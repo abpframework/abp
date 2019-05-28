@@ -8,7 +8,7 @@
         @if (!CurrentUser.IsAuthenticated)
         {
             <form method="POST">
-                <input type="submit" asp-page-handler="Login" value="LOGIN" class="btn btn-login" />
+                <input type="submit" asp-page-handler="Login" value="LOGIN" class="btn btn-primary" />
             </form>
         }
         else
