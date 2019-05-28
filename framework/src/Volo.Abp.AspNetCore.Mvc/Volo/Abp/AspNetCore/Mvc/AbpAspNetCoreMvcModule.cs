@@ -1,34 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Razor;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Modularity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.Localization;
+using Volo.Abp.Modularity;
 using Volo.Abp.UI;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
     [DependsOn(
-        typeof(AbpAspNetCoreModule), 
-        typeof(AbpLocalizationModule), 
-        typeof(AbpApiVersioningAbstractionsModule), 
+        typeof(AbpAspNetCoreModule),
+        typeof(AbpLocalizationModule),
+        typeof(AbpApiVersioningAbstractionsModule),
         typeof(AbpAspNetCoreMvcContractsModule),
         typeof(AbpUiModule)
         )]
@@ -108,6 +110,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             Configure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.AddAbp(context.Services);
+            });
+
+            Configure<MvcJsonOptions>(jsonOptions =>
+            {
+                jsonOptions.SerializerSettings.ContractResolver = new AbpMvcJsonContractResolver(context.Services);
             });
         }
 
