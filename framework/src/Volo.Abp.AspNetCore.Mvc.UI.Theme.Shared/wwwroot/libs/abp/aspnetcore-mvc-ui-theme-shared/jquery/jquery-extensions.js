@@ -87,7 +87,7 @@
         return str;
     };
 
-    $.fn.serializeFormToObject = function (camelCase = true) {
+    $.fn.serializeFormToObject = function (camelCase) {
         //serialize to array
         var data = $(this).serializeArray();
 
@@ -108,7 +108,7 @@
         //map to object
         var obj = {};
 
-        if (camelCase) {
+        if (camelCase !== undefined ? camelCase : true) {
             data.forEach(function (d) {
                 d.name = toCamelCase(d.name);
             });

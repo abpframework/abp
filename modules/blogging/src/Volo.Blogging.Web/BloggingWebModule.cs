@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -44,10 +45,13 @@ namespace Volo.Blogging
 
             Configure<AbpLocalizationOptions>(options =>
             {
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
                 options.Resources
                     .Get<BloggingResource>()
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiModule))
+                    .AddBaseTypes(typeof(AbpUiResource))
                     .AddVirtualJson("/Localization/Resources/Blogging/Web");
             });
 

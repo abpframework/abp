@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
@@ -9,14 +10,12 @@ namespace Acme.BookStore
 {
     public class BookStoreTestDataBuilder : ITransientDependency
     {
-        private readonly IIdentityDataSeeder _identityDataSeeder;
+        private readonly IDataSeeder _dataSeeder;
         private readonly IRepository<Book, Guid> _bookRepository;
 
-        public BookStoreTestDataBuilder(
-            IIdentityDataSeeder identityDataSeeder,
-            IRepository<Book, Guid> bookRepository)
+        public BookStoreTestDataBuilder(IDataSeeder dataSeeder, IRepository<Book, Guid> bookRepository)
         {
-            _identityDataSeeder = identityDataSeeder;
+            _dataSeeder = dataSeeder;
             _bookRepository = bookRepository;
         }
 
@@ -27,8 +26,7 @@ namespace Acme.BookStore
 
         public async Task BuildInternalAsync()
         {
-            await _identityDataSeeder.SeedAsync("1q2w3E*");
-
+            await _dataSeeder.SeedAsync();
             await _bookRepository.InsertAsync(
                 new Book
                 {

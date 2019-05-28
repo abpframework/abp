@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.IO
@@ -44,6 +45,23 @@ namespace Volo.Abp.IO
             }
 
             return IsSubDirectoryOf(parentDirectory, parentOfChild);
+        }
+
+        public static IDisposable ChangeCurrentDirectory(string targetDirectory)
+        {
+            var currentDirectory = Directory.GetCurrentDirectory();
+
+            if (currentDirectory.Equals(targetDirectory, StringComparison.OrdinalIgnoreCase))
+            {
+                return NullDisposable.Instance;
+            }
+
+            Directory.SetCurrentDirectory(targetDirectory);
+
+            return new DisposeAction(() =>
+            {
+                Directory.SetCurrentDirectory(currentDirectory);
+            });
         }
     }
 }

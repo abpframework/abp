@@ -29,7 +29,7 @@ namespace Volo.Abp.Application.Services
     {
         TEntityDto Get(TKey id);
 
-        PagedResultDto<TEntityDto> GetAll(TGetListInput input);
+        PagedResultDto<TEntityDto> GetList(TGetListInput input);
 
         TEntityDto Create(TCreateInput input);
 

@@ -8,7 +8,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
     {
         IMemoryDatabase Database { get; }
 
-        List<TEntity> Collection { get; }
+        IMemoryDatabaseCollection<TEntity> Collection { get; }
     }
 
     public interface IMemoryDbRepository<TEntity, TKey> : IMemoryDbRepository<TEntity>, IRepository<TEntity, TKey>

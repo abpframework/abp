@@ -9,7 +9,7 @@ ABP provides a built-in infrastructure and offers a standard model for handling 
 
 ### Automatic Exception Handling
 
-`AbpExceptionFilter` handles an exception if **any of the following conditions** are meet:
+`AbpExceptionFilter` handles an exception if **any of the following conditions** are met:
 
 * Exception is thrown by a **controller action** which returns an **object result** (not a view result).
 * The request is an AJAX request (`X-Requested-With` HTTP header value is `XMLHttpRequest`).
@@ -29,7 +29,7 @@ Error Message is an instance of the `RemoteServiceErrorResponse` class. The simp
 }
 ````
 
-There are **optional fields** those can be filled based upon the exception that has occured.
+There are **optional fields** those can be filled based upon the exception that has occurred.
 
 ##### Error Code
 
@@ -70,7 +70,7 @@ Error **details** in an optional field of the JSON error message. Thrown `Except
     "code": "App:010046",
     "message": "Your request is not valid, please correct and try again!",
     "validationErrors": [{
-      "message": "Username should be minimum lenght of 3.",
+      "message": "Username should be minimum length of 3.",
       "members": ["userName"]
     },
     {

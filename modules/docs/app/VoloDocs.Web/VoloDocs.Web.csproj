@@ -9,8 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\en.json" />
-    <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\tr.json" />
+    <EmbeddedResource Include="Localization\Resources\VoloDocs\Web\*.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,12 +40,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\assets\images\Logo.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="run.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

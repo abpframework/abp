@@ -3,6 +3,7 @@
   "TemplateFiles/": {},
   "Logs/": {},
   "wwwroot/files/": {},
+  "wwwroot/downloads/": {},
   "appsettings.json": {},
   "web.config": {}
 }
