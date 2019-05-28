@@ -9,7 +9,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(AbpLocalizationModule)
-        )]
+    )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
