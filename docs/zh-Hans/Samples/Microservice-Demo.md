@@ -116,11 +116,29 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 * 在`samples\MicroserviceDemo`文件夹中的命令行运行`dotnet restore`命令.
 * 在Visual Studio中构建解决方案.
 
-#### 还原数据库
+#### 创建数据库
 
-在`samples\MicroserviceDemo\databases`文件夹中打开`MsDemo_Identity.zip`和`MsDemo_ProductManagement.zip`并恢复到SQL Server.
+MongoDB 数据库是动态创建的，但是你需要创建 SQL server 数据库的结构。其实你可以很轻松的创建数据库，因为这个解决方案配置了使用 Entity Core Code First 来做迁移。
 
-> 请注意:这些数据库在解决方案中具有EF Core迁移,但它们没有种子数据,尤其是IdentityServer4所需的配置. 因此,恢复数据库要容易得多.
+这个解决方案中有两个 SQL server 数据库。
+
+##### MsDemo_Identity 数据库
+
+* 右键 `AuthServer.Host` 项目，然后点击 `设置为启动项目`.
+* 打开 **程序包管理器控制台** (工具 -> NuGet 包管理器 -> 程序包管理器控制台)
+* 选择 `AuthServer.Host` 成为 **默认项目**.
+* 执行 `Update-Database` 命令.
+
+![microservice-sample-update-database-authserver](../images/microservice-sample-update-database-authserver.png)
+
+##### MsDemo_ProductManagement
+
+* 右键 `ProductService.Host` 项目，然后点击 `设置为启动项目`.
+* 打开 **程序包管理器控制台** (工具 -> NuGet 包管理器 -> 程序包管理器控制台)
+* 选择 `ProductService.Host` 成为 **默认项目**.
+* 执行 `Update-Database` 命令.
+
+![microservice-sample-update-database-products](../images/microservice-sample-update-database-products.png)
 
 #### 运行项目
 

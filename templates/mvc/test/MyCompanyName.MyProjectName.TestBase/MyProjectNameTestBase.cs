@@ -7,6 +7,8 @@ using Volo.Abp.Uow;
 
 namespace MyCompanyName.MyProjectName
 {
+    /* All test classes are derived from this class, directly or indirectly.
+     */
     public abstract class MyProjectNameTestBase<TStartupModule> : AbpIntegratedTest<TStartupModule> 
         where TStartupModule : IAbpModule
     {

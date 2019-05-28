@@ -87,7 +87,10 @@ namespace MyCompanyName.MyProjectName
 
         private void ConfigureMultiTenancy()
         {
-            Configure<MultiTenancyOptions>(options => { options.IsEnabled = MultiTenancyConsts.IsMultiTenancyEnabled; });
+            Configure<MultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
+            });
         }
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
@@ -143,6 +146,7 @@ namespace MyCompanyName.MyProjectName
                 Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Application.Contracts", Path.DirectorySeparatorChar)));
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -212,7 +216,7 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseAuthentication();
 
-            if (MultiTenancyConsts.IsMultiTenancyEnabled)
+            if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }

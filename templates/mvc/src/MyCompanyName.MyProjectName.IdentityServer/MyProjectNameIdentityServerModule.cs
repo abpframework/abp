@@ -54,7 +54,7 @@ namespace MyCompanyName.MyProjectName
 
             Configure<AbpAuditingOptions>(options =>
             {
-                options.IsEnabledForGetRequests = true;
+                //options.IsEnabledForGetRequests = true;
                 options.ApplicationName = "AuthServer";
             });
 
@@ -62,6 +62,7 @@ namespace MyCompanyName.MyProjectName
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
@@ -105,12 +106,10 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
-
-            if (MultiTenancyConsts.IsMultiTenancyEnabled)
+            if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
-
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();

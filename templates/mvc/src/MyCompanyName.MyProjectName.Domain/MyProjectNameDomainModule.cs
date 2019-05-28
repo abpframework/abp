@@ -31,7 +31,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<MultiTenancyOptions>(options =>
             {
-                options.IsEnabled = MultiTenancyConsts.IsMultiTenancyEnabled;
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
         }
     }

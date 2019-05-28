@@ -20,7 +20,7 @@ namespace MyCompanyName.MyProjectName.Menus
 
         private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
-            if (!MultiTenancyConsts.IsMultiTenancyEnabled)
+            if (!MultiTenancyConsts.IsEnabled)
             {
                 var administration = context.Menu.GetAdministration();
                 administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);

@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
@@ -10,80 +10,105 @@ namespace Volo.Abp.Emailing.Templates
 {
     public class EmailTemplateProvider : IEmailTemplateProvider, ITransientDependency
     {
-        protected IServiceProvider ServiceProvider { get; }
+        protected IEmailTemplateDefinitionManager EmailTemplateDefinitionManager;
         protected ITemplateLocalizer TemplateLocalizer { get; }
         protected EmailTemplateOptions Options { get; }
+        protected IStringLocalizerFactory StringLocalizerFactory;
 
-        public EmailTemplateProvider(
-            IOptions<EmailTemplateOptions> options, 
-            IServiceProvider serviceProvider,
-            ITemplateLocalizer templateLocalizer)
+        public EmailTemplateProvider(IEmailTemplateDefinitionManager emailTemplateDefinitionManager,
+            ITemplateLocalizer templateLocalizer, IStringLocalizerFactory stringLocalizerFactory,
+            IOptions<EmailTemplateOptions> options)
         {
-            ServiceProvider = serviceProvider;
+            EmailTemplateDefinitionManager = emailTemplateDefinitionManager;
             TemplateLocalizer = templateLocalizer;
+            StringLocalizerFactory = stringLocalizerFactory;
             Options = options.Value;
         }
 
-        public async Task<EmailTemplate> GetAsync(string name)
+        public async Task<EmailTemplate> GetAsync(string name, string cultureName)
         {
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                return await GetInternalAsync(scope.ServiceProvider, name);
-            }
+            return await GetInternalAsync(name, cultureName);
         }
 
-        protected virtual async Task<EmailTemplate> GetInternalAsync(IServiceProvider serviceProvider, string name)
+        protected virtual async Task<EmailTemplate> GetInternalAsync(string name, string cultureName)
         {
-            var context = new EmailTemplateProviderContributorContext(name, serviceProvider);
-
-            foreach (var provider in Options.Providers)
+            var emailTemplateDefinition = EmailTemplateDefinitionManager.GetOrNull(name);
+            if (emailTemplateDefinition == null)
             {
-                await provider.ProvideAsync(context);
+                // TODO: Localized message
+                throw new AbpException($"email template {name} not definition");
             }
 
-            if (context.Template == null)
+            var emailTemplateString = emailTemplateDefinition.Contributors.GetOrNull(cultureName);
+            if (emailTemplateString == null && emailTemplateDefinition.DefaultCultureName != null)
             {
-                throw new AbpException($"Could not found the template: {name}");
+                emailTemplateString =
+                    emailTemplateDefinition.Contributors.GetOrNull(emailTemplateDefinition.DefaultCultureName);
+                if (emailTemplateString != null)
+                {
+                    cultureName = emailTemplateDefinition.DefaultCultureName;
+                }
             }
 
-            await SetLayoutAsync(serviceProvider, context);
-            await LocalizeAsync(serviceProvider, context);
-            
-            return context.Template;
+            if (emailTemplateString != null)
+            {
+                var emailTemplate = new EmailTemplate(emailTemplateString, emailTemplateDefinition);
+
+                await SetLayoutAsync(emailTemplateDefinition, emailTemplate, cultureName);
+
+                if (emailTemplateDefinition.SingleTemplateFile)
+                {
+                    await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName);
+                }
+
+                return emailTemplate;
+            }
+
+            // TODO: Localized message
+            throw new AbpException($"{cultureName} template not exist!");
         }
 
-        protected virtual async Task SetLayoutAsync(IServiceProvider serviceProvider, EmailTemplateProviderContributorContext context)
+        protected virtual async Task SetLayoutAsync(EmailTemplateDefinition emailTemplateDefinition,
+            EmailTemplate emailTemplate, string cultureName)
         {
-            var layout = context.Template.Definition.Layout;
-
-            if (layout.IsNullOrEmpty())
+            var layout = emailTemplateDefinition.Layout;
+            if (layout.IsNullOrWhiteSpace())
             {
                 return;
             }
-            
+
             if (layout == EmailTemplateDefinition.DefaultLayoutPlaceHolder)
             {
                 layout = Options.DefaultLayout;
             }
 
-            var layoutTemplate = await GetInternalAsync(serviceProvider, layout);
-            context.Template.SetLayout(layoutTemplate);
+            var layoutTemplate = await GetInternalAsync(layout, cultureName);
+
+            emailTemplate.SetLayout(layoutTemplate);
         }
 
-        protected virtual Task LocalizeAsync(IServiceProvider serviceProvider, EmailTemplateProviderContributorContext context)
+        protected virtual Task LocalizeAsync(EmailTemplateDefinition emailTemplateDefinition,
+            EmailTemplate emailTemplate, string cultureName)
         {
-            if (context.Template.Definition.LocalizationResource == null)
+            if (emailTemplateDefinition.LocalizationResource == null)
             {
                 return Task.CompletedTask;
             }
 
-            var localizer = serviceProvider
-                .GetRequiredService<IStringLocalizerFactory>()
-                .Create(context.Template.Definition.LocalizationResource);
-
-            context.Template.SetContent(
-                TemplateLocalizer.Localize(localizer, context.Template.Content)
-            );
+            var localizer = StringLocalizerFactory.Create(emailTemplateDefinition.LocalizationResource);
+            if (cultureName != null)
+            {
+                emailTemplate.SetContent(
+                    TemplateLocalizer.Localize(localizer.WithCulture(new CultureInfo(cultureName)),
+                        emailTemplate.Content)
+                );
+            }
+            else
+            {
+                emailTemplate.SetContent(
+                    TemplateLocalizer.Localize(localizer, emailTemplate.Content)
+                );
+            }
 
             return Task.CompletedTask;
         }
