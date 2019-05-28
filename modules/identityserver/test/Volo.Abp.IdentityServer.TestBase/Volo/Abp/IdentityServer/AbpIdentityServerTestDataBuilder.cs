@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
+using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
@@ -14,7 +16,8 @@ namespace Volo.Abp.IdentityServer
         private readonly IApiResourceRepository _apiResourceRepository;
         private readonly IClientRepository _clientRepository;
         private readonly IIdentityResourceRepository _identityResourceRepository;
-        //private readonly IPersistentGrantRepository _persistentGrantRepository;
+        private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
+        private readonly IPersistentGrantRepository _persistentGrantRepository;
         private readonly AbpIdentityServerTestData _testData;
 
         public AbpIdentityServerTestDataBuilder(
@@ -22,15 +25,17 @@ namespace Volo.Abp.IdentityServer
             IApiResourceRepository apiResourceRepository,
             IClientRepository clientRepository,
             IIdentityResourceRepository identityResourceRepository,
-            AbpIdentityServerTestData testData
-            /*IPersistentGrantRepository persistentGrantRepository*/)
+            IIdentityClaimTypeRepository identityClaimTypeRepository,
+            AbpIdentityServerTestData testData,
+            IPersistentGrantRepository persistentGrantRepository)
         {
             _testData = testData;
             _guidGenerator = guidGenerator;
             _apiResourceRepository = apiResourceRepository;
             _clientRepository = clientRepository;
             _identityResourceRepository = identityResourceRepository;
-            //_persistentGrantRepository = persistentGrantRepository;
+            _identityClaimTypeRepository = identityClaimTypeRepository;
+            _persistentGrantRepository = persistentGrantRepository;
         }
 
         public void Build()
@@ -39,13 +44,30 @@ namespace Volo.Abp.IdentityServer
             AddIdentityResources();
             AddApiResources();
             AddClients();
+            AddClaimTypes();
         }
 
         private void AddPersistedGrants()
         {
-            //_persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create()));
-            //_persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create()));
-            //_persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create()));
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+
+                Key = "PersistedGrantKey1",
+                SubjectId = "PersistedGrantSubjectId1",
+                ClientId = "PersistedGrantClientId1",
+                Type = "PersistedGrantType1"
+            });
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "PersistedGrantKey2",
+                SubjectId = "PersistedGrantSubjectId2"
+            });
+
+            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "PersistedGrantKey3",
+                SubjectId = "PersistedGrantSubjectId3"
+            });
         }
 
         private void AddIdentityResources()
@@ -104,6 +126,13 @@ namespace Volo.Abp.IdentityServer
 
             _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId2"));
             _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId3"));
+        }
+
+        private void AddClaimTypes()
+        {
+            var ageClaim = new IdentityClaimType(Guid.NewGuid(), "Age", false, false, null, null, null,
+                IdentityClaimValueType.Int);
+            _identityClaimTypeRepository.Insert(ageClaim);
         }
     }
 }

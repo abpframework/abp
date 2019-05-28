@@ -6,17 +6,17 @@ ABP的多租户模块提供了创建多租户应用程序的基本功能.
 
 > 软件多租户技术指的是一种软件架构,这种架构可以使用软件的单实例运行并为多个租户提供服务.租户是通过软件实例的特定权限共享通用访问的一组用户.使用多租户架构,软件应用为每个租户提供实例的专用共享,包括实例的数据、配置、用户管理、租户的私有功能和非功能属性.多租户与多实例架构形成对比,将软件实例的行为根据不同的租户分割开来.
 
-### Volo.Abp.MultiTenancy.Abstractions
+### Volo.Abp.MultiTenancy
 
-Volo.Abp.MultiTenancy.Abstractions定义了一些基础接口让你的代码"multi-tenancy ready",使用包管理器控制台(PMC)将它安装到你的项目中:
+Volo.Abp.MultiTenancy"multi-tenancy ready",使用包管理器控制台(PMC)将它安装到你的项目中:
 
 ````
-Install-Package Volo.Abp.MultiTenancy.Abstractions
+Install-Package Volo.Abp.MultiTenancy
 ````
 
 > 这个包默认安装在了快速启动模板中.所以,大多数情况下,你不需要手动安装它.
 
-然后你可以添加 **AbpMultiTenancyAbstractionsModule** 依赖到你的模块:
+然后你可以添加 **AbpMultiTenancyModule** 依赖到你的模块:
 
 ````C#
 using Volo.Abp.Modularity;
@@ -24,7 +24,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     public class MyModule : AbpModule
     {
         //...
@@ -89,32 +89,6 @@ namespace MyCompany.MyProject
 #### 改变当前租户
 
 TODO: ...
-
-### Volo.Abp.MultiTenancy
-
-Volo.Abp.MultiTenancy 才是让你的程序实现多租户的真正的包.使用PMC将它安装到你的项目中:
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-然后添加 **AbpMultiTenancyAbstractionsModule** 依赖到你的模块中:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> 如果你添加了AbpMultiTenancyModule依赖,就不需要再另外添加AbpMultiTenancyAbstractionsModule依赖了,因为AbpMultiTenancyModule已经依赖它了.
 
 #### 确定当前租户
 

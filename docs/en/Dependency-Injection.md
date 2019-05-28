@@ -96,7 +96,7 @@ public class TaxCalculator : ITransientDependency
 Another way of configuring a service for dependency injection is to use ``DependencyAttribute``. It has the following properties:
 
 * ``Lifetime``: Lifetime of the registration: ``Singleton``, ``Transient`` or ``Scoped``.
-* ``TryRegister``: Set ``true`` to register the service only it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
+* ``TryRegister``: Set ``true`` to register the service only if it's not registered before. Uses TryAdd... extension methods of IServiceCollection.
 * ``ReplaceServices``: Set ``true`` to replace services if they are already registered before. Uses Replace extension method of IServiceCollection.
 
 Example:
@@ -170,7 +170,7 @@ public class BlogModule : AbpModule
 
 There are three common ways of using a service that has already been registered.
 
-### Contructor Injection
+### Constructor Injection
 
 This is the most common way of injecting a service into a class. For example:
 

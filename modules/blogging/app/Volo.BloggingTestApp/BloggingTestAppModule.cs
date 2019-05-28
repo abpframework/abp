@@ -98,7 +98,7 @@ namespace Volo.BloggingTestApp
                     options.CustomSchemaIds(type => type.FullName);
                 });
 
-            var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
+            var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr"),new CultureInfo("zh-Hans") };
             Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");
@@ -114,7 +114,6 @@ namespace Volo.BloggingTestApp
             Configure<BlogFileOptions>(options =>
             {
                 options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
-                options.FileUploadUrlRoot = "/files/";
             });
         }
 
@@ -160,18 +159,8 @@ namespace Volo.BloggingTestApp
                 AsyncHelper.RunSync(async () =>
                 {
                     await scope.ServiceProvider
-                        .GetRequiredService<IIdentityDataSeeder>()
-                        .SeedAsync(
-                            "1q2w3E*"
-                        );
-
-                    await scope.ServiceProvider
-                        .GetRequiredService<IPermissionDataSeeder>()
-                        .SeedAsync(
-                            RolePermissionValueProvider.ProviderName,
-                            "admin",
-                            IdentityPermissions.GetAll().Union(BloggingPermissions.GetAll())
-                        );
+                        .GetRequiredService<IDataSeeder>()
+                        .SeedAsync();
                 });
             }
         }

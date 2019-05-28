@@ -205,6 +205,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual List<ModelExpression> ExploreModelsRecursively(List<ModelExpression> list, ModelExplorer model)
         {
+            if (model.GetAttribute<DynamicFormIgnore>() != null)
+            {
+                return list;
+            }
+
             if (IsCsharpClassOrPrimitive(model.ModelType) || IsListOfCsharpClassOrPrimitive(model.ModelType))
             {
                 list.Add(ModelExplorerToModelExpressionConverter(model));

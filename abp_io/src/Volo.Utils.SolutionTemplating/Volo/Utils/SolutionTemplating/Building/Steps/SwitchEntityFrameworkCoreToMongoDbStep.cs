@@ -14,27 +14,27 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
 
         private void ChangeProjectReference(ProjectBuildContext context)
         {
-            var file = GetFile(context, "/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj");
+            var file = context.GetFile("/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj");
 
             file.NormalizeLineEndings();
 
             var lines = file.GetLines();
             for (var i = 0; i < lines.Length; i++)
             {
-                if (lines[i].Contains("ProjectReference") && lines[i].Contains("MyCompanyName.MyProjectName.EntityFrameworkCore"))
+                if (lines[i].Contains("ProjectReference") && lines[i].Contains("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"))
                 {
-                    lines[i] = lines[i].Replace("EntityFrameworkCore", "MongoDB");
+                    lines[i] = lines[i].Replace("EntityFrameworkCore.DbMigrations", "MongoDB");
                     file.SetLines(lines);
                     return;
                 }
             }
 
-            throw new ApplicationException("Could not find the 'Default' connection string in appsettings.json file!");
+            throw new ApplicationException("Could not find the EntityFrameworkCore reference in the MyCompanyName.MyProjectName.Web.csproj!");
         }
 
         private void ChangeWebModuleUsage(ProjectBuildContext context)
         {
-            var file = GetFile(context, "/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs");
+            var file = context.GetFile("/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs");
 
             file.NormalizeLineEndings();
 
@@ -59,7 +59,7 @@ namespace Volo.Utils.SolutionTemplating.Building.Steps
 
         private void ChangeConnectionString(ProjectBuildContext context)
         {
-            var file = GetFile(context, "/src/MyCompanyName.MyProjectName.Web/appsettings.json");
+            var file = context.GetFile("/src/MyCompanyName.MyProjectName.Web/appsettings.json");
 
             file.NormalizeLineEndings();
 

@@ -67,8 +67,7 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "验证",
-          "path": "Validation.md"
+          "text": "验证"
         },
         {
           "text": "授权"
@@ -145,6 +144,7 @@
     },
     {
       "text": "领域驱动设计",
+      "path": "Domain-Driven-Design.md",
       "items": [
         {
           "text": "领域层",
@@ -180,8 +180,7 @@
               "text": "数据传输对象(DTO)"
             },
             {
-              "text": "工作单元",
-              "path": "Unit-Of-Work.md"
+              "text": "工作单元"
             }
           ]
         }
@@ -277,6 +276,10 @@
     },
     {
       "text": "测试"
+    },
+    {
+      "text": "每日构建",
+      "path": "Nightly-Builds.md"
     },
     {
       "text": "贡献指南",

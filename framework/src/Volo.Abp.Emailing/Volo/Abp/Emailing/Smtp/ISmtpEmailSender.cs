@@ -1,4 +1,5 @@
 using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace Volo.Abp.Emailing.Smtp
 {
@@ -13,6 +14,6 @@ namespace Volo.Abp.Emailing.Smtp
         /// <returns>
         /// An <see cref="SmtpClient"/> object that is ready to send emails.
         /// </returns>
-        SmtpClient BuildClient();
+        Task<SmtpClient> BuildClientAsync();
     }
 }

@@ -77,11 +77,11 @@ namespace BasicAspNetCoreApplication
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(ServiceConfigurationContext context)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            context.Services.AddApplication<AppModule>();
+            services.AddApplication<AppModule>();
 
-            return context.Services.BuildServiceProviderFromFactory();
+            return services.BuildServiceProviderFromFactory();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -155,6 +155,26 @@ services.AddApplication<AppModule>(options =>
     options.UseAutofac(); // 集成 Autofac
 });
 ````
+
+4. 更新 `Program.cs`代码, 不再使用`WebHost.CreateDefaultBuilder()`方法(因为它使用默认的DI容器)：
+
+ ````csharp
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BuildWebHostInternal(args).Run();
+    }
+     public static IWebHost BuildWebHostInternal(string[] args) =>
+        new WebHostBuilder()
+            .UseKestrel()
+            .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIISIntegration()
+            .UseStartup<Startup>()
+            .Build();
+}
+````
+
 
 ### 源码
 

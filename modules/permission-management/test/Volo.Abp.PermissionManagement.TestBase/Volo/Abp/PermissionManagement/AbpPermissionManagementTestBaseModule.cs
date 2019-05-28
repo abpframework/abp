@@ -14,9 +14,9 @@ namespace Volo.Abp.PermissionManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<PermissionOptions>(options =>
+            context.Services.Configure<PermissionManagementOptions>(options =>
             {
-                options.DefinitionProviders.Add<TestPermissionDefinitionProvider>();
+                options.ManagementProviders.Add<TestPermissionManagementProvider>();
             });
         }
 

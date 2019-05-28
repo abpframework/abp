@@ -10,7 +10,7 @@ namespace Volo.Abp.Http.Client
         public string BaseUrl
         {
             get => this.GetOrDefault(nameof(BaseUrl));
-            set => this[BaseUrl] = value;
+            set => this[nameof(BaseUrl)] = value;
         }
 
         /// <summary>
@@ -19,7 +19,7 @@ namespace Volo.Abp.Http.Client
         public string Version
         {
             get => this.GetOrDefault(nameof(Version));
-            set => this[Version] = value;
+            set => this[nameof(Version)] = value;
         }
 
         public RemoteServiceConfiguration()

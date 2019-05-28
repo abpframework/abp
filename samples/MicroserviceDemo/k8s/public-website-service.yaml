@@ -1,15 +1,11 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  labels:
-    io.kompose.service: public-website
   name: public-website
 spec:
-  ports:
-  - name: "3002"
-    port: 3002
-    targetPort: 80
   selector:
-    io.kompose.service: public-website
-status:
-  loadBalancer: {}
+    app: public-website
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http

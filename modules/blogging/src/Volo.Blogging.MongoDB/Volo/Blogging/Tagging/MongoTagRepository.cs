@@ -44,6 +44,7 @@ namespace Volo.Blogging.Tagging
             foreach (var tag in tags)
             {
                 tag.DecreaseUsageCount();
+                Update(tag);
             }
         }
     }

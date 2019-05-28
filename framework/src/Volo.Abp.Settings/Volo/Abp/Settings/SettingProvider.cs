@@ -29,7 +29,7 @@ namespace Volo.Abp.Settings
             Providers = new Lazy<List<ISettingValueProvider>>(
                 () => Options
                     .ValueProviders
-                    .Select(c => serviceProvider.GetRequiredService(c) as ISettingValueProvider)
+                    .Select(type => serviceProvider.GetRequiredService(type) as ISettingValueProvider)
                     .ToList(),
                 true
             );

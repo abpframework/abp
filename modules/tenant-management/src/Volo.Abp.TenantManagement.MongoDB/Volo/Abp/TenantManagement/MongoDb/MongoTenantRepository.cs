@@ -28,11 +28,6 @@ namespace Volo.Abp.TenantManagement.MongoDb
                 .FirstOrDefaultAsync(t => t.Name == name, cancellationToken);
         }
 
-        public virtual async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return await GetMongoQueryable().LongCountAsync(cancellationToken);
-        }
-
         public virtual async Task<List<Tenant>> GetListAsync(
             string sorting = null, 
             int maxResultCount = int.MaxValue, 

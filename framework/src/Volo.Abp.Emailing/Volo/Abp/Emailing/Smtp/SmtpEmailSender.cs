@@ -4,6 +4,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Emailing.Smtp
 {
@@ -12,31 +13,34 @@ namespace Volo.Abp.Emailing.Smtp
     /// </summary>
     public class SmtpEmailSender : EmailSenderBase, ISmtpEmailSender, ITransientDependency
     {
-        private readonly ISmtpEmailSenderConfiguration _configuration;
+        protected ISmtpEmailSenderConfiguration SmtpConfiguration { get; }
 
         /// <summary>
         /// Creates a new <see cref="SmtpEmailSender"/>.
         /// </summary>
-        public SmtpEmailSender(ISmtpEmailSenderConfiguration configuration, IBackgroundJobManager backgroundJobManager)
-            : base(configuration, backgroundJobManager)
+        public SmtpEmailSender(
+            ISmtpEmailSenderConfiguration smtpConfiguration,
+            IBackgroundJobManager backgroundJobManager)
+            : base(smtpConfiguration, backgroundJobManager)
         {
-            _configuration = configuration;
+            SmtpConfiguration = smtpConfiguration;
         }
 
-        public SmtpClient BuildClient()
+        public async Task<SmtpClient> BuildClientAsync()
         {
-            var host = _configuration.Host;
-            var port = _configuration.Port;
+            var host = await SmtpConfiguration.GetHostAsync();
+            var port = await SmtpConfiguration.GetPortAsync();
 
             var smtpClient = new SmtpClient(host, port);
+
             try
             {
-                if (_configuration.EnableSsl)
+                if (await SmtpConfiguration.GetEnableSslAsync())
                 {
                     smtpClient.EnableSsl = true;
                 }
 
-                if (_configuration.UseDefaultCredentials)
+                if (await SmtpConfiguration.GetUseDefaultCredentialsAsync())
                 {
                     smtpClient.UseDefaultCredentials = true;
                 }
@@ -44,11 +48,11 @@ namespace Volo.Abp.Emailing.Smtp
                 {
                     smtpClient.UseDefaultCredentials = false;
 
-                    var userName = _configuration.UserName;
+                    var userName = await SmtpConfiguration.GetUserNameAsync();
                     if (!userName.IsNullOrEmpty())
                     {
-                        var password = _configuration.Password;
-                        var domain = _configuration.Domain;
+                        var password = await SmtpConfiguration.GetPasswordAsync();
+                        var domain = await SmtpConfiguration.GetDomainAsync();
                         smtpClient.Credentials = !domain.IsNullOrEmpty()
                             ? new NetworkCredential(userName, password, domain)
                             : new NetworkCredential(userName, password);
@@ -66,7 +70,7 @@ namespace Volo.Abp.Emailing.Smtp
 
         protected override async Task SendEmailAsync(MailMessage mail)
         {
-            using (var smtpClient = BuildClient())
+            using (var smtpClient = await BuildClientAsync())
             {
                 await smtpClient.SendMailAsync(mail);
             }
@@ -74,7 +78,7 @@ namespace Volo.Abp.Emailing.Smtp
 
         protected override void SendEmail(MailMessage mail)
         {
-            using (var smtpClient = BuildClient())
+            using (var smtpClient = AsyncHelper.RunSync(BuildClientAsync))
             {
                 smtpClient.Send(mail);
             }

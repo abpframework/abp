@@ -6,17 +6,17 @@ Wikipedia [defines](https://en.wikipedia.org/wiki/Multitenancy) multi-tenancy as
 
 > Software **Multi-tenancy** refers to a software **architecture** in which a **single instance** of a software runs on a server and serves **multiple tenants**. A tenant is a group of users who share a common access with specific privileges to the software instance. With a multitenant architecture, a software application is designed to provide every tenant a **dedicated share of the instance including its data**, configuration, user management, tenant individual functionality and non-functional properties. Multi-tenancy contrasts with multi-instance architectures, where separate software instances operate on behalf of different tenants.
 
-### Volo.Abp.MultiTenancy.Abstractions Package
+### Volo.Abp.MultiTenancy Package
 
-Volo.Abp.MultiTenancy.Abstractions package defines fundamental interfaces to make your code "multi-tenancy ready". So, install it to your project using the package manager console (PMC):
+Volo.Abp.MultiTenancy package defines fundamental interfaces to make your code "multi-tenancy ready". So, install it to your project using the package manager console (PMC):
 
 ````
-Install-Package Volo.Abp.MultiTenancy.Abstractions
+Install-Package Volo.Abp.MultiTenancy
 ````
 
 > This package is already installed by default with the startup template. So, most of the time, you don't need to install it manually.
 
-Then you can add **AbpMultiTenancyAbstractionsModule** dependency to your module:
+Then you can add **AbpMultiTenancyModule** dependency to your module:
 
 ````C#
 using Volo.Abp.Modularity;
@@ -24,7 +24,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     public class MyModule : AbpModule
     {
         //...
@@ -56,7 +56,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-IMultiTenant requires to define a **TenantId** property in the implementing entity (See entity documentation (TODO: link) for more about entities).
+IMultiTenant requires to define a **TenantId** property in the implementing entity (See [entity documentation](Entities.md) for more about entities).
 
 #### Obtain Current Tenant's Id
 
@@ -89,32 +89,6 @@ namespace MyCompany.MyProject
 #### Change Current Tenant
 
 TODO: ...
-
-### Volo.Abp.MultiTenancy Package
-
-Volo.Abp.MultiTenancy is the actual package that makes your application multi-tenant. Install it into your project using PMC:
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-Then you can add **AbpMultiTenancyAbstractionsModule** dependency to your module:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> If you add AbpMultiTenancyModule dependency to your module, then you don't need to add AbpMultiTenancyAbstractionsModule dependency separately since AbpMultiTenancyModule already depends on it.
 
 #### Determining Current Tenant
 

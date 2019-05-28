@@ -3,6 +3,10 @@
         return;
     }
 
+    var localize = function (key) {
+        return abp.localization.getResource('AbpUi')(key);
+    };
+
     /* A simple jQuery plug-in to make a button busy. */
     $.fn.buttonBusy = function (isBusy) {
         return $(this).each(function () {
@@ -83,7 +87,7 @@
         return str;
     };
 
-    $.fn.serializeFormToObject = function (camelCase = true) {
+    $.fn.serializeFormToObject = function (camelCase) {
         //serialize to array
         var data = $(this).serializeArray();
 
@@ -104,7 +108,7 @@
         //map to object
         var obj = {};
 
-        if (camelCase) {
+        if (camelCase !== undefined ? camelCase : true) {
             data.forEach(function (d) {
                 d.name = toCamelCase(d.name);
             });
@@ -124,6 +128,32 @@
                 $this.focus();
                 $this[0].selectionStart = $this[0].selectionEnd = 10000;
             }, 0);
+        });
+    };
+
+    $.fn.needConfirmationOnUnsavedClose = function ($modal) {
+        var $form = $(this);
+        var formSaved = false;
+        var unEditedForm = JSON.stringify($form.serializeFormToObject());
+
+        $modal.on("hide.bs.modal", function (e) {
+            var currentForm = JSON.stringify($form.serializeFormToObject());
+            var thereAreUnsavedChanges = currentForm !== unEditedForm;
+
+            if (!formSaved && thereAreUnsavedChanges) {
+                e.preventDefault();
+                abp.message.confirm(localize('AreYouSureYouWantToCancelEditingWarningMessage'),
+                    function (result) {
+                        if (result) {
+                            formSaved = true;
+                            $modal.modal('hide');
+                        }
+                    });
+            }
+        });
+
+        $(this).on('abp-ajax-success',function () {
+            formSaved = true;
         });
     };
 

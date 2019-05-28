@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
+﻿using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
@@ -8,7 +7,7 @@ using Volo.Abp.UI;
 
 namespace Volo.Abp.TenantManagement
 {
-    [DependsOn(typeof(AbpMultiTenancyAbstractionsModule))]
+    [DependsOn(typeof(AbpMultiTenancyModule))]
     [DependsOn(typeof(AbpTenantManagementDomainSharedModule))]
     [DependsOn(typeof(AbpDataModule))]
     [DependsOn(typeof(AbpDddDomainModule))]

@@ -1,15 +1,10 @@
-apiVersion: v1
 kind: Service
+apiVersion: v1
 metadata:
-  labels:
-    io.kompose.service: mongodb
   name: mongodb
 spec:
-  ports:
-  - name: "27017"
-    port: 27017
-    targetPort: 27017
   selector:
-    io.kompose.service: mongodb
-status:
-  loadBalancer: {}
+    app: mongodb
+  ports:
+  - port: 27017
+    targetPort: 27017

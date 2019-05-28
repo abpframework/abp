@@ -80,6 +80,11 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Delete)]
         public async Task DeleteAsync(Guid id)
         {
+            if (CurrentUser.Id == id)
+            {
+                throw new BusinessException(code: IdentityErrorCodes.UserSelfDeletion);
+            }
+
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
@@ -111,18 +116,6 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
                 await _userManager.FindByEmailAsync(email)
             );
-        }
-
-        //TODO: Move this to the profile service!
-        public async Task ChangePasswordAsync(string currentPassword, string newPassword)
-        {
-            if (!CurrentUser.Id.HasValue)
-            {
-                throw new AbpException("Current user Id is null!");
-            }
-
-            var currentUser = await _userManager.GetByIdAsync(CurrentUser.Id.Value);
-            (await _userManager.ChangePasswordAsync(currentUser, currentPassword, newPassword)).CheckErrors();
         }
 
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)

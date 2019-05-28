@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
@@ -13,6 +12,10 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Caching
 {
+    /// <summary>
+    /// Represents a distributed cache of <typeparamref name="TCacheItem" /> type.
+    /// </summary>
+    /// <typeparam name="TCacheItem">The type of cache item being cached.</typeparam>
     public class DistributedCache<TCacheItem> : IDistributedCache<TCacheItem>
         where TCacheItem : class
     {
@@ -26,7 +29,8 @@ namespace Volo.Abp.Caching
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-        protected IObjectSerializer ObjectSerializer { get; }
+        //TODO: Create IDistributedCacheSerializer
+        protected IDistributedCacheSerializer Serializer { get; }
 
         protected ICurrentTenant CurrentTenant { get; }
 
@@ -43,8 +47,7 @@ namespace Volo.Abp.Caching
             IOptions<DistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
-
-            IObjectSerializer objectSerializer,
+            IDistributedCacheSerializer serializer,
             ICurrentTenant currentTenant)
         {
             _distributedCacheOption = distributedCacheOption.Value;
@@ -52,13 +55,21 @@ namespace Volo.Abp.Caching
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
             Logger = NullLogger<DistributedCache<TCacheItem>>.Instance;
-            ObjectSerializer = objectSerializer;
+            Serializer = serializer;
             CurrentTenant = currentTenant;
 
             SetDefaultOptions();
         }
 
-        public virtual TCacheItem Get(string key, bool? hideErrors = null)
+        /// <summary>
+        /// Gets a cache item with the given key. If no cache item is found for the given key then returns null.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <returns>The cache item, or null.</returns>
+        public virtual TCacheItem Get(
+            string key, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -70,11 +81,12 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return null;
                 }
+
                 throw;
             }
 
@@ -83,10 +95,20 @@ namespace Volo.Abp.Caching
                 return null;
             }
 
-            return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
+            return Serializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
-        public virtual async Task<TCacheItem> GetAsync(string key, bool? hideErrors = null, CancellationToken token = default)
+        /// <summary>
+        /// Gets a cache item with the given key. If no cache item is found for the given key then returns null.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
+        /// <returns>The cache item, or null.</returns>
+        public virtual async Task<TCacheItem> GetAsync(
+            string key,
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -94,11 +116,14 @@ namespace Volo.Abp.Caching
 
             try
             {
-                cachedBytes = await Cache.GetAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
+                cachedBytes = await Cache.GetAsync(
+                    NormalizeKey(key),
+                    CancellationTokenProvider.FallbackToProvider(token)
+                );
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return null;
@@ -112,9 +137,18 @@ namespace Volo.Abp.Caching
                 return null;
             }
 
-            return ObjectSerializer.Deserialize<TCacheItem>(cachedBytes);
+            return Serializer.Deserialize<TCacheItem>(cachedBytes);
         }
 
+        /// <summary>
+        /// Gets or Adds a cache item with the given key. If no cache item is found for the given key then adds a cache item
+        /// provided by <paramref name="factory" /> delegate and returns the provided cache item.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="factory">The factory delegate is used to provide the cache item when no cache item is found for the given <paramref name="key" />.</param>
+        /// <param name="optionsFactory">The cache options for the factory delegate.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <returns>The cache item.</returns>
         public TCacheItem GetOrAdd(
             string key,
             Func<TCacheItem> factory,
@@ -142,6 +176,16 @@ namespace Volo.Abp.Caching
             return value;
         }
 
+        /// <summary>
+        /// Gets or Adds a cache item with the given key. If no cache item is found for the given key then adds a cache item
+        /// provided by <paramref name="factory" /> delegate and returns the provided cache item.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="factory">The factory delegate is used to provide the cache item when no cache item is found for the given <paramref name="key" />.</param>
+        /// <param name="optionsFactory">The cache options for the factory delegate.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
+        /// <returns>The cache item.</returns>
         public async Task<TCacheItem> GetOrAddAsync(
             string key,
             Func<Task<TCacheItem>> factory,
@@ -171,7 +215,18 @@ namespace Volo.Abp.Caching
             return value;
         }
 
-        public virtual void Set(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null)
+        /// <summary>
+        /// Sets the cache item value for the provided key.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="value">The cache item value to set in the cache.</param>
+        /// <param name="options">The cache options for the value.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        public virtual void Set(
+            string key, 
+            TCacheItem value, 
+            DistributedCacheEntryOptions options = null, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -179,13 +234,13 @@ namespace Volo.Abp.Caching
             {
                 Cache.Set(
                     NormalizeKey(key),
-                    ObjectSerializer.Serialize(value),
+                    Serializer.Serialize(value),
                     options ?? DefaultCacheOptions
                 );
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -195,7 +250,21 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual async Task SetAsync(string key, TCacheItem value, DistributedCacheEntryOptions options = null, bool? hideErrors = null, CancellationToken token = default)
+        /// <summary>
+        /// Sets the cache item value for the provided key.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="value">The cache item value to set in the cache.</param>
+        /// <param name="options">The cache options for the value.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
+        /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
+        public virtual async Task SetAsync(
+            string key, 
+            TCacheItem value, 
+            DistributedCacheEntryOptions options = null, 
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -203,14 +272,14 @@ namespace Volo.Abp.Caching
             {
                 await Cache.SetAsync(
                     NormalizeKey(key),
-                    ObjectSerializer.Serialize(value),
+                    Serializer.Serialize(value),
                     options ?? DefaultCacheOptions,
                     CancellationTokenProvider.FallbackToProvider(token)
                 );
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -220,7 +289,14 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual void Refresh(string key, bool? hideErrors = null)
+        /// <summary>
+        /// Refreshes the cache value of the given key, and resets its sliding expiration timeout.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        public virtual void Refresh(
+            string key, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -230,7 +306,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -240,7 +316,17 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual async Task RefreshAsync(string key, bool? hideErrors = null, CancellationToken token = default)
+        /// <summary>
+        /// Refreshes the cache value of the given key, and resets its sliding expiration timeout.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
+        /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
+        public virtual async Task RefreshAsync(
+            string key, 
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -250,7 +336,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;
@@ -260,7 +346,15 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual void Remove(string key, bool? hideErrors = null)
+
+        /// <summary>
+        /// Removes the cache item for given key from cache.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        public virtual void Remove(
+            string key, 
+            bool? hideErrors = null)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -270,7 +364,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool) hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                 }
@@ -279,7 +373,17 @@ namespace Volo.Abp.Caching
             }
         }
 
-        public virtual async Task RemoveAsync(string key, bool? hideErrors = null, CancellationToken token = default)
+        /// <summary>
+        /// Removes the cache item for given key from cache.
+        /// </summary>
+        /// <param name="key">The key of cached item to be retrieved from the cache.</param>
+        /// <param name="hideErrors">Indicates to throw or hide the exceptions for the distributed cache.</param>
+        /// <param name="token">The <see cref="T:System.Threading.CancellationToken" /> for the task.</param>
+        /// <returns>The <see cref="T:System.Threading.Tasks.Task" /> indicating that the operation is asynchronous.</returns>
+        public virtual async Task RemoveAsync(
+            string key, 
+            bool? hideErrors = null, 
+            CancellationToken token = default)
         {
             hideErrors = hideErrors ?? _distributedCacheOption.HideErrors;
 
@@ -289,7 +393,7 @@ namespace Volo.Abp.Caching
             }
             catch (Exception ex)
             {
-                if ((bool)hideErrors)
+                if (hideErrors == true)
                 {
                     Logger.LogException(ex, LogLevel.Warning);
                     return;

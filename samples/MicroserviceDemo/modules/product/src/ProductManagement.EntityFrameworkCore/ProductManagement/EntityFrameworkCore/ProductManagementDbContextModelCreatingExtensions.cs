@@ -27,6 +27,7 @@ namespace ProductManagement.EntityFrameworkCore
 
                 b.Property(x => x.Code).IsRequired().HasMaxLength(ProductConsts.MaxCodeLength);
                 b.Property(x => x.Name).IsRequired().HasMaxLength(ProductConsts.MaxNameLength);
+                b.Property(x => x.ImageName).HasMaxLength(ProductConsts.MaxImageNameLength);
 
                 b.HasIndex(q => q.Code);
                 b.HasIndex(q => q.Name);

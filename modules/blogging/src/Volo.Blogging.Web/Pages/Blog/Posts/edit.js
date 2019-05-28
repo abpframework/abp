@@ -1,4 +1,4 @@
-﻿(function ($) {
+﻿$(function () {
 
     var $container = $("#edit-post-container");
     var $editorContainer = $container.find(".edit-post-editor");
@@ -17,7 +17,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Blog/Files/UploadImage",
+            url: "/api/blogging/files/images/upload",
             data: formData,
             contentType: false,
             processData: false,
@@ -42,7 +42,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Blog/Files/UploadImage",
+            url: "/api/blogging/files/images/upload",
             data: formData,
             contentType: false,
             processData: false,
@@ -72,6 +72,8 @@
             load: function () {
                 $editorContainer.find(".loading-cover").remove();
                 $submitButton.prop("disabled", false);
+                $form.data("validator").settings.ignore = '.ignore';
+                $editorContainer.find(':input').addClass('ignore');
             }
         }
     }).data(editorDataKey);
@@ -82,8 +84,16 @@
         var postText = newPostEditor.getMarkdown();
         $postTextInput.val(postText);
 
+        if (!$form.valid()) {
+            var validationResult = $form.validate();
+            abp.message.warn(validationResult.errorList[0].message); //TODO: errors can be merged into lines. make sweetalert accept HTML.
+            e.preventDefault();
+            return false; //for old browsers 
+        }
+
         $submitButton.buttonBusy();
         $(this).off('submit').submit();
     });
 
-})(jQuery);
+});
+

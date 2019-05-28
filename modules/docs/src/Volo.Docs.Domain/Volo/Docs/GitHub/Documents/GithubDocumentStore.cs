@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Octokit;
-using Octokit.Internal;
 using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
 using Newtonsoft.Json.Linq;
+using Octokit;
 using ProductHeaderValue = Octokit.ProductHeaderValue;
 using Project = Volo.Docs.Projects.Project;
 
@@ -22,6 +20,13 @@ namespace Volo.Docs.GitHub.Documents
     {
         public const string Type = "GitHub";
 
+        private readonly IGithubRepositoryManager _githubRepositoryManager;
+
+        public GithubDocumentStore(IGithubRepositoryManager githubRepositoryManager)
+        {
+            _githubRepositoryManager = githubRepositoryManager;
+        }
+        
         public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string version)
         {
             var token = project.GetGitHubAccessTokenOrNull();
@@ -102,20 +107,7 @@ namespace Volo.Docs.GitHub.Documents
             var url = project.GetGitHubUrl();
             var ownerName = GetOwnerNameFromUrl(url);
             var repositoryName = GetRepositoryNameFromUrl(url);
-            var gitHubClient = CreateGitHubClient(project.GetGitHubAccessTokenOrNull());
-
-            return await gitHubClient
-                .Repository
-                .Release
-                .GetAll(ownerName, repositoryName);
-        }
-
-        private static GitHubClient CreateGitHubClient(string token = null)
-        {
-            //TODO: Why hard-coded "abpframework"? Should be configurable?
-            return token.IsNullOrWhiteSpace()
-                ? new GitHubClient(new ProductHeaderValue("abpframework"))
-                : new GitHubClient(new ProductHeaderValue("abpframework"), new InMemoryCredentialStore(new Credentials(token)));
+            return await _githubRepositoryManager.GetReleasesAsync(ownerName, repositoryName, project.GetGitHubAccessTokenOrNull());
         }
 
         protected virtual string GetOwnerNameFromUrl(string url)
@@ -151,19 +143,7 @@ namespace Volo.Docs.GitHub.Documents
             {
                 Logger.LogInformation("Downloading content from Github (DownloadWebContentAsStringAsync): " + rawUrl);
 
-                using (var webClient = new GithubWebClient())
-                {
-                    if (!token.IsNullOrWhiteSpace())
-                    {
-                        webClient.Headers.Add("Authorization", "token " + token);
-                    }
-
-                    webClient.Headers.Add("User-Agent", userAgent ?? "");
-                    
-                    //TODO: SET TIMEOUT?
-
-                    return await webClient.DownloadStringTaskAsync(new Uri(rawUrl));
-                }
+                return await _githubRepositoryManager.GetFileRawStringContentAsync(rawUrl, token, userAgent);
             }
             catch (Exception ex)
             {
@@ -179,16 +159,7 @@ namespace Volo.Docs.GitHub.Documents
             {
                 Logger.LogInformation("Downloading content from Github (DownloadWebContentAsByteArrayAsync): " + rawUrl);
 
-                using (var webClient = new GithubWebClient())
-                {
-                    if (!token.IsNullOrWhiteSpace())
-                    {
-                        webClient.Headers.Add("Authorization", "token " + token);
-                    }
-                    webClient.Headers.Add("User-Agent", userAgent ?? "");
-
-                    return await webClient.DownloadDataTaskAsync(new Uri(rawUrl));
-                }
+                return await _githubRepositoryManager.GetFileRawByteArrayContentAsync(rawUrl, token, userAgent);
             }
             catch (Exception ex)
             {
@@ -235,23 +206,8 @@ namespace Volo.Docs.GitHub.Documents
         {
             return rootUrl
                 .Replace("github.com", "raw.githubusercontent.com")
-                .ReplaceFirst("/tree/", "/");
-        }
-
-        private class GithubWebClient : WebClient
-        {
-            protected override WebRequest GetWebRequest(Uri address)
-            {
-                var webRequest = base.GetWebRequest(address);
-                if (webRequest == null)
-                {
-                    return null;
-                }
-
-                webRequest.Timeout = 15000;
-
-                return webRequest;
-            }
+                .ReplaceFirst("/tree/", "/")
+                .EnsureEndsWith('/');
         }
     }
 }

@@ -38,6 +38,8 @@ namespace Volo.Docs
             Configure<RazorPagesOptions>(options =>
             {
                 //TODO: Make configurable!
+                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}");
+
                 options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
             });
 
