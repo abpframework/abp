@@ -9,9 +9,10 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json
 {
-    public class AbpMvcJsonContractResolver : DefaultContractResolver
+    public class AbpMvcJsonContractResolver : CamelCasePropertyNamesContractResolver
     {
         private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
+
         public AbpMvcJsonContractResolver(IServiceCollection services)
         {
             _dateTimeConverter = services.GetServiceLazy<AbpJsonIsoDateTimeConverter>();
