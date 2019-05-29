@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <Import Project="..\..\common.props" />
 
@@ -36,12 +36,12 @@
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Application\Acme.BookStore.Application.csproj" />
     <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.Account.Web" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="0.16.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.Account.Web" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="0.17.0.0" />
   </ItemGroup>
 
 </Project>
