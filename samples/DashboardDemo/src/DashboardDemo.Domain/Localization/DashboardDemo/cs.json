@@ -1,10 +1,10 @@
 {
   "culture": "cs",
   "texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Welcome",
-    "RolesInApplication": "Roles in application",
-    "UserCount": "User count",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    "Menu:Home": "Úvod",
+    "Welcome": "Vítejte",
+    "RolesInApplication": "Role v aplikaci",
+    "UserCount": "Počet uživatelů",
+    "LongWelcomeMessage": "Vítejte v aplikaci. Toto je startovací projekt založený na ABP frameworku. Pro více informací, navštivte abp.io."
   }
 }

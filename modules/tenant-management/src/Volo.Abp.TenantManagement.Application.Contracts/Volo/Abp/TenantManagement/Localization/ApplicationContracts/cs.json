@@ -1,11 +1,11 @@
 {
   "culture": "cs",
   "texts": {
-    "Permission:TenantManagement": "Tenant management",
-    "Permission:Create": "Create",
-    "Permission:Edit": "Edit",
-    "Permission:Delete": "Delete",
-    "Permission:ManageConnectionStrings": "Manage connection strings",
-    "Permission:ManageFeatures": "Manage features"
+    "Permission:TenantManagement": "Správa tenantů",
+    "Permission:Create": "Vytvořit",
+    "Permission:Edit": "Upravit",
+    "Permission:Delete": "Smazat",
+    "Permission:ManageConnectionStrings": "Spravovat connection stringy",
+    "Permission:ManageFeatures": "Spravovat funkce"
   }
 }

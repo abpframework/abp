@@ -1,20 +1,20 @@
 {
   "culture": "cs",
   "texts": {
-    "'{0}' and '{1}' do not match.": "'{0}' and '{1}' do not match.",
-    "The {0} field is not a valid credit card number.": "The {0} field is not a valid credit card number.",
-    "{0} is not valid.": "{0} is not valid.",
-    "The {0} field is not a valid e-mail address.": "The {0} field is not a valid e-mail address.",
-    "The {0} field only accepts files with the following extensions: {1}": "The {0} field only accepts files with the following extensions: {1}",
-    "The field {0} must be a string or array type with a maximum length of '{1}'.": "The field {0} must be a string or array type with a maximum length of '{1}'.",
-    "The field {0} must be a string or array type with a minimum length of '{1}'.": "The field {0} must be a string or array type with a minimum length of '{1}'.",
-    "The {0} field is not a valid phone number.": "The {0} field is not a valid phone number.",
-    "The field {0} must be between {1} and {2}.": "The field {0} must be between {1} and {2}.",
-    "The field {0} must match the regular expression '{1}'.": "The field {0} must match the regular expression '{1}'.",
-    "The {0} field is required.": "The {0} field is required.",
-    "The field {0} must be a string with a maximum length of {1}.": "The field {0} must be a string with a maximum length of {1}.",
-    "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.",
-    "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "The {0} field is not a valid fully-qualified http, https, or ftp URL.",
-    "The field {0} is invalid.": "The field {0} is invalid."
+    "'{0}' and '{1}' do not match.": "'{0}' a '{1}' se neshodují",
+    "The {0} field is not a valid credit card number.": "V poli {0} není platné číslo kreditní karty.",
+    "{0} is not valid.": "{0} není platný.",
+    "The {0} field is not a valid e-mail address.": "V poli {0} není platný email.",
+    "The {0} field only accepts files with the following extensions: {1}": "Pole {0} přijímá soubory pouze s následujícími koncovkami: {1}",
+    "The field {0} must be a string or array type with a maximum length of '{1}'.": "Vy poli {0} musí být řežezec nebo řada o maximální délce '{1}'.",
+    "The field {0} must be a string or array type with a minimum length of '{1}'.": "V poli {0} musí být řežezec nebo řada o minimální délce '{1}'.",
+    "The {0} field is not a valid phone number.": "V poli {0} není platné telefonní číslo.",
+    "The field {0} must be between {1} and {2}.": "Pole {0} musí být mezi {1} a {2}.",
+    "The field {0} must match the regular expression '{1}'.": "Pole {0} musí odpovídat regulérnímu výrazu '{1}'.",
+    "The {0} field is required.": "Pole {0} je povinné.",
+    "The field {0} must be a string with a maximum length of {1}.": "Pole {0} musí být řetězec o maximální délce {1}.",
+    "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "Pole {0} musí být řetězec o minimální délce {2} a maximální délce {1} znaků.",
+    "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "Pole {0} není platná plně kvalifikovaná adresa http, https, nebo ftp URL.",
+    "The field {0} is invalid.": "Pole {0} je neplatné."
   }
 }

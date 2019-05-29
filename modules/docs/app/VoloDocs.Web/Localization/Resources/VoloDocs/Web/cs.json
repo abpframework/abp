@@ -1,9 +1,9 @@
 ﻿{
   "culture": "cs",
   "texts": {
-    "WelcomeVoloDocs": "Welcome to the VoloDocs!",
-    "NoProjectWarning": "There`s no defined project yet!",
-    "CreateYourFirstProject": "Click here to start your first project",
-    "NoProject": "No project!"
+    "WelcomeVoloDocs": "Vítejte ve VoloDocs!",
+    "NoProjectWarning": "Zatím zde není žádný projekt!",
+    "CreateYourFirstProject": "Klikněte zde k vytvoření vašeho prvního projektu",
+    "NoProject": "Žádný projekt!"
   }
 }

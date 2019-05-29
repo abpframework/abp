@@ -1,20 +1,20 @@
 {
   "culture": "cs",
   "texts": {
-    "Menu:Home": "Home",
-    "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
-    "Menu:BookStore": "Book Store",
-    "Menu:Books": "Books",
-    "Name": "Name",
-    "Type": "Type",
-    "PublishDate": "Publish Date",
-    "Price": "Price",
-    "CreationTime": "Creation Time",
-    "NewBook": "New book",
-    "Books": "Books",
-    "Update": "Update",
-    "BookDeletionConfirmationMessage": "Are you sure to delete this book: {0}",
-    "SuccessfullyDeleted": "Successfully deleted."
+    "Menu:Home": "Úvod",
+    "Welcome": "Vítejte",
+    "LongWelcomeMessage": "Vítejte v aplikaci. Toto je startovací projekt založený na ABP frameworku. Pro více informací, navštivte abp.io.",
+    "Menu:BookStore": "Knihkupectví",
+    "Menu:Books": "Knihy",
+    "Name": "Název",
+    "Type": "Typ",
+    "PublishDate": "Publikováno",
+    "Price": "Cena",
+    "CreationTime": "Vytvořeno",
+    "NewBook": "Nová kniha",
+    "Books": "Knihy",
+    "Update": "Aktualizovat",
+    "BookDeletionConfirmationMessage": "Opravdu chcete smazat tuto knihu: {0}",
+    "SuccessfullyDeleted": "Úspěšně smazáno."
   }
 }

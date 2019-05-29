@@ -1,11 +1,11 @@
 ﻿{
   "culture": "cs",
   "texts": {
-    "Hello <b>{0}</b>.": "Hello <b>{0}</b>.",
-    "Car": "Car",
-    "CarPlural": "Cars",
-    "MaxLenghtErrorMessage": "This field's length can be maximum of '{0}' chars",
-    "Universe": "Universe",
-    "FortyTwo": "Forty Two"
+    "Hello <b>{0}</b>.": "Ahoj <b>{0}</b>.",
+    "Car": "Auto",
+    "CarPlural": "Auta",
+    "MaxLenghtErrorMessage": "Toto pole může mít nanejvýš '{0}' znaků",
+    "Universe": "Vesmír",
+    "FortyTwo": "Čtyřicet dva"
   }
 }

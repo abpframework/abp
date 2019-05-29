@@ -1,10 +1,10 @@
 {
   "culture": "cs",
   "texts": {
-    "Permission:ProductManagement": "Product Management",
-    "Permission:Products": "Products",
-    "Permission:Edit": "Edit",
-    "Permission:Delete": "Delete",
-    "Permission:Create": "Create"
+    "Permission:ProductManagement": "Správa produktů",
+    "Permission:Products": "Produkty",
+    "Permission:Edit": "Upravit",
+    "Permission:Delete": "Smazat",
+    "Permission:Create": "Vytvořit"
   }
 }

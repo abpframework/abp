@@ -1,10 +1,10 @@
 {
   "culture": "cs",
   "texts": {
-    "Permissions": "Permissions",
-    "OnlyProviderPermissons": "Only this provider",
-    "All": "All",
-    "SelectAllInAllTabs": "Grant all permissions",
-    "SelectAllInThisTab": "Select all"
+    "Permissions": "Oprávnění",
+    "OnlyProviderPermissons": "Pouze tento poskytovatel",
+    "All": "Všechna",
+    "SelectAllInAllTabs": "Dát veškerá oprávnění",
+    "SelectAllInThisTab": "Vybrat vše"
   }
 }

@@ -2,13 +2,13 @@
   "culture": "cs",
   "texts": {
     "Permission:Blogging": "Blog",
-    "Permission:Blogs": "Blogs",
-    "Permission:Posts": "Posts",
-    "Permission:Tags": "Tags",
-    "Permission:Comments": "Comments",
-    "Permission:Management": "Management",
-    "Permission:Edit": "Edit",
-    "Permission:Create": "Create",
-    "Permission:Delete": "Delete"
+    "Permission:Blogs": "Blogy",
+    "Permission:Posts": "Příspěvky",
+    "Permission:Tags": "Tagy",
+    "Permission:Comments": "Komentáře",
+    "Permission:Management": "Správa",
+    "Permission:Edit": "Upravit",
+    "Permission:Create": "Vytvořit",
+    "Permission:Delete": "Smazat"
   }
 }

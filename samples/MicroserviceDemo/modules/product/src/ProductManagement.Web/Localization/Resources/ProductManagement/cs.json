@@ -1,16 +1,16 @@
 {
   "culture": "cs",
   "texts": {
-    "Menu:ProductManagement": "Product Management",
-    "Menu:Products": "Products",
-    "ProductManagement": "Product Management",
-    "CreateANewProduct": "Create A New Product",
-    "Products": "Products",
-    "StockCount": "Stock Count",
-    "Code": "Code",
-    "Name": "Name",
-    "Price": "Price",
-    "ImageName": "Image Name",
-    "ProductDeletionWarningMessage": "Are you sure you want to delete this product?"
+    "Menu:ProductManagement": "Správa produktů",
+    "Menu:Products": "Produkty",
+    "ProductManagement": "Správa produktů",
+    "CreateANewProduct": "Vytvořit nový produkt",
+    "Products": "Produkty",
+    "StockCount": "Skladem",
+    "Code": "Kód",
+    "Name": "Název",
+    "Price": "Cena",
+    "ImageName": "Název obrázku",
+    "ProductDeletionWarningMessage": "Opravdu chcete smazat tento produkt?"
   }
 }
