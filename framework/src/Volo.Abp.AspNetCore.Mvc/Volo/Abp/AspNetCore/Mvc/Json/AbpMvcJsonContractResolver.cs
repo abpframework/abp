@@ -9,13 +9,15 @@ using Volo.Abp.Timing;
 
 namespace Volo.Abp.AspNetCore.Mvc.Json
 {
-    public class AbpMvcJsonContractResolver : CamelCasePropertyNamesContractResolver
+    public class AbpMvcJsonContractResolver : DefaultContractResolver
     {
         private readonly Lazy<AbpJsonIsoDateTimeConverter> _dateTimeConverter;
 
         public AbpMvcJsonContractResolver(IServiceCollection services)
         {
             _dateTimeConverter = services.GetServiceLazy<AbpJsonIsoDateTimeConverter>();
+
+            NamingStrategy = new CamelCaseNamingStrategy();
         }
 
         protected override JsonProperty CreateProperty(MemberInfo member, MemberSerialization memberSerialization)
