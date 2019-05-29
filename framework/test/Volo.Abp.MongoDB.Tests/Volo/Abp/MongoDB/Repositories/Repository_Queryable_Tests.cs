@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.MongoDB.Repositories
 {
-    public class Repository_Queryable_Tests : Repository_Queryable_Tests<AbpMongoDbTestModule>
+    public class Repository_Queryable_Tests : Repository_Queryable_Tests<MongoDbTestModule>
     {
         
     }

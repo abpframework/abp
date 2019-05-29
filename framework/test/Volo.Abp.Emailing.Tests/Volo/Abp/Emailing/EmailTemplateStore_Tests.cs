@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Volo.Abp.Emailing
 {
-    public class EmailTemplateStore_Tests : AbpIntegratedTest<AbpEmailingTestModule>
+    public class EmailTemplateStore_Tests : AbpIntegratedTest<EmailingTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {

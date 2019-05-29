@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.MongoDB.Auditing
 {
-    public class Auditing_Tests : Auditing_Tests<AbpMongoDbTestModule>
+    public class Auditing_Tests : Auditing_Tests<MongoDbTestModule>
     {
 
     }

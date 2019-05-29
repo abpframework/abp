@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.Security.Encryption
 {
-    public class StringEncryptionService_Tests : AbpIntegratedTest<AbpSecurityTestModule>
+    public class StringEncryptionService_Tests : AbpIntegratedTest<SecurityTestModule>
     {
         private readonly IStringEncryptionService _stringEncryptionService;
 

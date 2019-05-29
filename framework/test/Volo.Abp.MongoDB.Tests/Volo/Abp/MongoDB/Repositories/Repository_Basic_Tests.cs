@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Repositories
 {
-    public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
+    public class Repository_Basic_Tests : Repository_Basic_Tests<MongoDbTestModule>
     {
         [Fact]
         public void Linq_Queries()

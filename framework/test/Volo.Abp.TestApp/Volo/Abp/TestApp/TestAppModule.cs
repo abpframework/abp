@@ -10,10 +10,10 @@ using Volo.Abp.TestApp.Application.Dto;
 namespace Volo.Abp.TestApp
 {
     [DependsOn(
-        typeof(AbpDddApplicationModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpAutoMapperModule)
+        typeof(DddApplicationModule),
+        typeof(AutofacModule),
+        typeof(TestBaseModule),
+        typeof(AutoMapperModule)
         )]
     public class TestAppModule : AbpModule
     {

@@ -1,0 +1,39 @@
+﻿using System.Collections.Generic;
+using Volo.Abp.Application.Services;
+using Volo.Abp.Authorization;
+using Volo.Abp.Domain;
+using Volo.Abp.Features;
+using Volo.Abp.Http;
+using Volo.Abp.Http.Modeling;
+using Volo.Abp.Modularity;
+using Volo.Abp.ObjectMapping;
+using Volo.Abp.Security;
+using Volo.Abp.Settings;
+using Volo.Abp.Uow;
+using Volo.Abp.Validation;
+
+namespace Volo.Abp.Application
+{
+    [DependsOn(
+        typeof(DddDomainModule),
+        typeof(SecurityModule),
+        typeof(ObjectMappingModule),
+        typeof(ValidationModule),
+        typeof(AuthorizationModule),
+        typeof(HttpAbstractionsModule),
+        typeof(SettingsModule),
+        typeof(FeaturesModule)
+        )]
+    public class DddApplicationModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<ApiDescriptionModelOptions>(options =>
+            {
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IApplicationService));
+                options.IgnoredInterfaces.AddIfNotContains(typeof(IUnitOfWorkEnabled));
+            });
+        }
+    }
+}

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.MongoDB.Domain
 {
-    public class ConcurrencyStamp_Tests : ConcurrencyStamp_Tests<AbpMongoDbTestModule>
+    public class ConcurrencyStamp_Tests : ConcurrencyStamp_Tests<MongoDbTestModule>
     {
 
     }

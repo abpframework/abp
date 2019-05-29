@@ -83,7 +83,7 @@ namespace Volo.Abp.VirtualFileSystem
             fileCallbackCalled.ShouldBeTrue();
         }
 
-        [DependsOn(typeof(AbpVirtualFileSystemModule))]
+        [DependsOn(typeof(VirtualFileSystemModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)

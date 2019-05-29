@@ -3,7 +3,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.TestApp
 {
-    [DependsOn(typeof(AbpMemoryDbTestModule))]
+    [DependsOn(typeof(MemoryDbTestModule))]
     public class TestAppTestModule : AbpModule
     {
 

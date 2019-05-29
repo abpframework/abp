@@ -1,0 +1,14 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Modularity;
+
+namespace Volo.Abp.Threading
+{
+    public class ThreadingModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            context.Services.AddSingleton<ICancellationTokenProvider>(NullCancellationTokenProvider.Instance);
+            context.Services.AddSingleton(typeof(IAmbientScopeProvider<>), typeof(AmbientDataContextAmbientScopeProvider<>));
+        }
+    }
+}

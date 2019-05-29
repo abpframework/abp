@@ -30,7 +30,7 @@ namespace Volo.Abp.Modularity
             Type startupModuleType,
             PlugInSourceList plugInSources)
         {
-            var modules = new List<AbpModuleDescriptor>();
+            var modules = new List<ModuleDescriptor>();
 
             FillModules(modules, services, startupModuleType, plugInSources);
             SetDependencies(modules);
@@ -39,7 +39,7 @@ namespace Volo.Abp.Modularity
         }
 
         protected virtual void FillModules(
-            List<AbpModuleDescriptor> modules,
+            List<ModuleDescriptor> modules,
             IServiceCollection services,
             Type startupModuleType,
             PlugInSourceList plugInSources)
@@ -62,7 +62,7 @@ namespace Volo.Abp.Modularity
             }
         }
 
-        protected virtual void SetDependencies(List<AbpModuleDescriptor> modules)
+        protected virtual void SetDependencies(List<ModuleDescriptor> modules)
         {
             foreach (var module in modules)
             {
@@ -77,9 +77,9 @@ namespace Volo.Abp.Modularity
             return sortedModules;
         }
 
-        protected virtual AbpModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType, bool isLoadedAsPlugIn = false)
+        protected virtual ModuleDescriptor CreateModuleDescriptor(IServiceCollection services, Type moduleType, bool isLoadedAsPlugIn = false)
         {
-            return new AbpModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType), isLoadedAsPlugIn);
+            return new ModuleDescriptor(moduleType, CreateAndRegisterModule(services, moduleType), isLoadedAsPlugIn);
         }
 
         protected virtual IAbpModule CreateAndRegisterModule(IServiceCollection services, Type moduleType)
@@ -137,7 +137,7 @@ namespace Volo.Abp.Modularity
             }
         }
 
-        protected virtual void SetDependencies(List<AbpModuleDescriptor> modules, AbpModuleDescriptor module)
+        protected virtual void SetDependencies(List<ModuleDescriptor> modules, ModuleDescriptor module)
         {
             foreach (var dependedModuleType in AbpModuleHelper.FindDependedModuleTypes(module.Type))
             {

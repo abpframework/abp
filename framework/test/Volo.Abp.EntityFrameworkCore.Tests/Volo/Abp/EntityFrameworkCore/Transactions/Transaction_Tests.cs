@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Volo.Abp.EntityFrameworkCore.Transactions
 {
-    public class Transaction_Tests : TestAppTestBase<AbpEntityFrameworkCoreTestModule>
+    public class Transaction_Tests : TestAppTestBase<EntityFrameworkCoreTestModule>
     {
         private readonly IBasicRepository<Person, Guid> _personRepository;
         private readonly IBasicRepository<BookInSecondDbContext, Guid> _bookRepository;

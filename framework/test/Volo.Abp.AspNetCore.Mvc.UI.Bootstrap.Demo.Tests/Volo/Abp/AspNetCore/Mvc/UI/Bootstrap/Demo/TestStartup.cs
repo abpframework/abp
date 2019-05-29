@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpAspNetCoreMvcUiBootstrapDemoTestModule>(options =>
+            services.AddApplication<AspNetCoreMvcUiBootstrapDemoTestModule>(options =>
             {
                 options.UseAutofac();
             });

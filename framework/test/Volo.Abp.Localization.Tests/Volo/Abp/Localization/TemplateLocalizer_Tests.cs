@@ -39,15 +39,15 @@ namespace Volo.Abp.Localization
             }
         }
 
-        [DependsOn(typeof(AbpTestBaseModule))]
-        [DependsOn(typeof(AbpLocalizationModule))]
+        [DependsOn(typeof(TestBaseModule))]
+        [DependsOn(typeof(LocalizationModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.AddEmbedded<AbpLocalization_Tests.TestModule>();
+                    options.FileSets.AddEmbedded<Localization_Tests.TestModule>();
                 });
 
                 Configure<AbpLocalizationOptions>(options =>

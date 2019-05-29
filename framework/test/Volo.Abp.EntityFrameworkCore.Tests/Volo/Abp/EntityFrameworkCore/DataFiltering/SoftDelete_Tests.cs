@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.EntityFrameworkCore.DataFiltering
 {
-    public class SoftDelete_Tests : SoftDelete_Tests<AbpEntityFrameworkCoreTestModule>
+    public class SoftDelete_Tests : SoftDelete_Tests<EntityFrameworkCoreTestModule>
     {
 
     }

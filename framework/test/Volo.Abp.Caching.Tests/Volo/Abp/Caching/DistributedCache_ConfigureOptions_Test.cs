@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.Caching
 {
-    public class DistributedCache_ConfigureOptions_Test : AbpIntegratedTest<AbpCachingTestModule>
+    public class DistributedCache_ConfigureOptions_Test : AbpIntegratedTest<CachingTestModule>
     {
         [Fact]
         public void Configure_CacheOptions()

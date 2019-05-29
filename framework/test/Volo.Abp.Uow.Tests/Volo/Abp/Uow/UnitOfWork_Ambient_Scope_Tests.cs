@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWork_Ambient_Scope_Tests : AbpIntegratedTest<AbpUnitOfWorkModule>
+    public class UnitOfWork_Ambient_Scope_Tests : AbpIntegratedTest<UnitOfWorkModule>
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 

@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Volo.Abp.EntityFrameworkCore.Repositories
 {
-    public class Repository_Queryable_Tests : Repository_Queryable_Tests<AbpEntityFrameworkCoreTestModule>
+    public class Repository_Queryable_Tests : Repository_Queryable_Tests<EntityFrameworkCoreTestModule>
     {
         private readonly IRepository<BookInSecondDbContext, Guid> _bookRepository;
         private readonly IRepository<PhoneInSecondDbContext> _phoneInSecondDbContextRepository;

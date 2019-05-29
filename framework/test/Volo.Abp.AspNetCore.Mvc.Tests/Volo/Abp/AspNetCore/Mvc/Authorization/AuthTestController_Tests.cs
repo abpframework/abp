@@ -12,10 +12,10 @@ using Xunit;
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
     [DependsOn(
-        typeof(AbpAspNetCoreTestBaseModule),
-        typeof(AbpMemoryDbTestModule),
-        typeof(AbpAspNetCoreMvcModule),
-        typeof(AbpAutofacModule)
+        typeof(AspNetCoreTestBaseModule),
+        typeof(MemoryDbTestModule),
+        typeof(AspNetCoreMvcModule),
+        typeof(AutofacModule)
     )]
     public class AuthTestController_Tests : AspNetCoreMvcTestBase
     {

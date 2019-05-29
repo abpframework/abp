@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Volo.Abp.Caching
 {
-    public class DistributedCache_Tests : AbpIntegratedTest<AbpCachingTestModule>
+    public class DistributedCache_Tests : AbpIntegratedTest<CachingTestModule>
     {
         [Fact]
         public async Task Should_Set_Get_And_Remove_Cache_Items()

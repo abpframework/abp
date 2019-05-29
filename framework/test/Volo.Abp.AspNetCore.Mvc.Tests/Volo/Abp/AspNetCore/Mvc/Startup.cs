@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpAspNetCoreMvcTestModule>(options =>
+            services.AddApplication<AspNetCoreMvcTestModule>(options =>
             {
                 options.UseAutofac();
             });

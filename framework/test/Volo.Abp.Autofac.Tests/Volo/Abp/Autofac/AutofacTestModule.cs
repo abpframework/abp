@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Autofac
 {
-    [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(typeof(AutofacModule))]
     public class AutofacTestModule : AbpModule
     {
 

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.MongoDB.DataFiltering
 {
-    public class SoftDelete_Tests : SoftDelete_Tests<AbpMongoDbTestModule>
+    public class SoftDelete_Tests : SoftDelete_Tests<MongoDbTestModule>
     {
 
     }

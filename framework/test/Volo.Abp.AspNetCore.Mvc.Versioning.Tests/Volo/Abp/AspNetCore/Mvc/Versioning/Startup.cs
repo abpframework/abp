@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpAspNetCoreMvcVersioningTestModule>(options =>
+            services.AddApplication<AspNetCoreMvcVersioningTestModule>(options =>
             {
                 options.UseAutofac();
             });

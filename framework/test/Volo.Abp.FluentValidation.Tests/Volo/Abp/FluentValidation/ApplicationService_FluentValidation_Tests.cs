@@ -102,8 +102,8 @@ namespace Volo.Abp.FluentValidation
             output.ShouldBe("444");
         }
         
-        [DependsOn(typeof(AbpAutofacModule))]
-        [DependsOn(typeof(AbpFluentValidationModule))]
+        [DependsOn(typeof(AutofacModule))]
+        [DependsOn(typeof(FluentValidationModule))]
         public class TestModule : AbpModule
         {
             public override void PreConfigureServices(ServiceConfigurationContext context)

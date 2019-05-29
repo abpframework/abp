@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Authorization
 {
-    public class AuthorizationTestBase : AbpIntegratedTest<AbpAuthorizationTestModule>
+    public class AuthorizationTestBase : AbpIntegratedTest<AuthorizationTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {

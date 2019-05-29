@@ -10,7 +10,7 @@ namespace Volo.Abp.Http
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpHttpTestModule>(options =>
+            services.AddApplication<HttpTestModule>(options =>
             {
                 options.UseAutofac();
             });

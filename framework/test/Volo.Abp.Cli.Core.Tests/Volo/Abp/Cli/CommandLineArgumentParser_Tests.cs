@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Volo.Abp.Cli
 {
-    public class CommandLineArgumentParser_Tests : AbpCliTestBase
+    public class CommandLineArgumentParser_Tests : CliTestBase
     {
         private readonly ICommandLineArgumentParser _commandLineArgumentParser;
 

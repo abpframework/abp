@@ -34,7 +34,7 @@ namespace Volo.Abp.UI.Navigation
             mainMenu.Items[1].Items[3].Items[1].Name.ShouldBe("Administration.SubMenu1.2");
         }
 
-        [DependsOn(typeof(AbpUiNavigationModule))]
+        [DependsOn(typeof(UiNavigationModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)

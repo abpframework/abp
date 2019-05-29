@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.EntityFrameworkCore.Domain
 {
-    public class ExtraProperties_Tests : ExtraProperties_Tests<AbpEntityFrameworkCoreTestModule>
+    public class ExtraProperties_Tests : ExtraProperties_Tests<EntityFrameworkCoreTestModule>
     {
 
     }

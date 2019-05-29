@@ -2,7 +2,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Abp.EventBus
 {
-    [DependsOn(typeof(AbpEventBusModule))]
+    [DependsOn(typeof(EventBusModule))]
     public class EventBusTestModule : AbpModule
     {
 

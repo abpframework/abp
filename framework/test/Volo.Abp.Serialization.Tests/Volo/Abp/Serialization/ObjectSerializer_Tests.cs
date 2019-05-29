@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Volo.Abp.Serialization
 {
-    public class ObjectSerializer_Tests : AbpIntegratedTest<AbpSerializationTestModule>
+    public class ObjectSerializer_Tests : AbpIntegratedTest<SerializationTestModule>
     {
         private readonly IObjectSerializer _serializer;
 

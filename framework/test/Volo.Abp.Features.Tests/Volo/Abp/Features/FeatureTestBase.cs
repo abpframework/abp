@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Features
 {
-    public class FeatureTestBase : AbpIntegratedTest<AbpFeaturesTestModule>
+    public class FeatureTestBase : AbpIntegratedTest<FeaturesTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
         {
