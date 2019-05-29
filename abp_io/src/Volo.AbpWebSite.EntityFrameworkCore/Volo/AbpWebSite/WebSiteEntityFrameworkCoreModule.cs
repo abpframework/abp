@@ -11,15 +11,15 @@ using Volo.Docs.EntityFrameworkCore;
 namespace Volo.AbpWebSite
 {
     [DependsOn(
-        typeof(AbpWebSiteDomainModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
+        typeof(WebSiteDomainModule),
+        typeof(EntityFrameworkCoreSqlServerModule),
+        typeof(SettingManagementEntityFrameworkCoreModule),
+        typeof(PermissionManagementEntityFrameworkCoreModule),
+        typeof(IdentityEntityFrameworkCoreModule),
         typeof(DocsEntityFrameworkCoreModule),
         typeof(BloggingEntityFrameworkCoreModule)
         )]
-    public class AbpWebSiteEntityFrameworkCoreModule : AbpModule
+    public class WebSiteEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

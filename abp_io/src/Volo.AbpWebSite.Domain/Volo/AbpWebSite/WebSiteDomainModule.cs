@@ -6,7 +6,7 @@ namespace Volo.AbpWebSite
     [DependsOn(
         typeof(SolutionTemplatingModule)
         )]
-    public class AbpWebSiteDomainModule : AbpModule
+    public class WebSiteDomainModule : AbpModule
     {
         
     }

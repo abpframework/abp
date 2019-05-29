@@ -3,7 +3,7 @@ using Volo.Abp.Modularity;
 
 namespace Volo.Utils.SolutionTemplating
 {
-    [DependsOn(typeof(AbpDddDomainModule))]
+    [DependsOn(typeof(DddDomainModule))]
     public class SolutionTemplatingModule : AbpModule
     {
         

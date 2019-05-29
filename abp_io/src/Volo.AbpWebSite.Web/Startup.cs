@@ -11,10 +11,10 @@ namespace Volo.AbpWebSite
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpWebSiteWebModule>(options =>
+            services.AddApplication<WebSiteWebModule>(options =>
             {
                 options.UseAutofac();
-                options.Configuration.UserSecretsAssembly = typeof(AbpWebSiteWebModule).Assembly;
+                options.Configuration.UserSecretsAssembly = typeof(WebSiteWebModule).Assembly;
             });
 
             return services.BuildServiceProviderFromFactory();
