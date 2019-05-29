@@ -16,4 +16,8 @@
     <Content Remove="Localization\MyProjectName\DomainShared\*.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Localization\MyProjectName\DomainShared\pt-BR.json" />
+  </ItemGroup>
+
 </Project>

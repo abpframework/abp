@@ -20,4 +20,8 @@
     <Content Remove="Localization\MyProjectName\ApplicationContracts\*.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Localization\MyProjectName\ApplicationContracts\pt-BR.json" />
+  </ItemGroup>
+
 </Project>
