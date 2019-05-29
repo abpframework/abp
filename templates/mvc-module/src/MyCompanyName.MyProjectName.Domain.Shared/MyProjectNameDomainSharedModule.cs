@@ -8,7 +8,7 @@ using Volo.Abp.VirtualFileSystem;
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpLocalizationModule)
+        typeof(LocalizationModule)
     )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {

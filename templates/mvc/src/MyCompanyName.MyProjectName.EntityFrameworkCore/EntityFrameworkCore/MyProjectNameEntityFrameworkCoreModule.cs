@@ -15,15 +15,15 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     [DependsOn(
         typeof(MyProjectNameDomainModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpIdentityServerEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule),
+        typeof(IdentityEntityFrameworkCoreModule),
+        typeof(IdentityServerEntityFrameworkCoreModule),
+        typeof(PermissionManagementEntityFrameworkCoreModule),
+        typeof(SettingManagementEntityFrameworkCoreModule),
+        typeof(EntityFrameworkCoreSqlServerModule),
         typeof(BackgroundJobsEntityFrameworkCoreModule),
-        typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-        typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpFeatureManagementEntityFrameworkCoreModule)
+        typeof(AuditLoggingEntityFrameworkCoreModule),
+        typeof(TenantManagementEntityFrameworkCoreModule),
+        typeof(FeatureManagementEntityFrameworkCoreModule)
         )]
     public class MyProjectNameEntityFrameworkCoreModule : AbpModule
     {

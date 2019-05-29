@@ -9,10 +9,10 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpIdentityHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule),
-        typeof(AbpTenantManagementHttpApiClientModule),
-        typeof(AbpFeatureManagementHttpApiClientModule)
+        typeof(IdentityHttpApiClientModule),
+        typeof(PermissionManagementHttpApiClientModule),
+        typeof(TenantManagementHttpApiClientModule),
+        typeof(FeatureManagementHttpApiClientModule)
     )]
     public class MyProjectNameHttpApiClientModule : AbpModule
     {

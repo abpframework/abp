@@ -6,7 +6,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
 {
     [DependsOn(
         typeof(MyProjectNameDomainModule),
-        typeof(AbpMongoDbModule)
+        typeof(MongoDbModule)
         )]
     public class MyProjectNameMongoDbModule : AbpModule
     {

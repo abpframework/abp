@@ -5,7 +5,7 @@ namespace MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiClientModule),
-        typeof(AbpHttpClientIdentityModelModule)
+        typeof(HttpClientIdentityModelModule)
         )]
     public class MyProjectNameConsoleApiClientModule : AbpModule
     {

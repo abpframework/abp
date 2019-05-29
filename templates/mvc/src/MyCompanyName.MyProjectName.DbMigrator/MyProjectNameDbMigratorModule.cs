@@ -5,7 +5,7 @@ using Volo.Abp.Modularity;
 namespace MyCompanyName.MyProjectName.DbMigrator
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
+        typeof(AutofacModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
         typeof(MyProjectNameApplicationContractsModule)
         )]

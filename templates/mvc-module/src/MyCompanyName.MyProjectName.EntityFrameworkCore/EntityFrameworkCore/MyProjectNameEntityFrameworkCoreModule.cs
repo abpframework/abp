@@ -6,7 +6,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     [DependsOn(
         typeof(MyProjectNameDomainModule),
-        typeof(AbpEntityFrameworkCoreModule)
+        typeof(EntityFrameworkCoreModule)
     )]
     public class MyProjectNameEntityFrameworkCoreModule : AbpModule
     {

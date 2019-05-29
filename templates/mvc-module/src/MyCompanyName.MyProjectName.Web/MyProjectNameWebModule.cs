@@ -14,8 +14,8 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AspNetCoreMvcUiThemeSharedModule),
+        typeof(AutoMapperModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {

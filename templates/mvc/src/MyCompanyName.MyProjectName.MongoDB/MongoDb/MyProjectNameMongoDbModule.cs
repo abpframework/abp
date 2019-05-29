@@ -13,14 +13,14 @@ namespace MyCompanyName.MyProjectName.MongoDb
 {
     [DependsOn(
         typeof(MyProjectNameDomainModule),
-        typeof(AbpPermissionManagementMongoDbModule),
-        typeof(AbpSettingManagementMongoDbModule),
-        typeof(AbpIdentityMongoDbModule),
-        typeof(AbpIdentityServerMongoDbModule),
+        typeof(PermissionManagementMongoDbModule),
+        typeof(SettingManagementMongoDbModule),
+        typeof(IdentityMongoDbModule),
+        typeof(IdentityServerMongoDbModule),
         typeof(BackgroundJobsMongoDbModule),
-        typeof(AbpAuditLoggingMongoDbModule),
-        typeof(AbpTenantManagementMongoDbModule),
-        typeof(AbpFeatureManagementMongoDbModule)
+        typeof(AuditLoggingMongoDbModule),
+        typeof(TenantManagementMongoDbModule),
+        typeof(FeatureManagementMongoDbModule)
         )]
     public class MyProjectNameMongoDbModule : AbpModule
     {

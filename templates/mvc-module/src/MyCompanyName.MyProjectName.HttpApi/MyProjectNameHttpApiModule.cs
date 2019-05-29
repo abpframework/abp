@@ -5,7 +5,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule))]
+        typeof(AspNetCoreMvcModule))]
     public class MyProjectNameHttpApiModule : AbpModule
     {
         

@@ -6,7 +6,7 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(MyProjectNameDomainModule),
         typeof(MyProjectNameApplicationContractsModule),
-        typeof(AbpAutoMapperModule)
+        typeof(AutoMapperModule)
         )]
     public class MyProjectNameApplicationModule : AbpModule
     {
