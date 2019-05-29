@@ -16,17 +16,15 @@ namespace Volo.Docs.Projects
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
-        private readonly IGuidGenerator _guidGenerator;
 
         public ProjectAppService(
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDocumentStoreFactory documentStoreFactory, IGuidGenerator guidGenerator)
+            IDocumentStoreFactory documentStoreFactory)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
             _documentStoreFactory = documentStoreFactory;
-            _guidGenerator = guidGenerator;
         }
 
         public async Task<ListResultDto<ProjectDto>> GetListAsync()

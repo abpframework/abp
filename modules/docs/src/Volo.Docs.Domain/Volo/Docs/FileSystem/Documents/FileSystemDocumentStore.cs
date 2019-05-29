@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.IO;
 using Volo.Docs.Documents;
@@ -14,10 +16,10 @@ namespace Volo.Docs.FileSystem.Documents
     {
         public const string Type = "FileSystem";
 
-        public async Task<Document> GetDocumentAsync(Project project, string documentName, string version)
+        public async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version)
         {
             var projectFolder = project.GetFileSystemPath();
-            var path = Path.Combine(projectFolder, documentName);
+            var path = Path.Combine(projectFolder, languageCode, documentName);
 
             CheckDirectorySecurity(projectFolder, path);
             
@@ -44,6 +46,13 @@ namespace Volo.Docs.FileSystem.Documents
         public Task<List<VersionInfo>> GetVersionsAsync(Project project)
         {
             return Task.FromResult(new List<VersionInfo>());
+        }
+
+        public async Task<LanguageConfig> GetLanguageListAsync(Project project, string version)
+        {
+            var configAsJson = project.GetFileSystemPath() + "languageConfig.json";
+
+            return JsonConvert.DeserializeObject<LanguageConfig>(configAsJson);
         }
 
         public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)

@@ -28,7 +28,7 @@ namespace Volo.Docs
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 
-            var document = await store.GetDocumentAsync(project, "index2", "0.123.0");
+            var document = await store.GetDocumentAsync(project, "index2", "en", "0.123.0");
             document.ShouldNotBeNull();
 
             document.Title.ShouldBe("index2");

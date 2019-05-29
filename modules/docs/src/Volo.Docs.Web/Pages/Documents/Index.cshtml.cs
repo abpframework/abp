@@ -21,16 +21,6 @@ namespace Volo.Docs.Pages.Documents
         {
             var listResult = await _projectAppService.GetListAsync();
 
-            if (listResult.Items.Count == 1)
-            {
-                return RedirectToPage("./Project/Index", new
-                {
-                    projectName = listResult.Items[0].ShortName,
-                    version = DocsAppConsts.Latest,
-                    documentName = listResult.Items[0].DefaultDocumentName
-                });
-            }
-
             Projects = listResult.Items;
 
             return Page();

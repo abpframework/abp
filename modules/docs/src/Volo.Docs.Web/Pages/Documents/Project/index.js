@@ -2,9 +2,20 @@
 
     $(function () {
 
+        var addLanguageCodePrefixToLinks = function () {
+            var anchors = $('#sidebar-scroll a');
+
+            for (var i = 0; i < anchors.length; i++) {
+                var anchor = $(anchors[i]);
+                var newhref = anchor.attr('href').replace("/documents", "/documents/" + $('#LanguageCode').val());
+                anchor.attr('href', newhref);
+            }
+        };
+
         var initNavigationFilter = function (navigationContainerId) {
          
             var $navigation = $("#" + navigationContainerId);
+
 
             var getShownDocumentLinks = function () {
                 return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
@@ -107,6 +118,8 @@
         initAnchorTags(".docs-page .docs-body");
 
         initSocialShareLinks();
+
+        addLanguageCodePrefixToLinks();
 
     });
 

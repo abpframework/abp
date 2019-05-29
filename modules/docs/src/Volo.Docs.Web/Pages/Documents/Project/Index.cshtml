@@ -158,6 +158,11 @@
                         </a>
                     </div>
 
+                    @if (Model.LanguageSelectListItems.Count > 1)
+                    {
+                        <select asp-items="Model.LanguageSelectListItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                    }
+
                     @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                     {
                         <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
@@ -222,3 +227,4 @@
 
     </div>
 </div>
+<input hidden id="LanguageCode" value="@Model.LanguageCode"/>
