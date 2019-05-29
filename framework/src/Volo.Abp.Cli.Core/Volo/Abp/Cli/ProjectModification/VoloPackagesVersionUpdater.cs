@@ -1,28 +1,36 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
     public class VoloPackagesVersionUpdater : ITransientDependency
     {
-        public void UpdateSolution(string solutionPath, string newVersion)
+        private readonly NuGetService _nuGetService;
+
+        public VoloPackagesVersionUpdater(NuGetService nuGetService)
+        {
+            _nuGetService = nuGetService;
+        }
+
+        public void UpdateSolution(string solutionPath, bool includePreviews)
         {
             var projectPaths = ProjectFinder.GetProjectFiles(solutionPath);
 
             foreach (var filePath in projectPaths)
             {
-                UpdateInternal(filePath, newVersion);
+                UpdateInternal(filePath, includePreviews);
             }
         }
 
-        public void UpdateProject(string projectPath, string newVersion)
+        public void UpdateProject(string projectPath, bool includePreviews)
         {
-            UpdateInternal(projectPath, newVersion);
+            UpdateInternal(projectPath, includePreviews);
         }
 
-        protected virtual void UpdateInternal(string projectPath, string newVersion)
+        protected virtual void UpdateInternal(string projectPath, bool includePreviews)
         {
             var fileContent = File.ReadAllText(projectPath);
 
@@ -32,13 +40,13 @@ namespace Volo.Abp.Cli.ProjectModification
             while (index >= 0)
             {
                 fileContent = fileContent.Substring(index);
-                content.Append(ReplaceAPackage(fileContent, newVersion, out index));
+                content.Append(ReplaceAPackage(fileContent, includePreviews, out index));
             }
 
             File.WriteAllText(projectPath, content.ToString());
         }
 
-        private string ReplaceAPackage(string content, string version, out int index)
+        private string ReplaceAPackage(string content, bool includePreviews, out int index)
         {
             var packageReferenceStartText = "nclude=\"Volo.";
             var returningText = new StringBuilder();
@@ -56,6 +64,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var indexAfterQuote = content.IndexOf("\"", StringComparison.Ordinal) + 1;
 
+            var packageId = "Volo." + content.Substring(indexAfterQuote - 1);
+
             returningText.Append(content.Substring(0, indexAfterQuote));
             content = content.Substring(indexAfterQuote);
 
@@ -66,6 +76,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var indexOfThirdQuote = content.IndexOf("\"", StringComparison.Ordinal);
 
+            var version = _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews);
             returningText.Append(version);
 
             index = indexOfPackageReference + packageReferenceStartText.Length + indexAfterQuote + indexAfterSecondQuote + indexOfThirdQuote;

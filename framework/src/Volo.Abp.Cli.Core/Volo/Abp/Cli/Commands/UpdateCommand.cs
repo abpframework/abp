@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.ProjectBuilding.Github;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 
@@ -35,12 +31,11 @@ namespace Volo.Abp.Cli.Commands
 
             if (solution != null)
             {
-                var version = await GetLatestAbpVersion(includePreviews);
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                _packagesVersionUpdater.UpdateSolution(solution, version);
+                _packagesVersionUpdater.UpdateSolution(solution, includePreviews);
 
-                Logger.LogInformation($"Volo packages are updated to {version} in {solutionName} solution.");
+                Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
             }
 
@@ -48,37 +43,15 @@ namespace Volo.Abp.Cli.Commands
 
             if (project != null)
             {
-                var version = await GetLatestAbpVersion(includePreviews);
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                _packagesVersionUpdater.UpdateProject(project, version);
+                _packagesVersionUpdater.UpdateProject(project, includePreviews);
 
-                Logger.LogInformation($"Volo packages are updated to {version} in {projectName} project.");
+                Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
             }
 
             Logger.LogError("No solution or project found in this directory.");
-        }
-
-        protected virtual async Task<string> GetLatestAbpVersion(bool includePreviews)
-        {
-            var url = "https://api.github.com/repos/abpframework/abp/releases";
-
-            using (var client = new HttpClient())
-            {
-                client.Timeout = TimeSpan.FromMinutes(30);
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("MyAgent/1.0");
-                var result = await client.GetStringAsync(url);
-
-                var releases = JsonConvert.DeserializeObject<List<GithubRelease>>(result);
-
-                if (!includePreviews)
-                {
-                    releases.RemoveAll(v => v.IsPrerelease);
-                }
-
-                return releases.First().Name.RemovePreFix("v");
-            }
         }
 
         public static class Options
