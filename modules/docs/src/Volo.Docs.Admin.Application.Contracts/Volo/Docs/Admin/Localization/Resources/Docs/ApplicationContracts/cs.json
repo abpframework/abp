@@ -1,0 +1,10 @@
+﻿{
+  "culture": "cs",
+  "texts": {
+    "Permission:DocumentManagement": "Document Management",
+    "Permission:Projects": "Projects",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:Create": "Create"
+  }
+}

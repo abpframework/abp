@@ -1,0 +1,18 @@
+﻿{
+  "culture": "cs",
+  "texts": {
+    "Documents": "Documents",
+    "BackToWebsite": "Back to website",
+    "Contributors": "Contributors",
+    "ShareOn": "Share on",
+    "Version": "Version",
+    "Edit": "Edit",
+    "Delete": "Delete",
+    "InThisDocument": "In this document",
+    "GoToTop": "Go to top",
+    "Projects": "Project(s)",
+    "NoProjectWarning": "There are no projects yet!",
+    "DocumentNotFound": "Oops, the requested document was not found!",
+    "NavigationDocumentNotFound": "This version does not have a navigation document!"
+  }
+}
