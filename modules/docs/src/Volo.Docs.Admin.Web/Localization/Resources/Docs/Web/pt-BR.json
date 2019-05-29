@@ -21,6 +21,7 @@
     "DisplayName:MainWebsiteUrl": "URL do site principal",
     "DisplayName:LatestVersionBranchName": "Nome do branch da última versão",
     "DisplayName:GitHubRootUrl": "URL raíz do GitHub",
-    "DisplayName:GitHubAccessToken": "Token de acesso do GitHub"
+    "DisplayName:GitHubAccessToken": "Token de acesso do GitHub",
+    "DisplayName:GitHubUserAgent": "Usuário agente do GitHub"
   }
 }

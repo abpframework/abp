@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Volo\Abp\Ui\Navigation\Localization\Resource\pt-BR.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.UI\Volo.Abp.UI.csproj" />
   </ItemGroup>
 

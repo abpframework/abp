@@ -4,7 +4,7 @@
     "Documents": "Documentos",
     "BackToWebsite": "Voltar para o site",
     "Contributors": "Contribuidores",
-    "ShareOn": "Compartilhar em:",
+    "ShareOn": "Compartilhar em",
     "Version": "Versão",
     "Edit": "Editar",
     "Delete": "Excluir",
@@ -12,7 +12,7 @@
     "GoToTop": "Ir pra o topo",
     "Projects": "Projeto(s)",
     "NoProjectWarning": "Ainda não há projetos!",
-    "DocumentNotFound": "Oops, o documento solicitado foi encontrado",
+    "DocumentNotFound": "Oops, o documento solicitado não foi encontrado",
     "NavigationDocumentNotFound": "Esta versão não possui um documento de navegação!"
   }
 }
