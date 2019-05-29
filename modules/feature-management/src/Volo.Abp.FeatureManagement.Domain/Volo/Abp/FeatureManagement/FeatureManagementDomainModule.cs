@@ -1,0 +1,48 @@
+﻿using Volo.Abp.Caching;
+using Volo.Abp.FeatureManagement.Localization;
+using Volo.Abp.Features;
+using Volo.Abp.Localization;
+using Volo.Abp.Localization.ExceptionHandling;
+using Volo.Abp.Modularity;
+using Volo.Abp.VirtualFileSystem;
+
+namespace Volo.Abp.FeatureManagement
+{
+    [DependsOn(
+        typeof(FeatureManagementDomainSharedModule),
+        typeof(FeaturesModule),
+        typeof(CachingModule)
+        )]
+    public class FeatureManagementDomainModule : AbpModule
+    {
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<FeatureManagementOptions>(options =>
+            {
+                options.Providers.Add<DefaultValueFeatureManagementProvider>();
+                options.Providers.Add<EditionFeatureManagementProvider>();
+
+                //TODO: Should be moved to the Tenant Management module
+                options.Providers.Add<TenantFeatureManagementProvider>();
+                options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
+            });
+
+            Configure<VirtualFileSystemOptions>(options =>
+            {
+                options.FileSets.AddEmbedded<FeatureManagementDomainModule>();
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpFeatureManagementResource>()
+                    .AddVirtualJson("/Volo/Abp/FeatureManagement/Localization/Domain");
+            });
+
+            Configure<ExceptionLocalizationOptions>(options =>
+            {
+                options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));
+            });
+        }
+    }
+}

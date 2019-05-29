@@ -5,7 +5,7 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingApplicationContractsModule),
-        typeof(AbpAspNetCoreMvcModule))]
+        typeof(AspNetCoreMvcModule))]
     public class BloggingHttpApiModule : AbpModule
     {
 

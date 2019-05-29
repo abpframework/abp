@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class UserRoleFinder_Tests : AbpIdentityDomainTestBase
+    public class UserRoleFinder_Tests : IdentityDomainTestBase
     {
         private readonly IUserRoleFinder _userRoleFinder;
         private readonly IdentityTestData _testData;

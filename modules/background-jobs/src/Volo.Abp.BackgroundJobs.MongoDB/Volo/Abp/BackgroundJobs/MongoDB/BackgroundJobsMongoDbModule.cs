@@ -6,7 +6,7 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
 {
     [DependsOn(
         typeof(BackgroundJobsDomainModule),
-        typeof(AbpMongoDbModule)
+        typeof(MongoDbModule)
         )]
     public class BackgroundJobsMongoDbModule : AbpModule
     {

@@ -10,10 +10,10 @@ using Volo.Blogging.MongoDB;
 namespace Volo.BloggingTestApp.MongoDb
 {
     [DependsOn(
-        typeof(AbpIdentityMongoDbModule),
+        typeof(IdentityMongoDbModule),
         typeof(BloggingMongoDbModule),
-        typeof(AbpSettingManagementMongoDbModule),
-        typeof(AbpPermissionManagementMongoDbModule)
+        typeof(SettingManagementMongoDbModule),
+        typeof(PermissionManagementMongoDbModule)
     )]
     public class BloggingTestAppMongoDbModule : AbpModule
     {

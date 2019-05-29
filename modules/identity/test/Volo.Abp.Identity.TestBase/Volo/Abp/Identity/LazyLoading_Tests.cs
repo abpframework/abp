@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class LazyLoading_Tests<TStartupModule> : AbpIdentityTestBase<TStartupModule>
+    public abstract class LazyLoading_Tests<TStartupModule> : IdentityTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected IIdentityUserRepository UserRepository { get; }

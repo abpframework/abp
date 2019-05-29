@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class ClientRepository_Tests : ClientRepository_Tests<AbpIdentityServerMongoDbTestModule>
+    public class ClientRepository_Tests : ClientRepository_Tests<IdentityServerMongoDbTestModule>
     {
 
     }

@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Volo.Abp.TenantManagement
 {
-    public class Tenant_Tests : AbpTenantManagementDomainTestBase
+    public class Tenant_Tests : TenantManagementDomainTestBase
     {
         private readonly ITenantRepository _tenantRepository;
 

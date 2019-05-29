@@ -12,8 +12,8 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
     [DependsOn(
         typeof(DemoAppSharedModule),
         typeof(BackgroundJobsEntityFrameworkCoreModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule)
+        typeof(AutofacModule),
+        typeof(EntityFrameworkCoreSqlServerModule)
         )]
     public class DemoAppModule : AbpModule
     {

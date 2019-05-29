@@ -4,7 +4,7 @@ using Volo.Docs.Localization;
 
 namespace Volo.Docs
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(LocalizationModule))]
     public class DocsDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

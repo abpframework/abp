@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class PermissionManager_Tests : AbpIdentityDomainTestBase
+    public class PermissionManager_Tests : IdentityDomainTestBase
     {
         private readonly IPermissionManager _permissionManager;
         private readonly IPermissionStore _permissionStore;

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class IdentityResourceStore_Tests : AbpIdentityServerTestBase
+    public class IdentityResourceStore_Tests : IdentityServerTestBase
     {
         private readonly IResourceStore _resourceStore;
 

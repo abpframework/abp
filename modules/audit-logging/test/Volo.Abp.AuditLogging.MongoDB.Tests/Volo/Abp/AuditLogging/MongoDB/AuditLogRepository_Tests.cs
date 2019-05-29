@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Volo.Abp.AuditLogging.MongoDB
 {
-    public class AuditLogRepository_Tests : AuditLogRepository_Tests<AbpAuditLoggingMongoDbTestModule>
+    public class AuditLogRepository_Tests : AuditLogRepository_Tests<AuditLoggingMongoDbTestModule>
     {
 
     }

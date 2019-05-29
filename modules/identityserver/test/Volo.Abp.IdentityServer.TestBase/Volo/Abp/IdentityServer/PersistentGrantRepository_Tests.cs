@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer
 {
-    public abstract class PersistentGrantRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
+    public abstract class PersistentGrantRepository_Tests<TStartupModule> : IdentityServerTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         private readonly IPersistentGrantRepository _persistentGrantRepository;

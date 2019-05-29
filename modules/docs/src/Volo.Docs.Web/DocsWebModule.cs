@@ -16,7 +16,7 @@ namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule)
+        typeof(AspNetCoreMvcUiBootstrapModule)
         )]
     public class DocsWebModule : AbpModule
     {

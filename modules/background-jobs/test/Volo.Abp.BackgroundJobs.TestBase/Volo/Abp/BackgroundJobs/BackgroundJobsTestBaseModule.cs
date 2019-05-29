@@ -5,8 +5,8 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BackgroundJobs
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
+        typeof(AutofacModule),
+        typeof(TestBaseModule),
         typeof(BackgroundJobsDomainModule)
         )]
     public class BackgroundJobsTestBaseModule : AbpModule

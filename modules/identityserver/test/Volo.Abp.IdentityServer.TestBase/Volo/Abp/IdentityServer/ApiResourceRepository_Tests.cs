@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer
 {
-    public abstract class ApiResourceRepository_Tests<TStartupModule> : AbpIdentityServerTestBase<TStartupModule>
+    public abstract class ApiResourceRepository_Tests<TStartupModule> : IdentityServerTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected IApiResourceRepository apiResourceRepository { get; }

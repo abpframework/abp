@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class IdentityDataSeeder_Tests<TStartupModule> : AbpIdentityTestBase<TStartupModule>
+    public abstract class IdentityDataSeeder_Tests<TStartupModule> : IdentityTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         private readonly IIdentityDataSeeder _identityDataSeeder;

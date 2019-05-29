@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class Distributed_User_Change_Event_Tests : AbpIdentityDomainTestBase
+    public class Distributed_User_Change_Event_Tests : IdentityDomainTestBase
     {
         private readonly IIdentityUserRepository _userRepository;
         private readonly ILookupNormalizer _lookupNormalizer;

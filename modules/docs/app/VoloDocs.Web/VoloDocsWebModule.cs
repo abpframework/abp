@@ -39,13 +39,13 @@ namespace VoloDocs.Web
         typeof(DocsApplicationModule),
         typeof(DocsAdminApplicationModule),
         typeof(VoloDocsEntityFrameworkCoreModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpAccountWebModule),
-        typeof(AbpIdentityWebModule),
-        typeof(AbpIdentityApplicationModule),
-        typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpPermissionManagementApplicationModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AutofacModule),
+        typeof(AccountWebModule),
+        typeof(IdentityWebModule),
+        typeof(IdentityApplicationModule),
+        typeof(PermissionManagementDomainIdentityModule),
+        typeof(PermissionManagementApplicationModule),
+        typeof(AspNetCoreMvcUiBasicThemeModule)
     )]
     public class VoloDocsWebModule : AbpModule
     {
@@ -76,11 +76,11 @@ namespace VoloDocs.Web
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
-                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<UiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiBootstrapModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Bootstrap", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<AspNetCoreMvcUiBasicThemeModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DocsDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Domain", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Web", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DocsWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Volo.Docs.Admin.Web", Path.DirectorySeparatorChar)));

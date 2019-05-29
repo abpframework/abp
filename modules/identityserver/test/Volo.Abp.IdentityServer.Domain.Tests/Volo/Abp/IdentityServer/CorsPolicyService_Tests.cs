@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class CorsPolicyService_Tests : AbpIdentityServerDomainTestBase
+    public class CorsPolicyService_Tests : IdentityServerDomainTestBase
     {
         private readonly ICorsPolicyService _corsPolicyService;
         private readonly IClientRepository _clientRepository;

@@ -7,10 +7,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpAuthorizationModule),
-        typeof(AbpFeatureManagementDomainModule)
+        typeof(AutofacModule),
+        typeof(TestBaseModule),
+        typeof(AuthorizationModule),
+        typeof(FeatureManagementDomainModule)
         )]
     public class FeatureManagementTestBaseModule : AbpModule
     {

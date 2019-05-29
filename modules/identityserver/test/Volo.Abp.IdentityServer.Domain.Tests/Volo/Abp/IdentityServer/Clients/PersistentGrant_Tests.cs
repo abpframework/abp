@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class PersistentGrantStore_Tests : AbpIdentityServerTestBase
+    public class PersistentGrantStore_Tests : IdentityServerTestBase
     {
         private readonly IPersistedGrantStore _persistedGrantStore;
 

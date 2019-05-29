@@ -3,7 +3,7 @@ using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 
 namespace Volo.Abp.PermissionManagement
 {
-    public abstract class PermissionTestBase : PermissionManagementTestBase<AbpPermissionManagementTestModule>
+    public abstract class PermissionTestBase : PermissionManagementTestBase<PermissionManagementTestModule>
     {
         protected virtual void UsingDbContext(Action<IPermissionManagementDbContext> action)
         {

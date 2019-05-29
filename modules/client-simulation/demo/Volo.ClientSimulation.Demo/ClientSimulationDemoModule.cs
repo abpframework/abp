@@ -10,8 +10,8 @@ using Volo.ClientSimulation.Scenarios;
 namespace Volo.ClientSimulation.Demo
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAutofacModule),
+        typeof(AspNetCoreMvcUiBasicThemeModule),
+        typeof(AutofacModule),
         typeof(ClientSimulationWebModule)
         )]
     public class ClientSimulationDemoModule : AbpModule

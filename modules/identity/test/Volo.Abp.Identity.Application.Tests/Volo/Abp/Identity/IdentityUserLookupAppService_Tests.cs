@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserLookupAppService_Tests : AbpIdentityApplicationTestBase
+    public class IdentityUserLookupAppService_Tests : IdentityApplicationTestBase
     {
         private readonly IIdentityUserLookupAppService _identityUserLookupAppService;
         private readonly IIdentityUserRepository _identityUserRepository;

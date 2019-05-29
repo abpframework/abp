@@ -11,8 +11,8 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.HangFire
 {
     [DependsOn(
         typeof(DemoAppSharedModule),
-        typeof(AbpAutofacModule),
-        typeof(AbpBackgroundJobsHangfireModule)
+        typeof(AutofacModule),
+        typeof(BackgroundJobsHangfireModule)
     )]
     public class DemoAppHangfireModule : AbpModule
     {

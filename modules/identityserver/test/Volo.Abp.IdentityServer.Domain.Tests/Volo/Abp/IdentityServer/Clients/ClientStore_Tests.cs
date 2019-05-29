@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Volo.Abp.IdentityServer.Clients
 {
-    public class ClientStore_Tests : AbpIdentityServerTestBase
+    public class ClientStore_Tests : IdentityServerTestBase
     {
         private readonly IClientStore _clientStore;
 

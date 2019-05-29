@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityUserStore_Tests : AbpIdentityDomainTestBase
+    public class IdentityUserStore_Tests : IdentityDomainTestBase
     {
         private readonly IdentityUserStore _identityUserStore;
         private readonly ILookupNormalizer _lookupNormalizer;

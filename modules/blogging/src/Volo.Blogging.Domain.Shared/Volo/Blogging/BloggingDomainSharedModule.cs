@@ -5,7 +5,7 @@ using Volo.Blogging.Localization;
 
 namespace Volo.Blogging
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(LocalizationModule))]
     public class BloggingDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

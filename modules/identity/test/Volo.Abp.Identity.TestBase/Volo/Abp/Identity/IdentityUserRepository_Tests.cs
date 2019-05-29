@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class IdentityUserRepository_Tests<TStartupModule> : AbpIdentityTestBase<TStartupModule>
+    public abstract class IdentityUserRepository_Tests<TStartupModule> : IdentityTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
         protected IIdentityUserRepository UserRepository { get; }

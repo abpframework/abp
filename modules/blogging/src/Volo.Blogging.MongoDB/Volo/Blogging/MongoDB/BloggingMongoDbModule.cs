@@ -11,7 +11,7 @@ namespace Volo.Blogging.MongoDB
 {
     [DependsOn(
         typeof(BloggingDomainModule),
-        typeof(AbpUsersMongoDbModule)
+        typeof(UsersMongoDbModule)
     )]
     public class BloggingMongoDbModule : AbpModule
     {

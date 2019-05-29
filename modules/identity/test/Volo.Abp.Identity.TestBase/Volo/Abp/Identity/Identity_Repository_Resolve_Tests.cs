@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public abstract class Identity_Repository_Resolve_Tests<TStartupModule> : AbpIdentityTestBase<TStartupModule> 
+    public abstract class Identity_Repository_Resolve_Tests<TStartupModule> : IdentityTestBase<TStartupModule> 
         where TStartupModule : IAbpModule
     {
         [Fact] //Move this test to Volo.Abp.EntityFrameworkCore.Tests since it's actually testing the EF Core repository registration!

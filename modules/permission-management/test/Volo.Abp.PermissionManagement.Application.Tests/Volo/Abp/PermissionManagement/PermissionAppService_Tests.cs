@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionManagement
 {
-    public class PermissionAppService_Tests : AbpPermissionManagementApplicationTestBase
+    public class PermissionAppService_Tests : PermissionManagementApplicationTestBase
     {
         private readonly IPermissionAppService _permissionAppService;
         private readonly IPermissionGrantRepository _permissionGrantRepository;

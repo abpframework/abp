@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityOptions_Tests : AbpIdentityDomainTestBase
+    public class IdentityOptions_Tests : IdentityDomainTestBase
     {
         private ISettingProvider _settingProvider;
 

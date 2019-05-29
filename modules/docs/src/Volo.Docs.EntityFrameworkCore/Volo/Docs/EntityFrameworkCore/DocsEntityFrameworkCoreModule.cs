@@ -7,7 +7,7 @@ namespace Volo.Docs.EntityFrameworkCore
 {
     [DependsOn(
         typeof(DocsDomainModule),
-        typeof(AbpEntityFrameworkCoreModule))]
+        typeof(EntityFrameworkCoreModule))]
     public class DocsEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

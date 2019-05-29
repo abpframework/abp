@@ -11,8 +11,8 @@ namespace Volo.Blogging
     [DependsOn(
         typeof(BloggingDomainModule),
         typeof(BloggingApplicationContractsModule),
-        typeof(AbpCachingModule),
-        typeof(AbpAutoMapperModule))]
+        typeof(CachingModule),
+        typeof(AutoMapperModule))]
     public class BloggingApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

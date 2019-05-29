@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Identity.EntityFrameworkCore
 {
-    public class IdentityRoleRepository_Tests : IdentityRoleRepository_Tests<AbpIdentityEntityFrameworkCoreTestModule>
+    public class IdentityRoleRepository_Tests : IdentityRoleRepository_Tests<IdentityEntityFrameworkCoreTestModule>
     {
 
     }

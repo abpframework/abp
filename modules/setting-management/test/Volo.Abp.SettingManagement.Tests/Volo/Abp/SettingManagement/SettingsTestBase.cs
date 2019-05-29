@@ -5,7 +5,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
 namespace Volo.Abp.SettingManagement
 {
-    public class SettingsTestBase : SettingManagementTestBase<AbpSettingManagementTestModule>
+    public class SettingsTestBase : SettingManagementTestBase<SettingManagementTestModule>
     {
         protected virtual void UsingDbContext(Action<ISettingManagementDbContext> action)
         {

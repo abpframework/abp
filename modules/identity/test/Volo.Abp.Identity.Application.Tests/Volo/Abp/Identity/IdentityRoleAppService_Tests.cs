@@ -6,7 +6,7 @@ using Shouldly;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityRoleAppService_Tests : AbpIdentityApplicationTestBase
+    public class IdentityRoleAppService_Tests : IdentityApplicationTestBase
     {
         private readonly IIdentityRoleAppService _roleAppService;
         private readonly IIdentityRoleRepository _roleRepository;

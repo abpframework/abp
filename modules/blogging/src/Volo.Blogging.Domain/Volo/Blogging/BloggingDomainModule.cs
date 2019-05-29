@@ -6,7 +6,7 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingDomainSharedModule),
-        typeof(AbpDddDomainModule))]
+        typeof(DddDomainModule))]
     public class BloggingDomainModule : AbpModule
     {
 

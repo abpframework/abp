@@ -7,8 +7,8 @@ namespace Volo.Docs.Admin
     [DependsOn(
         typeof(DocsDomainModule),
         typeof(DocsAdminApplicationContractsModule),
-        typeof(AbpCachingModule),
-        typeof(AbpAutoMapperModule))]
+        typeof(CachingModule),
+        typeof(AutoMapperModule))]
     public class DocsAdminApplicationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

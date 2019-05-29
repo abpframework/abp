@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class IdentityRoleStore_Tests : AbpIdentityDomainTestBase
+    public class IdentityRoleStore_Tests : IdentityDomainTestBase
     {
         private readonly IdentityRoleStore _identityRoleStore;
         private readonly ILookupNormalizer _lookupNormalizer;

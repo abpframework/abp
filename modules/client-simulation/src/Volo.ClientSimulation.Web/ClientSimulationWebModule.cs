@@ -6,7 +6,7 @@ namespace Volo.ClientSimulation
 {
     [DependsOn(
         typeof(ClientSimulationModule),
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+        typeof(AspNetCoreMvcUiThemeSharedModule)
         )]
     public class ClientSimulationWebModule : AbpModule
     {

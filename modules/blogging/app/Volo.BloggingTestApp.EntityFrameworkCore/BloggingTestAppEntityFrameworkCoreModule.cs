@@ -10,10 +10,10 @@ namespace Volo.BloggingTestApp.EntityFrameworkCore
 {
     [DependsOn(
         typeof(BloggingEntityFrameworkCoreModule),
-        typeof(AbpIdentityEntityFrameworkCoreModule),
-        typeof(AbpPermissionManagementEntityFrameworkCoreModule),
-        typeof(AbpSettingManagementEntityFrameworkCoreModule),
-        typeof(AbpEntityFrameworkCoreSqlServerModule))]
+        typeof(IdentityEntityFrameworkCoreModule),
+        typeof(PermissionManagementEntityFrameworkCoreModule),
+        typeof(SettingManagementEntityFrameworkCoreModule),
+        typeof(EntityFrameworkCoreSqlServerModule))]
     public class BloggingTestAppEntityFrameworkCoreModule : AbpModule
     {
 

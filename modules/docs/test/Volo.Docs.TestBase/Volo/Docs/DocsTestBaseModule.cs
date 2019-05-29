@@ -7,9 +7,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Docs
 {
     [DependsOn(
-        typeof(AbpAutofacModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpAuthorizationModule),
+        typeof(AutofacModule),
+        typeof(TestBaseModule),
+        typeof(AuthorizationModule),
         typeof(DocsDomainModule)
         )]
     public class DocsTestBaseModule : AbpModule

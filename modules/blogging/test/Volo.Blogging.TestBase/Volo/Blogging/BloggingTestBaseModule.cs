@@ -7,8 +7,8 @@ namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingDomainModule),
-        typeof(AbpTestBaseModule),
-        typeof(AbpAutofacModule)
+        typeof(TestBaseModule),
+        typeof(AutofacModule)
         )]
     public class BloggingTestBaseModule : AbpModule
     {

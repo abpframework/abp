@@ -6,7 +6,7 @@ namespace Volo.Blogging.EntityFrameworkCore
 {
     [DependsOn(
         typeof(BloggingDomainModule),
-        typeof(AbpEntityFrameworkCoreModule))]
+        typeof(EntityFrameworkCoreModule))]
     public class BloggingEntityFrameworkCoreModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

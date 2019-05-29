@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Volo.Abp.Identity
 {
-    public class IdenityClaimTypeManager_Tests : AbpIdentityDomainTestBase
+    public class IdenityClaimTypeManager_Tests : IdentityDomainTestBase
     {
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IdenityClaimTypeManager _claimTypeManager;
