@@ -72,12 +72,12 @@ namespace Volo.Docs.Documents
         public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
-            var cacheKey = $"Resource@{project.ShortName}#{input.Name}#{input.Version}";
+            var cacheKey = $"Resource@{project.ShortName}#{input.LanguageCode}#{input.Name}#{input.Version}";
 
             async Task<DocumentResourceDto> GetResourceAsync()
             {
                 var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                var documentResource = await store.GetResource(project, input.Name, input.Version);
+                var documentResource = await store.GetResource(project, input.Name, input.LanguageCode, input.Version);
 
                 return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
             }

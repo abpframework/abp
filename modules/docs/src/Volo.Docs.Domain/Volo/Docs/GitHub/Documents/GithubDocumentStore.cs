@@ -91,9 +91,9 @@ namespace Volo.Docs.GitHub.Documents
             return versions;
         }
 
-        public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
+        public async Task<DocumentResource> GetResource(Project project, string resourceName, string languageCode, string version)
         {
-            var rawRootUrl = CalculateRawRootUrl(project.GetGitHubUrl(version));
+            var rawRootUrl = CalculateRawRootUrlWithLanguageCode(project.GetGitHubUrl(version), languageCode);
             var content = await DownloadWebContentAsByteArrayAsync(
                 rawRootUrl + resourceName,
                 project.GetGitHubAccessTokenOrNull(),

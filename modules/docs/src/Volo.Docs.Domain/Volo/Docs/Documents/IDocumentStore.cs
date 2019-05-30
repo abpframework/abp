@@ -12,7 +12,7 @@ namespace Volo.Docs.Documents
 
         Task<List<VersionInfo>> GetVersionsAsync(Project project);
 
-        Task<DocumentResource> GetResource(Project project, string resourceName, string version);
+        Task<DocumentResource> GetResource(Project project, string resourceName, string languageCode, string version);
 
         Task<LanguageConfig> GetLanguageListAsync(Project project, string version);
     }

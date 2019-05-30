@@ -55,7 +55,7 @@ namespace Volo.Docs.FileSystem.Documents
             return JsonConvert.DeserializeObject<LanguageConfig>(configAsJson);
         }
 
-        public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
+        public async Task<DocumentResource> GetResource(Project project, string resourceName, string languageCode, string version)
         {
             var projectFolder = project.GetFileSystemPath();
             var path = Path.Combine(projectFolder, resourceName);
