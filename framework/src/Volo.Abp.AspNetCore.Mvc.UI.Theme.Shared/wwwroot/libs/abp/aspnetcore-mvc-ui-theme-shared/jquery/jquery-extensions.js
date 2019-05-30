@@ -124,7 +124,9 @@
                 if (!obj[names[0]]) {
                     obj[names[0]] = {};
                 }
-                obj[names[0]][names[1]] = x.value;
+                if (!obj[names[0]][names[1]]) {
+                    obj[names[0]][names[1]] = x.value;
+                }
             }
         });
 
