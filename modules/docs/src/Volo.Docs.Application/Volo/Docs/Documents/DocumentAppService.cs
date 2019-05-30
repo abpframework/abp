@@ -37,7 +37,7 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocument(
+            return await GetDocumentWithDetailsDtoAsync(
                 project,
                 input.Name,
                 input.LanguageCode,
@@ -49,7 +49,7 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocument(
+            return await GetDocumentWithDetailsDtoAsync(
                 project,
                 project.DefaultDocumentName,
                 input.LanguageCode,
@@ -61,7 +61,7 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocument(
+            return await GetDocumentWithDetailsDtoAsync(
                 project,
                 project.NavigationDocumentName,
                 input.LanguageCode,
@@ -99,7 +99,7 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual async Task<DocumentWithDetailsDto> GetDocument(
+        protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDtoAsync(
             Project project,
             string documentName,
             string languageCode,
