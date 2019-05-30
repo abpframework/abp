@@ -16,20 +16,20 @@ namespace Volo.Docs.Documents
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentStoreFactory _documentStoreFactory;
         protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
-        protected IDistributedCache<LanguageConfig> LanguaCache { get; }
+        protected IDistributedCache<LanguageConfig> LanguageCache { get; }
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
 
         public DocumentAppService(
             IProjectRepository projectRepository,
             IDocumentStoreFactory documentStoreFactory,
             IDistributedCache<DocumentWithDetailsDto> documentCache,
-            IDistributedCache<LanguageConfig> languaCache,
+            IDistributedCache<LanguageConfig> languageCache,
             IDistributedCache<DocumentResourceDto> resourceCache)
         {
             _projectRepository = projectRepository;
             _documentStoreFactory = documentStoreFactory;
             DocumentCache = documentCache;
-            LanguaCache = languaCache;
+            LanguageCache = languageCache;
             ResourceCache = resourceCache;
         }
 
@@ -149,7 +149,7 @@ namespace Volo.Docs.Documents
                 return await store.GetLanguageListAsync(project, version);
             }
 
-            return await LanguaCache.GetOrAddAsync(
+            return await LanguageCache.GetOrAddAsync(
                 project.ShortName,
                 GetLanguagesAsync,
                 () => new DistributedCacheEntryOptions
