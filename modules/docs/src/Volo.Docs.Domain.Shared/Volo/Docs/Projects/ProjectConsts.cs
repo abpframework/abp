@@ -8,6 +8,5 @@
         public const int MaxNavigationDocumentNameLength = 128;
         public const int MaxLatestVersionBranchNameLength = 128;
         public const int MaxVersionNameLength = 128;
-        public const int MaxLanguageCodeLength = 10;
     }
 }
