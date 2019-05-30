@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -23,7 +24,12 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string DocumentName { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string LanguageCode { get; set; }
+
         public ProjectDto Project { get; set; }
+
+        public List<SelectListItem> LanguageSelectListItems { get; set; }
 
         public string DocumentNameWithExtension { get; private set; }
 
@@ -58,6 +64,8 @@ namespace Volo.Docs.Pages.Documents.Project
             await SetVersionAsync();
             await SetDocumentAsync();
             await SetNavigationAsync();
+            SetLanguageSelectListItems();
+            AddLanguageCodePrefixToLinks();
         }
 
         private async Task SetProjectAsync()
@@ -72,7 +80,7 @@ namespace Volo.Docs.Pages.Documents.Project
             ProjectSelectItems = projects.Items.Select(p => new SelectListItem
             {
                 Text = p.Name,
-                Value = p.Id != Project.Id ? "/documents/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
+                Value = p.Id != Project.Id ? "/documents/" + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
                 Selected = p.Id == Project.Id
             }).ToList();
         }
@@ -133,6 +141,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     new GetNavigationDocumentInput
                     {
                         ProjectId = Project.Id,
+                        LanguageCode = LanguageCode,
                         Version = Version
                     }
                 );
@@ -144,6 +153,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
 
+            LanguageCode = Document.CurrentLanguageCode;
+
             Navigation.ConvertItems();
         }
 
@@ -154,7 +165,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 version = DocsAppConsts.Latest;
             }
 
-            var link = "/documents/" + ProjectName + "/" + version;
+            var link = "/documents/" + LanguageCode + "/" + ProjectName + "/" + version;
 
             if (documentName != null)
             {
@@ -193,6 +204,7 @@ namespace Volo.Docs.Pages.Documents.Project
                         new GetDefaultDocumentInput
                         {
                             ProjectId = Project.Id,
+                            LanguageCode = LanguageCode,
                             Version = Version
                         }
                     );
@@ -204,18 +216,44 @@ namespace Volo.Docs.Pages.Documents.Project
                         {
                             ProjectId = Project.Id,
                             Name = DocumentNameWithExtension,
+                            LanguageCode = LanguageCode,
                             Version = Version
                         }
                     );
                 }
+
             }
             catch (DocumentNotFoundException)
             {
-                //TODO: Handle it!
-                throw;
+                Document = await _documentAppService.GetDefaultAsync(
+                    new GetDefaultDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        LanguageCode = LanguageCode,
+                        Version = Version
+                    }
+                );
             }
 
+            LanguageCode = Document.CurrentLanguageCode;
+
             ConvertDocumentContentToHtml();
+        }
+
+        private void SetLanguageSelectListItems()
+        {
+            LanguageSelectListItems = new List<SelectListItem>();
+
+            foreach (var language in Document.Project.Languages)
+            {
+                LanguageSelectListItems.Add(
+                    new SelectListItem(
+                        language.Value,
+                        "/documents/" + language.Key + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        language.Key == LanguageCode
+                        )
+                    );
+            }
         }
 
         private void ConvertDocumentContentToHtml()
@@ -237,6 +275,11 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+
+        private void AddLanguageCodePrefixToLinks()
+        {
+            Document.Content = Document.Content.Replace("href=\"/documents", "href=\"/documents/" + LanguageCode);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -15,17 +16,20 @@ namespace Volo.Docs.Documents
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentStoreFactory _documentStoreFactory;
         protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
+        protected IDistributedCache<LanguageConfig> LanguageCache { get; }
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
 
         public DocumentAppService(
             IProjectRepository projectRepository,
             IDocumentStoreFactory documentStoreFactory,
             IDistributedCache<DocumentWithDetailsDto> documentCache,
+            IDistributedCache<LanguageConfig> languageCache,
             IDistributedCache<DocumentResourceDto> resourceCache)
         {
             _projectRepository = projectRepository;
             _documentStoreFactory = documentStoreFactory;
             DocumentCache = documentCache;
+            LanguageCache = languageCache;
             ResourceCache = resourceCache;
         }
 
@@ -33,9 +37,10 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocumentWithDetailsDto(
+            return await GetDocument(
                 project,
                 input.Name,
+                input.LanguageCode,
                 input.Version
             );
         }
@@ -44,9 +49,10 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocumentWithDetailsDto(
+            return await GetDocument(
                 project,
                 project.DefaultDocumentName,
+                input.LanguageCode,
                 input.Version
             );
         }
@@ -55,9 +61,10 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocumentWithDetailsDto(
+            return await GetDocument(
                 project,
                 project.NavigationDocumentName,
+                input.LanguageCode,
                 input.Version
             );
         }
@@ -65,12 +72,12 @@ namespace Volo.Docs.Documents
         public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
-            var cacheKey = $"Resource@{project.ShortName}#{input.Name}#{input.Version}";
+            var cacheKey = $"Resource@{project.ShortName}#{input.LanguageCode}#{input.Name}#{input.Version}";
 
             async Task<DocumentResourceDto> GetResourceAsync()
             {
                 var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                var documentResource = await store.GetResource(project, input.Name, input.Version);
+                var documentResource = await store.GetResource(project, input.Name, input.LanguageCode, input.Version);
 
                 return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
             }
@@ -92,20 +99,23 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDto(
+        protected virtual async Task<DocumentWithDetailsDto> GetDocument(
             Project project,
             string documentName,
+            string languageCode,
             string version)
         {
-            var cacheKey = $"Document@{project.ShortName}#{documentName}#{version}";
+            var cacheKey = $"Document@{project.ShortName}#{languageCode}#{documentName}#{version}";
 
             async Task<DocumentWithDetailsDto> GetDocumentAsync()
             {
                 Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
                 var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                var document = await store.GetDocumentAsync(project, documentName, version);
+                var languages = await GetLanguageListAsync(store, project, version);
+                var language = GetLanguageByCode(languages, languageCode);
+                var document = await store.GetDocumentAsync(project, documentName, language.Code, version);
                 Logger.LogInformation($"Document retrieved: {documentName}");
-                return CreateDocumentWithDetailsDto(project, document);
+                return CreateDocumentWithDetailsDto(project, document, languages, language.Code);
             }
 
             if (Debugger.IsAttached)
@@ -125,11 +135,43 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
+        protected virtual LanguageConfigElement GetLanguageByCode(LanguageConfig languageCodes, string languageCode)
+        {
+            var language = languageCodes.Languages.FirstOrDefault(l => l.Code == languageCode);
+
+            return language ?? languageCodes.Languages.Single(l => l.IsDefault);
+        }
+
+        protected virtual async Task<LanguageConfig> GetLanguageListAsync(IDocumentStore store, Project project, string version)
+        {
+            async Task<LanguageConfig> GetLanguagesAsync()
+            {
+                return await store.GetLanguageListAsync(project, version);
+            }
+
+            return await LanguageCache.GetOrAddAsync(
+                project.ShortName,
+                GetLanguagesAsync,
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+                }
+            );
+        }
+
+        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document, LanguageConfig languages, string languageCode)
         {
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
+
+            documentDto.Project.Languages = new Dictionary<string, string>();
+            foreach (var language in languages.Languages)
+            {
+                documentDto.Project.Languages.Add(language.Code, language.DisplayName);
+            }
+
+            documentDto.CurrentLanguageCode = languageCode;
             return documentDto;
         }
     }

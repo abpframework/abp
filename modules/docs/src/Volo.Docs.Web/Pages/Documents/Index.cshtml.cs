@@ -17,7 +17,7 @@ namespace Volo.Docs.Pages.Documents
             _projectAppService = projectAppService;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             var listResult = await _projectAppService.GetListAsync();
 
@@ -27,6 +27,7 @@ namespace Volo.Docs.Pages.Documents
                 {
                     projectName = listResult.Items[0].ShortName,
                     version = DocsAppConsts.Latest,
+                    languageCode = await _projectAppService.GetDefaultLanguageCode(listResult.Items[0].ShortName),
                     documentName = listResult.Items[0].DefaultDocumentName
                 });
             }

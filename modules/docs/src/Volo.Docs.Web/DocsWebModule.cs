@@ -39,8 +39,8 @@ namespace Volo.Docs
             {
                 //TODO: Make configurable!
                 options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}");
-
-                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{languageCode}/{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{languageCode}/{projectName}/{version}/{*documentName}");
             });
 
             Configure<AbpAutoMapperOptions>(options =>

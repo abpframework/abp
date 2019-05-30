@@ -35,6 +35,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("project-format")]
         public string ProjectFormat { get; set; }
 
+        [HtmlAttributeName("language")]
+        public string LanguageCode { get; set; }
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var content = new StringBuilder();
@@ -107,7 +110,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
             else
             {
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path, node.HasChildItems), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
             }
 
             return string.Format(LiItemTemplateWithLink,
@@ -117,7 +120,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 content);
         }
 
-        private string NormalizePath(string path, bool hasChildItems)
+        private string NormalizePath(string path)
         {
             if (UrlHelper.IsExternalLink(path))
             {
@@ -131,7 +134,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            return  "/documents/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            return  "/documents/" + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }
 
         private string RemoveFileExtensionFromPath(string path)

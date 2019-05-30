@@ -16,17 +16,15 @@ namespace Volo.Docs.Projects
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
-        private readonly IGuidGenerator _guidGenerator;
 
         public ProjectAppService(
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDocumentStoreFactory documentStoreFactory, IGuidGenerator guidGenerator)
+            IDocumentStoreFactory documentStoreFactory)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
             _documentStoreFactory = documentStoreFactory;
-            _guidGenerator = guidGenerator;
         }
 
         public async Task<ListResultDto<ProjectDto>> GetListAsync()
@@ -43,6 +41,15 @@ namespace Volo.Docs.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             return ObjectMapper.Map<Project, ProjectDto>(project);
+        }
+
+        public async Task<string> GetDefaultLanguageCode(string shortName)
+        {
+            var project = await _projectRepository.GetByShortNameAsync(shortName);
+            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var languageList = await store.GetLanguageListAsync(project, project.LatestVersionBranchName);
+
+            return languageList.Languages.Single(l=>l.IsDefault).Code;
         }
 
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)

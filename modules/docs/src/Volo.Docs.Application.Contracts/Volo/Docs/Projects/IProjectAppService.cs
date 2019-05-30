@@ -9,6 +9,8 @@ namespace Volo.Docs.Projects
         Task<ListResultDto<ProjectDto>> GetListAsync();
      
         Task<ProjectDto> GetAsync(string shortName);
+
+        Task<string> GetDefaultLanguageCode(string shortName);
         
         Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName);
     }
