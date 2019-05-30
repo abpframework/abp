@@ -23,6 +23,8 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation("  abp <command> <target> [options]");
             Logger.LogInformation("");
 
+            //TODO: Write available commands (not hard-coded, but from the CliOptions.Commands)
+
             return Task.CompletedTask;
         }
     }

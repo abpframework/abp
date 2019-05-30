@@ -98,7 +98,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Examples:");
             sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current soluton.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
-            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given soluton but doesn't add-migration.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given soluton but doesn't create a database migration.");
             sb.AppendLine("");
 
             return sb.ToString();

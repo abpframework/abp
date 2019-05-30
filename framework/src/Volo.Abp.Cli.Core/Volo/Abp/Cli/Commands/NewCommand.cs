@@ -35,14 +35,21 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogWarning("");
                 Logger.LogWarning("Options:");
                 Logger.LogWarning("-t|--template <template-name>");
-                Logger.LogWarning("-d|--database-provider <database-provider>");
                 Logger.LogWarning("-o|--output-folder <output-folder>");
+                Logger.LogWarning("-d|--database-provider <database-provider>  (if supported by the template)");
+                Logger.LogWarning("--tiered                                    (if supported by the template)");
+                Logger.LogWarning("--no-ui                                     (if supported by the template)");
                 Logger.LogWarning("");
-                Logger.LogWarning("Examples:");
+                Logger.LogWarning("Some examples:");
                 Logger.LogWarning("  abp new Acme.BookStore");
+                Logger.LogWarning("  abp new Acme.BookStore --tiered");
                 Logger.LogWarning("  abp new Acme.BookStore -t mvc-module");
+                Logger.LogWarning("  abp new Acme.BookStore -t mvc-module no-ui");
+                Logger.LogWarning("  abp new Acme.BookStore -d mongodb");
                 Logger.LogWarning("  abp new Acme.BookStore -t mvc -d mongodb");
                 Logger.LogWarning("  abp new Acme.BookStore -t mvc -d mongodb -o d:\\project");
+                Logger.LogWarning("");
+                Logger.LogWarning("See the documentation for more info.");
                 return;
             }
 
