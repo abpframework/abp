@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Volo.Docs.Documents
 {
     public class LanguageConfig
     {
-        public List<LanguageConfigElement> Languages { get; set; }
+        public List<LanguageInfo> Languages { get; set; }
     }
 }

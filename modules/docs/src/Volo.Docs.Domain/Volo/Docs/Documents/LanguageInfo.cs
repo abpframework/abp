@@ -1,6 +1,6 @@
 ﻿namespace Volo.Docs.Documents
 {
-    public class LanguageConfigElement
+    public class LanguageInfo
     {
         public string DisplayName { get; set; }
 

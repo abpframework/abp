@@ -153,6 +153,8 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
 
+            LanguageCode = Document.CurrentLanguageCode;
+
             Navigation.ConvertItems();
         }
 
@@ -219,6 +221,7 @@ namespace Volo.Docs.Pages.Documents.Project
                         }
                     );
                 }
+
             }
             catch (DocumentNotFoundException)
             {
@@ -231,6 +234,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                 );
             }
+
+            LanguageCode = Document.CurrentLanguageCode;
 
             ConvertDocumentContentToHtml();
         }

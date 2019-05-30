@@ -115,7 +115,7 @@ namespace Volo.Docs.Documents
                 var language = GetLanguageByCode(languages, languageCode);
                 var document = await store.GetDocumentAsync(project, documentName, language.Code, version);
                 Logger.LogInformation($"Document retrieved: {documentName}");
-                return CreateDocumentWithDetailsDto(project, document, languages);
+                return CreateDocumentWithDetailsDto(project, document, languages, language.Code);
             }
 
             if (Debugger.IsAttached)
@@ -135,7 +135,7 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual LanguageConfigElement GetLanguageByCode(LanguageConfig languageCodes, string languageCode)
+        protected virtual LanguageInfo GetLanguageByCode(LanguageConfig languageCodes, string languageCode)
         {
             var language = languageCodes.Languages.FirstOrDefault(l => l.Code == languageCode);
 
@@ -159,16 +159,19 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document, LanguageConfig languages)
+        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document, LanguageConfig languages, string languageCode)
         {
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
+
             documentDto.Project.Languages = new Dictionary<string, string>();
             foreach (var language in languages.Languages)
             {
                 documentDto.Project.Languages.Add(language.Code,language.DisplayName);
             }
+
+            documentDto.CurrentLanguageCode = languageCode;
             return documentDto;
         }
     }
