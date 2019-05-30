@@ -60,7 +60,7 @@ namespace Volo.Docs
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 
-            var documentResource = await store.GetResource(project, "index.md", "0.123.0");
+            var documentResource = await store.GetResource(project, "index.md", "en", "0.123.0");
             documentResource.ShouldNotBeNull();
 
             documentResource.Content.ShouldBe(new byte[]
