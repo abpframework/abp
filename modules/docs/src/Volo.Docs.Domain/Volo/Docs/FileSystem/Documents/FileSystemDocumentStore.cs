@@ -50,7 +50,8 @@ namespace Volo.Docs.FileSystem.Documents
 
         public async Task<LanguageConfig> GetLanguageListAsync(Project project, string version)
         {
-            var configAsJson = project.GetFileSystemPath() + "languageConfig.json";
+            var path = Path.Combine(project.GetFileSystemPath(), "languageConfig.json");
+            var configAsJson = await FileHelper.ReadAllTextAsync(path);
 
             return JsonConvert.DeserializeObject<LanguageConfig>(configAsJson);
         }

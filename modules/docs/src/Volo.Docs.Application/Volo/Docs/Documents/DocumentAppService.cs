@@ -135,7 +135,7 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual LanguageInfo GetLanguageByCode(LanguageConfig languageCodes, string languageCode)
+        protected virtual LanguageConfigElement GetLanguageByCode(LanguageConfig languageCodes, string languageCode)
         {
             var language = languageCodes.Languages.FirstOrDefault(l => l.Code == languageCode);
 
@@ -168,7 +168,7 @@ namespace Volo.Docs.Documents
             documentDto.Project.Languages = new Dictionary<string, string>();
             foreach (var language in languages.Languages)
             {
-                documentDto.Project.Languages.Add(language.Code,language.DisplayName);
+                documentDto.Project.Languages.Add(language.Code, language.DisplayName);
             }
 
             documentDto.CurrentLanguageCode = languageCode;

@@ -4,6 +4,6 @@ namespace Volo.Docs.Documents
 {
     public class LanguageConfig
     {
-        public List<LanguageInfo> Languages { get; set; }
+        public List<LanguageConfigElement> Languages { get; set; }
     }
 }
