@@ -45,7 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
 			    var factoryInterface = service.ImplementationInstance?.GetType()
 				    .GetTypeInfo()
 				    .GetInterfaces()
-				    .FirstOrDefault(i => i.GetTypeInfo().IsGenericType &&
+				    .FirstOrDefault(i => i.GetTypeInfo().IsGenericType == false &&
 				                         i.GetGenericTypeDefinition() == typeof(IServiceProviderFactory<>));
 
 			    if (factoryInterface == null)
