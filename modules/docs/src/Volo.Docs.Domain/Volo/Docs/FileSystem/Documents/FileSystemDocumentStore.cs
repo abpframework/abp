@@ -58,7 +58,7 @@ namespace Volo.Docs.FileSystem.Documents
         public async Task<DocumentResource> GetResource(Project project, string resourceName, string languageCode, string version)
         {
             var projectFolder = project.GetFileSystemPath();
-            var path = Path.Combine(projectFolder, resourceName);
+            var path = Path.Combine(projectFolder, languageCode, resourceName);
 
             if (!DirectoryHelper.IsSubDirectoryOf(projectFolder, path))
             {
