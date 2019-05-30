@@ -43,6 +43,15 @@ namespace Volo.Docs.Projects
             return ObjectMapper.Map<Project, ProjectDto>(project);
         }
 
+        public async Task<string> GetDefaultLanguageCode(string shortName)
+        {
+            var project = await _projectRepository.GetByShortNameAsync(shortName);
+            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+            var languageList = await store.GetLanguageListAsync(project, project.LatestVersionBranchName);
+
+            return languageList.Languages.Single(l=>l.IsDefault).Code;
+        }
+
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);

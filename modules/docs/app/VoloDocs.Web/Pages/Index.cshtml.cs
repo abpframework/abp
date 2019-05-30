@@ -18,9 +18,20 @@ namespace VoloDocs.Web.Pages
             _projectAppService = projectAppService;
         }
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             Projects = (await _projectAppService.GetListAsync()).Items;
+
+            if (Projects.Count == 1)
+            {
+                return RedirectToPage("./Documents/Project/Index", new
+                {
+                    projectName = Projects[0].ShortName,
+                    version = DocsAppConsts.Latest,
+                    languageCode = await _projectAppService.GetDefaultLanguageCode(Projects[0].ShortName),
+                    documentName = Projects[0].DefaultDocumentName
+                });
+            }
 
             return Page();
         }
