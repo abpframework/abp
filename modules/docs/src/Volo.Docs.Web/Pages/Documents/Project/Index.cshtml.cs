@@ -27,7 +27,11 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string LanguageCode { get; set; }
 
+        public string DefaultLanguageCode { get; set; }
+
         public ProjectDto Project { get; set; }
+
+        public LanguageConfig LanguageConfig { get; set; }
 
         public List<SelectListItem> LanguageSelectListItems { get; set; }
 
@@ -43,6 +47,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
+        public bool DocumentLanguageIsDifferent { get; set; }
+
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
@@ -57,20 +63,55 @@ namespace Volo.Docs.Pages.Documents.Project
             _projectAppService = projectAppService;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             await SetProjectAsync();
             await SetProjectsAsync();
             await SetVersionAsync();
+            await SetLanguageList();
+
+            if (!CheckLanguage())
+            {
+                return RedirectToDefaultLanguage();
+            }
+
             await SetDocumentAsync();
             await SetNavigationAsync();
             SetLanguageSelectListItems();
             AddLanguageCodePrefixToLinks();
+
+            return Page();
         }
 
         private async Task SetProjectAsync()
         {
             Project = await _projectAppService.GetAsync(ProjectName);
+        }
+
+        private async Task SetLanguageList()
+        {
+            LanguageConfig = await _projectAppService.GetLanguageListAsync(ProjectName, Version);
+            SetDefaultLanguageCode();
+        }
+
+        private void SetDefaultLanguageCode()
+        {
+            DefaultLanguageCode = (LanguageConfig.Languages.FirstOrDefault(l => l.IsDefault) ?? LanguageConfig.Languages.First()).Code;
+        }
+
+        private bool CheckLanguage()
+        {
+            return LanguageConfig.Languages.Any(l => l.Code == LanguageCode);
+        }
+
+        private IActionResult RedirectToDefaultLanguage()
+        {
+            return RedirectToPage(new
+            {
+                projectName = ProjectName,
+                version = Version,
+                languageCode = DefaultLanguageCode
+            });
         }
 
         private async Task SetProjectsAsync()
@@ -153,8 +194,6 @@ namespace Volo.Docs.Pages.Documents.Project
                 return;
             }
 
-            LanguageCode = Document.CurrentLanguageCode;
-
             Navigation.ConvertItems();
         }
 
@@ -221,21 +260,28 @@ namespace Volo.Docs.Pages.Documents.Project
                         }
                     );
                 }
-
             }
             catch (DocumentNotFoundException)
             {
-                Document = await _documentAppService.GetDefaultAsync(
-                    new GetDefaultDocumentInput
-                    {
-                        ProjectId = Project.Id,
-                        LanguageCode = LanguageCode,
-                        Version = Version
-                    }
-                );
-            }
+                if (LanguageCode != DefaultLanguageCode)
+                {
+                    Document = await _documentAppService.GetAsync(
+                        new GetDocumentInput
+                        {
+                            ProjectId = Project.Id,
+                            Name = DocumentNameWithExtension,
+                            LanguageCode = DefaultLanguageCode,
+                            Version = Version
+                        }
+                    );
 
-            LanguageCode = Document.CurrentLanguageCode;
+                    DocumentLanguageIsDifferent = true;
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             ConvertDocumentContentToHtml();
         }
@@ -244,13 +290,13 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             LanguageSelectListItems = new List<SelectListItem>();
 
-            foreach (var language in Document.Project.Languages)
+            foreach (var language in LanguageConfig.Languages)
             {
                 LanguageSelectListItems.Add(
                     new SelectListItem(
-                        language.Value,
-                        "/documents/" + language.Key + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
-                        language.Key == LanguageCode
+                        language.DisplayName,
+                        "/documents/" + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        language.Code == LanguageCode
                         )
                     );
             }

@@ -25,8 +25,6 @@ namespace Volo.Docs.Documents
 
         public string FileName { get; set; }
 
-        public string CurrentLanguageCode { get; set; }
-
         public ProjectDto Project { get; set; }
 
         public List<DocumentContributorDto> Contributors { get; set; }

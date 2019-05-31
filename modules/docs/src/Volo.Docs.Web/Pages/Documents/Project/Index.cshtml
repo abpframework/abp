@@ -144,7 +144,6 @@
         @if (Model.Document != null)
         {
             <div class="col-md-7 docs-content bg-white">
-
                 <div class="docs-link-btns">
                     <div class="float-left">
                         @(L["ShareOn"].Value + " :")
@@ -191,6 +190,12 @@
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
+                                @if (Model.DocumentLanguageIsDifferent)
+                                {
+                                    <abp-alert  alert-type="Warning" dismissible="true" class="mb-0">
+                                        Document in the language you wanted is not found. Document in the default language is shown.
+                                    </abp-alert>
+                                }
                                 @Html.Raw(Model.Document.Content)
                             </article>
                         </div>

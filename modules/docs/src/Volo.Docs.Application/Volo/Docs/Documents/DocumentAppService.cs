@@ -111,11 +111,9 @@ namespace Volo.Docs.Documents
             {
                 Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
                 var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                var languages = await GetLanguageListAsync(store, project, version);
-                var language = GetLanguageByCode(languages, languageCode);
-                var document = await store.GetDocumentAsync(project, documentName, language.Code, version);
+                var document = await store.GetDocumentAsync(project, documentName, languageCode, version);
                 Logger.LogInformation($"Document retrieved: {documentName}");
-                return CreateDocumentWithDetailsDto(project, document, languages, language.Code);
+                return CreateDocumentWithDetailsDto(project, document);
             }
 
             if (Debugger.IsAttached)
@@ -135,45 +133,11 @@ namespace Volo.Docs.Documents
             );
         }
 
-        protected virtual LanguageConfigElement GetLanguageByCode(LanguageConfig languageCodes, string languageCode)
-        {
-            var language = languageCodes.Languages.FirstOrDefault(l => l.Code == languageCode);
-
-            return language ??
-                   languageCodes.Languages.FirstOrDefault(l => l.IsDefault) ??
-                   languageCodes.Languages.First();
-        }
-
-        protected virtual async Task<LanguageConfig> GetLanguageListAsync(IDocumentStore store, Project project, string version)
-        {
-            async Task<LanguageConfig> GetLanguagesAsync()
-            {
-                return await store.GetLanguageListAsync(project, version);
-            }
-
-            return await LanguageCache.GetOrAddAsync(
-                project.ShortName,
-                GetLanguagesAsync,
-                () => new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
-                }
-            );
-        }
-
-        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document, LanguageConfig languages, string languageCode)
+        protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
         {
             var documentDto = ObjectMapper.Map<Document, DocumentWithDetailsDto>(document);
             documentDto.Project = ObjectMapper.Map<Project, ProjectDto>(project);
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
-
-            documentDto.Project.Languages = new Dictionary<string, string>();
-            foreach (var language in languages.Languages)
-            {
-                documentDto.Project.Languages.Add(language.Code, language.DisplayName);
-            }
-
-            documentDto.CurrentLanguageCode = languageCode;
             return documentDto;
         }
     }

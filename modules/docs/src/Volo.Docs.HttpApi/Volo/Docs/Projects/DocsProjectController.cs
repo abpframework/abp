@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
 {
@@ -36,9 +37,9 @@ namespace Volo.Docs.Projects
 
         [HttpGet]
         [Route("{shortName}/defaultLanguage")]
-        public Task<string> GetDefaultLanguageCode(string shortName)
+        public Task<string> GetDefaultLanguageCode(string shortName,string version)
         {
-            return ProjectAppService.GetDefaultLanguageCode(shortName);
+            return ProjectAppService.GetDefaultLanguageCode(shortName, version);
         }
 
         [HttpGet]
@@ -46,6 +47,13 @@ namespace Volo.Docs.Projects
         public virtual Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             return ProjectAppService.GetVersionsAsync(shortName);
+        }
+
+        [HttpGet]
+        [Route("{shortName}/{versiion}/languageList")]
+        public Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
+        {
+            return ProjectAppService.GetLanguageListAsync(shortName, version);
         }
     }
 }

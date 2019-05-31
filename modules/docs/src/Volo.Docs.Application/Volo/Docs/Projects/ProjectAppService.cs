@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
-using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
@@ -17,15 +16,18 @@ namespace Volo.Docs.Projects
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentStoreFactory _documentStoreFactory;
+        protected IDistributedCache<LanguageConfig> LanguageCache { get; }
 
         public ProjectAppService(
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
-            IDocumentStoreFactory documentStoreFactory)
+            IDocumentStoreFactory documentStoreFactory,
+            IDistributedCache<LanguageConfig> languageCache)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
             _documentStoreFactory = documentStoreFactory;
+            LanguageCache = languageCache;
         }
 
         public async Task<ListResultDto<ProjectDto>> GetListAsync()
@@ -42,15 +44,6 @@ namespace Volo.Docs.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
 
             return ObjectMapper.Map<Project, ProjectDto>(project);
-        }
-
-        public async Task<string> GetDefaultLanguageCode(string shortName)
-        {
-            var project = await _projectRepository.GetByShortNameAsync(shortName);
-            var store = _documentStoreFactory.Create(project.DocumentStoreType);
-            var languageList = await store.GetLanguageListAsync(project, project.LatestVersionBranchName);
-
-            return (languageList.Languages.FirstOrDefault(l => l.IsDefault) ?? languageList.Languages.First()).Code;
         }
 
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
@@ -98,6 +91,38 @@ namespace Volo.Docs.Projects
             }
 
             return versions;
+        }
+
+        public async Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
+        {
+            return await GetLanguageListInternalAsync(shortName, version);
+        }
+
+        public async Task<string> GetDefaultLanguageCode(string shortName, string version)
+        {
+            var languageList = await GetLanguageListInternalAsync(shortName, version);
+
+            return (languageList.Languages.FirstOrDefault(l => l.IsDefault) ?? languageList.Languages.First()).Code;
+        }
+
+        private async Task<LanguageConfig> GetLanguageListInternalAsync(string shortName, string version)
+        {
+            var project = await _projectRepository.GetByShortNameAsync(shortName);
+            var store = _documentStoreFactory.Create(project.DocumentStoreType);
+
+            async Task<LanguageConfig> GetLanguagesAsync()
+            {
+                return await store.GetLanguageListAsync(project, version);
+            }
+
+            return await LanguageCache.GetOrAddAsync(
+                project.ShortName,
+                GetLanguagesAsync,
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+                }
+            );
         }
     }
 }

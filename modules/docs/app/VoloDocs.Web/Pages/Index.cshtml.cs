@@ -28,7 +28,7 @@ namespace VoloDocs.Web.Pages
                 {
                     projectName = Projects[0].ShortName,
                     version = DocsAppConsts.Latest,
-                    languageCode = await _projectAppService.GetDefaultLanguageCode(Projects[0].ShortName),
+                    languageCode = "",
                     documentName = Projects[0].DefaultDocumentName
                 });
             }

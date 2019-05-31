@@ -26,7 +26,5 @@ namespace Volo.Docs.Projects
         public string DocumentStoreType { get; set; }
 
         public Dictionary<string, object> ExtraProperties { get; set; }
-
-        public Dictionary<string, string> Languages { get; set; }
     }
 }

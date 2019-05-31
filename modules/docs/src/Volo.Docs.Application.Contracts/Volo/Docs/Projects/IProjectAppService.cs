@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
 {
@@ -9,9 +10,11 @@ namespace Volo.Docs.Projects
         Task<ListResultDto<ProjectDto>> GetListAsync();
      
         Task<ProjectDto> GetAsync(string shortName);
-
-        Task<string> GetDefaultLanguageCode(string shortName);
         
         Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName);
+
+        Task<string> GetDefaultLanguageCode(string shortName, string version);
+
+        Task<LanguageConfig> GetLanguageListAsync(string shortName, string version);
     }
 }
