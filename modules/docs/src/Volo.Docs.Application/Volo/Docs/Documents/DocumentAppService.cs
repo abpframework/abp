@@ -139,7 +139,9 @@ namespace Volo.Docs.Documents
         {
             var language = languageCodes.Languages.FirstOrDefault(l => l.Code == languageCode);
 
-            return language ?? languageCodes.Languages.Single(l => l.IsDefault);
+            return language ??
+                   languageCodes.Languages.FirstOrDefault(l => l.IsDefault) ??
+                   languageCodes.Languages.First();
         }
 
         protected virtual async Task<LanguageConfig> GetLanguageListAsync(IDocumentStore store, Project project, string version)

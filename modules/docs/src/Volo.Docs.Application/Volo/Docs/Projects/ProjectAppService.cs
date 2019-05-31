@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
@@ -49,7 +50,7 @@ namespace Volo.Docs.Projects
             var store = _documentStoreFactory.Create(project.DocumentStoreType);
             var languageList = await store.GetLanguageListAsync(project, project.LatestVersionBranchName);
 
-            return languageList.Languages.Single(l=>l.IsDefault).Code;
+            return (languageList.Languages.FirstOrDefault(l => l.IsDefault) ?? languageList.Languages.First()).Code;
         }
 
         public async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
