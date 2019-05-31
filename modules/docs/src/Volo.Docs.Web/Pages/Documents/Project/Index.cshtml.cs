@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Configuration;
 using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -52,15 +54,18 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
+        private readonly IConfigurationRoot _configuration;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
-            IProjectAppService projectAppService)
+            IProjectAppService projectAppService,
+            IConfigurationAccessor configurationAccessor)
         {
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
+            _configuration = configurationAccessor.Configuration;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -341,7 +346,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void AddLanguageCodePrefixToLinks()
         {
-            Document.Content = Document.Content.Replace("href=\"/documents", "href=\"/documents/" + LanguageCode);
+            var prefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+            Document.Content = Document.Content.Replace("href=\"/documents", "href=\"/" + prefix + LanguageCode);
         }
     }
 }

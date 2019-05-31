@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Configuration;
+using Volo.Abp.Configuration;
 using Volo.Docs.Documents;
 using Volo.Docs.Utils;
 
@@ -12,6 +14,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
+        private readonly IConfigurationRoot _configuration;
+
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
         private const string ListItemAnchor = @"<a href='{0}' class='{1}'>{2}</a>";
@@ -37,6 +41,11 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
+
+        public TreeTagHelper(IConfigurationAccessor configurationAccessor)
+        {
+            _configuration = configurationAccessor.Configuration;
+        }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -134,7 +143,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            return  "/documents/" + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            var prefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+
+            return  "/" + prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }
 
         private string RemoveFileExtensionFromPath(string path)
