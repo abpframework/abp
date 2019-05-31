@@ -62,6 +62,11 @@ namespace VoloDocs.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            Configure<DocsUrlOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
+
             Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration["ConnectionString"];

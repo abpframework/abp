@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
-using Volo.Abp.Configuration;
+using Microsoft.Extensions.Options;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Pages.Documents
@@ -16,17 +15,21 @@ namespace Volo.Docs.Pages.Documents
         public IReadOnlyList<ProjectDto> Projects { get; set; }
 
         private readonly IProjectAppService _projectAppService;
-        private readonly IConfigurationRoot _configuration;
+        private readonly DocsUrlOptions _urlOptions;
 
-        public IndexModel(IProjectAppService projectAppService, IConfigurationAccessor configurationAccessor)
+        public IndexModel(
+            IProjectAppService projectAppService,
+            IOptions<DocsUrlOptions> urlOptions)
         {
-            _configuration = configurationAccessor.Configuration;
             _projectAppService = projectAppService;
+            _urlOptions = urlOptions.Value;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+            DocumentsUrlPrefix = _urlOptions.RoutePrefix.IsNullOrEmpty()
+                ? ""
+                : _urlOptions.RoutePrefix.EnsureEndsWith('/');
 
             var listResult = await _projectAppService.GetListAsync();
 

@@ -2,8 +2,7 @@
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Configuration;
-using Volo.Abp.Configuration;
+using Microsoft.Extensions.Options;
 using Volo.Docs.Documents;
 using Volo.Docs.Utils;
 
@@ -14,7 +13,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly DocsUrlOptions _urlOptions;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -42,9 +41,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IConfigurationAccessor configurationAccessor)
+        public TreeTagHelper(IOptions<DocsUrlOptions> urlOptions)
         {
-            _configuration = configurationAccessor.Configuration;
+            _urlOptions = urlOptions.Value;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -143,7 +142,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            var prefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+            var prefix = _urlOptions.RoutePrefix.IsNullOrEmpty()
+                ? ""
+                : _urlOptions.RoutePrefix.EnsureEndsWith('/');
 
             return  "/" + prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }

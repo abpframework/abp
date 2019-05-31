@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -40,11 +41,17 @@ namespace Volo.Docs
 
             Configure<RazorPagesOptions>(options =>
             {
-                var prefix = Convert.ToBoolean(configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+                var urlOptions = context.Services
+                    .GetRequiredServiceLazy<IOptions<DocsUrlOptions>>()
+                    .Value;
 
-                options.Conventions.AddPageRoute("/Documents/Project/Index", prefix + "{projectName}");
-                options.Conventions.AddPageRoute("/Documents/Project/Index", prefix + "{languageCode}/{projectName}");
-                options.Conventions.AddPageRoute("/Documents/Project/Index", prefix + "{languageCode}/{projectName}/{version}/{*documentName}");
+                var routePrefix = urlOptions.Value.RoutePrefix.IsNullOrEmpty()
+                    ? ""
+                    : urlOptions.Value.RoutePrefix.EnsureEndsWith('/');
+
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
             });
 
             Configure<AbpAutoMapperOptions>(options =>

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Configuration;
-using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
 using Volo.Docs.Models;
@@ -57,22 +57,27 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
         private readonly IConfigurationRoot _configuration;
+        private readonly DocsUrlOptions _options;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
-            IConfigurationAccessor configurationAccessor)
+            IConfigurationAccessor configurationAccessor,
+            IOptions<DocsUrlOptions> options)
         {
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
             _configuration = configurationAccessor.Configuration;
+            _options = options.Value;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+            DocumentsUrlPrefix = _options.RoutePrefix.IsNullOrEmpty()
+                ? ""
+                : _options.RoutePrefix.EnsureEndsWith('/');
 
             await SetProjectAsync();
             await SetProjectsAsync();
@@ -234,7 +239,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 version = DocsAppConsts.Latest;
             }
 
-            var link = "/documents/" + LanguageCode + "/" + ProjectName + "/" + version;
+            var link = DocumentsUrlPrefix.EnsureStartsWith('/') + LanguageCode + "/" + ProjectName + "/" + version;
 
             if (documentName != null)
             {
