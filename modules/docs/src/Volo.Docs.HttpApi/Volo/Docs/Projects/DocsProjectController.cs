@@ -50,7 +50,7 @@ namespace Volo.Docs.Projects
         }
 
         [HttpGet]
-        [Route("{shortName}/{versiion}/languageList")]
+        [Route("{shortName}/{version}/languageList")]
         public Task<LanguageConfig> GetLanguageListAsync(string shortName, string version)
         {
             return ProjectAppService.GetLanguageListAsync(shortName, version);

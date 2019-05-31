@@ -73,6 +73,7 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
             var cacheKey = $"Resource@{project.ShortName}#{input.LanguageCode}#{input.Name}#{input.Version}";
+            input.Version = string.IsNullOrWhiteSpace(input.Version) ? project.LatestVersionBranchName : input.Version;
 
             async Task<DocumentResourceDto> GetResourceAsync()
             {
@@ -105,6 +106,8 @@ namespace Volo.Docs.Documents
             string languageCode,
             string version)
         {
+            version = string.IsNullOrWhiteSpace(version) ? project.LatestVersionBranchName : version;
+
             var cacheKey = $"Document@{project.ShortName}#{languageCode}#{documentName}#{version}";
 
             async Task<DocumentWithDetailsDto> GetDocumentAsync()
