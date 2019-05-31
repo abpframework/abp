@@ -70,6 +70,11 @@ namespace Volo.Docs.Pages.Documents.Project
             await SetVersionAsync();
             await SetLanguageList();
 
+            if (IsDefaultDocument())
+            {
+                return RedirectToDefaultDocument();
+            }
+
             if (!CheckLanguage())
             {
                 return RedirectToDefaultLanguage();
@@ -81,6 +86,11 @@ namespace Volo.Docs.Pages.Documents.Project
             AddLanguageCodePrefixToLinks();
 
             return Page();
+        }
+
+        private bool IsDefaultDocument()
+        {
+            return DocumentName == Project.DefaultDocumentName;
         }
 
         private async Task SetProjectAsync()
@@ -110,6 +120,17 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 projectName = ProjectName,
                 version = Version,
+                languageCode = DefaultLanguageCode
+            });
+        }
+
+        private IActionResult RedirectToDefaultDocument()
+        {
+            return RedirectToPage(new
+            {
+                projectName = ProjectName,
+                version = Version,
+                documentName = "",
                 languageCode = DefaultLanguageCode
             });
         }
@@ -228,16 +249,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetDocumentAsync()
         {
-            if (DocumentName.IsNullOrWhiteSpace())
-            {
-                DocumentName = Project.DefaultDocumentName;
-            }
-
             DocumentNameWithExtension = DocumentName + "." + Project.Format;
 
             try
             {
-                if (DocumentNameWithExtension.IsNullOrWhiteSpace())
+                if (DocumentName.IsNullOrWhiteSpace())
                 {
                     Document = await _documentAppService.GetDefaultAsync(
                         new GetDefaultDocumentInput

@@ -51,7 +51,7 @@ namespace Volo.Docs.Documents
 
             return await GetDocumentWithDetailsDtoAsync(
                 project,
-                project.DefaultDocumentName,
+                project.DefaultDocumentName + "." + project.Format,
                 input.LanguageCode,
                 input.Version
             );

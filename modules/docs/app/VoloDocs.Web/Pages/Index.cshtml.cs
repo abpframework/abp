@@ -22,16 +22,16 @@ namespace VoloDocs.Web.Pages
         {
             Projects = (await _projectAppService.GetListAsync()).Items;
 
-            if (Projects.Count == 1)
-            {
-                return RedirectToPage("./Documents/Project/Index", new
-                {
-                    projectName = Projects[0].ShortName,
-                    version = DocsAppConsts.Latest,
-                    languageCode = "",
-                    documentName = Projects[0].DefaultDocumentName
-                });
-            }
+            //if (Projects.Count == 1)
+            //{
+            //    return RedirectToPage("./Documents/Project/Index", new
+            //    {
+            //        projectName = Projects[0].ShortName,
+            //        version = DocsAppConsts.Latest,
+            //        languageCode = "",
+            //        documentName = Projects[0].DefaultDocumentName
+            //    });
+            //}
 
             return Page();
         }
