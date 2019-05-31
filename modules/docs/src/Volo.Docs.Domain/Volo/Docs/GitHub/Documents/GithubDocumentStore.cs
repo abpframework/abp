@@ -109,7 +109,7 @@ namespace Volo.Docs.GitHub.Documents
             var rootUrl = project.GetGitHubUrl(version);
             var userAgent = project.GetGithubUserAgentOrNull();
 
-            var url = CalculateRawRootUrl(rootUrl) + "languageConfig.json";
+            var url = CalculateRawRootUrl(rootUrl) + "docs-langs.json";
 
             var configAsJson = await DownloadWebContentAsStringAsync(url, token, userAgent);
 
