@@ -9,31 +9,15 @@ namespace VoloDocs.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        public IReadOnlyList<ProjectDto> Projects { get; set; }
 
-        private readonly IProjectAppService _projectAppService;
-
-        public IndexModel(IProjectAppService projectAppService)
+        public IndexModel()
         {
-            _projectAppService = projectAppService;
+            
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
-            Projects = (await _projectAppService.GetListAsync()).Items;
-
-            //if (Projects.Count == 1)
-            //{
-            //    return RedirectToPage("./Documents/Project/Index", new
-            //    {
-            //        projectName = Projects[0].ShortName,
-            //        version = DocsAppConsts.Latest,
-            //        languageCode = "",
-            //        documentName = Projects[0].DefaultDocumentName
-            //    });
-            //}
-
-            return Page();
+            return Redirect("./documents");
         }
     }
 }

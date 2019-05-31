@@ -49,6 +49,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
+        public string DocumentsUrlPrefix { get; set; }
+
         public bool DocumentLanguageIsDifferent { get; set; }
 
         private readonly IDocumentAppService _documentAppService;
@@ -70,6 +72,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public async Task<IActionResult> OnGetAsync()
         {
+            DocumentsUrlPrefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
+
             await SetProjectAsync();
             await SetProjectsAsync();
             await SetVersionAsync();
@@ -316,7 +320,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        "/documents/" + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        "/" + DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
                         language.Code == LanguageCode
                         )
                     );
@@ -346,8 +350,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void AddLanguageCodePrefixToLinks()
         {
-            var prefix = Convert.ToBoolean(_configuration["IncludeDocumentPrefixInUrl"]) ? "documents/" : "";
-            Document.Content = Document.Content.Replace("href=\"/documents", "href=\"/" + prefix + LanguageCode);
+            Document.Content = Document.Content.Replace("href=\"/documents", "href=\"/" + DocumentsUrlPrefix + LanguageCode);
         }
     }
 }
