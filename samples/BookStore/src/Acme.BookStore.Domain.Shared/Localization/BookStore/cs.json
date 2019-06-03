@@ -14,7 +14,7 @@
     "NewBook": "Nová kniha",
     "Books": "Knihy",
     "Update": "Aktualizovat",
-    "BookDeletionConfirmationMessage": "Opravdu chcete smazat tuto knihu: {0}",
+    "BookDeletionConfirmationMessage": "Opravdu chcete smazat knihu {0}?",
     "SuccessfullyDeleted": "Úspěšně smazáno."
   }
 }
