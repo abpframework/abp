@@ -2,14 +2,30 @@
 
 ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.
 
-## new
+## Installation
+
+ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Install it using a command line window:
+
+````bash
+dotnet tool install -g Volo.Abp.Cli
+````
+
+To update an existing installation:
+
+````bash
+dotnet tool update -g Volo.Abp.Cli
+````
+
+## Commands
+
+### new
 
 Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
 
 Basic usage:
 
 ````bash
-abp new <solution-name>
+abp new <solution-name> [options]
 ````
 
 Example:
@@ -21,7 +37,7 @@ abp new Acme.BookStore
 * Acme.BookStore is the solution name here.
 * Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
 
-### Options
+#### Options
 
 * `--template` or `-t`: Specifies the template name. Default template name is `mvc`. Available templates:
   * `mvc` (default): ASP.NET Core [MVC application template](Startup-Templates/Mvc.md). Additional options:
@@ -33,7 +49,7 @@ abp new Acme.BookStore
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
 
-## add-package
+### add-package
 
 Adds a new ABP package to a project by,
 
@@ -45,7 +61,7 @@ Adds a new ABP package to a project by,
 Basic usage:
 
 ````bash
-abp add-package <package-name>
+abp add-package <package-name> [options]
 ````
 
 Example:
@@ -56,11 +72,11 @@ abp add-package Volo.Abp.MongoDB
 
 * This example adds the Volo.Abp.MongoDB package to the project.
 
-### Options
+#### Options
 
 * `--project` or `-p`: Specifies the project (.csproj) file path. If not specified, CLI tries to find a .csproj file in the current directory.
 
-## add-module
+### add-module
 
 Adds a multi-package module to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
@@ -69,7 +85,7 @@ Adds a multi-package module to a solution by finding all packages of the module,
 Basic usage:
 
 ````bash
-abp add-module <module-name>
+abp add-module <module-name> [options]
 ````
 
 Example:
@@ -80,35 +96,42 @@ abp add-module Volo.Blogging
 
 * This example add the Volo.Blogging module to the solution.
 
-### Options
+#### Options
 
 * `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
 * `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
 
-## update
+### update
 
 Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related packages in a solution or project to the latest versions.
 
 Usage:
 
 ````bash
-abp update
+abp update [options]
 ````
 
 * If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
 * If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
 
-### Options
+#### Options
 
 * `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
 
-## help
+### help
 
 Writes basic usage information of the CLI.
 
 Usage:
 
 ````bash
-abp help
+abp help [command-name]
+````
+
+Examples:
+
+````bash
+abp help        # Shows a general help.
+abp help new    # Shows help about the "new" command.
 ````
 
