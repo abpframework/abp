@@ -197,13 +197,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 selectItems.Add(new SelectListItem());
             }
 
-            selectItems.AddRange(enumType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => 
-                    new SelectListItem
-                    {
-                        Value = ((int) Enum.Parse(enumType, t.Name)).ToString(),
-                        Text = GetLocalizedPropertyName(localizer, enumType, t.Name)
-                    }).ToList());
+            selectItems.AddRange(enumType.GetEnumNames()
+                .Select(enumName => new SelectListItem
+                {
+                    Value = Convert.ToUInt64(Enum.Parse(enumType, enumName)).ToString(),
+                    Text = GetLocalizedPropertyName(localizer, enumType, enumName)
+                }));
 
             return selectItems;
         }
