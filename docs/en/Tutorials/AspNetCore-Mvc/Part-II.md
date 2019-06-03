@@ -2,13 +2,13 @@
 
 ### About this Tutorial
 
-This is the second part of the tutorial series. See all parts:
+This is the second part of the ASP.NET Core MVC tutorial series. See all parts:
 
 * [Part I: Create the project and a book list page](Part-I.md)
 * **Part II: Create, Update and Delete books (this tutorial)**
 * [Part III: Integration Tests](Part-III.md)
 
-You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
 ### Creating a New Book
 
@@ -30,7 +30,7 @@ Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace wit
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Pages.Books
+namespace Acme.BookStore.Web.Pages.Books
 {
     public class CreateModalModel : BookStorePageModelBase
     {
@@ -63,9 +63,9 @@ Open the `CreateModal.cshtml` file and paste the code below:
 
 ````html
 @page
-@inherits Acme.BookStore.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePageBase
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model Acme.BookStore.Pages.Books.CreateModalModel
+@model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
     Layout = null;
 }
@@ -83,7 +83,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
 * This modal uses `abp-dynamic-form` tag helper to automatically create the form from the `CreateBookViewModel` class.
   * `abp-model` attribute indicates the model object, the `Book` property in this case.
   * `data-ajaxForm` attribute makes the form submitting via AJAX, instead of a classic page post.
-  * `abp-form-content` tag helper is a placeholder to render the form controls (this is optional and needed only if you added some other content in the `abp-dynamic-form` tag, just like in this view).
+  * `abp-form-content` tag helper is a placeholder to render the form controls (this is optional and needed only if you added some other content in the `abp-dynamic-form` tag, just like in this page).
 
 #### Add the "New book" Button
 
