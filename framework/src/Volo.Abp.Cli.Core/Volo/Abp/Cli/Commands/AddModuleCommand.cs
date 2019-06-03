@@ -40,6 +40,37 @@ namespace Volo.Abp.Cli.Commands
             );
         }
 
+        public Task<string> GetUsageInfo()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("'add-module' command is used to add a multi-package ABP module to a solution.");
+            sb.AppendLine("It should be used in a folder containing a .sln file.");
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("  abp add-module <module-name> [-s|--solution]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
+            sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
+            sb.AppendLine("");
+            sb.AppendLine("Examples:");
+            sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current soluton.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given soluton but doesn't create a database migration.");
+            sb.AppendLine("");
+
+            return Task.FromResult(sb.ToString());
+        }
+
+        public Task<string> GetShortDescriptionAsync()
+        {
+            return Task.FromResult("Adds a multi-package module to a solution by finding all packages of the module, " +
+                                   "finding related projects in the solution and adding each package to the" +
+                                   " corresponding project in the solution.");
+        }
+
         protected virtual string GetSolutionFile(CommandLineArgs commandLineArgs)
         {
             var providedSolutionFile = PathHelper.NormalizePath(
@@ -78,30 +109,6 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine($"abp add-module {commandLineArgs.Target} -p {foundSolutionFiles[0]}");
 
             throw new CliUsageException(sb.ToString());
-        }
-
-        protected virtual string GetUsageInfo()
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("");
-            sb.AppendLine("'add-module' command is used to add a multi-package ABP module to a solution.");
-            sb.AppendLine("It should be used in a folder containing a .sln file.");
-            sb.AppendLine("");
-            sb.AppendLine("Usage:");
-            sb.AppendLine("  abp add-module <module-name> [-s|--solution]");
-            sb.AppendLine("");
-            sb.AppendLine("Options:");
-            sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
-            sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
-            sb.AppendLine("");
-            sb.AppendLine("Examples:");
-            sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current soluton.");
-            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
-            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given soluton but doesn't create a database migration.");
-            sb.AppendLine("");
-
-            return sb.ToString();
         }
 
         public static class Options

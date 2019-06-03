@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -51,7 +52,33 @@ namespace Volo.Abp.Cli.Commands
                 return;
             }
 
-            Logger.LogError("No solution or project found in this directory.");
+            throw new CliUsageException("No solution or project found in this directory." + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+        }
+
+        public Task<string> GetUsageInfo()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("  abp update  [-p|--include-previews]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("--include-previews                          (if supported by the template)");
+            sb.AppendLine("");
+            sb.AppendLine("Some examples:");
+            sb.AppendLine("  abp update");
+            sb.AppendLine("  abp update --include-previews");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info.");
+
+            return Task.FromResult(sb.ToString());
+        }
+
+        public Task<string> GetShortDescriptionAsync()
+        {
+            return Task.FromResult("Automatically updates all ABP related packages in a" +
+                                   " solution or project to the latest versions.");
         }
 
         public static class Options
