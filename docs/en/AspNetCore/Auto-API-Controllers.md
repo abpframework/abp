@@ -16,7 +16,9 @@ public class BookStoreWebModule : AbpModule
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
-            options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
+            options
+                .ConventionalControllers
+                .Create(typeof(BookStoreApplicationModule).Assembly);
         });
     }
 }
