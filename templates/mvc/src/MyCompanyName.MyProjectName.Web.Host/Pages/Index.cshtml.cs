@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 
-namespace MyCompanyName.MyProjectName.Pages
+namespace MyCompanyName.MyProjectName.Web.Pages
 {
     public class IndexModel : MyProjectNamePageModelBase
     {

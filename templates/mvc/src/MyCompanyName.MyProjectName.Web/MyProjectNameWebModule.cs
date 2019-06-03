@@ -1,14 +1,14 @@
-﻿using Localization.Resources.AbpUi;
+﻿using System.IO;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using MyCompanyName.MyProjectName.Menus;
-using Swashbuckle.AspNetCore.Swagger;
-using System.IO;
-using Microsoft.Extensions.Configuration;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
+using MyCompanyName.MyProjectName.Web.Menus;
+using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
@@ -30,7 +30,7 @@ using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Web
 {
     [DependsOn(
         typeof(MyProjectNameHttpApiModule),

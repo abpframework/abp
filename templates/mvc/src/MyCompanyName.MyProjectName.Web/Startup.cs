@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Web
 {
     public class Startup
     {

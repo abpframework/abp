@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
+using MyCompanyName.MyProjectName.Web;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
