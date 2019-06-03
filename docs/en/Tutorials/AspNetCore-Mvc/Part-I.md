@@ -64,7 +64,7 @@ Define the `BookType` enum in the `Acme.BookStore.Domain.Shared` project:
 ````C#
 namespace Acme.BookStore
 {
-    public enum BookType : byte
+    public enum BookType
     {
         Undefined,
         Adventure,
@@ -336,8 +336,8 @@ Open the `Index.cshtml` and change the content as shown below:
 
 ````html
 @page
-@using Acme.BookStore.Pages.Books
-@inherits Acme.BookStore.Pages.BookStorePageBase
+@using Acme.BookStore.Web.Pages.Books
+@inherits Acme.BookStore.Web.Pages.BookStorePageBase
 @model IndexModel
 
 <h2>Books</h2>
@@ -388,15 +388,14 @@ When you click to the Books menu item, you are redirected to the new Books page.
 
 We will use the [Datatables.net](https://datatables.net/) JQuery plugin to show list of tables on the page. Datatables can completely work via AJAX, it is fast and provides a good user experience. Datatables plugin is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
 
-##### Index.cshtml Changes
+##### Index.cshtml
 
 Change the `Pages/Books/Index.cshtml` as following:
 
 ````html
 @page
-@using Acme.BookStore.Pages.Books
-@inherits Acme.BookStore.Pages.BookStorePageBase
-@model IndexModel
+@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@model Acme.BookStore.Web.Pages.Books.IndexModel
 @section scripts
 {
     <abp-script src="/Pages/Books/index.js" />
@@ -429,7 +428,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 Create `index.js` JavaScript file under the `Pages/Books/` folder:
 
-![bookstore-index-js-file](images/bookstore-index-js-file.png)
+![bookstore-index-js-file](images/bookstore-index-js-file-v2.png)
 
 `index.js` content is shown below:
 
