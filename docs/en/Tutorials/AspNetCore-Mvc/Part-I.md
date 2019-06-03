@@ -20,7 +20,7 @@ Go to the [startup template page](https://abp.io/Templates) and download a new p
 
 This is the how the layered solution structure looks after it's created from the startup template:
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
 
 ### Create the Book Entity
 
