@@ -98,7 +98,14 @@ namespace Volo.BloggingTestApp
                     options.CustomSchemaIds(type => type.FullName);
                 });
 
-            var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr"),new CultureInfo("zh-Hans") };
+            var cultures = new List<CultureInfo> 
+            { 
+                new CultureInfo("cs"), 
+                new CultureInfo("en"), 
+                new CultureInfo("tr"), 
+                new CultureInfo("zh-Hans") 
+            };
+
             Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");

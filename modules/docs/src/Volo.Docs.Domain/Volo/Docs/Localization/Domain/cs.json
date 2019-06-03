@@ -1,0 +1,18 @@
+﻿{
+  "culture": "cs",
+  "texts": {
+    "Documents": "Dokumenty",
+    "BackToWebsite": "Zpět na stránky",
+    "Contributors": "Přispěvatelé",
+    "ShareOn": "Sdílet na",
+    "Version": "Verze",
+    "Edit": "Upravit",
+    "Delete": "Smazat",
+    "InThisDocument": "V tomto dokumentu",
+    "GoToTop": "Přejít nahoru",
+    "Projects": "Projekt(y)",
+    "NoProjectWarning": "Zatím zde není žádný projekt!",
+    "DocumentNotFound": "Ups, vyžádaný dokument neexistuje!",
+    "NavigationDocumentNotFound": "Tato verze nemá navigační dokument!"
+  }
+}
