@@ -14,7 +14,7 @@
     "NewBook": "New book",
     "Books": "Books",
     "Update": "Update",
-    "BookDeletionConfirmationMessage": "Are you sure to delete this book: {0}",
+    "BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
     "SuccessfullyDeleted": "Successfully deleted."
   }
 }
