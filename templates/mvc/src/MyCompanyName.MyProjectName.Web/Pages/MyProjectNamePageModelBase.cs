@@ -1,7 +1,7 @@
 ﻿using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace MyCompanyName.MyProjectName.Pages
+namespace MyCompanyName.MyProjectName.Web.Pages
 {
     public abstract class MyProjectNamePageModelBase : AbpPageModel
     {

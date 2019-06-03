@@ -6,7 +6,7 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 
-namespace MyCompanyName.MyProjectName.Menus
+namespace MyCompanyName.MyProjectName.Web.Menus
 {
     public class MyProjectNameMenuContributor : IMenuContributor
     {
