@@ -6,7 +6,8 @@ namespace Acme.BookStore
     {
         public BookStoreApplicationAutoMapperProfile()
         {
-            //Configure your AutoMapper mapping configuration here...
+            CreateMap<Book, BookDto>();
+            CreateMap<CreateUpdateBookDto, Book>();
         }
     }
 }

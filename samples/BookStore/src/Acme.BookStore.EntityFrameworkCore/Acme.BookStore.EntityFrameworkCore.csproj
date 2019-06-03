@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -9,14 +9,15 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
+    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.Identity.EntityFrameworkCore" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.IdentityServer.EntityFrameworkCore" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.BackgroundJobs.EntityFrameworkCore" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.AuditLogging.EntityFrameworkCore" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.TenantManagement.EntityFrameworkCore" Version="0.17.0.0" />
     <PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" Version="0.17.0.0" />
   </ItemGroup>
 
 </Project>

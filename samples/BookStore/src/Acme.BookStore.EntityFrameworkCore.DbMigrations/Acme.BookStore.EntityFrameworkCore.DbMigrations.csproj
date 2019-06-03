@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -6,11 +6,6 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <RootNamespace>Acme.BookStore</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="Migrations\20190320072839_Initial.cs" />
-    <Compile Remove="Migrations\20190529070552_Upgraded_To_Abp_0.17.0.0.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.EntityFrameworkCore\Acme.BookStore.EntityFrameworkCore.csproj" />
