@@ -176,7 +176,3 @@ Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if 
 ![bookstore-appservice-tests](images/bookstore-appservice-tests.png)
 
 Congratulations, green icons show that tests have been successfully passed!
-
-### Testing Web Pages
-
-TODO
