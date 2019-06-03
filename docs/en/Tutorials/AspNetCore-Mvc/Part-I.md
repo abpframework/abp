@@ -118,7 +118,7 @@ PM> Update-Database
 
 #### Add Sample Data
 
-`Update-Database` command created the `Books` table in the database. Open your database and enter a few sample rows, so you can show them on the page:
+`Update-Database` command created the `AppBooks` table in the database. Open your database and enter a few sample rows, so you can show them on the page:
 
 ![bookstore-books-table](images/bookstore-books-table.png)
 
