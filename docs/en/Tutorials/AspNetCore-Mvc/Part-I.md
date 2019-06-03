@@ -4,7 +4,7 @@
 
 In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider as it is the default database provider.
 
-This is the first part of the tutorial series. See all parts:
+This is the first part of the ASP.NET Core MVC tutorial series. See all parts:
 
 - **Part I: Create the project and a book list page (this tutorial)**
 - [Part II: Create, Update and Delete books](Part-II.md)
