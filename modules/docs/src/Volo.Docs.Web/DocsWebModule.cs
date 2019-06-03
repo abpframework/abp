@@ -45,9 +45,7 @@ namespace Volo.Docs
                     .GetRequiredServiceLazy<IOptions<DocsUrlOptions>>()
                     .Value;
 
-                var routePrefix = urlOptions.Value.RoutePrefix.IsNullOrEmpty()
-                    ? ""
-                    : urlOptions.Value.RoutePrefix.EnsureEndsWith('/');
+                var routePrefix = urlOptions.Value.GetFormattedRoutePrefix();
 
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");

@@ -1,4 +1,6 @@
-﻿namespace Volo.Docs
+﻿using System;
+
+namespace Volo.Docs
 {
     public class DocsUrlOptions
     {
@@ -6,5 +8,15 @@
         /// Default value: "documents";
         /// </summary>
         public string RoutePrefix { get; set; } = "documents";
+
+        public string GetFormattedRoutePrefix()
+        {
+                if (string.IsNullOrWhiteSpace(RoutePrefix))
+                {
+                    return "";
+                }
+
+                return RoutePrefix.Trim('/').EnsureEndsWith('/');
+        }
     }
 }

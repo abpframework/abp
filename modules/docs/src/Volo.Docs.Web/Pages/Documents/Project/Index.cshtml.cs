@@ -70,9 +70,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = _options.RoutePrefix.IsNullOrEmpty()
-                ? ""
-                : _options.RoutePrefix.EnsureEndsWith('/');
+            DocumentsUrlPrefix = _options.GetFormattedRoutePrefix();
 
             await SetProjectAsync();
             await SetProjectsAsync();
@@ -92,7 +90,6 @@ namespace Volo.Docs.Pages.Documents.Project
             await SetDocumentAsync();
             await SetNavigationAsync();
             SetLanguageSelectListItems();
-            AddLanguageCodePrefixToLinks();
 
             return Page();
         }
@@ -234,7 +231,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 version = DocsAppConsts.Latest;
             }
 
-            var link = DocumentsUrlPrefix.EnsureStartsWith('/') + LanguageCode + "/" + ProjectName + "/" + version;
+            var link = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + version;
 
             if (documentName != null)
             {
@@ -330,7 +327,7 @@ namespace Volo.Docs.Pages.Documents.Project
         private void ConvertDocumentContentToHtml()
         {
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
-            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest());
+            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
 
             content = HtmlNormalizer.ReplaceImageSources(
                 content,
@@ -346,11 +343,6 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
-        }
-
-        private void AddLanguageCodePrefixToLinks()
-        {
-            Document.Content = Document.Content.Replace("href=\"/documents", "href=\"/" + DocumentsUrlPrefix + LanguageCode);
         }
     }
 }

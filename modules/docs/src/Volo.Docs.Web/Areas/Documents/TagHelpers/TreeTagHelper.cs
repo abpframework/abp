@@ -142,9 +142,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            var prefix = _urlOptions.RoutePrefix.IsNullOrEmpty()
-                ? ""
-                : _urlOptions.RoutePrefix.EnsureEndsWith('/');
+            var prefix = _urlOptions.GetFormattedRoutePrefix();
 
             return  "/" + prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }
