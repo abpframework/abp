@@ -1,0 +1,14 @@
+{
+  "Languages":[
+    {
+      "DisplayName" : "English",
+      "Code" : "en",
+      "IsDefault": true
+    },
+    {
+      "DisplayName" : "简体中文",
+      "Code" : "zh-Hans",
+      "IsDefault": false
+    }
+  ]
+}

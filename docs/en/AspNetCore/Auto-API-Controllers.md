@@ -1,6 +1,6 @@
 # Auto API Controllers
 
-Once you create an [application service](Application-Services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.
+Once you create an [application service](../Application-Services.md), you generally want to create an API controller to expose this service as an HTTP (REST) API endpoint. A typical API controller does nothing but redirects method calls to the application service and configures the REST API using attributes like [HttpGet], [HttpPost], [Route]... etc.
 
 ABP can **automagically** configures your application services as MVC API Controllers by convention. Most of time you don't care about its detailed configuration, but it's possible fully customize it.
 
@@ -16,7 +16,9 @@ public class BookStoreWebModule : AbpModule
     {
         Configure<AbpAspNetCoreMvcOptions>(options =>
         {
-            options.ConventionalControllers.Create(typeof(BookStoreApplicationModule).Assembly);
+            options
+                .ConventionalControllers
+                .Create(typeof(BookStoreApplicationModule).Assembly);
         });
     }
 }
@@ -106,7 +108,7 @@ public class PersonAppService : ApplicationService
 
 ### TypePredicate Option
 
-You can further filter classes to become an API controller by providing the `TypePedicate` option:
+You can further filter classes to become an API controller by providing the `TypePredicate` option:
 
 ````csharp
 services.Configure<AbpAspNetCoreMvcOptions>(options =>

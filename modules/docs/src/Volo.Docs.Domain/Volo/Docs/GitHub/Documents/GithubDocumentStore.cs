@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Volo.Abp.Domain.Services;
 using Volo.Docs.Documents;
 using Volo.Docs.GitHub.Projects;
@@ -27,14 +28,14 @@ namespace Volo.Docs.GitHub.Documents
             _githubRepositoryManager = githubRepositoryManager;
         }
         
-        public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string version)
+        public virtual async Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version)
         {
             var token = project.GetGitHubAccessTokenOrNull();
             var rootUrl = project.GetGitHubUrl(version);
-            var rawRootUrl = CalculateRawRootUrl(rootUrl);
+            var userAgent = project.GetGithubUserAgentOrNull();
+            var rawRootUrl = CalculateRawRootUrlWithLanguageCode(rootUrl, languageCode);
             var rawDocumentUrl = rawRootUrl + documentName;
             var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
-            var userAgent = project.GetGithubUserAgentOrNull();
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + documentName;
             var localDirectory = "";
@@ -90,9 +91,9 @@ namespace Volo.Docs.GitHub.Documents
             return versions;
         }
 
-        public async Task<DocumentResource> GetResource(Project project, string resourceName, string version)
+        public async Task<DocumentResource> GetResource(Project project, string resourceName, string languageCode, string version)
         {
-            var rawRootUrl = CalculateRawRootUrl(project.GetGitHubUrl(version));
+            var rawRootUrl = CalculateRawRootUrlWithLanguageCode(project.GetGitHubUrl(version), languageCode);
             var content = await DownloadWebContentAsByteArrayAsync(
                 rawRootUrl + resourceName,
                 project.GetGitHubAccessTokenOrNull(),
@@ -100,6 +101,19 @@ namespace Volo.Docs.GitHub.Documents
             );
 
             return new DocumentResource(content);
+        }
+
+        public async Task<LanguageConfig> GetLanguageListAsync(Project project, string version)
+        {
+            var token = project.GetGitHubAccessTokenOrNull();
+            var rootUrl = project.GetGitHubUrl(version);
+            var userAgent = project.GetGithubUserAgentOrNull();
+
+            var url = CalculateRawRootUrl(rootUrl) + "docs-langs.json";
+
+            var configAsJson = await DownloadWebContentAsStringAsync(url, token, userAgent);
+
+            return JsonConvert.DeserializeObject<LanguageConfig>(configAsJson);
         }
 
         private async Task<IReadOnlyList<Release>> GetReleasesAsync(Project project)
@@ -202,11 +216,22 @@ namespace Volo.Docs.GitHub.Documents
             return contributors;
         }
 
+        private static string CalculateRawRootUrlWithLanguageCode(string rootUrl, string languageCode)
+        {
+            return (rootUrl
+                .Replace("github.com", "raw.githubusercontent.com")
+                .ReplaceFirst("/tree/", "/")
+                .EnsureEndsWith('/')
+                + languageCode
+                ).EnsureEndsWith('/');
+        }
+
         private static string CalculateRawRootUrl(string rootUrl)
         {
             return rootUrl
                 .Replace("github.com", "raw.githubusercontent.com")
-                .ReplaceFirst("/tree/", "/");
+                .ReplaceFirst("/tree/", "/")
+                .EnsureEndsWith('/');
         }
     }
 }

@@ -2,23 +2,21 @@
 
 ### 关于本教程
 
-这是本教程所有章节中的第三章.下面是所有的章节:
+这是ASP.NET Core MVC教程系列的第三章. 查看其它章节
 
 - [Part I: 创建项目和书籍列表页面](Part-I.md)
 - [Part II: 创建,编辑,删除书籍](Part-II.md)
 - **Part III: 集成测试(本章)**
 
-你可以从 [这里](https://github.com/volosoft/abp/tree/master/samples/BookStore) 下载本程序的**源码**.
+你可以从[GitHub存储库](https://github.com/volosoft/abp/tree/master/samples/BookStore)访问应用程序的**源代码**.
 
 ### 解决方案中的测试项目
 
-本解决方案中有两个测试项目:
+解决方案中有多个测试项目：
 
+![bookstore-test-projects-v2](images/bookstore-test-projects-v2.png)
 
-* `Acme.BookStore.Application.Tests` 项目用于单元测试和集成测试.你可以在这个项目中为Application Service方法写测试代码.这个项目使用了 **EF Core SQLite in-memory** 数据库.
-* `Acme.BookStore.Web.Tests` 项目用于包含Web层的完整集成测试.所以,你也可以在这里写关于UI页面的测试.
-
-测试项目使用了以下库:
+每个项目用于测试相关的应用程序项目.测试项目使用以下库进行测试:
 
 * [xunit](https://xunit.github.io/) 作为主测试框架.
 * [Shoudly](http://shouldly.readthedocs.io/en/latest/) 作为断言库.
@@ -26,79 +24,39 @@
 
 ### 添加测试用数据
 
-起始模板在 `Acme.BookStore.Application.Tests` 项目中包含了 `BookStoreTestDataBuilder` 类,用于创建一些测试用数据. 相关代码如下所示:
-
-````C#
-using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
-using Volo.Abp.Threading;
-
-namespace Acme.BookStore
-{
-    public class BookStoreTestDataBuilder : ITransientDependency
-    {
-        private readonly IIdentityDataSeeder _identityDataSeeder;
-
-        public BookStoreTestDataBuilder(IIdentityDataSeeder identityDataSeeder)
-        {
-            _identityDataSeeder = identityDataSeeder;
-        }
-
-        public void Build()
-        {
-            AsyncHelper.RunSync(BuildInternalAsync);
-        }
-
-        public async Task BuildInternalAsync()
-        {
-            await _identityDataSeeder.SeedAsync("1q2w3E*");
-        }
-    }
-}
-````
-
-* 这里直接使用了identity模块实现的 `IIdentityDataSeeder` 接口,创建了一个admin角色和admin用户.你可以在测试代码中使用它们.
-* 你可以在 `BuildInternalAsync` 方法中添加你自己的测试数据.
-
-按下方所示修改 `BookStoreTestDataBuilder` 类:
+启动模板包含`Acme.BookStore.TestBase`项目中的`BookStoreTestDataSeedContributor`类,它创建一些数据来运行测试.
+更改`BookStoreTestDataSeedContributor`类如下所示:
 
 ````C#
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
-using Volo.Abp.Threading;
+using Volo.Abp.Guids;
 
 namespace Acme.BookStore
 {
-    public class BookStoreTestDataBuilder : ITransientDependency
+    public class BookStoreTestDataSeedContributor
+        : IDataSeedContributor, ITransientDependency
     {
-        private readonly IIdentityDataSeeder _identityDataSeeder;
         private readonly IRepository<Book, Guid> _bookRepository;
+        private readonly IGuidGenerator _guidGenerator;
 
-        public BookStoreTestDataBuilder(
-            IIdentityDataSeeder identityDataSeeder,
-            IRepository<Book, Guid> bookRepository)
+        public BookStoreTestDataSeedContributor(
+            IRepository<Book, Guid> bookRepository, 
+            IGuidGenerator guidGenerator)
         {
-            _identityDataSeeder = identityDataSeeder;
             _bookRepository = bookRepository;
+            _guidGenerator = guidGenerator;
         }
 
-        public void Build()
+        public async Task SeedAsync(DataSeedContext context)
         {
-            AsyncHelper.RunSync(BuildInternalAsync);
-        }
-
-        public async Task BuildInternalAsync()
-        {
-            await _identityDataSeeder.SeedAsync("1q2w3E*");
-
             await _bookRepository.InsertAsync(
                 new Book
                 {
-                    Id = Guid.NewGuid(),
+                    Id = _guidGenerator.Create(),
                     Name = "Test book 1",
                     Type = BookType.Fantastic,
                     PublishDate = new DateTime(2015, 05, 24),
@@ -109,7 +67,7 @@ namespace Acme.BookStore
             await _bookRepository.InsertAsync(
                 new Book
                 {
-                    Id = Guid.NewGuid(),
+                    Id = _guidGenerator.Create(),
                     Name = "Test book 2",
                     Type = BookType.Science,
                     PublishDate = new DateTime(2014, 02, 11),
@@ -121,7 +79,8 @@ namespace Acme.BookStore
 }
 ````
 
-* 通过构造函数注入 `IRepository<Book, Guid>`,在 `BuildInternalAsync` 方法中用它创建两个book实体.
+* 注入`IRepository<Book,Guid>`并在`SeedAsync`中使用它来创建两个书实体作为测试数据.
+* 使用`IGuidGenerator`服务创建GUID. 虽然`Guid.NewGuid()`非常适合测试，但`IGuidGenerator`在使用真实数据库时还有其他特别重要的功能(参见[Guid生成文档](../../Guid-Generation.md)了解更多信息).
 
 ### 测试 BookAppService
 
@@ -211,6 +170,8 @@ public async Task Should_Not_Create_A_Book_Without_Name()
 
 * 由于 `Name` 是空值, ABP 抛出一个 `AbpValidationException` 异常.
 
-### 测试 Web 页面
+打开**测试资源管理器**(测试 -> Windows -> 测试资源管理器)并**执行**所有测试:
 
-TODO
+![bookstore-appservice-tests](images/bookstore-appservice-tests.png)
+
+恭喜, 绿色图标表示测试已成功通过!

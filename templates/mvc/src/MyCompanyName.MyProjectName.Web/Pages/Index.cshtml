@@ -1,9 +1,15 @@
 ﻿@page
-@using MyCompanyName.MyProjectName.Pages
-@inherits MyProjectNamePageBase
-@model IndexModel
+@inherits MyCompanyName.MyProjectName.Web.Pages.MyProjectNamePageBase
+@model MyCompanyName.MyProjectName.Web.Pages.IndexModel
 @section styles {
-    <link href="~/pages/index.css" rel="stylesheet" />
+    <abp-style-bundle>
+        <abp-style src="/Pages/Index.css" />
+    </abp-style-bundle>
+}
+@section scripts {
+    <abp-script-bundle>
+        <abp-script src="/Pages/Index.js" />
+    </abp-script-bundle>
 }
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
@@ -13,7 +19,7 @@
         {
             <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
         }
-        <hr/>
-        <p class="text-right"><a href="http://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+        <hr />
+        <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
     </abp-card-body>
 </abp-card>

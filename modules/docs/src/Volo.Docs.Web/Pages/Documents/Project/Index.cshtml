@@ -107,7 +107,7 @@
                         </div>
                     }
 
-                    <div class="docs-version"> 
+                    <div class="docs-version">
                         <div class="version-select">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -116,7 +116,7 @@
 
                                 <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
                             </div>
-                        </div> 
+                        </div>
                     </div>
 
                     @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
@@ -132,6 +132,7 @@
                             project-name="@Model.ProjectName"
                             project-format="@Model.Project.Format"
                             selected-document-name="@Model.DocumentNameWithExtension"
+                            language="@Model.LanguageCode"
                             id="sidebar-scroll"
                             class="nav nav-list"></ul>
                     }
@@ -143,7 +144,6 @@
         @if (Model.Document != null)
         {
             <div class="col-md-7 docs-content bg-white">
-
                 <div class="docs-link-btns">
                     <div class="float-left">
                         @(L["ShareOn"].Value + " :")
@@ -158,10 +158,17 @@
                         </a>
                     </div>
 
-                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                    {
-                        <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
-                    }
+                    <div class="float-right">
+                        @if (Model.LanguageSelectListItems.Count > 1)
+                        {
+                                <select asp-items="Model.LanguageSelectListItems" class="mr-2" onchange="window.location.replace(this.value)"></select>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                        {
+                            <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                        }
+                    </div>
                 </div>
 
                 <div class="docs-content-field">
@@ -183,6 +190,12 @@
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
+                                @if (Model.DocumentLanguageIsDifferent)
+                                {
+                                    <abp-alert  alert-type="Warning" dismissible="true" class="mb-0">
+                                        Document in the language you wanted is not found. Document in the default language is shown.
+                                    </abp-alert>
+                                }
                                 @Html.Raw(Model.Document.Content)
                             </article>
                         </div>

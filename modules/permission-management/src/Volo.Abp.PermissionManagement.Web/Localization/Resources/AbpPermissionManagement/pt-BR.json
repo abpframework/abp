@@ -3,6 +3,8 @@
   "texts": {
     "Permissions": "Permissões",
     "OnlyProviderPermissons": "Apenas este provedor",
-    "All": "Todos"
+    "All": "Todos",
+    "SelectAllInAllTabs": "Conceder todas as permissões",
+    "SelectAllInThisTab": "Selecionar todos"
   }
 }

@@ -1,7 +1,7 @@
-﻿using Acme.BookStore.Localization.BookStore;
+﻿using Acme.BookStore.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Acme.BookStore.Pages
+namespace Acme.BookStore.Web.Pages
 {
     public abstract class BookStorePageModelBase : AbpPageModel
     {

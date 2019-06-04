@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Uow\Volo.Abp.Uow.csproj" />
   </ItemGroup>
 
 </Project>

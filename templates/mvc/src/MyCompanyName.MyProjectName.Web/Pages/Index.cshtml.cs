@@ -1,4 +1,4 @@
-﻿namespace MyCompanyName.MyProjectName.Pages
+﻿namespace MyCompanyName.MyProjectName.Web.Pages
 {
     public class IndexModel : MyProjectNamePageModelBase
     {

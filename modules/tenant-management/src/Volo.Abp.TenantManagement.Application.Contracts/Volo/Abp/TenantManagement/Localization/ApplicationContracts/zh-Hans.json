@@ -5,6 +5,7 @@
       "Permission:Create": "创建",
       "Permission:Edit": "编辑",
       "Permission:Delete": "删除",
+      "Permission:ManageConnectionStrings": "管理连接字符串",
       "Permission:ManageFeatures": "管理功能"
     }
   }

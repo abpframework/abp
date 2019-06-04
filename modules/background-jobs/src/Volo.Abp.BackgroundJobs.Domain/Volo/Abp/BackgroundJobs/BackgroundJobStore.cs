@@ -19,33 +19,33 @@ namespace Volo.Abp.BackgroundJobs
             BackgroundJobRepository = backgroundJobRepository;
         }
 
-        public async Task<BackgroundJobInfo> FindAsync(Guid jobId)
+        public virtual async Task<BackgroundJobInfo> FindAsync(Guid jobId)
         {
             return ObjectMapper.Map<BackgroundJobRecord, BackgroundJobInfo>(
                 await BackgroundJobRepository.FindAsync(jobId)
             );
         }
 
-        public async Task InsertAsync(BackgroundJobInfo jobInfo)
+        public virtual async Task InsertAsync(BackgroundJobInfo jobInfo)
         {
             await BackgroundJobRepository.InsertAsync(
                 ObjectMapper.Map<BackgroundJobInfo, BackgroundJobRecord>(jobInfo)
             );
         }
 
-        public async Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
+        public virtual async Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
         {
             return ObjectMapper.Map<List<BackgroundJobRecord>, List<BackgroundJobInfo>>(
                 await BackgroundJobRepository.GetWaitingListAsync(maxResultCount)
             );
         }
 
-        public async Task DeleteAsync(Guid jobId)
+        public virtual async Task DeleteAsync(Guid jobId)
         {
             await BackgroundJobRepository.DeleteAsync(jobId);
         }
 
-        public async Task UpdateAsync(BackgroundJobInfo jobInfo)
+        public virtual async Task UpdateAsync(BackgroundJobInfo jobInfo)
         {
             await BackgroundJobRepository.UpdateAsync(
                 ObjectMapper.Map<BackgroundJobInfo, BackgroundJobRecord>(jobInfo)

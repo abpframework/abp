@@ -122,7 +122,7 @@ namespace Volo.Abp
         }
 
         public static string Length(
-            string value, 
+            [CanBeNull] string value,
             [InvokerParameterName] [NotNull] string parameterName, 
             int maxLength, 
             int minLength = 0)

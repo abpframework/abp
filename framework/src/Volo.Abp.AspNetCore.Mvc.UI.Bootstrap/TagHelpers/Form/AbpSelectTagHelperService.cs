@@ -33,9 +33,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
-            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml), order, out var surpress);
+            AddGroupToFormGroupContents(context, TagHelper.AspFor.Name, SurroundInnerHtmlAndGet(context, output, innerHtml), order, out var suppress);
 
-            if (surpress)
+            if (suppress)
             {
                 output.SuppressOutput();
             }
@@ -187,8 +187,22 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var localizer = _tagHelperLocalizer.GetLocalizer(explorer);
 
-            var selectItems = explorer.Metadata.IsEnum ? explorer.ModelType.GetTypeInfo().GetMembers(BindingFlags.Public | BindingFlags.Static)
-                .Select((t, i) => new SelectListItem { Value = i.ToString(), Text = GetLocalizedPropertyName(localizer, explorer.ModelType, t.Name) }).ToList() : null;
+            var selectItems = new List<SelectListItem>();
+            var isNullableType = Nullable.GetUnderlyingType(explorer.ModelType) != null;
+            var enumType = explorer.ModelType;
+
+            if (isNullableType)
+            {
+                enumType = Nullable.GetUnderlyingType(explorer.ModelType);
+                selectItems.Add(new SelectListItem());
+            }
+
+            selectItems.AddRange(enumType.GetEnumNames()
+                .Select(enumName => new SelectListItem
+                {
+                    Value = Convert.ToUInt64(Enum.Parse(enumType, enumName)).ToString(),
+                    Text = GetLocalizedPropertyName(localizer, enumType, enumName)
+                }));
 
             return selectItems;
         }
@@ -304,10 +318,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return idAttr != null ? "for=\"" + idAttr.Value + "\"" : "";
         }
 
-        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool surpress)
+        protected virtual void AddGroupToFormGroupContents(TagHelperContext context, string propertyName, string html, int order, out bool suppress)
         {
             var list = context.GetValue<List<FormGroupItem>>(FormGroupContents) ?? new List<FormGroupItem>();
-            surpress = list == null;
+            suppress = list == null;
 
             if (list != null && !list.Any(igc => igc.HtmlContent.Contains("id=\"" + propertyName.Replace('.', '_') + "\"")))
             {

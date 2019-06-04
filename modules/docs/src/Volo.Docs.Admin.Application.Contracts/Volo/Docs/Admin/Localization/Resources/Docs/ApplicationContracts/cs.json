@@ -1,0 +1,10 @@
+﻿{
+  "culture": "cs",
+  "texts": {
+    "Permission:DocumentManagement": "Správa dokumentů",
+    "Permission:Projects": "Projekty",
+    "Permission:Edit": "Upravit",
+    "Permission:Delete": "Smazat",
+    "Permission:Create": "Vytvořit"
+  }
+}

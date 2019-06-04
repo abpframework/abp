@@ -1,38 +1,23 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Options;
 using Volo.Docs;
-using Volo.Docs.Projects;
 
 namespace VoloDocs.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        public IReadOnlyList<ProjectDto> Projects { get; set; }
+        private readonly DocsUrlOptions _urlOptions;
 
-        private readonly IProjectAppService _projectAppService;
-
-        public IndexModel(IProjectAppService projectAppService)
+        public IndexModel(IOptions<DocsUrlOptions> urlOptions)
         {
-            _projectAppService = projectAppService;
+            _urlOptions = urlOptions.Value;
         }
 
-        public async Task<IActionResult> OnGet()
+        public IActionResult OnGet()
         {
-            Projects = (await _projectAppService.GetListAsync()).Items;
-
-            if (Projects.Count == 1)
-            {
-                return RedirectToPage("./Documents/Project/Index", new
-                {
-                    projectName = Projects[0].ShortName,
-                    version = DocsAppConsts.Latest,
-                    documentName = Projects[0].DefaultDocumentName
-                });
-            }
-
-            return Page();
+            //TODO: Create HomeController & Index instead of Page. Otherwise, we have an empty Index.cshtml file.
+            return Redirect("./documents");
         }
     }
 }

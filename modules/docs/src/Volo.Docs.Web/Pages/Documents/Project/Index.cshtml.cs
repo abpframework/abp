@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -23,7 +24,16 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string DocumentName { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public string LanguageCode { get; set; }
+
+        public string DefaultLanguageCode { get; set; }
+
         public ProjectDto Project { get; set; }
+
+        public LanguageConfig LanguageConfig { get; set; }
+
+        public List<SelectListItem> LanguageSelectListItems { get; set; }
 
         public string DocumentNameWithExtension { get; private set; }
 
@@ -37,32 +47,98 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
+        public string DocumentsUrlPrefix { get; set; }
+
+        public bool DocumentLanguageIsDifferent { get; set; }
+
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
+        private readonly DocsUrlOptions _options;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
-            IProjectAppService projectAppService)
+            IProjectAppService projectAppService,
+            IOptions<DocsUrlOptions> options)
         {
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
+            _options = options.Value;
         }
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
+            DocumentsUrlPrefix = _options.GetFormattedRoutePrefix();
+
             await SetProjectAsync();
             await SetProjectsAsync();
             await SetVersionAsync();
+            await SetLanguageList();
+
+            if (IsDefaultDocument())
+            {
+                return RedirectToDefaultDocument();
+            }
+
+            if (!CheckLanguage())
+            {
+                return RedirectToDefaultLanguage();
+            }
+
             await SetDocumentAsync();
             await SetNavigationAsync();
+            SetLanguageSelectListItems();
+
+            return Page();
+        }
+
+        private bool IsDefaultDocument()
+        {
+            return DocumentName == Project.DefaultDocumentName;
         }
 
         private async Task SetProjectAsync()
         {
             Project = await _projectAppService.GetAsync(ProjectName);
+        }
+
+        private async Task SetLanguageList()
+        {
+            LanguageConfig = await _projectAppService.GetLanguageListAsync(ProjectName, Version);
+            SetDefaultLanguageCode();
+        }
+
+        private void SetDefaultLanguageCode()
+        {
+            DefaultLanguageCode = (LanguageConfig.Languages.FirstOrDefault(l => l.IsDefault) ?? LanguageConfig.Languages.First()).Code;
+        }
+
+        private bool CheckLanguage()
+        {
+            return LanguageConfig.Languages.Any(l => l.Code == LanguageCode);
+        }
+
+        private IActionResult RedirectToDefaultLanguage()
+        {
+            return RedirectToPage(new
+            {
+                projectName = ProjectName,
+                version = Version,
+                languageCode = DefaultLanguageCode
+            });
+        }
+
+        private IActionResult RedirectToDefaultDocument()
+        {
+            return RedirectToPage(new
+            {
+                projectName = ProjectName,
+                version = Version,
+                documentName = "",
+                languageCode = DefaultLanguageCode
+            });
         }
 
         private async Task SetProjectsAsync()
@@ -72,7 +148,7 @@ namespace Volo.Docs.Pages.Documents.Project
             ProjectSelectItems = projects.Items.Select(p => new SelectListItem
             {
                 Text = p.Name,
-                Value = p.Id != Project.Id ? "/documents/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
+                Value = p.Id != Project.Id ? "/documents/" + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
                 Selected = p.Id == Project.Id
             }).ToList();
         }
@@ -133,6 +209,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     new GetNavigationDocumentInput
                     {
                         ProjectId = Project.Id,
+                        LanguageCode = LanguageCode,
                         Version = Version
                     }
                 );
@@ -154,7 +231,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 version = DocsAppConsts.Latest;
             }
 
-            var link = "/documents/" + ProjectName + "/" + version;
+            var link = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + version;
 
             if (documentName != null)
             {
@@ -178,21 +255,17 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task SetDocumentAsync()
         {
-            if (DocumentName.IsNullOrWhiteSpace())
-            {
-                DocumentName = Project.DefaultDocumentName;
-            }
-
             DocumentNameWithExtension = DocumentName + "." + Project.Format;
 
             try
             {
-                if (DocumentNameWithExtension.IsNullOrWhiteSpace())
+                if (DocumentName.IsNullOrWhiteSpace())
                 {
                     Document = await _documentAppService.GetDefaultAsync(
                         new GetDefaultDocumentInput
                         {
                             ProjectId = Project.Id,
+                            LanguageCode = LanguageCode,
                             Version = Version
                         }
                     );
@@ -204,6 +277,7 @@ namespace Volo.Docs.Pages.Documents.Project
                         {
                             ProjectId = Project.Id,
                             Name = DocumentNameWithExtension,
+                            LanguageCode = LanguageCode,
                             Version = Version
                         }
                     );
@@ -211,17 +285,49 @@ namespace Volo.Docs.Pages.Documents.Project
             }
             catch (DocumentNotFoundException)
             {
-                //TODO: Handle it!
-                throw;
+                if (LanguageCode != DefaultLanguageCode)
+                {
+                    Document = await _documentAppService.GetAsync(
+                        new GetDocumentInput
+                        {
+                            ProjectId = Project.Id,
+                            Name = DocumentNameWithExtension,
+                            LanguageCode = DefaultLanguageCode,
+                            Version = Version
+                        }
+                    );
+
+                    DocumentLanguageIsDifferent = true;
+                }
+                else
+                {
+                    throw;
+                }
             }
 
             ConvertDocumentContentToHtml();
         }
 
+        private void SetLanguageSelectListItems()
+        {
+            LanguageSelectListItems = new List<SelectListItem>();
+
+            foreach (var language in LanguageConfig.Languages)
+            {
+                LanguageSelectListItems.Add(
+                    new SelectListItem(
+                        language.DisplayName,
+                        "/" + DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        language.Code == LanguageCode
+                        )
+                    );
+            }
+        }
+
         private void ConvertDocumentContentToHtml()
         {
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
-            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest());
+            var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
 
             content = HtmlNormalizer.ReplaceImageSources(
                 content,

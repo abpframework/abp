@@ -39,6 +39,11 @@ namespace Volo.Abp.AspNetCore.Mvc
                 return;
             }
 
+            if (context.Key.Name.IsNullOrWhiteSpace())
+            {
+                return;
+            }
+
             if (_localizationOptions.Value.Value.DataAnnotationLocalizerProvider == null)
             {
                 return;

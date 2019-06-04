@@ -263,12 +263,10 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected override IQueryable<TEntity> GetQueryable()
         {
-            return ApplyDataFilters(
-                Collection.AsQueryable()
-            );
+            return GetMongoQueryable();
         }
 
-        protected virtual IMongoQueryable<TEntity> GetMongoQueryable()
+        public virtual IMongoQueryable<TEntity> GetMongoQueryable()
         {
             return ApplyDataFilters(
                 Collection.AsQueryable()

@@ -29,7 +29,7 @@ using Volo.Docs;
 using Volo.Docs.Admin;
 using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
-using VoloDocs.Web.Utils;
+using Localization.Resources.AbpUi;
 
 namespace VoloDocs.Web
 {
@@ -61,6 +61,11 @@ namespace VoloDocs.Web
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            Configure<DocsUrlOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
 
             Configure<DbConnectionOptions>(options =>
             {
@@ -107,14 +112,15 @@ namespace VoloDocs.Web
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options
-                    .Languages
-                    .Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
 
                 options.Resources
                     .Get<DocsResource>()
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiModule))
+                    .AddBaseTypes(typeof(AbpUiResource))
                     .AddVirtualJson("/Localization/Resources/VoloDocs/Web");
             });
 

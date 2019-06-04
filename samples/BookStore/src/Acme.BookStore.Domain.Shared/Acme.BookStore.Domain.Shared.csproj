@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Acme.BookStore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="0.17.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\BookStore\*.json" />
+    <Content Remove="Localization\BookStore\*.json" />
+  </ItemGroup>
+
+</Project>

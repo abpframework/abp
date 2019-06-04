@@ -1,4 +1,6 @@
-﻿namespace ProductManagement
+﻿using Volo.Abp.Reflection;
+
+namespace ProductManagement
 {
     public class ProductManagementPermissions
     {
@@ -14,14 +16,7 @@
         }
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName,
-                Products.Default,
-                Products.Delete,
-                Products.Update,
-                Products.Create
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(ProductManagementPermissions));
         }
     }
 }
