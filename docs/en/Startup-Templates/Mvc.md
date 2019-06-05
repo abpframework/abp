@@ -4,7 +4,12 @@
 
 This template provides a layered (or tiered, based on the preference) application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices.
 
-## How to Start With
+This document explains the solution structure and projects in details.
+
+* See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
+* See the [ASP.NET Core MVC Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template.
+
+## How to Start With?
 
 You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
 
@@ -152,6 +157,8 @@ Most of time you don't need to manually create C# client proxies, thanks to ABP'
 
 This project contains the User Interface (UI) of the application. It contains razor pages, JavaScript files, style files, images and so on...
 
+This project contains the main `appsettings.json` file that contains the connection string and other configuration of the application.
+
 * Depends on the `.HttpApi` since UI layer needs to use APIs and application service interfaces of the solution.
 
 > If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore.DbMigrations` projects.
@@ -182,14 +189,63 @@ Test projects are prepared integration testing;
 
 You can still create unit tests for your classes which will be harder to write (because you will need to prepare mock/fake objects), but faster to run (because it only tests a single class and skips all initialization process).
 
+#### How to Run?
+
+Set `.Web` as the startup project and run the application. Default username is `admin` and password is `1q2w3E*`.
+
+See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) for more information.
+
 ### Tiered Structure
 
-TODO
+If you specify the `--tiered` option as described above, the solution created will be a tiered solution. The purpose of the tiered structure is to be able to **deploy Web application and HTTP API to different servers**:
 
-### Other Database Providers
+![bookstore-visual-studio-solution-v3](../images/tiered-solution-servers.png)
 
-TODO
+* Browser runs your UI by executing HTML, CSS & JavaScript.
+* Web servers hosts static UI files (CSS, JavaScript, image... etc.) & dynamic components (e.g. Razor pages). It performs HTTP requests to the API server to execute the business logic of the application.
+* API Server hosts the HTTP APIs which then use application & domain layers of the application to perform the business logic.
+* Finally, database server hosts your database.
 
-#### MongoDB
+So, the resulting solution allows a 4-tiered deployment, by comparing to 3-tiered deployment of the default structure explained before.
 
-TODO
+> Unless you actually need to such a 4-tiered deployment, its suggested to go with the default structure which is simpler to develop, deploy and maintain.
+
+The solution structure is shown below:
+
+![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-tiered.png)
+
+As different from the default structure, two new projects come into play: `.IdentityServer` & `.HttpApi.Host`.
+
+#### .IdentityServer Project
+
+This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
+
+![bookstore-visual-studio-solution-v3](../images/tiered-solution-applications.png)
+
+ABP uses the open source [IdentityServer4](https://identityserver.io/) framework for the authentication between applications. See [IdentityServer4 documentation](http://docs.identityserver.io) for details about the IdentityServer4 and OpenID Connect protocol.
+
+It has its own `appsettings.json` that contains database connection and other configurations.
+
+#### .HttpApi.Host Project
+
+This project is an application that hosts the API of the solution.
+
+It has its own `appsettings.json` that contains database connection and other configurations.
+
+#### .Web Project
+
+Just like the default structure, this project contains the User Interface (UI) of the application. It contains razor pages, JavaScript files, style files, images and so on...
+
+This project contains an `appsettings.json` file, but this time it does not have a connection string because it never connects to the database. Instead, it mainly contains endpoint of the remote API server and the authentication server.
+
+#### Pre-requirements
+
+* [Redis](https://redis.io/): The applications use Redis as as distributed cache. So, you need to have Redis installed & running.
+
+#### How to Run?
+
+You should run the application with the given order:
+
+* First, run the `.IdentityServer` since other applications depends on it.
+* Then run the `.HttpApi.Server` since it is used by the `.Web` application.
+* Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
