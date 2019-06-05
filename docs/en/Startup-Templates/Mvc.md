@@ -58,7 +58,7 @@ If you don't specify any option, you will have a solution like shown below:
 
 Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before. The diagram below shows the layers & project dependencies of the solution:
 
-![layered-project-dependencies](D:\Github\abp\docs\en\images\layered-project-dependencies.png)
+![layered-project-dependencies](../images/layered-project-dependencies.png)
 
 Each section below will explain the related project & its dependencies.
 
