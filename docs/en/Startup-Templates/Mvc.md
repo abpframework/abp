@@ -91,7 +91,7 @@ This project contains the [application service](../Application-Services.md) **im
 * Depends on the `.Application.Contracts` project to be able to implement the interfaces and use the DTOs.
 * Depends on the `.Domain` project to be able to use domain objects (entities, repository interfaces... etc.) to perform the application logic.
 
-#### .EntityFrameworkCore Project.
+#### .EntityFrameworkCore Project
 
 This is the integration project for the EF Core. It defines the `DbContext` and implements repository interfaces defined in the `.Domain` project.
 
@@ -140,7 +140,7 @@ Most of time you don't need to manually define API Controllers since ABP's [Auto
 
 This is a project that defines C# client proxies to use the HTTP APIs of the solution. You can share this library to 3rd-party clients, so they can easily consume your HTTP APIs in their Dotnet applications (For other type of applications, they can still use your APIs, either manually or using a tool in their own platform)
 
-Most of time you don't need to manually create C# client proxies, thanks to ABP's [Cynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature.
+Most of time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature.
 
 `.HttpApi.Client.ConsoleTestApp` project is a console application created to demonstrate the usage of the client proxies.
 
