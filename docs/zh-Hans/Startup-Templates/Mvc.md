@@ -50,7 +50,7 @@ abp new Acme.BookStore --tiered
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
-项目组织在`src`和`test`文件夹中. `src`文件夹包含实际应用程序,该应用程序基于前面提到的[DDD]原则(../Domain-Driven-Design.md)进行分层.
+项目组织在`src`和`test`文件夹中. `src`文件夹包含实际应用程序,该应用程序基于前面提到的[DDD](../Domain-Driven-Design.md)原则进行分层.
 
 --------------------
 
