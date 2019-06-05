@@ -140,7 +140,7 @@ This is a project that defines C# client proxies to use the HTTP APIs of the sol
 
 `.HttpApi.Client.ConsoleTestApp` project is a console application created to demonstrate the usage of the client proxies.
 
-Most of time you don't need to manually create C# client proxies, thanks to ABP's [Cynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature.
+Most of time you don't need to manually create C# client proxies, thanks to ABP's [Dynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature.
 
 * Depends on the `.Application.Contracts` project to be able to share the same application service interfaces and DTOs with the remote service.
 
