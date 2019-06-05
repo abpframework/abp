@@ -1,180 +1,180 @@
-﻿# MVC Application Startup Template
+﻿# MVC应用程序启动模板
 
-## Introduction
+## 介绍
 
-This template provides a layered (or tiered, based on the preference) application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices.
+MVC应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层(或根据偏好分层)的应用程序结构.
 
-## How to Start With
+## 如何开始
 
-You can use the [ABP CLI](../CLI.md) to create a new project using this startup template. Alternatively, you can directly create & download from the [Get Started](https://abp.io/get-started) page. CLI approach is used here.
+你要以使用[ABP CLI](../CLI.md)创建基于此启动模板的新项目,或者你也可以在[入门](https://abp.io/get-started)页面创建并下载项目. 在这里我们使用CLI创建新项目.
 
-First, install the ABP CLI as described in [its document](../CLI.md). Then use the `abp new` command in an empty folder to create a new solution:
+首先根据[文档](../CLI.md)中的说明安装ABP CLI. 然后使用 `abp new` 命令在空文件夹中创建新解决方案:
 
 ````bash
 abp new Acme.BookStore -t mvc
 ````
 
-* `Acme.BookStore` is the solution name, like *YourCompany.YourProduct*. See the [CLI document](../CLI.md) for different naming styles.
-* This example specified the template name (`-t` or `--template` option). However, `mvc` is the default template and used even if you don't specify it.
+* `Acme.BookStore` 是解决方案的名称,  命名样式如 *YourCompany.YourProduct*. 更多的命名样式请参阅[CLI文档](../CLI.md).
+* 示例中指定了启动模板 (`-t` 或 `--template` 选项). 不过 `mvc` 是默认模板,即使未指定也会创建 `MVC` 的模板项目.
 
-### Specify Database Provider
+### 指定数据库提供程序
 
-This template supports the following database providers:
+`MVC`模板支持以下数据库提供程序:
 
-- `ef`: Entity Framework Core (default)
+- `ef`: Entity Framework Core (默认)
 - `mongodb`: MongoDB
 
-Use the `-d` (or `--database-provider`) to specify the database provider:
+使用 `-d` (或 `--database-provider`) 指定数据库提供程序:
 
 ````bash
 abp new Acme.BookStore -t mvc -d mongodb
 ````
 
-### Create a Tiered Solution
+### 创建分层解决方案
 
-`--tiered` option is used to create a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
+使用 `--tiered` 选项创建分层解决方案, Web与WebApi层在物理上是分开的. 如果未指定,CLI会创建一个分层的解决方案,这个解决方案没有那么复杂,适合大多数场景.
 
 ````bash
 abp new Acme.BookStore --tiered
 ````
 
-See the "Tiered Structure" section below for the tiered approach.
+有关分层的方法,请参阅下面的"分层结构"部分.
 
-## Solution Structure
+## 解决方案结构
 
-Based on the options you've specified, you will get a slightly different solution structure.
+根据命令的选项,会创建略有不同的解决方案结构.
 
-### Default Structure
+### 默认结构
 
-If you don't specify any option, you will have a solution like shown below:
+如果未指定选项,你会得到如下所示的解决方案:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
-Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before.
+项目组织在`src`和`test`文件夹中. `src`文件夹包含实际应用程序,该应用程序基于前面提到的[DDD]原则(../Domain-Driven-Design.md)进行分层.
 
 --------------------
 
-**TODO: Add a graphic to illustrate dependencies between projects.**
+**TODO: 添加一些图来说明项目之间的依赖关系.**
 
 ------------------
 
-Each section below will explain the related project.
+下面介绍解决方案中的项目.
 
-#### .Domain Project
+#### .Domain 项目
 
-This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value types](../Value-Types.md), [repository interfaces](../Repositories.md) and other domain objects of the solution.
+解决方案的领域层. 它主要包含 [实体, 集合根](../Entities.md), [领域服务](../Domain-Services.md), [值类型](../Value-Types.md), [仓储接口](../Repositories.md) 和解决方案的其他领域对象.
 
-A `Book` entity and a `IBookRepository` interface are good candidates for this project.
+例如 `Book` 实体和 `IBookRepository` 接口都适合放在这个项目中.
 
-* Depends on the `.Domain.Shared` because it uses constants, enums and other objects defined in that project.
+* 它依赖 `.Domain.Shared` 项目,因为项目中会用到它的一些常量,枚举和定义其他对象.
 
-#### .Domain.Shared Project
+#### .Domain.Shared 项目
 
-This project contains constants, enums and other objects these are actually a part of the domain layer, but needed to be used by all layers/projects in the solution.
+项目包含常量,枚举和其他对象, 这些对象实际上是领域层的一部分,但是解决方案中所有的层/项目中都会使用到.
 
-A `BookType` enum and a `BookConts` class (which may have some constant fields for the `Book` entity, like `MaxNameLength`) are good candidates for this project.
+例如 `BookType` 枚举和 `BookConts` 类 (可能是 `Book` 实体用到的常数字段,像`MaxNameLength`)都适合放在这个项目中.
 
-This project has no dependency to other projects in the solution.
+该项目不会依赖解决方案中的其他项目.
 
-#### .Application.Contracts Project
+#### .Application.Contracts 项目
 
-This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
+项目主要包含 [应用服务](../Application-Services.md) **interfaces** 和应用层的 [数据传输对象](../Data-Transfer-Objects.md) (DTO). 它用于分离应用层的接口和实现. 这种方式可以将接口项目做为约定包共享给客户端.
 
-* Depends on the `.Domain.Shared` because it may use constants, enums and other shared objects in the application service interfaces and DTOs.
+* 它依赖 `.Domain.Shared` 因为它可能会在应用接口和DTO中使用常量,枚举和其它的共享对象.
 
-#### .Application Project
+#### .Application 项目
 
-This project contains the [application service](../Application-Services.md) implementations of the interfaces defined in the `.Application.Contracts` project.
+项目包含 `.Application.Contracts` 项目的 [应用服务](../Application-Services.md) 接口实现.
 
-* Depends on the `.Application.Contracts` project to be able to implement the interfaces and use the DTOs.
-* Depends on the `.Domain` project to be able to use domain objects (entities, repository interfaces... etc.) to perform the application logic.
+* 它依赖 `.Application.Contracts` 项目, 因为它需要实现接口与使用DTO.
+* 它依赖 `.Domain` 项目,因为它需要使用领域对象(实体,仓储接口等)执行应用程序逻辑.
 
-#### .EntityFrameworkCore Project.
+#### .EntityFrameworkCore 项目
 
-This is the integration project for the EF Core. It defines the `DbContext` and implements repository interfaces defined in the `.Domain` project.
+这是集成EF Core的项目. 它定义了 `DbContext` 并实现 `.Domain` 项目中定义的仓储接口.
 
-* Depends on the `.Domain` project to be able to reference to entities and repository interfaces.
+* 它依赖 `.Domain` 项目,因为它需要引用实体和仓储接口.
 
-> This project is available only if you are using EF Core as the database provider.
+> 只有在你使用了EF Core做为数据库提供程序时,此项目才会可用.
 
-#### .EntityFrameworkCore.DbMigrations Project
+#### .EntityFrameworkCore.DbMigrations 项目
 
-Contains EF Cor database migrations for the solution. It has a separated `DbContext` to dedicated to manage migrations.
+包含解决方案的EF Core数据库迁移. 它有独立的 `DbContext` 来专门管理迁移.
 
-ABP is a modular framework and with an ideal design, each module has its own `DbContext` class. This is where the migration `DbContext` comes into play and unifies all `DbContext` configurations into a single model to maintain a single database schema.
+ABP是一个模块化的框架,理想的设计是让每个模块都有自己的 `DbContext` 类. 这时用于迁移的 `DbContext` 就会发挥作用. 它将所有的 `DbContext` 配置统一到单个模型中以维护单个数据库的模式.
 
-Notice that the migration `DbContext` is only used for database migrations and *not used on runtime*.
+需要注意,迁移 `DbContext` 仅用于数据库迁移,而不在*运行时*使用.
 
-* Depends on the `.EntityFrameworkCore` project since it re-uses the configuration defined for the `DbContext` of the application.
+* 它依赖 `.EntityFrameworkCore` 项目,因为它重用了应用程序的 `DbContext` 配置 .
 
-> This project is available only if you are using EF Core as the database provider.
+> 只有在你使用了EF Core做为数据库提供程序时,此项目才会可用.
 
-#### .DbMigrator Project
+#### .DbMigrator 项目
 
-This is a console application which simplifies to execute database migrations on development and production environments. When you this application;
+这是一个控制台应用唾弃,它简化了在开发和生产环境执行数据库迁移的操作.当你使用它时;
 
-* Creates the database if necessary.
-* Applies database migrations.
-* Seeds initial data.
+* 必要时创建数据库.
+* 应用数据库迁移.
+* 初始化种子数据.
 
-> This project has its own `appsettings.json` file. So, if you want to change the database connection string, remember to change this file.
+> 这个项目有自己的 `appsettings.json` 文件. 所以如果要更改数据库连接字符串,请记得也要更改此文件.
 
-Especially, seeding initial data is important at this point. ABP has a modular data seed infrastructure. See [its documentation](../Data-Seeding.md) for more about the data seeding.
+初始化种子数据很很要,ABP具有模块化的种子数据基础设施. 种子数据的更多信息,请参阅[文档](../Data-Seeding.md).
 
-While creating database & applying migrations seems only necessary for relational databases, this projects comes even if you choose a NoSQL database provider (like MongoDB). In that case, it still seeds initial data which is necessary for the application.
+虽然创建数据库和应用迁移似乎只对关系数据库有用,但即使您选择NoSQL数据库提供程序(如MongoDB),也会生成此项目. 这时,它会为应用程序提供必要的初始数据.
 
-* Depends on the `.EntityFrameworkCore.DbMigrations` project (for EF Core) since it needs to access to the migrations.
-* Depends on the `.Application.Contracts` project to be able to access permission definitions, because initial data seeder grants permissions for the admin user.
+* 它依赖 `.EntityFrameworkCore.DbMigrations` 项目 (针对EF Core),因为它需要访问迁移文件.
+* 它依赖 `.Application.Contracts` 项目,因为它需要访问权限定义在初始化种子数据时为管理员用户赋予权限.
 
-#### .HttpApi Project
+#### .HttpApi 项目
 
-This project is used to define your API Controllers.
+用于定义API控制器.
 
-Most of time you don't need to manually define API Controllers since ABP's [Auto API Controllers](../AspNetCore/Auto-API-Controllers.md) feature creates them automagically based on your application layer. However, in case of you need to write API controllers, this is the best place to do it.
+大多数情况下,你不需要手动定义API控制器,因为ABP的[动态API](../AspNetCore/Auto-API-Controllers.md)功能会根据你的应用层自动创建API控制器. 但是,如果你需要编写API控制器,那么它是最合适的地方.
 
-* Depends on the `.Application.Contracts` project to be able to inject the application service interfaces.
+* 它依赖 `.Application.Contracts` 项目,因为它需要注入应用服务接口.
 
-#### .HttpApi.Client Project
+#### .HttpApi.Client 项目
 
-This is a project that defines C# client proxies to use the HTTP APIs of the solution. You can share this library to 3rd-party clients, so they can easily consume your HTTP APIs in their Dotnet applications.
+定义C#客户端代理使用解决方案的HttpAPI项目. 可以将上编辑共享给第三方客户端,让它们轻松的在DotNet应用程序中使用你的httiApi.
 
-`.HttpApi.Client.ConsoleTestApp` project is a console application created to demonstrate the usage of the client proxies.
+`.HttpApi.Client.ConsoleTestApp` 项目是一个用于演示客户端代理用法的控制台应用程序.
 
-Most of time you don't need to manually create C# client proxies, thanks to ABP's [Cynamic C# API Clients](../AspNetCore/Dynamic-CSharp-API-Clients.md) feature.
+ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功能,所以大多数情况下你不需要手动的创建C#客户端代理.
 
-* Depends on the `.Application.Contracts` project to be able to share the same application service interfaces and DTOs with the remote service.
+* 它依赖 `.Application.Contracts` 项目,因为它需要使用应用服务接口和DTO.
 
-#### .Web Project
+#### .Web 项目
 
-This project contains the User Interface (UI) of the application. It contains razor pages, javascript files, css files, images and so on...
+包含应用程序的用户界面(UI). 包括Razor页面,javascript文件,css文件,图片等...
 
-* Depends on the `.HttpApi` since UI layer needs to use APIs and application service interfaces of the solution.
+* 依赖 `.HttpApi` 项目,因为UI层需要使用解决方案的API和应用服务接口.
 
-> If you check the source code of the `.Web.csproj` file, you will see the references to the `.Application` and the `.EntityFrameworkCore.DbMigrations` projects.
+> 如果查看 `.Web.csproj` 源码, 你会看到对 `.Application` 和 `.EntityFrameworkCore.DbMigrations` 项目的引用.
 >
-> These references are actually not needed on development, because UI layer normally doesn't depend on the EF Core or the Application implementation. This startup templates are ready for the tiered deployment, where API layer is hosted in a separate server than the UI layer.
+> 这些引用实际上在开发中并不需要. 因为UI层通常不依赖于EF Core或应用程序实现. 这个启动模板已经为分层部署做好了准备,API层托管在不同与UI层的服务器中.
 >
-> However, if you don't choose the `--tiered` option, these references will be in the .Web project to be able to host the Web, API and application layers in a single application endpoint.
+> 但是如果你不选择 `--tiered` 选项, .Web项目会有这些引用,以便能够将Web,Api和应用层托管在单个应用程序站点.
 >
-> This gives you to ability to use domain entities in your presentation layer. However, this is considered as a bad practice according to the DDD.
+> 你可以在表示层中使用领域实体,但是根据DDD的理论,这被认为是一种不好的做法.
 
-#### Test Projects
+#### 测试项目
 
-The solution has multiple test projects, one for each layer:
+解决方案有多个测试项目,每一层都会有一个:
 
-* `.Domain.Tests` is used to test the domain layer.
-* `.Application.Tests` is used to test the application layer.
-* `.EntityFrameworkCore.Tests` is used to test EF Core configuration and custom repositories.
-* `.Web.Tests` is used to test the UI.
-* `.TestBase` is a base (shared) project for all tests.
+* `.Domain.Tests` 用于测试领域层.
+* `.Application.Tests` 用于测试应用层.
+* `.EntityFrameworkCore.Tests` 用于测试EF Core配置与自定义仓储.
+* `.Web.Tests` 用于测试UI.
+* `.TestBase` 所有测试项目的基础(共享)项目.
 
-In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
+此外,  `.HttpApi.Client.ConsoleTestApp` 是一个控制台应用程序(不是自动化测试项目),它用于演示DotNet应用程序中Http Api的用法.
 
-### Tiered Structure
+### 分层结构
 
 TODO
 
-### Other Database Providers
+### 其它数据库提供程序
 
 TODO
 
