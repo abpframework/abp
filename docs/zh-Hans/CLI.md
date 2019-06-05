@@ -1,16 +1,16 @@
 ﻿# ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.
+ABP CLI (命令行接口) 是一个命令行工具,用来执行基于ABP解决方案的一些常见操作.
 
 ## Installation
 
-ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Install it using a command line window:
+ABP CLI 是一个 [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). 使用命令行窗口安装:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-To update an existing installation:
+更新最新版本:
 
 ````bash
 dotnet tool update -g Volo.Abp.Cli
@@ -20,118 +20,117 @@ dotnet tool update -g Volo.Abp.Cli
 
 ### new
 
-Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
+生成基于ABP[启动模板](Startup-Templates/Index.md)的新解决方案.
 
-Basic usage:
+基本用法:
 
 ````bash
-abp new <solution-name> [options]
+abp new <解决方案名称> [options]
 ````
 
-Example:
+示例:
 
 ````bash
 abp new Acme.BookStore
 ````
 
-* Acme.BookStore is the solution name here.
-* Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
+* Acme.BookStore是解决方案的名称.
+* 常见的命名方式类似于 *YourCompany.YourProject*. 不过你可以使用自己喜欢的方式,如 *YourProject* (单级命名空间) 或 *YourCompany.YourProduct.YourModule* (三级命名空间).
 
 #### Options
 
-* `--template` or `-t`: Specifies the template name. Default template name is `mvc`. Available templates:
-  * `mvc` (default): ASP.NET Core [MVC application template](Startup-Templates/Mvc.md). Additional options:
-    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+* `--template` 或 `-t`: 指定模板. 默认的模板是 `mvc`.可用的模板有:
+  * `mvc` (默认): ASP.NET Core [MVC应用程序模板](Startup-Templates/Mvc.md). 其他选项:
+    * `--database-provider` 或 `-d`: 指定数据库提供程序. 默认提供程序是 `ef`. 可用的提供程序有:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-    * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-  *  `mvc-module`: ASP.NET Core [MVC module template](Startup-Templates/Mvc-Module.md). Additional options:
-    * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
-* `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
+    * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的. 如果未指定会创建一个分层的解决方案, 此解决方案没有那么复杂,适合大多数场景.
+  *  `mvc-module`: ASP.NET Core [MVC模块模板](Startup-Templates/Mvc-Module.md). 其他选项:
+    * `--no-ui`: 不包含UI. 仅创建服务模块 (也称为微服务 - 没有UI).
+* `--output-folder` 或 `-o`: 指定输出文件夹,默认是当前目录.
 
 ### add-package
 
-Adds a new ABP package to a project by,
+添加新的ABP包到项目中
 
-* Adding related nuget package as a dependency to the project.
-* Adding `[DependsOn(...)]` attribute to the module class in the project (see the [module development document](Module-Development-Basics.md)).
+* 添加nuget包做为项目的依赖项目.
+* 添加 `[DependsOn(...)]` attribute到项目的模块类 (请参阅 [模块开发文档](Module-Development-Basics.md)).
 
-> Notice that the added module may require additional configuration which is generally indicated in the documentation of the related package.
+> 需要注意的是添加的模块可能需要额外的配置,通常会在包的文档中指出.
 
-Basic usage:
+基本用法:
 
 ````bash
-abp add-package <package-name> [options]
+abp add-package <包名> [options]
 ````
 
-Example:
+示例:
 
 ````
 abp add-package Volo.Abp.MongoDB
 ````
 
-* This example adds the Volo.Abp.MongoDB package to the project.
+* 示例中将Volo.Abp.MongoDB包添加到项目中.
 
 #### Options
 
-* `--project` or `-p`: Specifies the project (.csproj) file path. If not specified, CLI tries to find a .csproj file in the current directory.
+* `--project` 或 `-p`: 指定项目 (.csproj) 路径. 如果未指定,Cli会尝试在当前目录查找.csproj文件.
 
 ### add-module
 
-Adds a multi-package module to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
+通过查找模块的所有包,查找解决方案中的相关项目,并将每个包添加到解决方案中的相应项目,从而将多包模块添加到解决方案中.
 
-> A business module generally consists of several packages (because of layering, different database providr options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
+> 由于分层,不同的数据库提供程序选项或其他原因,业务模块通常由多个包组成. 使用`add-module`命令可以大大简化向模块添加模块的过程. 但是每个模块可能需要一些其他配置,这些配置通常在相关模块的文档中指出.
 
-Basic usage:
+基本用法:
 
 ````bash
-abp add-module <module-name> [options]
+abp add-module <模块名称> [options]
 ````
 
-Example:
+示例:
 
 ```bash
 abp add-module Volo.Blogging
 ```
 
-* This example add the Volo.Blogging module to the solution.
+* 示例中将Volo.Blogging模块添加到解决方案中.
 
 #### Options
 
-* `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
-* `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
+* `--solution` 或 `-s`: 指定解决方案 (.sln) 路径. 如果未指定,CLI会尝试在当前目录中寻找.sln文件.
+* `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related packages in a solution or project to the latest versions.
+更新所有ABP相关的包可能会很繁琐,框架和模块都有很多包. 此命令自动将解决方案或项目中所有ABP相关的包更新到最新版本.
 
-Usage:
+用法:
 
 ````bash
 abp update [options]
 ````
 
-* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
-* If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
+* 如果你的文件夹中有.sln文件,运行命令会将解决方案中所有项目ABP相关的包更新到最新版本.
+* 如果你的文件夹中有.csproj文件,运行命令会将项目中所有ABP相关的包更新到最新版本.
 
 #### Options
 
-* `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
+* `--include-previews` 或 `-p`: 将预览版, 测试版本 和 rc 包 同时更新到最新版本.
 
 ### help
 
-Writes basic usage information of the CLI.
+CLI的基本用法信息.
 
-Usage:
-
-````bash
-abp help [command-name]
-````
-
-Examples:
+用法:
 
 ````bash
-abp help        # Shows a general help.
-abp help new    # Shows help about the "new" command.
+abp help [命令名]
 ````
 
+示例:
+
+````bash
+abp help        # 显示常规帮助.
+abp help new    # 显示有关 "New" 命令的帮助.
+````

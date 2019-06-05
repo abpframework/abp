@@ -89,7 +89,7 @@ This project contains the [application service](../Application-Services.md) impl
 * Depends on the `.Application.Contracts` project to be able to implement the interfaces and use the DTOs.
 * Depends on the `.Domain` project to be able to use domain objects (entities, repository interfaces... etc.) to perform the application logic.
 
-#### .EntityFrameworkCore Project.
+#### .EntityFrameworkCore Project
 
 This is the integration project for the EF Core. It defines the `DbContext` and implements repository interfaces defined in the `.Domain` project.
 
