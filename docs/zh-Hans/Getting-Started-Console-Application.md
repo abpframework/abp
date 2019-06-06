@@ -1,4 +1,4 @@
-﻿## 使用Console Application
+﻿## 在控制台应用中使用ABP
 
 本教程将介绍如何从头开始以最小的依赖关系启动ABP. 你通常希望以 **[启动模板](https://abp.io/Templates)** 开头.
 
