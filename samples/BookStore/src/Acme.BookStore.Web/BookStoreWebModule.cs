@@ -105,19 +105,17 @@ namespace Acme.BookStore.Web
 
         private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            if (hostingEnvironment.IsDevelopment())
             {
-                options.FileSets.AddEmbedded<BookStoreWebModule>("Acme.BookStore.Web");
-
-                if (hostingEnvironment.IsDevelopment())
+                Configure<VirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Application.Contracts", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Application", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreWebModule>(hostingEnvironment.ContentRootPath);
-                }
-            });
+                });
+            }
         }
 
         private void ConfigureLocalizationServices()
