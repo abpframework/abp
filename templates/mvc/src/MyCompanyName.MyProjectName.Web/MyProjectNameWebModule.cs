@@ -109,9 +109,11 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
         {
-            if (hostingEnvironment.IsDevelopment())
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName.Web");
+
+                if (hostingEnvironment.IsDevelopment())
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
@@ -128,8 +130,8 @@ namespace MyCompanyName.MyProjectName.Web
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web", Path.DirectorySeparatorChar)));
                     //</TEMPLATE-REMOVE>
-                });
-            }
+                }
+            });
         }
 
         private void ConfigureLocalizationServices()
