@@ -187,7 +187,7 @@ The solution has multiple test projects, one for each layer:
 
 In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
 
-Test projects are prepared integration testing;
+Test projects are prepared for integration testing;
 
 * It is fully integrated to ABP framework and all services in your application.
 * It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library.
@@ -224,9 +224,9 @@ As different from the default structure, two new projects come into play: `.Iden
 
 #### .IdentityServer Project
 
-This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
+This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the IdentityServer. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
-![bookstore-visual-studio-solution-v3](../images/tiered-solution-applications.png)
+![tiered-solution-applications](../images/tiered-solution-applications.png)
 
 ABP uses the open source [IdentityServer4](https://identityserver.io/) framework for the authentication between applications. See [IdentityServer4 documentation](http://docs.identityserver.io) for details about the IdentityServer4 and OpenID Connect protocol.
 
@@ -234,9 +234,7 @@ It has its own `appsettings.json` that contains database connection and other co
 
 #### .HttpApi.Host Project
 
-This project is an application that hosts the API of the solution.
-
-It has its own `appsettings.json` that contains database connection and other configurations.
+This project is an application that hosts the API of the solution. It has its own `appsettings.json` that contains database connection and other configurations.
 
 #### .Web Project
 
@@ -253,5 +251,10 @@ This project contains an `appsettings.json` file, but this time it does not have
 You should run the application with the given order:
 
 * First, run the `.IdentityServer` since other applications depends on it.
-* Then run the `.HttpApi.Server` since it is used by the `.Web` application.
+* Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
+
+## What's Next?
+
+- See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
+- See the [ASP.NET Core MVC Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template.
