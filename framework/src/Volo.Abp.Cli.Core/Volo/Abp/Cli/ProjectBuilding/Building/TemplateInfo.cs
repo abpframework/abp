@@ -6,9 +6,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
     public abstract class TemplateInfo
     {
+        [NotNull]
         public string Name { get; }
 
         public DatabaseProvider DefaultDatabaseProvider { get; }
+
+        [CanBeNull]
+        public string DocumentUrl { get; set; }
 
         protected TemplateInfo(
             [NotNull] string name, 

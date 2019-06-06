@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 
@@ -7,6 +9,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
 {
     public class ProjectBuilder : IProjectBuilder, ITransientDependency
     {
+        public ILogger<ProjectBuilder> Logger { get; set; }
+
         protected ITemplateStore TemplateStore { get; }
         protected ITemplateInfoProvider TemplateInfoProvider { get; }
 
@@ -14,6 +18,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             TemplateStore = templateStore;
             TemplateInfoProvider = templateInfoProvider;
+
+            Logger = NullLogger<ProjectBuilder>.Instance;
         }
         
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
@@ -43,6 +49,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
             );
 
             ProjectBuildPipelineBuilder.Build(context).Execute(context);
+
+            if (!templateInfo.DocumentUrl.IsNullOrEmpty())
+            {
+                Logger.LogInformation("Check the documentation of this template: " + templateInfo.DocumentUrl);
+            }
 
             return new ProjectBuildResult(context.Result.ZipContent, args.SolutionName.ProjectName);
         }
