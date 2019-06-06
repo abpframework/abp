@@ -61,7 +61,9 @@ If you don't specify any option, you will have a solution like shown below:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
-Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before. The diagram below shows the layers & project dependencies of the solution:
+Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before.
+
+The diagram below shows the layers & project dependencies of the application:
 
 ![layered-project-dependencies](../images/layered-project-dependencies.png)
 
@@ -79,7 +81,7 @@ A `BookType` enum and a `BookConts` class (which may have some constant fields f
 
 This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value types](../Value-Types.md), [repository interfaces](../Repositories.md) and other domain objects.
 
-A `Book` entity, a `BookManager` domain service and a `IBookRepository` interface are good candidates for this project.
+A `Book` entity, a `BookManager` domain service and an `IBookRepository` interface are good candidates for this project.
 
 * Depends on the `.Domain.Shared` because it uses constants, enums and other objects defined in that project.
 
@@ -87,11 +89,15 @@ A `Book` entity, a `BookManager` domain service and a `IBookRepository` interfac
 
 This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
 
+An `IBookAppService` interface and a `BookCreationDto` class are good candidates for this project.
+
 * Depends on the `.Domain.Shared` because it may use constants, enums and other shared objects of this project in the application service interfaces and DTOs.
 
 #### .Application Project
 
 This project contains the [application service](../Application-Services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
+
+A `BookAppService` class is a good candidate for this project.
 
 * Depends on the `.Application.Contracts` project to be able to implement the interfaces and use the DTOs.
 * Depends on the `.Domain` project to be able to use domain objects (entities, repository interfaces... etc.) to perform the application logic.
