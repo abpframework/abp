@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
@@ -17,7 +18,12 @@ namespace VoloDocs.Web.Pages
         public IActionResult OnGet()
         {
             //TODO: Create HomeController & Index instead of Page. Otherwise, we have an empty Index.cshtml file.
-            return Redirect("./documents");
+            if (!_urlOptions.RoutePrefix.IsNullOrWhiteSpace())
+            {
+                return Redirect("./" + _urlOptions.GetFormattedRoutePrefix());
+            }
+
+            return Page();
         }
     }
 }
