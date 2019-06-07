@@ -45,28 +45,40 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class AsyncCrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
-        IAsyncCrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : AsyncCrudAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        where TEntity : class, IEntity<TKey>
+        where TEntityDto : IEntityDto<TKey>
+    {
+        protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
+            : base(repository)
+        {
+        }
+    }
+
+    public abstract class AsyncCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+       : CrudAppServiceBase<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
+        IAsyncCrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity<TKey>
-           where TEntityDto : IEntityDto<TKey>
+        where TGetOutputDto : IEntityDto<TKey>
+        where TGetListOutputDto : IEntityDto<TKey>
     {
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
         protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
-            :base(repository)
+            : base(repository)
         {
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;
         }
 
-        public virtual async Task<TEntityDto> GetAsync(TKey id)
+        public virtual async Task<TGetOutputDto> GetAsync(TKey id)
         {
             await CheckGetPolicyAsync();
 
             var entity = await GetEntityByIdAsync(id);
-            return MapToEntityDto(entity);
+            return MapToGetOutputDto(entity);
         }
 
-        public virtual async Task<PagedResultDto<TEntityDto>> GetListAsync(TGetListInput input)
+        public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
         {
             await CheckGetListPolicyAsync();
 
@@ -79,29 +91,29 @@ namespace Volo.Abp.Application.Services
 
             var entities = await AsyncQueryableExecuter.ToListAsync(query);
 
-            return new PagedResultDto<TEntityDto>(
+            return new PagedResultDto<TGetListOutputDto>(
                 totalCount,
-                entities.Select(MapToEntityDto).ToList()
+                entities.Select(MapToGetListOutputDto).ToList()
             );
         }
 
-        public virtual async Task<TEntityDto> CreateAsync(TCreateInput input)
+        public virtual async Task<TGetOutputDto> CreateAsync(TCreateInput input)
         {
             await CheckCreatePolicyAsync();
 
             var entity = MapToEntity(input);
-            
-            if(entity is IMultiTenant && !HasTenantIdProperty(entity))
+
+            if (entity is IMultiTenant && !HasTenantIdProperty(entity))
             {
                 TryToSetTenantId(entity);
             }
-            
+
             await Repository.InsertAsync(entity, autoSave: true);
 
-            return MapToEntityDto(entity);
+            return MapToGetOutputDto(entity);
         }
 
-        public virtual async Task<TEntityDto> UpdateAsync(TKey id, TUpdateInput input)
+        public virtual async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
         {
             await CheckUpdatePolicyAsync();
 
@@ -110,7 +122,7 @@ namespace Volo.Abp.Application.Services
             MapToEntity(input, entity);
             await Repository.UpdateAsync(entity, autoSave: true);
 
-            return MapToEntityDto(entity);
+            return MapToGetOutputDto(entity);
         }
 
         public virtual async Task DeleteAsync(TKey id)

@@ -13,10 +13,11 @@ namespace Volo.Abp.Application.Services
     /// This is a common base class for CrudAppService and AsyncCrudAppService classes.
     /// Inherit either from CrudAppService or AsyncCrudAppService, not from this class.
     /// </summary>
-    public abstract class CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput> :
+    public abstract class CrudAppServiceBase<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput> :
         ApplicationService
         where TEntity : class, IEntity<TKey>
-        where TEntityDto : IEntityDto<TKey>
+        where TGetOutputDto : IEntityDto<TKey>
+        where TGetListOutputDto : IEntityDto<TKey>
     {
         protected IRepository<TEntity, TKey> Repository { get; }
         
@@ -100,13 +101,23 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TEntity"/> to <see cref="TEntityDto"/>.
+        /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
         /// It can be overrided for custom mapping.
         /// </summary>
-        protected virtual TEntityDto MapToEntityDto(TEntity entity)
+        protected virtual TGetOutputDto MapToGetOutputDto(TEntity entity)
         {
-            return ObjectMapper.Map<TEntity, TEntityDto>(entity);
+            return ObjectMapper.Map<TEntity, TGetOutputDto>(entity);
+        }
+
+        /// <summary>
+        /// Maps <see cref="TEntity"/> to <see cref="TGetListOutputDto"/>.
+        /// It uses <see cref="IObjectMapper"/> by default.
+        /// It can be overrided for custom mapping.
+        /// </summary>
+        protected virtual TGetListOutputDto MapToGetListOutputDto(TEntity entity)
+        {
+            return ObjectMapper.Map<TEntity, TGetListOutputDto>(entity);
         }
 
         /// <summary>
