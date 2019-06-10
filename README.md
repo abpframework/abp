@@ -8,15 +8,11 @@ See the official [web site (abp.io)](https://abp.io/) for more information.
 
 ### Status
 
-This project is in **very early preview** stage and it's not suggested to use it in a real project. 
+This project is in **preview** stage and it's not suggested to use it in production yet.
 
 ### Documentation
 
 See the <a href="https://abp.io/documents/" target="_blank">documentation</a>.
-
-### How to Build
-
-- Run the `build-all.ps1`. It will build all the solutions in this repository.
 
 ### Development
 
