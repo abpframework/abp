@@ -12,7 +12,7 @@ add section in `appsettings.json`
 "LDAP": {
     "ServerHost": "192.168.101.54", 
     "ServerPort": 636,
-    "UseSSL": true
+    "UseSsl": true
 }
 ```
 
@@ -22,7 +22,7 @@ add section in `appsettings.json`
 "LDAP": {
     "ServerHost": "192.168.101.54", 
     "ServerPort": 389,
-    "UseSSL": false
+    "UseSsl": false
 }
 ```
 
@@ -59,7 +59,7 @@ public class TaxAppService : ApplicationService
 "LDAP": {
     "ServerHost": "192.168.101.54",
     "ServerPort": 636,
-    "UseSSL": true,
+    "UseSsl": true,
     "Credentials": {
         "DomainUserName": "administrator@yourdomain.com.cn",
         "Password": "yH.20190528"
@@ -76,7 +76,7 @@ public class TaxAppService : ApplicationService
 "LDAP": {
     "ServerHost": "192.168.101.54",
     "ServerPort": 389,
-    "UseSSL": false,
+    "UseSsl": false,
     "Credentials": {
         "DomainUserName": "administrator@yourdomain.com.cn",
         "Password": "yH.20190528"
@@ -166,8 +166,6 @@ _ldapManager.AddUserToOrganization("nameA", "passwordA", parentOrganization);
 _ldapManager.AddUserToOrganization("nameA", "passwordA", "OU=Domain Controllers,DC=yourdomain,DC=com,DC=cn");
 ```
 
-# More see [unit test](../../test/Volo.Abp.Ldap.Tests)
+# More
 
-
-
-# 
+See [unit test](../../test/Volo.Abp.Ldap.Tests)
