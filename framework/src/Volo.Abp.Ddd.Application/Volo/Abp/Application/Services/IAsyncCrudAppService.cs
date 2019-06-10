@@ -25,7 +25,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface IAsyncCrudAppService<TEntityDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : IAsyncCrudAppService<TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
+        : IAsyncCrudAppService<TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
     {
 
