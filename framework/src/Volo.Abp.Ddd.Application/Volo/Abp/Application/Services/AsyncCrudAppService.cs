@@ -52,6 +52,12 @@ namespace Volo.Abp.Application.Services
         protected AsyncCrudAppService(IRepository<TEntity, TKey> repository)
             : base(repository)
         {
+
+        }
+
+        protected override TEntityDto MapToGetListOutputDto(TEntity entity)
+        {
+            return MapToGetOutputDto(entity);
         }
     }
 

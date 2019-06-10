@@ -53,6 +53,11 @@ namespace Volo.Abp.Application.Services
         {
 
         }
+
+        protected override TEntityDto MapToGetListOutputDto(TEntity entity)
+        {
+            return MapToGetOutputDto(entity);
+        }
     }
 
     public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>

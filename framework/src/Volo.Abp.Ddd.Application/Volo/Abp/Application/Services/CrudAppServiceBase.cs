@@ -103,7 +103,7 @@ namespace Volo.Abp.Application.Services
         /// <summary>
         /// Maps <see cref="TEntity"/> to <see cref="TGetOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
-        /// It can be overrided for custom mapping.
+        /// It can be overriden for custom mapping.
         /// </summary>
         protected virtual TGetOutputDto MapToGetOutputDto(TEntity entity)
         {
@@ -113,7 +113,7 @@ namespace Volo.Abp.Application.Services
         /// <summary>
         /// Maps <see cref="TEntity"/> to <see cref="TGetListOutputDto"/>.
         /// It uses <see cref="IObjectMapper"/> by default.
-        /// It can be overrided for custom mapping.
+        /// It can be overriden for custom mapping.
         /// </summary>
         protected virtual TGetListOutputDto MapToGetListOutputDto(TEntity entity)
         {
@@ -121,9 +121,9 @@ namespace Volo.Abp.Application.Services
         }
 
         /// <summary>
-        /// Maps <see cref="TEntityDto"/> to <see cref="TEntity"/> to create a new entity.
+        /// Maps <see cref="TCreateInput"/> to <see cref="TEntity"/> to create a new entity.
         /// It uses <see cref="IObjectMapper"/> by default.
-        /// It can be overrided for custom mapping.
+        /// It can be overriden for custom mapping.
         /// </summary>
         protected virtual TEntity MapToEntity(TCreateInput createInput)
         {
@@ -151,7 +151,7 @@ namespace Volo.Abp.Application.Services
         /// <summary>
         /// Maps <see cref="TUpdateInput"/> to <see cref="TEntity"/> to update the entity.
         /// It uses <see cref="IObjectMapper"/> by default.
-        /// It can be overrided for custom mapping.
+        /// It can be overriden for custom mapping.
         /// </summary>
         protected virtual void MapToEntity(TUpdateInput updateInput, TEntity entity)
         {
