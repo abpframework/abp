@@ -148,8 +148,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private IActionResult ReloadPageWithCulture()
         {
-            var languageCodeWithSlashAtTheEnd = string.IsNullOrWhiteSpace(LanguageCode) ? "" : LanguageCode + "/";
-            var returnUrl = "/" + DocumentsUrlPrefix + languageCodeWithSlashAtTheEnd + ProjectName + "/" + Version + "/" +
+            var returnUrl = "/" + DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" +
                             DocumentName;
 
             return Redirect("/Abp/Languages/Switch?culture=" + LanguageCode + "&uiCulture=" + LanguageCode + "&returnUrl=" + returnUrl);
