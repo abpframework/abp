@@ -1,6 +1,6 @@
 ﻿namespace MyCompanyName.MyProjectName.Web.Pages
 {
-    public class IndexModel : MyProjectNamePageModelBase
+    public class IndexModel : MyProjectNamePageModel
     {
         public void OnGet()
         {

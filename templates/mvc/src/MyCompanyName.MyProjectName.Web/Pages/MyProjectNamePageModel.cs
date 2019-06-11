@@ -3,9 +3,11 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace MyCompanyName.MyProjectName.Web.Pages
 {
-    public abstract class MyProjectNamePageModelBase : AbpPageModel
+    /* Inherit your PageModel classes from this class.
+     */
+    public abstract class MyProjectNamePageModel : AbpPageModel
     {
-        protected MyProjectNamePageModelBase()
+        protected MyProjectNamePageModel()
         {
             LocalizationResourceType = typeof(MyProjectNameResource);
         }
