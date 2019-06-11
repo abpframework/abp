@@ -1,11 +1,11 @@
 ﻿using MyCompanyName.MyProjectName.Localization;
-using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc;
 
 namespace MyCompanyName.MyProjectName
 {
-    public abstract class MyProjectNameAppServiceBase : ApplicationService
+    public abstract class MyProjectNameController : AbpController
     {
-        protected MyProjectNameAppServiceBase()
+        protected MyProjectNameController()
         {
             LocalizationResource = typeof(MyProjectNameResource);
         }
