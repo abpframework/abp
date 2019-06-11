@@ -1,0 +1,7 @@
+{
+  "culture": "vi",
+  "texts": {
+    "ThisFieldIsRequired": "Trường này là bắt buộc",
+    "MaxLenghtErrorMessage": "Trường này có thể có tối đa là '{0}' kí tự"
+  }
+}
