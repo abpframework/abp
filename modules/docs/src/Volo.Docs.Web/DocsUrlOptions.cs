@@ -13,10 +13,10 @@ namespace Volo.Docs
         {
                 if (string.IsNullOrWhiteSpace(RoutePrefix))
                 {
-                    return "";
+                    return "/";
                 }
 
-                return RoutePrefix.Trim('/').EnsureEndsWith('/');
+                return RoutePrefix.EnsureEndsWith('/').EnsureStartsWith('/');
         }
     }
 }

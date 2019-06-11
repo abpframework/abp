@@ -33,7 +33,7 @@ namespace Volo.Docs.Pages.Documents
 
             if (listResult.Items.Count == 1)
             {
-                return Redirect("./" + DocumentsUrlPrefix + listResult.Items[0].ShortName);
+                return Redirect("." + DocumentsUrlPrefix + listResult.Items[0].ShortName);
             }
 
             Projects = listResult.Items;

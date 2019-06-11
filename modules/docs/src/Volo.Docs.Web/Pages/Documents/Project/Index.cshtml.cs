@@ -148,7 +148,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private IActionResult ReloadPageWithCulture()
         {
-            var returnUrl = "/" + DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" +
+            var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" +
                             DocumentName;
 
             return Redirect("/Abp/Languages/Switch?culture=" + LanguageCode + "&uiCulture=" + LanguageCode + "&returnUrl=" + returnUrl);
@@ -351,7 +351,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        "/" + DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
                         language.Code == LanguageCode
                         )
                     );

@@ -144,7 +144,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
             var prefix = _urlOptions.GetFormattedRoutePrefix();
 
-            return  "/" + prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            return  prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }
 
         private string RemoveFileExtensionFromPath(string path)
