@@ -1,0 +1,18 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Documents": "Tài liệu",
+    "BackToWebsite": "Quay lại trang web",
+    "Contributors": "Người đóng góp",
+    "ShareOn": "Chia sẻ",
+    "Version": "Phiên bản",
+    "Edit": "Sửa",
+    "Delete": "Xóa",
+    "InThisDocument": "Trong tài liệu này",
+    "GoToTop": "Chuyển về đầu trang",
+    "Projects": "Dự án",
+    "NoProjectWarning": "Chưa có dự án nào!",
+    "DocumentNotFound": "Rất tiếc, tài liệu được yêu cầu không tìm thấy!",
+    "NavigationDocumentNotFound": "Phiên bản này không có tài liệu điều hướng!"
+  }
+}
