@@ -15,7 +15,8 @@
     "@abp/select2": "^0.4.9",
     "@abp/sweetalert": "^0.4.9",
     "@abp/timeago": "^0.4.9",
-    "@abp/toastr": "^0.4.9"
+    "@abp/toastr": "^0.4.9",
+	"@abp/freeze-ui": "^0.4.9"
   },
   "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
 }
