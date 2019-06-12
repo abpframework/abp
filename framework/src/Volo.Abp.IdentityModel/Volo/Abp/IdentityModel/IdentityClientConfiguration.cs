@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using IdentityModel;
 
 namespace Volo.Abp.IdentityModel
@@ -71,6 +72,16 @@ namespace Volo.Abp.IdentityModel
             set => this[nameof(Scope)] = value;
         }
 
+        /// <summary>
+        /// RequireHttps.
+        /// Default: true.
+        /// </summary>
+        public bool RequireHttps
+        {
+            get => this.GetOrDefault(nameof(RequireHttps))?.To<bool>() ?? true;
+            set => this[nameof(RequireHttps)] = value.ToString().ToLowerInvariant();
+        }
+
         public IdentityClientConfiguration()
         {
             
@@ -83,7 +94,8 @@ namespace Volo.Abp.IdentityModel
             string clientSecret, 
             string grantType = OidcConstants.GrantTypes.ClientCredentials,
             string userName = null,
-            string userPassword = null)
+            string userPassword = null,
+            bool requireHttps = true)
         {
             this[nameof(Authority)] = authority;
             this[nameof(Scope)] = scope;
@@ -92,6 +104,7 @@ namespace Volo.Abp.IdentityModel
             this[nameof(GrantType)] = grantType;
             this[nameof(UserName)] = userName;
             this[nameof(UserPassword)] = userPassword;
+            this[nameof(RequireHttps)] = requireHttps.ToString().ToLowerInvariant();
         }
     }
 }

@@ -2,22 +2,21 @@
 
 ### About this Tutorial
 
-This is the third part of the tutorial series. See all parts:
+This is the third part of the ASP.NET Core MVC tutorial series. See all parts:
 
 - [Part I: Create the project and a book list page](Part-I.md)
 - [Part II: Create, Update and Delete books](Part-II.md)
 - **Part III: Integration Tests (this tutorial)**
 
-You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
 ### Test Projects in the Solution
 
-There are two test projects in the solution:
+There are multiple test projects in the solution:
 
-* `Acme.BookStore.Application.Tests` is for unit & integration tests. You can write tests for application service methods. It uses **EF Core SQLite in-memory** database.
-* `Acme.BookStore.Web.Tests` is for full stack integration tests including the web layer. So, you can write tests for UI pages too.
+![bookstore-test-projects-v2](images/bookstore-test-projects-v2.png)
 
-Test projects use the following libraries for testing:
+Each project is used to test the related application project. Test projects use the following libraries for testing:
 
 * [xunit](https://xunit.github.io/) as the main test framework.
 * [Shoudly](http://shouldly.readthedocs.io/en/latest/) as an assertion library.
@@ -25,79 +24,40 @@ Test projects use the following libraries for testing:
 
 ### Adding Test Data
 
-Startup template contains the `BookStoreTestDataBuilder` class in the `Acme.BookStore.Application.Tests` project that creates some data to run tests on. It's shown below:
+Startup template contains the `BookStoreTestDataSeedContributor` class in the `Acme.BookStore.TestBase` project that creates some data to run tests on.
 
-````C#
-using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
-using Volo.Abp.Threading;
-
-namespace Acme.BookStore
-{
-    public class BookStoreTestDataBuilder : ITransientDependency
-    {
-        private readonly IIdentityDataSeeder _identityDataSeeder;
-
-        public BookStoreTestDataBuilder(IIdentityDataSeeder identityDataSeeder)
-        {
-            _identityDataSeeder = identityDataSeeder;
-        }
-
-        public void Build()
-        {
-            AsyncHelper.RunSync(BuildInternalAsync);
-        }
-
-        public async Task BuildInternalAsync()
-        {
-            await _identityDataSeeder.SeedAsync("1q2w3E*");
-        }
-    }
-}
-````
-
-* It simply uses `IIdentityDataSeeder` which is implemented by the identity module and creates an admin role and admin user. You can use them in your tests.
-* You can add new test data in the `BuildInternalAsync` method.
-
-Change the `BookStoreTestDataBuilder` class as show below:
+Change the `BookStoreTestDataSeedContributor` class as show below:
 
 ````C#
 using System;
 using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Identity;
-using Volo.Abp.Threading;
+using Volo.Abp.Guids;
 
 namespace Acme.BookStore
 {
-    public class BookStoreTestDataBuilder : ITransientDependency
+    public class BookStoreTestDataSeedContributor
+        : IDataSeedContributor, ITransientDependency
     {
-        private readonly IIdentityDataSeeder _identityDataSeeder;
         private readonly IRepository<Book, Guid> _bookRepository;
+        private readonly IGuidGenerator _guidGenerator;
 
-        public BookStoreTestDataBuilder(
-            IIdentityDataSeeder identityDataSeeder,
-            IRepository<Book, Guid> bookRepository)
+        public BookStoreTestDataSeedContributor(
+            IRepository<Book, Guid> bookRepository, 
+            IGuidGenerator guidGenerator)
         {
-            _identityDataSeeder = identityDataSeeder;
             _bookRepository = bookRepository;
+            _guidGenerator = guidGenerator;
         }
 
-        public void Build()
+        public async Task SeedAsync(DataSeedContext context)
         {
-            AsyncHelper.RunSync(BuildInternalAsync);
-        }
-
-        public async Task BuildInternalAsync()
-        {
-            await _identityDataSeeder.SeedAsync("1q2w3E*");
-
             await _bookRepository.InsertAsync(
                 new Book
                 {
-                    Id = Guid.NewGuid(),
+                    Id = _guidGenerator.Create(),
                     Name = "Test book 1",
                     Type = BookType.Fantastic,
                     PublishDate = new DateTime(2015, 05, 24),
@@ -108,7 +68,7 @@ namespace Acme.BookStore
             await _bookRepository.InsertAsync(
                 new Book
                 {
-                    Id = Guid.NewGuid(),
+                    Id = _guidGenerator.Create(),
                     Name = "Test book 2",
                     Type = BookType.Science,
                     PublishDate = new DateTime(2014, 02, 11),
@@ -120,7 +80,8 @@ namespace Acme.BookStore
 }
 ````
 
-* Injected `IRepository<Book, Guid>` and used it in the `BuildInternalAsync` to create two book entities.
+* Injected `IRepository<Book, Guid>` and used it in the `SeedAsync` to create two book entities as the test data.
+* Used `IGuidGenerator` service to create GUIDs. While `Guid.NewGuid()` would perfectly work for testing, `IGuidGenerator` has additional features especially important while using real databases (see the [Guid generation document](../../Guid-Generation.md) for more).
 
 ### Testing the BookAppService
 
@@ -210,6 +171,8 @@ public async Task Should_Not_Create_A_Book_Without_Name()
 
 * Since the `Name` is empty, ABP throws an `AbpValidationException`.
 
-### Testing Web Pages
+Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if it is not visible) and **Run All** tests:
 
-TODO
+![bookstore-appservice-tests](images/bookstore-appservice-tests.png)
+
+Congratulations, green icons show that tests have been successfully passed!

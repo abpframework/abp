@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using JetBrains.Annotations;
@@ -47,7 +48,7 @@ namespace Microsoft.AspNetCore.Builder
                 .UseMiddleware<AbpCorrelationIdMiddleware>();
         }
 
-        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app)
+        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app, Action<RequestLocalizationOptions> optionsAction = null)
         {
             IReadOnlyList<LanguageInfo> languages;
             string defaultLanguage;
@@ -61,28 +62,27 @@ namespace Microsoft.AspNetCore.Builder
                 defaultLanguage = settingProvider.GetOrNull(LocalizationSettingNames.DefaultLanguage);
             }
 
-            if (!languages.Any())
-            {
-                return app.UseRequestLocalization();
-            }
+            var options = !languages.Any()
+                ? new RequestLocalizationOptions()
+                : new RequestLocalizationOptions
+                {
+                    DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
 
-            var options = new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+                    SupportedCultures = languages
+                        .Select(l => l.CultureName)
+                        .Distinct()
+                        .Select(c => new CultureInfo(c))
+                        .ToArray(),
 
-                SupportedCultures = languages
-                    .Select(l => l.CultureName)
-                    .Distinct()
-                    .Select(c => new CultureInfo(c))
-                    .ToArray(),
+                    SupportedUICultures = languages
+                        .Select(l => l.UiCultureName)
+                        .Distinct()
+                        .Select(c => new CultureInfo(c))
+                        .ToArray()
+                };
 
-                SupportedUICultures = languages
-                    .Select(l => l.UiCultureName)
-                    .Distinct()
-                    .Select(c => new CultureInfo(c))
-                    .ToArray()
-            };
-            
+            optionsAction?.Invoke(options);
+
             return app.UseRequestLocalization(options);
         }
 

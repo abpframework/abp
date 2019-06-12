@@ -16,7 +16,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.MemoryDb\Volo.Abp.MemoryDb.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\Volo.Abp.TestApp\Volo.Abp.TestApp.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
   </ItemGroup>
 
 </Project>

@@ -42,6 +42,10 @@
       ]
     },
     {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
       "text": "Fundamentals",
       "items": [
         {
@@ -214,7 +218,7 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "Tag-Helpers.md"
+              "path": "AspNetCore/Tag-Helpers/Index.md"
             },
             {
               "text": "Theming",

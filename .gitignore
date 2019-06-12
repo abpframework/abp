@@ -23,7 +23,7 @@ bld/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory
-.vs/
+**/.vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -268,7 +268,6 @@ modules/blog/app/Volo.BlogTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
-samples/BookStore/src/Acme.BookStore.Web/Logs/*.*
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 

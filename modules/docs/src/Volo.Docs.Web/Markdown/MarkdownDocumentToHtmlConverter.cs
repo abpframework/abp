@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -13,17 +14,21 @@ namespace Volo.Docs.Markdown
         public const string Type = "md";
 
         private readonly IMarkdownConverter _markdownConverter;
+        private readonly DocsUrlOptions _urlOptions;
 
-        public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter)
+        public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter,
+            IOptions<DocsUrlOptions> urlOptions)
         {
             _markdownConverter = markdownConverter;
+            _urlOptions = urlOptions.Value;
         }
 
-        private const string MdLinkFormat = "[{0}](/documents/{1}/{2}{3}/{4})";
+        private const string MdLinkFormat = "[{0}]({1}{2}/{3}/{4}{5}/{6})";
         private const string MarkdownLinkRegExp = @"\[(.*)\]\((.*\.md)\)";
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
          
-        public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version)
+        public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version,
+            string languageCode)
         {
             if (document.Content.IsNullOrEmpty())
             {
@@ -34,7 +39,8 @@ namespace Volo.Docs.Markdown
                 document.Content,
                 project.ShortName,
                 version,
-                document.LocalDirectory
+                document.LocalDirectory,
+                languageCode
             );
 
             return _markdownConverter.ConvertToHtml(content);
@@ -44,7 +50,8 @@ namespace Volo.Docs.Markdown
             string content,
             string projectShortName,
             string version,
-            string documentLocalDirectory)
+            string documentLocalDirectory,
+            string languageCode)
         {
             var normalized = Regex.Replace(content, MarkdownLinkRegExp, delegate (Match match)
             {
@@ -66,6 +73,8 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
+                    _urlOptions.GetFormattedRoutePrefix(),
+                    languageCode,
                     projectShortName,
                     version,
                     documentLocalDirectoryNormalized,
@@ -92,6 +101,8 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
+                    _urlOptions.GetFormattedRoutePrefix(),
+                    languageCode,
                     projectShortName,
                     version,
                     documentLocalDirectoryNormalized,

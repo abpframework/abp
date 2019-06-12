@@ -5,6 +5,7 @@
     "Permission:Create": "Criar",
     "Permission:Edit": "Editar",
     "Permission:Delete": "Excluir",
+    "Permission:ManageConnectionStrings": "Gerenciar conexões (connection strings)",
     "Permission:ManageFeatures": "Gerenciar Funcionalidades"
   }
 }

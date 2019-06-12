@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Web
 {
     public class MyProjectNameWebAutoMapperProfile : Profile
     {

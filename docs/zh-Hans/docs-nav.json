@@ -42,6 +42,10 @@
       ]
     },
     {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
       "text": "基础知识",
       "items": [
         {

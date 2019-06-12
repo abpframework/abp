@@ -1,10 +1,10 @@
 ﻿(function ($) {
 
     $(function () {
-
         var initNavigationFilter = function (navigationContainerId) {
          
             var $navigation = $("#" + navigationContainerId);
+
 
             var getShownDocumentLinks = function () {
                 return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");

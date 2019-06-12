@@ -1,6 +1,6 @@
 {
-  "version": "0.1.0",
-  "name": "Acme.BookStore",
+  "version": "1.0.0",
+  "name": "my-app",
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.9"

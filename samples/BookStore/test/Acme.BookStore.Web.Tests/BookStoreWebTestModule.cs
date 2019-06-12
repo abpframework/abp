@@ -4,17 +4,13 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Acme.BookStore.Localization.BookStore;
-using Acme.BookStore.Menus;
+using Acme.BookStore.Localization;
+using Acme.BookStore.Web;
+using Acme.BookStore.Web.Menus;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.TestBase;
-using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
@@ -24,10 +20,8 @@ namespace Acme.BookStore
 {
     [DependsOn(
         typeof(AbpAspNetCoreTestBaseModule),
-        typeof(BookStoreApplicationTestModule),
-        typeof(AbpIdentityWebModule),
-        typeof(AbpAccountWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(BookStoreWebModule),
+        typeof(BookStoreApplicationTestModule)
     )]
     public class BookStoreWebTestModule : AbpModule
     {

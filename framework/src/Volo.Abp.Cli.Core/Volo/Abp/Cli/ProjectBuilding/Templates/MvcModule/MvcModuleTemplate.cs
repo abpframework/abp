@@ -14,7 +14,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
         public MvcModuleTemplate()
             : base(TemplateName)
         {
-            
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Mvc-Module";
         }
 
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)

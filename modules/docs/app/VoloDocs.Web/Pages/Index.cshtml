@@ -1,55 +1,5 @@
 ﻿@page
-
-@using System.Linq
-@using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Docs
-@using Volo.Docs.Localization
-@using Volo.Docs.Pages.Documents
-
 @model VoloDocs.Web.Pages.IndexModel
-@inject IHtmlLocalizer<DocsResource> L
-
-@section styles {
-    <abp-style-bundle name="@typeof(IndexModel).FullName">
-        <abp-style src="/Pages/Documents/Shared/Styles/vs.css" />
-    </abp-style-bundle>
+@{
 }
 
-<div class="p-5">
-
-    <h1 class="text-center mb-5">
-        @L["WelcomeVoloDocs"]
-    </h1>
-
-    @if (!Model.Projects.Any())
-    {
-        <div class="d-flex justify-content-center">
-            <div class="alert alert-secondary col-md-6 text-center" role="alert">
-                <p>@L["NoProjectWarning"]</p>
-                <hr />
-                <a href="/Docs/Admin/Projects">@L["CreateYourFirstProject"] <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-    }
-    else if (Model.Projects.Count > 1)
-    {
-        <h2>@L["Projects"]</h2>
-        <p>
-            <ul style="list-style-type: upper-roman;">
-                @foreach (var project in Model.Projects)
-                {
-                    <li>
-                        <h3>
-                            <a asp-page="./Documents/Project/Index"
-                               asp-route-projectName="@project.ShortName"
-                               asp-route-version="@DocsAppConsts.Latest">
-                                @project.Name
-                            </a>
-                        </h3>
-                    </li>
-                }
-            </ul>
-        </p>
-    }
-
-</div>

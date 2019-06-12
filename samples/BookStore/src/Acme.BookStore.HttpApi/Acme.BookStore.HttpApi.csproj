@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>Acme.BookStore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acme.BookStore.Application.Contracts\Acme.BookStore.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.HttpApi" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.HttpApi" Version="0.17.0.0" />
+  </ItemGroup>
+
+</Project>

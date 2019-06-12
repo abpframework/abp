@@ -2,13 +2,13 @@
 
 ### About this Tutorial
 
-This is the second part of the tutorial series. See all parts:
+This is the second part of the ASP.NET Core MVC tutorial series. See all parts:
 
 * [Part I: Create the project and a book list page](Part-I.md)
 * **Part II: Create, Update and Delete books (this tutorial)**
 * [Part III: Integration Tests](Part-III.md)
 
-You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
 ### Creating a New Book
 
@@ -20,7 +20,7 @@ In this section, you will learn how to create a new modal dialog form to create 
 
 Create a new razor page, named `CreateModal.cshtml` under the `Pages/Books` folder of the `Acme.BookStore.Web` project:
 
-![bookstore-add-create-dialog](images/bookstore-add-create-dialog.png)
+![bookstore-add-create-dialog](images/bookstore-add-create-dialog-v2.png)
 
 ##### CreateModal.cshtml.cs
 
@@ -30,7 +30,7 @@ Open the `CreateModal.cshtml.cs` file (`CreateModalModel` class) and replace wit
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Pages.Books
+namespace Acme.BookStore.Web.Pages.Books
 {
     public class CreateModalModel : BookStorePageModelBase
     {
@@ -63,9 +63,9 @@ Open the `CreateModal.cshtml` file and paste the code below:
 
 ````html
 @page
-@inherits Acme.BookStore.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePageBase
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
-@model Acme.BookStore.Pages.Books.CreateModalModel
+@model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
     Layout = null;
 }
@@ -83,7 +83,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
 * This modal uses `abp-dynamic-form` tag helper to automatically create the form from the `CreateBookViewModel` class.
   * `abp-model` attribute indicates the model object, the `Book` property in this case.
   * `data-ajaxForm` attribute makes the form submitting via AJAX, instead of a classic page post.
-  * `abp-form-content` tag helper is a placeholder to render the form controls (this is optional and needed only if you added some other content in the `abp-dynamic-form` tag, just like in this view).
+  * `abp-form-content` tag helper is a placeholder to render the form controls (this is optional and needed only if you added some other content in the `abp-dynamic-form` tag, just like in this page).
 
 #### Add the "New book" Button
 
@@ -138,12 +138,12 @@ Create a new razor page, named `EditModal.cshtml` under the `Pages/Books` folder
 
 Open the `EditModal.cshtml.cs` file (`EditModalModel` class) and replace with the following code:
 
-````C#
+````csharp
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Pages.Books
+namespace Acme.BookStore.Web.Pages.Books
 {
     public class EditModalModel : BookStorePageModelBase
     {
@@ -153,7 +153,7 @@ namespace Acme.BookStore.Pages.Books
 
         [BindProperty]
         public CreateUpdateBookDto Book { get; set; }
-        
+
         private readonly IBookAppService _bookAppService;
 
         public EditModalModel(IBookAppService bookAppService)
@@ -180,38 +180,26 @@ namespace Acme.BookStore.Pages.Books
 * Mapped `BookDto` (received from the `BookAppService.GetAsync`) to `CreateUpdateBookDto` in the `GetAsync` method.
 * The `OnPostAsync` simply uses `BookAppService.UpdateAsync` to update the entity.
 
-#### CreateUpdateBookDto
+#### BookDto to CreateUpdateBookDto Mapping
 
-In order to perform `BookDto` to `CreateUpdateBookDto` object mapping, change the `CreateUpdateBookDto` class as shown below:
+In order to perform `BookDto` to `CreateUpdateBookDto` object mapping, open the `BookStoreWebAutoMapperProfile.cs` in the `Acme.BookStore.Web` project and change it as shown below:
 
-````C#
-using System;
-using System.ComponentModel.DataAnnotations;
-using Volo.Abp.AutoMapper;
+````csharp
+using AutoMapper;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Web
 {
-    [AutoMapTo(typeof(Book))]
-    [AutoMapFrom(typeof(BookDto))]
-    public class CreateUpdateBookDto
+    public class BookStoreWebAutoMapperProfile : Profile
     {
-        [Required]
-        [StringLength(128)]
-        public string Name { get; set; }
-
-        [Required]
-        public BookType Type { get; set; } = BookType.Undefined;
-
-        [Required]
-        public DateTime PublishDate { get; set; }
-
-        [Required]
-        public float Price { get; set; }
+        public BookStoreWebAutoMapperProfile()
+        {
+            CreateMap<BookDto, CreateUpdateBookDto>();
+        }
     }
 }
 ````
 
-* Just added the `[AutoMapFrom(typeof(BookDto))]` attribute to create the mapping.
+* Just added `CreateMap<BookDto, CreateUpdateBookDto>();` as the mapping definition.
 
 #### EditModal.cshtml
 
@@ -219,8 +207,8 @@ Replace `EditModal.cshtml` content with the following content:
 
 ````html
 @page
-@inherits Acme.BookStore.Pages.BookStorePageBase
-@using Acme.BookStore.Pages.Books
+@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
 @{
@@ -231,7 +219,7 @@ Replace `EditModal.cshtml` content with the following content:
         <abp-modal-header title="@L["Update"].Value"></abp-modal-header>
         <abp-modal-body>
             <abp-input asp-for="Id" />
-            <abp-form-content/>
+            <abp-form-content />
         </abp-modal-body>
         <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
@@ -240,7 +228,7 @@ Replace `EditModal.cshtml` content with the following content:
 
 This page is very similar to the `CreateModal.cshtml` except;
 
-* It includes an `abp-input` for the `Id` property to store id of the editing book.
+* It includes an `abp-input` for the `Id` property to store id of the editing book (which is a hidden input).
 * It uses `Books/EditModal` as the post URL and *Update* text as the modal header.
 
 #### Add "Actions" Dropdown to the Table
@@ -418,6 +406,12 @@ $(function () {
         createModal.open();
     });
 });
+````
+
+Open the `en.json` in the `Acme.BookStore.Domain.Shared` project and add the following line:
+
+````json
+"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?" 
 ````
 
 Run the application and try to delete a book.
