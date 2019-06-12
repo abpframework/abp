@@ -7,7 +7,7 @@ namespace MyCompanyName.MyProjectName.Samples
 {
     [RemoteService]
     [Route("api/MyProjectName/sample")]
-    public class SampleController : MyProjectNameControllerBase, ISampleAppService
+    public class SampleController : MyProjectNameController, ISampleAppService
     {
         private readonly ISampleAppService _sampleAppService;
 

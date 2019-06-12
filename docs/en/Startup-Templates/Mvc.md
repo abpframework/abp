@@ -61,7 +61,9 @@ If you don't specify any option, you will have a solution like shown below:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
-Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before. The diagram below shows the layers & project dependencies of the solution:
+Projects are organized in `src` and `test` folders. `src` folder contains the actual application which is layered based on [DDD](../Domain-Driven-Design.md) principles as mentioned before.
+
+The diagram below shows the layers & project dependencies of the application:
 
 ![layered-project-dependencies](../images/layered-project-dependencies.png)
 
@@ -79,7 +81,7 @@ A `BookType` enum and a `BookConts` class (which may have some constant fields f
 
 This is the domain layer of the solution. It mainly contains [entities, aggregate roots](../Entities.md), [domain services](../Domain-Services.md), [value types](../Value-Types.md), [repository interfaces](../Repositories.md) and other domain objects.
 
-A `Book` entity, a `BookManager` domain service and a `IBookRepository` interface are good candidates for this project.
+A `Book` entity, a `BookManager` domain service and an `IBookRepository` interface are good candidates for this project.
 
 * Depends on the `.Domain.Shared` because it uses constants, enums and other objects defined in that project.
 
@@ -87,11 +89,15 @@ A `Book` entity, a `BookManager` domain service and a `IBookRepository` interfac
 
 This project mainly contains [application service](../Application-Services.md) **interfaces** and [Data Transfer Objects](../Data-Transfer-Objects.md) (DTO) of the application layer. It does exists to separate interface & implementation of the application layer. In this way, the interface project can be shared to the clients as a contract package.
 
+An `IBookAppService` interface and a `BookCreationDto` class are good candidates for this project.
+
 * Depends on the `.Domain.Shared` because it may use constants, enums and other shared objects of this project in the application service interfaces and DTOs.
 
 #### .Application Project
 
 This project contains the [application service](../Application-Services.md) **implementations** of the interfaces defined in the `.Application.Contracts` project.
+
+A `BookAppService` class is a good candidate for this project.
 
 * Depends on the `.Application.Contracts` project to be able to implement the interfaces and use the DTOs.
 * Depends on the `.Domain` project to be able to use domain objects (entities, repository interfaces... etc.) to perform the application logic.
@@ -181,7 +187,7 @@ The solution has multiple test projects, one for each layer:
 
 In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
 
-Test projects are prepared integration testing;
+Test projects are prepared for integration testing;
 
 * It is fully integrated to ABP framework and all services in your application.
 * It uses SQLite in-memory database for EF Core. For MongoDB, it uses the [Mongo2Go](https://github.com/Mongo2Go/Mongo2Go) library.
@@ -218,9 +224,9 @@ As different from the default structure, two new projects come into play: `.Iden
 
 #### .IdentityServer Project
 
-This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
+This project is used as an authentication server for other projects. `.Web` project uses OpenId Connect Authentication to get identity and access tokens for the current user from the IdentityServer. Then uses the access token to call the HTTP API server. HTTP API server uses bearer token authentication to obtain claims from the access token to authorize the current user.
 
-![bookstore-visual-studio-solution-v3](../images/tiered-solution-applications.png)
+![tiered-solution-applications](../images/tiered-solution-applications.png)
 
 ABP uses the open source [IdentityServer4](https://identityserver.io/) framework for the authentication between applications. See [IdentityServer4 documentation](http://docs.identityserver.io) for details about the IdentityServer4 and OpenID Connect protocol.
 
@@ -228,9 +234,7 @@ It has its own `appsettings.json` that contains database connection and other co
 
 #### .HttpApi.Host Project
 
-This project is an application that hosts the API of the solution.
-
-It has its own `appsettings.json` that contains database connection and other configurations.
+This project is an application that hosts the API of the solution. It has its own `appsettings.json` that contains database connection and other configurations.
 
 #### .Web Project
 
@@ -247,5 +251,10 @@ This project contains an `appsettings.json` file, but this time it does not have
 You should run the application with the given order:
 
 * First, run the `.IdentityServer` since other applications depends on it.
-* Then run the `.HttpApi.Server` since it is used by the `.Web` application.
+* Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
+
+## What's Next?
+
+- See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
+- See the [ASP.NET Core MVC Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template.

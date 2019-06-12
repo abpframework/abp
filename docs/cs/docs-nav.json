@@ -1,0 +1,292 @@
+{
+  "items": [
+    {
+      "text": "Začínáme",
+      "items": [
+        {
+          "text": "Ze startovacích šablon",
+          "items": [
+            {
+              "text": "ASP.NET Core MVC",
+              "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            }
+          ]
+        },
+        {
+          "text": "Z prázdných projektů",
+          "items": [
+            {
+              "text": "S ASP.NET Core Web aplikací",
+              "path": "Getting-Started-AspNetCore-Application.md"
+            },
+            {
+              "text": "S konzolovou aplikací",
+              "path": "Getting-Started-Console-Application.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Tutoriály",
+      "items": [
+        {
+          "text": "Vývoj aplikace",
+          "items": [
+            {
+              "text": "S ASP.NET Core MVC",
+              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
+      "text": "Základy",
+      "items": [
+        {
+          "text": "Vkládání závislostí",
+          "path": "Dependency-Injection.md",
+          "items": [
+            {
+              "text": "AutoFac integrace",
+              "path": "Autofac-Integration.md"
+            }
+          ]
+        },
+        {
+          "text": "Virtuální systém souborů",
+          "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Lokalizace",
+          "path": "Localization.md"
+        },
+        {
+          "text": "Zpracování výjimek",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Validace"
+        },
+        {
+          "text": "Autorizace"
+        },
+        {
+          "text": "Ukládání do mezipaměti"
+        },
+        {
+          "text": "Audit"
+        },
+        {
+          "text": "Správa nastavení"
+        }
+      ]
+    },
+    {
+      "text": "Události",
+      "items": [
+        {
+          "text": "Event bus (místní)"
+        },
+        {
+          "text": "Distribuovaný event bus",
+          "items": [
+            {
+              "text": "RabbitMQ integrace"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Služby",
+      "items": [
+        {
+          "text": "Serializace objektu"
+        },
+        {
+          "text": "Serializace JSON"
+        },
+        {
+          "text": "Emailování"
+        },
+        {
+          "text": "GUIDy"
+        },
+        {
+          "text": "Vláknování"
+        },
+        {
+          "text": "Časování"
+        }
+      ]
+    },
+    {
+      "text": "Multitenance",
+      "path": "Multi-Tenancy.md"
+    },
+    {
+      "text": "Vývoj modulů",
+      "items": [
+        {
+          "text": "Základy",
+          "path": "Module-Development-Basics.md"
+        },
+        {
+          "text": "Zásuvné moduly"
+        },
+        {
+          "text": "Nejlepší praktiky",
+          "path": "Best-Practices/Index.md"
+        }
+      ]
+    },
+    {
+      "text": "Domain driven design",
+      "path": "Domain-Driven-Design.md",
+      "items": [
+        {
+          "text": "Doménová vrstva",
+          "items": [
+            {
+              "text": "Entity & agregované kořeny",
+              "path": "Entities.md"
+            },
+            {
+              "text": "Hodnotové objekty"
+            },
+            {
+              "text": "Repozitáře",
+              "path": "Repositories.md"
+            },
+            {
+              "text": "Doménové služby"
+            },
+            {
+              "text": "Specifikace"
+            }
+          ]
+        },
+        {
+          "text": "Aplikační vrstva",
+          "items": [
+            {
+              "text": "Aplikační služby",
+              "path": "Application-Services.md"
+            },
+            {
+              "text": "Objekty přenosu dat"
+            },
+            {
+              "text": "Jednotka práce"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "ASP.NET Core",
+      "items": [
+        {
+          "text": "API",
+          "items": [            
+            {
+              "text": "Automatické API řadiče",
+              "path": "AspNetCore/Auto-API-Controllers.md"
+            },
+            {
+              "text": "Dynamičtí C# API klienti",
+              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+            }
+          ]
+        },
+        {
+          "text": "Uživatelské rozhraní",
+          "items": [
+            {
+              "text": "Správa klientských balíčků",
+              "path": "AspNetCore/Client-Side-Package-Management.md"
+            },
+            {
+              "text": "Svazování & minifikace",
+              "path": "AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag pomocníci",
+              "path": "Tag-Helpers.md"
+            },
+            {
+              "text": "Motivy",
+              "path": "AspNetCore/Theming.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Přístup k datům",
+      "items": [
+        {
+          "text": "Entity Framework Core integrace",
+          "path": "Entity-Framework-Core.md"
+        },
+        {
+          "text": "MongoDB integrace",
+          "path": "MongoDB.md"
+        }
+      ]
+    },
+    {
+      "text": "Pozadí",
+      "items": [
+        {
+          "text": "Úkony na pozadí",
+          "path": "Background-Jobs.md",
+          "items": [
+            {
+              "text": "Hangfire integrace",
+              "path": "Background-Jobs-Hangfire.md"
+            },
+            {
+              "text": "RabbitMQ integrace",
+              "path": "Background-Jobs-RabbitMq.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Vzorky",
+      "items": [
+        {
+          "text": "Mikroslužby demo",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "Moduly aplikace",
+      "path": "Modules/Index.md"
+    },
+    {
+      "text": "Architektura mikroslužby",
+      "path": "Microservice-Architecture.md"
+    },
+    {
+      "text": "Testování"
+    },
+    {
+      "text": "Noční sestavení",
+      "path": "Nightly-Builds.md"
+    },
+    {
+      "text": "Průvodce pro přispěvatele",
+      "path": "Contribution/Index.md"
+    }
+  ]
+}

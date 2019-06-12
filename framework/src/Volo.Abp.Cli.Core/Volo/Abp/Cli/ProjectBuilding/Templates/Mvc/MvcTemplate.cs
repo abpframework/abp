@@ -14,7 +14,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
         public MvcTemplate()
             : base(TemplateName, DatabaseProvider.EntityFrameworkCore)
         {
-
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Mvc";
         }
 
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)

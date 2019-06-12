@@ -24,16 +24,24 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : IApplicationService
+        : ICrudAppService<TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
         where TEntityDto : IEntityDto<TKey>
     {
-        TEntityDto Get(TKey id);
 
-        PagedResultDto<TEntityDto> GetList(TGetListInput input);
+    }
 
-        TEntityDto Create(TCreateInput input);
+    public interface ICrudAppService<TGetOutputDto, TGetListOutputDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
+        : IApplicationService
+        where TGetOutputDto : IEntityDto<TKey>
+        where TGetListOutputDto : IEntityDto<TKey>
+    {
+        TGetOutputDto Get(TKey id);
 
-        TEntityDto Update(TKey id, TUpdateInput input);
+        PagedResultDto<TGetListOutputDto> GetList(TGetListInput input);
+
+        TGetOutputDto Create(TCreateInput input);
+
+        TGetOutputDto Update(TKey id, TUpdateInput input);
 
         void Delete(TKey id);
     }
