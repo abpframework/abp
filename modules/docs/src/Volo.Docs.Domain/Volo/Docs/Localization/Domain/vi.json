@@ -13,6 +13,7 @@
     "Projects": "Dự án",
     "NoProjectWarning": "Chưa có dự án nào!",
     "DocumentNotFound": "Rất tiếc, tài liệu được yêu cầu không tìm thấy!",
-    "NavigationDocumentNotFound": "Phiên bản này không có tài liệu điều hướng!"
+    "NavigationDocumentNotFound": "Phiên bản này không có tài liệu điều hướng!",
+    "DocumentNotFoundInSelectedLanguage": "Tài liệu bằng ngôn ngữ bạn muốn không được tìm thấy. Tài liệu trong ngôn ngữ mặc định được hiển thị."
   }
 }

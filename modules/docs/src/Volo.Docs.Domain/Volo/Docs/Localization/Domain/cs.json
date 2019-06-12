@@ -13,6 +13,7 @@
     "Projects": "Projekt(y)",
     "NoProjectWarning": "Zatím zde není žádný projekt!",
     "DocumentNotFound": "Ups, vyžádaný dokument neexistuje!",
-    "NavigationDocumentNotFound": "Tato verze nemá navigační dokument!"
+    "NavigationDocumentNotFound": "Tato verze nemá navigační dokument!",
+    "DocumentNotFoundInSelectedLanguage": "Tento dokument není dostupný ve vybraném jazyce. Zobrazen dokument ve výchozím jazyce."
   }
 }

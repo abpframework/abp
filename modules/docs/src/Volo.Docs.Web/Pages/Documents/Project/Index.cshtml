@@ -192,8 +192,8 @@
                             <article class="docs-body">
                                 @if (Model.DocumentLanguageIsDifferent)
                                 {
-                                    <abp-alert  alert-type="Warning" dismissible="true" class="mb-0">
-                                        Document in the language you wanted is not found. Document in the default language is shown.
+                                    <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
+                                        @L["DocumentNotFoundInSelectedLanguage"]
                                     </abp-alert>
                                 }
                                 @Html.Raw(Model.Document.Content)
