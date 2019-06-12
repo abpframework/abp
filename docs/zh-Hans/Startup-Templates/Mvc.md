@@ -87,11 +87,15 @@ abp new Acme.BookStore --tiered
 
 项目主要包含 [应用服务](../Application-Services.md) **interfaces** 和应用层的 [数据传输对象](../Data-Transfer-Objects.md) (DTO). 它用于分离应用层的接口和实现. 这种方式可以将接口项目做为约定包共享给客户端.
 
+例如 `IBookAppService` 接口和 `BookCreationDto` 类都适合放在这个项目中.
+
 * 它依赖 `.Domain.Shared` 因为它可能会在应用接口和DTO中使用常量,枚举和其他的共享对象.
 
 #### .Application 项目
 
 项目包含 `.Application.Contracts` 项目的 [应用服务](../Application-Services.md) 接口**实现**.
+
+例如 `BookAppService` 类适合放在这个项目中.
 
 * 它依赖 `.Application.Contracts` 项目, 因为它需要实现接口与使用DTO.
 * 它依赖 `.Domain` 项目,因为它需要使用领域对象(实体,仓储接口等)执行应用程序逻辑.
@@ -181,9 +185,9 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 
 此外,  `.HttpApi.Client.ConsoleTestApp` 是一个控制台应用程序(不是自动化测试项目),它用于演示DotNet应用程序中HTTP API的用法.
 
-测试项目已为集成测试做好准备:
+测试项目是用于做集成测试的:
 
-* 它完成集成到ABP框架和应用程序的所有服务.
+* 它完全集成到ABP框架和应用程序的所有服务.
 * 如果数据库提供程序是EF Core,测试项目会使用SQLite内存数据库,如果是MongoDB,它使用[Mongo2Go](https://github.com/Mongo2Go/Mongo2Go)库.
 * 授权被禁用,任何的应用服务都可以在测试中轻松调用.
 
@@ -199,7 +203,7 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 
 如果你按上面的描述指定了 `--tiered` 选项,会创建分层解决方案. 分层结构的目的是**将Web应用程序和HTTP API部署到不同的服务器**:
 
-![bookstore-visual-studio-solution-v3](../images/tiered-solution-servers.png)
+![tiered-solution-servers](../images/tiered-solution-servers.png)
 
 * 浏览器渲染HTML,执行CSS和JavaScript来运行UI.
 * Web服务器托管静态文件(CSS,JavaScript,图片...等)和动态组件(如Razor页面),它通过HTTP请求到API服务器执行应用程序的业务逻辑.
@@ -212,15 +216,15 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 
 解决方案结构如下所示:
 
-![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-tiered.png)
+![bookstore-visual-studio-solution-tiered](../images/bookstore-visual-studio-solution-tiered.png)
 
 与默认结构不同,我们得到了两个新项目: `.IdentityServer` 和 `.HttpApi.Host`.
 
 #### .IdentityServer 项目
 
-用于其他项目的身份验证服务器. `.Web`项目使用OpenId Connect身份验证获取当前用户的身份和访问令牌. 然后使用访问令牌调用HTTP API服务器. HTTP API服务器使用bearer token从访问令牌获取声明授权当前用户.
+用于其他项目的身份验证服务器. `.Web`项目使用OpenId Connect身份验证从IdentityServer获取当前用户的身份和访问令牌. 然后使用访问令牌调用HTTP API服务器. HTTP API服务器使用bearer token从访问令牌获取声明授权当前用户.
 
-![bookstore-visual-studio-solution-v3](../images/tiered-solution-applications.png)
+![tiered-solution-applications](../images/tiered-solution-applications.png)
 
 ABP使用开源的[IdentityServer4](https://identityserver.io/)框架做应用程序间的身份验证. 有关IdentityServer4和OpenId Connect协议的详细信息请参阅[IdentityServer4文档](http://docs.identityserver.io).
 
@@ -228,9 +232,7 @@ ABP使用开源的[IdentityServer4](https://identityserver.io/)框架做应用�
 
 #### .HttpApi.Host 项目
 
-该项目是一个承载解决方案API的应用程序.
-
-它有自己的`appsettings.json`文件(数据库连接字符串等其他配置).
+该项目是一个承载解决方案API的应用程序. 它有自己的`appsettings.json`文件(数据库连接字符串等其他配置).
 
 #### .Web 项目
 
@@ -247,13 +249,10 @@ ABP使用开源的[IdentityServer4](https://identityserver.io/)框架做应用�
 你应该按照以下顺序运行应用:
 
 * 首先运行`.IdentityServer`,因为其他应用程序依赖它做身份验证.
-* 然后运行`.HttpApi.Server`,因为`.Web`应用程序需要访问HTTI API.
+* 然后运行`.HttpApi.Host`,因为`.Web`应用程序需要访问HTTI API.
 * 最后运行`.Web`并登录到应用程序(用户名: `admin` 密码: `1q2w3E*`).
 
-### 其他数据库提供程序
+## 下一步是什么?
 
-TODO
-
-#### MongoDB
-
-TODO
+* 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-AspNetCore-MVC-Template.md)创建此模板的新解决方案并运行它.
+* 参阅[ASP.NET Core MVC 教程](../Tutorials/AspNetCore-Mvc/Part-I.md)学习使用此模板开发应用程序.
