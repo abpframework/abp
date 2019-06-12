@@ -13,6 +13,7 @@
     "Projects": "Projeto(s)",
     "NoProjectWarning": "Ainda não há projetos!",
     "DocumentNotFound": "Oops, o documento solicitado não foi encontrado",
-    "NavigationDocumentNotFound": "Esta versão não possui um documento de navegação!"
+    "NavigationDocumentNotFound": "Esta versão não possui um documento de navegação!",
+    "DocumentNotFoundInSelectedLanguage": "Documento no idioma desejado não foi encontrado. Documento no idioma padrão é mostrado."
   }
 }
