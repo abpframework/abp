@@ -43,6 +43,7 @@ namespace Acme.BookStore.Web
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
+                .UseIIS()
                 .UseStartup<Startup>()
                 .UseSerilog()
                 .Build();
