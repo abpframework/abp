@@ -5,30 +5,29 @@ using Volo.Abp.Tracing;
 
 namespace Volo.Abp.AspNetCore.Tracing
 {
-    public class AbpCorrelationIdMiddleware
+    public class AbpCorrelationIdMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
+        private readonly CorrelationIdOptions _options;
+        private readonly ICorrelationIdProvider _correlationIdProvider;
 
-        public AbpCorrelationIdMiddleware(RequestDelegate next)
-        {
-            _next = next;
-        }
-
-        public async Task Invoke(
-            HttpContext httpContext,
-            IOptions<CorrelationIdOptions> options,
+        public AbpCorrelationIdMiddleware(IOptions<CorrelationIdOptions> options,
             ICorrelationIdProvider correlationIdProvider)
         {
-            var correlationId = correlationIdProvider.Get();
-            var optionsValue = options.Value;
+            _options = options.Value;
+            _correlationIdProvider = correlationIdProvider;
+        }
+
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        {
+            var correlationId = _correlationIdProvider.Get();
 
             try
             {
-                await _next(httpContext);
+                await next(context);
             }
             finally
             {
-                CheckAndSetCorrelationIdOnResponse(httpContext, optionsValue, correlationId);
+                CheckAndSetCorrelationIdOnResponse(context, _options, correlationId);
             }
         }
 

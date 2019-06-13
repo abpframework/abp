@@ -7,32 +7,29 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Auditing
 {
-    public class AbpAuditingMiddleware
+    public class AbpAuditingMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly IAuditingManager _auditingManager;
 
         protected AbpAuditingOptions Options { get; }
         protected ICurrentUser CurrentUser { get; }
 
         public AbpAuditingMiddleware(
-            RequestDelegate next, 
             IAuditingManager auditingManager,
             ICurrentUser currentUser,
             IOptions<AbpAuditingOptions> options)
         {
-            _next = next;
             _auditingManager = auditingManager;
 
             CurrentUser = currentUser;
             Options = options.Value;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (!ShouldWriteAuditLog(httpContext))
+            if (!ShouldWriteAuditLog(context))
             {
-                await _next(httpContext);
+                await next(context);
                 return;
             }
 
@@ -40,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Auditing
             {
                 try
                 {
-                    await _next(httpContext);
+                    await next(context);
                 }
                 finally
                 {

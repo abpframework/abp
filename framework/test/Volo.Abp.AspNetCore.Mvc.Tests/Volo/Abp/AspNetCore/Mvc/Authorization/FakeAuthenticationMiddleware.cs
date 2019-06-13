@@ -6,28 +6,26 @@ using Microsoft.AspNetCore.Http;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
-    public class FakeAuthenticationMiddleware
+    public class FakeAuthenticationMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly FakeUserClaims _fakeUserClaims;
 
-        public FakeAuthenticationMiddleware(RequestDelegate next, FakeUserClaims fakeUserClaims)
+        public FakeAuthenticationMiddleware(FakeUserClaims fakeUserClaims)
         {
-            _next = next;
             _fakeUserClaims = fakeUserClaims;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             if (_fakeUserClaims.Claims.Any())
             {
-                httpContext.User = new ClaimsPrincipal(new List<ClaimsIdentity>
+                context.User = new ClaimsPrincipal(new List<ClaimsIdentity>
                 {
                     new ClaimsIdentity(_fakeUserClaims.Claims, "FakeSchema")
                 });
             }
 
-            await _next(httpContext);
+            await next(context);
         }
     }
 }

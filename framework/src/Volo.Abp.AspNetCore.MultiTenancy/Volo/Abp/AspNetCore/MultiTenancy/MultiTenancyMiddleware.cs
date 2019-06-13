@@ -5,30 +5,26 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class MultiTenancyMiddleware
+    public class MultiTenancyMiddleware : IMiddleware
     {
-        private readonly RequestDelegate _next;
-
         private readonly ITenantResolver _tenantResolver;
         private readonly ITenantStore _tenantStore;
         private readonly ICurrentTenant _currentTenant;
         private readonly ITenantResolveResultAccessor _tenantResolveResultAccessor;
 
         public MultiTenancyMiddleware(
-            RequestDelegate next,
             ITenantResolver tenantResolver, 
             ITenantStore tenantStore, 
             ICurrentTenant currentTenant, 
             ITenantResolveResultAccessor tenantResolveResultAccessor)
         {
-            _next = next;
             _tenantResolver = tenantResolver;
             _tenantStore = tenantStore;
             _currentTenant = currentTenant;
             _tenantResolveResultAccessor = tenantResolveResultAccessor;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             var resolveResult = _tenantResolver.ResolveTenantIdOrName();
             _tenantResolveResultAccessor.Result = resolveResult;
@@ -48,7 +44,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
             using (_currentTenant.Change(tenant?.Id, tenant?.Name))
             {
-                await _next(httpContext);
+                await next(context);
             }
         }
 
