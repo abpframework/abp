@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.FreezeUi
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/freeze-ui/freeze-ui.min.css");
+            context.Files.AddIfNotContains("/libs/freeze-ui/freeze-ui.min.js");
         }
     }
 }
