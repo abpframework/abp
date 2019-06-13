@@ -23,6 +23,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
 
             DeleteUnrelatedProjects(context, steps);
 
+            steps.Add(new TemplateRandomSslPortStep(new List<string>
+            {
+                "https://localhost:44300",
+                "https://localhost:44301",
+                "https://localhost:44302",
+                "https://localhost:44303"
+            }));
+
             return steps;
         }
 
