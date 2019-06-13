@@ -1,28 +1,27 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Uow
 {
-    public class AbpUnitOfWorkMiddleware
+    public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
     {
         public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
 
-        private readonly RequestDelegate _next;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
 
-        public AbpUnitOfWorkMiddleware(RequestDelegate next, IUnitOfWorkManager unitOfWorkManager)
+        public AbpUnitOfWorkMiddleware(IUnitOfWorkManager unitOfWorkManager)
         {
-            _next = next;
             _unitOfWorkManager = unitOfWorkManager;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             using (var uow = _unitOfWorkManager.Reserve(UnitOfWorkReservationName))
             {
-                await _next(httpContext);
-                await uow.CompleteAsync(httpContext.RequestAborted);
+                await next(context);
+                await uow.CompleteAsync(context.RequestAborted);
             }
         }
     }
