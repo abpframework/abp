@@ -70,8 +70,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                         typeof(AbpValidationResource)
                     ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
             });
-
-            context.Services.AddTransient<FakeAuthenticationMiddleware>();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

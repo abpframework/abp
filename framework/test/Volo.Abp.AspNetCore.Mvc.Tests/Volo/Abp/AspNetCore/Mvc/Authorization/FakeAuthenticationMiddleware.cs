@@ -3,10 +3,11 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.Authorization
 {
-    public class FakeAuthenticationMiddleware : IMiddleware
+    public class FakeAuthenticationMiddleware : IMiddleware, ITransientDependency
     {
         private readonly FakeUserClaims _fakeUserClaims;
 

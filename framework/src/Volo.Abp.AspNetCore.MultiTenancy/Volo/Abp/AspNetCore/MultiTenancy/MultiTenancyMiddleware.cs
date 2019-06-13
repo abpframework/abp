@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class MultiTenancyMiddleware : IMiddleware
+    public class MultiTenancyMiddleware : IMiddleware, ITransientDependency
     {
         private readonly ITenantResolver _tenantResolver;
         private readonly ITenantStore _tenantStore;

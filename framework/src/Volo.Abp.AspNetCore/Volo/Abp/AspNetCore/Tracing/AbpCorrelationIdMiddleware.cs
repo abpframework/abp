@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Tracing;
 
 namespace Volo.Abp.AspNetCore.Tracing
 {
-    public class AbpCorrelationIdMiddleware : IMiddleware
+    public class AbpCorrelationIdMiddleware : IMiddleware, ITransientDependency
     {
         private readonly CorrelationIdOptions _options;
         private readonly ICorrelationIdProvider _correlationIdProvider;

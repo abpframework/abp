@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Auditing;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Auditing
 {
-    public class AbpAuditingMiddleware : IMiddleware
+    public class AbpAuditingMiddleware : IMiddleware, ITransientDependency
     {
         private readonly IAuditingManager _auditingManager;
 

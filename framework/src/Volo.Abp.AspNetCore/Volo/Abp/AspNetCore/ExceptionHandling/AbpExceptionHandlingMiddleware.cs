@@ -5,12 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.Uow;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
-    public class AbpExceptionHandlingMiddleware : IMiddleware
+    public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
     {
         private readonly ILogger<AbpUnitOfWorkMiddleware> _logger;
 

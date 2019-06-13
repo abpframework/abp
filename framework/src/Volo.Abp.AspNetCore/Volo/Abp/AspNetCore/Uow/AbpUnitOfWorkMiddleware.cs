@@ -1,10 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.AspNetCore.Uow
 {
-    public class AbpUnitOfWorkMiddleware : IMiddleware
+    public class AbpUnitOfWorkMiddleware : IMiddleware, ITransientDependency
     {
         public const string UnitOfWorkReservationName = "_AbpActionUnitOfWork";
 

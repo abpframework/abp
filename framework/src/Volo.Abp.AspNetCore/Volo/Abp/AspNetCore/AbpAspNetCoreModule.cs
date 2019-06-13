@@ -46,11 +46,6 @@ namespace Volo.Abp.AspNetCore
 
             AddAspNetServices(context.Services);
             context.Services.AddObjectAccessor<IApplicationBuilder>();
-
-            context.Services.AddTransient<AbpAuditingMiddleware>();
-            context.Services.AddTransient<AbpUnitOfWorkMiddleware>();
-            context.Services.AddTransient<AbpCorrelationIdMiddleware>();
-            context.Services.AddTransient<AbpExceptionHandlingMiddleware>();
         }
 
         private static void AddAspNetServices(IServiceCollection services)
