@@ -33,7 +33,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                     !x.IsDirectory && x.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
-
             var excludePorts = new List<string>();
             excludePorts.AddRange(_buildInSslUrls.Select(GetUrlPort).ToList());
 
@@ -85,7 +84,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
 
         private string GetRandomPort(IReadOnlyCollection<string> excludePort = null)
         {
-            var ports = Enumerable.Range(_minSslPort, _maxSslPort).Select(p => p.ToString());
+            var ports = Enumerable.Range(_minSslPort, _maxSslPort - _minSslPort + 1).Select(p => p.ToString());
 
             return RandomHelper.GetRandomOfList(excludePort != null
                 ? ports.Except(excludePort).ToList()
