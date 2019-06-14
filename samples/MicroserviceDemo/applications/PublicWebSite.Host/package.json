@@ -3,7 +3,7 @@
   "name": "msdemo-backend-admin-app-host",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.4.9",
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.6.4",
     "@abp/blogging": "^0.4.9"
   }
 }
