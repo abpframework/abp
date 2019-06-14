@@ -93,8 +93,8 @@ namespace Volo.Abp.Cli.Commands
 
         public Task<string> GetShortDescriptionAsync()
         {
-            return Task.FromResult("Automatically updates all ABP related packages in a" +
-                                   " solution or project to the latest versions.");
+            return Task.FromResult("Automatically updates all ABP related NuGet packages and NPM packages in a" +
+                                   " solution or project to the latest versions");
         }
 
         public static class Options
