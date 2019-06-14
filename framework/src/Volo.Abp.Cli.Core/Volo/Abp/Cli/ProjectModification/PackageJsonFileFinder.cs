@@ -14,7 +14,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var slash = Path.DirectorySeparatorChar;
 
             return
-                Directory.GetFiles(rootDirectory.EnsureEndsWith(Path.DirectorySeparatorChar), "*package.json", SearchOption.AllDirectories)
+                Directory.GetFiles(rootDirectory.EnsureEndsWith(slash), "*package.json", SearchOption.AllDirectories)
                     .Where(f =>
                         !f.Contains(slash + "node_modules" + slash) &&
                         !f.Contains(slash + "Release" + slash) &&
@@ -25,9 +25,9 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual bool IsWithProjectFile(string path)
         {
-            var dir = Path.GetDirectoryName(path);
+            var directory = Path.GetDirectoryName(path);
 
-            return Directory.GetFiles(dir, "*.csproj", searchOption: SearchOption.TopDirectoryOnly).Length > 0;
+            return Directory.GetFiles(directory, "*.csproj", searchOption: SearchOption.TopDirectoryOnly).Length > 0;
         }
     }
 }

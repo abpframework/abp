@@ -30,7 +30,6 @@ namespace Volo.Abp.Cli.Commands
         {
             UpdateNugetPackages(commandLineArgs);
             UpdateNpmPackages();
-            return;
         }
 
         private void UpdateNpmPackages()
