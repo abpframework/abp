@@ -1,21 +1,21 @@
 {
-  "version": "0.6.4",
+  "version": "0.6.5",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
     "@abp/aspnetcore.mvc.ui": "^0.6.4",
-    "@abp/bootstrap": "^0.6.2",
-    "@abp/datatables.net-bs4": "^0.6.2",
-    "@abp/font-awesome": "^0.6.2",
-    "@abp/jquery-form": "^0.6.2",
-    "@abp/jquery-validation-unobtrusive": "^0.6.2",
-    "@abp/lodash": "^0.6.2",
-    "@abp/select2": "^0.6.2",
-    "@abp/sweetalert": "^0.6.2",
-    "@abp/timeago": "^0.6.2",
-    "@abp/toastr": "^0.6.2"
+    "@abp/bootstrap": "^0.6.5",
+    "@abp/datatables.net-bs4": "^0.6.5",
+    "@abp/font-awesome": "^0.6.5",
+    "@abp/jquery-form": "^0.6.5",
+    "@abp/jquery-validation-unobtrusive": "^0.6.5",
+    "@abp/lodash": "^0.6.5",
+    "@abp/select2": "^0.6.5",
+    "@abp/sweetalert": "^0.6.5",
+    "@abp/timeago": "^0.6.5",
+    "@abp/toastr": "^0.6.5"
   },
   "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"
 }
