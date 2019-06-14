@@ -1,6 +1,6 @@
-## Localization Text Files
+## Textové soubory pro lokalizaci
 
-Here, a list of localization text files for anyone wants to contribute to localization of the texts coming from the framework. We will keep this list up to date:
+Toto je seznam lokalizačních textových souborů pro každého kdo chce přispět k překladu textů ve frameworku. Tento seznam budeme udržovat aktuální:
 
 * https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy/Volo/Abp/AspNetCore/Mvc/UI/MultiTenancy/Localization/en.json
 * https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.Localization/Volo/Abp/Localization/Resources/AbpValidation/en.json
