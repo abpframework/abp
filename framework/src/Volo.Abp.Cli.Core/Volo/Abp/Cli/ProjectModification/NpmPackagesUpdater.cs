@@ -47,14 +47,10 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (isFileModified)
             {
-                var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
-                Logger.LogInformation($"Running Yarn on {fileDirectory}");
-                CmdHelper.RunCmd($"cd {fileDirectory} && yarn");
-                Thread.Sleep(500);
-                Logger.LogInformation($"Running Gulp on {fileDirectory}");
-                CmdHelper.RunCmd($"cd {fileDirectory} && gulp");
+                RunYarnAndGulp(file);
             }
         }
+
 
         protected virtual void UpdatePackagesInFile(string file, out bool isAnyPackageUpdated)
         {
@@ -111,6 +107,25 @@ namespace Volo.Abp.Cli.ProjectModification
             var properties = dependencies.Properties().ToList();
             var abpPackages = properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList();
             return abpPackages;
+        }
+        protected virtual void RunYarnAndGulp(string file)
+        {
+            var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
+            RunYarn(fileDirectory);
+            Thread.Sleep(500);
+            RunGulp(fileDirectory);
+        }
+
+        protected virtual void RunGulp(string fileDirectory)
+        {
+            Logger.LogInformation($"Running Gulp on {fileDirectory}");
+            CmdHelper.RunCmd($"cd {fileDirectory} && gulp");
+        }
+
+        protected virtual void RunYarn(string fileDirectory)
+        {
+            Logger.LogInformation($"Running Yarn on {fileDirectory}");
+            CmdHelper.RunCmd($"cd {fileDirectory} && yarn");
         }
     }
 }
