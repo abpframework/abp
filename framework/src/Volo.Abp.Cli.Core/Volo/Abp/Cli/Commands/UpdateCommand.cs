@@ -15,18 +15,33 @@ namespace Volo.Abp.Cli.Commands
     {
         public ILogger<UpdateCommand> Logger { get; set; }
 
-        private readonly VoloPackagesVersionUpdater _packagesVersionUpdater;
+        private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
+        private readonly NpmPackagesUpdater _npmPackagesUpdater;
 
-        public UpdateCommand(VoloPackagesVersionUpdater packagesVersionUpdater)
+        public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater, NpmPackagesUpdater npmPackagesUpdater)
         {
-            _packagesVersionUpdater = packagesVersionUpdater;
+            _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
+            _npmPackagesUpdater = npmPackagesUpdater;
 
             Logger = NullLogger<UpdateCommand>.Instance;
         }
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            var includePreviews = commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
+            UpdateNugetPackages(commandLineArgs);
+            UpdateNpmPackages();
+            return;
+        }
+
+        private void UpdateNpmPackages()
+        {
+            _npmPackagesUpdater.Update(Directory.GetCurrentDirectory());
+        }
+
+        private void UpdateNugetPackages(CommandLineArgs commandLineArgs)
+        {
+            var includePreviews =
+                commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
 
             var solution = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").FirstOrDefault();
 
@@ -34,7 +49,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                _packagesVersionUpdater.UpdateSolution(solution, includePreviews);
+                _nugetPackagesVersionUpdater.UpdateSolution(solution, includePreviews);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -46,13 +61,14 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                _packagesVersionUpdater.UpdateProject(project, includePreviews);
+                _nugetPackagesVersionUpdater.UpdateProject(project, includePreviews);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
             }
 
-            throw new CliUsageException("No solution or project found in this directory." + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+            throw new CliUsageException("No solution or project found in this directory." + Environment.NewLine +
+                                        Environment.NewLine + GetUsageInfo());
         }
 
         public Task<string> GetUsageInfo()

@@ -6,11 +6,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
-    public class VoloPackagesVersionUpdater : ITransientDependency
+    public class VoloNugetPackagesVersionUpdater : ITransientDependency
     {
         private readonly NuGetService _nuGetService;
 
-        public VoloPackagesVersionUpdater(NuGetService nuGetService)
+        public VoloNugetPackagesVersionUpdater(NuGetService nuGetService)
         {
             _nuGetService = nuGetService;
         }
