@@ -3,6 +3,6 @@
   "name": "DashboardDemo",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.6.4"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.6.5"
   }
 }

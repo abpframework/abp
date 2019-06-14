@@ -166,7 +166,7 @@ var abp = abp || {};
     abp.setting = abp.setting || {};
 
     abp.setting.values = abp.setting.values || {};
-    
+
     abp.setting.get = function (name) {
         return abp.setting.values[name];
     };
@@ -179,7 +179,7 @@ var abp = abp || {};
     abp.setting.getInt = function (name) {
         return parseInt(abp.setting.values[name]);
     };
-    
+
     /* NOTIFICATION *********************************************/
     //Defines Notification API, not implements it
 
@@ -246,25 +246,96 @@ var abp = abp || {};
     abp.ui = abp.ui || {};
 
     /* UI BLOCK */
-    //Defines UI Block API, not implements it
+    //Defines UI Block API and implements basically
 
-    abp.ui.block = function (elm) {
-        abp.log.warn('abp.ui.block is not implemented!');
+    var $abpBlockArea = document.createElement('div');
+    $abpBlockArea.classList.add('abp-block-area');
+
+    /* opts: { //Can be an object with options or a string for query a selector
+     *  elm: a query selector (optional - default: document.body)
+     *  busy: boolean (optional - default: false)
+     *  promise: A promise with always or finally handler (optional - auto unblocks the ui if provided)
+     * }
+     */
+    abp.ui.block = function (opts) {
+        if (!opts) {
+            opts = {};
+        } else if (typeof opts == 'string') {
+            opts = {
+                elm: opts
+            };
+        }
+
+        var $elm = document.querySelector(opts.elm) || document.body;
+
+        if (opts.busy) {
+            $abpBlockArea.classList.add('abp-block-area-busy');
+        } else {
+            $abpBlockArea.classList.remove('abp-block-area-busy');
+        }
+
+        if (document.querySelector(opts.elm)) {
+            $abpBlockArea.style.position = 'absolute';
+        } else {
+            $abpBlockArea.style.position = 'fixed';
+        }
+
+        $elm.appendChild($abpBlockArea);
+
+        if (opts.promise) {
+            if (opts.promise.always) { //jQuery.Deferred style
+                opts.promise.always(function () {
+                    abp.ui.unblock({
+                        $elm: opts.elm
+                    });
+                });
+            } else if (opts.promise['finally']) { //Q style
+                opts.promise['finally'](function () {
+                    abp.ui.unblock({
+                        $elm: opts.elm
+                    });
+                });
+            }
+        }
     };
 
-    abp.ui.unblock = function (elm) {
-        abp.log.warn('abp.ui.unblock is not implemented!');
+    /* opts: {
+     *    
+     * }
+     */
+    abp.ui.unblock = function (opts) {
+        var element = document.querySelector('.abp-block-area');
+        if (element) {
+            element.classList.add('abp-block-area-disappearing');
+            setTimeout(function () {
+                if (element) {
+                    element.classList.remove('abp-block-area-disappearing');
+                    element.parentElement.removeChild(element);
+                }
+            }, 250);
+        }
     };
 
     /* UI BUSY */
     //Defines UI Busy API, not implements it
 
-    abp.ui.setBusy = function (elm, optionsOrPromise) {
-        abp.log.warn('abp.ui.setBusy is not implemented!');
+    abp.ui.setBusy = function (opts) {
+        if (!opts) {
+            opts = {
+                busy: true
+            };
+        } else if (typeof opts == 'string') {
+            opts = {
+                elm: opts,
+                busy: true
+            };
+        }
+
+        abp.ui.block(opts);
     };
 
-    abp.ui.clearBusy = function (elm) {
-        abp.log.warn('abp.ui.clearBusy is not implemented!');
+    abp.ui.clearBusy = function (opts) {
+        abp.ui.unblock(opts);
     };
 
     /* SIMPLE EVENT BUS *****************************************/
