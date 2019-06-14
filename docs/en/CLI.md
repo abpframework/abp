@@ -103,7 +103,7 @@ abp add-module Volo.Blogging
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related packages in a solution or project to the latest versions.
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP NuGet related packages and NPM packages in a solution or project to the latest versions.
 
 Usage:
 
