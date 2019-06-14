@@ -1,7 +1,7 @@
 /*!
  * tui-editor
- * @version 1.2.6
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
+ * @version 1.4.3
+ * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -13,7 +13,7 @@
 		exports["Editor"] = factory(require("jquery"), require("tui-code-snippet"), require("markdown-it"), require("to-mark"), require("highlight.js"));
 	else
 		root["tui"] = root["tui"] || {}, root["tui"]["Editor"] = factory(root["$"], (root["tui"] && root["tui"]["util"]), root["markdownit"], root["toMark"], root["hljs"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_22__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_31__) {
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_22__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_32__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -76,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 138);
+/******/ 	return __webpack_require__(__webpack_require__.s = 148);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -121,7 +121,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements markdown preview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -138,12 +138,13 @@ var MarkdownPreview = function (_Preview) {
    * @param {EventManager} eventManager - event manager
    * @param {Convertor} convertor - convertor
    * @param {boolean} isViewer - true for view only mode
+   * @param {Number} delayTime - lazyRunner delay time
    * @memberof MarkdownPreview
    */
-  function MarkdownPreview($el, eventManager, convertor, isViewer) {
+  function MarkdownPreview($el, eventManager, convertor, isViewer, delayTime) {
     _classCallCheck(this, MarkdownPreview);
 
-    var _this = _possibleConstructorReturn(this, (MarkdownPreview.__proto__ || Object.getPrototypeOf(MarkdownPreview)).call(this, $el, eventManager, convertor, isViewer));
+    var _this = _possibleConstructorReturn(this, (MarkdownPreview.__proto__ || Object.getPrototypeOf(MarkdownPreview)).call(this, $el, eventManager, convertor, isViewer, delayTime));
 
     _this._initEvent();
     return _this;
@@ -196,6 +197,12 @@ var MarkdownPreview = function (_Preview) {
 
       this.eventManager.emit('previewRenderAfter', this);
     }
+  }, {
+    key: 'remove',
+    value: function remove() {
+      this.$el.off('scroll');
+      this.$el = null;
+    }
   }]);
 
   return MarkdownPreview;
@@ -217,7 +224,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements preview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -243,9 +250,12 @@ var Preview = function () {
    * @param {EventManager} eventManager Event manager instance
    * @param {Convertor} convertor Convertor instance
    * @param {boolean} isViewer - whether viewer mode or not
+   * @param {Number} delayTime - lazyRunner delay time
    * @memberof Preview
    */
   function Preview($el, eventManager, convertor, isViewer) {
+    var delayTime = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 800;
+
     _classCallCheck(this, Preview);
 
     this.eventManager = eventManager;
@@ -257,7 +267,7 @@ var Preview = function () {
 
     this.lazyRunner = new _lazyRunner2.default();
 
-    this.lazyRunner.registerLazyRunFunction('refresh', this.refresh, 800, this);
+    this.lazyRunner.registerLazyRunFunction('refresh', this.refresh, delayTime, this);
   }
 
   /**
@@ -370,7 +380,21 @@ exports.default = Preview;
 
 /***/ }),
 
-/***/ 138:
+/***/ 14:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isMac = /Mac/.test(navigator.platform);
+
+module.exports = {
+  isMac: isMac
+};
+
+/***/ }),
+
+/***/ 148:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -382,12 +406,12 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Viewer = __webpack_require__(32);
+var Viewer = __webpack_require__(33);
 
 // for jquery
 /**
  * @fileoverview entry point for viewer
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 _jquery2.default.fn.tuiEditor = function () {
   var options = void 0,
@@ -424,119 +448,6 @@ module.exports = Viewer;
 
 /***/ }),
 
-/***/ 14:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @fileoverview Implements htmlSanitizer
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
- */
-var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpadding|cellspacing|class|clear|' + 'color|cols|compact|coords|dir|face|headers|height|hreflang|hspace|' + 'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' + 'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' + 'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' + 'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
-
-var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
-
-/**
- * htmlSanitizer
- * @param {string|Node} html html or Node
- * @param {boolean} [needHtmlText] pass true if need html text
- * @returns {string|DocumentFragment} result
- * @ignore
- */
-function htmlSanitizer(html, needHtmlText) {
-  var $html = (0, _jquery2.default)('<div />');
-
-  html = html.replace(/<!--[\s\S]*?-->/g, '');
-
-  $html.append(html);
-
-  removeUnnecessaryTags($html);
-  leaveOnlyWhitelistAttribute($html);
-
-  return finalizeHtml($html, needHtmlText);
-}
-
-/**
- * Remove unnecessary tags
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function removeUnnecessaryTags($html) {
-  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title').remove();
-}
-
-/**
- * Leave only white list attributes
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function leaveOnlyWhitelistAttribute($html) {
-  $html.find('*').each(function (index, node) {
-    var attrs = node.attributes;
-    var blacklist = _tuiCodeSnippet2.default.toArray(attrs).filter(function (attr) {
-      var isHTMLAttr = attr.name.match(HTML_ATTR_LIST_RX);
-      var isSVGAttr = attr.name.match(SVG_ATTR_LIST_RX);
-
-      return !isHTMLAttr && !isSVGAttr;
-    });
-
-    _tuiCodeSnippet2.default.forEachArray(blacklist, function (attr) {
-      // Edge svg attribute name returns uppercase bug. error guard.
-      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/5579311/
-      if (attrs.getNamedItem(attr.name)) {
-        attrs.removeNamedItem(attr.name);
-      }
-    });
-  });
-}
-
-/**
- * Finalize html result
- * @private
- * @param {jQuery} $html jQuery instance
- * @param {boolean} needHtmlText pass true if need html text
- * @returns {string|DocumentFragment} result
- */
-function finalizeHtml($html, needHtmlText) {
-  var returnValue = void 0;
-
-  if (needHtmlText) {
-    returnValue = $html[0].innerHTML;
-  } else {
-    var frag = document.createDocumentFragment();
-    var childNodes = _tuiCodeSnippet2.default.toArray($html[0].childNodes);
-    var length = childNodes.length;
-
-
-    for (var i = 0; i < length; i += 1) {
-      frag.appendChild(childNodes[i]);
-    }
-    returnValue = frag;
-  }
-
-  return returnValue;
-}
-
-exports.default = htmlSanitizer;
-
-/***/ }),
-
 /***/ 15:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -549,7 +460,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements EventManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -815,7 +726,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview extension manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -905,7 +816,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Convertor have responsible to convert markdown and html
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -925,7 +836,7 @@ var _toMark = __webpack_require__(23);
 
 var _toMark2 = _interopRequireDefault(_toMark);
 
-var _htmlSanitizer = __webpack_require__(14);
+var _htmlSanitizer = __webpack_require__(9);
 
 var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
 
@@ -956,6 +867,8 @@ var _markdownitHtmlBlockRenderer2 = _interopRequireDefault(_markdownitHtmlBlockR
 var _markdownitBackticksRenderer = __webpack_require__(30);
 
 var _markdownitBackticksRenderer2 = _interopRequireDefault(_markdownitBackticksRenderer);
+
+var _markdownitInlinePlugin = __webpack_require__(31);
 
 var _codeBlockManager = __webpack_require__(7);
 
@@ -1032,24 +945,21 @@ var Convertor = function () {
    * @private
    * @memberof Convertor
    * @param {string} markdown markdown text
+   * @param {object} env environment sandbox for markdownit
    * @returns {string} html text
    */
 
 
   _createClass(Convertor, [{
     key: '_markdownToHtmlWithCodeHighlight',
-    value: function _markdownToHtmlWithCodeHighlight(markdown) {
-      markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
+    value: function _markdownToHtmlWithCodeHighlight(markdown, env) {
       // eslint-disable-next-line
       var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
       while (onerrorStripeRegex.exec(markdown)) {
         markdown = markdown.replace(onerrorStripeRegex, '$1$3');
       }
 
-      var renderedHTML = markdownitHighlight.render(markdown);
-      renderedHTML = this._removeBrToMarkPassAttributeInCode(renderedHTML);
-
-      return renderedHTML;
+      return markdownitHighlight.render(markdown, env);
     }
 
     /**
@@ -1058,23 +968,22 @@ var Convertor = function () {
      * @private
      * @memberof Convertor
      * @param {string} markdown markdown text
+     * @param {object} env environment sandbox for markdownit
      * @returns {string} html text
      */
 
   }, {
     key: '_markdownToHtml',
-    value: function _markdownToHtml(markdown) {
-      markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
+    value: function _markdownToHtml(markdown, env) {
+      // should insert data-tomark-pass in the opening tag
+      markdown = markdown.replace(/<(?!\/)([^>]+)([/]?)>/g, '<$1 data-tomark-pass $2>');
       // eslint-disable-next-line
       var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
       while (onerrorStripeRegex.exec(markdown)) {
         markdown = markdown.replace(onerrorStripeRegex, '$1$3');
       }
 
-      var renderedHTML = markdownit.render(markdown);
-      renderedHTML = this._removeBrToMarkPassAttributeInCode(renderedHTML);
-
-      return renderedHTML;
+      return markdownit.render(markdown, env);
     }
 
     /**
@@ -1093,7 +1002,7 @@ var Convertor = function () {
 
       $wrapperDiv.find('code, pre').each(function (i, codeOrPre) {
         var $code = (0, _jquery2.default)(codeOrPre);
-        $code.html($code.html().replace(/&lt;br data-tomark-pass&gt;/, '&lt;br&gt;'));
+        $code.html($code.html().replace(/ data-tomark-pass &gt;/g, '&gt;'));
       });
 
       renderedHTML = $wrapperDiv.html();
@@ -1134,6 +1043,7 @@ var Convertor = function () {
       var html = this._markdownToHtml(markdown);
 
       html = this.eventManager.emitReduce('convertorAfterMarkdownToHtmlConverted', html);
+      html = this._removeBrToMarkPassAttributeInCode(html);
 
       return html;
     }
@@ -1143,6 +1053,26 @@ var Convertor = function () {
       this.eventManager.listen('convertorAfterMarkdownToHtmlConverted', function (html) {
         return (0, _htmlSanitizer2.default)(html, true);
       });
+    }
+
+    /**
+     * set link attribute to markdownitHighlight, markdownit
+     * using linkAttribute of markdownItInlinePlugin
+     * @param {object} attribute markdown text
+     */
+
+  }, {
+    key: 'setLinkAttribute',
+    value: function setLinkAttribute(attribute) {
+      var keys = Object.keys(attribute);
+      var setAttributeToToken = function setAttributeToToken(tokens, idx) {
+        keys.forEach(function (key) {
+          tokens[idx].attrPush([key, attribute[key]]);
+        });
+      };
+
+      markdownitHighlight.use(_markdownitInlinePlugin.linkAttribute, setAttributeToToken);
+      markdownit.use(_markdownitInlinePlugin.linkAttribute, setAttributeToToken);
     }
 
     /**
@@ -1187,22 +1117,11 @@ var Convertor = function () {
       var FIRST_TWO_BRS_BEFORE_RX = /([^>]|<\/a>|<\/code>|<\/span>|<\/b>|<\/i>|<\/s>|<img [^>]*>)/;
       var TWO_BRS_RX = /<br data-tomark-pass \/><br data-tomark-pass \/>/;
       var FIND_FIRST_TWO_BRS_RX = new RegExp(FIRST_TWO_BRS_BEFORE_RX.source + TWO_BRS_RX.source, 'g');
+      var FIND_ATTRI_WITH_EMTPY_STR_RX = /<br data-tomark-pass="">/ig;
 
       html = html.replace(FIND_BR_RX, '<br />');
-
       html = html.replace(FIND_DOUBLE_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />');
-
-      var div = document.createElement('div');
-      var $div = (0, _jquery2.default)(div);
-      $div.html(html);
-      $div.find('pre br,code br').each(function (index, node) {
-        if (node.hasAttribute('data-tomark-pass')) {
-          node.removeAttribute('data-tomark-pass');
-        }
-      });
-
-      html = $div.html().replace(/<br data-tomark-pass="">/ig, '<br data-tomark-pass />');
-      html = html.replace(FIND_BR_RX, '<br />');
+      html = html.replace(FIND_ATTRI_WITH_EMTPY_STR_RX, '<br data-tomark-pass />');
 
       html = html.replace(FIND_PASSING_AND_NORMAL_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />$1');
       html = html.replace(FIND_FIRST_TWO_BRS_RX, '$1<br /><br />');
@@ -1221,6 +1140,19 @@ var Convertor = function () {
     key: 'getMarkdownitHighlightRenderer',
     value: function getMarkdownitHighlightRenderer() {
       return markdownitHighlight;
+    }
+
+    /**
+     * get markdownit
+     * @returns {markdownit} - markdownit instance
+     * @memberof Convertor
+     * @static
+     */
+
+  }, {
+    key: 'getMarkdownitRenderer',
+    value: function getMarkdownitRenderer() {
+      return markdownit;
     }
   }]);
 
@@ -1243,7 +1175,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CommandManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1259,7 +1191,7 @@ var _command = __webpack_require__(21);
 
 var _command2 = _interopRequireDefault(_command);
 
-var _util = __webpack_require__(9);
+var _util = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1388,6 +1320,7 @@ var CommandManager = function () {
      * Execute command
      * @memberof CommandManager
      * @param {String} name Command name
+     * @param {*} ...args Command argument
      * @returns {*}
      */
 
@@ -1430,9 +1363,9 @@ var CommandManager = function () {
 
 /**
  * Create command by given editor type and property object
- * @memberof ComponentManager
+ * @memberof CommandManager
  * @param {string} type Command type
- * @param {{name: string, keyMap: object}} props Property
+ * @param {{name: string, keyMap: Array}} props Property
  * @returns {*}
  */
 
@@ -1461,7 +1394,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements LazyRunner
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1569,7 +1502,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements Command
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1600,6 +1533,7 @@ var Command = function () {
       this.setKeyMap(keyMap);
     }
   }
+
   /**
    * getName
    * returns Name of command
@@ -1756,8 +1690,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_23__;
 
 /**
  * @fileoverview Implements markdownitTaskPlugin
- * @modifier Sungho Kim(sungho-kim@nhnent.com) FE Development Lab/NHN Ent.
- * @modifier Junghwan Park(junghwan.park@nhnent.com) FE Development Lab/NHN Ent.
+ * @modifier Sungho Kim(sungho-kim@nhn.com) FE Development Lab/NHN
+ * @modifier Junghwan Park(junghwan.park@nhn.com) FE Development Lab/NHN
  */
 /* eslint-disable */
 
@@ -1865,7 +1799,7 @@ module.exports = MarkdownitTaskRenderer;
 /* eslint-disable */
 /**
  * @fileoverview Implements markdownitCodeBlockPlugin
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /**
@@ -1948,7 +1882,7 @@ module.exports = MarkdownitCodeBlockRenderer;
 // Distributed under an ISC license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements MarkdownItCodeRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /* eslint-disable */
@@ -2016,7 +1950,7 @@ module.exports = function code(state, startLine, endLine /*, silent*/) {
 // Distributed under MIT license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements markdownitCodeBlockQuoteRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /* eslint-disable */
@@ -2352,7 +2286,7 @@ module.exports = function blockquote(state, startLine, endLine, silent) {
 
 /**
  * @fileoverview Implements markdownitTableRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 
 /*eslint-disable */
@@ -2565,7 +2499,7 @@ module.exports = function table(state, startLine, endLine, silent) {
 
 /**
  * @fileoverview Implements markdownitHtmlBlockRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
  */
 /* eslint-disable */
 // HTML block
@@ -2654,7 +2588,479 @@ module.exports = function html_block(state, startLine, endLine, silent) {
 
 /***/ }),
 
-/***/ 3:
+/***/ 30:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// Copyright (c) 2014 Vitaly Puzrin, Alex Kocharin.
+// Distributed under MIT license: https://github.com/markdown-it/markdown-it/
+/**
+ * @fileoverview Implements markdownitBackticksRenderer
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ */
+/* eslint-disable */
+
+// Parse backticks
+module.exports = function backtick(state, silent) {
+  var start,
+      max,
+      marker,
+      matchStart,
+      matchEnd,
+      token,
+      pos = state.pos,
+      ch = state.src.charCodeAt(pos);
+
+  if (ch !== 0x60 /* ` */) {
+      return false;
+    }
+
+  start = pos;
+  pos++;
+  max = state.posMax;
+
+  while (pos < max && state.src.charCodeAt(pos) === 0x60 /* ` */) {
+    pos++;
+  }
+
+  marker = state.src.slice(start, pos);
+
+  matchStart = matchEnd = pos;
+
+  while ((matchStart = state.src.indexOf('`', matchEnd)) !== -1) {
+    matchEnd = matchStart + 1;
+
+    while (matchEnd < max && state.src.charCodeAt(matchEnd) === 0x60 /* ` */) {
+      matchEnd++;
+    }
+
+    if (matchEnd - matchStart === marker.length) {
+      if (!silent) {
+        token = state.push('code_inline', 'code', 0);
+        token.markup = marker;
+        token.content = state.src.slice(pos, matchStart).replace(/[ \n]+/g, ' ').trim();
+        // TUI.EDITOR MODIFICATION START
+        // store number of backtick in data-backtick
+        // https://github.nhn.com/fe/tui.editor/pull/981
+        token.attrSet('data-backticks', token.markup.length);
+        // TUI.EDITOR MODIFICATION END
+      }
+      state.pos = matchEnd;
+      return true;
+    }
+  }
+
+  if (!silent) {
+    state.pending += marker;
+  }
+  state.pos += marker.length;
+  return true;
+};
+
+/***/ }),
+
+/***/ 31:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// Copyright (c) 2014, Vitaly Puzrin.
+// Distributed under an MIT license: https://github.com/markdown-it/markdown-it-for-inline
+/* eslint-disable */
+
+/**
+ * @fileoverview Implements markdownItLinkPlugin
+ * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ */
+
+function for_inline_plugin(md, ruleName, tokenType, iteartor) {
+
+  function scan(state) {
+    var i, blkIdx, inlineTokens;
+
+    for (blkIdx = state.tokens.length - 1; blkIdx >= 0; blkIdx--) {
+      if (state.tokens[blkIdx].type !== 'inline') {
+        continue;
+      }
+
+      inlineTokens = state.tokens[blkIdx].children;
+
+      for (i = inlineTokens.length - 1; i >= 0; i--) {
+        if (inlineTokens[i].type !== tokenType) {
+          continue;
+        }
+
+        iteartor(inlineTokens, i);
+      }
+    }
+  }
+
+  md.core.ruler.push(ruleName, scan);
+};
+
+var linkAttribute = exports.linkAttribute = function linkAttribute(markdownit, iteartor) {
+  for_inline_plugin(markdownit, 'url_attribute', 'link_open', iteartor);
+};
+
+/***/ }),
+
+/***/ 32:
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
+
+/***/ }),
+
+/***/ 33:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements editor preivew
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+
+
+var _jquery = __webpack_require__(0);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _tuiCodeSnippet = __webpack_require__(1);
+
+var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+
+var _mdPreview = __webpack_require__(12);
+
+var _mdPreview2 = _interopRequireDefault(_mdPreview);
+
+var _eventManager = __webpack_require__(15);
+
+var _eventManager2 = _interopRequireDefault(_eventManager);
+
+var _commandManager = __webpack_require__(2);
+
+var _commandManager2 = _interopRequireDefault(_commandManager);
+
+var _extManager = __webpack_require__(16);
+
+var _extManager2 = _interopRequireDefault(_extManager);
+
+var _convertor = __webpack_require__(17);
+
+var _convertor2 = _interopRequireDefault(_convertor);
+
+var _domUtils = __webpack_require__(4);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
+var _codeBlockManager = __webpack_require__(7);
+
+var _codeBlockManager2 = _interopRequireDefault(_codeBlockManager);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var TASK_ATTR_NAME = 'data-te-task';
+var TASK_CHECKED_CLASS_NAME = 'checked';
+
+/**
+ * Class ToastUIEditorViewer
+ */
+
+var ToastUIEditorViewer = function () {
+  /**
+   * Viewer
+   * @param {object} options Option object
+    * @param {HTMLElement} options.el - container element
+    * @param {string} options.initialValue Editor's initial value
+    * @param {object} options.events eventlist Event list
+      * @param {function} options.events.load It would be emitted when editor fully load
+      * @param {function} options.events.change It would be emitted when content changed
+      * @param {function} options.events.stateChange It would be emitted when format change by cursor position
+      * @param {function} options.events.focus It would be emitted when editor get focus
+      * @param {function} options.events.blur It would be emitted when editor loose focus
+    * @param {object} options.hooks Hook list
+      * @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
+    * @param {string[]} [options.exts] - extensions
+    */
+  function ToastUIEditorViewer(options) {
+    var _this = this;
+
+    _classCallCheck(this, ToastUIEditorViewer);
+
+    this.options = _jquery2.default.extend({
+      useDefaultHTMLSanitizer: true,
+      codeBlockLanguages: _codeBlockManager.CodeBlockManager.getHighlightJSLanguages(),
+      customConvertor: null
+    }, options);
+
+    this.eventManager = new _eventManager2.default();
+    this.commandManager = new _commandManager2.default(this);
+    if (this.options.customConvertor) {
+      // eslint-disable-next-line new-cap
+      this.convertor = new this.options.customConvertor(this.eventManager);
+    } else {
+      this.convertor = new _convertor2.default(this.eventManager);
+    }
+    this.toMarkOptions = null;
+
+    if (this.options.useDefaultHTMLSanitizer) {
+      this.convertor.initHtmlSanitizer();
+    }
+
+    if (this.options.hooks) {
+      _tuiCodeSnippet2.default.forEach(this.options.hooks, function (fn, key) {
+        _this.addHook(key, fn);
+      });
+    }
+
+    if (this.options.events) {
+      _tuiCodeSnippet2.default.forEach(this.options.events, function (fn, key) {
+        _this.on(key, fn);
+      });
+    }
+
+    this.preview = new _mdPreview2.default((0, _jquery2.default)(this.options.el), this.eventManager, this.convertor, true);
+
+    this.preview.$el.on('mousedown', _jquery2.default.proxy(this._toggleTask, this));
+
+    _extManager2.default.applyExtension(this, this.options.exts);
+
+    this.setValue(this.options.initialValue);
+
+    this.eventManager.emit('load', this);
+  }
+
+  /**
+   * Toggle task by detecting mousedown event.
+   * @param {MouseEvent} ev - event
+   * @private
+   */
+
+
+  _createClass(ToastUIEditorViewer, [{
+    key: '_toggleTask',
+    value: function _toggleTask(ev) {
+      var style = getComputedStyle(ev.target, ':before');
+
+      if (ev.target.hasAttribute(TASK_ATTR_NAME) && _domUtils2.default.isInsideTaskBox(style, ev.offsetX, ev.offsetY)) {
+        (0, _jquery2.default)(ev.target).toggleClass(TASK_CHECKED_CLASS_NAME);
+        this.eventManager.emit('change', {
+          source: 'viewer',
+          data: ev
+        });
+      }
+    }
+
+    /**
+     * Set content for preview
+     * @memberof ToastUIEditorViewer
+     * @param {string} markdown Markdown text
+     */
+
+  }, {
+    key: 'setMarkdown',
+    value: function setMarkdown(markdown) {
+      this.markdownValue = markdown = markdown || '';
+
+      this.preview.refresh(this.markdownValue);
+      this.eventManager.emit('setMarkdownAfter', this.markdownValue);
+    }
+
+    /**
+     * Set content for preview
+     * @memberof ToastUIEditorViewer
+     * @param {string} markdown Markdown text
+     * @deprecated
+     */
+
+  }, {
+    key: 'setValue',
+    value: function setValue(markdown) {
+      this.setMarkdown(markdown);
+    }
+
+    /**
+     * Bind eventHandler to event type
+     * @memberof ToastUIEditorViewer
+     * @param {string} type Event type
+     * @param {function} handler Event handler
+     */
+
+  }, {
+    key: 'on',
+    value: function on(type, handler) {
+      this.eventManager.listen(type, handler);
+    }
+
+    /**
+     * Unbind eventHandler from event type
+     * @memberof ToastUIEditorViewer
+     * @param {string} type Event type
+     */
+
+  }, {
+    key: 'off',
+    value: function off(type) {
+      this.eventManager.removeEventHandler(type);
+    }
+
+    /**
+     * Remove Viewer preview from document
+     * @memberof ToastUIEditorViewer
+     */
+
+  }, {
+    key: 'remove',
+    value: function remove() {
+      this.eventManager.emit('removeEditor');
+      this.preview.$el.off('mousedown', _jquery2.default.proxy(this._toggleTask, this));
+      this.preview.remove();
+      this.options = null;
+      this.eventManager = null;
+      this.commandManager = null;
+      this.convertor = null;
+      this.preview = null;
+    }
+
+    /**
+     * Add hook to Viewer preview's event
+     * @memberof ToastUIEditorViewer
+     * @param {string} type Event type
+     * @param {function} handler Event handler
+     */
+
+  }, {
+    key: 'addHook',
+    value: function addHook(type, handler) {
+      this.eventManager.removeEventHandler(type);
+      this.eventManager.listen(type, handler);
+    }
+
+    /**
+     * Return true
+     * @memberof ToastUIEditorViewer
+     * @returns {boolean}
+     */
+
+  }, {
+    key: 'isViewer',
+    value: function isViewer() {
+      return true;
+    }
+
+    /**
+     * Return false
+     * @memberof ToastUIEditorViewer
+     * @returns {boolean}
+     */
+
+  }, {
+    key: 'isMarkdownMode',
+    value: function isMarkdownMode() {
+      return false;
+    }
+
+    /**
+     * Return false
+     * @memberof ToastUIEditorViewer
+     * @returns {boolean}
+     */
+
+  }, {
+    key: 'isWysiwygMode',
+    value: function isWysiwygMode() {
+      return false;
+    }
+
+    /**
+     * Define extension
+     * @memberof ToastUIEditorViewer
+     * @param {string} name Extension name
+     * @param {ExtManager~extension} ext extension
+     */
+
+  }], [{
+    key: 'defineExtension',
+    value: function defineExtension(name, ext) {
+      _extManager2.default.defineExtension(name, ext);
+    }
+  }]);
+
+  return ToastUIEditorViewer;
+}();
+
+/**
+ * check whther is viewer
+ * @type {boolean}
+ */
+
+
+ToastUIEditorViewer.isViewer = true;
+
+/**
+ * domUtil instance
+ * @type {DomUtil}
+ */
+ToastUIEditorViewer.domUtils = _domUtils2.default;
+
+/**
+ * CodeBlockManager instance
+ * @type {CodeBlockManager}
+ */
+ToastUIEditorViewer.codeBlockManager = _codeBlockManager2.default;
+
+/**
+ * MarkdownIt hightlight instance
+ * @type {MarkdownIt}
+ */
+ToastUIEditorViewer.markdownitHighlight = _convertor2.default.getMarkdownitHighlightRenderer();
+
+/**
+ * MarkdownIt instance
+ * @type {MarkdownIt}
+ */
+ToastUIEditorViewer.markdownit = _convertor2.default.getMarkdownitRenderer();
+
+/**
+ * @ignore
+ */
+ToastUIEditorViewer.i18n = null;
+
+/**
+ * @ignore
+ */
+ToastUIEditorViewer.Button = null;
+
+/**
+ * @ignore
+ */
+ToastUIEditorViewer.WwCodeBlockManager = null;
+
+/**
+ * @ignore
+ */
+ToastUIEditorViewer.WwTableManager = null;
+
+/**
+ * @ignore
+ */
+ToastUIEditorViewer.WwTableSelectionManager = null;
+
+module.exports = ToastUIEditorViewer;
+
+/***/ }),
+
+/***/ 4:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2676,7 +3082,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @fileoverview DOM Utils
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 var FIND_ZWB = /\u200B/g;
 
@@ -2700,6 +3106,17 @@ var isTextNode = function isTextNode(node) {
  */
 var isElemNode = function isElemNode(node) {
   return node && node.nodeType === Node.ELEMENT_NODE;
+};
+
+/**
+ * Check that the node is block node
+ * @param {Node} node node
+ * @returns {boolean}
+ * @ignore
+ */
+var isBlockNode = function isBlockNode(node) {
+  return (/^(ADDRESS|ARTICLE|ASIDE|BLOCKQUOTE|DETAILS|DIALOG|DD|DIV|DL|DT|FIELDSET|FIGCAPTION|FIGURE|FOOTER|FORM|H[\d]|HEADER|HGROUP|HR|LI|MAIN|NAV|OL|P|PRE|SECTION|UL)$/ig.test(this.getNodeName(node))
+  );
 };
 
 /**
@@ -3086,24 +3503,19 @@ var getPath = function getPath(node, root) {
 /**
  * Find next, previous TD or TH element by given TE element
  * @param {HTMLElement} node TD element
- * @param {string} direction Boolean value for direction true is find next cell
+ * @param {string} direction 'next' or 'previous'
  * @returns {HTMLElement|null}
  * @ignore
  */
 var getTableCellByDirection = function getTableCellByDirection(node, direction) {
-  var isForward = true;
   var targetElement = null;
 
-  if (_tuiCodeSnippet2.default.isUndefined(direction) || direction !== 'next' && direction !== 'previous') {
-    return null;
-  } else if (direction === 'previous') {
-    isForward = false;
-  }
-
-  if (isForward) {
-    targetElement = node.nextElementSibling;
-  } else {
-    targetElement = node.previousElementSibling;
+  if (!_tuiCodeSnippet2.default.isUndefined(direction) && (direction === 'next' || direction === 'previous')) {
+    if (direction === 'next') {
+      targetElement = node.nextElementSibling;
+    } else {
+      targetElement = node.previousElementSibling;
+    }
   }
 
   return targetElement;
@@ -3118,7 +3530,6 @@ var getTableCellByDirection = function getTableCellByDirection(node, direction) 
  * @ignore
  */
 var getSiblingRowCellByDirection = function getSiblingRowCellByDirection(node, direction, needEdgeCell) {
-  var isForward = true;
   var tableCellElement = null;
   var $node = void 0,
       index = void 0,
@@ -3127,56 +3538,221 @@ var getSiblingRowCellByDirection = function getSiblingRowCellByDirection(node, d
       $siblingContainer = void 0,
       isSiblingContainerExists = void 0;
 
-  if (_tuiCodeSnippet2.default.isUndefined(direction) || direction !== 'next' && direction !== 'previous') {
-    return null;
-  } else if (direction === 'previous') {
-    isForward = false;
+  if (!_tuiCodeSnippet2.default.isUndefined(direction) && (direction === 'next' || direction === 'previous')) {
+    if (node) {
+      $node = (0, _jquery2.default)(node);
+
+      if (direction === 'next') {
+        $targetRowElement = $node.parent().next();
+        $currentContainer = $node.parents('thead');
+        $siblingContainer = $currentContainer[0] && $currentContainer.next();
+        isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'TBODY';
+
+        index = 0;
+      } else {
+        $targetRowElement = $node.parent().prev();
+        $currentContainer = $node.parents('tbody');
+        $siblingContainer = $currentContainer[0] && $currentContainer.prev();
+        isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'THEAD';
+
+        index = node.parentNode.childNodes.length - 1;
+      }
+
+      if (_tuiCodeSnippet2.default.isUndefined(needEdgeCell) || !needEdgeCell) {
+        index = getNodeOffsetOfParent(node);
+      }
+
+      if ($targetRowElement[0]) {
+        tableCellElement = $targetRowElement.children('td,th')[index];
+      } else if ($currentContainer[0] && isSiblingContainerExists) {
+        tableCellElement = $siblingContainer.find('td,th')[index];
+      }
+    }
   }
 
-  if (node) {
-    $node = (0, _jquery2.default)(node);
+  return tableCellElement;
+};
 
-    if (isForward) {
-      $targetRowElement = $node.parent().next();
-      $currentContainer = $node.parents('thead');
-      $siblingContainer = $currentContainer[0] && $currentContainer.next();
-      isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'TBODY';
+/**
+ * Check that the inline node is supported by markdown
+ * @param {Node} node TD element
+ * @returns {boolean}
+ * @ignore
+ */
+var isMDSupportInlineNode = function isMDSupportInlineNode(node) {
+  return (/^(A|B|BR|CODE|DEL|EM|I|IMG|S|SPAN|STRONG)$/ig.test(node.nodeName)
+  );
+};
 
-      index = 0;
+/**
+ * Check that node is styled node.
+ * Styled node is a node that has text and decorates text.
+ * @param {Node} node TD element
+ * @returns {boolean}
+ * @ignore
+ */
+var isStyledNode = function isStyledNode(node) {
+  return (/^(A|ABBR|ACRONYM|B|BDI|BDO|BIG|CITE|CODE|DEL|DFN|EM|I|INS|KBD|MARK|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|U|VAR)$/ig.test(node.nodeName)
+  );
+};
+
+/**
+ * remove node from 'start' node to 'end-1' node inside parent
+ * if 'end' node is null, remove all child nodes after 'start' node.
+ * @param {Node} parent - parent node
+ * @param {Node} start - start node to remove
+ * @param {Node} end - end node to remove
+ * @ignore
+ */
+var removeChildFromStartToEndNode = function removeChildFromStartToEndNode(parent, start, end) {
+  var child = start;
+
+  if (!child || parent !== child.parentNode) {
+    return;
+  }
+
+  while (child !== end) {
+    var next = child.nextSibling;
+    parent.removeChild(child);
+    child = next;
+  }
+};
+
+/**
+ * remove nodes along the direction from the node to reach targetParent node
+ * @param {Node} targetParent - stop removing when reach target parent node
+ * @param {Node} node - start node
+ * @param {boolean} isForward - direction
+ * @ignore
+ */
+var removeNodesByDirection = function removeNodesByDirection(targetParent, node, isForward) {
+  var parent = node;
+
+  while (parent !== targetParent) {
+    var nextParent = parent.parentNode;
+    var _parent = parent,
+        nextSibling = _parent.nextSibling,
+        previousSibling = _parent.previousSibling;
+
+
+    if (!isForward && nextSibling) {
+      removeChildFromStartToEndNode(nextParent, nextSibling, null);
+    } else if (isForward && previousSibling) {
+      removeChildFromStartToEndNode(nextParent, nextParent.childNodes[0], parent);
+    }
+
+    parent = nextParent;
+  }
+};
+
+var getLeafNode = function getLeafNode(node) {
+  var result = node;
+  while (result.childNodes && result.childNodes.length) {
+    var _result = result,
+        nextLeaf = _result.firstChild;
+
+    // When inline tag have empty text node with other childnodes, ignore empty text node.
+
+    if (isTextNode(nextLeaf) && !getTextLength(nextLeaf)) {
+      result = nextLeaf.nextSibling || nextLeaf;
     } else {
-      $targetRowElement = $node.parent().prev();
-      $currentContainer = $node.parents('tbody');
-      $siblingContainer = $currentContainer[0] && $currentContainer.prev();
-      isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'THEAD';
-
-      index = node.parentNode.childNodes.length - 1;
+      result = nextLeaf;
     }
-
-    if (_tuiCodeSnippet2.default.isUndefined(needEdgeCell) || !needEdgeCell) {
-      index = getNodeOffsetOfParent(node);
-    }
-
-    if ($targetRowElement[0]) {
-      tableCellElement = $targetRowElement.children('td,th')[index];
-    } else if ($currentContainer[0] && isSiblingContainerExists) {
-      tableCellElement = $siblingContainer.find('td,th')[index];
-    }
-
-    return tableCellElement;
   }
 
-  return null;
+  return result;
+};
+/**
+ * check if a coordinates is inside a task box
+ * @param {object} style - computed style of task box
+ * @param {number} offsetX - event x offset
+ * @param {number} offsetY - event y offset
+ * @returns {boolean}
+ * @ignore
+ */
+var isInsideTaskBox = function isInsideTaskBox(style, offsetX, offsetY) {
+  var rect = {
+    left: parseInt(style.left, 10),
+    top: parseInt(style.top, 10),
+    width: parseInt(style.width, 10),
+    height: parseInt(style.height, 10)
+  };
+
+  return offsetX >= rect.left && offsetX <= rect.left + rect.width && offsetY >= rect.top && offsetY <= rect.top + rect.height;
+};
+
+/**
+ * Check whether node is OL or UL
+ * @param {node} node - node
+ * @returns {boolean} - whether node is OL or UL
+ * @ignore
+ */
+var isListNode = function isListNode(node) {
+  if (!node) {
+    return false;
+  }
+
+  return node.nodeName === 'UL' || node.nodeName === 'OL';
+};
+
+/**
+ * Check whether node is first list item
+ * @param {node} node - node
+ * @returns {boolean} whether node is first list item
+ * @ignore
+ */
+var isFirstListItem = function isFirstListItem(node) {
+  var nodeName = node.nodeName,
+      parentNode = node.parentNode;
+
+
+  return nodeName === 'LI' && node === parentNode.firstChild;
+};
+
+/**
+ * Check whether node is first level list item
+ * @param {node} node - node
+ * @returns {boolean} whether node is first level list item
+ * @ignore
+ */
+var isFirstLevelListItem = function isFirstLevelListItem(node) {
+  var nodeName = node.nodeName,
+      listNode = node.parentNode;
+  var listParentNode = listNode.parentNode;
+
+
+  return nodeName === 'LI' && !isListNode(listParentNode);
+};
+
+/**
+ * Merge node to target node and detach node
+ * @param {node} node - node
+ * @param {node} targetNode - target node
+ * @ignore
+ */
+var mergeNode = function mergeNode(node, targetNode) {
+  if (node.hasChildNodes()) {
+    _tuiCodeSnippet2.default.forEachArray(node.childNodes, function () {
+      targetNode.appendChild(node.firstChild);
+    });
+  }
+
+  if (node.parentNode) {
+    node.parentNode.removeChild(node);
+  }
 };
 
 exports.default = {
   getNodeName: getNodeName,
   isTextNode: isTextNode,
   isElemNode: isElemNode,
+  isBlockNode: isBlockNode,
   getTextLength: getTextLength,
   getOffsetLength: getOffsetLength,
   getPrevOffsetNodeUntil: getPrevOffsetNodeUntil,
   getNodeOffsetOfParent: getNodeOffsetOfParent,
   getChildNodeByOffset: getChildNodeByOffset,
+  getNodeWithDirectionUntil: getNodeWithDirectionUntil,
   containsNode: containsNode,
   getTopPrevNodeUnder: getTopPrevNodeUnder,
   getTopNextNodeUnder: getTopNextNodeUnder,
@@ -3188,416 +3764,18 @@ exports.default = {
   getPath: getPath,
   getNodeInfo: getNodeInfo,
   getTableCellByDirection: getTableCellByDirection,
-  getSiblingRowCellByDirection: getSiblingRowCellByDirection
+  getSiblingRowCellByDirection: getSiblingRowCellByDirection,
+  isMDSupportInlineNode: isMDSupportInlineNode,
+  isStyledNode: isStyledNode,
+  removeChildFromStartToEndNode: removeChildFromStartToEndNode,
+  removeNodesByDirection: removeNodesByDirection,
+  getLeafNode: getLeafNode,
+  isInsideTaskBox: isInsideTaskBox,
+  isListNode: isListNode,
+  isFirstListItem: isFirstListItem,
+  isFirstLevelListItem: isFirstLevelListItem,
+  mergeNode: mergeNode
 };
-
-/***/ }),
-
-/***/ 30:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// Copyright (c) 2014 Vitaly Puzrin, Alex Kocharin.
-// Distributed under MIT license: https://github.com/markdown-it/markdown-it/
-/**
- * @fileoverview Implements markdownitBackticksRenderer
- * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
- */
-/* eslint-disable */
-
-// Parse backticks
-module.exports = function backtick(state, silent) {
-  var start,
-      max,
-      marker,
-      matchStart,
-      matchEnd,
-      token,
-      pos = state.pos,
-      ch = state.src.charCodeAt(pos);
-
-  if (ch !== 0x60 /* ` */) {
-      return false;
-    }
-
-  start = pos;
-  pos++;
-  max = state.posMax;
-
-  while (pos < max && state.src.charCodeAt(pos) === 0x60 /* ` */) {
-    pos++;
-  }
-
-  marker = state.src.slice(start, pos);
-
-  matchStart = matchEnd = pos;
-
-  while ((matchStart = state.src.indexOf('`', matchEnd)) !== -1) {
-    matchEnd = matchStart + 1;
-
-    while (matchEnd < max && state.src.charCodeAt(matchEnd) === 0x60 /* ` */) {
-      matchEnd++;
-    }
-
-    if (matchEnd - matchStart === marker.length) {
-      if (!silent) {
-        token = state.push('code_inline', 'code', 0);
-        token.markup = marker;
-        token.content = state.src.slice(pos, matchStart).replace(/[ \n]+/g, ' ').trim();
-        // TUI.EDITOR MODIFICATION START
-        // store number of backtick in data-backtick
-        // https://github.nhnent.com/fe/tui.editor/pull/981
-        token.attrSet('data-backticks', token.markup.length);
-        // TUI.EDITOR MODIFICATION END
-      }
-      state.pos = matchEnd;
-      return true;
-    }
-  }
-
-  if (!silent) {
-    state.pending += marker;
-  }
-  state.pos += marker.length;
-  return true;
-};
-
-/***/ }),
-
-/***/ 31:
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_31__;
-
-/***/ }),
-
-/***/ 32:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements editor preivew
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-var _mdPreview = __webpack_require__(12);
-
-var _mdPreview2 = _interopRequireDefault(_mdPreview);
-
-var _eventManager = __webpack_require__(15);
-
-var _eventManager2 = _interopRequireDefault(_eventManager);
-
-var _commandManager = __webpack_require__(2);
-
-var _commandManager2 = _interopRequireDefault(_commandManager);
-
-var _extManager = __webpack_require__(16);
-
-var _extManager2 = _interopRequireDefault(_extManager);
-
-var _convertor = __webpack_require__(17);
-
-var _convertor2 = _interopRequireDefault(_convertor);
-
-var _domUtils = __webpack_require__(3);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
-var _codeBlockManager = __webpack_require__(7);
-
-var _codeBlockManager2 = _interopRequireDefault(_codeBlockManager);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var TASK_ATTR_NAME = 'data-te-task';
-var TASK_CHECKED_CLASS_NAME = 'checked';
-
-/**
- * Class ToastUIEditorViewer
- */
-
-var ToastUIEditorViewer = function () {
-  /**
-     * Viewer
-     * @param {object} options Option object
-        * @param {string} options.initialValue Editor's initial value
-        * @param {object} options.events eventlist Event list
-            * @param {function} options.events.load It would be emitted when editor fully load
-            * @param {function} options.events.change It would be emitted when content changed
-            * @param {function} options.events.stateChange It would be emitted when format change by cursor position
-            * @param {function} options.events.focus It would be emitted when editor get focus
-            * @param {function} options.events.blur It would be emitted when editor loose focus
-        * @param {object} options.hooks Hook list
-            * @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
-    */
-  function ToastUIEditorViewer(options) {
-    var _this = this;
-
-    _classCallCheck(this, ToastUIEditorViewer);
-
-    this.options = _jquery2.default.extend({
-      useDefaultHTMLSanitizer: true,
-      codeBlockLanguages: _codeBlockManager.CodeBlockManager.getHighlightJSLanguages()
-    }, options);
-
-    this.eventManager = new _eventManager2.default();
-    this.commandManager = new _commandManager2.default(this);
-    this.convertor = new _convertor2.default(this.eventManager);
-    this.toMarkOptions = null;
-
-    if (this.options.useDefaultHTMLSanitizer) {
-      this.convertor.initHtmlSanitizer();
-    }
-
-    if (this.options.hooks) {
-      _tuiCodeSnippet2.default.forEach(this.options.hooks, function (fn, key) {
-        _this.addHook(key, fn);
-      });
-    }
-
-    if (this.options.events) {
-      _tuiCodeSnippet2.default.forEach(this.options.events, function (fn, key) {
-        _this.on(key, fn);
-      });
-    }
-
-    this.preview = new _mdPreview2.default((0, _jquery2.default)(this.options.el), this.eventManager, this.convertor, true);
-
-    this.preview.$el.on('mousedown', _jquery2.default.proxy(this._toggleTask, this));
-
-    _extManager2.default.applyExtension(this, this.options.exts);
-
-    this.setValue(this.options.initialValue);
-
-    this.eventManager.emit('load', this);
-  }
-
-  /**
-   * Toggle task by detecting mousedown event.
-   * @param {MouseEvent} ev - event
-   * @private
-   */
-
-
-  _createClass(ToastUIEditorViewer, [{
-    key: '_toggleTask',
-    value: function _toggleTask(ev) {
-      var isBeneathTaskBox = ev.offsetX < 18 && ev.offsetY > 18;
-
-      if (ev.target.hasAttribute(TASK_ATTR_NAME) && !isBeneathTaskBox) {
-        (0, _jquery2.default)(ev.target).toggleClass(TASK_CHECKED_CLASS_NAME);
-        this.eventManager.emit('change', {
-          source: 'viewer',
-          data: ev
-        });
-      }
-    }
-
-    /**
-     * Set content for preview
-     * @memberof ToastUIEditorViewer
-     * @param {string} markdown Markdown text
-     */
-
-  }, {
-    key: 'setMarkdown',
-    value: function setMarkdown(markdown) {
-      this.markdownValue = markdown = markdown || '';
-
-      this.preview.refresh(this.markdownValue);
-      this.eventManager.emit('setMarkdownAfter', this.markdownValue);
-    }
-
-    /**
-     * Set content for preview
-     * @memberof ToastUIEditorViewer
-     * @param {string} markdown Markdown text
-     * @deprecated
-     */
-
-  }, {
-    key: 'setValue',
-    value: function setValue(markdown) {
-      this.setMarkdown(markdown);
-    }
-
-    /**
-     * Bind eventHandler to event type
-     * @memberof ToastUIEditorViewer
-     * @param {string} type Event type
-     * @param {function} handler Event handler
-     */
-
-  }, {
-    key: 'on',
-    value: function on(type, handler) {
-      this.eventManager.listen(type, handler);
-    }
-
-    /**
-     * Unbind eventHandler from event type
-     * @memberof ToastUIEditorViewer
-     * @param {string} type Event type
-     */
-
-  }, {
-    key: 'off',
-    value: function off(type) {
-      this.eventManager.removeEventHandler(type);
-    }
-
-    /**
-     * Remove Viewer preview from document
-     * @memberof ToastUIEditorViewer
-     */
-
-  }, {
-    key: 'remove',
-    value: function remove() {
-      this.eventManager.emit('removeEditor');
-      this.preview.$el.off('mousedown', _jquery2.default.proxy(this._toggleTask, this));
-      this.options = null;
-      this.eventManager = null;
-      this.commandManager = null;
-      this.convertor = null;
-      this.preview = null;
-    }
-
-    /**
-     * Add hook to Viewer preview's event
-     * @memberof ToastUIEditorViewer
-     * @param {string} type Event type
-     * @param {function} handler Event handler
-     */
-
-  }, {
-    key: 'addHook',
-    value: function addHook(type, handler) {
-      this.eventManager.removeEventHandler(type);
-      this.eventManager.listen(type, handler);
-    }
-
-    /**
-     * Return true
-     * @memberof ToastUIEditorViewer
-     * @returns {boolean}
-     */
-
-  }, {
-    key: 'isViewer',
-    value: function isViewer() {
-      return true;
-    }
-
-    /**
-     * Return false
-     * @memberof ToastUIEditorViewer
-     * @returns {boolean}
-     */
-
-  }, {
-    key: 'isMarkdownMode',
-    value: function isMarkdownMode() {
-      return false;
-    }
-
-    /**
-     * Return false
-     * @memberof ToastUIEditorViewer
-     * @returns {boolean}
-     */
-
-  }, {
-    key: 'isWysiwygMode',
-    value: function isWysiwygMode() {
-      return false;
-    }
-
-    /**
-     * Define extension
-     * @memberof ToastUIEditorViewer
-     * @param {string} name Extension name
-     * @param {ExtManager~extension} ext extension
-     */
-
-  }], [{
-    key: 'defineExtension',
-    value: function defineExtension(name, ext) {
-      _extManager2.default.defineExtension(name, ext);
-    }
-  }]);
-
-  return ToastUIEditorViewer;
-}();
-
-/**
- * check whther is viewer
- * @type {boolean}
- */
-
-
-ToastUIEditorViewer.isViewer = true;
-
-/**
- * domUtil instance
- * @type {DomUtil}
- */
-ToastUIEditorViewer.domUtils = _domUtils2.default;
-
-/**
- * CodeBlockManager instance
- * @type {CodeBlockManager}
- */
-ToastUIEditorViewer.codeBlockManager = _codeBlockManager2.default;
-
-/**
- * MarkdownIt hightlight instance
- * @type {MarkdownIt}
- */
-ToastUIEditorViewer.markdownitHighlight = _convertor2.default.getMarkdownitHighlightRenderer();
-
-/**
- * @ignore
- */
-ToastUIEditorViewer.i18n = null;
-
-/**
- * @ignore
- */
-ToastUIEditorViewer.Button = null;
-
-/**
- * @ignore
- */
-ToastUIEditorViewer.WwCodeBlockManager = null;
-
-/**
- * @ignore
- */
-ToastUIEditorViewer.WwTableManager = null;
-
-/**
- * @ignore
- */
-ToastUIEditorViewer.WwTableSelectionManager = null;
-
-module.exports = ToastUIEditorViewer;
 
 /***/ }),
 
@@ -3614,11 +3792,11 @@ exports.CodeBlockManager = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CodeBlockManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _highlight = __webpack_require__(31);
+var _highlight = __webpack_require__(32);
 
 var _highlight2 = _interopRequireDefault(_highlight);
 
@@ -3728,47 +3906,110 @@ exports.default = new CodeBlockManager();
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _jquery = __webpack_require__(0);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var hostnameSent = false;
+/**
+ * @fileoverview Implements htmlSanitizer
+ * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ */
+var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpadding|cellspacing|class|clear|' + 'color|cols|compact|coords|dir|face|headers|height|hreflang|hspace|' + 'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' + 'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' + 'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' + 'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
+
+var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
 
 /**
- * send host name
+ * htmlSanitizer
+ * @param {string|Node} html html or Node
+ * @param {boolean} [needHtmlText] pass true if need html text
+ * @returns {string|DocumentFragment} result
  * @ignore
  */
-function sendHostName() {
-  if (hostnameSent) {
-    return;
-  }
-  hostnameSent = true;
+function htmlSanitizer(html, needHtmlText) {
+  var $html = (0, _jquery2.default)('<div />');
 
-  var trackingID = 'UA-115377265-9';
-  var applicationID = 'editor';
-  var hitType = 'event';
-  var _location = location,
-      hostname = _location.hostname;
+  html = html.replace(/<!--[\s\S]*?-->/g, '');
 
+  $html.append(html);
 
-  _tuiCodeSnippet2.default.imagePing('https://www.google-analytics.com/collect', {
-    v: 1,
-    t: hitType,
-    tid: trackingID,
-    cid: hostname,
-    dp: hostname,
-    dh: applicationID
+  removeUnnecessaryTags($html);
+  leaveOnlyWhitelistAttribute($html);
+
+  return finalizeHtml($html, needHtmlText);
+}
+
+/**
+ * Remove unnecessary tags
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function removeUnnecessaryTags($html) {
+  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title').remove();
+}
+
+/**
+ * Leave only white list attributes
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function leaveOnlyWhitelistAttribute($html) {
+  $html.find('*').each(function (index, node) {
+    var attrs = node.attributes;
+    var blacklist = _tuiCodeSnippet2.default.toArray(attrs).filter(function (attr) {
+      var isHTMLAttr = attr.name.match(HTML_ATTR_LIST_RX);
+      var isSVGAttr = attr.name.match(SVG_ATTR_LIST_RX);
+
+      return !isHTMLAttr && !isSVGAttr;
+    });
+
+    _tuiCodeSnippet2.default.forEachArray(blacklist, function (attr) {
+      // Edge svg attribute name returns uppercase bug. error guard.
+      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/5579311/
+      if (attrs.getNamedItem(attr.name)) {
+        attrs.removeNamedItem(attr.name);
+      }
+    });
   });
 }
 
-var isMac = /Mac/.test(navigator.platform);
+/**
+ * Finalize html result
+ * @private
+ * @param {jQuery} $html jQuery instance
+ * @param {boolean} needHtmlText pass true if need html text
+ * @returns {string|DocumentFragment} result
+ */
+function finalizeHtml($html, needHtmlText) {
+  var returnValue = void 0;
 
-module.exports = {
-  sendHostName: sendHostName,
-  isMac: isMac
-};
+  if (needHtmlText) {
+    returnValue = $html[0].innerHTML;
+  } else {
+    var frag = document.createDocumentFragment();
+    var childNodes = _tuiCodeSnippet2.default.toArray($html[0].childNodes);
+    var length = childNodes.length;
+
+
+    for (var i = 0; i < length; i += 1) {
+      frag.appendChild(childNodes[i]);
+    }
+    returnValue = frag;
+  }
+
+  return returnValue;
+}
+
+exports.default = htmlSanitizer;
 
 /***/ })
 
