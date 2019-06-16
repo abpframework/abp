@@ -1,6 +1,6 @@
 # ABP CLI, New Templates & Other Features with the v0.18 Release
 
-ABP v0.18 has been released with 70+ issues resolved and 500+ commits pushed.
+ABP v0.18 has been released with [70+ issues](https://github.com/abpframework/abp/milestone/16?closed=1) resolved and [500+ commits](https://github.com/abpframework/abp/compare/0.17.0.0...0.18.0) pushed.
 
 ## Web Site Changes
 
@@ -11,11 +11,11 @@ The [abp.io](https://abp.io) web site is **completely renewed**. Documents & blo
 
 ## ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions. Main functions are;
+ABP CLI (Command Line Interface) is a new global command line tool to perform some common operations for ABP based solutions. Main functions are;
 
-* Creating a new application or module project.
-* Adding a new module to an application.
-* Updating all ABP related packages in a solution.
+* **Creating a new application** or module project.
+* **Adding a new module** to an application.
+* **Updating** all ABP related packages in a solution.
 
 ABP CLI is now the preferred way to create a new project, while you can still download a new project from the [get started](https://abp.io/get-started) page.
 
@@ -67,3 +67,18 @@ Here are some new features and important enhancements come with this release:
 * Added multi-language support for the docs module. Used it for the [ABP documentation](https://docs.abp.ip).
 
 See the [GitHub Release Notes](https://github.com/abpframework/abp/releases/tag/0.18.0) for all features, enhancements & bugfixes in this release.
+
+## Road Map
+
+One thing related to the ABP v1.0 release is .NET Core / ASP.NET Core 3.0 releases. According to the [.NET Core road map](https://github.com/dotnet/core/blob/master/roadmap.md), 3.0 release has been scheduled for September 2019.
+
+ASP.NET Core comes with big changes and features. As a big breaking change, it will [only run on .NET Core](https://github.com/aspnet/Announcements/issues/324) (dropping .net standard support), so it can not work with full .net framework.
+
+We had declared before to release v1.0 in 2019 Q2. The main works we should do are;
+
+* Fill the gaps in current features.
+* Refactor & improve the current APIs.
+* Fix known bugs.
+* Complete the documentation & tutorials.
+
+In addition to the work we should do, we are also considering to wait ASP.NET Core 3.0 release. Because, if we release ABP v1.0 before ASP.NET Core 3.0, we will have to release ABP v2.0 again in a short time and drop v1.0 support.
