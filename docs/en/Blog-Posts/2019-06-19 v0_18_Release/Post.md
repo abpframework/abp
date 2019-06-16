@@ -4,10 +4,10 @@ ABP v0.18 has been released with [70+ issues](https://github.com/abpframework/ab
 
 ## Web Site Changes
 
-The [abp.io](https://abp.io) web site is **completely renewed**. Documents & blog URLs are also changed:
+The [abp.io](https://abp.io) web site is **completely renewed** to highlight important features and goals of the ABP framework. Documents & blog URLs are also changed:
 
-- `abp.io/documents` changed to `docs.abp.io`
-- `abp.io/blog` changed to `blog.abp.io`
+- `abp.io/documents` changed to [docs.abp.io](https://docs.abp.io).
+- `abp.io/blog` changed to [blog.abp.io](https://blog.abp.io).
 
 ## ABP CLI
 
