@@ -27,7 +27,7 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var directory = Path.GetDirectoryName(path);
 
-            return Directory.GetFiles(directory, "*.csproj", searchOption: SearchOption.TopDirectoryOnly).Length > 0;
+            return Directory.GetFiles(directory, "*.csproj", searchOption: SearchOption.TopDirectoryOnly).Any();
         }
     }
 }
