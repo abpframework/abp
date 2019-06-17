@@ -77,7 +77,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Logger.LogInformation($"Updated {package.Name} to {version} in {file.Replace(Directory.GetCurrentDirectory(), "")}.");
         }
 
-        private string GetLatestVersion(JProperty package)
+        protected virtual string GetLatestVersion(JProperty package)
         {
             if (_fileVersionStorage.ContainsKey(package.Name))
             {
