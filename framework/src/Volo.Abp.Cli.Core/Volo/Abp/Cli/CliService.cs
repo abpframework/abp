@@ -71,7 +71,7 @@ namespace Volo.Abp.Cli
 
         private void CheckDependencies()
         {
-            var installedNpmPackages = GetInstalledNpmPackages();
+            var installedNpmPackages = CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0");
             
             if (!installedNpmPackages.Contains(" yarn@"))
             {
@@ -81,35 +81,6 @@ namespace Volo.Abp.Cli
             {
                 InstallGulp();
             }
-        }
-
-        private string GetInstalledNpmPackages()
-        {
-            var output = "";
-
-            using (var process = new Process())
-            {
-                process.StartInfo = new ProcessStartInfo(CmdHelper.GetFileName())
-                {
-                    Arguments = CmdHelper.GetArguments("npm list -g --depth 0"),
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true
-                };
-                process.Start();
-
-                using (var stdOut = process.StandardOutput)
-                {
-                    using (var stdErr = process.StandardError)
-                    {
-                        output = stdOut.ReadToEnd();
-                        output += stdErr.ReadToEnd();
-                    }
-                }
-            }
-
-            return output;
         }
 
         private void InstallYarn()

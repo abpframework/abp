@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Volo.Abp.Cli.Commands;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -18,14 +17,12 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public ILogger<NpmPackagesUpdater> Logger { get; set; }
 
-        private readonly LatestNpmPackageVersionFinder _latestNpmPackageVersionFinder;
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
 
         private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
 
-        public NpmPackagesUpdater(LatestNpmPackageVersionFinder latestNpmPackageVersionFinder, PackageJsonFileFinder packageJsonFileFinder)
+        public NpmPackagesUpdater(PackageJsonFileFinder packageJsonFileFinder)
         {
-            _latestNpmPackageVersionFinder = latestNpmPackageVersionFinder;
             _packageJsonFileFinder = packageJsonFileFinder;
 
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
@@ -87,7 +84,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 return _fileVersionStorage[package.Name];
             }
 
-            var version = _latestNpmPackageVersionFinder.Find(package.Name);
+            var version = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
+            
             _fileVersionStorage[package.Name] = version;
 
             return version;
