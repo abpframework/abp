@@ -37,38 +37,26 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var file in fileList)
             {
-                ProcessFile(file);
-            }
-        }
+                UpdatePackagesInFile(file);
 
-        protected virtual void ProcessFile(string file)
-        {
-            UpdatePackagesInFile(file, out var isFileModified);
-
-            if (isFileModified)
-            {
                 RunYarnAndGulp(file);
             }
         }
 
-
-        protected virtual void UpdatePackagesInFile(string file, out bool isAnyPackageUpdated)
+        protected virtual void UpdatePackagesInFile(string file)
         {
-            isAnyPackageUpdated = false;
             var fileContent = File.ReadAllText(file);
+            var packageJson = JObject.Parse(fileContent);
+            var abpPackages = GetAbpPackagesFromPackageJson(packageJson);
 
-            if (!fileContent.Contains("\"@abp/") && !fileContent.Contains("\"@volo/"))
+            if (!abpPackages.Any())
             {
                 return;
             }
 
-            var packageJson = JObject.Parse(fileContent);
-
-            var abpPackages = GetAbpPackagesFromPackageJson(packageJson);
-
             foreach (var abpPackage in abpPackages)
             {
-                UpdatePackage(file, abpPackage, out isAnyPackageUpdated);
+                UpdatePackage(file, abpPackage);
             }
 
             var modifiedFileContent = packageJson.ToString(Formatting.Indented);
@@ -76,29 +64,33 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(file, modifiedFileContent);
         }
 
-        protected virtual void UpdatePackage(string file, JProperty package, out bool isPackageUpdated)
+        protected virtual void UpdatePackage(string file, JProperty package)
         {
-            isPackageUpdated = false;
-            string version;
+            var version = GetLatestVersion(package);
 
-            if (_fileVersionStorage.ContainsKey(package.Name))
-            {
-                version = _fileVersionStorage[package.Name];
-            }
-            else
-            {
-                version = _latestNpmPackageVersionFinder.Find(package.Name);
-                _fileVersionStorage[package.Name] = version;
-            }
+            var versionWithPrefix = $"^{version}";
 
-            if (version == (string) package.Value)
+            if (versionWithPrefix == (string)package.Value)
             {
                 return;
             }
 
-            package.Value.Replace($"^{version}");
-            isPackageUpdated = true;
-            Logger.LogInformation($"Updated {package.Name} to {version} in {file.Replace(Directory.GetCurrentDirectory(),"")}.");
+            package.Value.Replace(versionWithPrefix);
+
+            Logger.LogInformation($"Updated {package.Name} to {version} in {file.Replace(Directory.GetCurrentDirectory(), "")}.");
+        }
+
+        private string GetLatestVersion(JProperty package)
+        {
+            if (_fileVersionStorage.ContainsKey(package.Name))
+            {
+                return _fileVersionStorage[package.Name];
+            }
+
+            var version = _latestNpmPackageVersionFinder.Find(package.Name);
+            _fileVersionStorage[package.Name] = version;
+
+            return version;
         }
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
@@ -108,6 +100,7 @@ namespace Volo.Abp.Cli.ProjectModification
             var abpPackages = properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList();
             return abpPackages;
         }
+
         protected virtual void RunYarnAndGulp(string file)
         {
             var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
