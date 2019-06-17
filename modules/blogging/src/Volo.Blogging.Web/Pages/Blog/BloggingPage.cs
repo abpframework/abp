@@ -70,6 +70,11 @@ namespace Volo.Blogging.Pages.Blog
 
         public string RenderMarkdownToString(string content)
         {
+            if (content.IsNullOrWhiteSpace())
+            {
+                return "";
+            }
+
             byte[] bytes = Encoding.Default.GetBytes(content);
             var utf8Content = Encoding.UTF8.GetString(bytes);
 
