@@ -76,8 +76,8 @@ namespace Volo.Abp.Cli.ProjectModification
 
             var indexOfThirdQuote = content.IndexOf("\"", StringComparison.Ordinal);
 
-            var version = _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews);
-            returningText.Append(version);
+            var version = _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews).GetAwaiter().GetResult();
+            returningText.Append(version.ToString());
 
             index = indexOfPackageReference + packageReferenceStartText.Length + indexAfterQuote + indexAfterSecondQuote + indexOfThirdQuote;
 
