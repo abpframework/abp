@@ -28,12 +28,15 @@ body {
         left: 0;
         position: fixed;
 
+        .docs-language {
+        }
+
         .docs-sidebar-wrapper {
             width: 270px;
             float: right;
 
             input.form-control {
-                background: none; 
+                background: none;
                 background: #fff;
                 border: 0;
 
@@ -45,26 +48,37 @@ body {
             .docs-version {
                 position: relative;
                 padding: 0 1rem;
-                margin: .45rem 0;
+                margin: .25rem 0;
 
                 .version-select {
-                    border-radius: 8px;
+                    border-radius: 3px;
+                    border: 1px solid #e9ecef;
 
                     .input-group-text {
-                        border: 0;
+                        padding: 0.375rem 0.6rem;
+                        font-size: .9rem;
+                        width: 32px;
+                        height: 30px;
+                        line-height: 1;
+                        border-radius: 0px;
+                        border: 1px solid #e9ecef;
                     }
 
                     select.form-control, input.form-control {
-                        line-height: 1;
-                        border-top-left-radius: 0;
-                        border-bottom-left-radius: 0;
-                        padding: .3em .5em .5em;
+                        padding: 0 10px;
                         border: 0;
-
+                        min-height: 30px;
+                        height: 30px;
+                        font-size: .85em;
+                        border-radius: 1px;
 
                         &:focus, &:active, &:hover, &:visited {
                             box-shadow: none;
                         }
+                    }
+
+                    select.form-control {
+                        padding-left: 6px;
                     }
 
                     label {
@@ -72,12 +86,12 @@ body {
                 }
             }
 
-            .docs-filter { 
+            .docs-filter {
                 padding: 0 1rem;
                 margin: .5rem 0;
                 font-size: .9em;
 
-                .filter-icon { 
+                .filter-icon {
 
                     i.fa {
                         color: #ddd;
@@ -205,6 +219,7 @@ body {
                 }
             }
         }
+
 
         .docs-top {
             .navbar-logo {
@@ -398,15 +413,15 @@ body {
     }
 
     .docs-page-index {
-        min-height: 100vh;
+        min-height: 96vh;
 
         #scroll-index {
-            max-height: 100vh;
+            max-height: 96vh;
         }
 
         .docs-inner-anchors {
             position: fixed;
-            top: 0px;
+            top: 40px;
             /* max-width: 270px; */
             padding: 10px;
             font-size: .90em;
@@ -464,6 +479,7 @@ body {
             }
         }
 
+
         .scroll-top-btn {
             display: none;
             font-size: .85em;
@@ -493,22 +509,18 @@ body {
 
                     .docs-version {
                         .version-select {
+                            border: 1px solid #333;
+
                             select.form-control, input.form-control {
-                                background: #333;
-                                border-color: #333;
+                                background: #191919;
+                                border-color: #191919;
                                 color: #999;
-                                font-size: .9em;
-                                min-height: 40px;
-                                padding-left: 8px;
                             }
 
                             input.form-control {
-                                background: #333;
-                                border-color: #333;
+                                background: #191919;
+                                border-color: #191919;
                                 color: #999;
-                                font-size: .9em;
-                                min-height: 40px;
-                                padding-left: 12px;
 
                                 &::placeholder {
                                     color: #999;
@@ -517,15 +529,9 @@ body {
                             }
 
                             label {
-                                background: #444;
-                                border-color: #444;
+                                background: #333;
+                                border-color: #333;
                                 color: #ddd;
-                                width: 36px;
-                                text-align: center;
-                                padding-left: 0;
-                                padding-right: 0;
-                                display: inline-block;
-                                line-height: 26px;
                             }
                         }
                     }
