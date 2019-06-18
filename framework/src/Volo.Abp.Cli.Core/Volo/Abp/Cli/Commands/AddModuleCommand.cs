@@ -56,9 +56,9 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
-            sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current soluton.");
-            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given soluton.");
-            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given soluton but doesn't create a database migration.");
+            sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current solution.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given solution.");
+            sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
             sb.AppendLine("");
 
             return Task.FromResult(sb.ToString());
@@ -93,7 +93,7 @@ namespace Volo.Abp.Cli.Commands
 
             if (foundSolutionFiles.Length == 0)
             {
-                throw new CliUsageException("'abp add-module' command should be used inside a folder contaning a .sln file!");
+                throw new CliUsageException("'abp add-module' command should be used inside a folder containing a .sln file!");
             }
 
             //foundSolutionFiles.Length > 1
