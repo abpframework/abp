@@ -106,7 +106,7 @@ namespace Volo.Abp.Cli
             {
                 var latestVersion = await GetLatestVersion(updateChannel);
 
-                if (latestVersion != null & latestVersion > currentCliVersion)
+                if (latestVersion != null && latestVersion > currentCliVersion)
                 {
                     LogNewVersionInfo(updateChannel, latestVersion, toolPath);
                 }
