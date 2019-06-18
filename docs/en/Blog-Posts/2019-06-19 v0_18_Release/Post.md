@@ -61,8 +61,9 @@ See the [startup templates document](https://docs.abp.io/en/abp/latest/Startup-T
 
 Here are some other features and enhancements coming with this release:
 
-* New data seed system with `IDataSeeder` service & `IDataSeedContributor` interface to allow a modular initial data seed system.
+* New [Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper) package.
 * New [Volo.Abp.Specifications](https://www.nuget.org/packages/Volo.Abp.Specifications) package.
+* New data seed system with `IDataSeeder` service & `IDataSeedContributor` interface to allow a modular initial data seed system.
 * Improved MemoryDB implementation to serialize/deserialize objects stored in memory, so it provides more realistic infrastructure for mocking database in unit/integration tests.
 * Added multi-language support for the docs module. Used it for the [ABP documentation](https://docs.abp.io).
 
