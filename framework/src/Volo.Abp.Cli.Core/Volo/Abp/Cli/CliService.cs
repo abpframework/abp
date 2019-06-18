@@ -40,6 +40,7 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
+            Logger.LogInformation("https://abp.io");
 
             await CheckCliVersionAsync();
             CheckDependencies();
@@ -95,20 +96,54 @@ namespace Volo.Abp.Cli
         private async Task CheckCliVersionAsync()
         {
             var assembly = typeof(CliService).Assembly;
+            var toolPath = GetToolPath(assembly);
+            var currentCliVersion = await GetCurrentCliVersion(toolPath, assembly);
+            var updateChannel = GetUpdateChannel(currentCliVersion);
 
-            var toolPath = assembly.Location.Contains(".store") ? assembly.Location.Substring(0, assembly.Location.IndexOf(".store")) : null;
+            Logger.LogInformation($"Version {currentCliVersion} ({updateChannel} channel)");
+
+            try
+            {
+                var latestVersion = await GetLatestVersion(updateChannel);
+
+                if (latestVersion != null & latestVersion > currentCliVersion)
+                {
+                    LogNewVersionInfo(updateChannel, latestVersion, toolPath);
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.LogWarning("Unable to retrieve the latest version");
+                Logger.LogWarning(e.Message);
+            }
+        }
+
+        private static string GetToolPath(Assembly assembly)
+        {
+            if (!assembly.Location.Contains(".store"))
+            {
+                return null;
+            }
+
+            return assembly.Location.Substring(0, assembly.Location.IndexOf(".store", StringComparison.Ordinal));
+        }
+
+        private async Task<SemanticVersion> GetCurrentCliVersion(string toolPath, Assembly assembly)
+        {
             SemanticVersion currentCliVersion = default;
-
             if (!string.IsNullOrEmpty(toolPath))
             {
-                var strReader = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list --tool-path {toolPath}"));
-                string output;
-                while ((output = await strReader.ReadLineAsync()) != null)
+                var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list --tool-path {toolPath}"));
+                string line;
+                while ((line = await consoleOutput.ReadLineAsync()) != null)
                 {
-                    if (output.StartsWith("Volo.Abp.Cli", StringComparison.InvariantCultureIgnoreCase) &&
-                        SemanticVersion.TryParse(output.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1], out var detectedVersion))
+                    if (line.StartsWith("Volo.Abp.Cli", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        currentCliVersion = detectedVersion;
+                        var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
+
+                        SemanticVersion.TryParse(version, out currentCliVersion);
+
+                        break;
                     }
                 }
             }
@@ -118,73 +153,76 @@ namespace Volo.Abp.Cli
                 // If not a tool executable, fallback to assembly version and treat as dev without updates
                 // Assembly revisions are not supported by SemVer scheme required for NuGet, trim to {major}.{minor}.{patch}
                 var assemblyVersion = string.Join(".", assembly.GetFileVersion().Split('.').Take(3));
-                currentCliVersion = SemanticVersion.Parse(assemblyVersion + "-dev");
+                return SemanticVersion.Parse(assemblyVersion + "-dev");
             }
 
-            var updateChannel =
-                currentCliVersion.IsPrerelease ?
-                    currentCliVersion.Release.Contains("preview") ?
-                        UpdateChannel.Nightly
-                        : currentCliVersion.Release.Contains("dev") ?
-                            UpdateChannel.Development
-                            : UpdateChannel.Prerelease
-                    : UpdateChannel.Stable;
+            return currentCliVersion;
+        }
 
-            Logger.LogInformation($"Version {currentCliVersion} ({updateChannel} channel)");
-
-            try
+        private static UpdateChannel GetUpdateChannel(SemanticVersion currentCliVersion)
+        {
+            if (!currentCliVersion.IsPrerelease)
             {
-                SemanticVersion latestVersion = default;
-
-                switch (updateChannel)
-                {
-                    case UpdateChannel.Stable:
-                        latestVersion = await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
-                        break;
-
-                    case UpdateChannel.Prerelease:
-                        latestVersion = await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includePreviews: true);
-                        break;
-
-                    case UpdateChannel.Nightly:
-                        latestVersion = await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
-                        break;
-                }
-
-                if (latestVersion != null & latestVersion > currentCliVersion)
-                {
-                    Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
-                    Logger.LogWarning("");
-                    Logger.LogWarning("Update Command: ");
-
-                    // Update command doesn't support prerelease versions https://github.com/dotnet/sdk/issues/2551 workaround is to uninstall & install
-                    switch (updateChannel)
-                    {
-                        case UpdateChannel.Stable:
-                            Logger.LogWarning($"    dotnet tool update --tool-path {toolPath} Volo.Abp.Cli");
-                            break;
-
-                        case UpdateChannel.Prerelease:
-                            Logger.LogWarning($"    dotnet tool uninstall --tool-path {toolPath} Volo.Abp.Cli");
-                            Logger.LogWarning($"    dotnet tool install --tool-path {toolPath} --version {latestVersion} Volo.Abp.Cli");
-                            break;
-
-                        case UpdateChannel.Nightly:
-                            Logger.LogWarning($"    dotnet tool uninstall --tool-path {toolPath} Volo.Abp.Cli");
-                            Logger.LogWarning($"    dotnet tool install --tool-path {toolPath} --add-source https://www.myget.org/F/abp-nightly/api/v3/index.json --version {latestVersion} Volo.Abp.Cli");
-                            break;
-                    }
-
-                    Logger.LogWarning("");
-                }
-
-                return;
+                return UpdateChannel.Stable;
             }
-            catch (Exception e)
+
+            if (currentCliVersion.Release.Contains("preview"))
             {
-                Logger.LogWarning("Unable to retrieve the latest version");
-                Logger.LogWarning(e.Message);
+                return UpdateChannel.Nightly;
             }
+
+            if (currentCliVersion.Release.Contains("dev"))
+            {
+                return UpdateChannel.Development;
+            }
+
+            return UpdateChannel.Prerelease;
+        }
+
+        private async Task<SemanticVersion> GetLatestVersion(UpdateChannel updateChannel)
+        {
+            switch (updateChannel)
+            {
+                case UpdateChannel.Stable:
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
+
+                case UpdateChannel.Prerelease:
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includePreviews: true);
+
+                case UpdateChannel.Nightly:
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
+                default:
+                    return default;
+            }
+        }
+
+        private void LogNewVersionInfo(UpdateChannel updateChannel, SemanticVersion latestVersion, string toolPath)
+        {
+            Logger.LogWarning(
+                $"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
+            Logger.LogWarning("");
+            Logger.LogWarning("Update Command: ");
+
+            // Update command doesn't support prerelease versions https://github.com/dotnet/sdk/issues/2551 workaround is to uninstall & install
+            switch (updateChannel)
+            {
+                case UpdateChannel.Stable:
+                    Logger.LogWarning($"    dotnet tool update --tool-path {toolPath} Volo.Abp.Cli");
+                    break;
+
+                case UpdateChannel.Prerelease:
+                    Logger.LogWarning($"    dotnet tool uninstall --tool-path {toolPath} Volo.Abp.Cli");
+                    Logger.LogWarning($"    dotnet tool install --tool-path {toolPath} --version {latestVersion} Volo.Abp.Cli");
+                    break;
+
+                case UpdateChannel.Nightly:
+                    Logger.LogWarning($"    dotnet tool uninstall --tool-path {toolPath} Volo.Abp.Cli");
+                    Logger.LogWarning(
+                        $"    dotnet tool install --tool-path {toolPath} --add-source https://www.myget.org/F/abp-nightly/api/v3/index.json --version {latestVersion} Volo.Abp.Cli");
+                    break;
+            }
+
+            Logger.LogWarning("");
         }
 
         protected enum UpdateChannel

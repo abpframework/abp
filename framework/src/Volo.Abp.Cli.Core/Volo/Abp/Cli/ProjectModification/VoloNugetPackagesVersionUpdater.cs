@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
@@ -75,9 +76,9 @@ namespace Volo.Abp.Cli.ProjectModification
             content = content.Substring(indexAfterSecondQuote);
 
             var indexOfThirdQuote = content.IndexOf("\"", StringComparison.Ordinal);
-
-            var version = _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews).GetAwaiter().GetResult();
-            returningText.Append(version.ToString());
+            
+            var version = AsyncHelper.RunSync(() => _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews));
+            returningText.Append(version);
 
             index = indexOfPackageReference + packageReferenceStartText.Length + indexAfterQuote + indexAfterSecondQuote + indexOfThirdQuote;
 
