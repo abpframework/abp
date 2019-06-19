@@ -4,6 +4,7 @@
 @using Volo.Abp.Identity.Localization
 @using Volo.Abp.Identity.Web.Navigation
 @using Volo.Abp.Identity.Web.Pages.Identity.Roles
+@using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @model IndexModel
 @inject IHtmlLocalizer<IdentityResource> L
 @inject IPageLayout PageLayout
@@ -15,11 +16,13 @@
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-style src="/Pages/AbpPermissionManagement/permission-management-modal.css" />
+        <abp-style type="@typeof(MalihuCustomScrollbarPluginStyleBundleContributor)"/>
     </abp-style-bundle>
 }
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script src="/Pages/AbpPermissionManagement/permission-management-modal.js" />
+        <abp-script type="@typeof(MalihuCustomScrollbarPluginScriptBundleContributor)"/>
         <abp-script src="/Pages/identity/roles/index.js" />
     </abp-script-bundle>
 }
