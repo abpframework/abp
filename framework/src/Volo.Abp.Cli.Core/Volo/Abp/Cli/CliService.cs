@@ -40,7 +40,6 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
-            Logger.LogInformation("https://abp.io");
 
             await CheckCliVersionAsync();
             CheckDependencies();
