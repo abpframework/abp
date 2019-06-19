@@ -58,6 +58,7 @@ $projects = (
     "framework/src/Volo.Abp.Cli.Core",
     "framework/src/Volo.Abp.Cli",
     "framework/src/Volo.Abp.Core",
+    "framework/src/Volo.Abp.Dapper",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",
     "framework/src/Volo.Abp.Ddd.Domain",

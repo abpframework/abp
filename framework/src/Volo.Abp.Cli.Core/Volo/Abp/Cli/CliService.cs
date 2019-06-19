@@ -190,6 +190,7 @@ namespace Volo.Abp.Cli
 
                 case UpdateChannel.Nightly:
                     return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
+
                 default:
                     return default;
             }
