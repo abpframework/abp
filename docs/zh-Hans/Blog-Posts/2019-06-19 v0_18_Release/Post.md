@@ -17,7 +17,7 @@ ABP CLI(命令行界面)是一种新的全局命令行工具,用于执行基于A
 * **向应用程序添加新模块**.
 * **更新**解决方案中所有与ABP相关的包.
 
-ABP CLI现在是创建新项目的首选方式,您仍然可以从[开始](https://abp.io/get-started)页面下载新项目.
+ABP CLI现在是创建新项目的首选方式,你仍然可以从[开始](https://abp.io/get-started)页面下载新项目.
 
 ### 用法
 
@@ -61,8 +61,9 @@ abp update
 
 以下是此版本附带的一些其他功能和增强功能：
 
-* 具有`IDataSeeder`服务和`IDataSeedContributor`接口的新数据种子系统,允许模块化初始数据种子系统.
+* 新[Volo.Abp.Dapper](https://www.nuget.org/packages/Volo.Abp.Dapper)包.
 * 新[Volo.Abp.Specifications](https://www.nuget.org/packages/Volo.Abp.Specifications)包.
+* 具有`IDataSeeder`服务和`IDataSeedContributor`接口的新数据种子系统,允许模块化初始数据种子系统.
 * 改进了MemoryDB实现,以序列化/反序列化存储在内存中的对象,因此它为单元/集成测试中的数据库模拟提供了更真实的基础结构.
 * 为docs模块添加了多语言支持.用于[ABP文档](https://docs.abp.io).
 
@@ -85,4 +86,4 @@ ASP.NET Core具有很大的变化和功能.作为一个重大的突破性变化,
 
 ## 想要贡献？
 
-感谢社区对ABP开发的支持.非常感谢.如果您还想参与,请参阅[本指南](https://github.com/abpframework/abp/blob/master/docs/en/Contribution/Index.md)作为开始.
+感谢社区对ABP开发的支持.非常感谢.如果你还想参与,请参阅[本指南](https://github.com/abpframework/abp/blob/master/docs/en/Contribution/Index.md)作为开始.
