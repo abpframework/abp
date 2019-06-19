@@ -40,7 +40,6 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
-            Logger.LogInformation("https://abp.io");
 
             await CheckCliVersionAsync();
             CheckDependencies();
@@ -191,6 +190,7 @@ namespace Volo.Abp.Cli
 
                 case UpdateChannel.Nightly:
                     return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
+
                 default:
                     return default;
             }
