@@ -102,7 +102,7 @@ The solution has multiple test projects, one for each layer:
 - `.Domain.Tests` is used to test the domain layer.
 - `.Application.Tests` is used to test the application layer.
 - `.EntityFrameworkCore.Tests` is used to test EF Core configuration and custom repositories.
-- `.MongoDB.Tests` is used to test EF Core configuration and custom repositories.
+- `.MongoDB.Tests` is used to test MongoDB configuration and custom repositories.
 - `.TestBase` is a base (shared) project for all tests.
 
 In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
@@ -120,8 +120,6 @@ You can still create unit tests for your classes which will be harder to write (
 ### Host Projects
 
 The solution has a few host applications to run your module on development. Host applications are used to run your module in a fully configured application. It is useful on development. Host applications includes some other modules in addition to the module being developed:
-
-* 
 
 Host applications support two types of scenarios.
 

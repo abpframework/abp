@@ -11,7 +11,7 @@ MVC应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design
 
 ## 如何开始
 
-你要以使用[ABP CLI](../CLI.md)创建基于此启动模板的新项目,或者你也可以在[入门](https://abp.io/get-started)页面创建并下载项目. 在这里我们使用CLI创建新项目.
+你可以使用[ABP CLI](../CLI.md)创建基于此启动模板的新项目,或者你也可以在[入门](https://abp.io/get-started)页面创建并下载项目. 在这里我们使用CLI创建新项目.
 
 如果未安装ABP CLI,第一步是安装ABP CLI
 
@@ -173,7 +173,7 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 >
 > 你可以在表示层中使用领域实体和仓储,但是根据DDD的理论,这被认为是一种不好的做法.
 
-#### 测试项目
+#### Test 项目
 
 解决方案有多个测试项目,每一层都会有一个:
 
