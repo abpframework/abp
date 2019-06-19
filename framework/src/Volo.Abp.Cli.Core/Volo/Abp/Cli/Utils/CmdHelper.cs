@@ -17,6 +17,35 @@ namespace Volo.Abp.Cli.Utils
             Process.Start(procStartInfo).WaitForExit();
         }
 
+        public static string RunCmdAndGetOutput(string command)
+        {
+            var output = "";
+
+            using (var process = new Process())
+            {
+                process.StartInfo = new ProcessStartInfo(CmdHelper.GetFileName())
+                {
+                    Arguments = CmdHelper.GetArguments(command),
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                };
+                process.Start();
+
+                using (var stdOut = process.StandardOutput)
+                {
+                    using (var stdErr = process.StandardError)
+                    {
+                        output = stdOut.ReadToEnd();
+                        output += stdErr.ReadToEnd();
+                    }
+                }
+            }
+
+            return output.Trim();
+        }
+
         public static string GetArguments(string command)
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))

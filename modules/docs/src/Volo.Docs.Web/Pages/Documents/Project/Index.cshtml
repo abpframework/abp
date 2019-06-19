@@ -90,24 +90,46 @@
                         </div>
                     }
 
-                    @if (Model.VersionSelectItems.Any())
-                    {
-                        <div class="docs-version">
-                            <div class="version-select">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text">
-                                            <i class="fa fa-check-square-o" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
-                                        </label>
-                                    </div>
+                    <div class="row">
+                        @if (Model.VersionSelectItems.Any())
+                        {
+                            <div class="col @(Model.LanguageSelectListItems.Any()?"pr-0":"")">
+                                <div class="docs-version @(Model.LanguageSelectListItems.Any()?"pr-1":"")">
+                                    <div class="version-select">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
+                                                </label>
+                                            </div>
 
-                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
+                                            <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
 
-                    <div class="docs-version">
+                        @if (Model.VersionSelectItems.Any())
+                        {
+                            <div class="col  @(Model.VersionSelectItems.Any()?"pl-0":"")">
+                                <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
+                                    <div class="version-select">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text">
+                                                    <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
+                                                </label>
+                                            </div>
+                                            <select asp-items="Model.LanguageSelectListItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="docs-version mb-4">
                         <div class="version-select">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -118,6 +140,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
                     {
@@ -159,11 +182,6 @@
                     </div>
 
                     <div class="float-right">
-                        @if (Model.LanguageSelectListItems.Count > 1)
-                        {
-                                <select asp-items="Model.LanguageSelectListItems" class="mr-2" onchange="window.location.replace(this.value)"></select>
-                        }
-
                         @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                         {
                             <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
@@ -207,6 +225,7 @@
             <div class="col-md-2 docs-page-index position-relative bg-light">
 
                 <div id="scroll-index" class="docs-inner-anchors mt-2">
+
                     <h5>@L["InThisDocument"]</h5>
                     <nav id="docs-sticky-index" class="navbar index-scroll">
                     </nav>

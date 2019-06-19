@@ -25,6 +25,11 @@ namespace Volo.Abp.Emailing.Templates
             Options = options.Value;
         }
 
+        public async Task<EmailTemplate> GetAsync(string name)
+        {
+            return await GetAsync(name, CultureInfo.CurrentUICulture.Name);
+        }
+
         public async Task<EmailTemplate> GetAsync(string name, string cultureName)
         {
             return await GetInternalAsync(name, cultureName);

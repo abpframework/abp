@@ -1,11 +1,11 @@
 {
-  "version": "0.6.2",
+  "version": "0.6.5",
   "name": "@abp/lodash",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.6.2",
+    "@abp/core": "^0.6.5",
     "lodash": "^4.17.10"
   },
   "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"

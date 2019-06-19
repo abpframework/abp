@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
@@ -31,6 +33,13 @@ namespace Volo.Abp.EventBus
                 (IEventHandler) scope.ServiceProvider.GetRequiredService(HandlerType),
                 () => scope.Dispose()
             );
+        }
+
+        public bool IsInFactories(List<IEventHandlerFactory> handlerFactories)
+        {
+            return handlerFactories
+                .OfType<IocEventHandlerFactory>()
+                .Any(f => f.HandlerType == HandlerType);
         }
 
         public void Dispose()

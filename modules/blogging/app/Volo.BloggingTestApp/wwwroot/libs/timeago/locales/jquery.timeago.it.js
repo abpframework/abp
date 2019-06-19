@@ -9,8 +9,10 @@
 }(function (jQuery) {
   // Italian
   jQuery.timeago.settings.strings = {
+    prefixAgo: null,
+    prefixFromNow: "fra",
     suffixAgo: "fa",
-    suffixFromNow: "da ora",
+    suffixFromNow: null,
     seconds: "meno di un minuto",
     minute: "circa un minuto",
     minutes: "%d minuti",
