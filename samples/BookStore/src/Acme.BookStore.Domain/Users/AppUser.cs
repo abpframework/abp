@@ -8,7 +8,7 @@ namespace Acme.BookStore.Users
      * IdentityUser entity of the Identity module.
      *
      * - You can define your custom properties into this class.
-     * - You never create or delete this entity, becase it is Identity module's job.
+     * - You never create or delete this entity, because it is Identity module's job.
      * - You can query users from database with this entity.
      * - You can update values of your custom properties.
      */
