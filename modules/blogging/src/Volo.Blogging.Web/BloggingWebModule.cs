@@ -1,6 +1,7 @@
 ﻿using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -63,11 +64,16 @@ namespace Volo.Blogging
 
             Configure<RazorPagesOptions>(options =>
             {
-                //TODO: Make configurable!
-                options.Conventions.AddPageRoute("/Blog/Posts/Index", "blog/{blogShortName}");
-                options.Conventions.AddPageRoute("/Blog/Posts/Detail", "blog/{blogShortName}/{postUrl}");
-                options.Conventions.AddPageRoute("/Blog/Posts/Edit", "blog/{blogShortName}/posts/{postId}/edit");
-                options.Conventions.AddPageRoute("/Blog/Posts/New", "blog/{blogShortName}/posts/new");
+                var urlOptions = context.Services
+                    .GetRequiredServiceLazy<IOptions<BloggingUrlOptions>>()
+                    .Value.Value;
+
+                var routePrefix = urlOptions.RoutePrefix;
+
+                options.Conventions.AddPageRoute("/Blog/Posts/Index", routePrefix + "{blogShortName}");
+                options.Conventions.AddPageRoute("/Blog/Posts/Detail", routePrefix + "{blogShortName}/{postUrl}");
+                options.Conventions.AddPageRoute("/Blog/Posts/Edit", routePrefix + "{blogShortName}/posts/{postId}/edit");
+                options.Conventions.AddPageRoute("/Blog/Posts/New", routePrefix + "{blogShortName}/posts/new");
             });
         }
     }
