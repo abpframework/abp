@@ -73,7 +73,7 @@ Each section below will explain the related project & its dependencies.
 
 This project contains constants, enums and other objects these are actually a part of the domain layer, but needed to be used by all layers/projects in the solution.
 
-A `BookType` enum and a `BookConts` class (which may have some constant fields for the `Book` entity, like `MaxNameLength`) are good candidates for this project.
+A `BookType` enum and a `BookConsts` class (which may have some constant fields for the `Book` entity, like `MaxNameLength`) are good candidates for this project.
 
 * This project has no dependency to other projects in the solution. All other projects depend on this directly or indirectly.
 
