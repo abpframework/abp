@@ -126,7 +126,7 @@
                         }
                         else
                         {
-                            <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login">@L["LeaveComment"]</a>
+                            <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
                         }
                     </abp-column>
                 </abp-row>
@@ -317,7 +317,7 @@
             }
             else
             {
-                <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login">@L["LeaveComment"]</a>
+                <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
             }
         </div>
     </div>
