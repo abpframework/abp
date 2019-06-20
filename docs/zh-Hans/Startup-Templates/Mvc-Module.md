@@ -50,7 +50,7 @@ abp new Acme.IssueManagement -t mvc-module --no-ui
 
 项目包含常量,枚举和其他对象,这些对象实际上是领域层的一部分,但是解决方案中所有的层/项目中都会使用到.
 
-例如 `IssueType` 枚举和 `IssueConts` 类 (可能是 `Issue` 实体用到的常数字段,像`MaxTitleLength`)都适合放在这个项目中.
+例如 `IssueType` 枚举和 `IssueConsts` 类 (可能是 `Issue` 实体用到的常数字段,像`MaxTitleLength`)都适合放在这个项目中.
 
 * 该项目不依赖解决方案中的其他项目. 其他项目直接或间接依赖该项目.
 
