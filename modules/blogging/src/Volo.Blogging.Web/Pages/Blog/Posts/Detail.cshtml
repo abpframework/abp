@@ -74,7 +74,7 @@
                                         <i class="fa fa-pencil"></i> @L["Edit"]
                                     </a>
                                 }
-                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id == Model.Post.CreatorId))
+                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id.HasValue && CurrentUser.Id == Model.Post.CreatorId))
                                 {
                                     <span class="seperator">|</span>
                                     <a href="#" id="DeletePostLink" data-postid="@Model.Post.Id" data-blogShortName="@Model.BlogShortName">
