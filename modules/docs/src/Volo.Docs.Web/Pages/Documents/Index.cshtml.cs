@@ -27,7 +27,7 @@ namespace Volo.Docs.Pages.Documents
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = _urlOptions.GetFormattedRoutePrefix();
+            DocumentsUrlPrefix = _urlOptions.RoutePrefix;
 
             var listResult = await _projectAppService.GetListAsync();
 

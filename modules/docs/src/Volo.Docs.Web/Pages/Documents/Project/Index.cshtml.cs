@@ -73,7 +73,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = _options.GetFormattedRoutePrefix();
+            DocumentsUrlPrefix = _options.RoutePrefix;
 
             if (IsDocumentCultureDifferentThanCurrent())
             {

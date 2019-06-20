@@ -43,9 +43,9 @@ namespace Volo.Docs
             {
                 var urlOptions = context.Services
                     .GetRequiredServiceLazy<IOptions<DocsUrlOptions>>()
-                    .Value;
+                    .Value.Value;
 
-                var routePrefix = urlOptions.Value.GetFormattedRoutePrefix();
+                var routePrefix = urlOptions.RoutePrefix;
 
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
