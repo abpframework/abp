@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
@@ -10,11 +11,13 @@
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
 @model IndexModel
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+    PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
