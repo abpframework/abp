@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace MyCompanyName.MyProjectName.Web.Pages
+namespace MyCompanyName.MyProjectName.Pages
 {
-    public abstract class MyProjectNamePageBase : AbpPage
+    public abstract class MyProjectNamePage : AbpPage
     {
         [RazorInject]
         public IHtmlLocalizer<MyProjectNameResource> L { get; set; }

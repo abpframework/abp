@@ -1,11 +1,11 @@
 ﻿using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace MyCompanyName.MyProjectName.Web.Pages
+namespace MyCompanyName.MyProjectName.Pages
 {
-    public abstract class MyProjectNamePageModelBase : AbpPageModel
+    public abstract class MyProjectNamePageModel : AbpPageModel
     {
-        protected MyProjectNamePageModelBase()
+        protected MyProjectNamePageModel()
         {
             LocalizationResourceType = typeof(MyProjectNameResource);
         }
