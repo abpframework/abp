@@ -1,6 +1,6 @@
 # ABP CLI, New Templates & Other Features with the v0.18 Release
 
-ABP v0.18 has been released with [70+ issues](https://github.com/abpframework/abp/milestone/16?closed=1) resolved and [500+ commits](https://github.com/abpframework/abp/compare/0.17.0.0...0.18.0) pushed.
+ABP v0.18 has been released with [80+ issues](https://github.com/abpframework/abp/milestone/16?closed=1) resolved and [550+ commits](https://github.com/abpframework/abp/compare/0.17.0.0...0.18.0) pushed.
 
 ## Web Site Changes
 
