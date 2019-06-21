@@ -113,7 +113,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 "/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDb",
-                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                "MyProjectNameEntityFrameworkCoreTestModule",
                 "MyProjectNameMongoDbTestModule"
             );
         }
