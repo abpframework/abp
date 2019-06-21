@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@abp/aspnetcore.mvc.ui.theme.basic@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.6.5.tgz#dc417bcfe8687a9859db22af9e17795862089d03"
-  integrity sha512-qAFC3ZM2L5hLk7gK6RtfpAfTr1SHYpJ3i82Ztf/w0qNSE/t7V5C3TJdaxxKfdXVoZ6ZI6QS1vo14JHxiSYuGYg==
+"@abp/aspnetcore.mvc.ui.theme.basic@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.6.6.tgz#5a71e7f578092cc4550bb8295996e9b1d1b3f1be"
+  integrity sha512-1yFqyxqvfXBeNyOyBvKgL+DB/T8q0eWlFJ1/6ifCsDQ6nvgBqFWFwiRLB1Rb18q43o/1warGBTXdNb//C3jbdA==
   dependencies:
-    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.6.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.6.6"
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.6.5.tgz#32502d13d3b50e2b15fbcdb2dce3026bfa192d65"
-  integrity sha512-KpUlwqM7iGwWt48ajtXvcXXsRlYKgCVdgX0CrJanSZ6Sz0Rj3ApCROvxNJP+kf1KCNqlM9nx+pDRQOnUK+2ohg==
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.6.6.tgz#390625c457390ff399e8230c155f53c2f0bb3bcd"
+  integrity sha512-+qs1KoOfgbc6uKthZVVrWPyUgXQt6PXS3ugPT8IaqKVCLYRKTEOUQpOugMajnP+GZlw7toFwsN8jjk4T3AIsvQ==
   dependencies:
     "@abp/aspnetcore.mvc.ui" "^0.6.4"
     "@abp/bootstrap" "^0.6.5"
@@ -21,6 +21,7 @@
     "@abp/jquery-form" "^0.6.5"
     "@abp/jquery-validation-unobtrusive" "^0.6.5"
     "@abp/lodash" "^0.6.5"
+    "@abp/malihu-custom-scrollbar-plugin" "^0.6.5"
     "@abp/select2" "^0.6.5"
     "@abp/sweetalert" "^0.6.5"
     "@abp/timeago" "^0.6.5"
@@ -38,12 +39,12 @@
     path "^0.12.7"
     rimraf "^2.6.3"
 
-"@abp/blogging@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@abp/blogging/-/blogging-0.6.5.tgz#d93f0910fde64a62dce247aec5541ae9eebbfd76"
-  integrity sha512-CPP3GtWM8wwVWD7yF273hA+A1/KonB8cK4H7fAI5qTp93NxMd8aGoYKwyXHEcxac3494v01+lcSYqSaLaVDP7A==
+"@abp/blogging@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@abp/blogging/-/blogging-0.6.6.tgz#da2cf4f725f629ef7af3afd312c849423875cd95"
+  integrity sha512-4bhvGG42IyuWlqmlOQYa2OT8+97HHsugJ66wGMZSFr3Y0t/Y39hlpB2eHRM/q3vddynj/dDCyWLARdRTD4pzJg==
   dependencies:
-    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.6.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.6.6"
     "@abp/owl.carousel" "^0.6.5"
     "@abp/tui-editor" "^0.6.5"
 
@@ -138,6 +139,14 @@
   dependencies:
     "@abp/core" "^0.6.5"
     lodash "^4.17.10"
+
+"@abp/malihu-custom-scrollbar-plugin@^0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@abp/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-0.6.5.tgz#00383dd433ab0f87b80deebf271ac243e22133d1"
+  integrity sha512-u2r1rv4WlaaIM8S1aiHONGAO0hLqOgsauC/TLgb7JBD6H54pTcPuiIYn9C8mwJ/EThoByGE3gOxEdY+11bmy+A==
+  dependencies:
+    "@abp/core" "^0.6.5"
+    malihu-custom-scrollbar-plugin "^3.1.5"
 
 "@abp/markdown-it@^0.6.5":
   version "0.6.5"
@@ -1386,7 +1395,7 @@ jquery-form@^4.2.2:
   dependencies:
     jquery ">=1.7.2"
 
-jquery-mousewheel@~3.1.13:
+jquery-mousewheel@>=3.0.6, jquery-mousewheel@~3.1.13:
   version "3.1.13"
   resolved "https://registry.yarnpkg.com/jquery-mousewheel/-/jquery-mousewheel-3.1.13.tgz#06f0335f16e353a695e7206bf50503cb523a6ee5"
 
@@ -1506,6 +1515,13 @@ make-iterator@^1.0.0:
   resolved "https://registry.yarnpkg.com/make-iterator/-/make-iterator-1.0.1.tgz#29b33f312aa8f547c4a5e490f56afcec99133ad6"
   dependencies:
     kind-of "^6.0.2"
+
+malihu-custom-scrollbar-plugin@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-3.1.5.tgz#310cecc5e59415a1c29e9dfb5d2b6e01d66a29ef"
+  integrity sha1-MQzsxeWUFaHCnp37XStuAdZqKe8=
+  dependencies:
+    jquery-mousewheel ">=3.0.6"
 
 map-cache@^0.2.0, map-cache@^0.2.2:
   version "0.2.2"
