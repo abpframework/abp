@@ -186,7 +186,7 @@
     </Drawer>
 
     <Drawer
-      title="角色权限配置"
+      title="用户权限配置"
       v-model="permissionModal.opened"
       width="600"
       :mask-closable="false"

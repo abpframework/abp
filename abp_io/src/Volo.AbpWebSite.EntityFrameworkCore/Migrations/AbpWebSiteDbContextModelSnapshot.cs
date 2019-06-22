@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.AbpWebSite.EntityFrameworkCore;
 
@@ -15,9 +14,8 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
@@ -149,6 +147,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<string>("Email")
                         .HasColumnName("Email")
                         .HasMaxLength(256);
+
+                    b.Property<string>("EmailConfirmationCode")
+                        .HasColumnName("EmailConfirmationCode")
+                        .HasMaxLength(328);
 
                     b.Property<bool>("EmailConfirmed")
                         .ValueGeneratedOnAdd()
@@ -374,7 +376,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
@@ -426,7 +430,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
@@ -482,7 +488,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("BlogId")
                         .HasColumnName("BlogId");
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<string>("Content")
                         .HasColumnName("Content")
@@ -563,7 +571,9 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
 
                     b.Property<Guid>("BlogId");
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
@@ -704,8 +714,7 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
             modelBuilder.Entity("Volo.Utils.SolutionTemplating.DownloadInfo", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VoloDocs.EntityFrameworkCore.Migrations
 {
-    public partial class Initial20181225 : Migration
+    public partial class AddDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -98,6 +98,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
+                    EmailConfirmationCode = table.Column<string>(maxLength: 328, nullable: true),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 16, nullable: true),
@@ -180,9 +181,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserLogins",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     ProviderKey = table.Column<string>(maxLength: 196, nullable: false),
                     ProviderDisplayName = table.Column<string>(maxLength: 128, nullable: true)
                 },
@@ -201,9 +202,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserRoles",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    RoleId = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,10 +227,10 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserTokens",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

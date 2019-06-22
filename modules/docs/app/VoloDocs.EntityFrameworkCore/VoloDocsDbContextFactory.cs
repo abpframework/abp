@@ -12,7 +12,7 @@ namespace VoloDocs.EntityFrameworkCore
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<VoloDocsDbContext>()
-                .UseSqlServer(configuration["ConnectionString"]);
+                .UseMySql(configuration["ConnectionString"]);
 
             return new VoloDocsDbContext(builder.Options);
         }

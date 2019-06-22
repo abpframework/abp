@@ -2,31 +2,83 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Volo.AbpWebSite.EntityFrameworkCore;
+using VoloDocs.EntityFrameworkCore;
 
-namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
+namespace VoloDocs.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(AbpWebSiteDbContext))]
-    [Migration("20180911135940_Added_CoverImage")]
-    partial class Added_CoverImage
+    [DbContext(typeof(VoloDocsDbContext))]
+    [Migration("20190531073420_Add-Database")]
+    partial class AddDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsStatic");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Regex")
+                        .HasMaxLength(512);
+
+                    b.Property<string>("RegexDescription")
+                        .HasMaxLength(128);
+
+                    b.Property<bool>("Required");
+
+                    b.Property<int>("ValueType");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AbpClaimTypes");
+                });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasColumnName("ConcurrencyStamp")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDefault")
+                        .HasColumnName("IsDefault");
+
+                    b.Property<bool>("IsPublic")
+                        .HasColumnName("IsPublic");
+
+                    b.Property<bool>("IsStatic")
+                        .HasColumnName("IsStatic");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -79,13 +131,28 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsRequired()
-                        .HasColumnName("ConcurrencyStamp")
-                        .HasMaxLength(256);
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnName("DeletionTime");
 
                     b.Property<string>("Email")
                         .HasColumnName("Email")
                         .HasMaxLength(256);
+
+                    b.Property<string>("EmailConfirmationCode")
+                        .HasColumnName("EmailConfirmationCode")
+                        .HasMaxLength(328);
 
                     b.Property<bool>("EmailConfirmed")
                         .ValueGeneratedOnAdd()
@@ -95,12 +162,27 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IsDeleted")
+                        .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnName("LastModifierId");
+
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("LockoutEnabled")
                         .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Name")
+                        .HasColumnName("Name")
+                        .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnName("NormalizedEmail")
@@ -128,6 +210,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnName("SecurityStamp")
                         .HasMaxLength(256);
+
+                    b.Property<string>("Surname")
+                        .HasColumnName("Surname")
+                        .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId");
@@ -221,9 +307,10 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.Property<Guid>("UserId");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128);
+                        .HasMaxLength(64);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasMaxLength(128);
 
                     b.Property<Guid?>("TenantId");
 
@@ -286,227 +373,14 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.ToTable("AbpSettings");
                 });
 
-            modelBuilder.Entity("Volo.Blogging.Blogs.Blog", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasColumnName("Description")
-                        .HasMaxLength(1024);
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("IsDeleted")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("ShortName")
-                        .IsRequired()
-                        .HasColumnName("ShortName")
-                        .HasMaxLength(32);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BlgBlogs");
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Comments.Comment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("IsDeleted")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnName("PostId");
-
-                    b.Property<Guid?>("RepliedCommentId")
-                        .HasColumnName("RepliedCommentId");
-
-                    b.Property<string>("Text")
-                        .IsRequired()
-                        .HasColumnName("Text")
-                        .HasMaxLength(1024);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("RepliedCommentId");
-
-                    b.ToTable("BlgComments");
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("BlogId")
-                        .HasColumnName("BlogId");
-
-                    b.Property<string>("Content")
-                        .HasColumnName("Content")
-                        .HasMaxLength(1048576);
-
-                    b.Property<string>("CoverImage")
-                        .IsRequired()
-                        .HasColumnName("CoverImage");
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("IsDeleted")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<int>("ReadCount");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnName("Title")
-                        .HasMaxLength(512);
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnName("Url")
-                        .HasMaxLength(64);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BlogId");
-
-                    b.ToTable("BlgPosts");
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Posts.PostTag", b =>
-                {
-                    b.Property<Guid>("PostId")
-                        .HasColumnName("PostId");
-
-                    b.Property<Guid>("TagId")
-                        .HasColumnName("TagId");
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<Guid?>("CreatorId");
-
-                    b.HasKey("PostId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("BlgPostTags");
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Tagging.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("CreationTime")
-                        .HasColumnName("CreationTime");
-
-                    b.Property<Guid?>("CreatorId")
-                        .HasColumnName("CreatorId");
-
-                    b.Property<Guid?>("DeleterId")
-                        .HasColumnName("DeleterId");
-
-                    b.Property<DateTime?>("DeletionTime")
-                        .HasColumnName("DeletionTime");
-
-                    b.Property<string>("Description")
-                        .HasColumnName("Description")
-                        .HasMaxLength(512);
-
-                    b.Property<bool>("IsDeleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("IsDeleted")
-                        .HasDefaultValue(false);
-
-                    b.Property<DateTime?>("LastModificationTime")
-                        .HasColumnName("LastModificationTime");
-
-                    b.Property<Guid?>("LastModifierId")
-                        .HasColumnName("LastModifierId");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnName("Name")
-                        .HasMaxLength(64);
-
-                    b.Property<int>("UsageCount")
-                        .HasColumnName("UsageCount");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BlgTags");
-                });
-
             modelBuilder.Entity("Volo.Docs.Projects.Project", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<string>("DefaultDocumentName")
                         .IsRequired()
@@ -519,7 +393,12 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Format");
 
-                    b.Property<string>("GoogleCustomSearchId");
+                    b.Property<string>("LatestVersionBranchName")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("MainWebsiteUrl");
+
+                    b.Property<string>("MinimumVersion");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -536,37 +415,6 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DocsProjects");
-                });
-
-            modelBuilder.Entity("Volo.Utils.SolutionTemplating.DownloadInfo", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CreationDuration");
-
-                    b.Property<DateTime>("CreationTime");
-
-                    b.Property<Guid?>("CreatorId");
-
-                    b.Property<byte>("DatabaseProvider");
-
-                    b.Property<string>("ProjectName")
-                        .IsRequired()
-                        .HasMaxLength(128);
-
-                    b.Property<string>("TemplateName")
-                        .IsRequired()
-                        .HasMaxLength(42);
-
-                    b.Property<string>("Version")
-                        .IsRequired()
-                        .HasMaxLength(20);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Downloads");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>
@@ -611,39 +459,6 @@ namespace Volo.AbpWebSite.EntityFrameworkCore.Migrations
                     b.HasOne("Volo.Abp.Identity.IdentityUser")
                         .WithMany("Tokens")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Comments.Comment", b =>
-                {
-                    b.HasOne("Volo.Blogging.Posts.Post")
-                        .WithMany()
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Blogging.Comments.Comment")
-                        .WithMany()
-                        .HasForeignKey("RepliedCommentId");
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Posts.Post", b =>
-                {
-                    b.HasOne("Volo.Blogging.Blogs.Blog")
-                        .WithMany()
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Volo.Blogging.Posts.PostTag", b =>
-                {
-                    b.HasOne("Volo.Blogging.Posts.Post")
-                        .WithMany("Tags")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Volo.Blogging.Tagging.Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

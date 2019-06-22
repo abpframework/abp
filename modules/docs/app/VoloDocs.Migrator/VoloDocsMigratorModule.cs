@@ -22,7 +22,7 @@ namespace VoloDocs.Migrator
 
             Configure<AbpDbContextOptions>(options =>
             {
-                options.UseSqlServer();
+                options.UseMySQL();
             });
         }
     }

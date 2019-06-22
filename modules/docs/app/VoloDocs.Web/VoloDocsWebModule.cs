@@ -69,7 +69,7 @@ namespace VoloDocs.Web
 
             Configure<AbpDbContextOptions>(options =>
             {
-                options.UseSqlServer();
+                options.UseMySQL();
             });
 
             if (hostingEnvironment.IsDevelopment())

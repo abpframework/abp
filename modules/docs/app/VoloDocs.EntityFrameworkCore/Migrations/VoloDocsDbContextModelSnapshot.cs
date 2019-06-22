@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VoloDocs.EntityFrameworkCore;
 
@@ -15,9 +14,8 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
                 {
@@ -149,6 +147,10 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     b.Property<string>("Email")
                         .HasColumnName("Email")
                         .HasMaxLength(256);
+
+                    b.Property<string>("EmailConfirmationCode")
+                        .HasColumnName("EmailConfirmationCode")
+                        .HasMaxLength(328);
 
                     b.Property<bool>("EmailConfirmed")
                         .ValueGeneratedOnAdd()

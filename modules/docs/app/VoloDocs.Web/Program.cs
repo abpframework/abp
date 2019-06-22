@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
 
@@ -17,10 +18,14 @@ namespace VoloDocs.Web
                 .WriteTo.File("Logs/logs.txt")
                 .CreateLogger();
 
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("hosting.json", optional: true)
+                .Build();
             try
             {
                 Log.Information("Starting web host.");
-                BuildWebHostInternal(args).Run();
+                BuildWebHostInternal(args, config).Run();
                 return 0;
             }
             catch (Exception ex)
@@ -34,8 +39,9 @@ namespace VoloDocs.Web
             }
         }
 
-        public static IWebHost BuildWebHostInternal(string[] args) =>
+        public static IWebHost BuildWebHostInternal(string[] args,IConfigurationRoot config) =>
             new WebHostBuilder()
+                .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()

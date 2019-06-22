@@ -1,7 +1,7 @@
-﻿using System.IO;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace Volo.AbpWebSite.EntityFrameworkCore
 {
@@ -12,7 +12,7 @@ namespace Volo.AbpWebSite.EntityFrameworkCore
             var configuration = BuildConfiguration();
 
             var builder = new DbContextOptionsBuilder<AbpWebSiteDbContext>()
-                .UseSqlServer(configuration.GetConnectionString("Default"));
+                .UseMySql(configuration.GetConnectionString("Default"));
 
             return new AbpWebSiteDbContext(builder.Options);
         }
