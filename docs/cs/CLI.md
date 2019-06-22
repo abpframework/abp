@@ -1,137 +1,137 @@
 ﻿# ABP CLI
 
-ABP CLI (Command Line Interface) is a command line tool to perform some common operations for ABP based solutions.
+ABP CLI (Command Line Interface) je nástroj v příkazovém řádku k provádění některých běžných úkonů v řešeních založených na ABP.
 
-## Installation
+## Instalace
 
-ABP CLI is a [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Install it using a command line window:
+ABP CLI je [dotnet global tool](https://docs.microsoft.com/en-us/dotnet/core/tools/global-tools). Nainstalujete jej pomocí okna příkazového řádku:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-To update an existing installation:
+Aktualizace stávající instalace:
 
 ````bash
 dotnet tool update -g Volo.Abp.Cli
 ````
 
-## Commands
+## Příkazy
 
 ### new
 
-Generates a new solution based on the ABP [startup templates](Startup-Templates/Index.md).
+Vygeneruje nové řešení založené na ABP [startovací šabloně](Startup-Templates/Index.md).
 
-Basic usage:
+Základní použití:
 
 ````bash
-abp new <solution-name> [options]
+abp new <název-řešení> [možnosti]
 ````
 
-Example:
+Příklad:
 
 ````bash
 abp new Acme.BookStore
 ````
 
-* Acme.BookStore is the solution name here.
-* Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
+* Acme.BookStore je tady název řešení.
+* Běžná konvence je nazvat řešení stylem *VašeSpolečnost.VášProjekt*. Nicméně můžete použít i jiné pojmenování jako *VášProjekt* (jednostupňový jmenný prostor) nebo *VašeSpolečnost.VášProdukt.VášModul* (třístupňový jmenný prostor).
 
-#### Options
+#### Možnosti
 
-* `--template` or `-t`: Specifies the template name. Default template name is `mvc`. Available templates:
-  * `mvc` (default): ASP.NET Core [MVC application template](Startup-Templates/Mvc.md). Additional options:
-    * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
+* `--template` nebo `-t`: Určuje název šablony. Výchozí šablona je `mvc`. Dostupné šablony:
+  * `mvc` (výchozí): ASP.NET Core [MVC aplikační šablona](Startup-Templates/Mvc.md). Dodatečné možnosti:
+    * `--database-provider` nebo `-d`: Určuje poskytovatele databáze. Vychozí poskytovatel je `ef`. Dostupní poskytovatelé:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-    * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-  *  `mvc-module`: ASP.NET Core [MVC module template](Startup-Templates/Mvc-Module.md). Additional options:
-    * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
-* `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
+    * `--tiered`: Vytvoří stupňovité řešení, kde jsou vrstvy Web a Http API fyzicky odděleny. Pokud není uvedeno tak vytvoří vrstvené řešení, které je méně složité a vhodné pro většinu scénářů.
+  *  `mvc-module`: ASP.NET Core [MVC modulová šablona](Startup-Templates/Mvc-Module.md). Dodatečné možnosti:
+    * `--no-ui`: Určuje, že nebude zahrnuto uživatelské rozhraní. To umožňuje vytvářet moduly pouze pro služby (a.k.a. mikroslužby - bez UI).
+* `--output-folder` nebo `-o`: Určuje výstupní složku. Výchozí hodnota je aktuální adresář.
 
 ### add-package
 
-Adds a new ABP package to a project by,
+Přidá nový balíček ABP do projektu pomocí,
 
-* Adding related nuget package as a dependency to the project.
-* Adding `[DependsOn(...)]` attribute to the module class in the project (see the [module development document](Module-Development-Basics.md)).
+* Přidání souvisejícícho nuget balíčku jako závislost do projektu.
+* Přidáním `[DependsOn(...)]` atributu k modulové tříde v projektu (podívejte se na [dokument vývoje modulu](Module-Development-Basics.md)).
 
-> Notice that the added module may require additional configuration which is generally indicated in the documentation of the related package.
+> Všimněte si, že přidaný modul může vyžadovat další konfiguraci, která je obecně uvedena v dokumentaci příslušného balíčku.
 
-Basic usage:
+Základní použití:
 
 ````bash
-abp add-package <package-name> [options]
+abp add-package <název-balíčku> [možnosti]
 ````
 
-Example:
+Příklad:
 
 ````
 abp add-package Volo.Abp.MongoDB
 ````
 
-* This example adds the Volo.Abp.MongoDB package to the project.
+* Tento příklad přidá do projektu balíček Volo.Abp.MongoDB.
 
-#### Options
+#### Možnosti
 
-* `--project` or `-p`: Specifies the project (.csproj) file path. If not specified, CLI tries to find a .csproj file in the current directory.
+* `--project` nebo `-p`: Určuje cestu k projektu (.csproj). Pokud není zadáno, CLI se pokusí najít soubor .csproj v aktuálním adresáři.
 
 ### add-module
 
-Adds a multi-package module to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
+Přidá více-balíčkový modul k řešení tím, že najde všechny balíčky modulu, vyhledá související projekty v řešení a přidá každý balíček do odpovídajícího projektu v řešení.
 
-> A business module generally consists of several packages (because of layering, different database providr options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
+> Modul se obecně skládá z několika balíčků (z důvodu vrstvení, různých možností poskytovatele databáze nebo jiných důvodů). Použití příkazu `add-module` dramaticky zjednodušuje přidání modulu do řešení. Každý modul však může vyžadovat další konfiguraci, která je obecně uvedena v dokumentaci příslušného modulu.
 
-Basic usage:
+Základní použití:
 
 ````bash
-abp add-module <module-name> [options]
+abp add-module <název-modulu> [možnosti]
 ````
 
-Example:
+Příklad:
 
 ```bash
 abp add-module Volo.Blogging
 ```
 
-* This example add the Volo.Blogging module to the solution.
+* Tento příklad přidá do projektu modul Volo.Blogging.
 
-#### Options
+#### Možnosti
 
-* `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
-* `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
+* `--solution` nebo `-s`: Určuje cestu k řešení (.sln). Pokud není zadáno, CLI se pokusí najít soubor .sln v aktuálním adresáři.
+* `--skip-db-migrations`: Pro poskytovatele databáze EF Core automaticky přidá nový kód první migrace (`Add-Migration`) a v případě potřeby aktualizuje databázi (`Update-Database`). Tuto možnost určete k vynechání této operace.
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP NuGet related packages and NPM packages in a solution or project to the latest versions.
+Aktualizace všech balíčků souvisejících s ABP může být únavná, protože existuje mnoho balíčků frameworku a modulů. Tento příkaz automaticky aktualizuje na poslední verze všechny související ABP NuGet a NPM balíčky v řešení nebo projektu.
 
-Usage:
+Použití:
 
 ````bash
-abp update [options]
+abp update [možnosti]
 ````
 
-* If you run in a directory with a .sln file, it updates all ABP related packages of the all projects of the solution to the latest versions.
-* If you run in a directory with a .csproj file, it updates all ABP related packages of the project to the latest versions.
+* Pokud spouštíte v adresáři se souborem .sln, aktualizuje všechny balíčky všech projektů v řešení souvisejících s ABP na nejnovější verze.
+* Pokud spouštíte v adresáři se souborem .csproj, aktualizuje všechny balíčky v projektu na nejnovější verze.
 
-#### Options
+#### Možnosti
 
-* `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
+* `--include-previews` nebo `-p`: Zahrne náhledové, beta a rc balíčky při kontrole nových verzí.
 
 ### help
 
-Writes basic usage information of the CLI.
+Vypíše základní informace k používání CLI.
 
-Usage:
+Použítí:
 
 ````bash
-abp help [command-name]
+abp help [název-příkazu]
 ````
 
-Examples:
+Příklady:
 
 ````bash
-abp help        # Shows a general help.
-abp help new    # Shows help about the "new" command.
+abp help        # Zobrazí obecnou nápovědu.
+abp help new    # Zobrazí nápovědu k příkazu "new".
 ````
 
