@@ -59,14 +59,14 @@ namespace Volo.Abp.AutoMapper
                         //We should prevent duplicate mapping in an application, since Mapper is static.
                         if (!_createdMappingsBefore)
                         {
+                            _createdMappingsBefore = true;
+
                             Mapper.Initialize(mapperConfigurationExpression =>
                             {
                                 ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
                             });
 
                             ValidateAll(Mapper.Configuration);
-
-                            _createdMappingsBefore = true;
                         }
 
                         scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = Mapper.Instance;

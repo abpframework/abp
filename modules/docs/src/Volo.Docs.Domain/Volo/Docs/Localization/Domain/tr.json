@@ -13,6 +13,7 @@
     "Projects": "Proje(ler)",
     "NoProjectWarning": "Hiç proje yok!",
     "DocumentNotFound": "Aradığınız döküman bulunamadı!",
-    "NavigationDocumentNotFound": "Bu döküman için menü bulunamadı!"
+    "NavigationDocumentNotFound": "Bu döküman için menü bulunamadı!",
+    "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir."
   }
 }

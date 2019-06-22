@@ -5,46 +5,45 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using Volo.Abp.AspNetCore.Uow;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
 namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
 {
-    public class AbpExceptionHandlingMiddleware
+    public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger<AbpUnitOfWorkMiddleware> _logger;
 
         private readonly Func<object, Task> _clearCacheHeadersDelegate;
 
-        public AbpExceptionHandlingMiddleware(RequestDelegate next, ILogger<AbpUnitOfWorkMiddleware> logger)
+        public AbpExceptionHandlingMiddleware(ILogger<AbpUnitOfWorkMiddleware> logger)
         {
-            _next = next;
             _logger = logger;
 
             _clearCacheHeadersDelegate = ClearCacheHeaders;
         }
 
-        public async Task Invoke(HttpContext httpContext)
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
             try
             {
-                await _next(httpContext);
+                await next(context);
             }
             catch (Exception ex)
             {
                 // We can't do anything if the response has already started, just abort.
-                if (httpContext.Response.HasStarted)
+                if (context.Response.HasStarted)
                 {
                     _logger.LogWarning("An exception occurred, but response has already started!");
                     throw;
                 }
 
-                if (httpContext.Items["_AbpActionInfo"] is AbpActionInfoInHttpContext actionInfo)
+                if (context.Items["_AbpActionInfo"] is AbpActionInfoInHttpContext actionInfo)
                 {
                     if (actionInfo.IsObjectResult) //TODO: Align with AbpExceptionFilter.ShouldHandleException!
                     {
-                        await HandleAndWrapException(httpContext, ex);
+                        await HandleAndWrapException(context, ex);
                         return;
                     }
                 }

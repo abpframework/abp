@@ -78,6 +78,46 @@ namespace Volo.Abp.IdentityServer.Clients
             persistedGrant.CreationTime.Second.ShouldBe(21);
         }
 
+
+        [Fact]
+        public async Task StoreAsync_Should_Store_PersistedGrant_When_Exists()
+        {
+            //Act
+            await _persistedGrantStore.StoreAsync(new PersistedGrant
+            {
+                Key = "PersistedGrantKey1",
+                ClientId = "TestClientId-PersistedGrantKey1",
+                Type = "TestType-PersistedGrantKey1",
+                SubjectId = "TestSubject",
+                Data = "TestData-PersistedGrantKey1",
+                Expiration = new DateTime(2018, 1, 6, 21, 22, 23),
+                CreationTime = new DateTime(2018, 1, 5, 19, 20, 21)
+            });
+
+            //Assert
+            var persistedGrant = await _persistedGrantStore.GetAsync("PersistedGrantKey1");
+            persistedGrant.Key.ShouldBe("PersistedGrantKey1");
+            persistedGrant.ClientId.ShouldBe("TestClientId-PersistedGrantKey1");
+            persistedGrant.Type.ShouldBe("TestType-PersistedGrantKey1");
+            persistedGrant.SubjectId.ShouldBe("TestSubject");
+            persistedGrant.Data.ShouldBe("TestData-PersistedGrantKey1");
+
+            persistedGrant.Expiration.HasValue.ShouldBe(true);
+            persistedGrant.Expiration.Value.Year.ShouldBe(2018);
+            persistedGrant.Expiration.Value.Month.ShouldBe(1);
+            persistedGrant.Expiration.Value.Day.ShouldBe(6);
+            persistedGrant.Expiration.Value.Hour.ShouldBe(21);
+            persistedGrant.Expiration.Value.Minute.ShouldBe(22);
+            persistedGrant.Expiration.Value.Second.ShouldBe(23);
+
+            persistedGrant.CreationTime.Year.ShouldBe(2018);
+            persistedGrant.CreationTime.Month.ShouldBe(1);
+            persistedGrant.CreationTime.Day.ShouldBe(5);
+            persistedGrant.CreationTime.Hour.ShouldBe(19);
+            persistedGrant.CreationTime.Minute.ShouldBe(20);
+            persistedGrant.CreationTime.Second.ShouldBe(21);
+        }
+
         [Fact]
         public async Task GetAllAsync_Should_Get_All_PersistedGrants_For_A_Given_SubjectId()
         {

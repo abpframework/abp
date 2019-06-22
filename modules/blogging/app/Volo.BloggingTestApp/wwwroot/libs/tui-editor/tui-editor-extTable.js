@@ -1,7 +1,7 @@
 /*!
  * tui-editor
- * @version 1.2.6
- * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
+ * @version 1.4.3
+ * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -97,7 +97,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 /**
 * @fileoverview Editor/Viewer proxy for extensions
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 /* eslint global-require: 0 no-empty: 0 */
 
@@ -158,7 +158,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements tableDataHandler
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _parseCell(cell, rowIndex, colIndex) {
   var $cell = (0, _jquery2.default)(cell);
@@ -484,12 +484,14 @@ function findElementIndex(tableData, rowIndex, colIndex) {
 function stuffCellsIntoIncompleteRow(tableData, limitIndex) {
   tableData.forEach(function (rowData, rowIndex) {
     var startIndex = rowData.length;
-    var nodeName = rowData[0].nodeName;
+    if (startIndex) {
+      var nodeName = rowData[0].nodeName;
 
 
-    _tuiCodeSnippet2.default.range(startIndex, limitIndex).forEach(function (colIndex) {
-      rowData.push(createBasicCell(rowIndex, colIndex, nodeName));
-    });
+      _tuiCodeSnippet2.default.range(startIndex, limitIndex).forEach(function (colIndex) {
+        rowData.push(createBasicCell(rowIndex, colIndex, nodeName));
+      });
+    }
   });
 }
 
@@ -594,7 +596,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements tableRenderer
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _createCellHtml(cell) {
   var attrs = cell.colspan > 1 ? ' colspan="' + cell.colspan + '"' : '';
@@ -763,7 +765,7 @@ function _findUnmergedRange(tableData, $start, $end) {
  */
 /**
 * @fileoverview Implements tableRangeHandler
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _expandRowMergedRange(tableData, tableRange, rangeType) {
   var rowIndex = tableRange[rangeType].rowIndex;
@@ -1038,7 +1040,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
 * @fileoverview Implements table extension
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function tableExtension(editor) {
   var eventManager = editor.eventManager;
@@ -1053,13 +1055,12 @@ function tableExtension(editor) {
   }
 
   var wwComponentManager = editor.wwEditor.componentManager;
-  var popupTableUtils = editor._ui.popupTableUtils;
-
+  var popupTableUtils = editor.getUI().getPopupTableUtils();
 
   _addCommands(editor);
   _changeWysiwygManagers(wwComponentManager);
 
-  if (editor._ui.popupTableUtils) {
+  if (popupTableUtils) {
     _mergedTableUI2.default.updateContextMenu(popupTableUtils, eventManager, wwComponentManager.getManager('tableSelection'));
   }
 }
@@ -1101,6 +1102,10 @@ function _changeHtml(html, onChangeTable) {
   if ($tables.length) {
     $tables.get().forEach(function (tableElement) {
       var changedTableElement = onChangeTable(tableElement);
+
+      if (tableElement.hasAttribute('data-tomark-pass')) {
+        changedTableElement.setAttribute('data-tomark-pass', '');
+      }
 
       (0, _jquery2.default)(tableElement).replaceWith(changedTableElement);
     });
@@ -1176,7 +1181,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var i18n = _editorProxy2.default.i18n; /**
                                        * @fileoverview i18n for table extension
-                                       * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                       * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                        */
 
 if (i18n) {
@@ -1209,10 +1214,10 @@ if (i18n) {
   });
 
   i18n.setLanguage(['nl', 'nl_NL'], {
-    'Merge cells': 'cellen samenvoegen',
-    'Unmerge cells': 'Samenvoegen cellen ongedaan maken',
-    'Cannot change part of merged cell': 'Kan geen deel uit van samengevoegde cel te veranderen.',
-    'Cannot paste row merged cells into the table header': 'Kan niet plakken rij samengevoegde cellen in de koptekst. '
+    'Merge cells': 'Cellen samenvoegen',
+    'Unmerge cells': 'Samengevoegde cellen ongedaan maken',
+    'Cannot change part of merged cell': 'Kan geen deel uit van een samengevoegde cel veranderen.',
+    'Cannot paste row merged cells into the table header': 'Kan geen rij met samengevoegde cellen in de koptekst plakken.'
   });
 
   i18n.setLanguage(['zh', 'zh_CN'], {
@@ -1255,6 +1260,55 @@ if (i18n) {
     'Unmerge cells': 'Hücreleri ayır',
     'Cannot change part of merged cell': 'Birleştirilmiş hücrelerin bir kısmı değiştirelemez.',
     'Cannot paste row merged cells into the table header': 'Satırda birleştirilmiş hücreler sütun başlığına yapıştırılamaz'
+  });
+
+  i18n.setLanguage(['fi', 'fi_FI'], {
+    'Merge cells': 'Yhdistä solut',
+    'Unmerge cells': 'Jaa solut',
+    'Cannot change part of merged cell': 'Yhdistettyjen solujen osaa ei voi muuttaa',
+    'Cannot paste row merged cells into the table header': 'Soluja ei voi yhdistää taulukon otsikkoriviin'
+  });
+
+  i18n.setLanguage(['cs', 'cs_CZ'], {
+    'Merge cells': 'Spojit buňky',
+    'Unmerge cells': 'Rozpojit buňky',
+    'Cannot change part of merged cell': 'Nelze měnit část spojené buňky',
+    'Cannot paste row merged cells into the table header': 'Nelze vkládat spojené buňky do záhlaví tabulky'
+  });
+
+  i18n.setLanguage(['ar', 'ar_AR'], {
+    'Merge cells': 'دمج الوحدات',
+    'Unmerge cells': 'إلغاء دمج الوحدات',
+    'Cannot change part of merged cell': 'لا يمكن تغيير جزء من الخلية المدموجة',
+    'Cannot paste row merged cells into the table header': 'لا يمكن لصق الخلايا المدموجة من صف واحد في رأس الجدول'
+  });
+
+  i18n.setLanguage(['pl', 'pl_PL'], {
+    'Merge cells': 'Scal komórki',
+    'Unmerge cells': 'Rozłącz komórki',
+    'Cannot change part of merged cell': 'Nie można zmienić części scalonej komórki.',
+    'Cannot paste row merged cells into the table header': 'Nie można wkleić komórek o scalonym rzędzie w nagłówek tabeli.'
+  });
+
+  i18n.setLanguage(['zh', 'zh_TW'], {
+    'Merge cells': '合併儲存格',
+    'Unmerge cells': '取消合併儲存格',
+    'Cannot change part of merged cell': '無法變更儲存格的一部分。',
+    'Cannot paste row merged cells into the table header': '無法將合併的儲存格貼上至表格標題中。'
+  });
+
+  i18n.setLanguage(['gl', 'gl_ES'], {
+    'Merge cells': 'Combinar celas',
+    'Unmerge cells': 'Separar celas',
+    'Cannot change part of merged cell': 'Non se pode cambiar parte dunha cela combinada',
+    'Cannot paste row merged cells into the table header': 'Non se poden pegar celas no encabezado da táboa'
+  });
+
+  i18n.setLanguage(['sv', 'sv_SE'], {
+    'Merge cells': 'Sammanfoga celler',
+    'Unmerge cells': 'Dela celler',
+    'Cannot change part of merged cell': 'Ej möjligt att ändra en del av en sammanfogad cell',
+    'Cannot paste row merged cells into the table header': 'Ej möjligt att klistra in rad-sammanfogade celler i tabellens huvud'
   });
 }
 
@@ -1327,7 +1381,7 @@ function _extractPropertiesForMerge(value, type, oppossitType) {
  */
 /**
 * @fileoverview Implements mergedTableCreator.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _parseTableCell(cell) {
   var nodeName = cell.nodeName;
@@ -1539,7 +1593,7 @@ function _prependMergeSyntaxToContent(cell) {
  */
 /**
 * @fileoverview Implements tableUnmergePreparer.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function prepareTableUnmerge(tableElement) {
   (0, _jquery2.default)(tableElement).find('td, th').get().forEach(_prependMergeSyntaxToContent);
@@ -1585,7 +1639,7 @@ var RX_COLS = /@cols=[0-9]+:/g;
  */
 /**
 * @fileoverview Implements toMarkRendererCreator.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 function _createRepeatString(str, count) {
   return _tuiCodeSnippet2.default.range(0, count).map(function () {
@@ -1595,7 +1649,7 @@ function _createRepeatString(str, count) {
 
 /**
  * Make table head align text.
- * Copy from https://github.com/nhnent/to-mark/blob/develop/src/renderer.gfm.js
+ * Copy from https://github.com/nhn/to-mark/blob/develop/src/renderer.gfm.js
  * @param {HTMLElement} thElement - Table head cell element
  * @returns {string}
  * @private
@@ -1718,7 +1772,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Implements wysiwyg merged table manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 
@@ -2324,12 +2378,13 @@ var WwMergedTableManager = function (_WwTableManager) {
 
     /**
      * Paste clibpard data.
-     * @param {jQuery} $clipboardTable - jQuery table element of clipboard
+     * @param {Node} clipboardTable - table element of clipboard
      */
 
   }, {
-    key: 'pasteClipboardData',
-    value: function pasteClipboardData($clipboardTable) {
+    key: 'pasteTableData',
+    value: function pasteTableData(clipboardTable) {
+      var $clipboardTable = (0, _jquery2.default)(clipboardTable);
       var clipboardTableData = _tableDataHandler2.default.createTableData($clipboardTable);
       var tableSelectionManager = this.wwe.componentManager.getManager('tableSelection');
       var $selectedCells = tableSelectionManager.getSelectedCells();
@@ -2415,7 +2470,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Implements wysiwyg merged table selection manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @author NHN FE Development Lab <dl_javascript@nhn.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
 
@@ -2617,7 +2672,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableAddRow. Add Row to selected table
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -2794,7 +2849,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableAddCol. Add Row to selected table.
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -2994,7 +3049,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableRemoveRow
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3181,7 +3236,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableRemoveCol. Remove col to selected table
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3360,7 +3415,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements mergedTableAlignCol. Align selected column's text content to given direction
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3476,7 +3531,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements MergeCell
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3699,7 +3754,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements UnmergeCell
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var CommandManager = _editorProxy2.default.CommandManager;
 
@@ -3861,7 +3916,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements table extension ui
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 var i18n = _editorProxy2.default.i18n;
 

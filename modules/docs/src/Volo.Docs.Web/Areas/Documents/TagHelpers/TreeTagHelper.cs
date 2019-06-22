@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Options;
 using Volo.Docs.Documents;
 using Volo.Docs.Utils;
 
@@ -12,6 +13,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
+        private readonly DocsUrlOptions _urlOptions;
+
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
         private const string ListItemAnchor = @"<a href='{0}' class='{1}'>{2}</a>";
@@ -34,6 +37,14 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
 
         [HtmlAttributeName("project-format")]
         public string ProjectFormat { get; set; }
+
+        [HtmlAttributeName("language")]
+        public string LanguageCode { get; set; }
+
+        public TreeTagHelper(IOptions<DocsUrlOptions> urlOptions)
+        {
+            _urlOptions = urlOptions.Value;
+        }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
@@ -107,7 +118,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
             else
             {
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path, node.HasChildItems), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
             }
 
             return string.Format(LiItemTemplateWithLink,
@@ -117,7 +128,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 content);
         }
 
-        private string NormalizePath(string path, bool hasChildItems)
+        private string NormalizePath(string path)
         {
             if (UrlHelper.IsExternalLink(path))
             {
@@ -131,7 +142,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            return  "/documents/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
+            var prefix = _urlOptions.RoutePrefix;
+
+            return  prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }
 
         private string RemoveFileExtensionFromPath(string path)

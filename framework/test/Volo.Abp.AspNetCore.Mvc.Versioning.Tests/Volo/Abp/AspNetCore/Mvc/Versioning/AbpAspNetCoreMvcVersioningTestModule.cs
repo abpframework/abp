@@ -16,26 +16,34 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
         )]
     public class AbpAspNetCoreMvcVersioningTestModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
+        public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpAspNetCoreMvcOptions>(options =>
+            PreConfigure<AbpAspNetCoreMvcOptions>(options =>
             {
                 //2.0 Version
                 options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
                 {
-                    opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.TodoAppService).Namespace;
+                    opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.v2.TodoAppService).Namespace;
                     opts.ApiVersions.Add(new ApiVersion(2, 0));
                 });
 
                 //1.0 Compatibility version
                 options.ConventionalControllers.Create(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly, opts =>
                 {
-                    opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.Compat.TodoAppService).Namespace;
+                    opts.TypePredicate = t => t.Namespace == typeof(Volo.Abp.AspNetCore.Mvc.Versioning.App.v1.TodoAppService).Namespace;
                     opts.ApiVersions.Add(new ApiVersion(1, 0));
                 });
             });
+        }
 
-            context.Services.AddApiVersioning(options =>
+        public override void ConfigureServices(ServiceConfigurationContext context)
+        {
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                context.Services.ExecutePreConfiguredActions(options);
+            });
+
+            context.Services.AddAbpApiVersioning(options =>
             {
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
@@ -43,7 +51,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
                 //options.ApiVersionReader = new HeaderApiVersionReader("api-version"); //Supports header too
                 //options.ApiVersionReader = new MediaTypeApiVersionReader(); //Supports accept header too
 
-                options.ConfigureAbp(context.Services);
+                var mvcOptions = context.Services.ExecutePreConfiguredActions<AbpAspNetCoreMvcOptions>();
+                options.ConfigureAbp(mvcOptions);
             });
 
             context.Services.AddHttpClientProxies(typeof(AbpAspNetCoreMvcVersioningTestModule).Assembly);

@@ -49,8 +49,6 @@ namespace Volo.Abp.EventBus.RabbitMq
             
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
-
-            Initialize();
         }
 
         public void Initialize()
@@ -97,7 +95,12 @@ namespace Volo.Abp.EventBus.RabbitMq
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             var handlerFactories = GetOrCreateHandlerFactories(eventType);
-            
+
+            if (factory.IsInFactories(handlerFactories))
+            {
+                return NullDisposable.Instance;
+            }
+
             handlerFactories.Add(factory);
 
             if (handlerFactories.Count == 1) //TODO: Multi-threading!

@@ -1,51 +1,46 @@
 ﻿using System.IO;
-using System.Linq;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
-using MyCompanyName.MyProjectName.Localization.MyProjectName;
-using MyCompanyName.MyProjectName.Menus;
-using MyCompanyName.MyProjectName.Permissions;
+using MyCompanyName.MyProjectName.Localization;
+using MyCompanyName.MyProjectName.MultiTenancy;
+using MyCompanyName.MyProjectName.Web.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Data;
-using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
-using Volo.Abp.Threading;
+using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.Ui.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.PermissionManagement;
-using Volo.Abp.TenantManagement.Web;
-//<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
-using Volo.Abp.EntityFrameworkCore;
-//</TEMPLATE-REMOVE>
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Web
 {
     [DependsOn(
+        typeof(MyProjectNameHttpApiModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreModule),
+        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpAccountWebModule),
+        typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpTenantManagementWebModule)
         )]
     public class MyProjectNameWebModule : AbpModule
@@ -57,7 +52,9 @@ namespace MyCompanyName.MyProjectName
                 options.AddAssemblyResource(
                     typeof(MyProjectNameResource),
                     typeof(MyProjectNameDomainModule).Assembly,
+                    typeof(MyProjectNameDomainSharedModule).Assembly,
                     typeof(MyProjectNameApplicationModule).Assembly,
+                    typeof(MyProjectNameApplicationContractsModule).Assembly,
                     typeof(MyProjectNameWebModule).Assembly
                 );
             });
@@ -68,7 +65,8 @@ namespace MyCompanyName.MyProjectName
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureDatabaseServices();
+            ConfigureUrls(configuration);
+            ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
@@ -77,20 +75,34 @@ namespace MyCompanyName.MyProjectName
             ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureDatabaseServices()
+        private void ConfigureUrls(IConfigurationRoot configuration)
         {
-            //<TEMPLATE-REMOVE IF-NOT='EntityFrameworkCore'>
-            Configure<AbpDbContextOptions>(options =>
+            Configure<AppUrlOptions>(options =>
             {
-                options.UseSqlServer();
+                options.Applications["MVC"].RootUrl = configuration["AppSelfUrl"];
             });
-            //</TEMPLATE-REMOVE>
+        }
+
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        {
+            context.Services.AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
+                {
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "MyProjectName";
+                });
         }
 
         private void ConfigureAutoMapper()
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
+                /* use `true` for the `validate` parameter if you want to
+                 * validate the profile on application startup.
+                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more
+                 * about configuration validation.
+                 */
                 options.AddProfile<MyProjectNameWebAutoMapperProfile>();
             });
         }
@@ -101,7 +113,6 @@ namespace MyCompanyName.MyProjectName
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
-                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -111,7 +122,12 @@ namespace MyCompanyName.MyProjectName
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpPermissionManagementWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}permission-management{0}src{0}Volo.Abp.PermissionManagement.Web", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpIdentityWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}identity{0}src{0}Volo.Abp.Identity.Web", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAccountWebModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}modules{0}account{0}src{0}Volo.Abp.Account.Web", Path.DirectorySeparatorChar)));
-					//</TEMPLATE-REMOVE>
+                    //</TEMPLATE-REMOVE>
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain.Shared", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Application.Contracts", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}MyCompanyName.MyProjectName.Application", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameWebModule>(hostingEnvironment.ContentRootPath);
                 });
             }
         }
@@ -123,10 +139,10 @@ namespace MyCompanyName.MyProjectName
                 options.Resources
                     .Get<MyProjectNameResource>()
                     .AddBaseTypes(
-                        typeof(AbpValidationResource),
                         typeof(AbpUiResource)
                     );
 
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
@@ -158,7 +174,8 @@ namespace MyCompanyName.MyProjectName
                     options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
-                });
+                }
+            );
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -177,38 +194,22 @@ namespace MyCompanyName.MyProjectName
 
             app.UseVirtualFiles();
             app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
 
-            if (MyProjectNameConsts.IsMultiTenancyEnabled)
+            if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
-
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-
             app.UseAuditing();
-
             app.UseMvcWithDefaultRouteAndArea();
-
-            SeedDatabase(context);
-        }
-
-        private static void SeedDatabase(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                AsyncHelper.RunSync(async () =>
-                {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                });
-            }
         }
     }
 }

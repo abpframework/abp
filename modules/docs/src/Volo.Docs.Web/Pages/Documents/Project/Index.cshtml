@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
@@ -10,11 +11,13 @@
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
 @inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
 @inject IHtmlLocalizer<DocsResource> L
 @model IndexModel
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
+    PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
@@ -90,24 +93,46 @@
                         </div>
                     }
 
-                    @if (Model.VersionSelectItems.Any())
-                    {
-                        <div class="docs-version">
-                            <div class="version-select">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text">
-                                            <i class="fa fa-check-square-o" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
-                                        </label>
-                                    </div>
+                    <div class="row">
+                        @if (Model.VersionSelectItems.Any())
+                        {
+                            <div class="col @(Model.LanguageSelectListItems.Any()?"pr-0":"")">
+                                <div class="docs-version @(Model.LanguageSelectListItems.Any()?"pr-1":"")">
+                                    <div class="version-select">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text">
+                                                    <i class="fa fa-check-square-o" aria-hidden="true" data-toggle="tooltip" title="@L["Version"]"></i>
+                                                </label>
+                                            </div>
 
-                                    <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
+                                            <select asp-items="Model.VersionSelectItems" class="form-control" onchange="if (this.value) { window.location.replace(this.value) }"></select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    }
+                        }
 
-                    <div class="docs-version"> 
+                        @if (Model.VersionSelectItems.Any())
+                        {
+                            <div class="col  @(Model.VersionSelectItems.Any()?"pl-0":"")">
+                                <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
+                                    <div class="version-select">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text">
+                                                    <i class="fa fa-globe" aria-hidden="true" data-toggle="tooltip" title="@L["Language"]"></i>
+                                                </label>
+                                            </div>
+                                            <select asp-items="Model.LanguageSelectListItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="docs-version mb-4">
                         <div class="version-select">
                             <div class="input-group">
                                 <div class="input-group-prepend">
@@ -116,8 +141,9 @@
 
                                 <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
                             </div>
-                        </div> 
+                        </div>
                     </div>
+
 
                     @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
                     {
@@ -132,6 +158,7 @@
                             project-name="@Model.ProjectName"
                             project-format="@Model.Project.Format"
                             selected-document-name="@Model.DocumentNameWithExtension"
+                            language="@Model.LanguageCode"
                             id="sidebar-scroll"
                             class="nav nav-list"></ul>
                     }
@@ -143,7 +170,6 @@
         @if (Model.Document != null)
         {
             <div class="col-md-7 docs-content bg-white">
-
                 <div class="docs-link-btns">
                     <div class="float-left">
                         @(L["ShareOn"].Value + " :")
@@ -158,10 +184,12 @@
                         </a>
                     </div>
 
-                    @if (!string.IsNullOrEmpty(Model.Document.EditLink))
-                    {
-                        <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
-                    }
+                    <div class="float-right">
+                        @if (!string.IsNullOrEmpty(Model.Document.EditLink))
+                        {
+                            <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                        }
+                    </div>
                 </div>
 
                 <div class="docs-content-field">
@@ -183,6 +211,12 @@
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
+                                @if (Model.DocumentLanguageIsDifferent)
+                                {
+                                    <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
+                                        @L["DocumentNotFoundInSelectedLanguage"]
+                                    </abp-alert>
+                                }
                                 @Html.Raw(Model.Document.Content)
                             </article>
                         </div>
@@ -194,6 +228,7 @@
             <div class="col-md-2 docs-page-index position-relative bg-light">
 
                 <div id="scroll-index" class="docs-inner-anchors mt-2">
+
                     <h5>@L["InThisDocument"]</h5>
                     <nav id="docs-sticky-index" class="navbar index-scroll">
                     </nav>

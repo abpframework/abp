@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="8.3.0" />
+    <PackageReference Include="FluentValidation" Version="8.4.0" />
   </ItemGroup>
 
   <ItemGroup>

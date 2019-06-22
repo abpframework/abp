@@ -31,7 +31,7 @@ You may want to translate the complete [documentation](https://abp.io/documents/
 
 ### Resource Localization
 
-ABP framework has a flexible [localization system](https://abp.io/documents/abp/latest/Localization). You can create localized user interfaces for your own application.
+ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
 
 In addition to that, the framework and pre-build modules have already localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). You can create a new file in the [same folder](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) to translate it.
 

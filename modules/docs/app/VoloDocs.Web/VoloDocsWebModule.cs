@@ -62,6 +62,11 @@ namespace VoloDocs.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            Configure<DocsUrlOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
+
             Configure<DbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration["ConnectionString"];
@@ -107,7 +112,7 @@ namespace VoloDocs.Web
 
             Configure<AbpLocalizationOptions>(options =>
             {
-
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));

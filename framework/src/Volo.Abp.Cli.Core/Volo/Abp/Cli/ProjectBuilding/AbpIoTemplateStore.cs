@@ -83,7 +83,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 AddAuthentication(client);
 
                 var responseMessage = await client.PostAsync(
-                    Options.AbpIoWwwUrlRoot + "api/download/template/get-version/",
+                    $"{CliUrls.WwwAbpIo}api/download/template/get-version/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     CancellationTokenProvider.Token
                 );
@@ -109,7 +109,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 AddAuthentication(client);
 
                 var responseMessage = await client.PostAsync(
-                    Options.AbpIoWwwUrlRoot + "api/download/template/",
+                    $"{CliUrls.WwwAbpIo}api/download/template/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     CancellationTokenProvider.Token
                 );

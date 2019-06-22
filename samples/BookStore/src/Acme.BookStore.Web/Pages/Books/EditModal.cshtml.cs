@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Acme.BookStore.Pages.Books
+namespace Acme.BookStore.Web.Pages.Books
 {
     public class EditModalModel : BookStorePageModelBase
     {

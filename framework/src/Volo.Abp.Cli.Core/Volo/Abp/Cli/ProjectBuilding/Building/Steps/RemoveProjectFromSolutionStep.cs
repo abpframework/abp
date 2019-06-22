@@ -10,6 +10,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         private readonly string _solutionFilePath;
         private readonly string _projectFolderPath;
 
+        private string ProjectNameWithQuotes => $"\"{_projectName}\"";
+
         public RemoveProjectFromSolutionStep(
             string projectName,
             string solutionFilePath = null,
@@ -22,7 +24,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         public override void Execute(ProjectBuildContext context)
         {
-            context.Files.RemoveAll(file => file.Name.StartsWith(_projectFolderPath));
+            var projectFolderWithSlash = _projectFolderPath + "/";
+            context.Files.RemoveAll(file => file.Name.StartsWith(projectFolderWithSlash));
+            context.Files.RemoveAll(file => file.Name == _projectFolderPath);
             var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
             solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));
@@ -57,7 +61,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         {
             foreach (var solutionFileLine in solutionFileLines)
             {
-                if (solutionFileLine.Contains(_projectName))
+                if (solutionFileLine.Contains(ProjectNameWithQuotes))
                 {
                     var curlyBracketStartIndex = solutionFileLine.LastIndexOf("{", StringComparison.OrdinalIgnoreCase);
                     var curlyBracketEndIndex = solutionFileLine.LastIndexOf("}", StringComparison.OrdinalIgnoreCase);

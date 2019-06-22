@@ -2,6 +2,7 @@
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.InProcess;
 using Serilog;
 using Serilog.Events;
 
@@ -11,6 +12,8 @@ namespace VoloDocs.Web
     {
         public static int Main(string[] args)
         {
+            CurrentDirectoryHelpers.SetCurrentDirectory();
+            
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug() //TODO: Should be configurable!
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
@@ -44,6 +47,7 @@ namespace VoloDocs.Web
                 .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIIS()
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseSerilog()

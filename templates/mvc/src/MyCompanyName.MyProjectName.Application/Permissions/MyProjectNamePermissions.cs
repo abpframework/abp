@@ -1,7 +1,4 @@
-﻿using System;
-using Volo.Abp.Reflection;
-
-namespace MyCompanyName.MyProjectName.Permissions
+﻿namespace MyCompanyName.MyProjectName.Permissions
 {
     public static class MyProjectNamePermissions
     {
@@ -9,11 +6,5 @@ namespace MyCompanyName.MyProjectName.Permissions
 
         //Add your own permission names. Example:
         //public const string MyPermission1 = GroupName + ".MyPermission1";
-
-        public static string[] GetAll()
-        {
-            //Return an array of all permissions
-            return ReflectionHelper.GetPublicConstantsRecursively(typeof(MyProjectNamePermissions));
-        }
     }
 }

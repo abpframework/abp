@@ -1,0 +1,30 @@
+﻿@page
+@inject IOptions<DashboardOptions> OptionsDashboadOptions
+@inject IStringLocalizerFactory localizer
+@using Microsoft.Extensions.Options
+@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
+@using DashboardDemo.Pages
+@using DashboardDemo.Pages.widgets
+@using DashboardDemo.Widgets
+@using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
+@inherits DashboardDemoPageBase
+@inject IWidgetRenderer WidgetRenderer
+@model IndexModel
+@section styles {
+    <link href="~/pages/index.css" rel="stylesheet" />
+    <abp-style-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+}
+@section scripts {
+    <abp-script-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+}
+<abp-card>
+    <abp-card-header>@L["Welcome"]</abp-card-header>
+    <abp-card-body>
+        @await WidgetRenderer.RenderAsync(Component, UserCountWidgetViewComponent.WidgetName)
+    </abp-card-body>
+</abp-card>
+@foreach (var dashboard in OptionsDashboadOptions.Value.Dashboards)
+{
+    <a href="/@dashboard.Name">Go to @dashboard.DisplayName.Localize(localizer)</a>
+}

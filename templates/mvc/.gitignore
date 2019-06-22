@@ -252,4 +252,7 @@ paket-files/
 *.sln.iml
 
 # MyProjectName
-src/MyCompanyName.MyProjectName.Web/Logs/logs.txt
+src/MyCompanyName.MyProjectName.Web/Logs/*
+src/MyCompanyName.MyProjectName.Web.Host/Logs/*
+src/MyCompanyName.MyProjectName.IdentityServer/Logs/*
+src/MyCompanyName.MyProjectName.HttpApi.Host/Logs/*

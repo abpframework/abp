@@ -21,7 +21,6 @@ $solutionPaths = (
     "modules/client-simulation",
     "abp_io",
     "templates/mvc-module",
-    "templates/service",
     "templates/mvc",
     "samples/MicroserviceDemo",
     "samples/Microservice"

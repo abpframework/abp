@@ -2,6 +2,7 @@
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Application.Services
 {
@@ -43,8 +44,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public abstract class CrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-       : CrudAppServiceBase<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
-        ICrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+       : CrudAppService<TEntity, TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity<TKey>
            where TEntityDto : IEntityDto<TKey>
     {
@@ -54,15 +54,34 @@ namespace Volo.Abp.Application.Services
 
         }
 
-        public virtual TEntityDto Get(TKey id)
+        protected override TEntityDto MapToGetListOutputDto(TEntity entity)
+        {
+            return MapToGetOutputDto(entity);
+        }
+    }
+
+    public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+       : CrudAppServiceBase<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
+        ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+           where TEntity : class, IEntity<TKey>
+           where TGetOutputDto : IEntityDto<TKey>
+           where TGetListOutputDto : IEntityDto<TKey>
+    {
+        protected CrudAppService(IRepository<TEntity, TKey> repository)
+            : base(repository)
+        {
+
+        }
+
+        public virtual TGetOutputDto Get(TKey id)
         {
             CheckGetPolicy();
 
             var entity = GetEntityById(id);
-            return MapToEntityDto(entity);
+            return MapToGetOutputDto(entity);
         }
 
-        public virtual PagedResultDto<TEntityDto> GetList(TGetListInput input)
+        public virtual PagedResultDto<TGetListOutputDto> GetList(TGetListInput input)
         {
             CheckGetListPolicy();
 
@@ -75,23 +94,29 @@ namespace Volo.Abp.Application.Services
 
             var entities = query.ToList();
 
-            return new PagedResultDto<TEntityDto>(
+            return new PagedResultDto<TGetListOutputDto>(
                 totalCount,
-                entities.Select(MapToEntityDto).ToList()
+                entities.Select(MapToGetListOutputDto).ToList()
             );
         }
 
-        public virtual TEntityDto Create(TCreateInput input)
+        public virtual TGetOutputDto Create(TCreateInput input)
         {
             CheckCreatePolicy();
 
             var entity = MapToEntity(input);
+
+            if (entity is IMultiTenant && !HasTenantIdProperty(entity))
+            {
+                TryToSetTenantId(entity);
+            }
+
             Repository.Insert(entity, autoSave: true);
 
-            return MapToEntityDto(entity);
+            return MapToGetOutputDto(entity);
         }
 
-        public virtual TEntityDto Update(TKey id, TUpdateInput input)
+        public virtual TGetOutputDto Update(TKey id, TUpdateInput input)
         {
             CheckUpdatePolicy();
 
@@ -99,7 +124,7 @@ namespace Volo.Abp.Application.Services
             MapToEntity(input, entity);
             Repository.Update(entity, autoSave: true);
 
-            return MapToEntityDto(entity);
+            return MapToGetOutputDto(entity);
         }
 
         public virtual void Delete(TKey id)

@@ -1,14 +1,28 @@
 ﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
+@inject IPageLayout PageLayout
 @{
     Layout = null;
     AbpAntiForgeryManager.SetCookie();
     var containerClass = ViewBag.FluidLayout == true ? "container-fluid" : "container"; //TODO: Better and type-safe options
+
+    var pageTitle = ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title; //TODO: Discard to get from Title
+
+    if (PageLayout.Content.Title != null)
+    {
+        if (!string.IsNullOrWhiteSpace(pageTitle))
+        {
+            pageTitle = " | " + pageTitle;
+        }
+
+        pageTitle = PageLayout.Content.Title + pageTitle;
+    }
 }
 
 <!DOCTYPE html>
@@ -19,7 +33,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>@(ViewBag.Title == null ? BrandingProvider.AppName : ViewBag.Title)</title>
+    <title>@pageTitle</title>
 
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
@@ -28,7 +42,7 @@
 <body class="abp-application-layout">
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
-    
+
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
         <div id="AbpContentToolbar" class="text-right mb-3">
