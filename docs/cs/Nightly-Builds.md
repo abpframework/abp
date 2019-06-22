@@ -1,26 +1,26 @@
-# Nightly Builds
+# Noční sestavení
 
-All framework & module packages are deployed to MyGet every night in weekdays. So, you can use or test the latest code without waiting the next release.
+Všechny balíky frameworku a modulů jsou každý večer nasazeny na MyGet. Takže můžete používat nebo testovat nejnovější kód bez čekání na další vydání.
 
-## Configure Visual Studio
+## Konfigurace Visual Studia
 
-> Requires Visual Studio 2017+
+> Vyžaduje Visual Studio 2017+
 
-1. Go to `Tools > Options > NuGet Package Manager > Package Source`.
-2. Click the green `+` icon.
-3. Set `ABP Nightly` as *Name* and `https://www.myget.org/F/abp-nightly/api/v3/index.json` as the *Source* as shown below:
+1. Přejděte do `Tools > Options > NuGet Package Manager > Package Source`.
+2. Klikněte na zelenou ikonku `+`.
+3. Nastavte `ABP Nightly` jako *Name* a `https://www.myget.org/F/abp-nightly/api/v3/index.json` jako *Source* podle vyobrazení níže:
    ![night-build-add-nuget-source](images/night-build-add-nuget-source.png)
-4. Click the `Update` button.
-5. Click the `OK` button to save changes.
+4. Klikněte na `Update`.
+5. Klikněte na `OK` k uložení změn.
 
-## Install Package
+## Instalace balíku
 
-Now, you can install preview / nightly packages to your project from Nuget Browser or Package Manager Console.
+Nyní můžete instalovat náhledové / noční balíky do Vašeho projektu z NuGet prohlížeče nebo Package Manager Console.
 
 ![night-build-add-nuget-package](images/night-build-add-nuget-package.png)
 
-1. In the nuget browser, select "Include prereleases".
-2. Change package source to "All".
-3. Search a package. You will see prereleases of the package formatted as `(VERSION)-preview(DATE)` (like *v0.16.0-preview20190401* in this sample).
-4. You can click to the `Install` button to add package to your project.
+1. V nuget prohlížeči, vyberte "Include prereleases".
+2. Změňte zdroj balíků na "All".
+3. Vyhledejte balík. Uvidíte prerelease balík formátovaný jako `(VERZE)-preview(DATUM)` (např *v0.16.0-preview20190401* jako v tomto vzorku).
+4. Můžete kliknout na `Install` k přídání balíku do projektu.
 
