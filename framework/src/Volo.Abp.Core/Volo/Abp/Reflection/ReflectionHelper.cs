@@ -212,25 +212,20 @@ namespace Volo.Abp.Reflection
             var queue = new Queue<Type>();
             considered.Add(type);
             queue.Enqueue(type);
+            
+            foreach (var subInterface in type.GetInterfaces())
+            {
+                if (considered.Contains(subInterface)) continue;
+                considered.Add(subInterface);
+                queue.Enqueue(subInterface);
+            }
+            
             while (queue.Count > 0)
             {
                 var subType = queue.Dequeue();
-                foreach (var subInterface in subType.GetInterfaces())
-                {
-                    if (considered.Contains(subInterface))
-                    {
-                        continue;
-                    }
-
-                    considered.Add(subInterface);
-                    queue.Enqueue(subInterface);
-                }
-
                 var typeProperties = subType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
                 var newPropertyInfos = typeProperties
                     .Where(x => !propertyInfos.Contains(x));
-
                 propertyInfos.InsertRange(0, newPropertyInfos);
             }
 
