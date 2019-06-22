@@ -204,29 +204,17 @@ namespace Volo.Abp.Reflection
 
         public static PropertyInfo[] GetPublicProperties(this Type type)
         {
+            const BindingFlags publicInstanceFlag = BindingFlags.Public | BindingFlags.Instance;
             if (!type.IsInterface)
-                return type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+                return type.GetProperties(publicInstanceFlag);
 
             var propertyInfos = new List<PropertyInfo>();
-            var considered = new List<Type>();
-            var queue = new Queue<Type>();
-            considered.Add(type);
-            queue.Enqueue(type);
-            
+
+            propertyInfos.InsertRange(0, type.GetProperties(publicInstanceFlag));
             foreach (var subInterface in type.GetInterfaces())
             {
-                if (considered.Contains(subInterface)) continue;
-                considered.Add(subInterface);
-                queue.Enqueue(subInterface);
-            }
-            
-            while (queue.Count > 0)
-            {
-                var subType = queue.Dequeue();
-                var typeProperties = subType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                var newPropertyInfos = typeProperties
-                    .Where(x => !propertyInfos.Contains(x));
-                propertyInfos.InsertRange(0, newPropertyInfos);
+                var typeProperties = subInterface.GetProperties(publicInstanceFlag);
+                propertyInfos.InsertRange(0, typeProperties);
             }
 
             return propertyInfos.ToArray();
