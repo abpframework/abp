@@ -1,18 +1,18 @@
-# Autofac Integration
+# Autofac integrace
 
-Autofac is one of the most used dependency injection frameworks for .Net. It provides some advanced features compared to .Net Core standard DI library, like dynamic proxying and property injection.
+Autofac je jedním z nejpoužívanějších frameworků pro .Net pro vkládání závislostí (DI). Poskytuje pokročilejší funkce v porovnáním se standardní .Net Core DI knihovnou, jako dynamickou proxy a injekci vlastností.
 
-## Install Autofac Integration
+## Instalace Autofac integrace
 
-> All startup templates and samples are Autofac integrated. So, most of the time you don't need to manually install this package.
+> Všechny startovací šablony a vzorky jsou s Autofac již integrovány. Takže většinou nemusíte tento balíček instalovat ručně.
 
-Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) nuget package to your project (for a multi-projects application, it's suggested to add to the executable/web project.)
+Nainstalujte do vašeho projektu balíček [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) (pro víceprojektovou aplikaci se doporučuje přidat do spustitelného/webového projektu.)
 
 ````
 Install-Package Volo.Abp.Autofac
 ````
 
-Then add `AbpAutofacModule` dependency to your module:
+Poté přídejte k vašemu modulu závislost na `AbpAutofacModule`:
 
 ```csharp
 using Volo.Abp.Modularity;
@@ -28,11 +28,11 @@ namespace MyCompany.MyProject
 }
 ```
 
-Finally, configure `AbpApplicationCreationOptions` to replace default dependency injection services by Autofac. It depends on the application type.
+Nakonec nastavte `AbpApplicationCreationOptions` aby nahradil výchozí služby pro vkládání závislostí na Autofac. Záleží na typu aplikace.
 
-### ASP.NET Core Application
+### ASP.NET Core aplikace
 
-Call `UseAutofac()` in the **Startup.cs** file as shown below:
+Volejte `UseAutofac()` v souboru **Startup.cs** jako je ukázáno níže:
 
 ````csharp
 public class Startup
@@ -41,7 +41,7 @@ public class Startup
     {
         services.AddApplication<MyWebModule>(options =>
         {
-            //Integrate Autofac!
+            //Integrace Autofac!
             options.UseAutofac();
         });
 
@@ -55,9 +55,9 @@ public class Startup
 }
 ````
 
-### Console Application
+### Konzolová aplikace
 
-Call `UseAutofac()` method in the `AbpApplicationFactory.Create` options as shown below:
+Volejte metodu `UseAutofac()` v možnostech `AbpApplicationFactory.Create` jako je ukázáno níže:
 
 ````csharp
 using System;
@@ -72,7 +72,7 @@ namespace AbpConsoleDemo
         {
             using (var application = AbpApplicationFactory.Create<AppModule>(options =>
             {
-                options.UseAutofac(); //Autofac integration
+                options.UseAutofac(); //Autofac integrace
             }))
             {
                 //...
