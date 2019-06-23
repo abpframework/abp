@@ -313,10 +313,12 @@ $(function () {
 ````
 
 * Used `abp.localization.getResource('BookStore')` to be able to use the same localization texts defined on the server side.
+* Added a new `ModalManager` named `createModal` to open the create modal dialog.
 * Added a new `ModalManager` named `editModal` to open the edit modal dialog.
 * Added a new column at the beginning of the `columnDefs` section. This column is used for the "Actions" dropdown button.
+* "New Book" action simply calls `createModal.open` to open the create dialog.
 * "Edit" action simply calls `editModal.open` to open the edit dialog.
-
+`
 You can run the application and edit any book by selecting the edit action.
 
 ### Deleting an Existing Book
@@ -355,6 +357,12 @@ $(function () {
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
     var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+        processing: true,
+        serverSide: true,
+        paging: true,
+        searching: false,
+        autoWidth: false,
+        scrollCollapse: true,
         order: [[1, "asc"]],
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [
