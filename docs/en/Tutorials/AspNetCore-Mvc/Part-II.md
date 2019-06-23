@@ -63,7 +63,7 @@ Open the `CreateModal.cshtml` file and paste the code below:
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
@@ -207,7 +207,7 @@ Replace `EditModal.cshtml` content with the following content:
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
