@@ -32,7 +32,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Acme.BookStore.Web.Pages.Books
 {
-    public class CreateModalModel : BookStorePageModelBase
+    public class CreateModalModel : BookStorePageModel
     {
         [BindProperty]
         public CreateUpdateBookDto Book { get; set; }
@@ -53,7 +53,7 @@ namespace Acme.BookStore.Web.Pages.Books
 }
 ````
 
-* This class is derived from the `BookStorePageModelBase` instead of standard `PageModel`. `BookStorePageModelBase` inherits the `PageModel` and adds some common properties/methods those can be used by your page model classes.
+* This class is derived from the `BookStorePageModel` instead of standard `PageModel`. `BookStorePageModel` inherits the `PageModel` and adds some common properties/methods those can be used by your page model classes.
 * `[BindProperty]` attribute on the `Book` property binds post request data to this property.
 * This class simply injects the `IBookAppService` in its constructor and calls the `CreateAsync` method in the `OnPostAsync` handler.
 
@@ -145,7 +145,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Acme.BookStore.Web.Pages.Books
 {
-    public class EditModalModel : BookStorePageModelBase
+    public class EditModalModel : BookStorePageModel
     {
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
