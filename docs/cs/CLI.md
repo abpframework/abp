@@ -35,7 +35,7 @@ abp new Acme.BookStore
 ````
 
 * Acme.BookStore je tady název řešení.
-* Běžná konvence je nazvat řešení stylem *VašeSpolečnost.VášProjekt*. Nicméně můžete použít i jiné pojmenování jako *VášProjekt* (jednostupňový jmenný prostor) nebo *VašeSpolečnost.VášProdukt.VášModul* (třístupňový jmenný prostor).
+* Běžná konvence je nazvat řešení stylem *VaseSpolecnost.VasProjekt*. Nicméně můžete použít i jiné pojmenování jako *VasProjekt* (jednostupňový jmenný prostor) nebo *VaseSpolecnost.VasProjekt.VasModul* (třístupňový jmenný prostor).
 
 #### Možnosti
 
