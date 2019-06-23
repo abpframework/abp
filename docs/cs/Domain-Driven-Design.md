@@ -1,33 +1,33 @@
 # Domain Driven Design
 
-## What is DDD?
+## Co je DDD?
 
-ABP framework provides an **infrastructure** to make **DDD** based development easier to implement. DDD is [defined in the Wikipedia](https://en.wikipedia.org/wiki/Domain-driven_design) as below:
+ABP framework poskytuje **infrastrukturu**, která zjednodušuje implementaci vývoje založeného na **DDD**. DDD je [definován ve Wikipedii](https://en.wikipedia.org/wiki/Domain-driven_design) takto:
 
-> **Domain-driven design** (**DDD**) is an approach to software development for complex needs by connecting the implementation to an evolving model. The premise of domain-driven design is the following:
+> **Domain-driven design** (**DDD**) je přístup k vývoji softwaru pro komplexní potřeby propojením implementace s vyvíjejícím se modelem. Předpoklad DDD je následující:
 >
-> - Placing the project's primary focus on the core domain and domain logic;
-> - Basing complex designs on a model of the domain;
-> - Initiating a creative collaboration between technical and domain experts to iteratively refine a conceptual model that addresses particular domain problems.
+> - Primární zaměření projektu je na jádře domény a doménové logice;
+> - Zakládání komplexních návrhů na modelu domény;
+> - Iniciování tvůrčí spolupráce mezi technickými a doménovými odborníky s cílem iterativně zdokonalit koncepční model, který řeší konkrétní problémy v doméně.
 
-### Layers
+### Vrstvy
 
-ABP follows DDD principles and patterns to achieve a layered application model which consists of four fundamental layers:
+ABP dodržuje principy a vzorce DDD pro dosažení vrstveného aplikačního modelu, který se skládá ze čtyř základních vrstev:
 
-- **Presentation Layer**: Provides an interface to the user. Uses the *Application Layer* to achieve user interactions.
-- **Application Layer**: Mediates between the Presentation and Domain Layers. Orchestrates business objects to perform specific application tasks. Implements use cases as the application logic.
-- **Domain Layer**: Includes business objects and their business rules. This is the heart of the application.
-- **Infrastructure Layer**: Provides generic technical capabilities that support higher layers mostly using 3rd-party libraries.
+- **Prezentační vrstva**: Poskytuje uživateli rozhraní. Používá *Aplikační vrstvu* k dosažení uživatelských interakcí.
+- **Aplikační vrstva**: Prostředník mezi prezentační a doménovou vrstvou. Instrumentuje business objekty k provádění specifických úloh aplikace. Implementuje případy použití jako logiku aplikace.
+- **Doménová vrstva**: Zahrnuje business objekty a jejich business pravidla. Je jádrem aplikace.
+- **Vrstva infrastruktury**: Poskytuje obecné technické možnosti, které podporují vyšší vrstvy většinou pomocí knihoven třetích stran.
 
-## Contents
+## Obsah
 
-* **Domain Layer**
-  * [Entities & Aggregate Roots](Entities.md)
-  * Value Objects
-  * [Repositories](Repositories.md)
-  * Domain Services
-  * Specifications
-* **Application Layer**
-  * [Application Services](Application-Services.md)
-  * [Data Transfer Objects (DTOs)](Data-Transfer-Objects.md)
-  * Unit of Work
+* **Doménová vrstva**
+  * [Entity & agregované kořeny](Entities.md)
+  * Hodnotové objekty
+  * [Repozitáře](Repositories.md)
+  * Doménové služby
+  * Specifikace
+* **Aplikační vrstva**
+  * [Aplikační služby](Application-Services.md)
+  * [Objekty přenosu dat (DTOs)](Data-Transfer-Objects.md)
+  * Jednotka práce
