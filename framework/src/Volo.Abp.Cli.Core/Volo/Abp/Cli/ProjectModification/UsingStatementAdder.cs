@@ -24,7 +24,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return fileContent.Insert(index, usingStatement);
         }
 
-        protected string GetUsingStatement(string nameSpace)
+        protected virtual string GetUsingStatement(string nameSpace)
         {
             return Environment.NewLine + "using " + nameSpace + ";";
         }
