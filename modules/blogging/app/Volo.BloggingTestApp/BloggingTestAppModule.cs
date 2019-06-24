@@ -60,6 +60,11 @@ namespace Volo.BloggingTestApp
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.BuildConfiguration();
 
+            Configure<BloggingUrlOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
+
             Configure<DbConnectionOptions>(options =>
             {
 #if MONGODB

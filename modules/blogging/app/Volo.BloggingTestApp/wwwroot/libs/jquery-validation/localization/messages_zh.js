@@ -28,6 +28,7 @@ $.extend( $.validator.messages, {
 	minlength: $.validator.format( "最少要输入 {0} 个字符" ),
 	rangelength: $.validator.format( "请输入长度在 {0} 到 {1} 之间的字符串" ),
 	range: $.validator.format( "请输入范围在 {0} 到 {1} 之间的数值" ),
+	step: $.validator.format( "请输入 {0} 的整数倍值" ),
 	max: $.validator.format( "请输入不大于 {0} 的数值" ),
 	min: $.validator.format( "请输入不小于 {0} 的数值" )
 } );

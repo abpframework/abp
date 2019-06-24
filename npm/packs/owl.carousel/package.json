@@ -1,11 +1,11 @@
 {
-  "version": "0.6.2",
+  "version": "0.6.5",
   "name": "@abp/owl.carousel",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.6.2",
+    "@abp/core": "^0.6.5",
     "owl.carousel": "^2.3.4"
   }
 }

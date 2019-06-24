@@ -30,7 +30,7 @@ $.extend( $.validator.messages, {
 	range: $.validator.format( "Lütfen {0} ile {1} arasında bir değer giriniz." ),
 	max: $.validator.format( "Lütfen {0} değerine eşit ya da daha küçük bir değer giriniz." ),
 	min: $.validator.format( "Lütfen {0} değerine eşit ya da daha büyük bir değer giriniz." ),
-	require_from_group: "Lütfen bu alanların en az {0} tanesini doldurunuz."
+	require_from_group: $.validator.format( "Lütfen bu alanların en az {0} tanesini doldurunuz." )
 } );
 return $;
 }));

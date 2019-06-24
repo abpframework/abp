@@ -49,7 +49,12 @@ namespace Volo.Abp.EventBus.Local
         {
             GetOrCreateHandlerFactories(eventType)
                 .Locking(factories =>
-                    factories.Add(factory)
+                    {
+                        if (!factory.IsInFactories(factories))
+                        {
+                            factories.Add(factory);
+                        }
+                    }
                 );
 
             return new EventHandlerFactoryUnregistrar(this, eventType, factory);

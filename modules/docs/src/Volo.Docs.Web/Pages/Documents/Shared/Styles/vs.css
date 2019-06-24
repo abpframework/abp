@@ -31,19 +31,29 @@
       .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version {
         position: relative;
         padding: 0 1rem;
-        margin: .45rem 0; }
+        margin: .25rem 0; }
         .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select {
-          border-radius: 8px; }
+          border-radius: 3px;
+          border: 1px solid #e9ecef; }
           .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select .input-group-text {
-            border: 0; }
-          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
+            padding: 0.375rem 0.6rem;
+            font-size: .9rem;
+            width: 32px;
+            height: 30px;
             line-height: 1;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-            padding: .3em .5em .5em;
-            border: 0; }
+            border-radius: 0px;
+            border: 1px solid #e9ecef; }
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
+            padding: 0 10px;
+            border: 0;
+            min-height: 30px;
+            height: 30px;
+            font-size: .85em;
+            border-radius: 1px; }
             .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control:visited, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:focus, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:active, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:hover, .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control:visited {
               box-shadow: none; }
+          .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control {
+            padding-left: 6px; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper .docs-filter {
         padding: 0 1rem;
         margin: .5rem 0;
@@ -232,9 +242,9 @@
       .docs-page .docs-content article.docs-body table img {
         background-color: initial; }
   .docs-page .docs-page-index {
-    min-height: 100vh; }
+    min-height: 96vh; }
     .docs-page .docs-page-index #scroll-index {
-      max-height: 100vh; }
+      max-height: 96vh; }
     .docs-page .docs-page-index .docs-inner-anchors {
       position: fixed;
       top: 0px;
@@ -284,33 +294,23 @@
     max-width: 1080px; }
   .docs-page .docs-sidebar.dark-sidebar {
     background: #191919; }
-    .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
-      background: #333;
-      border-color: #333;
-      color: #999;
-      font-size: .9em;
-      min-height: 40px;
-      padding-left: 8px; }
-    .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
-      background: #333;
-      border-color: #333;
-      color: #999;
-      font-size: .9em;
-      min-height: 40px;
-      padding-left: 12px; }
-      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control::placeholder {
-        color: #999;
-        opacity: .5; }
-    .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select label {
-      background: #444;
-      border-color: #444;
-      color: #ddd;
-      width: 36px;
-      text-align: center;
-      padding-left: 0;
-      padding-right: 0;
-      display: inline-block;
-      line-height: 26px; }
+    .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select {
+      border: 1px solid #333; }
+      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select select.form-control, .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
+        background: #191919;
+        border-color: #191919;
+        color: #999; }
+      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control {
+        background: #191919;
+        border-color: #191919;
+        color: #999; }
+        .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select input.form-control::placeholder {
+          color: #999;
+          opacity: .5; }
+      .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-version .version-select label {
+        background: #333;
+        border-color: #333;
+        color: #ddd; }
     .docs-page .docs-sidebar.dark-sidebar .docs-sidebar-wrapper .docs-filter .form-control {
       background: #333;
       color: #999; }

@@ -43,4 +43,13 @@
     <PackageReference Include="Volo.Abp.FeatureManagement.Web" Version="0.17.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Pages\**\*.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Pages\**\*.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

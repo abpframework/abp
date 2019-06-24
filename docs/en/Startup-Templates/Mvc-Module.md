@@ -50,7 +50,7 @@ Each section below will explain the related project & its dependencies.
 
 This project contains constants, enums and other objects these are actually a part of the domain layer, but needed to be used by all layers/projects in the solution.
 
-An `IssueType` enum and an `IssueConts` class (which may have some constant fields for the `Issue` entity, like `MaxTitleLength`) are good candidates for this project.
+An `IssueType` enum and an `IssueConsts` class (which may have some constant fields for the `Issue` entity, like `MaxTitleLength`) are good candidates for this project.
 
 - This project has no dependency to other projects in the solution. All other projects depend on this directly or indirectly.
 
@@ -102,7 +102,7 @@ The solution has multiple test projects, one for each layer:
 - `.Domain.Tests` is used to test the domain layer.
 - `.Application.Tests` is used to test the application layer.
 - `.EntityFrameworkCore.Tests` is used to test EF Core configuration and custom repositories.
-- `.MongoDB.Tests` is used to test EF Core configuration and custom repositories.
+- `.MongoDB.Tests` is used to test MongoDB configuration and custom repositories.
 - `.TestBase` is a base (shared) project for all tests.
 
 In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
@@ -120,8 +120,6 @@ You can still create unit tests for your classes which will be harder to write (
 ### Host Projects
 
 The solution has a few host applications to run your module on development. Host applications are used to run your module in a fully configured application. It is useful on development. Host applications includes some other modules in addition to the module being developed:
-
-* 
 
 Host applications support two types of scenarios.
 

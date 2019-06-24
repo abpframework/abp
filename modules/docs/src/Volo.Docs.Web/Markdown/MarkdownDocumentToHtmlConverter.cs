@@ -73,7 +73,7 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
-                    _urlOptions.GetFormattedRoutePrefix(),
+                    _urlOptions.RoutePrefix,
                     languageCode,
                     projectShortName,
                     version,
@@ -101,7 +101,7 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
-                    _urlOptions.GetFormattedRoutePrefix(),
+                    _urlOptions.RoutePrefix,
                     languageCode,
                     projectShortName,
                     version,

@@ -4,19 +4,25 @@ namespace Volo.Docs
 {
     public class DocsUrlOptions
     {
+        private string _routePrefix = "documents";
+
         /// <summary>
         /// Default value: "documents";
         /// </summary>
-        public string RoutePrefix { get; set; } = "documents";
-
-        public string GetFormattedRoutePrefix()
+        public string RoutePrefix
         {
-                if (string.IsNullOrWhiteSpace(RoutePrefix))
-                {
-                    return "/";
-                }
+            get => GetFormattedRoutePrefix();
+            set => _routePrefix = value;
+        }
 
-                return RoutePrefix.EnsureEndsWith('/').EnsureStartsWith('/');
+        private string GetFormattedRoutePrefix()
+        {
+            if (string.IsNullOrWhiteSpace(_routePrefix))
+            {
+                return "/";
+            }
+
+            return _routePrefix.EnsureEndsWith('/').EnsureStartsWith('/');
         }
     }
 }

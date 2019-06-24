@@ -20,7 +20,7 @@ namespace VoloDocs.Web.Pages
             //TODO: Create HomeController & Index instead of Page. Otherwise, we have an empty Index.cshtml file.
             if (!_urlOptions.RoutePrefix.IsNullOrWhiteSpace())
             {
-                return Redirect("." + _urlOptions.GetFormattedRoutePrefix());
+                return Redirect("." + _urlOptions.RoutePrefix);
             }
 
             return Page();
