@@ -1,6 +1,6 @@
-﻿using System;
+﻿using NuGet.Versioning;
 using System.IO;
-using System.Text;
+using System.Xml;
 using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
@@ -35,54 +35,29 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var fileContent = File.ReadAllText(projectPath);
 
-            var content = new StringBuilder();
-            var index = 0;
-
-            while (index >= 0)
-            {
-                fileContent = fileContent.Substring(index);
-                content.Append(ReplaceAPackage(fileContent, includePreviews, out index));
-            }
-
-            File.WriteAllText(projectPath, content.ToString());
+            File.WriteAllText(projectPath, UpdateVoloPackages(fileContent, includePreviews));
         }
 
-        private string ReplaceAPackage(string content, bool includePreviews, out int index)
+        private string UpdateVoloPackages(string content, bool includePreviews)
         {
-            var packageReferenceStartText = "nclude=\"Volo.";
-            var returningText = new StringBuilder();
+            var doc = new XmlDocument() { PreserveWhitespace = true };
+            doc.LoadXml(content);
 
-            var indexOfPackageReference = content.IndexOf(packageReferenceStartText, StringComparison.Ordinal);
-
-            if (indexOfPackageReference < 0)
+            foreach (XmlNode package in doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]"))
             {
-                index = -1;
-                return content;
+                var versionAttribute = package.Attributes["Version"];
+
+                var packageId = package.Attributes["Include"].Value;
+                var packageVersion = SemanticVersion.Parse(versionAttribute.Value);
+                var latestVersion = AsyncHelper.RunSync(() => _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews));
+
+                if (latestVersion != null && packageVersion < latestVersion)
+                {
+                    versionAttribute.Value = latestVersion.ToString();
+                }
             }
 
-            returningText.Append(content.Substring(0, indexOfPackageReference + packageReferenceStartText.Length));
-            content = content.Substring(indexOfPackageReference + packageReferenceStartText.Length);
-
-            var indexAfterQuote = content.IndexOf("\"", StringComparison.Ordinal) + 1;
-
-            var packageId = "Volo." + content.Substring(indexAfterQuote - 1);
-
-            returningText.Append(content.Substring(0, indexAfterQuote));
-            content = content.Substring(indexAfterQuote);
-
-            var indexAfterSecondQuote = content.IndexOf("\"", StringComparison.Ordinal) + 1;
-
-            returningText.Append(content.Substring(0, indexAfterSecondQuote));
-            content = content.Substring(indexAfterSecondQuote);
-
-            var indexOfThirdQuote = content.IndexOf("\"", StringComparison.Ordinal);
-            
-            var version = AsyncHelper.RunSync(() => _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews));
-            returningText.Append(version);
-
-            index = indexOfPackageReference + packageReferenceStartText.Length + indexAfterQuote + indexAfterSecondQuote + indexOfThirdQuote;
-
-            return returningText.ToString();
+            return doc.OuterXml;
         }
     }
 }
