@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.PermissionManagement.MongoDB
 {
-    [ConnectionStringName("AbpPermissionManagement")]
+    [ConnectionStringName(AbpPermissionManagementConsts.ConnectionStringName)]
     public interface IPermissionManagementMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<PermissionGrant> PermissionGrants { get; }

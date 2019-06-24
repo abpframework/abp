@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.AuditLogging.MongoDB
 {
-    [ConnectionStringName("AbpAuditLogging")]
+    [ConnectionStringName(AbpAuditLoggingConsts.ConnectionStringName)]
     public interface IAuditLoggingMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<AuditLog> AuditLogs { get; }

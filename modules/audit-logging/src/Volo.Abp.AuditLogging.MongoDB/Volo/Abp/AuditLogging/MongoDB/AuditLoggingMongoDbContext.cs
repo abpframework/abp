@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.AuditLogging.MongoDB
 {
-    [ConnectionStringName("AbpAuditLogging")]
+    [ConnectionStringName(AbpAuditLoggingConsts.ConnectionStringName)]
     public class AuditLoggingMongoDbContext : AbpMongoDbContext, IAuditLoggingMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = AbpAuditLoggingConsts.DefaultDbTablePrefix;

@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.PermissionManagement.MongoDB
 {
-    [ConnectionStringName("AbpPermissionManagement")]
+    [ConnectionStringName(AbpPermissionManagementConsts.ConnectionStringName)]
     public class PermissionManagementMongoDbContext : AbpMongoDbContext, IPermissionManagementMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = AbpPermissionManagementConsts.DefaultDbTablePrefix;

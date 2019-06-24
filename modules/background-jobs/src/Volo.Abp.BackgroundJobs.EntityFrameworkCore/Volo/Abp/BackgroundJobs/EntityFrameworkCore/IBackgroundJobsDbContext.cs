@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpBackgroundJobs")]
+    [ConnectionStringName(BackgroundJobsConsts.ConnectionStringName)]
     public interface IBackgroundJobsDbContext : IEfCoreDbContext
     {
         DbSet<BackgroundJobRecord> BackgroundJobs { get; }

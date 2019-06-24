@@ -8,7 +8,7 @@ using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResou
 
 namespace Volo.Abp.IdentityServer.MongoDB
 {
-    [ConnectionStringName("AbpIdentityServer")]
+    [ConnectionStringName(AbpIdentityServerConsts.ConnectionStringName)]
     public class AbpIdentityServerMongoDbContext : AbpMongoDbContext, IAbpIdentityServerMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = AbpIdentityServerConsts.DefaultDbTablePrefix;

@@ -8,7 +8,7 @@ using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpIdentityServer")]
+    [ConnectionStringName(AbpIdentityServerConsts.ConnectionStringName)]
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
     {
         public static string TablePrefix { get; set; } = AbpIdentityServerConsts.DefaultDbTablePrefix;
