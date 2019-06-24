@@ -17,8 +17,7 @@ $solutions = (
     "modules/background-jobs",
     "modules/blogging",
     "modules/docs",
-    "modules/client-simulation",
-    "abp_io"
+    "modules/client-simulation"
 )
 
 # List of projects
@@ -207,8 +206,5 @@ $projects = (
     
     # modules/client-simulation
     "modules/client-simulation/src/Volo.ClientSimulation",
-    "modules/client-simulation/src/Volo.ClientSimulation.Web",
-    
-    # abp_io/SolutionTemplating
-    "abp_io/src/Volo.Utils.SolutionTemplating"
+    "modules/client-simulation/src/Volo.ClientSimulation.Web"
 )
