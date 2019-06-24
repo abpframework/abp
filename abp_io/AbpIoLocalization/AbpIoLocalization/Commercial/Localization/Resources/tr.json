@@ -1,0 +1,23 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "OrganizationManagement": "Organizasyon yönetimi",
+    "OrganizationList": "Organizasyon listesi",
+    "Volo.AbpIo.Commercial:010003": "Bu organizasyonda yetkili değilsiniz!",
+    "OrganizationNotFoundMessage": "Organizasyon bulunamadı!",
+    "DeveloperCount": "Yazılımcı sayısı",
+    "Owners": "Yetkili sayısı",
+    "AddMember": "Üye ekle",
+    "AddOwner": "Yetkili ekle",
+    "AddDeveloper": "Yazılımcı ekle",
+    "UserName": "Kullanıcı adı",
+    "Name": "İsim",
+    "EmailAddress": "Email adresi",
+    "Developers": "Yazılımcılar",
+    "LicenseType": "lisans türü",
+    "Manage": "Yönet",
+    "StartDate": "Başlangıç tarihi",
+    "EndDate": "bitiş tarihi",
+    "Modules": "Modüller"
+  }
+}

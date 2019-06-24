@@ -1,0 +1,18 @@
+{
+  "culture": "en",
+  "texts": {
+    "GetStarted": "Get Started",
+    "Create": "Create",
+    "NewProject": "New Project",
+    "DirectDownload": "Direct Download",
+    "ProjectName": "Project name",
+    "ProjectType": "Project type",
+    "DatabaseProvider": "Database provider",
+    "NTier": "N-Tier",
+    "IncludeUserInterface": "Include user interface",
+    "CreateNow": "Create now",
+    "TheStartupProject": "The startup project",
+    "Tutorial": "Tutorial",
+    "UsingCLI": "Using CLI"
+  }
+}
