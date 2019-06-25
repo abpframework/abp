@@ -20,7 +20,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public ILogger<AbpIoTemplateStore> Logger { get; set; }
 
         protected CliOptions Options { get; }
+
         protected IJsonSerializer JsonSerializer { get; }
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public AbpIoTemplateStore(
@@ -63,7 +65,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Name = name,
                     Version = version,
                     DatabaseProvider = databaseProvider.ToString(),
-                    ProjectName = projectName
+                    ProjectName = projectName,
+                    Tool = Options.ToolName
                 }
             );
 
@@ -147,6 +150,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string DatabaseProvider { get; set; }
 
             public string ProjectName { get; set; }
+
+            public string Tool { get; set; }
         }
 
         public class GetLatestTemplateVersionDto
