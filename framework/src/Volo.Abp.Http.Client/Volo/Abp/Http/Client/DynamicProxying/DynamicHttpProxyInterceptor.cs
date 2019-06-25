@@ -135,7 +135,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
             var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
             var apiVersion = GetApiVersionInfo(action);
-            var url = remoteServiceConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+            var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
 
             var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
             {

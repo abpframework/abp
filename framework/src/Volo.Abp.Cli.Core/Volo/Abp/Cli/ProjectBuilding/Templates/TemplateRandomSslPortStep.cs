@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
 
                     var consoleTestApp = appSettings.FirstOrDefault(x =>
                         x.Name.Equals("/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
-                    consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44302", "https://localhost:44303"));
+                    consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44300", "https://localhost:44303"));
                     consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44301", "https://localhost:44303"));
                 }
             }
