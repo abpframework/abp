@@ -165,18 +165,21 @@ namespace Volo.Abp.Application.Services
         
         protected virtual void TryToSetTenantId(TEntity entity)
         {
-            var tenantId = CurrentTenant.Id;
-
-            if (!tenantId.HasValue)
+            if (entity is IMultiTenant && HasTenantIdProperty(entity))
             {
-                return;
-            }
+                var tenantId = CurrentTenant.Id;
 
-            var propertyInfo = entity.GetType().GetProperty(nameof(IMultiTenant.TenantId));
+                if (!tenantId.HasValue)
+                {
+                    return;
+                }
 
-            if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
-            {
-                propertyInfo.SetValue(entity, tenantId, null);
+                var propertyInfo = entity.GetType().GetProperty(nameof(IMultiTenant.TenantId));
+
+                if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
+                {
+                    propertyInfo.SetValue(entity, tenantId, null);
+                }
             }
         }
 
