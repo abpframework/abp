@@ -184,7 +184,6 @@ using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    [AutoMapTo(typeof(Book))]
     public class CreateUpdateBookDto
     {
         [Required]
