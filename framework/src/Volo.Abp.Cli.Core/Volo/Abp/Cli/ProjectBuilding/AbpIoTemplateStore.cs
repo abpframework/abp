@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
 
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
-            if (File.Exists(localCacheFile))
+            if (Options.CacheTemplates && File.Exists(localCacheFile))
             {
                 Logger.LogInformation("Using cached template: " + name + ", version: " + version);
                 return new TemplateFile(File.ReadAllBytes(localCacheFile), version);
@@ -67,7 +67,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 }
             );
 
-            File.WriteAllBytes(localCacheFile, fileContent);
+            if (Options.CacheTemplates)
+            {
+                File.WriteAllBytes(localCacheFile, fileContent);
+            }
 
             return new TemplateFile(fileContent, version);
         }
