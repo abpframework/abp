@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.TenantManagement.MongoDb
 {
-    [ConnectionStringName("AbpTenantManagement")]
+    [ConnectionStringName(AbpTenantManagementConsts.ConnectionStringName)]
     public class TenantManagementMongoDbContext : AbpMongoDbContext, ITenantManagementMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = AbpTenantManagementConsts.DefaultDbTablePrefix;

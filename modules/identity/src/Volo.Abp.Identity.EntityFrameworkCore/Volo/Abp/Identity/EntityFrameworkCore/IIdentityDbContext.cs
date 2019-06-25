@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpIdentity")]
+    [ConnectionStringName(AbpIdentityConsts.ConnectionStringName)]
     public interface IIdentityDbContext : IEfCoreDbContext
     {
         DbSet<IdentityUser> Users { get; set; }

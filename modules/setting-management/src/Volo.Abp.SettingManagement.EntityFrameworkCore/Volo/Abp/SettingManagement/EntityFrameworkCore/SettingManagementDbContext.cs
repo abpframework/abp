@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpSettingManagement")]
+    [ConnectionStringName(AbpSettingManagementConsts.ConnectionStringName)]
     public class SettingManagementDbContext : AbpDbContext<SettingManagementDbContext>, ISettingManagementDbContext
     {
         public static string TablePrefix { get; set; } = AbpSettingManagementConsts.DefaultDbTablePrefix;

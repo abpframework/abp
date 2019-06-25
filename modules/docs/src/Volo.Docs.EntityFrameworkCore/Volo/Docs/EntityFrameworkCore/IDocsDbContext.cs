@@ -5,7 +5,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.EntityFrameworkCore
 {
-    [ConnectionStringName("Docs")]
+    [ConnectionStringName(DocsConsts.ConnectionStringName)]
     public interface IDocsDbContext : IEfCoreDbContext
     {
         DbSet<Project> Projects { get; set; }
