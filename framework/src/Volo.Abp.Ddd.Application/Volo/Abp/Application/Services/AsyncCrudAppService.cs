@@ -109,10 +109,7 @@ namespace Volo.Abp.Application.Services
 
             var entity = MapToEntity(input);
 
-            if (entity is IMultiTenant && !HasTenantIdProperty(entity))
-            {
-                TryToSetTenantId(entity);
-            }
+            TryToSetTenantId(entity);
 
             await Repository.InsertAsync(entity, autoSave: true);
 
