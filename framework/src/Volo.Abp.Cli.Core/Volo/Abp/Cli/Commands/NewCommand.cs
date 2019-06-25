@@ -29,7 +29,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Project name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException("Project name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
             }
 
             Logger.LogInformation("Creating a new project...");

@@ -27,7 +27,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Package name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException("Package name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
             }
 
             await ProjectNugetPackageAdder.AddAsync(

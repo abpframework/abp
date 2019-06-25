@@ -26,14 +26,14 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target.IsNullOrEmpty())
             {
-                throw new CliUsageException("Username name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException("Username name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
             }
 
             Console.Write("Password: ");
             var password = ConsoleHelper.ReadSecret();
             if (password.IsNullOrWhiteSpace())
             {
-                throw new CliUsageException("Password name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException("Password name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
             }
 
             await AuthService.LoginAsync(commandLineArgs.Target, password);
