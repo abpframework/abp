@@ -7,7 +7,7 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public string Add(string fileContent, string nameSpace)
         {
-            if (fileContent.Contains(nameSpace))
+            if (fileContent.Contains($" {nameSpace};"))
             {
                 return fileContent;
             }
