@@ -1,7 +1,9 @@
-﻿using System.IO;
-using Ionic.Zip;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 using Volo.Abp.Cli.ProjectBuilding.Files;
-using Volo.Abp.Cli.ProjectBuilding.Zipping;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -16,10 +18,24 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         {
             using (var memoryStream = new MemoryStream(fileBytes))
             {
-                using (var templateZipFile = ZipFile.Read(memoryStream))
+                var fileEntries = new List<FileEntry>();
+
+                var zipInputStream = new ZipInputStream(memoryStream);
+                var zipEntry = zipInputStream.GetNextEntry();
+                while (zipEntry != null)
                 {
-                    return templateZipFile.ToFileEntryList();
+                    var buffer = new byte[4096]; // 4K is optimum
+
+                    using (var fileEntryMemoryStream = new MemoryStream())
+                    {
+                        StreamUtils.Copy(zipInputStream, fileEntryMemoryStream, buffer);
+                        fileEntries.Add(new FileEntry(zipEntry.Name.EnsureStartsWith('/'), fileEntryMemoryStream.ToArray(), zipEntry.IsDirectory));
+                    }
+
+                    zipEntry = zipInputStream.GetNextEntry();
                 }
+
+                return new FileEntryList(fileEntries);
             }
         }
     }
