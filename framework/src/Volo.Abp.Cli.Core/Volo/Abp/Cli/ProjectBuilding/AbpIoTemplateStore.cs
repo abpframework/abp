@@ -6,6 +6,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
@@ -82,12 +83,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var postData = JsonSerializer.Serialize(new GetLatestTemplateVersionDto { Name = name });
 
-            using (var client = new HttpClient())
+            using (var client = new CliHttpClient())
             {
-                client.Timeout = TimeSpan.FromSeconds(30);
-
-                AddAuthentication(client);
-
                 var responseMessage = await client.PostAsync(
                     $"{CliUrls.WwwAbpIo}api/download/template/get-version/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
@@ -108,12 +105,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var postData = JsonSerializer.Serialize(input);
 
-            using (var client = new HttpClient())
+            using (var client = new CliHttpClient())
             {
-                client.Timeout = TimeSpan.FromMinutes(3);
-
-                AddAuthentication(client);
-
                 var responseMessage = await client.PostAsync(
                     $"{CliUrls.WwwAbpIo}api/download/template/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
@@ -126,18 +119,6 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 }
 
                 return await responseMessage.Content.ReadAsByteArrayAsync();
-            }
-        }
-
-        private static void AddAuthentication(HttpClient client)
-        {
-            if (File.Exists(CliPaths.AccessToken))
-            {
-                var accessToken = File.ReadAllText(CliPaths.AccessToken, Encoding.UTF8);
-                if (!accessToken.IsNullOrEmpty())
-                {
-                    client.SetBearerToken(accessToken);
-                }
             }
         }
 

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IO;
@@ -71,7 +71,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual async Task<NugetPackageInfo> FindNugetPackageInfoAsync(string moduleName)
         {
-            using (var client = new HttpClient())
+            using (var client = new CliHttpClient())
             {
                 var url = $"{CliUrls.WwwAbpIo}api/app/nugetPackage/byName/?name=" + moduleName;
 
