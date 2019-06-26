@@ -15,22 +15,22 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         {
             using (var memoryStream = new MemoryStream())
             {
-                var zipOutputStream = new ZipOutputStream(memoryStream);
-                zipOutputStream.SetLevel(3); //0-9, 9 being the highest level of compression
-
-                foreach (var entry in entries)
+                using (var zipOutputStream = new ZipOutputStream(memoryStream))
                 {
-                    zipOutputStream.PutNextEntry(new ZipEntry(entry.Name)
+                    zipOutputStream.SetLevel(3); //0-9, 9 being the highest level of compression
+
+                    foreach (var entry in entries)
                     {
-                        Size = entry.Bytes.Length
-                    });
-                    zipOutputStream.Write(entry.Bytes, 0, entry.Bytes.Length);
+                        zipOutputStream.PutNextEntry(new ZipEntry(entry.Name)
+                        {
+                            Size = entry.Bytes.Length
+                        });
+                        zipOutputStream.Write(entry.Bytes, 0, entry.Bytes.Length);
+                    }
+
+                    zipOutputStream.CloseEntry();
+                    zipOutputStream.IsStreamOwner = false;
                 }
-
-                zipOutputStream.CloseEntry();
-
-                zipOutputStream.IsStreamOwner = false;
-                zipOutputStream.Close();
 
                 memoryStream.Position = 0;
                 return memoryStream.ToArray();

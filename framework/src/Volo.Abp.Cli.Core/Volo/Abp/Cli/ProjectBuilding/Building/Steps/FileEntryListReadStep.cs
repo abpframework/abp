@@ -16,23 +16,25 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         private static FileEntryList GetEntriesFromZipFile(byte[] fileBytes)
         {
+            var fileEntries = new List<FileEntry>();
+
             using (var memoryStream = new MemoryStream(fileBytes))
             {
-                var fileEntries = new List<FileEntry>();
-
-                var zipInputStream = new ZipInputStream(memoryStream);
-                var zipEntry = zipInputStream.GetNextEntry();
-                while (zipEntry != null)
+                using (var zipInputStream = new ZipInputStream(memoryStream))
                 {
-                    var buffer = new byte[4096]; // 4K is optimum
-
-                    using (var fileEntryMemoryStream = new MemoryStream())
+                    var zipEntry = zipInputStream.GetNextEntry();
+                    while (zipEntry != null)
                     {
-                        StreamUtils.Copy(zipInputStream, fileEntryMemoryStream, buffer);
-                        fileEntries.Add(new FileEntry(zipEntry.Name.EnsureStartsWith('/'), fileEntryMemoryStream.ToArray(), zipEntry.IsDirectory));
-                    }
+                        var buffer = new byte[4096]; // 4K is optimum
 
-                    zipEntry = zipInputStream.GetNextEntry();
+                        using (var fileEntryMemoryStream = new MemoryStream())
+                        {
+                            StreamUtils.Copy(zipInputStream, fileEntryMemoryStream, buffer);
+                            fileEntries.Add(new FileEntry(zipEntry.Name.EnsureStartsWith('/'), fileEntryMemoryStream.ToArray(), zipEntry.IsDirectory));
+                        }
+
+                        zipEntry = zipInputStream.GetNextEntry();
+                    }
                 }
 
                 return new FileEntryList(fileEntries);
