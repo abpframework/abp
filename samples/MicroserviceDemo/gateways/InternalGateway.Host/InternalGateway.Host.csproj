@@ -47,13 +47,5 @@
     </Content>
   </ItemGroup>
 
-  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
-    <ItemGroup>
-      <ReferencePath Condition="'%(FileName)' == 'StackExchange.Redis.StrongName'">
-        <Aliases>signed</Aliases>
-      </ReferencePath>
-    </ItemGroup>
-  </Target>
-
 
 </Project>

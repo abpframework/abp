@@ -46,12 +46,4 @@
     <ProjectReference Include="..\MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations\MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations.csproj" />
   </ItemGroup>
 
-  <Target Name="ChangeAliasesOfStrongNameAssemblies" BeforeTargets="FindReferenceAssembliesForReferences;ResolveReferences">
-    <ItemGroup>
-      <ReferencePath Condition="'%(FileName)' == 'StackExchange.Redis.StrongName'">
-        <Aliases>signed</Aliases>
-      </ReferencePath>
-    </ItemGroup>
-  </Target>
-
 </Project>
