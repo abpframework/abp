@@ -28,10 +28,4 @@
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="System.Data.SqlXml">
-      <HintPath>C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Data.SqlXml.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
