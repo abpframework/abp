@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
@@ -92,11 +93,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             private string ConvertToNugetReference(string oldValue)
             {
-                var directory = new DirectoryInfo(oldValue);
+                var newValue = Regex.Match(oldValue, @"\\((?!.+?\\).+?)\.csproj");
+                if (newValue.Success && newValue.Groups.Count == 2)
+                {
+                    return newValue.Groups[1].Value;
+                }
 
-                var newValue = directory.Name.Replace(".csproj", "");
-
-                return newValue;
+                return oldValue;
             }
 
             private static Stream GenerateStreamFromString(string s)
