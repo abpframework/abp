@@ -21,8 +21,9 @@ namespace Volo.Abp.Cli.ProjectModification
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
         protected DbContextFileBuilderConfigureAdder DbContextFileBuilderConfigureAdder { get; }
         protected EfCoreMigrationAdder EfCoreMigrationAdder { get; }
-        protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected DerivedClassFinder DerivedClassFinder { get; }
+        protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
+        protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -30,14 +31,16 @@ namespace Volo.Abp.Cli.ProjectModification
             DbContextFileBuilderConfigureAdder dbContextFileBuilderConfigureAdder,
             EfCoreMigrationAdder efCoreMigrationAdder,
             DerivedClassFinder derivedClassFinder,
-            ProjectNpmPackageAdder projectNpmPackageAdder)
+            ProjectNpmPackageAdder projectNpmPackageAdder,
+            NpmGlobalPackagesChecker npmGlobalPackagesChecker)
         {
-            EfCoreMigrationAdder = efCoreMigrationAdder;
-            DerivedClassFinder = derivedClassFinder;
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
             DbContextFileBuilderConfigureAdder = dbContextFileBuilderConfigureAdder;
+            EfCoreMigrationAdder = efCoreMigrationAdder;
+            DerivedClassFinder = derivedClassFinder;
             ProjectNpmPackageAdder = projectNpmPackageAdder;
+            NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -72,6 +75,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 var targetProjects = ProjectFinder.FindNpmTargetProjectFile(projectFiles);
                 if (targetProjects.Any())
                 {
+                    NpmGlobalPackagesChecker.Check();
+
                     foreach (var targetProject in targetProjects)
                     {
                         foreach (var npmPackage in module.NpmPackages.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc)))

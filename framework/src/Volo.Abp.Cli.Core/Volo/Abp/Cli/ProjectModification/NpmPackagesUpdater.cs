@@ -18,12 +18,14 @@ namespace Volo.Abp.Cli.ProjectModification
         public ILogger<NpmPackagesUpdater> Logger { get; set; }
 
         private readonly PackageJsonFileFinder _packageJsonFileFinder;
+        private readonly NpmGlobalPackagesChecker _npmGlobalPackagesChecker;
 
         private readonly Dictionary<string, string> _fileVersionStorage = new Dictionary<string, string>();
 
-        public NpmPackagesUpdater(PackageJsonFileFinder packageJsonFileFinder)
+        public NpmPackagesUpdater(PackageJsonFileFinder packageJsonFileFinder, NpmGlobalPackagesChecker npmGlobalPackagesChecker)
         {
             _packageJsonFileFinder = packageJsonFileFinder;
+            _npmGlobalPackagesChecker = npmGlobalPackagesChecker;
 
             Logger = NullLogger<NpmPackagesUpdater>.Instance;
         }
@@ -32,11 +34,16 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
-            foreach (var file in fileList)
+            if (fileList.Any())
             {
-                UpdatePackagesInFile(file);
+                _npmGlobalPackagesChecker.Check();
 
-                RunYarnAndGulp(file);
+                foreach (var file in fileList)
+                {
+                    UpdatePackagesInFile(file);
+
+                    RunYarnAndGulp(file);
+                }
             }
         }
 
