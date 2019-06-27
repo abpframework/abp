@@ -72,7 +72,7 @@ namespace ProductService.Host
                 options.UseSqlServer();
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
