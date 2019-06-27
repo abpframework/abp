@@ -102,7 +102,7 @@ namespace MyCompanyName.MyProjectName
             IConfigurationRoot configuration,
             IHostingEnvironment hostingEnvironment)
         {
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
