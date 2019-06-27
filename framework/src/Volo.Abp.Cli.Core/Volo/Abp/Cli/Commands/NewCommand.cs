@@ -2,7 +2,8 @@ using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Ionic.Zip;
+using ICSharpCode.SharpZipLib.Core;
+using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
@@ -29,7 +30,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Project name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException("Project name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
             }
 
             Logger.LogInformation("Creating a new project...");
@@ -61,9 +62,33 @@ namespace Volo.Abp.Cli.Commands
 
             using (var templateFileStream = new MemoryStream(result.ZipContent))
             {
-                using (var templateZipFile = ZipFile.Read(templateFileStream))
+                using (var zipInputStream = new ZipInputStream(templateFileStream))
                 {
-                    templateZipFile.ExtractAll(outputFolder, ExtractExistingFileAction.Throw);
+                    var zipEntry = zipInputStream.GetNextEntry();
+                    while (zipEntry != null)
+                    {
+                        var fullZipToPath = Path.Combine(outputFolder, zipEntry.Name);
+                        var directoryName = Path.GetDirectoryName(fullZipToPath);
+
+                        if (!string.IsNullOrEmpty(directoryName))
+                        {
+                            Directory.CreateDirectory(directoryName);
+                        }
+
+                        var fileName = Path.GetFileName(fullZipToPath);
+                        if (fileName.Length == 0)
+                        {
+                            zipEntry = zipInputStream.GetNextEntry();
+                            continue;
+                        }
+
+                        var buffer = new byte[4096]; // 4K is optimum
+                        using (var streamWriter = File.Create(fullZipToPath))
+                        {
+                            StreamUtils.Copy(zipInputStream, streamWriter, buffer);
+                        }
+                        zipEntry = zipInputStream.GetNextEntry();
+                    }
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using IdentityServer4.Models;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Configuration;
 using Volo.Abp.Data;
@@ -11,6 +12,8 @@ using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
+using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
+using Client = Volo.Abp.IdentityServer.Clients.Client;
 
 namespace MyCompanyName.MyProjectName.IdentityServer
 {
@@ -90,8 +93,6 @@ namespace MyCompanyName.MyProjectName.IdentityServer
 
         private async Task CreateClientsAsync()
         {
-            const string commonSecret = "E5Xd4yMqjP5kjWFKrYgySBju6JVfCzMyFp7n2QmMrME=";
-
             var commonScopes = new[]
             {
                 "email",
@@ -118,7 +119,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     webClientId,
                     commonScopes,
                     new[] { "hybrid" },
-                    commonSecret,
+                    (configurationSection["MyProjectName_Web:ClientSecret"] ?? "1q2w3e*").Sha256(),
                     redirectUri: $"{webClientRootUrl}signin-oidc",
                     postLogoutRedirectUri: $"{webClientRootUrl}signout-callback-oidc"
                 );
@@ -132,7 +133,7 @@ namespace MyCompanyName.MyProjectName.IdentityServer
                     consoleClientId,
                     commonScopes,
                     new[] { "password", "client_credentials" },
-                    commonSecret
+                    (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
         }

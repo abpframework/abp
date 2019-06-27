@@ -175,7 +175,7 @@ namespace Acme.BookStore
 
 #### CreateUpdateBookDto
 
-在`Acme.BookStore.Application`项目中创建一个名为`CreateUpdateBookDto`的DTO类:
+在`Acme.BookStore.Application.Contracts`项目中创建一个名为`CreateUpdateBookDto`的DTO类:
 
 ````c#
 using System;
@@ -184,7 +184,6 @@ using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    [AutoMapTo(typeof(Book))]
     public class CreateUpdateBookDto
     {
         [Required]

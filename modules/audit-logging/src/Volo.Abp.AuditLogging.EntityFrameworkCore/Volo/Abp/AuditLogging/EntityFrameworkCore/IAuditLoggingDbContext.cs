@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpAuditLogging")]
+    [ConnectionStringName(AbpAuditLoggingConsts.ConnectionStringName)]
     public interface IAuditLoggingDbContext : IEfCoreDbContext
     {
         DbSet<AuditLog> AuditLogs { get; set; }

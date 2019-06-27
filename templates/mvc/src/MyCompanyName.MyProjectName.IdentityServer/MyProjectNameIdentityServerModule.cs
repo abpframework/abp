@@ -86,7 +86,7 @@ namespace MyCompanyName.MyProjectName
                 options.IsJobExecutionEnabled = false;
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });

@@ -113,11 +113,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            if (result.RequiresTwoFactor)
-            {
-                return RedirectToPage("./SendSecurityCode");
-            }
-
             if (result.IsNotAllowed)
             {
                 Alerts.Warning(L["LoginIsNotAllowed"]);

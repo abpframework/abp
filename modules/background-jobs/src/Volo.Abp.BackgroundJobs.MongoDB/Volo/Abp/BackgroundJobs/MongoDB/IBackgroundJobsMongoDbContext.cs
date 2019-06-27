@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    [ConnectionStringName("AbpBackgroundJobs")]
+    [ConnectionStringName(BackgroundJobsConsts.ConnectionStringName)]
     public interface IBackgroundJobsMongoDbContext : IAbpMongoDbContext
     {
          IMongoCollection<BackgroundJobRecord> BackgroundJobs { get; }

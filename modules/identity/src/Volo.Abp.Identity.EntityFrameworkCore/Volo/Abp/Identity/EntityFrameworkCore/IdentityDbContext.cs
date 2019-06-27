@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     /// <summary>
     /// Base class for the Entity Framework database context used for identity.
     /// </summary>
-    [ConnectionStringName("AbpIdentity")]
+    [ConnectionStringName(AbpIdentityConsts.ConnectionStringName)]
     public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbContext
     {
         public static string TablePrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;

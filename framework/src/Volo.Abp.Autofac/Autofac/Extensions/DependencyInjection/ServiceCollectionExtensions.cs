@@ -24,7 +24,11 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp;
 
 namespace Autofac.Extensions.DependencyInjection
 {
@@ -41,7 +45,23 @@ namespace Autofac.Extensions.DependencyInjection
         /// <returns>The service collection.</returns>
         public static IServiceCollection AddAutofac(this IServiceCollection services, Action<ContainerBuilder> configurationAction = null)
         {
-            return services.AddSingleton<IServiceProviderFactory<ContainerBuilder>>(new AutofacServiceProviderFactory(configurationAction));
+            return services
+                .ClearServiceProviderFactories()
+                .AddSingleton<IServiceProviderFactory<ContainerBuilder>>(new AutofacServiceProviderFactory(configurationAction));
+        }
+
+        private static IServiceCollection ClearServiceProviderFactories([NotNull] this IServiceCollection services)
+        {
+            Check.NotNull(services, nameof(services));
+
+            services.RemoveAll(
+                service => service.ImplementationInstance?
+                               .GetType()
+                               .GetInterfaces()
+                               .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IServiceProviderFactory<>)) == true
+            );
+
+            return services;
         }
     }
 }

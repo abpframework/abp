@@ -88,7 +88,7 @@ namespace BloggingService.Host
                 options.FileUploadLocalFolder = Path.Combine(hostingEnvironment.WebRootPath, "files");
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });

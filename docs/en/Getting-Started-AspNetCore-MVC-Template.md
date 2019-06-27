@@ -14,7 +14,7 @@ dotnet tool install -g Volo.Abp.Cli
 
 Use `abp new` command in an empty folder to create your project:
 
-````
+````bash
 abp new Acme.BookStore
 ````
 

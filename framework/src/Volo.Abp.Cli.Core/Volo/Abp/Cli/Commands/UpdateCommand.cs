@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -67,7 +68,7 @@ namespace Volo.Abp.Cli.Commands
             }
 
             throw new CliUsageException("No solution or project found in this directory." + Environment.NewLine +
-                                        Environment.NewLine + GetUsageInfo());
+                                        Environment.NewLine + AsyncHelper.RunSync(GetUsageInfo));
         }
 
         public Task<string> GetUsageInfo()

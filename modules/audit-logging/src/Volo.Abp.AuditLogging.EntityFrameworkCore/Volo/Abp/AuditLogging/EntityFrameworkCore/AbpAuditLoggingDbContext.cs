@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpAuditLogging")]
+    [ConnectionStringName(AbpAuditLoggingConsts.ConnectionStringName)]
     public class AbpAuditLoggingDbContext : AbpDbContext<AbpAuditLoggingDbContext>, IAuditLoggingDbContext
     {
         public static string TablePrefix { get; set; } = AbpAuditLoggingConsts.DefaultDbTablePrefix;

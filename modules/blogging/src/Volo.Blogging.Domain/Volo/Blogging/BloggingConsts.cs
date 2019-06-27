@@ -4,5 +4,6 @@
     {
         public const string DefaultDbTablePrefix = "Blg";
         public const string DefaultDbSchema = null;
+        public const string ConnectionStringName = "Blogging";
     }
 }
