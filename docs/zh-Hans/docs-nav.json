@@ -165,8 +165,7 @@
               "path": "Repositories.md"
             },
             {
-              "text": "领域服务",
-              "path": "Domain-Services.md"
+              "text": "领域服务"
             },
             {
               "text": "规约"
@@ -195,16 +194,16 @@
       "items": [
         {
           "text": "API",
-           "items": [
-             {
-               "text": "自动API控制器",
-               "path": "AspNetCore/Auto-API-Controllers.md"
-             },
-             {
+          "items": [
+            {
+              "text": "自动API控制器",
+              "path": "AspNetCore/Auto-API-Controllers.md"
+            },
+            {
               "text": "动态C# API客户端",
               "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
             }
-           ]
+          ]
         },
         {
           "text": "用户界面",
@@ -219,7 +218,7 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "Tag-Helpers.md"
+              "path": "AspNetCore/Tag-Helpers/Index.md"
             },
             {
               "text": "主题化",
