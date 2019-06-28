@@ -17,7 +17,6 @@
 @{
     ViewBag.FluidLayout = true;
     Layout = ThemeManager.CurrentTheme.GetEmptyLayout();
-    PageLayout.Content.Lang = Model.LanguageCode;
     PageLayout.Content.Title = Model.DocumentName?.Replace("-", " ");
 }
 @section styles {
