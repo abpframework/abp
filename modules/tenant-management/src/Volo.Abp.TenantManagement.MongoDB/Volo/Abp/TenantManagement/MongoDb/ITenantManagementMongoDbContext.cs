@@ -2,7 +2,7 @@
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
     [ConnectionStringName(AbpTenantManagementConsts.ConnectionStringName)]
     public interface ITenantManagementMongoDbContext : IAbpMongoDbContext

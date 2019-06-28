@@ -2,15 +2,14 @@
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
-using Volo.Blogging.MongoDB;
 
-namespace Volo.Blogging
+namespace Volo.Blogging.MongoDB
 {
     [DependsOn(
         typeof(BloggingTestBaseModule),
         typeof(BloggingMongoDbModule)
     )]
-    public class BloggingMongoDBTestModule : AbpModule
+    public class BloggingMongoDbTestModule : AbpModule
     {
         private MongoDbRunner _mongoDbRunner;
 

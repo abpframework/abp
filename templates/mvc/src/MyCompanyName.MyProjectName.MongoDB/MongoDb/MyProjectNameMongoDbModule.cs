@@ -7,9 +7,9 @@ using Volo.Abp.IdentityServer.MongoDB;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.MongoDB;
 using Volo.Abp.SettingManagement.MongoDB;
-using Volo.Abp.TenantManagement.MongoDb;
+using Volo.Abp.TenantManagement.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDb
+namespace MyCompanyName.MyProjectName.MongoDB
 {
     [DependsOn(
         typeof(MyProjectNameDomainModule),

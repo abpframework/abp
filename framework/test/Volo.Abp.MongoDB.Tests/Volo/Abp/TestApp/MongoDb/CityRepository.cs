@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 using Volo.Abp.TestApp.Domain;
 
-namespace Volo.Abp.TestApp.MongoDb
+namespace Volo.Abp.TestApp.MongoDB
 {
     public class CityRepository : MongoDbRepository<ITestAppMongoDbContext, City, Guid>, ICityRepository
     {

@@ -3,7 +3,7 @@ using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 
-namespace MyCompanyName.MyProjectName.MongoDb
+namespace MyCompanyName.MyProjectName.MongoDB
 {
     [DependsOn(
         typeof(MyProjectNameTestBaseModule),

@@ -2,7 +2,7 @@
 using Volo.Abp.Modularity;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
     [DependsOn(
         typeof(AbpTenantManagementDomainModule),
