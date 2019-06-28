@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity
     [RemoteService]
     [Area("identity")]
     [ControllerName("Profile")]
-    [Route("/api/identity/profiles")]
+    [Route("/api/identity/my-profile")]
     public class ProfileController : AbpController, IProfileAppService
     {
         private readonly IProfileAppService _profileAppService;
@@ -30,7 +30,7 @@ namespace Volo.Abp.Identity
         }
 
         [HttpPost]
-        [Route("ChangePassword")]
+        [Route("change-password")]
         public Task ChangePasswordAsync(string currentPassword, string newPassword)
         {
             return _profileAppService.ChangePasswordAsync(currentPassword, newPassword);

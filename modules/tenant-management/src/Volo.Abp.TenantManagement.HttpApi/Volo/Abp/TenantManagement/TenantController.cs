@@ -53,21 +53,21 @@ namespace Volo.Abp.TenantManagement
         }
 
         [HttpGet]
-        [Route("{id}/DefaultConnectionString")]
+        [Route("{id}/default-connection-string")]
         public Task<string> GetDefaultConnectionStringAsync(Guid id)
         {
             return _service.GetDefaultConnectionStringAsync(id);
         }
 
         [HttpPut]
-        [Route("{id}/DefaultConnectionString")]
+        [Route("{id}/default-connection-string")]
         public Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
         {
             return _service.UpdateDefaultConnectionStringAsync(id, defaultConnectionString);
         }
 
         [HttpDelete]
-        [Route("{id}/DefaultConnectionString")]
+        [Route("{id}/default-connection-string")]
         public Task DeleteDefaultConnectionStringAsync(Guid id)
         {
             return _service.DeleteDefaultConnectionStringAsync(id);
