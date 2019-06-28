@@ -10,7 +10,7 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
-    public class ApiDescriptionFinder : IApiDescriptionFinder, ISingletonDependency
+    public class ApiDescriptionFinder : IApiDescriptionFinder, ITransientDependency
     {
         public ICancellationTokenProvider CancellationTokenProvider { get; set; }
 
