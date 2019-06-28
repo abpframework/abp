@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
@@ -12,54 +10,28 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class ApiDescriptionCache : IApiDescriptionCache, ISingletonDependency
     {
-        private readonly IDynamicProxyHttpClientFactory _httpClientFactory;
-
         private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
-        private readonly AsyncLock _asyncLock;
+        private readonly SemaphoreSlim _semaphoreSlim;
 
-        public ApiDescriptionCache(IDynamicProxyHttpClientFactory httpClientFactory)
+        public ApiDescriptionCache()
         {
-            _httpClientFactory = httpClientFactory;
-
             _cache = new Dictionary<string, ApplicationApiDescriptionModel>();
-            _asyncLock = new AsyncLock();
+            _semaphoreSlim = new SemaphoreSlim(1, 1);
         }
 
-        public async Task<ApplicationApiDescriptionModel> GetAsync(string baseUrl, CancellationToken cancellationToken = default)
+        public async Task<ApplicationApiDescriptionModel> GetAsync(
+            string baseUrl, 
+            Func<Task<ApplicationApiDescriptionModel>> factory)
         {
-            using (await _asyncLock.LockAsync(cancellationToken))
+            using (await _semaphoreSlim.LockAsync())
             {
                 var model = _cache.GetOrDefault(baseUrl);
                 if (model == null)
                 {
-                    _cache[baseUrl] = model = await GetFromServerAsync(baseUrl);
+                    _cache[baseUrl] = model = await factory();
                 }
 
                 return model;
-            }
-        }
-
-        private async Task<ApplicationApiDescriptionModel> GetFromServerAsync(string baseUrl)
-        {
-            using (var client = _httpClientFactory.Create())
-            {
-                var response = await client.GetAsync(baseUrl.EnsureEndsWith('/') + "api/abp/api-definition");
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new AbpException("Remote service returns error!");
-                }
-
-                var content = await response.Content.ReadAsStringAsync();
-
-                var result = JsonConvert.DeserializeObject(
-                    content,
-                    typeof(ApplicationApiDescriptionModel),
-                    new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-
-                return (ApplicationApiDescriptionModel)result;
             }
         }
     }
