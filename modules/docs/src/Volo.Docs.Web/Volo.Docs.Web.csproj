@@ -40,6 +40,8 @@
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
+    <None Remove="Pages\Documents\Project\qrcode.js" />
+    <None Remove="Pages\Documents\Project\qrcode.min.js" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>

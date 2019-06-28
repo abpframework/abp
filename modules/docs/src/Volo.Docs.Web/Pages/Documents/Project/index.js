@@ -1,114 +1,128 @@
 ﻿(function ($) {
 
-    $(function () {
-        var initNavigationFilter = function (navigationContainerId) {
-         
-            var $navigation = $("#" + navigationContainerId);
+    var initNavigationFilter = function (navigationContainerId) {
+
+        var $navigation = $("#" + navigationContainerId);
 
 
-            var getShownDocumentLinks = function () {
-                return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
-            };
+        var getShownDocumentLinks = function () {
+            return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
+        };
 
-            var gotoFilteredDocumentIfThereIsOnlyOne = function () {
-                var $links = getShownDocumentLinks();
-                if ($links.length === 1) {
-                    var url = $links.first().attr("href");
-                    if (url === "javascript:;") {
-                        return;
-                    }
-
-                    window.location = url;
-                }
-            };
-
-            var filterDocumentItems = function (filterText) {
-                $navigation.find(".mCSB_container .opened").removeClass("opened");
-                $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
-
-                if (!filterText) {
-                    $navigation.find(".mCSB_container > li").show();
-                    $navigation.find(".mCSB_container .selected-tree > ul").show();
+        var gotoFilteredDocumentIfThereIsOnlyOne = function () {
+            var $links = getShownDocumentLinks();
+            if ($links.length === 1) {
+                var url = $links.first().attr("href");
+                if (url === "javascript:;") {
                     return;
                 }
 
-                var filteredItems = $navigation.find("li > a").filter(function () {
-                    return $(this).text().toUpperCase().indexOf(filterText.toUpperCase()) > -1;
-                });
+                window.location = url;
+            }
+        };
 
-                filteredItems.each(function () {
+        var filterDocumentItems = function (filterText) {
+            $navigation.find(".mCSB_container .opened").removeClass("opened");
+            $navigation.find(".mCSB_container > li, .mCSB_container > li ul").hide();
 
-                    var $el = $(this);
-                    $el.show();
-                    var $parent = $el.parent();
+            if (!filterText) {
+                $navigation.find(".mCSB_container > li").show();
+                $navigation.find(".mCSB_container .selected-tree > ul").show();
+                return;
+            }
 
-                    var hasParent = true;
-                    while (hasParent) {
-                        if ($parent.attr("id") === navigationContainerId) {
-                            break;
-                        }
+            var filteredItems = $navigation.find("li > a").filter(function () {
+                return $(this).text().toUpperCase().indexOf(filterText.toUpperCase()) > -1;
+            });
 
-                        $parent.show();
-                        $parent.find("> li > label").not(".last-link").addClass("opened");
+            filteredItems.each(function () {
 
-                        $parent = $parent.parent();
-                        hasParent = $parent.length > 0;
+                var $el = $(this);
+                $el.show();
+                var $parent = $el.parent();
+
+                var hasParent = true;
+                while (hasParent) {
+                    if ($parent.attr("id") === navigationContainerId) {
+                        break;
                     }
-                });
-            };
 
-            $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
-                filterDocumentItems(e.target.value);
+                    $parent.show();
+                    $parent.find("> li > label").not(".last-link").addClass("opened");
 
-                if (e.key === "Enter") {
-                    gotoFilteredDocumentIfThereIsOnlyOne();
+                    $parent = $parent.parent();
+                    hasParent = $parent.length > 0;
                 }
             });
         };
 
-        var initAnchorTags = function (container) {
-            anchors.options = {
-                placement: 'left'
-            };
+        $(".docs-page .docs-tree-list input[type='search']").keyup(function (e) {
+            filterDocumentItems(e.target.value);
 
-            var anchorTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
-            anchorTags.forEach(function (tag) {
-                anchors.add(container + " " + tag);
-            });
+            if (e.key === "Enter") {
+                gotoFilteredDocumentIfThereIsOnlyOne();
+            }
+        });
+    };
+
+    var initAnchorTags = function (container) {
+        anchors.options = {
+            placement: 'left'
         };
 
-        var initSocialShareLinks = function () {
-            var pageHeader = $(".docs-body").find("h1, h2").first().text();
+        var anchorTags = ["h1", "h2", "h3", "h4", "h5", "h6"];
+        anchorTags.forEach(function (tag) {
+            anchors.add(container + " " + tag);
+        });
+    };
 
-            var projectName = $('#ProjectName')[0].innerText;
+    var initSocialShareLinks = function () {
+        var pageHeader = $(".docs-body").find("h1, h2").first().text();
 
-            $('#TwitterShareLink').attr('href',
-                'https://twitter.com/intent/tweet?text=' + encodeURI(pageHeader + " | " + projectName + " | " + window.location.href)
-            );
+        var projectName = $('#ProjectName')[0].innerText;
 
-            $('#LinkedinShareLink').attr('href',
-                'https://www.linkedin.com/shareArticle?'
-                + 'url=' + encodeURI(window.location.href) + '&'
-                + 'mini=true&'
-                + "summary=" + encodeURI(projectName) + '&'
-                + "title=" + encodeURI(pageHeader) + '&'
-                + "source=" + encodeURI($('#GoToMainWebSite').attr('href'))
-            );
+        $('#TwitterShareLink').attr('href',
+            'https://twitter.com/intent/tweet?text=' + encodeURI(pageHeader + " | " + projectName + " | " + window.location.href)
+        );
 
-            $('#EmailShareLink').attr('href',
-                'mailto:?'
-                + 'body=' + encodeURI('I want you to look at ' + window.location.href) + '&'
-                + "subject=" + encodeURI(pageHeader + ' | ' + projectName) + '&'
-            );
-        };
+        $('#LinkedinShareLink').attr('href',
+            'https://www.linkedin.com/shareArticle?'
+            + 'url=' + encodeURI(window.location.href) + '&'
+            + 'mini=true&'
+            + "summary=" + encodeURI(projectName) + '&'
+            + "title=" + encodeURI(pageHeader) + '&'
+            + "source=" + encodeURI($('#GoToMainWebSite').attr('href'))
+        );
 
-        initNavigationFilter("sidebar-scroll");
+        $('#EmailShareLink').attr('href',
+            'mailto:?'
+            + 'body=' + encodeURI('I want you to look at ' + window.location.href) + '&'
+            + "subject=" + encodeURI(pageHeader + ' | ' + projectName) + '&'
+        );
 
-        initAnchorTags(".docs-page .docs-body");
+        $("#WeiboShareLink").attr("href", "https://service.weibo.com/share/share.php?url=" + encodeURI(window.location.href) + "&title=" + encodeURI(pageHeader + " - DotNetCore 示例文档 http://docs.igeekfan.cn/"));
+        $("#WechatShareLink").tooltip({
+            html: true,
+            title: "<div id='WechatQRCode'>微信扫一扫分享</div>"
+        }).on("shown.bs.tooltip", function () {
+            new QRCode(document.getElementById("WechatQRCode"), {
+                text: encodeURI(window.location.href),
+                width: 128,
+                height: 128,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            })
+        })
 
-        initSocialShareLinks();
+     
+    };
 
-    });
+    initNavigationFilter("sidebar-scroll");
+
+    initAnchorTags(".docs-page .docs-body");
+
+    initSocialShareLinks();
 
 })(jQuery);
 

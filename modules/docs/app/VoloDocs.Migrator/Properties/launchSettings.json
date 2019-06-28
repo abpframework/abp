@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "VoloDocs.Migrator": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
