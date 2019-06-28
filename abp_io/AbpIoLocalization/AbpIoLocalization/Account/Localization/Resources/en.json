@@ -1,5 +1,13 @@
 {
   "culture": "en",
   "texts": {
+    "Account": "Account",
+    "Welcome": "Welcome",
+    "UseOneOfTheFollowingLinksToContinue": "Use one of the following links to continue",
+    "FrameworkHomePage": "Framework home page",
+    "FrameworkDocumentation": "Framework documentation",
+    "OfficialBlog": "Official blog",
+    "CommercialHomePage": "Commercial home page",
+    "CommercialSupportWebSite": "Commercial support web site"
   }
 }
