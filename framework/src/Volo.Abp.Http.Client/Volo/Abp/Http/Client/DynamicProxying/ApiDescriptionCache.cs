@@ -5,25 +5,29 @@ using System.Threading.Tasks;
 using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Http.Client.DynamicProxying
 {
     public class ApiDescriptionCache : IApiDescriptionCache, ISingletonDependency
     {
-        private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
-        private readonly SemaphoreSlim _semaphoreSlim;
+        protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-        public ApiDescriptionCache()
+        private readonly Dictionary<string, ApplicationApiDescriptionModel> _cache;
+        private readonly SemaphoreSlim _semaphore;
+
+        public ApiDescriptionCache(ICancellationTokenProvider cancellationTokenProvider)
         {
+            CancellationTokenProvider = cancellationTokenProvider;
             _cache = new Dictionary<string, ApplicationApiDescriptionModel>();
-            _semaphoreSlim = new SemaphoreSlim(1, 1);
+            _semaphore = new SemaphoreSlim(1, 1);
         }
 
         public async Task<ApplicationApiDescriptionModel> GetAsync(
             string baseUrl, 
             Func<Task<ApplicationApiDescriptionModel>> factory)
         {
-            using (await _semaphoreSlim.LockAsync())
+            using (await _semaphore.LockAsync(CancellationTokenProvider.Token))
             {
                 var model = _cache.GetOrDefault(baseUrl);
                 if (model == null)
