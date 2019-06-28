@@ -5,6 +5,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Layout
 {
     public class ContentLayout
     {
+        public string Lang { get; set; }
+
         public string Title { get; set; }
 
         public BreadCrumb BreadCrumb { get; }

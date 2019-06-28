@@ -1,4 +1,4 @@
-﻿@using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.AntiForgery
 @using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
@@ -25,11 +25,17 @@
 
         pageTitle = PageLayout.Content.Title + pageTitle;
     }
+
+    var pageLang = ViewBag.Lang == null ? "" : $" lang={ViewBag.Lang}";
+    if (PageLayout.Content.Lang != null)
+    {
+        pageLang = $" lang={PageLayout.Content.Lang}";
+    }
 }
 
 <!DOCTYPE html>
 
-<html lang="en">
+<@($"html{pageLang}")>
 <head>
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Application)
 
