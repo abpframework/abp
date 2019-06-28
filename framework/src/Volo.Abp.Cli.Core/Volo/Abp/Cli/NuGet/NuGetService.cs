@@ -11,9 +11,10 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.NuGet
 {
-    public class NuGetService : ISingletonDependency
+    public class NuGetService : ITransientDependency
     {
         protected IJsonSerializer JsonSerializer { get; }
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public NuGetService(
