@@ -86,6 +86,18 @@
     "BasedOnFamiliarTools": "Based on Familiar Tools",
     "BasedOnFamiliarToolsExplanation": "Built on and integrated to popular tools you already know. Low learning curve, easy adaptation, comfortable development.",
     "ORMIndependent": "ORM Independent",
-    "ORMIndependentExplanation": "The core framework is ORM/database independent and can work with any data source. Entity Framework Core and MongoDB providers are already available."
+    "ORMIndependentExplanation": "The core framework is ORM/database independent and can work with any data source. Entity Framework Core and MongoDB providers are already available.",
+    "Features": "Features",
+    "ABPCLI": "ABP CLI",
+    "Modularity": "Modularity",
+    "BootstrapTagHelpers": "Bootstrap Tag Helpers",
+    "DynamicForms": "Dynamic Forms",
+    "BundlingMinification": "Bundling & Minification",
+    "BackgroundJobs": "Background Jobs",
+    "DDDInfrastructure": "DDD Infrastructure",
+    "AutoRESTAPIs": "Auto REST APIs",
+    "DynamicClientProxies": "Dynamic Client Proxies",
+    "TestInfrastructure": "Test Infrastructure",
+    "AuditLogging": "Audit Logging"
   }
 }
