@@ -98,6 +98,13 @@
     "AutoRESTAPIs": "Auto REST APIs",
     "DynamicClientProxies": "Dynamic Client Proxies",
     "TestInfrastructure": "Test Infrastructure",
-    "AuditLogging": "Audit Logging"
+    "AuditLogging": "Audit Logging",
+    "ObjectToObjectMapping": "Object to Object Mapping",
+    "EmailSMSAbstractions": "Email & SMS Abstractions",
+    "Localization": "Localization",
+    "SettingManagement": "Setting Management",
+    "ExtensionMethods": "Extension Methods",
+    "AspectOrientedProgramming": "Aspect Oriented Programming",
+    "DependencyInjection": "Dependency Injection"
   }
 }
