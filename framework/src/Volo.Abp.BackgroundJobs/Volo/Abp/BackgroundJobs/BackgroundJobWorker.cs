@@ -4,13 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker, ISingletonDependency
+    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker
     {
         protected BackgroundJobOptions JobOptions { get; }
 
