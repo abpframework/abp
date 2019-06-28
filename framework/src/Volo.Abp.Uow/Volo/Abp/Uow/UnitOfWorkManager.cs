@@ -4,19 +4,19 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
+    public class UnitOfWorkManager : IUnitOfWorkManager, ITransientDependency
     {
         public IUnitOfWork Current => GetCurrentUnitOfWork();
 
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IHybridServiceScopeFactory _serviceScopeFactory;
         private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
         public UnitOfWorkManager(
-            IServiceProvider serviceProvider, 
-            IAmbientUnitOfWork ambientUnitOfWork)
+            IAmbientUnitOfWork ambientUnitOfWork, 
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
             _ambientUnitOfWork = ambientUnitOfWork;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
         public IUnitOfWork Begin(UnitOfWorkOptions options, bool requiresNew = false)
@@ -97,7 +97,7 @@ namespace Volo.Abp.Uow
 
         private IUnitOfWork CreateNewUnitOfWork()
         {
-            var scope = _serviceProvider.CreateScope();
+            var scope = _serviceScopeFactory.CreateScope();
             try
             {
                 var outerUow = _ambientUnitOfWork.UnitOfWork;
