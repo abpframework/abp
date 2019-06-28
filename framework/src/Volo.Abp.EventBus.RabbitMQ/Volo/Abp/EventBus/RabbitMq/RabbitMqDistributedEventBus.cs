@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -36,7 +37,7 @@ namespace Volo.Abp.EventBus.RabbitMq
             IOptions<RabbitMqEventBusOptions> options,
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
-            IHybridServiceScopeFactory serviceScopeFactory, 
+            IServiceScopeFactory serviceScopeFactory, 
             IOptions<DistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory)
             : base(serviceScopeFactory)

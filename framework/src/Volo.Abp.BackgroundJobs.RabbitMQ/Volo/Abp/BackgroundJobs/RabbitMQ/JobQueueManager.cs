@@ -14,6 +14,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected ConcurrentDictionary<string, IRunnable> JobQueues { get; }
 
         protected IServiceProvider ServiceProvider { get; }
+
         protected BackgroundJobOptions Options { get; }
 
         public JobQueueManager(

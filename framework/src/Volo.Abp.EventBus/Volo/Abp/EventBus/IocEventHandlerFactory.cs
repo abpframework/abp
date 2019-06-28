@@ -14,9 +14,9 @@ namespace Volo.Abp.EventBus
     {
         public Type HandlerType { get; }
 
-        protected IHybridServiceScopeFactory ScopeFactory { get; }
+        protected IServiceScopeFactory ScopeFactory { get; }
 
-        public IocEventHandlerFactory(IHybridServiceScopeFactory scopeFactory, Type handlerType)
+        public IocEventHandlerFactory(IServiceScopeFactory scopeFactory, Type handlerType)
         {
             ScopeFactory = scopeFactory;
             HandlerType = handlerType;
