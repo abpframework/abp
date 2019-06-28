@@ -3,7 +3,7 @@ using MyCompanyName.MyProjectName.Users;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDb
+namespace MyCompanyName.MyProjectName.MongoDB
 {
     [ConnectionStringName("Default")]
     public class MyProjectNameMongoDbContext : AbpMongoDbContext

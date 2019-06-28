@@ -1,10 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Mongo2Go;
+﻿using Mongo2Go;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
-using Volo.Abp.PermissionManagement.MongoDB;
 
-namespace Volo.Abp.PermissionManagement.MongoDb
+namespace Volo.Abp.PermissionManagement.MongoDB
 {
     [DependsOn(
         typeof(AbpPermissionManagementMongoDbModule),

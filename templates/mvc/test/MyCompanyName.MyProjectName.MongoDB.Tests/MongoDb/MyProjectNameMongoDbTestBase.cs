@@ -1,4 +1,4 @@
-﻿namespace MyCompanyName.MyProjectName.MongoDb
+﻿namespace MyCompanyName.MyProjectName.MongoDB
 {
     public abstract class MyProjectNameMongoDbTestBase : MyProjectNameTestBase<MyProjectNameMongoDbTestModule> 
     {

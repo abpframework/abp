@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
     [RemoteService]
     [Area("identity")]
     [ControllerName("User")]
-    [Route("api/identity/user")]
+    [Route("api/identity/users")]
     public class IdentityUserController : AbpController, IIdentityUserAppService
     {
         private readonly IIdentityUserAppService _userAppService;

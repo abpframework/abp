@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 context,
                 "/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
-                "MyCompanyName.MyProjectName.MongoDb",
+                "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
@@ -43,7 +43,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 context,
                 "/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
-                "MyCompanyName.MyProjectName.MongoDb",
+                "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
@@ -66,7 +66,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 context,
                 "/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
-                "MyCompanyName.MyProjectName.MongoDb",
+                "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
@@ -89,7 +89,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 context,
                 "/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
-                "MyCompanyName.MyProjectName.MongoDb",
+                "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
                 "MyProjectNameMongoDbModule"
             );
@@ -112,7 +112,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
                 context,
                 "/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
-                "MyCompanyName.MyProjectName.MongoDb",
+                "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreTestModule",
                 "MyProjectNameMongoDbTestModule"
             );

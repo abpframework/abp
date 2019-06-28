@@ -1,7 +1,7 @@
 ﻿using System;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
     public static class AbpTenantManagementMongoDbContextExtensions
     {

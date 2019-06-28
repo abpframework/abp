@@ -33,7 +33,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
 using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
-using Volo.BloggingTestApp.MongoDb;
+using Volo.BloggingTestApp.MongoDB;
 
 namespace Volo.BloggingTestApp
 {

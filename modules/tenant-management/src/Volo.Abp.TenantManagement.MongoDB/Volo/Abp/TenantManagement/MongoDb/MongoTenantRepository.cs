@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
     public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbContext, Tenant, Guid>, ITenantRepository
     {
