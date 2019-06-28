@@ -7,7 +7,7 @@ namespace Acme.BookStore.Controllers
     {
         protected BookStoreController()
         {
-            //LocalizationResource = typeof(BookStoreResource);
+            LocalizationResource = typeof(BookStoreResource);
         }
     }
 }

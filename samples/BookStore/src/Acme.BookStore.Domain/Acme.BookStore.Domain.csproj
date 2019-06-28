@@ -13,15 +13,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.DataAnnotations" Version="2.2.0" />
-    <PackageReference Include="Volo.Abp.Identity.Domain" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Domain" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="0.17.0.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.Identity.Domain" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Identity" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.IdentityServer.Domain" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.IdentityServer" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Domain" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Domain" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Domain" Version="0.18.1" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Domain" Version="0.18.1" />
   </ItemGroup>
 
 </Project>
