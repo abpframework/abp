@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.InProcess;
 using Serilog;
 using Serilog.Events;
 
@@ -10,6 +11,8 @@ namespace Acme.BookStore.Web
     {
         public static int Main(string[] args)
         {
+            CurrentDirectoryHelpers.SetCurrentDirectory();
+
             Log.Logger = new LoggerConfiguration()
 #if DEBUG
                 .MinimumLevel.Debug()
@@ -42,8 +45,8 @@ namespace Acme.BookStore.Web
             new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
                 .UseIIS()
+                .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseSerilog()
                 .Build();
