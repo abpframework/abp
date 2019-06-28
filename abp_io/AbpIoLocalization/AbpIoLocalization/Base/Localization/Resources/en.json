@@ -11,6 +11,12 @@
     "Volo.AbpIo.Domain:020001": "Could not delete this NPM Package because \"{NugetPackages}\" Nuget Packages are dependent to this package.",
     "Volo.AbpIo.Domain:020002": "Could not delete this NPM Package because \"{Modules}\" Modules are using this package.",
     "Volo.AbpIo.Domain:020003": "Could not delete this NPM Package because \"{Modules}\" Modules are using this package and \"{NugetPackages}\" Nuget Packages are dependent to this package.",
-    "Volo.AbpIo.Domain:020004": "Could not delete this Nuget Package because \"{Modules}\" Modules are using this package."
+    "Volo.AbpIo.Domain:020004": "Could not delete this Nuget Package because \"{Modules}\" Modules are using this package.",
+    "WantToLearn?": "Want to learn?",
+    "ReadyToGetStarted?": "Ready to get started?",
+    "JoinOurCommunity": "Join our community",
+    "GetStartedUpper": "GET STARTED",
+    "ForkMeOnGitHub": "Fork me on GitHub",
+    "SeeDocuments": "See Documents"
   }
 }
