@@ -18,6 +18,7 @@ namespace Acme.BookStore.EntityFrameworkCore
 
         public async Task MigrateAsync()
         {
+            await _dbContext.Database.EnsureCreatedAsync();
             await _dbContext.Database.MigrateAsync();
         }
     }
