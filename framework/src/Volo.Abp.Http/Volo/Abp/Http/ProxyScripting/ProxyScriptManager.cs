@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -11,37 +10,40 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.Http.ProxyScripting
 {
-    public class ProxyScriptManager : IProxyScriptManager, ISingletonDependency
+    public class ProxyScriptManager : IProxyScriptManager, ITransientDependency
     {
         private readonly IApiDescriptionModelProvider _modelProvider;
-        private readonly AbpApiProxyScriptingOptions _options;
         private readonly IServiceProvider _serviceProvider;
         private readonly IJsonSerializer _jsonSerializer;
-
-        private readonly ConcurrentDictionary<string, string> _cache;
+        private readonly IProxyScriptManagerCache _cache;
+        private readonly AbpApiProxyScriptingOptions _options;
 
         public ProxyScriptManager(
             IApiDescriptionModelProvider modelProvider, 
-            IOptions<AbpApiProxyScriptingOptions> options,
             IServiceProvider serviceProvider,
-            IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer,
+            IProxyScriptManagerCache cache,
+            IOptions<AbpApiProxyScriptingOptions> options)
         {
             _modelProvider = modelProvider;
-            _options = options.Value;
             _serviceProvider = serviceProvider;
             _jsonSerializer = jsonSerializer;
-
-            _cache = new ConcurrentDictionary<string, string>();
+            _cache = cache;
+            _options = options.Value;
         }
 
         public string GetScript(ProxyScriptingModel scriptingModel)
         {
+            var cacheKey = CreateCacheKey(scriptingModel);
+
             if (scriptingModel.UseCache)
             {
-                return _cache.GetOrAdd(CreateCacheKey(scriptingModel), (key) => CreateScript(scriptingModel));
+                return _cache.GetOrAdd(cacheKey, () => CreateScript(scriptingModel));
             }
 
-            return _cache[CreateCacheKey(scriptingModel)] = CreateScript(scriptingModel);
+            var script = CreateScript(scriptingModel);
+            _cache.Set(cacheKey, script);
+            return script;
         }
 
         private string CreateScript(ProxyScriptingModel scriptingModel)

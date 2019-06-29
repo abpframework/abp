@@ -31,7 +31,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected IBackgroundJobExecuter JobExecuter { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
-        protected AsyncLock SyncObj = new AsyncLock();
+        protected SemaphoreSlim SyncObj = new SemaphoreSlim(1, 1);
         protected bool IsDiposed { get; private set; }
 
         public JobQueue(

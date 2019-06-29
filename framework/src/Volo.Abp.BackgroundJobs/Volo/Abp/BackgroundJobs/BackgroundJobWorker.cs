@@ -1,36 +1,29 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.BackgroundWorkers;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker, ISingletonDependency
+    public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker
     {
-        protected IBackgroundJobExecuter JobExecuter { get; }
         protected BackgroundJobOptions JobOptions { get; }
+
         protected BackgroundJobWorkerOptions WorkerOptions { get; }
-        protected IClock Clock { get; }
-        protected IBackgroundJobSerializer Serializer { get; }
+
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         public BackgroundJobWorker(
             AbpTimer timer,
-            IBackgroundJobExecuter jobExecuter,
-            IBackgroundJobSerializer serializer,
             IOptions<BackgroundJobOptions> jobOptions,
             IOptions<BackgroundJobWorkerOptions> workerOptions,
-            IClock clock, 
             IServiceScopeFactory serviceScopeFactory)
             : base(timer)
         {
-            JobExecuter = jobExecuter;
-            Serializer = serializer;
-            Clock = clock;
             ServiceScopeFactory = serviceScopeFactory;
             WorkerOptions = workerOptions.Value;
             JobOptions = jobOptions.Value;
@@ -47,25 +40,36 @@ namespace Volo.Abp.BackgroundJobs
                     () => store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount)
                 );
 
+                if (!waitingJobs.Any())
+                {
+                    return;
+                }
+
+                var jobExecuter = scope.ServiceProvider.GetRequiredService<IBackgroundJobExecuter>();
+                var clock = scope.ServiceProvider.GetRequiredService<IClock>();
+                var serializer = scope.ServiceProvider.GetRequiredService<IBackgroundJobSerializer>();
+
                 foreach (var jobInfo in waitingJobs)
                 {
                     jobInfo.TryCount++;
-                    jobInfo.LastTryTime = Clock.Now;
+                    jobInfo.LastTryTime = clock.Now;
 
                     try
                     {
                         var jobConfiguration = JobOptions.GetJob(jobInfo.JobName);
-                        var jobArgs = Serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
+                        var jobArgs = serializer.Deserialize(jobInfo.JobArgs, jobConfiguration.ArgsType);
                         var context = new JobExecutionContext(scope.ServiceProvider, jobConfiguration.JobType, jobArgs);
 
                         try
                         {
-                            JobExecuter.Execute(context);
+                            jobExecuter.Execute(context);
+
                             AsyncHelper.RunSync(() => store.DeleteAsync(jobInfo.Id));
                         }
                         catch (BackgroundJobExecutionException)
                         {
-                            var nextTryTime = CalculateNextTryTime(jobInfo);
+                            var nextTryTime = CalculateNextTryTime(jobInfo, clock);
+
                             if (nextTryTime.HasValue)
                             {
                                 jobInfo.NextTryTime = nextTryTime.Value;
@@ -100,12 +104,12 @@ namespace Volo.Abp.BackgroundJobs
             }
         }
 
-        protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo) //TODO: Move to another place to override easier
+        protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo, IClock clock)
         {
             var nextWaitDuration = WorkerOptions.DefaultFirstWaitDuration * (Math.Pow(WorkerOptions.DefaultWaitFactor, jobInfo.TryCount - 1));
             var nextTryDate = jobInfo.LastTryTime.HasValue
                 ? jobInfo.LastTryTime.Value.AddSeconds(nextWaitDuration)
-                : Clock.Now.AddSeconds(nextWaitDuration);
+                : clock.Now.AddSeconds(nextWaitDuration);
 
             if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > WorkerOptions.DefaultTimeout)
             {

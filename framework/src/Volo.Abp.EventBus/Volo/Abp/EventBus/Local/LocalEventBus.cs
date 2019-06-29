@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -28,7 +29,7 @@ namespace Volo.Abp.EventBus.Local
 
         public LocalEventBus(
             IOptions<LocalEventBusOptions> options,
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IServiceScopeFactory serviceScopeFactory)
             : base(serviceScopeFactory)
         {
             Options = options.Value;
