@@ -1,6 +1,7 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "DocsTitle": "Volo文档",
     "WelcomeVoloDocs": "欢迎使用VoloDocs!",
     "NoProjectWarning": "当前没有定义的项目！",
     "CreateYourFirstProject": "点击这里开始你的第一个项目",
