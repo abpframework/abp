@@ -36,6 +36,8 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation("Creating a new project...");
             Logger.LogInformation("Project name: " + commandLineArgs.Target);
 
+            commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+
             var result = await ProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
                     SolutionName.Parse(commandLineArgs.Target),
