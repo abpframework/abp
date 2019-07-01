@@ -61,22 +61,27 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 var nodes = doc.SelectNodes("/Project/ItemGroup/ProjectReference[@Include]");
 
-                foreach (XmlNode node in nodes)
+                foreach (XmlNode oldNode in nodes)
                 {
-                    var valueAttr = node.Attributes["Include"];
+                    var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (valueAttr.Value.Contains($"{_companyNamePlaceHolder}.{_projectNamePlaceHolder}"))
+                    if (oldNodeIncludeValue.Contains($"{_companyNamePlaceHolder}.{_projectNamePlaceHolder}"))
                     {
                         continue;
                     }
 
-                    valueAttr.Value = ConvertToNugetReference(valueAttr.Value);
+                    var newNode = doc.CreateElement("PackageReference");
+
+                    var includeAttr = doc.CreateAttribute("Include");
+                    includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
+                    newNode.Attributes.Append(includeAttr);
 
                     var versionAttr = doc.CreateAttribute("Version");
                     versionAttr.Value = _latestNugetPackageVersion;
+                    newNode.Attributes.Append(versionAttr);
 
-                    node.Attributes.Append(versionAttr);
+                    oldNode.ParentNode.ReplaceChild(newNode, oldNode);
                 }
 
                 return doc.OuterXml;
