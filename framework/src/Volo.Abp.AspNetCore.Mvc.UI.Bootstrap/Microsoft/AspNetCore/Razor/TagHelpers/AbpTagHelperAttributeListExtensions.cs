@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHelpers
@@ -19,8 +21,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
             }
             else
             {
-                //TODO: Check if it's already added before!
-                attributes.SetAttribute("class", classAttribute.Value + " " + className);
+                var existingClasses = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (!existingClasses.Contains(className))
+                {
+                    attributes.SetAttribute("class", classAttribute.Value + " " + className);
+                }
             }
         }
 
@@ -37,8 +42,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
                 return;
             }
 
-            //Can be optimized?
-            attributes.SetAttribute("class", classAttribute.Value.ToString().Split(' ').RemoveAll(c => c == className).JoinAsString(" "));
+            var existingClassList = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var modifiedClassList = existingClassList.RemoveAll(c => c == className);
+
+            attributes.SetAttribute("class", modifiedClassList.JoinAsString(" "));
         }
 
         public static void AddIfNotContains(this TagHelperAttributeList attributes, string name, object value)
