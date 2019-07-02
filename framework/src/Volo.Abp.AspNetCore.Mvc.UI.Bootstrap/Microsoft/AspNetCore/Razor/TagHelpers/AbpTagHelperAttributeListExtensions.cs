@@ -21,11 +21,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
             }
             else
             {
-                var existingClasses = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-                if (!existingClasses.Contains(className))
-                {
-                    attributes.SetAttribute("class", classAttribute.Value + " " + className);
-                }
+                var existingClasses = classAttribute.Value.ToString().Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                existingClasses.AddIfNotContains(className);
+                attributes.SetAttribute("class", string.Join(" ", existingClasses));
             }
         }
 
