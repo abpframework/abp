@@ -104,14 +104,11 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private bool IsDocumentCultureDifferentThanCurrent()
         {
-            var currentCulture = CultureInfo.CurrentCulture;
-            CultureInfo newCulture;
-
             try
             {
-                newCulture = CultureInfo.GetCultureInfo(LanguageCode);
+                var newCulture = CultureInfo.GetCultureInfo(LanguageCode);
 
-                return currentCulture.Name != newCulture.Name;
+                return CultureInfo.CurrentCulture.Name != newCulture.Name;
             }
             catch (CultureNotFoundException)
             {
