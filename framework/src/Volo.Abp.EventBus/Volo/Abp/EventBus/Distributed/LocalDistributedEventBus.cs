@@ -11,7 +11,7 @@ namespace Volo.Abp.EventBus.Distributed
 {
     [Dependency(TryRegister = true)]
     [ExposeServices(typeof(IDistributedEventBus), typeof(LocalDistributedEventBus))]
-    public class LocalDistributedEventBus : IDistributedEventBus, ITransientDependency
+    public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependency
     {
         private readonly ILocalEventBus _localEventBus;
 
