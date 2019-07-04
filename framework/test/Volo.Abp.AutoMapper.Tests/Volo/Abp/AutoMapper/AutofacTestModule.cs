@@ -8,10 +8,7 @@ namespace Volo.Abp.AutoMapper
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpAutoMapperOptions>(options =>
-            {
-                options.UseStaticMapper = false;
-            });
+
         }
     }
 }

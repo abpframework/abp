@@ -14,9 +14,6 @@ namespace Volo.Abp.AutoMapper
     [DependsOn(typeof(AbpObjectMappingModule))]
     public class AbpAutoMapperModule : AbpModule
     {
-        private static volatile bool _createdMappingsBefore;
-        private static readonly object SyncObj = new object();
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var mapperAccessor = new MapperAccessor();
@@ -31,58 +28,35 @@ namespace Volo.Abp.AutoMapper
 
         private void CreateMappings(IServiceProvider serviceProvider)
         {
-            lock (SyncObj)
+            using (var scope = serviceProvider.CreateScope())
             {
-                using (var scope = serviceProvider.CreateScope())
+                var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
+
+                void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
                 {
-                    var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAutoMapperOptions>>().Value;
-
-                    void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
+                    FindAndAutoMapTypes(ctx);
+                    foreach (var configurator in options.Configurators)
                     {
-                        FindAndAutoMapTypes(ctx);
-                        foreach (var configurator in options.Configurators)
-                        {
-                            configurator(ctx);
-                        }
-                    }
-
-                    void ValidateAll(IConfigurationProvider config)
-                    {
-                        foreach (var profileType in options.ValidatingProfiles)
-                        {
-                            config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
-                        }
-                    }
-
-                    if (options.UseStaticMapper)
-                    {
-                        //We should prevent duplicate mapping in an application, since Mapper is static.
-                        if (!_createdMappingsBefore)
-                        {
-                            _createdMappingsBefore = true;
-
-                            Mapper.Initialize(mapperConfigurationExpression =>
-                            {
-                                ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
-                            });
-
-                            ValidateAll(Mapper.Configuration);
-                        }
-
-                        scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = Mapper.Instance;
-                    }
-                    else
-                    {
-                        var config = new MapperConfiguration(mapperConfigurationExpression =>
-                        {
-                            ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
-                        });
-
-                        ValidateAll(config);
-
-                        scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = config.CreateMapper();
+                        configurator(ctx);
                     }
                 }
+
+                void ValidateAll(IConfigurationProvider config)
+                {
+                    foreach (var profileType in options.ValidatingProfiles)
+                    {
+                        config.AssertConfigurationIsValid(((Profile)Activator.CreateInstance(profileType)).ProfileName);
+                    }
+                }
+
+                var mapperConfiguration = new MapperConfiguration(mapperConfigurationExpression =>
+                {
+                    ConfigureAll(new AbpAutoMapperConfigurationContext(mapperConfigurationExpression, scope.ServiceProvider));
+                });
+
+                ValidateAll(mapperConfiguration);
+
+                scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = mapperConfiguration.CreateMapper();
             }
         }
 
