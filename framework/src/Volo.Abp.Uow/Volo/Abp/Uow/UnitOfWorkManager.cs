@@ -4,7 +4,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWorkManager : IUnitOfWorkManager, ITransientDependency
+    public class UnitOfWorkManager : IUnitOfWorkManager, ISingletonDependency
     {
         public IUnitOfWork Current => GetCurrentUnitOfWork();
 
