@@ -34,7 +34,7 @@
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.PermissionManagement.Domain.Identity\Volo.Abp.PermissionManagement.Domain.Identity.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.Application\Volo.Abp.PermissionManagement.Application.csproj" />
     <ProjectReference Include="..\..\..\..\modules\account\src\Volo.Abp.Account.Web\Volo.Abp.Account.Web.csproj" />
-    <ProjectReference Include="..\Volo.BloggingTestApp.MongoDb\Volo.BloggingTestApp.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.BloggingTestApp.MongoDB\Volo.BloggingTestApp.MongoDB.csproj" />
   </ItemGroup>
 
 </Project>
