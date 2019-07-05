@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
@@ -64,10 +64,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 new TemplateDownloadInputDto
                 {
                     Name = name,
-                    Version = version,
-                    DatabaseProvider = databaseProvider.ToString(),
-                    ProjectName = projectName,
-                    Tool = Options.ToolName
+                    Version = version
                 }
             );
 
@@ -127,12 +124,6 @@ namespace Volo.Abp.Cli.ProjectBuilding
             public string Name { get; set; }
 
             public string Version { get; set; }
-
-            public string DatabaseProvider { get; set; }
-
-            public string ProjectName { get; set; }
-
-            public string Tool { get; set; }
         }
 
         public class GetLatestTemplateVersionDto
