@@ -294,8 +294,6 @@ ABP **自动** 为所有的API接口创建了JavaScript **代理**.因此,你可
 
 你可以使用你钟爱的浏览器的 **开发者控制台** 中轻松测试JavaScript代理.运行程序,并打开浏览器的 **开发者工具**(快捷键:F12),切换到 **Console** 标签,输入下面的代码并回车:
 
-你现在可以使用自己喜欢的浏览器的**开发者控制台**轻松测试JavaScript代理. 运行应用程序, 打开浏览器的**开发者工具**(快捷键:F12),切换到**Console**选项卡,输入以下代码并按回车键.
-
 ````js
 acme.bookStore.book.getList({}).done(function (result) { console.log(result); });
 ````
