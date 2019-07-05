@@ -346,7 +346,7 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 <h2>Books</h2>
 ````
 
-* 此代码更改了Razor View Page Model的默认继承,因此它从`BookStorePageBase`类(而不是`PageModel`)继承.启动模板附带的`BookStorePageBase`类,提供所有页面使用的一些共享属性/方法.
+* 此代码更改了Razor View Page Model的默认继承,因此它从`BookStorePage`类(而不是`PageModel`)继承.启动模板附带的`BookStorePage`类,提供所有页面使用的一些共享属性/方法.
 * 确保`IndexModel`(Index.cshtml.cs)具有`Acme.BookStore.Pages.Books`命名空间,或者在`Index.cshtml`中更新它.
 
 #### 将Books页面添加到主菜单
