@@ -1,0 +1,14 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "PasswordReset": "Password Reset",
+    "PasswordResetInfoInEmail": "We received an account recovery request! If you initiated this request, click the following link to reset your password.",
+    "ResetMyPassword": "Reset my password",
+    "NotAMemberYet": "Not a member yet?",
+    "OrSignInWith": "Or sign in with",
+    "EmailConfirmation": "Email Confirmation",
+    "EmailConfirmationInfoInEmail": "Please confirm your email address by clicking the following link.",
+    "ConfirmMyEmail": "Confirm my email address",
+    "Volo.Account:InvalidEmailAddress": "Can not find the given email address: {Email}"
+  }
+}
