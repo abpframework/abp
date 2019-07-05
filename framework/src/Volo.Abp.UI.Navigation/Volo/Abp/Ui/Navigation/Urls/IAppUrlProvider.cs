@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using JetBrains.Annotations;
 
-namespace Volo.Abp.Ui.Navigation.Urls
+namespace Volo.Abp.UI.Navigation.Urls
 {
     public interface IAppUrlProvider
     {

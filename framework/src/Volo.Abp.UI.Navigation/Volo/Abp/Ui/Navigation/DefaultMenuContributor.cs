@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using System.Threading.Tasks;
-using Volo.Abp.Ui.Navigation.Localization.Resource;
+using Volo.Abp.UI.Navigation.Localization.Resource;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.Ui.Navigation
+namespace Volo.Abp.UI.Navigation
 {
     public class DefaultMenuContributor : IMenuContributor
     {
