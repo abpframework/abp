@@ -1,14 +1,5 @@
 ﻿{
   "culture": "zh-Hans",
   "texts": {
-    "PasswordReset": "重设密码",
-    "PasswordResetInfoInEmail": "我们收到了帐户恢复请求!如果您发起了此请求,请单击以下链接以重置密码.",
-    "ResetMyPassword": "重置我的密码",
-    "NotAMemberYet": "还不是会员?",
-    "OrSignInWith": "或者登录",
-    "EmailConfirmation": "邮件确认",
-    "EmailConfirmationInfoInEmail": "请点击以下链接确认您的电子邮件地址.",
-    "ConfirmMyEmail": "确认我的电子邮件地址",
-    "Volo.Account:InvalidEmailAddress": "找不到给定的电子邮件地址：{Email}"
   }
 }

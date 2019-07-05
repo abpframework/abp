@@ -21,12 +21,6 @@ namespace Volo.Abp.Account
             {
                 options.FileSets.AddEmbedded<AbpAccountApplicationModule>();
             });
-
-            Configure<AppUrlOptions>(options =>
-            {
-                options.Applications["MVC"].Urls[AccountUrlNames.PasswordReset] = "Account/ResetPassword";
-                options.Applications["MVC"].Urls[AccountUrlNames.EmailConfirmation] = "Account/EmailConfirmation";
-            });
         }
     }
 }
