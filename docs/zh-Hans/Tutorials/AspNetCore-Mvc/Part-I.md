@@ -286,7 +286,7 @@ Swagger有一个很好的UI来测试API. 你可以尝试执行`[GET] /api/app/bo
 
 ### 动态JavaScript代理
 
-在Javascript端通过AJAX的方式调用HTTP API接口是很常见的,你可以使用`$.ajax`或这其他的工具来调用接口.当然,ABP中提供了更好的方式.
+在Javascript端通过AJAX的方式调用HTTP API接口是很常见的,你可以使用`$.ajax`或者其他的工具来调用接口.当然,ABP中提供了更好的方式.
 
 ABP **自动** 为所有的API接口创建了JavaScript **代理**.因此,你可以像调用 **JavaScript function**一样调用任何接口.
 
