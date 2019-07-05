@@ -83,7 +83,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 Command = args.ExtraProperties.ContainsKey(CliConsts.Command) ? args.ExtraProperties[CliConsts.Command] : "",
                 DatabaseProvider = args.DatabaseProvider.ToProviderName(),
                 IsTiered = args.ExtraProperties.ContainsKey("tiered"),
-                Options = JsonSerializer.Serialize(options), //TODO: JSON or comma separated string?
+                Options = JsonSerializer.Serialize(options),
                 ProjectName = args.SolutionName.FullName,
                 TemplateName = args.TemplateName,
                 TemplateVersion = templateFile.Version

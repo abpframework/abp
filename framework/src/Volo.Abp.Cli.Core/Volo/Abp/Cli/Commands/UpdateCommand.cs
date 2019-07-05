@@ -52,7 +52,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 Tool = _options.ToolName,
                 Command = commandLineArgs.Command,
-                Options = _jsonSerializer.Serialize(options) //TODO: JSON or comma separated string?
+                Options = _jsonSerializer.Serialize(options)
             });
         }
 

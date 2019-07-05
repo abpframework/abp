@@ -36,7 +36,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
                     _cancellationTokenProvider.Token
                 );
 
-                // TODO: Do not output logs, keep silent?
                 if (!responseMessage.IsSuccessStatusCode)
                 {
                     _logger.LogInformation("Remote server returns error! HTTP status code: " +
