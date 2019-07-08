@@ -5,9 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
@@ -18,11 +22,21 @@ namespace Volo.Abp.Cli.Commands
 
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
+        private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
+        private readonly CliOptions _options;
+        private readonly IJsonSerializer _jsonSerializer;
 
-        public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater, NpmPackagesUpdater npmPackagesUpdater)
+        public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
+            NpmPackagesUpdater npmPackagesUpdater,
+            ICliAnalyticsCollect cliAnalyticsCollect, 
+            IJsonSerializer jsonSerializer, 
+            IOptions<CliOptions> options)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;
+            _cliAnalyticsCollect = cliAnalyticsCollect;
+            _jsonSerializer = jsonSerializer;
+            _options = options.Value;
 
             Logger = NullLogger<UpdateCommand>.Instance;
         }
@@ -31,6 +45,15 @@ namespace Volo.Abp.Cli.Commands
         {
             UpdateNugetPackages(commandLineArgs);
             UpdateNpmPackages();
+
+            var options = commandLineArgs.Options
+                .Select(x => x.Key).ToList();
+            await _cliAnalyticsCollect.CollectAsync(new CliAnalyticsCollectInputDto
+            {
+                Tool = _options.ToolName,
+                Command = commandLineArgs.Command,
+                Options = _jsonSerializer.Serialize(options)
+            });
         }
 
         private void UpdateNpmPackages()

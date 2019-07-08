@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using HtmlAgilityPack;
+using System.Xml;
 using Volo.Abp.Cli.ProjectBuilding.Files;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
@@ -49,51 +48,48 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 Check.NotNull(content, nameof(content));
 
-                var doc = new HtmlDocument();
+                var doc = new XmlDocument() { PreserveWhitespace = true };
 
                 doc.Load(GenerateStreamFromString(content));
 
-                var nodes = doc.DocumentNode.SelectNodes("//projectreference[@include]");
-
-                if (nodes == null)
-                {
-                    return content;
-                }
-
-                return ProcessReferenceNodes(nodes, content);
+                return ProcessReferenceNodes(doc, content);
             }
 
-            private string ProcessReferenceNodes(HtmlNodeCollection nodes, string content)
+            private string ProcessReferenceNodes(XmlDocument doc, string content)
             {
-                Check.NotNull(nodes, nameof(nodes));
                 Check.NotNull(content, nameof(content));
 
-                foreach (var node in nodes)
+                var nodes = doc.SelectNodes("/Project/ItemGroup/ProjectReference[@Include]");
+
+                foreach (XmlNode oldNode in nodes)
                 {
-                    var valueAttr = node.Attributes.FirstOrDefault(a => a.Name.ToLower() == "include");
+                    var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (valueAttr.Value.Contains($"{_companyNamePlaceHolder}.{_projectNamePlaceHolder}"))
+                    if (oldNodeIncludeValue.Contains($"{_companyNamePlaceHolder}.{_projectNamePlaceHolder}"))
                     {
                         continue;
                     }
 
-                    var newValue = ConvertToNugetReference(valueAttr.Value);
+                    var newNode = doc.CreateElement("PackageReference");
 
-                    var oldLine = $"<ProjectReference Include=\"{valueAttr.Value}\"";
-                    var oldLineAlt = $"<ProjectReference  Include=\"{valueAttr.Value}\"";
-                    var newLine = $"<PackageReference Include=\"{newValue}\" Version=\"{_latestNugetPackageVersion}\"";
+                    var includeAttr = doc.CreateAttribute("Include");
+                    includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
+                    newNode.Attributes.Append(includeAttr);
 
-                    content = content.Replace(oldLine, newLine);
-                    content = content.Replace(oldLineAlt, newLine);
+                    var versionAttr = doc.CreateAttribute("Version");
+                    versionAttr.Value = _latestNugetPackageVersion;
+                    newNode.Attributes.Append(versionAttr);
+
+                    oldNode.ParentNode.ReplaceChild(newNode, oldNode);
                 }
 
-                return content;
+                return doc.OuterXml;
             }
 
             private string ConvertToNugetReference(string oldValue)
             {
-                var newValue = Regex.Match(oldValue, @"\\((?!.+?\\).+?)\.csproj");
+                var newValue = Regex.Match(oldValue, @"\\((?!.+?\\).+?)\.csproj", RegexOptions.CultureInvariant | RegexOptions.Compiled);
                 if (newValue.Success && newValue.Groups.Count == 2)
                 {
                     return newValue.Groups[1].Value;

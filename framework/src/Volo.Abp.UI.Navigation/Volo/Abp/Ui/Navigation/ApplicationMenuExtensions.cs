@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 using System.Linq;
-using Volo.Abp.Ui.Navigation;
+using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.UI.Navigation
 {
