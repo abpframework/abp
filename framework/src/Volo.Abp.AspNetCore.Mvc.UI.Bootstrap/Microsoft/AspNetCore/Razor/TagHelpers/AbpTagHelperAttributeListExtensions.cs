@@ -21,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
             }
             else
             {
-                var existingClasses = classAttribute.Value.ToString().Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var existingClasses = classAttribute.Value.ToString().Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
                 existingClasses.AddIfNotContains(className);
                 attributes.SetAttribute("class", string.Join(" ", existingClasses));
             }
@@ -40,10 +40,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
                 return;
             }
 
-            var existingClassList = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            var modifiedClassList = existingClassList.RemoveAll(c => c == className);
+            var classList = classAttribute.Value.ToString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            classList.RemoveAll(c => c == className);
 
-            attributes.SetAttribute("class", modifiedClassList.JoinAsString(" "));
+            attributes.SetAttribute("class", classList.JoinAsString(" "));
         }
 
         public static void AddIfNotContains(this TagHelperAttributeList attributes, string name, object value)

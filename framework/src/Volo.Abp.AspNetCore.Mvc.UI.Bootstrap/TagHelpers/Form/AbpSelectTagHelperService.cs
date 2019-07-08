@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
@@ -27,9 +28,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             _tagHelperLocalizer = tagHelperLocalizer;
         }
 
-        public override void Process(TagHelperContext context, TagHelperOutput output)
+        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var innerHtml = GetFormInputGroupAsHtml(context, output);
+            var innerHtml = await GetFormInputGroupAsHtmlAsync(context, output);
 
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
@@ -49,12 +50,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             }
         }
 
-        protected virtual string GetFormInputGroupAsHtml(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var selectTag = GetSelectTag(context, output);
+            var selectTag = await GetSelectTagAsync(context, output);
             var selectAsHtml = selectTag.Render(_encoder);
-            var label = GetLabelAsHtml(context, output, selectTag);
-            var validation = GetValidationAsHtml(context, output, selectTag);
+            var label = await GetLabelAsHtmlAsync(context, output, selectTag);
+            var validation = await GetValidationAsHtmlAsync(context, output, selectTag);
             var infoText = GetInfoAsHtml(context, output, selectTag);
 
             return label + Environment.NewLine + selectAsHtml + Environment.NewLine + infoText + Environment.NewLine + validation;
@@ -65,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return "<div class=\"form-group\">" + Environment.NewLine + innerHtml + Environment.NewLine + "</div>";
         }
 
-        protected virtual TagHelperOutput GetSelectTag(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<TagHelperOutput> GetSelectTagAsync(TagHelperContext context, TagHelperOutput output)
         {
             var selectTagHelper = new SelectTagHelper(_generator)
             {
@@ -74,7 +75,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            var selectTagHelperOutput = selectTagHelper.ProcessAndGetOutput(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
+            var selectTagHelperOutput = await selectTagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "select", TagMode.StartTagAndEndTag);
 
             selectTagHelperOutput.Attributes.AddClass("form-control");
             selectTagHelperOutput.Attributes.AddClass(GetSize(context, output));
@@ -115,14 +116,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             throw new Exception("No items provided for select attribute.");
         }
 
-        protected virtual string GetLabelAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
+        protected virtual async Task<string> GetLabelAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput selectTag)
         {
             if (!string.IsNullOrEmpty(TagHelper.Label))
             {
                 return "<label " + GetIdAttributeAsString(selectTag) + ">" + TagHelper.Label + "</label>" + GetRequiredSymbol(context, output);
             }
 
-            return GetLabelAsHtmlUsingTagHelper(context, output) + GetRequiredSymbol(context, output);
+            return await GetLabelAsHtmlUsingTagHelperAsync(context, output) + GetRequiredSymbol(context, output);
         }
         
         protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
@@ -233,7 +234,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
             return selectItems;
         }
 
-        protected virtual string GetLabelAsHtmlUsingTagHelper(TagHelperContext context, TagHelperOutput output)
+        protected virtual async Task<string> GetLabelAsHtmlUsingTagHelperAsync(TagHelperContext context, TagHelperOutput output)
         {
             var labelTagHelper = new LabelTagHelper(_generator)
             {
@@ -241,10 +242,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 ViewContext = TagHelper.ViewContext
             };
 
-            return labelTagHelper.Render(new TagHelperAttributeList(), context, _encoder, "label", TagMode.StartTagAndEndTag, true);
+            return await labelTagHelper.RenderAsync(new TagHelperAttributeList(), context, _encoder, "label", TagMode.StartTagAndEndTag);
         }
 
-        protected virtual string GetValidationAsHtml(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
+        protected virtual async Task<string> GetValidationAsHtmlAsync(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
         {
             var validationMessageTagHelper = new ValidationMessageTagHelper(_generator)
             {
@@ -254,7 +255,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-            return validationMessageTagHelper.Render(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag, true);
+            return await validationMessageTagHelper.RenderAsync(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag);
         }
 
         protected virtual string GetSize(TagHelperContext context, TagHelperOutput output)
