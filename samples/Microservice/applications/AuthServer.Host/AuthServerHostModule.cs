@@ -15,6 +15,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
 using Volo.Abp.EventBus.RabbitMq;
+using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
@@ -33,6 +34,9 @@ namespace AuthServer.Host
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpIdentityEntityFrameworkCoreModule),
+
+        typeof(AbpHttpClientIdentityModelModule),
+
         typeof(AbpIdentityApplicationContractsModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
