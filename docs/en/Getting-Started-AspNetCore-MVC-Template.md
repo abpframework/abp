@@ -37,7 +37,7 @@ Open the solution in **Visual Studio**:
 
 The solution has a layered structure (based on [Domain Driven Design](Domain-Driven-Design.md)) and contains unit & integration test projects properly configured to work with **EF Core** & **SQLite in-memory** database.
 
-> See [MVC application template document](Startup-Templates/Mvc.md) to understand the solution structure in details.
+> See [MVC application template document](Startup-Templates/Mvc.md) to understand the solution structure in detail.
 
 ### Database Connection String
 
