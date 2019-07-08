@@ -1,0 +1,97 @@
+﻿using System.Net.Mail;
+using System.Threading.Tasks;
+using Volo.Abp.BackgroundJobs;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Emailing;
+using Volo.Abp.Emailing.Smtp;
+using MailKit.Security;
+using Microsoft.Extensions.DependencyInjection;
+using MimeKit;
+using Volo.Abp.Threading;
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
+
+namespace Volo.Abp.MailKit
+{
+    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
+    public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
+    {
+        protected IAbpMailKitConfiguration AbpMailKitConfiguration { get; }
+
+        protected ISmtpEmailSenderConfiguration SmtpConfiguration { get; }
+
+        public MailKitSmtpEmailSender(ISmtpEmailSenderConfiguration smtpConfiguration,
+            IBackgroundJobManager backgroundJobManager,
+            IAbpMailKitConfiguration abpMailKitConfiguration)
+            : base(smtpConfiguration, backgroundJobManager)
+        {
+            AbpMailKitConfiguration = abpMailKitConfiguration;
+            SmtpConfiguration = smtpConfiguration;
+        }
+
+        protected override async Task SendEmailAsync(MailMessage mail)
+        {
+            using (var client = await BuildClientAsync())
+            {
+                var message = MimeMessage.CreateFromMailMessage(mail);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
+            }
+        }
+
+        protected override void SendEmail(MailMessage mail)
+        {
+            using (var client = AsyncHelper.RunSync(BuildClientAsync))
+            {
+                var message = MimeMessage.CreateFromMailMessage(mail);
+                client.Send(message);
+                client.Disconnect(true);
+            }
+        }
+
+        public async Task<SmtpClient> BuildClientAsync()
+        {
+            var client = new SmtpClient();
+
+            try
+            {
+                await ConfigureClient(client);
+                return client;
+            }
+            catch
+            {
+                client.Dispose();
+                throw;
+            }
+        }
+
+        protected virtual async Task ConfigureClient(SmtpClient client)
+        {
+            client.Connect(
+                await SmtpConfiguration.GetHostAsync(),
+                await SmtpConfiguration.GetPortAsync(),
+                await GetSecureSocketOption()
+            );
+
+            if (await SmtpConfiguration.GetUseDefaultCredentialsAsync())
+            {
+                return;
+            }
+
+            client.Authenticate(
+                await SmtpConfiguration.GetUserNameAsync(),
+                await SmtpConfiguration.GetPasswordAsync()
+            );
+        }
+        protected virtual async Task<SecureSocketOptions> GetSecureSocketOption()
+        {
+            if (AbpMailKitConfiguration.SecureSocketOption.HasValue)
+            {
+                return AbpMailKitConfiguration.SecureSocketOption.Value;
+            }
+
+            return await SmtpConfiguration.GetEnableSslAsync()
+                ? SecureSocketOptions.SslOnConnect
+                : SecureSocketOptions.StartTlsWhenAvailable;
+        }
+    }
+}
