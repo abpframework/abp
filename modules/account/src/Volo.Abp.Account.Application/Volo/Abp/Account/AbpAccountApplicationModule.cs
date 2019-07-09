@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Emailing;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation.Urls;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
