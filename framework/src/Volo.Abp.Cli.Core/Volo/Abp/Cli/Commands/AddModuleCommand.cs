@@ -27,7 +27,11 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Module name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
+                throw new CliUsageException(
+                    "Module name is missing!" +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
             }
 
             var skipDbMigrations = Convert.ToBoolean(
@@ -40,7 +44,7 @@ namespace Volo.Abp.Cli.Commands
             );
         }
 
-        public Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -61,14 +65,14 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
             sb.AppendLine("");
 
-            return Task.FromResult(sb.ToString());
+            return sb.ToString();
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("Adds a multi-package module to a solution by finding all packages of the module, " +
-                                   "finding related projects in the solution and adding each package to the" +
-                                   " corresponding project in the solution.");
+            return "Adds a multi-package module to a solution by finding all packages of the module, " +
+                   "finding related projects in the solution and adding each package to the" +
+                   " corresponding project in the solution.";
         }
 
         protected virtual string GetSolutionFile(CommandLineArgs commandLineArgs)

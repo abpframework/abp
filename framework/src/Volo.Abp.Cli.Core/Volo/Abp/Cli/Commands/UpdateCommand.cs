@@ -90,11 +90,14 @@ namespace Volo.Abp.Cli.Commands
                 return;
             }
 
-            throw new CliUsageException("No solution or project found in this directory." + Environment.NewLine +
-                                        Environment.NewLine + AsyncHelper.RunSync(GetUsageInfo));
+            throw new CliUsageException(
+                "No solution or project found in this directory." +
+                Environment.NewLine + Environment.NewLine +
+                GetUsageInfo()
+            );
         }
 
-        public Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -111,13 +114,13 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info.");
 
-            return Task.FromResult(sb.ToString());
+            return sb.ToString();
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("Automatically updates all ABP related NuGet packages and NPM packages in a" +
-                                   " solution or project to the latest versions");
+            return "Automatically updates all ABP related NuGet packages and NPM packages in a" +
+                   " solution or project to the latest versions";
         }
 
         public static class Options
