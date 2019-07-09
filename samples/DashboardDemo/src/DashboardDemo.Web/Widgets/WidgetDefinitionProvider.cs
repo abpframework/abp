@@ -16,7 +16,7 @@ namespace DashboardDemo.Widgets
                     LocalizableString.Create<DashboardDemoResource>(UserCountWidgetViewComponent.DisplayName),
                     typeof(UserCountWidgetViewComponent)
                 )
-                .SetDefaultDimension(6, 3)
+                .SetDefaultDimension(6, 7)
                 .AddRequiredPermission(IdentityPermissions.Users.Default);
 
             var roleListWidget = new WidgetDefinition(
