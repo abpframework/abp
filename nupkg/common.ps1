@@ -81,6 +81,7 @@ $projects = (
     "framework/src/Volo.Abp.Json",
     "framework/src/Volo.Abp.Localization",
     "framework/src/Volo.Abp.Localization.Abstractions",
+    "framework/src/Volo.Abp.MailKit",
     "framework/src/Volo.Abp.MemoryDb",
     "framework/src/Volo.Abp.MongoDB",
     "framework/src/Volo.Abp.MultiTenancy",
