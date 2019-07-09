@@ -124,20 +124,5 @@ namespace Volo.Abp.Application.Services
 
             await AuthorizationService.CheckAsync(policyName);
         }
-
-        /// <summary>
-        /// Checks for given <paramref name="policyName"/>.
-        /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
-        /// </summary>
-        /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
-        protected virtual void CheckPolicy([CanBeNull] string policyName)
-        {
-            if (string.IsNullOrEmpty(policyName))
-            {
-                return;
-            }
-
-            AuthorizationService.Check(policyName);
-        }
     }
 }

@@ -25,7 +25,13 @@ namespace Volo.Abp.TenantManagement.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .FirstOrDefaultAsync(t => t.Name == name, cancellationToken);
+                .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
+        }
+
+        public Tenant FindByName(string name, bool includeDetails = true)
+        {
+            return GetMongoQueryable()
+                .FirstOrDefault(t => t.Name == name);
         }
 
         public virtual async Task<List<Tenant>> GetListAsync(
@@ -45,7 +51,7 @@ namespace Volo.Abp.TenantManagement.MongoDB
                 .OrderBy(sorting ?? nameof(Tenant.Name))
                 .As<IMongoQueryable<Tenant>>()
                 .PageBy<Tenant, IMongoQueryable<Tenant>>(skipCount, maxResultCount)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

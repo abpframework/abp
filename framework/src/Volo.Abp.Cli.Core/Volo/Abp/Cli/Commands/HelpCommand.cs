@@ -28,7 +28,7 @@ namespace Volo.Abp.Cli.Commands
         {
             if (string.IsNullOrWhiteSpace(commandLineArgs.Target))
             {
-                Logger.LogInformation(await GetUsageInfo());
+                Logger.LogInformation(GetUsageInfo());
                 return;
             }
 
@@ -37,11 +37,11 @@ namespace Volo.Abp.Cli.Commands
             using (var scope = ServiceScopeFactory.CreateScope())
             {
                 var command = (IConsoleCommand) scope.ServiceProvider.GetRequiredService(commandType);
-                Logger.LogInformation(await command.GetUsageInfo());
+                Logger.LogInformation(command.GetUsageInfo());
             }
         }
 
-        public async Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -58,8 +58,8 @@ namespace Volo.Abp.Cli.Commands
 
                 using (var scope = ServiceScopeFactory.CreateScope())
                 {
-                    shortDescription = await ((IConsoleCommand)scope.ServiceProvider.GetRequiredService(command.Value))
-                        .GetShortDescriptionAsync();
+                    shortDescription = ((IConsoleCommand) scope.ServiceProvider
+                            .GetRequiredService(command.Value)).GetShortDescription();
                 }
 
                 sb.Append("    >");
@@ -74,9 +74,9 @@ namespace Volo.Abp.Cli.Commands
             return sb.ToString();
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("");
+            return string.Empty;
         }
     }
 }

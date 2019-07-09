@@ -1,5 +1,6 @@
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Emailing
 {
@@ -14,7 +15,7 @@ namespace Volo.Abp.Emailing
 
         public override void Execute(BackgroundEmailSendingJobArgs args)
         {
-            EmailSender.Send(args.To, args.Subject, args.Body, args.IsBodyHtml);
+            AsyncHelper.RunSync(() => EmailSender.SendAsync(args.To, args.Subject, args.Body, args.IsBodyHtml));
         }
     }
 }

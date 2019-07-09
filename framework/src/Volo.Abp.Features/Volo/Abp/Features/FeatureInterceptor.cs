@@ -18,9 +18,7 @@ namespace Volo.Abp.Features
 
         public override void Intercept(IAbpMethodInvocation invocation)
         {
-            if (AbpCrossCuttingConcerns.IsApplied(
-                invocation.TargetObject, 
-                AbpCrossCuttingConcerns.FeatureChecking))
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
             {
                 invocation.Proceed();
                 return;
@@ -32,21 +30,19 @@ namespace Volo.Abp.Features
 
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            if (AbpCrossCuttingConcerns.IsApplied(
-                invocation.TargetObject, 
-                AbpCrossCuttingConcerns.FeatureChecking))
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
             {
                 await invocation.ProceedAsync();
                 return;
             }
 
-            AsyncHelper.RunSync(() => CheckFeaturesAsync(invocation));
+            await CheckFeaturesAsync(invocation);
             await invocation.ProceedAsync();
         }
 
-        protected virtual Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
+        protected virtual async Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
         {
-            return _methodInvocationFeatureCheckerService.CheckAsync(
+            await _methodInvocationFeatureCheckerService.CheckAsync(
                 new MethodInvocationFeatureCheckerContext(
                     invocation.Method
                 )

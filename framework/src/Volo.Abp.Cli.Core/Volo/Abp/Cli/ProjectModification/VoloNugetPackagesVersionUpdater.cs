@@ -1,9 +1,9 @@
 ﻿using NuGet.Versioning;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml;
 using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
@@ -16,29 +16,29 @@ namespace Volo.Abp.Cli.ProjectModification
             _nuGetService = nuGetService;
         }
 
-        public void UpdateSolution(string solutionPath, bool includePreviews)
+        public async Task UpdateSolutionAsync(string solutionPath, bool includePreviews)
         {
             var projectPaths = ProjectFinder.GetProjectFiles(solutionPath);
 
             foreach (var filePath in projectPaths)
             {
-                UpdateInternal(filePath, includePreviews);
+                await UpdateInternalAsync(filePath, includePreviews);
             }
         }
 
-        public void UpdateProject(string projectPath, bool includePreviews)
+        public async Task UpdateProjectAsync(string projectPath, bool includePreviews)
         {
-            UpdateInternal(projectPath, includePreviews);
+            await UpdateInternalAsync(projectPath, includePreviews);
         }
 
-        protected virtual void UpdateInternal(string projectPath, bool includePreviews)
+        protected virtual async Task UpdateInternalAsync(string projectPath, bool includePreviews)
         {
             var fileContent = File.ReadAllText(projectPath);
 
-            File.WriteAllText(projectPath, UpdateVoloPackages(fileContent, includePreviews));
+            File.WriteAllText(projectPath, await UpdateVoloPackagesAsync(fileContent, includePreviews));
         }
 
-        private string UpdateVoloPackages(string content, bool includePreviews)
+        private async Task<string> UpdateVoloPackagesAsync(string content, bool includePreviews)
         {
             var doc = new XmlDocument() { PreserveWhitespace = true };
             doc.LoadXml(content);
@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 var packageId = package.Attributes["Include"].Value;
                 var packageVersion = SemanticVersion.Parse(versionAttribute.Value);
-                var latestVersion = AsyncHelper.RunSync(() => _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews));
+                var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews);
 
                 if (latestVersion != null && packageVersion < latestVersion)
                 {

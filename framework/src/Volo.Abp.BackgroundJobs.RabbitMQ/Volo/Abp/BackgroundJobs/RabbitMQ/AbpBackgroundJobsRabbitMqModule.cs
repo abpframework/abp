@@ -29,16 +29,20 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         private static void StartJobQueueManager(ApplicationInitializationContext context)
         {
-            context.ServiceProvider
-                .GetRequiredService<IJobQueueManager>()
-                .Start();
+            AsyncHelper.RunSync(
+                () => context.ServiceProvider
+                    .GetRequiredService<IJobQueueManager>()
+                    .StartAsync()
+            );
         }
 
         private static void StopJobQueueManager(ApplicationShutdownContext context)
         {
-            context.ServiceProvider
-                .GetRequiredService<IJobQueueManager>()
-                .Stop();
+            AsyncHelper.RunSync(
+                () => context.ServiceProvider
+                    .GetRequiredService<IJobQueueManager>()
+                    .StopAsync()
+            );
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Volo.Abp.RabbitMQ
             await TrySendQueueBindCommandsAsync();
         }
 
-        protected virtual Task TrySendQueueBindCommandsAsync()
+        protected virtual void TrySendQueueBindCommands()
         {
             try
             {
@@ -80,7 +80,7 @@ namespace Volo.Abp.RabbitMQ
                 {
                     if (Channel == null || Channel.IsClosed)
                     {
-                        return Task.CompletedTask;
+                        return;
                     }
 
                     lock (ChannelSendSyncLock)
@@ -115,7 +115,11 @@ namespace Volo.Abp.RabbitMQ
             {
                 Logger.LogException(ex, LogLevel.Warning);
             }
+        }
 
+        protected virtual Task TrySendQueueBindCommandsAsync()
+        {
+            TrySendQueueBindCommands();
             return Task.CompletedTask;
         }
 
@@ -129,7 +133,7 @@ namespace Volo.Abp.RabbitMQ
             if (Channel == null || Channel.IsOpen == false)
             {
                 TryCreateChannel();
-                AsyncHelper.RunSync(TrySendQueueBindCommandsAsync);
+                TrySendQueueBindCommands();
             }
         }
 

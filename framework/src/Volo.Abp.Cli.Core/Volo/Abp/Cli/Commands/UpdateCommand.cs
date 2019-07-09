@@ -43,7 +43,7 @@ namespace Volo.Abp.Cli.Commands
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            UpdateNugetPackages(commandLineArgs);
+            await UpdateNugetPackages(commandLineArgs);
             UpdateNpmPackages();
 
             var options = commandLineArgs.Options
@@ -61,7 +61,7 @@ namespace Volo.Abp.Cli.Commands
             _npmPackagesUpdater.Update(Directory.GetCurrentDirectory());
         }
 
-        private void UpdateNugetPackages(CommandLineArgs commandLineArgs)
+        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs)
         {
             var includePreviews =
                 commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
@@ -72,7 +72,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                _nugetPackagesVersionUpdater.UpdateSolution(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -84,17 +84,20 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                _nugetPackagesVersionUpdater.UpdateProject(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
             }
 
-            throw new CliUsageException("No solution or project found in this directory." + Environment.NewLine +
-                                        Environment.NewLine + AsyncHelper.RunSync(GetUsageInfo));
+            throw new CliUsageException(
+                "No solution or project found in this directory." +
+                Environment.NewLine + Environment.NewLine +
+                GetUsageInfo()
+            );
         }
 
-        public Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -111,13 +114,13 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info.");
 
-            return Task.FromResult(sb.ToString());
+            return sb.ToString();
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("Automatically updates all ABP related NuGet packages and NPM packages in a" +
-                                   " solution or project to the latest versions");
+            return "Automatically updates all ABP related NuGet packages and NPM packages in a" +
+                   " solution or project to the latest versions";
         }
 
         public static class Options
