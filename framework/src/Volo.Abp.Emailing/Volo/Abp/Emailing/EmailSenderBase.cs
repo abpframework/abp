@@ -3,7 +3,6 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.BackgroundJobs;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Emailing
 {
@@ -36,25 +35,9 @@ namespace Volo.Abp.Emailing
             });
         }
 
-        public virtual void Send(string to, string subject, string body, bool isBodyHtml = true)
-        {
-            Send(new MailMessage
-            {
-                To = { to },
-                Subject = subject,
-                Body = body,
-                IsBodyHtml = isBodyHtml
-            });
-        }
-
         public virtual async Task SendAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
         {
             await SendAsync(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml });
-        }
-
-        public virtual void Send(string from, string to, string subject, string body, bool isBodyHtml = true)
-        {
-            Send(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml });
         }
 
         public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
@@ -84,16 +67,6 @@ namespace Volo.Abp.Emailing
                     IsBodyHtml = isBodyHtml
                 }
             );
-        }
-
-        public virtual void Send(MailMessage mail, bool normalize = true)
-        {
-            if (normalize)
-            {
-                AsyncHelper.RunSync(() => NormalizeMailAsync(mail));
-            }
-
-            SendEmail(mail);
         }
 
         /// <summary>
