@@ -1,12 +1,24 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
 @inject IAuthorizationService AuthorizationService
 @inject IWidgetRenderer WidgetRenderer
+@inject IGlobalFilterRenderer GlobalFilteRenderer
 @inject IStringLocalizerFactory localizer
 @model Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard.DashboardViewModel
 @{
 }
+
+<abp-row class="mb-4">
+    @foreach (var globalFilterConfiguration in Model.Dashboard.AvailableGlobalFilters)
+    {
+        var globalFilter = Model.GetGlobalFilter(globalFilterConfiguration.GlobalFilterName);
+        
+        @await GlobalFilteRenderer.RenderAsync(Component, globalFilter.Name)
+
+    }
+</abp-row>
 
 <abp-row>
     @foreach (var widgetConfiguration in Model.Dashboard.AvailableWidgets)
