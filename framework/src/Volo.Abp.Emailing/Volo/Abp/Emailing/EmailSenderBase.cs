@@ -76,12 +76,6 @@ namespace Volo.Abp.Emailing
         protected abstract Task SendEmailAsync(MailMessage mail);
 
         /// <summary>
-        /// Should implement this method to send email in derived classes.
-        /// </summary>
-        /// <param name="mail">Mail to be sent</param>
-        protected abstract void SendEmail(MailMessage mail);
-
-        /// <summary>
         /// Normalizes given email.
         /// Fills <see cref="MailMessage.From"/> if it's not filled before.
         /// Sets encodings to UTF8 if they are not set before.

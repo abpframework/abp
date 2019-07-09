@@ -75,13 +75,5 @@ namespace Volo.Abp.Emailing.Smtp
                 await smtpClient.SendMailAsync(mail);
             }
         }
-
-        protected override void SendEmail(MailMessage mail)
-        {
-            using (var smtpClient = AsyncHelper.RunSync(BuildClientAsync))
-            {
-                smtpClient.Send(mail);
-            }
-        }
     }
 }
