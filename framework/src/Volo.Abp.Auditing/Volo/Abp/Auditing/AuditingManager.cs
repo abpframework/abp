@@ -147,7 +147,6 @@ namespace Volo.Abp.Auditing
 
             private readonly AuditingManager _auditingManager;
             private readonly IDisposable _scope;
-            private bool _saved;
 
             public DisposableSaveHandle(
                 AuditingManager auditingManager,
@@ -163,23 +162,16 @@ namespace Volo.Abp.Auditing
 
             public async Task SaveAsync()
             {
-                _saved = true;
                 await _auditingManager.SaveAsync(this);
             }
 
             public void Save()
             {
-                _saved = true;
                 _auditingManager.Save(this);
             }
 
             public void Dispose()
             {
-                if (!_saved)
-                {
-                    Save();
-                }
-
                 _scope.Dispose();
             }
         }
