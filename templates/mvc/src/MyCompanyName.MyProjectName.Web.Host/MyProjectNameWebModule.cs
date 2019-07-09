@@ -29,7 +29,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.TenantManagement.Web;
-using Volo.Abp.Ui.Navigation.Urls;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;

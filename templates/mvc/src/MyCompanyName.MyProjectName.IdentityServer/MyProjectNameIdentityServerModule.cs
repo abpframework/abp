@@ -19,7 +19,7 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation.Urls;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 

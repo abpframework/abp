@@ -23,7 +23,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.Ui.Navigation.Urls;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore.Web
