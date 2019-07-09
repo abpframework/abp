@@ -134,10 +134,5 @@ namespace Volo.Abp.Features
                 );
             }
         }
-
-        public static void CheckEnabled(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
-        {
-            AsyncHelper.RunSync(() => featureChecker.CheckEnabledAsync(requiresAll, featureNames));
-        }
     }
 }
