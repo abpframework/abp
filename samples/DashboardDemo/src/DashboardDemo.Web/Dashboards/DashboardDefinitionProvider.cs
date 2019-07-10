@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Pages.widgets;
+using DashboardDemo.Pages.widgets.Filters;
 using DashboardDemo.Widgets;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
@@ -17,7 +18,8 @@ namespace DashboardDemo.Dashboards
                 LocalizableString.Create<DashboardDemoResource>("MyDashboard")
                 )
                 .WithWidget(RoleListWidgetViewComponent.WidgetName)
-                .WithWidget(UserCountWidgetViewComponent.WidgetName);
+                .WithWidget(UserCountWidgetViewComponent.WidgetName)
+                .WithGlobalFilter(DateRangeGlobalFilterViewComponent.GlobalFilterName);
 
             return new List<DashboardDefinition>
             {

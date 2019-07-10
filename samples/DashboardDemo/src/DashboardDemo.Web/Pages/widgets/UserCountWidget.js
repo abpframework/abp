@@ -2,14 +2,11 @@
     var $container = $('#UserCountWidgetContainer');
     if ($container.length > 0) {
 
-        var _identityUserAppService = volo.abp.identity.identityUser;
-        _identityUserAppService.getList({}).then(function (result) {
-            $container.find('#UserCount').text(result.items.length);
-        });
+        var $DateRangeGlobalFilterContainer = $("#DateRangeGlobalFilterContainer");
 
-        var createChart = function() {
+
+        var createChart = function () {
             dashboardDemo.userStatistic.getNewUserPerDayStatistic().then(function (result) {
-                console.log(result.data);
 
                 var chart = new Chart($container.find('#UserStatistics'), {
                     type: 'bar',
@@ -33,6 +30,13 @@
                 });
             });
         };
+
+        if ($DateRangeGlobalFilterContainer.length > 0) {
+            $DateRangeGlobalFilterContainer.find('#GlobalRefreshButton').on('click',
+                function () {
+                    createChart();
+                });
+        }
 
         createChart();
     }

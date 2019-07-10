@@ -1,4 +1,5 @@
 ﻿using DashboardDemo.Pages.widgets.Chartjs;
+using DashboardDemo.Pages.widgets.Filters;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.HighlightJs;
