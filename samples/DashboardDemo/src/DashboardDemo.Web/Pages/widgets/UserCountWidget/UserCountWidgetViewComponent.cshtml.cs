@@ -11,7 +11,7 @@ namespace DashboardDemo.Pages.widgets
 
         public IViewComponentResult Invoke()
         {
-            return View("/Pages/widgets/UserCountWidgetViewComponent.cshtml", new UserCountWidgetViewComponent());
+            return View("/Pages/widgets/UserCountWidget/UserCountWidgetViewComponent.cshtml", new UserCountWidgetViewComponent());
         }
     }
 }

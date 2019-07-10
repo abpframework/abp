@@ -14,7 +14,7 @@ namespace DashboardDemo.Pages.widgets
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/UserCountWidget.css");
+            context.Files.Add("/Pages/widgets/UserCountWidget/UserCountWidget.css");
         }
     }
 }

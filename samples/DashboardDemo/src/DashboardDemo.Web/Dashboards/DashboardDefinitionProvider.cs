@@ -2,9 +2,7 @@
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Pages.widgets;
 using DashboardDemo.Pages.widgets.Filters;
-using DashboardDemo.Widgets;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Localization;
 
 namespace DashboardDemo.Dashboards
