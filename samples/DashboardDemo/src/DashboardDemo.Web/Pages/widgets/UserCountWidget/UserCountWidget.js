@@ -6,7 +6,7 @@
 
 
         var createChart = function () {
-            dashboardDemo.userStatistic.getNewUserPerDayStatistic().then(function (result) {
+            dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
 
                 var chart = new Chart($container.find('#UserStatistics'), {
                     type: 'bar',

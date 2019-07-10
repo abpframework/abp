@@ -7,7 +7,7 @@ using Volo.Abp.Application.Services;
 
 namespace DashboardDemo
 {
-    public class UserStatisticAppService : ApplicationService, IUserStatisticAppService
+    public class DemoStatisticAppService : ApplicationService, IDemoStatisticAppService
     {
         public async Task<NewUserPerDayStatisticDto> GetNewUserPerDayStatistic()
         {
