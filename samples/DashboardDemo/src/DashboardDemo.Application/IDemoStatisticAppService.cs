@@ -9,5 +9,7 @@ namespace DashboardDemo
     public interface IDemoStatisticAppService : IApplicationService
     {
         Task<NewUserPerDayStatisticDto> GetNewUserPerDayStatistic();
+
+        Task<MonthlyProfitStatisticDto> GetMonthlyProfitStatistic();
     }
 }

@@ -8,6 +8,7 @@ namespace DashboardDemo.Pages
     [DependsOn(
         typeof(AbpBasicDashboardScriptContributor),
         typeof(UserCountWidgetScriptBundleContributor),
+        typeof(MonthlyProfitWidgetScriptBundleContributor),
         typeof(RoleListWidgetScriptContributor)
     )]
     public class MyDashboardScriptBundleContributor : BundleContributor

@@ -18,5 +18,15 @@ namespace DashboardDemo
 
             return new NewUserPerDayStatisticDto{Data = data};
         }
+
+        public async Task<MonthlyProfitStatisticDto> GetMonthlyProfitStatistic()
+        {
+            var data = Enumerable
+                .Repeat(0, 12)
+                .Select(i => new Random().Next(-20, 40))
+                .ToArray();
+
+            return new MonthlyProfitStatisticDto { Data = data };
+        }
     }
 }

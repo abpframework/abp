@@ -16,7 +16,15 @@ namespace DashboardDemo.Widgets
                     LocalizableString.Create<DashboardDemoResource>(UserCountWidgetViewComponent.DisplayName),
                     typeof(UserCountWidgetViewComponent)
                 )
-                .SetDefaultDimension(6, 7)
+                .SetDefaultDimension(6, 4)
+                .AddRequiredPermission(IdentityPermissions.Users.Default);
+
+            var monthlyProfitWidget = new WidgetDefinition(
+                    MonthlyProfitWidgetViewComponent.WidgetName,
+                    LocalizableString.Create<DashboardDemoResource>(MonthlyProfitWidgetViewComponent.DisplayName),
+                    typeof(MonthlyProfitWidgetViewComponent)
+                )
+                .SetDefaultDimension(6, 4)
                 .AddRequiredPermission(IdentityPermissions.Users.Default);
 
             var roleListWidget = new WidgetDefinition(
@@ -30,6 +38,7 @@ namespace DashboardDemo.Widgets
             return new List<WidgetDefinition>
             {
                 userCountWidget,
+                monthlyProfitWidget,
                 roleListWidget
             };
         }

@@ -15,9 +15,10 @@ namespace DashboardDemo.Dashboards
                 DashboardNames.MyDashboard,
                 LocalizableString.Create<DashboardDemoResource>("MyDashboard")
                 )
-                .WithWidget(RoleListWidgetViewComponent.WidgetName)
                 .WithWidget(UserCountWidgetViewComponent.WidgetName)
-                .WithGlobalFilter(DateRangeGlobalFilterViewComponent.GlobalFilterName);
+                .WithWidget(RoleListWidgetViewComponent.WidgetName)
+                .WithWidget(MonthlyProfitWidgetViewComponent.WidgetName)
+                .WithGlobalFilter(RefreshGlobalFilterViewComponent.GlobalFilterName);
 
             return new List<DashboardDefinition>
             {

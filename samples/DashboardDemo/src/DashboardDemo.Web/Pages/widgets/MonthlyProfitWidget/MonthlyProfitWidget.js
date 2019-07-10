@@ -1,22 +1,20 @@
 ﻿(function ($) {
-    var $container = $('#UserCountWidgetContainer');
+    var $container = $('#MonthlyProfitWidgetContainer');
     if ($container.length > 0) {
         var chart = {};
-
-        var $DateRangeGlobalFilterContainer = $("#RefreshGlobalFilterContainer");
-
+        var $RefreshGlobalFilterContainer = $("#RefreshGlobalFilterContainer");
 
         var createChart = function () {
-            dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
+            dashboardDemo.demoStatistic.getMonthlyProfitStatistic().then(function (result) {
 
-                chart = new Chart($container.find('#UserStatistics'), {
-                    type: 'bar',
+                chart = new Chart($container.find('#MonthlyProfitStatistics'), {
+                    type: 'line',
                     data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', "Sun"],
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
                         datasets: [{
-                            label: 'Avarage new user per day',
+                            label: 'Monthly Profit',
                             data: result.data,
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)'
+                            backgroundColor: 'rgba(255, 255, 132, 0.2)'
                         }]
                     },
                     options: {
@@ -32,11 +30,10 @@
             });
         };
 
-        if ($DateRangeGlobalFilterContainer.length > 0) {
-            $DateRangeGlobalFilterContainer.find('#GlobalRefreshButton').on('click',
+        if ($RefreshGlobalFilterContainer.length > 0) {
+            $RefreshGlobalFilterContainer.find('#GlobalRefreshButton').on('click',
                 function () {
-                    dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
-
+                    dashboardDemo.demoStatistic.getMonthlyProfitStatistic().then(function (result) {
                         chart.data.datasets[0].data = result.data;
                         chart.update();
                     });

@@ -15,9 +15,9 @@ namespace DashboardDemo.GlobalFilters
         public static List<GlobalFilterDefinition> GetDefinitions()
         {
             var dateRangeFilter = new GlobalFilterDefinition(
-                DateRangeGlobalFilterViewComponent.GlobalFilterName,
+                RefreshGlobalFilterViewComponent.GlobalFilterName,
                     LocalizableString.Create<DashboardDemoResource>("DateRangeFilter"),
-                typeof(DateRangeGlobalFilterViewComponent)
+                typeof(RefreshGlobalFilterViewComponent)
                 );
 
             return new List<GlobalFilterDefinition>

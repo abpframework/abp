@@ -11,11 +11,11 @@ namespace DashboardDemo.Pages.widgets
     [DependsOn(typeof(ClipboardScriptBundleContributor))]
     [DependsOn(typeof(ChartjsScriptContributor))]
     [DependsOn(typeof(RefreshGlobalFilterScriptContributor))]
-    public class UserCountWidgetScriptBundleContributor : BundleContributor
+    public class MonthlyProfitWidgetScriptBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/UserCountWidget/UserCountWidget.js");
+            context.Files.Add("/Pages/widgets/MonthlyProfitWidget/MonthlyProfitWidget.js");
         }
     }
 }
