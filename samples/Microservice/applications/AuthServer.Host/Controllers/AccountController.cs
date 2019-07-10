@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using IdentityModel;
+using IdentityServer4;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
@@ -30,7 +31,7 @@ namespace AuthServer.Host.Controllers
         }
 
         /// <summary>
-        /// 该方法提示在下一个版本被弃用
+        /// DiscoveryClient方法提示在下一个版本被弃用，scope传递offline_access，可得到refresh_token值
         /// </summary>
         /// <param name="login"></param>
         /// <returns></returns>
@@ -48,7 +49,7 @@ namespace AuthServer.Host.Controllers
             await ReplaceEmailToUsernameOfInputIfNeeds(login);
 
             var tokenClient = new TokenClient(dico.TokenEndpoint, _configuration["AuthServer:ClientId"], _configuration["AuthServer:ClientSecret"]);
-            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(login.UserNameOrEmailAddress, login.Password, "IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService");
+            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(login.UserNameOrEmailAddress, login.Password, "offline_access IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService");
             if (tokenresp.IsError)
             {
                 Console.WriteLine(tokenresp.Error);
@@ -86,7 +87,7 @@ namespace AuthServer.Host.Controllers
         }
 
         /// <summary>
-        /// 官方支持获取AccessToken的写法
+        /// 官方支持获取AccessToken的写法，传递offline_access也得不到refresh_token,除了改类库源码GetAccessTokenAsync，直接返回tokenResponse
         /// </summary>
         /// <param name="login"></param>
         /// <returns></returns>
@@ -103,14 +104,12 @@ namespace AuthServer.Host.Controllers
                 GrantType = OidcConstants.GrantTypes.Password,
                 UserName = login.UserNameOrEmailAddress,
                 UserPassword = login.Password,
-                Scope = "IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService"
+                Scope = "offline_access IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService"
             };
 
             string token = await _authenticator.GetAccessTokenAsync(config);
-
+           
             return Json(new { code = 1, data = token });
         }
-
-
     }
 }
