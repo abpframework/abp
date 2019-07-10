@@ -33,16 +33,15 @@ namespace Volo.Abp.MailKit
         private static MailKitSmtpEmailSender CreateMailKitEmailSender()
         {
             var mailConfig = Substitute.For<ISmtpEmailSenderConfiguration>();
-            var mailKitConfig = Substitute.For<IAbpMailKitConfiguration>();
             var bgJob = Substitute.For<IBackgroundJobManager>();
 
-            mailConfig.GetHostAsync().Returns("stmp_server_name");
-            mailConfig.GetUserNameAsync().Returns("mail_server_user_name");
-            mailConfig.GetPasswordAsync().Returns("mail_server_password");
-            mailConfig.GetPortAsync().Returns(587);
-            mailConfig.GetEnableSslAsync().Returns(false);
+            mailConfig.GetHostAsync().Returns(Task.FromResult("stmp_server_name"));
+            mailConfig.GetUserNameAsync().Returns(Task.FromResult("mail_server_user_name"));
+            mailConfig.GetPasswordAsync().Returns(Task.FromResult("mail_server_password"));
+            mailConfig.GetPortAsync().Returns(Task.FromResult(587));
+            mailConfig.GetEnableSslAsync().Returns(Task.FromResult(false));
 
-            var mailSender = new MailKitSmtpEmailSender(mailConfig, bgJob, mailKitConfig);
+            var mailSender = new MailKitSmtpEmailSender(mailConfig, bgJob, null);
             return mailSender;
         }
     }

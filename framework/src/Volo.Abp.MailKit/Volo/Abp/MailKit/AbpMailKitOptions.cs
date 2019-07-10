@@ -2,8 +2,13 @@
 
 namespace Volo.Abp.MailKit
 {
-    public class AbpMailKitConfiguration : IAbpMailKitConfiguration
+    public class AbpMailKitOptions
     {
         public SecureSocketOptions? SecureSocketOption { get; set; }
+
+        public AbpMailKitOptions()
+        {
+            SecureSocketOption = null;
+        }
     }
 }

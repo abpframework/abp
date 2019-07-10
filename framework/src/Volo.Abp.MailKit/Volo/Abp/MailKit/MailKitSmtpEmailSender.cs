@@ -6,6 +6,7 @@ using Volo.Abp.Emailing;
 using Volo.Abp.Emailing.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using MimeKit;
 using Volo.Abp.Threading;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
@@ -15,16 +16,16 @@ namespace Volo.Abp.MailKit
     [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
     public class MailKitSmtpEmailSender : EmailSenderBase, IMailKitSmtpEmailSender
     {
-        protected IAbpMailKitConfiguration AbpMailKitConfiguration { get; }
+        protected AbpMailKitOptions AbpMailKitOptions { get; }
 
         protected ISmtpEmailSenderConfiguration SmtpConfiguration { get; }
 
         public MailKitSmtpEmailSender(ISmtpEmailSenderConfiguration smtpConfiguration,
             IBackgroundJobManager backgroundJobManager,
-            IAbpMailKitConfiguration abpMailKitConfiguration)
+            IOptions<AbpMailKitOptions> abpMailKitConfiguration)
             : base(smtpConfiguration, backgroundJobManager)
         {
-            AbpMailKitConfiguration = abpMailKitConfiguration;
+            AbpMailKitOptions = abpMailKitConfiguration.Value;
             SmtpConfiguration = smtpConfiguration;
         }
 
@@ -82,11 +83,12 @@ namespace Volo.Abp.MailKit
                 await SmtpConfiguration.GetPasswordAsync()
             );
         }
+
         protected virtual async Task<SecureSocketOptions> GetSecureSocketOption()
         {
-            if (AbpMailKitConfiguration.SecureSocketOption.HasValue)
+            if (AbpMailKitOptions.SecureSocketOption.HasValue)
             {
-                return AbpMailKitConfiguration.SecureSocketOption.Value;
+                return AbpMailKitOptions.SecureSocketOption.Value;
             }
 
             return await SmtpConfiguration.GetEnableSslAsync()
