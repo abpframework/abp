@@ -1,6 +1,6 @@
 ## Getting Started With the ASP.NET Core MVC Template
 
-This tutorials explains how to create a new ASP.NET Core MVC web application using the startup template, configure and run it.
+These tutorials explain how to create a new ASP.NET Core MVC web application using the startup template, configure and run it.
 
 ### Creating a New Project
 

@@ -19,7 +19,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
         public List<DashboardWidgetConfiguration> AvailableWidgets { get; }
 
         /// <summary>
-        /// Display name of the widget.
+        /// A list of Global Filters available for this dashboard.
+        /// </summary>
+        public List<DashboardGlobalFilterConfiguration> AvailableGlobalFilters { get; }
+
+        /// <summary>
+        /// Display name of the dashboard.
         /// </summary>
         [NotNull]
         public ILocalizableString DisplayName
@@ -37,11 +42,19 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
             DisplayName = displayName ?? new FixedLocalizableString(name);
 
             AvailableWidgets = new List<DashboardWidgetConfiguration>();
+            AvailableGlobalFilters = new List<DashboardGlobalFilterConfiguration>();
         }
 
         public DashboardDefinition WithWidget(string widgetName, WidgetLocation location = null, WidgetDimensions dimensions = null)
         {
             AvailableWidgets.Add( new DashboardWidgetConfiguration(widgetName, dimensions, location));
+
+            return this;
+        }
+
+        public DashboardDefinition WithGlobalFilter(string globalFilterName)
+        {
+            AvailableGlobalFilters.Add( new DashboardGlobalFilterConfiguration(globalFilterName));
 
             return this;
         }

@@ -51,5 +51,33 @@ namespace Volo.Abp.TenantManagement
                 return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
             }
         }
+
+        public TenantConfiguration Find(string name)
+        {
+            using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
+            {
+                var tenant = _tenantRepository.FindByName(name);
+                if (tenant == null)
+                {
+                    return null;
+                }
+
+                return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
+            }
+        }
+
+        public TenantConfiguration Find(Guid id)
+        {
+            using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
+            {
+                var tenant = _tenantRepository.Find(id);
+                if (tenant == null)
+                {
+                    return null;
+                }
+
+                return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
+            }
+        }
     }
 }

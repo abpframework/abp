@@ -7,8 +7,8 @@ namespace Volo.Abp.Cli.Commands
     {
         Task ExecuteAsync(CommandLineArgs commandLineArgs);
 
-        Task<string> GetUsageInfo();
+        string GetUsageInfo();
 
-        Task<string> GetShortDescriptionAsync();
+        string GetShortDescription();
     }
 }

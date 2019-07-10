@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Application.Services
@@ -24,7 +25,7 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : ICrudAppService<TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TCreateInput>
+        : ICrudAppService<TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
     {
 
@@ -35,14 +36,14 @@ namespace Volo.Abp.Application.Services
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
     {
-        TGetOutputDto Get(TKey id);
+        Task<TGetOutputDto> GetAsync(TKey id);
 
-        PagedResultDto<TGetListOutputDto> GetList(TGetListInput input);
+        Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input);
 
-        TGetOutputDto Create(TCreateInput input);
+        Task<TGetOutputDto> CreateAsync(TCreateInput input);
 
-        TGetOutputDto Update(TKey id, TUpdateInput input);
+        Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input);
 
-        void Delete(TKey id);
+        Task DeleteAsync(TKey id);
     }
 }

@@ -18,13 +18,13 @@ namespace Volo.Abp.Features
 
         protected FeatureOptions Options { get; }
 
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
         public FeatureDefinitionManager(
             IOptions<FeatureOptions> options,
-            IServiceProvider serviceProvider)
+            IServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
+            _serviceScopeFactory = serviceScopeFactory;
             Options = options.Value;
 
             _lazyFeatureDefinitions = new Lazy<Dictionary<string, FeatureDefinition>>(
@@ -98,7 +98,7 @@ namespace Volo.Abp.Features
         {
             var context = new FeatureDefinitionContext();
 
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var providers = Options
                     .DefinitionProviders
