@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using DashboardDemo.EntityFrameworkCore;
+using DashboardDemo.GlobalFilters;
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Menus;
 using DashboardDemo.Pages;
@@ -75,6 +76,7 @@ namespace DashboardDemo
             var configuration = context.Services.GetConfiguration();
 
             ConfigureWidgets();
+            ConfigureGlobalFilters();
             ConfigureDashboards();
             ConfigureDatabaseServices();
             ConfigureAutoMapper();
@@ -90,6 +92,14 @@ namespace DashboardDemo
             Configure<WidgetOptions>(options =>
             {
                 options.Widgets.AddRange(WidgetDefinitionProvider.GetDefinitions());
+            });
+        }
+
+        private void ConfigureGlobalFilters()
+        {
+            Configure<GlobalFilterOptions>(options =>
+            {
+                options.GlobalFilters.AddRange(GlobalFilterDefinitionProvider.GetDefinitions());
             });
         }
 

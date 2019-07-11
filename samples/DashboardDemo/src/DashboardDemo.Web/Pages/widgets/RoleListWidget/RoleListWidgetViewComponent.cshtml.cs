@@ -11,7 +11,7 @@ namespace DashboardDemo.Pages.widgets
 
         public IViewComponentResult Invoke()
         {
-            return View("/Pages/widgets/RoleListWidgetViewComponent.cshtml", new RoleListWidgetViewComponent());
+            return View("/Pages/widgets/RoleListWidget/RoleListWidgetViewComponent.cshtml", new RoleListWidgetViewComponent());
         }
     }
 }

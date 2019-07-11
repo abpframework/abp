@@ -7,7 +7,7 @@ using Volo.Abp.Application.Services;
 
 namespace DashboardDemo
 {
-    public class UserStatisticAppService : ApplicationService, IUserStatisticAppService
+    public class DemoStatisticAppService : ApplicationService, IDemoStatisticAppService
     {
         public async Task<NewUserPerDayStatisticDto> GetNewUserPerDayStatistic()
         {
@@ -17,6 +17,16 @@ namespace DashboardDemo
                 .ToArray();
 
             return new NewUserPerDayStatisticDto{Data = data};
+        }
+
+        public async Task<MonthlyProfitStatisticDto> GetMonthlyProfitStatistic()
+        {
+            var data = Enumerable
+                .Repeat(0, 12)
+                .Select(i => new Random().Next(-20, 40))
+                .ToArray();
+
+            return new MonthlyProfitStatisticDto { Data = data };
         }
     }
 }

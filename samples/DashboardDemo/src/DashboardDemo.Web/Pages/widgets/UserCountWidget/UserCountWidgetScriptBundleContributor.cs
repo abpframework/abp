@@ -1,4 +1,5 @@
 using DashboardDemo.Pages.widgets.Chartjs;
+using DashboardDemo.Pages.widgets.Filters;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
@@ -9,11 +10,12 @@ namespace DashboardDemo.Pages.widgets
     [DependsOn(typeof(JQueryScriptContributor))]
     [DependsOn(typeof(ClipboardScriptBundleContributor))]
     [DependsOn(typeof(ChartjsScriptContributor))]
+    [DependsOn(typeof(RefreshGlobalFilterScriptContributor))]
     public class UserCountWidgetScriptBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/UserCountWidget.js");
+            context.Files.Add("/Pages/widgets/UserCountWidget/UserCountWidget.js");
         }
     }
 }

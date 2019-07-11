@@ -6,7 +6,7 @@ namespace DashboardDemo.Pages.widgets
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/RoleListWidget.css");
+            context.Files.Add("/Pages/widgets/RoleListWidget/RoleListWidget.css");
         }
     }
 }

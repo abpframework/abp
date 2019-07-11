@@ -9,7 +9,7 @@ namespace DashboardDemo.Pages.widgets
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/RoleListWidget.js");
+            context.Files.Add("/Pages/widgets/RoleListWidget/RoleListWidget.js");
         }
     }
 }

@@ -1,17 +1,15 @@
 ﻿(function ($) {
     var $container = $('#UserCountWidgetContainer');
     if ($container.length > 0) {
+        var chart = {};
 
-        var _identityUserAppService = volo.abp.identity.identityUser;
-        _identityUserAppService.getList({}).then(function (result) {
-            $container.find('#UserCount').text(result.items.length);
-        });
+        var $DateRangeGlobalFilterContainer = $("#RefreshGlobalFilterContainer");
 
-        var createChart = function() {
-            dashboardDemo.userStatistic.getNewUserPerDayStatistic().then(function (result) {
-                console.log(result.data);
 
-                var chart = new Chart($container.find('#UserStatistics'), {
+        var createChart = function () {
+            dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
+
+                chart = new Chart($container.find('#UserStatistics'), {
                     type: 'bar',
                     data: {
                         labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', "Sun"],
@@ -33,6 +31,17 @@
                 });
             });
         };
+
+        if ($DateRangeGlobalFilterContainer.length > 0) {
+            $DateRangeGlobalFilterContainer.find('#GlobalRefreshButton').on('click',
+                function () {
+                    dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
+
+                        chart.data.datasets[0].data = result.data;
+                        chart.update();
+                    });
+                });
+        }
 
         createChart();
     }

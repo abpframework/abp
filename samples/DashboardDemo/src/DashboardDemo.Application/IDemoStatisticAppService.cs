@@ -6,8 +6,10 @@ using Volo.Abp.Application.Services;
 
 namespace DashboardDemo
 {
-    public interface IUserStatisticAppService : IApplicationService
+    public interface IDemoStatisticAppService : IApplicationService
     {
         Task<NewUserPerDayStatisticDto> GetNewUserPerDayStatistic();
+
+        Task<MonthlyProfitStatisticDto> GetMonthlyProfitStatistic();
     }
 }
