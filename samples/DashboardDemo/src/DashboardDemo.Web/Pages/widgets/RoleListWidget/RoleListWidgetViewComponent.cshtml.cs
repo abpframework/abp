@@ -5,7 +5,7 @@ namespace DashboardDemo.Pages.widgets
     [ViewComponent]
     public class RoleListWidgetViewComponent : ViewComponent
     {
-        public const string WidgetName = "RoleListWidget";
+        public const string Name = "RoleListWidget";
 
         public const string DisplayName = "RoleListWidgets";
 

@@ -1,5 +1,5 @@
 ﻿(function ($) {
-    var $container = $('#RefreshGlobalFilterContainer');
+    var $container = $('#DateRangeGlobalFilterContainer');
     if ($container.length > 0) {
 
     }

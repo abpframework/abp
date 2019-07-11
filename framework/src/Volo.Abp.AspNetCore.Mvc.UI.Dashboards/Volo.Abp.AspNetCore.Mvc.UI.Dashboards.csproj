@@ -18,14 +18,17 @@
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\Dashboards\Components\**\*.cshtml" />
     <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\Dashboards\Components\**\*.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\Dashboards\_ViewImports.cshtml" />
+    <EmbeddedResource Include="Pages\Components\Dashboard\*.js" />
+    <Content Remove="Pages\Components\Dashboard\*.js" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\Dashboards\_ViewImports.cshtml" />
+    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\Dashboards\_ViewImports.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Volo\Abp\AspNetCore\Mvc\UI\Dashboards\Components\Dashboard\Default.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

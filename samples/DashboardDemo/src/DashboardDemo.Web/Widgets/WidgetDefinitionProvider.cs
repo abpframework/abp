@@ -12,7 +12,7 @@ namespace DashboardDemo.Widgets
         public static List<WidgetDefinition> GetDefinitions()
         {
             var userCountWidget = new WidgetDefinition(
-                    UserCountWidgetViewComponent.WidgetName,
+                    UserCountWidgetViewComponent.Name,
                     LocalizableString.Create<DashboardDemoResource>(UserCountWidgetViewComponent.DisplayName),
                     typeof(UserCountWidgetViewComponent)
                 )
@@ -20,7 +20,7 @@ namespace DashboardDemo.Widgets
                 .AddRequiredPermission(IdentityPermissions.Users.Default);
 
             var monthlyProfitWidget = new WidgetDefinition(
-                    MonthlyProfitWidgetViewComponent.WidgetName,
+                    MonthlyProfitWidgetViewComponent.Name,
                     LocalizableString.Create<DashboardDemoResource>(MonthlyProfitWidgetViewComponent.DisplayName),
                     typeof(MonthlyProfitWidgetViewComponent)
                 )
@@ -28,7 +28,7 @@ namespace DashboardDemo.Widgets
                 .AddRequiredPermission(IdentityPermissions.Users.Default);
 
             var roleListWidget = new WidgetDefinition(
-                    RoleListWidgetViewComponent.WidgetName,
+                    RoleListWidgetViewComponent.Name,
                     LocalizableString.Create<DashboardDemoResource>(RoleListWidgetViewComponent.DisplayName),
                     typeof(RoleListWidgetViewComponent)
                 )

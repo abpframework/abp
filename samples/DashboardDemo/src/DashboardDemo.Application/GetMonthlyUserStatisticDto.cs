@@ -1,6 +1,6 @@
 ﻿namespace DashboardDemo
 {
-    public class MonthlyProfitStatisticDto
+    public class GetMonthlyUserStatisticDto
     {
         public string[] Labels { get; set; }
 

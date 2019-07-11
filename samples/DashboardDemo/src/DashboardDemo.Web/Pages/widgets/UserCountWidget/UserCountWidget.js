@@ -3,18 +3,14 @@
     if ($container.length > 0) {
         var chart = {};
 
-        var $DateRangeGlobalFilterContainer = $("#RefreshGlobalFilterContainer");
-
-
         var createChart = function () {
-            dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
-
+            dashboardDemo.demoStatistic.getMonthlyUserStatistic({}).then(function (result) {
                 chart = new Chart($container.find('#UserStatistics'), {
                     type: 'bar',
                     data: {
-                        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', "Sun"],
+                        labels: result.labels,
                         datasets: [{
-                            label: 'Avarage new user per day',
+                            label: 'Monthly user count',
                             data: result.data,
                             backgroundColor: 'rgba(255, 99, 132, 0.2)'
                         }]
@@ -32,16 +28,20 @@
             });
         };
 
-        if ($DateRangeGlobalFilterContainer.length > 0) {
-            $DateRangeGlobalFilterContainer.find('#GlobalRefreshButton').on('click',
-                function () {
-                    dashboardDemo.demoStatistic.getNewUserPerDayStatistic().then(function (result) {
-
-                        chart.data.datasets[0].data = result.data;
+            $(document).on('RefreshWidgets',
+                function (event, filters) {
+                    dashboardDemo.demoStatistic.getMonthlyUserStatistic({ startDate: filters.startDate, endDate: filters.endDate }).then(function (result) {
+                        chart.data= {
+                            labels: result.labels,
+                                datasets: [{
+                                label: 'Monthly user count',
+                                data: result.data,
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)'
+                            }]
+                        },
                         chart.update();
                     });
                 });
-        }
 
         createChart();
     }
