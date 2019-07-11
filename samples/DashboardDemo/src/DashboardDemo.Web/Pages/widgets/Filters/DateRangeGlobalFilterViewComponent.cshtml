@@ -5,7 +5,15 @@
 @{
 }
 <div id="DateRangeGlobalFilterContainer">
-    <input type="date" id="StartDate" name="StartDate"/>
-    <input type="date" id="EndDate" name="EndDate"/>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="DateFilterStartDateInput">@L["Start Date"].Value</label>
+            <input class="form-control" type="date" name="StartDate" id="DateFilterStartDateInput">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="DateFilterEndDateInput">@L["End Date"].Value</label>
+            <input class="form-control" type="date" name="EndDate" id="EndDateStartDateInput">
+        </div>
+    </div>
 </div>
 
