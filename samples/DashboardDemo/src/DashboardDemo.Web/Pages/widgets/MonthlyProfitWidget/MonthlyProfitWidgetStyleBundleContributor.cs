@@ -8,7 +8,6 @@ using Volo.Abp.Modularity;
 namespace DashboardDemo.Pages.widgets
 {
     [DependsOn(typeof(BootstrapStyleContributor))]
-    [DependsOn(typeof(HighlightJsStyleContributor))]
     [DependsOn(typeof(ChartjsStyleContributor))]
     public class MonthlyProfitWidgetStyleBundleContributor : BundleContributor
     {

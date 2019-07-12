@@ -8,7 +8,6 @@ using Volo.Abp.Modularity;
 namespace DashboardDemo.Pages.widgets
 {
     [DependsOn(typeof(JQueryScriptContributor))]
-    [DependsOn(typeof(ClipboardScriptBundleContributor))]
     [DependsOn(typeof(ChartjsScriptContributor))]
     public class MonthlyProfitWidgetScriptBundleContributor : BundleContributor
     {
