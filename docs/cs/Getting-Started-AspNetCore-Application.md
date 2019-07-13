@@ -1,30 +1,30 @@
-﻿# Getting Started ABP With AspNet Core MVC Web Application
+﻿# Začínáme s ASP.NET Core MVC aplikací
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with the **[startup template](Getting-Started-AspNetCore-MVC-Template.md)**.
+Tento tutoriál vysvětluje jak začít s ABP z ničeho s minimem závislostí. Obvykle chcete začít se **[startovací šablonou](https://abp.io/Templates)**.
 
-## Create A New Project
+## Tvorba nového projektu
 
-1. Create a new empty AspNet Core Web Application from Visual Studio:
+1. Vytvořte novou prázdnou AspNet Core Web aplikaci ve Visual Studio:
 
 ![](images/create-new-aspnet-core-application.png)
 
-2. Select Empty Template
+2. Zvolte prázdnou šablonu
 
 ![](images/select-empty-web-application.png)
 
-You could select another template, but I want to show it from a clear project.
+Můžete zvolit i jinou šablonu, ale pro demonstraci je lepší čístý projekt.
 
-## Install Volo.Abp.AspNetCore.Mvc Package
+## Instalace Volo.Abp.AspNetCore.Mvc balíku
 
-Volo.Abp.AspNetCore.Mvc is AspNet Core MVC integration package for ABP. So, install it to your project:
+Volo.Abp.AspNetCore.Mvc je AspNet Core MVC integrační balík pro ABP. Takže ho nainstalujeme do projektu:
 
 ````
 Install-Package Volo.Abp.AspNetCore.Mvc
 ````
 
-## Create First ABP Module
+## Tvorba prvního ABP modulu
 
-ABP is a modular framework and it requires a **startup (root) module** class derived from ``AbpModule``:
+ABP je modulární framework a proto vyžaduje **spouštěcí (kořenový) modul** což je třída dědící z ``AbpModule``:
 
 ````C#
 using Microsoft.AspNetCore.Builder;
@@ -56,15 +56,15 @@ namespace BasicAspNetCoreApplication
 }
 ````
 
-``AppModule`` is a good name for the startup module for an application.
+``AppModule`` je dobrý název pro spouštěcí modul aplikace.
 
-ABP packages define module classes and a module can depend on another module. In the code above, our ``AppModule`` depends on ``AbpAspNetCoreMvcModule`` (defined by Volo.Abp.AspNetCore.Mvc package). It's common to add a ``DependsOn`` attribute after installing a new ABP nuget package.
+ABP balíky definují modulové třídy a modul může mít závislost na jiný modul. V kódu výše, náš ``AppModule`` má závislost na ``AbpAspNetCoreMvcModule`` (definován v balíku Volo.Abp.AspNetCore.Mvc). Je běžné přidat ``DependsOn`` atribute po instalaci nového ABP NuGet balíku.
 
-Instead of Startup class, we are configuring ASP.NET Core pipeline in this module class.
+Místo třídy Startup, konfigurujeme ASP.NET Core pipeline v této modulové třídě.
 
-## The Startup Class
+## Třída Startup
 
-Next step is to modify Startup class to integrate to ABP module system:
+V dalším kroku upravíme Startup třídu k integraci ABP modulového systému:
 
 ````C#
 using System;
@@ -91,13 +91,13 @@ namespace BasicAspNetCoreApplication
 
 ````
 
-Changed ``ConfigureServices`` method to return ``IServiceProvider`` instead of ``void``. This change allows us to replace AspNet Core's Dependency Injection with another framework (see Autofac integration section below). ``services.AddApplication<AppModule>()`` adds all services defined in all modules beginning from the ``AppModule``.
+Změnili jsme metodu ``ConfigureServices`` aby vracela ``IServiceProvider`` místo ``void``. Tato změna nám dovoluje nahradit AspNet Core vkládání závislostí za jiný framework (více v sekci Autofac integrace níže). ``services.AddApplication<AppModule>()`` přidává všechny služby definované ve všech modulech počínaje ``AppModule``.
 
-``app.InitializeApplication()`` call in ``Configure`` method initializes and starts the application.
+Volání ``app.InitializeApplication()`` v metodě ``Configure`` inicializuje a spustí aplikaci.
 
-## Hello World!
+## Ahoj světe!
 
-The application above does nothing. Let's create an MVC controller does something:
+Aplikace výše zatím nic nedělá. Pojďme proto vytvořit MVC controller, který už něco dělá:
 
 ````C#
 using Microsoft.AspNetCore.Mvc;
@@ -116,43 +116,43 @@ namespace BasicAspNetCoreApplication.Controllers
 
 ````
 
-If you run the application, you will see a "Hello World!" message on the page.
+Jakmile spustíte aplikaci, uvidíte na stránce zprávu "Hello World!".
 
-Derived ``HomeController`` from ``AbpController`` instead of standard ``Controller`` class. This is not required, but ``AbpController`` class has useful base properties and methods to make your development easier.
+Odvození ``HomeController`` od ``AbpController`` místo standardní třídy ``Controller``. Toto není vyžadováno, ale třída ``AbpController`` má užitečné základní vlastnosti a metody, které usnadňují vývoj.
 
-## Using Autofac as the Dependency Injection Framework
+## Použití Autofac jako frameworku pro vkládání závislostí
 
-While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, Autofac provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
+Ačkoliv je AspNet Core systém pro vkládání závíslostí (DI) skvělý pro základní požadavky, Autofac poskytuje pokročilé funkce jako injekce vlastností nebo záchyt metod, které jsou v ABP užity k provádění pokročilých funkcí frameworku.
 
-Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
+Nahrazení AspNet Core DI systému za Autofac a integrace s ABP je snadná.
 
-1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
+1. Nainstalujeme [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) balík
 
 ````
 Install-Package Volo.Abp.Autofac
 ````
 
-2. Add ``AbpAutofacModule`` Dependency
+2. Přidáme ``AbpAutofacModule`` závislost
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
-[DependsOn(typeof(AbpAutofacModule))] //Add dependency to ABP Autofac module
+[DependsOn(typeof(AbpAutofacModule))]  // Přidá závislost na AbpAutofacModule
 public class AppModule : AbpModule
 {
     ...
 }
 ````
 
-3. Change ``services.AddApplication<AppModule>();`` line in the ``Startup`` class as shown below:
+3. Změníme řádek ``services.AddApplication<AppModule>();`` v třídě ``Startup`` následovně:
 
 ````C#
 services.AddApplication<AppModule>(options =>
 {
-    options.UseAutofac(); //Integrate to Autofac
+    options.UseAutofac(); // Integrace s Autofac
 });
 ````
 
-4. Update `Program.cs` to not use the `WebHost.CreateDefaultBuilder()` method since it uses the default DI container:
+4. Upravíme `Program.cs` aby nepoužíval metodu `WebHost.CreateDefaultBuilder()` jelikož ta používá výchozí DI kontejner:
 
 ````csharp
 public class Program
@@ -180,7 +180,7 @@ public class Program
 }
 ````
 
-## Source Code
+## Zdrojový kód
 
-Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).
+Získejte zdrojový kód vzorového projektu vytvořeného v tomto tutoriálů [z tohoto odkazu](https://github.com/abpframework/abp/tree/master/samples/BasicAspNetCoreApplication).
 

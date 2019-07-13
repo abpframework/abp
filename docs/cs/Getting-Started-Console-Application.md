@@ -1,24 +1,24 @@
-﻿# Getting Started ABP With Console Application
+﻿# Začínáme s konzolovou aplikací
 
-This tutorial explains how to start ABP from scratch with minimal dependencies. You generally want to start with a **[startup template](https://abp.io/Templates)**.
+Tento tutoriál vysvětluje jak začít s ABP z ničeho s minimem závislostí. Obvykle chcete začít se **[startovací šablonou](https://abp.io/Templates)**.
 
-## Create A New Project
+## Tvorba nového projektu
 
-Create a new Regular .Net Core Console Application from Visual Studio:
+Vytvořte regulérní .NET Core konzolovou aplikaci z Visual Studio:
 
 ![](images/create-new-net-core-console-application.png)
 
-## Install Volo.Abp Package
+## Instalace Volo.Abp balíku
 
-Volo.Abp.Core is the core nuget package to create ABP based applications. So, install it to your project:
+Volo.Abp.Core je základní NuGet balík k tvorbě aplikací založených na ABP. Takže ho nainstalujeme do projektu:
 
 ````
 Install-Package Volo.Abp.Core
 ````
 
-## Create First ABP Module
+## Tvorba prvního ABP modulu
 
-ABP is a modular framework and it requires a **startup (root) module** class derived from ``AbpModule``:
+ABP je modulární framework a proto vyžaduje **spouštěcí (kořenový) modul** což je třída dědící z ``AbpModule``:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -33,11 +33,11 @@ namespace AbpConsoleDemo
 }
 ````
 
-``AppModule`` is a good name for the startup module for an application.
+``AppModule`` je dobrý název pro spouštěcí modul aplikace.
 
-## Initialize The Application
+## Inicializace aplikace
 
-The next step is to bootstrap the application using the startup module created above:
+Dalším krokem je bootstrap aplikace pomocí spouštěcího modulu vytvořeného výše:
 
 ````C#
 using System;
@@ -62,11 +62,11 @@ namespace AbpConsoleDemo
 
 ````
 
-``AbpApplicationFactory`` is used to create the application and load all modules taking ``AppModule`` as the startup module. ``Initialize()`` method starts the application.
+``AbpApplicationFactory`` se používá k vytvoření aplikace a načtení všech modulů, s využitím ``AppModule`` jako spouštěcím modulem. ``Initialize()`` metoda spouští aplikaci.
 
-## Hello World!
+## Ahoj světe!
 
-The application above does nothing. Let's create a service that does something:
+Aplikace výše zatím nic nedělá. Pojďme proto vytvořit službu která už něco dělá:
 
 ````C#
 using System;
@@ -85,9 +85,9 @@ namespace AbpConsoleDemo
 
 ````
 
-``ITransientDependency`` is a special interface of ABP that automatically registers the service as transient (see [dependency injection document](Dependency-Injection.md)).
+``ITransientDependency`` je speciální rozhraní ABP, které automaticky registruje službu jako přechodnou (více v [dokumentu vkládání závislostí](Dependency-Injection.md)).
 
-Now, we can resolve the ``HelloWorldService`` and say hello. Change the Program.cs as shown below:
+Nyní můžeme vyřešit ``HelloWorldService`` a vypsat naše ahoj. Změníme Program.cs podle vyobrazení níže:
 
 ````C#
 using System;
@@ -104,7 +104,7 @@ namespace AbpConsoleDemo
             {
                 application.Initialize();
 
-                //Resolve a service and use it
+                // Vyřeší službu a použije ji
                 var helloWorldService = 
                     application.ServiceProvider.GetService<HelloWorldService>();
                 helloWorldService.SayHello();
@@ -117,31 +117,31 @@ namespace AbpConsoleDemo
 }
 ````
 
-While it's enough for this simple code example, it's always suggested to create scopes in case of directly resolving dependencies from ``IServiceProvider`` (see the [Dependency Injection documentation](Dependency-Injection.md)).
+I když je to dostačující pro tento jednoduchý príklad kódu, je vždy lepší v případě přímého řešení závislostí z ``IServiceProvider`` vytvořit rámce (více v [dokumentu vkládání závislostí](Dependency-Injection.md)).
 
-## Using Autofac as the Dependency Injection Framework
+## Využití Autofac jako frameworku pro vkládání závislostí
 
-While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, Autofac provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
+Ačkoliv je AspNet Core systém pro vkládání závíslostí (DI) skvělý pro základní požadavky, Autofac poskytuje pokročilé funkce jako injekce vlastností nebo záchyt metod, které jsou v ABP užity k provádění pokročilých funkcí frameworku.
 
-Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
+Nahrazení AspNet Core DI systému za Autofac a integrace s ABP je snadná.
 
-1. Install [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) package
+1. Nainstalujeme [Volo.Abp.Autofac](https://www.nuget.org/packages/Volo.Abp.Autofac) balík
 
 ```
 Install-Package Volo.Abp.Autofac
 ```
 
-1. Add ``AbpAutofacModule`` Dependency
+1. Přidáme ``AbpAutofacModule`` závislost
 
 ```c#
-[DependsOn(typeof(AbpAutofacModule))] //Add dependency to the AbpAutofacModule
+[DependsOn(typeof(AbpAutofacModule))] // Přidá závislost na AbpAutofacModule
 public class AppModule : AbpModule
 {
     
 }
 ```
 
-1. Change ``Program.cs`` file as shown below:
+1. Změníme soubor ``Program.cs`` podle vyobrazení níže:
 
 ```c#
 using System;
@@ -156,12 +156,12 @@ namespace AbpConsoleDemo
         {
             using (var application = AbpApplicationFactory.Create<AppModule>(options =>
             {
-                options.UseAutofac(); //Autofac integration
+                options.UseAutofac(); // Autofac integrace
             }))
             {
                 application.Initialize();
 
-                //Resolve a service and use it
+                // Vyřeší službu a použije ji
                 var helloWorldService = 
                     application.ServiceProvider.GetService<HelloWorldService>();
                 helloWorldService.SayHello();
@@ -174,8 +174,8 @@ namespace AbpConsoleDemo
 }
 ```
 
-Just called `options.UseAutofac()` method in the `AbpApplicationFactory.Create` options.
+Stačí volat metodu `options.UseAutofac()` v možnostech `AbpApplicationFactory.Create`.
 
-## Source Code
+## Zdrojový kód
 
-Get source code of the sample project created in this tutorial from [here](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication).
+Získejte zdrojový kód vzorového projektu vytvořeného v tomto tutoriálů [z tohoto odkazu](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication).

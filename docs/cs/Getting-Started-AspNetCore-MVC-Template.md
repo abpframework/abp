@@ -1,47 +1,47 @@
-## Getting Started With the ASP.NET Core MVC Template
+## Začínáme s ASP.NET Core MVC šablonou
 
-This tutorials explains how to create a new ASP.NET Core MVC web application using the startup template, configure and run it.
+Tento tutoriál vysvětluje, jak vytvořit novou ASP.NET Core MVC webovou aplikaci pomocí úvodní šablony, jak ji nakonfigurovat a spustit.
 
-### Creating a New Project
+### Tvorba nového projektu
 
-This tutorial uses **ABP CLI** to create a new project. See the [Get Started](https://abp.io/get-started) page for other options.
+Tento tutoriál používá k tvorbě nového projektu **ABP CLI**. Podívejte se na stránku [Začínáme](https://abp.io/get-started) pro více možností.
 
-Install the ABP CLI using a command line window, if you've not installed before:
+Pokud ještě nemáte ABP CLI nainstalováno, učiňte tak pomocí okna příkazového řádku:
 
 ````bash
 dotnet tool install -g Volo.Abp.Cli
 ````
 
-Use `abp new` command in an empty folder to create your project:
+K tvorbě vašeho projektu použijte příkaz `abp new` v prázdné složce:
 
 ````bash
 abp new Acme.BookStore
 ````
 
-> You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.
+> Můžete použít různé úrovně jmenných prostorů; např. BookStore, Acme.BookStore nebo Acme.Retail.BookStore.
 
-`new` command creates a **layered MVC application** with **Entity Framework Core** as the database provider. However, it has additional options. See the [CLI documentation](CLI.md) for all available options.
+Příkaz `new` vytvoří **vrstvenou MVC aplikaci** s **Entity Framework Core** jako databázovým poskytovatelem. Jsou zde však i jiné možnosti. Podívejte se na [CLI dokumnentaci](CLI.md) pro všechny další možností.
 
-#### Pre Requirements
+#### Požadavky
 
-The created solution requires;
+Vytvořené řešení vyžaduje;
 
 * [Visual Studio 2017 (v15.9.0+)](https://visualstudio.microsoft.com/tr/downloads/)
 * [.NET Core 2.2+](https://www.microsoft.com/net/download/dotnet-core/)
 
-### The Solution Structure
+### Struktura řešení
 
-Open the solution in **Visual Studio**:
+Otevřete řešení ve **Visual Studio**:
 
 ![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
 
-The solution has a layered structure (based on [Domain Driven Design](Domain-Driven-Design.md)) and contains unit & integration test projects properly configured to work with **EF Core** & **SQLite in-memory** database.
+Řešení má vrstvenou strukturu (založenou na [Domain Driven Design](Domain-Driven-Design.md)) a obsahuje projekty jednotkovových a integračních testů předkonfigurované pro práci s **EF Core** & **SQLite in-memory** databází.
 
-> See [MVC application template document](Startup-Templates/Mvc.md) to understand the solution structure in details.
+> Podívejte se na [dokument šablony MVC aplikace](Startup-Templates/Mvc.md) k detailnímu pochopení struktury řešení.
 
-### Database Connection String
+### Connection string databáze
 
-Check the **connection string** in the `appsettings.json` file under the `.Web` project:
+Zkontrolujte **connection string** v souboru `appsettings.json` v projektu `.Web`:
 
 ````json
 {
@@ -51,52 +51,52 @@ Check the **connection string** in the `appsettings.json` file under the `.Web` 
 }
 ````
 
-The solution is configured to use **Entity Framework Core** with **MS SQL Server**. EF Core supports [various](https://docs.microsoft.com/en-us/ef/core/providers/) database providers, so you can use another DBMS if you want. Change the connection string if you need.
+Řešení je nakonfigurováno k používání **Entity Framework Core** s **MS SQL Server**. EF Core podporuje [různé](https://docs.microsoft.com/en-us/ef/core/providers/) databázové poskytovatele, takže můžete použít i jiné DBMS. V případě potřeby změňte connection string.
 
-### Create Database & Apply Database Migrations
+### Tvorba databáze & aplikace databázových migrací
 
-You have two options to create the database.
+K vytvoření databáze máte dvě možnosti.
 
-#### Using the DbMigrator Application
+#### Použití DbMigrator aplikace
 
-The solution contains a console application (named `Acme.BookStore.DbMigrator` in this sample) that can create database, apply migrations and seed initial data. It is useful on development as well as on production environment.
+Řešení obsahuje konzolovou aplikaci (v tomto příkladu nazvanou `Acme.BookStore.DbMigrator`), která může vytvářet databáze, aplikovat migrace a vkládat seed data. Je užitečná jak pro vývojové, tak pro produkční prostředí.
 
-> `.DbMigrator` project has its own `appsettings.json`. So, if you have changed the connection string above, you should also change this one.
+> Projekt `.DbMigrator` má vlastní `appsettings.json`. Takže pokud jste změnili connection string uvedený výše, musíte změnit také tento.
 
-Right click to the `.DbMigrator` project and select **Set as StartUp Project**:
+Klikněte pravým na projekt `.DbMigrator` a vyberte **Set as StartUp Project**:
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 
-Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown below:
+Zmáčkněte F5 (nebo Ctrl+F5) ke spuštění aplikace. Výstup bude vypadat následovně:
 
 ![set-as-startup-project](images/db-migrator-app.png)
 
-#### Using EF Core Update-Database Command
+#### Použití EF Core Update-Database příkazu
 
-Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations. Right click to the `.Web` project and select **Set as StartUp Project**:
+Ef Core má `Update-Database` příkaz, který v případě potřeby vytvoří databázi a aplikuje čekající migrace. Klikněte pravým na projekt `.Web` a vyberte **Set as StartUp Project**:
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 
-Open the **Package Manager Console**, select `.EntityFrameworkCore.DbMigrations` project as the **Default Project** and run the `Update-Database` command:
+Otevřete **Package Manager Console**, vyberte projekt `.EntityFrameworkCore.DbMigrations` jako **Default Project** and spusťte příkaz `Update-Database`:
 
 ![pcm-update-database](images/pcm-update-database-v2.png)
 
-This will create a new database based on the configured connection string.
+Dojde k vytvoření nové databáze na základě nakonfigurovaného connection stringu.
 
-> Using the `.Migrator` tool is the suggested way, because it also seeds the initial data to be able to properly run the web application.
+> Použití nástroje `.Migrator` je doporučený způsob, jelikož zároveň vloží seed data nutné k správnému běhu webové aplikace.
 
-### Running the Application
+### Spuštění aplikace
 
-Ensure that the `.Web` project is the startup project. Run the application which will open the **home** page in your browser:
+Ujistěte se že je projekt `.Web` nastaven jako startovací projekt. Spusťte aplikaci což následně otevře **úvodní** stránku ve vašem prohlížeči:
 
 ![bookstore-homepage](images/bookstore-homepage.png)
 
-Click the **Login** button, enter `admin` as the username and `1q2w3E*` as the password to login to the application.
+Klikněte na tlačítko **Přihlásit**, vložte `admin` jako uživatelské jméno a `1q2w3E*` jako heslo k přihlášení do aplikace.
 
-The startup template includes the **identity management** and **tenant management** modules. Once you login, the Administration menu will be available where you can manage **tenants**, **roles**, **users** and their **permissions**. User management page is shown below:
+Startovací šabloná obsahuje **identity management** a **tenant management** moduly. Jakmile se přihlásite, budete mít přístup do nabídky Administrace, kde můžete spravovat **tenanty**, **role**, **uživatele** a jejich **oprávnění**. Správa uživatelů vypadá takto:
 
 ![bookstore-user-management](images/bookstore-user-management-v2.png)
 
-### What's Next?
+### Co dále?
 
-* [Application development tutorial](Tutorials/AspNetCore-Mvc/Part-I.md)
+* [Tutoriál vývoje aplikace](Tutorials/AspNetCore-Mvc/Part-I.md)
