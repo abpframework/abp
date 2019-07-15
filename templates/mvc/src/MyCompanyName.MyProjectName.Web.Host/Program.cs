@@ -21,7 +21,7 @@ namespace MyCompanyName.MyProjectName.Web
 #endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                .WriteTo.File("Logs/logs.txt")
+                .WriteTo.Async(c => c.File("Logs/logs.txt"))
                 .CreateLogger();
 
             try
