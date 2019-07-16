@@ -5,7 +5,7 @@ namespace DashboardDemo.Pages.widgets
 {
     public class MonthlyProfitWidgetViewComponent : AbpViewComponent
     {
-        public const string WidgetName = "MonthlyProfitWidget";
+        public const string Name = "MonthlyProfitWidget";
         
         public const string DisplayName = "Monthly Profit Widget";
 

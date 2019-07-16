@@ -2,11 +2,11 @@
 
 namespace DashboardDemo.Pages.widgets.Filters
 {
-    public class RefreshGlobalFilterScriptContributor : BundleContributor
+    public class DateRangeGlobalFilterScriptContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.Add("/Pages/widgets/Filters/RefreshGlobalFilter.js");
+            context.Files.Add("/Pages/widgets/Filters/DateRangeGlobalFilter.js");
         }
     }
 }

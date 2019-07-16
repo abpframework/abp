@@ -10,7 +10,6 @@ namespace DashboardDemo.Pages.widgets
     [DependsOn(typeof(JQueryScriptContributor))]
     [DependsOn(typeof(ClipboardScriptBundleContributor))]
     [DependsOn(typeof(ChartjsScriptContributor))]
-    [DependsOn(typeof(RefreshGlobalFilterScriptContributor))]
     public class UserCountWidgetScriptBundleContributor : BundleContributor
     {
         public override void ConfigureBundle(BundleConfigurationContext context)

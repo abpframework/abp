@@ -16,4 +16,7 @@
     <abp-script-bundle name="@DashboardNames.MyDashboard" />
 }
 
-@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard })
+<abp-card-body style="background: rgb(240,240,240)" class="p-4">
+    @await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard })
+</abp-card-body>
+

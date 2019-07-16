@@ -5,7 +5,7 @@ namespace DashboardDemo.Pages.widgets
 {
     public class UserCountWidgetViewComponent : AbpViewComponent
     {
-        public const string WidgetName = "UserCountWidget";
+        public const string Name = "UserCountWidget";
         
         public const string DisplayName = "UserCountWidgett";
 
