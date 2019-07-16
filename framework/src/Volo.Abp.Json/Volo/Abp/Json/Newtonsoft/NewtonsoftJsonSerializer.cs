@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Volo.Abp.DependencyInjection;
@@ -8,10 +9,12 @@ namespace Volo.Abp.Json.Newtonsoft
     public class NewtonsoftJsonSerializer : IJsonSerializer, ITransientDependency
     {
         private readonly AbpJsonIsoDateTimeConverter _dateTimeConverter;
+        private readonly AbpJsonOptions _abpJsonOptions;
 
-        public NewtonsoftJsonSerializer(AbpJsonIsoDateTimeConverter dateTimeConverter)
+        public NewtonsoftJsonSerializer(AbpJsonIsoDateTimeConverter dateTimeConverter, IOptions<AbpJsonOptions> abpJsonOptions)
         {
             _dateTimeConverter = dateTimeConverter;
+            _abpJsonOptions = abpJsonOptions.Value;
         }
 
         public string Serialize(object obj, bool camelCase = true, bool indented = false)
@@ -31,7 +34,7 @@ namespace Volo.Abp.Json.Newtonsoft
 
         protected virtual JsonSerializerSettings CreateSerializerSettings(bool camelCase = true, bool indented = false)
         {
-            var settings = new JsonSerializerSettings();
+            var settings = _abpJsonOptions.SerializerSettings;
 
             settings.Converters.Insert(0, _dateTimeConverter);
             
