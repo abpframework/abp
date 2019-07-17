@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Volo.Abp.MultiTenancy;
@@ -19,7 +20,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                 return null;
             }
 
-            return Convert.ToString(tenantId);
+            return WebUtility.UrlDecode(Convert.ToString(tenantId));
         }
     }
 }
