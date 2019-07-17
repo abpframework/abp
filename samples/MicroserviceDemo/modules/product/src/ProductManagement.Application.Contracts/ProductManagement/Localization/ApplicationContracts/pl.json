@@ -1,0 +1,10 @@
+{
+  "culture": "pl",
+  "texts": {
+    "Permission:ProductManagement": "Zarządzanie produktami",
+    "Permission:Products": "Produkty",
+    "Permission:Edit": "Edytuj",
+    "Permission:Delete": "Usuń",
+    "Permission:Create": "Utwórz"
+  }
+}

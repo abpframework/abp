@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
+    /* This class is needed for EF Core console commands
+     * (like Add-Migration and Update-Database commands) */
     public class BookStoreMigrationsDbContextFactory : IDesignTimeDbContextFactory<BookStoreMigrationsDbContext>
     {
         public BookStoreMigrationsDbContext CreateDbContext(string[] args)

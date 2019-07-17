@@ -28,7 +28,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
                 var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
                 if (accessToken != null)
                 {
-                    context.Client.SetBearerToken(accessToken);
+                    context.Request.SetBearerToken(accessToken);
                     return;
                 }
             }

@@ -6,16 +6,17 @@ using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
-namespace MyCompanyName.MyProjectName
+namespace MyCompanyName.MyProjectName.Web
 {
-    [DependsOn(typeof(MyProjectNameHttpApiModule))]
-    [DependsOn(typeof(AbpAspNetCoreMvcUiThemeSharedModule))]
-    [DependsOn(typeof(AbpAutoMapperModule))]
+    [DependsOn(
+        typeof(MyProjectNameHttpApiModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAutoMapperModule)
+        )]
     public class MyProjectNameWebModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -42,14 +43,16 @@ namespace MyCompanyName.MyProjectName
             {
                 options.Resources
                     .Get<MyProjectNameResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/MyProjectName");
+                    .AddBaseTypes(typeof(AbpUiResource))
+                    .AddVirtualJson("/Localization/MyProjectName/Web");
             });
 
             Configure<AbpAutoMapperOptions>(options =>
             {
+                /* Using `true` for the `validate` parameter to
+                 * validate the profile on application startup.
+                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more info
+                 * about the configuration validation. */
                 options.AddProfile<MyProjectNameWebAutoMapperProfile>(validate: true);
             });
 

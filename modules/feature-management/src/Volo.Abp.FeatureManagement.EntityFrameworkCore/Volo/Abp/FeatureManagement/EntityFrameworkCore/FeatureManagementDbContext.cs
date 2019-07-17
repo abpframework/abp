@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpFeatureManagement")]
+    [ConnectionStringName(FeatureManagementConsts.ConnectionStringName)]
     public class FeatureManagementDbContext : AbpDbContext<FeatureManagementDbContext>, IFeatureManagementDbContext
     {
         public static string TablePrefix { get; set; } = FeatureManagementConsts.DefaultDbTablePrefix;

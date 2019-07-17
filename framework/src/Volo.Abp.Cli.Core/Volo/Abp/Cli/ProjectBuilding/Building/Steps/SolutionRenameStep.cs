@@ -52,64 +52,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 if (_companyNamePlaceHolder != null && _companyName != null)
                 {
-                    RenameDirectoryRecursively(_companyNamePlaceHolder, _companyName);
-                    RenameAllFiles(_companyNamePlaceHolder, _companyName);
-                    ReplaceContent(_companyNamePlaceHolder, _companyName);
+                    RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
                 }
                 else if (_companyNamePlaceHolder != null)
                 {
-                    RenameDirectoryRecursively(_companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
-                    RenameAllFiles(_companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
-                    ReplaceContent(_companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
+                    RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
                 }
 
-                RenameDirectoryRecursively(_projectNamePlaceHolder, _projectName);
-                RenameAllFiles(_projectNamePlaceHolder, _projectName);
-                ReplaceContent(_projectNamePlaceHolder, _projectName);
-            }
-
-            private void RenameDirectoryRecursively(string placeHolder, string name)
-            {
-                foreach (var entry in _entries.Where(e => e.IsDirectory))
-                {
-                    if (entry.Name.Contains(placeHolder))
-                    {
-                        entry.SetName(entry.Name.Replace(placeHolder, name));
-                    }
-                }
-            }
-
-            private void RenameAllFiles(string placeHolder, string name)
-            {
-                foreach (var entry in _entries.Where(e => !e.IsDirectory))
-                {
-                    if (entry.Name.Contains(placeHolder))
-                    {
-                        entry.SetName(entry.Name.Replace(placeHolder, name));
-                    }
-                }
-            }
-
-            private void ReplaceContent(string placeHolder, string name)
-            {
-                foreach (var entry in _entries.Where(e => !e.IsDirectory))
-                {
-                    if (entry.Content.Length < placeHolder.Length)
-                    {
-                        continue;
-                    }
-
-                    if (entry.IsBinaryFile)
-                    {
-                        continue;
-                    }
-
-                    var newContent = entry.Content.Replace(placeHolder, name);
-                    if (newContent != entry.Content)
-                    {
-                        entry.SetContent(newContent);
-                    }
-                }
+                RenameHelper.RenameAll(_entries, _projectNamePlaceHolder, _projectName);
             }
         }
     }

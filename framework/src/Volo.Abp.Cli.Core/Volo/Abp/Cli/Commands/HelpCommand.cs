@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.DependencyInjection;
 
@@ -9,21 +13,70 @@ namespace Volo.Abp.Cli.Commands
     public class HelpCommand : IConsoleCommand, ITransientDependency
     {
         public ILogger<HelpCommand> Logger { get; set; }
+        protected CliOptions CliOptions { get; }
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
 
-        public HelpCommand()
+        public HelpCommand(IOptions<CliOptions> cliOptions,
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
+            ServiceScopeFactory = serviceScopeFactory;
             Logger = NullLogger<HelpCommand>.Instance;
+            CliOptions = cliOptions.Value;
         }
 
-        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            Logger.LogInformation("");
-            Logger.LogInformation("Usage:");
-            Logger.LogInformation("");
-            Logger.LogInformation("  abp <command> <target> [options]");
-            Logger.LogInformation("");
+            if (string.IsNullOrWhiteSpace(commandLineArgs.Target))
+            {
+                Logger.LogInformation(await GetUsageInfo());
+                return;
+            }
 
-            return Task.CompletedTask;
+            var commandType = CliOptions.Commands[commandLineArgs.Target];
+
+            using (var scope = ServiceScopeFactory.CreateScope())
+            {
+                var command = (IConsoleCommand) scope.ServiceProvider.GetRequiredService(commandType);
+                Logger.LogInformation(await command.GetUsageInfo());
+            }
+        }
+
+        public async Task<string> GetUsageInfo()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("");
+            sb.AppendLine("    abp <command> <target> [options]");
+            sb.AppendLine("");
+            sb.AppendLine("Command List:");
+
+            foreach (var command in CliOptions.Commands.ToArray())
+            {
+                string shortDescription;
+
+                using (var scope = ServiceScopeFactory.CreateScope())
+                {
+                    shortDescription = await ((IConsoleCommand)scope.ServiceProvider.GetRequiredService(command.Value))
+                        .GetShortDescriptionAsync();
+                }
+
+                sb.Append("    >");
+                sb.Append(command.Key);
+                sb.Append(string.IsNullOrWhiteSpace(shortDescription) ? "":":");
+                sb.Append(" ");
+                sb.AppendLine(shortDescription);
+            }
+
+            sb.AppendLine("");
+
+            return sb.ToString();
+        }
+
+        public Task<string> GetShortDescriptionAsync()
+        {
+            return Task.FromResult("");
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.Localization;
+﻿using Acme.BookStore.Localization;
+using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Razor.Internal;
-using Acme.BookStore.Localization.BookStore;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
-namespace Acme.BookStore.Pages
+namespace Acme.BookStore.Web.Pages
 {
     public abstract class BookStorePageBase : AbpPage
     {

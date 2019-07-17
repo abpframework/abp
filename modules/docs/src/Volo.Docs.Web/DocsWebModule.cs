@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -35,12 +37,19 @@ namespace Volo.Docs
                 options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
             });
 
+            var configuration = context.Services.GetConfiguration();
+
             Configure<RazorPagesOptions>(options =>
             {
-                //TODO: Make configurable!
-                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}");
+                var urlOptions = context.Services
+                    .GetRequiredServiceLazy<IOptions<DocsUrlOptions>>()
+                    .Value.Value;
 
-                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
+                var routePrefix = urlOptions.RoutePrefix;
+
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
             });
 
             Configure<AbpAutoMapperOptions>(options =>

@@ -88,7 +88,7 @@
 
         if (deleteCommentId != '' && deleteCommentId !== undefined) {
             abp.message.confirm(
-                l('PostDeletionWarningMessage'), // TODO: localize
+                l('PostDeletionWarningMessage'),
                 l('AreYouSure'),
                 function (isConfirmed) {
                     if (isConfirmed) {
@@ -97,16 +97,15 @@
                             url: "/Blog/Posts/Delete",
                             data: { id: deleteCommentId },
                             success: function () {
-                                window.location.replace('/Blog/' + blogShortName);
+                                var url = window.location.pathname;
+                                var postNameBeginning = url.lastIndexOf('/');
+                                window.location.replace(url.substring(0, postNameBeginning));
                             }
                         });
                     }
                 }
             );
         }
-    });
-    $('#DeletePostRouteLink').click(function (event) {
-        console.log("goooo");
     });
 
     $('.updateLink').click(function (event) {

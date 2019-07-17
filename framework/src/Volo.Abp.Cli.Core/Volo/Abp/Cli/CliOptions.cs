@@ -7,9 +7,15 @@ namespace Volo.Abp.Cli
     {
         public Dictionary<string, Type> Commands { get; }
 
-        public string AbpIoWwwUrlRoot { get; set; } = "https://abp.io/";
+        /// <summary>
+        /// Default value: true.
+        /// </summary>
+        public bool CacheTemplates { get; set; } = true;
 
-        public string AbpIoAccountUrlRoot { get; set; } = "https://account.abp.io/";
+        /// <summary>
+        /// Default value: "CLI".
+        /// </summary>
+        public string ToolName { get; set; } = "CLI";
 
         public CliOptions()
         {

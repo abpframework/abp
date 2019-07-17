@@ -1,11 +1,11 @@
 {
-  "version": "0.5.1",
+  "version": "0.6.5",
   "name": "@abp/popper.js",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.4.9",
+    "@abp/core": "^0.6.5",
     "popper.js": "^1.14.6"
   },
   "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"

@@ -252,4 +252,7 @@ paket-files/
 *.sln.iml
 
 # BookStore
-src/Acme.BookStore.Web/Logs/logs.txt
+src/Acme.BookStore.Web/Logs/*
+src/Acme.BookStore.Web.Host/Logs/*
+src/Acme.BookStore.IdentityServer/Logs/*
+src/Acme.BookStore.HttpApi.Host/Logs/*

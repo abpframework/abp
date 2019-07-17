@@ -17,8 +17,7 @@ $solutions = (
     "modules/background-jobs",
     "modules/blogging",
     "modules/docs",
-    "modules/client-simulation",
-    "abp_io"
+    "modules/client-simulation"
 )
 
 # List of projects
@@ -58,6 +57,7 @@ $projects = (
     "framework/src/Volo.Abp.Cli.Core",
     "framework/src/Volo.Abp.Cli",
     "framework/src/Volo.Abp.Core",
+    "framework/src/Volo.Abp.Dapper",
     "framework/src/Volo.Abp.Data",
     "framework/src/Volo.Abp.Ddd.Application",
     "framework/src/Volo.Abp.Ddd.Domain",
@@ -206,8 +206,5 @@ $projects = (
     
     # modules/client-simulation
     "modules/client-simulation/src/Volo.ClientSimulation",
-    "modules/client-simulation/src/Volo.ClientSimulation.Web",
-    
-    # abp_io/SolutionTemplating
-    "abp_io/src/Volo.Utils.SolutionTemplating"
+    "modules/client-simulation/src/Volo.ClientSimulation.Web"
 )

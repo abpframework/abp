@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}"
 EndProject
@@ -234,9 +234,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Specifications.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Cli.Core.Tests", "test\Volo.Abp.Cli.Core.Tests\Volo.Abp.Cli.Core.Tests.csproj", "{F006B0B4-F25D-4511-9FB3-F17AA44BDCEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Widgets", "src\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj", "{EE1AAB08-3FBD-487F-B0B4-BEBA4B69528A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Widgets", "src\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj", "{EE1AAB08-3FBD-487F-B0B4-BEBA4B69528A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.AspNetCore.Mvc.UI.Dashboards", "src\Volo.Abp.AspNetCore.Mvc.UI.Dashboards\Volo.Abp.AspNetCore.Mvc.UI.Dashboards.csproj", "{054D766D-5992-460E-A4D8-936D80BE2C1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.AspNetCore.Mvc.UI.Dashboards", "src\Volo.Abp.AspNetCore.Mvc.UI.Dashboards\Volo.Abp.AspNetCore.Mvc.UI.Dashboards.csproj", "{054D766D-5992-460E-A4D8-936D80BE2C1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ldap", "src\Volo.Abp.Ldap\Volo.Abp.Ldap.csproj", "{4DADBBD2-4C63-4C90-9661-EBF6252A7D6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ldap.Tests", "test\Volo.Abp.Ldap.Tests\Volo.Abp.Ldap.Tests.csproj", "{38FB8F75-426E-4265-8D0E-E121837B6FCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Dapper", "src\Volo.Abp.Dapper\Volo.Abp.Dapper.csproj", "{D863A3C3-CC1D-426F-BDD4-02E7AE2A3170}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Dapper.Tests", "test\Volo.Abp.Dapper.Tests\Volo.Abp.Dapper.Tests.csproj", "{E026A085-D881-4AE0-9F08-422AC3903BD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -708,6 +716,22 @@ Global
 		{054D766D-5992-460E-A4D8-936D80BE2C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{054D766D-5992-460E-A4D8-936D80BE2C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{054D766D-5992-460E-A4D8-936D80BE2C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DADBBD2-4C63-4C90-9661-EBF6252A7D6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DADBBD2-4C63-4C90-9661-EBF6252A7D6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DADBBD2-4C63-4C90-9661-EBF6252A7D6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DADBBD2-4C63-4C90-9661-EBF6252A7D6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38FB8F75-426E-4265-8D0E-E121837B6FCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38FB8F75-426E-4265-8D0E-E121837B6FCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38FB8F75-426E-4265-8D0E-E121837B6FCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38FB8F75-426E-4265-8D0E-E121837B6FCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D863A3C3-CC1D-426F-BDD4-02E7AE2A3170}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D863A3C3-CC1D-426F-BDD4-02E7AE2A3170}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D863A3C3-CC1D-426F-BDD4-02E7AE2A3170}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D863A3C3-CC1D-426F-BDD4-02E7AE2A3170}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E026A085-D881-4AE0-9F08-422AC3903BD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E026A085-D881-4AE0-9F08-422AC3903BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E026A085-D881-4AE0-9F08-422AC3903BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E026A085-D881-4AE0-9F08-422AC3903BD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -829,6 +853,10 @@ Global
 		{F006B0B4-F25D-4511-9FB3-F17AA44BDCEA} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{EE1AAB08-3FBD-487F-B0B4-BEBA4B69528A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{054D766D-5992-460E-A4D8-936D80BE2C1A} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{4DADBBD2-4C63-4C90-9661-EBF6252A7D6F} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{38FB8F75-426E-4265-8D0E-E121837B6FCC} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{D863A3C3-CC1D-426F-BDD4-02E7AE2A3170} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{E026A085-D881-4AE0-9F08-422AC3903BD7} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.TenantManagement.MongoDb
 {
-    [ConnectionStringName("AbpTenantManagement")]
+    [ConnectionStringName(AbpTenantManagementConsts.ConnectionStringName)]
     public interface ITenantManagementMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<Tenant> Tenants { get; }

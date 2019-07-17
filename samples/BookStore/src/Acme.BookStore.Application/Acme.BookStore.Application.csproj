@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
-    <PackageReference Include="Volo.Abp.Identity.Application" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Application" Version="0.16.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="0.16.0" />
+    <ProjectReference Include="..\Acme.BookStore.Application.Contracts\Acme.BookStore.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Identity.Application" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Application" Version="0.17.0.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="0.17.0.0" />
   </ItemGroup>
 
 </Project>

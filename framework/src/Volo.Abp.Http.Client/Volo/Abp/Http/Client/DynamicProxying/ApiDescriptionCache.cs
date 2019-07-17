@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -42,7 +43,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         {
             using (var client = _httpClientFactory.Create())
             {
-                var response = await client.GetAsync(baseUrl + "api/abp/api-definition");
+                var response = await client.GetAsync(baseUrl.EnsureEndsWith('/') + "api/abp/api-definition");
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new AbpException("Remote service returns error!");

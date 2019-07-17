@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using DashboardDemo.Dashboards;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,8 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Menus;
+using DashboardDemo.Pages;
 using DashboardDemo.Pages.widgets;
 using DashboardDemo.Permissions;
+using DashboardDemo.Widgets;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -16,6 +19,7 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
@@ -71,6 +75,7 @@ namespace DashboardDemo
             var configuration = context.Services.GetConfiguration();
 
             ConfigureWidgets();
+            ConfigureDashboards();
             ConfigureDatabaseServices();
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
@@ -84,8 +89,35 @@ namespace DashboardDemo
         {
             Configure<WidgetOptions>(options =>
             {
-                options.Widgets.Add(new WidgetDefinition("MyWidget", typeof(MyWidgetViewComponentModel),
-                    new LocalizableString(typeof(DashboardDemoResource), "MyWidgett")));
+                options.Widgets.AddRange(WidgetDefinitionProvider.GetDefinitions());
+            });
+        }
+
+        private void ConfigureDashboards()
+        {
+            Configure<DashboardOptions>(options =>
+            {
+                options.Dashboards.AddRange(DashboardDefinitionProvider.GetDefinitions());
+            });
+
+            Configure<BundlingOptions>(options =>
+            {
+                options.ScriptBundles.Add(DashboardNames.MyDashboard, configuration =>
+                    {
+                        configuration.AddContributors(typeof(MyDashboardScriptBundleContributor));
+                    });
+                options.ScriptBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+                {
+                    configuration.AddContributors(typeof(UserCountWidgetScriptBundleContributor));
+                });
+                options.StyleBundles.Add(DashboardNames.MyDashboard, configuration =>
+                    {
+                        configuration.AddContributors(typeof(MyDashboardStyleBundleContributor));
+                    });
+                options.StyleBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+                {
+                    configuration.AddContributors(typeof(UserCountWidgetStyleBundleContributor));
+                });
             });
         }
 
@@ -127,6 +159,7 @@ namespace DashboardDemo
                         typeof(AbpUiResource)
                     );
 
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
                 options.Languages.Add(new LanguageInfo("pt-BR", "pt-BR", "Português"));
                 options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));

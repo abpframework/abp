@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -123,9 +123,9 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual async Task<ModuleInfo> FindModuleInfoAsync(string moduleName)
         {
-            using (var client = new HttpClient())
+            using (var client = new CliHttpClient())
             {
-                var url = "https://localhost:44328/api/app/module/byName/?name=" + moduleName;
+                var url = $"{CliUrls.WwwAbpIo}api/app/module/byName/?name=" + moduleName;
 
                 var response = await client.GetAsync(url);
 

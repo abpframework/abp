@@ -19,7 +19,6 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                 return;
             }
 
-
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementPageOptions>>().Value;
             var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
             if (
@@ -42,7 +41,6 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                         icon: "fa fa-cog"
                     )
                 );
-            
         }
 
         private async Task<bool> CheckAnyOfPagePermissionsGranted(

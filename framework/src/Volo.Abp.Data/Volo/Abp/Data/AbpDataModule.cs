@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Data
 {
+    [DependsOn(
+        typeof(AbpUnitOfWorkModule)
+        )]
     public class AbpDataModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)

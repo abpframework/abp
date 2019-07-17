@@ -2,43 +2,45 @@
 
 ### About this Tutorial
 
-In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider (as it comes pre-configured with the [startup template](https://abp.io/Templates)).
+In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Entity Framework Core** (EF Core) will be used as the ORM provider as it is the default database provider.
 
-This is the first part of the tutorial series. See all parts:
+This is the first part of the ASP.NET Core MVC tutorial series. See all parts:
 
 - **Part I: Create the project and a book list page (this tutorial)**
 - [Part II: Create, Update and Delete books](Part-II.md)
 - [Part III: Integration Tests](Part-III.md)
 
-You can download the **source code** of the application [from here](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
 ### Creating the Project
 
-Go to the [startup template page](https://abp.io/Templates) and download a new project named `Acme.BookStore`, create the  database and run the application by following the [template document](../../Getting-Started-AspNetCore-MVC-Template.md).
+Create a new project named `Acme.BookStore`, create the  database and run the application by following the [Getting Started document](../../Getting-Started-AspNetCore-MVC-Template.md).
 
 ### Solution Structure
 
-This is the how the layered solution structure looks after it's created from the startup template:
+This is how the layered solution structure looks after it's created:
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v2.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
+
+> You can see [MVC application template document](../../Startup-Templates/Mvc.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
 ### Create the Book Entity
 
-Define [entities](../../Entities.md) in the **domain layer** (`Acme.BookStore.Domain` project) of the solution. The main entity of the application is the `Book`:
+Domain layer in the startup template is separated into two projects:
+
+- `Acme.BookStore.Domain` contains your [entities](../../Entities.md), [domain services](../../Domain-Services.md) and other core domain objects.
+- `Acme.BookStore.Domain.Shared` contains constants, enums or other domain related objects those can be shared with clients.
+
+Define [entities](../../Entities.md) in the **domain layer** (`Acme.BookStore.Domain` project) of the solution. The main entity of the application is the `Book`. Create a class, named `Book`, in the `Acme.BookStore.Domain` project as shown below:
 
 ````C#
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Acme.BookStore
 {
-    [Table("Books")]
     public class Book : AuditedAggregateRoot<Guid>
     {
-        [Required]
-        [StringLength(128)]
         public string Name { get; set; }
 
         public BookType Type { get; set; }
@@ -50,22 +52,22 @@ namespace Acme.BookStore
 }
 ````
 
-* ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](../../Entities.md) for more details and best practices.
+* ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](../../Entities.md) for details and best practices.
 * `Book` entity inherits `AuditedAggregateRoot` which adds some auditing properties (`CreationTime`, `CreatorId`, `LastModificationTime`... etc.) on top of the `AggregateRoot` class.
 * `Guid` is the **primary key type** of the `Book` entity.
 * Used **data annotation attributes** in this code for EF Core mappings. Alternatively you could use EF Core's [fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling) instead.
 
 #### BookType Enum
 
-The `BookType` enum used above is defined as below:
+Define the `BookType` enum in the `Acme.BookStore.Domain.Shared` project:
 
 ````C#
 namespace Acme.BookStore
 {
-    public enum BookType : byte
+    public enum BookType
     {
         Undefined,
-        Advanture,
+        Adventure,
         Biography,
         Dystopia,
         Fantastic,
@@ -91,14 +93,15 @@ EF Core requires you to relate entities with your DbContext. The easiest way to 
 
 #### Configure Your Book Entity
 
-Open BookStoreDbContextModelCreatingExtensions.cs file from the `Acme.BookStore.EntityFrameworkCore` project, add following code to the end of ConfigureBookStore method to configure Book entity:
+Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.EntityFrameworkCore` project and add following code to the end of the `ConfigureBookStore` method to configure the Book entity:
 
 ````C#
-	builder.Entity<Book>(b =>
-        {
-           b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
-           b.ConfigureExtraProperties();
-        });
+builder.Entity<Book>(b =>
+{
+    b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
+    b.ConfigureAuditedAggregateRoot(); //auto configure for the base class props
+    b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+});
 ````
 
 #### Add New Migration & Update the Database
@@ -115,26 +118,27 @@ PM> Update-Database
 
 #### Add Sample Data
 
-`Update-Database` command created the `Books` table in the database. Open your database and enter a few sample rows, so you can show them on the page:
+`Update-Database` command created the `AppBooks` table in the database. Open your database and enter a few sample rows, so you can show them on the page:
 
 ![bookstore-books-table](images/bookstore-books-table.png)
 
 ### Create the Application Service
 
-The next step is to create an [application service](../../Application-Services.md) to manage (create, list, update, delete...) the books.
+The next step is to create an [application service](../../Application-Services.md) to manage (create, list, update, delete...) the books. Application layer in the startup template is separated into two projects:
+
+* `Acme.BookStore.Application.Contracts` mainly contains your DTOs and application service interfaces.
+* `Acme.BookStore.Application` contains the implementations of your application services.
 
 #### BookDto
 
-Create a DTO class named `BookDto` into the `Acme.BookStore.Application` project:
+Create a DTO class named `BookDto` into the `Acme.BookStore.Application.Contracts` project:
 
 ````C#
 using System;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    [AutoMapFrom(typeof(Book))]
     public class BookDto : AuditedEntityDto<Guid>
     {
         public string Name { get; set; }
@@ -151,20 +155,34 @@ namespace Acme.BookStore
 * **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](../../Data-Transfer-Objects.md) for more details.
 * `BookDto` is used to transfer book data to the presentation layer in order to show the book information on the UI.
 * `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` class defined above.
-* `[AutoMapFrom(typeof(Book))]` is used to create AutoMapper mapping from the `Book` class to the `BookDto` class. In this way, you get automatic conversion of `Book` objects to `BookDto` objects (instead of manually copy all properties).
+
+It will be needed to convert `Book` entities to `BookDto` objects while returning books to the presentation layer. [AutoMapper](https://automapper.org) library can automate this conversion when you define the proper mapping. Startup template comes with AutoMapper configured, so you can just define the mapping in the `BookStoreApplicationAutoMapperProfile` class in the `Acme.BookStore.Application` project:
+
+````csharp
+using AutoMapper;
+
+namespace Acme.BookStore
+{
+    public class BookStoreApplicationAutoMapperProfile : Profile
+    {
+        public BookStoreApplicationAutoMapperProfile()
+        {
+            CreateMap<Book, BookDto>();
+        }
+    }
+}
+````
 
 #### CreateUpdateBookDto
 
-Create a DTO class named `CreateUpdateBookDto` into the `Acme.BookStore.Application` project:
+Create a DTO class named `CreateUpdateBookDto` into the `Acme.BookStore.Application.Contracts` project:
 
 ````c#
 using System;
 using System.ComponentModel.DataAnnotations;
-using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    [AutoMapTo(typeof(Book))]
     public class CreateUpdateBookDto
     {
         [Required]
@@ -184,11 +202,17 @@ namespace Acme.BookStore
 ````
 
 * This DTO class is used to get book information from the user interface while creating or updating a book.
-* It defines data annotation attributes (like `[Required]`) to define validations for the properties. DTOs are automatically validated by ABP.
+* It defines data annotation attributes (like `[Required]`) to define validations for the properties. DTOs are [automatically validated](../../Validation.md) by the ABP framework.
+
+Like done for the `BookDto` above, create a mapping from the `CreateUpdateBookDto` object to the `Book` entity:
+
+````csharp
+CreateMap<CreateUpdateBookDto, Book>();
+````
 
 #### IBookAppService
 
-Define an interface named `IBookAppService` for the book application service:
+Define an interface named `IBookAppService` in the `Acme.BookStore.Application.Contracts` project:
 
 ````C#
 using System;
@@ -210,13 +234,13 @@ namespace Acme.BookStore
 }
 ````
 
-* Defining interfaces for application services is <u>not required</u> by the framework. However, it's suggested as best practice.
-* `IAsyncCrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods.
-* There are some variations of the `IAsyncCrudAppService` where you can use a single DTO or separated DTOs for each method.
+* Defining interfaces for application services is <u>not required</u> by the framework. However, it's suggested as a best practice.
+* `IAsyncCrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually.
+* There are some variations of the `IAsyncCrudAppService` where you can use separated DTOs for each method.
 
 #### BookAppService
 
-Implement the `IBookAppService` as named `BookAppService`:
+Implement the `IBookAppService` as named `BookAppService` in the `Acme.BookStore.Application` project:
 
 ````C#
 using System;
@@ -241,22 +265,22 @@ namespace Acme.BookStore
 ````
 
 * `BookAppService` is derived from `AsyncCrudAppService<...>` which implements all the CRUD methods defined above.
-* `BookAppService` injects `IRepository<Book, Guid>` which is the default repository created for the `Book` entity. ABP automatically creates repositories for each aggregate root (or entity). See the [repository document](../../Repositories.md).
-* `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as object mapping provider. You defined mappings using the `AutoMapFrom` and the `AutoMapTo` attributes above. See the [AutoMapper integration document](../../AutoMapper-Integration.md) for details.
+* `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](../../Repositories.md).
+* `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. You defined the mappings before, so it will work as expected.
 
 ### Auto API Controllers
 
-You normally create **Controllers** to expose application services as **HTTP API** endpoints. Thus allowing browser or 3rd-party clients to call them via AJAX.
-
-ABP can [**automagically**](../../AspNetCore/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
+You normally create **Controllers** to expose application services as **HTTP API** endpoints. Thus allowing browser or 3rd-party clients to call them via AJAX. ABP can [**automagically**](../../AspNetCore/Auto-API-Controllers.md) configures your application services as MVC API Controllers by convention.
 
 #### Swagger UI
 
-The startup template is configured to run the [swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application and enter `http://localhost:53929/swagger/` as URL on your browser.
+The startup template is configured to run the [swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application and enter `https://localhost:XXXX/swagger/` (replace XXXX by your own port) as URL on your browser.
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints:
 
 ![bookstore-swagger](images/bookstore-swagger.png)
+
+Swagger has a nice UI to test APIs. You can try to execute the `[GET] /api/app/book` API to get a list of books.
 
 ### Dynamic JavaScript Proxies
 
@@ -266,7 +290,7 @@ ABP **dynamically** creates JavaScript **proxies** for all API endpoints. So, yo
 
 #### Testing in the Browser Developer Console
 
-You can easily test the JavaScript proxy using your favorite browser's **Developer Console** now. Run the application again, open your browser's **developer tools** (shortcut: F12), switch to the **Console** tab, type the following code and press enter:
+You can easily test the JavaScript proxies using your favorite browser's **Developer Console** now. Run the application, open your browser's **developer tools** (shortcut: F12), switch to the **Console** tab, type the following code and press enter:
 
 ````js
 acme.bookStore.book.getList({}).done(function (result) { console.log(result); });
@@ -275,7 +299,7 @@ acme.bookStore.book.getList({}).done(function (result) { console.log(result); })
 * `acme.bookStore` is the namespace of the `BookAppService` converted to [camelCase](https://en.wikipedia.org/wiki/Camel_case).
 * `book` is the conventional name for the `BookAppService` (removed AppService postfix and converted to camelCase).
 * `getList` is the conventional name for the `GetListAsync` method defined in the `AsyncCrudAppService` base class (removed Async postfix and converted to camelCase).
-* `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` which is used to send paging and sorting options to the server.
+* `{}` argument is used to send an empty object to the `GetListAsync` method which normally expects an object of type `PagedAndSortedResultRequestDto` that is used to send paging and sorting options to the server (all properties are optional, so you can send an empty object).
 * `getList` function returns a `promise`. So, you can pass a callback to the `done` (or `then`) function to get the result from the server.
 
 Running this code produces the following output:
@@ -298,7 +322,7 @@ You should see a message in the console something like that:
 successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 ````
 
-Check the `books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions too.
+Check the `Books` table in the database to see the new book row. You can try `get`, `update` and `delete` functions yourself.
 
 ### Create the Books Page
 
@@ -306,20 +330,21 @@ It's time to create something visible and usable! Instead of classic MVC, we wil
 
 Create a new `Books` folder under the `Pages` folder of the `Acme.BookStore.Web` project and add a new Razor Page named `Index.cshtml`:
 
-![bookstore-add-index-page](images/bookstore-add-index-page.png)
+![bookstore-add-index-page](images/bookstore-add-index-page-v2.png)
 
 Open the `Index.cshtml` and change the content as shown below:
 
 ````html
 @page
-@using Acme.BookStore.Pages.Books
-@inherits Acme.BookStore.Pages.BookStorePageBase
+@using Acme.BookStore.Web.Pages.Books
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model IndexModel
 
 <h2>Books</h2>
 ````
 
-* Change the default inhertitance of the Razor View Page Model so it **inherits** from the `BookStorePageBase` class (instead of `PageModel`).  The `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
+* This code changes the default inheritance of the Razor View Page Model so it **inherits** from the `BookStorePage` class (instead of `PageModel`).  The `BookStorePage` class which comes with the startup template and provides some shared properties/methods used by all pages.
+* Ensure that the `IndexModel` (*Index.cshtml.cs)* has the `Acme.BookStore.Pages.Books` namespace, or update it in the `Index.cshtml`.
 
 #### Add Books Page to the Main Menu
 
@@ -334,17 +359,16 @@ context.Menu.AddItem(
 
 #### Localizing the Menu Items
 
-Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain` project:
+Localization texts are located under the `Localization/BookStore` folder of the `Acme.BookStore.Domain.Shared` project:
 
-![bookstore-localization-files](images/bookstore-localization-files.png)
+![bookstore-localization-files](images/bookstore-localization-files-v2.png)
 
-Open the `en.json` file and add localization texts for `Menu:BookStore` and `Menu:Books`  keys:
+Open the `en.json` file and add localization texts for `Menu:BookStore` and `Menu:Books` keys to the end of the file:
 
 ````json
 {
   "culture": "en",
   "texts": {
-    //...
     "Menu:BookStore": "Book Store",
     "Menu:Books": "Books"
   }
@@ -352,9 +376,9 @@ Open the `en.json` file and add localization texts for `Menu:BookStore` and `Men
 ````
 
 * ABP's localization system is built on [ASP.NET Core's standard localization](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) system and extends it in many ways. See the [localization document](../../Localization.md) for details.
-* Localization key names are arbitrary, you can set any name. We prefer to add `Menu` namespace for menu items to distinguish from other texts. If a text is not defined in the localization file, it **fallbacks** to the localization key (ASP.NET Core's standard behavior).
+* Localization key names are arbitrary. You can set any name. We prefer to add `Menu:` prefix for menu items to distinguish from other texts. If a text is not defined in the localization file, it **fallbacks** to the localization key (ASP.NET Core's standard behavior).
 
-Run the application and see the menu items are added to the top bar:
+Run the application and see the new menu item has been added to the top bar:
 
 ![bookstore-menu-items](images/bookstore-menu-items.png)
 
@@ -362,17 +386,16 @@ When you click to the Books menu item, you are redirected to the new Books page.
 
 #### Book List
 
-We will use the [Datatables.net](https://datatables.net/) JQuery plugin to show list of tables on the page. Datatables can completely work via AJAX, so it is fast and provides a good user experience. Datatables plugin is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
+We will use the [Datatables.net](https://datatables.net/) JQuery plugin to show list of tables on the page. Datatables can completely work via AJAX, it is fast and provides a good user experience. Datatables plugin is configured in the startup template, so you can directly use it in any page without including any style or script file to your page.
 
-##### Index.cshtml Changes
+##### Index.cshtml
 
 Change the `Pages/Books/Index.cshtml` as following:
 
 ````html
 @page
-@using Acme.BookStore.Pages.Books
-@inherits Acme.BookStore.Pages.BookStorePageBase
-@model IndexModel
+@inherits Acme.BookStore.Web.Pages.BookStorePage
+@model Acme.BookStore.Web.Pages.Books.IndexModel
 @section scripts
 {
     <abp-script src="/Pages/Books/index.js" />
@@ -405,7 +428,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 Create `index.js` JavaScript file under the `Pages/Books/` folder:
 
-![bookstore-index-js-file](images/bookstore-index-js-file.png)
+![bookstore-index-js-file](images/bookstore-index-js-file-v2.png)
 
 `index.js` content is shown below:
 

@@ -1,19 +1,25 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Domain.Repositories.MemoryDb
 {
-    public static class MemoryDatabaseManager
+    public class MemoryDatabaseManager : ISingletonDependency
     {
-        private static ConcurrentDictionary<string, IMemoryDatabase> _databases;
+        private readonly ConcurrentDictionary<string, IMemoryDatabase> _databases =
+            new ConcurrentDictionary<string, IMemoryDatabase>();
 
-        static MemoryDatabaseManager()
+        private readonly IServiceProvider _serviceProvider;
+
+        public MemoryDatabaseManager(IServiceProvider serviceProvider)
         {
-            _databases = new ConcurrentDictionary<string, IMemoryDatabase>();
+            _serviceProvider = serviceProvider;
         }
 
-        public static IMemoryDatabase Get(string databaseName)
+        public IMemoryDatabase Get(string databaseName)
         {
-            return _databases.GetOrAdd(databaseName, _ => new MemoryDatabase());
+            return _databases.GetOrAdd(databaseName, _ => _serviceProvider.GetRequiredService<IMemoryDatabase>());
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Volo.Abp.Localization;
 
@@ -24,21 +25,34 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         private ILocalizableString _displayName;
 
         [NotNull]
-        public Type ViewComponentType { get; set; }
+        public Type ViewComponentType { get; }
 
         [CanBeNull]
         public WidgetDimensions DefaultDimensions { get; set; }
 
+        public List<string> RequiredPermissions { get; set; }
+
         public WidgetDefinition(
             [NotNull] string name,
-            [NotNull] Type viewComponentType,
             [CanBeNull] ILocalizableString displayName,
-            [CanBeNull] WidgetDimensions defaultDimensions = null)
+            [NotNull] Type viewComponentType)
         {
-            DefaultDimensions = defaultDimensions;
             Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             ViewComponentType = Check.NotNull(viewComponentType, nameof(viewComponentType));
             DisplayName = displayName ?? new FixedLocalizableString(name);
+            RequiredPermissions = new List<string>();
+        }
+
+        public WidgetDefinition AddRequiredPermission(string permissionName)
+        {
+            RequiredPermissions.Add(permissionName);
+            return this;
+        }
+
+        public WidgetDefinition SetDefaultDimension(int width, int height)
+        {
+            DefaultDimensions = new WidgetDimensions(width, height);
+            return this;
         }
     }
 }

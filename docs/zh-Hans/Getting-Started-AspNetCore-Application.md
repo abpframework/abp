@@ -60,7 +60,7 @@ namespace BasicAspNetCoreApplication
 
 ``AppModule`` 是应用程序启动模块的好名称(建议你的启动模块也使用这个命名).
 
-ABP的包定义了这个模块类,模块可以依赖其它模块.在上面的代码中 ``AppModule`` 依赖于 ``AbpAspNetCoreMvcModule`` (模块存在于Volo.Abp.AspNetCore.Mvc包中). 安装新的ABP的包后添加``DependsOn``是很非常常见的做法.
+ABP的包定义了这个模块类,模块可以依赖其它模块.在上面的代码中 ``AppModule`` 依赖于 ``AbpAspNetCoreMvcModule`` (模块存在于Volo.Abp.AspNetCore.Mvc包中). 安装新的ABP的包后添加``DependsOn``是很常见的做法.
 
 我们在此模块类中配置ASP.NET Core管道,而不是Startup类中.
 
@@ -99,7 +99,7 @@ namespace BasicAspNetCoreApplication
 
 ### Hello World!
 
-上面的应用程序什么都不没有做,让我们创建一个MVC控制器实现一些功能:
+上面的应用程序没有什么功能,让我们创建一个MVC控制器实现一些功能:
 
 ````C#
 using Microsoft.AspNetCore.Mvc;
@@ -163,12 +163,20 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        /*
+            https://github.com/aspnet/AspNetCore/issues/4206#issuecomment-445612167
+            CurrentDirectoryHelpers 文件位于: \framework\src\Volo.Abp.AspNetCore.Mvc\Microsoft\AspNetCore\InProcess\CurrentDirectoryHelpers.cs
+            当升级到ASP.NET Core 3.0的时候将会删除这个类.
+        */
+        CurrentDirectoryHelpers.SetCurrentDirectory();
+
         BuildWebHostInternal(args).Run();
     }
      public static IWebHost BuildWebHostInternal(string[] args) =>
         new WebHostBuilder()
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIIS()
             .UseIISIntegration()
             .UseStartup<Startup>()
             .Build();

@@ -38,5 +38,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 
             AvailableWidgets = new List<DashboardWidgetConfiguration>();
         }
+
+        public DashboardDefinition WithWidget(string widgetName, WidgetLocation location = null, WidgetDimensions dimensions = null)
+        {
+            AvailableWidgets.Add( new DashboardWidgetConfiguration(widgetName, dimensions, location));
+
+            return this;
+        }
     }
 }

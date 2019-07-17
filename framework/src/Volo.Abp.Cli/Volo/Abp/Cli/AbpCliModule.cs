@@ -9,15 +9,6 @@ namespace Volo.Abp.Cli
     )]
     public class AbpCliModule : AbpModule
     {
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-#if DEBUG
-            Configure<CliOptions>(options =>
-            {
-                options.AbpIoWwwUrlRoot = "https://localhost:44328/";
-                options.AbpIoAccountUrlRoot = "https://localhost:44333/";
-            });
-#endif
-        }
+
     }
 }

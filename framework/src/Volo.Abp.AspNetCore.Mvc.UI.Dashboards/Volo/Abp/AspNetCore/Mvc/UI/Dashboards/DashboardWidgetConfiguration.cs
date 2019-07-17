@@ -11,13 +11,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards
         [CanBeNull]
         public WidgetDimensions Dimensions { get; set; }
 
+        [CanBeNull]
+        public WidgetLocation Location { get; set; }
+
         public DashboardWidgetConfiguration(
             [NotNull] string widgetName,
-            [CanBeNull] WidgetDimensions dimensions
+            [CanBeNull] WidgetDimensions dimensions = null,
+            [CanBeNull] WidgetLocation location = null
             )
         {
             WidgetName = Check.NotNullOrWhiteSpace(widgetName, nameof(widgetName));
             Dimensions = dimensions;
+            Location = location;
         }
     }
 }
