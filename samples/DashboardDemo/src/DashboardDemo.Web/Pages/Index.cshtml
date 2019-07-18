@@ -13,15 +13,15 @@
 @model IndexModel
 @section styles {
     <link href="~/pages/index.css" rel="stylesheet" />
-    <abp-style-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+    <abp-style-bundle name="@UserCountWidgetViewComponent.Name" />
 }
 @section scripts {
-    <abp-script-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+    <abp-script-bundle name="@UserCountWidgetViewComponent.Name" />
 }
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>
-        @await WidgetRenderer.RenderAsync(Component, UserCountWidgetViewComponent.WidgetName)
+        @await WidgetRenderer.RenderAsync(Component, UserCountWidgetViewComponent.Name)
     </abp-card-body>
 </abp-card>
 @foreach (var dashboard in OptionsDashboadOptions.Value.Dashboards)

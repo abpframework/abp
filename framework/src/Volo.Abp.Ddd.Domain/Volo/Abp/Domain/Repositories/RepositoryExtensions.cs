@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories
 {
@@ -27,17 +26,6 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public static void EnsureCollectionLoaded<TEntity, TKey, TProperty>(
-            this IBasicRepository<TEntity, TKey> repository,
-            TEntity entity,
-            Expression<Func<TEntity, IEnumerable<TProperty>>> propertyExpression
-        )
-            where TEntity : class, IEntity<TKey>
-            where TProperty : class
-        {
-            AsyncHelper.RunSync(() => repository.EnsureCollectionLoadedAsync(entity, propertyExpression));
-        }
-
         public static async Task EnsurePropertyLoadedAsync<TEntity, TKey, TProperty>(
             this IBasicRepository<TEntity, TKey> repository,
             TEntity entity,
@@ -52,17 +40,6 @@ namespace Volo.Abp.Domain.Repositories
             {
                 await repo.EnsurePropertyLoadedAsync(entity, propertyExpression, cancellationToken);
             }
-        }
-
-        public static void EnsurePropertyLoaded<TEntity, TKey, TProperty>(
-            this IBasicRepository<TEntity, TKey> repository,
-            TEntity entity,
-            Expression<Func<TEntity, TProperty>> propertyExpression
-        )
-            where TEntity : class, IEntity<TKey>
-            where TProperty : class
-        {
-            AsyncHelper.RunSync(() => repository.EnsurePropertyLoadedAsync(entity, propertyExpression));
         }
     }
 }

@@ -30,7 +30,11 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Project name is missing!" + Environment.NewLine + Environment.NewLine + await GetUsageInfo());
+                throw new CliUsageException(
+                    "Project name is missing!" +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
             }
 
             Logger.LogInformation("Creating a new project...");
@@ -98,7 +102,7 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation($"The output folder is: '{outputFolder}'");
         }
 
-        public Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -124,12 +128,12 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info.");
 
-            return Task.FromResult(sb.ToString());
+            return sb.ToString();
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("Generates a new solution based on the ABP startup templates.");
+            return "Generates a new solution based on the ABP startup templates.";
         }
 
         protected virtual DatabaseProvider GetDatabaseProviderOrNull(CommandLineArgs commandLineArgs)

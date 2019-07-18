@@ -24,14 +24,14 @@ namespace Volo.Abp.Cli.Commands
             return AuthService.LogoutAsync();
         }
 
-        public Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
-            return Task.FromResult("");
+            return string.Empty;
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("");
+            return string.Empty;
         }
     }
 }

@@ -10,7 +10,7 @@ using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
 {
-    public class PeopleAppService : AsyncCrudAppService<Person, PersonDto, Guid>, IPeopleAppService
+    public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeopleAppService
     {
         public PeopleAppService(IRepository<Person, Guid> repository) 
             : base(repository)

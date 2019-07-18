@@ -36,9 +36,7 @@ namespace Volo.Abp.BackgroundJobs
             {
                 var store = scope.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
 
-                var waitingJobs = AsyncHelper.RunSync(
-                    () => store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount)
-                );
+                var waitingJobs = store.GetWaitingJobs(WorkerOptions.MaxJobFetchCount);
 
                 if (!waitingJobs.Any())
                 {
@@ -64,7 +62,7 @@ namespace Volo.Abp.BackgroundJobs
                         {
                             jobExecuter.Execute(context);
 
-                            AsyncHelper.RunSync(() => store.DeleteAsync(jobInfo.Id));
+                            store.Delete(jobInfo.Id);
                         }
                         catch (BackgroundJobExecutionException)
                         {
@@ -96,7 +94,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             try
             {
-                store.UpdateAsync(jobInfo);
+                store.Update(jobInfo);
             }
             catch (Exception updateEx)
             {
@@ -107,9 +105,8 @@ namespace Volo.Abp.BackgroundJobs
         protected virtual DateTime? CalculateNextTryTime(BackgroundJobInfo jobInfo, IClock clock)
         {
             var nextWaitDuration = WorkerOptions.DefaultFirstWaitDuration * (Math.Pow(WorkerOptions.DefaultWaitFactor, jobInfo.TryCount - 1));
-            var nextTryDate = jobInfo.LastTryTime.HasValue
-                ? jobInfo.LastTryTime.Value.AddSeconds(nextWaitDuration)
-                : clock.Now.AddSeconds(nextWaitDuration);
+            var nextTryDate = jobInfo.LastTryTime?.AddSeconds(nextWaitDuration) ??
+                              clock.Now.AddSeconds(nextWaitDuration);
 
             if (nextTryDate.Subtract(jobInfo.CreationTime).TotalSeconds > WorkerOptions.DefaultTimeout)
             {

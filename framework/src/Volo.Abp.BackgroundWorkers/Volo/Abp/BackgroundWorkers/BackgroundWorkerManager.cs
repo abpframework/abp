@@ -32,7 +32,9 @@ namespace Volo.Abp.BackgroundWorkers
 
             if (IsRunning)
             {
-                worker.Start();
+                AsyncHelper.RunSync(
+                    () => worker.StartAsync()
+                );
             }
         }
 

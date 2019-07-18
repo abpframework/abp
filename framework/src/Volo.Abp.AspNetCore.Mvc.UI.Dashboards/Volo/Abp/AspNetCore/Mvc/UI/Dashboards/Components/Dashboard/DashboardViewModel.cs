@@ -13,15 +13,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard
 
         public List<WidgetDefinition> Widgets { get; set; }
 
-        public DashboardViewModel(DashboardDefinition dashboard, List<WidgetDefinition> widgets)
+        public List<GlobalFilterDefinition> GlobalFilters { get; set; }
+
+        public DashboardViewModel(DashboardDefinition dashboard, List<WidgetDefinition> widgets, List<GlobalFilterDefinition> globalFilters)
         {
             Dashboard = dashboard;
             Widgets = widgets;
+            GlobalFilters = globalFilters;
         }
 
         public WidgetDefinition GetWidget(string name)
         {
             return Widgets.Single(d => d.Name.Equals(name));
+        }
+
+        public GlobalFilterDefinition GetGlobalFilter(string name)
+        {
+            return GlobalFilters.Single(d => d.Name.Equals(name));
         }
 
         public async Task<bool> CheckPermissionsAsync(IAuthorizationService authorizationService, WidgetDefinition widget)

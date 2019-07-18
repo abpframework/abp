@@ -61,7 +61,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                     .GetRequiredService(typeof(IJobQueue<>)
                         .MakeGenericType(typeof(TArgs)));
 
-                jobQueue.Start();
+                AsyncHelper.RunSync(() => jobQueue.StartAsync());
 
                 return jobQueue;
             });

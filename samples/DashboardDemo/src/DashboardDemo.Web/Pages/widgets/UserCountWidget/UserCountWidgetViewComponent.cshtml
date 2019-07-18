@@ -6,9 +6,11 @@
 }
 <div id="UserCountWidgetContainer">
     <abp-card background="Light">
-        <abp-card-header background="Info">@L["UserCount"] :</abp-card-header>
+        <abp-card-header background="Info">@L["UserCount"]</abp-card-header>
         <abp-card-body>
-            <h1 id="UserCount"></h1>
+            <div class="row margin-bottom-5">
+                <canvas  id="UserStatistics"></canvas>
+            </div>
         </abp-card-body>
     </abp-card>
 </div>

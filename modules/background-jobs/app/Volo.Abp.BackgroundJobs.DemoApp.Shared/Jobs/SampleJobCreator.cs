@@ -1,4 +1,6 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 {
@@ -13,10 +15,15 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.Shared.Jobs
 
         public void CreateJobs()
         {
-            _backgroundJobManager.Enqueue(new WriteToConsoleGreenJobArgs { Value = "test 1 (green)" });
-            _backgroundJobManager.Enqueue(new WriteToConsoleGreenJobArgs { Value = "test 2 (green)" });
-            _backgroundJobManager.Enqueue(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow)" });
-            _backgroundJobManager.Enqueue(new WriteToConsoleYellowJobArgs { Value = "test 2 (yellow)" });
+            AsyncHelper.RunSync(CreateJobsAsync);
+        }
+
+        public async Task CreateJobsAsync()
+        {
+            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleGreenJobArgs { Value = "test 1 (green)" });
+            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleGreenJobArgs { Value = "test 2 (green)" });
+            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleYellowJobArgs { Value = "test 1 (yellow)" });
+            await _backgroundJobManager.EnqueueAsync(new WriteToConsoleYellowJobArgs { Value = "test 2 (yellow)" });
         }
     }
 }

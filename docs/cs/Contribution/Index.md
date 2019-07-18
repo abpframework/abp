@@ -29,6 +29,14 @@ Pokud chcete přeložit celou [dokumentaci](https://abp.io/documents/) (včetně
 * Pro referenci použijte ["en" složku](https://github.com/abpframework/abp/tree/master/docs/en) a její názvy souborů a strom složek. Při překladu této dokumentace zachovejte prosím tyto názvy stejné.
 * Zašlete pull request (PR) po překladu jakéhokoliv dokumentu klidně i po jednom. Nečekejte až budete mít překlad všech dokumentů.
 
+Existuje několik základních dokumentů, které je třeba přeložit než bude jazyk uveřejněn na [stránkách ABP dokumentace](https://docs.abp.io)
+
+* Začínáme dokumenty
+* Tutoriály
+* CLI
+
+Nový jazyk je publikován jakmile budou minimálně tyto překlady dokončeny.
+
 ### Lokalizace zdrojů
 
 ABP framework má flexibilní [lokalizační systém](../Localization.md). Můžete tak vytvořit lokalizované uživatelské prostředí pro svou vlastní aplikaci.

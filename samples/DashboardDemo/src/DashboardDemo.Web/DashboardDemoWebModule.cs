@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using DashboardDemo.EntityFrameworkCore;
+using DashboardDemo.GlobalFilters;
 using DashboardDemo.Localization.DashboardDemo;
 using DashboardDemo.Menus;
 using DashboardDemo.Pages;
@@ -75,6 +76,7 @@ namespace DashboardDemo
             var configuration = context.Services.GetConfiguration();
 
             ConfigureWidgets();
+            ConfigureGlobalFilters();
             ConfigureDashboards();
             ConfigureDatabaseServices();
             ConfigureAutoMapper();
@@ -93,6 +95,14 @@ namespace DashboardDemo
             });
         }
 
+        private void ConfigureGlobalFilters()
+        {
+            Configure<GlobalFilterOptions>(options =>
+            {
+                options.GlobalFilters.AddRange(GlobalFilterDefinitionProvider.GetDefinitions());
+            });
+        }
+
         private void ConfigureDashboards()
         {
             Configure<DashboardOptions>(options =>
@@ -106,7 +116,7 @@ namespace DashboardDemo
                     {
                         configuration.AddContributors(typeof(MyDashboardScriptBundleContributor));
                     });
-                options.ScriptBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+                options.ScriptBundles.Add(UserCountWidgetViewComponent.Name, configuration =>
                 {
                     configuration.AddContributors(typeof(UserCountWidgetScriptBundleContributor));
                 });
@@ -114,7 +124,7 @@ namespace DashboardDemo
                     {
                         configuration.AddContributors(typeof(MyDashboardStyleBundleContributor));
                     });
-                options.StyleBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+                options.StyleBundles.Add(UserCountWidgetViewComponent.Name, configuration =>
                 {
                     configuration.AddContributors(typeof(UserCountWidgetStyleBundleContributor));
                 });
