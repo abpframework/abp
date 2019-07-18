@@ -1,5 +1,4 @@
-﻿using Volo.Abp.Emailing;
-using Volo.Abp.Identity;
+﻿using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI.Navigation;
@@ -9,7 +8,6 @@ namespace Volo.Abp.Account
 {
     [DependsOn(
         typeof(AbpAccountApplicationContractsModule),
-        typeof(AbpEmailingModule),
         typeof(AbpIdentityApplicationModule),
         typeof(AbpUiNavigationModule)
     )]
