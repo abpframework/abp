@@ -1,18 +1,18 @@
-# Dashboard & Widget System
+# 仪表板和小部件(Widget)系统
 
-Dashboard & Widget System allows you to create reusable widgets and dashboards.
+仪表板和小部件(Widget)系统允许你创建可重用的小部件和仪表板。
 
-![Image of a sample, create with this system](..\images\dashboard1.png)
+![Image of a sample, create with this system](../images/dashboard1.png)
 
-You can see a sample dashboard, build with that system, in the screenshot above. Top section, where the filters and refresh button is placed is global filter section and each card below is a widget. Both widgets and global filters are reusable components. Also dashboard layout is reusable too.
+你可以在上面的屏幕截图中看到使用该系统构建的示例仪表板. 放置过滤器和刷新按钮的顶部是全局过滤器部分，下面的每个卡片都是一个小部件. 小部件和全局过滤器都是可重用的组件.仪表板布局也可以重复使用.
 
-Now we will see how those are defined, used in an application.
+现在我们将看到如何在应用程序中使用它们.
 
-## Dashboard Component
+## 仪表板组件
 
-Firstly, we will define a dashboard in our application (you can download a new application template from [abp.io/get-started](https://abp.io/get-started). To keep it simple, Please don't use tiered option).
+首先,我们将在应用程序中定义仪表板,你可以从[abp.io/get-started](https://abp.io/get-started)下载新的应用程序模板. 为简单起见,请不要使用分层选项.
 
-In *.Web project, we create **DashboardNames.cs** and **DashboardDefinitionProvider.cs** classes:
+在 *.Web项目中, 我们创建**DashboardNames.cs**和**DashboardDefinitionProvider.cs**类:
 
 ```c#
     public static class DashboardNames
@@ -44,7 +44,7 @@ In *.Web project, we create **DashboardNames.cs** and **DashboardDefinitionProvi
     }
 ```
 
-We need to add that definition to **DashboardOptions** in **ConfigureServices** method of ***WebModule.cs** file:
+我们需要将该定义添加到**WebModule.cs**文件中**ConfigureServices**方法的**DashboardOptions**:
 
 ```c#
 using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
@@ -64,7 +64,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
      }
 ```
 
-Then we can create the view file that the dashboard we have defined will be rendered, **Pages/MyDashboard.cshtml**:
+然后我们可以创建我们定义的仪表板它将被渲染 **Pages/MyDashboard.cshtml**:
 
 ```html
 @page
@@ -90,7 +90,7 @@ Then we can create the view file that the dashboard we have defined will be rend
 
 ```
 
-**DashboardRenderer.RenderAsync** method renders the dashboard we have defined. Now we have to define the script and style bundles that you can see their usage in the code above:
+**DashboardRenderer.RenderAsync** 方法呈现我们定义的仪表板. 现在我们必须定义script和style bundles. 你可以在上面的代码中看到它们的用法:
 
 ```c#
     [DependsOn(typeof(AbpBasicDashboardStyleContributor))]
@@ -114,9 +114,9 @@ Then we can create the view file that the dashboard we have defined will be rend
     }
 ```
 
-The dashboard system uses [Bundling & Minification](../Bundling-Minification.md) for scripts and styles. Dashboard contributors will be dependent on their widget and global filter contributors, and widget and global filters will be dependent on the other contributors they need. This guarantees that more than one widget can request a javascript library and it won't be duplicated.
+仪表板系统使用[Bundling & Minification](../Bundling-Minification.md)作为脚本和样式. 仪表板贡献者将依赖于他们的小部件和全局过滤器贡献者, 小部件和全局过滤器将依赖于他们需要的其他贡献者. 这可以保证多个小部件可以请求javascript库, 并且不会重复.
 
-We need to add those contributors to bundling options in **ConfigureServices** method of ***WebModule.cs** file:
+我们需要将这些贡献者添加到**WebModule.cs**文件的**ConfigureServices**方法中的bundling选项:
 
 ```c#
             Configure<BundlingOptions>(options =>
@@ -133,15 +133,15 @@ We need to add those contributors to bundling options in **ConfigureServices** m
             });
 ```
 
-Now we can start to create widgets.
+现在我们可以开始创建小部件了.
 
-## Widgets
+## 小部件
 
-Widgets are view components those are rendered in order when you add them to a dashboard. They also can be rendered anywhere you like.
+小部件是在将它们添加到仪表板时按顺序呈现的视图组件. 它们也可以在任何你喜欢的地方呈现.
 
-We will see how to create a widget and add it to the dashboard we created. We will create the "Monthly profit" widget in the screenshot at the beginning of this tutorial.
+我们将看到如何创建小部件并将其添加到我们创建的仪表板中. 我们将在本教程开头的屏幕截图中创建"每月利润"小部件.
 
-Before creating our widget, we need a application service to return dummy data for our widget.
+在创建小部件之前,我们需要一个应用程序服务来返回小部件的虚拟数据.
 
 ```c#
 namespace DashboardDemo
@@ -209,15 +209,15 @@ namespace DashboardDemo
 }
 ```
 
-We will use **FilterDto** in **Global Filters** section.
+我们将在**Global Filters**中使用**FilterDto**.
 
-Now we can start to work on our widget.
+现在我们可以开始处理我们的小部件了.
 
 ![widget file tree](..\images\MonthlyProfitWidgetFiles.png)
 
-You can see the files that we will create our widget. (If your widget won't need css or javascript, you don't need to create them and contributors as well.)
+你可以看到我们将创建小部件的文件. (如果你的小部件不需要css或javascript,则不需要创建它们和贡献者).
 
-First we create the **MonthlyProfitWidgetViewComponent**:
+首先我们创建 **MonthlyProfitWidgetViewComponent**:
 
 ```html
 @inject IHtmlLocalizer<DashboardDemoResource> L
@@ -253,7 +253,7 @@ First we create the **MonthlyProfitWidgetViewComponent**:
     }
 ```
 
-We will use [chart.js library](https://www.chartjs.org/) to create the chart. To add this library to our project, we add the package dependency to **package.json**:
+我们将使用[chart.js library](https://www.chartjs.org/)来创建图表. 要将此库添加到项目中,我们将包依赖项添加到**package.json**:
 
 ```json
   "dependencies": {
@@ -262,7 +262,7 @@ We will use [chart.js library](https://www.chartjs.org/) to create the chart. To
   }
 ```
 
-Then add the mapping **abp.resourcemappings.js**: (see [related doc](/AspNetCore/Client-Side-Package-Management#resource-mapping-definition-file))
+然后添加映射到**abp.resourcemappings.js**:(参见[相关文档](/AspNetCore/Client-Side-Package-Management#resource-mapping-definition-file))
 
 ```js
     mappings: {
@@ -271,7 +271,7 @@ Then add the mapping **abp.resourcemappings.js**: (see [related doc](/AspNetCore
     }
 ```
 
-Now we have chart.js library in our application. In order to use it, we will create it's contributors:
+现在我们的应用程序中有chart.js库. 为了使用它,我们将创建它的贡献者:
 
 ```c#
     public class ChartjsScriptContributor : BundleContributor
@@ -291,7 +291,7 @@ Now we have chart.js library in our application. In order to use it, we will cre
     }
 ```
 
-Well. Now we create the contributors for our widget files and make them dependent on chart.js:
+现在我们为小部件文件创建贡献者并使它们依赖于chart.js:
 
 ```c#
     [DependsOn(typeof(JQueryScriptContributor))]
@@ -315,9 +315,9 @@ Well. Now we create the contributors for our widget files and make them dependen
     }
 ```
 
-**MonthlyProfitWidget.css** is empty for our widget.
+**MonthlyProfitWidget.css** 对于我们的小部件是空的.
 
-**MonthlyProfitWidget.js** content is below:
+**MonthlyProfitWidget.js** 内容如下:
 
 ```js
 (function ($) {
@@ -356,7 +356,7 @@ Well. Now we create the contributors for our widget files and make them dependen
 
 ```
 
-We have created our widget. There is one last thing before adding it to dashboard; we need to define it:
+我们创建了小部件. 在将其添加到仪表板之前还有最后一件事, 我们需要定义它:
 
 ```c#
     public static class WidgetDefinitionProvider
@@ -382,11 +382,11 @@ We have created our widget. There is one last thing before adding it to dashboar
     }
 ```
 
-**.SetDefaultDimension(int x, int y):** Sets the dimensions of the widget. This will be used when rendering it in dashboard. X is for column width in bootstrap, can be between 1 and 12. Y is height in pixels, will be multiplied by 100. 
+**SetDefaultDimension(int x, int y):** 设置小部件的尺寸. 在仪表板中渲染时将使用此选项.  X表示bootstrap中的列宽，可以在1到12之间.Y是以像素为单位的高度,将乘以100.
 
-**AddRequiredPermission(string permissionName)**: Sets the permission for widget. So a user that doesn't have this permission will not see this widget.
+**AddRequiredPermission(string permissionName)**: 设置窗口小部件的权限. 因此, 没有此权限的用户将看不到此小部件.
 
-We need to add the widget definitions to **WidgetOptions** in **ConfigureServices** method of ***WebModule.cs** file as well:
+我们需要在**WebModule.cs**文件的**ConfigureServices**方法中将小部件定义添加到**WidgetOptions**:
 
 ```c#
             Configure<WidgetOptions>(options =>
@@ -395,7 +395,7 @@ We need to add the widget definitions to **WidgetOptions** in **ConfigureService
             });
 ```
 
-Now our widget is ready to use. We will use **WithWidget** method to add it to our dashboard in **DashboardDefinitionProvider.cs**:
+现在我们的小部件已经可以使用了. 我们将使用**DashboardDefinitionProvider.cs**中**WithWidget**方法将其添加到仪表板中:
 
 ```c#
             var myDashboard = new DashboardDefinition(
@@ -404,7 +404,7 @@ Now our widget is ready to use. We will use **WithWidget** method to add it to o
                .WithWidget(MonthlyProfitWidgetViewComponent.Name); 
 ```
 
-And add the javascript and contributor dependencies to dashboard:
+并将javascript和contributor依赖项添加到仪表板:
 
 ```c#
     [DependsOn(typeof(MonthlyProfitWidgetScriptBundleContributor))] // <<<<<<
@@ -428,15 +428,15 @@ And add the javascript and contributor dependencies to dashboard:
     }
 ```
 
-Now start your application and go to **/MyDashboard** page.
+现在启动应用程序并转到 **/MyDashboard**页面.
 
-## Global Filters
+## 全局过滤器
 
-Global filters are used for filtering all widgets with same input. If you add a global filter to a dashboard, a refresh button will appear for refreshing widgets with new filter values. When this button is clicked, it serializes filters to object and fires an event with that object as parameter. 
+全局过滤器用于过滤具有相同输入的所有小部件. 如果向仪表板添加全局过滤器,则会显示刷新按钮,以使用新过滤器值刷新窗口小部件. 单击此按钮时,它会将过滤器序列化为对象,并以该对象作为参数触发事件.
 
-Let's implement a **date range** global filter.
+我们来实现一个**date range**全局过滤器.
 
-First, we need to create **DateRangeGlobalFilterViewComponent.cshtml**:
+首先我们创建 **DateRangeGlobalFilterViewComponent.cshtml**:
 
 ```html
 @inject IHtmlLocalizer<DashboardDemoResource> L
@@ -479,9 +479,9 @@ namespace DashboardDemo.Pages.widgets.Filters
 }
 ```
 
-You can add javascript and css files in the same way you add them to widgets, but in this example they are not needed.
+您可以像添加到窗口小部件一样添加javascript和css文件,但在此示例中不需要它们.
 
-We will add the global filter definitions to **GlobalFilterOptions** in **ConfigureServices** method of ***WebModule.cs** file as well:
+我们将在**WebModule.cs**文件的**ConfigureServices**方法中将全局过滤器定义添加到**GlobalFilterOptions**:
 
 ```c#
             Configure<GlobalFilterOptions>(options =>
@@ -490,7 +490,7 @@ We will add the global filter definitions to **GlobalFilterOptions** in **Config
             });
 ```
 
-And add it to our dashboard in **DashboardDefinitionProvider.cs** using **WithGlobalFilter** method:
+并使用**WithGlobalFilter**方法将其添加到**DashboardDefinitionProvider.cs**中的仪表板中:
 
 ```c#
             var myDashboard = new DashboardDefinition(
@@ -500,7 +500,7 @@ And add it to our dashboard in **DashboardDefinitionProvider.cs** using **WithGl
                 .WithGlobalFilter(DateRangeGlobalFilterViewComponent.Name);
 ```
 
-That's it! Now let's catch the refresh event in our widget:
+现在让我们在小部件中捕获刷新事件：
 
 ```js
 (function ($) {
@@ -554,6 +554,6 @@ That's it! Now let's catch the refresh event in our widget:
 
 ```
 
-## Source Code
+## 源代码
 
-You can see a sample application for dashboard at [Github](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo). 
+你可以在[Github](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo)查看仪表板的示例应用程序
