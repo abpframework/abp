@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace DashboardDemo
+namespace DashboardDemo.Web
 {
     public class Startup
     {

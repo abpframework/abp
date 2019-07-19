@@ -7,10 +7,23 @@ using Volo.Abp.Users.EntityFrameworkCore;
 
 namespace DashboardDemo.EntityFrameworkCore
 {
+    /* This is your actual DbContext used on runtime.
+     * It includes only your entities.
+     * It does not include entities of the used modules, because each module has already
+     * its own DbContext class. If you want to share some database tables with the used modules,
+     * just create a structure like done for AppUser.
+     *
+     * Don't use this DbContext for database migrations since it does not contain tables of the
+     * used modules (as explained above). See DashboardDemoMigrationsDbContext for migrations.
+     */
     [ConnectionStringName("Default")]
     public class DashboardDemoDbContext : AbpDbContext<DashboardDemoDbContext>
     {
         public DbSet<AppUser> Users { get; set; }
+
+        /* Add DbSet properties for your Aggregate Roots / Entities here.
+         * Also map them inside DashboardDemoDbContextModelCreatingExtensions.ConfigureDashboardDemo
+         */
 
         public DashboardDemoDbContext(DbContextOptions<DashboardDemoDbContext> options)
             : base(options)

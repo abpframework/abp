@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
-using DashboardDemo.Localization.DashboardDemo;
+using DashboardDemo.Localization;
+using DashboardDemo.MultiTenancy;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 
-namespace DashboardDemo.Menus
+namespace DashboardDemo.Web.Menus
 {
     public class DashboardDemoMenuContributor : IMenuContributor
     {
@@ -19,9 +20,9 @@ namespace DashboardDemo.Menus
 
         private async Task ConfigureMainMenuAsync(MenuConfigurationContext context)
         {
-            if (!DashboardDemoConsts.IsMultiTenancyEnabled)
+            if (!MultiTenancyConsts.IsEnabled)
             {
-                ApplicationMenuItem administration = context.Menu.GetAdministration();
+                var administration = context.Menu.GetAdministration();
                 administration.TryRemoveMenuItem(TenantManagementMenuNames.GroupName);
             }
 

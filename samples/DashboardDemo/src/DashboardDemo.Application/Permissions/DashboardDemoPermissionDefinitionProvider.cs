@@ -1,4 +1,4 @@
-﻿using DashboardDemo.Localization.DashboardDemo;
+﻿using DashboardDemo.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
