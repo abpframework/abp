@@ -18,7 +18,7 @@ namespace Volo.Abp.Auditing
         {
             var options = new JsonSerializerSettings
             {
-                ContractResolver = new AuditingContractResolver(Options.IgnoredTypes)
+                ContractResolver = AuditingContractResolver.GetSharedAuditingContractResolver(Options.IgnoredTypes)
             };
 
             return JsonConvert.SerializeObject(obj, options);

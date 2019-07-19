@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Microsoft.Extensions.Localization;
@@ -9,6 +9,9 @@ namespace Volo.Abp.Localization.Json
 {
     public static class JsonLocalizationDictionaryBuilder
     {
+        private static readonly CamelCasePropertyNamesContractResolver SharedCamelCasePropertyNamesContractResolver =
+            new CamelCasePropertyNamesContractResolver();
+
         /// <summary>
         ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
         /// </summary>
@@ -38,7 +41,7 @@ namespace Volo.Abp.Localization.Json
                     jsonString,
                     new JsonSerializerSettings
                     {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        ContractResolver = SharedCamelCasePropertyNamesContractResolver
                     });
             }
             catch (JsonException ex)

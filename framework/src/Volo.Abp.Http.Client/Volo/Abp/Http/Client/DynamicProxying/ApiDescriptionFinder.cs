@@ -18,6 +18,9 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected IApiDescriptionCache Cache { get; }
 
+        private static readonly CamelCasePropertyNamesContractResolver SharedCamelCasePropertyNamesContractResolver =
+            new CamelCasePropertyNamesContractResolver();
+
         public ApiDescriptionFinder(
             IApiDescriptionCache cache, 
             IDynamicProxyHttpClientFactory httpClientFactory)
@@ -97,7 +100,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                     typeof(ApplicationApiDescriptionModel),
                     new JsonSerializerSettings
                     {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        ContractResolver = SharedCamelCasePropertyNamesContractResolver
                     });
 
                 return (ApplicationApiDescriptionModel)result;

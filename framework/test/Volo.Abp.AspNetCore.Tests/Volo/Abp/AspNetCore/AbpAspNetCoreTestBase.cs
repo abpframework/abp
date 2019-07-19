@@ -11,12 +11,15 @@ namespace Volo.Abp.AspNetCore
     public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
         where TStartup : class
     {
+        private static readonly CamelCasePropertyNamesContractResolver SharedCamelCasePropertyNamesContractResolver =
+            new CamelCasePropertyNamesContractResolver();
+
         protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
             var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
             return JsonConvert.DeserializeObject<T>(strResponse, new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = SharedCamelCasePropertyNamesContractResolver
             });
         }
 

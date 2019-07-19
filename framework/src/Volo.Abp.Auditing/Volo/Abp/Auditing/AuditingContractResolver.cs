@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 using Newtonsoft.Json;
@@ -34,6 +35,14 @@ namespace Volo.Abp.Auditing
             }
 
             return property;
+        }
+
+        private static readonly ConcurrentDictionary<List<Type>, AuditingContractResolver> AuditingContractResolverdDictionary = new ConcurrentDictionary<List<Type>, AuditingContractResolver>();
+
+        public static AuditingContractResolver GetSharedAuditingContractResolver(List<Type> ignoredTypes)
+        {
+            return AuditingContractResolverdDictionary.GetOrAdd(ignoredTypes,
+                x => new AuditingContractResolver(ignoredTypes));
         }
     }
 }
