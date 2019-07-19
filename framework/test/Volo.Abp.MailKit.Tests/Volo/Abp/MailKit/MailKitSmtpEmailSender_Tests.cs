@@ -15,19 +15,21 @@ namespace Volo.Abp.MailKit
         {
             var mailSender = CreateMailKitEmailSender();
             var mailMessage = new MailMessage("from_mail_address@asd.com", "to_mail_address@asd.com", "subject", "body")
-                { IsBodyHtml = true };
+            { IsBodyHtml = true };
 
             await mailSender.SendAsync(mailMessage);
         }
 
         //[Fact]
-        public void ShouldSendMailMessage()
+        public async Task ShouldSendMailMessage()
         {
             var mailSender = CreateMailKitEmailSender();
             var mailMessage = new MailMessage("from_mail_address@asd.com", "to_mail_address@asd.com", "subject", "body")
-                { IsBodyHtml = true };
+            {
+                IsBodyHtml = true
+            };
 
-            mailSender.Send(mailMessage);
+            await mailSender.SendAsync(mailMessage);
         }
 
         private static MailKitSmtpEmailSender CreateMailKitEmailSender()
