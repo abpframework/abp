@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
@@ -18,10 +20,29 @@ namespace Volo.Abp.Auditing
         {
             var options = new JsonSerializerSettings
             {
-                ContractResolver = AuditingContractResolver.GetSharedAuditingContractResolver(Options.IgnoredTypes)
+                ContractResolver = GetSharedAuditingContractResolver(Options.IgnoredTypes)
             };
 
             return JsonConvert.SerializeObject(obj, options);
+        }
+
+        private static readonly object SyncObj = new object();
+        private static AuditingContractResolver _sharedAuditingContractResolver;
+
+        public static AuditingContractResolver GetSharedAuditingContractResolver(List<Type> ignoredTypes)
+        {
+            if (_sharedAuditingContractResolver == null)
+            {
+                lock (SyncObj)
+                {
+                    if (_sharedAuditingContractResolver == null)
+                    {
+                        _sharedAuditingContractResolver = new AuditingContractResolver(ignoredTypes);
+                    }
+                }
+            }
+
+            return _sharedAuditingContractResolver;
         }
     }
 }
