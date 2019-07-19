@@ -8,7 +8,6 @@ using MailKit.Security;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using Volo.Abp.Threading;
 using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace Volo.Abp.MailKit
@@ -36,16 +35,6 @@ namespace Volo.Abp.MailKit
                 var message = MimeMessage.CreateFromMailMessage(mail);
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
-            }
-        }
-
-        protected override void SendEmail(MailMessage mail)
-        {
-            using (var client = AsyncHelper.RunSync(BuildClientAsync))
-            {
-                var message = MimeMessage.CreateFromMailMessage(mail);
-                client.Send(message);
-                client.Disconnect(true);
             }
         }
 

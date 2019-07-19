@@ -1,9 +1,10 @@
-﻿using Newtonsoft.Json;
-
-namespace Volo.Abp.Json
+﻿namespace Volo.Abp.Json
 {
     public class AbpJsonOptions
     {
-        public JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings();
+        /// <summary>
+        /// Used to set default value for the DateTimeFormat.
+        /// </summary>
+        public string DefaultDateTimeFormat { get; set; }
     }
 }

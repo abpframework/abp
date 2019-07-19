@@ -20,7 +20,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
         {
             services.Configure<AbpJsonOptions>(options =>
             {
-                options.SerializerSettings.DateFormatString = "yyyy*MM*dd";
+                options.DefaultDateTimeFormat = "yyyy*MM*dd";
             });
 
             base.ConfigureServices(context, services);

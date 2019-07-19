@@ -14,7 +14,11 @@ namespace Volo.Abp.Json.Newtonsoft
         public AbpJsonIsoDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
         {
             _clock = clock;
-            DateTimeFormat = abpJsonOptions.Value.SerializerSettings.DateFormatString;
+
+            if (abpJsonOptions.Value.DefaultDateTimeFormat != null)
+            {
+                DateTimeFormat = abpJsonOptions.Value.DefaultDateTimeFormat;
+            }
         }
 
         public override bool CanConvert(Type objectType)
