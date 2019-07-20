@@ -20,7 +20,7 @@ ABP是[开源](https://github.com/abpframework)和社区驱动项目. 本指南�
 
 如果你对框架或模块有功能的想法, 请在Github上[创建一个问题](https://github.com/abpframework/abp/issues/new)或参加现有的讨论. 如果它被社区所接受你就可以实现它.
 
-### 文件翻译
+### 文档翻译
 
 你可能希望将完整的[文档](https://abp.io/documents/)(包括本文)翻译成你的母语. 请按照下列步骤操作:
 
@@ -28,6 +28,14 @@ ABP是[开源](https://github.com/abpframework)和社区驱动项目. 本指南�
 * 要添加新语言,请在[docs](https://github.com/abpframework/abp/tree/master/docs)文件夹中创建一个新文件夹. 文件夹名称可以是" en","es","fr","tr"等(参见[所有文化代码](https://msdn.microsoft.com/en-us/library/hh441729.aspx)).
 * 获取["en"文件夹](https://github.com/abpframework/abp/tree/master/docs/en)作为文件名和文件夹结构的参考. 如果要翻译相同的文档, 请保持相同的命名.
 * 翻译任何文档后发送拉取请求(PR). 请翻译文件后及时发送PR. 不要等到完成所有文件的翻译.
+
+在[ABP文档网站](https://docs.abp.io)上新添加语言之前,需要翻译一些基本文档:
+
+* 入门文档
+* 教程
+* CLI
+
+完成了这些基本的翻译后,将添加一种新的语言
 
 ### 资源本地化
 
