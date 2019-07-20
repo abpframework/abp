@@ -6,6 +6,8 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
 @inject IPageLayout PageLayout
@@ -41,6 +43,8 @@
 
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
+    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+
     @await RenderSectionAsync("styles", false)
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
@@ -62,6 +66,8 @@
 
     <script type="text/javascript" src="~/Abp/ApplicationConfigurationScript"></script>
     <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>
+
+    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
 
     @await RenderSectionAsync("scripts", false)
 
