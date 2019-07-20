@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Authorization;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Features
 {
@@ -20,30 +19,6 @@ namespace Volo.Abp.Features
 
             var value = await featureChecker.GetOrNullAsync(name);
             return value?.To<T>() ?? defaultValue;
-        }
-
-        public static string GetOrNull(
-            [NotNull] this IFeatureChecker featureChecker, 
-            [NotNull] string name)
-        {
-            Check.NotNull(featureChecker, nameof(featureChecker));
-            return AsyncHelper.RunSync(() => featureChecker.GetOrNullAsync(name));
-        }
-
-        public static T Get<T>(
-            [NotNull] this IFeatureChecker featureChecker, 
-            [NotNull] string name, 
-            T defaultValue = default)
-            where T : struct
-        {
-            return AsyncHelper.RunSync(() => featureChecker.GetAsync(name, defaultValue));
-        }
-
-        public static bool IsEnabled(
-            [NotNull] this IFeatureChecker featureChecker, 
-            [NotNull] string name)
-        {
-            return AsyncHelper.RunSync(() => featureChecker.IsEnabledAsync(name));
         }
 
         public static async Task<bool> IsEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
@@ -77,11 +52,6 @@ namespace Volo.Abp.Features
             return false;
         }
 
-        public static bool IsEnabled(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
-        {
-            return AsyncHelper.RunSync(() => featureChecker.IsEnabledAsync(requiresAll, featureNames));
-        }
-
         public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, string featureName)
         {
             if (!(await featureChecker.IsEnabledAsync(featureName)))
@@ -89,15 +59,7 @@ namespace Volo.Abp.Features
                 throw new AbpAuthorizationException("Feature is not enabled: " + featureName);
             }
         }
-
-        public static void CheckEnabled(this IFeatureChecker featureChecker, string featureName)
-        {
-            if (!featureChecker.IsEnabled(featureName))
-            {
-                throw new AbpAuthorizationException("Feature is not enabled: " + featureName);
-            }
-        }
-
+        
         public static async Task CheckEnabledAsync(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
         {
             if (featureNames.IsNullOrEmpty())
@@ -133,11 +95,6 @@ namespace Volo.Abp.Features
                     string.Join(", ", featureNames)
                 );
             }
-        }
-
-        public static void CheckEnabled(this IFeatureChecker featureChecker, bool requiresAll, params string[] featureNames)
-        {
-            AsyncHelper.RunSync(() => featureChecker.CheckEnabledAsync(requiresAll, featureNames));
         }
     }
 }

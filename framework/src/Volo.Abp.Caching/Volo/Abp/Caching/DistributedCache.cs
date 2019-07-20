@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Nito.AsyncEx;
 using Volo.Abp.MultiTenancy;
-using Volo.Abp.Serialization;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Caching
@@ -34,7 +33,7 @@ namespace Volo.Abp.Caching
 
         protected ICurrentTenant CurrentTenant { get; }
 
-        protected AsyncLock AsyncLock { get; } = new AsyncLock();
+        protected SemaphoreSlim SyncSemaphore { get; }
 
         protected DistributedCacheEntryOptions DefaultCacheOptions;
 
@@ -57,6 +56,8 @@ namespace Volo.Abp.Caching
             Logger = NullLogger<DistributedCache<TCacheItem>>.Instance;
             Serializer = serializer;
             CurrentTenant = currentTenant;
+
+            SyncSemaphore = new SemaphoreSlim(1, 1);
 
             SetDefaultOptions();
         }
@@ -161,7 +162,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            using (AsyncLock.Lock(CancellationTokenProvider.Token))
+            using (SyncSemaphore.Lock())
             {
                 value = Get(key, hideErrors);
                 if (value != null)
@@ -200,7 +201,7 @@ namespace Volo.Abp.Caching
                 return value;
             }
 
-            using (await AsyncLock.LockAsync(token))
+            using (await SyncSemaphore.LockAsync(token))
             {
                 value = await GetAsync(key, hideErrors, token);
                 if (value != null)

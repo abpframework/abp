@@ -32,7 +32,7 @@ using Volo.Abp.PermissionManagement.Web;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
-using Volo.Abp.Ui.Navigation.Urls;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.VirtualFileSystem;
 
@@ -183,7 +183,7 @@ namespace MyCompanyName.MyProjectName
             IConfigurationRoot configuration,
             IHostingEnvironment hostingEnvironment)
         {
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });

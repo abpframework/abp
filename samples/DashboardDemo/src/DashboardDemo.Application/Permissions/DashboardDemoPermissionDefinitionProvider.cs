@@ -1,4 +1,4 @@
-﻿using DashboardDemo.Localization.DashboardDemo;
+﻿using DashboardDemo.Localization;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Localization;
 
@@ -10,7 +10,7 @@ namespace DashboardDemo.Permissions
         {
             var myGroup = context.AddGroup(DashboardDemoPermissions.GroupName);
 
-            //Define your own permissions here. Examaple:
+            //Define your own permissions here. Example:
             //myGroup.AddPermission(DashboardDemoPermissions.MyPermission1, L("Permission:MyPermission1"));
         }
 

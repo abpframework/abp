@@ -3,17 +3,18 @@ using NuGet.Versioning;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Http;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.NuGet
 {
-    public class NuGetService : ISingletonDependency
+    public class NuGetService : ITransientDependency
     {
         protected IJsonSerializer JsonSerializer { get; }
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public NuGetService(
@@ -26,10 +27,8 @@ namespace Volo.Abp.Cli.NuGet
 
         public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includePreviews = false, bool includeNightly = false)
         {
-            using (var client = new HttpClient())
+            using (var client = new CliHttpClient())
             {
-                client.Timeout = TimeSpan.FromSeconds(30);
-
                 var url = includeNightly ?
                     $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json" :
                     $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";

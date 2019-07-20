@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity
     [RemoteService]
     [Area("identity")]
     [ControllerName("Role")]
-    [Route("api/identity/role")]
+    [Route("api/identity/roles")]
     public class IdentityRoleController : AbpController, IIdentityRoleAppService
     {
         private readonly IIdentityRoleAppService _roleAppService;

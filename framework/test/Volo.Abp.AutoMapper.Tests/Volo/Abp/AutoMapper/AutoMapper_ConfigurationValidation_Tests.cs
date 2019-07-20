@@ -30,8 +30,6 @@ namespace Volo.Abp.AutoMapper
             {
                 Configure<AbpAutoMapperOptions>(options =>
                 {
-                    options.UseStaticMapper = false;
-
                     options.AddProfile<ValidatedProfile>(true);
                     options.AddProfile<NonValidatedProfile>();
                 });

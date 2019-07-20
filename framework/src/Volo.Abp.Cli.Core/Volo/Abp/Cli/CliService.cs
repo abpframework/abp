@@ -40,10 +40,8 @@ namespace Volo.Abp.Cli
         public async Task RunAsync(string[] args)
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
-            Logger.LogInformation("https://abp.io");
 
             await CheckCliVersionAsync();
-            CheckDependencies();
 
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);
@@ -65,32 +63,6 @@ namespace Volo.Abp.Cli
                     Logger.LogException(ex);
                 }
             }
-        }
-
-        private void CheckDependencies()
-        {
-            var installedNpmPackages = CmdHelper.RunCmdAndGetOutput("npm list -g --depth 0");
-
-            if (!installedNpmPackages.Contains(" yarn@"))
-            {
-                InstallYarn();
-            }
-            if (!installedNpmPackages.Contains(" gulp@"))
-            {
-                InstallGulp();
-            }
-        }
-
-        private void InstallYarn()
-        {
-            Logger.LogInformation("Installing yarn...");
-            CmdHelper.RunCmd("npm install yarn -g");
-        }
-
-        private void InstallGulp()
-        {
-            Logger.LogInformation("Installing gulp...");
-            CmdHelper.RunCmd("npm install gulp -g");
         }
 
         private async Task CheckCliVersionAsync()
@@ -191,6 +163,7 @@ namespace Volo.Abp.Cli
 
                 case UpdateChannel.Nightly:
                     return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
+
                 default:
                     return default;
             }

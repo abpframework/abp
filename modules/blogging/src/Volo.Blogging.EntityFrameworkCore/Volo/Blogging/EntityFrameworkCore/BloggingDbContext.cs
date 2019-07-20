@@ -9,7 +9,7 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
-    [ConnectionStringName("Blogging")]
+    [ConnectionStringName(BloggingConsts.ConnectionStringName)]
     public class BloggingDbContext : AbpDbContext<BloggingDbContext>, IBloggingDbContext
     {
         public static string TablePrefix { get; set; } = BloggingConsts.DefaultDbTablePrefix;

@@ -2,5 +2,6 @@
 {
     public interface IAmbientUnitOfWork : IUnitOfWorkAccessor
     {
+
     }
 }

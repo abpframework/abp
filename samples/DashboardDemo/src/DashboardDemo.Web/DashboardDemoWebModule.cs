@@ -1,57 +1,46 @@
 ﻿using System.IO;
-using System.Linq;
-using DashboardDemo.Dashboards;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DashboardDemo.EntityFrameworkCore;
-using DashboardDemo.Localization.DashboardDemo;
-using DashboardDemo.Menus;
-using DashboardDemo.Pages;
-using DashboardDemo.Pages.widgets;
-using DashboardDemo.Permissions;
-using DashboardDemo.Widgets;
+using DashboardDemo.Localization;
+using DashboardDemo.MultiTenancy;
+using DashboardDemo.Web.Menus;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
-using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
-using Volo.Abp.Data;
-using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Web;
-using Volo.Abp.Threading;
+using Volo.Abp.TenantManagement.Web;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
-using Volo.Abp.PermissionManagement;
-using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.TenantManagement.Web;
 
-namespace DashboardDemo
+namespace DashboardDemo.Web
 {
     [DependsOn(
+        typeof(DashboardDemoHttpApiModule),
         typeof(DashboardDemoApplicationModule),
-        typeof(DashboardDemoEntityFrameworkCoreModule),
+        typeof(DashboardDemoEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAutofacModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpAccountWebModule),
+        typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpAspNetCoreMvcUiDashboardsModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpTenantManagementWebModule)
         )]
     public class DashboardDemoWebModule : AbpModule
@@ -63,7 +52,9 @@ namespace DashboardDemo
                 options.AddAssemblyResource(
                     typeof(DashboardDemoResource),
                     typeof(DashboardDemoDomainModule).Assembly,
+                    typeof(DashboardDemoDomainSharedModule).Assembly,
                     typeof(DashboardDemoApplicationModule).Assembly,
+                    typeof(DashboardDemoApplicationContractsModule).Assembly,
                     typeof(DashboardDemoWebModule).Assembly
                 );
             });
@@ -74,9 +65,8 @@ namespace DashboardDemo
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            ConfigureWidgets();
-            ConfigureDashboards();
-            ConfigureDatabaseServices();
+            ConfigureUrls(configuration);
+            ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureLocalizationServices();
@@ -85,54 +75,34 @@ namespace DashboardDemo
             ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureWidgets()
+        private void ConfigureUrls(IConfigurationRoot configuration)
         {
-            Configure<WidgetOptions>(options =>
+            Configure<AppUrlOptions>(options =>
             {
-                options.Widgets.AddRange(WidgetDefinitionProvider.GetDefinitions());
+                options.Applications["MVC"].RootUrl = configuration["AppSelfUrl"];
             });
         }
 
-        private void ConfigureDashboards()
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
         {
-            Configure<DashboardOptions>(options =>
-            {
-                options.Dashboards.AddRange(DashboardDefinitionProvider.GetDefinitions());
-            });
-
-            Configure<BundlingOptions>(options =>
-            {
-                options.ScriptBundles.Add(DashboardNames.MyDashboard, configuration =>
-                    {
-                        configuration.AddContributors(typeof(MyDashboardScriptBundleContributor));
-                    });
-                options.ScriptBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
+            context.Services.AddAuthentication()
+                .AddIdentityServerAuthentication(options =>
                 {
-                    configuration.AddContributors(typeof(UserCountWidgetScriptBundleContributor));
+                    options.Authority = configuration["AuthServer:Authority"];
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = "DashboardDemo";
                 });
-                options.StyleBundles.Add(DashboardNames.MyDashboard, configuration =>
-                    {
-                        configuration.AddContributors(typeof(MyDashboardStyleBundleContributor));
-                    });
-                options.StyleBundles.Add(UserCountWidgetViewComponent.WidgetName, configuration =>
-                {
-                    configuration.AddContributors(typeof(UserCountWidgetStyleBundleContributor));
-                });
-            });
-        }
-
-        private void ConfigureDatabaseServices()
-        {
-            Configure<AbpDbContextOptions>(options =>
-            {
-                options.UseSqlServer();
-            });
         }
 
         private void ConfigureAutoMapper()
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
+                /* use `true` for the `validate` parameter if you want to
+                 * validate the profile on application startup.
+                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more
+                 * about configuration validation.
+                 */
                 options.AddProfile<DashboardDemoWebAutoMapperProfile>();
             });
         }
@@ -143,7 +113,11 @@ namespace DashboardDemo
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
+                    options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Domain", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Application.Contracts", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoApplicationModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Application", Path.DirectorySeparatorChar)));
+                    options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoWebModule>(hostingEnvironment.ContentRootPath);
                 });
             }
         }
@@ -155,7 +129,6 @@ namespace DashboardDemo
                 options.Resources
                     .Get<DashboardDemoResource>()
                     .AddBaseTypes(
-                        typeof(AbpValidationResource),
                         typeof(AbpUiResource)
                     );
 
@@ -191,7 +164,8 @@ namespace DashboardDemo
                     options.SwaggerDoc("v1", new Info { Title = "DashboardDemo API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
-                });
+                }
+            );
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -210,38 +184,22 @@ namespace DashboardDemo
 
             app.UseVirtualFiles();
             app.UseAuthentication();
+            app.UseJwtTokenMiddleware();
 
-            if (DashboardDemoConsts.IsMultiTenancyEnabled)
+            if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
 
+            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
-
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "DashboardDemo API");
             });
-
             app.UseAuditing();
-
             app.UseMvcWithDefaultRouteAndArea();
-
-            SeedDatabase(context);
-        }
-
-        private static void SeedDatabase(ApplicationInitializationContext context)
-        {
-            using (var scope = context.ServiceProvider.CreateScope())
-            {
-                AsyncHelper.RunSync(async () =>
-                {
-                    await scope.ServiceProvider
-                        .GetRequiredService<IDataSeeder>()
-                        .SeedAsync();
-                });
-            }
         }
     }
 }

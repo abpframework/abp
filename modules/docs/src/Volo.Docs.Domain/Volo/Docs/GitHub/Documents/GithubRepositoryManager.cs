@@ -30,7 +30,10 @@ namespace Volo.Docs.GitHub.Documents
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
             }
 
-            httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent ?? "");
+            if (!userAgent.IsNullOrWhiteSpace())
+            {
+                httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+            }
 
             return await httpClient.GetStringAsync(new Uri(rawUrl));
         }
@@ -43,7 +46,10 @@ namespace Volo.Docs.GitHub.Documents
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", token);
             }
 
-            httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent ?? "");
+            if (!userAgent.IsNullOrWhiteSpace())
+            {
+                httpClient.DefaultRequestHeaders.Add("User-Agent", userAgent);
+            }
 
             return await httpClient.GetByteArrayAsync(new Uri(rawUrl));
         }

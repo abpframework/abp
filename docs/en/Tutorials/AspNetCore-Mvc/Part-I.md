@@ -204,7 +204,7 @@ namespace Acme.BookStore
 * This DTO class is used to get book information from the user interface while creating or updating a book.
 * It defines data annotation attributes (like `[Required]`) to define validations for the properties. DTOs are [automatically validated](../../Validation.md) by the ABP framework.
 
-Like done for the `BookDto` above, create a mapping from the `CreateUpdateBookDto` object to the `Book` entity:
+Next, add a mapping in `BookStoreApplicationAutoMapperProfile` from the `CreateUpdateBookDto` object to the `Book` entity:
 
 ````csharp
 CreateMap<CreateUpdateBookDto, Book>();
@@ -337,13 +337,13 @@ Open the `Index.cshtml` and change the content as shown below:
 ````html
 @page
 @using Acme.BookStore.Web.Pages.Books
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model IndexModel
 
 <h2>Books</h2>
 ````
 
-* This code changes the default inheritance of the Razor View Page Model so it **inherits** from the `BookStorePageBase` class (instead of `PageModel`).  The `BookStorePageBase` class which comes with the startup template and provides some shared properties/methods used by all pages.
+* This code changes the default inheritance of the Razor View Page Model so it **inherits** from the `BookStorePage` class (instead of `PageModel`).  The `BookStorePage` class which comes with the startup template and provides some shared properties/methods used by all pages.
 * Ensure that the `IndexModel` (*Index.cshtml.cs)* has the `Acme.BookStore.Pages.Books` namespace, or update it in the `Index.cshtml`.
 
 #### Add Books Page to the Main Menu
@@ -394,7 +394,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model Acme.BookStore.Web.Pages.Books.IndexModel
 @section scripts
 {

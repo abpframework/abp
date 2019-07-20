@@ -1,12 +1,40 @@
-﻿@using Microsoft.AspNetCore.Authorization
+﻿@using Localization.Resources.AbpUi
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
 @inject IAuthorizationService AuthorizationService
 @inject IWidgetRenderer WidgetRenderer
-@inject IStringLocalizerFactory localizer
+@inject IGlobalFilterRenderer GlobalFilteRenderer
+@inject IHtmlLocalizer<AbpUiResource> L
 @model Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard.DashboardViewModel
 @{
 }
+
+    <abp-row class="mb-4 align-items-center justify-content-between">
+        @if (Model.Dashboard.AvailableGlobalFilters.Any())
+        {
+            <abp-column size="_10">
+                <form id="DashboardGlobalFiltersForm">
+                    <abp-row>
+                        @foreach (var globalFilterConfiguration in Model.Dashboard.AvailableGlobalFilters)
+                        {
+                            var globalFilter = Model.GetGlobalFilter(globalFilterConfiguration.GlobalFilterName);
+
+                            @await GlobalFilteRenderer.RenderAsync(Component, globalFilter.Name)
+
+                        }
+                    </abp-row>
+                </form>
+            </abp-column>
+            <abp-column size="_2">
+                <div class="float-right">
+                    <abp-button button-type="Success" text="@L["Refresh"].Value" icon="refresh" id="GlobalRefreshButton" />
+                </div>
+            </abp-column>
+        }
+    </abp-row>
 
 <abp-row>
     @foreach (var widgetConfiguration in Model.Dashboard.AvailableWidgets)

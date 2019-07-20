@@ -10,7 +10,7 @@ namespace MyCompanyName.MyProjectName.Permissions
         {
             var myGroup = context.AddGroup(MyProjectNamePermissions.GroupName);
 
-            //Define your own permissions here. Examaple:
+            //Define your own permissions here. Example:
             //myGroup.AddPermission(MyProjectNamePermissions.MyPermission1, L("Permission:MyPermission1"));
         }
 

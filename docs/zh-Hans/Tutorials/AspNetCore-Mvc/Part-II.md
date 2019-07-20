@@ -313,8 +313,10 @@ $(function () {
 ````
 
 * 通过 `abp.localization.getResource('BookStore')` 可以在客户端使用服务器端定义的相同的本地化语言文本.
+* 添加了一个名为 `createModal` 的新的 `ModalManager` 来打开创建用的 modal 对话框.
 * 添加了一个名为 `editModal` 的新的 `ModalManager` 来打开编辑用的 modal 对话框.
 * 在 `columnDefs` 起始处新增一列用于显示 "Actions" 下拉按钮.
+* "New Book"动作只需调用`createModal.open`来打开创建对话框.
 * "Edit" 操作只是简单调用 `editModal.open` 来打开编辑对话框.
 
 现在,你可以运行程序,通过编辑操作来更新任一个book实体.
@@ -355,6 +357,12 @@ $(function () {
     var editModal = new abp.ModalManager(abp.appPath + 'Books/EditModal');
 
     var dataTable = $('#BooksTable').DataTable(abp.libs.datatables.normalizeConfiguration({
+        processing: true,
+        serverSide: true,
+        paging: true,
+        searching: false,
+        autoWidth: false,
+        scrollCollapse: true,
         order: [[1, "asc"]],
         ajax: abp.libs.datatables.createAjax(acme.bookStore.book.getList),
         columnDefs: [

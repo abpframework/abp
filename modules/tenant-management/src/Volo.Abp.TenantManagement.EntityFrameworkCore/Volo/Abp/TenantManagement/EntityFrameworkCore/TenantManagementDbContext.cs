@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpTenantManagement")]
+    [ConnectionStringName(AbpTenantManagementConsts.ConnectionStringName)]
     public class TenantManagementDbContext : AbpDbContext<TenantManagementDbContext>, ITenantManagementDbContext
     {
         public static string TablePrefix { get; set; } = AbpTenantManagementConsts.DefaultDbTablePrefix;

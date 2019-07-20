@@ -61,7 +61,7 @@ namespace Volo.Abp.Cli.Utils
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX) || RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                //TODO: Test this. it should work for both operaion systems.
+                //TODO: Test this. it should work for both operation systems.
                 return "/bin/bash";
             }
 

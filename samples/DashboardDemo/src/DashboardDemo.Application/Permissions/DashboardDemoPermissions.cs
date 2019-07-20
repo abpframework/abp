@@ -1,7 +1,4 @@
-﻿using System;
-using Volo.Abp.Reflection;
-
-namespace DashboardDemo.Permissions
+﻿namespace DashboardDemo.Permissions
 {
     public static class DashboardDemoPermissions
     {
@@ -9,11 +6,5 @@ namespace DashboardDemo.Permissions
 
         //Add your own permission names. Example:
         //public const string MyPermission1 = GroupName + ".MyPermission1";
-
-        public static string[] GetAll()
-        {
-            //Return an array of all permissions
-            return ReflectionHelper.GetPublicConstantsRecursively(typeof(DashboardDemoPermissions));
-        }
     }
 }

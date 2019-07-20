@@ -1,5 +1,5 @@
 {
-  "version": "0.6.5",
+  "version": "0.6.6",
   "name": "@abp/aspnetcore.mvc.ui.theme.shared",
   "publishConfig": {
     "access": "public"
@@ -12,6 +12,7 @@
     "@abp/jquery-form": "^0.6.5",
     "@abp/jquery-validation-unobtrusive": "^0.6.5",
     "@abp/lodash": "^0.6.5",
+    "@abp/malihu-custom-scrollbar-plugin": "^0.6.5",
     "@abp/select2": "^0.6.5",
     "@abp/sweetalert": "^0.6.5",
     "@abp/timeago": "^0.6.5",

@@ -1,6 +1,6 @@
 # ABP CLI,v0.18版本的新模板和其他功能
 
-ABP v0.18已发布, 包含解决的[70+个issue](https://github.com/abpframework/abp/milestone/16?closed=1),[500+次提交](https://github.com/abpframework/abp/compare/0.17.0.0...0.18.0)
+ABP v0.18已发布, 包含解决的[80+个issue](https://github.com/abpframework/abp/milestone/16?closed=1),[550+次提交](https://github.com/abpframework/abp/compare/0.17.0.0...0.18.0)
 
 ## 网站更改
 

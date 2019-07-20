@@ -11,11 +11,8 @@ namespace Volo.Abp.AutoMapper
 
         public ITypeList<Profile> ValidatingProfiles { get; set; }
 
-        public bool UseStaticMapper { get; set; }
-
         public AbpAutoMapperOptions()
         {
-            UseStaticMapper = true;
             Configurators = new List<Action<IAbpAutoMapperConfigurationContext>>();
             ValidatingProfiles = new TypeList<Profile>();
         }

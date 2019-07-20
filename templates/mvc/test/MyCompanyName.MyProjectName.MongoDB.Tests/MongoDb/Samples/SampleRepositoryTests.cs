@@ -6,7 +6,7 @@ using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Xunit;
 
-namespace MyCompanyName.MyProjectName.MongoDb.Samples
+namespace MyCompanyName.MyProjectName.MongoDB.Samples
 {
     /* This is just an example test class.
      * Normally, you don't test ABP framework code

@@ -221,6 +221,10 @@
               "path": "AspNetCore/Tag-Helpers/Index.md"
             },
             {
+              "text": "Dashboard & Widget System",
+              "path": "AspNetCore/Tag-Helpers/DashboardWidgetSystem.md"
+            },
+            {
               "text": "Theming",
               "path": "AspNetCore/Theming.md"
             }

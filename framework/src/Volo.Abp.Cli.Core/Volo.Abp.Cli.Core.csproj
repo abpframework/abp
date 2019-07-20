@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ionic.Zip" Version="1.9.1.8" />
+    <PackageReference Include="SharpZipLib" Version="1.1.0" />
     <PackageReference Include="HtmlAgilityPack.NetCore" Version="1.5.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
     <PackageReference Include="NuGet.Versioning" Version="5.1.0" />
@@ -26,12 +26,6 @@
     <ProjectReference Include="..\Volo.Abp.Http\Volo.Abp.Http.csproj" />
     <ProjectReference Include="..\Volo.Abp.IdentityModel\Volo.Abp.IdentityModel.csproj" />
     <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="System.Data.SqlXml">
-      <HintPath>C:\Windows\Microsoft.NET\Framework\v2.0.50727\System.Data.SqlXml.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

@@ -27,7 +27,11 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Package name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException(
+                    "Package name is missing!" +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
             }
 
             await ProjectNugetPackageAdder.AddAsync(
@@ -36,7 +40,7 @@ namespace Volo.Abp.Cli.Commands
             );
         }
 
-        public Task<string> GetUsageInfo()
+        public string GetUsageInfo()
         {
             var sb = new StringBuilder();
 
@@ -55,14 +59,14 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
             sb.AppendLine("");
 
-            return Task.FromResult(sb.ToString());
+            return sb.ToString();
         }
 
-        public Task<string> GetShortDescriptionAsync()
+        public string GetShortDescription()
         {
-            return Task.FromResult("Adds a new ABP package to a project by adding related nuget package" +
-                                   " as a dependency to the project and adding [DependsOn(...)] attribute to" +
-                                   " the module class in the project.");
+            return "Adds a new ABP package to a project by adding related nuget package" +
+                   " as a dependency to the project and adding [DependsOn(...)] attribute to" +
+                   " the module class in the project.";
         }
 
         protected virtual string GetProjectFile(CommandLineArgs commandLineArgs)

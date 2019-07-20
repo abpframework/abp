@@ -1,12 +1,7 @@
-﻿using Volo.Abp;
-
-namespace DashboardDemo
+﻿namespace DashboardDemo
 {
-    public abstract class DashboardDemoApplicationTestBase : AbpIntegratedTest<DashboardDemoApplicationTestModule>
+    public abstract class DashboardDemoApplicationTestBase : DashboardDemoTestBase<DashboardDemoApplicationTestModule> 
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+
     }
 }

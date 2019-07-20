@@ -175,7 +175,7 @@ namespace Acme.BookStore
 
 #### CreateUpdateBookDto
 
-在`Acme.BookStore.Application`项目中创建一个名为`CreateUpdateBookDto`的DTO类:
+在`Acme.BookStore.Application.Contracts`项目中创建一个名为`CreateUpdateBookDto`的DTO类:
 
 ````c#
 using System;
@@ -184,7 +184,6 @@ using Volo.Abp.AutoMapper;
 
 namespace Acme.BookStore
 {
-    [AutoMapTo(typeof(Book))]
     public class CreateUpdateBookDto
     {
         [Required]
@@ -287,15 +286,13 @@ Swagger有一个很好的UI来测试API. 你可以尝试执行`[GET] /api/app/bo
 
 ### 动态JavaScript代理
 
-在Javascript端通过AJAX的方式调用HTTP API接口是很常见的,你可以使用`$.ajax`或这其他的工具来调用接口.当然,ABP中提供了更好的方式.
+在Javascript端通过AJAX的方式调用HTTP API接口是很常见的,你可以使用`$.ajax`或者其他的工具来调用接口.当然,ABP中提供了更好的方式.
 
 ABP **自动** 为所有的API接口创建了JavaScript **代理**.因此,你可以像调用 **JavaScript function**一样调用任何接口.
 
 #### 在浏览器的开发者控制台中测试接口
 
 你可以使用你钟爱的浏览器的 **开发者控制台** 中轻松测试JavaScript代理.运行程序,并打开浏览器的 **开发者工具**(快捷键:F12),切换到 **Console** 标签,输入下面的代码并回车:
-
-你现在可以使用自己喜欢的浏览器的**开发者控制台**轻松测试JavaScript代理. 运行应用程序, 打开浏览器的**开发者工具**(快捷键:F12),切换到**Console**选项卡,输入以下代码并按回车键.
 
 ````js
 acme.bookStore.book.getList({}).done(function (result) { console.log(result); });
@@ -349,7 +346,7 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 <h2>Books</h2>
 ````
 
-* 此代码更改了Razor View Page Model的默认继承,因此它从`BookStorePageBase`类(而不是`PageModel`)继承.启动模板附带的`BookStorePageBase`类,提供所有页面使用的一些共享属性/方法.
+* 此代码更改了Razor View Page Model的默认继承,因此它从`BookStorePage`类(而不是`PageModel`)继承.启动模板附带的`BookStorePage`类,提供所有页面使用的一些共享属性/方法.
 * 确保`IndexModel`(Index.cshtml.cs)具有`Acme.BookStore.Pages.Books`命名空间,或者在`Index.cshtml`中更新它.
 
 #### 将Books页面添加到主菜单
@@ -400,7 +397,7 @@ context.Menu.AddItem(
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @model Acme.BookStore.Web.Pages.Books.IndexModel
 @section scripts
 {

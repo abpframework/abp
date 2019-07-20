@@ -5,5 +5,7 @@
         public const string DefaultDbTablePrefix = "IdentityServer";
 
         public const string DefaultDbSchema = null;
+
+        public const string ConnectionStringName = "AbpIdentityServer";
     }
 }

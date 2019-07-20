@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Volo.Abp.Cli.Commands;
 using Volo.Abp.Domain;
 using Volo.Abp.IdentityModel;
@@ -17,6 +18,10 @@ namespace Volo.Abp.Cli
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+            // TODO: workaround until subsequent issues of https://github.com/dotnet/corefx/issues/30166 are resolved
+            // a permanent fix will probably be published with the release of .net core 3.0: https://github.com/dotnet/corefx/issues/36553
+            AppContext.SetSwitch("System.Net.Http.UseSocketsHttpHandler", false);
 
             Configure<CliOptions>(options =>
             {

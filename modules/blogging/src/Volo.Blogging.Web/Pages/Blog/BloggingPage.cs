@@ -34,7 +34,10 @@ namespace Volo.Blogging.Pages.Blog
             var closingTag = "</p>";
 
             var html = RenderMarkdownToString(content);
-
+            if (string.IsNullOrWhiteSpace(html))
+            {
+                return "";
+            }
             var splittedHtml = html.Split(closingTag);
 
             if (splittedHtml.Length < 1)

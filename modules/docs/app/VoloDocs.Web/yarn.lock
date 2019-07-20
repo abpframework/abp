@@ -10,17 +10,17 @@
     "@abp/core" "^0.6.5"
     anchor-js "^4.1.1"
 
-"@abp/aspnetcore.mvc.ui.theme.basic@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.6.5.tgz#dc417bcfe8687a9859db22af9e17795862089d03"
-  integrity sha512-qAFC3ZM2L5hLk7gK6RtfpAfTr1SHYpJ3i82Ztf/w0qNSE/t7V5C3TJdaxxKfdXVoZ6ZI6QS1vo14JHxiSYuGYg==
+"@abp/aspnetcore.mvc.ui.theme.basic@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.basic/-/aspnetcore.mvc.ui.theme.basic-0.6.6.tgz#5a71e7f578092cc4550bb8295996e9b1d1b3f1be"
+  integrity sha512-1yFqyxqvfXBeNyOyBvKgL+DB/T8q0eWlFJ1/6ifCsDQ6nvgBqFWFwiRLB1Rb18q43o/1warGBTXdNb//C3jbdA==
   dependencies:
-    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.6.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared" "^0.6.6"
 
-"@abp/aspnetcore.mvc.ui.theme.shared@^0.6.5":
-  version "0.6.5"
-  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.6.5.tgz#32502d13d3b50e2b15fbcdb2dce3026bfa192d65"
-  integrity sha512-KpUlwqM7iGwWt48ajtXvcXXsRlYKgCVdgX0CrJanSZ6Sz0Rj3ApCROvxNJP+kf1KCNqlM9nx+pDRQOnUK+2ohg==
+"@abp/aspnetcore.mvc.ui.theme.shared@^0.6.6":
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/@abp/aspnetcore.mvc.ui.theme.shared/-/aspnetcore.mvc.ui.theme.shared-0.6.6.tgz#390625c457390ff399e8230c155f53c2f0bb3bcd"
+  integrity sha512-+qs1KoOfgbc6uKthZVVrWPyUgXQt6PXS3ugPT8IaqKVCLYRKTEOUQpOugMajnP+GZlw7toFwsN8jjk4T3AIsvQ==
   dependencies:
     "@abp/aspnetcore.mvc.ui" "^0.6.4"
     "@abp/bootstrap" "^0.6.5"
@@ -29,6 +29,7 @@
     "@abp/jquery-form" "^0.6.5"
     "@abp/jquery-validation-unobtrusive" "^0.6.5"
     "@abp/lodash" "^0.6.5"
+    "@abp/malihu-custom-scrollbar-plugin" "^0.6.5"
     "@abp/select2" "^0.6.5"
     "@abp/sweetalert" "^0.6.5"
     "@abp/timeago" "^0.6.5"

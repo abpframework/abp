@@ -1,48 +1,37 @@
-﻿using DashboardDemo.Localization.DashboardDemo;
-using Volo.Abp.Auditing;
+﻿using DashboardDemo.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
-using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.IdentityServer;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.PermissionManagement.Identity;
+using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using Volo.Abp.VirtualFileSystem;
 
 namespace DashboardDemo
 {
     [DependsOn(
+        typeof(DashboardDemoDomainSharedModule),
+        typeof(AbpAuditLoggingDomainModule),
+        typeof(BackgroundJobsDomainModule),
+        typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
-        typeof(AbpAuditingModule),
-        typeof(BackgroundJobsDomainModule),
-        typeof(AbpAuditLoggingDomainModule),
-        typeof(AbpTenantManagementDomainModule),
-        typeof(AbpFeatureManagementDomainModule)
+        typeof(AbpIdentityServerDomainModule),
+        typeof(AbpPermissionManagementDomainIdentityServerModule),
+        typeof(AbpSettingManagementDomainModule),
+        typeof(AbpTenantManagementDomainModule)
         )]
     public class DashboardDemoDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<DashboardDemoDomainModule>("DashboardDemo");
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<DashboardDemoResource>("en")
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/DashboardDemo");
-            });
-
             Configure<MultiTenancyOptions>(options =>
             {
-                options.IsEnabled = DashboardDemoConsts.IsMultiTenancyEnabled;
+                options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
         }
     }

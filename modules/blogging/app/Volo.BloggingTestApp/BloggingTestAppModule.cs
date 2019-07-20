@@ -33,7 +33,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
 using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
-using Volo.BloggingTestApp.MongoDb;
+using Volo.BloggingTestApp.MongoDB;
 
 namespace Volo.BloggingTestApp
 {
@@ -59,6 +59,11 @@ namespace Volo.BloggingTestApp
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.BuildConfiguration();
+
+            Configure<BloggingUrlOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
 
             Configure<DbConnectionOptions>(options =>
             {
