@@ -178,7 +178,7 @@ namespace DashboardDemo.Web
             {
                 options.Widgets.Add(
                     new WidgetDefinition(
-                        "MySimpleWidget",
+                        "MyCustomNameWidget",
                         typeof(MySimpleWidgetViewComponent))
                         .WithStyles("/Pages/Components/MySimpleWidget/Default.css")
                         .WithScripts("/Pages/Components/MySimpleWidget/Default.js")

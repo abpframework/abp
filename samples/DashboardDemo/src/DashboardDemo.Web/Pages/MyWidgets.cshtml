@@ -1,6 +1,11 @@
 ﻿@page
-@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
+@using DashboardDemo.Web.Pages.Components.MySimpleWidget
 @model DashboardDemo.Web.Pages.MyWidgetsModel
-@inject IWidgetRenderer WidgetRenderer
 
-@await WidgetRenderer.RenderAsync(Component, "MySimpleWidget")
+@await Component.InvokeAsync(typeof(MySimpleWidgetViewComponent))
+<hr />
+@await Component.InvokeAsync("MyCustomNameWidget")
+<hr />
+<vc:my-custom-name-widget></vc:my-custom-name-widget>
+@*<hr />
+@await WidgetRenderer.RenderAsync(Component, "MySimpleWidget")*@

@@ -5,12 +5,12 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
 namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 {
-
+    [ViewComponent(Name = "MyCustomNameWidget")]
     public class MySimpleWidgetViewComponent : AbpViewComponent
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            return View("~/Pages/Components/MySimpleWidget/Default.cshtml");
         }
     }
 
@@ -18,7 +18,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("~/Pages/Components/MySimpleWidget/Default.css");
+            context.Files.AddIfNotContains("/Pages/Components/MySimpleWidget/Default.css");
         }
     }
 }
