@@ -8,6 +8,7 @@ using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization;
 using DashboardDemo.MultiTenancy;
 using DashboardDemo.Web.Menus;
+using DashboardDemo.Web.Pages.Components.MySimpleWidget;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -16,8 +17,10 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Web;
@@ -73,6 +76,7 @@ namespace DashboardDemo.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
+            ConfigureWidgets();
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -166,6 +170,20 @@ namespace DashboardDemo.Web
                     options.CustomSchemaIds(type => type.FullName);
                 }
             );
+        }
+
+        private void ConfigureWidgets()
+        {
+            Configure<WidgetOptions>(options =>
+            {
+                options.Widgets.Add(
+                    new WidgetDefinition(
+                        "MySimpleWidget",
+                        typeof(MySimpleWidgetViewComponent))
+                        .WithStyles("/Pages/Components/MySimpleWidget/Default.css")
+                        .WithScripts("/Pages/Components/MySimpleWidget/Default.js")
+                );
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
