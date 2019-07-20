@@ -76,7 +76,6 @@ namespace DashboardDemo.Web
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
             ConfigureSwaggerServices(context.Services);
-            ConfigureWidgets();
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -170,20 +169,6 @@ namespace DashboardDemo.Web
                     options.CustomSchemaIds(type => type.FullName);
                 }
             );
-        }
-
-        private void ConfigureWidgets()
-        {
-            Configure<WidgetOptions>(options =>
-            {
-                options.Widgets.Add(
-                    new WidgetDefinition(
-                        "MyCustomNameWidget",
-                        typeof(MySimpleWidgetViewComponent))
-                        .WithStyles("/Pages/Components/MySimpleWidget/Default.css")
-                        .WithScripts("/Pages/Components/MySimpleWidget/Default.js")
-                );
-            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

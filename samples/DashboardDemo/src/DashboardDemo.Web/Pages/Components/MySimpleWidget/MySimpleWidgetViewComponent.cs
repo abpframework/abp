@@ -2,10 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
 namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 {
-    [ViewComponent(Name = "MyCustomNameWidget")]
+    [Widget(
+        StyleTypes = new[] { typeof(MySimpleWidgetStyleBundleContributor) },
+        ScriptTypes = new[] { typeof(MySimpleWidgetScriptBundleContributor) }
+    )]
     public class MySimpleWidgetViewComponent : AbpViewComponent
     {
         public IViewComponentResult Invoke()
@@ -19,6 +23,14 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
             context.Files.AddIfNotContains("/Pages/Components/MySimpleWidget/Default.css");
+        }
+    }
+
+    public class MySimpleWidgetScriptBundleContributor : BundleContributor
+    {
+        public override void ConfigureBundle(BundleConfigurationContext context)
+        {
+            context.Files.AddIfNotContains("/Pages/Components/MySimpleWidget/Default.js");
         }
     }
 }

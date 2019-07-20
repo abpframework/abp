@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
+using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Localization;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
@@ -12,6 +14,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         /// </summary>
         [NotNull]
         public string Name { get; }
+
+        [NotNull]
+        public WidgetAttribute WidgetAttribute { get; }
 
         /// <summary>
         /// Display name of the widget.
@@ -27,33 +32,130 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         [NotNull]
         public Type ViewComponentType { get; }
 
+        [NotNull]
+        public List<string> RequiredPolicies { get; }
+
+        /// <summary>
+        /// Set true to make this Widget available only for authenticated users.
+        /// This property is not considered if <see cref="RequiredPolicies"/> is already set.
+        /// </summary>
+        public bool RequiresAuthentication { get; set; }
+
+        [NotNull]
+        public List<WidgetResourceItem> Styles { get; }
+
+        [NotNull]
+        public List<WidgetResourceItem> Scripts { get; }
+
         [CanBeNull]
         public WidgetDimensions DefaultDimensions { get; set; }
 
-        public List<string> RequiredPermissions { get; set; }
-
-        public List<WidgetResourceItem> Styles { get; }
-
-        public List<WidgetResourceItem> Scripts { get; }
-
         public WidgetDefinition(
-            [NotNull] string name,
             [NotNull] Type viewComponentType,
             [CanBeNull] ILocalizableString displayName = null)
         {
-            Name = Check.NotNullOrWhiteSpace(name, nameof(name));
             ViewComponentType = Check.NotNull(viewComponentType, nameof(viewComponentType));
-            DisplayName = displayName ?? new FixedLocalizableString(name);
 
-            RequiredPermissions = new List<string>();
-            Styles = new List<WidgetResourceItem>();
-            Scripts = new List<WidgetResourceItem>();
+            WidgetAttribute = WidgetAttribute.Get(viewComponentType);
+            Name = GetWidgetName(viewComponentType);
+            DisplayName = displayName ?? GetDisplayName(WidgetAttribute, Name);
+            RequiredPolicies = GetRequiredPolicies(WidgetAttribute);
+            Styles = GetStyles(WidgetAttribute);
+            Scripts = GetScripts(WidgetAttribute);
         }
 
-        public WidgetDefinition WithPermission([NotNull] string permissionName)
+        private static List<WidgetResourceItem> GetStyles(WidgetAttribute widgetAttribute)
         {
-            Check.NotNullOrWhiteSpace(permissionName, nameof(permissionName));
-            RequiredPermissions.Add(permissionName);
+            var styles = new List<WidgetResourceItem>();
+
+            if (!widgetAttribute.StyleSrcs.IsNullOrEmpty())
+            {
+                styles.AddRange(widgetAttribute.StyleSrcs.Select(src => new WidgetResourceItem(src)));
+            }
+
+            if (!widgetAttribute.StyleTypes.IsNullOrEmpty())
+            {
+                styles.AddRange(widgetAttribute.StyleTypes.Select(type => new WidgetResourceItem(type)));
+            }
+
+            return styles;
+        }
+
+        private static List<WidgetResourceItem> GetScripts(WidgetAttribute widgetAttribute)
+        {
+            var scripts = new List<WidgetResourceItem>();
+
+            if (!widgetAttribute.ScriptSrcs.IsNullOrEmpty())
+            {
+                scripts.AddRange(widgetAttribute.ScriptSrcs.Select(src => new WidgetResourceItem(src)));
+            }
+
+            if (!widgetAttribute.ScriptTypes.IsNullOrEmpty())
+            {
+                scripts.AddRange(widgetAttribute.ScriptTypes.Select(type => new WidgetResourceItem(type)));
+            }
+
+            return scripts;
+        }
+
+        private static List<string> GetRequiredPolicies(WidgetAttribute widgetAttribute)
+        {
+            var policies = new List<string>();
+
+            if (!widgetAttribute.RequiredPolicies.IsNullOrEmpty())
+            {
+                policies.AddRange(widgetAttribute.RequiredPolicies);
+            }
+
+            return policies;
+        }
+
+        private static string GetWidgetName(Type viewComponentType)
+        {
+            var viewComponentAttr = viewComponentType
+                .GetCustomAttributes(typeof(ViewComponentAttribute), true)
+                .FirstOrDefault() as ViewComponentAttribute;
+
+            if (viewComponentAttr?.Name != null)
+            {
+                return viewComponentAttr.Name;
+            }
+
+            return viewComponentType.Name.RemovePostFix("ViewComponent");
+        }
+
+        private static ILocalizableString GetDisplayName(WidgetAttribute widgetAttribute, string widgetName)
+        {
+            if (widgetAttribute.DisplayName == null)
+            {
+                return new FixedLocalizableString(widgetName);
+            }
+
+            if (widgetAttribute.DisplayNameResource == null)
+            {
+                return new FixedLocalizableString(widgetAttribute.DisplayName);
+            }
+
+            return new LocalizableString(widgetAttribute.DisplayNameResource, widgetAttribute.DisplayName);
+        }
+
+        public WidgetDefinition WithRequiredPolicies(params string[] policyNames)
+        {
+            foreach (var policyName in policyNames)
+            {
+                RequiredPolicies.Add(policyName);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set true to make this Widget available only for authenticated users.
+        /// This value is not considered if <see cref="RequiredPolicies"/> is already set.
+        /// </summary>
+        public WidgetDefinition WithRequiresAuthentication(bool value = true)
+        {
+            RequiresAuthentication = value;
             return this;
         }
 
@@ -67,7 +169,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         {
             return WithResources(Styles, files);
         }
-        
+
         public WidgetDefinition WithStyles(params Type[] bundleContributorTypes)
         {
             return WithResources(Styles, bundleContributorTypes);

@@ -4,8 +4,6 @@
 
 @await Component.InvokeAsync(typeof(MySimpleWidgetViewComponent))
 <hr />
-@await Component.InvokeAsync("MyCustomNameWidget")
+@await Component.InvokeAsync("MySimpleWidget")
 <hr />
 <vc:my-custom-name-widget></vc:my-custom-name-widget>
-@*<hr />
-@await WidgetRenderer.RenderAsync(Component, "MySimpleWidget")*@
