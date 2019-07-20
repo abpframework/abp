@@ -32,7 +32,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Acme.BookStore.Web.Pages.Books
 {
-    public class CreateModalModel : BookStorePageModelBase
+    public class CreateModalModel : BookStorePageModel
     {
         [BindProperty]
         public CreateUpdateBookDto Book { get; set; }
@@ -53,7 +53,7 @@ namespace Acme.BookStore.Web.Pages.Books
 }
 ````
 
-* 该类派生于 `BookStorePageModelBase` 而非默认的 `PageModel`. `BookStorePageModelBase` 继承了 `PageModel` 并且添加了一些可以被你的page model类使用的通用属性和方法.
+* 该类派生于 `BookStorePageModel` 而非默认的 `PageModel`. `BookStorePageModel` 继承了 `PageModel` 并且添加了一些可以被你的page model类使用的通用属性和方法.
 *  `Book` 属性上的 `[BindProperty]` 特性将post请求提交上来的数据绑定到该属性上.
 * 该类通过构造函数注入了 `IBookAppService` 应用服务,并且在 `OnPostAsync` 处理程序中调用了服务的 `CreateAsync` 方法.
 
@@ -63,7 +63,7 @@ namespace Acme.BookStore.Web.Pages.Books
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model Acme.BookStore.Web.Pages.Books.CreateModalModel
 @{
@@ -145,7 +145,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Acme.BookStore.Web.Pages.Books
 {
-    public class EditModalModel : BookStorePageModelBase
+    public class EditModalModel : BookStorePageModel
     {
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
@@ -207,7 +207,7 @@ namespace Acme.BookStore.Web
 
 ````html
 @page
-@inherits Acme.BookStore.Web.Pages.BookStorePageBase
+@inherits Acme.BookStore.Web.Pages.BookStorePage
 @using Acme.BookStore.Web.Pages.Books
 @using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @model EditModalModel
