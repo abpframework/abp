@@ -9,13 +9,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
     public class WidgetAttribute : Attribute
     {
         [CanBeNull]
-        public string[] StyleSrcs { get; set; }
+        public string[] StyleFiles { get; set; }
 
         [CanBeNull]
         public Type[] StyleTypes { get; set; }
 
         [CanBeNull]
-        public string[] ScriptSrcs { get; set; }
+        public string[] ScriptFiles { get; set; }
 
         [CanBeNull]
         public Type[] ScriptTypes { get; set; }

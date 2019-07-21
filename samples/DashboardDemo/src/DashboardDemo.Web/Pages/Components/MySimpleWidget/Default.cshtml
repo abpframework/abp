@@ -1,4 +1,5 @@
-﻿<div class="my-simple-widget">
+﻿@model DashboardDemo.Web.Pages.Components.MySimpleWidget.MySimpleWidgetViewModel
+<div class="my-simple-widget">
     <h2>My Simple Widget</h2>
-    <p>This is a simple widget!</p>
+    <p>Hello <strong>@Model.Name</strong>! This is a simple widget!</p>
 </div>

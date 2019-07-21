@@ -1,36 +1,18 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
 namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 {
     [Widget(
-        StyleTypes = new[] { typeof(MySimpleWidgetStyleBundleContributor) },
-        ScriptTypes = new[] { typeof(MySimpleWidgetScriptBundleContributor) }
+        StyleFiles = new[] { "/Pages/Components/MySimpleWidget/Default.css" },
+        ScriptFiles = new[] { "/Pages/Components/MySimpleWidget/Default.js" }
     )]
     public class MySimpleWidgetViewComponent : AbpViewComponent
     {
-        public IViewComponentResult Invoke()
+        public IViewComponentResult Invoke(string name)
         {
-            return View("~/Pages/Components/MySimpleWidget/Default.cshtml");
-        }
-    }
-
-    public class MySimpleWidgetStyleBundleContributor : BundleContributor
-    {
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-            context.Files.AddIfNotContains("/Pages/Components/MySimpleWidget/Default.css");
-        }
-    }
-
-    public class MySimpleWidgetScriptBundleContributor : BundleContributor
-    {
-        public override void ConfigureBundle(BundleConfigurationContext context)
-        {
-            context.Files.AddIfNotContains("/Pages/Components/MySimpleWidget/Default.js");
+            return View(new MySimpleWidgetViewModel { Name = name });
         }
     }
 }

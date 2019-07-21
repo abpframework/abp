@@ -1,9 +1,10 @@
 ﻿@page
-@using DashboardDemo.Web.Pages.Components.MySimpleWidget
 @model DashboardDemo.Web.Pages.MyWidgetsModel
 
-@await Component.InvokeAsync(typeof(MySimpleWidgetViewComponent))
+@* Example usage by widget name *@
+@await Component.InvokeAsync("MySimpleWidget", new { name = "John" })
+
 <hr />
-@await Component.InvokeAsync("MySimpleWidget")
-<hr />
-<vc:my-custom-name-widget></vc:my-custom-name-widget>
+
+@* Example usage by widget type *@
+@await Component.InvokeAsync("MySimpleWidget", new { name = "Mete" })

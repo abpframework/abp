@@ -68,9 +68,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         {
             var styles = new List<WidgetResourceItem>();
 
-            if (!widgetAttribute.StyleSrcs.IsNullOrEmpty())
+            if (!widgetAttribute.StyleFiles.IsNullOrEmpty())
             {
-                styles.AddRange(widgetAttribute.StyleSrcs.Select(src => new WidgetResourceItem(src)));
+                styles.AddRange(widgetAttribute.StyleFiles.Select(src => new WidgetResourceItem(src)));
             }
 
             if (!widgetAttribute.StyleTypes.IsNullOrEmpty())
@@ -85,9 +85,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         {
             var scripts = new List<WidgetResourceItem>();
 
-            if (!widgetAttribute.ScriptSrcs.IsNullOrEmpty())
+            if (!widgetAttribute.ScriptFiles.IsNullOrEmpty())
             {
-                scripts.AddRange(widgetAttribute.ScriptSrcs.Select(src => new WidgetResourceItem(src)));
+                scripts.AddRange(widgetAttribute.ScriptFiles.Select(src => new WidgetResourceItem(src)));
             }
 
             if (!widgetAttribute.ScriptTypes.IsNullOrEmpty())
