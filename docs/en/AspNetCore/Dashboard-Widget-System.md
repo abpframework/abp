@@ -213,7 +213,7 @@ We will use **FilterDto** in **Global Filters** section.
 
 Now we can start to work on our widget.
 
-![widget file tree](..\images\MonthlyProfitWidgetFiles.png)
+![widget file tree](../images/MonthlyProfitWidgetFiles.png)
 
 You can see the files that we will create our widget. (If your widget won't need css or javascript, you don't need to create them and contributors as well.)
 
