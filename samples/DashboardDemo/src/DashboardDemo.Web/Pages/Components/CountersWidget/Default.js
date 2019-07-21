@@ -1,17 +1,13 @@
 ﻿(function() {
-
     function refresh(args) {
-        var mainContainer = args.container;
-        var globalFilters = args.filters;
-
-        mainContainer
+        args.container
             .find('.counters-widget')
             .each(function () {
                 var $this = $(this);
                 dashboardDemo.dashboard
                     .getCountersWidget({
-                        startDate: globalFilters.startDate,
-                        endDate: globalFilters.endDate
+                        startDate: args.filters.startDate,
+                        endDate: args.filters.endDate
                     }).then(function (result) {
                         $this.find('.new-user-count').text(result.newUsers);
                         $this.find('.active-user-count').text(result.activeUsers);
