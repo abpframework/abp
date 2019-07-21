@@ -24,11 +24,13 @@
 </form>
 
 <div id="MyDashboardWidgetsArea">
-
-    @await Component.InvokeAsync("CountersWidget", new
-    {
-        startDate = @Model.StartDate,
-        endDate = @Model.EndDate
-    })
-
+    <abp-row>
+        <abp-column>
+            @await Component.InvokeAsync("CountersWidget", new
+            {
+                startDate = @Model.StartDate,
+                endDate = @Model.EndDate
+            })
+        </abp-column>
+    </abp-row>
 </div>
