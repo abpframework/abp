@@ -11,19 +11,24 @@ namespace DashboardDemo.Web.Pages.Components.CountersWidget
         )]
     public class CountersWidgetViewComponent : AbpViewComponent
     {
+        private readonly IDashboardAppService _dashboardAppService;
+
+        public CountersWidgetViewComponent(IDashboardAppService dashboardAppService)
+        {
+            _dashboardAppService = dashboardAppService;
+        }
+
         public async Task<IViewComponentResult> InvokeAsync(DateTime startDate, DateTime endDate)
         {
-            /* Instead of hard-coded / calculated values, get counts from a database or a service!
-             */
+            var result = await _dashboardAppService.GetCountersWidgetAsync(
+                new CountersWidgetInputDto
+                {
+                    StartDate = startDate,
+                    EndDate = endDate
+                }
+            );
 
-            var dayFactor = (int)Math.Round(endDate.Subtract(startDate).TotalDays + 1);
-            return View(new CountersWidgetViewModel
-            {
-                NewUsers = dayFactor * 86,
-                ActiveUsers = dayFactor * 58,
-                TotalIncome = dayFactor * 749.53,
-                TotalProfit = dayFactor * 239.45,
-            });
+            return View(result);
         }
     }
 }
