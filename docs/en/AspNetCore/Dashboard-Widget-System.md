@@ -2,7 +2,7 @@
 
 Dashboard & Widget System allows you to create reusable widgets and dashboards.
 
-![Image of a sample, create with this system](..\images\dashboard1.png)
+![Image of a sample, create with this system](../images/dashboard1.png)
 
 You can see a sample dashboard, build with that system, in the screenshot above. Top section, where the filters and refresh button is placed is global filter section and each card below is a widget. Both widgets and global filters are reusable components. Also dashboard layout is reusable too.
 
@@ -213,7 +213,7 @@ We will use **FilterDto** in **Global Filters** section.
 
 Now we can start to work on our widget.
 
-![widget file tree](..\images\MonthlyProfitWidgetFiles.png)
+![widget file tree](../images/MonthlyProfitWidgetFiles.png)
 
 You can see the files that we will create our widget. (If your widget won't need css or javascript, you don't need to create them and contributors as well.)
 
