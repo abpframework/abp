@@ -213,7 +213,7 @@ namespace DashboardDemo
 
 现在我们可以开始处理我们的小部件了.
 
-![widget file tree](..\images\MonthlyProfitWidgetFiles.png)
+![widget file tree](../images/MonthlyProfitWidgetFiles.png)
 
 你可以看到我们将创建小部件的文件. (如果你的小部件不需要css或javascript,则不需要创建它们和贡献者).
 
