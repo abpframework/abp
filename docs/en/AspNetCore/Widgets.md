@@ -155,8 +155,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 {
     [Widget(
-        StyleSrcs = new[] { "/Pages/Components/MySimpleWidget/Default.css" },
-        ScriptSrcs = new[] { "/Pages/Components/MySimpleWidget/Default.js" }
+        StyleFiles = new[] { "/Pages/Components/MySimpleWidget/Default.css" },
+        ScriptFiles = new[] { "/Pages/Components/MySimpleWidget/Default.js" }
         )]
     public class MySimpleWidgetViewComponent : AbpViewComponent
     {
