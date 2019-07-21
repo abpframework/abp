@@ -1,6 +1,10 @@
 ﻿@page
 @model DashboardDemo.Web.Pages.MyDashboardModel
 
+@section scripts {
+    <abp-script src="/Pages/MyDashboard.js" />
+}
+
 @section styles {
     <abp-style src="/Pages/MyDashboard.css" />
 }
@@ -19,8 +23,12 @@
     </abp-row>
 </form>
 
-@await Component.InvokeAsync("CountersWidget", new
-{
-    startDate = @Model.StartDate,
-    endDate = @Model.EndDate
-})
+<div id="MyDashboardWidgetsArea">
+
+    @await Component.InvokeAsync("CountersWidget", new
+    {
+        startDate = @Model.StartDate,
+        endDate = @Model.EndDate
+    })
+
+</div>

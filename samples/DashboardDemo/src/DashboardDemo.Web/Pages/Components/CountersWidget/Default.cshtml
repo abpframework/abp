@@ -3,25 +3,25 @@
     <abp-row>
         <abp-column size-md="_3">
             <div class="counters-widget-item">
-                <div class="counters-widget-count">@Model.NewUsers</div>
+                <div class="counters-widget-count"><span class="new-user-count">@Model.NewUsers</span></div>
                 <div class="counters-widget-count-name">New Users</div>
             </div>
         </abp-column>
         <abp-column size-md="_3">
             <div class="counters-widget-item">
-                <div class="counters-widget-count">@Model.ActiveUsers</div>
+                <div class="counters-widget-count"><span class="active-user-count">@Model.ActiveUsers</span></div>
                 <div class="counters-widget-count-name">Active Users</div>
             </div>
         </abp-column>
         <abp-column size-md="_3">
             <div class="counters-widget-item">
-                <div class="counters-widget-count">@Model.TotalIncome.ToString("C")</div>
+                <div class="counters-widget-count"><span class="total-income">$@Model.TotalIncome.ToString("0.00")</span></div>
                 <div class="counters-widget-count-name">Total Income</div>
             </div>
         </abp-column>
         <abp-column size-md="_3">
             <div class="counters-widget-item">
-                <div class="counters-widget-count">@Model.TotalProfit.ToString("C")</div>
+                <div class="counters-widget-count"><span class="total-profit">$@Model.TotalProfit.ToString("0.00")</span></div>
                 <div class="counters-widget-count-name">Total Profit</div>
             </div>
         </abp-column>

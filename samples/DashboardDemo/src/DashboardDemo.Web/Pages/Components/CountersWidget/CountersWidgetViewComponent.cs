@@ -7,7 +7,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 namespace DashboardDemo.Web.Pages.Components.CountersWidget
 {
     [Widget(
-        StyleFiles = new[] { "/Pages/Components/CountersWidget/Default.css" }
+        StyleFiles = new[] { "/Pages/Components/CountersWidget/Default.css" },
+        ScriptFiles = new[] { "/Pages/Components/CountersWidget/Default.js" }
         )]
     public class CountersWidgetViewComponent : AbpViewComponent
     {
