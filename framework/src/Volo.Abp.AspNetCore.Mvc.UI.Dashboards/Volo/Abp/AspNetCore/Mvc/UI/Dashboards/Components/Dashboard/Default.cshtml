@@ -5,7 +5,6 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
 @inject IAuthorizationService AuthorizationService
-@inject IWidgetRenderer WidgetRenderer
 @inject IGlobalFilterRenderer GlobalFilteRenderer
 @inject IHtmlLocalizer<AbpUiResource> L
 @model Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard.DashboardViewModel
@@ -47,7 +46,7 @@
             <abp-column class="col-@(widgetDefinition.DefaultDimensions.Width) p-2"
                         style="height: @(widgetDefinition.DefaultDimensions.Height * 100)px">
 
-                @await WidgetRenderer.RenderAsync(Component, widgetDefinition.Name)
+                @await Component.InvokeAsync(widgetDefinition.Name)
             </abp-column>
         }
     }

@@ -1,6 +1,6 @@
-﻿namespace DashboardDemo.Pages
+﻿namespace DashboardDemo.Web.Pages
 {
-    public class IndexModel : DashboardDemoPageModelBase
+    public class IndexModel : DashboardDemoPageModel
     {
         public void OnGet()
         {

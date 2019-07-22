@@ -12,7 +12,7 @@ dotnet tool install -g Volo.Abp.Cli
 
 在空文件夹中使用 `abp new` 命令来创建项目:
 
-````
+````bash
 abp new Acme.BookStore
 ````
 

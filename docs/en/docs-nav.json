@@ -221,6 +221,10 @@
               "path": "AspNetCore/Tag-Helpers/Index.md"
             },
             {
+              "text": "Widgets",
+              "path": "AspNetCore/Widgets.md"
+            },
+            {
               "text": "Theming",
               "path": "AspNetCore/Theming.md"
             }

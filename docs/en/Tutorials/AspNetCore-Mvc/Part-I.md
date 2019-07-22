@@ -204,7 +204,7 @@ namespace Acme.BookStore
 * This DTO class is used to get book information from the user interface while creating or updating a book.
 * It defines data annotation attributes (like `[Required]`) to define validations for the properties. DTOs are [automatically validated](../../Validation.md) by the ABP framework.
 
-Like done for the `BookDto` above, create a mapping from the `CreateUpdateBookDto` object to the `Book` entity:
+Next, add a mapping in `BookStoreApplicationAutoMapperProfile` from the `CreateUpdateBookDto` object to the `Book` entity:
 
 ````csharp
 CreateMap<CreateUpdateBookDto, Book>();

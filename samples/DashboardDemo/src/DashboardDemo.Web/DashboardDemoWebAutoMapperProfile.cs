@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 
-namespace DashboardDemo
+namespace DashboardDemo.Web
 {
     public class DashboardDemoWebAutoMapperProfile : Profile
     {
         public DashboardDemoWebAutoMapperProfile()
         {
-            //Configure your AutoMapper mapping configuration here...
+            //Define your AutoMapper configuration here for the Web project.
         }
     }
 }

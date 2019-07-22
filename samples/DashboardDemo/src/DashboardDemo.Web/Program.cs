@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.InProcess;
 using Serilog;
 using Serilog.Events;
 
-namespace DashboardDemo
+namespace DashboardDemo.Web
 {
     public class Program
     {
@@ -14,7 +14,11 @@ namespace DashboardDemo
             CurrentDirectoryHelpers.SetCurrentDirectory();
 
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug() //TODO: Should be configurable!
+#if DEBUG
+                .MinimumLevel.Debug()
+#else
+                .MinimumLevel.Information()
+#endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")

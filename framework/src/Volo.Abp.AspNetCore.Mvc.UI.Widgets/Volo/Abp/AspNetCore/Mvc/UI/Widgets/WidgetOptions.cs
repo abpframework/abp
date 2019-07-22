@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-
-namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
+﻿namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
     public class WidgetOptions
     {
-        public List<WidgetDefinition> Widgets { get; }
+        public WidgetDefinitionCollection Widgets { get; }
 
         public WidgetOptions()
         {
-            Widgets = new List<WidgetDefinition>();
+            Widgets = new WidgetDefinitionCollection();
         }
     }
 }

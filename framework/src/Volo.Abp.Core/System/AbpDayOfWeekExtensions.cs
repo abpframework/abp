@@ -1,7 +1,7 @@
 ﻿namespace System
 {
     /// <summary>
-    /// Extension methods for <see cref="AbpDayOfWeekExtensions"/>.
+    /// Extension methods for the <see cref="DayOfWeek"/>.
     /// </summary>
     public static class AbpDayOfWeekExtensions
     {
