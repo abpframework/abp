@@ -260,7 +260,7 @@ Configure<WidgetOptions>(options =>
 });
 ```
 
-Write this into the `ConfigureServices` method of your [module](../Module-Development-Basics.md). All the configuration done with the `Widhet` attribute is also possible with the `WidgetOptions`. Example configuration that adds a style for the widget:
+Write this into the `ConfigureServices` method of your [module](../Module-Development-Basics.md). All the configuration done with the `Widget` attribute is also possible with the `WidgetOptions`. Example configuration that adds a style for the widget:
 
 ````csharp
 Configure<WidgetOptions>(options =>
