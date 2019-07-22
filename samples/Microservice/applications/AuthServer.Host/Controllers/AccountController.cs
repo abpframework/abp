@@ -1,16 +1,20 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.Configuration;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 using Volo.Abp.IdentityModel;
+using Volo.Abp.MultiTenancy;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,11 +26,19 @@ namespace AuthServer.Host.Controllers
     {
         private readonly IdentityUserManager _userManager;
         private readonly IConfiguration _configuration;
-        public IIdentityModelAuthenticationService _authenticator { get; set; }
+        private readonly ICurrentTenant _currentTenant;
+        private readonly AspNetCoreMultiTenancyOptions _aspNetCoreMultiTenancyOptions;
+        private readonly IIdentityModelAuthenticationService _authenticator;
 
-        public AccountController(IdentityUserManager userManager, IConfigurationAccessor configurationAccessor)
+        public AccountController(IdentityUserManager userManager,
+            IConfigurationAccessor configurationAccessor,
+            ICurrentTenant currentTenant,
+            IOptions<AspNetCoreMultiTenancyOptions> options, IIdentityModelAuthenticationService authenticator)
         {
             _userManager = userManager;
+            _currentTenant = currentTenant;
+            _authenticator = authenticator;
+            _aspNetCoreMultiTenancyOptions = options.Value;
             _configuration = configurationAccessor.Configuration;
         }
 
@@ -49,11 +61,24 @@ namespace AuthServer.Host.Controllers
             await ReplaceEmailToUsernameOfInputIfNeeds(login);
 
             var tokenClient = new TokenClient(dico.TokenEndpoint, _configuration["AuthServer:ClientId"], _configuration["AuthServer:ClientSecret"]);
-            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(login.UserNameOrEmailAddress, login.Password, "offline_access IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService");
+            TokenResponse tokenresp = await tokenClient.RequestResourceOwnerPasswordAsync(
+                login.UserNameOrEmailAddress,
+                login.Password,
+                "offline_access IdentityService BackendAdminAppGateway AuditLogging BaseManagement OrganizationService",
+                extra: new Dictionary<string, string>
+                {
+                    {_aspNetCoreMultiTenancyOptions.TenantKey,login.TenanId?.ToString()}
+                }
+                );
             if (tokenresp.IsError)
             {
                 Console.WriteLine(tokenresp.Error);
-                return Json(new { code = 0, data = tokenresp.ErrorDescription, message = tokenresp.Error });
+                return Json(new
+                {
+                    code = 0,
+                    data = tokenresp.ErrorDescription,
+                    message = tokenresp.Error
+                });
             }
 
             return Json(new { code = 1, data = tokenresp.Json });
@@ -108,7 +133,7 @@ namespace AuthServer.Host.Controllers
             };
 
             string token = await _authenticator.GetAccessTokenAsync(config);
-           
+
             return Json(new { code = 1, data = token });
         }
     }

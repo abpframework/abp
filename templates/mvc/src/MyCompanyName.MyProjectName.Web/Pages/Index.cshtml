@@ -11,15 +11,44 @@
         <abp-script src="/Pages/Index.js" />
     </abp-script-bundle>
 }
-<abp-card>
-    <abp-card-header>@L["Welcome"]</abp-card-header>
-    <abp-card-body>
-        <p>@L["LongWelcomeMessage"]</p>
-        @if (!CurrentUser.IsAuthenticated)
-        {
-            <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
-        }
-        <hr />
-        <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
-    </abp-card-body>
-</abp-card>
+
+@using MyCompanyName.MyProjectName.Web.Pages
+@using Volo.Abp.Users
+@inject ICurrentUser CurrentUser
+@if (CurrentUser.IsAuthenticated)
+{
+    <div>
+        <abp-row>
+            <abp-column size-md="_3" class="text-center">
+                <i class="fa fa-user d-block" style="font-size: 10em; color: #12b900"></i>
+                <a abp-button="Primary" asp-controller="Logout" asp-action="Index" asp-area="Account">Logout</a>
+            </abp-column>
+            <abp-column size-md="_9">
+                <h2>@CurrentUser.UserName</h2>
+                <h5 class="text-muted">@CurrentUser.Email</h5>
+                <div>
+                    <strong>Roles</strong>: @CurrentUser.Roles.JoinAsString(", ")
+                    <br />
+                    <strong>Claims</strong>: <br />
+                    @Html.Raw(CurrentUser.GetAllClaims().Select(c => $"{c.Type}={c.Value}").JoinAsString(" <br /> "))
+                </div>
+            </abp-column>
+        </abp-row>
+    </div>
+}
+
+@if (!CurrentUser.IsAuthenticated)
+{
+    <abp-card>
+        <abp-card-header>@L["Welcome"]</abp-card-header>
+        <abp-card-body>
+            <p>@L["LongWelcomeMessage"]</p>
+            @if (!CurrentUser.IsAuthenticated)
+            {
+                <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
+            }
+            <hr />
+            <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
+        </abp-card-body>
+    </abp-card>
+}

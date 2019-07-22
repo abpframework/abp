@@ -1,4 +1,5 @@
-﻿using AuthServer.Host.EntityFrameworkCore;
+﻿using System;
+using AuthServer.Host.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
@@ -21,6 +23,8 @@ using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Threading;
@@ -36,6 +40,8 @@ namespace AuthServer.Host
         typeof(AbpIdentityEntityFrameworkCoreModule),
 
         typeof(AbpHttpClientIdentityModelModule),
+
+        typeof(AbpAspNetCoreMultiTenancyModule),
 
         typeof(AbpIdentityApplicationContractsModule),
         typeof(AbpIdentityServerEntityFrameworkCoreModule),
@@ -86,6 +92,22 @@ namespace AuthServer.Host
                 });
             });
 
+
+            Configure<DefaultTenantStoreOptions>(options =>
+            {
+                options.Tenants = new[]
+                {
+                    new TenantConfiguration (
+                        Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"),
+                        "tenant1"
+                    ),
+                    new TenantConfiguration (
+                        Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"),
+                        "tenant2"
+                    )
+                };
+            });
+
             Configure<AbpAuditingOptions>(options =>
             {
                 options.IsEnabledForGetRequests = true;
@@ -113,6 +135,8 @@ namespace AuthServer.Host
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials());
+
+            app.UseMultiTenancy();
 
             app.UseCorrelationId();
             app.UseVirtualFiles();

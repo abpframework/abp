@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
@@ -10,6 +11,7 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
@@ -19,8 +21,10 @@ using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation.Urls;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.MultiTenancy.ConfigurationStore;
 using Volo.Abp.UI;
+using Volo.Abp.Ui.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -29,6 +33,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebIdentityServerModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
@@ -37,6 +42,25 @@ namespace MyCompanyName.MyProjectName
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+            Configure<MultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = true;
+            });
+
+            Configure<DefaultTenantStoreOptions>(options =>
+            {
+                options.Tenants = new[]
+                {
+                    new TenantConfiguration (
+                        Guid.Parse("446a5211-3d72-4339-9adc-845151f8ada0"),
+                        "tenant1"
+                    ),
+                    new TenantConfiguration (
+                        Guid.Parse("25388015-ef1c-4355-9c18-f6b6ddbaf89d"),
+                        "tenant2"
+                    )
+                };
+            });
 
             Configure<AbpLocalizationOptions>(options =>
             {

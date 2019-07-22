@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.Domain;
 using Volo.Abp.Emailing;
 using Volo.Abp.Emailing.Templates;
-using Volo.Abp.Emailing.Templates.Virtual;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity.Localization;
 using Volo.Abp.Identity.Settings;
@@ -40,11 +39,11 @@ namespace Volo.Abp.Identity
 
             Configure<EmailTemplateOptions>(options =>
             {
-                options.Templates
-                    .Add(
-                        new EmailTemplateDefinition(IdentitySettingNames.User.EmailConfirmed, isLayout: true, layout: null)
-                            .SetVirtualFilePath("/Volo/Abp/Identity/Templates/default.html")
-                    );
+                //options.Templates
+                //    .Add(
+                //        new EmailTemplateDefinition(IdentitySettingNames.User.EmailConfirmed, isLayout: true, layout: null)
+                //            .SetVirtualFilePath("/Volo/Abp/Identity/Templates/default.html")
+                //    );
             });
 
             Configure<DistributedEventBusOptions>(options =>

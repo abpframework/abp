@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "microservices", "microservices", "{3B26D176-390B-4F51-BE52-E9B422C28A88}"
 EndProject
@@ -56,6 +56,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganizationService.HttpApi", "modules\organization\src\OrganizationService.HttpApi\OrganizationService.HttpApi.csproj", "{332688FE-ACC4-4047-9B2B-085A65CDC9E4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrganizationService.Host", "microservices\OrganizationService.Host\OrganizationService.Host.csproj", "{909DEA32-40D5-456B-9CD0-74F4750176F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "identityserver", "identityserver", "{2AA1F628-3CC9-42C0-A72A-92B7D39A7339}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.IdentityServer.Domain", "..\..\modules\identityserver\src\Volo.Abp.IdentityServer.Domain\Volo.Abp.IdentityServer.Domain.csproj", "{6E616889-9C52-412C-B792-ABFC250AC731}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +151,10 @@ Global
 		{909DEA32-40D5-456B-9CD0-74F4750176F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{909DEA32-40D5-456B-9CD0-74F4750176F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{909DEA32-40D5-456B-9CD0-74F4750176F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E616889-9C52-412C-B792-ABFC250AC731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E616889-9C52-412C-B792-ABFC250AC731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E616889-9C52-412C-B792-ABFC250AC731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E616889-9C52-412C-B792-ABFC250AC731}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -175,6 +183,8 @@ Global
 		{4F53BDAB-7C6A-4297-BC96-4D6A49B459F0} = {0F746886-75D2-47B9-B475-B4B11105996F}
 		{332688FE-ACC4-4047-9B2B-085A65CDC9E4} = {0F746886-75D2-47B9-B475-B4B11105996F}
 		{909DEA32-40D5-456B-9CD0-74F4750176F2} = {3B26D176-390B-4F51-BE52-E9B422C28A88}
+		{2AA1F628-3CC9-42C0-A72A-92B7D39A7339} = {818134CC-2F7F-41B9-ACA6-87F0650F5D52}
+		{6E616889-9C52-412C-B792-ABFC250AC731} = {2AA1F628-3CC9-42C0-A72A-92B7D39A7339}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37474F0D-2E52-4D2F-B39B-7FE3FF31B4EC}
