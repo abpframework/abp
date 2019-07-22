@@ -1,17 +1,17 @@
-# Widgets
+# Widgety
 
-ABP provides a model and infrastructure to create **reusable widgets**. Widget system is an extension to [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgets are especially useful when you want to;
+ABP poskytuje model a infastrukturu k vytváření **znovu použitelných widgetů**. Systém widgetů je rozšíření pro [ASP.NET Core pohledové komponenty](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgety jsou zvláště užitečné, když chcete;
 
-* Define widgets in reusable **[modules](../Module-Development-Basics.md)**.
-* Have **scripts & styles** dependencies for your widget.
-* Create **[dashboards](Dashboards.md)** with widgets used inside.
-* Co-operate widgets with **[authorization](../Authorization.md)** and **[bundling](Bundling-Minification.md)** systems.
+* Definovat widgety v znovu použitelných **[modulech](../Module-Development-Basics.md)**.
+* Mít závislosti na **skriptech & stylech** ve vašem widgetu.
+* Vytvářet **[řídící panely](Dashboards.md)** za použítí widgetů.
+* Spolupráci widgetů s **[authorizačními](../Authorization.md)** a **[svazovacími](Bundling-Minification.md)** systémy.
 
-## Basic Widget Definition
+## Základní definice widgetu
 
-### Create a View Component
+### Tvorba pohledové komponenty
 
-As the first step, create a new regular ASP.NET Core View Component:
+Jako první krok, vytvoříme běžnou ASP.NET Core pohledovou komponentu:
 
 ![widget-basic-files](../images/widget-basic-files.png)
 
@@ -33,7 +33,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-Inheriting from `AbpViewComponent` is not required. You could inherit from ASP.NET Core's standard `ViewComponent`. `AbpViewComponent` only defines some base useful properties.
+Dědění z `AbpViewComponent` není vyžadováno. Můžeme dědit ze standardního ASP.NET Core `ViewComponent`. `AbpViewComponent` pouze definuje pár základních a užitečných vlastnosti.
 
 **Default.cshtml**:
 
@@ -44,9 +44,9 @@ Inheriting from `AbpViewComponent` is not required. You could inherit from ASP.N
 </div>
 ```
 
-### Define the Widget
+### Definice widgetu
 
-Add a `Widget` attribute to the `MySimpleWidgetViewComponent` class to mark this view component as a widget:
+Přidáme atribut `Widget` k třídě `MySimpleWidgetViewComponent` pro označení této pohledové komponenty jako widgetu:
 
 ````csharp
 using Microsoft.AspNetCore.Mvc;
@@ -66,22 +66,22 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-## Rendering a Widget
+## Vykreslení widgetu
 
-Rendering a widget is pretty standard. Use the `Component.InvokeAsync` method in a razor view/page as you do for any view component. Examples:
+Vykreslení widgetu je vcelku standardní. Použijeme metodu `Component.InvokeAsync` v razor pohledu/stránce jako s kteroukoliv jinou pohledovou komponentou. Příklady:
 
 ````xml
 @await Component.InvokeAsync("MySimpleWidget")
 @await Component.InvokeAsync(typeof(MySimpleWidgetViewComponent))
 ````
 
-First approach uses the widget name while second approach uses the view component type.
+První přístup používá název widgetu, zatímco druhý používá typ pohledové komponenty.
 
-## Widget Name
+## Název widgetu
 
-Default name of the view components are calculated based on the name of the view component type. If your view component type is `MySimpleWidgetViewComponent` then the widget name will be `MySimpleWidget` (removes `ViewComponent` postfix). This is how ASP.NET Core calculates a view component's name.
+Výchozí název pohledových komponent je vypočítán na základě názvu typu pohledové komponenty. Pokud je typ pohledové komponenty `MySimpleWidgetViewComponent` potom název widgetu bude `MySimpleWidget` (odstraní se `ViewComponent` postfix). Takto ASP.NET Core vypočítává název pohledové komponenty.
 
-To customize widget's name, just use the standard `ViewComponent` attribute of ASP.NET Core:
+Chceme-li přizpůsobit název widgetu, stačí použít standardní atribut `ViewComponent` z ASP.NET Core:
 
 ```csharp
 using Microsoft.AspNetCore.Mvc;
@@ -102,13 +102,13 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ```
 
-ABP will respect to the custom name by handling the widget.
+ABP bude respektovat přizpůsobený název při zpracování widgetu.
 
-> If the view component name and the folder name of the view component don't match, you may need to manually write the view path as done in this example.
+> Pokud jsou názvy pohledové komponenty a složky, která pohledovou komponentu obsahuje rozdílné, pravděpodobně budete muset ručně uvést cestu pohledu tak jako je to provedeno v tomto příkladu.
 
-### Display Name
+### Zobrazovaný název
 
-You can also define a human-readable, localizable display name for the widget. This display name then can be used on the UI when needed. Display name is optional and can be defined using properties of the  `Widget` attribute:
+Můžeme také definovat čitelný & lokalizovatelný zobrazovaný název pro widget. Tento zobrazovaný název může být využít na uživatelském rozhraní kdykoliv je to potřeba. Zobrazovaný název je nepovinný a lze ho definovat pomocí vlastností atributu `Widget`:
 
 ````csharp
 using DashboardDemo.Localization;
@@ -119,8 +119,8 @@ using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 {
     [Widget(
-        DisplayName = "MySimpleWidgetDisplayName", //Localization key
-        DisplayNameResource = typeof(DashboardDemoResource) //localization resource
+        DisplayName = "MySimpleWidgetDisplayName", // Lokalizační klíč
+        DisplayNameResource = typeof(DashboardDemoResource) // Lokalizační zdroj
         )]
     public class MySimpleWidgetViewComponent : AbpViewComponent
     {
@@ -132,20 +132,20 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-See [the localization document](../Localization.md) to learn about localization resources and keys.
+Podívejte se na [dokument lokalizace](../Localization.md) pro více informací o lokalizačních zdrojích a klíčích.
 
-## Style & Script Dependencies
+## Závislosti na stylech & skriptech
 
-There are some challenges when your widget has script and style files;
+Problémy když má widget soubory skriptů a stylů;
 
-* Any page uses the widget should also include the **its script & styles** files into the page.
-* The page should also care about **depended libraries/files** of the widget.
+* Každý stránka, která používá widget musí také přidat soubory **skriptů & stylů** tohoto widgetu.
+* Stránka se také musí postarat o **závislé knihovny/soubory** widgetu.
 
-ABP solves these issues when you properly relate the resources with the widget. You don't care about dependencies of the widget while using it.
+ABP tyto problémy řeší, když správně propojíme zdroje s widgetem. O závislosti widgetu se při jeho používání nestaráme.
 
-### Defining as Simple File Paths
+### Definování jednoduchých cest souborů
 
-The example widget below adds a style and a script file:
+Níže uvedený příklad widgetu přidá stylové a skriptové soubory:
 
 ````csharp
 using Microsoft.AspNetCore.Mvc;
@@ -168,13 +168,13 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-ABP takes account these dependencies and properly adds to the view/page when you use the widget. Style/script files can be **physical or virtual**. It is completely integrated to the [Virtual File System](../Virtual-File-System.md).
+ABP bere v úvahu tyto závislosti a správně je přidává do pohledu/stránky při použití widgetu. Stylové/skriptové soubory mohou být **fyzické nebo virtuální**. Plně integrováno do [virtuálního systému souborů](../Virtual-File-System.md).
 
-### Defining Bundle Contributors
+### Definování přispěvatelů balíku
 
-All resources for used widgets in a page are added as a **bundle** (bundled & minified in production if you don't configure otherwise). In addition to adding a simple file, you can take full power of the bundle contributors.
+Všechny zdroje použité ve widgetech na stránce jsou přidány jako **svazek** (svázány & minifikovány v produkci pokud nenastavíte jinak). Kromě přidání jednoduchého souboru můžete využít plnou funkčnost přispěvatelů balíčků.
 
-The sample code below does the same with the code above, but defines and uses bundle contributors:
+Níže uvedený ukázkový kód provádí totéž co výše uvedený kód, ale definuje a používá přispěvatele balíků:
 
 ````csharp
 using System.Collections.Generic;
@@ -218,18 +218,18 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 ````
 
-Bundle contribution system is very powerful. If your widget uses a JavaScript library to render a chart, then you can declare it as a dependency, so the JavaScript library is automatically added to the page if it wasn't added before. In this way, the page using your widget doesn't care about the dependencies.
+Systém přispěvatelů balíků je velmi schopný. Pokud váš widget používá k vykreslení grafu JavaScript knihovnu, můžete ji deklarovat jako závislost, díky tomu se knihovna pokud nebyla dříve přidána automaticky přidá na stránku Tímto způsobem se stránka využívající váš widget nestará o závislosti.
 
-See the [bundling & minification](Bundling-Minification.md) documentation for more information about that system.
+Podívejte se na dokumentaci [svazování & minifikace](Bundling-Minification.md) pro více informací o tomto systému.
 
-## Authorization
+## Autorizace
 
-Some widgets may need to be available only for authenticated or authorized users. In this case, use the following properties of the `Widget` attribute:
+Některé widgety budou pravděpodobně muset být dostupné pouze pro ověřené nebo autorizované uživatele. V tomto případě použijte následující vlastnosti atributu `Widget`:
 
-* `RequiresAuthentication` (`bool`): Set to true to make this widget usable only for authentication users (user have logged in to the application).
-* `RequiredPolicies` (`List<string>`): A list of policy names to authorize the user. See [the authorization document](../Authorization.md) for more info about policies.
+* `RequiresAuthentication` (`bool`): Nastavte na true, aby byl tento widget použitelný pouze pro ověřené uživatele (uživatel je přihlášen do aplikace).
+* `RequiredPolicies` (`List<string>`): Seznam názvů zásad k autorizaci uživatele. Další informace o zásadách naleznete v [dokumentu autorizace](../Authorization.md).
 
-Example:
+Příklad:
 
 ````csharp
 using Microsoft.AspNetCore.Mvc;
@@ -249,9 +249,9 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-## Widget Options
+## Možnosti widgetu
 
-As alternative to the `Widget` attribute, you can use the `WidgetOptions` to configure widgets:
+Jako alternativu k atributu `Widget` můžete ke konfiguraci widgetů použít `WidgetOptions`:
 
 ```csharp
 Configure<WidgetOptions>(options =>
@@ -260,7 +260,7 @@ Configure<WidgetOptions>(options =>
 });
 ```
 
-Write this into the `ConfigureServices` method of your [module](../Module-Development-Basics.md). All the configuration done with the `Widhet` attribute is also possible with the `WidgetOptions`. Example configuration that adds a style for the widget:
+Toto vepište do metody `ConfigureServices` vašeho [modulu](../Module-Development-Basics.md). Veškerá konfigurace udělaná přes atribut `Widget` je dostupná i za pomoci `WidgetOptions`. Příklad konfigurace, která přidává styl pro widget:
 
 ````csharp
 Configure<WidgetOptions>(options =>
@@ -271,4 +271,4 @@ Configure<WidgetOptions>(options =>
 });
 ````
 
-> Tip: `WidgetOptions` can also be used to get an existing widget and change its configuration. This is especially useful if you want to modify the configuration of a widget inside a module used by your application. Use `options.Widgets.Find` to get an existing `WidgetDefinition`.
+> Tip: `WidgetOptions` lze také použít k získání existujícího widgetu a ke změně jeho konfigurace. To je obzvláště užitečné, pokud chcete změnit konfiguraci widgetu uvnitř modulu používaného vaší aplikací. Použíjte `options.Widgets.Find` k získání existujícího `WidgetDefinition`.
