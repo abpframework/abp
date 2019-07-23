@@ -9,8 +9,10 @@ namespace Volo.Abp.Localization.Json
 {
     public static class JsonLocalizationDictionaryBuilder
     {
-        private static readonly CamelCasePropertyNamesContractResolver SharedCamelCasePropertyNamesContractResolver =
-            new CamelCasePropertyNamesContractResolver();
+        private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
         /// <summary>
         ///     Builds an <see cref="JsonLocalizationDictionaryBuilder" /> from given file.
@@ -38,11 +40,7 @@ namespace Volo.Abp.Localization.Json
             try
             {
                 jsonFile = JsonConvert.DeserializeObject<JsonLocalizationFile>(
-                    jsonString,
-                    new JsonSerializerSettings
-                    {
-                        ContractResolver = SharedCamelCasePropertyNamesContractResolver
-                    });
+                    jsonString, SharedJsonSerializerSettings);
             }
             catch (JsonException ex)
             {
