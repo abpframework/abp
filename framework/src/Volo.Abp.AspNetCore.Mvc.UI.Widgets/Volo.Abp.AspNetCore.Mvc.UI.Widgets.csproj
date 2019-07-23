@@ -10,7 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\AspNetCore\Mvc\UI\Widgets\Components\**\*.cshtml" />
+    <Content Remove="Volo\Abp\AspNetCore\Mvc\UI\Widgets\Components\**\*.cshtml" />
   </ItemGroup>
 
 </Project>

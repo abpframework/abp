@@ -9,6 +9,8 @@
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.MultiTenancy
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
@@ -39,6 +41,8 @@
 
     @await RenderSectionAsync("styles", false)
 
+    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
 <body class="abp-account-layout">
@@ -50,7 +54,7 @@
         <abp-row>
             <abp-column size-md="_4" offset-md="_4">
                 @if (MultiTenancyOptions.Value.IsEnabled &&
-                   (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
+                  (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
                 {
                     <div class="tenant-switch-box" style="background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;">
                         <span style="color: #666;">@MultiTenancyStringLocalizer["Tenant"]: </span>
@@ -79,6 +83,8 @@
     <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>
 
     @await RenderSectionAsync("scripts", false)
+
+    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.Last, StandardLayouts.Account)
 </body>

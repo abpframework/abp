@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashboardDemo.Domain", "src\DashboardDemo.Domain\DashboardDemo.Domain.csproj", "{554AD327-6DBA-4F8F-96F8-81CE7A0C863F}"
 EndProject
@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashboardDemo.Domain.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashboardDemo.HttpApi.Client.ConsoleTestApp", "test\DashboardDemo.HttpApi.Client.ConsoleTestApp\DashboardDemo.HttpApi.Client.ConsoleTestApp.csproj", "{EF480016-9127-4916-8735-D2466BDBC582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashboardDemo.DbMigrator", "src\DashboardDemo.DbMigrator\DashboardDemo.DbMigrator.csproj", "{AA94D832-1CCC-4715-95A9-A483F23A1A5D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DashboardDemo.DbMigrator", "src\DashboardDemo.DbMigrator\DashboardDemo.DbMigrator.csproj", "{AA94D832-1CCC-4715-95A9-A483F23A1A5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

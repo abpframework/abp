@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Dashboards.Components.Dashboard
 
         public async Task<bool> CheckPermissionsAsync(IAuthorizationService authorizationService, WidgetDefinition widget)
         {
-            foreach (var permission in widget.RequiredPermissions)
+            foreach (var permission in widget.RequiredPolicies)
             {
                 if (!await authorizationService.IsGrantedAsync(permission))
                 {
