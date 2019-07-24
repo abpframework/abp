@@ -18,6 +18,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected IApiDescriptionCache Cache { get; }
 
+        private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
         public ApiDescriptionFinder(
             IApiDescriptionCache cache, 
             IDynamicProxyHttpClientFactory httpClientFactory)
@@ -94,32 +99,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 var result = JsonConvert.DeserializeObject(
                     content,
-                    typeof(ApplicationApiDescriptionModel), GetSharedJsonSerializerSettings());
+                    typeof(ApplicationApiDescriptionModel), SharedJsonSerializerSettings);
 
                 return (ApplicationApiDescriptionModel)result;
             }
-        }
-
-        private static readonly object SyncObj = new object();
-        private static JsonSerializerSettings _sharedJsonSerializerSettings;
-
-        private static JsonSerializerSettings GetSharedJsonSerializerSettings()
-        {
-            if (_sharedJsonSerializerSettings == null)
-            {
-                lock (SyncObj)
-                {
-                    if (_sharedJsonSerializerSettings == null)
-                    {
-                        _sharedJsonSerializerSettings = new JsonSerializerSettings
-                        {
-                            ContractResolver = new CamelCasePropertyNamesContractResolver()
-                        };
-                    }
-                }
-            }
-
-            return _sharedJsonSerializerSettings;
         }
     }
 }
