@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.bootstrap_daterangepicker;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.DatatablesNetBs4;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
@@ -25,6 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(SweetalertScriptContributor),
         typeof(ToastrScriptBundleContributor),
         typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
+        typeof(BootstrapDateRangePickerScriptContributor),
         typeof(TimeagoScriptContributor)
         )]
     public class SharedThemeGlobalScriptContributor : BundleContributor
