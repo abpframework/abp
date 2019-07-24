@@ -3,7 +3,7 @@
 
     function ChartManager($wrapper) {
 
-        var _filters;
+        var _latestFilters;
         var _chart;
 
         var getFrequencyVal = function () {
@@ -52,8 +52,8 @@
 
         var render = function (args, callback) {
             serviceMethod({
-                    startDate: _filters.startDate,
-                    endDate: _filters.endDate,
+                    startDate: _latestFilters.startDate,
+                    endDate: _latestFilters.endDate,
                     frequency: getFrequencyVal()
                 })
                 .then(function (result) {
@@ -62,18 +62,18 @@
         };
 
         var init = function (filters) {
-            _filters = filters;
+            _latestFilters = filters;
             render(filters, createChart);
         };
 
         var refresh = function (filters) {
-            _filters = filters;
+            _latestFilters = filters;
             render(filters, refreshChart);
         };
 
         $wrapper.find('.frequency-filter').on('change',
             function () {
-                refresh(_filters);
+                refresh(_latestFilters);
             });
 
         return {
@@ -82,19 +82,19 @@
         };
     }
 
-    var init = function (args) {
+    abp.event.on('init-widgets', function (args) {
         args.container
             .find('.newUserStatistic-widget')
-            .each(function() {
+            .each(function () {
                 var $this = $(this);
                 var chartManager = new ChartManager($this);
                 chartManager.init(args.filters);
                 $this.data('chart-manager', chartManager);
             });
 
-    };
+    });
 
-    var refresh = function (args) {
+    abp.event.on('refresh-widgets', function (args) {
         args.container
             .find('.newUserStatistic-widget')
             .each(function () {
@@ -102,8 +102,5 @@
                 var chartManager = $this.data('chart-manager');
                 chartManager.refresh(args.filters);
             });
-    };
-
-    abp.event.on('init-widgets', init);
-    abp.event.on('refresh-widgets', refresh);
+    });
 })();
