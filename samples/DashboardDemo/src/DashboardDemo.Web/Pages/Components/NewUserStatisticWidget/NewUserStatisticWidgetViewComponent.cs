@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using DashboardDemo.Web.Bundles;
+﻿using DashboardDemo.Web.Bundles;
 using DashboardDemo.Web.Pages.Components.NewUserStatisticWidget;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
@@ -14,7 +12,7 @@ namespace DashboardDemo.Web.Pages.Components.CountersWidget
         )]
     public class NewUserStatisticWidgetViewComponent : AbpViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync()
+        public IViewComponentResult Invoke()
         {
             return View();
         }
