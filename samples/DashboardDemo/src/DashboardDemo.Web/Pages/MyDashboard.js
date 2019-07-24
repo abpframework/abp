@@ -1,13 +1,13 @@
 ﻿(function () {
 
-    function triggerWidgets(eventName) {
+    function triggerWidgets(eventName, startDate, endDate) {
         abp.event.trigger(
             eventName,
             {
                 container: $('#MyDashboardWidgetsArea'),
                 filters: {
-                    startDate: $('#StartDate').val(),
-                    endDate: $('#EndDate').val()
+                    startDate: startDate,
+                    endDate: endDate
                 }
             }
         );
@@ -15,12 +15,14 @@
 
     $(function () {
 
-        $('#MyDashboardFilterForm').submit(function(e) {
-            e.preventDefault();
+        $('#DateRangePickerGlobalFilter').daterangepicker({
+            opens: 'left'
+        }, function (start, end, label) {
+                triggerWidgets('refresh-widgets', start, end);
+            });
 
-            triggerWidgets('refresh-widgets');
-        });
-
-        triggerWidgets('init-widgets');
+        triggerWidgets('init-widgets',
+            $('#DateRangePickerGlobalFilter').data('daterangepicker').startDate,
+            $('#DateRangePickerGlobalFilter').data('daterangepicker').endDate);
     });
 })();

@@ -3,22 +3,22 @@
 
 @section scripts {
     <abp-script src="/Pages/MyDashboard.js" />
+    <abp-script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"/>
+    <abp-script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"/>
 }
 
 @section styles {
     <abp-style src="/Pages/MyDashboard.css" />
+    <abp-style src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 }
 
 <form method="get" id="MyDashboardFilterForm">
     <abp-row class="mb-3">
-        <abp-column size-md="_5">
-            <abp-input asp-for="StartDate" />
-        </abp-column>
-        <abp-column size-md="_5">
-            <abp-input asp-for="EndDate" />
-        </abp-column>
-        <abp-column size-md="_2">
-            <abp-button button-type="Primary" icon="refresh" size="Block_Large" type="Submit" text="Refresh" />
+        <abp-column size-md="_4" offset="_8">
+            <div class="form-group">
+                <input class="form-control" type="text" id="DateRangePickerGlobalFilter" 
+                       value="@DateTime.Now.AddDays(-7).ToString("MM-dd-yyyy") - @DateTime.Now.ToString("MM-dd-yyyy")"/>
+            </div>
         </abp-column>
     </abp-row>
 </form>
