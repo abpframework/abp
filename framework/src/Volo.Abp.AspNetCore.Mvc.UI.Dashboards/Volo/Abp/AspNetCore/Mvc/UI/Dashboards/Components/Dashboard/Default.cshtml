@@ -11,29 +11,29 @@
 @{
 }
 
-    <abp-row class="mb-4 align-items-center justify-content-between">
-        @if (Model.Dashboard.AvailableGlobalFilters.Any())
-        {
-            <abp-column size="_10">
-                <form id="DashboardGlobalFiltersForm">
-                    <abp-row>
-                        @foreach (var globalFilterConfiguration in Model.Dashboard.AvailableGlobalFilters)
-                        {
-                            var globalFilter = Model.GetGlobalFilter(globalFilterConfiguration.GlobalFilterName);
+<abp-row class="mb-4 align-items-center justify-content-between">
+    @if (Model.Dashboard.AvailableGlobalFilters.Any())
+    {
+        <abp-column size="_10">
+            <form id="DashboardGlobalFiltersForm">
+                <abp-row>
+                    @foreach (var globalFilterConfiguration in Model.Dashboard.AvailableGlobalFilters)
+                    {
+                        var globalFilter = Model.GetGlobalFilter(globalFilterConfiguration.GlobalFilterName);
 
-                            @await GlobalFilteRenderer.RenderAsync(Component, globalFilter.Name)
+                        @await GlobalFilteRenderer.RenderAsync(Component, globalFilter.Name)
 
-                        }
-                    </abp-row>
-                </form>
-            </abp-column>
-            <abp-column size="_2">
-                <div class="float-right">
-                    <abp-button button-type="Success" text="@L["Refresh"].Value" icon="refresh" id="GlobalRefreshButton" />
-                </div>
-            </abp-column>
-        }
-    </abp-row>
+                    }
+                </abp-row>
+            </form>
+        </abp-column>
+        <abp-column size="_2">
+            <div class="float-right">
+                <abp-button button-type="Success" text="@L["Refresh"].Value" icon="refresh" id="GlobalRefreshButton" />
+            </div>
+        </abp-column>
+    }
+</abp-row>
 
 <abp-row>
     @foreach (var widgetConfiguration in Model.Dashboard.AvailableWidgets)
