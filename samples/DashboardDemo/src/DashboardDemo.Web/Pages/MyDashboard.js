@@ -16,6 +16,7 @@
     $(function () {
 
         $('#DateRangePickerGlobalFilter').daterangepicker({
+            "showDropdowns": true,
             opens: 'left'
         }, function (start, end, label) {
                 triggerWidgets('refresh-widgets', start, end);
