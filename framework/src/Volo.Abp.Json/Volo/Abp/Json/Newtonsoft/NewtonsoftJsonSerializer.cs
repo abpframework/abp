@@ -9,6 +9,9 @@ namespace Volo.Abp.Json.Newtonsoft
     {
         private readonly AbpJsonIsoDateTimeConverter _dateTimeConverter;
 
+        private static readonly CamelCaseExceptDictionaryKeysResolver SharedCamelCaseExceptDictionaryKeysResolver =
+            new CamelCaseExceptDictionaryKeysResolver();
+
         public NewtonsoftJsonSerializer(AbpJsonIsoDateTimeConverter dateTimeConverter)
         {
             _dateTimeConverter = dateTimeConverter;
@@ -37,7 +40,7 @@ namespace Volo.Abp.Json.Newtonsoft
             
             if (camelCase)
             {
-                settings.ContractResolver = new CamelCaseExceptDictionaryKeysResolver();
+                settings.ContractResolver = SharedCamelCaseExceptDictionaryKeysResolver;
             }
 
             if (indented)
