@@ -1,37 +1,27 @@
 ﻿(function () {
-    var serviceMethod = dashboardDemo.dashboard.getNewUserStatisticWidget;
+    var serviceMethod = dashboardDemo.dashboard.getLicenseStatisticWidget;
 
     function ChartManager($wrapper) {
 
-        var _latestFilters;
         var _chart;
 
-        var getFrequencyVal = function () {
-            return $wrapper.find('.frequency-filter option:selected').val();
-        };
-
         var createChart = function (statistic) {
-            _chart = new Chart($wrapper.find('.NewUserStatisticChart'),
+            _chart = new Chart($wrapper.find('.LicenseStatisticChart'),
                 {
-                    type: 'bar',
+                    type: 'pie',
                     data: {
                         labels: Object.keys(statistic.data),
                         datasets: [
                             {
-                                label: 'User count',
+                                label: 'License ratios',
                                 data: Object.values(statistic.data),
-                                backgroundColor: 'rgba(255, 132, 132, 1)'
+                                backgroundColor: [
+                                    'rgba(50, 150, 255, 1)',
+                                    'rgba(150, 255, 100, 1)',
+                                    'rgba(255, 100, 150, 1)'
+                                ]
                             }
                         ]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
                     }
                 });
         };
@@ -41,20 +31,23 @@
                 labels: Object.keys(statistic.data),
                 datasets: [
                     {
-                        label: 'User count',
+                        label: 'License ratios',
                         data: Object.values(statistic.data),
-                        backgroundColor: 'rgba(255, 132, 132, 1)'
+                        backgroundColor: [
+                            'rgba(50, 150, 255, 1)',
+                            'rgba(150, 255, 100, 1)',
+                            'rgba(255, 100, 150, 1)'
+                        ]
                     }
                 ]
             };
             _chart.update();
         };
 
-        var render = function (args, callback) {
+        var render = function (filters, callback) {
             serviceMethod({
-                    startDate: _latestFilters.startDate,
-                    endDate: _latestFilters.endDate,
-                    frequency: getFrequencyVal()
+                startDate: filters.startDate,
+                endDate: filters.endDate
                 })
                 .then(function (result) {
                     callback(result);
@@ -62,19 +55,12 @@
         };
 
         var init = function (filters) {
-            _latestFilters = filters;
             render(filters, createChart);
         };
 
         var refresh = function (filters) {
-            _latestFilters = filters;
             render(filters, refreshChart);
         };
-
-        $wrapper.find('.frequency-filter').on('change',
-            function () {
-                refresh(_latestFilters);
-            });
 
         return {
             init: init,
@@ -84,7 +70,7 @@
 
     abp.event.on('init-widgets', function (args) {
         args.container
-            .find('.newUserStatistic-widget')
+            .find('.license-statistic-widget')
             .each(function () {
                 var $this = $(this);
                 var chartManager = new ChartManager($this);
@@ -96,7 +82,7 @@
 
     abp.event.on('refresh-widgets', function (args) {
         args.container
-            .find('.newUserStatistic-widget')
+            .find('.license-statistic-widget')
             .each(function () {
                 var $this = $(this);
                 var chartManager = $this.data('chart-manager');

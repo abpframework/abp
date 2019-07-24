@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace DashboardDemo.Web.Pages.Components.NewUserStatisticWidget
+namespace DashboardDemo.Web.Pages.Components.LicenseStatisticWidget
 {
     [Widget(
         StyleTypes = new[] { typeof(ChartjsStyleContributor) },
-        ScriptTypes = new[] { typeof(NewUserStatisticWidgetScriptContributor)}
+        ScriptTypes = new[] { typeof(LicenseStatisticWidgetScriptContributor) }
         )]
-    public class NewUserStatisticWidgetViewComponent : AbpViewComponent
+    public class LicenseStatisticWidgetViewComponent : AbpViewComponent
     {
         public IViewComponentResult Invoke()
         {

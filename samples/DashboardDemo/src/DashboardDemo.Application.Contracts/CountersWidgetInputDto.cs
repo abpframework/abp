@@ -2,10 +2,7 @@
 
 namespace DashboardDemo
 {
-    public class CountersWidgetInputDto
+    public class CountersWidgetInputDto : WidgetFilter
     {
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
     }
 }
