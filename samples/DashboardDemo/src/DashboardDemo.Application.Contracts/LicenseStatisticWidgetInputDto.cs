@@ -1,6 +1,11 @@
-﻿namespace DashboardDemo
+﻿using System;
+
+namespace DashboardDemo
 {
-    public class LicenseStatisticWidgetInputDto : WidgetFilter
+    public class LicenseStatisticWidgetInputDto
     {
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
     }
 }

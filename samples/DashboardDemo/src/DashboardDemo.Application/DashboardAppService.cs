@@ -23,7 +23,7 @@ namespace DashboardDemo
             };
         }
 
-        public async Task<NewUserStatistiWidgetResultDto> GetNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
+        public async Task<NewUserStatisticWidgetResultDto> GetNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             switch (input.Frequency)
             {
@@ -50,7 +50,7 @@ namespace DashboardDemo
             return new LicenseStatistiWidgetResultDto(){Data = data};
         }
 
-        private async Task<NewUserStatistiWidgetResultDto> GetMonthlyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
+        private async Task<NewUserStatisticWidgetResultDto> GetMonthlyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             DateTime endDate = input.EndDate;
             DateTime startDate = input.StartDate;
@@ -74,13 +74,13 @@ namespace DashboardDemo
                 data.Add(labels[i], new Random().Next(1500, 3000));
             }
 
-            return new NewUserStatistiWidgetResultDto()
+            return new NewUserStatisticWidgetResultDto()
             {
                 Data = data
             };
         }
 
-        private async Task<NewUserStatistiWidgetResultDto> GetDailyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
+        private async Task<NewUserStatisticWidgetResultDto> GetDailyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             var dayCount = (input.EndDate - input.StartDate).Days + 1;
 
@@ -98,7 +98,7 @@ namespace DashboardDemo
                 data.Add(labels[i], new Random().Next(50, 100));
             }
 
-            return new NewUserStatistiWidgetResultDto()
+            return new NewUserStatisticWidgetResultDto()
             {
                 Data = data
             };
