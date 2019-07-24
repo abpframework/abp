@@ -2,7 +2,7 @@
 
 namespace DashboardDemo
 {
-    public class NewUserStatistiWidgetResultDto
+    public class LicenseStatistiWidgetResultDto
     {
         public Dictionary<string, int> Data { get; set; }
     }

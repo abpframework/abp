@@ -8,5 +8,7 @@ namespace DashboardDemo
         Task<CountersWidgetResultDto> GetCountersWidgetAsync(CountersWidgetInputDto input);
 
         Task<NewUserStatistiWidgetResultDto> GetNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input);
+
+        Task<LicenseStatistiWidgetResultDto> GetLicenseStatisticWidgetAsync(LicenseStatisticWidgetInputDto input);
     }
 }

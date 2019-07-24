@@ -2,12 +2,8 @@
 
 namespace DashboardDemo
 {
-    public class NewUserStatisticWidgetInputDto
+    public class NewUserStatisticWidgetInputDto : WidgetFilter
     {
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
-
         public NewUserStatisticFrequency Frequency { get; set; } = NewUserStatisticFrequency.Daily;
     }
 }

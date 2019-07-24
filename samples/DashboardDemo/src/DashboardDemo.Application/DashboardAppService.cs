@@ -36,6 +36,20 @@ namespace DashboardDemo
             throw new UserFriendlyException("Not implemented statistic frequency.");
         }
 
+        public async Task<LicenseStatistiWidgetResultDto> GetLicenseStatisticWidgetAsync(LicenseStatisticWidgetInputDto input)
+        {
+            var days = (int)Math.Round(input.EndDate.Subtract(input.StartDate).TotalDays + 1);
+
+            var data = new Dictionary<string, int>
+            {
+                {"Regular", new Random().Next(50, 100) * days},
+                {"Enterprise", new Random().Next(40, 70) * days},
+                {"Ultimate", new Random().Next(30, 40) * days}
+            };
+
+            return new LicenseStatistiWidgetResultDto(){Data = data};
+        }
+
         private async Task<NewUserStatistiWidgetResultDto> GetMonthlyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             DateTime endDate = input.EndDate;
@@ -45,7 +59,7 @@ namespace DashboardDemo
             var monthCount = (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month + 1;
             var labels = new List<string>();
 
-            for (int i = 0; i < monthCount; i++)
+            for (var i = 0; i < monthCount; i++)
             {
                 labels.Add(months[endDate.Month - 1]);
                 endDate = endDate.AddMonths(-1);
@@ -53,27 +67,22 @@ namespace DashboardDemo
 
             labels.Reverse();
 
-            var data = Enumerable
-                .Repeat(0, monthCount)
-                .Select(i => new Random().Next(1500, 3000))
-                .ToArray();
+            var data = new Dictionary<string, int>();
 
+            for (var i = 0; i < monthCount; i++)
+            {
+                data.Add(labels[i], new Random().Next(1500, 3000));
+            }
 
             return new NewUserStatistiWidgetResultDto()
             {
-                Data = data,
-                Labels = labels.ToArray()
+                Data = data
             };
         }
 
         private async Task<NewUserStatistiWidgetResultDto> GetDailyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             var dayCount = (input.EndDate - input.StartDate).Days + 1;
-
-            var data = Enumerable
-                .Repeat(0, dayCount)
-                .Select(i => new Random().Next(50, 100))
-                .ToArray();
 
             var labels = new List<string>();
 
@@ -82,10 +91,16 @@ namespace DashboardDemo
                 labels.Add(input.StartDate.AddDays(i).Day.ToString());
             }
 
+            var data = new Dictionary<string, int>();
+
+            for (var i = 0; i < dayCount; i++)
+            {
+                data.Add(labels[i], new Random().Next(50, 100));
+            }
+
             return new NewUserStatistiWidgetResultDto()
             {
-                Data = data,
-                Labels = labels.ToArray()
+                Data = data
             };
         }
     }
