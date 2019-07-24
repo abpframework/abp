@@ -222,7 +222,7 @@
             },
             {
               "text": "仪表板和小部件(Widget)系统",
-              "path": "AspNetCore/Tag-Helpers/DashboardWidgetSystem.md"
+              "path": "AspNetCore/Widgets.md"
             },
             {
               "text": "主题化",
