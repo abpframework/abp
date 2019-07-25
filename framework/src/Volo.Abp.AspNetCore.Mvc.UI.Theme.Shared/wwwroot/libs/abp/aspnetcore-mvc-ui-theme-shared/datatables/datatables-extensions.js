@@ -287,9 +287,18 @@
 
                 //Sorting
                 if (requestData.order && requestData.order.length > 0) {
-                    var orderingField = requestData.order[0];
-                    if (requestData.columns[orderingField.column].data) {
-                        input.sorting = requestData.columns[orderingField.column].data + " " + orderingField.dir;
+                    input.sorting = "";
+
+                    for (var i = 0; i < requestData.order.length; i++) {
+                        var orderingField = requestData.order[i];
+
+                        if (requestData.columns[orderingField.column].data) {
+                            input.sorting += requestData.columns[orderingField.column].data + " " + orderingField.dir;
+
+                            if (i < requestData.order.length - 1) {
+                                input.sorting += ",";
+                            }
+                        }
                     }
                 }
 
