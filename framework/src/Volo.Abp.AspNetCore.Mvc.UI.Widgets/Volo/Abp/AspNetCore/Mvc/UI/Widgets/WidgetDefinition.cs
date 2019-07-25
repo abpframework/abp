@@ -60,8 +60,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             Name = GetWidgetName(viewComponentType);
             DisplayName = displayName ?? GetDisplayName(WidgetAttribute, Name);
             RequiredPolicies = GetRequiredPolicies(WidgetAttribute);
+            RequiresAuthentication = WidgetAttribute.RequiresAuthentication;
             Styles = GetStyles(WidgetAttribute);
             Scripts = GetScripts(WidgetAttribute);
+            
+            if (WidgetAttribute.DefaultWidth.HasValue && WidgetAttribute.DefaultHeight.HasValue)
+            {
+                DefaultDimensions = new WidgetDimensions(WidgetAttribute.DefaultWidth.Value, WidgetAttribute.DefaultHeight.Value);
+            }
         }
 
         private static List<WidgetResourceItem> GetStyles(WidgetAttribute widgetAttribute)

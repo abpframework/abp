@@ -31,6 +31,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 
         public bool RequiresAuthentication { get; set; }
 
+        public int? DefaultWidth { get; set; }
+
+        public int? DefaultHeight { get; set; }
+
         public static bool IsWidget(Type type)
         {
             return type.IsSubclassOf(typeof(ViewComponent)) &&
