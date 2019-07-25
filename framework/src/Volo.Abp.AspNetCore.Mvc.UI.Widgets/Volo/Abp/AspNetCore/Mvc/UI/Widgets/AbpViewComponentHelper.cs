@@ -79,7 +79,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             }
 
             PageWidgetManager.TryAdd(widget);
-            return await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments);
+
+            return new HtmlContentBuilder()
+                .AppendHtml($"<div class=\"abp-widget-wrapper\" data-widget-name=\"{widget.Name}\">")
+                .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))
+                .AppendHtml("</div>");
         }
     }
 }
