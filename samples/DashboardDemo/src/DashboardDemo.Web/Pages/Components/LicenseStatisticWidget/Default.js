@@ -1,11 +1,9 @@
 ﻿(function () {
-    var serviceMethod = dashboardDemo.dashboard.getLicenseStatisticWidget;
-
-    function ChartManager($wrapper) {
+    abp.widgets.LicenseStatisticWidget = function($wrapper) {
 
         var _chart;
 
-        var createChart = function (statistic) {
+        var createChart = function(statistic) {
             _chart = new Chart($wrapper.find('.LicenseStatisticChart'),
                 {
                     type: 'pie',
@@ -26,7 +24,7 @@
                 });
         };
 
-        var refreshChart = function (statistic) {
+        var refreshChart = function(statistic) {
             _chart.data = {
                 labels: Object.keys(statistic.data),
                 datasets: [
@@ -44,21 +42,21 @@
             _chart.update();
         };
 
-        var render = function (filters, callback) {
-            serviceMethod({
-                startDate: filters.startDate,
-                endDate: filters.endDate
+        var render = function(filters, callback) {
+            dashboardDemo.dashboard.getLicenseStatisticWidget({
+                    startDate: filters.startDate,
+                    endDate: filters.endDate
                 })
-                .then(function (result) {
+                .then(function(result) {
                     callback(result);
                 });
         };
 
-        var init = function (filters) {
+        var init = function(filters) {
             render(filters, createChart);
         };
 
-        var refresh = function (filters) {
+        var refresh = function(filters) {
             render(filters, refreshChart);
         };
 
@@ -66,27 +64,5 @@
             init: init,
             refresh: refresh
         };
-    }
-
-    abp.event.on('init-widgets', function (args) {
-        args.container
-            .find('.license-statistic-widget')
-            .each(function () {
-                var $this = $(this);
-                var chartManager = new ChartManager($this);
-                chartManager.init(args.filters);
-                $this.data('chart-manager', chartManager);
-            });
-
-    });
-
-    abp.event.on('refresh-widgets', function (args) {
-        args.container
-            .find('.license-statistic-widget')
-            .each(function () {
-                var $this = $(this);
-                var chartManager = $this.data('chart-manager');
-                chartManager.refresh(args.filters);
-            });
-    });
+    };
 })();
