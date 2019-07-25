@@ -55,6 +55,16 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await this
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                ).CountAsync(cancellationToken: cancellationToken);
+        }
+
         public override IQueryable<Tenant> WithDetails()
         {
             return GetQueryable().IncludeDetails();

@@ -33,7 +33,7 @@ namespace Volo.Abp.TenantManagement
 
         public async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
         {
-            var count = await TenantRepository.GetCountAsync();
+            var count = await TenantRepository.GetCountAsync(input.Filter);
             var list = await TenantRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
 
             return new PagedResultDto<TenantDto>(
