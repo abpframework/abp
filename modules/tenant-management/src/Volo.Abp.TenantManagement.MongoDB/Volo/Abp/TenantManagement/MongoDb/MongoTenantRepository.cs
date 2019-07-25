@@ -53,5 +53,15 @@ namespace Volo.Abp.TenantManagement.MongoDB
                 .PageBy<Tenant, IMongoQueryable<Tenant>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
+
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .WhereIf<Tenant, IMongoQueryable<Tenant>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                ).CountAsync(cancellationToken: cancellationToken);
+        }
     }
 }
