@@ -1,21 +1,26 @@
-﻿(function() {
-    function refresh(args) {
-        args.container
-            .find('.counters-widget')
-            .each(function () {
-                var $this = $(this);
-                dashboardDemo.dashboard
-                    .getCountersWidget({
-                        startDate: args.filters.startDate,
-                        endDate: args.filters.endDate
-                    }).then(function (result) {
-                        $this.find('.new-user-count').text(result.newUsers);
-                        $this.find('.active-user-count').text(result.activeUsers);
-                        $this.find('.total-income').text('$' + result.totalIncome.toFixed(2));
-                        $this.find('.total-profit').text('$' + result.totalProfit.toFixed(2));
-                    });
-            });
-    }
+﻿abp.widgets = abp.widgets || {}; //TODO: Remove later
+(function () {
+    abp.widgets.CountersWidget = function ($wrapper) {
 
-    abp.event.on('refresh-widgets', refresh);
+        var refresh = function (filters) {
+            dashboardDemo.dashboard.getCountersWidget({
+                startDate: filters.startDate,
+                endDate: filters.endDate
+            }).then(function (result) {
+                $wrapper.find('.new-user-count').text(result.newUsers);
+                $wrapper.find('.active-user-count').text(result.activeUsers);
+                $wrapper.find('.total-income').text('$' + result.totalIncome.toFixed(2));
+                $wrapper.find('.total-profit').text('$' + result.totalProfit.toFixed(2));
+            });
+        };
+
+        var init = function (filters) {
+            // there is no initial process for this widget.
+        };
+
+        return {
+            init: init,
+            refresh: refresh
+        };
+    };
 })();

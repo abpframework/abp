@@ -1,11 +1,11 @@
 ﻿abp.widgets = abp.widgets || {}; //TODO: Remove later
 (function () {
-    abp.widgets.NewUserStatisticWidget = function ($wrapper) {
+    abp.widgets.NewUserStatisticWidget = function($wrapper) {
 
         var _latestFilters;
         var _chart;
 
-        var refresh = function (filters) {
+        var refresh = function(filters) {
             _latestFilters = filters || _latestFilters;
             dashboardDemo.dashboard.getNewUserStatisticWidget({
                 startDate: _latestFilters.startDate,
@@ -26,17 +26,19 @@
             });
         };
 
-        var init = function (filters) {
+        var init = function(filters) {
             _chart = new Chart($wrapper.find('.NewUserStatisticChart'),
                 {
                     type: 'bar',
                     options: {
                         scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
+                            yAxes: [
+                                {
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
                                 }
-                            }]
+                            ]
                         }
                     }
                 });
@@ -45,14 +47,15 @@
 
             $wrapper
                 .find('.frequency-filter')
-                .on('change', function () {
-                    refresh();
-                });
+                .on('change',
+                    function() {
+                        refresh();
+                    });
         };
 
         return {
             init: init,
             refresh: refresh
         };
-    }
+    };
 })();
