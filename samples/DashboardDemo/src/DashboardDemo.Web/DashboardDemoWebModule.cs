@@ -8,7 +8,6 @@ using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization;
 using DashboardDemo.MultiTenancy;
 using DashboardDemo.Web.Menus;
-using DashboardDemo.Web.Pages.Components.MySimpleWidget;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;

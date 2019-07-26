@@ -2,11 +2,11 @@
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
+namespace DashboardDemo.Web.Pages.Shared.Components.MySimpleWidget
 {
     [Widget(
-        StyleFiles = new[] { "/Pages/Components/MySimpleWidget/Default.css" },
-        ScriptFiles = new[] { "/Pages/Components/MySimpleWidget/Default.js" }
+        StyleFiles = new[] { "/Pages/Shared/Components/MySimpleWidget/Default.css" },
+        ScriptFiles = new[] { "/Pages/Shared/Components/MySimpleWidget/Default.js" }
     )]
     public class MySimpleWidgetViewComponent : AbpViewComponent
     {

@@ -1,4 +1,4 @@
-﻿namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
+﻿namespace DashboardDemo.Web.Pages.Shared.Components.MySimpleWidget
 {
     public class MySimpleWidgetViewModel
     {

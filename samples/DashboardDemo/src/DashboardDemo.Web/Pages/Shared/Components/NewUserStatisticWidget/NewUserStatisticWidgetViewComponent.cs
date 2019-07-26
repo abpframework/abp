@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace DashboardDemo.Web.Pages.Components.NewUserStatisticWidget
+namespace DashboardDemo.Web.Pages.Shared.Components.NewUserStatisticWidget
 {
     [Widget(
         StyleTypes = new[] { typeof(ChartjsStyleContributor) },

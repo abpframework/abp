@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
 
-namespace DashboardDemo.Web.Pages.Components.CountersWidget
+namespace DashboardDemo.Web.Pages.Shared.Components.CountersWidget
 {
     [Widget(
-        StyleFiles = new[] { "/Pages/Components/CountersWidget/Default.css" },
-        ScriptFiles = new[] { "/Pages/Components/CountersWidget/Default.js" }
+        StyleFiles = new[] { "/Pages/Shared/Components/CountersWidget/Default.css" },
+        ScriptFiles = new[] { "/Pages/Shared/Components/CountersWidget/Default.js" }
         )]
     public class CountersWidgetViewComponent : AbpViewComponent
     {
