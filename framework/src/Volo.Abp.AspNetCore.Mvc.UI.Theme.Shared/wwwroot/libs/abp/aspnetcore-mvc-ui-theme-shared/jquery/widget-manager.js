@@ -16,11 +16,22 @@
             opts.wrapper = $(opts.wrapper);
         }
 
+        if (!opts.filterForm) {
+            var widgetFilterAttr = opts.wrapper.attr('data-widget-filter');
+            if (widgetFilterAttr) {
+                opts.filterForm = $(widgetFilterAttr);
+            }
+        } else if (typeof opts.filterForm === 'string') {
+            opts.filterForm = $(opts.filterForm);
+        }
+
         var getFilters = function ($widgetWrapperDiv) {
             var filters = {};
             
             if (opts.filterForm) {
-                filters = opts.filterForm.serializeFormToObject();
+                opts.filterForm.each(function() {
+                    filters = $.extend(filters, opts.filterForm.serializeFormToObject());
+                });
             }
 
             if (opts.filterCallback) {
@@ -75,15 +86,22 @@
         };
 
         if (opts.filterForm) {
-            opts.filterForm.submit(function (e) {
-                e.preventDefault();
-                refresh();
+            opts.filterForm.each(function() {
+                $(this).submit(function (e) {
+                    e.preventDefault();
+                    refresh();
+                });
             });
         }
 
-        return  {
+        var publicApi = {
             init: init,
             refresh: refresh
         };
+
+        opts.wrapper.data('abp-widget-manager', publicApi);
+
+        return publicApi;
     };
+
 })(jQuery);
