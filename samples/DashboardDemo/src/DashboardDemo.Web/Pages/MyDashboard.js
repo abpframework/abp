@@ -1,6 +1,10 @@
 ﻿abp.widgets = abp.widgets || {}; //TODO: Remove later
 (function () {
 
+    abp.WidgetManager = function(opts) {
+
+    };
+
     abp.DashboardManager = function (opts) {
 
         if (typeof opts === 'string') {
@@ -16,12 +20,19 @@
             $dashboardWrapper = opts.wrapper;
         }
 
-        var getFilters = function() {
-            if (!opts.filterCallback) {
-                return {};
+        var getFilters = function ($widgetWrapperDiv) {
+            var filters = {};
+
+            if (opts.filterCallback) {
+                filters = opts.filterCallback();
             }
 
-            return opts.filterCallback();
+            var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
+            if (widgetApi && widgetApi.getFilters) {
+                filters = $.extend(filters, widgetApi.getFilters());
+            }
+
+            return filters;
         };
 
         var initWidget = function($widgetWrapperDiv) {
@@ -29,24 +40,17 @@
             var widgetApiClass = abp.widgets[widgetName];
             if (widgetApiClass) {
                 var widgetApi = new widgetApiClass($widgetWrapperDiv);
-                if (widgetApi.init) {
-                    widgetApi.init(getFilters());
-                }
-
                 $widgetWrapperDiv.data('abp-widget-api', widgetApi);
+                if (widgetApi.init) {
+                    widgetApi.init(getFilters($widgetWrapperDiv));
+                }
             }
-        };
-        
-        var init = function () {
-            $dashboardWrapper.find('.abp-widget-wrapper').each(function () {
-                initWidget($(this));
-            });
         };
 
         var callRefreshWidgetApi = function ($widgetWrapperDiv) {
             var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
             if (widgetApi && widgetApi.refresh) {
-                widgetApi.refresh(getFilters());
+                widgetApi.refresh(getFilters($widgetWrapperDiv));
             }
         }
 
@@ -58,8 +62,8 @@
                     type: 'GET',
                     dataType: 'html',
                     contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-                    data: getFilters()
-                }).then(function(result) {
+                    data: getFilters($widgetWrapperDiv)
+                }).then(function (result) {
                     var $newWidgetWrapperDiv = $(result);
                     $widgetWrapperDiv.replaceWith($newWidgetWrapperDiv);
                     $widgetWrapperDiv = $newWidgetWrapperDiv;
@@ -68,6 +72,12 @@
             } else {
                 callRefreshWidgetApi($widgetWrapperDiv);
             }
+        };
+
+        var init = function () {
+            $dashboardWrapper.find('.abp-widget-wrapper').each(function () {
+                initWidget($(this));
+            });
         };
 
         var refresh = function() {

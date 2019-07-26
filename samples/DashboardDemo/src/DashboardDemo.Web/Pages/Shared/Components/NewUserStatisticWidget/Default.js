@@ -5,25 +5,29 @@
         var _latestFilters;
         var _chart;
 
-        var refresh = function(filters) {
-            _latestFilters = filters || _latestFilters;
-            dashboardDemo.dashboard.getNewUserStatisticWidget({
-                startDate: _latestFilters.startDate,
-                endDate: _latestFilters.endDate,
+        var getFilters = function() {
+            return {
                 frequency: $wrapper.find('.frequency-filter option:selected').val()
-            }).then(function(result) {
-                _chart.data = {
-                    labels: Object.keys(result.data),
-                    datasets: [
-                        {
-                            label: 'User count',
-                            data: Object.values(result.data),
-                            backgroundColor: 'rgba(255, 132, 132, 1)'
-                        }
-                    ]
-                };
-                _chart.update();
-            });
+            };
+        }
+
+        var refresh = function(filters) {
+            _latestFilters = filters;
+            dashboardDemo.dashboard
+                .getNewUserStatisticWidget(_latestFilters)
+                .then(function(result) {
+                    _chart.data = {
+                        labels: Object.keys(result.data),
+                        datasets: [
+                            {
+                                label: 'User count',
+                                data: Object.values(result.data),
+                                backgroundColor: 'rgba(255, 132, 132, 1)'
+                            }
+                        ]
+                    };
+                    _chart.update();
+                });
         };
 
         var init = function(filters) {
@@ -49,11 +53,12 @@
                 .find('.frequency-filter')
                 .on('change',
                     function() {
-                        refresh();
+                        refresh($.extend(_latestFilters, getFilters()));
                     });
         };
 
         return {
+            getFilters: getFilters,
             init: init,
             refresh: refresh
         };
