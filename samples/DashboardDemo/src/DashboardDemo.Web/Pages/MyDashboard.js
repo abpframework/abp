@@ -1,26 +1,73 @@
-﻿(function () {
+﻿abp.widgets = abp.widgets || {}; //TODO: Remove later
+(function () {
 
-    function triggerWidgets(eventName) {
-        abp.event.trigger(
-            eventName,
-            {
-                container: $('#MyDashboardWidgetsArea'),
-                filters: {
-                    startDate: $('#StartDate').val(),
-                    endDate: $('#EndDate').val()
-                }
+    abp.DashboardManager = function (opts) {
+
+        if (typeof opts === 'string') {
+            opts = {
+                wrapper: opts
+            };
+        }
+
+        var $dashboardWrapper;
+        if (typeof opts.wrapper === 'string') {
+            $dashboardWrapper = $(opts.wrapper);
+        } else {
+            $dashboardWrapper = opts.wrapper;
+        }
+
+        var getFilters = function() {
+            if (!opts.filterCallback) {
+                return {};
             }
-        );
-    }
 
-    $(function () {
+            return opts.filterCallback();
+        }
+        
+        var init = function () {
+            $dashboardWrapper.find('.abp-widget-wrapper').each(function () {
+                var $widgetWrapperDiv = $(this);
+                var widgetName = $widgetWrapperDiv.attr('data-widget-name');
+                var widgetApiClass = abp.widgets[widgetName];
+                if (widgetApiClass) {
+                    var widgetApi = new widgetApiClass($widgetWrapperDiv);
+                    if (widgetApi.init) {
+                        widgetApi.init(getFilters());
+                    }
+                    $widgetWrapperDiv.data('abp-widget-api', widgetApi);
+                }
+            });
+        };
 
-        $('#MyDashboardFilterForm').submit(function(e) {
-            e.preventDefault();
+        var refresh = function() {
+            $dashboardWrapper.find('.abp-widget-wrapper').each(function () {
+                var $widgetWrapperDiv = $(this);
+                var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
+                if (widgetApi && widgetApi.refresh) {
+                    widgetApi.refresh(getFilters());
+                }
+            });
+        }
+        
+        return {
+            init: init,
+            refresh: refresh
+        };
+    };
 
-            triggerWidgets('refresh-widgets');
-        });
+    var filterForm = $('#MyDashboardFilterForm');
 
-        triggerWidgets('init-widgets');
+    var myDashboard = new abp.DashboardManager({
+        wrapper: '#MyDashboardWidgetsArea',
+        filterCallback: function() {
+            return filterForm.serializeFormToObject();
+        }
+    });
+
+    myDashboard.init();
+
+    filterForm.submit(function(e) {
+        e.preventDefault();
+        myDashboard.refresh();
     });
 })();

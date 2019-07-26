@@ -25,5 +25,9 @@ namespace Volo.Abp.TenantManagement
             string filter = null, 
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
+
+        Task<long> GetCountAsync(
+            string filter = null, 
+            CancellationToken cancellationToken = default);
     }
 }
