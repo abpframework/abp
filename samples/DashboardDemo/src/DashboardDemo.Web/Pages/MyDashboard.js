@@ -1,3 +1,3 @@
-﻿(function () {
+﻿$(function() {
     new abp.WidgetManager('#MyDashboardWidgetsArea').init();
-})();
+})

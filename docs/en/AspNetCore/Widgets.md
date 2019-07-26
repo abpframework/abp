@@ -35,6 +35,8 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 Inheriting from `AbpViewComponent` is not required. You could inherit from ASP.NET Core's standard `ViewComponent`. `AbpViewComponent` only defines some base useful properties.
 
+You can inject a service and use in the `Invoke` method to get some data from the service. You may need to make Invoke method async, like `public async Task<IViewComponentResult> InvokeAsync()`. See [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components) document fore all different usages. 
+
 **Default.cshtml**:
 
 ```xml
@@ -76,6 +78,56 @@ Rendering a widget is pretty standard. Use the `Component.InvokeAsync` method in
 ````
 
 First approach uses the widget name while second approach uses the view component type.
+
+### Widgets with Arguments
+
+ASP.NET Core's view component system allows you to accept arguments for view components. The sample view component below accepts `startDate` and `endDate` and uses these arguments to retrieve data from a service.
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+
+namespace DashboardDemo.Web.Pages.Shared.Components.CountersWidget
+{
+    [Widget]
+    public class CountersWidgetViewComponent : AbpViewComponent
+    {
+        private readonly IDashboardAppService _dashboardAppService;
+
+        public CountersWidgetViewComponent(IDashboardAppService dashboardAppService)
+        {
+            _dashboardAppService = dashboardAppService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(
+            DateTime startDate, DateTime endDate)
+        {
+            var result = await _dashboardAppService.GetCountersWidgetAsync(
+                new CountersWidgetInputDto
+                {
+                    StartDate = startDate,
+                    EndDate = endDate
+                }
+            );
+
+            return View(result);
+        }
+    }
+}
+````
+
+Now, you need to pass an anonymous object to pass arguments as shown below:
+
+````xml
+@await Component.InvokeAsync("CountersWidget", new
+{
+    startDate = DateTime.Now.Subtract(TimeSpan.FromDays(7)),
+    endDate = DateTime.Now
+})
+````
 
 ## Widget Name
 
@@ -222,6 +274,44 @@ Bundle contribution system is very powerful. If your widget uses a JavaScript li
 
 See the [bundling & minification](Bundling-Minification.md) documentation for more information about that system.
 
+## JavaScript API
+
+A widget may need to be rendered and refreshed in the client side. In such cases, you can use ABP's `WidgetManager` and define APIs for your widgets.
+
+### WidgetManager
+
+`WidgetManager` is used to initialize and refresh one or more widgets. Create a new `WidgetManager` as shown below:
+
+````js
+$(function() {
+    var myWidgetManager = new abp.WidgetManager('#MyDashboardWidgetsArea');    
+})
+````
+
+`MyDashboardWidgetsArea` may contain one or more widgets inside.
+
+> Using the `WidgetManager` inside document.ready (like above) is a good practice since its functions use the DOM and need DOM to be ready.
+
+#### WidgetManager.init()
+
+`init` simply initializes the `WidgetManager` and calls `init` methods of the related widgets if they define (see Widget JavaScript API section below)
+
+```js
+myWidgetManager.init();
+```
+
+#### WidgetManager.refresh()
+
+`refresh` method refreshes all widgets related to this `WidgetManager`:
+
+````
+myWidgetManager.refresh();
+````
+
+#### WidgetManager Options
+
+### Widget JavaScript API
+
 ## Authorization
 
 Some widgets may need to be available only for authenticated or authorized users. In this case, use the following properties of the `Widget` attribute:
@@ -249,7 +339,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-## Widget Options
+## WidgetOptions
 
 As alternative to the `Widget` attribute, you can use the `WidgetOptions` to configure widgets:
 
