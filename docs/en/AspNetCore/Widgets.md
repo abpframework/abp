@@ -2,9 +2,9 @@
 
 ABP provides a model and infrastructure to create **reusable widgets**. Widget system is an extension to [ASP.NET Core's ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgets are especially useful when you want to;
 
-* Define widgets in reusable **[modules](../Module-Development-Basics.md)**.
 * Have **scripts & styles** dependencies for your widget.
-* Create **[dashboards](Dashboards.md)** with widgets used inside.
+* Create **dashboards** with widgets used inside.
+* Define widgets in reusable **[modules](../Module-Development-Basics.md)**.
 * Co-operate widgets with **[authorization](../Authorization.md)** and **[bundling](Bundling-Minification.md)** systems.
 
 ## Basic Widget Definition
@@ -274,6 +274,37 @@ Bundle contribution system is very powerful. If your widget uses a JavaScript li
 
 See the [bundling & minification](Bundling-Minification.md) documentation for more information about that system.
 
+## RefreshUrl
+
+A widget may design a `RefreshUrl` that is used whenever the widget needs to be refreshed. If it is defined, the widget is re-rendered on the server side on every refresh (see the refresh `method` of the `WidgetManager` below).
+
+````csharp
+[Widget(RefreshUrl = "Widgets/Counters")]
+public class CountersWidgetViewComponent : AbpViewComponent
+{
+    
+}
+````
+
+Once you define a `RefreshUrl` for your widget, you need to provide an endpoint to render and return it:
+
+````csharp
+[Route("Widgets")]
+public class CountersWidgetController : AbpController
+{
+    [HttpGet]
+    [Route("Counters")]
+    public IActionResult Counters(DateTime startDate, DateTime endDate)
+    {
+        return ViewComponent("CountersWidget", new {startDate, endDate});
+    }
+}
+````
+
+`Widgets/Counters` route matches to the `RefreshUrl` declared before.
+
+> A widget supposed to be refreshed in two ways: In the first way, when you use a `RefreshUrl`, it re-rendered on the server and replaced by the HTML returned from server. In the second way the widget gets data (generally a JSON object) from server and refreshes itself in the client side (see the refresh method in the Widget JavaScript API section).
+
 ## JavaScript API
 
 A widget may need to be rendered and refreshed in the client side. In such cases, you can use ABP's `WidgetManager` and define APIs for your widgets.
@@ -310,7 +341,113 @@ myWidgetManager.refresh();
 
 #### WidgetManager Options
 
+WidgetManager has some additional options.
+
+##### Filter Form
+
+If your widgets require parameters/filters then you will generally have a form to filter the widgets. In such cases, you can create a form that has some form elements and a dashboard area with some widgets inside. Example:
+
+````xml
+<form method="get" id="MyDashboardFilterForm">
+    ...form elements
+</form>
+
+<div id="MyDashboardWidgetsArea" data-widget-filter="#MyDashboardFilterForm">
+   ...widgets
+</div>
+````
+
+`data-widget-filter` attribute relates the form with the widgets. Whenever the form is submitted, all the widgets are automatically refreshed with the form fields as the filter.
+
+Instead of the `data-widget-filter` attribute, you can use the `filterForm` parameter of the `WidgetManager` constructor. Example:
+
+````js
+var myWidgetManager = new abp.WidgetManager({
+    wrapper: '#MyDashboardWidgetsArea',
+    filterForm: '#MyDashboardFilterForm'
+});
+````
+
+##### Filter Callback
+
+You may want to have a better control to provide filters while initializing and refreshing the widgets. In this case, you can use the `filterCallback` option:
+
+````js
+var myWidgetManager = new abp.WidgetManager({
+    wrapper: '#MyDashboardWidgetsArea',
+    filterCallback: function() {
+        return $('#MyDashboardFilterForm').serializeFormToObject();
+    }
+});
+````
+
+This example shows the default implementation of the `filterCallback`. You can return any JavaScript object with fields. Example:
+
+````js
+filterCallback: function() {
+    return {
+        'startDate': $('#StartDateInput').val(),
+        'endDate': $('#EndDateInput').val()
+    };
+}
+````
+
+The returning filters are passed to all widgets on `init` and `refresh`.
+
 ### Widget JavaScript API
+
+A widget can define a JavaScript API that is invoked by the `WidgetManager` when needed. The code sample below can be used to start to define an API for a widget.
+
+````js
+(function () {
+    abp.widgets.NewUserStatisticWidget = function ($wrapper) {
+
+        var getFilters = function () {
+            return {
+                ...
+            };
+        }
+
+        var refresh = function (filters) {
+            ...
+        };
+
+        var init = function (filters) {
+            ...
+        };
+
+        return {
+            getFilters: getFilters,
+            init: init,
+            refresh: refresh
+        };
+    };
+})();
+````
+
+`NewUserStatisticWidget` is the name of the widget here. It should match the widget name defined in the server side. All of the functions are optional.
+
+#### getFilters
+
+If the widget has internal custom filters, this function should return the filter object. Example:
+
+````js
+var getFilters = function() {
+    return {
+        frequency: $wrapper.find('.frequency-filter option:selected').val()
+    };
+}
+````
+
+This method is used by the `WidgetManager` while building filters.
+
+#### init
+
+Used to initialize the widget when needed. It has a filter argument that can be used while getting data from server. `init` method is used when `WidgetManager.init()` function is called. It is also called if your widget requires a full re-load on refresh. See the `RefreshUrl` widget option.
+
+#### refresh
+
+Used to refresh the widget when needed. It has a filter argument that can be used while getting data from server. `refresh` method is used whenever `WidgetManager.refresh()` function is called.
 
 ## Authorization
 
@@ -362,3 +499,7 @@ Configure<WidgetOptions>(options =>
 ````
 
 > Tip: `WidgetOptions` can also be used to get an existing widget and change its configuration. This is especially useful if you want to modify the configuration of a widget inside a module used by your application. Use `options.Widgets.Find` to get an existing `WidgetDefinition`.
+
+## See Also
+
+* [Example project (source code)](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo).
