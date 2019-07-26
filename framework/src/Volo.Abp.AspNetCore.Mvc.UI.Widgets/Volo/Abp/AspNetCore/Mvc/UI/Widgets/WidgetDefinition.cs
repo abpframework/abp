@@ -48,9 +48,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         public List<WidgetResourceItem> Scripts { get; }
 
         [CanBeNull]
-        public WidgetDimensions DefaultDimensions { get; set; }
-
-        [CanBeNull]
         public string RefreshUrl { get; set; }
 
         public WidgetDefinition(
@@ -67,11 +64,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             Styles = GetStyles(WidgetAttribute);
             Scripts = GetScripts(WidgetAttribute);
             RefreshUrl = WidgetAttribute.RefreshUrl;
-            
-            if (WidgetAttribute.DefaultWidth.HasValue && WidgetAttribute.DefaultHeight.HasValue)
-            {
-                DefaultDimensions = new WidgetDimensions(WidgetAttribute.DefaultWidth.Value, WidgetAttribute.DefaultHeight.Value);
-            }
         }
 
         private static List<WidgetResourceItem> GetStyles(WidgetAttribute widgetAttribute)
@@ -166,12 +158,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         public WidgetDefinition WithRequiresAuthentication(bool value = true)
         {
             RequiresAuthentication = value;
-            return this;
-        }
-
-        public WidgetDefinition WithDefaultDimensions(int width, int height)
-        {
-            DefaultDimensions = new WidgetDimensions(width, height);
             return this;
         }
 
