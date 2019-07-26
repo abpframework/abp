@@ -1,5 +1,4 @@
-﻿abp.widgets = abp.widgets || {}; //TODO: Remove later
-(function () {
+﻿(function () {
     abp.widgets.NewUserStatisticWidget = function($wrapper) {
 
         var _latestFilters;
