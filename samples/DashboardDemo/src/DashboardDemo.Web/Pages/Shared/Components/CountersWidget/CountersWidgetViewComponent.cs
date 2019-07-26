@@ -8,7 +8,7 @@ namespace DashboardDemo.Web.Pages.Shared.Components.CountersWidget
 {
     [Widget(
         StyleFiles = new[] { "/Pages/Shared/Components/CountersWidget/Default.css" },
-        ScriptFiles = new[] { "/Pages/Shared/Components/CountersWidget/Default.js" }
+        RefreshUrl = "Widgets/Counters"
         )]
     public class CountersWidgetViewComponent : AbpViewComponent
     {

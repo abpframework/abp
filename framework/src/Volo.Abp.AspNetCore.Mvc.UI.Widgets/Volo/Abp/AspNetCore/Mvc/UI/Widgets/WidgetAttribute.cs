@@ -35,6 +35,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 
         public int? DefaultHeight { get; set; }
 
+        public string RefreshUrl { get; set; }
+
         public static bool IsWidget(Type type)
         {
             return type.IsSubclassOf(typeof(ViewComponent)) &&

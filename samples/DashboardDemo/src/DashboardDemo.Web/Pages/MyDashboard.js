@@ -22,32 +22,59 @@
             }
 
             return opts.filterCallback();
-        }
+        };
+
+        var initWidget = function($widgetWrapperDiv) {
+            var widgetName = $widgetWrapperDiv.attr('data-widget-name');
+            var widgetApiClass = abp.widgets[widgetName];
+            if (widgetApiClass) {
+                var widgetApi = new widgetApiClass($widgetWrapperDiv);
+                if (widgetApi.init) {
+                    widgetApi.init(getFilters());
+                }
+
+                $widgetWrapperDiv.data('abp-widget-api', widgetApi);
+            }
+        };
         
         var init = function () {
             $dashboardWrapper.find('.abp-widget-wrapper').each(function () {
-                var $widgetWrapperDiv = $(this);
-                var widgetName = $widgetWrapperDiv.attr('data-widget-name');
-                var widgetApiClass = abp.widgets[widgetName];
-                if (widgetApiClass) {
-                    var widgetApi = new widgetApiClass($widgetWrapperDiv);
-                    if (widgetApi.init) {
-                        widgetApi.init(getFilters());
-                    }
-                    $widgetWrapperDiv.data('abp-widget-api', widgetApi);
-                }
+                initWidget($(this));
             });
         };
 
-        var refresh = function() {
-            $dashboardWrapper.find('.abp-widget-wrapper').each(function () {
-                var $widgetWrapperDiv = $(this);
-                var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
-                if (widgetApi && widgetApi.refresh) {
-                    widgetApi.refresh(getFilters());
-                }
-            });
+        var callRefreshWidgetApi = function ($widgetWrapperDiv) {
+            var widgetApi = $widgetWrapperDiv.data('abp-widget-api');
+            if (widgetApi && widgetApi.refresh) {
+                widgetApi.refresh(getFilters());
+            }
         }
+
+        var refreshWidget = function ($widgetWrapperDiv) {
+            var refreshUrl = $widgetWrapperDiv.attr('data-refresh-url');
+            if (refreshUrl) {
+                abp.ajax({
+                    url: refreshUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+                    data: getFilters()
+                }).then(function(result) {
+                    var $newWidgetWrapperDiv = $(result);
+                    $widgetWrapperDiv.replaceWith($newWidgetWrapperDiv);
+                    $widgetWrapperDiv = $newWidgetWrapperDiv;
+                    initWidget($widgetWrapperDiv);
+                });
+            } else {
+                callRefreshWidgetApi($widgetWrapperDiv);
+            }
+        };
+
+        var refresh = function() {
+            $dashboardWrapper.find('.abp-widget-wrapper').each(function() {
+                refreshWidget($(this));
+            });
+        };
         
         return {
             init: init,

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Html;
@@ -80,8 +81,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 
             PageWidgetManager.TryAdd(widget);
 
+            var wrapperAttributesBuilder = new StringBuilder($"class=\"abp-widget-wrapper\" data-widget-name=\"{widget.Name}\"");
+
+            if (widget.RefreshUrl != null)
+            {
+                wrapperAttributesBuilder.Append($" data-refresh-url=\"{widget.RefreshUrl}\"");
+            }
+
             return new HtmlContentBuilder()
-                .AppendHtml($"<div class=\"abp-widget-wrapper\" data-widget-name=\"{widget.Name}\">")
+                .AppendHtml($"<div {wrapperAttributesBuilder}>")
                 .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))
                 .AppendHtml("</div>");
         }

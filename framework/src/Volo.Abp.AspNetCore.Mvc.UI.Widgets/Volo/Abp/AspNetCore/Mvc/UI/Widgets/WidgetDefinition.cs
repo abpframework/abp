@@ -50,6 +50,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         [CanBeNull]
         public WidgetDimensions DefaultDimensions { get; set; }
 
+        [CanBeNull]
+        public string RefreshUrl { get; set; }
+
         public WidgetDefinition(
             [NotNull] Type viewComponentType,
             [CanBeNull] ILocalizableString displayName = null)
@@ -63,6 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             RequiresAuthentication = WidgetAttribute.RequiresAuthentication;
             Styles = GetStyles(WidgetAttribute);
             Scripts = GetScripts(WidgetAttribute);
+            RefreshUrl = WidgetAttribute.RefreshUrl;
             
             if (WidgetAttribute.DefaultWidth.HasValue && WidgetAttribute.DefaultHeight.HasValue)
             {
@@ -189,6 +193,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         public WidgetDefinition WithScripts(params Type[] bundleContributorTypes)
         {
             return WithResources(Scripts, bundleContributorTypes);
+        }
+
+        public WidgetDefinition WithRefreshUrl(string refreshUrl)
+        {
+            RefreshUrl = refreshUrl;
+            return this;
         }
 
         private WidgetDefinition WithResources(List<WidgetResourceItem> resourceItems, Type[] bundleContributorTypes)
