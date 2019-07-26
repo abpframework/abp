@@ -1,6 +1,6 @@
 ﻿(function () {
 
-    var myDashboard = new abp.DashboardManager({
+    var myDashboard = new abp.WidgetManager({
         wrapper: '#MyDashboardWidgetsArea',
         filterForm: $('#MyDashboardFilterForm')
     });

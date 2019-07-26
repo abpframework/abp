@@ -36,7 +36,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/jquery-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery-form/jquery-form-extensions.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/widget-manager.js",
-                "/libs/abp/aspnetcore-mvc-ui-theme-shared/jquery/dashboard-manager.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/dom-event-handlers.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/bootstrap/modal-manager.js",
                 "/libs/abp/aspnetcore-mvc-ui-theme-shared/datatables/datatables-extensions.js",
