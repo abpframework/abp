@@ -138,3 +138,11 @@ namespace AuthServer.Host.Controllers
         }
     }
 }
+
+
+//{
+//"userNameOrEmailAddress": "710277267",
+//"password": "1q2w3E*",
+//"rememberMe": true,
+//"tenanId": "446A5211-3D72-4339-9ADC-845151F8ADA0"
+//}

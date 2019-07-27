@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Collections.Generic;
+using IdentityServer4.AspNetIdentity;
+using IdentityServer4.Validation;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -65,7 +67,7 @@ namespace AuthServer.Host
                 options.UseSqlServer();
             });
 
-            Configure<AbpLocalizationOptions>(options =>
+             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
