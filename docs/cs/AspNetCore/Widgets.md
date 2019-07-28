@@ -274,6 +274,37 @@ Systém přispěvatelů balíků je velmi schopný. Pokud váš widget použív�
 
 Podívejte se na dokumentaci [svazování & minifikace](Bundling-Minification.md) pro více informací o tomto systému.
 
+## RefreshUrl
+
+Widget může navrhnout `RefreshUrl`, který se používá vždy, když je potřeba widget aktualizovat. Je-li definován, widget se při každé aktualizaci znovu vykreslí na straně serveru (viz refresh `methoda` u `WidgetManager` níže).
+
+````csharp
+[Widget(RefreshUrl = "Widgets/Counters")]
+public class CountersWidgetViewComponent : AbpViewComponent
+{
+    
+}
+````
+
+Jakmile pro svůj widget definujete `RefreshUrl`, musíte poskytnout koncový bod pro jeho vykreslení a vrátit ho:
+
+````csharp
+[Route("Widgets")]
+public class CountersWidgetController : AbpController
+{
+    [HttpGet]
+    [Route("Counters")]
+    public IActionResult Counters(DateTime startDate, DateTime endDate)
+    {
+        return ViewComponent("CountersWidget", new {startDate, endDate});
+    }
+}
+````
+
+Trasa `Widgets/Counters` předchozímu `RefreshUrl`.
+
+> Widget lze obnovit dvěma způsoby: Prvním způsobem je použití `RefreshUrl`, kdy se znovu vykreslí na serveru a nahradí HTML vrácené tím ze serveru. Druhým způsobem widget získá data (obvykle JSON objekt) ze serveru a obnoví se sám u klienta (viz refresh metoda v sekci Widget JavaScript API).
+
 ## JavaScript API
 
 Možná bude potřeba vykreslit a obnovit widget na straně klienta. V takových případech můžete použít ABP `WidgetManager` a definovat API pro vaše widgety.
@@ -308,9 +339,115 @@ myWidgetManager.init();
 myWidgetManager.refresh();
 ````
 
-#### WidgetManager Options
+#### WidgetManager možnosti
+
+WidgetManager má několik dalších možností.
+
+##### Filtrační formulář
+
+Pokud vaše widgety vyžadují parametry/filtry pak budete obvykle mít formulář pro filtrování widgetů. V takových případech můžete vytvořit formulář, který obsahuje prvky formuláře a oblast řídicího panelu s nějakými widgety uvnitř. Příklad:
+
+````xml
+<form method="get" id="MyDashboardFilterForm">
+    ...prvky formuláře
+</form>
+
+<div id="MyDashboardWidgetsArea" data-widget-filter="#MyDashboardFilterForm">
+   ...widgety
+</div>
+````
+
+`data-widget-filter` atribut propojuje formulář s widgety. Kdykoli je formulář odeslán, všechny widgety jsou automaticky aktualizovány pomocí polí formuláře jako filtru.
+
+Místo atributu `data-widget-filter`, můžete použít parametr `filterForm` v konstruktoru `WidgetManager`. Příklad:
+
+````js
+var myWidgetManager = new abp.WidgetManager({
+    wrapper: '#MyDashboardWidgetsArea',
+    filterForm: '#MyDashboardFilterForm'
+});
+````
+
+##### Zpětné volání filtru
+
+Možná budete chtít mít lepší kontrolu nad poskytováním filtrů při inicializaci a aktualizaci widgetů. V tomto případě můžete použít volbu `filterCallback`:
+
+````js
+var myWidgetManager = new abp.WidgetManager({
+    wrapper: '#MyDashboardWidgetsArea',
+    filterCallback: function() {
+        return $('#MyDashboardFilterForm').serializeFormToObject();
+    }
+});
+````
+
+Tento příklad ukazuje výchozí implementaci `filterCallback`. Pomocí polí můžete vrátit jakýkoli JavaScript objekt. Příklad:
+
+````js
+filterCallback: function() {
+    return {
+        'startDate': $('#StartDateInput').val(),
+        'endDate': $('#EndDateInput').val()
+    };
+}
+````
+
+Vrácené filtry jsou předávány všem widgetům na `init` a` refresh`.
 
 ### Widget JavaScript API
+
+Widget může definovat rozhraní API jazyka JavaScript, které je v případě potřeby vyvoláno přes `WidgetManager`. Ukázku kódu níže lze použít k definování API pro widget.
+
+````js
+(function () {
+    abp.widgets.NewUserStatisticWidget = function ($wrapper) {
+
+        var getFilters = function () {
+            return {
+                ...
+            };
+        }
+
+        var refresh = function (filters) {
+            ...
+        };
+
+        var init = function (filters) {
+            ...
+        };
+
+        return {
+            getFilters: getFilters,
+            init: init,
+            refresh: refresh
+        };
+    };
+})();
+````
+
+`NewUserStatisticWidget` je tady název widgetu. Měl by odpovídat názvu widgetu definovanému na straně serveru. Všechny funkce jsou volitelné.
+
+#### getFilters
+
+Pokud má widget vlastní interní filtry, měla by tato funkce vrátit objekt filtru. Příklad:
+
+````js
+var getFilters = function() {
+    return {
+        frequency: $wrapper.find('.frequency-filter option:selected').val()
+    };
+}
+````
+
+Tuto metodu používá `WidgetManager` při vytváření filtrů.
+
+#### init
+
+Slouží k inicializaci widgetu kdykoli je potřeba. Má argument filtru, který lze použít při získávání dat ze serveru. Metoda `init` je použita když je volána funkce `WidgetManager.init()`. Použita je i v případě že váš widget vyžaduje úplné obnovení při aktualizaci. Viz `RefreshUrl` v možnostech widgetu.
+
+#### refresh
+
+Slouží k aktualizaci widgetu kdykoli je potřeba. Má argument filtru, který lze použít při získávání dat ze serveru. Metoda `refresh` se používá kdykoliv je volána funkce `WidgetManager.refresh()`.
 
 ## Autorizace
 
@@ -362,3 +499,7 @@ Configure<WidgetOptions>(options =>
 ````
 
 > Tip: `WidgetOptions` lze také použít k získání existujícího widgetu a ke změně jeho konfigurace. To je obzvláště užitečné, pokud chcete změnit konfiguraci widgetu uvnitř modulu používaného vaší aplikací. Použíjte `options.Widgets.Find` k získání existujícího `WidgetDefinition`.
+
+## Podívejte se také na
+
+* [Příklad projektu (zdrojový kód)](https://github.com/abpframework/abp/tree/dev/samples/DashboardDemo).
