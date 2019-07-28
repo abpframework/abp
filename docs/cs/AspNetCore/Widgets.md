@@ -2,16 +2,16 @@
 
 ABP poskytuje model a infastrukturu k vytváření **znovu použitelných widgetů**. Systém widgetů je rozšíření pro [ASP.NET Core pohledové komponenty](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components). Widgety jsou zvláště užitečné, když chcete;
 
-* Definovat widgety v znovu použitelných **[modulech](../Module-Development-Basics.md)**.
 * Mít závislosti na **skriptech & stylech** ve vašem widgetu.
-* Vytvářet **[řídící panely](Dashboards.md)** za použítí widgetů.
+* Vytvářet **řídící panely** za použítí widgetů.
+* Definovat widgety v znovu použitelných **[modulech](../Module-Development-Basics.md)**.
 * Spolupráci widgetů s **[authorizačními](../Authorization.md)** a **[svazovacími](Bundling-Minification.md)** systémy.
 
 ## Základní definice widgetu
 
 ### Tvorba pohledové komponenty
 
-Jako první krok, vytvoříme běžnou ASP.NET Core pohledovou komponentu:
+Jako první krok, vytvořte běžnou ASP.NET Core pohledovou komponentu:
 
 ![widget-basic-files](../images/widget-basic-files.png)
 
@@ -33,7 +33,9 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-Dědění z `AbpViewComponent` není vyžadováno. Můžeme dědit ze standardního ASP.NET Core `ViewComponent`. `AbpViewComponent` pouze definuje pár základních a užitečných vlastnosti.
+Dědění z `AbpViewComponent` není vyžadováno. Můžete dědit ze standardního ASP.NET Core `ViewComponent`. `AbpViewComponent` pouze definuje pár základních a užitečných vlastnosti.
+
+Můžete vložit službu a pomocí metody `Invoke` z ní získat některá data. Možná budete muset provést metodu Invoke jako asynchronní `public async Task<IViewComponentResult> InvokeAsync()`. Podívejte se na dokument [ASP.NET Core ViewComponents](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/view-components) pro všechna další použítí. 
 
 **Default.cshtml**:
 
@@ -46,7 +48,7 @@ Dědění z `AbpViewComponent` není vyžadováno. Můžeme dědit ze standardn�
 
 ### Definice widgetu
 
-Přidáme atribut `Widget` k třídě `MySimpleWidgetViewComponent` pro označení této pohledové komponenty jako widgetu:
+Přidejte atribut `Widget` k třídě `MySimpleWidgetViewComponent` pro označení této pohledové komponenty jako widgetu:
 
 ````csharp
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +70,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 
 ## Vykreslení widgetu
 
-Vykreslení widgetu je vcelku standardní. Použijeme metodu `Component.InvokeAsync` v razor pohledu/stránce jako s kteroukoliv jinou pohledovou komponentou. Příklady:
+Vykreslení widgetu je vcelku standardní. Použijte metodu `Component.InvokeAsync` v razor pohledu/stránce jako s kteroukoliv jinou pohledovou komponentou. Příklady:
 
 ````xml
 @await Component.InvokeAsync("MySimpleWidget")
@@ -77,11 +79,61 @@ Vykreslení widgetu je vcelku standardní. Použijeme metodu `Component.InvokeAs
 
 První přístup používá název widgetu, zatímco druhý používá typ pohledové komponenty.
 
+### Widgety s argumenty
+
+Systém ASP.NET Core pohledových komponent umožňuje přijímat argumenty pro pohledové komponenty. Níže uvedená pohledová komponenta přijímá `startDate` a `endDate` a používá tyto argumenty k získání dat ze služby.
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+
+namespace DashboardDemo.Web.Pages.Shared.Components.CountersWidget
+{
+    [Widget]
+    public class CountersWidgetViewComponent : AbpViewComponent
+    {
+        private readonly IDashboardAppService _dashboardAppService;
+
+        public CountersWidgetViewComponent(IDashboardAppService dashboardAppService)
+        {
+            _dashboardAppService = dashboardAppService;
+        }
+
+        public async Task<IViewComponentResult> InvokeAsync(
+            DateTime startDate, DateTime endDate)
+        {
+            var result = await _dashboardAppService.GetCountersWidgetAsync(
+                new CountersWidgetInputDto
+                {
+                    StartDate = startDate,
+                    EndDate = endDate
+                }
+            );
+
+            return View(result);
+        }
+    }
+}
+````
+
+Nyní musíte předat anonymní objekt k předání argumentů tak jak je ukázáno níže:
+
+````xml
+@await Component.InvokeAsync("CountersWidget", new
+{
+    startDate = DateTime.Now.Subtract(TimeSpan.FromDays(7)),
+    endDate = DateTime.Now
+})
+````
+
 ## Název widgetu
 
 Výchozí název pohledových komponent je vypočítán na základě názvu typu pohledové komponenty. Pokud je typ pohledové komponenty `MySimpleWidgetViewComponent` potom název widgetu bude `MySimpleWidget` (odstraní se `ViewComponent` postfix). Takto ASP.NET Core vypočítává název pohledové komponenty.
 
-Chceme-li přizpůsobit název widgetu, stačí použít standardní atribut `ViewComponent` z ASP.NET Core:
+Chcete-li přizpůsobit název widgetu, stačí použít standardní atribut `ViewComponent` z ASP.NET Core:
 
 ```csharp
 using Microsoft.AspNetCore.Mvc;
@@ -108,7 +160,7 @@ ABP bude respektovat přizpůsobený název při zpracování widgetu.
 
 ### Zobrazovaný název
 
-Můžeme také definovat čitelný & lokalizovatelný zobrazovaný název pro widget. Tento zobrazovaný název může být využít na uživatelském rozhraní kdykoliv je to potřeba. Zobrazovaný název je nepovinný a lze ho definovat pomocí vlastností atributu `Widget`:
+Můžete také definovat čitelný & lokalizovatelný zobrazovaný název pro widget. Tento zobrazovaný název může být využít na uživatelském rozhraní kdykoliv je to potřeba. Zobrazovaný název je nepovinný a lze ho definovat pomocí vlastností atributu `Widget`:
 
 ````csharp
 using DashboardDemo.Localization;
@@ -222,6 +274,44 @@ Systém přispěvatelů balíků je velmi schopný. Pokud váš widget použív�
 
 Podívejte se na dokumentaci [svazování & minifikace](Bundling-Minification.md) pro více informací o tomto systému.
 
+## JavaScript API
+
+Možná bude potřeba vykreslit a obnovit widget na straně klienta. V takových případech můžete použít ABP `WidgetManager` a definovat API pro vaše widgety.
+
+### WidgetManager
+
+`WidgetManager` se používá k inicializaci a aktualizaci jednoho nebo více widgetů. Vytvořte nový `WidgetManager` jako je ukázáno níže:
+
+````js
+$(function() {
+    var myWidgetManager = new abp.WidgetManager('#MyDashboardWidgetsArea');    
+})
+````
+
+`MyDashboardWidgetsArea` může obsahovat jeden nebo více widgetů.
+
+> Použíti `WidgetManager` uvnitř document.ready (jako nahoře) je dobrá praktika jelikož jeho funkce používají DOM a potřebují, aby byl DOM připraven.
+
+#### WidgetManager.init()
+
+`init` jednoduše inicializuje `WidgetManager` a volá metody `init` v souvisejících widgetech pokud je obsahují (podívejte se na sekci Widget JavaScript API section níže)
+
+```js
+myWidgetManager.init();
+```
+
+#### WidgetManager.refresh()
+
+`refresh` metoda obnoví všechny widgety související s tímto `WidgetManager`:
+
+````
+myWidgetManager.refresh();
+````
+
+#### WidgetManager Options
+
+### Widget JavaScript API
+
 ## Autorizace
 
 Některé widgety budou pravděpodobně muset být dostupné pouze pro ověřené nebo autorizované uživatele. V tomto případě použijte následující vlastnosti atributu `Widget`:
@@ -249,7 +339,7 @@ namespace DashboardDemo.Web.Pages.Components.MySimpleWidget
 }
 ````
 
-## Možnosti widgetu
+## WidgetOptions
 
 Jako alternativu k atributu `Widget` můžete ke konfiguraci widgetů použít `WidgetOptions`:
 
