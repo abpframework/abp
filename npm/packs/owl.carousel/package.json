@@ -7,5 +7,6 @@
   "dependencies": {
     "@abp/core": "^0.7.1",
     "owl.carousel": "^2.3.4"
-  }
+  },
+  "gitHead": "432bc546ce9a861b07d3aee56bcffe4eafed010c"
 }
