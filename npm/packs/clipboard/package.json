@@ -1,11 +1,11 @@
 {
-  "version": "0.7.1",
+  "version": "0.7.2",
   "name": "@abp/clipboard",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.7.1",
+    "@abp/core": "^0.7.2",
     "clipboard": "^2.0.4"
   },
   "gitHead": "432bc546ce9a861b07d3aee56bcffe4eafed010c"
