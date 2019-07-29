@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.theme.basic",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "dependencies": {
-    "@abp/ng.theme.shared": "^0.7.0",
+    "@abp/ng.theme.shared": "^0.7.1",
     "tslib": "^1.9.0"
   },
   "main": "bundles/abp-ng.theme.basic.umd.js",
