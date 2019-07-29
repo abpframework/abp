@@ -1,0 +1,43 @@
+import { ABP } from '@abp/ng.core';
+import { ConfirmationService } from '@abp/ng.theme.shared';
+import { TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { TenantManagementService } from '../../services';
+export declare class TenantsComponent {
+    private confirmationService;
+    private tenantService;
+    private modalService;
+    private fb;
+    private store;
+    datas$: Observable<ABP.BasicItem[]>;
+    selected: ABP.BasicItem;
+    tenantForm: FormGroup;
+    defaultConnectionStringForm: FormGroup;
+    defaultConnectionString: string;
+    useSharedDatabase: boolean;
+    selectedModalContent: {
+        title: string;
+        template: TemplateRef<any>;
+        onSave: () => void;
+    };
+    readonly showInput: boolean;
+    readonly connectionString: string;
+    modalWrapper: TemplateRef<any>;
+    mTemplateConnStr: TemplateRef<any>;
+    mTemplateFeatures: TemplateRef<any>;
+    mTemplateTenant: TemplateRef<any>;
+    constructor(confirmationService: ConfirmationService, tenantService: TenantManagementService, modalService: NgbModal, fb: FormBuilder, store: Store);
+    openModal(): void;
+    private createTenantForm;
+    private createDefaultConnectionStringForm;
+    onEditConnStr(id: string): void;
+    saveConnStr(): void;
+    onManageFeatures(id: string): void;
+    onAdd(): void;
+    onEdit(id: string): void;
+    saveTenant(): void;
+    delete(id: string, name: string): void;
+}
