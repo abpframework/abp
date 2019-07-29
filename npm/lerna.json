@@ -1,8 +1,8 @@
 {
-  "version": "0.6.6",
+  "version": "0.7.0",
   "packages": [
-    "packs/*",
     "!packs/ng",
+    "packs/*",
     "packs/ng/dist/*"
   ],
   "npmClient": "yarn",

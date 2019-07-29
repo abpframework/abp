@@ -1,12 +1,12 @@
 {
-  "version": "0.6.6",
+  "version": "0.7.0",
   "name": "@abp/blogging",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.6.6",
-    "@abp/owl.carousel": "^0.6.5",
-    "@abp/tui-editor": "^0.6.5"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.7.0",
+    "@abp/owl.carousel": "^0.7.0",
+    "@abp/tui-editor": "^0.7.0"
   }
 }
