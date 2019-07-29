@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.identity",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "dependencies": {
-    "@abp/ng.permission-management": "^0.7.4",
+    "@abp/ng.permission-management": "^0.7.5",
     "tslib": "^1.9.0"
   },
   "main": "bundles/abp-ng.identity.umd.js",
