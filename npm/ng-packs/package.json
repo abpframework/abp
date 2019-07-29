@@ -1,6 +1,4 @@
 {
-  "name": "abp-ng-packages",
-  "version": "0.7.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -9,7 +7,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "~8.1.2",
     "@angular/common": "~8.1.2",
@@ -40,6 +37,7 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
+    "lerna": "^3.16.4",
     "ng-packagr": "^5.1.0",
     "protractor": "~5.4.0",
     "symlink-manager": "^1.1.2",
