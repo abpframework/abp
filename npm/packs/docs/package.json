@@ -1,15 +1,15 @@
 {
-  "version": "0.7.3",
+  "version": "0.7.4",
   "name": "@abp/docs",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/anchor-js": "^0.7.3",
-    "@abp/clipboard": "^0.7.3",
-    "@abp/malihu-custom-scrollbar-plugin": "^0.7.3",
-    "@abp/popper.js": "^0.7.3",
-    "@abp/prismjs": "^0.7.3"
+    "@abp/anchor-js": "^0.7.4",
+    "@abp/clipboard": "^0.7.4",
+    "@abp/malihu-custom-scrollbar-plugin": "^0.7.4",
+    "@abp/popper.js": "^0.7.4",
+    "@abp/prismjs": "^0.7.4"
   },
   "gitHead": "fe22d4731846a162d477fbbe9bd046b70cc7414a"
 }

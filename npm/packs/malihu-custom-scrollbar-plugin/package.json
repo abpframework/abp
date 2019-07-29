@@ -1,11 +1,11 @@
 {
-  "version": "0.7.3",
+  "version": "0.7.4",
   "name": "@abp/malihu-custom-scrollbar-plugin",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.7.3",
+    "@abp/core": "^0.7.4",
     "malihu-custom-scrollbar-plugin": "^3.1.5"
   },
   "gitHead": "fe22d4731846a162d477fbbe9bd046b70cc7414a"
