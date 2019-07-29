@@ -1,8 +1,9 @@
 {
   "name": "@abp/ng.tenant-management",
-  "version": "0.7.3",
-  "peerDependencies": {
-    "@abp/ng.theme.shared": "^0.5.0"
+  "version": "0.5.0",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^0.5.0",
+    "tslib": "^1.9.0"
   },
   "main": "bundles/abp-ng.tenant-management.umd.js",
   "module": "fesm5/abp-ng.tenant-management.js",
@@ -13,9 +14,5 @@
   "fesm2015": "fesm2015/abp-ng.tenant-management.js",
   "typings": "abp-ng.tenant-management.d.ts",
   "metadata": "abp-ng.tenant-management.metadata.json",
-  "sideEffects": false,
-  "dependencies": {
-    "tslib": "^1.9.0"
-  },
-  "gitHead": "fe22d4731846a162d477fbbe9bd046b70cc7414a"
+  "sideEffects": false
 }

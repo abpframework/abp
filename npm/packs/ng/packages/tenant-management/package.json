@@ -1,7 +1,7 @@
 {
   "name": "@abp/ng.tenant-management",
   "version": "0.5.0",
-  "peerDependencies": {
+  "dependencies": {
     "@abp/ng.theme.shared": "^0.5.0"
   }
 }
