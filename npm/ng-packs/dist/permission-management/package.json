@@ -1,9 +1,12 @@
 {
   "name": "@abp/ng.permission-management",
-  "version": "0.7.5",
+  "version": "0.5.0",
   "dependencies": {
-    "@abp/ng.theme.shared": "^0.7.5",
+    "@abp/ng.theme.shared": "^0.5.0",
     "tslib": "^1.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "main": "bundles/abp-ng.permission-management.umd.js",
   "module": "fesm5/abp-ng.permission-management.js",
@@ -14,6 +17,5 @@
   "fesm2015": "fesm2015/abp-ng.permission-management.js",
   "typings": "abp-ng.permission-management.d.ts",
   "metadata": "abp-ng.permission-management.metadata.json",
-  "sideEffects": false,
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "sideEffects": false
 }

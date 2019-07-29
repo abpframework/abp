@@ -1,9 +1,12 @@
 {
   "name": "@abp/ng.account",
-  "version": "0.7.5",
+  "version": "0.5.0",
   "dependencies": {
-    "@abp/ng.theme.shared": "^0.7.5",
+    "@abp/ng.theme.shared": "^0.5.0",
     "tslib": "^1.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "main": "bundles/abp-ng.account.umd.js",
   "module": "fesm5/abp-ng.account.js",
@@ -14,6 +17,5 @@
   "fesm2015": "fesm2015/abp-ng.account.js",
   "typings": "abp-ng.account.d.ts",
   "metadata": "abp-ng.account.metadata.json",
-  "sideEffects": false,
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "sideEffects": false
 }

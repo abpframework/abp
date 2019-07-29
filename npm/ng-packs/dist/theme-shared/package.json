@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.theme.shared",
-  "version": "0.7.5",
+  "version": "0.5.0",
   "dependencies": {
-    "@abp/ng.core": "^0.7.5",
+    "@abp/ng.core": "^0.5.0",
     "@angular/cdk": "^8.0.1",
     "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
     "@ngx-validate/core": "^0.0.1",
@@ -13,6 +13,9 @@
     "primeng": "^8.0.0",
     "tslib": "^1.9.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "bundles/abp-ng.theme.shared.umd.js",
   "module": "fesm5/abp-ng.theme.shared.js",
   "es2015": "fesm2015/abp-ng.theme.shared.js",
@@ -22,6 +25,5 @@
   "fesm2015": "fesm2015/abp-ng.theme.shared.js",
   "typings": "abp-ng.theme.shared.d.ts",
   "metadata": "abp-ng.theme.shared.metadata.json",
-  "sideEffects": false,
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "sideEffects": false
 }

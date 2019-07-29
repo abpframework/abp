@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.core",
-  "version": "0.7.5",
+  "version": "0.5.0",
   "dependencies": {
     "@ngxs/router-plugin": "^3.5.0",
     "@ngxs/storage-plugin": "^3.5.0",
@@ -17,6 +17,9 @@
     "@angular/router": ">=8.1.0",
     "rxjs": ">=6.4.0"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "bundles/abp-ng.core.umd.js",
   "module": "fesm5/abp-ng.core.js",
   "es2015": "fesm2015/abp-ng.core.js",
@@ -26,6 +29,5 @@
   "fesm2015": "fesm2015/abp-ng.core.js",
   "typings": "abp-ng.core.d.ts",
   "metadata": "abp-ng.core.metadata.json",
-  "sideEffects": false,
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "sideEffects": false
 }
