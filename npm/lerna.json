@@ -2,8 +2,7 @@
   "version": "0.7.3",
   "packages": [
     "!packs/ng",
-    "packs/*",
-    "packs/ng/dist/*"
+    "packs/*"
   ],
   "npmClient": "yarn",
   "lerna": "2.11.0"
