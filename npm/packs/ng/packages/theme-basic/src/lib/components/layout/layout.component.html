@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" id="main-navbar">
+  <a class="navbar-brand" routerLink="/">MyProjectName</a>
+  <button class="navbar-toggler" type="button" [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="main-navbar-collapse" [ngbCollapse]="isCollapsed">
+    <ng-content></ng-content>
+  </div>
+</nav>
+
+<div style="padding-top: 5rem;" class="container">
+  <router-outlet></router-outlet>
+</div>
+
+<abp-confirmation></abp-confirmation>
+<abp-toast></abp-toast>

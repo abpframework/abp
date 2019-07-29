@@ -1,0 +1,108 @@
+<div id="identity-roles-wrapper" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>
+      </div>
+      <div class="text-right col col-md-6">
+        <button id="create-role" class="btn btn-primary" type="button" (click)="onAdd()">
+          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div id="data-tables-table-filter" class="data-tables-filter">
+      <label
+        ><input
+          type="search"
+          class="form-control form-control-sm"
+          placeholder="Search"
+          (input)="dt.filterGlobal($event.target.value, 'contains')"
+      /></label>
+    </div>
+    <p-table #dt [value]="roles$ | async" [globalFilterFields]="['name']" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
+          <th>{{ 'AbpIdentity::RoleName' | abpLocalization }}</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-data>
+        <tr>
+          <td>
+            <div ngbDropdown class="d-inline-block">
+              <button
+                class="btn btn-primary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                ngbDropdownToggle
+              >
+                <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
+              </button>
+              <div ngbDropdownMenu>
+                <button ngbDropdownItem (click)="onEdit(data.id)">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>
+                <button ngbDropdownItem (click)="providerKey = data.name; visiblePermissions = true">
+                  {{ 'AbpIdentity::Permissions' | abpLocalization }}
+                </button>
+                <button ngbDropdownItem (click)="delete(data.id, data.name)">
+                  {{ 'AbpIdentity::Delete' | abpLocalization }}
+                </button>
+              </div>
+            </div>
+          </td>
+          <td>{{ data.name }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<ng-template #modalContent let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">
+      {{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}
+    </h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="role-name">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label
+        ><span> * </span>
+        <input type="text" id="role-name" class="form-control" formControlName="name" />
+      </div>
+
+      <div class="custom-checkbox custom-control mb-2">
+        <input type="checkbox" id="role-is-default" class="custom-control-input" formControlName="isDefault" />
+        <label class="custom-control-label" for="role-is-default">{{
+          'AbpIdentity::DisplayName:IsDefault' | abpLocalization
+        }}</label>
+      </div>
+
+      <div class="custom-checkbox custom-control mb-2">
+        <input type="checkbox" id="role-is-public" class="custom-control-input" formControlName="isPublic" />
+        <label class="custom-control-label" for="role-is-public">{{
+          'AbpIdentity::DisplayName:IsPublic' | abpLocalization
+        }}</label>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">
+        {{ 'AbpIdentity::Cancel' | abpLocalization }}
+      </button>
+      <button type="submit" class="btn btn-primary">
+        <i class="fa fa-check mr-1"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>
+      </button>
+    </div>
+  </form>
+</ng-template>
+
+<abp-permission-management
+  [(visible)]="visiblePermissions"
+  providerName="Role"
+  [providerKey]="providerKey"
+></abp-permission-management>

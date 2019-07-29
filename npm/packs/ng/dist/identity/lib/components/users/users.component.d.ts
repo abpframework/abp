@@ -1,0 +1,38 @@
+import { TemplateRef, TrackByFunction, OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { Observable, Subject } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FormBuilder, FormGroup, AbstractControl } from '@angular/forms';
+import { Identity } from '../../models/identity';
+import { ConfirmationService } from '@abp/ng.theme.shared';
+import { ABP } from '@abp/ng.core';
+export declare class UsersComponent implements OnInit {
+    private confirmationService;
+    private modalService;
+    private fb;
+    private store;
+    data$: Observable<Identity.UserItem[]>;
+    totalCount$: Observable<number>;
+    modalContent: TemplateRef<any>;
+    form: FormGroup;
+    selected: Identity.UserItem;
+    selectedUserRoles: Identity.RoleItem[];
+    roles: Identity.RoleItem[];
+    visiblePermissions: boolean;
+    providerKey: string;
+    pageQuery: ABP.PageQueryParams;
+    loading: boolean;
+    search$: Subject<string>;
+    trackByFn: TrackByFunction<AbstractControl>;
+    readonly roleGroups: FormGroup[];
+    constructor(confirmationService: ConfirmationService, modalService: NgbModal, fb: FormBuilder, store: Store);
+    ngOnInit(): void;
+    buildForm(): void;
+    openModal(): void;
+    onAdd(): void;
+    onEdit(id: string): void;
+    save(): void;
+    delete(id: string, userName: string): void;
+    onPageChange(data: any): void;
+    get(): void;
+}

@@ -1,0 +1,686 @@
+import { RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, EventEmitter, Renderer2, Input, Output, ContentChild, ElementRef, ViewChild, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { ToastModule } from 'primeng/toast';
+import { Subject, timer, fromEvent, forkJoin } from 'rxjs';
+import { take, debounceTime, takeUntil, filter } from 'rxjs/operators';
+import { Navigate, RouterState } from '@ngxs/router-plugin';
+import { ofActionSuccessful, Actions, Store } from '@ngxs/store';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @template T
+ */
+class AbstractToasterClass {
+    /**
+     * @param {?} messageService
+     */
+    constructor(messageService) {
+        this.messageService = messageService;
+        this.key = 'abpToast';
+        this.sticky = false;
+    }
+    /**
+     * @param {?} message
+     * @param {?} title
+     * @param {?=} options
+     * @return {?}
+     */
+    info(message, title, options) {
+        return this.show(message, title, 'info', options);
+    }
+    /**
+     * @param {?} message
+     * @param {?} title
+     * @param {?=} options
+     * @return {?}
+     */
+    success(message, title, options) {
+        return this.show(message, title, 'success', options);
+    }
+    /**
+     * @param {?} message
+     * @param {?} title
+     * @param {?=} options
+     * @return {?}
+     */
+    warn(message, title, options) {
+        return this.show(message, title, 'warn', options);
+    }
+    /**
+     * @param {?} message
+     * @param {?} title
+     * @param {?=} options
+     * @return {?}
+     */
+    error(message, title, options) {
+        return this.show(message, title, 'error', options);
+    }
+    /**
+     * @protected
+     * @param {?} message
+     * @param {?} title
+     * @param {?} severity
+     * @param {?=} options
+     * @return {?}
+     */
+    show(message, title, severity, options) {
+        this.messageService.clear(this.key);
+        this.messageService.add(Object.assign({ severity, detail: message, summary: title }, options, { key: this.key }, (typeof (options || ((/** @type {?} */ ({})))).sticky === 'undefined' && { sticky: this.sticky })));
+        this.status$ = new Subject();
+        return this.status$;
+    }
+    /**
+     * @param {?=} status
+     * @return {?}
+     */
+    clear(status) {
+        this.messageService.clear(this.key);
+        this.status$.next(status || "dismiss" /* dismiss */);
+        this.status$.complete();
+    }
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ConfirmationService extends AbstractToasterClass {
+    constructor() {
+        super(...arguments);
+        this.key = 'abpConfirmation';
+        this.sticky = true;
+    }
+}
+ConfirmationService.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfirmationService_Factory() { return new ConfirmationService(ɵɵinject(MessageService)); }, token: ConfirmationService, providedIn: "root" });
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ConfirmationComponent {
+    /**
+     * @param {?} confirmationService
+     */
+    constructor(confirmationService) {
+        this.confirmationService = confirmationService;
+        this.confirm = "confirm" /* confirm */;
+        this.reject = "reject" /* reject */;
+        this.dismiss = "dismiss" /* dismiss */;
+    }
+    /**
+     * @param {?} status
+     * @return {?}
+     */
+    close(status) {
+        this.confirmationService.clear(status);
+    }
+}
+ConfirmationComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'abp-confirmation',
+                template: `
+    <p-toast
+      position="center"
+      key="abpConfirmation"
+      (onClose)="close(dismiss)"
+      [modal]="true"
+      [baseZIndex]="1000"
+      styleClass=""
+    >
+      <ng-template let-message pTemplate="message">
+        <div *ngIf="message.summary" class="modal-header">
+          <h4 class="modal-title">
+            {{ message.summary | abpLocalization: message.titleLocalizationParams }}
+          </h4>
+        </div>
+        <div class="modal-body">
+          {{ message.detail | abpLocalization: message.messageLocalizationParams }}
+        </div>
+
+        <div class="modal-footer justify-content-center">
+          <button *ngIf="!message.hideCancelBtn" type="button" class="btn btn-secondary" (click)="close(reject)">
+            {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
+          </button>
+          <button *ngIf="!message.hideYesBtn" type="button" class="btn btn-secondary" (click)="close(confirm)">
+            <span>{{ message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>
+          </button>
+        </div>
+      </ng-template>
+    </p-toast>
+  `
+            }] }
+];
+/** @nocollapse */
+ConfirmationComponent.ctorParameters = () => [
+    { type: ConfirmationService }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ModalComponent {
+    /**
+     * @param {?} renderer
+     * @param {?} confirmationService
+     */
+    constructor(renderer, confirmationService) {
+        this.renderer = renderer;
+        this.confirmationService = confirmationService;
+        this.centered = true;
+        this.modalClass = '';
+        this.size = 'lg';
+        this.visibleChange = new EventEmitter();
+        this._visible = false;
+        this.closable = false;
+        this.isOpenConfirmation = false;
+        this.destroy$ = new Subject();
+    }
+    /**
+     * @return {?}
+     */
+    get visible() {
+        return this._visible;
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set visible(value) {
+        if (!this.modalContent) {
+            setTimeout((/**
+             * @return {?}
+             */
+            () => (this.visible = value)), 0);
+            return;
+        }
+        if (value) {
+            this.setVisible(value);
+            this.listen();
+        }
+        else {
+            this.closable = false;
+            this.renderer.addClass(this.modalContent.nativeElement, 'fade-out-top');
+            setTimeout((/**
+             * @return {?}
+             */
+            () => {
+                this.setVisible(value);
+                this.renderer.removeClass(this.modalContent.nativeElement, 'fade-out-top');
+                this.ngOnDestroy();
+            }), 350);
+        }
+    }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() {
+        this.destroy$.next();
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    setVisible(value) {
+        this._visible = value;
+        this.visibleChange.emit(value);
+        value
+            ? timer(500)
+                .pipe(take(1))
+                .subscribe((/**
+             * @param {?} _
+             * @return {?}
+             */
+            _ => (this.closable = true)))
+            : (this.closable = false);
+    }
+    /**
+     * @return {?}
+     */
+    listen() {
+        fromEvent(document, 'click')
+            .pipe(debounceTime(350), takeUntil(this.destroy$), filter((/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => event &&
+            this.closable &&
+            this.modalContent &&
+            !this.isOpenConfirmation &&
+            !this.modalContent.nativeElement.contains(event.target))))
+            .subscribe((/**
+         * @param {?} _
+         * @return {?}
+         */
+        _ => {
+            this.close();
+        }));
+        fromEvent(document, 'keyup')
+            .pipe(takeUntil(this.destroy$), filter((/**
+         * @param {?} key
+         * @return {?}
+         */
+        (key) => key && key.code === 'Escape' && this.closable)), debounceTime(350))
+            .subscribe((/**
+         * @param {?} _
+         * @return {?}
+         */
+        _ => {
+            this.close();
+        }));
+        fromEvent(this.abpClose.nativeElement, 'click')
+            .pipe(takeUntil(this.destroy$), filter((/**
+         * @return {?}
+         */
+        () => !!(this.closable && this.modalContent))), debounceTime(350))
+            .subscribe((/**
+         * @return {?}
+         */
+        () => this.close()));
+    }
+    /**
+     * @return {?}
+     */
+    close() {
+        /** @type {?} */
+        const nodes = getFlatNodes(((/** @type {?} */ (this.modalContent.nativeElement.querySelector('#abp-modal-body')))).childNodes);
+        if (hasNgDirty(nodes)) {
+            if (this.isOpenConfirmation)
+                return;
+            this.isOpenConfirmation = true;
+            this.confirmationService
+                .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
+                .subscribe((/**
+             * @param {?} status
+             * @return {?}
+             */
+            (status) => {
+                timer(400).subscribe((/**
+                 * @return {?}
+                 */
+                () => {
+                    this.isOpenConfirmation = false;
+                }));
+                if (status === "confirm" /* confirm */) {
+                    this.visible = false;
+                }
+            }));
+        }
+        else {
+            this.visible = false;
+        }
+    }
+}
+ModalComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'abp-modal',
+                template: "<div\n  id=\"abp-modal\"\n  tabindex=\"-1\"\n  class=\"modal fade {{ modalClass }}\"\n  [class.show]=\"visible\"\n  [style.display]=\"visible ? 'block' : 'none'\"\n  [style.padding-right.px]=\"'15'\"\n>\n  <div\n    id=\"abp-modal-container\"\n    class=\"modal-dialog modal-{{ size }} fade-in-top\"\n    [class.modal-dialog-centered]=\"centered\"\n    #abpModalContent\n  >\n    <div #content id=\"abp-modal-content\" class=\"modal-content\">\n      <div id=\"abp-modal-header\" class=\"modal-header\">\n        <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n\n        <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" (click)=\"close()\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div id=\"abp-modal-body\" class=\"modal-body\">\n        <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <ng-content></ng-content>\n</div>\n"
+            }] }
+];
+/** @nocollapse */
+ModalComponent.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ConfirmationService }
+];
+ModalComponent.propDecorators = {
+    visible: [{ type: Input }],
+    centered: [{ type: Input }],
+    modalClass: [{ type: Input }],
+    size: [{ type: Input }],
+    visibleChange: [{ type: Output }],
+    abpHeader: [{ type: ContentChild, args: ['abpHeader', { static: false },] }],
+    abpBody: [{ type: ContentChild, args: ['abpBody', { static: false },] }],
+    abpFooter: [{ type: ContentChild, args: ['abpFooter', { static: false },] }],
+    abpClose: [{ type: ContentChild, args: ['abpClose', { static: false, read: ElementRef },] }],
+    modalContent: [{ type: ViewChild, args: ['abpModalContent', { static: false },] }]
+};
+/**
+ * @param {?} nodes
+ * @return {?}
+ */
+function getFlatNodes(nodes) {
+    return Array.from(nodes).reduce((/**
+     * @param {?} acc
+     * @param {?} val
+     * @return {?}
+     */
+    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? Array.from(val.childNodes) : [val])]), []);
+}
+/**
+ * @param {?} nodes
+ * @return {?}
+ */
+function hasNgDirty(nodes) {
+    return nodes.findIndex((/**
+     * @param {?} node
+     * @return {?}
+     */
+    node => (node.className || '').indexOf('ng-dirty') > -1)) > -1;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ToastComponent {
+}
+ToastComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'abp-toast',
+                template: `
+    <p-toast position="bottom-right" key="abpToast" [baseZIndex]="1000">
+      <ng-template let-message pTemplate="message">
+        <span
+          class="ui-toast-icon pi"
+          [ngClass]="{
+            'pi-info-circle': message.severity == 'info',
+            'pi-exclamation-triangle': message.severity == 'warn',
+            'pi-times': message.severity == 'error',
+            'pi-check': message.severity == 'success'
+          }"
+        ></span>
+        <div class="ui-toast-message-text-content">
+          <div class="ui-toast-summary">{{ message.summary | abpLocalization: message.titleLocalizationParams }}</div>
+          <div class="ui-toast-detail">{{ message.detail | abpLocalization: message.messageLocalizationParams }}</div>
+        </div>
+      </ng-template>
+    </p-toast>
+  `
+            }] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var styles = `
+.is-invalid .form-control {
+  border-color: #dc3545;
+  border-style: solid !important;
+}
+
+.is-invalid .invalid-feedback,
+.is-invalid + * .invalid-feedback {
+  display: block;
+}
+
+.data-tables-filter {
+  text-align: right;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.navbar .dropdown-submenu a::after {
+  transform: rotate(-90deg);
+  position: absolute;
+  right: 16px;
+  top: 18px;
+}
+
+
+/* <animations */
+
+.fade-in-top {
+  animation: fadeInTop 0.4s ease-in-out;
+}
+
+.fade-out-top {
+  animation: fadeOutTop 0.4s ease-in-out;
+}
+
+
+@keyframes fadeInTop {
+  from {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(5px);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOutTop {
+  to {
+    transform: translateY(-5px);
+    opacity: 0;
+  }
+}
+
+/* </animations */
+
+`;
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+const DEFAULTS = {
+    defaultError: {
+        message: 'An error has occurred!',
+        details: 'Error detail not sent by server.',
+    },
+    defaultError401: {
+        message: 'You are not authenticated!',
+        details: 'You should be authenticated (sign in) in order to perform this operation.',
+    },
+    defaultError403: {
+        message: 'You are not authorized!',
+        details: 'You are not allowed to perform this operation.',
+    },
+    defaultError404: {
+        message: 'Resource not found!',
+        details: 'The resource requested could not found on the server.',
+    },
+};
+class ErrorHandler {
+    /**
+     * @param {?} actions
+     * @param {?} store
+     * @param {?} confirmationService
+     */
+    constructor(actions, store, confirmationService) {
+        this.actions = actions;
+        this.store = store;
+        this.confirmationService = confirmationService;
+        actions.pipe(ofActionSuccessful(RestOccurError)).subscribe((/**
+         * @param {?} res
+         * @return {?}
+         */
+        res => {
+            const { payload: err = (/** @type {?} */ ({})) } = res;
+            /** @type {?} */
+            const body = ((/** @type {?} */ (err))).error.error;
+            if (err.headers.get('_AbpErrorFormat')) {
+                /** @type {?} */
+                const confirmation$ = this.showError(null, null, body);
+                if (err.status === 401) {
+                    confirmation$.subscribe((/**
+                     * @return {?}
+                     */
+                    () => {
+                        this.navigateToLogin();
+                    }));
+                }
+            }
+            else {
+                switch (((/** @type {?} */ (err))).status) {
+                    case 401:
+                        this.showError(DEFAULTS.defaultError401.details, DEFAULTS.defaultError401.message).subscribe((/**
+                         * @return {?}
+                         */
+                        () => this.navigateToLogin()));
+                        break;
+                    case 403:
+                        this.showError(DEFAULTS.defaultError403.details, DEFAULTS.defaultError403.message);
+                        break;
+                    case 404:
+                        this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
+                        break;
+                    default:
+                        this.showError(DEFAULTS.defaultError.details, DEFAULTS.defaultError.message);
+                        break;
+                }
+            }
+        }));
+    }
+    /**
+     * @private
+     * @param {?=} message
+     * @param {?=} title
+     * @param {?=} body
+     * @return {?}
+     */
+    showError(message, title, body) {
+        if (body) {
+            if (body.details) {
+                message = body.details;
+                title = body.message;
+            }
+            else {
+                message = body.message || DEFAULTS.defaultError.message;
+            }
+        }
+        return this.confirmationService.error(message, title, {
+            hideCancelBtn: true,
+            yesCopy: 'OK',
+        });
+    }
+    /**
+     * @private
+     * @return {?}
+     */
+    navigateToLogin() {
+        this.store.dispatch(new Navigate(['/account/login'], null, {
+            state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
+        }));
+    }
+}
+ErrorHandler.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */
+ErrorHandler.ctorParameters = () => [
+    { type: Actions },
+    { type: Store },
+    { type: ConfirmationService }
+];
+/** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService)); }, token: ErrorHandler, providedIn: "root" });
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function appendScript(injector) {
+    /** @type {?} */
+    const fn = (/**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        const lazyLoadService = injector.get(LazyLoadService);
+        return forkJoin(lazyLoadService.load(null, 'style', styles, 'head', 'afterbegin') /* lazyLoadService.load(null, 'script', scripts) */).pipe(take(1));
+    });
+    return fn;
+}
+class ThemeSharedModule {
+    /**
+     * @return {?}
+     */
+    static forRoot() {
+        return {
+            ngModule: ThemeSharedModule,
+            providers: [
+                {
+                    provide: APP_INITIALIZER,
+                    multi: true,
+                    deps: [Injector, ErrorHandler],
+                    useFactory: appendScript,
+                },
+                { provide: MessageService, useClass: MessageService },
+            ],
+        };
+    }
+}
+ThemeSharedModule.decorators = [
+    { type: NgModule, args: [{
+                imports: [
+                    CoreModule,
+                    ToastModule,
+                    NgbModalModule,
+                    NgxValidateCoreModule.forRoot({
+                        targetSelector: '.form-group',
+                    }),
+                ],
+                declarations: [ConfirmationComponent, ToastComponent, ModalComponent],
+                exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent],
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var Confirmation;
+(function (Confirmation) {
+    /**
+     * @record
+     */
+    function Options() { }
+    Confirmation.Options = Options;
+})(Confirmation || (Confirmation = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var Toaster;
+(function (Toaster) {
+    /**
+     * @record
+     */
+    function Options() { }
+    Toaster.Options = Options;
+})(Toaster || (Toaster = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ToasterService extends AbstractToasterClass {
+    /**
+     * @param {?} messages
+     * @return {?}
+     */
+    addAll(messages) {
+        this.messageService.addAll(messages.map((/**
+         * @param {?} message
+         * @return {?}
+         */
+        message => (Object.assign({ key: this.key }, message)))));
+    }
+}
+ToasterService.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */ ToasterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(ɵɵinject(MessageService)); }, token: ToasterService, providedIn: "root" });
+
+export { ConfirmationComponent, ConfirmationService, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, ConfirmationComponent as ɵa, ConfirmationService as ɵb, AbstractToasterClass as ɵc, ToastComponent as ɵd, ModalComponent as ɵe, ErrorHandler as ɵf };
+//# sourceMappingURL=abp-ng.theme.shared.js.map

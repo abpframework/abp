@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col col-md-4 offset-md-4">
+    <abp-tenant-box></abp-tenant-box>
+
+    <div class="abp-account-container">
+      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <div class="form-group">
+          <label for="login-input-user-name-or-email-address">{{
+            'AbpAccount::UserNameOrEmailAddress' | abpLocalization
+          }}</label>
+          <input
+            class="form-control"
+            type="text"
+            id="login-input-user-name-or-email-address"
+            formControlName="username"
+          />
+        </div>
+        <div class="form-group">
+          <label for="login-input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label>
+          <input class="form-control" type="password" id="login-input-password" formControlName="password" />
+        </div>
+        <div class="form-check" validationTarget validationStyle>
+          <label class="form-check-label" for="login-input-remember-me">
+            <input class="form-check-input" type="checkbox" id="login-input-remember-me" formControlName="remember" />
+            {{ 'AbpAccount::RememberMe' | abpLocalization }}
+          </label>
+        </div>
+        <div class="mt-2">
+          <button type="button" name="Action" value="Cancel" class="btn btn-secondary">
+            {{ 'AbpAccount::Cancel' | abpLocalization }}
+          </button>
+          <button type="submit" name="Action" value="Login" class="btn btn-primary ml-1">
+            {{ 'AbpAccount::Login' | abpLocalization }}
+          </button>
+        </div>
+      </form>
+      <div style="padding-top: 20px">
+        <a routerLink="/account/register">{{ 'AbpAccount::Register' | abpLocalization }}</a>
+      </div>
+    </div>
+  </div>
+</div>

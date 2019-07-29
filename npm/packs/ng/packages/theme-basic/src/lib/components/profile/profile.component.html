@@ -1,0 +1,47 @@
+<ng-template #modalContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <form *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+    <div class="modal-body">
+      <div class="form-group">
+        <label for="username">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label
+        ><span> * </span><input type="text" id="username" class="form-control" formControlName="userName" />
+      </div>
+      <div class="row">
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label for="name">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label
+            ><input type="text" id="name" class="form-control" formControlName="name" />
+          </div>
+        </div>
+        <div class="col col-md-6">
+          <div class="form-group">
+            <label for="surname">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label
+            ><input type="text" id="surname" class="form-control" formControlName="surname" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email-address">{{ 'AbpIdentity::DisplayName:EmailAddress' | abpLocalization }}</label
+        ><span> * </span><input type="text" id="email-address" class="form-control" formControlName="email" />
+      </div>
+      <div class="form-group">
+        <label for="phone-number">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label
+        ><input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">
+        {{ 'AbpIdentity::Cancel' | abpLocalization }}
+      </button>
+      <button type="submit" class="btn btn-primary">
+        <i class="fa fa-check mr-1"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>
+      </button>
+    </div>
+  </form>
+</ng-template>

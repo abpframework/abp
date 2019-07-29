@@ -1,0 +1,34 @@
+<div
+  id="abp-modal"
+  tabindex="-1"
+  class="modal fade {{ modalClass }}"
+  [class.show]="visible"
+  [style.display]="visible ? 'block' : 'none'"
+  [style.padding-right.px]="'15'"
+>
+  <div
+    id="abp-modal-container"
+    class="modal-dialog modal-{{ size }} fade-in-top"
+    [class.modal-dialog-centered]="centered"
+    #abpModalContent
+  >
+    <div #content id="abp-modal-content" class="modal-content">
+      <div id="abp-modal-header" class="modal-header">
+        <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
+
+        <button id="abp-modal-close-button" type="button" class="close" (click)="close()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div id="abp-modal-body" class="modal-body">
+        <ng-container *ngTemplateOutlet="abpBody"></ng-container>
+
+        <div id="abp-modal-footer" class="modal-footer">
+          <ng-container *ngTemplateOutlet="abpFooter"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-content></ng-content>
+</div>

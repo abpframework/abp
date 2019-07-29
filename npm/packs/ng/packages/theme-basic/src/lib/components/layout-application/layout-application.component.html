@@ -1,0 +1,106 @@
+<abp-layout>
+  <ul class="navbar-nav mr-auto">
+    <ng-container
+      *ngFor="let route of visibleRoutes$ | async; trackBy: trackByFn"
+      [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"
+      [ngTemplateOutletContext]="{ $implicit: route }"
+    >
+    </ng-container>
+
+    <ng-template #defaultLink let-route>
+      <li class="nav-item" [abpPermission]="route.requiredPolicy">
+        <a class="nav-link" [routerLink]="[route.url]">{{ route.name }}</a>
+      </li>
+    </ng-template>
+
+    <ng-template #dropdownLink let-route>
+      <li class="nav-item dropdown" ngbDropdown [abpPermission]="route.requiredPolicy" [abpVisibility]="routeContainer">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
+          {{ route.name }}
+        </a>
+        <div #routeContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
+          <ng-template
+            #forTemplate
+            ngFor
+            [ngForOf]="route.children"
+            [ngForTrackBy]="trackByFn"
+            [ngForTemplate]="childWrapper"
+          ></ng-template>
+        </div>
+      </li>
+    </ng-template>
+
+    <ng-template #childWrapper let-child>
+      <ng-template
+        [ngTemplateOutlet]="child?.children?.length ? dropdownChild : defaultChild"
+        [ngTemplateOutletContext]="{ $implicit: child }"
+      ></ng-template>
+    </ng-template>
+
+    <ng-template #defaultChild let-child>
+      <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">
+        <a class="dropdown-item py-2 px-2" [routerLink]="[child.url]">{{ child.name }}</a>
+      </div>
+    </ng-template>
+
+    <ng-template #dropdownChild let-child>
+      <div
+        [abpVisibility]="childrenContainer"
+        class="dropdown-submenu"
+        ngbDropdown
+        placement="right-top"
+        [abpPermission]="child.requiredPolicy"
+      >
+        <a role="button" class="btn d-block text-left py-2 px-2" ngbDropdownToggle> {{ child.name }} </a>
+        <div #childrenContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
+          <ng-template
+            ngFor
+            [ngForOf]="child.children"
+            [ngForTrackBy]="trackByFn"
+            [ngForTemplate]="childWrapper"
+          ></ng-template>
+        </div>
+      </div>
+    </ng-template>
+  </ul>
+
+  <ul class="navbar-nav ml-auto">
+    <ng-container
+      *ngFor="let element of rightPartElements; trackBy: trackElementByFn"
+      [ngTemplateOutlet]="element"
+    ></ng-container>
+  </ul>
+</abp-layout>
+
+<abp-change-password [(visible)]="isOpenChangePassword"></abp-change-password>
+
+<abp-profile [(visible)]="isOpenProfile"></abp-profile>
+
+<ng-template #language>
+  <li class="nav-item dropdown" ngbDropdown>
+    <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
+      {{ defaultLanguage$ | async }}
+    </a>
+    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
+      <a
+        *ngFor="let lang of dropdownLanguages$ | async"
+        class="dropdown-item"
+        (click)="onChangeLang(lang.cultureName)"
+        >{{ lang?.displayName }}</a
+      >
+    </div>
+  </li>
+</ng-template>
+
+<ng-template #currentUser>
+  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item dropdown" ngbDropdown>
+    <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
+      {{ (currentUser$ | async)?.userName }}
+    </a>
+    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
+      <a class="dropdown-item pointer" (click)="isOpenChangePassword = true">Change Password</a>
+      <a class="dropdown-item pointer" (click)="isOpenProfile = true">My Profile</a>
+      <a class="dropdown-item pointer" (click)="logout()">Logout</a>
+    </div>
+  </li>
+</ng-template>

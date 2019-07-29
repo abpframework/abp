@@ -1,0 +1,41 @@
+import { EventEmitter, OnChanges, OnInit, Renderer2, SimpleChanges, TemplateRef, TrackByFunction } from '@angular/core';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { PermissionManagement } from '../models/permission-management';
+declare type PermissionWithMargin = PermissionManagement.Permission & {
+    margin: number;
+};
+export declare class PermissionManagementComponent implements OnInit, OnChanges {
+    private modalService;
+    private store;
+    private renderer;
+    providerName: string;
+    providerKey: string;
+    visible: boolean;
+    visibleChange: EventEmitter<boolean>;
+    modalContent: TemplateRef<any>;
+    groups$: Observable<PermissionManagement.Group[]>;
+    entityName$: Observable<string>;
+    modalRef: NgbModalRef;
+    selectedGroup: PermissionManagement.Group;
+    permissions: PermissionManagement.Permission[];
+    selectThisTab: boolean;
+    selectAllTab: boolean;
+    trackByFn: TrackByFunction<PermissionManagement.Group>;
+    readonly selectedGroupPermissions$: Observable<PermissionWithMargin[]>;
+    constructor(modalService: NgbModal, store: Store, renderer: Renderer2);
+    ngOnInit(): void;
+    getChecked(name: string): boolean;
+    onClickCheckbox(clickedPermission: PermissionManagement.Permission, value: any): void;
+    setTabCheckboxState(): void;
+    setGrantCheckboxState(): void;
+    onClickSelectThisTab(): void;
+    onClickSelectAll(): void;
+    onChangeGroup(group: PermissionManagement.Group): void;
+    onSubmit(): void;
+    openModal(): void;
+    setVisible(value: boolean): void;
+    ngOnChanges({ visible }: SimpleChanges): void;
+}
+export {};

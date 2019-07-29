@@ -1,0 +1,20 @@
+{
+  "name": "@abp/ng.tenant-management",
+  "version": "0.5.0",
+  "peerDependencies": {
+    "@abp/ng.theme.shared": "^0.5.0"
+  },
+  "main": "bundles/abp-ng.tenant-management.umd.js",
+  "module": "fesm5/abp-ng.tenant-management.js",
+  "es2015": "fesm2015/abp-ng.tenant-management.js",
+  "esm5": "esm5/abp-ng.tenant-management.js",
+  "esm2015": "esm2015/abp-ng.tenant-management.js",
+  "fesm5": "fesm5/abp-ng.tenant-management.js",
+  "fesm2015": "fesm2015/abp-ng.tenant-management.js",
+  "typings": "abp-ng.tenant-management.d.ts",
+  "metadata": "abp-ng.tenant-management.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}

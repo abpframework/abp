@@ -1,0 +1,7 @@
+{
+  "name": "@abp/ng.account",
+  "version": "0.5.0",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^0.5.0"
+  }
+}
