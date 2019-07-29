@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.theme.shared",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "dependencies": {
-    "@abp/ng.core": "^0.7.2",
+    "@abp/ng.core": "^0.7.3",
     "@angular/cdk": "^8.0.1",
     "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
     "@ngx-validate/core": "^0.0.1",
