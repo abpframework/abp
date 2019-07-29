@@ -39,7 +39,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync();
+                .ToListAsync(cancellationToken: cancellationToken);
 
             return auditLogs;
         }
@@ -58,9 +58,15 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, hasException, httpStatusCode);
 
-            var totalCount = await query.LongCountAsync();
+            var totalCount = await query.LongCountAsync(cancellationToken: cancellationToken);
 
             return totalCount;
+        }
+
+        public async Task<List<AuditLog>> GetAllBetweenDatesAsync(DateTime startDate, DateTime endDate,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet.Where(a => a.ExecutionTime < endDate && a.ExecutionTime > startDate).ToListAsync(cancellationToken: cancellationToken);
         }
 
         private IQueryable<AuditLog> GetListQuery(
