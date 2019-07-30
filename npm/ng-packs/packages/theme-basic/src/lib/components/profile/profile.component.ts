@@ -1,20 +1,9 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { Profile, ProfileGet, ProfileState, ProfileUpdate } from '@abp/ng.core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { Store, Select } from '@ngxs/store';
-import { from, Observable } from 'rxjs';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { take, withLatestFrom } from 'rxjs/operators';
-import { ProfileGet, ProfileState, Profile, ProfileUpdate } from '@abp/ng.core';
 
 const { maxLength, required, email } = Validators;
 
@@ -23,23 +12,27 @@ const { maxLength, required, email } = Validators;
   templateUrl: './profile.component.html',
 })
 export class ProfileComponent implements OnChanges {
+  protected _visible;
+
   @Input()
-  visible: boolean;
+  get visible(): boolean {
+    return this._visible;
+  }
+
+  set visible(value: boolean) {
+    this._visible = value;
+    this.visibleChange.emit(value);
+  }
 
   @Output()
   visibleChange = new EventEmitter<boolean>();
-
-  @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
 
   @Select(ProfileState.getProfile)
   profile$: Observable<Profile.Response>;
 
   form: FormGroup;
 
-  modalRef: NgbModalRef;
-
-  constructor(private fb: FormBuilder, private modalService: NgbModal, private store: Store) {}
+  constructor(private fb: FormBuilder, private store: Store) {}
 
   buildForm() {
     this.store
@@ -62,30 +55,14 @@ export class ProfileComponent implements OnChanges {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.store.dispatch(new ProfileUpdate(this.form.value)).subscribe(() => this.modalRef.close());
+    this.store.dispatch(new ProfileUpdate(this.form.value)).subscribe(() => {
+      this.visible = false;
+    });
   }
 
   openModal() {
     this.buildForm();
-
-    this.modalRef = this.modalService.open(this.modalContent);
-    this.visibleChange.emit(true);
-
-    from(this.modalRef.result)
-      .pipe(take(1))
-      .subscribe(
-        data => {
-          this.setVisible(false);
-        },
-        reason => {
-          this.setVisible(false);
-        },
-      );
-  }
-
-  setVisible(value: boolean) {
-    this.visible = value;
-    this.visibleChange.emit(value);
+    this.visible = true;
   }
 
   ngOnChanges({ visible }: SimpleChanges): void {
@@ -93,8 +70,8 @@ export class ProfileComponent implements OnChanges {
 
     if (visible.currentValue) {
       this.openModal();
-    } else if (visible.currentValue === false && this.modalService.hasOpenModals()) {
-      this.modalRef.close();
+    } else if (visible.currentValue === false && this.visible) {
+      this.visible = false;
     }
   }
 }
