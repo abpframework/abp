@@ -30,46 +30,44 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             Logger.LogInformation($"Bundling {context.BundleRelativePath} ({context.ContentFiles.Count} files)");
 
-            var sb = new StringBuilder();
+            var bundleContentBuilder = new StringBuilder();
 
             Logger.LogDebug("Bundle files:");
             foreach (var file in context.ContentFiles)
             {
-                var fileInfo = GetFileInfo(context, file);
-                var fileContent = fileInfo.ReadAsString();
-
-                Logger.LogDebug($"- {file} ({fileContent.Length} bytes)");
-
-                if (IsMinFile(fileInfo))
-                {
-                    sb.Append(NormalizedCode(fileContent));
-                }
-                else
-                {
-                    var minFileContent = GetMinFileOrNull(file);
-                    if (minFileContent != null)
-                    {
-                        sb.Append(NormalizedCode(minFileContent));
-                    }
-                    else
-                    {
-                        if (context.IsMinificationEnabled)
-                        {
-                            Logger.LogInformation($"Minifying {context.BundleRelativePath} ({fileInfo.Length} bytes)");
-                            sb.Append(NormalizedCode(Minifier.Minify(fileContent, context.BundleRelativePath)));
-                        }
-                        else
-                        {
-                            sb.Append(NormalizedCode(fileContent));
-                        }
-                    }
-                }
+                AddFileToBundle(context, bundleContentBuilder, file);
             }
 
-            var bundleContent = sb.ToString();
+            var bundleContent = bundleContentBuilder.ToString();
             Logger.LogInformation($"Bundled {context.BundleRelativePath} ({bundleContent.Length} bytes)");
 
             return new BundleResult(bundleContent);
+        }
+
+        private void AddFileToBundle(IBundlerContext context, StringBuilder bundleContentBuilder, string fileName)
+        {
+            if (context.IsMinificationEnabled && !IsMinFile(fileName))
+            {
+                var minFileInfo = GetMinFileInfoOrNull(fileName);
+                if (minFileInfo != null)
+                {
+                    Logger.LogDebug($"- {fileName} ({minFileInfo.Length} bytes)");
+                    bundleContentBuilder.Append(NormalizedCode(minFileInfo.ReadAsString()));
+                    return;
+                }
+            }
+
+            var fileContent = GetFileContent(context, fileName);
+            Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes)");
+
+            if (context.IsMinificationEnabled)
+            {
+                var nonMinifiedSize = fileContent.Length;
+                fileContent = Minifier.Minify(fileContent, context.BundleRelativePath);
+                Logger.LogInformation($"  -- Minified {context.BundleRelativePath} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+            }
+
+            bundleContentBuilder.Append(NormalizedCode(fileContent));
         }
 
         protected virtual string GetFileContent(IBundlerContext context, string file)
@@ -89,17 +87,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return fileInfo;
         }
 
-        protected virtual bool IsMinFile(IFileInfo fileInfo)
+        protected virtual bool IsMinFile(string fileName)
         {
-            return fileInfo.Name.EndsWith($".min.{FileExtension}", StringComparison.InvariantCultureIgnoreCase);
+            return fileName.EndsWith($".min.{FileExtension}", StringComparison.InvariantCultureIgnoreCase);
         }
 
-        protected virtual string GetMinFileOrNull(string file)
+        protected virtual IFileInfo GetMinFileInfoOrNull(string file)
         {
-            var fileInfo =
-                WebContentFileProvider.GetFileInfo($"{file.RemovePostFix($".{FileExtension}")}.min.{FileExtension}");
+            var fileInfo = WebContentFileProvider.GetFileInfo($"{file.RemovePostFix($".{FileExtension}")}.min.{FileExtension}");
 
-            return fileInfo.Exists ? fileInfo.ReadAsString() : null;
+            return fileInfo.Exists ? fileInfo : null;
         }
 
         protected virtual string NormalizedCode(string code)
