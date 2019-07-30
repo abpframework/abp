@@ -10,11 +10,17 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
     {
         public override void Execute(ProjectBuildContext context)
         {
+            var nugetPackageVersion = context.TemplateFile.Version;
+            if (nugetPackageVersion.StartsWith(CliConsts.BranchPrefix))
+            {
+                nugetPackageVersion = context.TemplateFile.LatestVersion;
+            }
+
             new NugetReferenceReplacer(
                 context.Files,
                 "MyCompanyName",
                 "MyProjectName",
-                context.TemplateFile.Version
+                nugetPackageVersion
             ).Run();
         }
 
@@ -23,14 +29,18 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             private readonly List<FileEntry> _entries;
             private readonly string _companyNamePlaceHolder;
             private readonly string _projectNamePlaceHolder;
-            private readonly string _latestNugetPackageVersion;
+            private readonly string _nugetPackageVersion;
 
-            public NugetReferenceReplacer(List<FileEntry> entries, string companyNamePlaceHolder, string projectNamePlaceHolder, string latestNugetPackageVersion)
+            public NugetReferenceReplacer(
+                List<FileEntry> entries, 
+                string companyNamePlaceHolder, 
+                string projectNamePlaceHolder, 
+                string nugetPackageVersion)
             {
                 _entries = entries;
                 _companyNamePlaceHolder = companyNamePlaceHolder;
                 _projectNamePlaceHolder = projectNamePlaceHolder;
-                _latestNugetPackageVersion = latestNugetPackageVersion;
+                _nugetPackageVersion = nugetPackageVersion;
             }
 
             public void Run()
@@ -78,7 +88,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     newNode.Attributes.Append(includeAttr);
 
                     var versionAttr = doc.CreateAttribute("Version");
-                    versionAttr.Value = _latestNugetPackageVersion;
+                    versionAttr.Value = _nugetPackageVersion;
                     newNode.Attributes.Append(versionAttr);
 
                     oldNode.ParentNode.ReplaceChild(newNode, oldNode);
