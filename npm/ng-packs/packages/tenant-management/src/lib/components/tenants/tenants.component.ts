@@ -2,7 +2,6 @@ import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { pluck, switchMap, take } from 'rxjs/operators';
@@ -14,6 +13,12 @@ import {
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
+
+type SelectedModalContent = {
+  type: string;
+  title: string;
+  template: TemplateRef<any>;
+};
 
 @Component({
   selector: 'abp-tenants',
@@ -31,45 +36,35 @@ export class TenantsComponent {
 
   defaultConnectionString: string;
 
-  useSharedDatabase: boolean;
+  _useSharedDatabase: boolean;
 
-  selectedModalContent: {
-    title: string;
-    template: TemplateRef<any>;
-    onSave: () => void;
-  };
+  isModalVisible: boolean;
 
-  get showInput(): boolean {
-    return !this.defaultConnectionStringForm.get('useSharedDatabase').value;
+  selectedModalContent = {} as SelectedModalContent;
+
+  get useSharedDatabase(): boolean {
+    return this.defaultConnectionStringForm.get('useSharedDatabase').value;
   }
 
   get connectionString(): string {
     return this.defaultConnectionStringForm.get('defaultConnectionString').value;
   }
 
-  @ViewChild('modalWrapper', { static: false })
-  modalWrapper: TemplateRef<any>;
+  @ViewChild('TenantModalTemplate', { static: false })
+  tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('mTemplateConnStr', { static: false })
-  mTemplateConnStr: TemplateRef<any>;
+  @ViewChild('ConnectionStringModalTemplate', { static: false })
+  connectionStringModalTemplate: TemplateRef<any>;
 
-  @ViewChild('mTemplateFeatures', { static: false })
-  mTemplateFeatures: TemplateRef<any>;
-
-  @ViewChild('mTemplateTenant', { static: false })
-  mTemplateTenant: TemplateRef<any>;
+  @ViewChild('FeaturesModalTemplate', { static: false })
+  featuresModalTemplate: TemplateRef<any>;
 
   constructor(
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,
-    private modalService: NgbModal,
     private fb: FormBuilder,
     private store: Store,
   ) {}
-
-  openModal() {
-    this.modalService.open(this.modalWrapper);
-  }
 
   private createTenantForm() {
     this.tenantForm = this.fb.group({
@@ -79,17 +74,22 @@ export class TenantsComponent {
 
   private createDefaultConnectionStringForm() {
     this.defaultConnectionStringForm = this.fb.group({
-      useSharedDatabase: this.useSharedDatabase,
+      useSharedDatabase: this._useSharedDatabase,
       defaultConnectionString: this.defaultConnectionString || '',
     });
   }
 
-  onEditConnStr(id: string) {
+  openModal(title: string, template: TemplateRef<any>, type: string) {
     this.selectedModalContent = {
-      title: this.selected && this.selected.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant',
-      template: this.mTemplateConnStr,
-      onSave: () => this.saveConnStr,
+      title,
+      template,
+      type,
     };
+
+    this.isModalVisible = true;
+  }
+
+  onEditConnectionString(id: string) {
     this.store
       .dispatch(new TenantManagementGetById(id))
       .pipe(
@@ -100,54 +100,57 @@ export class TenantsComponent {
         }),
       )
       .subscribe(fetchedConnectionString => {
-        this.useSharedDatabase = fetchedConnectionString ? false : true;
+        this._useSharedDatabase = fetchedConnectionString ? false : true;
         this.defaultConnectionString = fetchedConnectionString ? fetchedConnectionString : '';
         this.createDefaultConnectionStringForm();
-        this.openModal();
+        this.openModal('AbpTenantManagement::ConnectionStrings', this.connectionStringModalTemplate, 'saveConnStr');
       });
   }
 
-  saveConnStr() {
-    this.tenantService
-      .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
-      .pipe(take(1))
-      .subscribe(() => this.modalService.dismissAll());
-  }
-
   onManageFeatures(id: string) {
-    this.selectedModalContent = {
-      title: this.selected && this.selected.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant',
-      template: this.mTemplateFeatures,
-      onSave: () => {},
-    };
-    this.openModal();
+    this.openModal('AbpTenantManagement::Features', this.featuresModalTemplate, 'saveFeatures');
   }
 
-  onAdd() {
+  onAddTenant() {
     this.selected = {} as ABP.BasicItem;
     this.createTenantForm();
-    this.openModal();
-    this.selectedModalContent = {
-      title: 'AbpTenantManagement::NewTenant',
-      template: this.mTemplateTenant,
-      onSave: () => this.saveTenant,
-    };
+    this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
   }
 
-  onEdit(id: string) {
+  onEditTenant(id: string) {
     this.store
       .dispatch(new TenantManagementGetById(id))
       .pipe(pluck('TenantManagementState', 'selectedItem'))
       .subscribe(selected => {
         this.selected = selected;
-        this.selectedModalContent = {
-          title: 'AbpTenantManagement::Edit',
-          template: this.mTemplateTenant,
-          onSave: () => this.saveTenant,
-        };
         this.createTenantForm();
-        this.openModal();
+        this.openModal('AbpTenantManagement::Edit', this.tenantModalTemplate, 'saveTenant');
       });
+  }
+
+  save() {
+    const { type } = this.selectedModalContent;
+    if (!type) return;
+    if (type === 'saveTenant') this.saveTenant();
+    else if (type === 'saveConnStr') this.saveConnectionString();
+  }
+
+  saveConnectionString() {
+    if (this.useSharedDatabase) {
+      this.tenantService
+        .deleteDefaultConnectionString(this.selected.id)
+        .pipe(take(1))
+        .subscribe(() => {
+          this.isModalVisible = false;
+        });
+    } else {
+      this.tenantService
+        .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
+        .pipe(take(1))
+        .subscribe(() => {
+          this.isModalVisible = false;
+        });
+    }
   }
 
   saveTenant() {
@@ -159,7 +162,9 @@ export class TenantsComponent {
           ? new TenantManagementUpdate({ ...this.tenantForm.value, id: this.selected.id })
           : new TenantManagementAdd(this.tenantForm.value),
       )
-      .subscribe(() => this.modalService.dismissAll());
+      .subscribe(() => {
+        this.isModalVisible = false;
+      });
   }
 
   delete(id: string, name: string) {
