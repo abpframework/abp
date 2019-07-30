@@ -24,6 +24,9 @@ export default `
   top: 18px;
 }
 
+.modal {
+ background-color: rgba(0, 0, 0, .6);
+}
 
 /* <animations */
 
