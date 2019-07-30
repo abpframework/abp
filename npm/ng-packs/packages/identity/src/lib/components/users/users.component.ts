@@ -1,27 +1,37 @@
-import { Component, TemplateRef, ViewChild, TrackByFunction, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { IdentityState } from '../../states/identity.state';
-import { Identity } from '../../models/identity';
+import { ABP } from "@abp/ng.core";
+import { ConfirmationService, Toaster } from "@abp/ng.theme.shared";
 import {
-  IdentityUpdateUser,
+  Component,
+  OnInit,
+  TemplateRef,
+  TrackByFunction,
+  ViewChild
+} from "@angular/core";
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from "@angular/forms";
+import { validatePassword } from "@ngx-validate/core";
+import { Select, Store } from "@ngxs/store";
+import { combineLatest, Observable, Subject } from "rxjs";
+import { debounceTime, filter, map, pluck, take } from "rxjs/operators";
+import snq from "snq";
+import {
   IdentityAddUser,
   IdentityDeleteUser,
   IdentityGetUserById,
+  IdentityGetUserRoles,
   IdentityGetUsers,
-} from '../../actions/identity.actions';
-import { pluck, filter, map, take, debounceTime } from 'rxjs/operators';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import snq from 'snq';
-import { IdentityGetUserRoles } from '../../actions/identity.actions';
-import { validatePassword } from '@ngx-validate/core';
-import { ABP } from '@abp/ng.core';
-
+  IdentityUpdateUser
+} from "../../actions/identity.actions";
+import { Identity } from "../../models/identity";
+import { IdentityState } from "../../states/identity.state";
 @Component({
-  selector: 'abp-users',
-  templateUrl: './users.component.html',
+  selector: "abp-users",
+  templateUrl: "./users.component.html"
 })
 export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsers)
@@ -30,7 +40,7 @@ export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsersTotalCount)
   totalCount$: Observable<number>;
 
-  @ViewChild('modalContent', { static: false })
+  @ViewChild("modalContent", { static: false })
   modalContent: TemplateRef<any>;
 
   form: FormGroup;
@@ -46,24 +56,29 @@ export class UsersComponent implements OnInit {
   providerKey: string;
 
   pageQuery: ABP.PageQueryParams = {
-    sorting: 'userName',
+    sorting: "userName"
   };
+
+  isModalVisible: boolean;
 
   loading: boolean = false;
 
   search$ = new Subject<string>();
 
-  trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
+  trackByFn: TrackByFunction<AbstractControl> = (index, item) =>
+    Object.keys(item)[0] || index;
 
   get roleGroups(): FormGroup[] {
-    return snq(() => (this.form.get('roleNames') as FormArray).controls as FormGroup[], []);
+    return snq(
+      () => (this.form.get("roleNames") as FormArray).controls as FormGroup[],
+      []
+    );
   }
 
   constructor(
     private confirmationService: ConfirmationService,
-    private modalService: NgbModal,
     private fb: FormBuilder,
-    private store: Store,
+    private store: Store
   ) {}
 
   ngOnInit() {
@@ -78,34 +93,51 @@ export class UsersComponent implements OnInit {
 
     this.form = this.fb.group({
       password: [
-        '',
+        "",
         [
           Validators.required,
           Validators.maxLength(32),
           Validators.minLength(6),
-          validatePassword(['small', 'capital', 'number', 'special']),
-        ],
+          validatePassword(["small", "capital", "number", "special"])
+        ]
       ],
-      userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
-      email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
-      name: [this.selected.name || '', [Validators.maxLength(64)]],
-      surname: [this.selected.surname || '', [Validators.maxLength(64)]],
-      phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
-      lockoutEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
-      twoFactorEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
+      userName: [
+        this.selected.userName || "",
+        [Validators.required, Validators.maxLength(256)]
+      ],
+      email: [
+        this.selected.email || "",
+        [Validators.required, Validators.email, Validators.maxLength(256)]
+      ],
+      name: [this.selected.name || "", [Validators.maxLength(64)]],
+      surname: [this.selected.surname || "", [Validators.maxLength(64)]],
+      phoneNumber: [
+        this.selected.phoneNumber || "",
+        [Validators.maxLength(16)]
+      ],
+      lockoutEnabled: [
+        this.selected.twoFactorEnabled || (this.selected.id ? false : true)
+      ],
+      twoFactorEnabled: [
+        this.selected.twoFactorEnabled || (this.selected.id ? false : true)
+      ],
       roleNames: this.fb.array(
         this.roles.map(role =>
           this.fb.group({
-            [role.name]: [!!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))],
-          }),
-        ),
-      ),
+            [role.name]: [
+              !!snq(() =>
+                this.selectedUserRoles.find(userRole => userRole.id === role.id)
+              )
+            ]
+          })
+        )
+      )
     });
   }
 
   openModal() {
     this.buildForm();
-    this.modalService.open(this.modalContent);
+    this.isModalVisible = true;
   }
 
   onAdd() {
@@ -115,12 +147,15 @@ export class UsersComponent implements OnInit {
   }
 
   onEdit(id: string) {
-    combineLatest([this.store.dispatch(new IdentityGetUserById(id)), this.store.dispatch(new IdentityGetUserRoles(id))])
+    combineLatest([
+      this.store.dispatch(new IdentityGetUserById(id)),
+      this.store.dispatch(new IdentityGetUserRoles(id))
+    ])
       .pipe(
         filter(([res1, res2]) => res1 && res2),
         map(([state, _]) => state),
-        pluck('IdentityState'),
-        take(1),
+        pluck("IdentityState"),
+        take(1)
       )
       .subscribe((state: Identity.State) => {
         this.selected = state.selectedUser;
@@ -134,8 +169,11 @@ export class UsersComponent implements OnInit {
 
     const { roleNames } = this.form.value;
     const mappedRoleNames = snq(
-      () => roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]),
-      [],
+      () =>
+        roleNames
+          .filter(role => !!role[Object.keys(role)[0]])
+          .map(role => Object.keys(role)[0]),
+      []
     );
 
     this.store
@@ -144,18 +182,27 @@ export class UsersComponent implements OnInit {
           ? new IdentityUpdateUser({
               ...this.form.value,
               id: this.selected.id,
-              roleNames: mappedRoleNames,
+              roleNames: mappedRoleNames
             })
-          : new IdentityAddUser({ ...this.form.value, roleNames: mappedRoleNames }),
+          : new IdentityAddUser({
+              ...this.form.value,
+              roleNames: mappedRoleNames
+            })
       )
-      .subscribe(() => this.modalService.dismissAll());
+      .subscribe(() => {
+        this.isModalVisible = false;
+      });
   }
 
   delete(id: string, userName: string) {
     this.confirmationService
-      .warn('AbpIdentity::UserDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
-        messageLocalizationParams: [userName],
-      })
+      .warn(
+        "AbpIdentity::UserDeletionConfirmationMessage",
+        "AbpIdentity::AreYouSure",
+        {
+          messageLocalizationParams: [userName]
+        }
+      )
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
           this.store.dispatch(new IdentityDeleteUser(id));
@@ -172,6 +219,8 @@ export class UsersComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new IdentityGetUsers(this.pageQuery)).subscribe(() => (this.loading = false));
+    this.store
+      .dispatch(new IdentityGetUsers(this.pageQuery))
+      .subscribe(() => (this.loading = false));
   }
 }

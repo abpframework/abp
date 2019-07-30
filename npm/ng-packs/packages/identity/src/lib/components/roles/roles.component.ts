@@ -1,7 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IdentityState } from '../../states/identity.state';
 import { Identity } from '../../models/identity';
@@ -26,6 +25,8 @@ export class RolesComponent {
 
   selected: Identity.RoleItem;
 
+  isModalVisible: boolean;
+
   visiblePermissions: boolean = false;
 
   providerKey: string;
@@ -33,12 +34,7 @@ export class RolesComponent {
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
-  constructor(
-    private confirmationService: ConfirmationService,
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private store: Store,
-  ) {}
+  constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
   createForm() {
     this.form = this.fb.group({
@@ -50,7 +46,7 @@ export class RolesComponent {
 
   openModal() {
     this.createForm();
-    this.modalService.open(this.modalContent);
+    this.isModalVisible = true;
   }
 
   onAdd() {
@@ -77,7 +73,9 @@ export class RolesComponent {
           ? new IdentityUpdateRole({ ...this.form.value, id: this.selected.id })
           : new IdentityAddRole(this.form.value),
       )
-      .subscribe(() => this.modalService.dismissAll());
+      .subscribe(() => {
+        this.isModalVisible = false;
+      });
   }
 
   delete(id: string, name: string) {

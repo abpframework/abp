@@ -58,17 +58,13 @@
   </div>
 </div>
 
-<ng-template #modalContent let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="modal-basic-title">
-      {{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}
-    </h5>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="modal-body">
+<abp-modal size="md" [(visible)]="isModalVisible" *ngIf="isModalVisible" [centered]="true">
+  <ng-template #abpHeader>
+    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="form">
       <div class="form-group">
         <label for="role-name">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label
         ><span> * </span>
@@ -88,18 +84,18 @@
           'AbpIdentity::DisplayName:IsPublic' | abpLocalization
         }}</label>
       </div>
-    </div>
+    </form>
+  </ng-template>
 
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">
-        {{ 'AbpIdentity::Cancel' | abpLocalization }}
-      </button>
-      <button type="submit" class="btn btn-primary">
-        <i class="fa fa-check mr-1"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>
-      </button>
-    </div>
-  </form>
-</ng-template>
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" #abpClose>
+      {{ 'AbpIdentity::Cancel' | abpLocalization }}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="save()">
+      <i class="fa fa-check mr-1"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>
+    </button>
+  </ng-template>
+</abp-modal>
 
 <abp-permission-management
   [(visible)]="visiblePermissions"
