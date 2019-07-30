@@ -1,21 +1,20 @@
 ﻿using System.Collections.Generic;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
-using Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 {
-    public class MvcTemplate : TemplateInfo
+    public class AppTemplate : TemplateInfo
     {
         /// <summary>
-        /// "mvc".
+        /// "app".
         /// </summary>
-        public const string TemplateName = "mvc";
+        public const string TemplateName = "app";
 
-        public MvcTemplate()
+        public AppTemplate()
             : base(TemplateName, DatabaseProvider.EntityFrameworkCore)
         {
-            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Mvc";
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Application";
         }
 
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
@@ -24,14 +23,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
-
-            steps.Add(new TemplateRandomSslPortStep(new List<string>
-            {
-                "https://localhost:44300",
-                "https://localhost:44301",
-                "https://localhost:44302",
-                "https://localhost:44303"
-            }));
+            RandomizeSslPorts(context, steps);
 
             return steps;
         }
@@ -40,20 +32,20 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
         {
             if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
             {
-                steps.Add(new MvcTemplateSwitchEntityFrameworkCoreToMongoDbStep());
+                steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep());
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
             }
 
             if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
             }
         }
 
@@ -62,16 +54,27 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
             if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
-                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/test/MyCompanyName.MyProjectName.Web.Tests"));
-                steps.Add(new MvcTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
             }
             else
             {
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
-                steps.Add(new MyTemplateChangeConsoleTestClientPortSettingsStep());
+                steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep());
             }
+        }
+
+        private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new TemplateRandomSslPortStep(new List<string>
+            {
+                "https://localhost:44300",
+                "https://localhost:44301",
+                "https://localhost:44302",
+                "https://localhost:44303"
+            }));
         }
     }
 }

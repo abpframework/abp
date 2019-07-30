@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Volo.Abp.Cli.ProjectBuilding.Building;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Mvc;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
@@ -34,21 +34,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                     !x.IsDirectory && x.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
-            if (context.Template.Name == MvcTemplate.TemplateName)
+            if (context.Template.Name == AppTemplate.TemplateName)
             {
                 // no tiered
-                if (launchSettings.Count == 1&& launchSettings.First().Name.Equals("/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json", StringComparison.InvariantCultureIgnoreCase))
+                if (launchSettings.Count == 1&& launchSettings.First().Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var dbMigrator = appSettings.FirstOrDefault(x =>
-                        x.Name.Equals("/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
+                        x.Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
                     dbMigrator?.SetContent(dbMigrator.Content.Replace("https://localhost:44302", "https://localhost:44303"));
 
                     var web = appSettings.FirstOrDefault(x =>
-                        x.Name.Equals("/src/MyCompanyName.MyProjectName.Web/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
+                        x.Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.Web/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
                     web?.SetContent(web.Content.Replace("https://localhost:44301", "https://localhost:44303"));
 
                     var consoleTestApp = appSettings.FirstOrDefault(x =>
-                        x.Name.Equals("/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
+                        x.Name.Equals("/aspnet-core/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
                     consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44300", "https://localhost:44303"));
                     consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44301", "https://localhost:44303"));
                 }

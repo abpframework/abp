@@ -1,9 +1,9 @@
 ﻿using System;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 
-namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
 {
-    public class MvcTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPipelineStep
+    public class AppTemplateSwitchEntityFrameworkCoreToMongoDbStep : ProjectBuildPipelineStep
     {
         public override void Execute(ProjectBuildContext context)
         {
@@ -11,14 +11,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             ChangeProjectReference(
                 context,
-                "/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyCompanyName.MyProjectName.Web.csproj",
                 "EntityFrameworkCore.DbMigrations",
                 "MongoDB"
             );
 
             ChangeModuleDependency(
                 context,
-                "/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web/MyProjectNameWebModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
@@ -27,21 +27,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             ChangeConnectionStringToMongoDb(
                 context,
-                "/src/MyCompanyName.MyProjectName.Web/appsettings.json"
+                "/aspnet-core/src/MyCompanyName.MyProjectName.Web/appsettings.json"
             );
 
             //MyCompanyName.MyProjectName.IdentityServer
 
             ChangeProjectReference(
                 context,
-                "/src/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.csproj",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyCompanyName.MyProjectName.IdentityServer.csproj",
                 "EntityFrameworkCore.DbMigrations",
                 "MongoDB"
             );
 
             ChangeModuleDependency(
                 context,
-                "/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/MyProjectNameIdentityServerModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
@@ -50,21 +50,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             ChangeConnectionStringToMongoDb(
                 context,
-                "/src/MyCompanyName.MyProjectName.IdentityServer/appsettings.json"
+                "/aspnet-core/src/MyCompanyName.MyProjectName.IdentityServer/appsettings.json"
             );
 
             //MyCompanyName.MyProjectName.HttpApi.Host
 
             ChangeProjectReference(
                 context,
-                "/src/MyCompanyName.MyProjectName.HttpApi.Host/MyCompanyName.MyProjectName.HttpApi.Host.csproj",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyCompanyName.MyProjectName.HttpApi.Host.csproj",
                 "EntityFrameworkCore.DbMigrations",
                 "MongoDB"
             );
 
             ChangeModuleDependency(
                 context,
-                "/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/MyProjectNameHttpApiHostModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
@@ -73,21 +73,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             ChangeConnectionStringToMongoDb(
                 context,
-                "/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
+                "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
             );
 
             //MyCompanyName.MyProjectName.DbMigrator
 
             ChangeProjectReference(
                 context,
-                "/src/MyCompanyName.MyProjectName.DbMigrator/MyCompanyName.MyProjectName.DbMigrator.csproj",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyCompanyName.MyProjectName.DbMigrator.csproj",
                 "EntityFrameworkCore.DbMigrations",
                 "MongoDB"
             );
 
             ChangeModuleDependency(
                 context,
-                "/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
+                "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/MyProjectNameDbMigratorModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
@@ -96,21 +96,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Mvc
 
             ChangeConnectionStringToMongoDb(
                 context,
-                "/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json"
+                "/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json"
             );
 
             //MyCompanyName.MyProjectName.Domain.Tests
 
             ChangeProjectReference(
                 context,
-                "/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
+                "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyCompanyName.MyProjectName.Domain.Tests.csproj",
                 "EntityFrameworkCore.Tests",
                 "MongoDB.Tests"
             );
 
             ChangeModuleDependency(
                 context,
-                "/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
+                "/aspnet-core/test/MyCompanyName.MyProjectName.Domain.Tests/MyProjectNameDomainTestModule.cs",
                 "MyCompanyName.MyProjectName.EntityFrameworkCore",
                 "MyCompanyName.MyProjectName.MongoDB",
                 "MyProjectNameEntityFrameworkCoreTestModule",
