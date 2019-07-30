@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +29,8 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
+        private const string DefaultCorsPolicyName = "Default";
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
@@ -38,6 +42,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
             ConfigureRedis(context, configuration, hostingEnvironment);
+            ConfigureCors(context, configuration);
         }
 
         private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
@@ -116,9 +121,32 @@ namespace MyCompanyName.MyProjectName
             }
         }
 
+        private void ConfigureCors(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        {
+            context.Services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .WithOrigins(
+                            configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
+        }
+
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
+
+            app.UseCors(DefaultCorsPolicyName);
 
             app.UseVirtualFiles();
             app.UseAuthentication();
