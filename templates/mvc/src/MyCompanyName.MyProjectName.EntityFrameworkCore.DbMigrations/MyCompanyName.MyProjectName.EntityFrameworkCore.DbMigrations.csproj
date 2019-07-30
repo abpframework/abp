@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MyCompanyName.MyProjectName.EntityFrameworkCore\MyCompanyName.MyProjectName.EntityFrameworkCore.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
   </ItemGroup>
 
 </Project>
