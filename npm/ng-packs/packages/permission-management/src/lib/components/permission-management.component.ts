@@ -7,11 +7,8 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  TemplateRef,
   TrackByFunction,
-  ViewChild,
 } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { Select, Store } from '@ngxs/store';
 import { from, Observable } from 'rxjs';
 import { map, pluck, take } from 'rxjs/operators';
@@ -35,22 +32,32 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   @Input()
   providerKey: string;
 
+  protected _visible;
+
   @Input()
-  visible: boolean;
+  get visible(): boolean {
+    return this._visible;
+  }
+
+  set visible(value: boolean) {
+    if (!this.selectedGroup) return;
+
+    this._visible = value;
+    this.visibleChange.emit(value);
+
+    if (!value) {
+      this.selectedGroup = null;
+    }
+  }
 
   @Output()
   visibleChange = new EventEmitter<boolean>();
-
-  @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
 
   @Select(PermissionManagementState.getPermissionGroups)
   groups$: Observable<PermissionManagement.Group[]>;
 
   @Select(PermissionManagementState.getEntitiyDisplayName)
   entityName$: Observable<string>;
-
-  modalRef: NgbModalRef;
 
   selectedGroup: PermissionManagement.Group;
 
@@ -80,7 +87,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     );
   }
 
-  constructor(private modalService: NgbModal, private store: Store, private renderer: Renderer2) {}
+  constructor(private store: Store, private renderer: Renderer2) {}
 
   ngOnInit(): void {}
 
@@ -186,9 +193,11 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
             permissions: changedPermissions,
           }),
         )
-        .subscribe(() => this.modalRef.close());
+        .subscribe(() => {
+          this.visible = false;
+        });
     } else {
-      this.modalRef.close();
+      this.visible = false;
     }
   }
 
@@ -206,30 +215,13 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
         this.selectedGroup = permissionRes.groups[0];
         this.permissions = getPermissions(permissionRes.groups);
 
-        this.modalRef = this.modalService.open(this.modalContent, { size: 'lg' });
-        this.visibleChange.emit(true);
+        this.visible = true;
 
         setTimeout(() => {
           this.setTabCheckboxState();
           this.setGrantCheckboxState();
         }, 0);
-
-        from(this.modalRef.result)
-          .pipe(take(1))
-          .subscribe(
-            data => {
-              this.setVisible(false);
-            },
-            reason => {
-              this.setVisible(false);
-            },
-          );
       });
-  }
-
-  setVisible(value: boolean) {
-    this.visible = value;
-    this.visibleChange.emit(value);
   }
 
   ngOnChanges({ visible }: SimpleChanges): void {
@@ -237,8 +229,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
     if (visible.currentValue) {
       this.openModal();
-    } else if (visible.currentValue === false && this.modalService.hasOpenModals()) {
-      this.modalRef.close();
+    } else if (visible.currentValue === false && this.visible) {
+      this.visible = false;
     }
   }
 }
