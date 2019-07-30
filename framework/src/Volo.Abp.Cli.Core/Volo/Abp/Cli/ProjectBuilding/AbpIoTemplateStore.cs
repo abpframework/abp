@@ -102,7 +102,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var postData = JsonSerializer.Serialize(input);
 
-            using (var client = new CliHttpClient())
+            using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
             {
                 var responseMessage = await client.PostAsync(
                     $"{CliUrls.WwwAbpIo}api/download/template/",

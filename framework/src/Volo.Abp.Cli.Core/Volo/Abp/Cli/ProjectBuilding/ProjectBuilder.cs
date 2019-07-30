@@ -1,9 +1,10 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
@@ -53,7 +54,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var templateFile = await TemplateStore.GetAsync(
                 args.TemplateName,
                 args.DatabaseProvider,
-                args.SolutionName.FullName
+                args.SolutionName.FullName,
+                args.Version
             );
 
             var context = new ProjectBuildContext(

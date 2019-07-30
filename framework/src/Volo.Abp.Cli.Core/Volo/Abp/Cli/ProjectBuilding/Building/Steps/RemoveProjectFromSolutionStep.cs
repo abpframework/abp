@@ -18,7 +18,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             string projectFolderPath = null)
         {
             _projectName = projectName;
-            _solutionFilePath = solutionFilePath ?? "/MyCompanyName.MyProjectName.sln";
+            _solutionFilePath = solutionFilePath ?? "/aspnet-core/MyCompanyName.MyProjectName.sln";
             _projectFolderPath = projectFolderPath ?? ("/aspnet-core/src/" + projectName);
         }
 

@@ -46,6 +46,7 @@ namespace Volo.Abp.Cli.Commands
                 new ProjectBuildArgs(
                     SolutionName.Parse(commandLineArgs.Target),
                     commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long),
+                    commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long),
                     GetDatabaseProviderOrNull(commandLineArgs),
                     commandLineArgs.Options
                 )
@@ -111,13 +112,14 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new <project-name> [-t|--template] [-d|--database-provider] [-o|--output-folder]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("-t|--template <template-name>");
-            sb.AppendLine("-o|--output-folder <output-folder>");
+            sb.AppendLine("-t|--template <template-name>               (default: app)");
+            sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
+            sb.AppendLine("-v|--version <version>                      (default: latest version)");
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("");
-            sb.AppendLine("Some examples:");
+            sb.AppendLine("Examples:");
             sb.AppendLine("  abp new Acme.BookStore");
             sb.AppendLine("  abp new Acme.BookStore --tiered");
             sb.AppendLine("  abp new Acme.BookStore -t mvc-module");
@@ -168,6 +170,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "o";
                 public const string Long = "output-folder";
+            }
+
+            public static class Version
+            {
+                public const string Short = "v";
+                public const string Long = "version";
             }
         }
     }
