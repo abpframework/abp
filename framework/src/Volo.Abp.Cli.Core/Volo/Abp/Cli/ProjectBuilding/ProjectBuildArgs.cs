@@ -12,7 +12,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
         [CanBeNull]
         public string TemplateName { get; set; }
 
+        [CanBeNull]
+        public string Version { get; set; }
+
         public DatabaseProvider DatabaseProvider { get; set; }
+
+        public UiFramework UiFramework { get; set; }
 
         [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
@@ -20,13 +25,16 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public ProjectBuildArgs(
             [NotNull] SolutionName solutionName, 
             [CanBeNull] string templateName = null,
+            [CanBeNull] string version = null,
             DatabaseProvider databaseProvider = DatabaseProvider.NotSpecified,
+            UiFramework uiFramework = UiFramework.NotSpecified,
             Dictionary<string, string> extraProperties = null)
         {
-            DatabaseProvider = databaseProvider;
-            TemplateName = templateName;
             SolutionName = Check.NotNull(solutionName, nameof(solutionName));
-
+            TemplateName = templateName;
+            Version = version;
+            DatabaseProvider = databaseProvider;
+            UiFramework = uiFramework;
             ExtraProperties = extraProperties ?? new Dictionary<string, string>();
         }
     }

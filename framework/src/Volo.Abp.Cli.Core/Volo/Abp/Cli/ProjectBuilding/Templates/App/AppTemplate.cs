@@ -1,0 +1,107 @@
+﻿using System.Collections.Generic;
+using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+
+namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
+{
+    public class AppTemplate : TemplateInfo
+    {
+        /// <summary>
+        /// "app".
+        /// </summary>
+        public const string TemplateName = "app";
+
+        public AppTemplate()
+            : base(TemplateName, DatabaseProvider.EntityFrameworkCore, UiFramework.Mvc)
+        {
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Application";
+        }
+
+        public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
+        {
+            var steps = new List<ProjectBuildPipelineStep>();
+
+            SwitchDatabaseProvider(context, steps);
+            DeleteUnrelatedProjects(context, steps);
+            RandomizeSslPorts(context, steps);
+            CleanupFolderHierarchy(context, steps);
+
+            return steps;
+        }
+
+       private static void SwitchDatabaseProvider(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.DatabaseProvider == DatabaseProvider.MongoDb)
+            {
+                steps.Add(new AppTemplateSwitchEntityFrameworkCoreToMongoDbStep());
+            }
+
+            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.EntityFrameworkCore)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.DbMigrations"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.EntityFrameworkCore.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.EntityFrameworkCore.Tests"));
+            }
+
+            if (context.BuildArgs.DatabaseProvider != DatabaseProvider.MongoDb)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.MongoDB.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.MongoDB.Tests"));
+            }
+        }
+
+        private void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.UiFramework == UiFramework.Mvc)
+            {
+                if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+                    steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.Web.Host", "MyCompanyName.MyProjectName.Web"));
+                }
+                else
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                    steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep());
+                }
+            }
+
+            if (context.BuildArgs.UiFramework != UiFramework.Mvc)
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+            }
+
+            if (context.BuildArgs.UiFramework != UiFramework.Angular)
+            {
+                steps.Add(new RemoveFolderStep("/angular"));
+            }
+        }
+
+        private static void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new TemplateRandomSslPortStep(
+                    new List<string>
+                    {
+                        "https://localhost:44300",
+                        "https://localhost:44301",
+                        "https://localhost:44302",
+                        "https://localhost:44303"
+                    }
+                )
+            );
+        }
+
+        private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            if (context.BuildArgs.UiFramework == UiFramework.Mvc)
+            {
+                steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
+            }
+        }
+    }
+}

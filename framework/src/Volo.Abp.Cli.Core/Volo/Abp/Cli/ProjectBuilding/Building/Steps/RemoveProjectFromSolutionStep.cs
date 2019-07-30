@@ -18,15 +18,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             string projectFolderPath = null)
         {
             _projectName = projectName;
-            _solutionFilePath = solutionFilePath ?? "/MyCompanyName.MyProjectName.sln";
-            _projectFolderPath = projectFolderPath ?? ("/src/" + projectName);
+            _solutionFilePath = solutionFilePath ?? "/aspnet-core/MyCompanyName.MyProjectName.sln";
+            _projectFolderPath = projectFolderPath ?? ("/aspnet-core/src/" + projectName);
         }
 
         public override void Execute(ProjectBuildContext context)
         {
-            var projectFolderWithSlash = _projectFolderPath + "/";
-            context.Files.RemoveAll(file => file.Name.StartsWith(projectFolderWithSlash));
-            context.Files.RemoveAll(file => file.Name == _projectFolderPath);
+            new RemoveFolderStep(_projectFolderPath).Execute(context);
             var solutionFile = context.GetFile(_solutionFilePath);
             solutionFile.NormalizeLineEndings();
             solutionFile.SetLines(RemoveProject(solutionFile.GetLines().ToList()));

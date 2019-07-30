@@ -20,7 +20,7 @@ $solutionPaths = (
     "modules/background-jobs",
     "modules/client-simulation",
     "templates/mvc-module",
-    "templates/mvc",
+    "templates/app/aspnet-core",
     "samples/MicroserviceDemo",
     "abp_io/AbpIoLocalization"
 )
