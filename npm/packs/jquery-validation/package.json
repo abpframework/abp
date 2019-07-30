@@ -1,11 +1,11 @@
 {
-  "version": "0.7.5",
+  "version": "0.7.6",
   "name": "@abp/jquery-validation",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^0.7.5",
+    "@abp/jquery": "^0.7.6",
     "jquery-validation": "^1.17.0"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
