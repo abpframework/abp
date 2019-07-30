@@ -3,9 +3,9 @@ export const environment = {
   hmr: true,
   oAuthConfig: {
     issuer: 'http://localhost:44392',
-    clientId: 'MyAbpProject_ConsoleTestApp',
+    clientId: 'MyProjectName_ConsoleTestApp',
     dummyClientSecret: '1q2w3e*',
-    scope: 'MyAbpProject',
+    scope: 'MyProjectName',
     showDebugInformation: true,
     oidc: false,
     requireHttps: false,
@@ -16,6 +16,6 @@ export const environment = {
     },
   },
   localization: {
-    defaultResourceName: 'MyAbpProject',
+    defaultResourceName: 'MyProjectName',
   },
 };
