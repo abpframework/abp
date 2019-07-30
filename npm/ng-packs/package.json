@@ -1,7 +1,7 @@
 {
   "scripts": {
     "ng": "ng",
-    "lerna": "lerna"
+    "symlink": "symlink"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.801.2",
@@ -38,7 +38,6 @@
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
-    "lerna": "^3.16.4",
     "ng-packagr": "^5.1.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "primeicons": "^1.0.0",
@@ -46,7 +45,7 @@
     "protractor": "~5.4.0",
     "rxjs": "~6.4.0",
     "snq": "^1.0.3",
-    "symlink-manager": "^1.2.0",
+    "symlink-manager": "^1.2.1",
     "ts-node": "~7.0.0",
     "tsickle": "^0.35.0",
     "tslib": "^1.9.0",
