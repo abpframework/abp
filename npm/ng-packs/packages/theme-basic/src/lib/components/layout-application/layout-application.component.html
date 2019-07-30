@@ -9,14 +9,20 @@
 
     <ng-template #defaultLink let-route>
       <li class="nav-item" [abpPermission]="route.requiredPolicy">
-        <a class="nav-link" [routerLink]="[route.url]">{{ route.name }}</a>
+        <a class="nav-link" [routerLink]="[route.url]">{{ route.name | abpLocalization }}</a>
       </li>
     </ng-template>
 
     <ng-template #dropdownLink let-route>
-      <li class="nav-item dropdown" ngbDropdown [abpPermission]="route.requiredPolicy" [abpVisibility]="routeContainer">
+      <li
+        class="nav-item dropdown"
+        ngbDropdown
+        display="static"
+        [abpPermission]="route.requiredPolicy"
+        [abpVisibility]="routeContainer"
+      >
         <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
-          {{ route.name }}
+          {{ route.name | abpLocalization }}
         </a>
         <div #routeContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
           <ng-template
@@ -39,7 +45,7 @@
 
     <ng-template #defaultChild let-child>
       <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">
-        <a class="dropdown-item py-2 px-2" [routerLink]="[child.url]">{{ child.name }}</a>
+        <a class="dropdown-item py-2 px-2" [routerLink]="[child.url]">{{ child.name | abpLocalization }}</a>
       </div>
     </ng-template>
 
@@ -48,10 +54,13 @@
         [abpVisibility]="childrenContainer"
         class="dropdown-submenu"
         ngbDropdown
+        display="static"
         placement="right-top"
         [abpPermission]="child.requiredPolicy"
       >
-        <a role="button" class="btn d-block text-left py-2 px-2" ngbDropdownToggle> {{ child.name }} </a>
+        <a role="button" class="btn d-block text-left py-2 px-2" ngbDropdownToggle>
+          {{ child.name | abpLocalization }}
+        </a>
         <div #childrenContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
           <ng-template
             ngFor
