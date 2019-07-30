@@ -107,6 +107,8 @@ export class ConfigState {
   }
 
   static getCopy(key: string, ...interpolateParams: string[]) {
+    if (!key) key = '';
+
     const keys = key.split('::') as string[];
     const selector = createSelector(
       [ConfigState],
