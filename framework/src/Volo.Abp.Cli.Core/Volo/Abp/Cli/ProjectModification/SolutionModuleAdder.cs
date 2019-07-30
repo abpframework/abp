@@ -47,6 +47,7 @@ namespace Volo.Abp.Cli.ProjectModification
         public virtual async Task AddAsync(
             [NotNull] string solutionFile,
             [NotNull] string moduleName,
+            string startupProject,
             bool skipDbMigrations = false)
         {
             Check.NotNull(solutionFile, nameof(solutionFile));
@@ -91,10 +92,10 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
             }
 
-            ModifyDbContext(projectFiles, module, skipDbMigrations);
+            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
-        protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, bool skipDbMigrations = false)
+        protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, string startupProject, bool skipDbMigrations = false)
         {
             if (string.IsNullOrWhiteSpace(module.EfCoreConfigureMethodName))
             {
@@ -122,7 +123,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!skipDbMigrations)
             {
-                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name); 
+                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject); 
             }
         }
 
