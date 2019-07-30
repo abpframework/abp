@@ -41,9 +41,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string name,
             string version = null)
         {
+            var latestVersion = await GetLatestTemplateVersionAsync(name);
             if (version == null)
             {
-                version = await GetLatestTemplateVersionAsync(name);
+                version = latestVersion;
             }
 
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
@@ -52,7 +53,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             if (Options.CacheTemplates && File.Exists(localCacheFile))
             {
                 Logger.LogInformation("Using cached template: " + name + ", version: " + version);
-                return new TemplateFile(File.ReadAllBytes(localCacheFile), version);
+                return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion);
             }
 
             Logger.LogInformation("Downloading template: " + name + ", version: " + version);
@@ -70,7 +71,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 File.WriteAllBytes(localCacheFile, fileContent);
             }
 
-            return new TemplateFile(fileContent, version);
+            return new TemplateFile(fileContent, version, latestVersion);
         }
 
         private async Task<string> GetLatestTemplateVersionAsync(string name)
