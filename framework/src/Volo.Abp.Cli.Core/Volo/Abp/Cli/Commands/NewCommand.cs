@@ -47,7 +47,8 @@ namespace Volo.Abp.Cli.Commands
                     SolutionName.Parse(commandLineArgs.Target),
                     commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long),
                     commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long),
-                    GetDatabaseProviderOrNull(commandLineArgs),
+                    GetDatabaseProvider(commandLineArgs),
+                    GetUiFramework(commandLineArgs),
                     commandLineArgs.Options
                 )
             );
@@ -94,6 +95,7 @@ namespace Volo.Abp.Cli.Commands
                         {
                             StreamUtils.Copy(zipInputStream, streamWriter, buffer);
                         }
+
                         zipEntry = zipInputStream.GetNextEntry();
                     }
                 }
@@ -138,7 +140,7 @@ namespace Volo.Abp.Cli.Commands
             return "Generates a new solution based on the ABP startup templates.";
         }
 
-        protected virtual DatabaseProvider GetDatabaseProviderOrNull(CommandLineArgs commandLineArgs)
+        protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseProvider.Short, Options.DatabaseProvider.Long);
             switch (optionValue)
@@ -149,6 +151,20 @@ namespace Volo.Abp.Cli.Commands
                     return DatabaseProvider.MongoDb;
                 default:
                     return DatabaseProvider.NotSpecified;
+            }
+        }
+
+        private UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
+        {
+            var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
+            switch (optionValue)
+            {
+                case "mvc":
+                    return UiFramework.Mvc;
+                case "angular":
+                    return UiFramework.Angular;
+                default:
+                    return UiFramework.NotSpecified;
             }
         }
 
@@ -176,6 +192,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "v";
                 public const string Long = "version";
+            }
+
+            public static class UiFramework
+            {
+                public const string Short = "u";
+                public const string Long = "ui";
             }
         }
     }

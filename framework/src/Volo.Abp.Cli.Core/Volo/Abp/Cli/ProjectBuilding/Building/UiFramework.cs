@@ -1,9 +1,9 @@
 ﻿namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public enum DatabaseProvider
+    public enum UiFramework
     {
         NotSpecified = 0,
-        EntityFrameworkCore = 1,
-        MongoDb = 2
+        Mvc = 1,
+        Angular = 2
     }
 }

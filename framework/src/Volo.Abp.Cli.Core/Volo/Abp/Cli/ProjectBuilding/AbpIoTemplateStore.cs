@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
-using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.IO;
@@ -40,8 +39,6 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<TemplateFile> GetAsync(
             string name,
-            DatabaseProvider databaseProvider,
-            string projectName,
             string version = null)
         {
             if (version == null)

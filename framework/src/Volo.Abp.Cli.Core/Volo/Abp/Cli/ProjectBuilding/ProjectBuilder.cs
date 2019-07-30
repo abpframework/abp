@@ -41,20 +41,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var templateInfo = GetTemplateInfo(args);
 
-            args.TemplateName = templateInfo.Name;
-
-            if (args.DatabaseProvider == DatabaseProvider.NotSpecified)
-            {
-                if (templateInfo.DefaultDatabaseProvider != DatabaseProvider.NotSpecified)
-                {
-                    args.DatabaseProvider = templateInfo.DefaultDatabaseProvider;
-                }
-            }
+            NormalizeArgs(args, templateInfo);
 
             var templateFile = await TemplateStore.GetAsync(
                 args.TemplateName,
-                args.DatabaseProvider,
-                args.SolutionName.FullName,
                 args.Version
             );
 
@@ -64,7 +54,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args
             );
 
-            ProjectBuildPipelineBuilder.Build(context).Execute(context);
+            ProjectBuildPipelineBuilder.Build(context).Execute();
 
             if (!templateInfo.DocumentUrl.IsNullOrEmpty())
             {
@@ -92,6 +82,30 @@ namespace Volo.Abp.Cli.ProjectBuilding
             });
 
             return new ProjectBuildResult(context.Result.ZipContent, args.SolutionName.ProjectName);
+        }
+
+        private static void NormalizeArgs(ProjectBuildArgs args, TemplateInfo templateInfo)
+        {
+            if (args.TemplateName.IsNullOrEmpty())
+            {
+                args.TemplateName = templateInfo.Name;
+            }
+
+            if (args.DatabaseProvider == DatabaseProvider.NotSpecified)
+            {
+                if (templateInfo.DefaultDatabaseProvider != DatabaseProvider.NotSpecified)
+                {
+                    args.DatabaseProvider = templateInfo.DefaultDatabaseProvider;
+                }
+            }
+
+            if (args.UiFramework == UiFramework.NotSpecified)
+            {
+                if (templateInfo.DefaultUiFramework != UiFramework.NotSpecified)
+                {
+                    args.UiFramework = templateInfo.DefaultUiFramework;
+                }
+            }
         }
 
         private TemplateInfo GetTemplateInfo(ProjectBuildArgs args)
