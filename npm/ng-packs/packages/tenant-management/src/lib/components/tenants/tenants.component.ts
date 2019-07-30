@@ -12,7 +12,7 @@ import {
   TenantManagementGetById,
   TenantManagementUpdate,
 } from '../../actions/tenant-management.actions';
-import { TenantManagementService } from '../../services';
+import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 
 @Component({

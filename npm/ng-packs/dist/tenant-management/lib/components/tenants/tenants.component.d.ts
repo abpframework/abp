@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { TenantManagementService } from '../../services';
+import { TenantManagementService } from '../../services/tenant-management.service';
 export declare class TenantsComponent {
     private confirmationService;
     private tenantService;

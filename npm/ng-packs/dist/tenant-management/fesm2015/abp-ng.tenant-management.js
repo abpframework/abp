@@ -649,5 +649,5 @@ var TenantManagement;
     TenantManagement.DefaultConnectionStringRequest = DefaultConnectionStringRequest;
 })(TenantManagement || (TenantManagement = {}));
 
-export { TENANT_MANAGEMENT_ROUTES, TenantManagementAdd, TenantManagementDelete, TenantManagementGet, TenantManagementGetById, TenantManagementModule, TenantManagementService, TenantManagementState, TenantManagementUpdate, TenantsComponent, TenantsResolver, TenantsComponent as ɵa, TenantManagementState as ɵb, TenantManagementService as ɵc, TenantManagementGet as ɵd, TenantManagementGetById as ɵe, TenantManagementAdd as ɵf, TenantManagementUpdate as ɵg, TenantManagementDelete as ɵh, TenantManagementService as ɵj, TenantManagementRoutingModule as ɵk, TenantsResolver as ɵl };
+export { TENANT_MANAGEMENT_ROUTES, TenantManagementAdd, TenantManagementDelete, TenantManagementGet, TenantManagementGetById, TenantManagementModule, TenantManagementService, TenantManagementState, TenantManagementUpdate, TenantsComponent, TenantsResolver, TenantsComponent as ɵa, TenantManagementState as ɵb, TenantManagementService as ɵc, TenantManagementGet as ɵd, TenantManagementGetById as ɵe, TenantManagementAdd as ɵf, TenantManagementUpdate as ɵg, TenantManagementDelete as ɵh, TenantManagementRoutingModule as ɵj, TenantsResolver as ɵk };
 //# sourceMappingURL=abp-ng.tenant-management.js.map

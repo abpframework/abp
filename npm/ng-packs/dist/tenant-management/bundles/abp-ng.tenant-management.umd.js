@@ -812,9 +812,8 @@
     exports.ɵf = TenantManagementAdd;
     exports.ɵg = TenantManagementUpdate;
     exports.ɵh = TenantManagementDelete;
-    exports.ɵj = TenantManagementService;
-    exports.ɵk = TenantManagementRoutingModule;
-    exports.ɵl = TenantsResolver;
+    exports.ɵj = TenantManagementRoutingModule;
+    exports.ɵk = TenantsResolver;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
