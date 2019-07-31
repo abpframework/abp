@@ -1,6 +1,6 @@
-## Getting Started With the ASP.NET Core MVC Template
+## Getting Started With the Angular Startup Template
 
-This tutorial explains how to create a new ASP.NET Core MVC web application using the startup template, configure and run it.
+This tutorial explain how to create a new Angular application using the startup template, configure and run it.
 
 ### Creating a New Project
 
@@ -15,12 +15,12 @@ dotnet tool install -g Volo.Abp.Cli
 Use `abp new` command in an empty folder to create your project:
 
 ````bash
-abp new Acme.BookStore
+abp new Acme.BookStore -u angular
 ````
 
 > You can use different level of namespaces; e.g. BookStore, Acme.BookStore or Acme.Retail.BookStore.
 
-`new` command creates a **layered MVC application** with **Entity Framework Core** as the database provider. However, it has additional options. See the [CLI documentation](CLI.md) for all available options.
+`-u angular` option specifies the UI framework to be Angular. Default database provider is EF Core. See the [CLI documentation](CLI.md) for all available options.
 
 #### Pre Requirements
 
@@ -33,15 +33,15 @@ The created solution requires;
 
 Open the solution in **Visual Studio**:
 
-![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
+![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-for-spa.png)
 
 The solution has a layered structure (based on [Domain Driven Design](Domain-Driven-Design.md)) and contains unit & integration test projects properly configured to work with **EF Core** & **SQLite in-memory** database.
 
-> See [MVC application template document](Startup-Templates/Mvc.md) to understand the solution structure in details.
+> See the [Application Template Document](Startup-Templates/Application.md) to understand the solution structure in details.
 
 ### Database Connection String
 
-Check the **connection string** in the `appsettings.json` file under the `.Web` project:
+Check the **connection string** in the `appsettings.json` file under the `.HttpApi.Host` project:
 
 ````json
 {
@@ -87,16 +87,36 @@ This will create a new database based on the configured connection string.
 
 ### Running the Application
 
-Ensure that the `.Web` project is the startup project. Run the application which will open the **home** page in your browser:
+#### Run the API Host (Server Side)
 
-![bookstore-homepage](images/bookstore-homepage.png)
+Ensure that the `.HttpApi.Host` project is the startup project and un the application which will open a Swagger UI:
 
-Click the **Login** button, enter `admin` as the username and `1q2w3E*` as the password to login to the application.
+![bookstore-homepage](images/bookstore-swagger-ui-host.png)
 
-The startup template includes the **identity management** and **tenant management** modules. Once you login, the Administration menu will be available where you can manage **tenants**, **roles**, **users** and their **permissions**. User management page is shown below:
+You can see the application APIs and test them here. Get [more info](https://swagger.io/tools/swagger-ui/) about the Swagger UI.
 
-![bookstore-user-management](images/bookstore-user-management-v2.png)
+##### Authorization for the Swagger UI
+
+Most of the application APIs require authentication & authorization. If you want to test authorized APIs, manually go to the `/Account/Login` page, enter `admin` as the username and `1q2w3E*` as the password to login to the application. Then you will be able to execute authorized APIs too.
+
+#### Run the Angular Application (Client Side)
+
+Go to the `angular` folder, open a command line terminal, type the `yarn` command (we suggest to the [yarn](https://yarnpkg.com) package manager while npm install will also work in most cases):
+
+````bash
+yarn
+````
+
+Once all node modules are loaded, execute `yarn start` or `npm start` command:
+
+````bash
+yarn start
+````
+
+Open your favorite browser and go to `localhost:4200` URL. Initial username is `admin` and password is `1q2w3E*`.
+
+The startup template includes the **identity management** and **tenant management** modules. Once you login, the Administration menu will be available where you can manage **tenants**, **roles**, **users** and their **permissions**.
 
 ### What's Next?
 
-* [Application development tutorial](Tutorials/AspNetCore-Mvc/Part-I.md)
+* [Application development tutorial](Tutorials/Angular/Part-I.md)

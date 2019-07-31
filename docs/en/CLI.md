@@ -34,20 +34,25 @@ Example:
 abp new Acme.BookStore
 ````
 
-* Acme.BookStore is the solution name here.
+* `Acme.BookStore` is the solution name here.
 * Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
 
 #### Options
 
-* `--template` or `-t`: Specifies the template name. Default template name is `mvc`. Available templates:
-  * `mvc` (default): ASP.NET Core [MVC application template](Startup-Templates/Mvc.md). Additional options:
+* `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
+  * `app` (default): [Application template](Startup-Templates/Application.md). Additional options:
+    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+      * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
+        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
+      * `angular`: Angular. There are some additional options for this template:
+        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-    * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-  *  `mvc-module`: ASP.NET Core [MVC module template](Startup-Templates/Mvc-Module.md). Additional options:
+  *  `mvc-module`: ASP.NET Core [module template](Startup-Templates/Mvc-Module.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
+* `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 
 ### add-package
 
@@ -103,7 +108,7 @@ abp add-module Volo.Blogging
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP NuGet related packages and NPM packages in a solution or project to the latest versions.
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
 
 Usage:
 

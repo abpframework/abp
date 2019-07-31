@@ -1,13 +1,11 @@
-﻿# MVC Application Startup Template
+﻿# Application Startup Template
 
 ## Introduction
 
-This template provides a layered (or tiered, based on the preference) application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices.
+This template provides a layered application structure based on the [Domain Driven Design](../Domain-Driven-Design.md) (DDD) practices. This document explains the solution structure and projects in details. If you want to start quickly, follow the guides below:
 
-This document explains the solution structure and projects in details.
-
-* See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.
-* See the [ASP.NET Core MVC Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template.
+* See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template (uses MVC as the UI framework and Entity Framework Core as the database provider).
+* See the [ASP.NET Core MVC Tutorial](../Tutorials/AspNetCore-Mvc/Part-I.md) to learn how to develop applications using this template (uses MVC as the UI framework and Entity Framework Core as the database provider).
 
 ## How to Start With?
 
@@ -22,11 +20,24 @@ dotnet tool install -g Volo.Abp.Cli
 Then use the `abp new` command in an empty folder to create a new solution:
 
 ````bash
-abp new Acme.BookStore -t mvc
+abp new Acme.BookStore -t app
 ````
 
 * `Acme.BookStore` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
-* This example specified the template name (`-t` or `--template` option). However, `mvc` is already the default template if you don't specify it.
+* This example specified the template name (`-t` or `--template` option). However, `app` is already the default template if you don't specify it.
+
+### Specify the UI Framework
+
+This template provides multiple UI frameworks:
+
+* `mvc`: ASP.NET Core MVC UI with Razor Pages (default)
+* `angular`: Angular UI
+
+Use `-u` or `--ui` option to specify the UI framework:
+
+````bash
+abp new Acme.BookStore -u angular
+````
 
 ### Specify the Database Provider
 
@@ -41,23 +52,13 @@ Use `-d` (or `--database-provider`) option to specify the database provider:
 abp new Acme.BookStore -d mongodb
 ````
 
-### Create a Tiered Solution
-
-`--tiered` option is used to create a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-
-````bash
-abp new Acme.BookStore --tiered
-````
-
-See the "Tiered Structure" section below for the tiered approach.
-
 ## Solution Structure
 
 Based on the options you've specified, you will get a slightly different solution structure.
 
 ### Default Structure
 
-If you don't specify any option, you will have a solution like shown below:
+If you don't specify any additional option, you will have a solution like shown below:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
@@ -161,7 +162,7 @@ Most of time you don't need to manually create C# client proxies, thanks to ABP'
 
 #### .Web Project
 
-This project contains the User Interface (UI) of the application. It contains razor pages, JavaScript files, style files, images and so on...
+This project contains the User Interface (UI) of the application if you are using ASP.NET Core MVC UI. It contains Razor pages, JavaScript files, CSS files, images and so on...
 
 This project contains the main `appsettings.json` file that contains the connection string and other configuration of the application.
 
@@ -182,10 +183,10 @@ The solution has multiple test projects, one for each layer:
 * `.Domain.Tests` is used to test the domain layer.
 * `.Application.Tests` is used to test the application layer.
 * `.EntityFrameworkCore.Tests` is used to test EF Core configuration and custom repositories.
-* `.Web.Tests` is used to test the UI.
+* `.Web.Tests` is used to test the UI (if you are using ASP.NET Core MVC UI).
 * `.TestBase` is a base (shared) project for all tests.
 
-In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a Dotnet application.
+In addition, `.HttpApi.Client.ConsoleTestApp` is a console application (not an automated test project) which demonstrate the usage of HTTP APIs from a .NET application.
 
 Test projects are prepared for integration testing;
 
@@ -203,7 +204,7 @@ See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspN
 
 ### Tiered Structure
 
-If you specify the `--tiered` option as described above, the solution created will be a tiered solution. The purpose of the tiered structure is to be able to **deploy Web application and HTTP API to different servers**:
+If you have selected the ASP.NET Core UI and specified the `--tiered` option, the solution created will be a tiered solution. The purpose of the tiered structure is to be able to **deploy Web application and HTTP API to different servers**:
 
 ![bookstore-visual-studio-solution-v3](../images/tiered-solution-servers.png)
 
@@ -253,6 +254,19 @@ You should run the application with the given order:
 * First, run the `.IdentityServer` since other applications depends on it.
 * Then run the `.HttpApi.Host` since it is used by the `.Web` application.
 * Finally, you can run the `.Web` project and login to the application (using `admin` as the username and `1q2w3E*` as the password).
+
+### Angular UI
+
+If you choose Angular as the UI framework (using the `-u angular` option), the solution is separated into two folders:
+
+* `angular` folder contains the Angular UI solution, the client side.
+* `aspnet-core` folder contains the ASP.NET Core solution, the server side.
+
+Server side is very similar to the solution described above. `.HttpApi.Host` project serves the API, so the Angular application can consume it.
+
+The files under the `angular/src/environments` folder has the essential configuration of the application.
+
+#### 
 
 ## What's Next?
 
