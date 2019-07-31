@@ -15,7 +15,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
 
         private readonly List<string> _buildInSslUrls;
 
-        public TemplateRandomSslPortStep(List<string> buildInSslSslUrls, int minSslPort = 44300,
+        public TemplateRandomSslPortStep(
+            List<string> buildInSslSslUrls, 
+            int minSslPort = 44300,
             int maxSslPort = 44399)
         {
             _buildInSslUrls = buildInSslSslUrls;

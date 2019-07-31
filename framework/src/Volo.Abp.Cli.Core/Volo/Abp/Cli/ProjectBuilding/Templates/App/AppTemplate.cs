@@ -67,6 +67,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
                     steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep());
                 }
+
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
             }
 
             if (context.BuildArgs.UiFramework != UiFramework.Mvc)
@@ -74,6 +76,18 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+
+                if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+                    steps.Add(new AngularEnvironmentFilePortChangeForSeparatedIdentityServersStep());
+                }
+                else
+                {
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                    steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+                }
             }
 
             if (context.BuildArgs.UiFramework != UiFramework.Angular)
@@ -90,7 +104,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                         "https://localhost:44300",
                         "https://localhost:44301",
                         "https://localhost:44302",
-                        "https://localhost:44303"
+                        "https://localhost:44303",
+                        "https://localhost:44305"
                     }
                 )
             );
