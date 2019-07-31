@@ -53,17 +53,19 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("It should be used in a folder containing a .sln file.");
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp add-module <module-name> [-s|--solution]");
+            sb.AppendLine("  abp add-module <module-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
             sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
+            sb.AppendLine("");
             sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
             sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }

@@ -111,26 +111,33 @@ namespace Volo.Abp.Cli.Commands
 
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp new <project-name> [-t|--template] [-d|--database-provider] [-o|--output-folder]");
+            sb.AppendLine("");
+            sb.AppendLine("  abp new <project-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
+            sb.AppendLine("");
             sb.AppendLine("-t|--template <template-name>               (default: app)");
+            sb.AppendLine("-u|--ui <ui-framework>                      (if supported by the template)");
+            sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
-            sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
+            sb.AppendLine("--no-ui                                     (if supported by the template)");
+            sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
+            sb.AppendLine("");
             sb.AppendLine("  abp new Acme.BookStore");
             sb.AppendLine("  abp new Acme.BookStore --tiered");
+            sb.AppendLine("  abp new Acme.BookStore -u angular");
+            sb.AppendLine("  abp new Acme.BookStore -u angular -d mongodb");
+            sb.AppendLine("  abp new Acme.BookStore -d mongodb");
+            sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t mvc-module");
             sb.AppendLine("  abp new Acme.BookStore -t mvc-module no-ui");
-            sb.AppendLine("  abp new Acme.BookStore -d mongodb");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc -d mongodb");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc -d mongodb -o d:\\project");
             sb.AppendLine("");
-            sb.AppendLine("See the documentation for more info.");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }
