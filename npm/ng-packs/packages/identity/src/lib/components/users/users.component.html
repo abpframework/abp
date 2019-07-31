@@ -77,7 +77,7 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" *ngIf="isModalVisible" [centered]="true">
+<abp-modal [(visible)]="isModalVisible" *ngIf="isModalVisible">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>

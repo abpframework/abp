@@ -36,11 +36,11 @@ export class TenantsComponent {
 
   defaultConnectionString: string;
 
-  _useSharedDatabase: boolean;
-
   isModalVisible: boolean;
 
   selectedModalContent = {} as SelectedModalContent;
+
+  _useSharedDatabase: boolean;
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -50,13 +50,13 @@ export class TenantsComponent {
     return this.defaultConnectionStringForm.get('defaultConnectionString').value;
   }
 
-  @ViewChild('TenantModalTemplate', { static: false })
+  @ViewChild('tenantModalTemplate', { static: false })
   tenantModalTemplate: TemplateRef<any>;
 
-  @ViewChild('ConnectionStringModalTemplate', { static: false })
+  @ViewChild('connectionStringModalTemplate', { static: false })
   connectionStringModalTemplate: TemplateRef<any>;
 
-  @ViewChild('FeaturesModalTemplate', { static: false })
+  @ViewChild('featuresModalTemplate', { static: false })
   featuresModalTemplate: TemplateRef<any>;
 
   constructor(

@@ -33,7 +33,7 @@
     </form>
   </ng-template>
   <ng-template #abpFooter>
-    <button type="button" class="btn btn-secondary" #abpClose>
+    <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
     <button type="button" class="btn btn-primary" (click)="onSubmit()">

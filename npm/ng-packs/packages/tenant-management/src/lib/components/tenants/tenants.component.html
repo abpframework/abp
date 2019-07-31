@@ -88,7 +88,7 @@
   </div>
 </div>
 
-<abp-modal *ngIf="isModalVisible" size="md" [(visible)]="isModalVisible" [centered]="true">
+<abp-modal [(visible)]="isModalVisible" *ngIf="isModalVisible">
   <ng-template #abpHeader>
     <h3>{{ selectedModalContent.title | abpLocalization }}</h3>
   </ng-template>
@@ -107,7 +107,7 @@
   </ng-template>
 </abp-modal>
 
-<ng-template #TenantModalTemplate>
+<ng-template #tenantModalTemplate>
   <form [formGroup]="tenantForm">
     <div class="mt-2">
       <div class="form-group">
@@ -118,7 +118,7 @@
   </form>
 </ng-template>
 
-<ng-template #ConnectionStringModalTemplate>
+<ng-template #connectionStringModalTemplate>
   <form [formGroup]="defaultConnectionStringForm">
     <div class="mt-2">
       <div class="form-group">
@@ -144,6 +144,6 @@
   </form>
 </ng-template>
 
-<ng-template #FeaturesModalTemplate>
+<ng-template #featuresModalTemplate>
   Manage Features
 </ng-template>
