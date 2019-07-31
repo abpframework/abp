@@ -8,8 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
+using Volo.Abp.Account.Web;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
@@ -24,7 +27,10 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
-        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
+        typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+        typeof(AbpAccountWebIdentityServerModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
@@ -69,11 +75,11 @@ namespace MyCompanyName.MyProjectName
 
         private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
         {
-            context.Services.AddAuthentication("Bearer")
+            context.Services.AddAuthentication()
                 .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = configuration["AuthServer:Authority"];
-                    options.RequireHttpsMetadata = true;
+                    options.RequireHttpsMetadata = false;
                     options.ApiName = "MyProjectName";
                 });
         }
@@ -133,6 +139,7 @@ namespace MyCompanyName.MyProjectName
             {
                 app.UseMultiTenancy();
             }
+            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>
