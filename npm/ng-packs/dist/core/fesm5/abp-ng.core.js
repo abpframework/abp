@@ -4,7 +4,7 @@ import { Router, NavigationEnd, RouterModule } from '@angular/router';
 import { Store, Action, Selector, State, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { NEVER, throwError, of, Subject, Observable, ReplaySubject } from 'rxjs';
 import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { take, catchError, tap, switchMap, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { take, catchError, tap, switchMap, takeUntil, finalize, distinctUntilChanged } from 'rxjs/operators';
 import snq from 'snq';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Navigate, NgxsRouterPluginModule } from '@ngxs/router-plugin';
@@ -29,6 +29,25 @@ var ConfigGetAppConfiguration = /** @class */ (function () {
     }
     ConfigGetAppConfiguration.type = '[Config] Get App Configuration';
     return ConfigGetAppConfiguration;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var LoaderStart = /** @class */ (function () {
+    function LoaderStart(payload) {
+        this.payload = payload;
+    }
+    LoaderStart.type = '[Loader] Start';
+    return LoaderStart;
+}());
+var LoaderStop = /** @class */ (function () {
+    function LoaderStop(payload) {
+        this.payload = payload;
+    }
+    LoaderStop.type = '[Loader] Stop';
+    return LoaderStop;
 }());
 
 /**
@@ -1308,6 +1327,8 @@ var ApiInterceptor = /** @class */ (function () {
      * @return {?}
      */
     function (request, next) {
+        var _this = this;
+        this.store.dispatch(new LoaderStart(request));
         /** @type {?} */
         var headers = (/** @type {?} */ ({}));
         /** @type {?} */
@@ -1320,9 +1341,14 @@ var ApiInterceptor = /** @class */ (function () {
         if (!request.headers.has('Accept-Language') && lang) {
             headers['Accept-Language'] = lang;
         }
-        return next.handle(request.clone({
+        return next
+            .handle(request.clone({
             setHeaders: headers,
-        }));
+        }))
+            .pipe(finalize((/**
+         * @return {?}
+         */
+        function () { return _this.store.dispatch(new LoaderStop(request)); })));
     };
     ApiInterceptor.decorators = [
         { type: Injectable }
@@ -1861,5 +1887,5 @@ var CoreModule = /** @class */ (function () {
     return CoreModule;
 }());
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, CONFIG, ConfigGetAppConfiguration, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileChangePassword, ProfileGet, ProfileService, ProfileState, ProfileUpdate, Rest, RestOccurError, RestService, RouterOutletComponent, SessionSetLanguage, SessionState, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, RestService as ɵc, ProfileGet as ɵd, ProfileUpdate as ɵe, ProfileChangePassword as ɵf, SessionState as ɵh, SessionSetLanguage as ɵi, ConfigState as ɵj, ApplicationConfigurationService as ɵk, PatchRouteByName as ɵl, ConfigGetAppConfiguration as ɵm, RouterOutletComponent as ɵn, DynamicLayoutComponent as ɵo, ConfigState as ɵp, PermissionDirective as ɵq, VisibilityDirective as ɵr, LocalizationPipe as ɵs, NGXS_CONFIG_PLUGIN_OPTIONS as ɵt, ConfigPlugin as ɵu, ApiInterceptor as ɵw, getInitialData as ɵx };
+export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, CONFIG, ConfigGetAppConfiguration, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, LazyLoadService, LoaderStart, LoaderStop, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileChangePassword, ProfileGet, ProfileService, ProfileState, ProfileUpdate, Rest, RestOccurError, RestService, RouterOutletComponent, SessionSetLanguage, SessionState, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, RestService as ɵc, ProfileGet as ɵd, ProfileUpdate as ɵe, ProfileChangePassword as ɵf, SessionState as ɵh, SessionSetLanguage as ɵi, ConfigState as ɵj, ApplicationConfigurationService as ɵk, PatchRouteByName as ɵl, ConfigGetAppConfiguration as ɵm, RouterOutletComponent as ɵn, DynamicLayoutComponent as ɵo, ConfigState as ɵp, PermissionDirective as ɵq, VisibilityDirective as ɵr, LocalizationPipe as ɵs, NGXS_CONFIG_PLUGIN_OPTIONS as ɵt, ConfigPlugin as ɵu, ApiInterceptor as ɵw, getInitialData as ɵx };
 //# sourceMappingURL=abp-ng.core.js.map

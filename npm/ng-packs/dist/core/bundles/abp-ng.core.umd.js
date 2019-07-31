@@ -101,6 +101,25 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var LoaderStart = /** @class */ (function () {
+        function LoaderStart(payload) {
+            this.payload = payload;
+        }
+        LoaderStart.type = '[Loader] Start';
+        return LoaderStart;
+    }());
+    var LoaderStop = /** @class */ (function () {
+        function LoaderStop(payload) {
+            this.payload = payload;
+        }
+        LoaderStop.type = '[Loader] Stop';
+        return LoaderStop;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var ProfileGet = /** @class */ (function () {
         function ProfileGet() {
         }
@@ -1374,6 +1393,8 @@
          * @return {?}
          */
         function (request, next) {
+            var _this = this;
+            this.store.dispatch(new LoaderStart(request));
             /** @type {?} */
             var headers = (/** @type {?} */ ({}));
             /** @type {?} */
@@ -1386,9 +1407,14 @@
             if (!request.headers.has('Accept-Language') && lang) {
                 headers['Accept-Language'] = lang;
             }
-            return next.handle(request.clone({
+            return next
+                .handle(request.clone({
                 setHeaders: headers,
-            }));
+            }))
+                .pipe(operators.finalize((/**
+             * @return {?}
+             */
+            function () { return _this.store.dispatch(new LoaderStop(request)); })));
         };
         ApiInterceptor.decorators = [
             { type: core.Injectable }
@@ -1939,6 +1965,8 @@
     exports.DynamicLayoutComponent = DynamicLayoutComponent;
     exports.ENVIRONMENT = ENVIRONMENT;
     exports.LazyLoadService = LazyLoadService;
+    exports.LoaderStart = LoaderStart;
+    exports.LoaderStop = LoaderStop;
     exports.LocalizationService = LocalizationService;
     exports.NGXS_CONFIG_PLUGIN_OPTIONS = NGXS_CONFIG_PLUGIN_OPTIONS;
     exports.PatchRouteByName = PatchRouteByName;
