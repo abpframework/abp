@@ -59,7 +59,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Options:");
             sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
             sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
-            sb.AppendLine("  sp|startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
+            sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current solution.");
