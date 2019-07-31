@@ -6,7 +6,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
     {
         public static ProjectBuildPipeline Build(ProjectBuildContext context)
         {
-            var pipeline = new ProjectBuildPipeline();
+            var pipeline = new ProjectBuildPipeline(context);
 
             pipeline.Steps.Add(new FileEntryListReadStep());
 
