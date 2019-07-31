@@ -5,9 +5,11 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from } from 'rxjs';
+import { from, throwError } from 'rxjs';
+import { ToasterService, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { switchMap, tap, catchError, finalize } from 'rxjs/operators';
+import snq from 'snq';
 import { validatePassword, NgxValidateCoreModule } from '@ngx-validate/core';
-import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableModule } from 'primeng/table';
 
@@ -21,12 +23,14 @@ class LoginComponent {
      * @param {?} fb
      * @param {?} oauthService
      * @param {?} store
+     * @param {?} toasterService
      * @param {?} options
      */
-    constructor(fb, oauthService, store, options) {
+    constructor(fb, oauthService, store, toasterService, options) {
         this.fb = fb;
         this.oauthService = oauthService;
         this.store = store;
+        this.toasterService = toasterService;
         this.options = options;
         this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
         this.oauthService.loadDiscoveryDocument();
@@ -43,31 +47,42 @@ class LoginComponent {
         if (this.form.invalid)
             return;
         this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
-        from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value)).subscribe({
-            next: (/**
+        this.inProgress = true;
+        from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value))
+            .pipe(switchMap((/**
+         * @return {?}
+         */
+        () => this.store.dispatch(new ConfigGetAppConfiguration()))), tap((/**
+         * @return {?}
+         */
+        () => {
+            /** @type {?} */
+            const redirectUrl = snq((/**
              * @return {?}
              */
-            () => {
-                /** @type {?} */
-                const redirectUrl = window.history.state.redirectUrl || this.options.redirectUrl;
-                this.store
-                    .dispatch(new ConfigGetAppConfiguration())
-                    .subscribe((/**
-                 * @return {?}
-                 */
-                () => this.store.dispatch(new Navigate([redirectUrl || '/']))));
-            }),
-            error: (/**
+            () => window.history.state)).redirectUrl || (this.options || {}).redirectUrl || '/';
+            this.store.dispatch(new Navigate([redirectUrl]));
+        })), catchError((/**
+         * @param {?} err
+         * @return {?}
+         */
+        err => {
+            this.toasterService.error(snq((/**
              * @return {?}
              */
-            () => console.error('an error occured')),
-        });
+            () => err.error.error_description), 'An error occured.'), 'Error');
+            return throwError(err);
+        })), finalize((/**
+         * @return {?}
+         */
+        () => (this.inProgress = false))))
+            .subscribe();
     }
 }
 LoginComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-login',
-                template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button type=\"button\" name=\"Action\" value=\"Cancel\" class=\"btn btn-secondary\">\n            {{ 'AbpAccount::Cancel' | abpLocalization }}\n          </button>\n          <button type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button type=\"button\" name=\"Action\" value=\"Cancel\" class=\"btn btn-secondary\">\n            {{ 'AbpAccount::Cancel' | abpLocalization }}\n          </button>\n          <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
             }] }
 ];
 /** @nocollapse */
@@ -75,6 +90,7 @@ LoginComponent.ctorParameters = () => [
     { type: FormBuilder },
     { type: OAuthService },
     { type: Store },
+    { type: ToasterService },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: ['ACCOUNT_OPTIONS',] }] }
 ];
 

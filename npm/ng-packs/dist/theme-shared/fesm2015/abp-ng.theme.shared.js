@@ -1,13 +1,13 @@
-import { RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, EventEmitter, Renderer2, Input, Output, ContentChild, ElementRef, ViewChild, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { LoaderStart, LoaderStop, RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, EventEmitter, Renderer2, Output, ContentChild, ElementRef, ViewChild, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, APP_INITIALIZER, NgModule } from '@angular/core';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
 import { Subject, timer, fromEvent, forkJoin } from 'rxjs';
-import { take, debounceTime, takeUntil, filter } from 'rxjs/operators';
+import { filter, take, debounceTime, takeUntil } from 'rxjs/operators';
+import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
-import { ofActionSuccessful, Actions, Store } from '@ngxs/store';
 
 /**
  * @fileoverview added by tsickle
@@ -163,6 +163,150 @@ ConfirmationComponent.decorators = [
 ConfirmationComponent.ctorParameters = () => [
     { type: ConfirmationService }
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class Error500Component {
+    /**
+     * @param {?} store
+     */
+    constructor(store) {
+        this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() { }
+}
+Error500Component.decorators = [
+    { type: Component, args: [{
+                selector: 'abp-error-500',
+                template: `
+    <div class="error">
+      <div class="row centered">
+        <div class="col-md-12">
+          <div class="error-template">
+            <h1>
+              Oops!
+            </h1>
+            <div class="error-details">
+              Sorry, an error has occured.
+            </div>
+            <div class="error-actions">
+              <a routerLink="/" class="btn btn-primary btn-md mt-2"
+                ><span class="glyphicon glyphicon-home"></span> Take Me Home
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+                styles: [".error{position:fixed;top:0;background-color:#fff;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)}"]
+            }] }
+];
+/** @nocollapse */
+Error500Component.ctorParameters = () => [
+    { type: Store }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class LoaderBarComponent {
+    /**
+     * @param {?} actions
+     */
+    constructor(actions) {
+        this.actions = actions;
+        this.containerClass = 'abp-loader-bar';
+        this.progressClass = 'abp-progress';
+        this.isLoading = false;
+        this.filter = (/**
+         * @param {?} action
+         * @return {?}
+         */
+        (action) => action.payload.url.indexOf('openid-configuration') < 0);
+        this.progressLevel = 0;
+        actions
+            .pipe(ofActionSuccessful(LoaderStart, LoaderStop), filter(this.filter))
+            .subscribe((/**
+         * @param {?} action
+         * @return {?}
+         */
+        action => {
+            if (action instanceof LoaderStart) {
+                this.startLoading();
+            }
+            else {
+                this.stopLoading();
+            }
+        }));
+    }
+    /**
+     * @return {?}
+     */
+    startLoading() {
+        this.isLoading = true;
+        /** @type {?} */
+        const interval = setInterval((/**
+         * @return {?}
+         */
+        () => {
+            if (this.progressLevel < 75) {
+                this.progressLevel += Math.random() * 10;
+            }
+            else if (this.progressLevel < 90) {
+                this.progressLevel += 0.4;
+            }
+            else if (this.progressLevel < 100) {
+                this.progressLevel += 0.1;
+            }
+            else {
+                clearInterval(interval);
+            }
+        }), 300);
+        this.interval = interval;
+    }
+    /**
+     * @return {?}
+     */
+    stopLoading() {
+        clearInterval(this.interval);
+        this.progressLevel = 100;
+        this.isLoading = false;
+        setTimeout((/**
+         * @return {?}
+         */
+        () => {
+            this.progressLevel = 0;
+        }), 800);
+    }
+}
+LoaderBarComponent.decorators = [
+    { type: Component, args: [{
+                selector: 'abp-loader-bar',
+                template: `
+    <div id="abp-loader-bar" [ngClass]="containerClass" [class.is-loading]="isLoading">
+      <div [ngClass]="progressClass" [style.width.vw]="progressLevel"></div>
+    </div>
+  `,
+                styles: [".abp-loader-bar{left:0;opacity:0;position:fixed;top:0;transition:opacity .4s linear .4s;z-index:99999}.abp-loader-bar.is-loading{opacity:1;transition:none}.abp-loader-bar .abp-progress{background:#77b6ff;box-shadow:0 0 10px rgba(119,182,255,.7);height:2px;left:0;position:fixed;top:0;transition:width .4s}"]
+            }] }
+];
+/** @nocollapse */
+LoaderBarComponent.ctorParameters = () => [
+    { type: Actions }
+];
+LoaderBarComponent.propDecorators = {
+    containerClass: [{ type: Input }],
+    progressClass: [{ type: Input }],
+    isLoading: [{ type: Input }],
+    filter: [{ type: Input }]
+};
 
 /**
  * @fileoverview added by tsickle
@@ -491,11 +635,19 @@ class ErrorHandler {
      * @param {?} actions
      * @param {?} store
      * @param {?} confirmationService
+     * @param {?} appRef
+     * @param {?} cfRes
+     * @param {?} rendererFactory
+     * @param {?} injector
      */
-    constructor(actions, store, confirmationService) {
+    constructor(actions, store, confirmationService, appRef, cfRes, rendererFactory, injector) {
         this.actions = actions;
         this.store = store;
         this.confirmationService = confirmationService;
+        this.appRef = appRef;
+        this.cfRes = cfRes;
+        this.rendererFactory = rendererFactory;
+        this.injector = injector;
         actions.pipe(ofActionSuccessful(RestOccurError)).subscribe((/**
          * @param {?} res
          * @return {?}
@@ -529,6 +681,14 @@ class ErrorHandler {
                         break;
                     case 404:
                         this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
+                        break;
+                    case 500:
+                        this.show500Component();
+                        break;
+                    case 0:
+                        if (((/** @type {?} */ (err))).statusText === 'Unknown Error') {
+                            this.show500Component();
+                        }
                         break;
                     default:
                         this.showError(DEFAULTS.defaultError.details, DEFAULTS.defaultError.message);
@@ -568,6 +728,20 @@ class ErrorHandler {
             state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
         }));
     }
+    /**
+     * @private
+     * @return {?}
+     */
+    show500Component() {
+        /** @type {?} */
+        const renderer = this.rendererFactory.createRenderer(null, null);
+        /** @type {?} */
+        const host = renderer.selectRootElement('app-root', true);
+        /** @type {?} */
+        const componentRef = this.cfRes.resolveComponentFactory(Error500Component).create(this.injector);
+        this.appRef.attachView(componentRef.hostView);
+        renderer.appendChild(host, ((/** @type {?} */ (componentRef.hostView))).rootNodes[0]);
+    }
 }
 ErrorHandler.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
@@ -576,9 +750,13 @@ ErrorHandler.decorators = [
 ErrorHandler.ctorParameters = () => [
     { type: Actions },
     { type: Store },
-    { type: ConfirmationService }
+    { type: ConfirmationService },
+    { type: ApplicationRef },
+    { type: ComponentFactoryResolver },
+    { type: RendererFactory2 },
+    { type: Injector }
 ];
-/** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService)); }, token: ErrorHandler, providedIn: "root" });
+/** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService), ɵɵinject(ApplicationRef), ɵɵinject(ComponentFactoryResolver), ɵɵinject(RendererFactory2), ɵɵinject(INJECTOR)); }, token: ErrorHandler, providedIn: "root" });
 
 /**
  * @fileoverview added by tsickle
@@ -629,8 +807,9 @@ ThemeSharedModule.decorators = [
                         targetSelector: '.form-group',
                     }),
                 ],
-                declarations: [ConfirmationComponent, ToastComponent, ModalComponent],
-                exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent],
+                declarations: [ConfirmationComponent, ToastComponent, ModalComponent, Error500Component, LoaderBarComponent],
+                exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+                entryComponents: [Error500Component],
             },] }
 ];
 
@@ -682,5 +861,5 @@ ToasterService.decorators = [
 ];
 /** @nocollapse */ ToasterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(ɵɵinject(MessageService)); }, token: ToasterService, providedIn: "root" });
 
-export { ConfirmationComponent, ConfirmationService, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, ConfirmationComponent as ɵa, ConfirmationService as ɵb, AbstractToasterClass as ɵc, ToastComponent as ɵd, ModalComponent as ɵe, ErrorHandler as ɵf };
+export { ConfirmationComponent, ConfirmationService, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, ConfirmationComponent as ɵa, ConfirmationService as ɵb, AbstractToasterClass as ɵc, ToastComponent as ɵd, ModalComponent as ɵe, Error500Component as ɵf, LoaderBarComponent as ɵg, ErrorHandler as ɵh };
 //# sourceMappingURL=abp-ng.theme.shared.js.map

@@ -129,7 +129,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: '/api/identity/role',
+            url: '/api/identity/roles',
         };
         return this.rest.request(request);
     }
@@ -141,7 +141,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: `/api/identity/role/${id}`,
+            url: `/api/identity/roles/${id}`,
         };
         return this.rest.request(request);
     }
@@ -153,7 +153,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'DELETE',
-            url: `/api/identity/role/${id}`,
+            url: `/api/identity/roles/${id}`,
         };
         return this.rest.request(request);
     }
@@ -165,7 +165,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'POST',
-            url: '/api/identity/role',
+            url: '/api/identity/roles',
             body,
         };
         return this.rest.request(request);
@@ -176,7 +176,7 @@ class IdentityService {
      */
     updateRole(body) {
         /** @type {?} */
-        const url = `/api/identity/role/${body.id}`;
+        const url = `/api/identity/roles/${body.id}`;
         delete body.id;
         /** @type {?} */
         const request = {
@@ -194,7 +194,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: '/api/identity/user',
+            url: '/api/identity/users',
             params,
         };
         return this.rest.request(request);
@@ -207,7 +207,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: `/api/identity/user/${id}`,
+            url: `/api/identity/users/${id}`,
         };
         return this.rest.request(request);
     }
@@ -219,7 +219,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: `/api/identity/user/${id}/roles`,
+            url: `/api/identity/users/${id}/roles`,
         };
         return this.rest.request(request);
     }
@@ -231,7 +231,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'DELETE',
-            url: `/api/identity/user/${id}`,
+            url: `/api/identity/users/${id}`,
         };
         return this.rest.request(request);
     }
@@ -243,7 +243,7 @@ class IdentityService {
         /** @type {?} */
         const request = {
             method: 'POST',
-            url: '/api/identity/user',
+            url: '/api/identity/users',
             body,
         };
         return this.rest.request(request);

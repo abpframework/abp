@@ -4,8 +4,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from } from 'rxjs';
+import { from, throwError } from 'rxjs';
 import { Options } from '../../models/options';
+import { ToasterService } from '@abp/ng.theme.shared';
+import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import snq from 'snq';
 
 const { maxLength, minLength, required } = Validators;
 
@@ -16,10 +19,13 @@ const { maxLength, minLength, required } = Validators;
 export class LoginComponent {
   form: FormGroup;
 
+  inProgress: boolean;
+
   constructor(
     private fb: FormBuilder,
     private oauthService: OAuthService,
     private store: Store,
+    private toasterService: ToasterService,
     @Optional() @Inject('ACCOUNT_OPTIONS') private options: Options,
   ) {
     this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
@@ -34,20 +40,24 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.form.invalid) return;
-
     this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
 
+    this.inProgress = true;
     from(
       this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value),
-    ).subscribe({
-      next: () => {
-        const redirectUrl = window.history.state.redirectUrl || this.options.redirectUrl;
-
-        this.store
-          .dispatch(new ConfigGetAppConfiguration())
-          .subscribe(() => this.store.dispatch(new Navigate([redirectUrl || '/'])));
-      },
-      error: () => console.error('an error occured'),
-    });
+    )
+      .pipe(
+        switchMap(() => this.store.dispatch(new ConfigGetAppConfiguration())),
+        tap(() => {
+          const redirectUrl = snq(() => window.history.state).redirectUrl || (this.options || {}).redirectUrl || '/';
+          this.store.dispatch(new Navigate([redirectUrl]));
+        }),
+        catchError(err => {
+          this.toasterService.error(snq(() => err.error.error_description, 'An error occured.'), 'Error');
+          return throwError(err);
+        }),
+        finalize(() => (this.inProgress = false)),
+      )
+      .subscribe();
   }
 }

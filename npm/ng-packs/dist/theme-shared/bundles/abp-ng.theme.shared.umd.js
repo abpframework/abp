@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/components/common/messageservice'), require('primeng/toast'), require('rxjs'), require('rxjs/operators'), require('@ngxs/router-plugin'), require('@ngxs/store')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.theme.shared', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/components/common/messageservice', 'primeng/toast', 'rxjs', 'rxjs/operators', '@ngxs/router-plugin', '@ngxs/store'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.shared = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.core$1, global.messageservice, global.toast, global.rxjs, global.rxjs.operators, global.routerPlugin, global.store));
-}(this, function (exports, ng_core, core, ngBootstrap, core$1, messageservice, toast, rxjs, operators, routerPlugin, store) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/components/common/messageservice'), require('primeng/toast'), require('rxjs'), require('rxjs/operators'), require('@ngxs/store'), require('@ngxs/router-plugin')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.theme.shared', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/components/common/messageservice', 'primeng/toast', 'rxjs', 'rxjs/operators', '@ngxs/store', '@ngxs/router-plugin'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.shared = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.core$1, global.messageservice, global.toast, global.rxjs, global.rxjs.operators, global.store, global.routerPlugin));
+}(this, function (exports, ng_core, core, ngBootstrap, core$1, messageservice, toast, rxjs, operators, store, routerPlugin) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -233,6 +233,134 @@
             { type: ConfirmationService }
         ]; };
         return ConfirmationComponent;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var Error500Component = /** @class */ (function () {
+        function Error500Component(store) {
+            this.store = store;
+        }
+        /**
+         * @return {?}
+         */
+        Error500Component.prototype.ngOnInit = /**
+         * @return {?}
+         */
+        function () { };
+        Error500Component.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-error-500',
+                        template: "\n    <div class=\"error\">\n      <div class=\"row centered\">\n        <div class=\"col-md-12\">\n          <div class=\"error-template\">\n            <h1>\n              Oops!\n            </h1>\n            <div class=\"error-details\">\n              Sorry, an error has occured.\n            </div>\n            <div class=\"error-actions\">\n              <a routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\n                ><span class=\"glyphicon glyphicon-home\"></span> Take Me Home\n              </a>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  ",
+                        styles: [".error{position:fixed;top:0;background-color:#fff;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)}"]
+                    }] }
+        ];
+        /** @nocollapse */
+        Error500Component.ctorParameters = function () { return [
+            { type: store.Store }
+        ]; };
+        return Error500Component;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var LoaderBarComponent = /** @class */ (function () {
+        function LoaderBarComponent(actions) {
+            var _this = this;
+            this.actions = actions;
+            this.containerClass = 'abp-loader-bar';
+            this.progressClass = 'abp-progress';
+            this.isLoading = false;
+            this.filter = (/**
+             * @param {?} action
+             * @return {?}
+             */
+            function (action) { return action.payload.url.indexOf('openid-configuration') < 0; });
+            this.progressLevel = 0;
+            actions
+                .pipe(store.ofActionSuccessful(ng_core.LoaderStart, ng_core.LoaderStop), operators.filter(this.filter))
+                .subscribe((/**
+             * @param {?} action
+             * @return {?}
+             */
+            function (action) {
+                if (action instanceof ng_core.LoaderStart) {
+                    _this.startLoading();
+                }
+                else {
+                    _this.stopLoading();
+                }
+            }));
+        }
+        /**
+         * @return {?}
+         */
+        LoaderBarComponent.prototype.startLoading = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            this.isLoading = true;
+            /** @type {?} */
+            var interval = setInterval((/**
+             * @return {?}
+             */
+            function () {
+                if (_this.progressLevel < 75) {
+                    _this.progressLevel += Math.random() * 10;
+                }
+                else if (_this.progressLevel < 90) {
+                    _this.progressLevel += 0.4;
+                }
+                else if (_this.progressLevel < 100) {
+                    _this.progressLevel += 0.1;
+                }
+                else {
+                    clearInterval(interval);
+                }
+            }), 300);
+            this.interval = interval;
+        };
+        /**
+         * @return {?}
+         */
+        LoaderBarComponent.prototype.stopLoading = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            clearInterval(this.interval);
+            this.progressLevel = 100;
+            this.isLoading = false;
+            setTimeout((/**
+             * @return {?}
+             */
+            function () {
+                _this.progressLevel = 0;
+            }), 800);
+        };
+        LoaderBarComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-loader-bar',
+                        template: "\n    <div id=\"abp-loader-bar\" [ngClass]=\"containerClass\" [class.is-loading]=\"isLoading\">\n      <div [ngClass]=\"progressClass\" [style.width.vw]=\"progressLevel\"></div>\n    </div>\n  ",
+                        styles: [".abp-loader-bar{left:0;opacity:0;position:fixed;top:0;transition:opacity .4s linear .4s;z-index:99999}.abp-loader-bar.is-loading{opacity:1;transition:none}.abp-loader-bar .abp-progress{background:#77b6ff;box-shadow:0 0 10px rgba(119,182,255,.7);height:2px;left:0;position:fixed;top:0;transition:width .4s}"]
+                    }] }
+        ];
+        /** @nocollapse */
+        LoaderBarComponent.ctorParameters = function () { return [
+            { type: store.Actions }
+        ]; };
+        LoaderBarComponent.propDecorators = {
+            containerClass: [{ type: core.Input }],
+            progressClass: [{ type: core.Input }],
+            isLoading: [{ type: core.Input }],
+            filter: [{ type: core.Input }]
+        };
+        return LoaderBarComponent;
     }());
 
     /**
@@ -504,11 +632,15 @@
         },
     };
     var ErrorHandler = /** @class */ (function () {
-        function ErrorHandler(actions, store$1, confirmationService) {
+        function ErrorHandler(actions, store$1, confirmationService, appRef, cfRes, rendererFactory, injector) {
             var _this = this;
             this.actions = actions;
             this.store = store$1;
             this.confirmationService = confirmationService;
+            this.appRef = appRef;
+            this.cfRes = cfRes;
+            this.rendererFactory = rendererFactory;
+            this.injector = injector;
             actions.pipe(store.ofActionSuccessful(ng_core.RestOccurError)).subscribe((/**
              * @param {?} res
              * @return {?}
@@ -544,6 +676,14 @@
                             break;
                         case 404:
                             _this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
+                            break;
+                        case 500:
+                            _this.show500Component();
+                            break;
+                        case 0:
+                            if (((/** @type {?} */ (err))).statusText === 'Unknown Error') {
+                                _this.show500Component();
+                            }
                             break;
                         default:
                             _this.showError(DEFAULTS.defaultError.details, DEFAULTS.defaultError.message);
@@ -594,6 +734,24 @@
                 state: { redirectUrl: this.store.selectSnapshot(routerPlugin.RouterState).state.url },
             }));
         };
+        /**
+         * @private
+         * @return {?}
+         */
+        ErrorHandler.prototype.show500Component = /**
+         * @private
+         * @return {?}
+         */
+        function () {
+            /** @type {?} */
+            var renderer = this.rendererFactory.createRenderer(null, null);
+            /** @type {?} */
+            var host = renderer.selectRootElement('app-root', true);
+            /** @type {?} */
+            var componentRef = this.cfRes.resolveComponentFactory(Error500Component).create(this.injector);
+            this.appRef.attachView(componentRef.hostView);
+            renderer.appendChild(host, ((/** @type {?} */ (componentRef.hostView))).rootNodes[0]);
+        };
         ErrorHandler.decorators = [
             { type: core.Injectable, args: [{ providedIn: 'root' },] }
         ];
@@ -601,9 +759,13 @@
         ErrorHandler.ctorParameters = function () { return [
             { type: store.Actions },
             { type: store.Store },
-            { type: ConfirmationService }
+            { type: ConfirmationService },
+            { type: core.ApplicationRef },
+            { type: core.ComponentFactoryResolver },
+            { type: core.RendererFactory2 },
+            { type: core.Injector }
         ]; };
-        /** @nocollapse */ ErrorHandler.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(core.ɵɵinject(store.Actions), core.ɵɵinject(store.Store), core.ɵɵinject(ConfirmationService)); }, token: ErrorHandler, providedIn: "root" });
+        /** @nocollapse */ ErrorHandler.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(core.ɵɵinject(store.Actions), core.ɵɵinject(store.Store), core.ɵɵinject(ConfirmationService), core.ɵɵinject(core.ApplicationRef), core.ɵɵinject(core.ComponentFactoryResolver), core.ɵɵinject(core.RendererFactory2), core.ɵɵinject(core.INJECTOR)); }, token: ErrorHandler, providedIn: "root" });
         return ErrorHandler;
     }());
 
@@ -660,8 +822,9 @@
                                 targetSelector: '.form-group',
                             }),
                         ],
-                        declarations: [ConfirmationComponent, ToastComponent, ModalComponent],
-                        exports: [ngBootstrap.NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent],
+                        declarations: [ConfirmationComponent, ToastComponent, ModalComponent, Error500Component, LoaderBarComponent],
+                        exports: [ngBootstrap.NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+                        entryComponents: [Error500Component],
                     },] }
         ];
         return ThemeSharedModule;
@@ -737,7 +900,9 @@
     exports.ɵc = AbstractToasterClass;
     exports.ɵd = ToastComponent;
     exports.ɵe = ModalComponent;
-    exports.ɵf = ErrorHandler;
+    exports.ɵf = Error500Component;
+    exports.ɵg = LoaderBarComponent;
+    exports.ɵh = ErrorHandler;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

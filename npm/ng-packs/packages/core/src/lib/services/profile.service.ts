@@ -12,7 +12,7 @@ export class ProfileService {
   get(): Observable<Profile.Response> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: '/api/identity/profile',
+      url: '/api/identity/my-profile',
     };
 
     return this.rest.request<null, Profile.Response>(request);
@@ -21,7 +21,7 @@ export class ProfileService {
   update(body: Profile.Response): Observable<Profile.Response> {
     const request: Rest.Request<Profile.Response> = {
       method: 'PUT',
-      url: '/api/identity/profile',
+      url: '/api/identity/my-profile',
       body,
     };
 
@@ -31,7 +31,7 @@ export class ProfileService {
   changePassword(body: Profile.ChangePasswordRequest): Observable<null> {
     const request: Rest.Request<Profile.ChangePasswordRequest> = {
       method: 'POST',
-      url: '/api/identity/profile/changePassword',
+      url: '/api/identity/my-profile/changePassword',
       body,
     };
 

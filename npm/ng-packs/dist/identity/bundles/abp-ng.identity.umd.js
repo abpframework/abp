@@ -159,7 +159,7 @@
             /** @type {?} */
             var request = {
                 method: 'GET',
-                url: '/api/identity/role',
+                url: '/api/identity/roles',
             };
             return this.rest.request(request);
         };
@@ -175,7 +175,7 @@
             /** @type {?} */
             var request = {
                 method: 'GET',
-                url: "/api/identity/role/" + id,
+                url: "/api/identity/roles/" + id,
             };
             return this.rest.request(request);
         };
@@ -191,7 +191,7 @@
             /** @type {?} */
             var request = {
                 method: 'DELETE',
-                url: "/api/identity/role/" + id,
+                url: "/api/identity/roles/" + id,
             };
             return this.rest.request(request);
         };
@@ -207,7 +207,7 @@
             /** @type {?} */
             var request = {
                 method: 'POST',
-                url: '/api/identity/role',
+                url: '/api/identity/roles',
                 body: body,
             };
             return this.rest.request(request);
@@ -222,7 +222,7 @@
          */
         function (body) {
             /** @type {?} */
-            var url = "/api/identity/role/" + body.id;
+            var url = "/api/identity/roles/" + body.id;
             delete body.id;
             /** @type {?} */
             var request = {
@@ -245,7 +245,7 @@
             /** @type {?} */
             var request = {
                 method: 'GET',
-                url: '/api/identity/user',
+                url: '/api/identity/users',
                 params: params,
             };
             return this.rest.request(request);
@@ -262,7 +262,7 @@
             /** @type {?} */
             var request = {
                 method: 'GET',
-                url: "/api/identity/user/" + id,
+                url: "/api/identity/users/" + id,
             };
             return this.rest.request(request);
         };
@@ -278,7 +278,7 @@
             /** @type {?} */
             var request = {
                 method: 'GET',
-                url: "/api/identity/user/" + id + "/roles",
+                url: "/api/identity/users/" + id + "/roles",
             };
             return this.rest.request(request);
         };
@@ -294,7 +294,7 @@
             /** @type {?} */
             var request = {
                 method: 'DELETE',
-                url: "/api/identity/user/" + id,
+                url: "/api/identity/users/" + id,
             };
             return this.rest.request(request);
         };
@@ -310,7 +310,7 @@
             /** @type {?} */
             var request = {
                 method: 'POST',
-                url: '/api/identity/user',
+                url: '/api/identity/users',
                 body: body,
             };
             return this.rest.request(request);

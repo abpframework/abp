@@ -1,8 +1,10 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@angular/router'), require('@angular/forms'), require('@ngxs/router-plugin'), require('@ngxs/store'), require('angular-oauth2-oidc'), require('rxjs'), require('@ngx-validate/core'), require('@abp/ng.theme.shared'), require('@ng-bootstrap/ng-bootstrap'), require('primeng/table')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.account', ['exports', '@abp/ng.core', '@angular/core', '@angular/router', '@angular/forms', '@ngxs/router-plugin', '@ngxs/store', 'angular-oauth2-oidc', 'rxjs', '@ngx-validate/core', '@abp/ng.theme.shared', '@ng-bootstrap/ng-bootstrap', 'primeng/table'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = {}), global.ng_core, global.ng.core, global.ng.router, global.ng.forms, global.routerPlugin, global.store, global.angularOauth2Oidc, global.rxjs, global.core$1, global.ng_theme_shared, global.ngBootstrap, global.table));
-}(this, function (exports, ng_core, core, router, forms, routerPlugin, store, angularOauth2Oidc, rxjs, core$1, ng_theme_shared, ngBootstrap, table) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@angular/router'), require('@angular/forms'), require('@ngxs/router-plugin'), require('@ngxs/store'), require('angular-oauth2-oidc'), require('rxjs'), require('@abp/ng.theme.shared'), require('rxjs/operators'), require('snq'), require('@ngx-validate/core'), require('@ng-bootstrap/ng-bootstrap'), require('primeng/table')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.account', ['exports', '@abp/ng.core', '@angular/core', '@angular/router', '@angular/forms', '@ngxs/router-plugin', '@ngxs/store', 'angular-oauth2-oidc', 'rxjs', '@abp/ng.theme.shared', 'rxjs/operators', 'snq', '@ngx-validate/core', '@ng-bootstrap/ng-bootstrap', 'primeng/table'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = {}), global.ng_core, global.ng.core, global.ng.router, global.ng.forms, global.routerPlugin, global.store, global.angularOauth2Oidc, global.rxjs, global.ng_theme_shared, global.rxjs.operators, global.snq, global.core$1, global.ngBootstrap, global.table));
+}(this, function (exports, ng_core, core, router, forms, routerPlugin, store, angularOauth2Oidc, rxjs, ng_theme_shared, operators, snq, core$1, ngBootstrap, table) { 'use strict';
+
+    snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -36,10 +38,11 @@
      */
     var maxLength = forms.Validators.maxLength, minLength = forms.Validators.minLength, required = forms.Validators.required;
     var LoginComponent = /** @class */ (function () {
-        function LoginComponent(fb, oauthService, store, options) {
+        function LoginComponent(fb, oauthService, store, toasterService, options) {
             this.fb = fb;
             this.oauthService = oauthService;
             this.store = store;
+            this.toasterService = toasterService;
             this.options = options;
             this.oauthService.configure(this.store.selectSnapshot(ng_core.ConfigState.getOne('environment')).oAuthConfig);
             this.oauthService.loadDiscoveryDocument();
@@ -60,30 +63,41 @@
             if (this.form.invalid)
                 return;
             this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
-            rxjs.from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value)).subscribe({
-                next: (/**
+            this.inProgress = true;
+            rxjs.from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value))
+                .pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return _this.store.dispatch(new ng_core.ConfigGetAppConfiguration()); })), operators.tap((/**
+             * @return {?}
+             */
+            function () {
+                /** @type {?} */
+                var redirectUrl = snq((/**
                  * @return {?}
                  */
-                function () {
-                    /** @type {?} */
-                    var redirectUrl = window.history.state.redirectUrl || _this.options.redirectUrl;
-                    _this.store
-                        .dispatch(new ng_core.ConfigGetAppConfiguration())
-                        .subscribe((/**
-                     * @return {?}
-                     */
-                    function () { return _this.store.dispatch(new routerPlugin.Navigate([redirectUrl || '/'])); }));
-                }),
-                error: (/**
+                function () { return window.history.state; })).redirectUrl || (_this.options || {}).redirectUrl || '/';
+                _this.store.dispatch(new routerPlugin.Navigate([redirectUrl]));
+            })), operators.catchError((/**
+             * @param {?} err
+             * @return {?}
+             */
+            function (err) {
+                _this.toasterService.error(snq((/**
                  * @return {?}
                  */
-                function () { return console.error('an error occured'); }),
-            });
+                function () { return err.error.error_description; }), 'An error occured.'), 'Error');
+                return rxjs.throwError(err);
+            })), operators.finalize((/**
+             * @return {?}
+             */
+            function () { return (_this.inProgress = false); })))
+                .subscribe();
         };
         LoginComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-login',
-                        template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button type=\"button\" name=\"Action\" value=\"Cancel\" class=\"btn btn-secondary\">\n            {{ 'AbpAccount::Cancel' | abpLocalization }}\n          </button>\n          <button type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                        template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button type=\"button\" name=\"Action\" value=\"Cancel\" class=\"btn btn-secondary\">\n            {{ 'AbpAccount::Cancel' | abpLocalization }}\n          </button>\n          <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -91,6 +105,7 @@
             { type: forms.FormBuilder },
             { type: angularOauth2Oidc.OAuthService },
             { type: store.Store },
+            { type: ng_theme_shared.ToasterService },
             { type: undefined, decorators: [{ type: core.Optional }, { type: core.Inject, args: ['ACCOUNT_OPTIONS',] }] }
         ]; };
         return LoginComponent;

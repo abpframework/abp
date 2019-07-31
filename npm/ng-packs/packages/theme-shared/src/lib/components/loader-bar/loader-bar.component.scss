@@ -1,0 +1,23 @@
+.abp-loader-bar {
+  left: 0;
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  transition: opacity 0.4s linear 0.4s;
+  z-index: 99999;
+
+  &.is-loading {
+    opacity: 1;
+    transition: none;
+  }
+
+  .abp-progress {
+    background: #77b6ff;
+    box-shadow: 0 0 10px rgba(119, 182, 255, 0.7);
+    height: 2px;
+    left: 0;
+    position: fixed;
+    top: 0;
+    transition: width 0.4s ease;
+  }
+}

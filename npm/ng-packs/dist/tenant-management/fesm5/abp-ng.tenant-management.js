@@ -67,7 +67,7 @@ var TenantManagementService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'GET',
-            url: '/api/multi-tenancy/tenant',
+            url: '/api/multi-tenancy/tenants',
         };
         return this.rest.request(request);
     };
@@ -83,7 +83,7 @@ var TenantManagementService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'GET',
-            url: "/api/multi-tenancy/tenant/" + id,
+            url: "/api/multi-tenancy/tenants/" + id,
         };
         return this.rest.request(request);
     };
@@ -99,7 +99,7 @@ var TenantManagementService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'DELETE',
-            url: "/api/multi-tenancy/tenant/" + id,
+            url: "/api/multi-tenancy/tenants/" + id,
         };
         return this.rest.request(request);
     };
@@ -115,7 +115,7 @@ var TenantManagementService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'POST',
-            url: "/api/multi-tenancy/tenant",
+            url: "/api/multi-tenancy/tenants",
             body: body,
         };
         return this.rest.request(request);
@@ -130,7 +130,7 @@ var TenantManagementService = /** @class */ (function () {
      */
     function (body) {
         /** @type {?} */
-        var url = "/api/multi-tenancy/tenant/" + body.id;
+        var url = "/api/multi-tenancy/tenants/" + body.id;
         delete body.id;
         /** @type {?} */
         var request = {
@@ -150,7 +150,7 @@ var TenantManagementService = /** @class */ (function () {
      */
     function (id) {
         /** @type {?} */
-        var url = "/api/multi-tenancy/tenant/" + id + "/defaultConnectionString";
+        var url = "/api/multi-tenancy/tenants/" + id + "/defaultConnectionString";
         /** @type {?} */
         var request = {
             method: 'GET',
@@ -169,7 +169,7 @@ var TenantManagementService = /** @class */ (function () {
      */
     function (payload) {
         /** @type {?} */
-        var url = "/api/multi-tenancy/tenant/" + payload.id + "/defaultConnectionString";
+        var url = "/api/multi-tenancy/tenants/" + payload.id + "/defaultConnectionString";
         /** @type {?} */
         var request = {
             method: 'PUT',
