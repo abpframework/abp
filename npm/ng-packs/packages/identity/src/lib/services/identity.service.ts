@@ -12,7 +12,7 @@ export class IdentityService {
   getRoles(): Observable<Identity.RoleResponse> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: '/api/identity/role',
+      url: '/api/identity/roles',
     };
 
     return this.rest.request<null, Identity.RoleResponse>(request);
@@ -21,7 +21,7 @@ export class IdentityService {
   getRoleById(id: string): Observable<Identity.RoleItem> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: `/api/identity/role/${id}`,
+      url: `/api/identity/roles/${id}`,
     };
 
     return this.rest.request<null, Identity.RoleItem>(request);
@@ -30,7 +30,7 @@ export class IdentityService {
   deleteRole(id: string): Observable<Identity.RoleItem> {
     const request: Rest.Request<null> = {
       method: 'DELETE',
-      url: `/api/identity/role/${id}`,
+      url: `/api/identity/roles/${id}`,
     };
 
     return this.rest.request<null, Identity.RoleItem>(request);
@@ -39,7 +39,7 @@ export class IdentityService {
   addRole(body: Identity.RoleSaveRequest): Observable<Identity.RoleItem> {
     const request: Rest.Request<Identity.RoleSaveRequest> = {
       method: 'POST',
-      url: '/api/identity/role',
+      url: '/api/identity/roles',
       body,
     };
 
@@ -47,7 +47,7 @@ export class IdentityService {
   }
 
   updateRole(body: Identity.RoleItem): Observable<Identity.RoleItem> {
-    const url = `/api/identity/role/${body.id}`;
+    const url = `/api/identity/roles/${body.id}`;
     delete body.id;
 
     const request: Rest.Request<Identity.RoleItem> = {
@@ -62,7 +62,7 @@ export class IdentityService {
   getUsers(params = {} as ABP.PageQueryParams): Observable<Identity.UserResponse> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: '/api/identity/user',
+      url: '/api/identity/users',
       params,
     };
 
@@ -72,7 +72,7 @@ export class IdentityService {
   getUserById(id: string): Observable<Identity.UserItem> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: `/api/identity/user/${id}`,
+      url: `/api/identity/users/${id}`,
     };
 
     return this.rest.request<null, Identity.UserItem>(request);
@@ -81,7 +81,7 @@ export class IdentityService {
   getUserRoles(id: string): Observable<Identity.RoleResponse> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: `/api/identity/user/${id}/roles`,
+      url: `/api/identity/users/${id}/roles`,
     };
 
     return this.rest.request<null, Identity.RoleResponse>(request);
@@ -90,7 +90,7 @@ export class IdentityService {
   deleteUser(id: string): Observable<null> {
     const request: Rest.Request<null> = {
       method: 'DELETE',
-      url: `/api/identity/user/${id}`,
+      url: `/api/identity/users/${id}`,
     };
 
     return this.rest.request<null, null>(request);
@@ -99,7 +99,7 @@ export class IdentityService {
   addUser(body: Identity.UserSaveRequest): Observable<Identity.UserItem> {
     const request: Rest.Request<Identity.UserSaveRequest> = {
       method: 'POST',
-      url: '/api/identity/user',
+      url: '/api/identity/users',
       body,
     };
 

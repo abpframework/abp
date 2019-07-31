@@ -49,8 +49,8 @@ export class LoginComponent {
       .pipe(
         switchMap(() => this.store.dispatch(new ConfigGetAppConfiguration())),
         tap(() => {
-          const redirectUrl = (window.history.state || {}).redirectUrl || (this.options || {}).redirectUrl;
-          this.store.dispatch(new Navigate([redirectUrl || '/']));
+          const redirectUrl = snq(() => window.history.state).redirectUrl || (this.options || {}).redirectUrl || '/';
+          this.store.dispatch(new Navigate([redirectUrl]));
         }),
         catchError(err => {
           this.toasterService.error(snq(() => err.error.error_description, 'An error occured.'), 'Error');
