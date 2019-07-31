@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -11,7 +12,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         public override void Execute(ProjectBuildContext context)
         {
             var nugetPackageVersion = context.TemplateFile.Version;
-            if (nugetPackageVersion.StartsWith(CliConsts.BranchPrefix))
+            if (IsBranchName(nugetPackageVersion))
             {
                 nugetPackageVersion = context.TemplateFile.LatestVersion;
             }
@@ -22,6 +23,25 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                 "MyProjectName",
                 nugetPackageVersion
             ).Run();
+        }
+
+        private bool IsBranchName(string versionOrBranchName)
+        {
+            Check.NotNullOrWhiteSpace(versionOrBranchName, nameof(versionOrBranchName));
+
+            if (char.IsDigit(versionOrBranchName[0]))
+            {
+                return false;
+            }
+
+            if (versionOrBranchName[0].IsIn('v','V') &&
+                versionOrBranchName.Length > 1 && 
+                char.IsDigit(versionOrBranchName[1]))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private class NugetReferenceReplacer

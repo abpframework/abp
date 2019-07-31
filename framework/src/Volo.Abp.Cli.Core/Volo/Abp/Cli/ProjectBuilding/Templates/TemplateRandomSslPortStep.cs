@@ -16,7 +16,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
         private readonly List<string> _buildInSslUrls;
 
         public TemplateRandomSslPortStep(
-            List<string> buildInSslSslUrls, 
+            List<string> buildInSslSslUrls,
             int minSslPort = 44300,
             int maxSslPort = 44399)
         {
@@ -47,7 +47,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
             if (context.Template.Name == AppTemplate.TemplateName)
             {
                 // no tiered
-                if (launchSettings.Count == 1&& launchSettings.First().Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json", StringComparison.InvariantCultureIgnoreCase))
+                if (launchSettings.Count == 1 &&
+                    launchSettings.First().Name
+                        .Equals("/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var dbMigrator = appSettings.FirstOrDefault(x =>
                         x.Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
