@@ -185,7 +185,7 @@ var ProfileService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'GET',
-            url: '/api/identity/profile',
+            url: '/api/identity/my-profile',
         };
         return this.rest.request(request);
     };
@@ -201,7 +201,7 @@ var ProfileService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'PUT',
-            url: '/api/identity/profile',
+            url: '/api/identity/my-profile',
             body: body,
         };
         return this.rest.request(request);
@@ -218,7 +218,7 @@ var ProfileService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'POST',
-            url: '/api/identity/profile/changePassword',
+            url: '/api/identity/my-profile/changePassword',
             body: body,
         };
         return this.rest.request(request);

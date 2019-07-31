@@ -184,7 +184,7 @@ class ProfileService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: '/api/identity/profile',
+            url: '/api/identity/my-profile',
         };
         return this.rest.request(request);
     }
@@ -196,7 +196,7 @@ class ProfileService {
         /** @type {?} */
         const request = {
             method: 'PUT',
-            url: '/api/identity/profile',
+            url: '/api/identity/my-profile',
             body,
         };
         return this.rest.request(request);
@@ -209,7 +209,7 @@ class ProfileService {
         /** @type {?} */
         const request = {
             method: 'POST',
-            url: '/api/identity/profile/changePassword',
+            url: '/api/identity/my-profile/changePassword',
             body,
         };
         return this.rest.request(request);

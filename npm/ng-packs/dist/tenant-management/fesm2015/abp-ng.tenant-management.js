@@ -72,7 +72,7 @@ class TenantManagementService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: '/api/multi-tenancy/tenant',
+            url: '/api/multi-tenancy/tenants',
         };
         return this.rest.request(request);
     }
@@ -84,7 +84,7 @@ class TenantManagementService {
         /** @type {?} */
         const request = {
             method: 'GET',
-            url: `/api/multi-tenancy/tenant/${id}`,
+            url: `/api/multi-tenancy/tenants/${id}`,
         };
         return this.rest.request(request);
     }
@@ -96,7 +96,7 @@ class TenantManagementService {
         /** @type {?} */
         const request = {
             method: 'DELETE',
-            url: `/api/multi-tenancy/tenant/${id}`,
+            url: `/api/multi-tenancy/tenants/${id}`,
         };
         return this.rest.request(request);
     }
@@ -108,7 +108,7 @@ class TenantManagementService {
         /** @type {?} */
         const request = {
             method: 'POST',
-            url: `/api/multi-tenancy/tenant`,
+            url: `/api/multi-tenancy/tenants`,
             body,
         };
         return this.rest.request(request);
@@ -119,7 +119,7 @@ class TenantManagementService {
      */
     update(body) {
         /** @type {?} */
-        const url = `/api/multi-tenancy/tenant/${body.id}`;
+        const url = `/api/multi-tenancy/tenants/${body.id}`;
         delete body.id;
         /** @type {?} */
         const request = {
@@ -135,7 +135,7 @@ class TenantManagementService {
      */
     getDefaultConnectionString(id) {
         /** @type {?} */
-        const url = `/api/multi-tenancy/tenant/${id}/defaultConnectionString`;
+        const url = `/api/multi-tenancy/tenants/${id}/defaultConnectionString`;
         /** @type {?} */
         const request = {
             method: 'GET',
@@ -150,7 +150,7 @@ class TenantManagementService {
      */
     updateDefaultConnectionString(payload) {
         /** @type {?} */
-        const url = `/api/multi-tenancy/tenant/${payload.id}/defaultConnectionString`;
+        const url = `/api/multi-tenancy/tenants/${payload.id}/defaultConnectionString`;
         /** @type {?} */
         const request = {
             method: 'PUT',
