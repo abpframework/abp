@@ -11,6 +11,9 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ToastComponent } from './components/toast/toast.component';
 import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
+import { Error500Component } from './components/errors/error-500.component';
+import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
+import { Options } from './models/options';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -39,11 +42,12 @@ export function appendScript(injector: Injector) {
       targetSelector: '.form-group',
     }),
   ],
-  declarations: [ConfirmationComponent, ToastComponent, ModalComponent],
-  exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent],
+  declarations: [ConfirmationComponent, ToastComponent, ModalComponent, Error500Component, LoaderBarComponent],
+  exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+  entryComponents: [Error500Component],
 })
 export class ThemeSharedModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(options = {} as Options): ModuleWithProviders {
     return {
       ngModule: ThemeSharedModule,
       providers: [

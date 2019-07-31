@@ -1,11 +1,22 @@
 import { RestOccurError } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {
+  Injectable,
+  ApplicationRef,
+  ComponentFactoryResolver,
+  RendererFactory2,
+  Inject,
+  ReflectiveInjector,
+  Injector,
+  EmbeddedViewRef,
+} from '@angular/core';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
+import { DOCUMENT } from '@angular/common';
+import { Error500Component } from '../components/errors/error-500.component';
 
 const DEFAULTS = {
   defaultError: {
@@ -31,7 +42,15 @@ const DEFAULTS = {
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  constructor(private actions: Actions, private store: Store, private confirmationService: ConfirmationService) {
+  constructor(
+    private actions: Actions,
+    private store: Store,
+    private confirmationService: ConfirmationService,
+    private appRef: ApplicationRef,
+    private cfRes: ComponentFactoryResolver,
+    private rendererFactory: RendererFactory2,
+    private injector: Injector,
+  ) {
     actions.pipe(ofActionSuccessful(RestOccurError)).subscribe(res => {
       const { payload: err = {} as HttpErrorResponse | any } = res;
       const body = (err as HttpErrorResponse).error.error;
@@ -56,6 +75,14 @@ export class ErrorHandler {
             break;
           case 404:
             this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
+            break;
+          case 500:
+            this.show500Component();
+            break;
+          case 0:
+            if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
+              this.show500Component();
+            }
             break;
           default:
             this.showError(DEFAULTS.defaultError.details, DEFAULTS.defaultError.message);
@@ -87,5 +114,13 @@ export class ErrorHandler {
         state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
       }),
     );
+  }
+
+  private show500Component() {
+    const renderer = this.rendererFactory.createRenderer(null, null);
+    const host = renderer.selectRootElement('app-root', true);
+    const componentRef = this.cfRes.resolveComponentFactory(Error500Component).create(this.injector);
+    this.appRef.attachView(componentRef.hostView);
+    renderer.appendChild(host, (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
   }
 }
