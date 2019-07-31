@@ -1,10 +1,9 @@
 import { RestService, CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Component, Renderer2, Input, Output, ViewChild, NgModule } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Component, Renderer2, Input, Output, NgModule } from '@angular/core';
 import { Action, Selector, State, Store, Select, NgxsModule } from '@ngxs/store';
 import { __decorate, __metadata } from 'tslib';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { tap, map, take, pluck } from 'rxjs/operators';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
@@ -167,12 +166,10 @@ PermissionManagementState = __decorate([
  */
 class PermissionManagementComponent {
     /**
-     * @param {?} modalService
      * @param {?} store
      * @param {?} renderer
      */
-    constructor(modalService, store, renderer) {
-        this.modalService = modalService;
+    constructor(store, renderer) {
         this.store = store;
         this.renderer = renderer;
         this.visibleChange = new EventEmitter();
@@ -185,6 +182,25 @@ class PermissionManagementComponent {
          * @return {?}
          */
         (_, item) => item.name);
+    }
+    /**
+     * @return {?}
+     */
+    get visible() {
+        return this._visible;
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set visible(value) {
+        if (!this.selectedGroup)
+            return;
+        this._visible = value;
+        this.visibleChange.emit(value);
+        if (!value) {
+            this.selectedGroup = null;
+        }
     }
     /**
      * @return {?}
@@ -391,10 +407,12 @@ class PermissionManagementComponent {
                 .subscribe((/**
              * @return {?}
              */
-            () => this.modalRef.close()));
+            () => {
+                this.visible = false;
+            }));
         }
         else {
-            this.modalRef.close();
+            this.visible = false;
         }
     }
     /**
@@ -414,8 +432,7 @@ class PermissionManagementComponent {
         (permissionRes) => {
             this.selectedGroup = permissionRes.groups[0];
             this.permissions = getPermissions(permissionRes.groups);
-            this.modalRef = this.modalService.open(this.modalContent, { size: 'lg' });
-            this.visibleChange.emit(true);
+            this.visible = true;
             setTimeout((/**
              * @return {?}
              */
@@ -423,30 +440,7 @@ class PermissionManagementComponent {
                 this.setTabCheckboxState();
                 this.setGrantCheckboxState();
             }), 0);
-            from(this.modalRef.result)
-                .pipe(take(1))
-                .subscribe((/**
-             * @param {?} data
-             * @return {?}
-             */
-            data => {
-                this.setVisible(false);
-            }), (/**
-             * @param {?} reason
-             * @return {?}
-             */
-            reason => {
-                this.setVisible(false);
-            }));
         }));
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    setVisible(value) {
-        this.visible = value;
-        this.visibleChange.emit(value);
     }
     /**
      * @param {?} __0
@@ -458,20 +452,19 @@ class PermissionManagementComponent {
         if (visible.currentValue) {
             this.openModal();
         }
-        else if (visible.currentValue === false && this.modalService.hasOpenModals()) {
-            this.modalRef.close();
+        else if (visible.currentValue === false && this.visible) {
+            this.visible = false;
         }
     }
 }
 PermissionManagementComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-permission-management',
-                template: "<ng-template #modalContent let-modal>\n  <ng-container *ngIf=\"{ entityName: entityName$ | async } as data\">\n    <div class=\"modal-header\">\n      <h4 class=\"modal-title\" id=\"modal-basic-title\">\n        {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} -\n        {{ data.entityName }}\n      </h4>\n      <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss()\">\n        <span aria-hidden=\"true\">&times;</span>\n      </button>\n    </div>\n    <div class=\"modal-body\">\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input\n          type=\"checkbox\"\n          id=\"select-all-in-all-tabs\"\n          name=\"select-all-in-all-tabs\"\n          class=\"custom-control-input\"\n          [(ngModel)]=\"selectAllTab\"\n          (click)=\"onClickSelectAll()\"\n        />\n        <label class=\"custom-control-label\" for=\"select-all-in-all-tabs\">{{\n          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization\n        }}</label>\n      </div>\n\n      <hr class=\"mt-2 mb-2\" />\n      <div class=\"row\">\n        <div class=\"col-4\">\n          <ul class=\"nav nav-pills flex-column\">\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n              <li *ngFor=\"let group of groups$ | async; trackBy: trackByFn\" class=\"nav-item\">\n                <a class=\"nav-link\" [class.active]=\"selectedGroup.name === group.name\" (click)=\"onChangeGroup(group)\">{{\n                  group.displayName\n                }}</a>\n              </li>\n            </perfect-scrollbar>\n          </ul>\n        </div>\n        <div class=\"col-8\">\n          <h4>{{ selectedGroup.displayName }}</h4>\n          <hr class=\"mt-2 mb-3\" />\n          <div class=\"pl-1 pt-1\">\n            <div class=\"custom-checkbox custom-control mb-2\">\n              <input\n                type=\"checkbox\"\n                id=\"select-all-in-this-tabs\"\n                name=\"select-all-in-this-tabs\"\n                class=\"custom-control-input\"\n                [(ngModel)]=\"selectThisTab\"\n                (click)=\"onClickSelectThisTab()\"\n              />\n              <label class=\"custom-control-label\" for=\"select-all-in-this-tabs\">{{\n                'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization\n              }}</label>\n            </div>\n            <hr class=\"mb-3\" />\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 60vh;\">\n              <div\n                *ngFor=\"let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn\"\n                [style.margin-left]=\"permission.margin + 'px'\"\n                class=\"custom-checkbox custom-control mb-2\"\n              >\n                <input\n                  #permissionCheckbox\n                  type=\"checkbox\"\n                  [checked]=\"getChecked(permission.name)\"\n                  [value]=\"getChecked(permission.name)\"\n                  [attr.id]=\"permission.name\"\n                  class=\"custom-control-input\"\n                />\n                <label\n                  class=\"custom-control-label\"\n                  [attr.for]=\"permission.name\"\n                  (click)=\"onClickCheckbox(permission, permissionCheckbox.value)\"\n                  >{{ permission.displayName }}</label\n                >\n              </div>\n            </perfect-scrollbar>\n          </div>\n        </div>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"modal.close()\">\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n      </button>\n    </div>\n  </ng-container>\n</ng-template>\n"
+                template: "<abp-modal [(visible)]=\"visible\" *ngIf=\"visible\" size=\"lg\">\n  <ng-container *ngIf=\"{ entityName: entityName$ | async } as data\">\n    <ng-template #abpHeader>\n      <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>\n    </ng-template>\n    <ng-template #abpBody>\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input\n          type=\"checkbox\"\n          id=\"select-all-in-all-tabs\"\n          name=\"select-all-in-all-tabs\"\n          class=\"custom-control-input\"\n          [(ngModel)]=\"selectAllTab\"\n          (click)=\"onClickSelectAll()\"\n        />\n        <label class=\"custom-control-label\" for=\"select-all-in-all-tabs\">{{\n          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization\n        }}</label>\n      </div>\n\n      <hr class=\"mt-2 mb-2\" />\n      <div class=\"row\">\n        <div class=\"col-4\">\n          <ul class=\"nav nav-pills flex-column\">\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n              <li *ngFor=\"let group of groups$ | async; trackBy: trackByFn\" class=\"nav-item\">\n                <a class=\"nav-link\" [class.active]=\"selectedGroup.name === group.name\" (click)=\"onChangeGroup(group)\">{{\n                  group?.displayName\n                }}</a>\n              </li>\n            </perfect-scrollbar>\n          </ul>\n        </div>\n        <div class=\"col-8\">\n          <h4>{{ selectedGroup.displayName }}</h4>\n          <hr class=\"mt-2 mb-3\" />\n          <div class=\"pl-1 pt-1\">\n            <div class=\"custom-checkbox custom-control mb-2\">\n              <input\n                type=\"checkbox\"\n                id=\"select-all-in-this-tabs\"\n                name=\"select-all-in-this-tabs\"\n                class=\"custom-control-input\"\n                [(ngModel)]=\"selectThisTab\"\n                (click)=\"onClickSelectThisTab()\"\n              />\n              <label class=\"custom-control-label\" for=\"select-all-in-this-tabs\">{{\n                'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization\n              }}</label>\n            </div>\n            <hr class=\"mb-3\" />\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 60vh;\">\n              <div\n                *ngFor=\"let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn\"\n                [style.margin-left]=\"permission.margin + 'px'\"\n                class=\"custom-checkbox custom-control mb-2\"\n              >\n                <input\n                  #permissionCheckbox\n                  type=\"checkbox\"\n                  [checked]=\"getChecked(permission.name)\"\n                  [value]=\"getChecked(permission.name)\"\n                  [attr.id]=\"permission.name\"\n                  class=\"custom-control-input\"\n                />\n                <label\n                  class=\"custom-control-label\"\n                  [attr.for]=\"permission.name\"\n                  (click)=\"onClickCheckbox(permission, permissionCheckbox.value)\"\n                  >{{ permission.displayName }}</label\n                >\n              </div>\n            </perfect-scrollbar>\n          </div>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template #abpFooter>\n      <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n      </button>\n    </ng-template>\n  </ng-container>\n</abp-modal>\n"
             }] }
 ];
 /** @nocollapse */
 PermissionManagementComponent.ctorParameters = () => [
-    { type: NgbModal },
     { type: Store },
     { type: Renderer2 }
 ];
@@ -479,8 +472,7 @@ PermissionManagementComponent.propDecorators = {
     providerName: [{ type: Input }],
     providerKey: [{ type: Input }],
     visible: [{ type: Input }],
-    visibleChange: [{ type: Output }],
-    modalContent: [{ type: ViewChild, args: ['modalContent', { static: false },] }]
+    visibleChange: [{ type: Output }]
 };
 __decorate([
     Select(PermissionManagementState.getPermissionGroups),

@@ -421,6 +421,8 @@ class ModalComponent {
         _ => {
             this.close();
         }));
+        if (!this.abpClose)
+            return;
         fromEvent(this.abpClose.nativeElement, 'click')
             .pipe(takeUntil(this.destroy$), filter((/**
          * @return {?}
@@ -572,6 +574,16 @@ var styles = `
   top: 18px;
 }
 
+.modal {
+ background-color: rgba(0, 0, 0, .6);
+}
+
+.abp-ellipsis {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 /* <animations */
 
