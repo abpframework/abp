@@ -40,15 +40,6 @@ namespace Volo.Docs.Admin
                 options.FileSets.AddEmbedded<DocsAdminWebModule>("Volo.Docs.Admin");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<DocsResource>()
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiResource))
-                    .AddVirtualJson("/Localization/Resources/Docs/Web");
-            });
-
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsAdminWebAutoMapperProfile>(validate: true);

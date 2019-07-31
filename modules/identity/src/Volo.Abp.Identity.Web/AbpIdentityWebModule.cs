@@ -45,16 +45,6 @@ namespace Volo.Abp.Identity.Web
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/AbpIdentity");
-            });
-
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);

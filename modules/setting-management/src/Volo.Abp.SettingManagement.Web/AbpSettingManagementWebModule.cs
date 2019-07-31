@@ -1,7 +1,5 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
@@ -9,7 +7,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace Volo.Abp.SettingManagement.Web
 {
     [DependsOn(
-        typeof(AbpAspNetCoreMvcUiThemeSharedModule)
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpSettingManagementDomainSharedModule)
         )]
     public class AbpSettingManagementWebModule : AbpModule
     {
@@ -23,19 +22,6 @@ namespace Volo.Abp.SettingManagement.Web
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpSettingManagementWebModule>("Volo.Abp.SettingManagement.Web");
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Add<AbpSettingManagementResource>("en");
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpSettingManagementResource>()
-                    .AddVirtualJson("/Localization/Resources/AbpSettingManagement");
             });
         }
     }
