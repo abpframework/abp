@@ -12,7 +12,7 @@
           id="create-tenants"
           class="btn btn-primary"
           type="button"
-          (click)="onAdd()"
+          (click)="onAddTenant()"
         >
           <i class="fa fa-plus mr-1"></i>
           <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
@@ -53,14 +53,14 @@
                 <button
                   [abpPermission]="'AbpTenantManagement.Tenants.Update'"
                   ngbDropdownItem
-                  (click)="onEdit(data.id)"
+                  (click)="onEditTenant(data.id)"
                 >
                   {{ 'AbpTenantManagement::Edit' | abpLocalization }}
                 </button>
                 <button
                   [abpPermission]="'AbpTenantManagement.Tenants.ManageConnectionStrings'"
                   ngbDropdownItem
-                  (click)="onEditConnStr(data.id)"
+                  (click)="onEditConnectionString(data.id)"
                 >
                   {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}
                 </button>
@@ -88,60 +88,62 @@
   </div>
 </div>
 
-<ng-template #modalWrapper let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="modal-basic-title">
-      {{ selectedModalContent.title | abpLocalization }}
-    </h5>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-      <span aria-hidden="true">&times;</span>
+<abp-modal [(visible)]="isModalVisible" *ngIf="isModalVisible">
+  <ng-template #abpHeader>
+    <h3>{{ selectedModalContent.title | abpLocalization }}</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <ng-container *ngTemplateOutlet="selectedModalContent?.template"></ng-container>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button #abpClose type="button" class="btn btn-secondary">
+      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
-  </div>
+    <button class="btn btn-primary" type="button" (click)="save()">
+      {{ 'AbpTenantManagement::Save' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>
 
-  <form [formGroup]="tenantForm" (ngSubmit)="selectedModalContent.onSave()">
-    <div class="modal-body">
-      <ng-container *ngTemplateOutlet="selectedModalContent.template; context: { $implicit: modal }"></ng-container>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">
-        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
-      </button>
-      <button type="submit" class="btn btn-primary">
-        <i class="fa fa-check mr-1"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>
-      </button>
+<ng-template #tenantModalTemplate>
+  <form [formGroup]="tenantForm">
+    <div class="mt-2">
+      <div class="form-group">
+        <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
+        <input type="text" id="name" class="form-control" formControlName="name" />
+      </div>
     </div>
   </form>
 </ng-template>
 
-<ng-template #mTemplateTenant let-modal>
-  <div class="mt-2">
-    <div class="form-group">
-      <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
-      <input type="text" id="name" class="form-control" formControlName="name" />
-    </div>
-  </div>
-</ng-template>
-
-<ng-template #mTemplateConnStr let-modal>
-  <div class="mt-2">
-    <div class="form-group">
-      <div class="form-check">
-        <input id="useSharedDatabase" type="checkbox" class="form-check-input" formControlName="useSharedDatabase" />
-        <label for="useSharedDatabase" class="font-check-label">{{
-          'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
+<ng-template #connectionStringModalTemplate>
+  <form [formGroup]="defaultConnectionStringForm">
+    <div class="mt-2">
+      <div class="form-group">
+        <div class="form-check">
+          <input id="useSharedDatabase" type="checkbox" class="form-check-input" formControlName="useSharedDatabase" />
+          <label for="useSharedDatabase" class="font-check-label">{{
+            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
+          }}</label>
+        </div>
+      </div>
+      <div class="form-group" *ngIf="!useSharedDatabase">
+        <label for="defaultConnectionString">{{
+          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
         }}</label>
+        <input
+          type="text"
+          id="defaultConnectionString"
+          class="form-control"
+          formControlName="defaultConnectionString"
+        />
       </div>
     </div>
-    <div class="form-group" *ngIf="showInput">
-      <label for="defaultConnectionString">{{
-        'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
-      }}</label>
-      <input type="text" id="defaultConnectionString" class="form-control" formControlName="defaultConnectionString" />
-    </div>
-  </div>
+  </form>
 </ng-template>
 
-<ng-template #mTemplateFeatures let-modal>
+<ng-template #featuresModalTemplate>
   Manage Features
 </ng-template>

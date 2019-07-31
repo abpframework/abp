@@ -80,4 +80,14 @@ export class TenantManagementService {
     };
     return this.rest.request<TenantManagement.DefaultConnectionStringRequest, any>(request);
   }
+
+  deleteDefaultConnectionString(id: string): Observable<string> {
+    const url = `/api/multi-tenancy/tenant/${id}/defaultConnectionString`;
+
+    const request: Rest.Request<TenantManagement.DefaultConnectionStringRequest> = {
+      method: 'DELETE',
+      url,
+    };
+    return this.rest.request<TenantManagement.DefaultConnectionStringRequest, any>(request);
+  }
 }

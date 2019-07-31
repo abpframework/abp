@@ -116,6 +116,8 @@ export class ModalComponent implements OnDestroy {
         this.close();
       });
 
+    if (!this.abpClose) return;
+
     fromEvent(this.abpClose.nativeElement, 'click')
       .pipe(
         takeUntil(this.destroy$),

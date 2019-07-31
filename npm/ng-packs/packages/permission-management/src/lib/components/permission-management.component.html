@@ -1,15 +1,9 @@
-<ng-template #modalContent let-modal>
+<abp-modal [(visible)]="visible" *ngIf="visible" size="lg">
   <ng-container *ngIf="{ entityName: entityName$ | async } as data">
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">
-        {{ 'AbpPermissionManagement::Permissions' | abpLocalization }} -
-        {{ data.entityName }}
-      </h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
+    <ng-template #abpHeader>
+      <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>
+    </ng-template>
+    <ng-template #abpBody>
       <div class="custom-checkbox custom-control mb-2">
         <input
           type="checkbox"
@@ -31,7 +25,7 @@
             <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
               <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
                 <a class="nav-link" [class.active]="selectedGroup.name === group.name" (click)="onChangeGroup(group)">{{
-                  group.displayName
+                  group?.displayName
                 }}</a>
               </li>
             </perfect-scrollbar>
@@ -80,15 +74,14 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">
+    </ng-template>
+    <ng-template #abpFooter>
+      <button type="button" class="btn btn-secondary" #abpClose>
         {{ 'AbpIdentity::Cancel' | abpLocalization }}
       </button>
       <button type="submit" class="btn btn-primary" (click)="onSubmit()">
         <i class="fa fa-check mr-1"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>
       </button>
-    </div>
+    </ng-template>
   </ng-container>
-</ng-template>
+</abp-modal>

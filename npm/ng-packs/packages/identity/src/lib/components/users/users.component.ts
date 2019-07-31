@@ -1,24 +1,22 @@
-import { Component, TemplateRef, ViewChild, TrackByFunction, OnInit } from '@angular/core';
+import { ABP } from '@abp/ng.core';
+import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { validatePassword } from '@ngx-validate/core';
 import { Select, Store } from '@ngxs/store';
-import { Observable, combineLatest, Subject } from 'rxjs';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormBuilder, FormGroup, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { IdentityState } from '../../states/identity.state';
-import { Identity } from '../../models/identity';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { debounceTime, filter, map, pluck, take } from 'rxjs/operators';
+import snq from 'snq';
 import {
-  IdentityUpdateUser,
   IdentityAddUser,
   IdentityDeleteUser,
   IdentityGetUserById,
+  IdentityGetUserRoles,
   IdentityGetUsers,
+  IdentityUpdateUser,
 } from '../../actions/identity.actions';
-import { pluck, filter, map, take, debounceTime } from 'rxjs/operators';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import snq from 'snq';
-import { IdentityGetUserRoles } from '../../actions/identity.actions';
-import { validatePassword } from '@ngx-validate/core';
-import { ABP } from '@abp/ng.core';
-
+import { Identity } from '../../models/identity';
+import { IdentityState } from '../../states/identity.state';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -49,6 +47,8 @@ export class UsersComponent implements OnInit {
     sorting: 'userName',
   };
 
+  isModalVisible: boolean;
+
   loading: boolean = false;
 
   search$ = new Subject<string>();
@@ -59,12 +59,7 @@ export class UsersComponent implements OnInit {
     return snq(() => (this.form.get('roleNames') as FormArray).controls as FormGroup[], []);
   }
 
-  constructor(
-    private confirmationService: ConfirmationService,
-    private modalService: NgbModal,
-    private fb: FormBuilder,
-    private store: Store,
-  ) {}
+  constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
   ngOnInit() {
     this.search$.pipe(debounceTime(300)).subscribe(value => {
@@ -105,7 +100,7 @@ export class UsersComponent implements OnInit {
 
   openModal() {
     this.buildForm();
-    this.modalService.open(this.modalContent);
+    this.isModalVisible = true;
   }
 
   onAdd() {
@@ -146,9 +141,14 @@ export class UsersComponent implements OnInit {
               id: this.selected.id,
               roleNames: mappedRoleNames,
             })
-          : new IdentityAddUser({ ...this.form.value, roleNames: mappedRoleNames }),
+          : new IdentityAddUser({
+              ...this.form.value,
+              roleNames: mappedRoleNames,
+            }),
       )
-      .subscribe(() => this.modalService.dismissAll());
+      .subscribe(() => {
+        this.isModalVisible = false;
+      });
   }
 
   delete(id: string, userName: string) {
