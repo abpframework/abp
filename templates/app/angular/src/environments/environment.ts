@@ -2,7 +2,7 @@ export const environment = {
   production: false,
   hmr: false,
   oAuthConfig: {
-    issuer: 'https://localhost:44301',
+    issuer: 'https://localhost:44305',
     clientId: 'MyProjectName_ConsoleTestApp',
     dummyClientSecret: '1q2w3e*',
     scope: 'MyProjectName',
@@ -12,7 +12,7 @@ export const environment = {
   },
   apis: {
     default: {
-      url: 'https://localhost:44300',
+      url: 'https://localhost:44305',
     },
   },
   localization: {
