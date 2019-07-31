@@ -123,7 +123,6 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("-v|--version <version>                      (default: latest version)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
-            sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
