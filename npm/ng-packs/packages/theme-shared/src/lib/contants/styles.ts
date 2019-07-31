@@ -28,6 +28,13 @@ export default `
  background-color: rgba(0, 0, 0, .6);
 }
 
+.abp-ellipsis {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* <animations */
 
 .fade-in-top {
