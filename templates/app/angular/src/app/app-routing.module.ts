@@ -32,6 +32,7 @@ const routes: Routes = [
       import('./lazy-libs/tenant-management-wrapper.module').then(m => m.TenantManagementWrapperModule),
     data: { routes: TENANT_MANAGEMENT_ROUTES },
   },
+  { path: '**', redirectTo: '/' },
 ];
 
 @NgModule({
