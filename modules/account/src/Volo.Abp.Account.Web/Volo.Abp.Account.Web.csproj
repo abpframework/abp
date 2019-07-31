@@ -18,13 +18,11 @@
   <ItemGroup>
     <EmbeddedResource Include="Modules\**\*.*" Exclude="*.cs" />
     <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
-    <EmbeddedResource Include="Localization\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Remove="Modules\**\*.cshtml" />
     <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Localization\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
