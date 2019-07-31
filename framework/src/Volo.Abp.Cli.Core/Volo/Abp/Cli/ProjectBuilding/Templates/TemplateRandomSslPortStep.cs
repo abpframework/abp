@@ -34,6 +34,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                     !x.IsDirectory && x.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
+            var angularEnvironments = context.Files.Where(x =>
+                    !x.IsDirectory &&
+                    (x.Name.EndsWith("environments/environment.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                    x.Name.EndsWith("environments/environment.hmr.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                    x.Name.EndsWith("environments/environment.prod.ts", StringComparison.InvariantCultureIgnoreCase))
+                )
+                .ToList();
+
             if (context.Template.Name == AppTemplate.TemplateName)
             {
                 // no tiered
@@ -99,6 +107,22 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                         }
                         appSetting.SetLines(appSettingLines);
                     }
+
+                    foreach (var environment in angularEnvironments)
+                    {
+                        environment.NormalizeLineEndings();
+
+                        var environmentLines = environment.GetLines();
+                        for (var i = 0; i < environmentLines.Length; i++)
+                        {
+                            if (environmentLines[i].Contains(buildInUrl))
+                            {
+                                environmentLines[i] = environmentLines[i].Replace(buildInUrl, $"{buildInUrlWithoutPort}:{newPort}");
+                            }
+                        }
+                        environment.SetLines(environmentLines);
+                    }
+
                 }
             }
         }
@@ -112,13 +136,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 : ports.ToList());
         }
 
-        private string GetUrlPort(string url)
+        private static string GetUrlPort(string url)
         {
             var match = Regex.Match(url, @":(\d+)");
             return match.Success ? match.Groups[1].Value : "";
         }
 
-        private string GetUrlWithoutPort(string url)
+        private static string GetUrlWithoutPort(string url)
         {
             var match = Regex.Match(url, @"(^.+):");
             return match.Success ? match.Groups[1].Value : "";
