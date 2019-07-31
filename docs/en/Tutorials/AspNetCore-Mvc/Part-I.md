@@ -22,7 +22,7 @@ This is how the layered solution structure looks after it's created:
 
 ![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
 
-> You can see [MVC application template document](../../Startup-Templates/Mvc.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
+> You can see the [Application template document](../../Startup-Templates/Application.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
 ### Create the Book Entity
 
