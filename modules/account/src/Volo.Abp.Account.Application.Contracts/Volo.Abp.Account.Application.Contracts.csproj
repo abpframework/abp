@@ -11,11 +11,7 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\Account\Localization\Resources\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Volo\Abp\Account\Localization\Resources\en.json" />
-    <None Remove="Volo\Abp\Account\Localization\Resources\zh-Hans.json" />
+    <Content Remove="Volo\Abp\Account\Localization\Resources\*.json" />
   </ItemGroup>
 
   <ItemGroup>
