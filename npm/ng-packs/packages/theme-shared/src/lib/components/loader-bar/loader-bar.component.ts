@@ -1,7 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { LoaderStart, LoaderStop } from '@abp/ng.core';
 import { filter } from 'rxjs/operators';
+import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { takeUntilDestroy } from '@ngx-validate/core';
 
 @Component({
   selector: 'abp-loader-bar',
@@ -12,7 +14,7 @@ import { filter } from 'rxjs/operators';
   `,
   styleUrls: ['./loader-bar.component.scss'],
 })
-export class LoaderBarComponent {
+export class LoaderBarComponent implements OnDestroy {
   @Input()
   containerClass: string = 'abp-loader-bar';
 
@@ -29,20 +31,30 @@ export class LoaderBarComponent {
 
   interval: any;
 
-  constructor(private actions: Actions) {
+  constructor(private actions: Actions, private router: Router) {
     actions
       .pipe(
         ofActionSuccessful(LoaderStart, LoaderStop),
         filter(this.filter),
+        takeUntilDestroy(this),
       )
       .subscribe(action => {
-        if (action instanceof LoaderStart) {
-          this.startLoading();
-        } else {
-          this.stopLoading();
-        }
+        if (action instanceof LoaderStart) this.startLoading();
+        else this.stopLoading();
+      });
+
+    router.events
+      .pipe(
+        filter(event => event instanceof NavigationStart || event instanceof NavigationEnd),
+        takeUntilDestroy(this),
+      )
+      .subscribe(event => {
+        if (event instanceof NavigationStart) this.startLoading();
+        else this.stopLoading();
       });
   }
+
+  ngOnDestroy() {}
 
   startLoading() {
     this.isLoading = true;
