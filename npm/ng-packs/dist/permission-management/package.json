@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.permission-management",
-  "version": "0.7.6",
+  "version": "0.8.0",
   "dependencies": {
-    "@abp/ng.theme.shared": "^0.7.6",
+    "@abp/ng.theme.shared": "^0.8.0",
     "tslib": "^1.9.0"
   },
   "publishConfig": {

@@ -1,11 +1,11 @@
 {
-  "version": "0.7.6",
+  "version": "0.8.0",
   "name": "@abp/sweetalert",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.7.6",
+    "@abp/core": "^0.8.0",
     "sweetalert": "^2.1.0"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
