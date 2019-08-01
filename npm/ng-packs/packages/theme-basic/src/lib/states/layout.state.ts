@@ -1,5 +1,5 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { LayoutAddNavigationElement } from '../actions/layout.actions';
+import { LayoutAddNavigationElement, LayoutRemoveNavigationElementByName } from '../actions/layout.actions';
 import { Layout } from '../models/layout';
 import { TemplateRef } from '@angular/core';
 import snq from 'snq';
@@ -15,7 +15,7 @@ export class LayoutState {
   }
 
   @Action(LayoutAddNavigationElement)
-  layoutAction({ getState, patchState }: StateContext<Layout.State>, { payload = [] }: LayoutAddNavigationElement) {
+  layoutAddAction({ getState, patchState }: StateContext<Layout.State>, { payload = [] }: LayoutAddNavigationElement) {
     let { navigationElements } = getState();
 
     if (!Array.isArray(payload)) {
@@ -37,6 +37,24 @@ export class LayoutState {
     navigationElements = [...navigationElements, ...payload]
       .map(element => ({ ...element, order: element.order || 99 }))
       .sort((a, b) => a.order - b.order);
+
+    return patchState({
+      navigationElements,
+    });
+  }
+
+  @Action(LayoutRemoveNavigationElementByName)
+  layoutRemoveAction(
+    { getState, patchState }: StateContext<Layout.State>,
+    { name }: LayoutRemoveNavigationElementByName,
+  ) {
+    let { navigationElements } = getState();
+
+    const index = navigationElements.findIndex(element => element.name === name);
+
+    if (index > -1) {
+      navigationElements = navigationElements.splice(index, 1);
+    }
 
     return patchState({
       navigationElements,
