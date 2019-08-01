@@ -89,10 +89,6 @@
   </ul>
 </abp-layout>
 
-<abp-change-password [(visible)]="isOpenChangePassword"></abp-change-password>
-
-<abp-profile [(visible)]="isOpenProfile"></abp-profile>
-
 <ng-template #language>
   <li class="nav-item dropdown" ngbDropdown>
     <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
@@ -120,4 +116,8 @@
       <a class="dropdown-item pointer" (click)="logout()">Logout</a>
     </div>
   </li>
+
+  <abp-change-password [(visible)]="isOpenChangePassword"></abp-change-password>
+
+  <abp-profile [(visible)]="isOpenProfile"></abp-profile>
 </ng-template>
