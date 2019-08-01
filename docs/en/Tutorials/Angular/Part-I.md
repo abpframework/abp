@@ -19,7 +19,7 @@ Create a new project named `Acme.BookStore` by selecting the Angular as the UI f
 
 This is how the layered solution structure looks after it's created:
 
-![bookstore-backend-solution](images/bookstore-backend-solution.png)
+![bookstore-backend-solution](images\bookstore-backend-solution-v2.png)
 
 > You can see the [Application template document](../../Startup-Templates/Application.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
@@ -79,9 +79,72 @@ namespace Acme.BookStore
 
 #### Add Book Entity to Your DbContext
 
-...
+Add a `IMongoCollection` property to the `BookStoreMongoDbContext` inside the `Acme.BookStore.MongoDB` project:
+
+````csharp
+public class BookStoreMongoDbContext : AbpMongoDbContext
+{
+    public IMongoCollection<Book> Books => Collection<Book>();
+    ...
+}
+````
 
 #### Add Seed (Sample) Data
+
+This section is optional, but it would be good to have an initial data in the database in the first run. ABP provides a [data seed system](../../Data-Seeding.md). Create a class deriving from the `IDataSeedContributor` in the `.Domain` project:
+
+````csharp
+using System;
+using System.Threading.Tasks;
+using Volo.Abp.Data;
+using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Repositories;
+
+namespace Acme.BookStore
+{
+    public class BookStoreDataSeederContributor
+        : IDataSeedContributor, ITransientDependency
+    {
+        private readonly IRepository<Book, Guid> _bookRepository;
+
+        public BookStoreDataSeederContributor(IRepository<Book, Guid> bookRepository)
+        {
+            _bookRepository = bookRepository;
+        }
+
+        public async Task SeedAsync(DataSeedContext context)
+        {
+            if (await _bookRepository.GetCountAsync() > 0)
+            {
+                return;
+            }
+
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "1984",
+                    Type = BookType.Dystopia,
+                    PublishDate = new DateTime(1949, 6, 8),
+                    Price = 19.84f
+                }
+            );
+
+            await _bookRepository.InsertAsync(
+                new Book
+                {
+                    Name = "The Hitchhiker's Guide to the Galaxy",
+                    Type = BookType.ScienceFiction,
+                    PublishDate = new DateTime(1995, 9, 27),
+                    Price = 42.0f
+                }
+            );
+        }
+    }
+}
+
+````
+
+`BookStoreDataSeederContributor` simply inserts two books into database if there is no book added before. ABP automatically discovers and executes this class when you seed the database by running the `Acme.BookStore.DbMigrator` project.
 
 ### Create the Application Service
 
