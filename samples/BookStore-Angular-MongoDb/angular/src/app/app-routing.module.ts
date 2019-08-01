@@ -16,6 +16,11 @@ const routes: Routes = [
       } as ABP.Route,
     },
   },
+  { path: 'books', loadChildren: () => import('./books/books.module').then(m => m.BooksModule),  data: {
+    routes: {
+      name: 'Books',
+    } as ABP.Route,
+  }, },
   {
     path: 'account',
     loadChildren: () => import('./lazy-libs/account-wrapper.module').then(m => m.AccountWrapperModule),
@@ -33,6 +38,7 @@ const routes: Routes = [
     data: { routes: TENANT_MANAGEMENT_ROUTES },
   },
   { path: '**', redirectTo: '/' },
+  
 ];
 
 @NgModule({
