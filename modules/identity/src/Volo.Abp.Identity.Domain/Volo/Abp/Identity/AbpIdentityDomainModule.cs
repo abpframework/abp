@@ -21,18 +21,6 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
-            });
-
             Configure<DistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();

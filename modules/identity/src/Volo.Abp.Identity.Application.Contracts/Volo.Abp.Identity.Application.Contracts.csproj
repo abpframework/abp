@@ -14,10 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Identity\Localization\ApplicationContracts\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\permission-management\src\Volo.Abp.PermissionManagement.Application.Contracts\Volo.Abp.PermissionManagement.Application.Contracts.csproj" />
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Abstractions\Volo.Abp.Users.Abstractions.csproj" />

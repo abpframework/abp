@@ -14,11 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <content Remove="Volo\Abp\Identity\Localization\Domain\*.json" />
+    <EmbeddedResource Include="Volo\Abp\Identity\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Identity\Localization\Domain\*.json" />
+    <Content Remove="Volo\Abp\Identity\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
