@@ -1,4 +1,4 @@
-## Getting Started With the Angular Startup Template
+## Getting Started With the Angular Application Template
 
 This tutorial explain how to create a new Angular application using the startup template, configure and run it.
 
@@ -28,6 +28,8 @@ The created solution requires;
 
 * [Visual Studio 2017 (v15.9.0+)](https://visualstudio.microsoft.com/tr/downloads/)
 * [.NET Core 2.2+](https://www.microsoft.com/net/download/dotnet-core/)
+* [Node v10.16+](https://nodejs.org)
+* [Yarn v1.17+](https://yarnpkg.com/)
 
 ### The Solution Structure
 
@@ -116,6 +118,8 @@ yarn start
 Open your favorite browser and go to `localhost:4200` URL. Initial username is `admin` and password is `1q2w3E*`.
 
 The startup template includes the **identity management** and **tenant management** modules. Once you login, the Administration menu will be available where you can manage **tenants**, **roles**, **users** and their **permissions**.
+
+> We recommend [Visual Studio Code](https://code.visualstudio.com/) as the editor for the Angular project, but you are free to use your favorite editor.
 
 ### What's Next?
 
