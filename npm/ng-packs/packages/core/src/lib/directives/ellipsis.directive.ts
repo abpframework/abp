@@ -11,12 +11,17 @@ export class EllipsisDirective implements AfterContentInit {
   @Input()
   title: string;
 
-  @HostBinding('class.abp-ellipsis')
+  @Input('abpEllipsisEnabled')
   enabled = true;
+
+  @HostBinding('class.abp-ellipsis')
+  get class() {
+    return this.enabled;
+  }
 
   @HostBinding('style.max-width')
   get maxWidth() {
-    return this.witdh || '180px';
+    return this.enabled ? this.witdh || '180px' : undefined;
   }
 
   constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}
