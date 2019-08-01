@@ -2,6 +2,7 @@
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.Localization;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -12,16 +13,15 @@ namespace Volo.Abp.PermissionManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLocalizationOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                options.Resources
-                    .Add<AbpPermissionManagementResource>("en");
+                options.FileSets.AddEmbedded<AbpPermissionManagementDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<AbpPermissionManagementResource>()
+                    .Add<AbpPermissionManagementResource>("en")
                     .AddBaseTypes(
                         typeof(AbpValidationResource)
                     ).AddVirtualJson("/Volo/Abp/PermissionManagement/Localization/Domain");

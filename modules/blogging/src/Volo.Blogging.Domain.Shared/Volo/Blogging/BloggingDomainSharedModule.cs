@@ -3,6 +3,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Blogging.Localization;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Blogging
 {
@@ -11,15 +12,15 @@ namespace Volo.Blogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLocalizationOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                options.Resources.Add<BloggingResource>("en");
+                options.FileSets.AddEmbedded<BloggingDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<BloggingResource>()
+                    .Add<BloggingResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
                     .AddVirtualJson("/Localization/Resources");
             });

@@ -3,6 +3,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
+using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity
 {
@@ -12,15 +13,15 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<AbpLocalizationOptions>(options =>
+            Configure<VirtualFileSystemOptions>(options =>
             {
-                options.Resources.Add<IdentityResource>("en");
+                options.FileSets.AddEmbedded<AbpIdentityDomainSharedModule>();
             });
 
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Get<IdentityResource>()
+                    .Add<IdentityResource>("en")
                     .AddBaseTypes(
                         typeof(AbpValidationResource)
                     ).AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
