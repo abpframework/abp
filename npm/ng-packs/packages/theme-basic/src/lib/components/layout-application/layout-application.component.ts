@@ -8,13 +8,23 @@ import {
   SessionState,
   takeUntilDestroy,
 } from '@abp/ng.core';
-import { AfterViewInit, Component, OnDestroy, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  QueryList,
+  TemplateRef,
+  TrackByFunction,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Select, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import compare from 'just-compare';
-import { Observable, fromEvent } from 'rxjs';
-import { filter, map, debounceTime } from 'rxjs/operators';
+import { fromEvent, Observable } from 'rxjs';
+import { debounceTime, filter, map } from 'rxjs/operators';
 import snq from 'snq';
 import { LayoutAddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
@@ -45,6 +55,9 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('language', { static: false, read: TemplateRef })
   languageRef: TemplateRef<any>;
+
+  @ViewChildren('navbarRootDropdown', { read: NgbDropdown })
+  navbarRootDropdowns: QueryList<NgbDropdown>;
 
   isOpenChangePassword: boolean = false;
 
@@ -85,8 +98,14 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
 
   private checkWindowWidth() {
     setTimeout(() => {
-      if (window.innerWidth < 768) this.isDropdownChildDynamic = false;
-      else this.isDropdownChildDynamic = true;
+      if (window.innerWidth < 768) {
+        this.isDropdownChildDynamic = false;
+        this.navbarRootDropdowns.forEach(item => {
+          item.close();
+        });
+      } else {
+        this.isDropdownChildDynamic = true;
+      }
     }, 0);
   }
 
@@ -117,7 +136,7 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
     fromEvent(window, 'resize')
       .pipe(
         takeUntilDestroy(this),
-        debounceTime(350),
+        debounceTime(250),
       )
       .subscribe(() => {
         this.checkWindowWidth();
