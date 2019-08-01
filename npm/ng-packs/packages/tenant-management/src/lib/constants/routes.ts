@@ -2,7 +2,7 @@ import { ABP, eLayoutType } from '@abp/ng.core';
 
 export const TENANT_MANAGEMENT_ROUTES = [
   {
-    name: 'TenantManagement',
+    name: 'Tenant Management',
     path: 'tenant-management',
     parentName: 'Administration',
     layout: eLayoutType.application,
@@ -12,7 +12,6 @@ export const TENANT_MANAGEMENT_ROUTES = [
         name: 'Tenants',
         order: 1,
         requiredPolicy: 'AbpTenantManagement.Tenants',
-        parentName: 'TenantManagement',
       },
     ],
   },
