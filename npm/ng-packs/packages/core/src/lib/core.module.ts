@@ -18,6 +18,7 @@ import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData } from './utils/initial-utils';
+import { EllipsisDirective } from './directives/ellipsis.directive';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { getInitialData } from './utils/initial-utils';
     PermissionDirective,
     VisibilityDirective,
     LocalizationPipe,
+    EllipsisDirective,
   ],
   exports: [
     CommonModule,
@@ -47,6 +49,7 @@ import { getInitialData } from './utils/initial-utils';
     DynamicLayoutComponent,
     PermissionDirective,
     VisibilityDirective,
+    EllipsisDirective,
     LocalizationPipe,
   ],
   providers: [LocalizationPipe],

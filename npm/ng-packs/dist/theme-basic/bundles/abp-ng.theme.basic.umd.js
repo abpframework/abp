@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@angular/forms'), require('@ngx-validate/core'), require('@ngxs/store'), require('rxjs'), require('rxjs/operators'), require('@ngxs/router-plugin'), require('angular-oauth2-oidc'), require('snq'), require('just-compare'), require('@abp/ng.theme.shared'), require('primeng/toast')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.theme.basic', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@angular/forms', '@ngx-validate/core', '@ngxs/store', 'rxjs', 'rxjs/operators', '@ngxs/router-plugin', 'angular-oauth2-oidc', 'snq', 'just-compare', '@abp/ng.theme.shared', 'primeng/toast'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.basic = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.ng.forms, global.core$1, global.store, global.rxjs, global.rxjs.operators, global.routerPlugin, global.angularOauth2Oidc, global.snq, global.compare, global.ng_theme_shared, global.toast));
-}(this, function (exports, ng_core, core, ngBootstrap, forms, core$1, store, rxjs, operators, routerPlugin, angularOauth2Oidc, snq, compare, ng_theme_shared, toast) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@angular/forms'), require('@ngx-validate/core'), require('@ngxs/store'), require('@ngxs/router-plugin'), require('angular-oauth2-oidc'), require('rxjs'), require('rxjs/operators'), require('snq'), require('just-compare'), require('@abp/ng.theme.shared'), require('primeng/toast')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.theme.basic', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@angular/forms', '@ngx-validate/core', '@ngxs/store', '@ngxs/router-plugin', 'angular-oauth2-oidc', 'rxjs', 'rxjs/operators', 'snq', 'just-compare', '@abp/ng.theme.shared', 'primeng/toast'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.basic = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.ng.forms, global.core$1, global.store, global.routerPlugin, global.angularOauth2Oidc, global.rxjs, global.rxjs.operators, global.snq, global.compare, global.ng_theme_shared, global.toast));
+}(this, function (exports, ng_core, core, ngBootstrap, forms, core$1, store, routerPlugin, angularOauth2Oidc, rxjs, operators, snq, compare, ng_theme_shared, toast) { 'use strict';
 
     snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
     compare = compare && compare.hasOwnProperty('default') ? compare['default'] : compare;
@@ -73,12 +73,29 @@
      */
     var minLength = forms.Validators.minLength, required = forms.Validators.required;
     var ChangePasswordComponent = /** @class */ (function () {
-        function ChangePasswordComponent(fb, modalService, store) {
+        function ChangePasswordComponent(fb, store) {
             this.fb = fb;
-            this.modalService = modalService;
             this.store = store;
             this.visibleChange = new core.EventEmitter();
         }
+        Object.defineProperty(ChangePasswordComponent.prototype, "visible", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._visible;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                this._visible = value;
+                this.visibleChange.emit(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @return {?}
          */
@@ -112,7 +129,9 @@
                 .subscribe((/**
              * @return {?}
              */
-            function () { return _this.modalRef.close(); }));
+            function () {
+                _this.visible = false;
+            }));
         };
         /**
          * @return {?}
@@ -121,36 +140,7 @@
          * @return {?}
          */
         function () {
-            var _this = this;
-            this.modalRef = this.modalService.open(this.modalContent);
-            this.visibleChange.emit(true);
-            rxjs.from(this.modalRef.result)
-                .pipe(operators.take(1))
-                .subscribe((/**
-             * @param {?} data
-             * @return {?}
-             */
-            function (data) {
-                _this.setVisible(false);
-            }), (/**
-             * @param {?} reason
-             * @return {?}
-             */
-            function (reason) {
-                _this.setVisible(false);
-            }));
-        };
-        /**
-         * @param {?} value
-         * @return {?}
-         */
-        ChangePasswordComponent.prototype.setVisible = /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this.visible = value;
-            this.visibleChange.emit(value);
+            this.visible = true;
         };
         /**
          * @param {?} __0
@@ -167,20 +157,19 @@
             if (visible.currentValue) {
                 this.openModal();
             }
-            else if (visible.currentValue === false && this.modalService.hasOpenModals()) {
-                this.modalRef.close();
+            else if (visible.currentValue === false && this.visible) {
+                this.visible = false;
             }
         };
         ChangePasswordComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-change-password',
-                        template: "<ng-template #modalContent let-modal>\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\" id=\"modal-basic-title\">{{ 'AbpIdentity::ChangePassword' | abpLocalization }}</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss()\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n  <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n    <div class=\"modal-body\">\n      <div class=\"form-group\">\n        <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n      </div>\n      <div class=\"form-group\" [class.is-invalid]=\"form.errors?.passwordMismatch\">\n        <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n        <div *ngIf=\"form.errors?.passwordMismatch\" class=\"invalid-feedback\">\n          {{ 'AbpIdentity::Identity.PasswordConfirmationFailed' | abpLocalization }}\n        </div>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"modal.close()\">\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n      </button>\n    </div>\n  </form>\n</ng-template>\n"
+                        template: "<abp-modal *ngIf=\"visible\" [(visible)]=\"visible\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::ChangePassword' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\" novalidate>\n      <div class=\"form-group\">\n        <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n      </div>\n      <div class=\"form-group\" [class.is-invalid]=\"form.errors?.passwordMismatch\">\n        <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n        <div *ngIf=\"form.errors?.passwordMismatch\" class=\"invalid-feedback\">\n          {{ 'AbpIdentity::Identity.PasswordConfirmationFailed' | abpLocalization }}\n        </div>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\n      <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n    </button>\n  </ng-template>\n</abp-modal>\n"
                     }] }
         ];
         /** @nocollapse */
         ChangePasswordComponent.ctorParameters = function () { return [
             { type: forms.FormBuilder },
-            { type: ngBootstrap.NgbModal },
             { type: store.Store }
         ]; };
         ChangePasswordComponent.propDecorators = {
@@ -495,7 +484,7 @@
         LayoutApplicationComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-layout-application',
-                        template: "<abp-layout>\n  <ul class=\"navbar-nav mr-auto\">\n    <ng-container\n      *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n      [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n      [ngTemplateOutletContext]=\"{ $implicit: route }\"\n    >\n    </ng-container>\n\n    <ng-template #defaultLink let-route>\n      <li class=\"nav-item\" [abpPermission]=\"route.requiredPolicy\">\n        <a class=\"nav-link\" [routerLink]=\"[route.url]\">{{ route.name }}</a>\n      </li>\n    </ng-template>\n\n    <ng-template #dropdownLink let-route>\n      <li class=\"nav-item dropdown\" ngbDropdown [abpPermission]=\"route.requiredPolicy\" [abpVisibility]=\"routeContainer\">\n        <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n          {{ route.name }}\n        </a>\n        <div #routeContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            #forTemplate\n            ngFor\n            [ngForOf]=\"route.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </li>\n    </ng-template>\n\n    <ng-template #childWrapper let-child>\n      <ng-template\n        [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n        [ngTemplateOutletContext]=\"{ $implicit: child }\"\n      ></ng-template>\n    </ng-template>\n\n    <ng-template #defaultChild let-child>\n      <div class=\"dropdown-submenu\" [abpPermission]=\"child.requiredPolicy\">\n        <a class=\"dropdown-item py-2 px-2\" [routerLink]=\"[child.url]\">{{ child.name }}</a>\n      </div>\n    </ng-template>\n\n    <ng-template #dropdownChild let-child>\n      <div\n        [abpVisibility]=\"childrenContainer\"\n        class=\"dropdown-submenu\"\n        ngbDropdown\n        placement=\"right-top\"\n        [abpPermission]=\"child.requiredPolicy\"\n      >\n        <a role=\"button\" class=\"btn d-block text-left py-2 px-2\" ngbDropdownToggle> {{ child.name }} </a>\n        <div #childrenContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            ngFor\n            [ngForOf]=\"child.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </div>\n    </ng-template>\n  </ul>\n\n  <ul class=\"navbar-nav ml-auto\">\n    <ng-container\n      *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n      [ngTemplateOutlet]=\"element\"\n    ></ng-container>\n  </ul>\n</abp-layout>\n\n<abp-change-password [(visible)]=\"isOpenChangePassword\"></abp-change-password>\n\n<abp-profile [(visible)]=\"isOpenProfile\"></abp-profile>\n\n<ng-template #language>\n  <li class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ defaultLanguage$ | async }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a\n        *ngFor=\"let lang of dropdownLanguages$ | async\"\n        class=\"dropdown-item\"\n        (click)=\"onChangeLang(lang.cultureName)\"\n        >{{ lang?.displayName }}</a\n      >\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ (currentUser$ | async)?.userName }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenChangePassword = true\">Change Password</a>\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenProfile = true\">My Profile</a>\n      <a class=\"dropdown-item pointer\" (click)=\"logout()\">Logout</a>\n    </div>\n  </li>\n</ng-template>\n"
+                        template: "<abp-layout>\n  <ul class=\"navbar-nav mr-auto\">\n    <ng-container\n      *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n      [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n      [ngTemplateOutletContext]=\"{ $implicit: route }\"\n    >\n    </ng-container>\n\n    <ng-template #defaultLink let-route>\n      <li class=\"nav-item\" [abpPermission]=\"route.requiredPolicy\">\n        <a class=\"nav-link\" [routerLink]=\"[route.url]\">{{ route.name | abpLocalization }}</a>\n      </li>\n    </ng-template>\n\n    <ng-template #dropdownLink let-route>\n      <li\n        class=\"nav-item dropdown\"\n        ngbDropdown\n        display=\"static\"\n        [abpPermission]=\"route.requiredPolicy\"\n        [abpVisibility]=\"routeContainer\"\n      >\n        <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n          {{ route.name | abpLocalization }}\n        </a>\n        <div #routeContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            #forTemplate\n            ngFor\n            [ngForOf]=\"route.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </li>\n    </ng-template>\n\n    <ng-template #childWrapper let-child>\n      <ng-template\n        [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n        [ngTemplateOutletContext]=\"{ $implicit: child }\"\n      ></ng-template>\n    </ng-template>\n\n    <ng-template #defaultChild let-child>\n      <div class=\"dropdown-submenu\" [abpPermission]=\"child.requiredPolicy\">\n        <a class=\"dropdown-item py-2 px-2\" [routerLink]=\"[child.url]\">{{ child.name | abpLocalization }}</a>\n      </div>\n    </ng-template>\n\n    <ng-template #dropdownChild let-child>\n      <div\n        [abpVisibility]=\"childrenContainer\"\n        class=\"dropdown-submenu\"\n        ngbDropdown\n        display=\"static\"\n        placement=\"right-top\"\n        [abpPermission]=\"child.requiredPolicy\"\n      >\n        <a role=\"button\" class=\"btn d-block text-left py-2 px-2\" ngbDropdownToggle>\n          {{ child.name | abpLocalization }}\n        </a>\n        <div #childrenContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            ngFor\n            [ngForOf]=\"child.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </div>\n    </ng-template>\n  </ul>\n\n  <ul class=\"navbar-nav ml-auto\">\n    <ng-container\n      *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n      [ngTemplateOutlet]=\"element\"\n    ></ng-container>\n  </ul>\n</abp-layout>\n\n<abp-change-password [(visible)]=\"isOpenChangePassword\"></abp-change-password>\n\n<abp-profile [(visible)]=\"isOpenProfile\"></abp-profile>\n\n<ng-template #language>\n  <li class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ defaultLanguage$ | async }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a\n        *ngFor=\"let lang of dropdownLanguages$ | async\"\n        class=\"dropdown-item\"\n        (click)=\"onChangeLang(lang.cultureName)\"\n        >{{ lang?.displayName }}</a\n      >\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ (currentUser$ | async)?.userName }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenChangePassword = true\">Change Password</a>\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenProfile = true\">My Profile</a>\n      <a class=\"dropdown-item pointer\" (click)=\"logout()\">Logout</a>\n    </div>\n  </li>\n</ng-template>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -586,12 +575,29 @@
      */
     var maxLength = forms.Validators.maxLength, required$1 = forms.Validators.required, email = forms.Validators.email;
     var ProfileComponent = /** @class */ (function () {
-        function ProfileComponent(fb, modalService, store) {
+        function ProfileComponent(fb, store) {
             this.fb = fb;
-            this.modalService = modalService;
             this.store = store;
             this.visibleChange = new core.EventEmitter();
         }
+        Object.defineProperty(ProfileComponent.prototype, "visible", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._visible;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                this._visible = value;
+                this.visibleChange.emit(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
         /**
          * @return {?}
          */
@@ -631,7 +637,9 @@
             this.store.dispatch(new ng_core.ProfileUpdate(this.form.value)).subscribe((/**
              * @return {?}
              */
-            function () { return _this.modalRef.close(); }));
+            function () {
+                _this.visible = false;
+            }));
         };
         /**
          * @return {?}
@@ -640,37 +648,8 @@
          * @return {?}
          */
         function () {
-            var _this = this;
             this.buildForm();
-            this.modalRef = this.modalService.open(this.modalContent);
-            this.visibleChange.emit(true);
-            rxjs.from(this.modalRef.result)
-                .pipe(operators.take(1))
-                .subscribe((/**
-             * @param {?} data
-             * @return {?}
-             */
-            function (data) {
-                _this.setVisible(false);
-            }), (/**
-             * @param {?} reason
-             * @return {?}
-             */
-            function (reason) {
-                _this.setVisible(false);
-            }));
-        };
-        /**
-         * @param {?} value
-         * @return {?}
-         */
-        ProfileComponent.prototype.setVisible = /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this.visible = value;
-            this.visibleChange.emit(value);
+            this.visible = true;
         };
         /**
          * @param {?} __0
@@ -687,26 +666,24 @@
             if (visible.currentValue) {
                 this.openModal();
             }
-            else if (visible.currentValue === false && this.modalService.hasOpenModals()) {
-                this.modalRef.close();
+            else if (visible.currentValue === false && this.visible) {
+                this.visible = false;
             }
         };
         ProfileComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-profile',
-                        template: "<ng-template #modalContent let-modal>\n  <div class=\"modal-header\">\n    <h4 class=\"modal-title\" id=\"modal-basic-title\">{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss()\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n  <form *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n    <div class=\"modal-body\">\n      <div class=\"form-group\">\n        <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" />\n      </div>\n      <div class=\"row\">\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n            ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n          </div>\n        </div>\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n            ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:EmailAddress' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n        ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"modal.close()\">\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n      </button>\n    </div>\n  </form>\n</ng-template>\n"
+                        template: "<abp-modal *ngIf=\"visible\" [(visible)]=\"visible\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form *ngIf=\"form\" [formGroup]=\"form\" novalidate>\n      <div class=\"form-group\">\n        <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" />\n      </div>\n      <div class=\"row\">\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n            ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n          </div>\n        </div>\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n            ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n        ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\n      <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n    </button>\n  </ng-template>\n</abp-modal>\n"
                     }] }
         ];
         /** @nocollapse */
         ProfileComponent.ctorParameters = function () { return [
             { type: forms.FormBuilder },
-            { type: ngBootstrap.NgbModal },
             { type: store.Store }
         ]; };
         ProfileComponent.propDecorators = {
             visible: [{ type: core.Input }],
-            visibleChange: [{ type: core.Output }],
-            modalContent: [{ type: core.ViewChild, args: ['modalContent', { static: false },] }]
+            visibleChange: [{ type: core.Output }]
         };
         __decorate([
             store.Select(ng_core.ProfileState.getProfile),

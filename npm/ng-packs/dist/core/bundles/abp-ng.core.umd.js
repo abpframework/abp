@@ -790,6 +790,8 @@
             for (var _i = 1; _i < arguments.length; _i++) {
                 interpolateParams[_i - 1] = arguments[_i];
             }
+            if (!key)
+                key = '';
             /** @type {?} */
             var keys = (/** @type {?} */ (key.split('::')));
             /** @type {?} */
@@ -1149,6 +1151,65 @@
                     }] }
         ];
         return RouterOutletComponent;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var EllipsisDirective = /** @class */ (function () {
+        function EllipsisDirective(cdRef, elRef) {
+            this.cdRef = cdRef;
+            this.elRef = elRef;
+            this.enabled = true;
+        }
+        Object.defineProperty(EllipsisDirective.prototype, "maxWidth", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this.witdh || '180px';
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        EllipsisDirective.prototype.ngAfterContentInit = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            setTimeout((/**
+             * @return {?}
+             */
+            function () {
+                /** @type {?} */
+                var title = _this.title;
+                _this.title = title || ((/** @type {?} */ (_this.elRef.nativeElement))).innerText;
+                if (_this.title !== title) {
+                    _this.cdRef.detectChanges();
+                }
+            }), 0);
+        };
+        EllipsisDirective.decorators = [
+            { type: core.Directive, args: [{
+                        selector: '[abpEllipsis]',
+                    },] }
+        ];
+        /** @nocollapse */
+        EllipsisDirective.ctorParameters = function () { return [
+            { type: core.ChangeDetectorRef },
+            { type: core.ElementRef }
+        ]; };
+        EllipsisDirective.propDecorators = {
+            witdh: [{ type: core.Input, args: ['abpEllipsis',] }],
+            title: [{ type: core.HostBinding, args: ['title',] }, { type: core.Input }],
+            enabled: [{ type: core.HostBinding, args: ['class.abp-ellipsis',] }],
+            maxWidth: [{ type: core.HostBinding, args: ['style.max-width',] }]
+        };
+        return EllipsisDirective;
     }());
 
     /**
@@ -1933,6 +1994,7 @@
                             PermissionDirective,
                             VisibilityDirective,
                             LocalizationPipe,
+                            EllipsisDirective,
                         ],
                         exports: [
                             common.CommonModule,
@@ -1944,6 +2006,7 @@
                             DynamicLayoutComponent,
                             PermissionDirective,
                             VisibilityDirective,
+                            EllipsisDirective,
                             LocalizationPipe,
                         ],
                         providers: [LocalizationPipe],
@@ -1964,6 +2027,7 @@
     exports.CoreModule = CoreModule;
     exports.DynamicLayoutComponent = DynamicLayoutComponent;
     exports.ENVIRONMENT = ENVIRONMENT;
+    exports.EllipsisDirective = EllipsisDirective;
     exports.LazyLoadService = LazyLoadService;
     exports.LoaderStart = LoaderStart;
     exports.LoaderStop = LoaderStop;
@@ -2009,10 +2073,11 @@
     exports.ɵq = PermissionDirective;
     exports.ɵr = VisibilityDirective;
     exports.ɵs = LocalizationPipe;
-    exports.ɵt = NGXS_CONFIG_PLUGIN_OPTIONS;
-    exports.ɵu = ConfigPlugin;
-    exports.ɵw = ApiInterceptor;
-    exports.ɵx = getInitialData;
+    exports.ɵt = EllipsisDirective;
+    exports.ɵu = NGXS_CONFIG_PLUGIN_OPTIONS;
+    exports.ɵv = ConfigPlugin;
+    exports.ɵx = ApiInterceptor;
+    exports.ɵy = getInitialData;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

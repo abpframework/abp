@@ -1,7 +1,7 @@
 import { RestService, DynamicLayoutComponent, AuthGuard, PermissionGuard, CoreModule } from '@abp/ng.core';
 import { ConfirmationService, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, ViewChild, NgModule } from '@angular/core';
-import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Action, Selector, State, Store, Select, NgxsModule } from '@ngxs/store';
 import { TableModule } from 'primeng/table';
 import { __assign, __decorate, __metadata } from 'tslib';
@@ -175,6 +175,24 @@ var TenantManagementService = /** @class */ (function () {
             method: 'PUT',
             url: url,
             params: { defaultConnectionString: payload.defaultConnectionString },
+        };
+        return this.rest.request(request);
+    };
+    /**
+     * @param {?} id
+     * @return {?}
+     */
+    TenantManagementService.prototype.deleteDefaultConnectionString = /**
+     * @param {?} id
+     * @return {?}
+     */
+    function (id) {
+        /** @type {?} */
+        var url = "/api/multi-tenancy/tenant/" + id + "/defaultConnectionString";
+        /** @type {?} */
+        var request = {
+            method: 'DELETE',
+            url: url,
         };
         return this.rest.request(request);
     };
@@ -363,19 +381,19 @@ var TenantManagementState = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var TenantsComponent = /** @class */ (function () {
-    function TenantsComponent(confirmationService, tenantService, modalService, fb, store) {
+    function TenantsComponent(confirmationService, tenantService, fb, store) {
         this.confirmationService = confirmationService;
         this.tenantService = tenantService;
-        this.modalService = modalService;
         this.fb = fb;
         this.store = store;
+        this.selectedModalContent = (/** @type {?} */ ({}));
     }
-    Object.defineProperty(TenantsComponent.prototype, "showInput", {
+    Object.defineProperty(TenantsComponent.prototype, "useSharedDatabase", {
         get: /**
          * @return {?}
          */
         function () {
-            return !this.defaultConnectionStringForm.get('useSharedDatabase').value;
+            return this.defaultConnectionStringForm.get('useSharedDatabase').value;
         },
         enumerable: true,
         configurable: true
@@ -390,15 +408,6 @@ var TenantsComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    /**
-     * @return {?}
-     */
-    TenantsComponent.prototype.openModal = /**
-     * @return {?}
-     */
-    function () {
-        this.modalService.open(this.modalWrapper);
-    };
     /**
      * @private
      * @return {?}
@@ -422,28 +431,40 @@ var TenantsComponent = /** @class */ (function () {
      */
     function () {
         this.defaultConnectionStringForm = this.fb.group({
-            useSharedDatabase: this.useSharedDatabase,
+            useSharedDatabase: this._useSharedDatabase,
             defaultConnectionString: this.defaultConnectionString || '',
         });
+    };
+    /**
+     * @param {?} title
+     * @param {?} template
+     * @param {?} type
+     * @return {?}
+     */
+    TenantsComponent.prototype.openModal = /**
+     * @param {?} title
+     * @param {?} template
+     * @param {?} type
+     * @return {?}
+     */
+    function (title, template, type) {
+        this.selectedModalContent = {
+            title: title,
+            template: template,
+            type: type,
+        };
+        this.isModalVisible = true;
     };
     /**
      * @param {?} id
      * @return {?}
      */
-    TenantsComponent.prototype.onEditConnStr = /**
+    TenantsComponent.prototype.onEditConnectionString = /**
      * @param {?} id
      * @return {?}
      */
     function (id) {
         var _this = this;
-        this.selectedModalContent = {
-            title: this.selected && this.selected.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant',
-            template: this.mTemplateConnStr,
-            onSave: (/**
-             * @return {?}
-             */
-            function () { return _this.saveConnStr; }),
-        };
         this.store
             .dispatch(new TenantManagementGetById(id))
             .pipe(pluck('TenantManagementState', 'selectedItem'), switchMap((/**
@@ -459,27 +480,11 @@ var TenantsComponent = /** @class */ (function () {
          * @return {?}
          */
         function (fetchedConnectionString) {
-            _this.useSharedDatabase = fetchedConnectionString ? false : true;
+            _this._useSharedDatabase = fetchedConnectionString ? false : true;
             _this.defaultConnectionString = fetchedConnectionString ? fetchedConnectionString : '';
             _this.createDefaultConnectionStringForm();
-            _this.openModal();
+            _this.openModal('AbpTenantManagement::ConnectionStrings', _this.connectionStringModalTemplate, 'saveConnStr');
         }));
-    };
-    /**
-     * @return {?}
-     */
-    TenantsComponent.prototype.saveConnStr = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        this.tenantService
-            .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
-            .pipe(take(1))
-            .subscribe((/**
-         * @return {?}
-         */
-        function () { return _this.modalService.dismissAll(); }));
     };
     /**
      * @param {?} id
@@ -490,41 +495,24 @@ var TenantsComponent = /** @class */ (function () {
      * @return {?}
      */
     function (id) {
-        this.selectedModalContent = {
-            title: this.selected && this.selected.id ? 'AbpTenantManagement::Edit' : 'AbpTenantManagement::NewTenant',
-            template: this.mTemplateFeatures,
-            onSave: (/**
-             * @return {?}
-             */
-            function () { }),
-        };
-        this.openModal();
+        this.openModal('AbpTenantManagement::Features', this.featuresModalTemplate, 'saveFeatures');
     };
     /**
      * @return {?}
      */
-    TenantsComponent.prototype.onAdd = /**
+    TenantsComponent.prototype.onAddTenant = /**
      * @return {?}
      */
     function () {
-        var _this = this;
         this.selected = (/** @type {?} */ ({}));
         this.createTenantForm();
-        this.openModal();
-        this.selectedModalContent = {
-            title: 'AbpTenantManagement::NewTenant',
-            template: this.mTemplateTenant,
-            onSave: (/**
-             * @return {?}
-             */
-            function () { return _this.saveTenant; }),
-        };
+        this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
     };
     /**
      * @param {?} id
      * @return {?}
      */
-    TenantsComponent.prototype.onEdit = /**
+    TenantsComponent.prototype.onEditTenant = /**
      * @param {?} id
      * @return {?}
      */
@@ -539,17 +527,55 @@ var TenantsComponent = /** @class */ (function () {
          */
         function (selected) {
             _this.selected = selected;
-            _this.selectedModalContent = {
-                title: 'AbpTenantManagement::Edit',
-                template: _this.mTemplateTenant,
-                onSave: (/**
-                 * @return {?}
-                 */
-                function () { return _this.saveTenant; }),
-            };
             _this.createTenantForm();
-            _this.openModal();
+            _this.openModal('AbpTenantManagement::Edit', _this.tenantModalTemplate, 'saveTenant');
         }));
+    };
+    /**
+     * @return {?}
+     */
+    TenantsComponent.prototype.save = /**
+     * @return {?}
+     */
+    function () {
+        var type = this.selectedModalContent.type;
+        if (!type)
+            return;
+        if (type === 'saveTenant')
+            this.saveTenant();
+        else if (type === 'saveConnStr')
+            this.saveConnectionString();
+    };
+    /**
+     * @return {?}
+     */
+    TenantsComponent.prototype.saveConnectionString = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (this.useSharedDatabase) {
+            this.tenantService
+                .deleteDefaultConnectionString(this.selected.id)
+                .pipe(take(1))
+                .subscribe((/**
+             * @return {?}
+             */
+            function () {
+                _this.isModalVisible = false;
+            }));
+        }
+        else {
+            this.tenantService
+                .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
+                .pipe(take(1))
+                .subscribe((/**
+             * @return {?}
+             */
+            function () {
+                _this.isModalVisible = false;
+            }));
+        }
     };
     /**
      * @return {?}
@@ -568,7 +594,9 @@ var TenantsComponent = /** @class */ (function () {
             .subscribe((/**
          * @return {?}
          */
-        function () { return _this.modalService.dismissAll(); }));
+        function () {
+            _this.isModalVisible = false;
+        }));
     };
     /**
      * @param {?} id
@@ -599,22 +627,20 @@ var TenantsComponent = /** @class */ (function () {
     TenantsComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-tenants',
-                    template: "<div id=\"wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">\n          {{ 'AbpTenantManagement::Tenants' | abpLocalization }}\n        </h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button\n          [abpPermission]=\"'AbpTenantManagement.Tenants.Create'\"\n          id=\"create-tenants\"\n          class=\"btn btn-primary\"\n          type=\"button\"\n          (click)=\"onAdd()\"\n        >\n          <i class=\"fa fa-plus mr-1\"></i>\n          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          placeholder=\"Search\"\n          (input)=\"dt.filterGlobal($event.target.value, 'contains')\"\n      /></label>\n    </div>\n    <p-table #dt [value]=\"datas$ | async\" [globalFilterFields]=\"['name']\" [paginator]=\"true\" [rows]=\"10\">\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Update'\"\n                  ngbDropdownItem\n                  (click)=\"onEdit(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Edit' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageConnectionStrings'\"\n                  ngbDropdownItem\n                  (click)=\"onEditConnStr(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageFeatures'\"\n                  ngbDropdownItem\n                  (click)=\"onManageFeatures(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Features' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Delete'\"\n                  ngbDropdownItem\n                  (click)=\"delete(data.id, data.name)\"\n                >\n                  {{ 'AbpTenantManagement::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<ng-template #modalWrapper let-modal>\n  <div class=\"modal-header\">\n    <h5 class=\"modal-title\" id=\"modal-basic-title\">\n      {{ selectedModalContent.title | abpLocalization }}\n    </h5>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss()\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n\n  <form [formGroup]=\"tenantForm\" (ngSubmit)=\"selectedModalContent.onSave()\">\n    <div class=\"modal-body\">\n      <ng-container *ngTemplateOutlet=\"selectedModalContent.template; context: { $implicit: modal }\"></ng-container>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"modal.close()\">\n        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>\n      </button>\n    </div>\n  </form>\n</ng-template>\n\n<ng-template #mTemplateTenant let-modal>\n  <div class=\"mt-2\">\n    <div class=\"form-group\">\n      <label for=\"name\">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>\n      <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n    </div>\n  </div>\n</ng-template>\n\n<ng-template #mTemplateConnStr let-modal>\n  <div class=\"mt-2\">\n    <div class=\"form-group\">\n      <div class=\"form-check\">\n        <input id=\"useSharedDatabase\" type=\"checkbox\" class=\"form-check-input\" formControlName=\"useSharedDatabase\" />\n        <label for=\"useSharedDatabase\" class=\"font-check-label\">{{\n          'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization\n        }}</label>\n      </div>\n    </div>\n    <div class=\"form-group\" *ngIf=\"showInput\">\n      <label for=\"defaultConnectionString\">{{\n        'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization\n      }}</label>\n      <input type=\"text\" id=\"defaultConnectionString\" class=\"form-control\" formControlName=\"defaultConnectionString\" />\n    </div>\n  </div>\n</ng-template>\n\n<ng-template #mTemplateFeatures let-modal>\n  Manage Features\n</ng-template>\n"
+                    template: "<div id=\"wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">\n          {{ 'AbpTenantManagement::Tenants' | abpLocalization }}\n        </h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button\n          [abpPermission]=\"'AbpTenantManagement.Tenants.Create'\"\n          id=\"create-tenants\"\n          class=\"btn btn-primary\"\n          type=\"button\"\n          (click)=\"onAddTenant()\"\n        >\n          <i class=\"fa fa-plus mr-1\"></i>\n          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          placeholder=\"Search\"\n          (input)=\"dt.filterGlobal($event.target.value, 'contains')\"\n      /></label>\n    </div>\n    <p-table #dt [value]=\"datas$ | async\" [globalFilterFields]=\"['name']\" [paginator]=\"true\" [rows]=\"10\">\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Update'\"\n                  ngbDropdownItem\n                  (click)=\"onEditTenant(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Edit' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageConnectionStrings'\"\n                  ngbDropdownItem\n                  (click)=\"onEditConnectionString(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageFeatures'\"\n                  ngbDropdownItem\n                  (click)=\"onManageFeatures(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Features' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Delete'\"\n                  ngbDropdownItem\n                  (click)=\"delete(data.id, data.name)\"\n                >\n                  {{ 'AbpTenantManagement::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\" *ngIf=\"isModalVisible\">\n  <ng-template #abpHeader>\n    <h3>{{ selectedModalContent.title | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <ng-container *ngTemplateOutlet=\"selectedModalContent?.template\"></ng-container>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n    </button>\n    <button class=\"btn btn-primary\" type=\"button\" (click)=\"save()\">\n      {{ 'AbpTenantManagement::Save' | abpLocalization }}\n    </button>\n  </ng-template>\n</abp-modal>\n\n<ng-template #tenantModalTemplate>\n  <form [formGroup]=\"tenantForm\">\n    <div class=\"mt-2\">\n      <div class=\"form-group\">\n        <label for=\"name\">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>\n        <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n      </div>\n    </div>\n  </form>\n</ng-template>\n\n<ng-template #connectionStringModalTemplate>\n  <form [formGroup]=\"defaultConnectionStringForm\">\n    <div class=\"mt-2\">\n      <div class=\"form-group\">\n        <div class=\"form-check\">\n          <input id=\"useSharedDatabase\" type=\"checkbox\" class=\"form-check-input\" formControlName=\"useSharedDatabase\" />\n          <label for=\"useSharedDatabase\" class=\"font-check-label\">{{\n            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization\n          }}</label>\n        </div>\n      </div>\n      <div class=\"form-group\" *ngIf=\"!useSharedDatabase\">\n        <label for=\"defaultConnectionString\">{{\n          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization\n        }}</label>\n        <input\n          type=\"text\"\n          id=\"defaultConnectionString\"\n          class=\"form-control\"\n          formControlName=\"defaultConnectionString\"\n        />\n      </div>\n    </div>\n  </form>\n</ng-template>\n\n<ng-template #featuresModalTemplate>\n  Manage Features\n</ng-template>\n"
                 }] }
     ];
     /** @nocollapse */
     TenantsComponent.ctorParameters = function () { return [
         { type: ConfirmationService },
         { type: TenantManagementService },
-        { type: NgbModal },
         { type: FormBuilder },
         { type: Store }
     ]; };
     TenantsComponent.propDecorators = {
-        modalWrapper: [{ type: ViewChild, args: ['modalWrapper', { static: false },] }],
-        mTemplateConnStr: [{ type: ViewChild, args: ['mTemplateConnStr', { static: false },] }],
-        mTemplateFeatures: [{ type: ViewChild, args: ['mTemplateFeatures', { static: false },] }],
-        mTemplateTenant: [{ type: ViewChild, args: ['mTemplateTenant', { static: false },] }]
+        tenantModalTemplate: [{ type: ViewChild, args: ['tenantModalTemplate', { static: false },] }],
+        connectionStringModalTemplate: [{ type: ViewChild, args: ['connectionStringModalTemplate', { static: false },] }],
+        featuresModalTemplate: [{ type: ViewChild, args: ['featuresModalTemplate', { static: false },] }]
     };
     __decorate([
         Select(TenantManagementState.get),

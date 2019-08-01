@@ -11,4 +11,5 @@ export declare class TenantManagementService {
     update(body: TenantManagement.UpdateRequest): Observable<ABP.BasicItem>;
     getDefaultConnectionString(id: string): Observable<string>;
     updateDefaultConnectionString(payload: TenantManagement.DefaultConnectionStringRequest): Observable<any>;
+    deleteDefaultConnectionString(id: string): Observable<string>;
 }

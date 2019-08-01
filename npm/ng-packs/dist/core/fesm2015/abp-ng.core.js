@@ -1,5 +1,5 @@
 import { __rest, __decorate, __metadata } from 'tslib';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Directive, ElementRef, Optional, Renderer2, Input, InjectionToken, Inject, Pipe, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Directive, ChangeDetectorRef, ElementRef, Input, HostBinding, Optional, Renderer2, InjectionToken, Inject, Pipe, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Store, Action, Selector, State, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
 import { NEVER, throwError, of, Subject, Observable, ReplaySubject } from 'rxjs';
@@ -636,6 +636,8 @@ let ConfigState = ConfigState_1 = class ConfigState {
      * @return {?}
      */
     static getCopy(key, ...interpolateParams) {
+        if (!key)
+            key = '';
         /** @type {?} */
         const keys = (/** @type {?} */ (key.split('::')));
         /** @type {?} */
@@ -982,6 +984,60 @@ RouterOutletComponent.decorators = [
   `
             }] }
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class EllipsisDirective {
+    /**
+     * @param {?} cdRef
+     * @param {?} elRef
+     */
+    constructor(cdRef, elRef) {
+        this.cdRef = cdRef;
+        this.elRef = elRef;
+        this.enabled = true;
+    }
+    /**
+     * @return {?}
+     */
+    get maxWidth() {
+        return this.witdh || '180px';
+    }
+    /**
+     * @return {?}
+     */
+    ngAfterContentInit() {
+        setTimeout((/**
+         * @return {?}
+         */
+        () => {
+            /** @type {?} */
+            const title = this.title;
+            this.title = title || ((/** @type {?} */ (this.elRef.nativeElement))).innerText;
+            if (this.title !== title) {
+                this.cdRef.detectChanges();
+            }
+        }), 0);
+    }
+}
+EllipsisDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[abpEllipsis]',
+            },] }
+];
+/** @nocollapse */
+EllipsisDirective.ctorParameters = () => [
+    { type: ChangeDetectorRef },
+    { type: ElementRef }
+];
+EllipsisDirective.propDecorators = {
+    witdh: [{ type: Input, args: ['abpEllipsis',] }],
+    title: [{ type: HostBinding, args: ['title',] }, { type: Input }],
+    enabled: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
+    maxWidth: [{ type: HostBinding, args: ['style.max-width',] }]
+};
 
 /**
  * @fileoverview added by tsickle
@@ -1686,6 +1742,7 @@ CoreModule.decorators = [
                     PermissionDirective,
                     VisibilityDirective,
                     LocalizationPipe,
+                    EllipsisDirective,
                 ],
                 exports: [
                     CommonModule,
@@ -1697,6 +1754,7 @@ CoreModule.decorators = [
                     DynamicLayoutComponent,
                     PermissionDirective,
                     VisibilityDirective,
+                    EllipsisDirective,
                     LocalizationPipe,
                 ],
                 providers: [LocalizationPipe],
@@ -1704,5 +1762,5 @@ CoreModule.decorators = [
             },] }
 ];
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, CONFIG, ConfigGetAppConfiguration, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, LazyLoadService, LoaderStart, LoaderStop, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileChangePassword, ProfileGet, ProfileService, ProfileState, ProfileUpdate, Rest, RestOccurError, RestService, RouterOutletComponent, SessionSetLanguage, SessionState, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, RestService as ɵc, ProfileGet as ɵd, ProfileUpdate as ɵe, ProfileChangePassword as ɵf, SessionState as ɵh, SessionSetLanguage as ɵi, ConfigState as ɵj, ApplicationConfigurationService as ɵk, PatchRouteByName as ɵl, ConfigGetAppConfiguration as ɵm, RouterOutletComponent as ɵn, DynamicLayoutComponent as ɵo, ConfigState as ɵp, PermissionDirective as ɵq, VisibilityDirective as ɵr, LocalizationPipe as ɵs, NGXS_CONFIG_PLUGIN_OPTIONS as ɵt, ConfigPlugin as ɵu, ApiInterceptor as ɵw, getInitialData as ɵx };
+export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, CONFIG, ConfigGetAppConfiguration, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, LazyLoadService, LoaderStart, LoaderStop, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileChangePassword, ProfileGet, ProfileService, ProfileState, ProfileUpdate, Rest, RestOccurError, RestService, RouterOutletComponent, SessionSetLanguage, SessionState, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, RestService as ɵc, ProfileGet as ɵd, ProfileUpdate as ɵe, ProfileChangePassword as ɵf, SessionState as ɵh, SessionSetLanguage as ɵi, ConfigState as ɵj, ApplicationConfigurationService as ɵk, PatchRouteByName as ɵl, ConfigGetAppConfiguration as ɵm, RouterOutletComponent as ɵn, DynamicLayoutComponent as ɵo, ConfigState as ɵp, PermissionDirective as ɵq, VisibilityDirective as ɵr, LocalizationPipe as ɵs, EllipsisDirective as ɵt, NGXS_CONFIG_PLUGIN_OPTIONS as ɵu, ConfigPlugin as ɵv, ApiInterceptor as ɵx, getInitialData as ɵy };
 //# sourceMappingURL=abp-ng.core.js.map
