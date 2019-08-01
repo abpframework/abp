@@ -68,17 +68,26 @@ export class ErrorHandler {
             );
             break;
           case 403:
-            this.show403();
+            this.createErrorComponent({
+              title: DEFAULTS.defaultError403.message,
+              details: DEFAULTS.defaultError403.details,
+            });
             break;
           case 404:
             this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
             break;
           case 500:
-            this.show500();
+            this.createErrorComponent({
+              title: '500',
+              details: 'Sorry, an error has occured.',
+            });
             break;
           case 0:
             if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
-              this.show500();
+              this.createErrorComponent({
+                title: 'Unknown Error',
+                details: 'Sorry, an error has occured.',
+              });
             }
             break;
           default:
@@ -111,20 +120,6 @@ export class ErrorHandler {
         state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
       }),
     );
-  }
-
-  private show500() {
-    this.createErrorComponent({
-      title: '500',
-      details: 'Sorry, an error has occured.',
-    });
-  }
-
-  private show403() {
-    this.createErrorComponent({
-      title: DEFAULTS.defaultError403.message,
-      details: DEFAULTS.defaultError403.details,
-    });
   }
 
   createErrorComponent(instance: Partial<ErrorComponent>) {
