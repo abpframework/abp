@@ -246,7 +246,7 @@ using Volo.Abp.Application.Services;
 namespace Acme.BookStore
 {
     public interface IBookAppService : 
-        IAsyncCrudAppService< //Defines CRUD methods
+        ICrudAppService< //Defines CRUD methods
             BookDto, //Used to show books
             Guid, //Primary key of the book entity
             PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
@@ -259,8 +259,8 @@ namespace Acme.BookStore
 ```
 
 - Defining interfaces for application services is <u>not required</u> by the framework. However, it's suggested as a best practice.
-- `IAsyncCrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually.
-- There are some variations of the `IAsyncCrudAppService` where you can use separated DTOs for each method.
+- `ICrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually.
+- There are some variations of the `ICrudAppService` where you can use separated DTOs for each method.
 
 #### BookAppService
 
@@ -275,7 +275,7 @@ using Volo.Abp.Domain.Repositories;
 namespace Acme.BookStore
 {
     public class BookAppService : 
-        AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+        CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                             CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
@@ -288,7 +288,7 @@ namespace Acme.BookStore
 }
 ```
 
-- `BookAppService` is derived from `AsyncCrudAppService<...>` which implements all the CRUD methods defined above.
+- `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD methods defined above.
 - `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](../../Repositories.md).
 - `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. You defined the mappings before, so it will work as expected.
 
@@ -298,10 +298,14 @@ You normally create **Controllers** to expose application services as **HTTP API
 
 #### Swagger UI
 
-The startup template is configured to run the [swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the application and enter `https://localhost:XXXX/swagger/` (replace XXXX by your own port) as URL on your browser.
+The startup template is configured to run the [swagger UI](https://swagger.io/tools/swagger-ui/) using the [Swashbuckle.AspNetCore](https://github.com/domaindrivendev/Swashbuckle.AspNetCore) library. Run the `Acme.BookStore.HttpApi.Host` application and enter `https://localhost:XXXX/swagger/` (replace XXXX by your own port) as URL on your browser.
 
 You will see some built-in service endpoints as well as the `Book` service and its REST-style endpoints:
 
-TODO: Screenshot
+![bookstore-swagger](images/bookstore-swagger-api.png)
 
 Swagger has a nice UI to test APIs. You can try to execute the `[GET] /api/app/book` API to get a list of books.
+
+### Create the Books Page
+
+It's time to create something visible and usable!
