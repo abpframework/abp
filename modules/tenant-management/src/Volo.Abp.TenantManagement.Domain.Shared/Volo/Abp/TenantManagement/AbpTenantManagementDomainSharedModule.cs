@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
 
@@ -12,6 +13,15 @@ namespace Volo.Abp.TenantManagement
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<AbpTenantManagementResource>("en");
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpTenantManagementResource>()
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("/Volo/Abp/TenantManagement/Localization/Resources");
             });
         }
     }
