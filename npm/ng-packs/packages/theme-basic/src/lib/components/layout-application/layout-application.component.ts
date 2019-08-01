@@ -8,17 +8,17 @@ import {
   SessionState,
   takeUntilDestroy,
 } from '@abp/ng.core';
-import { Component, TrackByFunction, ViewChild, TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Select, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Observable } from 'rxjs';
-import { map, distinctUntilChanged, delay, filter } from 'rxjs/operators';
+import compare from 'just-compare';
+import { Observable, fromEvent } from 'rxjs';
+import { filter, map, debounceTime } from 'rxjs/operators';
 import snq from 'snq';
 import { LayoutAddNavigationElement } from '../../actions';
-import { LayoutState } from '../../states';
 import { Layout } from '../../models/layout';
-import compare from 'just-compare';
+import { LayoutState } from '../../states';
 
 @Component({
   selector: 'abp-layout-application',
@@ -49,6 +49,8 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
   isOpenChangePassword: boolean = false;
 
   isOpenProfile: boolean = false;
+
+  isDropdownChildDynamic: boolean;
 
   get visibleRoutes$(): Observable<ABP.FullRoute[]> {
     return this.routes$.pipe(map(routes => getVisibleRoutes(routes)));
@@ -81,6 +83,13 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
 
   constructor(private store: Store, private oauthService: OAuthService) {}
 
+  private checkWindowWidth() {
+    setTimeout(() => {
+      if (window.innerWidth < 768) this.isDropdownChildDynamic = false;
+      else this.isDropdownChildDynamic = true;
+    }, 0);
+  }
+
   ngAfterViewInit() {
     const navigations = this.store.selectSnapshot(LayoutState.getNavigationElements).map(({ name }) => name);
 
@@ -101,6 +110,17 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
       )
       .subscribe(elements => {
         setTimeout(() => (this.rightPartElements = elements), 0);
+      });
+
+    this.checkWindowWidth();
+
+    fromEvent(window, 'resize')
+      .pipe(
+        takeUntilDestroy(this),
+        debounceTime(350),
+      )
+      .subscribe(() => {
+        this.checkWindowWidth();
       });
   }
 

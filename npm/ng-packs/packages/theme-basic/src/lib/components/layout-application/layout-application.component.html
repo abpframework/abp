@@ -54,13 +54,20 @@
         [abpVisibility]="childrenContainer"
         class="dropdown-submenu"
         ngbDropdown
-        display="static"
+        [display]="isDropdownChildDynamic ? 'dynamic' : 'static'"
         placement="right-top"
         [abpPermission]="child.requiredPolicy"
       >
-        <a role="button" class="btn d-block text-left py-2 px-2" ngbDropdownToggle>
-          {{ child.name | abpLocalization }}
-        </a>
+        <div ngbDropdownToggle [class.dropdown-toggle]="false">
+          <a
+            abpEllipsis="140px"
+            [abpEllipsisEnabled]="isDropdownChildDynamic"
+            role="button"
+            class="btn d-block text-left py-2 px-2 dropdown-toggle"
+          >
+            {{ child.name | abpLocalization }}
+          </a>
+        </div>
         <div #childrenContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
           <ng-template
             ngFor
