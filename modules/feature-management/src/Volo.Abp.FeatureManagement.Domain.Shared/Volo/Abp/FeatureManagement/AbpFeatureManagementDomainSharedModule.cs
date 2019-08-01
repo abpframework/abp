@@ -1,5 +1,6 @@
 ﻿using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
+using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 
 namespace Volo.Abp.FeatureManagement
@@ -14,6 +15,15 @@ namespace Volo.Abp.FeatureManagement
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources.Add<AbpFeatureManagementResource>("en");
+            });
+
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Get<AbpFeatureManagementResource>()
+                    .AddBaseTypes(
+                        typeof(AbpValidationResource)
+                    ).AddVirtualJson("Volo/Abp/FeatureManagement/Localization/Resources/Domain");
             });
         }
     }

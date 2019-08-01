@@ -43,14 +43,6 @@ namespace Volo.Blogging
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<BloggingResource>()
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiResource))
-                    .AddVirtualJson("/Localization/Resources/Blogging/Web");
-            });
 
             Configure<AbpAutoMapperOptions>(options =>
             {

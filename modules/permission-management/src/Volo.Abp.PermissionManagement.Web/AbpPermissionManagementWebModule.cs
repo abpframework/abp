@@ -32,16 +32,6 @@ namespace Volo.Abp.PermissionManagement.Web
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpPermissionManagementResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                     ).AddVirtualJson("/Localization/Resources/AbpPermissionManagement");
-            });
-
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);

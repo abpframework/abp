@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -12,6 +12,14 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace />
   </PropertyGroup>
+
+  <ItemGroup>
+    <content Remove="Volo\Abp\Identity\Localization\Domain\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Identity\Localization\Domain\*.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.Domain.Shared\Volo.Abp.Users.Domain.Shared.csproj" />
