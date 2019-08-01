@@ -1,5 +1,6 @@
-import { ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Injector, RendererFactory2 } from '@angular/core';
 import { Actions, Store } from '@ngxs/store';
+import { ErrorComponent } from '../components/errors/error.component';
 import { ConfirmationService } from '../services/confirmation.service';
 export declare class ErrorHandler {
     private actions;
@@ -12,5 +13,5 @@ export declare class ErrorHandler {
     constructor(actions: Actions, store: Store, confirmationService: ConfirmationService, appRef: ApplicationRef, cfRes: ComponentFactoryResolver, rendererFactory: RendererFactory2, injector: Injector);
     private showError;
     private navigateToLogin;
-    private show500Component;
+    createErrorComponent(instance: Partial<ErrorComponent>): void;
 }

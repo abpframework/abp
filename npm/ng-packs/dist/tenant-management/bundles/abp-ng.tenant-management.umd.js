@@ -770,7 +770,7 @@
     /** @type {?} */
     var TENANT_MANAGEMENT_ROUTES = (/** @type {?} */ ([
         {
-            name: 'TenantManagement',
+            name: 'Tenant Management',
             path: 'tenant-management',
             parentName: 'Administration',
             layout: "application" /* application */,
@@ -780,7 +780,6 @@
                     name: 'Tenants',
                     order: 1,
                     requiredPolicy: 'AbpTenantManagement.Tenants',
-                    parentName: 'TenantManagement',
                 },
             ],
         },

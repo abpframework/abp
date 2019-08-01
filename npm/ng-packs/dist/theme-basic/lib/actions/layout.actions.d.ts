@@ -4,3 +4,8 @@ export declare class LayoutAddNavigationElement {
     static readonly type = "[Layout] Add Navigation Element";
     constructor(payload: Layout.NavigationElement | Layout.NavigationElement[]);
 }
+export declare class LayoutRemoveNavigationElementByName {
+    name: string;
+    static readonly type = "[Layout] Remove Navigation ElementByName";
+    constructor(name: string);
+}

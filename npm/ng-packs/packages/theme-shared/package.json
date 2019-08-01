@@ -4,7 +4,7 @@
   "dependencies": {
     "@abp/ng.core": "^0.7.6",
     "@angular/cdk": "^8.0.1",
-    "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ngx-validate/core": "^0.0.1",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",

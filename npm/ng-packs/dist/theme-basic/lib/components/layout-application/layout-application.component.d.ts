@@ -1,5 +1,6 @@
 import { ABP, ApplicationConfiguration, eLayoutType } from '@abp/ng.core';
-import { TrackByFunction, TemplateRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { AfterViewInit, OnDestroy, QueryList, TemplateRef, TrackByFunction } from '@angular/core';
+import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable } from 'rxjs';
@@ -14,8 +15,10 @@ export declare class LayoutApplicationComponent implements AfterViewInit, OnDest
     navElements$: Observable<Layout.NavigationElement[]>;
     currentUserRef: TemplateRef<any>;
     languageRef: TemplateRef<any>;
+    navbarRootDropdowns: QueryList<NgbDropdown>;
     isOpenChangePassword: boolean;
     isOpenProfile: boolean;
+    isDropdownChildDynamic: boolean;
     readonly visibleRoutes$: Observable<ABP.FullRoute[]>;
     readonly defaultLanguage$: Observable<string>;
     readonly dropdownLanguages$: Observable<ApplicationConfiguration.Language[]>;
@@ -24,6 +27,7 @@ export declare class LayoutApplicationComponent implements AfterViewInit, OnDest
     trackByFn: TrackByFunction<ABP.FullRoute>;
     trackElementByFn: TrackByFunction<ABP.FullRoute>;
     constructor(store: Store, oauthService: OAuthService);
+    private checkWindowWidth;
     ngAfterViewInit(): void;
     ngOnDestroy(): void;
     onChangeLang(cultureName: string): void;

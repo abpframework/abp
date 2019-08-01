@@ -1002,8 +1002,14 @@ class EllipsisDirective {
     /**
      * @return {?}
      */
+    get class() {
+        return this.enabled;
+    }
+    /**
+     * @return {?}
+     */
     get maxWidth() {
-        return this.witdh || '180px';
+        return this.enabled ? this.witdh || '180px' : undefined;
     }
     /**
      * @return {?}
@@ -1035,7 +1041,8 @@ EllipsisDirective.ctorParameters = () => [
 EllipsisDirective.propDecorators = {
     witdh: [{ type: Input, args: ['abpEllipsis',] }],
     title: [{ type: HostBinding, args: ['title',] }, { type: Input }],
-    enabled: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
+    enabled: [{ type: Input, args: ['abpEllipsisEnabled',] }],
+    class: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
     maxWidth: [{ type: HostBinding, args: ['style.max-width',] }]
 };
 

@@ -4,7 +4,7 @@
 export * from './public-api';
 export { AbstractToasterClass as ɵc } from './lib/abstracts/toaster';
 export { ConfirmationComponent as ɵa } from './lib/components/confirmation/confirmation.component';
-export { Error500Component as ɵf } from './lib/components/errors/error-500.component';
+export { ErrorComponent as ɵf } from './lib/components/errors/error.component';
 export { LoaderBarComponent as ɵg } from './lib/components/loader-bar/loader-bar.component';
 export { ModalComponent as ɵe } from './lib/components/modal/modal.component';
 export { ToastComponent as ɵd } from './lib/components/toast/toast.component';

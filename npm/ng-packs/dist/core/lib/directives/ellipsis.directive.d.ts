@@ -5,6 +5,7 @@ export declare class EllipsisDirective implements AfterContentInit {
     witdh: string;
     title: string;
     enabled: boolean;
+    readonly class: boolean;
     readonly maxWidth: string;
     constructor(cdRef: ChangeDetectorRef, elRef: ElementRef);
     ngAfterContentInit(): void;

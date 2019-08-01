@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/platform-browser": "~8.1.2",
     "@angular/router": "~8.1.2",
-    "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ngx-validate/core": "^0.0.1",
     "@ngxs/router-plugin": "^3.5.0",
     "@ngxs/storage-plugin": "^3.5.0",

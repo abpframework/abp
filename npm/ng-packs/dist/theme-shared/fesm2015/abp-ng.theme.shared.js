@@ -1,12 +1,13 @@
 import { LoaderStart, LoaderStop, RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
 import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, EventEmitter, Renderer2, Output, ContentChild, ElementRef, ViewChild, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, APP_INITIALIZER, NgModule } from '@angular/core';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { takeUntilDestroy, NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
 import { Subject, timer, fromEvent, forkJoin } from 'rxjs';
 import { filter, take, debounceTime, takeUntil } from 'rxjs/operators';
-import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
+import { ofActionSuccessful, Actions, Store } from '@ngxs/store';
+import { NavigationStart, NavigationEnd, Router } from '@angular/router';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 
 /**
@@ -168,35 +169,38 @@ ConfirmationComponent.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class Error500Component {
-    /**
-     * @param {?} store
-     */
-    constructor(store) {
-        this.store = store;
+class ErrorComponent {
+    constructor() {
+        this.title = 'Oops!';
+        this.details = 'Sorry, an error has occured.';
     }
     /**
      * @return {?}
      */
-    ngOnInit() { }
+    destroy() {
+        this.renderer.removeChild(this.host, this.elementRef.nativeElement);
+    }
 }
-Error500Component.decorators = [
+ErrorComponent.decorators = [
     { type: Component, args: [{
-                selector: 'abp-error-500',
+                selector: 'abp-error',
                 template: `
     <div class="error">
+      <button id="abp-close-button mr-2" type="button" class="close" (click)="destroy()">
+        <span aria-hidden="true">&times;</span>
+      </button>
       <div class="row centered">
         <div class="col-md-12">
           <div class="error-template">
             <h1>
-              Oops!
+              {{ title }}
             </h1>
             <div class="error-details">
-              Sorry, an error has occured.
+              {{ details }}
             </div>
             <div class="error-actions">
               <a routerLink="/" class="btn btn-primary btn-md mt-2"
-                ><span class="glyphicon glyphicon-home"></span> Take Me Home
+                ><span class="glyphicon glyphicon-home"></span> Take me home
               </a>
             </div>
           </div>
@@ -207,10 +211,6 @@ Error500Component.decorators = [
                 styles: [".error{position:fixed;top:0;background-color:#fff;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)}"]
             }] }
 ];
-/** @nocollapse */
-Error500Component.ctorParameters = () => [
-    { type: Store }
-];
 
 /**
  * @fileoverview added by tsickle
@@ -219,9 +219,11 @@ Error500Component.ctorParameters = () => [
 class LoaderBarComponent {
     /**
      * @param {?} actions
+     * @param {?} router
      */
-    constructor(actions) {
+    constructor(actions, router) {
         this.actions = actions;
+        this.router = router;
         this.containerClass = 'abp-loader-bar';
         this.progressClass = 'abp-progress';
         this.isLoading = false;
@@ -232,20 +234,38 @@ class LoaderBarComponent {
         (action) => action.payload.url.indexOf('openid-configuration') < 0);
         this.progressLevel = 0;
         actions
-            .pipe(ofActionSuccessful(LoaderStart, LoaderStop), filter(this.filter))
+            .pipe(ofActionSuccessful(LoaderStart, LoaderStop), filter(this.filter), takeUntilDestroy(this))
             .subscribe((/**
          * @param {?} action
          * @return {?}
          */
         action => {
-            if (action instanceof LoaderStart) {
+            if (action instanceof LoaderStart)
                 this.startLoading();
-            }
-            else {
+            else
                 this.stopLoading();
-            }
+        }));
+        router.events
+            .pipe(filter((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => event instanceof NavigationStart || event instanceof NavigationEnd)), takeUntilDestroy(this))
+            .subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        event => {
+            if (event instanceof NavigationStart)
+                this.startLoading();
+            else
+                this.stopLoading();
         }));
     }
+    /**
+     * @return {?}
+     */
+    ngOnDestroy() { }
     /**
      * @return {?}
      */
@@ -299,7 +319,8 @@ LoaderBarComponent.decorators = [
 ];
 /** @nocollapse */
 LoaderBarComponent.ctorParameters = () => [
-    { type: Actions }
+    { type: Actions },
+    { type: Router }
 ];
 LoaderBarComponent.propDecorators = {
     containerClass: [{ type: Input }],
@@ -689,17 +710,26 @@ class ErrorHandler {
                         () => this.navigateToLogin()));
                         break;
                     case 403:
-                        this.showError(DEFAULTS.defaultError403.details, DEFAULTS.defaultError403.message);
+                        this.createErrorComponent({
+                            title: DEFAULTS.defaultError403.message,
+                            details: DEFAULTS.defaultError403.details,
+                        });
                         break;
                     case 404:
                         this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
                         break;
                     case 500:
-                        this.show500Component();
+                        this.createErrorComponent({
+                            title: '500',
+                            details: 'Sorry, an error has occured.',
+                        });
                         break;
                     case 0:
                         if (((/** @type {?} */ (err))).statusText === 'Unknown Error') {
-                            this.show500Component();
+                            this.createErrorComponent({
+                                title: 'Unknown Error',
+                                details: 'Sorry, an error has occured.',
+                            });
                         }
                         break;
                     default:
@@ -741,18 +771,26 @@ class ErrorHandler {
         }));
     }
     /**
-     * @private
+     * @param {?} instance
      * @return {?}
      */
-    show500Component() {
+    createErrorComponent(instance) {
         /** @type {?} */
         const renderer = this.rendererFactory.createRenderer(null, null);
         /** @type {?} */
         const host = renderer.selectRootElement('app-root', true);
         /** @type {?} */
-        const componentRef = this.cfRes.resolveComponentFactory(Error500Component).create(this.injector);
+        const componentRef = this.cfRes.resolveComponentFactory(ErrorComponent).create(this.injector);
+        for (const key in componentRef.instance) {
+            if (componentRef.instance.hasOwnProperty(key)) {
+                componentRef.instance[key] = instance[key];
+            }
+        }
         this.appRef.attachView(componentRef.hostView);
         renderer.appendChild(host, ((/** @type {?} */ (componentRef.hostView))).rootNodes[0]);
+        componentRef.instance.renderer = renderer;
+        componentRef.instance.elementRef = componentRef.location;
+        componentRef.instance.host = host;
     }
 }
 ErrorHandler.decorators = [
@@ -819,9 +857,9 @@ ThemeSharedModule.decorators = [
                         targetSelector: '.form-group',
                     }),
                 ],
-                declarations: [ConfirmationComponent, ToastComponent, ModalComponent, Error500Component, LoaderBarComponent],
+                declarations: [ConfirmationComponent, ToastComponent, ModalComponent, ErrorComponent, LoaderBarComponent],
                 exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
-                entryComponents: [Error500Component],
+                entryComponents: [ErrorComponent],
             },] }
 ];
 
@@ -873,5 +911,5 @@ ToasterService.decorators = [
 ];
 /** @nocollapse */ ToasterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(ɵɵinject(MessageService)); }, token: ToasterService, providedIn: "root" });
 
-export { ConfirmationComponent, ConfirmationService, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, ConfirmationComponent as ɵa, ConfirmationService as ɵb, AbstractToasterClass as ɵc, ToastComponent as ɵd, ModalComponent as ɵe, Error500Component as ɵf, LoaderBarComponent as ɵg, ErrorHandler as ɵh };
+export { ConfirmationComponent, ConfirmationService, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, ConfirmationComponent as ɵa, ConfirmationService as ɵb, AbstractToasterClass as ɵc, ToastComponent as ɵd, ModalComponent as ɵe, ErrorComponent as ɵf, LoaderBarComponent as ɵg, ErrorHandler as ɵh };
 //# sourceMappingURL=abp-ng.theme.shared.js.map

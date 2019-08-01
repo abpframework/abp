@@ -1,11 +1,11 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@angular/forms'), require('@ngx-validate/core'), require('@ngxs/store'), require('@ngxs/router-plugin'), require('angular-oauth2-oidc'), require('rxjs'), require('rxjs/operators'), require('snq'), require('just-compare'), require('@abp/ng.theme.shared'), require('primeng/toast')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.theme.basic', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@angular/forms', '@ngx-validate/core', '@ngxs/store', '@ngxs/router-plugin', 'angular-oauth2-oidc', 'rxjs', 'rxjs/operators', 'snq', 'just-compare', '@abp/ng.theme.shared', 'primeng/toast'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.basic = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.ng.forms, global.core$1, global.store, global.routerPlugin, global.angularOauth2Oidc, global.rxjs, global.rxjs.operators, global.snq, global.compare, global.ng_theme_shared, global.toast));
-}(this, function (exports, ng_core, core, ngBootstrap, forms, core$1, store, routerPlugin, angularOauth2Oidc, rxjs, operators, snq, compare, ng_theme_shared, toast) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@angular/forms'), require('@ngx-validate/core'), require('@ngxs/store'), require('@ngxs/router-plugin'), require('angular-oauth2-oidc'), require('just-compare'), require('rxjs'), require('rxjs/operators'), require('snq'), require('@abp/ng.theme.shared'), require('primeng/toast')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.theme.basic', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@angular/forms', '@ngx-validate/core', '@ngxs/store', '@ngxs/router-plugin', 'angular-oauth2-oidc', 'just-compare', 'rxjs', 'rxjs/operators', 'snq', '@abp/ng.theme.shared', 'primeng/toast'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.basic = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.ng.forms, global.core$1, global.store, global.routerPlugin, global.angularOauth2Oidc, global.compare, global.rxjs, global.rxjs.operators, global.snq, global.ng_theme_shared, global.toast));
+}(this, function (exports, ng_core, core, ngBootstrap, forms, core$1, store, routerPlugin, angularOauth2Oidc, compare, rxjs, operators, snq, ng_theme_shared, toast) { 'use strict';
 
-    snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
     compare = compare && compare.hasOwnProperty('default') ? compare['default'] : compare;
+    snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -210,6 +210,13 @@
         LayoutAddNavigationElement.type = '[Layout] Add Navigation Element';
         return LayoutAddNavigationElement;
     }());
+    var LayoutRemoveNavigationElementByName = /** @class */ (function () {
+        function LayoutRemoveNavigationElementByName(name) {
+            this.name = name;
+        }
+        LayoutRemoveNavigationElementByName.type = '[Layout] Remove Navigation ElementByName';
+        return LayoutRemoveNavigationElementByName;
+    }());
 
     /**
      * @fileoverview added by tsickle
@@ -235,7 +242,7 @@
          * @param {?} __1
          * @return {?}
          */
-        LayoutState.prototype.layoutAction = /**
+        LayoutState.prototype.layoutAddAction = /**
          * @param {?} __0
          * @param {?} __1
          * @return {?}
@@ -283,12 +290,45 @@
                 navigationElements: navigationElements,
             });
         };
+        /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        LayoutState.prototype.layoutRemoveAction = /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        function (_a, _b) {
+            var getState = _a.getState, patchState = _a.patchState;
+            var name = _b.name;
+            var navigationElements = getState().navigationElements;
+            /** @type {?} */
+            var index = navigationElements.findIndex((/**
+             * @param {?} element
+             * @return {?}
+             */
+            function (element) { return element.name === name; }));
+            if (index > -1) {
+                navigationElements = navigationElements.splice(index, 1);
+            }
+            return patchState({
+                navigationElements: navigationElements,
+            });
+        };
         __decorate([
             store.Action(LayoutAddNavigationElement),
             __metadata("design:type", Function),
             __metadata("design:paramtypes", [Object, LayoutAddNavigationElement]),
             __metadata("design:returntype", void 0)
-        ], LayoutState.prototype, "layoutAction", null);
+        ], LayoutState.prototype, "layoutAddAction", null);
+        __decorate([
+            store.Action(LayoutRemoveNavigationElementByName),
+            __metadata("design:type", Function),
+            __metadata("design:paramtypes", [Object, LayoutRemoveNavigationElementByName]),
+            __metadata("design:returntype", void 0)
+        ], LayoutState.prototype, "layoutRemoveAction", null);
         __decorate([
             store.Selector(),
             __metadata("design:type", Function),
@@ -397,6 +437,35 @@
             configurable: true
         });
         /**
+         * @private
+         * @return {?}
+         */
+        LayoutApplicationComponent.prototype.checkWindowWidth = /**
+         * @private
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            setTimeout((/**
+             * @return {?}
+             */
+            function () {
+                _this.navbarRootDropdowns.forEach((/**
+                 * @param {?} item
+                 * @return {?}
+                 */
+                function (item) {
+                    item.close();
+                }));
+                if (window.innerWidth < 768) {
+                    _this.isDropdownChildDynamic = false;
+                }
+                else {
+                    _this.isDropdownChildDynamic = true;
+                }
+            }), 0);
+        };
+        /**
          * @return {?}
          */
         LayoutApplicationComponent.prototype.ngAfterViewInit = /**
@@ -446,6 +515,15 @@
                  */
                 function () { return (_this.rightPartElements = elements); }), 0);
             }));
+            this.checkWindowWidth();
+            rxjs.fromEvent(window, 'resize')
+                .pipe(ng_core.takeUntilDestroy(this), operators.debounceTime(250))
+                .subscribe((/**
+             * @return {?}
+             */
+            function () {
+                _this.checkWindowWidth();
+            }));
         };
         /**
          * @return {?}
@@ -484,7 +562,7 @@
         LayoutApplicationComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-layout-application',
-                        template: "<abp-layout>\n  <ul class=\"navbar-nav mr-auto\">\n    <ng-container\n      *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n      [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n      [ngTemplateOutletContext]=\"{ $implicit: route }\"\n    >\n    </ng-container>\n\n    <ng-template #defaultLink let-route>\n      <li class=\"nav-item\" [abpPermission]=\"route.requiredPolicy\">\n        <a class=\"nav-link\" [routerLink]=\"[route.url]\">{{ route.name | abpLocalization }}</a>\n      </li>\n    </ng-template>\n\n    <ng-template #dropdownLink let-route>\n      <li\n        class=\"nav-item dropdown\"\n        ngbDropdown\n        display=\"static\"\n        [abpPermission]=\"route.requiredPolicy\"\n        [abpVisibility]=\"routeContainer\"\n      >\n        <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n          {{ route.name | abpLocalization }}\n        </a>\n        <div #routeContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            #forTemplate\n            ngFor\n            [ngForOf]=\"route.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </li>\n    </ng-template>\n\n    <ng-template #childWrapper let-child>\n      <ng-template\n        [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n        [ngTemplateOutletContext]=\"{ $implicit: child }\"\n      ></ng-template>\n    </ng-template>\n\n    <ng-template #defaultChild let-child>\n      <div class=\"dropdown-submenu\" [abpPermission]=\"child.requiredPolicy\">\n        <a class=\"dropdown-item py-2 px-2\" [routerLink]=\"[child.url]\">{{ child.name | abpLocalization }}</a>\n      </div>\n    </ng-template>\n\n    <ng-template #dropdownChild let-child>\n      <div\n        [abpVisibility]=\"childrenContainer\"\n        class=\"dropdown-submenu\"\n        ngbDropdown\n        display=\"static\"\n        placement=\"right-top\"\n        [abpPermission]=\"child.requiredPolicy\"\n      >\n        <a role=\"button\" class=\"btn d-block text-left py-2 px-2\" ngbDropdownToggle>\n          {{ child.name | abpLocalization }}\n        </a>\n        <div #childrenContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            ngFor\n            [ngForOf]=\"child.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </div>\n    </ng-template>\n  </ul>\n\n  <ul class=\"navbar-nav ml-auto\">\n    <ng-container\n      *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n      [ngTemplateOutlet]=\"element\"\n    ></ng-container>\n  </ul>\n</abp-layout>\n\n<abp-change-password [(visible)]=\"isOpenChangePassword\"></abp-change-password>\n\n<abp-profile [(visible)]=\"isOpenProfile\"></abp-profile>\n\n<ng-template #language>\n  <li class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ defaultLanguage$ | async }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a\n        *ngFor=\"let lang of dropdownLanguages$ | async\"\n        class=\"dropdown-item\"\n        (click)=\"onChangeLang(lang.cultureName)\"\n        >{{ lang?.displayName }}</a\n      >\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ (currentUser$ | async)?.userName }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenChangePassword = true\">Change Password</a>\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenProfile = true\">My Profile</a>\n      <a class=\"dropdown-item pointer\" (click)=\"logout()\">Logout</a>\n    </div>\n  </li>\n</ng-template>\n"
+                        template: "<abp-layout>\n  <ul class=\"navbar-nav mr-auto\">\n    <ng-container\n      *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n      [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n      [ngTemplateOutletContext]=\"{ $implicit: route }\"\n    >\n    </ng-container>\n\n    <ng-template #defaultLink let-route>\n      <li class=\"nav-item\" [abpPermission]=\"route.requiredPolicy\">\n        <a class=\"nav-link\" [routerLink]=\"[route.url]\">{{ route.name | abpLocalization }}</a>\n      </li>\n    </ng-template>\n\n    <ng-template #dropdownLink let-route>\n      <li\n        #navbarRootDropdown\n        class=\"nav-item dropdown\"\n        ngbDropdown\n        display=\"static\"\n        [abpPermission]=\"route.requiredPolicy\"\n        [abpVisibility]=\"routeContainer\"\n      >\n        <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n          {{ route.name | abpLocalization }}\n        </a>\n        <div #routeContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            #forTemplate\n            ngFor\n            [ngForOf]=\"route.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </li>\n    </ng-template>\n\n    <ng-template #childWrapper let-child>\n      <ng-template\n        [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n        [ngTemplateOutletContext]=\"{ $implicit: child }\"\n      ></ng-template>\n    </ng-template>\n\n    <ng-template #defaultChild let-child>\n      <div class=\"dropdown-submenu\" [abpPermission]=\"child.requiredPolicy\">\n        <a class=\"dropdown-item py-2 px-2\" [routerLink]=\"[child.url]\">{{ child.name | abpLocalization }}</a>\n      </div>\n    </ng-template>\n\n    <ng-template #dropdownChild let-child>\n      <div\n        [abpVisibility]=\"childrenContainer\"\n        class=\"dropdown-submenu\"\n        ngbDropdown\n        [display]=\"isDropdownChildDynamic ? 'dynamic' : 'static'\"\n        placement=\"right-top\"\n        [abpPermission]=\"child.requiredPolicy\"\n      >\n        <div ngbDropdownToggle [class.dropdown-toggle]=\"false\">\n          <a\n            abpEllipsis=\"140px\"\n            [abpEllipsisEnabled]=\"isDropdownChildDynamic\"\n            role=\"button\"\n            class=\"btn d-block text-left py-2 px-2 dropdown-toggle\"\n          >\n            {{ child.name | abpLocalization }}\n          </a>\n        </div>\n        <div #childrenContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            ngFor\n            [ngForOf]=\"child.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </div>\n    </ng-template>\n  </ul>\n\n  <ul class=\"navbar-nav ml-auto\">\n    <ng-container\n      *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n      [ngTemplateOutlet]=\"element\"\n    ></ng-container>\n  </ul>\n</abp-layout>\n\n<ng-template #language>\n  <li class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ defaultLanguage$ | async }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a\n        *ngFor=\"let lang of dropdownLanguages$ | async\"\n        class=\"dropdown-item\"\n        (click)=\"onChangeLang(lang.cultureName)\"\n        >{{ lang?.displayName }}</a\n      >\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item dropdown\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle\" data-toggle=\"dropdown\">\n      {{ (currentUser$ | async)?.userName }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenChangePassword = true\">Change Password</a>\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenProfile = true\">My Profile</a>\n      <a class=\"dropdown-item pointer\" (click)=\"logout()\">Logout</a>\n    </div>\n  </li>\n\n  <abp-change-password [(visible)]=\"isOpenChangePassword\"></abp-change-password>\n\n  <abp-profile [(visible)]=\"isOpenProfile\"></abp-profile>\n</ng-template>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -494,7 +572,8 @@
         ]; };
         LayoutApplicationComponent.propDecorators = {
             currentUserRef: [{ type: core.ViewChild, args: ['currentUser', { static: false, read: core.TemplateRef },] }],
-            languageRef: [{ type: core.ViewChild, args: ['language', { static: false, read: core.TemplateRef },] }]
+            languageRef: [{ type: core.ViewChild, args: ['language', { static: false, read: core.TemplateRef },] }],
+            navbarRootDropdowns: [{ type: core.ViewChildren, args: ['navbarRootDropdown', { read: ngBootstrap.NgbDropdown },] }]
         };
         __decorate([
             store.Select(ng_core.ConfigState.getOne('routes')),
@@ -743,6 +822,7 @@
     exports.LayoutAddNavigationElement = LayoutAddNavigationElement;
     exports.LayoutApplicationComponent = LayoutApplicationComponent;
     exports.LayoutEmptyComponent = LayoutEmptyComponent;
+    exports.LayoutRemoveNavigationElementByName = LayoutRemoveNavigationElementByName;
     exports.LayoutState = LayoutState;
     exports.ThemeBasicModule = ThemeBasicModule;
     exports.ɵa = LayoutApplicationComponent;
@@ -754,6 +834,7 @@
     exports.ɵg = ProfileComponent;
     exports.ɵh = LayoutState;
     exports.ɵi = LayoutAddNavigationElement;
+    exports.ɵj = LayoutRemoveNavigationElementByName;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

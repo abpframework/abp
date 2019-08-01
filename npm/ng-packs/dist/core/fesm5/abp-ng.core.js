@@ -1097,12 +1097,22 @@ var EllipsisDirective = /** @class */ (function () {
         this.elRef = elRef;
         this.enabled = true;
     }
+    Object.defineProperty(EllipsisDirective.prototype, "class", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.enabled;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(EllipsisDirective.prototype, "maxWidth", {
         get: /**
          * @return {?}
          */
         function () {
-            return this.witdh || '180px';
+            return this.enabled ? this.witdh || '180px' : undefined;
         },
         enumerable: true,
         configurable: true
@@ -1140,7 +1150,8 @@ var EllipsisDirective = /** @class */ (function () {
     EllipsisDirective.propDecorators = {
         witdh: [{ type: Input, args: ['abpEllipsis',] }],
         title: [{ type: HostBinding, args: ['title',] }, { type: Input }],
-        enabled: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
+        enabled: [{ type: Input, args: ['abpEllipsisEnabled',] }],
+        class: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
         maxWidth: [{ type: HostBinding, args: ['style.max-width',] }]
     };
     return EllipsisDirective;
