@@ -7,7 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-import { Error500Component } from './components/errors/error-500.component';
+import { ErrorComponent } from './components/errors/error.component';
 import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { ToastComponent } from './components/toast/toast.component';
@@ -41,9 +41,9 @@ export function appendScript(injector: Injector) {
       targetSelector: '.form-group',
     }),
   ],
-  declarations: [ConfirmationComponent, ToastComponent, ModalComponent, Error500Component, LoaderBarComponent],
+  declarations: [ConfirmationComponent, ToastComponent, ModalComponent, ErrorComponent, LoaderBarComponent],
   exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
-  entryComponents: [Error500Component],
+  entryComponents: [ErrorComponent],
 })
 export class ThemeSharedModule {
   static forRoot(): ModuleWithProviders {

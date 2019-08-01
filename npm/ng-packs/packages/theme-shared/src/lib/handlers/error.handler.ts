@@ -1,22 +1,19 @@
 import { RestOccurError } from '@abp/ng.core';
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  Injectable,
   ApplicationRef,
   ComponentFactoryResolver,
-  RendererFactory2,
-  Inject,
-  ReflectiveInjector,
-  Injector,
   EmbeddedViewRef,
+  Injectable,
+  Injector,
+  RendererFactory2,
 } from '@angular/core';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { ErrorComponent } from '../components/errors/error.component';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
-import { DOCUMENT } from '@angular/common';
-import { Error500Component } from '../components/errors/error-500.component';
 
 const DEFAULTS = {
   defaultError: {
@@ -71,17 +68,17 @@ export class ErrorHandler {
             );
             break;
           case 403:
-            this.showError(DEFAULTS.defaultError403.details, DEFAULTS.defaultError403.message);
+            this.show403();
             break;
           case 404:
             this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
             break;
           case 500:
-            this.show500Component();
+            this.show500();
             break;
           case 0:
             if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
-              this.show500Component();
+              this.show500();
             }
             break;
           default:
@@ -116,11 +113,37 @@ export class ErrorHandler {
     );
   }
 
-  private show500Component() {
+  private show500() {
+    this.createErrorComponent({
+      title: '500',
+      details: 'Sorry, an error has occured.',
+    });
+  }
+
+  private show403() {
+    this.createErrorComponent({
+      title: DEFAULTS.defaultError403.message,
+      details: DEFAULTS.defaultError403.details,
+    });
+  }
+
+  createErrorComponent(instance: Partial<ErrorComponent>) {
     const renderer = this.rendererFactory.createRenderer(null, null);
     const host = renderer.selectRootElement('app-root', true);
-    const componentRef = this.cfRes.resolveComponentFactory(Error500Component).create(this.injector);
+
+    const componentRef = this.cfRes.resolveComponentFactory(ErrorComponent).create(this.injector);
+
+    for (const key in componentRef.instance) {
+      if (componentRef.instance.hasOwnProperty(key)) {
+        componentRef.instance[key] = instance[key];
+      }
+    }
+
     this.appRef.attachView(componentRef.hostView);
     renderer.appendChild(host, (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
+
+    componentRef.instance.renderer = renderer;
+    componentRef.instance.elementRef = componentRef.location;
+    componentRef.instance.host = host;
   }
 }
