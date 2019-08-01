@@ -98,11 +98,11 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
 
   private checkWindowWidth() {
     setTimeout(() => {
+      this.navbarRootDropdowns.forEach(item => {
+        item.close();
+      });
       if (window.innerWidth < 768) {
         this.isDropdownChildDynamic = false;
-        this.navbarRootDropdowns.forEach(item => {
-          item.close();
-        });
       } else {
         this.isDropdownChildDynamic = true;
       }
