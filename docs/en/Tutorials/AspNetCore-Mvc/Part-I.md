@@ -10,11 +10,11 @@ This is the first part of the ASP.NET Core MVC tutorial series. See all parts:
 - [Part II: Create, Update and Delete books](Part-II.md)
 - [Part III: Integration Tests](Part-III.md)
 
-You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+You can access to the **source code** of the application from [the GitHub repository](https://github.com/abpframework/abp/tree/master/samples/BookStore).
 
 ### Creating the Project
 
-Create a new project named `Acme.BookStore`, create the  database and run the application by following the [Getting Started document](../../Getting-Started-AspNetCore-MVC-Template.md).
+Create a new project named `Acme.BookStore`, create the database and run the application by following the [Getting Started document](../../Getting-Started-AspNetCore-MVC-Template.md).
 
 ### Solution Structure
 
@@ -55,7 +55,6 @@ namespace Acme.BookStore
 * ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](../../Entities.md) for details and best practices.
 * `Book` entity inherits `AuditedAggregateRoot` which adds some auditing properties (`CreationTime`, `CreatorId`, `LastModificationTime`... etc.) on top of the `AggregateRoot` class.
 * `Guid` is the **primary key type** of the `Book` entity.
-* Used **data annotation attributes** in this code for EF Core mappings. Alternatively you could use EF Core's [fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling) instead.
 
 #### BookType Enum
 

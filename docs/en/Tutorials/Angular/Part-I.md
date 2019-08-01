@@ -19,7 +19,7 @@ Create a new project named `Acme.BookStore` by selecting the Angular as the UI f
 
 This is how the layered solution structure looks after it's created:
 
-TODO: Screenshot
+![bookstore-backend-solution](images/bookstore-backend-solution.png)
 
 > You can see the [Application template document](../../Startup-Templates/Application.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
@@ -54,7 +54,6 @@ namespace Acme.BookStore
 - ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](../../Entities.md) for details and best practices.
 - `Book` entity inherits `AuditedAggregateRoot` which adds some auditing properties (`CreationTime`, `CreatorId`, `LastModificationTime`... etc.) on top of the `AggregateRoot` class.
 - `Guid` is the **primary key type** of the `Book` entity.
-- Used **data annotation attributes** in this code for EF Core mappings. Alternatively you could use EF Core's [fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling) instead.
 
 #### BookType Enum
 
