@@ -38,11 +38,11 @@ export default `
 /* <animations */
 
 .fade-in-top {
-  animation: fadeInTop 0.4s ease-in-out;
+  animation: fadeInTop 0.2s ease-in-out;
 }
 
 .fade-out-top {
-  animation: fadeOutTop 0.4s ease-in-out;
+  animation: fadeOutTop 0.2s ease-in-out;
 }
 
 

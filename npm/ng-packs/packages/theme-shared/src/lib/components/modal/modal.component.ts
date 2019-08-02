@@ -17,6 +17,8 @@ import { Toaster } from '../../models/toaster';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
+const ANIMATION_TIMEOUT = 200;
+
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
@@ -30,10 +32,12 @@ export class ModalComponent implements OnDestroy {
     if (typeof value !== 'boolean') return;
 
     if (!this.modalContent) {
-      setTimeout(() => {
-        this.showModal = value;
-        this.visible = value;
-      }, 0);
+      if (value) {
+        setTimeout(() => {
+          this.showModal = value;
+          this.visible = value;
+        }, 0);
+      }
       return;
     }
 
@@ -47,7 +51,7 @@ export class ModalComponent implements OnDestroy {
         this.setVisible(value);
         // this.renderer.removeClass(this.modalContent.nativeElement, 'fade-out-top');
         this.ngOnDestroy();
-      }, 350);
+      }, ANIMATION_TIMEOUT - 10);
     }
   }
 
@@ -91,7 +95,7 @@ export class ModalComponent implements OnDestroy {
     this.showModal = value;
 
     value
-      ? timer(500)
+      ? timer(ANIMATION_TIMEOUT + 100)
           .pipe(take(1))
           .subscribe(_ => (this.closable = true))
       : (this.closable = false);
@@ -100,7 +104,7 @@ export class ModalComponent implements OnDestroy {
   listen() {
     fromEvent(document, 'click')
       .pipe(
-        debounceTime(350),
+        debounceTime(100),
         takeUntil(this.destroy$),
         filter((event: MouseEvent) => {
           const isOpenConfirmation = this.isOpenConfirmation || document.querySelector('p-toastitem');
@@ -120,8 +124,8 @@ export class ModalComponent implements OnDestroy {
     fromEvent(document, 'keyup')
       .pipe(
         takeUntil(this.destroy$),
+        debounceTime(250),
         filter((key: KeyboardEvent) => key && key.code === 'Escape' && this.closable),
-        debounceTime(350),
       )
       .subscribe(_ => {
         this.close();
@@ -133,7 +137,6 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         filter(() => !!(this.closable && this.modalContent)),
-        debounceTime(350),
       )
       .subscribe(() => this.close());
   }
@@ -150,7 +153,7 @@ export class ModalComponent implements OnDestroy {
       this.confirmationService
         .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
         .subscribe((status: Toaster.Status) => {
-          timer(400).subscribe(() => {
+          timer(ANIMATION_TIMEOUT).subscribe(() => {
             this.isOpenConfirmation = false;
           });
 
@@ -166,7 +169,7 @@ export class ModalComponent implements OnDestroy {
 
 function getFlatNodes(nodes: NodeList): HTMLElement[] {
   return Array.from(nodes).reduce(
-    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? Array.from(val.childNodes) : [val])],
+    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
     [],
   );
 }
