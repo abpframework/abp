@@ -51,7 +51,7 @@ export class ButtonComponent implements OnInit {
                 this.requestType.findIndex(type => type.toLowerCase() === event.payload.method.toLowerCase()) > -1;
             }
 
-            if (this.requestURLContainSearchValue) {
+            if (condition && this.requestURLContainSearchValue) {
               condition =
                 condition &&
                 event.payload.url.toLowerCase().indexOf(this.requestURLContainSearchValue.toLowerCase()) > -1;
