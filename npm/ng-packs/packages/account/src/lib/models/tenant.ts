@@ -1,4 +1,4 @@
-export interface Tenant {
-    success: boolean;
-    tenantId: string;
+export interface TenantIdResponse {
+  success: boolean;
+  tenantId: string;
 }
