@@ -1,4 +1,4 @@
-<abp-modal [(visible)]="visible">
+<abp-modal [(visible)]="visible" (init)="initModal()">
   <ng-container *ngIf="{ entityName: entityName$ | async } as data">
     <ng-template #abpHeader>
       <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>
@@ -24,9 +24,12 @@
           <ul class="nav nav-pills flex-column">
             <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
               <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
-                <a class="nav-link" [class.active]="selectedGroup.name === group.name" (click)="onChangeGroup(group)">{{
-                  group?.displayName
-                }}</a>
+                <a
+                  class="nav-link pointer"
+                  [class.active]="selectedGroup.name === group.name"
+                  (click)="onChangeGroup(group)"
+                  >{{ group?.displayName }}</a
+                >
               </li>
             </perfect-scrollbar>
           </ul>

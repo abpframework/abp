@@ -19,7 +19,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="abp-modal-body" class="modal-body">
+      <div
+        id="abp-modal-body"
+        class="modal-body"
+        [style.height]="height || undefined"
+        [style.minHeight]="minHeight || undefined"
+      >
         <ng-container *ngTemplateOutlet="abpBody"></ng-container>
 
         <div id="abp-modal-footer" class="modal-footer">
