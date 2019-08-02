@@ -4,7 +4,7 @@
 >
   <span style="color: #666;">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>
   <strong>
-    <i>{{ selected?.name ? selected.name : ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>
+    <i>{{ tenantName ? tenantName : ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>
   </strong>
   (<a id="abp-tenant-switch-link" style="color: #333; cursor: pointer" (click)="onSwitch()">{{
     'AbpUiMultiTenancy::Switch' | abpLocalization
@@ -17,11 +17,11 @@
     <h5>Switch Tenant</h5>
   </ng-template>
   <ng-template #abpBody>
-    <form>
+    <form (ngSubmit)="save()">
       <div class="mt-2">
         <div class="form-group">
           <label for="name">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>
-          <input [(ngModel)]="selected.name" type="text" id="name" name="tenant" class="form-control" autofocus />
+          <input [(ngModel)]="tenant.name" type="text" id="name" name="tenant" class="form-control" autofocus />
         </div>
         <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>
       </div>
