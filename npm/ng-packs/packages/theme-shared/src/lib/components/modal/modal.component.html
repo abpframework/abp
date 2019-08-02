@@ -1,9 +1,8 @@
 <div
+  *ngIf="showModal"
   id="abp-modal"
   tabindex="-1"
-  class="modal fade {{ modalClass }}"
-  [class.show]="visible"
-  [style.display]="visible ? 'block' : 'none'"
+  class="modal fade {{ modalClass }} d-block show"
   [style.padding-right.px]="'15'"
 >
   <div
