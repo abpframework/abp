@@ -8,8 +8,12 @@
   </div>
 </nav>
 
-<div style="padding-top: 5rem;" class="container">
-  <router-outlet></router-outlet>
+<div
+  [@routeAnimations]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path"
+  style="padding-top: 5rem;"
+  class="container"
+>
+  <router-outlet #outlet="outlet"></router-outlet>
 </div>
 
 <abp-confirmation></abp-confirmation>
