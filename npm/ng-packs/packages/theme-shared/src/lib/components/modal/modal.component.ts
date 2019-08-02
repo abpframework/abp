@@ -55,13 +55,19 @@ export class ModalComponent implements OnDestroy {
     }
   }
 
-  @Input() centered: boolean = true;
+  @Input() centered: boolean = false;
 
   @Input() modalClass: string = '';
 
   @Input() size: ModalSize = 'lg';
 
   @Output() visibleChange = new EventEmitter<boolean>();
+
+  @Input() height: number;
+
+  @Input() minHeight: number;
+
+  @Output() init = new EventEmitter<void>();
 
   @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
 
@@ -139,6 +145,8 @@ export class ModalComponent implements OnDestroy {
         filter(() => !!(this.closable && this.modalContent)),
       )
       .subscribe(() => this.close());
+
+    this.init.emit();
   }
 
   close() {
