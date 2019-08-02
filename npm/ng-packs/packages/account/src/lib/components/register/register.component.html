@@ -3,22 +3,28 @@
     <abp-tenant-box></abp-tenant-box>
 
     <div class="abp-account-container">
-      <h2>Register</h2>
+      <h2>{{ 'AbpAccount::Register' | abpLocalization }}</h2>
       <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
         <div class="form-group">
-          <label for="input-user-name">User name</label><span> * </span
+          <label for="input-user-name">{{ 'AbpAccount::UserName' | abpLocalization }}</label
+          ><span> * </span
           ><input autofocus type="text" id="input-user-name" class="form-control" formControlName="username" />
         </div>
         <div class="form-group">
-          <label for="input-email-address">Email address</label><span> * </span
-          ><input type="email" id="input-email-address" class="form-control" formControlName="email" />
+          <label for="input-email-address">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label
+          ><span> * </span><input type="email" id="input-email-address" class="form-control" formControlName="email" />
         </div>
         <div class="form-group">
-          <label for="input-password">Password</label><span> * </span
-          ><input type="password" id="input-password" class="form-control" formControlName="password" />
+          <label for="input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label
+          ><span> * </span><input type="password" id="input-password" class="form-control" formControlName="password" />
         </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button [disabled]="inProgress" type="submit" name="Action" value="Register" class="btn btn-primary">
+          {{ 'AbpAccount::Register' | abpLocalization }}
+        </button>
       </form>
+      <div style="padding-top: 20px">
+        <a routerLink="/account/login">{{ 'AbpAccount::Login' | abpLocalization }}</a>
+      </div>
     </div>
   </div>
 </div>
