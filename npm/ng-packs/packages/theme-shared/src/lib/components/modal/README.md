@@ -3,7 +3,7 @@
 Example Usage:
 
 ```html
-<abp-modal size="lg" [(visible)]="isModalShow" [centered]="true">
+<abp-modal size="md" [(visible)]="isModalShow" [centered]="false">
   <ng-template #abpHeader>
     <h3>Modal Title</h3>
   </ng-template>

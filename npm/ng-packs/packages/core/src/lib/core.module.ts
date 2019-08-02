@@ -19,6 +19,7 @@ import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData } from './utils/initial-utils';
 import { EllipsisDirective } from './directives/ellipsis.directive';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 @NgModule({
   imports: [
@@ -34,10 +35,11 @@ import { EllipsisDirective } from './directives/ellipsis.directive';
   declarations: [
     RouterOutletComponent,
     DynamicLayoutComponent,
+    AutofocusDirective,
+    EllipsisDirective,
+    LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
-    LocalizationPipe,
-    EllipsisDirective,
   ],
   exports: [
     CommonModule,
@@ -47,9 +49,11 @@ import { EllipsisDirective } from './directives/ellipsis.directive';
     RouterModule,
     RouterOutletComponent,
     DynamicLayoutComponent,
+    AutofocusDirective,
+    EllipsisDirective,
+    LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
-    EllipsisDirective,
     LocalizationPipe,
   ],
   providers: [LocalizationPipe],
