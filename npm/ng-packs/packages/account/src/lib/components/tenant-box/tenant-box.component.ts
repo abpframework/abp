@@ -26,7 +26,7 @@ export class TenantBoxComponent {
   }
 
   save() {
-    this.selected.name = this.selected.name ? this.selected.name : '';
+    this.selected.name = this.selected.name || '';
 
     this.accountService
       .findTenant(this.selected.name)
@@ -39,13 +39,12 @@ export class TenantBoxComponent {
       )
       .subscribe(({ success, tenantId }) => {
         if (success) {
-          this.store.dispatch(new SessionSetTenantId(tenantId));
           this.isModalVisible = false;
         } else {
           this.toasterService.error(`Given tenant is not available: ${this.selected.name}`, 'Error');
           this.selected = {} as ABP.BasicItem;
-          this.store.dispatch(new SessionSetTenantId(null));
         }
+        this.store.dispatch(new SessionSetTenantId(success ? tenantId : null));
       });
   }
 }
