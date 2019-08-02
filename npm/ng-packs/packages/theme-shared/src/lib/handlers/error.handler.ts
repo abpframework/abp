@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 import { ErrorComponent } from '../components/errors/error.component';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
+import snq from 'snq';
 
 const DEFAULTS = {
   defaultError: {
@@ -50,7 +51,7 @@ export class ErrorHandler {
   ) {
     actions.pipe(ofActionSuccessful(RestOccurError)).subscribe(res => {
       const { payload: err = {} as HttpErrorResponse | any } = res;
-      const body = (err as HttpErrorResponse).error.error;
+      const body = snq(() => (err as HttpErrorResponse).error.error, DEFAULTS.defaultError.message);
 
       if (err.headers.get('_AbpErrorFormat')) {
         const confirmation$ = this.showError(null, null, body);
