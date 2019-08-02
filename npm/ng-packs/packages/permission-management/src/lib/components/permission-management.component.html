@@ -1,4 +1,4 @@
-<abp-modal [(visible)]="visible" *ngIf="visible" size="lg">
+<abp-modal [(visible)]="visible">
   <ng-container *ngIf="{ entityName: entityName$ | async } as data">
     <ng-template #abpHeader>
       <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>

@@ -12,7 +12,7 @@
   >)
 </div>
 
-<abp-modal *ngIf="isModalVisible" [(visible)]="isModalVisible">
+<abp-modal [(visible)]="isModalVisible" size="md">
   <ng-template #abpHeader>
     <h5>Switch Tenant</h5>
   </ng-template>
@@ -21,7 +21,7 @@
       <div class="mt-2">
         <div class="form-group">
           <label for="name">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>
-          <input type="text" id="name" name="tenant" class="form-control" [(ngModel)]="selected.name" />
+          <input [(ngModel)]="selected.name" type="text" id="name" name="tenant" class="form-control" autofocus />
         </div>
         <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>
       </div>

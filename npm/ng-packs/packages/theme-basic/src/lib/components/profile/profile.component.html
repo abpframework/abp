@@ -1,4 +1,4 @@
-<abp-modal *ngIf="visible" [(visible)]="visible">
+<abp-modal [(visible)]="visible">
   <ng-template #abpHeader>
     <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>
   </ng-template>
@@ -6,7 +6,7 @@
     <form *ngIf="form" [formGroup]="form" novalidate>
       <div class="form-group">
         <label for="username">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label
-        ><span> * </span><input type="text" id="username" class="form-control" formControlName="userName" />
+        ><span> * </span><input type="text" id="username" class="form-control" formControlName="userName" autofocus/>
       </div>
       <div class="row">
         <div class="col col-md-6">
