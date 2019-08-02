@@ -2,12 +2,12 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable, Subject } from 'rxjs';
 import { Toaster } from '../models/toaster';
 
-export class AbstractToasterClass<T = Toaster.Options> {
-  protected status$: Subject<Toaster.Status>;
+export class AbstractToaster<T = Toaster.Options> {
+  status$: Subject<Toaster.Status>;
 
-  protected key: string = 'abpToast';
+  key: string = 'abpToast';
 
-  protected sticky: boolean = false;
+  sticky: boolean = false;
 
   constructor(protected messageService: MessageService) {}
   info(message: string, title: string, options?: T): Observable<Toaster.Status> {

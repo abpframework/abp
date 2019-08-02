@@ -35,4 +35,6 @@ import fse from 'fs-extra';
       cwd: '../',
     });
   });
+
+  process.exit(0);
 })();

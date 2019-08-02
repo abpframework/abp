@@ -27,8 +27,13 @@ export class ModalComponent implements OnDestroy {
     return this._visible;
   }
   set visible(value: boolean) {
+    if (typeof value !== 'boolean') return;
+
     if (!this.modalContent) {
-      setTimeout(() => (this.visible = value), 0);
+      setTimeout(() => {
+        this.showModal = value;
+        this.visible = value;
+      }, 0);
       return;
     }
 
@@ -40,7 +45,7 @@ export class ModalComponent implements OnDestroy {
       this.renderer.addClass(this.modalContent.nativeElement, 'fade-out-top');
       setTimeout(() => {
         this.setVisible(value);
-        this.renderer.removeClass(this.modalContent.nativeElement, 'fade-out-top');
+        // this.renderer.removeClass(this.modalContent.nativeElement, 'fade-out-top');
         this.ngOnDestroy();
       }, 350);
     }
@@ -66,9 +71,11 @@ export class ModalComponent implements OnDestroy {
 
   _visible: boolean = false;
 
-  closable: boolean = false;
+  showModal: boolean = false;
 
   isOpenConfirmation: boolean = false;
+
+  closable: boolean = false;
 
   destroy$ = new Subject<void>();
 
@@ -81,6 +88,8 @@ export class ModalComponent implements OnDestroy {
   setVisible(value: boolean) {
     this._visible = value;
     this.visibleChange.emit(value);
+    this.showModal = value;
+
     value
       ? timer(500)
           .pipe(take(1))
@@ -93,14 +102,16 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         debounceTime(350),
         takeUntil(this.destroy$),
-        filter(
-          (event: MouseEvent) =>
+        filter((event: MouseEvent) => {
+          const isOpenConfirmation = this.isOpenConfirmation || document.querySelector('p-toastitem');
+          return (
             event &&
             this.closable &&
             this.modalContent &&
-            !this.isOpenConfirmation &&
-            !this.modalContent.nativeElement.contains(event.target),
-        ),
+            !isOpenConfirmation &&
+            !this.modalContent.nativeElement.contains(event.target)
+          );
+        }),
       )
       .subscribe(_ => {
         this.close();
