@@ -25,6 +25,11 @@ export class ApiInterceptor implements HttpInterceptor {
       headers['Accept-Language'] = lang;
     }
 
+    const tenant = this.store.selectSnapshot(SessionState.getTenant);
+    if (!request.headers.has('__tenant') && tenant) {
+      headers['__tenant'] = tenant.id;
+    }
+
     return next
       .handle(
         request.clone({
