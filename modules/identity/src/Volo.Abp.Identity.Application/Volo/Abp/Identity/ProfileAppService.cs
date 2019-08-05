@@ -50,10 +50,10 @@ namespace Volo.Abp.Identity
             return ObjectMapper.Map<IdentityUser, ProfileDto>(user);
         }
 
-        public async Task ChangePasswordAsync(string currentPassword, string newPassword)
+        public async Task ChangePasswordAsync(ChangePasswordInput input)
         {
             var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId());
-            (await _userManager.ChangePasswordAsync(currentUser, currentPassword, newPassword)).CheckErrors();
+            (await _userManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
         }
     }
 }
