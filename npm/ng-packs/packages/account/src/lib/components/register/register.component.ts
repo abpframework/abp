@@ -1,13 +1,11 @@
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { validatePassword } from '@ngx-validate/core';
 import { throwError } from 'rxjs';
 import { catchError, finalize, take } from 'rxjs/operators';
 import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
-
 const { maxLength, minLength, required, email } = Validators;
 
 @Component({
@@ -22,10 +20,7 @@ export class RegisterComponent {
   constructor(private fb: FormBuilder, private accountService: AccountService, private toasterService: ToasterService) {
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: [
-        '',
-        [required, maxLength(32), minLength(6), validatePassword(['small', 'capital', 'number', 'special'])],
-      ],
+      password: ['', [required, maxLength(32)]],
       email: ['', [required, email]],
     });
   }
@@ -47,7 +42,12 @@ export class RegisterComponent {
       .pipe(
         take(1),
         catchError(err => {
-          this.toasterService.error(snq(() => err.error.error_description, 'An error occured.'), 'Error');
+          this.toasterService.error(
+            snq(() => err.error.error_description) ||
+              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            'Error',
+            { life: 7000 },
+          );
           return throwError(err);
         }),
         finalize(() => (this.inProgress = false)),

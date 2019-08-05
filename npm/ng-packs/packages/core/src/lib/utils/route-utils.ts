@@ -7,7 +7,7 @@ export function organizeRoutes(
   parentName: string = null,
 ): ABP.FullRoute[] {
   const filter = route => {
-    if (route.children) {
+    if (route.children && route.children.length) {
       route.children = organizeRoutes(route.children, wrappers, parentNameArr, route.name);
     }
 
@@ -34,20 +34,18 @@ export function organizeRoutes(
 }
 
 export function setChildRoute(routes: ABP.FullRoute[], parentNameArr: ABP.FullRoute[]): ABP.FullRoute[] {
-  return routes
-    .map(route => {
-      if (route.children && route.children.length) {
-        route.children = setChildRoute(route.children, parentNameArr);
-      }
+  return routes.map(route => {
+    if (route.children && route.children.length) {
+      route.children = setChildRoute(route.children, parentNameArr);
+    }
 
-      const foundedChildren = parentNameArr.filter(parent => parent.parentName === route.name);
-      if (foundedChildren && foundedChildren.length) {
-        route.children = [...(route.children || []), ...foundedChildren];
-      }
+    const foundedChildren = parentNameArr.filter(parent => parent.parentName === route.name);
+    if (foundedChildren && foundedChildren.length) {
+      route.children = [...(route.children || []), ...foundedChildren];
+    }
 
-      return route;
-    })
-    .filter(route => route.path || (route.children && route.children.length));
+    return route;
+  });
 }
 
 export function sortRoutes(routes: ABP.FullRoute[] = []): ABP.FullRoute[] {

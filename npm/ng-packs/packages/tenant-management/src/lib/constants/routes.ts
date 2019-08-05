@@ -6,6 +6,7 @@ export const TENANT_MANAGEMENT_ROUTES = [
     path: 'tenant-management',
     parentName: 'Administration',
     layout: eLayoutType.application,
+    iconClass: 'fa fa-users',
     children: [
       {
         path: 'tenants',

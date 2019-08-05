@@ -80,14 +80,14 @@ export class ErrorHandler {
           case 500:
             this.createErrorComponent({
               title: '500',
-              details: 'Sorry, an error has occured.',
+              details: 'AbpAccount::InternalServerErrorMessage',
             });
             break;
           case 0:
             if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
               this.createErrorComponent({
                 title: 'Unknown Error',
-                details: 'Sorry, an error has occured.',
+                details: 'AbpAccount::InternalServerErrorMessage',
               });
             }
             break;

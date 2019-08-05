@@ -11,14 +11,14 @@ import { Component, Renderer2, ElementRef } from '@angular/core';
         <div class="col-md-12">
           <div class="error-template">
             <h1>
-              {{ title }}
+              {{ title | abpLocalization }}
             </h1>
             <div class="error-details">
-              {{ details }}
+              {{ details | abpLocalization }}
             </div>
             <div class="error-actions">
-              <a routerLink="/" class="btn btn-primary btn-md mt-2"
-                ><span class="glyphicon glyphicon-home"></span> Take me home
+              <a (click)="destroy()" routerLink="/" class="btn btn-primary btn-md mt-2"
+                ><span class="glyphicon glyphicon-home"></span> {{ '::Menu:Home' | abpLocalization }}
               </a>
             </div>
           </div>

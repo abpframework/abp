@@ -14,6 +14,7 @@ import { ToastComponent } from './components/toast/toast.component';
 import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
 import { ButtonComponent } from './components/button/button.component';
+import { ValidationErrorComponent } from './components/errors/validation-error.component';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -40,6 +41,16 @@ export function appendScript(injector: Injector) {
     NgbModalModule,
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
+      blueprints: {
+        email: `AbpAccount::ThisFieldIsNotAValidEmailAddress.`,
+        max: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ max }}]`,
+        maxlength: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]`,
+        min: `AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]`,
+        minlength: `AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]`,
+        required: `AbpAccount::ThisFieldIsRequired.`,
+        passwordMismatch: `AbpIdentity::Identity.PasswordConfirmationFailed`,
+      },
+      errorTemplate: ValidationErrorComponent,
     }),
   ],
   declarations: [
@@ -49,9 +60,10 @@ export function appendScript(injector: Injector) {
     ModalComponent,
     ErrorComponent,
     LoaderBarComponent,
+    ValidationErrorComponent,
   ],
   exports: [NgbModalModule, ButtonComponent, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
-  entryComponents: [ErrorComponent],
+  entryComponents: [ErrorComponent, ValidationErrorComponent],
 })
 export class ThemeSharedModule {
   static forRoot(): ModuleWithProviders {
