@@ -40,7 +40,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             return await CheckAsyncInternal(widget, name);
         }
 
-        public async Task<bool> CheckAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
+        private async Task<bool> CheckAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
         {
             if (widget == null)
             {
