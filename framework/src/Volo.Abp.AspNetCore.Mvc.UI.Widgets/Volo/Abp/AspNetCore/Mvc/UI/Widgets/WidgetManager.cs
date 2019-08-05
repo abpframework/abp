@@ -7,13 +7,13 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    public class WidgetPolicyChecker : IWidgetPolicyChecker
+    public class WidgetManager : IWidgetManager
     {
         protected WidgetOptions Options { get; }
         protected IAuthorizationService AuthorizationService { get; }
         protected ICurrentUser CurrentUser { get; }
 
-        public WidgetPolicyChecker(
+        public WidgetManager(
             IOptions<WidgetOptions> widgetOptions,
             IAuthorizationService authorizationService,
             ICurrentUser currentUser)
@@ -23,21 +23,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             Options = widgetOptions.Value;
         }
 
-        public async Task<bool> CheckAsync(Type widgetComponentType)
+        public async Task<bool> IsGrantedAsync(Type widgetComponentType)
         {
             var widget = Options.Widgets.Find(widgetComponentType);
 
-            return await CheckAsyncInternal(widget, widgetComponentType.FullName);
+            return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
         }
 
-        public async Task<bool> CheckAsync(string name)
+        public async Task<bool> IsGrantedAsync(string name)
         {
             var widget = Options.Widgets.Find(name);
 
-            return await CheckAsyncInternal(widget, name);
+            return await IsGrantedAsyncInternal(widget, name);
         }
 
-        private async Task<bool> CheckAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
+        private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
         {
             if (widget == null)
             {

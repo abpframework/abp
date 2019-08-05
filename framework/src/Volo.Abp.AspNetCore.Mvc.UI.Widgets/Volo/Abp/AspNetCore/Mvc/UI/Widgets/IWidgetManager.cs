@@ -6,10 +6,10 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
-    public interface IWidgetPolicyChecker : ITransientDependency
+    public interface IWidgetManager : ITransientDependency
     {
-        Task<bool> CheckAsync(Type widgetComponentType);
+        Task<bool> IsGrantedAsync(Type widgetComponentType);
 
-        Task<bool> CheckAsync(string name);
+        Task<bool> IsGrantedAsync(string name);
     }
 }
