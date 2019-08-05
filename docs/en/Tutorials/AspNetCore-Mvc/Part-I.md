@@ -12,6 +12,8 @@ This is the first part of the ASP.NET Core MVC tutorial series. See all parts:
 
 You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
+> You can also watch [this video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by an ABP community member, based on this tutorial.
+
 ### Creating the Project
 
 Create a new project named `Acme.BookStore`, create the  database and run the application by following the [Getting Started document](../../Getting-Started-AspNetCore-MVC-Template.md).
