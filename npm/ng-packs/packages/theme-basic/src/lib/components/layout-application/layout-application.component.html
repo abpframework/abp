@@ -46,7 +46,10 @@
 
     <ng-template #defaultChild let-child>
       <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">
-        <a class="dropdown-item py-2 px-2" [routerLink]="[child.url]">{{ child.name | abpLocalization }}</a>
+        <a class="dropdown-item py-2 px-2" [routerLink]="[child.url]">
+          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
+          {{ child.name | abpLocalization }}</a
+        >
       </div>
     </ng-template>
 
@@ -61,11 +64,12 @@
       >
         <div ngbDropdownToggle [class.dropdown-toggle]="false" class="pointer">
           <a
-            abpEllipsis="140px"
+            abpEllipsis="200px"
             [abpEllipsisEnabled]="isDropdownChildDynamic"
             role="button"
             class="btn d-block text-left py-2 px-2 dropdown-toggle"
           >
+            <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
             {{ child.name | abpLocalization }}
           </a>
         </div>

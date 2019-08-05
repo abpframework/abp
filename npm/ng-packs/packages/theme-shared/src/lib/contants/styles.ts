@@ -24,6 +24,10 @@ export default `
   top: 18px;
 }
 
+.navbar .dropdown-menu {
+  min-width: 220px;
+}
+
 .modal {
  background-color: rgba(0, 0, 0, .6);
 }

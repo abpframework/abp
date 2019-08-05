@@ -31,6 +31,7 @@ export namespace ABP {
     parentName?: string;
     path: string;
     requiredPolicy?: string;
+    iconClass?: string;
   }
 
   export interface FullRoute extends Route {
