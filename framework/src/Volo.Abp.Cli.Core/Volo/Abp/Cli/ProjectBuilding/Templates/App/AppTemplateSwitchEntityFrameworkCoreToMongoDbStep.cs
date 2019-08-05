@@ -184,7 +184,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             {
                 if (lines[i].Contains("Default") && lines[i].Contains("Database"))
                 {
-                    lines[i] = "    \"Default\": \"mongodb://localhost:27017|MyProjectName\"";
+                    lines[i] = "    \"Default\": \"mongodb://localhost:27017/MyProjectName\"";
                     file.SetLines(lines);
                     return;
                 }

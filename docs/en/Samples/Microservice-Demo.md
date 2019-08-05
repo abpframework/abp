@@ -902,7 +902,7 @@ It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. I
 ````json
 "ConnectionStrings": {
   "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "Blogging": "mongodb://localhost|MsDemo_Blogging"
+  "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
 

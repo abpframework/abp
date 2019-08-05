@@ -903,7 +903,7 @@ Swagger UI已配置,是此服务的默认页面. 如果你导航到URL`http://lo
 ````json
 "ConnectionStrings": {
   "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "Blogging": "mongodb://localhost|MsDemo_Blogging"
+  "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
 
