@@ -1,4 +1,5 @@
 import { ProfileChangePassword } from '@abp/ng.core';
+import { ToasterService } from '@abp/ng.theme.shared';
 import {
   Component,
   EventEmitter,
@@ -11,10 +12,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { comparePasswords, validatePassword, Validation } from '@ngx-validate/core';
+import { comparePasswords } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import snq from 'snq';
-import { ToasterService } from '@abp/ng.theme.shared';
 
 const { minLength, required } = Validators;
 
@@ -48,12 +48,9 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.form = this.fb.group(
       {
-        password: ['', [required /* minLength(6), validatePassword(['small', 'capital', 'number', 'special']) */]],
-        newPassword: ['', [required /* minLength(6), validatePassword(['small', 'capital', 'number', 'special']) */]],
-        repeatNewPassword: [
-          '',
-          [required /* minLength(6), validatePassword(['small', 'capital', 'number', 'special']) */],
-        ],
+        password: ['', required],
+        newPassword: ['', required],
+        repeatNewPassword: ['', required],
       },
       {
         validators: [comparePasswords(['newPassword', 'repeatNewPassword'])],

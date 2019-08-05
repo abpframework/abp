@@ -2,7 +2,6 @@ import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { validatePassword } from '@ngx-validate/core';
 import { Select, Store } from '@ngxs/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, map, pluck, take } from 'rxjs/operators';
@@ -72,15 +71,7 @@ export class UsersComponent implements OnInit {
     this.roles = this.store.selectSnapshot(IdentityState.getRoles);
 
     this.form = this.fb.group({
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.maxLength(32),
-          // Validators.minLength(6),
-          // validatePassword(['small', 'capital', 'number', 'special']),
-        ],
-      ],
+      password: ['', [Validators.required, Validators.maxLength(32)]],
       userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
       email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
       name: [this.selected.name || '', [Validators.maxLength(64)]],
