@@ -1,6 +1,6 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { SessionSetLanguage, SessionSetTenantId } from '../actions/session.actions';
-import { Session } from '../models/session';
+import { SessionSetLanguage, SessionSetTenant } from '../actions/session.actions';
+import { ABP, Session } from '../models';
 
 @State<Session.State>({
   name: 'SessionState',
@@ -13,8 +13,8 @@ export class SessionState {
   }
 
   @Selector()
-  static getSelectedTenantId({ tenantId }: Session.State): string {
-    return tenantId;
+  static getTenant({ tenant }: Session.State): ABP.BasicItem {
+    return tenant;
   }
 
   constructor() {}
@@ -26,10 +26,10 @@ export class SessionState {
     });
   }
 
-  @Action(SessionSetTenantId)
-  sessionSetTenantId({ patchState }: StateContext<Session.State>, { payload }: SessionSetTenantId) {
+  @Action(SessionSetTenant)
+  sessionSetTenantId({ patchState }: StateContext<Session.State>, { payload }: SessionSetTenant) {
     patchState({
-      tenantId: payload,
+      tenant: payload,
     });
   }
 }
