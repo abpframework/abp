@@ -36,10 +36,5 @@ namespace Volo.Abp.AuditLogging
             bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default);
-
-        Task<List<AuditLog>> GetAllBetweenDatesAsync(
-            DateTime startDate,
-            DateTime endDate,
-            CancellationToken cancellationToken = default);
     }
 }

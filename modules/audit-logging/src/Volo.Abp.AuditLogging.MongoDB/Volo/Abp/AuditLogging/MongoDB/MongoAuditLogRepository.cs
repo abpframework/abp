@@ -62,12 +62,6 @@ namespace Volo.Abp.AuditLogging.MongoDB
             return count;
         }
 
-        public async Task<List<AuditLog>> GetAllBetweenDatesAsync(DateTime startDate, DateTime endDate,
-            CancellationToken cancellationToken = default)
-        {
-            return await GetMongoQueryable().Where(a => a.ExecutionTime < endDate && a.ExecutionTime > startDate).ToListAsync(cancellationToken: cancellationToken);
-        }
-
         private IQueryable<AuditLog> GetListQuery(
             string httpMethod = null,
             string url = null,
