@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Options;
-using Volo.Abp.Authorization;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
@@ -20,21 +16,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
     {
         protected WidgetOptions Options { get; }
         protected IPageWidgetManager PageWidgetManager { get; }
-        protected IAuthorizationService AuthorizationService { get; }
-        protected ICurrentUser CurrentUser { get; }
         protected DefaultViewComponentHelper DefaultViewComponentHelper { get; }
 
         public AbpViewComponentHelper(
             DefaultViewComponentHelper defaultViewComponentHelper,
             IOptions<WidgetOptions> widgetOptions,
-            IPageWidgetManager pageWidgetManager,
-            IAuthorizationService authorizationService,
-            ICurrentUser currentUser)
+            IPageWidgetManager pageWidgetManager)
         {
             DefaultViewComponentHelper = defaultViewComponentHelper;
             PageWidgetManager = pageWidgetManager;
-            AuthorizationService = authorizationService;
-            CurrentUser = currentUser;
             Options = widgetOptions.Value;
         }
 
@@ -67,18 +57,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 
         protected virtual async Task<IHtmlContent> InvokeWidgetAsync(object arguments, WidgetDefinition widget)
         {
-            if (widget.RequiredPolicies.Any())
-            {
-                foreach (var requiredPolicy in widget.RequiredPolicies)
-                {
-                    await AuthorizationService.AuthorizeAsync(requiredPolicy);
-                }
-            }
-            else if (widget.RequiresAuthentication && !CurrentUser.IsAuthenticated)
-            {
-                throw new AbpAuthorizationException("Authorization failed! User has not logged in.");
-            }
-
             PageWidgetManager.TryAdd(widget);
 
             var wrapperAttributesBuilder = new StringBuilder($"class=\"abp-widget-wrapper\" data-widget-name=\"{widget.Name}\"");
@@ -87,7 +65,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             {
                 wrapperAttributesBuilder.Append($" data-refresh-url=\"{widget.RefreshUrl}\"");
             }
-
+            
             return new HtmlContentBuilder()
                 .AppendHtml($"<div {wrapperAttributesBuilder}>")
                 .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))
