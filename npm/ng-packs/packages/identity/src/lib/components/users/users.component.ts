@@ -77,8 +77,8 @@ export class UsersComponent implements OnInit {
         [
           Validators.required,
           Validators.maxLength(32),
-          Validators.minLength(6),
-          validatePassword(['small', 'capital', 'number', 'special']),
+          // Validators.minLength(6),
+          // validatePassword(['small', 'capital', 'number', 'special']),
         ],
       ],
       userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],

@@ -40,6 +40,6 @@ export class ProfileState {
 
   @Action(ProfileChangePassword)
   changePassword(_, { payload }: ProfileChangePassword) {
-    return this.profileService.changePassword(payload);
+    return this.profileService.changePassword(payload, true);
   }
 }

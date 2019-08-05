@@ -57,6 +57,7 @@ export class ProfileComponent implements OnChanges {
 
     this.store.dispatch(new ProfileUpdate(this.form.value)).subscribe(() => {
       this.visible = false;
+      this.form.reset();
     });
   }
 

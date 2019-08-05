@@ -137,14 +137,16 @@ export class ModalComponent implements OnDestroy {
         this.close();
       });
 
-    if (!this.abpClose) return;
+    setTimeout(() => {
+      if (!this.abpClose) return;
 
-    fromEvent(this.abpClose.nativeElement, 'click')
-      .pipe(
-        takeUntil(this.destroy$),
-        filter(() => !!(this.closable && this.modalContent)),
-      )
-      .subscribe(() => this.close());
+      fromEvent(this.abpClose.nativeElement, 'click')
+        .pipe(
+          takeUntil(this.destroy$),
+          filter(() => !!(this.closable && this.modalContent)),
+        )
+        .subscribe(() => this.close());
+    }, 0);
 
     this.init.emit();
   }
