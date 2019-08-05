@@ -14,6 +14,7 @@
             type="text"
             id="login-input-user-name-or-email-address"
             formControlName="username"
+            autofocus
           />
         </div>
         <div class="form-group">
@@ -27,9 +28,6 @@
           </label>
         </div>
         <div class="mt-2">
-          <button type="button" name="Action" value="Cancel" class="btn btn-secondary">
-            {{ 'AbpAccount::Cancel' | abpLocalization }}
-          </button>
           <button [disabled]="inProgress" type="submit" name="Action" value="Login" class="btn btn-primary ml-1">
             {{ 'AbpAccount::Login' | abpLocalization }}
           </button>

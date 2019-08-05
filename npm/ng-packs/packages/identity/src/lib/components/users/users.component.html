@@ -77,13 +77,13 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" *ngIf="isModalVisible">
+<abp-modal [(visible)]="isModalVisible">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <perfect-scrollbar class="ps-show-always" style="max-height: 65vh;">
+    <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
       <form [formGroup]="form">
         <ngb-tabset>
           <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
@@ -92,7 +92,7 @@
                 <div class="form-group">
                   <label for="user-name">{{ 'AbpIdentity::UserName' | abpLocalization }}</label
                   ><span> * </span>
-                  <input type="text" id="user-name" class="form-control" formControlName="userName" />
+                  <input type="text" id="user-name" class="form-control" formControlName="userName" autofocus />
                 </div>
 
                 <div class="form-group">

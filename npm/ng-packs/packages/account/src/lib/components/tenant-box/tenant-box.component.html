@@ -12,33 +12,27 @@
   >)
 </div>
 
-<ng-template #modalContent let-modal>
-  <div class="modal-header">
-    <h5 class="modal-title" id="modal-basic-title">
-      SwitchTenant
-    </h5>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <form [formGroup]="form" (ngSubmit)="save()">
-    <div class="modal-body">
+<abp-modal [(visible)]="isModalVisible" size="md">
+  <ng-template #abpHeader>
+    <h5>Switch Tenant</h5>
+  </ng-template>
+  <ng-template #abpBody>
+    <form>
       <div class="mt-2">
         <div class="form-group">
           <label for="name">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>
-          <input type="text" id="name" class="form-control" formControlName="name" />
+          <input [(ngModel)]="selected.name" type="text" id="name" name="tenant" class="form-control" autofocus />
         </div>
         <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>
       </div>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="modal.close()">
-        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
-      </button>
-      <button type="submit" class="btn btn-primary">
-        <i class="fa fa-check mr-1"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>
-      </button>
-    </div>
-  </form>
-</ng-template>
+    </form>
+  </ng-template>
+  <ng-template #abpFooter>
+    <button #abpClose type="button" class="btn btn-secondary">
+      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
+    </button>
+    <button type="button" class="btn btn-primary" (click)="save()">
+      <i class="fa fa-check mr-1"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>
+    </button>
+  </ng-template>
+</abp-modal>

@@ -216,12 +216,12 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
         this.permissions = getPermissions(permissionRes.groups);
 
         this.visible = true;
-
-        setTimeout(() => {
-          this.setTabCheckboxState();
-          this.setGrantCheckboxState();
-        }, 0);
       });
+  }
+
+  initModal() {
+    this.setTabCheckboxState();
+    this.setGrantCheckboxState();
   }
 
   ngOnChanges({ visible }: SimpleChanges): void {

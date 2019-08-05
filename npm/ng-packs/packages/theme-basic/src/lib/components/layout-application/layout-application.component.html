@@ -16,13 +16,13 @@
     <ng-template #dropdownLink let-route>
       <li
         #navbarRootDropdown
-        class="nav-item dropdown"
         ngbDropdown
-        display="static"
         [abpPermission]="route.requiredPolicy"
         [abpVisibility]="routeContainer"
+        class="nav-item dropdown pointer"
+        display="static"
       >
-        <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
+        <a ngbDropdownToggle class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
           {{ route.name | abpLocalization }}
         </a>
         <div #routeContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -53,13 +53,13 @@
     <ng-template #dropdownChild let-child>
       <div
         [abpVisibility]="childrenContainer"
-        class="dropdown-submenu"
+        class="dropdown-submenu pointer"
         ngbDropdown
         [display]="isDropdownChildDynamic ? 'dynamic' : 'static'"
         placement="right-top"
         [abpPermission]="child.requiredPolicy"
       >
-        <div ngbDropdownToggle [class.dropdown-toggle]="false">
+        <div ngbDropdownToggle [class.dropdown-toggle]="false" class="pointer">
           <a
             abpEllipsis="140px"
             [abpEllipsisEnabled]="isDropdownChildDynamic"
@@ -90,8 +90,8 @@
 </abp-layout>
 
 <ng-template #language>
-  <li class="nav-item dropdown" ngbDropdown>
-    <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
+  <li class="nav-item dropdown pointer" ngbDropdown>
+    <a ngbDropdownToggle class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
       {{ defaultLanguage$ | async }}
     </a>
     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -106,8 +106,8 @@
 </ng-template>
 
 <ng-template #currentUser>
-  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item dropdown" ngbDropdown>
-    <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
+  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item dropdown pointer" ngbDropdown>
+    <a ngbDropdownToggle class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
       {{ (currentUser$ | async)?.userName }}
     </a>
     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">

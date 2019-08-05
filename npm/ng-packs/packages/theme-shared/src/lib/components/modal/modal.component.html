@@ -1,9 +1,8 @@
 <div
+  *ngIf="showModal"
   id="abp-modal"
   tabindex="-1"
-  class="modal fade {{ modalClass }}"
-  [class.show]="visible"
-  [style.display]="visible ? 'block' : 'none'"
+  class="modal fade {{ modalClass }} d-block show"
   [style.padding-right.px]="'15'"
 >
   <div
@@ -20,7 +19,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div id="abp-modal-body" class="modal-body">
+      <div
+        id="abp-modal-body"
+        class="modal-body"
+        [style.height]="height || undefined"
+        [style.minHeight]="minHeight || undefined"
+      >
         <ng-container *ngTemplateOutlet="abpBody"></ng-container>
 
         <div id="abp-modal-footer" class="modal-footer">

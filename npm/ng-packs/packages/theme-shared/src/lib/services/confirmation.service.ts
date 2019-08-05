@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AbstractToasterClass } from '../abstracts/toaster';
+import { AbstractToaster } from '../abstracts/toaster';
 import { Confirmation } from '../models/confirmation';
 
 @Injectable({ providedIn: 'root' })
-export class ConfirmationService extends AbstractToasterClass<Confirmation.Options> {
-  protected key: string = 'abpConfirmation';
+export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
+  key: string = 'abpConfirmation';
 
-  protected sticky: boolean = true;
+  sticky: boolean = true;
 }

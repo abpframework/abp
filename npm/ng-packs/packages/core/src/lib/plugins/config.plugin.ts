@@ -1,9 +1,9 @@
-import { Injectable, Inject, InjectionToken, Type } from '@angular/core';
-import { NgxsPlugin, setValue, actionMatcher, InitState, UpdateState, NgxsNextPluginFn } from '@ngxs/store';
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Router, Routes } from '@angular/router';
-import { ABP } from '../models';
+import { actionMatcher, InitState, NgxsNextPluginFn, NgxsPlugin, setValue, UpdateState } from '@ngxs/store';
 import snq from 'snq';
-import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
+import { ABP } from '../models';
+import { organizeRoutes } from '../utils/route-utils';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
@@ -45,7 +45,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
   wrappers = abpRoutes.filter(ar => ar.wrapper);
   const transformed = [] as ABP.FullRoute[];
   routes
-    .filter(route => route.component || route.loadChildren)
+    .filter(route => (route.data || {}).routes && (route.component || route.loadChildren))
     .forEach(route => {
       const abpPackage = abpRoutes.find(abp => abp.path.toLowerCase() === route.path.toLowerCase());
       const { length } = transformed;

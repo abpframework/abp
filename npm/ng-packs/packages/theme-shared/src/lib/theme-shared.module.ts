@@ -13,6 +13,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ToastComponent } from './components/toast/toast.component';
 import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
+import { ButtonComponent } from './components/button/button.component';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -41,8 +42,15 @@ export function appendScript(injector: Injector) {
       targetSelector: '.form-group',
     }),
   ],
-  declarations: [ConfirmationComponent, ToastComponent, ModalComponent, ErrorComponent, LoaderBarComponent],
-  exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+  declarations: [
+    ButtonComponent,
+    ConfirmationComponent,
+    ToastComponent,
+    ModalComponent,
+    ErrorComponent,
+    LoaderBarComponent,
+  ],
+  exports: [NgbModalModule, ButtonComponent, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
   entryComponents: [ErrorComponent],
 })
 export class ThemeSharedModule {

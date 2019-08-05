@@ -1,5 +1,4 @@
 // ESM syntax is supported.
-import execa from 'execa';
 import fse from 'fs-extra';
 
 (async () => {
@@ -21,4 +20,6 @@ import fse from 'fs-extra';
 
     await fse.writeJSON(srcPackagePath, { ...srcPackage, version }, { spaces: 2 });
   });
+
+  process.exit(0);
 })();
