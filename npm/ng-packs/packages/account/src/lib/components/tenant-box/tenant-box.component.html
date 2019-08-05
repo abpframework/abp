@@ -4,7 +4,7 @@
 >
   <span style="color: #666;">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>
   <strong>
-    <i>{{ tenantName ? tenantName : ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>
+    <i>{{ tenantName || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>
   </strong>
   (<a id="abp-tenant-switch-link" style="color: #333; cursor: pointer" (click)="onSwitch()">{{
     'AbpUiMultiTenancy::Switch' | abpLocalization
