@@ -23,7 +23,7 @@ spec:
           - name: AuthServer__Authority
             value: http://auth-server:51511
           - name: ConnectionStrings__Blogging
-            value: mongodb://mongodb|MsDemo_Blogging
+            value: mongodb://mongodb/MsDemo_Blogging
           - name: ConnectionStrings__Default
             value: Server=sqlserver;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true;User=sa;Password=yourStrong(!)Password;Integrated Security=false
           - name: RabbitMQ__Connections__Default__HostName
