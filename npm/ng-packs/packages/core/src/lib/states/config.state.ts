@@ -138,9 +138,10 @@ export class ConfigState {
           return undefined;
         }, state.localization.values);
 
+        interpolateParams = interpolateParams.filter(params => params != null);
         if (copy && interpolateParams && interpolateParams.length) {
-          interpolateParams.forEach((param, index) => {
-            copy = copy.replace(`'{${index}}'`, param);
+          interpolateParams.forEach(param => {
+            copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
           });
         }
 
