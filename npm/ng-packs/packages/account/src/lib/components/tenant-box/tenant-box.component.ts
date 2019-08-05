@@ -36,7 +36,10 @@ export class TenantBoxComponent implements OnInit {
         .pipe(
           take(1),
           catchError(err => {
-            this.toasterService.error(snq(() => err.error.error_description, 'An error occured.'), 'Error');
+            this.toasterService.error(
+              snq(() => err.error.error_description, 'AbpUi::DefaultErrorMessage'),
+              'AbpUi::Error',
+            );
             return throwError(err);
           }),
         )
@@ -49,7 +52,9 @@ export class TenantBoxComponent implements OnInit {
             this.tenantName = this.tenant.name;
             this.isModalVisible = false;
           } else {
-            this.toasterService.error(`Given tenant is not available: ${this.tenant.name}`, 'Error');
+            this.toasterService.error(`AbpUiMultiTenancy::GivenTenantIsNotAvailable`, 'AbpUi::Error', {
+              messageLocalizationParams: [this.tenant.name],
+            });
             this.tenant = {} as ABP.BasicItem;
           }
           this.store.dispatch(new SessionSetTenant(success ? this.tenant : null));
