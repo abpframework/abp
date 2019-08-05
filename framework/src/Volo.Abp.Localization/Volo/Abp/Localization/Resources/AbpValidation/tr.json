@@ -15,6 +15,20 @@
     "The field {0} must be a string with a maximum length of {1}.": "{0} alanı en fazla {1} uzunluğunda bir metin olmalıdır.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "{0} alanı en az {2}, en fazla {1} uzunluğunda bir metin olmalıdır.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "{0} alanı geçerli bir http, https, ya da ftp adresi olmalıdır.",
-    "The field {0} is invalid.": "{0} alanı geçerli değil."
+    "The field {0} is invalid.": "{0} alanı geçerli değil.",
+    "ThisFieldIsNotAValidCreditCardNumber.": "Bu alan geçerli bir kredi kartı numarası olmalıdır.",
+    "ThisFieldIsNotValid.": "Bu alan geçerli değil.",
+    "ThisFieldIsNotAValidEmailAddress.": "Bu alan geçerli bir e-posta adresi olmalıdır.",
+    "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "Bu alan sadece şu uzantılarda dosyaları kabul eder: {0}",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}": "Bu alan en fazla '{0}' uzunluğunda bir metin ya da dizi olmalıdır.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "Bu alan en az '{0}' uzunluğunda bir metin ya da dizi olmalıdır.",
+    "ThisFieldIsNotAValidPhoneNumber.": "Bu alan geçerli bir telefon numarası olmalıdır.",
+    "ThisFieldMustBeBetween{0}And{1}": "Bu alanın değeri {0} ile {1} arasında olmalıdır.",
+    "ThisFieldMustMatchTheRegularExpression{0}": "Bu alan şu düzenli ifadeye uymalıdır: '{0}'.",
+    "ThisFieldIsRequired.": "Bu alan zorunludur.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Bu alan en fazla {0} uzunluğunda bir metin olmalıdır.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Bu alan en az {1}, en fazla {0} uzunluğunda bir metin olmalıdır.",
+    "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "Bu alan geçerli bir http, https, ya da ftp adresi olmalıdır.",
+    "ThisFieldIsInvalid.": "Bu alan geçerli değil."
   }
 }
