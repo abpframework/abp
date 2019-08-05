@@ -24,7 +24,12 @@ export class RegisterComponent {
       username: ['', [required, maxLength(255)]],
       password: [
         '',
-        [required, maxLength(32), minLength(6), validatePassword(['small', 'capital', 'number', 'special'])],
+        [
+          required,
+          maxLength(32),
+          // minLength(6),
+          // validatePassword(['small', 'capital', 'number', 'special']),
+        ],
       ],
       email: ['', [required, email]],
     });
@@ -47,7 +52,12 @@ export class RegisterComponent {
       .pipe(
         take(1),
         catchError(err => {
-          this.toasterService.error(snq(() => err.error.error_description, 'An error occured.'), 'Error');
+          this.toasterService.error(
+            snq(() => err.error.error_description) ||
+              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            'Error',
+            { life: 7000 },
+          );
           return throwError(err);
         }),
         finalize(() => (this.inProgress = false)),

@@ -53,7 +53,12 @@ export class LoginComponent {
           this.store.dispatch(new Navigate([redirectUrl]));
         }),
         catchError(err => {
-          this.toasterService.error(snq(() => err.error.error_description, 'An error occured.'), 'Error');
+          this.toasterService.error(
+            snq(() => err.error.error_description) ||
+              snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            'Error',
+            { life: 7000 },
+          );
           return throwError(err);
         }),
         finalize(() => (this.inProgress = false)),
