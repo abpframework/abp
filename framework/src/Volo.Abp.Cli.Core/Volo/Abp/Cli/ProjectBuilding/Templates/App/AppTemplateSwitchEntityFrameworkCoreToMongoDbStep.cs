@@ -76,6 +76,29 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.Host/appsettings.json"
             );
 
+            //MyCompanyName.MyProjectName.HttpApi.HostWithIds
+
+            ChangeProjectReference(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyCompanyName.MyProjectName.HttpApi.HostWithIds.csproj",
+                "EntityFrameworkCore.DbMigrations",
+                "MongoDB"
+            );
+
+            ChangeModuleDependency(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/MyProjectNameHttpApiHostModule.cs",
+                "MyCompanyName.MyProjectName.EntityFrameworkCore",
+                "MyCompanyName.MyProjectName.MongoDB",
+                "MyProjectNameEntityFrameworkCoreDbMigrationsModule",
+                "MyProjectNameMongoDbModule"
+            );
+
+            ChangeConnectionStringToMongoDb(
+                context,
+                "/aspnet-core/src/MyCompanyName.MyProjectName.HttpApi.HostWithIds/appsettings.json"
+            );
+
             //MyCompanyName.MyProjectName.DbMigrator
 
             ChangeProjectReference(
