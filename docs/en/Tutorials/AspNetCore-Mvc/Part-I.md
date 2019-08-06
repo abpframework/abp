@@ -98,7 +98,7 @@ Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.
 builder.Entity<Book>(b =>
 {
     b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
-    b.ConfigureAuditedAggregateRoot(); //auto configure for the base class props
+    b.ConfigureByConvention(); //auto configure for the base class props
     b.Property(x => x.Name).IsRequired().HasMaxLength(128);
 });
 ````
