@@ -108,7 +108,7 @@ export class IdentityService {
   }
 
   updateUser(body: Identity.UserItem): Observable<Identity.UserItem> {
-    const url = `/identity/users/${body.id}`;
+    const url = `/api/identity/users/${body.id}`;
     delete body.id;
 
     const request: Rest.Request<Identity.UserItem> = {
