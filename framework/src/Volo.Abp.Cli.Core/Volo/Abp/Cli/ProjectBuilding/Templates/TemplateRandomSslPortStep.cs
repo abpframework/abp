@@ -44,7 +44,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 )
                 .ToList();
 
-            if (context.Template.Name == AppTemplate.TemplateName)
+            if (AppTemplateBase.IsAppTemplate(context.Template.Name))
             {
                 // no tiered
                 if (launchSettings.Count == 1 &&

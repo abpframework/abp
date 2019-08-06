@@ -19,6 +19,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
             {
                 case AppTemplate.TemplateName:
                     return new AppTemplate();
+                case AppProTemplate.TemplateName:
+                    return new AppProTemplate();
                 case ModuleTemplate.TemplateName:
                     return new ModuleTemplate();
                 default:
