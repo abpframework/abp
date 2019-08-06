@@ -23,7 +23,7 @@
         ><input
           type="search"
           class="form-control form-control-sm"
-          placeholder="Search"
+          [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
           (input)="search$.next($event.target.value)"
       /></label>
     </div>
