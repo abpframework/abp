@@ -119,7 +119,6 @@ export class RolesComponent implements OnInit {
 
   get() {
     this.loading = true;
-    console.warn(this.pageQuery);
     this.store
       .dispatch(new IdentityGetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
