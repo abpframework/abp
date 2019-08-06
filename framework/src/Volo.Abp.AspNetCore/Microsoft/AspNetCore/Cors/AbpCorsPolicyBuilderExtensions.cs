@@ -4,7 +4,7 @@ namespace Microsoft.AspNetCore.Cors
 {
     public static class AbpCorsPolicyBuilderExtensions
     {
-        public static CorsPolicyBuilder WithAbpExposeHeaders(this CorsPolicyBuilder corsPolicyBuilder)
+        public static CorsPolicyBuilder WithAbpExposedHeaders(this CorsPolicyBuilder corsPolicyBuilder)
         {
             return corsPolicyBuilder.WithExposedHeaders("_AbpErrorFormat");
         }

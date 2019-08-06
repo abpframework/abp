@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -114,6 +115,7 @@ namespace MyCompanyName.MyProjectName
                                 .Select(o => o.RemovePostFix("/"))
                                 .ToArray()
                         )
+                        .WithAbpExposedHeaders()
                         .SetIsOriginAllowedToAllowWildcardSubdomains()
                         .AllowAnyHeader()
                         .AllowAnyMethod()
