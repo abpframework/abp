@@ -22,14 +22,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
             var steps = new List<ProjectBuildPipelineStep>();
 
             DeleteUnrelatedProjects(context, steps);
-
-            steps.Add(new TemplateRandomSslPortStep(new List<string>
-            {
-                "https://localhost:44300",
-                "https://localhost:44301",
-                "https://localhost:44302",
-                "https://localhost:44303"
-            }));
+            RandomizeSslPorts(context, steps);
+            CleanupFolderHierarchy(context, steps);
 
             return steps;
         }
@@ -52,6 +46,22 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
                     projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified"
                 ));
             }
+        }
+
+        private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new TemplateRandomSslPortStep(new List<string>
+            {
+                "https://localhost:44300",
+                "https://localhost:44301",
+                "https://localhost:44302",
+                "https://localhost:44303"
+            }));
+        }
+
+        private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
         }
     }
 }
