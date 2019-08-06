@@ -40,6 +40,7 @@ namespace Volo.Abp.Cli.Commands
             await SolutionModuleAdder.AddAsync(
                 GetSolutionFile(commandLineArgs),
                 commandLineArgs.Target,
+                commandLineArgs.Options.GetOrNull(Options.StartupProject.Short, Options.StartupProject.Long),
                 skipDbMigrations
             );
         }
@@ -58,12 +59,14 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("Options:");
             sb.AppendLine("  -s|--solution <solution-file>    Specify the solution file explicitly.");
             sb.AppendLine("  --skip-db-migrations <boolean>    Specify if a new migration will be added or not.");
+            sb.AppendLine("  -sp|--startup-project <startup-project-path>    Relative path to the project folder of the startup project. Default value is the current folder.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
             sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
+            sb.AppendLine(@"  abp add-module Volo.Blogging -s Acme.BookStore -sp src\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Adds the module to the given solution and specify migration startup project.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -81,8 +84,8 @@ namespace Volo.Abp.Cli.Commands
         {
             var providedSolutionFile = PathHelper.NormalizePath(
                 commandLineArgs.Options.GetOrNull(
-                    AddPackageCommand.Options.Project.Short,
-                    AddPackageCommand.Options.Project.Long
+                    Options.Solution.Short,
+                    Options.Solution.Long
                 )
             );
 
@@ -128,6 +131,12 @@ namespace Volo.Abp.Cli.Commands
             public static class DbMigrations
             {
                 public const string Skip = "skip-db-migrations";
+            }
+
+            public static class StartupProject 
+            {
+                public const string Short = "sp";
+                public const string Long = "startup-project";
             }
         }
     }
