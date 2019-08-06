@@ -4,7 +4,7 @@ import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@ang
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, pluck, take } from 'rxjs/operators';
+import { debounceTime, filter, map, pluck, take, finalize } from 'rxjs/operators';
 import snq from 'snq';
 import {
   IdentityAddUser,
@@ -163,6 +163,9 @@ export class UsersComponent implements OnInit {
 
   get() {
     this.loading = true;
-    this.store.dispatch(new IdentityGetUsers(this.pageQuery)).subscribe(() => (this.loading = false));
+    this.store
+      .dispatch(new IdentityGetUsers(this.pageQuery))
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe();
   }
 }
