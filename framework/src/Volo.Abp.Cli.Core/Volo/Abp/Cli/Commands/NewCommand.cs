@@ -133,8 +133,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -u angular -d mongodb");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc-module");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc-module no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -t module");
+            sb.AppendLine("  abp new Acme.BookStore -t module no-ui");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 

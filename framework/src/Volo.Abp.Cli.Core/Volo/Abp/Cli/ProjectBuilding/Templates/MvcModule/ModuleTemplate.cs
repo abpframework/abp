@@ -4,17 +4,17 @@ using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
 {
-    public class MvcModuleTemplate : TemplateInfo
+    public class ModuleTemplate : TemplateInfo
     {
         /// <summary>
-        /// "mvc-module".
+        /// "module".
         /// </summary>
-        public const string TemplateName = "mvc-module";
+        public const string TemplateName = "module";
 
-        public MvcModuleTemplate()
+        public ModuleTemplate()
             : base(TemplateName)
         {
-            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Mvc-Module";
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Module";
         }
 
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
@@ -22,14 +22,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
             var steps = new List<ProjectBuildPipelineStep>();
 
             DeleteUnrelatedProjects(context, steps);
-
-            steps.Add(new TemplateRandomSslPortStep(new List<string>
-            {
-                "https://localhost:44300",
-                "https://localhost:44301",
-                "https://localhost:44302",
-                "https://localhost:44303"
-            }));
+            RandomizeSslPorts(context, steps);
+            CleanupFolderHierarchy(context, steps);
 
             return steps;
         }
@@ -44,14 +38,30 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
 
                 steps.Add(new RemoveProjectFromSolutionStep(
                     "MyCompanyName.MyProjectName.Web.Host",
-                    projectFolderPath: "/host/MyCompanyName.MyProjectName.Web.Host"
+                    projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
                 ));
 
                 steps.Add(new RemoveProjectFromSolutionStep(
                     "MyCompanyName.MyProjectName.Web.Unified",
-                    projectFolderPath: "/host/MyCompanyName.MyProjectName.Web.Unified"
+                    projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified"
                 ));
             }
+        }
+
+        private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new TemplateRandomSslPortStep(new List<string>
+            {
+                "https://localhost:44300",
+                "https://localhost:44301",
+                "https://localhost:44302",
+                "https://localhost:44303"
+            }));
+        }
+
+        private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new MoveFolderStep("/aspnet-core/", "/"));
         }
     }
 }

@@ -15,14 +15,14 @@ dotnet tool install -g Volo.Abp.Cli
 Then use the `abp new` command in an empty folder to create a new solution:
 
 ```bash
-abp new Acme.IssueManagement -t mvc-module
+abp new Acme.IssueManagement -t module
 ```
 
 - `Acme.IssueManagement` is the solution name, like *YourCompany.YourProduct*. You can use single level, two-levels or three-levels naming.
 
 ### Without User Interface
 
-The template comes with a UI by default. You can use `--no-ui` option to not include the UI layer.
+The template comes with an MVC UI by default. You can use `--no-ui` option to not include the UI layer.
 
 ````bash
 abp new Acme.IssueManagement -t mvc-module --no-ui
@@ -119,7 +119,7 @@ You can still create unit tests for your classes which will be harder to write (
 
 ### Host Projects
 
-The solution has a few host applications to run your module on development. Host applications are used to run your module in a fully configured application. It is useful on development. Host applications includes some other modules in addition to the module being developed:
+The solution has a few host applications to run your module. Host applications are used to run your module in a fully configured application. It is useful on development. Host applications includes some other modules in addition to the module being developed:
 
 Host applications support two types of scenarios.
 
