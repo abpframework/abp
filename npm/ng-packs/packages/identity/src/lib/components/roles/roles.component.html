@@ -17,11 +17,20 @@
         ><input
           type="search"
           class="form-control form-control-sm"
-          placeholder="Search"
-          (input)="dt.filterGlobal($event.target.value, 'contains')"
+          [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
+          (input)="search$.next($event.target.value)"
       /></label>
     </div>
-    <p-table #dt [value]="roles$ | async" [globalFilterFields]="['name']" [paginator]="true" [rows]="10">
+    <p-table
+      [value]="data$ | async"
+      [lazy]="true"
+      [lazyLoadOnInit]="false"
+      [paginator]="true"
+      [rows]="10"
+      [totalRecords]="totalCount$ | async"
+      [loading]="loading"
+      (onLazyLoad)="onPageChange($event)"
+    >
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>

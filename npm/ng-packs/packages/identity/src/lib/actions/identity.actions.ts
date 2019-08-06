@@ -3,6 +3,7 @@ import { ABP } from '@abp/ng.core';
 
 export class IdentityGetRoles {
   static readonly type = '[Identity] Get Roles';
+  constructor(public payload?: ABP.PageQueryParams) {}
 }
 
 export class IdentityGetRoleById {
