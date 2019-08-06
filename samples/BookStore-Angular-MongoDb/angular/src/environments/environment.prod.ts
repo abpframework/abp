@@ -3,7 +3,7 @@ export const environment = {
   hmr: false,
   oAuthConfig: {
     issuer: 'https://localhost:44359',
-    clientId: 'BookStore_ConsoleTestApp',
+    clientId: 'BookStore_App',
     dummyClientSecret: '1q2w3e*',
     scope: 'BookStore',
     showDebugInformation: true,
