@@ -153,7 +153,7 @@ export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
   logout() {
     this.oauthService.logOut();
     this.store.dispatch(
-      new Navigate(['/account/login'], null, {
+      new Navigate(['/'], null, {
         state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
       }),
     );
