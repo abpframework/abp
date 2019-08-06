@@ -68,9 +68,6 @@ export class TenantsComponent implements OnInit {
   @ViewChild('connectionStringModalTemplate', { static: false })
   connectionStringModalTemplate: TemplateRef<any>;
 
-  @ViewChild('featuresModalTemplate', { static: false })
-  featuresModalTemplate: TemplateRef<any>;
-
   constructor(
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,
@@ -124,10 +121,6 @@ export class TenantsComponent implements OnInit {
         this.createDefaultConnectionStringForm();
         this.openModal('AbpTenantManagement::ConnectionStrings', this.connectionStringModalTemplate, 'saveConnStr');
       });
-  }
-
-  onManageFeatures(id: string) {
-    this.openModal('AbpTenantManagement::Features', this.featuresModalTemplate, 'saveFeatures');
   }
 
   onAddTenant() {

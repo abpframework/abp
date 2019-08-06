@@ -74,13 +74,6 @@
                   {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.ManageFeatures'"
-                  ngbDropdownItem
-                  (click)="onManageFeatures(data.id)"
-                >
-                  {{ 'AbpTenantManagement::Features' | abpLocalization }}
-                </button>
-                <button
                   [abpPermission]="'AbpTenantManagement.Tenants.Delete'"
                   ngbDropdownItem
                   (click)="delete(data.id, data.name)"
@@ -110,9 +103,13 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
-    <button class="btn btn-primary" type="button" (click)="save()">
-      {{ 'AbpTenantManagement::Save' | abpLocalization }}
-    </button>
+    <abp-button
+      [requestType]="['POST', 'PUT', 'DELETE']"
+      requestURLContainSearchValue="change-password"
+      iconClass="fa fa-check"
+      (click)="save()"
+      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
+    >
   </ng-template>
 </abp-modal>
 
@@ -157,8 +154,4 @@
       </div>
     </div>
   </form>
-</ng-template>
-
-<ng-template #featuresModalTemplate>
-  Manage Features
 </ng-template>
