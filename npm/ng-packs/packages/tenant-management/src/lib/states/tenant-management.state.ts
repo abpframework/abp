@@ -21,11 +21,16 @@ export class TenantManagementState {
     return result.items || [];
   }
 
+  @Selector()
+  static getTenantsTotalCount({ result }: TenantManagement.State): number {
+    return result.totalCount;
+  }
+
   constructor(private tenantManagementService: TenantManagementService) {}
 
   @Action(TenantManagementGet)
-  get({ patchState }: StateContext<TenantManagement.State>) {
-    return this.tenantManagementService.get().pipe(
+  get({ patchState }: StateContext<TenantManagement.State>, { payload }: TenantManagementGet) {
+    return this.tenantManagementService.get(payload).pipe(
       tap(result =>
         patchState({
           result,

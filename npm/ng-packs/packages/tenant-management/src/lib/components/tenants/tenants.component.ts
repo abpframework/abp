@@ -1,13 +1,14 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { pluck, switchMap, take } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   TenantManagementAdd,
   TenantManagementDelete,
+  TenantManagementGet,
   TenantManagementGetById,
   TenantManagementUpdate,
 } from '../../actions/tenant-management.actions';
@@ -24,9 +25,12 @@ type SelectedModalContent = {
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
 })
-export class TenantsComponent {
+export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
-  datas$: Observable<ABP.BasicItem[]>;
+  data$: Observable<ABP.BasicItem[]>;
+
+  @Select(TenantManagementState.getTenantsTotalCount)
+  totalCount$: Observable<number>;
 
   selected: ABP.BasicItem;
 
@@ -41,6 +45,14 @@ export class TenantsComponent {
   selectedModalContent = {} as SelectedModalContent;
 
   _useSharedDatabase: boolean;
+
+  pageQuery: ABP.PageQueryParams = {
+    sorting: 'name',
+  };
+
+  loading: boolean = false;
+
+  search$ = new Subject<string>();
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -65,6 +77,13 @@ export class TenantsComponent {
     private fb: FormBuilder,
     private store: Store,
   ) {}
+
+  ngOnInit() {
+    this.search$.pipe(debounceTime(300)).subscribe(value => {
+      this.pageQuery.filter = value;
+      this.get();
+    });
+  }
 
   private createTenantForm() {
     this.tenantForm = this.fb.group({
@@ -177,5 +196,20 @@ export class TenantsComponent {
           this.store.dispatch(new TenantManagementDelete(id));
         }
       });
+  }
+
+  onPageChange(data) {
+    this.pageQuery.skipCount = data.first;
+    this.pageQuery.maxResultCount = data.rows;
+
+    this.get();
+  }
+
+  get() {
+    this.loading = true;
+    this.store
+      .dispatch(new TenantManagementGet(this.pageQuery))
+      .pipe(finalize(() => (this.loading = false)))
+      .subscribe();
   }
 }
