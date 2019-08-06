@@ -1,1 +1,31 @@
-<p>books works!</p>
+<div id="wrapper" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          Books
+        </h5>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <p-table [value]="books$ | async" [loading]="loading" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Book name</th>
+          <th>Book type</th>
+          <th>Publish date</th>
+          <th>Price</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-data>
+        <tr>
+          <td>{{ data.name }}</td>
+          <td>{{ bookType[data.type] }}</td>
+          <td>{{ data.publishDate | date }}</td>
+          <td>{{ data.price }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
