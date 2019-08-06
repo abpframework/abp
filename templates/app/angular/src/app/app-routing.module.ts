@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
     data: {
       routes: {
-        name: 'Home',
+        name: '::Menu:Home',
       } as ABP.Route,
     },
   },

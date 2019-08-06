@@ -1,9 +1,8 @@
 <div class="card">
-  <div class="card-header">Welcome</div>
+  <div class="card-header">{{ '::Welcome' | abpLocalization }}</div>
   <div class="card-body">
     <p>
-      Welcome to the application. This is a startup project based on the ABP framework. For more information, visit
-      abp.io.
+      {{ '::LongWelcomeMessage' | abpLocalization }}
     </p>
     <p *ngIf="!hasLoggedIn">
       <a routerLink="/account/login" [state]="{ redirectUrl: '/home' }" class="btn btn-primary" role="button"
