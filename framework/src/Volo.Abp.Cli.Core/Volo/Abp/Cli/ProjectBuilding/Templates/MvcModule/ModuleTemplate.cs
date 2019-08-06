@@ -4,17 +4,17 @@ using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
 {
-    public class MvcModuleTemplate : TemplateInfo
+    public class ModuleTemplate : TemplateInfo
     {
         /// <summary>
-        /// "mvc-module".
+        /// "module".
         /// </summary>
-        public const string TemplateName = "mvc-module";
+        public const string TemplateName = "module";
 
-        public MvcModuleTemplate()
+        public ModuleTemplate()
             : base(TemplateName)
         {
-            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Mvc-Module";
+            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Module";
         }
 
         public override IEnumerable<ProjectBuildPipelineStep> GetCustomSteps(ProjectBuildContext context)
