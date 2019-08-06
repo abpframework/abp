@@ -44,12 +44,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.MvcModule
 
                 steps.Add(new RemoveProjectFromSolutionStep(
                     "MyCompanyName.MyProjectName.Web.Host",
-                    projectFolderPath: "/host/MyCompanyName.MyProjectName.Web.Host"
+                    projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
                 ));
 
                 steps.Add(new RemoveProjectFromSolutionStep(
                     "MyCompanyName.MyProjectName.Web.Unified",
-                    projectFolderPath: "/host/MyCompanyName.MyProjectName.Web.Unified"
+                    projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified"
                 ));
             }
         }
