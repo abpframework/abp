@@ -6,21 +6,15 @@ import { ABP } from '@abp/ng.core';
 import { TENANT_MANAGEMENT_ROUTES } from '@abp/ng.tenant-management';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
-    path: 'home',
+    path: '',
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
     data: {
       routes: {
-        name: 'Home',
+        name: '::Menu:Home',
       } as ABP.Route,
     },
   },
-  { path: 'books', loadChildren: () => import('./books/books.module').then(m => m.BooksModule),  data: {
-    routes: {
-      name: 'Books',
-    } as ABP.Route,
-  }, },
   {
     path: 'account',
     loadChildren: () => import('./lazy-libs/account-wrapper.module').then(m => m.AccountWrapperModule),
@@ -37,8 +31,15 @@ const routes: Routes = [
       import('./lazy-libs/tenant-management-wrapper.module').then(m => m.TenantManagementWrapperModule),
     data: { routes: TENANT_MANAGEMENT_ROUTES },
   },
-  { path: '**', redirectTo: '/' },
-  
+  {
+    path: 'books',
+    loadChildren: () => import('./books/books.module').then(m => m.BooksModule),
+    data: {
+      routes: {
+        name: 'Books',
+      } as ABP.Route,
+    },
+  },
 ];
 
 @NgModule({
