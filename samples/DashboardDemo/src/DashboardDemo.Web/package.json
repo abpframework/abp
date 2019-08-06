@@ -4,6 +4,6 @@
   "private": true,
   "dependencies": {
     "@abp/aspnetcore.mvc.ui.theme.basic": "^0.6.6",
-    "chart.js": "^2.8.0"
+    "@abp/chart.js": "^0.8.0"
   }
 }

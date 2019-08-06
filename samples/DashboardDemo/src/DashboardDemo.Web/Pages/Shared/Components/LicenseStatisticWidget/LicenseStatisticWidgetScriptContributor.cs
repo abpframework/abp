@@ -1,5 +1,5 @@
-﻿using DashboardDemo.Web.Bundles;
-using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.ChartJs;
 using Volo.Abp.Modularity;
 
 namespace DashboardDemo.Web.Pages.Shared.Components.LicenseStatisticWidget

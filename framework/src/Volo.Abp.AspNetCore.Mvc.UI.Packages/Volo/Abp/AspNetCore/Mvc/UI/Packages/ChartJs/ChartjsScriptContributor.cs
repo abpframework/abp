@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 
-namespace DashboardDemo.Web.Bundles
+namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.ChartJs
 {
     public class ChartjsScriptContributor : BundleContributor
     {
