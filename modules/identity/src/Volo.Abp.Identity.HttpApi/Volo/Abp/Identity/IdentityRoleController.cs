@@ -21,16 +21,16 @@ namespace Volo.Abp.Identity
         }
 
         [HttpGet]
+        public virtual Task<ListResultDto<IdentityRoleDto>> GetListAsync()
+        {
+            return _roleAppService.GetListAsync();
+        }
+
+        [HttpGet]
         [Route("{id}")]
         public virtual Task<IdentityRoleDto> GetAsync(Guid id)
         {
             return _roleAppService.GetAsync(id);
-        }
-
-        [HttpGet]
-        public virtual Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input)
-        {
-            return _roleAppService.GetListAsync(input);
         }
 
         [HttpPost]
@@ -51,13 +51,6 @@ namespace Volo.Abp.Identity
         public virtual Task DeleteAsync(Guid id)
         {
             return _roleAppService.DeleteAsync(id);
-        }
-
-        [HttpGet]
-        [Route("all")]
-        public virtual Task<List<IdentityRoleDto>> GetAllListAsync()
-        {
-            return _roleAppService.GetAllListAsync();
         }
     }
 }

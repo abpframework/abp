@@ -2,8 +2,8 @@
 
 namespace Volo.Abp.Identity
 {
-    public class GetIdentityRolesInput : PagedAndSortedResultRequestDto
+    public class GetIdentityRolesInput
     {
-        public string Filter { get; set; }
+
     }
 }
