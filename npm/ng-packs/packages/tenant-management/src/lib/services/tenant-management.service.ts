@@ -61,7 +61,7 @@ export class TenantManagementService {
   }
 
   getDefaultConnectionString(id: string): Observable<string> {
-    const url = `/api/multi-tenancy/tenants/${id}/defaultConnectionString`;
+    const url = `/api/multi-tenancy/tenants/${id}/default-connection-string`;
 
     const request: Rest.Request<TenantManagement.DefaultConnectionStringRequest> = {
       method: 'GET',
@@ -72,7 +72,7 @@ export class TenantManagementService {
   }
 
   updateDefaultConnectionString(payload: TenantManagement.DefaultConnectionStringRequest): Observable<any> {
-    const url = `/api/multi-tenancy/tenants/${payload.id}/defaultConnectionString`;
+    const url = `/api/multi-tenancy/tenants/${payload.id}/default-connection-string`;
 
     const request: Rest.Request<TenantManagement.DefaultConnectionStringRequest> = {
       method: 'PUT',
@@ -83,7 +83,7 @@ export class TenantManagementService {
   }
 
   deleteDefaultConnectionString(id: string): Observable<string> {
-    const url = `/api/multi-tenancy/tenant/${id}/defaultConnectionString`;
+    const url = `/api/multi-tenancy/tenant/${id}/default-connection-string`;
 
     const request: Rest.Request<TenantManagement.DefaultConnectionStringRequest> = {
       method: 'DELETE',

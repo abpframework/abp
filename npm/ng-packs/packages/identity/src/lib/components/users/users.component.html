@@ -84,7 +84,7 @@
 
   <ng-template #abpBody>
     <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
-      <form [formGroup]="form">
+      <form [formGroup]="form" validateOnSubmit>
         <ngb-tabset>
           <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
             <ng-template ngbTabContent>
@@ -183,9 +183,13 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <button type="button" class="btn btn-primary" (click)="save()">
-      <i class="fa fa-check mr-1"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>
-    </button>
+    <abp-button
+      [requestType]="['POST', 'PUT']"
+      requestURLContainSearchValue="users"
+      iconClass="fa fa-check"
+      (click)="save()"
+      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
+    >
   </ng-template>
 </abp-modal>
 
