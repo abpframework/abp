@@ -17,11 +17,7 @@ namespace Acme.BookStore.EntityFrameworkCore
             builder.Entity<Book>(b =>
             {
                 b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
-
-                b.ConfigureAudited();
-                b.ConfigureExtraProperties();
-                b.ConfigureConcurrencyStamp();
-
+                b.ConfigureByConvention();
                 b.Property(x => x.Name).IsRequired().HasMaxLength(128);
             });
         }

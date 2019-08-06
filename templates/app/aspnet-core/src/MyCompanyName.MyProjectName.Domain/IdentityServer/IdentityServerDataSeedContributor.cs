@@ -126,14 +126,14 @@ namespace MyCompanyName.MyProjectName.IdentityServer
             }
 
             //Console Test Client
-            var consoleClientId = configurationSection["MyProjectName_ConsoleTestApp:ClientId"];
+            var consoleClientId = configurationSection["MyProjectName_App:ClientId"];
             if (!consoleClientId.IsNullOrWhiteSpace())
             {
                 await CreateClientAsync(
                     consoleClientId,
                     commonScopes,
                     new[] { "password", "client_credentials" },
-                    (configurationSection["MyProjectName_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
+                    (configurationSection["MyProjectName_App:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
         }

@@ -44,8 +44,8 @@ export class IdentityState {
   constructor(private identityService: IdentityService) {}
 
   @Action(IdentityGetRoles)
-  getRoles({ patchState }: StateContext<Identity.State>) {
-    return this.identityService.getRoles().pipe(
+  getRoles({ patchState }: StateContext<Identity.State>, { payload }: IdentityGetRoles) {
+    return this.identityService.getRoles(payload).pipe(
       tap(roles =>
         patchState({
           roles,
