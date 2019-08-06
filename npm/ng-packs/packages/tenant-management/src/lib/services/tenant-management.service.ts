@@ -9,10 +9,11 @@ import { TenantManagement } from '../models/tenant-management';
 export class TenantManagementService {
   constructor(private rest: RestService) {}
 
-  get(): Observable<TenantManagement.Response> {
+  get(params = {} as ABP.PageQueryParams): Observable<TenantManagement.Response> {
     const request: Rest.Request<null> = {
       method: 'GET',
       url: '/api/multi-tenancy/tenants',
+      params,
     };
 
     return this.rest.request<null, TenantManagement.Response>(request);

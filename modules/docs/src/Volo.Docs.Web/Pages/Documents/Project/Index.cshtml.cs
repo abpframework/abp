@@ -201,7 +201,6 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 LatestVersionInfo = versions.First();
                 LatestVersionInfo.DisplayText = $"{LatestVersionInfo.DisplayText} ({DocsAppConsts.Latest})";
-                LatestVersionInfo.Version = LatestVersionInfo.Version;
 
                 if (string.Equals(Version, DocsAppConsts.Latest, StringComparison.OrdinalIgnoreCase))
                 {

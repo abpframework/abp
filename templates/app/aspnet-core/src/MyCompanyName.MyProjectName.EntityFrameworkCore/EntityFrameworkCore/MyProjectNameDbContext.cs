@@ -40,10 +40,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
             builder.Entity<AppUser>(b =>
             {
                 b.ToTable("AbpUsers"); //Sharing the same table "AbpUsers" with the IdentityUser
-
-                b.ConfigureFullAudited();
-                b.ConfigureExtraProperties();
-                b.ConfigureConcurrencyStamp();
+                b.ConfigureByConvention();
                 b.ConfigureAbpUser();
 
                 //Moved customization to a method so we can share it with the MyProjectNameMigrationsDbContext class

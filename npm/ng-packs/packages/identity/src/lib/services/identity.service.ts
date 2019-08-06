@@ -9,10 +9,11 @@ import { Identity } from '../models/identity';
 export class IdentityService {
   constructor(private rest: RestService) {}
 
-  getRoles(): Observable<Identity.RoleResponse> {
+  getRoles(params = {} as ABP.PageQueryParams): Observable<Identity.RoleResponse> {
     const request: Rest.Request<null> = {
       method: 'GET',
       url: '/api/identity/roles',
+      params,
     };
 
     return this.rest.request<null, Identity.RoleResponse>(request);

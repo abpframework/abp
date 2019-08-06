@@ -367,6 +367,15 @@ body {
                 }
             }
 
+            .blockquote {
+                margin-bottom: 1rem;
+                margin-left: 0;
+                border-left: 2px solid gray;
+                padding: 1em;
+                background-color: #eee;
+                padding-bottom: .2em
+            }
+
             img {
                 max-width: 100%;
                 border: 1px solid #f4f5f7;
