@@ -113,6 +113,8 @@ export class ConfigState {
     const selector = createSelector(
       [ConfigState],
       function(state: Config.State) {
+        if (!state.localization) return key;
+
         const { defaultResourceName } = state.environment.localization;
         if (keys[0] === '') {
           if (!defaultResourceName) {
