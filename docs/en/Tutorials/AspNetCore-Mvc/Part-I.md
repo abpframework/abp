@@ -10,11 +10,13 @@ This is the first part of the ASP.NET Core MVC tutorial series. See all parts:
 - [Part II: Create, Update and Delete books](Part-II.md)
 - [Part III: Integration Tests](Part-III.md)
 
-You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
+You can access to the **source code** of the application from [the GitHub repository](https://github.com/abpframework/abp/tree/master/samples/BookStore).
+
+> You can also watch [this video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by an ABP community member, based on this tutorial.
 
 ### Creating the Project
 
-Create a new project named `Acme.BookStore`, create the  database and run the application by following the [Getting Started document](../../Getting-Started-AspNetCore-MVC-Template.md).
+Create a new project named `Acme.BookStore`, create the database and run the application by following the [Getting Started document](../../Getting-Started-AspNetCore-MVC-Template.md).
 
 ### Solution Structure
 
@@ -22,7 +24,7 @@ This is how the layered solution structure looks after it's created:
 
 ![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
 
-> You can see [MVC application template document](../../Startup-Templates/Mvc.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
+> You can see the [Application template document](../../Startup-Templates/Application.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
 ### Create the Book Entity
 
@@ -55,7 +57,6 @@ namespace Acme.BookStore
 * ABP has two fundamental base classes for entities: `AggregateRoot` and `Entity`. **Aggregate Root** is one of the **Domain Driven Design (DDD)** concepts. See [entity document](../../Entities.md) for details and best practices.
 * `Book` entity inherits `AuditedAggregateRoot` which adds some auditing properties (`CreationTime`, `CreatorId`, `LastModificationTime`... etc.) on top of the `AggregateRoot` class.
 * `Guid` is the **primary key type** of the `Book` entity.
-* Used **data annotation attributes** in this code for EF Core mappings. Alternatively you could use EF Core's [fluent mapping API](https://docs.microsoft.com/en-us/ef/core/modeling) instead.
 
 #### BookType Enum
 
@@ -99,7 +100,7 @@ Open `BookStoreDbContextModelCreatingExtensions.cs` file in the `Acme.BookStore.
 builder.Entity<Book>(b =>
 {
     b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
-    b.ConfigureAuditedAggregateRoot(); //auto configure for the base class props
+    b.ConfigureByConvention(); //auto configure for the base class props
     b.Property(x => x.Name).IsRequired().HasMaxLength(128);
 });
 ````
@@ -222,7 +223,7 @@ using Volo.Abp.Application.Services;
 namespace Acme.BookStore
 {
     public interface IBookAppService : 
-        IAsyncCrudAppService< //Defines CRUD methods
+        ICrudAppService< //Defines CRUD methods
             BookDto, //Used to show books
             Guid, //Primary key of the book entity
             PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
@@ -235,8 +236,8 @@ namespace Acme.BookStore
 ````
 
 * Defining interfaces for application services is <u>not required</u> by the framework. However, it's suggested as a best practice.
-* `IAsyncCrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually.
-* There are some variations of the `IAsyncCrudAppService` where you can use separated DTOs for each method.
+* `ICrudAppService` defines common **CRUD** methods: `GetAsync`, `GetListAsync`, `CreateAsync`, `UpdateAsync` and `DeleteAsync`. It's not required to extend it. Instead, you could inherit from the empty `IApplicationService` interface and define your own methods manually.
+* There are some variations of the `ICrudAppService` where you can use separated DTOs for each method.
 
 #### BookAppService
 
@@ -251,8 +252,8 @@ using Volo.Abp.Domain.Repositories;
 namespace Acme.BookStore
 {
     public class BookAppService : 
-        AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
-                            CreateUpdateBookDto, CreateUpdateBookDto>,
+        CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+                       CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
         public BookAppService(IRepository<Book, Guid> repository) 
@@ -264,7 +265,7 @@ namespace Acme.BookStore
 }
 ````
 
-* `BookAppService` is derived from `AsyncCrudAppService<...>` which implements all the CRUD methods defined above.
+* `BookAppService` is derived from `CrudAppService<...>` which implements all the CRUD methods defined above.
 * `BookAppService` injects `IRepository<Book, Guid>` which is the default repository for the `Book` entity. ABP automatically creates default repositories for each aggregate root (or entity). See the [repository document](../../Repositories.md).
 * `BookAppService` uses `IObjectMapper` to convert `Book` objects to `BookDto` objects and `CreateUpdateBookDto` objects to `Book` objects. The Startup template uses the [AutoMapper](http://automapper.org/) library as the object mapping provider. You defined the mappings before, so it will work as expected.
 

@@ -1,0 +1,10 @@
+{
+  "name": "@abp/ng.tenant-management",
+  "version": "0.8.0",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^0.8.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

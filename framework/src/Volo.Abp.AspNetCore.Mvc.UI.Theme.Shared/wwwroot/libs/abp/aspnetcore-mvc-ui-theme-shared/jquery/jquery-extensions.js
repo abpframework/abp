@@ -160,7 +160,7 @@
                             formSaved = true;
                             $modal.modal('hide');
                         }
-                    });
+                    }, false);
             }
         });
 

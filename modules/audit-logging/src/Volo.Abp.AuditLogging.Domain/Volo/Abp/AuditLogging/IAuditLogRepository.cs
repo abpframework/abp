@@ -7,7 +7,7 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.AuditLogging
 {
-    public interface IAuditLogRepository : IBasicRepository<AuditLog, Guid>
+    public interface IAuditLogRepository : IRepository<AuditLog, Guid>
     {
         Task<List<AuditLog>> GetListAsync(
             string sorting = null,

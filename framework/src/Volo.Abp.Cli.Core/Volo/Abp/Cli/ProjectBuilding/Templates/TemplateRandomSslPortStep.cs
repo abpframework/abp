@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Volo.Abp.Cli.ProjectBuilding.Building;
-using Volo.Abp.Cli.ProjectBuilding.Templates.Mvc;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Templates
 {
@@ -15,7 +15,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
 
         private readonly List<string> _buildInSslUrls;
 
-        public TemplateRandomSslPortStep(List<string> buildInSslSslUrls, int minSslPort = 44300,
+        public TemplateRandomSslPortStep(
+            List<string> buildInSslSslUrls,
+            int minSslPort = 44300,
             int maxSslPort = 44399)
         {
             _buildInSslUrls = buildInSslSslUrls;
@@ -34,21 +36,31 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                     !x.IsDirectory && x.Name.EndsWith("appSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 .ToList();
 
-            if (context.Template.Name == MvcTemplate.TemplateName)
+            var angularEnvironments = context.Files.Where(x =>
+                    !x.IsDirectory &&
+                    (x.Name.EndsWith("environments/environment.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                    x.Name.EndsWith("environments/environment.hmr.ts", StringComparison.InvariantCultureIgnoreCase) ||
+                    x.Name.EndsWith("environments/environment.prod.ts", StringComparison.InvariantCultureIgnoreCase))
+                )
+                .ToList();
+
+            if (AppTemplateBase.IsAppTemplate(context.Template.Name))
             {
                 // no tiered
-                if (launchSettings.Count == 1&& launchSettings.First().Name.Equals("/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json", StringComparison.InvariantCultureIgnoreCase))
+                if (launchSettings.Count == 1 &&
+                    launchSettings.First().Name
+                        .Equals("/aspnet-core/src/MyCompanyName.MyProjectName.Web/Properties/launchSettings.json", StringComparison.InvariantCultureIgnoreCase))
                 {
                     var dbMigrator = appSettings.FirstOrDefault(x =>
-                        x.Name.Equals("/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
+                        x.Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.DbMigrator/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
                     dbMigrator?.SetContent(dbMigrator.Content.Replace("https://localhost:44302", "https://localhost:44303"));
 
                     var web = appSettings.FirstOrDefault(x =>
-                        x.Name.Equals("/src/MyCompanyName.MyProjectName.Web/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
+                        x.Name.Equals("/aspnet-core/src/MyCompanyName.MyProjectName.Web/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
                     web?.SetContent(web.Content.Replace("https://localhost:44301", "https://localhost:44303"));
 
                     var consoleTestApp = appSettings.FirstOrDefault(x =>
-                        x.Name.Equals("/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
+                        x.Name.Equals("/aspnet-core/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp/appsettings.json", StringComparison.InvariantCultureIgnoreCase));
                     consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44300", "https://localhost:44303"));
                     consoleTestApp?.SetContent(consoleTestApp.Content.Replace("https://localhost:44301", "https://localhost:44303"));
                 }
@@ -99,6 +111,22 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                         }
                         appSetting.SetLines(appSettingLines);
                     }
+
+                    foreach (var environment in angularEnvironments)
+                    {
+                        environment.NormalizeLineEndings();
+
+                        var environmentLines = environment.GetLines();
+                        for (var i = 0; i < environmentLines.Length; i++)
+                        {
+                            if (environmentLines[i].Contains(buildInUrl))
+                            {
+                                environmentLines[i] = environmentLines[i].Replace(buildInUrl, $"{buildInUrlWithoutPort}:{newPort}");
+                            }
+                        }
+                        environment.SetLines(environmentLines);
+                    }
+
                 }
             }
         }
@@ -112,13 +140,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates
                 : ports.ToList());
         }
 
-        private string GetUrlPort(string url)
+        private static string GetUrlPort(string url)
         {
             var match = Regex.Match(url, @":(\d+)");
             return match.Success ? match.Groups[1].Value : "";
         }
 
-        private string GetUrlWithoutPort(string url)
+        private static string GetUrlWithoutPort(string url)
         {
             var match = Regex.Match(url, @"(^.+):");
             return match.Success ? match.Groups[1].Value : "";

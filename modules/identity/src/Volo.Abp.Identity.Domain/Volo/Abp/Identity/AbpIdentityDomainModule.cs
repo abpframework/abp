@@ -25,27 +25,6 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
-            });
-
-            Configure<EmailTemplateOptions>(options =>
-            {
-                //options.Templates
-                //    .Add(
-                //        new EmailTemplateDefinition(IdentitySettingNames.User.EmailConfirmed, isLayout: true, layout: null)
-                //            .SetVirtualFilePath("/Volo/Abp/Identity/Templates/default.html")
-                //    );
-            });
-
             Configure<DistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();

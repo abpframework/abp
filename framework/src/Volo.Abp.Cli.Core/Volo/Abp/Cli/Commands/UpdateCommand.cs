@@ -103,16 +103,18 @@ namespace Volo.Abp.Cli.Commands
 
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp update  [-p|--include-previews]");
+            sb.AppendLine("");
+            sb.AppendLine("  abp update  [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("--include-previews                          (if supported by the template)");
+            sb.AppendLine("-p|--include-previews                       (if supported by the template)");
             sb.AppendLine("");
             sb.AppendLine("Some examples:");
-            sb.AppendLine("  abp update");
-            sb.AppendLine("  abp update --include-previews");
             sb.AppendLine("");
-            sb.AppendLine("See the documentation for more info.");
+            sb.AppendLine("  abp update");
+            sb.AppendLine("  abp update -p");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }

@@ -27,7 +27,6 @@
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="Localization\Resources\**\*.json" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,8 +34,6 @@
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Localization\Resources\**\*.json" />
-    <Content Remove=".json" />
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <None Include="Properties\launchSettings.json" />

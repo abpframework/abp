@@ -73,16 +73,20 @@
         return showMessage('error', message, title);
     };
 
-    abp.message.confirm = function (message, titleOrCallback, callback) {
+    abp.message.confirm = function (message, titleOrCallback, callback, closeOnEsc) {
+
         var userOpts = {
             text: message
         };
 
         if ($.isFunction(titleOrCallback)) {
+            closeOnEsc = callback;
             callback = titleOrCallback;
         } else if (titleOrCallback) {
             userOpts.title = titleOrCallback;
         };
+
+        userOpts.closeOnEsc = closeOnEsc;
 
         var opts = $.extend(
             {},

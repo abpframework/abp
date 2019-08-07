@@ -31,9 +31,9 @@ namespace Volo.Abp.Identity
 
         [HttpPost]
         [Route("change-password")]
-        public Task ChangePasswordAsync(string currentPassword, string newPassword)
+        public Task ChangePasswordAsync(ChangePasswordInput input)
         {
-            return _profileAppService.ChangePasswordAsync(currentPassword, newPassword);
+            return _profileAppService.ChangePasswordAsync(input);
         }
     }
 }

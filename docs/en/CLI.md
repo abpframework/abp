@@ -34,24 +34,29 @@ Example:
 abp new Acme.BookStore
 ````
 
-* Acme.BookStore is the solution name here.
+* `Acme.BookStore` is the solution name here.
 * Common convention is to name a solution is like *YourCompany.YourProject*. However, you can use different naming like *YourProject* (single level namespacing) or *YourCompany.YourProduct.YourModule* (three levels namespacing).
 
 #### Options
 
-* `--template` or `-t`: Specifies the template name. Default template name is `mvc`. Available templates:
-  * `mvc` (default): ASP.NET Core [MVC application template](Startup-Templates/Mvc.md). Additional options:
+* `--template` or `-t`: Specifies the template name. Default template name is `app`, which generates a web application. Available templates:
+  * `app` (default): [Application template](Startup-Templates/Application.md). Additional options:
+    * `--ui` or `-u`: Specifies the UI framework. Default framework is `mvc`. Available frameworks:
+      * `mvc`: ASP.NET Core MVC. There are some additional options for this template:
+        * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
+      * `angular`: Angular. There are some additional options for this template:
+        * `--separate-identity-server`: Separates the identity server application from the API host application. If not specified, you will have a single endpoint in the server side.
     * `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-    * `--tiered`: Creates a tiered solution where Web and Http API layers are physically separated. If not specified, it creates a layered solution which is less complex and suitable for most scenarios.
-  *  `mvc-module`: ASP.NET Core [MVC module template](Startup-Templates/Mvc-Module.md). Additional options:
+  *  `module`: [Module template](Startup-Templates/Module.md). Additional options:
     * `--no-ui`: Specifies to not include the UI. This makes possible to create service-only modules (a.k.a. microservices - without UI).
 * `--output-folder` or `-o`: Specifies the output folder. Default value is the current directory.
+* `--version` or `-v`: Specifies the ABP & template version. It can be a [release tag](https://github.com/abpframework/abp/releases) or a [branch name](https://github.com/abpframework/abp/branches). Uses the latest release if not specified. Most of the times, you will want to use the latest version.
 
 ### add-package
 
-Adds a new ABP package to a project by,
+Adds an ABP package to a project by,
 
 * Adding related nuget package as a dependency to the project.
 * Adding `[DependsOn(...)]` attribute to the module class in the project (see the [module development document](Module-Development-Basics.md)).
@@ -78,9 +83,9 @@ abp add-package Volo.Abp.MongoDB
 
 ### add-module
 
-Adds a multi-package module to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
+Adds a [multi-package application module](Modules/Index) to a solution by finding all packages of the module, finding related projects in the solution and adding each package to the corresponding project in the solution.
 
-> A business module generally consists of several packages (because of layering, different database providr options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
+> A business module generally consists of several packages (because of layering, different database provider options or other reasons). Using `add-module` command dramatically simplifies adding a module to a solution. However, each module may require some additional configurations which is generally indicated in the documentation of the related module.
 
 Basic usage:
 
@@ -100,10 +105,11 @@ abp add-module Volo.Blogging
 
 * `--solution` or `-s`: Specifies the solution (.sln) file path. If not specified, CLI tries to find a .sln file in the current directory.
 * `--skip-db-migrations`: For EF Core database provider, it automatically adds a new code first migration (`Add-Migration`) and updates the database (`Update-Database`) if necessary. Specify this option to skip this operation.
+* `-sp` or `--startup-project`: Relative path to the project folder of the startup project. Default value is the current folder.
 
 ### update
 
-Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP NuGet related packages and NPM packages in a solution or project to the latest versions.
+Updating all ABP related packages can be tedious since there are many packages of the framework and modules. This command automatically updates all ABP related NuGet and NPM packages in a solution or project to the latest versions.
 
 Usage:
 

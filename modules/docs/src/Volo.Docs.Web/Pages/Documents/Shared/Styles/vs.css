@@ -201,6 +201,13 @@
       padding-top: 2rem;
       padding-bottom: 10px;
       font-size: 2rem; }
+    .docs-page .docs-content article.docs-body .blockquote {
+        margin-bottom: 1rem;
+        margin-left: 0;
+        border-left: 2px solid gray;
+        padding: 1em;
+        background-color: #eee;
+        padding-bottom: .2em; }
     .docs-page .docs-content article.docs-body h3, .docs-page .docs-content article.docs-body h4, .docs-page .docs-content article.docs-body h5, .docs-page .docs-content article.docs-body h6 {
       padding-top: 20px;
       padding-bottom: 5px;

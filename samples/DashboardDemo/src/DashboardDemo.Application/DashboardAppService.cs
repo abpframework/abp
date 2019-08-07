@@ -47,7 +47,7 @@ namespace DashboardDemo
                 {"Ultimate", new Random().Next(30, 40) * days}
             };
 
-            return new LicenseStatistiWidgetResultDto(){Data = data};
+            return new LicenseStatistiWidgetResultDto() { Data = data };
         }
 
         private async Task<NewUserStatisticWidgetResultDto> GetMonthlyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
@@ -61,7 +61,7 @@ namespace DashboardDemo
 
             for (var i = 0; i < monthCount; i++)
             {
-                labels.Add(months[endDate.Month - 1]);
+                labels.Add(months[endDate.Month - 1] + " " + endDate.Year);
                 endDate = endDate.AddMonths(-1);
             }
 
@@ -88,7 +88,7 @@ namespace DashboardDemo
 
             for (int i = 0; i < dayCount; i++)
             {
-                labels.Add(input.StartDate.AddDays(i).Day.ToString());
+                labels.Add(input.StartDate.AddDays(i).ToString("dd/MM/yyyy"));
             }
 
             var data = new Dictionary<string, int>();

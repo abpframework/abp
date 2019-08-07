@@ -33,8 +33,11 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
             }
 
             await _profileAppService.ChangePasswordAsync(
-                ChangePasswordInfoModel.CurrentPassword,
-                ChangePasswordInfoModel.NewPassword
+                new ChangePasswordInput()
+                {
+                    CurrentPassword = ChangePasswordInfoModel.CurrentPassword,
+                    NewPassword = ChangePasswordInfoModel.NewPassword
+                }
             );
 
             return NoContent();
