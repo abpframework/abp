@@ -1,25 +1,25 @@
-import { Component, TemplateRef, ViewChild, OnInit } from '@angular/core';
-import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
+import { ABP } from '@abp/ng.core';
+import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IdentityState } from '../../states/identity.state';
-import { Identity } from '../../models/identity';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { debounceTime, finalize, pluck } from 'rxjs/operators';
 import {
-  IdentityUpdateRole,
   IdentityAddRole,
   IdentityDeleteRole,
   IdentityGetRoleById,
   IdentityGetRoles,
+  IdentityUpdateRole,
 } from '../../actions/identity.actions';
-import { pluck, debounceTime, finalize } from 'rxjs/operators';
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { ABP } from '@abp/ng.core';
+import { Identity } from '../../models/identity';
+import { IdentityState } from '../../states/identity.state';
 
 @Component({
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
 })
-export class RolesComponent implements OnInit {
+export class RolesComponent {
   @Select(IdentityState.getRoles)
   data$: Observable<Identity.RoleItem[]>;
 
@@ -42,18 +42,14 @@ export class RolesComponent implements OnInit {
 
   loading: boolean = false;
 
-  search$ = new Subject<string>();
-
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
   constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
-  ngOnInit() {
-    this.search$.pipe(debounceTime(300)).subscribe(value => {
-      this.pageQuery.filter = value;
-      this.get();
-    });
+  onSearch(value) {
+    this.pageQuery.filter = value;
+    this.get();
   }
 
   createForm() {
