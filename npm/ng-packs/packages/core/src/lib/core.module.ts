@@ -20,8 +20,8 @@ import { SessionState } from './states/session.state';
 import { getInitialData } from './utils/initial-utils';
 import { EllipsisDirective } from './directives/ellipsis.directive';
 import { AutofocusDirective } from './directives/autofocus.directive';
-import { DebounceDirective } from './directives/debounce.directive';
-import { StopPropagationDirective } from './directives/stop-propagation.directive';
+import { InputEventDebounceDirective } from './directives/debounce.directive';
+import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
 
 @NgModule({
   imports: [
@@ -42,8 +42,8 @@ import { StopPropagationDirective } from './directives/stop-propagation.directiv
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
-    DebounceDirective,
-    StopPropagationDirective,
+    InputEventDebounceDirective,
+    ClickEventStopPropagationDirective,
   ],
   exports: [
     CommonModule,
@@ -58,9 +58,9 @@ import { StopPropagationDirective } from './directives/stop-propagation.directiv
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
-    DebounceDirective,
+    InputEventDebounceDirective,
     LocalizationPipe,
-    StopPropagationDirective,
+    ClickEventStopPropagationDirective,
   ],
   providers: [LocalizationPipe],
   entryComponents: [RouterOutletComponent, DynamicLayoutComponent],

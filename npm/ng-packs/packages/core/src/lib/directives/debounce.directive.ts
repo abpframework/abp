@@ -6,7 +6,7 @@ import { takeUntilDestroy } from '@ngx-validate/core';
 @Directive({
   selector: '[input.debounce]',
 })
-export class DebounceDirective implements OnInit {
+export class InputEventDebounceDirective implements OnInit {
   @Input() debounce: number = 300;
 
   @Output('input.debounce') debounceEvent = new EventEmitter<Event>();
