@@ -20,6 +20,8 @@ import { SessionState } from './states/session.state';
 import { getInitialData } from './utils/initial-utils';
 import { EllipsisDirective } from './directives/ellipsis.directive';
 import { AutofocusDirective } from './directives/autofocus.directive';
+import { InputEventDebounceDirective } from './directives/debounce.directive';
+import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
 
 @NgModule({
   imports: [
@@ -40,6 +42,8 @@ import { AutofocusDirective } from './directives/autofocus.directive';
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
+    InputEventDebounceDirective,
+    ClickEventStopPropagationDirective,
   ],
   exports: [
     CommonModule,
@@ -54,7 +58,9 @@ import { AutofocusDirective } from './directives/autofocus.directive';
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
+    InputEventDebounceDirective,
     LocalizationPipe,
+    ClickEventStopPropagationDirective,
   ],
   providers: [LocalizationPipe],
   entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
