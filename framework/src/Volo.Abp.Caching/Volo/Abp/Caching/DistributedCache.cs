@@ -28,7 +28,6 @@ namespace Volo.Abp.Caching
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-        //TODO: Create IDistributedCacheSerializer
         protected IDistributedCacheSerializer Serializer { get; }
 
         protected ICurrentTenant CurrentTenant { get; }

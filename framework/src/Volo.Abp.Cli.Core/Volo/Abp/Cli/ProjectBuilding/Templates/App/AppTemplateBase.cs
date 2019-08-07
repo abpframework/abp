@@ -25,6 +25,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             SwitchDatabaseProvider(context, steps);
             DeleteUnrelatedProjects(context, steps);
             RandomizeSslPorts(context, steps);
+            UpdateNuGetConfig(context, steps);
             CleanupFolderHierarchy(context, steps);
 
             return steps;
@@ -111,6 +112,11 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                     }
                 )
             );
+        }
+
+        private void UpdateNuGetConfig(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new UpdateNuGetConfigStep("/aspnet-core/NuGet.Config"));
         }
 
         private void CleanupFolderHierarchy(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)

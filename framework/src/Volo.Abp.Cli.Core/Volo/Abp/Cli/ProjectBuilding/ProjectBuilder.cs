@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
@@ -21,18 +22,21 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected ICliAnalyticsCollect CliAnalyticsCollect { get; }
         protected CliOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
+        protected IApiKeyService ApiKeyService { get; }
 
         public ProjectBuilder(ITemplateStore templateStore, 
             ITemplateInfoProvider templateInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect, 
             IOptions<CliOptions> options,
-            IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer, 
+            IApiKeyService apiKeyService)
         {
             TemplateStore = templateStore;
             TemplateInfoProvider = templateInfoProvider;
             CliAnalyticsCollect = cliAnalyticsCollect;
             Options = options.Value;
             JsonSerializer = jsonSerializer;
+            ApiKeyService = apiKeyService;
 
             Logger = NullLogger<ProjectBuilder>.Instance;
         }
@@ -47,6 +51,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args.TemplateName,
                 args.Version
             );
+
+            var apiKey = await ApiKeyService.GetApiKeyOrNullAsync();
+            if (apiKey != null)
+            {
+                args.ExtraProperties["api-key"] = apiKey;
+            }
 
             var context = new ProjectBuildContext(
                 templateInfo,
