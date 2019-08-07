@@ -1,6 +1,6 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
@@ -25,7 +25,7 @@ type SelectedModalContent = {
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
 })
-export class TenantsComponent implements OnInit {
+export class TenantsComponent {
   @Select(TenantManagementState.get)
   data$: Observable<ABP.BasicItem[]>;
 
@@ -52,8 +52,6 @@ export class TenantsComponent implements OnInit {
 
   loading: boolean = false;
 
-  search$ = new Subject<string>();
-
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
   }
@@ -75,11 +73,9 @@ export class TenantsComponent implements OnInit {
     private store: Store,
   ) {}
 
-  ngOnInit() {
-    this.search$.pipe(debounceTime(300)).subscribe(value => {
-      this.pageQuery.filter = value;
-      this.get();
-    });
+  onSearch(value) {
+    this.pageQuery.filter = value;
+    this.get();
   }
 
   private createTenantForm() {

@@ -1,10 +1,10 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
+import { Component, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable, Subject } from 'rxjs';
-import { debounceTime, filter, map, pluck, take, finalize } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, finalize, map, pluck, take } from 'rxjs/operators';
 import snq from 'snq';
 import {
   IdentityAddUser,
@@ -20,7 +20,7 @@ import { IdentityState } from '../../states/identity.state';
   selector: 'abp-users',
   templateUrl: './users.component.html',
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent {
   @Select(IdentityState.getUsers)
   data$: Observable<Identity.UserItem[]>;
 
@@ -50,8 +50,6 @@ export class UsersComponent implements OnInit {
 
   loading: boolean = false;
 
-  search$ = new Subject<string>();
-
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   get roleGroups(): FormGroup[] {
@@ -60,11 +58,9 @@ export class UsersComponent implements OnInit {
 
   constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
-  ngOnInit() {
-    this.search$.pipe(debounceTime(300)).subscribe(value => {
-      this.pageQuery.filter = value;
-      this.get();
-    });
+  onSearch(value) {
+    this.pageQuery.filter = value;
+    this.get();
   }
 
   buildForm() {

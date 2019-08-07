@@ -108,25 +108,6 @@ export class ModalComponent implements OnDestroy {
   }
 
   listen() {
-    fromEvent(document, 'click')
-      .pipe(
-        debounceTime(100),
-        takeUntil(this.destroy$),
-        filter((event: MouseEvent) => {
-          const isOpenConfirmation = this.isOpenConfirmation || document.querySelector('p-toastitem');
-          return (
-            event &&
-            this.closable &&
-            this.modalContent &&
-            !isOpenConfirmation &&
-            !this.modalContent.nativeElement.contains(event.target)
-          );
-        }),
-      )
-      .subscribe(_ => {
-        this.close();
-      });
-
     fromEvent(document, 'keyup')
       .pipe(
         takeUntil(this.destroy$),
@@ -174,6 +155,10 @@ export class ModalComponent implements OnDestroy {
     } else {
       this.visible = false;
     }
+  }
+
+  onClickBackdrop() {
+    this.close();
   }
 }
 

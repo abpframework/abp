@@ -1,5 +1,6 @@
 <div
   *ngIf="showModal"
+  (click)="onClickBackdrop()"
   id="abp-modal"
   tabindex="-1"
   class="modal fade {{ modalClass }} d-block show"
@@ -11,7 +12,7 @@
     [class.modal-dialog-centered]="centered"
     #abpModalContent
   >
-    <div #content id="abp-modal-content" class="modal-content">
+    <div #content id="abp-modal-content" class="modal-content" (click)="$event.stopPropagation()">
       <div id="abp-modal-header" class="modal-header">
         <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
 
