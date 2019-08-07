@@ -30,4 +30,11 @@ export namespace Books {
     ScienceFiction,
     Poetry,
   }
+
+  export interface SaveRequest {
+    name: string;
+    type: Type;
+    publishDate: string;
+    price: number;
+  }
 }

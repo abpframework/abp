@@ -1,8 +1,8 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { BooksGet } from '../actions/books.actions';
+import { BooksGet, BooksSave } from '../actions/books.actions';
 import { Books } from '../models/books';
 import { BooksService } from '../../books/services/books.service';
-import { tap } from 'rxjs/operators';
+import { tap, switchMap } from 'rxjs/operators';
 
 @State<Books.State>({
   name: 'BooksState',
@@ -24,6 +24,13 @@ export class BooksState {
           data,
         });
       }),
+    );
+  }
+
+  @Action(BooksSave)
+  addBooks({ dispatch }: StateContext<Books.State>, { payload, id }: BooksSave) {
+    return (id ? this.booksService.update(payload, id) : this.booksService.add(payload)).pipe(
+      switchMap(() => dispatch(new BooksGet())),
     );
   }
 }
