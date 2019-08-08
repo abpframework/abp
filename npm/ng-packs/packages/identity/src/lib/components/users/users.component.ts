@@ -1,10 +1,10 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, finalize, map, pluck, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
 import {
   IdentityAddUser,
@@ -65,9 +65,7 @@ export class UsersComponent {
 
   buildForm() {
     this.roles = this.store.selectSnapshot(IdentityState.getRoles);
-
     this.form = this.fb.group({
-      password: ['', [Validators.required, Validators.maxLength(32)]],
       userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
       email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
       name: [this.selected.name || '', [Validators.maxLength(64)]],
@@ -83,6 +81,9 @@ export class UsersComponent {
         ),
       ),
     });
+    if (!this.selected.userName) {
+      this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
+    }
   }
 
   openModal() {
@@ -97,10 +98,10 @@ export class UsersComponent {
   }
 
   onEdit(id: string) {
-    combineLatest([this.store.dispatch(new IdentityGetUserById(id)), this.store.dispatch(new IdentityGetUserRoles(id))])
+    this.store
+      .dispatch(new IdentityGetUserById(id))
       .pipe(
-        filter(([res1, res2]) => res1 && res2),
-        map(([state, _]) => state),
+        switchMap(() => this.store.dispatch(new IdentityGetUserRoles(id))),
         pluck('IdentityState'),
         take(1),
       )
