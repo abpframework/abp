@@ -19,6 +19,11 @@ export class ConfigState {
     return state;
   }
 
+  @Selector()
+  static getApplicationInfo(state: Config.State) {
+    return state.environment.application || {};
+  }
+
   static getOne(key: string) {
     const selector = createSelector(
       [ConfigState],

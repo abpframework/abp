@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Config, ConfigState } from '@abp/ng.core';
 import { slideFromBottom } from '@abp/ng.theme.shared';
+import { Component } from '@angular/core';
+import { Store } from '@ngxs/store';
 
 @Component({
   selector: ' abp-layout',
@@ -8,4 +10,10 @@ import { slideFromBottom } from '@abp/ng.theme.shared';
 })
 export class LayoutComponent {
   isCollapsed: boolean = false;
+
+  get appInfo(): Config.Application {
+    return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+  }
+
+  constructor(private store: Store) {}
 }
