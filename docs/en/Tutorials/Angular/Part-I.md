@@ -697,9 +697,14 @@ Copy next code block to `book-list.component.html`.
 ```
 > PrimeNG Table used in this component. See the [PrimeNG Table Document](https://www.primefaces.org/primeng/#/table)
 
-The final UI is shown below:
+The final UI and file tree are shown below:
 
 ![bookstore-book-list](images/bookstore-book-list.png)
+
+<img src="images/angular-file-tree.png" height="75%">
+
+> Check the folder structure on [Angular Style Guide](https://angular.io/guide/styleguide#file-tree)
+
 
 ### Next Part
 
