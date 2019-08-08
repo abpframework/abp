@@ -1,10 +1,10 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { debounceTime, finalize, pluck } from 'rxjs/operators';
+import { finalize, pluck } from 'rxjs/operators';
 import {
   IdentityAddRole,
   IdentityDeleteRole,
@@ -54,7 +54,10 @@ export class RolesComponent {
 
   createForm() {
     this.form = this.fb.group({
-      name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+      name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
+        Validators.required,
+        Validators.maxLength(256),
+      ]),
       isDefault: [this.selected.isDefault || false],
       isPublic: [this.selected.isPublic || false],
     });
