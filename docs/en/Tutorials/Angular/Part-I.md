@@ -308,16 +308,24 @@ Swagger has a nice UI to test APIs. You can try to execute the `[GET] /api/app/b
 
 ### Create the Books Page
 
-It's time to create something visible and usable!
+In this tutorial;
 
+* [Angular CLI](https://angular.io/cli) will be used to create modules, components and services
+* [NGXS](https://ngxs.gitbook.io/ngxs/) will be used as the state management library
+* [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
+* [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
 
+#### Install NPM Packages
 
-In this Angular Application, [Angular CLI](https://angular.io/cli) will be used to creating modules, components, services, etc. ,  [NGXS](https://ngxs.gitbook.io/ngxs/) will be used as state management and [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI library.
+Open a terminal window and go to `angular` folder and then run `yarn` command for installing NPM packages:
 
+```
+yarn
+```
 
-Open a terminal window and go to `angular` folder and then run `yarn` command for installing packages.
+#### BooksModule
 
-Run the following command line for creating `BooksModule`
+Run the following command line to create a new module, named `BooksModule`:
 
 ```bash
 yarn ng generate module books --route books --module app.module
@@ -325,17 +333,13 @@ yarn ng generate module books --route books --module app.module
 
 ![creating-books-module.terminal](images/creating-books-module-terminal.png)
 
-Run `yarn start` and then open `http://localhost:4200/books` on a browser.
+Run `yarn start`, wait Angular to run the application and open `http://localhost:4200/books` on a browser:
 
 ![initial-books-page](images/initial-books-page.png)
 
-Books page works but you need some configuration for the application layout.
+#### Routing
 
-Let's start the coding.
-
->[Visual Studio Code](https://code.visualstudio.com/) will be used in this tutorial.
-
-Open the `app-routing.module.ts` and replace `books` route to the below route.
+Open the `app-routing.module.ts` and replace `books` as shown below:
 
 ```typescript
 import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
@@ -353,32 +357,30 @@ import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
 },
 ```
 
-If you would like to see your route on the navigation bar of `LayoutApplication`, you must add the `data` object with `name` property in your route.
-
->ABP themes have three layouts. These layouts are `LayoutApplication`, `LayoutAccount` and `LayoutEmpty`. [Check these layouts.](https://github.com/abpframework/abp/tree/dev/npm/ng-packs/packages/theme-basic/src/lib/components)
+`LayoutApplicationComponent` configuration sets the application layout to the new page. If you would like to see your route on the navigation bar (main menu) you must also add the `data` object with `name` property in your route.
 
 
 ![initial-books-page](images/initial-books-page-with-layout.png)
 
-`LayoutApplication` successfully added and `Books` successfully added to the navigation bar.
-
-Let's create the `book-list.component`.
+#### Book List Component 
 
 
-Replace the `books.component.html` to the following line
+First, replace the `books.component.html` to the following line to place the router-outlet:
 
 ```html
 <router-outlet></router-outlet>
 ```
 
-Run the below command on the terminal in the root folder.
+Then run the command below on the terminal in the root folder to generate a new component, named book-list:
 
-`yarn ng generate component books/book-list`
+````bash
+yarn ng generate component books/book-list
+````
 
 
 ![creating-books-list-terminal](images/creating-book-list-terminal.png)
 
-Import the `SharedModule` to the `BooksModule`
+Import the `SharedModule` to the `BooksModule` to reuse some components and services defined in:
 
 ```typescript
 import { SharedModule } from '../shared/shared.module';
@@ -393,7 +395,7 @@ import { SharedModule } from '../shared/shared.module';
 export class BooksModule {}
 ```
 
-After, update to `routes` in `books-routing.module.ts`
+Then, update the `routes` in the `books-routing.module.ts` to add the new book-list component:
 
 ```typescript
 import { BookListComponent } from './book-list/book-list.component';
@@ -415,73 +417,15 @@ export class BooksRoutingModule {}
 
 ![initial-book-list-page](images/initial-book-list-page.png)
 
-It seems good.
+#### Create BooksState
 
-Now, you created `BookListComponent` and added in the `BooksRoutingModule`.
+Run the following command in the terminal to create a new state, named `BooksState`:
 
+````shell
+yarn ng generate ngxs-schematic:state books
+````
 
-
-<h3>Create the Books State</h3>
-
-In this step, [NGXS Schematic](https://github.com/mehmet-erim/ngxs-schematic) will be used to generate state.
-
-Run the next command on terminal.
-
-`yarn ng generate ngxs-schematic:state books`
-
-![ngxs-schematic-terminal-output](images/ngxs-schematic-terminal-output.png)
-
-```typescript
-// books.ts
-
-export namespace Books {
-  export interface State {
-    books: any;
-  }
-}
-```
-
-```typescript
-// books.actions.ts
-
-export class BooksAction {
-  static readonly type = '[Books] Action';
-  constructor(public payload?: any) { }
-}
-```
->See [Actions on NGXS Document](https://ngxs.gitbook.io/ngxs/concepts/actions)
-
-```typescript
-// books.state.ts
-
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { BooksAction } from '../actions/books.actions';
-import { Books } from '../models/books';
-
-@State<Books.State> ({
-  name: 'BooksState',
-  defaults: { books: {} } as Books.State
-})
-export class BooksState {
-  @Selector()
-  static getBooks({ books }: Books.State) {
-    return books;
-  }
-
-  constructor() { }
-
-  @Action(BooksAction)
-  booksAction({ getState, patchState }: StateContext<Books.State>, { payload }: BooksAction) {
-    const state = getState();
-    patchState({
-      ...state,
-    });
-  }
-}
-```
->See [State on NGXS Document](https://ngxs.gitbook.io/ngxs/concepts/state)
-
-NGXS Schematic created the above files and added `BooksState` to `NgxsModule` in `app.modules.ts`.
+This command creates several new files and edits `app.modules.ts` to import the `NgxsModule` with the new state:
 
 ```typescript
 // app.module.ts
@@ -498,12 +442,11 @@ import { BooksState } from './store/states/books.state';
 export class AppModule {}
 ```
 
-<h3>Get Books Data from Backend</h3>
+#### Get Books Data from Backend
 
-Firstly, you have to create the response type of book API.
->Book response type must be the same as the backend response type. You can use swagger for response types.
+First, create data types to map data returning from the backend (you can check swagger UI or your backend API to know the data format).
 
-Add the below types to `books.ts`
+Modify the `books.ts` as shown below:
 
 ```typescript
 import { ABP } from '@abp/ng.core';
@@ -541,7 +484,11 @@ export namespace Books {
 }
 ```
 
-OK, you ready to create a service.
+Added `Book` interface that represents a book object and `Type` enum represents a book category.
+
+#### BooksService
+
+Now, create a new service, named `BooksService` to perform HTTP calls to the server:
 
 ```bash
 yarn ng generate service books/shared/books
@@ -549,7 +496,7 @@ yarn ng generate service books/shared/books
 
 ![service-terminal-output](images/service-terminal-output.png)
 
-Add a get method to this service.
+Modify `book.service.ts` as shown below:
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -574,7 +521,9 @@ export class BooksService {
 }
 ```
 
-Replace the following code block to `books.actions.ts`.
+Added a `get` method to get the list of books by performing an HTTP request to the related endpoint.
+
+Replace `books.actions.ts` content as shown below:
 
 ```typescript
 export class GetBooks {
@@ -582,7 +531,9 @@ export class GetBooks {
 }
 ```
 
-Replace the next code block to `books.state.ts`.
+#### Implement the BooksState
+
+Open the `books.state.ts` and change the file as shown below:
 
 ```typescript
 import { State, Action, StateContext, Selector } from '@ngxs/store';
@@ -605,10 +556,6 @@ export class BooksState {
 
   @Action(GetBooks)
   get({ patchState }: StateContext<Books.State>) {
-    /* Suggestion:
-    You never subscribe to an observable here
-    and don't forget to return
-    */
     return this.booksService.get().pipe(
       tap(books => {
         patchState({
@@ -618,11 +565,14 @@ export class BooksState {
     );
   }
 }
-
 ```
->See the [Selectors on NGXS Document](https://ngxs.gitbook.io/ngxs/concepts/select#memoized-selectors)
+* Added a `GetBooks` action that uses the `BookService` defined above to get the books and patch the state.
 
-You ready to get books and list in the table.
+>NGXS requires to return the observable without subscribing it, as done in this sample (in the get function).
+
+#### BookListComponent
+
+Modify the `book-list.component.ts` as shown below:
 
 ```typescript
 import { Component, OnInit } from '@angular/core';
@@ -651,16 +601,15 @@ export class BookListComponent implements OnInit {
     this.loading = true;
     this.store.dispatch(new GetBooks())
     .subscribe(() => {
-      // This subscribe block runs when the action completed successfully
       this.loading = false
     };
   }
 }
 ```
 
->See the [Dispatching Actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions) and [Select](https://ngxs.gitbook.io/ngxs/concepts/select)  on NGXS Document
+>See the [Dispatching Actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions) and [Select](https://ngxs.gitbook.io/ngxs/concepts/select) on the NGXS documentation for more information on these NGXS features.
 
-Copy next code block to `book-list.component.html`.
+Replace `book-list.component.html` content as shown below:
 
 ```html
 <div id="wrapper" class="card">
@@ -695,15 +644,17 @@ Copy next code block to `book-list.component.html`.
   </div>
 </div>
 ```
-> PrimeNG Table used in this component. See the [PrimeNG Table Document](https://www.primefaces.org/primeng/#/table)
+> We've used [PrimeNG table](https://www.primefaces.org/primeng/#/table) used in this component.
 
-The final UI and file tree are shown below:
+The resulting books page is shown below:
 
 ![bookstore-book-list](images/bookstore-book-list.png)
 
+And this is the folder & file structure by the end of this tutorial:
+
 <img src="images/angular-file-tree.png" height="75%">
 
-> Check the folder structure on [Angular Style Guide](https://angular.io/guide/styleguide#file-tree)
+> This tutorial follows the [Angular Style Guide](https://angular.io/guide/styleguide#file-tree).
 
 
 ### Next Part
