@@ -309,3 +309,398 @@ Swagger has a nice UI to test APIs. You can try to execute the `[GET] /api/app/b
 ### Create the Books Page
 
 It's time to create something visible and usable!
+
+
+
+In this Angular Application, [Angular CLI](https://angular.io/cli) will be used to creating modules, components, services, etc. ,  [NGXS](https://ngxs.gitbook.io/ngxs/) will be used as state management and [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI library.
+
+
+Open a terminal window and go to `angular` folder and then run `yarn` command for installing packages.
+
+Run the following command line for creating `BooksModule`
+
+```bash
+yarn ng generate module books --route books --module app.module
+```
+
+![creating-books-module.terminal](images/creating-books-module-terminal.png)
+
+Run `yarn start` and then open `http://localhost:4200/books` on a browser.
+
+![initial-books-page](images/initial-books-page.png)
+
+Books page works but you need some configuration for the application layout.
+
+Let's start the coding.
+
+>[Visual Studio Code](https://code.visualstudio.com/) will be used in this tutorial.
+
+Open the `app-routing.module.ts` and replace `books` route to the below route.
+
+```typescript
+import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
+
+//...  
+{
+  path: 'books',
+  component: LayoutApplicationComponent,
+  loadChildren: () => import('./books/books.module').then(m => m.BooksModule),
+  data: {
+    routes: {
+      name: 'Books',
+    } as ABP.Route,
+  },
+},
+```
+
+If you would like to see your route on the navigation bar of `LayoutApplication`, you must add the `data` object with `name` property in your route.
+
+>ABP themes have three layouts. These layouts are `LayoutApplication`, `LayoutAccount` and `LayoutEmpty`. [Check these layouts.](https://github.com/abpframework/abp/tree/dev/npm/ng-packs/packages/theme-basic/src/lib/components)
+
+
+![initial-books-page](images/initial-books-page-with-layout.png)
+
+`LayoutApplication` successfully added and `Books` successfully added to the navigation bar.
+
+Let's create the `book-list.component`.
+
+
+Replace the `books.component.html` to the following line
+
+```html
+<router-outlet></router-outlet>
+```
+
+Run the below command on the terminal in the root folder.
+
+`yarn ng generate component books/book-list`
+
+
+![creating-books-list-terminal](images/creating-book-list-terminal.png)
+
+Import the `SharedModule` to the `BooksModule`
+
+```typescript
+import { SharedModule } from '../shared/shared.module';
+
+@NgModule({
+  //...
+  imports: [
+    //...
+    SharedModule
+  ],
+})
+export class BooksModule {}
+```
+
+After, update to `routes` in `books-routing.module.ts`
+
+```typescript
+import { BookListComponent } from './book-list/book-list.component';
+
+const routes: Routes = [
+  {
+    path: '',
+    component: BooksComponent,
+    children: [{ path: '', component: BookListComponent }],
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class BooksRoutingModule {}
+```
+
+![initial-book-list-page](images/initial-book-list-page.png)
+
+It seems good.
+
+Now, you created `BookListComponent` and added in the `BooksRoutingModule`.
+
+
+
+<h3>Create the Books State</h3>
+
+In this step, [NGXS Schematic](https://github.com/mehmet-erim/ngxs-schematic) will be used to generate state.
+
+Run the next command on terminal.
+
+`yarn ng generate ngxs-schematic:state books`
+
+![ngxs-schematic-terminal-output](images/ngxs-schematic-terminal-output.png)
+
+```typescript
+// books.ts
+
+export namespace Books {
+  export interface State {
+    books: any;
+  }
+}
+```
+
+```typescript
+// books.actions.ts
+
+export class BooksAction {
+  static readonly type = '[Books] Action';
+  constructor(public payload?: any) { }
+}
+```
+>See [Actions on NGXS Document](https://ngxs.gitbook.io/ngxs/concepts/actions)
+
+```typescript
+// books.state.ts
+
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { BooksAction } from '../actions/books.actions';
+import { Books } from '../models/books';
+
+@State<Books.State> ({
+  name: 'BooksState',
+  defaults: { books: {} } as Books.State
+})
+export class BooksState {
+  @Selector()
+  static getBooks({ books }: Books.State) {
+    return books;
+  }
+
+  constructor() { }
+
+  @Action(BooksAction)
+  booksAction({ getState, patchState }: StateContext<Books.State>, { payload }: BooksAction) {
+    const state = getState();
+    patchState({
+      ...state,
+    });
+  }
+}
+```
+>See [State on NGXS Document](https://ngxs.gitbook.io/ngxs/concepts/state)
+
+NGXS Schematic created the above files and added `BooksState` to `NgxsModule` in `app.modules.ts`.
+
+```typescript
+// app.module.ts
+
+import { BooksState } from './store/states/books.state';
+
+@NgModule({
+  imports: [
+    //...
+    NgxsModule.forRoot([BooksState]),
+  ],
+  //...
+})
+export class AppModule {}
+```
+
+<h3>Get Books Data from Backend</h3>
+
+Firstly, you have to create the response type of book API.
+>Book response type must be the same as the backend response type. You can use swagger for response types.
+
+Add the below types to `books.ts`
+
+```typescript
+import { ABP } from '@abp/ng.core';
+
+export namespace Books {
+  export interface State {
+    books: Response;
+  }
+
+  export type Response = ABP.PagedResponse<Book>;
+
+  export interface Book {
+    name: string;
+    type: Type;
+    publishDate: string;
+    price: number;
+    lastModificationTime: string;
+    lastModifierId: string;
+    creationTime: string;
+    creatorId: string;
+    id: string;
+  }
+
+  export enum Type {
+    Undefined,
+    Adventure,
+    Biography,
+    Dystopia,
+    Fantastic,
+    Horror,
+    Science,
+    ScienceFiction,
+    Poetry,
+  }
+}
+```
+
+OK, you ready to create a service.
+
+```bash
+yarn ng generate service books/shared/books
+```
+
+![service-terminal-output](images/service-terminal-output.png)
+
+Add a get method to this service.
+
+```typescript
+import { Injectable } from '@angular/core';
+import { RestService, Rest } from '@abp/ng.core';
+import { Books } from '../../store/models';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class BooksService {
+  constructor(private rest: RestService) {}
+
+  get(): Observable<Books.Response> {
+    const request: Rest.Request<null> = {
+      method: 'GET',
+      url: '/api/app/book',
+    };
+
+    return this.rest.request<null, Books.Response>(request);
+  }
+}
+```
+
+Replace the following code block to `books.actions.ts`.
+
+```typescript
+export class GetBooks {
+  static readonly type = '[Books] Get';
+}
+```
+
+Replace the next code block to `books.state.ts`.
+
+```typescript
+import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { GetBooks } from '../actions/books.actions';
+import { Books } from '../models/books';
+import { BooksService } from '../../books/shared/books.service';
+import { tap } from 'rxjs/operators';
+
+@State<Books.State>({
+  name: 'BooksState',
+  defaults: { books: {} } as Books.State,
+})
+export class BooksState {
+  @Selector()
+  static getBooks({ books }: Books.State) {
+    return books.items || [];
+  }
+
+  constructor(private booksService: BooksService) {}
+
+  @Action(GetBooks)
+  get({ patchState }: StateContext<Books.State>) {
+    /* Suggestion:
+    You never subscribe to an observable here
+    and don't forget to return
+    */
+    return this.booksService.get().pipe(
+      tap(books => {
+        patchState({
+          books,
+        });
+      }),
+    );
+  }
+}
+
+```
+>See the [Selectors on NGXS Document](https://ngxs.gitbook.io/ngxs/concepts/select#memoized-selectors)
+
+You ready to get books and list in the table.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { Store, Select } from '@ngxs/store';
+import { BooksState } from '../../store/states';
+import { Observable } from 'rxjs';
+import { Books } from '../../store/models';
+import { GetBooks } from '../../store/actions';
+
+@Component({
+  selector: 'app-book-list',
+  templateUrl: './book-list.component.html',
+  styleUrls: ['./book-list.component.scss'],
+})
+export class BookListComponent implements OnInit {
+  @Select(BooksState.getBooks)
+  books$: Observable<Books.Book[]>;
+
+  booksType = Books.Type;
+
+  loading = false;
+
+  constructor(private store: Store) {}
+
+  ngOnInit() {
+    this.loading = true;
+    this.store.dispatch(new GetBooks())
+    .subscribe(() => {
+      // This subscribe block runs when the action completed successfully
+      this.loading = false
+    };
+  }
+}
+```
+
+>See the [Dispatching Actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions) and [Select](https://ngxs.gitbook.io/ngxs/concepts/select)  on NGXS Document
+
+Copy next code block to `book-list.component.html`.
+
+```html
+<div id="wrapper" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">
+          Books
+        </h5>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <p-table [value]="books$ | async" [loading]="loading" [paginator]="true" [rows]="10">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Book name</th>
+          <th>Book type</th>
+          <th>Publish date</th>
+          <th>Price</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-data>
+        <tr>
+          <td>{{ data.name }}</td>
+          <td>{{ booksType[data.type] }}</td>
+          <td>{{ data.publishDate | date }}</td>
+          <td>{{ data.price }}</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+```
+> PrimeNG Table used in this component. See the [PrimeNG Table Document](https://www.primefaces.org/primeng/#/table)
+
+The final UI is shown below:
+
+![bookstore-book-list](images/bookstore-book-list.png)
+
+### Next Part
+
+See the [next part](Part-II.md) of this tutorial.
