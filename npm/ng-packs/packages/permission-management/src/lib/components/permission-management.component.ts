@@ -148,6 +148,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
+        if (permission.isGranted && permission.grantedProviders.length > 0) return;
+
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
         this.permissions = [
