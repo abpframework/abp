@@ -4,12 +4,12 @@
 
 In this tutorial series, you will build an application that is used to manage a list of books & their authors. **Angular** will be used as the UI framework and **MongoDB** will be used as the database provider.
 
-This is the first part of the ASP.NET Core MVC tutorial series. See all parts:
+This is the first part of the Angular tutorial series. See all parts:
 
 - **Part I: Create the project and a book list page (this tutorial)**
 - [Part II: Create, Update and Delete books](Part-II.md)
 
-You can access to the **source code** of the application from the GitHub repository (TOD: link).
+You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
 
 ### Creating the Project
 
@@ -81,19 +81,19 @@ namespace Acme.BookStore
 
 Add a `IMongoCollection` property to the `BookStoreMongoDbContext` inside the `Acme.BookStore.MongoDB` project:
 
-````csharp
+```csharp
 public class BookStoreMongoDbContext : AbpMongoDbContext
 {
     public IMongoCollection<Book> Books => Collection<Book>();
     ...
 }
-````
+```
 
 #### Add Seed (Sample) Data
 
 This section is optional, but it would be good to have an initial data in the database in the first run. ABP provides a [data seed system](../../Data-Seeding.md). Create a class deriving from the `IDataSeedContributor` in the `.Domain` project:
 
-````csharp
+```csharp
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -142,7 +142,7 @@ namespace Acme.BookStore
     }
 }
 
-````
+```
 
 `BookStoreDataSeederContributor` simply inserts two books into database if there is no book added before. ABP automatically discovers and executes this class when you seed the database by running the `Acme.BookStore.DbMigrator` project.
 
@@ -176,7 +176,7 @@ namespace Acme.BookStore
 }
 ```
 
-- **DTO** classes are used to **transfer data** between the *presentation layer* and the *application layer*. See the [Data Transfer Objects document](../../Data-Transfer-Objects.md) for more details.
+- **DTO** classes are used to **transfer data** between the _presentation layer_ and the _application layer_. See the [Data Transfer Objects document](../../Data-Transfer-Objects.md) for more details.
 - `BookDto` is used to transfer book data to the presentation layer in order to show the book information on the UI.
 - `BookDto` is derived from the `AuditedEntityDto<Guid>` which has audit properties just like the `Book` class defined above.
 
@@ -245,7 +245,7 @@ using Volo.Abp.Application.Services;
 
 namespace Acme.BookStore
 {
-    public interface IBookAppService : 
+    public interface IBookAppService :
         ICrudAppService< //Defines CRUD methods
             BookDto, //Used to show books
             Guid, //Primary key of the book entity
@@ -274,12 +274,12 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Acme.BookStore
 {
-    public class BookAppService : 
+    public class BookAppService :
         CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                             CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
-        public BookAppService(IRepository<Book, Guid> repository) 
+        public BookAppService(IRepository<Book, Guid> repository)
             : base(repository)
         {
 
@@ -310,10 +310,10 @@ Swagger has a nice UI to test APIs. You can try to execute the `[GET] /api/app/b
 
 In this tutorial;
 
-* [Angular CLI](https://angular.io/cli) will be used to create modules, components and services
-* [NGXS](https://ngxs.gitbook.io/ngxs/) will be used as the state management library
-* [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
-* [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
+- [Angular CLI](https://angular.io/cli) will be used to create modules, components and services
+- [NGXS](https://ngxs.gitbook.io/ngxs/) will be used as the state management library
+- [Ng Bootstrap](https://ng-bootstrap.github.io/#/home) will be used as the UI component library.
+- [Visual Studio Code](https://code.visualstudio.com/) will be used as the code editor (you can use your favorite editor).
 
 #### Install NPM Packages
 
@@ -331,11 +331,11 @@ Run the following command line to create a new module, named `BooksModule`:
 yarn ng generate module books --route books --module app.module
 ```
 
-![creating-books-module.terminal](images/creating-books-module-terminal.png)
+![creating-books-module.terminal](images/bookstore-creating-books-module-terminal.png)
 
 Run `yarn start`, wait Angular to run the application and open `http://localhost:4200/books` on a browser:
 
-![initial-books-page](images/initial-books-page.png)
+![initial-books-page](images/bookstore-initial-books-page.png)
 
 #### Routing
 
@@ -344,7 +344,7 @@ Open the `app-routing.module.ts` and replace `books` as shown below:
 ```typescript
 import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
 
-//...  
+//...
 {
   path: 'books',
   component: LayoutApplicationComponent,
@@ -359,11 +359,9 @@ import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
 
 `LayoutApplicationComponent` configuration sets the application layout to the new page. If you would like to see your route on the navigation bar (main menu) you must also add the `data` object with `name` property in your route.
 
+![initial-books-page](images/bookstore-initial-books-page-with-layout.png)
 
-![initial-books-page](images/initial-books-page-with-layout.png)
-
-#### Book List Component 
-
+#### Book List Component
 
 First, replace the `books.component.html` to the following line to place the router-outlet:
 
@@ -373,12 +371,11 @@ First, replace the `books.component.html` to the following line to place the rou
 
 Then run the command below on the terminal in the root folder to generate a new component, named book-list:
 
-````bash
+```bash
 yarn ng generate component books/book-list
-````
+```
 
-
-![creating-books-list-terminal](images/creating-book-list-terminal.png)
+![creating-books-list-terminal](images/bookstore-creating-book-list-terminal.png)
 
 Import the `SharedModule` to the `BooksModule` to reuse some components and services defined in:
 
@@ -389,7 +386,7 @@ import { SharedModule } from '../shared/shared.module';
   //...
   imports: [
     //...
-    SharedModule
+    SharedModule,
   ],
 })
 export class BooksModule {}
@@ -415,15 +412,15 @@ const routes: Routes = [
 export class BooksRoutingModule {}
 ```
 
-![initial-book-list-page](images/initial-book-list-page.png)
+![initial-book-list-page](images/bookstore-initial-book-list-page.png)
 
 #### Create BooksState
 
 Run the following command in the terminal to create a new state, named `BooksState`:
 
-````shell
+```shell
 yarn ng generate ngxs-schematic:state books
-````
+```
 
 This command creates several new files and edits `app.modules.ts` to import the `NgxsModule` with the new state:
 
@@ -470,7 +467,7 @@ export namespace Books {
     id: string;
   }
 
-  export enum Type {
+  export enum BookType {
     Undefined,
     Adventure,
     Biography,
@@ -484,7 +481,7 @@ export namespace Books {
 }
 ```
 
-Added `Book` interface that represents a book object and `Type` enum represents a book category.
+Added `Book` interface that represents a book object and `BookType` enum represents a book category.
 
 #### BooksService
 
@@ -494,7 +491,7 @@ Now, create a new service, named `BooksService` to perform HTTP calls to the ser
 yarn ng generate service books/shared/books
 ```
 
-![service-terminal-output](images/service-terminal-output.png)
+![service-terminal-output](images/bookstore-service-terminal-output.png)
 
 Modify `book.service.ts` as shown below:
 
@@ -521,7 +518,7 @@ export class BooksService {
 }
 ```
 
-Added a `get` method to get the list of books by performing an HTTP request to the related endpoint.
+Added the `get` method to get the list of books by performing an HTTP request to the related endpoint.
 
 Replace `books.actions.ts` content as shown below:
 
@@ -566,9 +563,10 @@ export class BooksState {
   }
 }
 ```
-* Added a `GetBooks` action that uses the `BookService` defined above to get the books and patch the state.
 
->NGXS requires to return the observable without subscribing it, as done in this sample (in the get function).
+Added the `GetBooks` action that uses the `BookService` defined above to get the books and patch the state.
+
+> NGXS requires to return the observable without subscribing it, as done in this sample (in the get function).
 
 #### BookListComponent
 
@@ -591,7 +589,7 @@ export class BookListComponent implements OnInit {
   @Select(BooksState.getBooks)
   books$: Observable<Books.Book[]>;
 
-  booksType = Books.Type;
+  booksType = Books.BookType;
 
   loading = false;
 
@@ -607,7 +605,7 @@ export class BookListComponent implements OnInit {
 }
 ```
 
->See the [Dispatching Actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions) and [Select](https://ngxs.gitbook.io/ngxs/concepts/select) on the NGXS documentation for more information on these NGXS features.
+> See the [Dispatching Actions](https://ngxs.gitbook.io/ngxs/concepts/store#dispatching-actions) and [Select](https://ngxs.gitbook.io/ngxs/concepts/select) on the NGXS documentation for more information on these NGXS features.
 
 Replace `book-list.component.html` content as shown below:
 
@@ -644,7 +642,8 @@ Replace `book-list.component.html` content as shown below:
   </div>
 </div>
 ```
-> We've used [PrimeNG table](https://www.primefaces.org/primeng/#/table) used in this component.
+
+> We've used [PrimeNG table](https://www.primefaces.org/primeng/#/table) in this component.
 
 The resulting books page is shown below:
 
@@ -652,10 +651,9 @@ The resulting books page is shown below:
 
 And this is the folder & file structure by the end of this tutorial:
 
-<img src="images/angular-file-tree.png" height="75%">
+<img src="images/bookstore-angular-file-tree.png" height="75%">
 
 > This tutorial follows the [Angular Style Guide](https://angular.io/guide/styleguide#file-tree).
-
 
 ### Next Part
 
