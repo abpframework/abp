@@ -1,5 +1,5 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { SessionSetLanguage, SessionSetTenant } from '../actions/session.actions';
+import { SetLanguage, SetTenant } from '../actions/session.actions';
 import { ABP, Session } from '../models';
 
 @State<Session.State>({
@@ -19,15 +19,15 @@ export class SessionState {
 
   constructor() {}
 
-  @Action(SessionSetLanguage)
-  sessionSetLanguage({ patchState }: StateContext<Session.State>, { payload }: SessionSetLanguage) {
+  @Action(SetLanguage)
+  setLanguage({ patchState }: StateContext<Session.State>, { payload }: SetLanguage) {
     patchState({
       language: payload,
     });
   }
 
-  @Action(SessionSetTenant)
-  sessionSetTenantId({ patchState }: StateContext<Session.State>, { payload }: SessionSetTenant) {
+  @Action(SetTenant)
+  setTenantId({ patchState }: StateContext<Session.State>, { payload }: SetTenant) {
     patchState({
       tenant: payload,
     });
