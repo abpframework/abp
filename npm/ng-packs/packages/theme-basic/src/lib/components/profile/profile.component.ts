@@ -1,4 +1,4 @@
-import { Profile, ProfileGet, ProfileState, ProfileUpdate } from '@abp/ng.core';
+import { Profile, GetProfile, ProfileState, UpdateProfile } from '@abp/ng.core';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
@@ -36,7 +36,7 @@ export class ProfileComponent implements OnChanges {
 
   buildForm() {
     this.store
-      .dispatch(new ProfileGet())
+      .dispatch(new GetProfile())
       .pipe(
         withLatestFrom(this.profile$),
         take(1),
@@ -55,7 +55,7 @@ export class ProfileComponent implements OnChanges {
   onSubmit() {
     if (this.form.invalid) return;
 
-    this.store.dispatch(new ProfileUpdate(this.form.value)).subscribe(() => {
+    this.store.dispatch(new UpdateProfile(this.form.value)).subscribe(() => {
       this.visible = false;
       this.form.reset();
     });

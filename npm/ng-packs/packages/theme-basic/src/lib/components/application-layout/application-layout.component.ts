@@ -1,10 +1,10 @@
 import {
   ABP,
   ApplicationConfiguration,
-  ConfigGetAppConfiguration,
+  GetAppConfiguration,
   ConfigState,
   eLayoutType,
-  SessionSetLanguage,
+  SetLanguage,
   SessionState,
   takeUntilDestroy,
 } from '@abp/ng.core';
@@ -26,7 +26,7 @@ import compare from 'just-compare';
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, filter, map } from 'rxjs/operators';
 import snq from 'snq';
-import { LayoutAddNavigationElement } from '../../actions';
+import { AddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
 import { LayoutState } from '../../states';
 
@@ -114,7 +114,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
     if (navigations.indexOf('LanguageRef') < 0) {
       this.store.dispatch(
-        new LayoutAddNavigationElement([
+        new AddNavigationElement([
           { element: this.languageRef, order: 4, name: 'LanguageRef' },
           { element: this.currentUserRef, order: 5, name: 'CurrentUserRef' },
         ]),
@@ -146,8 +146,8 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy() {}
 
   onChangeLang(cultureName: string) {
-    this.store.dispatch(new SessionSetLanguage(cultureName));
-    this.store.dispatch(new ConfigGetAppConfiguration());
+    this.store.dispatch(new SetLanguage(cultureName));
+    this.store.dispatch(new GetAppConfiguration());
   }
 
   logout() {
@@ -157,7 +157,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
         state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
       }),
     );
-    this.store.dispatch(new ConfigGetAppConfiguration());
+    this.store.dispatch(new GetAppConfiguration());
   }
 }
 
