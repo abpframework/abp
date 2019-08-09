@@ -8,7 +8,7 @@ import { eLayoutType } from '@abp/ng.core';
     <router-outlet></router-outlet>
   `,
 })
-export class EmptyLayout {
+export class EmptyLayoutComponent {
   // required for dynamic component
   static type = eLayoutType.empty;
 }

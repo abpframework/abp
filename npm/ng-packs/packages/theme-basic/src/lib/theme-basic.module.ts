@@ -4,7 +4,7 @@ import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
 import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
-import { EmptyLayout } from './components/empty-layout/empty-layout.component';
+import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
@@ -13,7 +13,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { NgxsModule } from '@ngxs/store';
 import { LayoutState } from './states/layout.state';
 
-export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayout];
+export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
   declarations: [...LAYOUTS, LayoutComponent, ChangePasswordComponent, ProfileComponent],
