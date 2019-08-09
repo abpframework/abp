@@ -3,9 +3,9 @@ import { eLayoutType } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-layout-account',
-  templateUrl: './layout-account.component.html',
+  templateUrl: './account-layout.component.html',
 })
-export class LayoutAccountComponent {
+export class AccountLayoutComponent {
   // required for dynamic component
   static type = eLayoutType.account;
 

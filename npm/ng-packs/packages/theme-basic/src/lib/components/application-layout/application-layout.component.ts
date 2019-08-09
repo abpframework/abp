@@ -32,9 +32,9 @@ import { LayoutState } from '../../states';
 
 @Component({
   selector: 'abp-layout-application',
-  templateUrl: './layout-application.component.html',
+  templateUrl: './application-layout.component.html',
 })
-export class LayoutApplicationComponent implements AfterViewInit, OnDestroy {
+export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   // required for dynamic component
   static type = eLayoutType.application;
 
