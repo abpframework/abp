@@ -1,4 +1,4 @@
-import { ProfileChangePassword } from '@abp/ng.core';
+import { ChangePassword } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import {
   Component,
@@ -63,7 +63,7 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
 
     this.store
       .dispatch(
-        new ProfileChangePassword({
+        new ChangePassword({
           currentPassword: this.form.get('password').value,
           newPassword: this.form.get('newPassword').value,
         }),

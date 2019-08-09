@@ -7,12 +7,12 @@ import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
 import {
-  IdentityAddUser,
-  IdentityDeleteUser,
-  IdentityGetUserById,
-  IdentityGetUserRoles,
-  IdentityGetUsers,
-  IdentityUpdateUser,
+  CreateUser,
+  DeleteUser,
+  GetUserById,
+  GetUserRoles,
+  GetUsers,
+  UpdateUser,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
@@ -99,9 +99,9 @@ export class UsersComponent {
 
   onEdit(id: string) {
     this.store
-      .dispatch(new IdentityGetUserById(id))
+      .dispatch(new GetUserById(id))
       .pipe(
-        switchMap(() => this.store.dispatch(new IdentityGetUserRoles(id))),
+        switchMap(() => this.store.dispatch(new GetUserRoles(id))),
         pluck('IdentityState'),
         take(1),
       )
@@ -124,12 +124,12 @@ export class UsersComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new IdentityUpdateUser({
+          ? new UpdateUser({
               ...this.form.value,
               id: this.selected.id,
               roleNames: mappedRoleNames,
             })
-          : new IdentityAddUser({
+          : new CreateUser({
               ...this.form.value,
               roleNames: mappedRoleNames,
             }),
@@ -146,7 +146,7 @@ export class UsersComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new IdentityDeleteUser(id));
+          this.store.dispatch(new DeleteUser(id));
         }
       });
   }
@@ -161,7 +161,7 @@ export class UsersComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new IdentityGetUsers(this.pageQuery))
+      .dispatch(new GetUsers(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

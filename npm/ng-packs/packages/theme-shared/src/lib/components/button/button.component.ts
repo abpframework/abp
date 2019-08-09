@@ -1,4 +1,4 @@
-import { LoaderStart, LoaderStop } from '@abp/ng.core';
+import { StartLoader, StopLoader } from '@abp/ng.core';
 import { Component, Input, OnInit } from '@angular/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { filter } from 'rxjs/operators';
@@ -40,8 +40,8 @@ export class ButtonComponent implements OnInit {
     if (this.requestType || this.requestURLContainSearchValue) {
       this.actions
         .pipe(
-          ofActionSuccessful(LoaderStart, LoaderStop),
-          filter((event: LoaderStart | LoaderStop) => {
+          ofActionSuccessful(StartLoader, StopLoader),
+          filter((event: StartLoader | StopLoader) => {
             let condition = true;
             if (this.requestType) {
               if (!Array.isArray(this.requestType)) this.requestType = [this.requestType];

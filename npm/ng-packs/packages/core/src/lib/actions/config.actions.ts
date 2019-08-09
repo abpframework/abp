@@ -5,6 +5,6 @@ export class PatchRouteByName {
   constructor(public name: string, public newValue: Partial<ABP.Route>) {}
 }
 
-export class ConfigGetAppConfiguration {
+export class GetAppConfiguration {
   static readonly type = '[Config] Get App Configuration';
 }

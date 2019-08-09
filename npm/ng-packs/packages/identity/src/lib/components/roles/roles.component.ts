@@ -5,13 +5,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck } from 'rxjs/operators';
-import {
-  IdentityAddRole,
-  IdentityDeleteRole,
-  IdentityGetRoleById,
-  IdentityGetRoles,
-  IdentityUpdateRole,
-} from '../../actions/identity.actions';
+import { CreateRole, DeleteRole, GetRoleById, GetRoles, UpdateRole } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
 
@@ -75,7 +69,7 @@ export class RolesComponent {
 
   onEdit(id: string) {
     this.store
-      .dispatch(new IdentityGetRoleById(id))
+      .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
       .subscribe(selectedRole => {
         this.selected = selectedRole;
@@ -89,8 +83,8 @@ export class RolesComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new IdentityUpdateRole({ ...this.form.value, id: this.selected.id })
-          : new IdentityAddRole(this.form.value),
+          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
+          : new CreateRole(this.form.value),
       )
       .subscribe(() => {
         this.isModalVisible = false;
@@ -104,7 +98,7 @@ export class RolesComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new IdentityDeleteRole(id));
+          this.store.dispatch(new DeleteRole(id));
         }
       });
   }
@@ -119,7 +113,7 @@ export class RolesComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new IdentityGetRoles(this.pageQuery))
+      .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

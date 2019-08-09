@@ -12,10 +12,7 @@ import {
 import { Select, Store } from '@ngxs/store';
 import { from, Observable } from 'rxjs';
 import { map, pluck, take } from 'rxjs/operators';
-import {
-  PermissionManagementGetPermissions,
-  PermissionManagementUpdatePermissions,
-} from '../actions/permission-management.actions';
+import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
 
@@ -151,6 +148,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
+        if (permission.isGranted && permission.grantedProviders.length > 0) return;
+
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
         this.permissions = [
@@ -189,7 +188,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     if (changedPermissions.length) {
       this.store
         .dispatch(
-          new PermissionManagementUpdatePermissions({
+          new UpdatePermissions({
             providerKey: this.providerKey,
             providerName: this.providerName,
             permissions: changedPermissions,
@@ -209,9 +208,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     }
 
     this.store
-      .dispatch(
-        new PermissionManagementGetPermissions({ providerKey: this.providerKey, providerName: this.providerName }),
-      )
+      .dispatch(new GetPermissions({ providerKey: this.providerKey, providerName: this.providerName }))
       .pipe(pluck('PermissionManagementState', 'permissionRes'))
       .subscribe((permissionRes: PermissionManagement.Response) => {
         this.selectedGroup = permissionRes.groups[0];
