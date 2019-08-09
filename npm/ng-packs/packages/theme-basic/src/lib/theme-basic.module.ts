@@ -2,9 +2,9 @@ import { CoreModule } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { NgbCollapseModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
-import { LayoutAccountComponent } from './components/layout-account/layout-account.component';
-import { LayoutApplicationComponent } from './components/layout-application/layout-application.component';
-import { LayoutEmptyComponent } from './components/layout-empty/layout-empty.component';
+import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
+import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
+import { EmptyLayout } from './components/empty-layout/empty-layout.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
@@ -13,7 +13,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { NgxsModule } from '@ngxs/store';
 import { LayoutState } from './states/layout.state';
 
-export const LAYOUTS = [LayoutApplicationComponent, LayoutAccountComponent, LayoutEmptyComponent];
+export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayout];
 
 @NgModule({
   declarations: [...LAYOUTS, LayoutComponent, ChangePasswordComponent, ProfileComponent],
