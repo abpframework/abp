@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
 import { Store } from '@ngxs/store';
-import { GetTenant } from '../actions/tenant-management.actions';
+import { GetTenants } from '../actions/tenant-management.actions';
 import { TenantManagement } from '../models/tenant-management';
 import { TenantManagementState } from '../states/tenant-management.state';
 
@@ -11,6 +11,6 @@ export class TenantsResolver implements Resolve<TenantManagement.State> {
 
   resolve() {
     const data = this.store.selectSnapshot(TenantManagementState.get);
-    return data && data.length ? null : this.store.dispatch(new GetTenant());
+    return data && data.length ? null : this.store.dispatch(new GetTenants());
   }
 }

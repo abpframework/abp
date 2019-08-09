@@ -3,7 +3,7 @@ import { switchMap, tap } from 'rxjs/operators';
 import {
   CreateTenant,
   DeleteTenant,
-  GetTenant,
+  GetTenants,
   GetTenantById,
   UpdateTenant,
 } from '../actions/tenant-management.actions';
@@ -28,8 +28,8 @@ export class TenantManagementState {
 
   constructor(private tenantManagementService: TenantManagementService) {}
 
-  @Action(GetTenant)
-  get({ patchState }: StateContext<TenantManagement.State>, { payload }: GetTenant) {
+  @Action(GetTenants)
+  get({ patchState }: StateContext<TenantManagement.State>, { payload }: GetTenants) {
     return this.tenantManagementService.getTenant(payload).pipe(
       tap(result =>
         patchState({
@@ -52,19 +52,19 @@ export class TenantManagementState {
 
   @Action(DeleteTenant)
   delete({ dispatch }: StateContext<TenantManagement.State>, { payload }: DeleteTenant) {
-    return this.tenantManagementService.deleteTenant(payload).pipe(switchMap(() => dispatch(new GetTenant())));
+    return this.tenantManagementService.deleteTenant(payload).pipe(switchMap(() => dispatch(new GetTenants())));
   }
 
   @Action(CreateTenant)
   add({ dispatch }: StateContext<TenantManagement.State>, { payload }: CreateTenant) {
-    return this.tenantManagementService.createTenant(payload).pipe(switchMap(() => dispatch(new GetTenant())));
+    return this.tenantManagementService.createTenant(payload).pipe(switchMap(() => dispatch(new GetTenants())));
   }
 
   @Action(UpdateTenant)
   update({ dispatch, getState }: StateContext<TenantManagement.State>, { payload }: UpdateTenant) {
     return dispatch(new GetTenantById(payload.id)).pipe(
       switchMap(() => this.tenantManagementService.updateTenant({ ...getState().selectedItem, ...payload })),
-      switchMap(() => dispatch(new GetTenant())),
+      switchMap(() => dispatch(new GetTenants())),
     );
   }
 }

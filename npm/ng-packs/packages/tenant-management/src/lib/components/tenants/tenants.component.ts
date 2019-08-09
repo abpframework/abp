@@ -8,7 +8,7 @@ import { debounceTime, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   CreateTenant,
   DeleteTenant,
-  GetTenant,
+  GetTenants,
   GetTenantById,
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
@@ -197,7 +197,7 @@ export class TenantsComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new GetTenant(this.pageQuery))
+      .dispatch(new GetTenants(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

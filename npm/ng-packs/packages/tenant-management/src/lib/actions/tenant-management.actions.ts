@@ -1,7 +1,7 @@
 import { TenantManagement } from '../models/tenant-management';
 import { ABP } from '@abp/ng.core';
 
-export class GetTenant {
+export class GetTenants {
   static readonly type = '[TenantManagement] Get Tenant';
   constructor(public payload?: ABP.PageQueryParams) {}
 }
