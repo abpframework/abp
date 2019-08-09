@@ -88,7 +88,7 @@
         <ngb-tabset>
           <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
             <ng-template ngbTabContent>
-              <div class="mt-2">
+              <div class="mt-2 fade-in-top">
                 <div class="form-group">
                   <label for="user-name">{{ 'AbpIdentity::UserName' | abpLocalization }}</label
                   ><span> * </span>
@@ -105,7 +105,7 @@
                   <input type="text" id="surname" class="form-control" formControlName="surname" />
                 </div>
 
-                <div class="form-group">
+                <div *ngIf="!selected.userName" class="form-group">
                   <label for="password">{{ 'AbpIdentity::Password' | abpLocalization }}</label
                   ><span> * </span>
                   <input
@@ -156,7 +156,7 @@
           </ngb-tab>
           <ngb-tab [title]="'AbpIdentity::Roles' | abpLocalization">
             <ng-template ngbTabContent>
-              <div class="mt-2">
+              <div class="mt-2 fade-in-top">
                 <div
                   *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
                   class="custom-checkbox custom-control mb-2"

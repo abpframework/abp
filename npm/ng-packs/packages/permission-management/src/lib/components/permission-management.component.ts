@@ -96,6 +96,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 
   onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
+    if (clickedPermission.isGranted && clickedPermission.grantedProviders.length > 0) return;
+
     setTimeout(() => {
       this.permissions = this.permissions.map(per => {
         if (clickedPermission.name === per.name) {

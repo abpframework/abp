@@ -95,7 +95,7 @@
 
 <ng-template #language>
   <li class="nav-item dropdown pointer" ngbDropdown>
-    <a ngbDropdownToggle class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
+    <a ngbDropdownToggle class="nav-link dropdown-toggle text-white pointer" data-toggle="dropdown">
       {{ defaultLanguage$ | async }}
     </a>
     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
@@ -111,7 +111,7 @@
 
 <ng-template #currentUser>
   <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item dropdown pointer" ngbDropdown>
-    <a ngbDropdownToggle class="nav-link dropdown-toggle pointer" data-toggle="dropdown">
+    <a ngbDropdownToggle class="nav-link dropdown-toggle text-white pointer" data-toggle="dropdown">
       {{ (currentUser$ | async)?.userName }}
     </a>
     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
