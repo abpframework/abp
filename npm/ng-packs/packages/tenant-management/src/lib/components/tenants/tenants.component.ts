@@ -6,11 +6,11 @@ import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
-  TenantManagementAdd,
-  TenantManagementDelete,
-  TenantManagementGet,
-  TenantManagementGetById,
-  TenantManagementUpdate,
+  CreateTenant,
+  DeleteTenant,
+  GetTenant,
+  GetTenantById,
+  UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
@@ -103,7 +103,7 @@ export class TenantsComponent {
 
   onEditConnectionString(id: string) {
     this.store
-      .dispatch(new TenantManagementGetById(id))
+      .dispatch(new GetTenantById(id))
       .pipe(
         pluck('TenantManagementState', 'selectedItem'),
         switchMap(selected => {
@@ -127,7 +127,7 @@ export class TenantsComponent {
 
   onEditTenant(id: string) {
     this.store
-      .dispatch(new TenantManagementGetById(id))
+      .dispatch(new GetTenantById(id))
       .pipe(pluck('TenantManagementState', 'selectedItem'))
       .subscribe(selected => {
         this.selected = selected;
@@ -167,8 +167,8 @@ export class TenantsComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new TenantManagementUpdate({ ...this.tenantForm.value, id: this.selected.id })
-          : new TenantManagementAdd(this.tenantForm.value),
+          ? new UpdateTenant({ ...this.tenantForm.value, id: this.selected.id })
+          : new CreateTenant(this.tenantForm.value),
       )
       .subscribe(() => {
         this.isModalVisible = false;
@@ -182,7 +182,7 @@ export class TenantsComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new TenantManagementDelete(id));
+          this.store.dispatch(new DeleteTenant(id));
         }
       });
   }
@@ -197,7 +197,7 @@ export class TenantsComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new TenantManagementGet(this.pageQuery))
+      .dispatch(new GetTenant(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

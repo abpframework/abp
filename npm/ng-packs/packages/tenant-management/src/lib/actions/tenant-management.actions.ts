@@ -1,27 +1,27 @@
 import { TenantManagement } from '../models/tenant-management';
 import { ABP } from '@abp/ng.core';
 
-export class TenantManagementGet {
-  static readonly type = '[TenantManagement] Get';
+export class GetTenant {
+  static readonly type = '[TenantManagement] Get Tenant';
   constructor(public payload?: ABP.PageQueryParams) {}
 }
 
-export class TenantManagementGetById {
-  static readonly type = '[TenantManagement] Get By Id';
+export class GetTenantById {
+  static readonly type = '[TenantManagement] Get Tenant By Id';
   constructor(public payload: string) {}
 }
 
-export class TenantManagementAdd {
-  static readonly type = '[TenantManagement] Add';
+export class CreateTenant {
+  static readonly type = '[TenantManagement] Create Tenant';
   constructor(public payload: TenantManagement.AddRequest) {}
 }
 
-export class TenantManagementUpdate {
-  static readonly type = '[TenantManagement] Update';
+export class UpdateTenant {
+  static readonly type = '[TenantManagement] Update Tenant';
   constructor(public payload: TenantManagement.UpdateRequest) {}
 }
 
-export class TenantManagementDelete {
-  static readonly type = '[TenantManagement] Delete';
+export class DeleteTenant {
+  static readonly type = '[TenantManagement] Delete Tenant';
   constructor(public payload: string) {}
 }

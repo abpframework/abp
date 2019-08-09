@@ -9,7 +9,7 @@ import { TenantManagement } from '../models/tenant-management';
 export class TenantManagementService {
   constructor(private rest: RestService) {}
 
-  get(params = {} as ABP.PageQueryParams): Observable<TenantManagement.Response> {
+  getTenant(params = {} as ABP.PageQueryParams): Observable<TenantManagement.Response> {
     const request: Rest.Request<null> = {
       method: 'GET',
       url: '/api/multi-tenancy/tenants',
@@ -19,7 +19,7 @@ export class TenantManagementService {
     return this.rest.request<null, TenantManagement.Response>(request);
   }
 
-  getById(id: string): Observable<ABP.BasicItem> {
+  getTenantById(id: string): Observable<ABP.BasicItem> {
     const request: Rest.Request<null> = {
       method: 'GET',
       url: `/api/multi-tenancy/tenants/${id}`,
@@ -28,7 +28,7 @@ export class TenantManagementService {
     return this.rest.request<null, ABP.BasicItem>(request);
   }
 
-  delete(id: string): Observable<null> {
+  deleteTenant(id: string): Observable<null> {
     const request: Rest.Request<null> = {
       method: 'DELETE',
       url: `/api/multi-tenancy/tenants/${id}`,
@@ -37,7 +37,7 @@ export class TenantManagementService {
     return this.rest.request<null, null>(request);
   }
 
-  add(body: TenantManagement.AddRequest): Observable<ABP.BasicItem> {
+  createTenant(body: TenantManagement.AddRequest): Observable<ABP.BasicItem> {
     const request: Rest.Request<TenantManagement.AddRequest> = {
       method: 'POST',
       url: `/api/multi-tenancy/tenants`,
@@ -47,7 +47,7 @@ export class TenantManagementService {
     return this.rest.request<TenantManagement.AddRequest, ABP.BasicItem>(request);
   }
 
-  update(body: TenantManagement.UpdateRequest): Observable<ABP.BasicItem> {
+  updateTenant(body: TenantManagement.UpdateRequest): Observable<ABP.BasicItem> {
     const url = `/api/multi-tenancy/tenants/${body.id}`;
     delete body.id;
 
