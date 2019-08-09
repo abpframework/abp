@@ -37,7 +37,7 @@ export class IdentityService {
     return this.rest.request<null, Identity.RoleItem>(request);
   }
 
-  addRole(body: Identity.RoleSaveRequest): Observable<Identity.RoleItem> {
+  createRole(body: Identity.RoleSaveRequest): Observable<Identity.RoleItem> {
     const request: Rest.Request<Identity.RoleSaveRequest> = {
       method: 'POST',
       url: '/api/identity/roles',
@@ -97,7 +97,7 @@ export class IdentityService {
     return this.rest.request<null, null>(request);
   }
 
-  addUser(body: Identity.UserSaveRequest): Observable<Identity.UserItem> {
+  createUser(body: Identity.UserSaveRequest): Observable<Identity.UserItem> {
     const request: Rest.Request<Identity.UserSaveRequest> = {
       method: 'POST',
       url: '/api/identity/users',
