@@ -1,4 +1,4 @@
-import { ABP, SessionSetTenant, SessionState } from '@abp/ng.core';
+import { ABP, SetTenant, SessionState } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngxs/store';
@@ -57,10 +57,10 @@ export class TenantBoxComponent implements OnInit {
             });
             this.tenant = {} as ABP.BasicItem;
           }
-          this.store.dispatch(new SessionSetTenant(success ? this.tenant : null));
+          this.store.dispatch(new SetTenant(success ? this.tenant : null));
         });
     } else {
-      this.store.dispatch(new SessionSetTenant(null));
+      this.store.dispatch(new SetTenant(null));
       this.tenantName = null;
       this.isModalVisible = false;
     }
