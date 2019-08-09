@@ -1,8 +1,5 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import {
-  PermissionManagementGetPermissions,
-  PermissionManagementUpdatePermissions,
-} from '../actions/permission-management.actions';
+import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementService } from '../services/permission-management.service';
 import { tap } from 'rxjs/operators';
@@ -24,11 +21,8 @@ export class PermissionManagementState {
 
   constructor(private permissionManagementService: PermissionManagementService) {}
 
-  @Action(PermissionManagementGetPermissions)
-  permissionManagementGet(
-    { patchState }: StateContext<PermissionManagement.State>,
-    { payload }: PermissionManagementGetPermissions,
-  ) {
+  @Action(GetPermissions)
+  permissionManagementGet({ patchState }: StateContext<PermissionManagement.State>, { payload }: GetPermissions) {
     return this.permissionManagementService.getPermissions(payload).pipe(
       tap(permissionResponse =>
         patchState({
@@ -38,8 +32,8 @@ export class PermissionManagementState {
     );
   }
 
-  @Action(PermissionManagementUpdatePermissions)
-  permissionManagementUpdate(_, { payload }: PermissionManagementUpdatePermissions) {
+  @Action(UpdatePermissions)
+  permissionManagementUpdate(_, { payload }: UpdatePermissions) {
     return this.permissionManagementService.updatePermissions(payload);
   }
 }
