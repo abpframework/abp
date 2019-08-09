@@ -65,7 +65,7 @@
                   [value]="getChecked(permission.name)"
                   [attr.id]="permission.name"
                   class="custom-control-input"
-                  [disabled]="isDisabled(permission)"
+                  [disabled]="permission.isGranted && permission.grantedProviders.length > 0"
                 />
                 <label
                   class="custom-control-label"
