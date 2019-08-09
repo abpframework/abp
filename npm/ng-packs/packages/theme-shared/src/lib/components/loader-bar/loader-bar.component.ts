@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { Actions, ofActionSuccessful } from '@ngxs/store';
-import { LoaderStart, LoaderStop } from '@abp/ng.core';
-import { filter } from 'rxjs/operators';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { StartLoader, StopLoader } from '@abp/ng.core';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { takeUntilDestroy } from '@ngx-validate/core';
+import { Actions, ofActionSuccessful } from '@ngxs/store';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-loader-bar',
@@ -25,7 +25,7 @@ export class LoaderBarComponent implements OnDestroy {
   isLoading: boolean = false;
 
   @Input()
-  filter = (action: LoaderStart | LoaderStop) => action.payload.url.indexOf('openid-configuration') < 0;
+  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
 
   progressLevel: number = 0;
 
@@ -34,12 +34,12 @@ export class LoaderBarComponent implements OnDestroy {
   constructor(private actions: Actions, private router: Router) {
     actions
       .pipe(
-        ofActionSuccessful(LoaderStart, LoaderStop),
+        ofActionSuccessful(StartLoader, StopLoader),
         filter(this.filter),
         takeUntilDestroy(this),
       )
       .subscribe(action => {
-        if (action instanceof LoaderStart) this.startLoading();
+        if (action instanceof StartLoader) this.startLoading();
         else this.stopLoading();
       });
 
