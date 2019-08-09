@@ -54,7 +54,7 @@ function findLayout(segments: UrlSegment[], routes: ABP.FullRoute[]): eLayoutTyp
       layout = route.layout;
     }
 
-    if (route.children && route.children.length) {
+    if (route.children && route.children.length && segments.length > 1) {
       const child = route.children.find(c => c.path === segments[1].path);
 
       if (child.layout) {

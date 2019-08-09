@@ -65,12 +65,16 @@
                   [value]="getChecked(permission.name)"
                   [attr.id]="permission.name"
                   class="custom-control-input"
+                  [disabled]="permission.isGranted && permission.grantedProviders.length > 0"
                 />
                 <label
                   class="custom-control-label"
                   [attr.for]="permission.name"
                   (click)="onClickCheckbox(permission, permissionCheckbox.value)"
-                  >{{ permission.displayName }}</label
+                  >{{ permission.displayName }}
+                  <span *ngFor="let provider of permission.grantedProviders" class="badge badge-light"
+                    >{{ provider.providerName }}: {{ provider.providerKey }}</span
+                  ></label
                 >
               </div>
             </perfect-scrollbar>

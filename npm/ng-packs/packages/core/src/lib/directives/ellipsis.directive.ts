@@ -21,7 +21,7 @@ export class EllipsisDirective implements AfterContentInit {
 
   @HostBinding('style.max-width')
   get maxWidth() {
-    return this.enabled ? this.witdh || '180px' : undefined;
+    return this.enabled ? this.witdh || '160px' : undefined;
   }
 
   constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}

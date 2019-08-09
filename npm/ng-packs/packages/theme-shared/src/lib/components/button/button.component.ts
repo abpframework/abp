@@ -61,7 +61,9 @@ export class ButtonComponent implements OnInit {
           }),
         )
         .subscribe(() => {
-          this.loading = !this.loading;
+          setTimeout(() => {
+            this.loading = !this.loading;
+          }, 0);
         });
     }
   }
