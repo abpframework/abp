@@ -8,7 +8,7 @@ namespace Volo.Abp.AutoMapper
     {
         public static void CreateAutoAttributeMaps(this IMapperConfigurationExpression configuration, Type type)
         {
-            foreach (var autoMapAttribute in type.GetTypeInfo().GetCustomAttributes<AutoMapAttributeBase>())
+            foreach (var autoMapAttribute in type.GetTypeInfo().GetCustomAttributes<AbpAutoMapAttributeBase>())
             {
                 autoMapAttribute.CreateMap(configuration, type);
             }

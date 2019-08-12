@@ -70,9 +70,9 @@ namespace Volo.Abp.AutoMapper
             var types = typeFinder.Types.Where(type =>
                 {
                     var typeInfo = type.GetTypeInfo();
-                    return typeInfo.IsDefined(typeof(AutoMapAttribute)) ||
-                           typeInfo.IsDefined(typeof(AutoMapFromAttribute)) ||
-                           typeInfo.IsDefined(typeof(AutoMapToAttribute));
+                    return typeInfo.IsDefined(typeof(AbpAutoMapAttribute)) ||
+                           typeInfo.IsDefined(typeof(AbpAutoMapFromAttribute)) ||
+                           typeInfo.IsDefined(typeof(AbpAutoMapToAttribute));
                 }
             ).ToArray();
 

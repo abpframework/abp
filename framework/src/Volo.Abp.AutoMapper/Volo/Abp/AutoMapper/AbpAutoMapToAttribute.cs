@@ -4,12 +4,20 @@ using AutoMapper;
 
 namespace Volo.Abp.AutoMapper
 {
-    public class AutoMapAttribute : AutoMapAttributeBase
+    public class AbpAutoMapToAttribute : AbpAutoMapAttributeBase
     {
-        public AutoMapAttribute(params Type[] targetTypes)
+        public MemberList MemberList { get; set; } = MemberList.Source;
+
+        public AbpAutoMapToAttribute(params Type[] targetTypes)
             : base(targetTypes)
         {
 
+        }
+
+        public AbpAutoMapToAttribute(MemberList memberList, params Type[] targetTypes)
+            : this(targetTypes)
+        {
+            MemberList = memberList;
         }
 
         public override void CreateMap(IMapperConfigurationExpression configuration, Type type)
@@ -21,8 +29,7 @@ namespace Volo.Abp.AutoMapper
 
             foreach (var targetType in TargetTypes)
             {
-                configuration.CreateMap(type, targetType, MemberList.Source);
-                configuration.CreateMap(targetType, type, MemberList.Destination);
+                configuration.CreateMap(type, targetType, MemberList);
             }
         }
     }

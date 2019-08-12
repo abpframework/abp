@@ -6,7 +6,7 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.TestApp.Domain
 {
-    [AutoMapTo(typeof(PersonEto))]
+    [AbpAutoMapTo(typeof(PersonEto))]
     public class Person : FullAuditedAggregateRoot<Guid>, IMultiTenant
     {
         public virtual Guid? TenantId { get; set; }

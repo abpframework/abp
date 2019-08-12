@@ -38,7 +38,7 @@ namespace Volo.Abp.AutoMapper
 
         }
 
-        [AutoMapFrom(typeof(MyBaseClass))]
+        [AbpAutoMapFrom(typeof(MyBaseClass))]
         public class MyTargetClassToMap
         {
             public string Value { get; set; }
@@ -63,13 +63,13 @@ namespace Volo.Abp.AutoMapper
 
         private class EntityProxy : DerivedEntity { }
 
-        [AutoMapFrom(typeof(Entity))]
+        [AbpAutoMapFrom(typeof(Entity))]
         private class EntityDto
         {
             public string Value { get; set; }
         }
 
-        [AutoMapFrom(typeof(DerivedEntity))]
+        [AbpAutoMapFrom(typeof(DerivedEntity))]
         private class DerivedEntityDto : EntityDto { }
     }
 }
