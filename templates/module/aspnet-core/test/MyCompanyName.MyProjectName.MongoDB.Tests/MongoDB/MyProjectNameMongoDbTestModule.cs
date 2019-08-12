@@ -1,4 +1,5 @@
-﻿using Mongo2Go;
+﻿using System;
+using Mongo2Go;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
@@ -19,7 +20,7 @@ namespace MyCompanyName.MyProjectName.MongoDB
 
             Configure<DbConnectionOptions>(options =>
             {
-                options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString + "|MyProjectName";
+                options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString.EnsureEndsWith('/') + "MyProjectName";
             });
         }
 
