@@ -46,7 +46,9 @@ namespace Volo.Abp.Cli.Commands
                 new ProjectBuildArgs(
                     SolutionName.Parse(commandLineArgs.Target),
                     commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long),
-                    GetDatabaseProviderOrNull(commandLineArgs),
+                    commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long),
+                    GetDatabaseProvider(commandLineArgs),
+                    GetUiFramework(commandLineArgs),
                     commandLineArgs.Options
                 )
             );
@@ -93,6 +95,7 @@ namespace Volo.Abp.Cli.Commands
                         {
                             StreamUtils.Copy(zipInputStream, streamWriter, buffer);
                         }
+
                         zipEntry = zipInputStream.GetNextEntry();
                     }
                 }
@@ -108,25 +111,32 @@ namespace Volo.Abp.Cli.Commands
 
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp new <project-name> [-t|--template] [-d|--database-provider] [-o|--output-folder]");
+            sb.AppendLine("");
+            sb.AppendLine("  abp new <project-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
-            sb.AppendLine("-t|--template <template-name>");
-            sb.AppendLine("-o|--output-folder <output-folder>");
+            sb.AppendLine("");
+            sb.AppendLine("-t|--template <template-name>               (default: app)");
+            sb.AppendLine("-u|--ui <ui-framework>                      (if supported by the template)");
             sb.AppendLine("-d|--database-provider <database-provider>  (if supported by the template)");
+            sb.AppendLine("-o|--output-folder <output-folder>          (default: current folder)");
+            sb.AppendLine("-v|--version <version>                      (default: latest version)");
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
+            sb.AppendLine("--separate-identity-server                  (if supported by the template)");
             sb.AppendLine("");
-            sb.AppendLine("Some examples:");
+            sb.AppendLine("Examples:");
+            sb.AppendLine("");
             sb.AppendLine("  abp new Acme.BookStore");
             sb.AppendLine("  abp new Acme.BookStore --tiered");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc-module");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc-module no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -u angular");
+            sb.AppendLine("  abp new Acme.BookStore -u angular -d mongodb");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc -d mongodb");
-            sb.AppendLine("  abp new Acme.BookStore -t mvc -d mongodb -o d:\\project");
+            sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
+            sb.AppendLine("  abp new Acme.BookStore -t module");
+            sb.AppendLine("  abp new Acme.BookStore -t module no-ui");
             sb.AppendLine("");
-            sb.AppendLine("See the documentation for more info.");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }
@@ -136,7 +146,7 @@ namespace Volo.Abp.Cli.Commands
             return "Generates a new solution based on the ABP startup templates.";
         }
 
-        protected virtual DatabaseProvider GetDatabaseProviderOrNull(CommandLineArgs commandLineArgs)
+        protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)
         {
             var optionValue = commandLineArgs.Options.GetOrNull(Options.DatabaseProvider.Short, Options.DatabaseProvider.Long);
             switch (optionValue)
@@ -147,6 +157,20 @@ namespace Volo.Abp.Cli.Commands
                     return DatabaseProvider.MongoDb;
                 default:
                     return DatabaseProvider.NotSpecified;
+            }
+        }
+
+        private UiFramework GetUiFramework(CommandLineArgs commandLineArgs)
+        {
+            var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
+            switch (optionValue)
+            {
+                case "mvc":
+                    return UiFramework.Mvc;
+                case "angular":
+                    return UiFramework.Angular;
+                default:
+                    return UiFramework.NotSpecified;
             }
         }
 
@@ -168,6 +192,18 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "o";
                 public const string Long = "output-folder";
+            }
+
+            public static class Version
+            {
+                public const string Short = "v";
+                public const string Long = "version";
+            }
+
+            public static class UiFramework
+            {
+                public const string Short = "u";
+                public const string Long = "ui";
             }
         }
     }

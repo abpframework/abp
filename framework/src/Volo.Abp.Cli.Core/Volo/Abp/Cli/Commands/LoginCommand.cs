@@ -58,7 +58,10 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp login <username>");
             sb.AppendLine("");
             sb.AppendLine("Example:");
+            sb.AppendLine("");
             sb.AppendLine("  abp login john");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }

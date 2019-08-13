@@ -34,16 +34,6 @@ namespace Volo.Abp.FeatureManagement
                 options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>("Volo.Abp.FeatureManagement");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpFeatureManagementResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/FeatureManagement");
-            });
-
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<FeatureManagementWebAutoMapperProfile>(validate: true);

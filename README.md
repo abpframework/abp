@@ -15,7 +15,7 @@ This project is in **preview** stage and it's not suggested to use it in product
 
 ### Documentation
 
-See the <a href="https://abp.io/documents/" target="_blank">documentation</a>.
+See the <a href="https://docs.abp.io/" target="_blank">documentation</a>.
 
 ### Development
 

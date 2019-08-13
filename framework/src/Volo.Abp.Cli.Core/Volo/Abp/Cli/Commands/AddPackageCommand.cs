@@ -49,15 +49,19 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("It should be used in a folder containing a .csproj file.");
             sb.AppendLine("");
             sb.AppendLine("Usage:");
-            sb.AppendLine("  abp add-package <package-name> [-p|--project]");
+            sb.AppendLine("");
+            sb.AppendLine("  abp add-package <package-name> [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
+            sb.AppendLine("");
             sb.AppendLine("  -p|--project <project-file>    Specify the project file explicitly.");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
+            sb.AppendLine("");
             sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the package to the current project.");
             sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
             sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }

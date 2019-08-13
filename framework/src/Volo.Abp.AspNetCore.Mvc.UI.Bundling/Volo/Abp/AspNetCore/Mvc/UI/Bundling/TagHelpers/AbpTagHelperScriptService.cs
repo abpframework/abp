@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)
         {
-            output.Content.AppendHtml($"<script src=\"{file}\" type=\"text/javascript\"></script>{Environment.NewLine}");
+            output.Content.AppendHtml($"<script src=\"{file}\"></script>{Environment.NewLine}");
         }
     }
 }

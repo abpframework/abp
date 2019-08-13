@@ -10,11 +10,13 @@ This is the second part of the ASP.NET Core MVC tutorial series. See all parts:
 
 You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
+> You can also watch [this video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by an ABP community member, based on this tutorial.
+
 ### Creating a New Book
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The result dialog will be like that:
 
-![bookstore-create-dialog](images/bookstore-create-dialog.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
 
 #### Create the Modal Form
 

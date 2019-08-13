@@ -23,7 +23,7 @@ namespace DashboardDemo
             };
         }
 
-        public async Task<NewUserStatistiWidgetResultDto> GetNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
+        public async Task<NewUserStatisticWidgetResultDto> GetNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             switch (input.Frequency)
             {
@@ -36,7 +36,21 @@ namespace DashboardDemo
             throw new UserFriendlyException("Not implemented statistic frequency.");
         }
 
-        private async Task<NewUserStatistiWidgetResultDto> GetMonthlyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
+        public async Task<LicenseStatistiWidgetResultDto> GetLicenseStatisticWidgetAsync(LicenseStatisticWidgetInputDto input)
+        {
+            var days = (int)Math.Round(input.EndDate.Subtract(input.StartDate).TotalDays + 1);
+
+            var data = new Dictionary<string, int>
+            {
+                {"Regular", new Random().Next(50, 100) * days},
+                {"Enterprise", new Random().Next(40, 70) * days},
+                {"Ultimate", new Random().Next(30, 40) * days}
+            };
+
+            return new LicenseStatistiWidgetResultDto() { Data = data };
+        }
+
+        private async Task<NewUserStatisticWidgetResultDto> GetMonthlyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             DateTime endDate = input.EndDate;
             DateTime startDate = input.StartDate;
@@ -45,47 +59,48 @@ namespace DashboardDemo
             var monthCount = (endDate.Year - startDate.Year) * 12 + endDate.Month - startDate.Month + 1;
             var labels = new List<string>();
 
-            for (int i = 0; i < monthCount; i++)
+            for (var i = 0; i < monthCount; i++)
             {
-                labels.Add(months[endDate.Month - 1]);
+                labels.Add(months[endDate.Month - 1] + " " + endDate.Year);
                 endDate = endDate.AddMonths(-1);
             }
 
             labels.Reverse();
 
-            var data = Enumerable
-                .Repeat(0, monthCount)
-                .Select(i => new Random().Next(1500, 3000))
-                .ToArray();
+            var data = new Dictionary<string, int>();
 
-
-            return new NewUserStatistiWidgetResultDto()
+            for (var i = 0; i < monthCount; i++)
             {
-                Data = data,
-                Labels = labels.ToArray()
+                data.Add(labels[i], new Random().Next(1500, 3000));
+            }
+
+            return new NewUserStatisticWidgetResultDto()
+            {
+                Data = data
             };
         }
 
-        private async Task<NewUserStatistiWidgetResultDto> GetDailyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
+        private async Task<NewUserStatisticWidgetResultDto> GetDailyNewUserStatisticWidgetAsync(NewUserStatisticWidgetInputDto input)
         {
             var dayCount = (input.EndDate - input.StartDate).Days + 1;
-
-            var data = Enumerable
-                .Repeat(0, dayCount)
-                .Select(i => new Random().Next(50, 100))
-                .ToArray();
 
             var labels = new List<string>();
 
             for (int i = 0; i < dayCount; i++)
             {
-                labels.Add(input.StartDate.AddDays(i).Day.ToString());
+                labels.Add(input.StartDate.AddDays(i).ToString("dd/MM/yyyy"));
             }
 
-            return new NewUserStatistiWidgetResultDto()
+            var data = new Dictionary<string, int>();
+
+            for (var i = 0; i < dayCount; i++)
             {
-                Data = data,
-                Labels = labels.ToArray()
+                data.Add(labels[i], new Random().Next(50, 100));
+            }
+
+            return new NewUserStatisticWidgetResultDto()
+            {
+                Data = data
             };
         }
     }

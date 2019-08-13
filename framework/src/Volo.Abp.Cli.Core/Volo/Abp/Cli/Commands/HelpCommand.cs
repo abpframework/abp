@@ -51,6 +51,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("    abp <command> <target> [options]");
             sb.AppendLine("");
             sb.AppendLine("Command List:");
+            sb.AppendLine("");
 
             foreach (var command in CliOptions.Commands.ToArray())
             {
@@ -62,7 +63,7 @@ namespace Volo.Abp.Cli.Commands
                             .GetRequiredService(command.Value)).GetShortDescription();
                 }
 
-                sb.Append("    >");
+                sb.Append("    > ");
                 sb.Append(command.Key);
                 sb.Append(string.IsNullOrWhiteSpace(shortDescription) ? "":":");
                 sb.Append(" ");
@@ -70,6 +71,11 @@ namespace Volo.Abp.Cli.Commands
             }
 
             sb.AppendLine("");
+            sb.AppendLine("To get a detailed help for a command:");
+            sb.AppendLine("");
+            sb.AppendLine("    abp help <command>");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
             return sb.ToString();
         }

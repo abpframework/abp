@@ -10,6 +10,8 @@ This is the third part of the ASP.NET Core MVC tutorial series. See all parts:
 
 You can access to the **source code** of the application from [the GitHub repository](https://github.com/volosoft/abp/tree/master/samples/BookStore).
 
+> You can also watch [this video course](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application) prepared by an ABP community member, based on this tutorial.
+
 ### Test Projects in the Solution
 
 There are multiple test projects in the solution:

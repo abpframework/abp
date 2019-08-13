@@ -1,6 +1,4 @@
 ﻿using Volo.Abp.Application;
-using Volo.Abp.FeatureManagement.Localization;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -17,13 +15,6 @@ namespace Volo.Abp.FeatureManagement
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpFeatureManagementApplicationContractsModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpFeatureManagementResource>()
-                    .AddVirtualJson("/Volo/Abp/FeatureManagement/Localization/ApplicationContracts");
             });
         }
     }

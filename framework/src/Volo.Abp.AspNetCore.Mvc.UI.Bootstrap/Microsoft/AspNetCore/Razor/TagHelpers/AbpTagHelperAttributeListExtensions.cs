@@ -48,9 +48,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Microsoft.AspNetCore.Razor.TagHel
 
         public static void AddIfNotContains(this TagHelperAttributeList attributes, string name, object value)
         {
-            if (!attributes.ContainsName("method"))
+            if (!attributes.ContainsName(name))
             {
-                attributes.Add("method", "post");
+                attributes.Add(name, value);
             }
         }
     }

@@ -8,7 +8,6 @@ using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization;
 using DashboardDemo.MultiTenancy;
 using DashboardDemo.Web.Menus;
-using DashboardDemo.Web.Pages.Components.MySimpleWidget;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -116,6 +115,7 @@ namespace DashboardDemo.Web
             {
                 Configure<VirtualFileSystemOptions>(options =>
                 {
+                    options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiThemeSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Domain", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<DashboardDemoApplicationContractsModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}DashboardDemo.Application.Contracts", Path.DirectorySeparatorChar)));

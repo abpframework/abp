@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         public List<WidgetResourceItem> Scripts { get; }
 
         [CanBeNull]
-        public WidgetDimensions DefaultDimensions { get; set; }
+        public string RefreshUrl { get; set; }
 
         public WidgetDefinition(
             [NotNull] Type viewComponentType,
@@ -60,8 +60,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             Name = GetWidgetName(viewComponentType);
             DisplayName = displayName ?? GetDisplayName(WidgetAttribute, Name);
             RequiredPolicies = GetRequiredPolicies(WidgetAttribute);
+            RequiresAuthentication = WidgetAttribute.RequiresAuthentication;
             Styles = GetStyles(WidgetAttribute);
             Scripts = GetScripts(WidgetAttribute);
+            RefreshUrl = WidgetAttribute.RefreshUrl;
         }
 
         private static List<WidgetResourceItem> GetStyles(WidgetAttribute widgetAttribute)
@@ -159,12 +161,6 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             return this;
         }
 
-        public WidgetDefinition WithDefaultDimensions(int width, int height)
-        {
-            DefaultDimensions = new WidgetDimensions(width, height);
-            return this;
-        }
-
         public WidgetDefinition WithStyles(params string[] files)
         {
             return WithResources(Styles, files);
@@ -183,6 +179,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         public WidgetDefinition WithScripts(params Type[] bundleContributorTypes)
         {
             return WithResources(Scripts, bundleContributorTypes);
+        }
+
+        public WidgetDefinition WithRefreshUrl(string refreshUrl)
+        {
+            RefreshUrl = refreshUrl;
+            return this;
         }
 
         private WidgetDefinition WithResources(List<WidgetResourceItem> resourceItems, Type[] bundleContributorTypes)

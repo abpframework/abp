@@ -1,9 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Volo.Abp.Cli.Licensing;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
@@ -20,18 +22,21 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected ICliAnalyticsCollect CliAnalyticsCollect { get; }
         protected CliOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
+        protected IApiKeyService ApiKeyService { get; }
 
         public ProjectBuilder(ITemplateStore templateStore, 
             ITemplateInfoProvider templateInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect, 
             IOptions<CliOptions> options,
-            IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer, 
+            IApiKeyService apiKeyService)
         {
             TemplateStore = templateStore;
             TemplateInfoProvider = templateInfoProvider;
             CliAnalyticsCollect = cliAnalyticsCollect;
             Options = options.Value;
             JsonSerializer = jsonSerializer;
+            ApiKeyService = apiKeyService;
 
             Logger = NullLogger<ProjectBuilder>.Instance;
         }
@@ -40,21 +45,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
         {
             var templateInfo = GetTemplateInfo(args);
 
-            args.TemplateName = templateInfo.Name;
-
-            if (args.DatabaseProvider == DatabaseProvider.NotSpecified)
-            {
-                if (templateInfo.DefaultDatabaseProvider != DatabaseProvider.NotSpecified)
-                {
-                    args.DatabaseProvider = templateInfo.DefaultDatabaseProvider;
-                }
-            }
+            NormalizeArgs(args, templateInfo);
 
             var templateFile = await TemplateStore.GetAsync(
                 args.TemplateName,
-                args.DatabaseProvider,
-                args.SolutionName.FullName
+                args.Version
             );
+
+            var apiKey = await ApiKeyService.GetApiKeyOrNullAsync();
+            if (apiKey != null)
+            {
+                args.ExtraProperties["api-key"] = apiKey;
+            }
 
             var context = new ProjectBuildContext(
                 templateInfo,
@@ -62,7 +64,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args
             );
 
-            ProjectBuildPipelineBuilder.Build(context).Execute(context);
+            ProjectBuildPipelineBuilder.Build(context).Execute();
 
             if (!templateInfo.DocumentUrl.IsNullOrEmpty())
             {
@@ -90,6 +92,30 @@ namespace Volo.Abp.Cli.ProjectBuilding
             });
 
             return new ProjectBuildResult(context.Result.ZipContent, args.SolutionName.ProjectName);
+        }
+
+        private static void NormalizeArgs(ProjectBuildArgs args, TemplateInfo templateInfo)
+        {
+            if (args.TemplateName.IsNullOrEmpty())
+            {
+                args.TemplateName = templateInfo.Name;
+            }
+
+            if (args.DatabaseProvider == DatabaseProvider.NotSpecified)
+            {
+                if (templateInfo.DefaultDatabaseProvider != DatabaseProvider.NotSpecified)
+                {
+                    args.DatabaseProvider = templateInfo.DefaultDatabaseProvider;
+                }
+            }
+
+            if (args.UiFramework == UiFramework.NotSpecified)
+            {
+                if (templateInfo.DefaultUiFramework != UiFramework.NotSpecified)
+                {
+                    args.UiFramework = templateInfo.DefaultUiFramework;
+                }
+            }
         }
 
         private TemplateInfo GetTemplateInfo(ProjectBuildArgs args)

@@ -16,12 +16,29 @@ namespace Volo.Abp.Auditing
 
         public string Serialize(object obj)
         {
-            var options = new JsonSerializerSettings
-            {
-                ContractResolver = new AuditingContractResolver(Options.IgnoredTypes)
-            };
+            return JsonConvert.SerializeObject(obj, GetSharedJsonSerializerSettings());
+        }
 
-            return JsonConvert.SerializeObject(obj, options);
+        private static readonly object SyncObj = new object();
+        private static JsonSerializerSettings _sharedJsonSerializerSettings;
+
+        private JsonSerializerSettings GetSharedJsonSerializerSettings()
+        {
+            if (_sharedJsonSerializerSettings == null)
+            {
+                lock (SyncObj)
+                {
+                    if (_sharedJsonSerializerSettings == null)
+                    {
+                        _sharedJsonSerializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new AuditingContractResolver(Options.IgnoredTypes)
+                        };
+                    }
+                }
+            }
+
+            return _sharedJsonSerializerSettings;
         }
     }
 }

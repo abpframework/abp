@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
@@ -29,27 +30,44 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         {
             Logger.LogInformation($"Bundling {context.BundleRelativePath} ({context.ContentFiles.Count} files)");
 
-            var sb = new StringBuilder();
+            var bundleContentBuilder = new StringBuilder();
 
             Logger.LogDebug("Bundle files:");
             foreach (var file in context.ContentFiles)
             {
-                var fileContent = GetFileContent(context, file);
-                Logger.LogDebug($"- {file} ({fileContent.Length} bytes)");
-                sb.AppendLine(fileContent);
+                AddFileToBundle(context, bundleContentBuilder, file);
             }
 
-            var bundleContent = sb.ToString();
-
-            if (context.IsMinificationEnabled)
-            {
-                Logger.LogInformation($"Minifying {context.BundleRelativePath} ({bundleContent.Length} bytes)");
-                bundleContent = Minifier.Minify(bundleContent, context.BundleRelativePath);
-            }
-
+            var bundleContent = bundleContentBuilder.ToString();
             Logger.LogInformation($"Bundled {context.BundleRelativePath} ({bundleContent.Length} bytes)");
 
             return new BundleResult(bundleContent);
+        }
+
+        private void AddFileToBundle(IBundlerContext context, StringBuilder bundleContentBuilder, string fileName)
+        {
+            if (context.IsMinificationEnabled && !IsMinFile(fileName))
+            {
+                var minFileInfo = GetMinFileInfoOrNull(fileName);
+                if (minFileInfo != null)
+                {
+                    Logger.LogDebug($"- {fileName} ({minFileInfo.Length} bytes)");
+                    bundleContentBuilder.Append(NormalizedCode(minFileInfo.ReadAsString()));
+                    return;
+                }
+            }
+
+            var fileContent = GetFileContent(context, fileName);
+            Logger.LogDebug($"- {fileName} ({fileContent.Length} bytes)");
+
+            if (context.IsMinificationEnabled)
+            {
+                var nonMinifiedSize = fileContent.Length;
+                fileContent = Minifier.Minify(fileContent, context.BundleRelativePath);
+                Logger.LogInformation($"  -- Minified {context.BundleRelativePath} ({nonMinifiedSize} bytes -> {fileContent.Length} bytes)");
+            }
+
+            bundleContentBuilder.Append(NormalizedCode(fileContent));
         }
 
         protected virtual string GetFileContent(IBundlerContext context, string file)
@@ -67,6 +85,23 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
 
             return fileInfo;
+        }
+
+        protected virtual bool IsMinFile(string fileName)
+        {
+            return fileName.EndsWith($".min.{FileExtension}", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        protected virtual IFileInfo GetMinFileInfoOrNull(string file)
+        {
+            var fileInfo = WebContentFileProvider.GetFileInfo($"{file.RemovePostFix($".{FileExtension}")}.min.{FileExtension}");
+
+            return fileInfo.Exists ? fileInfo : null;
+        }
+
+        protected virtual string NormalizedCode(string code)
+        {
+            return code;
         }
     }
 }

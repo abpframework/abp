@@ -14,10 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Identity\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Remove="Volo\Abp\Permissions\**" />
     <EmbeddedResource Remove="Volo\Abp\Permissions\**" />
     <None Remove="Volo\Abp\Permissions\**" />

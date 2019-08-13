@@ -4,9 +4,9 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement.Web.Navigation
 {
