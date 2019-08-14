@@ -186,4 +186,4 @@ public class Program
 
 ### 源码
 
-从[此处](../samples/BasicAspNetCoreApplication)获取本教程中创建的示例项目的源代码.
+从[此处](https://github.com/abpframework/abp/tree/dev/samples/BasicAspNetCoreApplication)获取本教程中创建的示例项目的源代码.

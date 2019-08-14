@@ -10,6 +10,8 @@
 
 你可以从[GitHub存储库](https://github.com/volosoft/abp/tree/master/samples/BookStore)访问应用程序的**源代码**.
 
+> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
+
 ### 解决方案中的测试项目
 
 解决方案中有多个测试项目：

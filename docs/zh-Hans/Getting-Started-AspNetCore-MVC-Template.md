@@ -35,7 +35,7 @@ abp new Acme.BookStore
 
 该解决方案具有分层结构(基于[Domain Driven Design](Domain-Driven-Design.md)), 并包含配置好的的单元&集成测试项目,可与**EF Core**和**SQLite**数据库内存一起使用.
 
-> 请参阅[MVC应用程序模板文档](Startup-Templates/Mvc.md)以详细了解解决方案结构.
+> 请参阅[应用程序模板文档](Startup-Templates/Application.md)以详细了解解决方案结构.
 
 ### 数据库连接字符串
 
