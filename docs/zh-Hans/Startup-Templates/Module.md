@@ -15,14 +15,14 @@ dotnet tool install -g Volo.Abp.Cli
 然后使用 `abp new` 命令在空文件夹中创建新解决方案:
 
 ````bash
-abp new Acme.IssueManagement -t mvc-module
+abp new Acme.IssueManagement -t module
 ````
 
 * `Acme.IssueManagement` 是解决方案的名称,  如*YourCompany.YourProduct*. 你可以使用单级或多级名称.
 
 ### 无用户界面
 
-默认情况模板附带一个UI,你可以使用`--no-ui`选项指定不包含UI层.
+默认情况模板附带一个MVC UI,你可以使用`--no-ui`选项指定不包含UI层.
 
 ````bash
 abp new Acme.IssueManagement -t mvc-module --no-ui

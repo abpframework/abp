@@ -266,8 +266,6 @@ Server side is very similar to the solution described above. `.HttpApi.Host` pro
 
 The files under the `angular/src/environments` folder has the essential configuration of the application.
 
-#### 
-
 ## What's Next?
 
 - See [Getting Started With the ASP.NET Core MVC Template](../Getting-Started-AspNetCore-MVC-Template.md) to create a new solution and run it for this template.

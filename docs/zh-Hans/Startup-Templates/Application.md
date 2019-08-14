@@ -1,10 +1,8 @@
-﻿# MVC应用程序启动模板
+﻿# 应用程序启动模板
 
 ## 介绍
 
-MVC应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层(或根据偏好分层)的应用程序结构.
-
-在这篇文档中详细介绍了解决方案结构和项目
+应用程序启动模板是基于[领域驱动设计](../Domain-Driven-Design.md)(DDD)分层的应用程序结构. 在这篇文档中详细介绍了解决方案结构和项目,如果你想快速入门,请遵循以下指南:
 
 * 参阅[ASP.NET Core MVC 模板入门](../Getting-Started-AspNetCore-MVC-Template.md)创建此模板的新解决方案并运行它.
 * 参阅[ASP.NET Core MVC 教程](../Tutorials/AspNetCore-Mvc/Part-I.md)学习使用此模板开发应用程序.
@@ -22,11 +20,24 @@ dotnet tool install -g Volo.Abp.Cli
 然后使用 `abp new` 命令在空文件夹中创建新解决方案:
 
 ````bash
-abp new Acme.BookStore -t mvc
+abp new Acme.BookStore -t app
 ````
 
 * `Acme.BookStore` 是解决方案的名称,  如*YourCompany.YourProduct*. 你可以使用单级或多级名称.
-* 示例中指定了启动模板 (`-t` 或 `--template` 选项). 不过 `mvc` 是默认模板,即使未指定也会创建 `MVC` 的模板项目.
+* 示例中指定了启动模板 (`-t` 或 `--template` 选项). 示指定模板时,默认模板是`app` .
+
+### 指定UI框架
+
+模板提供了多个UI框架
+
+* `mvc`: ASP.NET Core MVC Razor页面 (默认)
+* `angular`: Angular UI
+
+使用 `-u` 或 `--ui` 选择指定UI框架:
+
+````bash
+abp new Acme.BookStore -u angular
+````
 
 ### 指定数据库提供程序
 
@@ -41,23 +52,13 @@ abp new Acme.BookStore -t mvc
 abp new Acme.BookStore -d mongodb
 ````
 
-### 创建分层解决方案
-
-使用 `--tiered` 选项创建分层解决方案, Web与WebApi层在物理上是分开的. 如果未指定,CLI会创建一个分层的解决方案,这个解决方案没有那么复杂,适合大多数场景.
-
-````bash
-abp new Acme.BookStore --tiered
-````
-
-有关分层的方法,请参阅下面的"分层结构"部分.
-
 ## 解决方案结构
 
 根据命令的选项,会创建略有不同的解决方案结构.
 
 ### 默认结构
 
-如果未指定选项,你会得到如下所示的解决方案:
+如果未指定附加选项,你会得到如下所示的解决方案:
 
 ![bookstore-visual-studio-solution-v3](../images/bookstore-visual-studio-solution-v3.png)
 
@@ -159,7 +160,7 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 
 #### .Web 项目
 
-包含应用程序的用户界面(UI). 包括Razor页面,javascript文件,样式文件,图片等...
+包含应用程序的用户界面(UI).如果使用ASP.NET Core MVC UI, 它包括Razor页面,javascript文件,样式文件,图片等...
 
 包含应用程序主要的 `appsettings.json` 配置文件,用于配置数据库连接字符串和应用程序的其他配置
 
@@ -180,10 +181,10 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 * `.Domain.Tests` 用于测试领域层.
 * `.Application.Tests` 用于测试应用层.
 * `.EntityFrameworkCore.Tests` 用于测试EF Core配置与自定义仓储.
-* `.Web.Tests` 用于测试UI.
+* `.Web.Tests` 用于测试UI(适用于ASP.NET Core MVC UI).
 * `.TestBase` 所有测试项目的基础(共享)项目.
 
-此外,  `.HttpApi.Client.ConsoleTestApp` 是一个控制台应用程序(不是自动化测试项目),它用于演示DotNet应用程序中HTTP API的用法.
+此外,  `.HttpApi.Client.ConsoleTestApp` 是一个控制台应用程序(不是自动化测试项目),它用于演示.Net应用程序中HTTP API的用法.
 
 测试项目是用于做集成测试的:
 
@@ -201,7 +202,7 @@ ABP有[动态 C# API 客户端](../AspNetCore/Dynamic-CSharp-API-Clients.md)功�
 
 ### 分层结构
 
-如果你按上面的描述指定了 `--tiered` 选项,会创建分层解决方案. 分层结构的目的是**将Web应用程序和HTTP API部署到不同的服务器**:
+如果你选择了ASP.NET Core UI并指定了 `--tiered` 选项,CLI会创建分层解决方案. 分层结构的目的是**将Web应用程序和HTTP API部署到不同的服务器**:
 
 ![tiered-solution-servers](../images/tiered-solution-servers.png)
 
@@ -251,6 +252,17 @@ ABP使用开源的[IdentityServer4](https://identityserver.io/)框架做应用�
 * 首先运行`.IdentityServer`,因为其他应用程序依赖它做身份验证.
 * 然后运行`.HttpApi.Host`,因为`.Web`应用程序需要访问HTTI API.
 * 最后运行`.Web`并登录到应用程序(用户名: `admin` 密码: `1q2w3E*`).
+
+### Angular UI
+
+如果你选择Angular做为UI框架(使用 `-u angular` 选择), 解决方案会被分成两个文件夹:
+
+* `angular` 是客户端部分,文件夹中包含了Angular UI 解决方案.
+* `aspnet-core` 是服务端部分,文件夹中包含了ASP.NET Core解决方案.
+
+服务端部分与上面的描述的解决方案非常相似. `.HttpApi.Host` 项目提供API接口, Angular应用程序使用它提供的接口.
+
+`angular/src/environments` 文件夹下的文件含有应用程序的基础配置.
 
 ## 下一步是什么?
 
