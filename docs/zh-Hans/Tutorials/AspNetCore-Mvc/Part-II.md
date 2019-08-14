@@ -10,11 +10,13 @@
 
 你可以从[GitHub存储库](https://github.com/volosoft/abp/tree/master/samples/BookStore)访问应用程序的**源代码**.
 
+> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
+
 ### 新增 Book 实体
 
 通过本节, 你将会了解如何创建一个 modal form 来实现新增书籍的功能. 最终成果如下图所示:
 
-![bookstore-create-dialog](images/bookstore-create-dialog.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
 
 #### 新建 modal form
 

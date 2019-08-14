@@ -10,7 +10,9 @@
 - [Part II: 创建,编辑,删除书籍](Part-II.md)
 - [Part III: 集成测试](Part-III.md)
 
-你可以从[GitHub存储库](https://github.com/volosoft/abp/tree/master/samples/BookStore)访问应用程序的**源代码**.
+你可以从[GitHub存储库](https://github.com/abpframework/abp/tree/master/samples/BookStore)访问应用程序的**源代码**.
+
+> 你也可以观看由ABP社区成员为本教程录制的[视频课程](https://amazingsolutions.teachable.com/p/lets-build-the-bookstore-application).
 
 ### 创建项目
 
@@ -22,7 +24,7 @@
 
 ![bookstore-visual-studio-solution](images/bookstore-visual-studio-solution-v3.png)
 
-> 你可以查看[MVC应用程序模板文档](../../Startup-Templates/Mvc.md)以详细了解解决方案结构.但是,你将通过本教程了解基础知识.
+> 你可以查看[应用程序模板文档](../../Startup-Templates/Application.md)以详细了解解决方案结构.但是,你将通过本教程了解基础知识.
 
 ### 创建Book实体
 
@@ -99,7 +101,7 @@ public class BookStoreDbContext : AbpDbContext<BookStoreDbContext>
 builder.Entity<Book>(b =>
 {
     b.ToTable(BookStoreConsts.DbTablePrefix + "Books", BookStoreConsts.DbSchema);
-    b.ConfigureAuditedAggregateRoot(); //auto configure for the base class props
+    b.ConfigureByConvention(); //auto configure for the base class props
     b.Property(x => x.Name).IsRequired().HasMaxLength(128);
 });
 ````
@@ -457,7 +459,7 @@ $(function () {
 
 最终的页面如下:
 
-![bookstore-book-list](images/bookstore-book-list.png)
+![bookstore-book-list](images/bookstore-book-list-2.png)
 
 ### 下一章
 

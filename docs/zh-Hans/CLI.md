@@ -45,13 +45,13 @@ abp new Acme.BookStore
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
     * `--tiered`: 创建分层解决方案,Web和Http Api层在物理上是分开的. 如果未指定会创建一个分层的解决方案, 此解决方案没有那么复杂,适合大多数场景.
-  *  `mvc-module`: ASP.NET Core [MVC模块模板](Startup-Templates/Mvc-Module.md). 其他选项:
+  *  `module`: [模块模板](Startup-Templates/Module.md). 其他选项:
     * `--no-ui`: 不包含UI. 仅创建服务模块 (也称为微服务 - 没有UI).
 * `--output-folder` 或 `-o`: 指定输出文件夹,默认是当前目录.
 
 ### add-package
 
-添加新的ABP包到项目中
+通过以下方式将ABP包添加到项目中
 
 * 添加nuget包做为项目的依赖项目.
 * 添加 `[DependsOn(...)]` attribute到项目的模块类 (请参阅 [模块开发文档](Module-Development-Basics.md)).
@@ -78,7 +78,7 @@ abp add-package Volo.Abp.MongoDB
 
 ### add-module
 
-通过查找模块的所有包,查找解决方案中的相关项目,并将每个包添加到解决方案中的相应项目,从而将多包模块添加到解决方案中.
+通过查找模块的所有包,查找解决方案中的相关项目,并将每个包添加到解决方案中的相应项目,从而将[多包应用程序模块](Modules/Index)添加到解决方案中.
 
 > 由于分层,不同的数据库提供程序选项或其他原因,业务模块通常由多个包组成. 使用`add-module`命令可以大大简化向模块添加模块的过程. 但是每个模块可能需要一些其他配置,这些配置通常在相关模块的文档中指出.
 
@@ -100,6 +100,7 @@ abp add-module Volo.Blogging
 
 * `--solution` 或 `-s`: 指定解决方案 (.sln) 路径. 如果未指定,CLI会尝试在当前目录中寻找.sln文件.
 * `--skip-db-migrations`: 对于EF Core 数据库提供程序,它会自动添加新代码的第一次迁移 (`Add-Migration`) 并且在需要时更新数据库 (`Update-Database`). 指定此选项可跳过此操作.
+* `-sp` 或 `--startup-project`: 启动项目的项目文件夹的相对路径. 默认值是当前文件夹.
 
 ### update
 
