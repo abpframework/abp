@@ -26,7 +26,7 @@
               <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
                 <a
                   class="nav-link pointer"
-                  [class.active]="selectedGroup.name === group.name"
+                  [class.active]="selectedGroup?.name === group?.name"
                   (click)="onChangeGroup(group)"
                   >{{ group?.displayName }}</a
                 >
@@ -65,7 +65,7 @@
                   [value]="getChecked(permission.name)"
                   [attr.id]="permission.name"
                   class="custom-control-input"
-                  [disabled]="permission.isGranted && permission.grantedProviders.length > 0"
+                  [disabled]="isGrantedByRole(permission.grantedProviders)"
                 />
                 <label
                   class="custom-control-label"
