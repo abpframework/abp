@@ -22,7 +22,7 @@ import fse from 'fs-extra';
   });
 
   await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
-  await execa('git', ['commit', '-m', 'Sync ng source packages versions'], { stdout: 'inherit' });
+  await execa('git', ['commit', '-m', 'Update source packages versions'], { stdout: 'inherit' });
 
   try {
     await execa('git', ['push', 'origin']);
