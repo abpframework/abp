@@ -342,12 +342,12 @@ Run `yarn start`, wait Angular to run the application and open `http://localhost
 Open the `app-routing.module.ts` and replace `books` as shown below:
 
 ```typescript
-import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
+import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';-
 
 //...
 {
   path: 'books',
-  component: LayoutApplicationComponent,
+  component: ApplicationLayoutComponent,
   loadChildren: () => import('./books/books.module').then(m => m.BooksModule),
   data: {
     routes: {
@@ -357,7 +357,7 @@ import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
 },
 ```
 
-`LayoutApplicationComponent` configuration sets the application layout to the new page. If you would like to see your route on the navigation bar (main menu) you must also add the `data` object with `name` property in your route.
+`ApplicationLayoutComponent` configuration sets the application layout to the new page. If you would like to see your route on the navigation bar (main menu) you must also add the `data` object with `name` property in your route.
 
 ![initial-books-page](images/bookstore-initial-books-page-with-layout.png)
 
@@ -458,7 +458,7 @@ export namespace Books {
 
   export interface Book {
     name: string;
-    type: Type;
+    type: BookType;
     publishDate: string;
     price: number;
     lastModificationTime: string;
@@ -494,7 +494,7 @@ yarn ng generate service books/shared/books
 
 ![service-terminal-output](images/bookstore-service-terminal-output.png)
 
-Modify `book.service.ts` as shown below:
+Modify `books.service.ts` as shown below:
 
 ```typescript
 import { Injectable } from '@angular/core';
@@ -598,10 +598,9 @@ export class BookListComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.store.dispatch(new GetBooks())
-    .subscribe(() => {
-      this.loading = false
-    };
+    this.store.dispatch(new GetBooks()).subscribe(() => {
+      this.loading = false;
+    });
   }
 }
 ```

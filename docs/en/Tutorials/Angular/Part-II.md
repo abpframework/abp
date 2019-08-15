@@ -60,17 +60,18 @@ export class CreateUpdateBook {
 }
 ```
 
-<!-- Added an `id` parameter to differentiate between create or update actions -->
-
 Open `books.state.ts` and define the `save` method that will listen to a `CreateUpdateBook` action to create a book:
 
 ```typescript
-  @Action(CreateUpdateBook)
-  save({ dispatch }: StateContext<Books.State>, { payload }: CreateUpdateBook) {
-    return this.booksService
-        .create(payload)
-        .pipe(switchMap(() => dispatch(new GetBooks())));
-  }
+import { GetBooks, CreateUpdateBook } from '../actions/books.actions';
+import { tap, switchMap } from 'rxjs/operators';
+//...
+@Action(CreateUpdateBook)
+save({ dispatch }: StateContext<Books.State>, { payload }: CreateUpdateBook) {
+  return this.booksService
+      .create(payload)
+      .pipe(switchMap(() => dispatch(new GetBooks())));
+}
 ```
 
 When the `SaveBook` action dispatched, the save method is executed. It call `create` method of the `BooksService` defined before. After the service call, `BooksState` dispatches the `GetBooks` action to get books again from the server to refresh the page.
@@ -301,7 +302,7 @@ Now, You can add a new book.
 
 TODO: Description
 
-Open the `book.service.ts` and then add the `getById` and `update` methods.
+Open the `books.service.ts` and then add the `getById` and `update` methods.
 
 ```typescript
 getById(id: string): Observable<Books.Book> {
@@ -327,15 +328,47 @@ update(body: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
 - Added the `getById` method to get the editing book by performing an HTTP request to the related endpoint.
 - Added the `update` method to update a book with the `id` by performing an HTTP request to the related endpoint.
 
+TODO: header ??
+
+Open the `books.actins.ts` and add `id` parameter.
+
+```typescript
+export class CreateUpdateBook {
+  static readonly type = '[Books] Create Update Book';
+  constructor(public payload: Books.CreateUpdateBookInput, public id?: string) {}
+}
+```
+
+Added `id` parameter to reuse the `BooksSave` while updating and creating a book.
+
+Open `books.state.ts` and then modify the `save` method as show below:
+
+```typescript
+@Action(CreateUpdateBook)
+save({ dispatch }: StateContext<Books.State>, { payload, id }: CreateUpdateBook) {
+  let request;
+
+  if (id) {
+    request = this.booksService.update(payload, id);
+  } else {
+    request = this.booksService.create(payload);
+  }
+
+  return request.pipe(switchMap(() => dispatch(new GetBooks())));
+}
+```
+
 ### Update a Book
 
 Inject `BooksService` dependency by adding it to the `book-list.component.ts` constructor and add variable named `selectedBook`.
 
 ```typescript
+import { BooksService } from '../shared/books.service';
+//...
 selectedBook = {} as Books.Book;
 
 constructor(
-	//...
+  //...
   private booksService: BooksService
 )
 ```
@@ -374,19 +407,25 @@ Add the `selectedBook` definition to `onAdd` method for reuse same form while ad
 
 ```typescript
   onAdd() {
-    this.selectedBook = {} as Books.Item;
+    this.selectedBook = {} as Books.Book;
     //...
   }
 ```
 
-Add the `this.selectedBook.id` to `CreateUpdateBook` action in `save` method.
+Modify the `save` method as shown below:
 
 ```typescript
-  save() {
-    //...
-    this.store.dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
-    //...
+save() {
+  if (this.form.invalid) {
+    return;
   }
+
+  this.store.dispatch(new CreateUpdateBook(this.form.value, this.selectedBook.id))
+    .subscribe(() => {
+      this.isModalOpen = false;
+      this.form.reset();
+    });
+}
 ```
 
 Added the `this.selectedBook.id` property to reuse the `CreateUpdateBook` action.
@@ -430,7 +469,6 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
     </tr>
   </ng-template>
 </p-table>
->
 ```
 
 Actions button added to each row of the table.
@@ -445,41 +483,11 @@ Update the modal header for reuse the same modal.
 
 ```html
 <ng-template #abpHeader>
-  <h3>{{ (selectedBook.id ? 'Edit' : 'New Book') }}</h3>
+  <h3>{{ selectedBook.id ? 'Edit' : 'New Book' }}</h3>
 </ng-template>
 ```
 
 ![actions-buttons](images/bookstore-edit-modal.png)
-
-TODO: header ??
-
-Open the `books.actins.ts` and add `id` parameter.
-
-```typescript
-export class CreateUpdateBook {
-  static readonly type = '[Books] Create Update Book';
-  constructor(public payload: Books.CreateUpdateBookInput, public id?: string) {}
-}
-```
-
-Added `id` parameter to reuse the `BooksSave` while updating and creating a book.
-
-Open `books.state.ts` and then modify the `save` method as show below:
-
-```typescript
-@Action(CreateUpdateBook)
-save({ dispatch }: StateContext<Books.State>, { payload, id }: CreateUpdateBook) {
-  let request;
-
-  if (id) {
-    request = this.booksService.update(payload, id);
-  } else {
-    request = this.booksService.create(payload);
-  }
-
-  return request.pipe(switchMap(() => dispatch(new GetBooks())));
-}
-```
 
 TODO: description & screenshot ??
 
@@ -512,6 +520,8 @@ export class DeleteBook {
 Then, open the `books.state.ts` and add the `delete` method that will listen to a `CreateUpdateBook` action to create a book
 
 ```typescript
+import { ... , DeleteBook } from '../actions/books.actions';
+//...
 @Action(DeleteBook)
 delete({ dispatch }: StateContext<Books.State>, { id }: DeleteBook) {
   return this.booksService.delete(id).pipe(switchMap(() => dispatch(new GetBooks())));
@@ -553,7 +563,8 @@ constructor(
 Add the following method to `BookListComponent`.
 
 ```typescript
-import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
+import { ... , DeleteBook } from '../../store/actions';
+import { ... , Toaster } from '@abp/ng.theme.shared';
 //...
 delete(id: string, name: string) {
   this.confirmationService
@@ -571,3 +582,5 @@ The `delete` method shows confirmation popup and listens to them. When close the
 The confirmation popup looks like this:
 
 ![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
+
+TODO: End
