@@ -1,4 +1,4 @@
-## Angular Tutorial - Part I
+## Angular Tutorial - Part II
 
 ### About this Tutorial
 
@@ -9,7 +9,11 @@ This is the second part of the Angular tutorial series. See all parts:
 
 You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
 
-### Type Definition
+### Creating a New Book
+
+In this section, you will learn how to create a new modal dialog form to create a new book.
+
+#### Type Definition
 
 Create an interface, named `CreateUpdateBookInput` in the `books.ts` as shown below:
 
@@ -27,9 +31,9 @@ export namespace Books {
 
 `CreateUpdateBookInput` interface matches the `CreateUpdateBookDto` in the backend.
 
-### Add HTTP POST Method
+#### Service Method
 
-Open the `books.service.ts` and add a new method, named create to perform an HTTP POST request to the server:
+Open the `books.service.ts` and add a new method, named `create` to perform an HTTP POST request to the server:
 
 ```typescript
 create(body: Books.CreateUpdateBookInput): Observable<Books.Book> {
@@ -43,7 +47,7 @@ create(body: Books.CreateUpdateBookInput): Observable<Books.Book> {
 }
 ```
 
-### State Definitions
+#### State Definitions
 
 Add the `CreateUpdateBook` action to `books.actions.ts` as shown below:
 
@@ -63,13 +67,15 @@ Open `books.state.ts` and define the `save` method that will listen to a `Create
 ```typescript
   @Action(CreateUpdateBook)
   save({ dispatch }: StateContext<Books.State>, { payload }: CreateUpdateBook) {
-    return this.booksService.create(payload).pipe(switchMap(() => dispatch(new GetBooks())));
+    return this.booksService
+        .create(payload)
+        .pipe(switchMap(() => dispatch(new GetBooks())));
   }
 ```
 
-When the `SaveBook` action dispached, the save method runs and then call `create` method of the `BooksService`. After, `BooksService` sends a POST request to the backend. When finished this HTTP call, `BooksState` dispatches `GetBooks` action for getting up-to-date books.
+When the `SaveBook` action dispatched, the save method is executed. It call `create` method of the `BooksService` defined before. After the service call, `BooksState` dispatches the `GetBooks` action to get books again from the server to refresh the page.
 
-### Add a Modal to BookListComponent
+#### Add a Modal to BookListComponent
 
 Open the `book-list.component.html` and add the `abp-modal` to show/hide the book form.
 
@@ -89,7 +95,9 @@ Open the `book-list.component.html` and add the `abp-modal` to show/hide the boo
 </abp-modal>
 ```
 
-Then, add the `New book` button to show the modal.
+`abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
+
+Add a button, labeled `New book` to show the modal.
 
 ```html
 <div class="row">
@@ -106,20 +114,12 @@ Then, add the `New book` button to show the modal.
 </div>
 ```
 
-Open `book-list.component.ts` and add the `isModalOpen` variable and `onAdd` method to show/hide the modal.
+Open the `book-list.component.ts` and add `isModalOpen` variable and `onAdd` method to show/hide the modal.
 
 ```typescript
-//...
-loading = false;
-
 isModalOpen = false;
-```
 
-```typescript
-// ...
-ngOnInit() {
-  // ...
-}
+//...
 
 onAdd() {
   this.isModalOpen = true;
@@ -128,24 +128,17 @@ onAdd() {
 
 ![empty-modal](images/bookstore-empty-new-book-modal.png)
 
-### Create a Reactive Form
+#### Create a Reactive Form
 
-[Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
+> [Reactive forms](https://angular.io/guide/reactive-forms) provide a model-driven approach to handling form inputs whose values change over time.
 
-Add the `form` variable and import to the FormGroup from `@angular/core`
+Add a `form` variable and inject a `FormBuilder` service to the `book-list.component.ts` as shown below (remember add the import statement).
 
 ```typescript
-//...
-isModalOpen = false;
+import { FormGroup, FormBuilder } from '@angular/forms';
 
 form: FormGroup;
-```
 
-Inject `FormBuilder` dependency by adding it to the `BookListComponent` constructor.
-
-```typescript
-import { FormBuilder } from '@angular/forms';
-//...
 constructor(
   //...
   private fb: FormBuilder
@@ -154,7 +147,7 @@ constructor(
 
 > The [FormBuilder](https://angular.io/api/forms/FormBuilder) service provides convenient methods for generating controls. It reduces the amount of boilerplate needed to build complex forms.
 
-Add the `buildForm` method for create book form.
+Add the `buildForm` method to create book form.
 
 ```typescript
 buildForm() {

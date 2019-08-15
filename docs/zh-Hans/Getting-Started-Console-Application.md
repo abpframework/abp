@@ -121,4 +121,4 @@ namespace AbpConsoleDemo
 
 ### 源码
 
-从[这里](../samples/BasicConsoleApplication)获取本教程中创建的示例项目的源代码.
+从[这里](https://github.com/abpframework/abp/tree/dev/samples/BasicConsoleApplication)获取本教程中创建的示例项目的源代码.
