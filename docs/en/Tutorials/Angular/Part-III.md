@@ -8,13 +8,13 @@ This is the third part of the Angular tutorial series. See all parts:
 - [Part II: Create, Update and Delete books](Part-II.md)
 - **Part III: Integration Tests (this tutorial)**
 
-You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
+This part covers the **server side** tests. You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
 
 ### Test Projects in the Solution
 
 There are multiple test projects in the solution:
 
-![bookstore-test-projects-v2](images/bookstore-test-projects-v2.png)
+![bookstore-test-projects](images/bookstore-test-projects-v3.png)
 
 Each project is used to test the related application project. Test projects use the following libraries for testing:
 

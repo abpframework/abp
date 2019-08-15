@@ -21,7 +21,6 @@ $solutionPaths = (
     "modules/client-simulation",
     "templates/module/aspnet-core",
     "templates/app/aspnet-core",
-    "samples/MicroserviceDemo",
     "abp_io/AbpIoLocalization"
 )
 
