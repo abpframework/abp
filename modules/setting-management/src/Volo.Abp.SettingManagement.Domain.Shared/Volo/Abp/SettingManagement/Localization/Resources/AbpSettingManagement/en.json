@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "Settings": "Settings"
+    "Settings": "Settings",
+    "SuccessfullySaved": "Successfully saved"
   }
 }
