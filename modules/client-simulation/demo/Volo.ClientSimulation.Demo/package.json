@@ -3,6 +3,6 @@
   "name": "client-simulation-web",
   "private": true,
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.6.6"
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.8.0"
   }
 }
