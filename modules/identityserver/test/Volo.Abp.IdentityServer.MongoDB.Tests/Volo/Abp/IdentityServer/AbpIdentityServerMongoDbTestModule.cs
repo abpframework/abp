@@ -20,8 +20,8 @@ namespace Volo.Abp.IdentityServer
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
-									"Db_" +									
-                                    Guid.NewGuid().ToString("N");
+                                   "Db_" +
+                                   Guid.NewGuid().ToString("N");
 
             Configure<DbConnectionOptions>(options =>
             {

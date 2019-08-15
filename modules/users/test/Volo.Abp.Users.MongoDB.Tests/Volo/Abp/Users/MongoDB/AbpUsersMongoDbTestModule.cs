@@ -17,7 +17,7 @@ namespace Volo.Abp.Users.MongoDB
         public override void ConfigureServices(IServiceCollection services)
         {
             var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
-									"Db_" +									
+                                   "Db_" +
                                     Guid.NewGuid().ToString("N");
 
             Configure<DbConnectionOptions>(options =>
