@@ -96,7 +96,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
   isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean {
     if (grantedProviders.length) {
-      return grantedProviders.findIndex(p => p.providerName === 'Role') === -1 ? false : true;
+      return grantedProviders.findIndex(p => p.providerName === 'Role') > -1;
     }
     return false;
   }
