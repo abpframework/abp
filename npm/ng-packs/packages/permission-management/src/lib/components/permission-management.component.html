@@ -1,4 +1,4 @@
-<abp-modal [(visible)]="visible" (init)="initModal()">
+<abp-modal [(visible)]="visible" (init)="initModal()" [busy]="modalBusy">
   <ng-container *ngIf="{ entityName: entityName$ | async } as data">
     <ng-template #abpHeader>
       <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>
@@ -86,13 +86,7 @@
       <button type="button" class="btn btn-secondary" #abpClose>
         {{ 'AbpIdentity::Cancel' | abpLocalization }}
       </button>
-      <abp-button
-        [requestType]="['PUT']"
-        requestURLContainSearchValue="permissions"
-        iconClass="fa fa-check"
-        (click)="onSubmit()"
-        >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
-      >
+      <abp-button iconClass="fa fa-check" (click)="onSubmit()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
     </ng-template>
   </ng-container>
 </abp-modal>

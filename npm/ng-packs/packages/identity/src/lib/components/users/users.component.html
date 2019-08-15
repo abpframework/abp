@@ -77,14 +77,14 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible">
+<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
     <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
-      <form [formGroup]="form" validateOnSubmit>
+      <form [formGroup]="form" (ngSubmit)="save()">
         <ngb-tabset>
           <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
             <ng-template ngbTabContent>
@@ -183,14 +183,9 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button
-      [requestType]="['POST', 'PUT']"
-      requestURLContainSearchValue="users"
-      iconClass="fa fa-check"
-      (click)="save()"
-      [disabled]="form.invalid"
-      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
-    >
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form.invalid">{{
+      'AbpIdentity::Save' | abpLocalization
+    }}</abp-button>
   </ng-template>
 </abp-modal>
 
