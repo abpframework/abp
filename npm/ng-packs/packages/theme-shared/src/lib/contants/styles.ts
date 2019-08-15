@@ -25,7 +25,7 @@ export default `
 }
 
 .navbar .dropdown-menu {
-  min-width: 200px;
+  min-width: 215px;
 }
 
 .modal {
