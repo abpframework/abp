@@ -16,8 +16,8 @@ namespace Acme.BookStore.MongoDB
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
-                                   "BookStore_" +
-                                   Guid.NewGuid().ToString("N");
+                                    "Db_" +		
+                                    Guid.NewGuid().ToString("N");
 
             Configure<DbConnectionOptions>(options =>
             {
