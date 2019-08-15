@@ -173,6 +173,6 @@ public async Task Should_Not_Create_A_Book_Without_Name()
 
 Open the **Test Explorer Window** (use Test -> Windows -> Test Explorer menu if it is not visible) and **Run All** tests:
 
-![bookstore-appservice-tests](images/bookstore-appservice-tests.png)
+![bookstore-appservice-tests](images/bookstore-test-explorer.png)
 
 Congratulations, green icons show that tests have been successfully passed!
