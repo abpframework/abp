@@ -4,9 +4,9 @@
     "symlink": "symlink"
   },
   "devDependencies": {
-    "@abp/ng.core": "^0.7.6",
-    "@abp/ng.permission-management": "^0.7.6",
-    "@abp/ng.theme.shared": "^0.7.6",
+    "@abp/ng.core": "^0.8.0",
+    "@abp/ng.permission-management": "^0.8.0",
+    "@abp/ng.theme.shared": "^0.8.0",
     "@angular-devkit/build-angular": "~0.801.2",
     "@angular-devkit/build-ng-packagr": "~0.801.2",
     "@angular/animations": "~8.1.2",
