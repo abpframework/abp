@@ -27,6 +27,4 @@ export class ButtonComponent {
   get icon(): string {
     return `${this.loading ? 'fa fa-spin fa-spinner' : this.iconClass || 'd-none'}`;
   }
-
-  constructor() {}
 }
