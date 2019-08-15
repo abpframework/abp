@@ -446,14 +446,15 @@ First, create data types to map data returning from the backend (you can check s
 Modify the `books.ts` as shown below:
 
 ```typescript
-import { ABP } from '@abp/ng.core';
-
 export namespace Books {
   export interface State {
     books: Response;
   }
 
-  export type Response = ABP.PagedResponse<Book>;
+  export interface Response {
+    items: Book[];
+    totalCount: number;
+  }
 
   export interface Book {
     name: string;

@@ -540,6 +540,10 @@ Open `book-list.component.html` and modify the `ngbDropdownMenu` for add the del
 </div>
 ```
 
+The final actions dropdown UI looks like this:
+
+![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
+
 ### Open Confirmation Popup
 
 Open `book-list.component.ts` and inject the `ConfirmationService` for show confirmation popup.
@@ -570,3 +574,7 @@ delete(id: string, name: string) {
 ```
 
 The `delete` method shows confirmation popup and listens to them. When close the popup, the subscribe block runs. If confirmed this popup, it will dispatch the `DeleteBook` action.
+
+The confirmation popup looks like this:
+
+![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
