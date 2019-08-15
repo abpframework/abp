@@ -1,36 +1,47 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { BooksGet, BooksSave } from '../actions/books.actions';
 import { Books } from '../models/books';
-import { BooksService } from '../../books/services/books.service';
+import { BooksService } from '../../books/shared/books.service';
 import { tap, switchMap } from 'rxjs/operators';
+import { GetBooks, CreateUpdateBook, DeleteBook } from '../actions/books.actions';
 
 @State<Books.State>({
   name: 'BooksState',
-  defaults: { data: {} } as Books.State,
+  defaults: { books: {} } as Books.State,
 })
 export class BooksState {
   @Selector()
-  static getBooks({ data }: Books.State) {
-    return data.items || [];
+  static getBooks({ books }: Books.State) {
+    return books.items || [];
   }
 
   constructor(private booksService: BooksService) {}
 
-  @Action(BooksGet)
-  getBooks({ patchState }: StateContext<Books.State>) {
+  @Action(GetBooks)
+  get({ patchState }: StateContext<Books.State>) {
     return this.booksService.get().pipe(
-      tap(data => {
+      tap(books => {
         patchState({
-          data,
+          books,
         });
       }),
     );
   }
 
-  @Action(BooksSave)
-  addBooks({ dispatch }: StateContext<Books.State>, { payload, id }: BooksSave) {
-    return (id ? this.booksService.update(payload, id) : this.booksService.add(payload)).pipe(
-      switchMap(() => dispatch(new BooksGet())),
-    );
+  @Action(CreateUpdateBook)
+  save({ dispatch }: StateContext<Books.State>, { payload, id }: CreateUpdateBook) {
+    let request;
+
+    if (id) {
+      request = this.booksService.update(payload, id);
+    } else {
+      request = this.booksService.create(payload);
+    }
+
+    return request.pipe(switchMap(() => dispatch(new GetBooks())));
+  }
+
+  @Action(DeleteBook)
+  delete({ dispatch }: StateContext<Books.State>, { id }: DeleteBook) {
+    return this.booksService.delete(id).pipe(switchMap(() => dispatch(new GetBooks())));
   }
 }
