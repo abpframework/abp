@@ -5,7 +5,7 @@
     "@abp/ng.core": "^0.8.0",
     "@angular/cdk": "^8.0.1",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
-    "@ngx-validate/core": "^0.0.1",
+    "@ngx-validate/core": "^0.0.4",
     "bootstrap": "^4.3.1",
     "font-awesome": "^4.7.0",
     "ngx-perfect-scrollbar": "^8.0.0",

@@ -5,9 +5,14 @@ export declare namespace Config {
         [key: string]: any;
     }
     interface Environment {
+        application: Application;
         production: boolean;
         oAuthConfig: AuthConfig;
         apis: Apis;
+    }
+    interface Application {
+        name: string;
+        logoUrl?: string;
     }
     interface Apis {
         [key: string]: {

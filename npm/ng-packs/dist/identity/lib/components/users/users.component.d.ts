@@ -1,11 +1,11 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService } from '@abp/ng.theme.shared';
-import { OnInit, TemplateRef, TrackByFunction } from '@angular/core';
+import { TemplateRef, TrackByFunction } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Identity } from '../../models/identity';
-export declare class UsersComponent implements OnInit {
+export declare class UsersComponent {
     private confirmationService;
     private fb;
     private store;
@@ -21,11 +21,10 @@ export declare class UsersComponent implements OnInit {
     pageQuery: ABP.PageQueryParams;
     isModalVisible: boolean;
     loading: boolean;
-    search$: Subject<string>;
     trackByFn: TrackByFunction<AbstractControl>;
     readonly roleGroups: FormGroup[];
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
-    ngOnInit(): void;
+    onSearch(value: any): void;
     buildForm(): void;
     openModal(): void;
     onAdd(): void;

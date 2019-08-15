@@ -2,14 +2,22 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-export class TenantManagementGet {
+export class GetTenants {
+    /**
+     * @param {?=} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
 }
-TenantManagementGet.type = '[TenantManagement] Get';
+GetTenants.type = '[TenantManagement] Get Tenant';
 if (false) {
     /** @type {?} */
-    TenantManagementGet.type;
+    GetTenants.type;
+    /** @type {?} */
+    GetTenants.prototype.payload;
 }
-export class TenantManagementGetById {
+export class GetTenantById {
     /**
      * @param {?} payload
      */
@@ -17,14 +25,14 @@ export class TenantManagementGetById {
         this.payload = payload;
     }
 }
-TenantManagementGetById.type = '[TenantManagement] Get By Id';
+GetTenantById.type = '[TenantManagement] Get Tenant By Id';
 if (false) {
     /** @type {?} */
-    TenantManagementGetById.type;
+    GetTenantById.type;
     /** @type {?} */
-    TenantManagementGetById.prototype.payload;
+    GetTenantById.prototype.payload;
 }
-export class TenantManagementAdd {
+export class CreateTenant {
     /**
      * @param {?} payload
      */
@@ -32,14 +40,14 @@ export class TenantManagementAdd {
         this.payload = payload;
     }
 }
-TenantManagementAdd.type = '[TenantManagement] Add';
+CreateTenant.type = '[TenantManagement] Create Tenant';
 if (false) {
     /** @type {?} */
-    TenantManagementAdd.type;
+    CreateTenant.type;
     /** @type {?} */
-    TenantManagementAdd.prototype.payload;
+    CreateTenant.prototype.payload;
 }
-export class TenantManagementUpdate {
+export class UpdateTenant {
     /**
      * @param {?} payload
      */
@@ -47,14 +55,14 @@ export class TenantManagementUpdate {
         this.payload = payload;
     }
 }
-TenantManagementUpdate.type = '[TenantManagement] Update';
+UpdateTenant.type = '[TenantManagement] Update Tenant';
 if (false) {
     /** @type {?} */
-    TenantManagementUpdate.type;
+    UpdateTenant.type;
     /** @type {?} */
-    TenantManagementUpdate.prototype.payload;
+    UpdateTenant.prototype.payload;
 }
-export class TenantManagementDelete {
+export class DeleteTenant {
     /**
      * @param {?} payload
      */
@@ -62,11 +70,11 @@ export class TenantManagementDelete {
         this.payload = payload;
     }
 }
-TenantManagementDelete.type = '[TenantManagement] Delete';
+DeleteTenant.type = '[TenantManagement] Delete Tenant';
 if (false) {
     /** @type {?} */
-    TenantManagementDelete.type;
+    DeleteTenant.type;
     /** @type {?} */
-    TenantManagementDelete.prototype.payload;
+    DeleteTenant.prototype.payload;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LW1hbmFnZW1lbnQuYWN0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGVuYW50LW1hbmFnZW1lbnQvIiwic291cmNlcyI6WyJsaWIvYWN0aW9ucy90ZW5hbnQtbWFuYWdlbWVudC5hY3Rpb25zLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7QUFFQSxNQUFNLE9BQU8sbUJBQW1COztBQUNkLHdCQUFJLEdBQUcsd0JBQXdCLENBQUM7OztJQUFoRCx5QkFBZ0Q7O0FBR2xELE1BQU0sT0FBTyx1QkFBdUI7Ozs7SUFFbEMsWUFBbUIsT0FBZTtRQUFmLFlBQU8sR0FBUCxPQUFPLENBQVE7SUFBRyxDQUFDOztBQUR0Qiw0QkFBSSxHQUFHLDhCQUE4QixDQUFDOzs7SUFBdEQsNkJBQXNEOztJQUMxQywwQ0FBc0I7O0FBR3BDLE1BQU0sT0FBTyxtQkFBbUI7Ozs7SUFFOUIsWUFBbUIsT0FBb0M7UUFBcEMsWUFBTyxHQUFQLE9BQU8sQ0FBNkI7SUFBRyxDQUFDOztBQUQzQyx3QkFBSSxHQUFHLHdCQUF3QixDQUFDOzs7SUFBaEQseUJBQWdEOztJQUNwQyxzQ0FBMkM7O0FBR3pELE1BQU0sT0FBTyxzQkFBc0I7Ozs7SUFFakMsWUFBbUIsT0FBdUM7UUFBdkMsWUFBTyxHQUFQLE9BQU8sQ0FBZ0M7SUFBRyxDQUFDOztBQUQ5QywyQkFBSSxHQUFHLDJCQUEyQixDQUFDOzs7SUFBbkQsNEJBQW1EOztJQUN2Qyx5Q0FBOEM7O0FBRzVELE1BQU0sT0FBTyxzQkFBc0I7Ozs7SUFFakMsWUFBbUIsT0FBZTtRQUFmLFlBQU8sR0FBUCxPQUFPLENBQVE7SUFBRyxDQUFDOztBQUR0QiwyQkFBSSxHQUFHLDJCQUEyQixDQUFDOzs7SUFBbkQsNEJBQW1EOztJQUN2Qyx5Q0FBc0IiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBUZW5hbnRNYW5hZ2VtZW50IH0gZnJvbSAnLi4vbW9kZWxzL3RlbmFudC1tYW5hZ2VtZW50JztcblxuZXhwb3J0IGNsYXNzIFRlbmFudE1hbmFnZW1lbnRHZXQge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbVGVuYW50TWFuYWdlbWVudF0gR2V0Jztcbn1cblxuZXhwb3J0IGNsYXNzIFRlbmFudE1hbmFnZW1lbnRHZXRCeUlkIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW1RlbmFudE1hbmFnZW1lbnRdIEdldCBCeSBJZCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBUZW5hbnRNYW5hZ2VtZW50QWRkIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW1RlbmFudE1hbmFnZW1lbnRdIEFkZCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBUZW5hbnRNYW5hZ2VtZW50LkFkZFJlcXVlc3QpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBUZW5hbnRNYW5hZ2VtZW50VXBkYXRlIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW1RlbmFudE1hbmFnZW1lbnRdIFVwZGF0ZSc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBUZW5hbnRNYW5hZ2VtZW50LlVwZGF0ZVJlcXVlc3QpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBUZW5hbnRNYW5hZ2VtZW50RGVsZXRlIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW1RlbmFudE1hbmFnZW1lbnRdIERlbGV0ZSc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LW1hbmFnZW1lbnQuYWN0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGVuYW50LW1hbmFnZW1lbnQvIiwic291cmNlcyI6WyJsaWIvYWN0aW9ucy90ZW5hbnQtbWFuYWdlbWVudC5hY3Rpb25zLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7QUFHQSxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUE2QjtRQUE3QixZQUFPLEdBQVAsT0FBTyxDQUFzQjtJQUFHLENBQUM7O0FBRHBDLGVBQUksR0FBRywrQkFBK0IsQ0FBQzs7O0lBQXZELGdCQUF1RDs7SUFDM0MsNkJBQW9DOztBQUdsRCxNQUFNLE9BQU8sYUFBYTs7OztJQUV4QixZQUFtQixPQUFlO1FBQWYsWUFBTyxHQUFQLE9BQU8sQ0FBUTtJQUFHLENBQUM7O0FBRHRCLGtCQUFJLEdBQUcscUNBQXFDLENBQUM7OztJQUE3RCxtQkFBNkQ7O0lBQ2pELGdDQUFzQjs7QUFHcEMsTUFBTSxPQUFPLFlBQVk7Ozs7SUFFdkIsWUFBbUIsT0FBb0M7UUFBcEMsWUFBTyxHQUFQLE9BQU8sQ0FBNkI7SUFBRyxDQUFDOztBQUQzQyxpQkFBSSxHQUFHLGtDQUFrQyxDQUFDOzs7SUFBMUQsa0JBQTBEOztJQUM5QywrQkFBMkM7O0FBR3pELE1BQU0sT0FBTyxZQUFZOzs7O0lBRXZCLFlBQW1CLE9BQXVDO1FBQXZDLFlBQU8sR0FBUCxPQUFPLENBQWdDO0lBQUcsQ0FBQzs7QUFEOUMsaUJBQUksR0FBRyxrQ0FBa0MsQ0FBQzs7O0lBQTFELGtCQUEwRDs7SUFDOUMsK0JBQThDOztBQUc1RCxNQUFNLE9BQU8sWUFBWTs7OztJQUV2QixZQUFtQixPQUFlO1FBQWYsWUFBTyxHQUFQLE9BQU8sQ0FBUTtJQUFHLENBQUM7O0FBRHRCLGlCQUFJLEdBQUcsa0NBQWtDLENBQUM7OztJQUExRCxrQkFBMEQ7O0lBQzlDLCtCQUFzQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFRlbmFudE1hbmFnZW1lbnQgfSBmcm9tICcuLi9tb2RlbHMvdGVuYW50LW1hbmFnZW1lbnQnO1xuaW1wb3J0IHsgQUJQIH0gZnJvbSAnQGFicC9uZy5jb3JlJztcblxuZXhwb3J0IGNsYXNzIEdldFRlbmFudHMge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbVGVuYW50TWFuYWdlbWVudF0gR2V0IFRlbmFudCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkPzogQUJQLlBhZ2VRdWVyeVBhcmFtcykge31cbn1cblxuZXhwb3J0IGNsYXNzIEdldFRlbmFudEJ5SWQge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbVGVuYW50TWFuYWdlbWVudF0gR2V0IFRlbmFudCBCeSBJZCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBDcmVhdGVUZW5hbnQge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbVGVuYW50TWFuYWdlbWVudF0gQ3JlYXRlIFRlbmFudCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBUZW5hbnRNYW5hZ2VtZW50LkFkZFJlcXVlc3QpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBVcGRhdGVUZW5hbnQge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbVGVuYW50TWFuYWdlbWVudF0gVXBkYXRlIFRlbmFudCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBUZW5hbnRNYW5hZ2VtZW50LlVwZGF0ZVJlcXVlc3QpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBEZWxldGVUZW5hbnQge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbVGVuYW50TWFuYWdlbWVudF0gRGVsZXRlIFRlbmFudCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG4iXX0=

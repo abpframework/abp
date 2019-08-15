@@ -15,7 +15,8 @@ export declare class TenantsComponent {
     private tenantService;
     private fb;
     private store;
-    datas$: Observable<ABP.BasicItem[]>;
+    data$: Observable<ABP.BasicItem[]>;
+    totalCount$: Observable<number>;
     selected: ABP.BasicItem;
     tenantForm: FormGroup;
     defaultConnectionStringForm: FormGroup;
@@ -23,22 +24,25 @@ export declare class TenantsComponent {
     isModalVisible: boolean;
     selectedModalContent: SelectedModalContent;
     _useSharedDatabase: boolean;
+    pageQuery: ABP.PageQueryParams;
+    loading: boolean;
     readonly useSharedDatabase: boolean;
     readonly connectionString: string;
     tenantModalTemplate: TemplateRef<any>;
     connectionStringModalTemplate: TemplateRef<any>;
-    featuresModalTemplate: TemplateRef<any>;
     constructor(confirmationService: ConfirmationService, tenantService: TenantManagementService, fb: FormBuilder, store: Store);
+    onSearch(value: any): void;
     private createTenantForm;
     private createDefaultConnectionStringForm;
     openModal(title: string, template: TemplateRef<any>, type: string): void;
     onEditConnectionString(id: string): void;
-    onManageFeatures(id: string): void;
     onAddTenant(): void;
     onEditTenant(id: string): void;
     save(): void;
     saveConnectionString(): void;
     saveTenant(): void;
     delete(id: string, name: string): void;
+    onPageChange(data: any): void;
+    get(): void;
 }
 export {};

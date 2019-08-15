@@ -1,11 +1,12 @@
+import { ToasterService } from '@abp/ng.theme.shared';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { AccountService } from '../../services/account.service';
 export declare class RegisterComponent {
     private fb;
-    private oauthService;
-    private router;
+    private accountService;
+    private toasterService;
     form: FormGroup;
-    constructor(fb: FormBuilder, oauthService: OAuthService, router: Router);
+    inProgress: boolean;
+    constructor(fb: FormBuilder, accountService: AccountService, toasterService: ToasterService);
     onSubmit(): void;
 }

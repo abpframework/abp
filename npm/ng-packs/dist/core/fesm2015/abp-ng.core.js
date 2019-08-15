@@ -1,16 +1,17 @@
 import { __rest, __decorate, __metadata } from 'tslib';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Directive, ChangeDetectorRef, ElementRef, Input, HostBinding, Optional, Renderer2, InjectionToken, Inject, Pipe, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Directive, ElementRef, Input, ChangeDetectorRef, HostBinding, Optional, Renderer2, InjectionToken, Inject, Pipe, EventEmitter, Output, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { Store, Action, Selector, State, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
-import { NEVER, throwError, of, Subject, Observable, ReplaySubject } from 'rxjs';
+import { NEVER, throwError, of, Subject, Observable, ReplaySubject, fromEvent } from 'rxjs';
 import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { take, catchError, tap, switchMap, takeUntil, finalize, distinctUntilChanged } from 'rxjs/operators';
+import { take, catchError, tap, switchMap, takeUntil, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
 import snq from 'snq';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Navigate, NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
+import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
 
 /**
  * @fileoverview added by tsickle
@@ -27,15 +28,15 @@ class PatchRouteByName {
     }
 }
 PatchRouteByName.type = '[Config] Patch Route By Name';
-class ConfigGetAppConfiguration {
+class GetAppConfiguration {
 }
-ConfigGetAppConfiguration.type = '[Config] Get App Configuration';
+GetAppConfiguration.type = '[Config] Get App Configuration';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class LoaderStart {
+class StartLoader {
     /**
      * @param {?} payload
      */
@@ -43,8 +44,8 @@ class LoaderStart {
         this.payload = payload;
     }
 }
-LoaderStart.type = '[Loader] Start';
-class LoaderStop {
+StartLoader.type = '[Loader] Start';
+class StopLoader {
     /**
      * @param {?} payload
      */
@@ -52,16 +53,16 @@ class LoaderStop {
         this.payload = payload;
     }
 }
-LoaderStop.type = '[Loader] Stop';
+StopLoader.type = '[Loader] Stop';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class ProfileGet {
+class GetProfile {
 }
-ProfileGet.type = '[Profile] Get';
-class ProfileUpdate {
+GetProfile.type = '[Profile] Get';
+class UpdateProfile {
     /**
      * @param {?} payload
      */
@@ -69,8 +70,8 @@ class ProfileUpdate {
         this.payload = payload;
     }
 }
-ProfileUpdate.type = '[Profile] Update';
-class ProfileChangePassword {
+UpdateProfile.type = '[Profile] Update';
+class ChangePassword {
     /**
      * @param {?} payload
      */
@@ -78,7 +79,7 @@ class ProfileChangePassword {
         this.payload = payload;
     }
 }
-ProfileChangePassword.type = '[Profile] Change Password';
+ChangePassword.type = '[Profile] Change Password';
 
 /**
  * @fileoverview added by tsickle
@@ -98,7 +99,7 @@ RestOccurError.type = '[Rest] Error';
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class SessionSetLanguage {
+class SetLanguage {
     /**
      * @param {?} payload
      */
@@ -106,7 +107,16 @@ class SessionSetLanguage {
         this.payload = payload;
     }
 }
-SessionSetLanguage.type = '[Session] Set Language';
+SetLanguage.type = '[Session] Set Language';
+class SetTenant {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+SetTenant.type = '[Session] Set Tenant';
 
 /**
  * @fileoverview added by tsickle
@@ -203,16 +213,17 @@ class ProfileService {
     }
     /**
      * @param {?} body
+     * @param {?=} throwErr
      * @return {?}
      */
-    changePassword(body) {
+    changePassword(body, throwErr = false) {
         /** @type {?} */
         const request = {
             method: 'POST',
-            url: '/api/identity/my-profile/changePassword',
+            url: '/api/identity/my-profile/change-password',
             body,
         };
-        return this.rest.request(request);
+        return this.rest.request(request, { throwErr });
     }
 }
 ProfileService.decorators = [
@@ -277,25 +288,25 @@ let ProfileState = class ProfileState {
      * @return {?}
      */
     changePassword(_, { payload }) {
-        return this.profileService.changePassword(payload);
+        return this.profileService.changePassword(payload, true);
     }
 };
 __decorate([
-    Action(ProfileGet),
+    Action(GetProfile),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ProfileState.prototype, "profileGet", null);
 __decorate([
-    Action(ProfileUpdate),
+    Action(UpdateProfile),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, ProfileUpdate]),
+    __metadata("design:paramtypes", [Object, UpdateProfile]),
     __metadata("design:returntype", void 0)
 ], ProfileState.prototype, "profileUpdate", null);
 __decorate([
-    Action(ProfileChangePassword),
+    Action(ChangePassword),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, ProfileChangePassword]),
+    __metadata("design:paramtypes", [Object, ChangePassword]),
     __metadata("design:returntype", void 0)
 ], ProfileState.prototype, "changePassword", null);
 __decorate([
@@ -361,27 +372,56 @@ let SessionState = class SessionState {
     }
     /**
      * @param {?} __0
+     * @return {?}
+     */
+    static getTenant({ tenant }) {
+        return tenant;
+    }
+    /**
+     * @param {?} __0
      * @param {?} __1
      * @return {?}
      */
-    sessionSetLanguage({ patchState }, { payload }) {
+    setLanguage({ patchState }, { payload }) {
         patchState({
             language: payload,
         });
     }
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    setTenantId({ patchState }, { payload }) {
+        patchState({
+            tenant: payload,
+        });
+    }
 };
 __decorate([
-    Action(SessionSetLanguage),
+    Action(SetLanguage),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, SessionSetLanguage]),
+    __metadata("design:paramtypes", [Object, SetLanguage]),
     __metadata("design:returntype", void 0)
-], SessionState.prototype, "sessionSetLanguage", null);
+], SessionState.prototype, "setLanguage", null);
+__decorate([
+    Action(SetTenant),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, SetTenant]),
+    __metadata("design:returntype", void 0)
+], SessionState.prototype, "setTenantId", null);
 __decorate([
     Selector(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", String)
 ], SessionState, "getLanguage", null);
+__decorate([
+    Selector(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], SessionState, "getTenant", null);
 SessionState = __decorate([
     State({
         name: 'SessionState',
@@ -408,7 +448,7 @@ function organizeRoutes(routes, wrappers = [], parentNameArr = (/** @type {?} */
      * @return {?}
      */
     route => {
-        if (route.children) {
+        if (route.children && route.children.length) {
             route.children = organizeRoutes(route.children, wrappers, parentNameArr, route.name);
         }
         if (route.parentName && route.parentName !== parentName) {
@@ -434,8 +474,7 @@ function organizeRoutes(routes, wrappers = [], parentNameArr = (/** @type {?} */
  * @return {?}
  */
 function setChildRoute(routes, parentNameArr) {
-    return routes
-        .map((/**
+    return routes.map((/**
      * @param {?} route
      * @return {?}
      */
@@ -453,12 +492,7 @@ function setChildRoute(routes, parentNameArr) {
             route.children = [...(route.children || []), ...foundedChildren];
         }
         return route;
-    }))
-        .filter((/**
-     * @param {?} route
-     * @return {?}
-     */
-    route => route.path || (route.children && route.children.length)));
+    }));
 }
 /**
  * @param {?=} routes
@@ -502,6 +536,13 @@ let ConfigState = ConfigState_1 = class ConfigState {
      */
     static getAll(state) {
         return state;
+    }
+    /**
+     * @param {?} state
+     * @return {?}
+     */
+    static getApplicationInfo(state) {
+        return state.environment.application || {};
     }
     /**
      * @param {?} key
@@ -646,6 +687,8 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @return {?}
          */
         function (state) {
+            if (!state.localization)
+                return key;
             const { defaultResourceName } = state.environment.localization;
             if (keys[0] === '') {
                 if (!defaultResourceName) {
@@ -674,14 +717,18 @@ let ConfigState = ConfigState_1 = class ConfigState {
                 }
                 return undefined;
             }), state.localization.values);
+            interpolateParams = interpolateParams.filter((/**
+             * @param {?} params
+             * @return {?}
+             */
+            params => params != null));
             if (copy && interpolateParams && interpolateParams.length) {
                 interpolateParams.forEach((/**
                  * @param {?} param
-                 * @param {?} index
                  * @return {?}
                  */
-                (param, index) => {
-                    copy = copy.replace(`'{${index}}'`, param);
+                param => {
+                    copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
                 }));
             }
             return copy || key;
@@ -703,7 +750,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
          */
         configuration => this.store.selectSnapshot(SessionState.getLanguage)
             ? of(null)
-            : dispatch(new SessionSetLanguage(snq((/**
+            : dispatch(new SetLanguage(snq((/**
              * @return {?}
              */
             () => configuration.setting.values['Abp.Localization.DefaultLanguage'])))))));
@@ -729,7 +776,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
     }
 };
 __decorate([
-    Action(ConfigGetAppConfiguration),
+    Action(GetAppConfiguration),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
@@ -746,6 +793,12 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], ConfigState, "getAll", null);
+__decorate([
+    Selector(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ConfigState, "getApplicationInfo", null);
 ConfigState = ConfigState_1 = __decorate([
     State({
         name: 'ConfigState',
@@ -821,7 +874,7 @@ function getInitialData(injector) {
     function () {
         /** @type {?} */
         const store = injector.get(Store);
-        return store.dispatch(new ConfigGetAppConfiguration()).toPromise();
+        return store.dispatch(new GetAppConfiguration()).toPromise();
     });
     return fn;
 }
@@ -955,7 +1008,7 @@ function findLayout(segments, routes) {
         if (route.layout) {
             layout = route.layout;
         }
-        if (route.children && route.children.length) {
+        if (route.children && route.children.length && segments.length > 1) {
             /** @type {?} */
             const child = route.children.find((/**
              * @param {?} c
@@ -989,6 +1042,41 @@ RouterOutletComponent.decorators = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class AutofocusDirective {
+    /**
+     * @param {?} elRef
+     */
+    constructor(elRef) {
+        this.elRef = elRef;
+        this.delay = 0;
+    }
+    /**
+     * @return {?}
+     */
+    ngAfterViewInit() {
+        setTimeout((/**
+         * @return {?}
+         */
+        () => this.elRef.nativeElement.focus()), this.delay);
+    }
+}
+AutofocusDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[autofocus]',
+            },] }
+];
+/** @nocollapse */
+AutofocusDirective.ctorParameters = () => [
+    { type: ElementRef }
+];
+AutofocusDirective.propDecorators = {
+    delay: [{ type: Input, args: ['autofocus',] }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class EllipsisDirective {
     /**
      * @param {?} cdRef
@@ -1009,7 +1097,7 @@ class EllipsisDirective {
      * @return {?}
      */
     get maxWidth() {
-        return this.enabled ? this.witdh || '180px' : undefined;
+        return this.enabled ? this.witdh || '160px' : undefined;
     }
     /**
      * @return {?}
@@ -1275,7 +1363,7 @@ class ApiInterceptor {
      * @return {?}
      */
     intercept(request, next) {
-        this.store.dispatch(new LoaderStart(request));
+        this.store.dispatch(new StartLoader(request));
         /** @type {?} */
         const headers = (/** @type {?} */ ({}));
         /** @type {?} */
@@ -1288,6 +1376,11 @@ class ApiInterceptor {
         if (!request.headers.has('Accept-Language') && lang) {
             headers['Accept-Language'] = lang;
         }
+        /** @type {?} */
+        const tenant = this.store.selectSnapshot(SessionState.getTenant);
+        if (!request.headers.has('__tenant') && tenant) {
+            headers['__tenant'] = tenant.id;
+        }
         return next
             .handle(request.clone({
             setHeaders: headers,
@@ -1295,7 +1388,7 @@ class ApiInterceptor {
             .pipe(finalize((/**
          * @return {?}
          */
-        () => this.store.dispatch(new LoaderStop(request)))));
+        () => this.store.dispatch(new StopLoader(request)))));
     }
 }
 ApiInterceptor.decorators = [
@@ -1411,7 +1504,7 @@ function transformRoutes(routes = [], wrappers = []) {
      * @param {?} route
      * @return {?}
      */
-    route => route.component || route.loadChildren))
+    route => (route.data || {}).routes && (route.component || route.loadChildren)))
         .forEach((/**
      * @param {?} route
      * @return {?}
@@ -1422,7 +1515,10 @@ function transformRoutes(routes = [], wrappers = []) {
          * @param {?} abp
          * @return {?}
          */
-        abp => abp.path.toLowerCase() === route.path.toLowerCase()));
+        abp => abp.path.toLowerCase() === route.path.toLowerCase() && snq((/**
+         * @return {?}
+         */
+        () => route.data.routes.length), false)));
         const { length } = transformed;
         if (abpPackage) {
             transformed.push(abpPackage);
@@ -1698,6 +1794,95 @@ LocalizationPipe.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class InputEventDebounceDirective {
+    /**
+     * @param {?} renderer
+     * @param {?} el
+     */
+    constructor(renderer, el) {
+        this.renderer = renderer;
+        this.el = el;
+        this.debounce = 300;
+        this.debounceEvent = new EventEmitter();
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        fromEvent(this.el.nativeElement, 'input')
+            .pipe(debounceTime(this.debounce), takeUntilDestroy$1(this))
+            .subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => {
+            this.debounceEvent.emit(event);
+        }));
+    }
+}
+InputEventDebounceDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[input.debounce]',
+            },] }
+];
+/** @nocollapse */
+InputEventDebounceDirective.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+InputEventDebounceDirective.propDecorators = {
+    debounce: [{ type: Input }],
+    debounceEvent: [{ type: Output, args: ['input.debounce',] }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ClickEventStopPropagationDirective {
+    /**
+     * @param {?} renderer
+     * @param {?} el
+     */
+    constructor(renderer, el) {
+        this.renderer = renderer;
+        this.el = el;
+        this.stopPropEvent = new EventEmitter();
+    }
+    /**
+     * @return {?}
+     */
+    ngOnInit() {
+        fromEvent(this.el.nativeElement, 'click')
+            .pipe(takeUntilDestroy$1(this))
+            .subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        (event) => {
+            event.stopPropagation();
+            this.stopPropEvent.emit(event);
+        }));
+    }
+}
+ClickEventStopPropagationDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[click.stop]',
+            },] }
+];
+/** @nocollapse */
+ClickEventStopPropagationDirective.ctorParameters = () => [
+    { type: Renderer2 },
+    { type: ElementRef }
+];
+ClickEventStopPropagationDirective.propDecorators = {
+    stopPropEvent: [{ type: Output, args: ['click.stop',] }]
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class CoreModule {
     /**
      * @param {?=} options
@@ -1746,10 +1931,13 @@ CoreModule.decorators = [
                 declarations: [
                     RouterOutletComponent,
                     DynamicLayoutComponent,
+                    AutofocusDirective,
+                    EllipsisDirective,
+                    LocalizationPipe,
                     PermissionDirective,
                     VisibilityDirective,
-                    LocalizationPipe,
-                    EllipsisDirective,
+                    InputEventDebounceDirective,
+                    ClickEventStopPropagationDirective,
                 ],
                 exports: [
                     CommonModule,
@@ -1759,15 +1947,19 @@ CoreModule.decorators = [
                     RouterModule,
                     RouterOutletComponent,
                     DynamicLayoutComponent,
-                    PermissionDirective,
-                    VisibilityDirective,
+                    AutofocusDirective,
                     EllipsisDirective,
                     LocalizationPipe,
+                    PermissionDirective,
+                    VisibilityDirective,
+                    InputEventDebounceDirective,
+                    LocalizationPipe,
+                    ClickEventStopPropagationDirective,
                 ],
                 providers: [LocalizationPipe],
                 entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
             },] }
 ];
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, CONFIG, ConfigGetAppConfiguration, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, LazyLoadService, LoaderStart, LoaderStop, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileChangePassword, ProfileGet, ProfileService, ProfileState, ProfileUpdate, Rest, RestOccurError, RestService, RouterOutletComponent, SessionSetLanguage, SessionState, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, RestService as ɵc, ProfileGet as ɵd, ProfileUpdate as ɵe, ProfileChangePassword as ɵf, SessionState as ɵh, SessionSetLanguage as ɵi, ConfigState as ɵj, ApplicationConfigurationService as ɵk, PatchRouteByName as ɵl, ConfigGetAppConfiguration as ɵm, RouterOutletComponent as ɵn, DynamicLayoutComponent as ɵo, ConfigState as ɵp, PermissionDirective as ɵq, VisibilityDirective as ɵr, LocalizationPipe as ɵs, EllipsisDirective as ɵt, NGXS_CONFIG_PLUGIN_OPTIONS as ɵu, ConfigPlugin as ɵv, ApiInterceptor as ɵx, getInitialData as ɵy };
+export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ConfigPlugin as ɵba, ApiInterceptor as ɵbb, getInitialData as ɵbc, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, SetLanguage as ɵi, SetTenant as ɵj, ConfigState as ɵl, ApplicationConfigurationService as ɵm, PatchRouteByName as ɵn, GetAppConfiguration as ɵo, RouterOutletComponent as ɵp, DynamicLayoutComponent as ɵq, ConfigState as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, LocalizationPipe as ɵu, PermissionDirective as ɵv, VisibilityDirective as ɵw, InputEventDebounceDirective as ɵx, ClickEventStopPropagationDirective as ɵy, NGXS_CONFIG_PLUGIN_OPTIONS as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

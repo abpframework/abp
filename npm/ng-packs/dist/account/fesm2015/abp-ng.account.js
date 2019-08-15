@@ -1,17 +1,17 @@
-import { ConfigState, ConfigGetAppConfiguration, DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
-import { Component, Optional, Inject, NgModule, ViewChild, InjectionToken } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { ConfigState, GetAppConfiguration, RestService, DynamicLayoutComponent, SessionState, SetTenant, CoreModule } from '@abp/ng.core';
+import { Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject, NgModule, InjectionToken } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, throwError } from 'rxjs';
 import { ToasterService, ThemeSharedModule } from '@abp/ng.theme.shared';
-import { switchMap, tap, catchError, finalize } from 'rxjs/operators';
+import { switchMap, tap, catchError, finalize, take } from 'rxjs/operators';
 import snq from 'snq';
-import { validatePassword, NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableModule } from 'primeng/table';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 /**
  * @fileoverview added by tsickle
@@ -52,7 +52,7 @@ class LoginComponent {
             .pipe(switchMap((/**
          * @return {?}
          */
-        () => this.store.dispatch(new ConfigGetAppConfiguration()))), tap((/**
+        () => this.store.dispatch(new GetAppConfiguration()))), tap((/**
          * @return {?}
          */
         () => {
@@ -70,7 +70,11 @@ class LoginComponent {
             this.toasterService.error(snq((/**
              * @return {?}
              */
-            () => err.error.error_description), 'An error occured.'), 'Error');
+            () => err.error.error_description)) ||
+                snq((/**
+                 * @return {?}
+                 */
+                () => err.error.error.message), 'AbpAccount::DefaultErrorMessage'), 'Error', { life: 7000 });
             return throwError(err);
         })), finalize((/**
          * @return {?}
@@ -82,7 +86,7 @@ class LoginComponent {
 LoginComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-login',
-                template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button type=\"button\" name=\"Action\" value=\"Cancel\" class=\"btn btn-secondary\">\n            {{ 'AbpAccount::Cancel' | abpLocalization }}\n          </button>\n          <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n            autofocus\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
             }] }
 ];
 /** @nocollapse */
@@ -98,23 +102,68 @@ LoginComponent.ctorParameters = () => [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class AccountService {
+    /**
+     * @param {?} rest
+     */
+    constructor(rest) {
+        this.rest = rest;
+    }
+    /**
+     * @param {?} tenantName
+     * @return {?}
+     */
+    findTenant(tenantName) {
+        /** @type {?} */
+        const request = {
+            method: 'GET',
+            url: `/api/abp/multi-tenancy/find-tenant/${tenantName}`,
+        };
+        return this.rest.request(request);
+    }
+    /**
+     * @param {?} body
+     * @return {?}
+     */
+    register(body) {
+        /** @type {?} */
+        const request = {
+            method: 'POST',
+            url: `/api/account/register`,
+            body,
+        };
+        return this.rest.request(request, { throwErr: true });
+    }
+}
+AccountService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
+];
+/** @nocollapse */
+AccountService.ctorParameters = () => [
+    { type: RestService }
+];
+/** @nocollapse */ AccountService.ngInjectableDef = ɵɵdefineInjectable({ factory: function AccountService_Factory() { return new AccountService(ɵɵinject(RestService)); }, token: AccountService, providedIn: "root" });
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 const { maxLength: maxLength$1, minLength: minLength$1, required: required$1, email } = Validators;
 class RegisterComponent {
     /**
      * @param {?} fb
-     * @param {?} oauthService
-     * @param {?} router
+     * @param {?} accountService
+     * @param {?} toasterService
      */
-    constructor(fb, oauthService, router) {
+    constructor(fb, accountService, toasterService) {
         this.fb = fb;
-        this.oauthService = oauthService;
-        this.router = router;
+        this.accountService = accountService;
+        this.toasterService = toasterService;
         this.form = this.fb.group({
             username: ['', [required$1, maxLength$1(255)]],
-            password: [
-                '',
-                [required$1, maxLength$1(32), minLength$1(6), validatePassword(['small', 'capital', 'number', 'special'])],
-            ],
+            password: ['', [required$1, maxLength$1(32)]],
             email: ['', [required$1, email]],
         });
     }
@@ -124,19 +173,48 @@ class RegisterComponent {
     onSubmit() {
         if (this.form.invalid)
             return;
+        this.inProgress = true;
+        /** @type {?} */
+        const newUser = (/** @type {?} */ ({
+            userName: this.form.get('username').value,
+            password: this.form.get('password').value,
+            emailAddress: this.form.get('email').value,
+            appName: 'angular',
+        }));
+        this.accountService
+            .register(newUser)
+            .pipe(take(1), catchError((/**
+         * @param {?} err
+         * @return {?}
+         */
+        err => {
+            this.toasterService.error(snq((/**
+             * @return {?}
+             */
+            () => err.error.error_description)) ||
+                snq((/**
+                 * @return {?}
+                 */
+                () => err.error.error.message), 'AbpAccount::DefaultErrorMessage'), 'Error', { life: 7000 });
+            return throwError(err);
+        })), finalize((/**
+         * @return {?}
+         */
+        () => (this.inProgress = false))))
+            .subscribe();
     }
 }
 RegisterComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-register',
-                template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>Register</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"input-user-name\">User name</label><span> * </span\n          ><input autofocus type=\"text\" id=\"input-user-name\" class=\"form-control\" formControlName=\"username\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-email-address\">Email address</label><span> * </span\n          ><input type=\"email\" id=\"input-email-address\" class=\"form-control\" formControlName=\"email\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-password\">Password</label><span> * </span\n          ><input type=\"password\" id=\"input-password\" class=\"form-control\" formControlName=\"password\" />\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary\">Register</button>\n      </form>\n    </div>\n  </div>\n</div>\n"
+                template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Register' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"input-user-name\">{{ 'AbpAccount::UserName' | abpLocalization }}</label\n          ><span> * </span\n          ><input autofocus type=\"text\" id=\"input-user-name\" class=\"form-control\" formControlName=\"username\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-email-address\">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label\n          ><span> * </span><input type=\"email\" id=\"input-email-address\" class=\"form-control\" formControlName=\"email\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label\n          ><span> * </span><input type=\"password\" id=\"input-password\" class=\"form-control\" formControlName=\"password\" />\n        </div>\n        <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Register\" class=\"btn btn-primary\">\n          {{ 'AbpAccount::Register' | abpLocalization }}\n        </button>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/login\">{{ 'AbpAccount::Login' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
             }] }
 ];
 /** @nocollapse */
 RegisterComponent.ctorParameters = () => [
     { type: FormBuilder },
-    { type: OAuthService },
-    { type: Router }
+    { type: AccountService },
+    { type: ToasterService }
 ];
 
 /**
@@ -167,57 +245,88 @@ AccountRoutingModule.decorators = [
  */
 class TenantBoxComponent {
     /**
-     * @param {?} modalService
-     * @param {?} fb
+     * @param {?} store
+     * @param {?} toasterService
+     * @param {?} accountService
      */
-    constructor(modalService, fb) {
-        this.modalService = modalService;
-        this.fb = fb;
+    constructor(store, toasterService, accountService) {
+        this.store = store;
+        this.toasterService = toasterService;
+        this.accountService = accountService;
+        this.tenant = (/** @type {?} */ ({}));
     }
     /**
      * @return {?}
      */
-    createForm() {
-        this.form = this.fb.group({
-            name: [this.selected.name],
-        });
-    }
-    /**
-     * @return {?}
-     */
-    openModal() {
-        this.createForm();
-        this.modalService.open(this.modalContent);
+    ngOnInit() {
+        this.tenant = this.store.selectSnapshot(SessionState.getTenant) || ((/** @type {?} */ ({})));
+        this.tenantName = this.tenant.name || '';
     }
     /**
      * @return {?}
      */
     onSwitch() {
-        this.selected = (/** @type {?} */ ({}));
-        this.openModal();
+        this.isModalVisible = true;
     }
     /**
      * @return {?}
      */
     save() {
-        this.selected = this.form.value;
-        this.modalService.dismissAll();
+        if (this.tenant.name) {
+            this.accountService
+                .findTenant(this.tenant.name)
+                .pipe(take(1), catchError((/**
+             * @param {?} err
+             * @return {?}
+             */
+            err => {
+                this.toasterService.error(snq((/**
+                 * @return {?}
+                 */
+                () => err.error.error_description), 'AbpUi::DefaultErrorMessage'), 'AbpUi::Error');
+                return throwError(err);
+            })))
+                .subscribe((/**
+             * @param {?} __0
+             * @return {?}
+             */
+            ({ success, tenantId }) => {
+                if (success) {
+                    this.tenant = {
+                        id: tenantId,
+                        name: this.tenant.name,
+                    };
+                    this.tenantName = this.tenant.name;
+                    this.isModalVisible = false;
+                }
+                else {
+                    this.toasterService.error(`AbpUiMultiTenancy::GivenTenantIsNotAvailable`, 'AbpUi::Error', {
+                        messageLocalizationParams: [this.tenant.name],
+                    });
+                    this.tenant = (/** @type {?} */ ({}));
+                }
+                this.store.dispatch(new SetTenant(success ? this.tenant : null));
+            }));
+        }
+        else {
+            this.store.dispatch(new SetTenant(null));
+            this.tenantName = null;
+            this.isModalVisible = false;
+        }
     }
 }
 TenantBoxComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-tenant-box',
-                template: "<div\n  class=\"tenant-switch-box\"\n  style=\"background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;\"\n>\n  <span style=\"color: #666;\">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>\n  <strong>\n    <i>{{ selected?.name ? selected.name : ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>\n  </strong>\n  (<a id=\"abp-tenant-switch-link\" style=\"color: #333; cursor: pointer\" (click)=\"onSwitch()\">{{\n    'AbpUiMultiTenancy::Switch' | abpLocalization\n  }}</a\n  >)\n</div>\n\n<ng-template #modalContent let-modal>\n  <div class=\"modal-header\">\n    <h5 class=\"modal-title\" id=\"modal-basic-title\">\n      SwitchTenant\n    </h5>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss()\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n  <form [formGroup]=\"form\" (ngSubmit)=\"save()\">\n    <div class=\"modal-body\">\n      <div class=\"mt-2\">\n        <div class=\"form-group\">\n          <label for=\"name\">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>\n          <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n        </div>\n        <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"modal.close()\">\n        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>\n      </button>\n    </div>\n  </form>\n</ng-template>\n"
+                template: "<div\n  class=\"tenant-switch-box\"\n  style=\"background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;\"\n>\n  <span style=\"color: #666;\">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>\n  <strong>\n    <i>{{ tenantName || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>\n  </strong>\n  (<a id=\"abp-tenant-switch-link\" style=\"color: #333; cursor: pointer\" (click)=\"onSwitch()\">{{\n    'AbpUiMultiTenancy::Switch' | abpLocalization\n  }}</a\n  >)\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\" size=\"md\">\n  <ng-template #abpHeader>\n    <h5>Switch Tenant</h5>\n  </ng-template>\n  <ng-template #abpBody>\n    <form (ngSubmit)=\"save()\">\n      <div class=\"mt-2\">\n        <div class=\"form-group\">\n          <label for=\"name\">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>\n          <input [(ngModel)]=\"tenant.name\" type=\"text\" id=\"name\" name=\"tenant\" class=\"form-control\" autofocus />\n        </div>\n        <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n    </button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"save()\">\n      <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>\n    </button>\n  </ng-template>\n</abp-modal>\n"
             }] }
 ];
 /** @nocollapse */
 TenantBoxComponent.ctorParameters = () => [
-    { type: NgbModal },
-    { type: FormBuilder }
+    { type: Store },
+    { type: ToasterService },
+    { type: AccountService }
 ];
-TenantBoxComponent.propDecorators = {
-    modalContent: [{ type: ViewChild, args: ['modalContent', { static: false },] }]
-};
 
 /**
  * @fileoverview added by tsickle
@@ -279,5 +388,5 @@ const ACCOUNT_ROUTES = (/** @type {?} */ ([
     },
 ]));
 
-export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, LoginComponent, RegisterComponent, optionsFactory, LoginComponent as ɵa, RegisterComponent as ɵc, TenantBoxComponent as ɵd, AccountRoutingModule as ɵe, optionsFactory as ɵf, ACCOUNT_OPTIONS as ɵg };
+export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, LoginComponent, RegisterComponent, optionsFactory, LoginComponent as ɵa, RegisterComponent as ɵc, AccountService as ɵd, TenantBoxComponent as ɵe, AccountRoutingModule as ɵf, optionsFactory as ɵg, ACCOUNT_OPTIONS as ɵh };
 //# sourceMappingURL=abp-ng.account.js.map

@@ -6,6 +6,7 @@ export declare class ConfigState {
     private appConfigurationService;
     private store;
     static getAll(state: Config.State): Config.State;
+    static getApplicationInfo(state: Config.State): any;
     static getOne(key: string): (state: Config.State) => any;
     static getDeep(keys: string[] | string): (state: Config.State) => any;
     static getApiUrl(key?: string): (state: Config.State) => string;

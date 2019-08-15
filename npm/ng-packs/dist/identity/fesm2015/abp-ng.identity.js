@@ -2,62 +2,23 @@ import { RestService, DynamicLayoutComponent, AuthGuard, PermissionGuard, CoreMo
 import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, ViewChild, NgModule } from '@angular/core';
 import { Action, Selector, State, Store, Select, NgxsModule } from '@ngxs/store';
 import { __decorate, __metadata } from 'tslib';
-import { Observable, Subject, combineLatest } from 'rxjs';
-import { Validators, FormBuilder } from '@angular/forms';
-import { tap, switchMap, pluck, debounceTime, filter, map, take } from 'rxjs/operators';
 import { ConfirmationService, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { tap, switchMap, pluck, finalize, take } from 'rxjs/operators';
 import { RouterModule } from '@angular/router';
-import { validatePassword, NgxValidateCoreModule } from '@ngx-validate/core';
 import snq from 'snq';
 import { NgbTabsetModule, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { PermissionManagementModule } from '@abp/ng.permission-management';
 import { TableModule } from 'primeng/table';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class IdentityGetRoles {
-}
-IdentityGetRoles.type = '[Identity] Get Roles';
-class IdentityGetRoleById {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityGetRoleById.type = '[Identity] Get Role By Id';
-class IdentityDeleteRole {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityDeleteRole.type = '[Identity] Delete Role';
-class IdentityAddRole {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityAddRole.type = '[Identity] Add Role';
-class IdentityUpdateRole {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityUpdateRole.type = '[Identity] Update Role';
-class IdentityGetUsers {
+class GetRoles {
     /**
      * @param {?=} payload
      */
@@ -65,8 +26,8 @@ class IdentityGetUsers {
         this.payload = payload;
     }
 }
-IdentityGetUsers.type = '[Identity] Get Users';
-class IdentityGetUserById {
+GetRoles.type = '[Identity] Get Roles';
+class GetRoleById {
     /**
      * @param {?} payload
      */
@@ -74,8 +35,8 @@ class IdentityGetUserById {
         this.payload = payload;
     }
 }
-IdentityGetUserById.type = '[Identity] Get User By Id';
-class IdentityDeleteUser {
+GetRoleById.type = '[Identity] Get Role By Id';
+class DeleteRole {
     /**
      * @param {?} payload
      */
@@ -83,8 +44,8 @@ class IdentityDeleteUser {
         this.payload = payload;
     }
 }
-IdentityDeleteUser.type = '[Identity] Delete User';
-class IdentityAddUser {
+DeleteRole.type = '[Identity] Delete Role';
+class CreateRole {
     /**
      * @param {?} payload
      */
@@ -92,8 +53,8 @@ class IdentityAddUser {
         this.payload = payload;
     }
 }
-IdentityAddUser.type = '[Identity] Add User';
-class IdentityUpdateUser {
+CreateRole.type = '[Identity] Create Role';
+class UpdateRole {
     /**
      * @param {?} payload
      */
@@ -101,8 +62,17 @@ class IdentityUpdateUser {
         this.payload = payload;
     }
 }
-IdentityUpdateUser.type = '[Identity] Update User';
-class IdentityGetUserRoles {
+UpdateRole.type = '[Identity] Update Role';
+class GetUsers {
+    /**
+     * @param {?=} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+GetUsers.type = '[Identity] Get Users';
+class GetUserById {
     /**
      * @param {?} payload
      */
@@ -110,7 +80,43 @@ class IdentityGetUserRoles {
         this.payload = payload;
     }
 }
-IdentityGetUserRoles.type = '[Identity] Get User Roles';
+GetUserById.type = '[Identity] Get User By Id';
+class DeleteUser {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+DeleteUser.type = '[Identity] Delete User';
+class CreateUser {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+CreateUser.type = '[Identity] Create User';
+class UpdateUser {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+UpdateUser.type = '[Identity] Update User';
+class GetUserRoles {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+GetUserRoles.type = '[Identity] Get User Roles';
 
 /**
  * @fileoverview added by tsickle
@@ -124,13 +130,15 @@ class IdentityService {
         this.rest = rest;
     }
     /**
+     * @param {?=} params
      * @return {?}
      */
-    getRoles() {
+    getRoles(params = (/** @type {?} */ ({}))) {
         /** @type {?} */
         const request = {
             method: 'GET',
             url: '/api/identity/roles',
+            params,
         };
         return this.rest.request(request);
     }
@@ -162,7 +170,7 @@ class IdentityService {
      * @param {?} body
      * @return {?}
      */
-    addRole(body) {
+    createRole(body) {
         /** @type {?} */
         const request = {
             method: 'POST',
@@ -240,7 +248,7 @@ class IdentityService {
      * @param {?} body
      * @return {?}
      */
-    addUser(body) {
+    createUser(body) {
         /** @type {?} */
         const request = {
             method: 'POST',
@@ -255,7 +263,7 @@ class IdentityService {
      */
     updateUser(body) {
         /** @type {?} */
-        const url = `/identity/users/${body.id}`;
+        const url = `/api/identity/users/${body.id}`;
         delete body.id;
         /** @type {?} */
         const request = {
@@ -318,10 +326,11 @@ let IdentityState = class IdentityState {
     }
     /**
      * @param {?} __0
+     * @param {?} __1
      * @return {?}
      */
-    getRoles({ patchState }) {
-        return this.identityService.getRoles().pipe(tap((/**
+    getRoles({ patchState }, { payload }) {
+        return this.identityService.getRoles(payload).pipe(tap((/**
          * @param {?} roles
          * @return {?}
          */
@@ -352,7 +361,7 @@ let IdentityState = class IdentityState {
         return this.identityService.deleteRole(payload).pipe(switchMap((/**
          * @return {?}
          */
-        () => dispatch(new IdentityGetRoles()))));
+        () => dispatch(new GetRoles()))));
     }
     /**
      * @param {?} __0
@@ -360,10 +369,10 @@ let IdentityState = class IdentityState {
      * @return {?}
      */
     addRole({ dispatch }, { payload }) {
-        return this.identityService.addRole(payload).pipe(switchMap((/**
+        return this.identityService.createRole(payload).pipe(switchMap((/**
          * @return {?}
          */
-        () => dispatch(new IdentityGetRoles()))));
+        () => dispatch(new GetRoles()))));
     }
     /**
      * @param {?} __0
@@ -371,13 +380,13 @@ let IdentityState = class IdentityState {
      * @return {?}
      */
     updateRole({ getState, dispatch }, { payload }) {
-        return dispatch(new IdentityGetRoleById(payload.id)).pipe(switchMap((/**
+        return dispatch(new GetRoleById(payload.id)).pipe(switchMap((/**
          * @return {?}
          */
         () => this.identityService.updateRole(Object.assign({}, getState().selectedRole, payload)))), switchMap((/**
          * @return {?}
          */
-        () => dispatch(new IdentityGetRoles()))));
+        () => dispatch(new GetRoles()))));
     }
     /**
      * @param {?} __0
@@ -416,7 +425,7 @@ let IdentityState = class IdentityState {
         return this.identityService.deleteUser(payload).pipe(switchMap((/**
          * @return {?}
          */
-        () => dispatch(new IdentityGetUsers()))));
+        () => dispatch(new GetUsers()))));
     }
     /**
      * @param {?} __0
@@ -424,10 +433,10 @@ let IdentityState = class IdentityState {
      * @return {?}
      */
     addUser({ dispatch }, { payload }) {
-        return this.identityService.addUser(payload).pipe(switchMap((/**
+        return this.identityService.createUser(payload).pipe(switchMap((/**
          * @return {?}
          */
-        () => dispatch(new IdentityGetUsers()))));
+        () => dispatch(new GetUsers()))));
     }
     /**
      * @param {?} __0
@@ -435,13 +444,13 @@ let IdentityState = class IdentityState {
      * @return {?}
      */
     updateUser({ getState, dispatch }, { payload }) {
-        return dispatch(new IdentityGetUserById(payload.id)).pipe(switchMap((/**
+        return dispatch(new GetUserById(payload.id)).pipe(switchMap((/**
          * @return {?}
          */
         () => this.identityService.updateUser(Object.assign({}, getState().selectedUser, payload)))), switchMap((/**
          * @return {?}
          */
-        () => dispatch(new IdentityGetUsers()))));
+        () => dispatch(new GetUsers()))));
     }
     /**
      * @param {?} __0
@@ -459,69 +468,69 @@ let IdentityState = class IdentityState {
     }
 };
 __decorate([
-    Action(IdentityGetRoles),
+    Action(GetRoles),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, GetRoles]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "getRoles", null);
 __decorate([
-    Action(IdentityGetRoleById),
+    Action(GetRoleById),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityGetRoleById]),
+    __metadata("design:paramtypes", [Object, GetRoleById]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "getRole", null);
 __decorate([
-    Action(IdentityDeleteRole),
+    Action(DeleteRole),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityGetRoleById]),
+    __metadata("design:paramtypes", [Object, GetRoleById]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "deleteRole", null);
 __decorate([
-    Action(IdentityAddRole),
+    Action(CreateRole),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityAddRole]),
+    __metadata("design:paramtypes", [Object, CreateRole]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "addRole", null);
 __decorate([
-    Action(IdentityUpdateRole),
+    Action(UpdateRole),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityUpdateRole]),
+    __metadata("design:paramtypes", [Object, UpdateRole]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "updateRole", null);
 __decorate([
-    Action(IdentityGetUsers),
+    Action(GetUsers),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityGetUsers]),
+    __metadata("design:paramtypes", [Object, GetUsers]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "getUsers", null);
 __decorate([
-    Action(IdentityGetUserById),
+    Action(GetUserById),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityGetUserById]),
+    __metadata("design:paramtypes", [Object, GetUserById]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "getUser", null);
 __decorate([
-    Action(IdentityDeleteUser),
+    Action(DeleteUser),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityGetUserById]),
+    __metadata("design:paramtypes", [Object, GetUserById]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "deleteUser", null);
 __decorate([
-    Action(IdentityAddUser),
+    Action(CreateUser),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityAddUser]),
+    __metadata("design:paramtypes", [Object, CreateUser]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "addUser", null);
 __decorate([
-    Action(IdentityUpdateUser),
+    Action(UpdateUser),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityUpdateUser]),
+    __metadata("design:paramtypes", [Object, UpdateUser]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "updateUser", null);
 __decorate([
-    Action(IdentityGetUserRoles),
+    Action(GetUserRoles),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, IdentityGetUserRoles]),
+    __metadata("design:paramtypes", [Object, GetUserRoles]),
     __metadata("design:returntype", void 0)
 ], IdentityState.prototype, "getUserRoles", null);
 __decorate([
@@ -571,13 +580,28 @@ class RolesComponent {
         this.fb = fb;
         this.store = store;
         this.visiblePermissions = false;
+        this.pageQuery = {
+            sorting: 'name',
+        };
+        this.loading = false;
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    onSearch(value) {
+        this.pageQuery.filter = value;
+        this.get();
     }
     /**
      * @return {?}
      */
     createForm() {
         this.form = this.fb.group({
-            name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+            name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
+                Validators.required,
+                Validators.maxLength(256),
+            ]),
             isDefault: [this.selected.isDefault || false],
             isPublic: [this.selected.isPublic || false],
         });
@@ -602,7 +626,7 @@ class RolesComponent {
      */
     onEdit(id) {
         this.store
-            .dispatch(new IdentityGetRoleById(id))
+            .dispatch(new GetRoleById(id))
             .pipe(pluck('IdentityState', 'selectedRole'))
             .subscribe((/**
          * @param {?} selectedRole
@@ -621,8 +645,8 @@ class RolesComponent {
             return;
         this.store
             .dispatch(this.selected.id
-            ? new IdentityUpdateRole(Object.assign({}, this.form.value, { id: this.selected.id }))
-            : new IdentityAddRole(this.form.value))
+            ? new UpdateRole(Object.assign({}, this.form.value, { id: this.selected.id }))
+            : new CreateRole(this.form.value))
             .subscribe((/**
          * @return {?}
          */
@@ -646,15 +670,37 @@ class RolesComponent {
          */
         (status) => {
             if (status === "confirm" /* confirm */) {
-                this.store.dispatch(new IdentityDeleteRole(id));
+                this.store.dispatch(new DeleteRole(id));
             }
         }));
+    }
+    /**
+     * @param {?} data
+     * @return {?}
+     */
+    onPageChange(data) {
+        this.pageQuery.skipCount = data.first;
+        this.pageQuery.maxResultCount = data.rows;
+        this.get();
+    }
+    /**
+     * @return {?}
+     */
+    get() {
+        this.loading = true;
+        this.store
+            .dispatch(new GetRoles(this.pageQuery))
+            .pipe(finalize((/**
+         * @return {?}
+         */
+        () => (this.loading = false))))
+            .subscribe();
     }
 }
 RolesComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-roles',
-                template: "<div id=\"identity-roles-wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button id=\"create-role\" class=\"btn btn-primary\" type=\"button\" (click)=\"onAdd()\">\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          placeholder=\"Search\"\n          (input)=\"dt.filterGlobal($event.target.value, 'contains')\"\n      /></label>\n    </div>\n    <p-table #dt [value]=\"roles$ | async\" [globalFilterFields]=\"['name']\" [paginator]=\"true\" [rows]=\"10\">\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::RoleName' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button ngbDropdownItem (click)=\"onEdit(data.id)\">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>\n                <button ngbDropdownItem (click)=\"providerKey = data.name; visiblePermissions = true\">\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\n                </button>\n                <button ngbDropdownItem (click)=\"delete(data.id, data.name)\">\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal size=\"md\" [(visible)]=\"isModalVisible\" *ngIf=\"isModalVisible\" [centered]=\"true\">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\">\n      <div class=\"form-group\">\n        <label for=\"role-name\">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label\n        ><span> * </span>\n        <input type=\"text\" id=\"role-name\" class=\"form-control\" formControlName=\"name\" />\n      </div>\n\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input type=\"checkbox\" id=\"role-is-default\" class=\"custom-control-input\" formControlName=\"isDefault\" />\n        <label class=\"custom-control-label\" for=\"role-is-default\">{{\n          'AbpIdentity::DisplayName:IsDefault' | abpLocalization\n        }}</label>\n      </div>\n\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input type=\"checkbox\" id=\"role-is-public\" class=\"custom-control-input\" formControlName=\"isPublic\" />\n        <label class=\"custom-control-label\" for=\"role-is-public\">{{\n          'AbpIdentity::DisplayName:IsPublic' | abpLocalization\n        }}</label>\n      </div>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"save()\">\n      <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n    </button>\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management\n  [(visible)]=\"visiblePermissions\"\n  providerName=\"Role\"\n  [providerKey]=\"providerKey\"\n></abp-permission-management>\n"
+                template: "<div id=\"identity-roles-wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button id=\"create-role\" class=\"btn btn-primary\" type=\"button\" (click)=\"onAdd()\">\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          [placeholder]=\"'AbpUi::PagerSearch' | abpLocalization\"\n          (input.debounce)=\"onSearch($event.target.value)\"\n      /></label>\n    </div>\n    <p-table\n      [value]=\"data$ | async\"\n      [lazy]=\"true\"\n      [lazyLoadOnInit]=\"false\"\n      [paginator]=\"true\"\n      [rows]=\"10\"\n      [totalRecords]=\"totalCount$ | async\"\n      [loading]=\"loading\"\n      (onLazyLoad)=\"onPageChange($event)\"\n    >\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::RoleName' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button ngbDropdownItem (click)=\"onEdit(data.id)\">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>\n                <button ngbDropdownItem (click)=\"providerKey = data.name; visiblePermissions = true\">\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\n                </button>\n                <button ngbDropdownItem (click)=\"delete(data.id, data.name)\">\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal size=\"md\" [(visible)]=\"isModalVisible\">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\">\n      <div class=\"form-group\">\n        <label for=\"role-name\">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label\n        ><span> * </span>\n        <input autofocus type=\"text\" id=\"role-name\" class=\"form-control\" formControlName=\"name\" />\n      </div>\n\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input type=\"checkbox\" id=\"role-is-default\" class=\"custom-control-input\" formControlName=\"isDefault\" />\n        <label class=\"custom-control-label\" for=\"role-is-default\">{{\n          'AbpIdentity::DisplayName:IsDefault' | abpLocalization\n        }}</label>\n      </div>\n\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input type=\"checkbox\" id=\"role-is-public\" class=\"custom-control-input\" formControlName=\"isPublic\" />\n        <label class=\"custom-control-label\" for=\"role-is-public\">{{\n          'AbpIdentity::DisplayName:IsPublic' | abpLocalization\n        }}</label>\n      </div>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button\n      [requestType]=\"['POST', 'PUT']\"\n      requestURLContainSearchValue=\"roles\"\n      iconClass=\"fa fa-check\"\n      (click)=\"save()\"\n      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button\n    >\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management\n  [(visible)]=\"visiblePermissions\"\n  providerName=\"Role\"\n  [providerKey]=\"providerKey\"\n></abp-permission-management>\n"
             }] }
 ];
 /** @nocollapse */
@@ -669,7 +715,11 @@ RolesComponent.propDecorators = {
 __decorate([
     Select(IdentityState.getRoles),
     __metadata("design:type", Observable)
-], RolesComponent.prototype, "roles$", void 0);
+], RolesComponent.prototype, "data$", void 0);
+__decorate([
+    Select(IdentityState.getRolesTotalCount),
+    __metadata("design:type", Observable)
+], RolesComponent.prototype, "totalCount$", void 0);
 
 /**
  * @fileoverview added by tsickle
@@ -688,7 +738,7 @@ class RoleResolver {
     resolve() {
         /** @type {?} */
         const roles = this.store.selectSnapshot(IdentityState.getRoles);
-        return roles && roles.length ? null : this.store.dispatch(new IdentityGetRoles());
+        return roles && roles.length ? null : this.store.dispatch(new GetRoles());
     }
 }
 RoleResolver.decorators = [
@@ -718,7 +768,6 @@ class UsersComponent {
             sorting: 'userName',
         };
         this.loading = false;
-        this.search$ = new Subject();
         this.trackByFn = (/**
          * @param {?} index
          * @param {?} item
@@ -736,17 +785,12 @@ class UsersComponent {
         () => (/** @type {?} */ (((/** @type {?} */ (this.form.get('roleNames')))).controls))), []);
     }
     /**
+     * @param {?} value
      * @return {?}
      */
-    ngOnInit() {
-        this.search$.pipe(debounceTime(300)).subscribe((/**
-         * @param {?} value
-         * @return {?}
-         */
-        value => {
-            this.pageQuery.filter = value;
-            this.get();
-        }));
+    onSearch(value) {
+        this.pageQuery.filter = value;
+        this.get();
     }
     /**
      * @return {?}
@@ -754,15 +798,6 @@ class UsersComponent {
     buildForm() {
         this.roles = this.store.selectSnapshot(IdentityState.getRoles);
         this.form = this.fb.group({
-            password: [
-                '',
-                [
-                    Validators.required,
-                    Validators.maxLength(32),
-                    Validators.minLength(6),
-                    validatePassword(['small', 'capital', 'number', 'special']),
-                ],
-            ],
             userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
             email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
             name: [this.selected.name || '', [Validators.maxLength(64)]],
@@ -785,6 +820,9 @@ class UsersComponent {
                     userRole => userRole.id === role.id))))],
             })))),
         });
+        if (!this.selected.userName) {
+            this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
+        }
     }
     /**
      * @return {?}
@@ -806,16 +844,12 @@ class UsersComponent {
      * @return {?}
      */
     onEdit(id) {
-        combineLatest([this.store.dispatch(new IdentityGetUserById(id)), this.store.dispatch(new IdentityGetUserRoles(id))])
-            .pipe(filter((/**
-         * @param {?} __0
+        this.store
+            .dispatch(new GetUserById(id))
+            .pipe(switchMap((/**
          * @return {?}
          */
-        ([res1, res2]) => res1 && res2)), map((/**
-         * @param {?} __0
-         * @return {?}
-         */
-        ([state, _]) => state)), pluck('IdentityState'), take(1))
+        () => this.store.dispatch(new GetUserRoles(id)))), pluck('IdentityState'), take(1))
             .subscribe((/**
          * @param {?} state
          * @return {?}
@@ -848,8 +882,8 @@ class UsersComponent {
         role => Object.keys(role)[0]))), []);
         this.store
             .dispatch(this.selected.id
-            ? new IdentityUpdateUser(Object.assign({}, this.form.value, { id: this.selected.id, roleNames: mappedRoleNames }))
-            : new IdentityAddUser(Object.assign({}, this.form.value, { roleNames: mappedRoleNames })))
+            ? new UpdateUser(Object.assign({}, this.form.value, { id: this.selected.id, roleNames: mappedRoleNames }))
+            : new CreateUser(Object.assign({}, this.form.value, { roleNames: mappedRoleNames })))
             .subscribe((/**
          * @return {?}
          */
@@ -873,7 +907,7 @@ class UsersComponent {
          */
         (status) => {
             if (status === "confirm" /* confirm */) {
-                this.store.dispatch(new IdentityDeleteUser(id));
+                this.store.dispatch(new DeleteUser(id));
             }
         }));
     }
@@ -891,16 +925,19 @@ class UsersComponent {
      */
     get() {
         this.loading = true;
-        this.store.dispatch(new IdentityGetUsers(this.pageQuery)).subscribe((/**
+        this.store
+            .dispatch(new GetUsers(this.pageQuery))
+            .pipe(finalize((/**
          * @return {?}
          */
-        () => (this.loading = false)));
+        () => (this.loading = false))))
+            .subscribe();
     }
 }
 UsersComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-users',
-                template: "<div id=\"identity-roles-wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button\n          [abpPermission]=\"'AbpIdentity.Users.Create'\"\n          id=\"create-role\"\n          class=\"btn btn-primary\"\n          type=\"button\"\n          (click)=\"onAdd()\"\n        >\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          placeholder=\"Search\"\n          (input)=\"search$.next($event.target.value)\"\n      /></label>\n    </div>\n    <p-table\n      [value]=\"data$ | async\"\n      [lazy]=\"true\"\n      [lazyLoadOnInit]=\"false\"\n      [paginator]=\"true\"\n      [rows]=\"10\"\n      [totalRecords]=\"totalCount$ | async\"\n      [loading]=\"loading\"\n      (onLazyLoad)=\"onPageChange($event)\"\n    >\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::UserName' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button ngbDropdownItem (click)=\"onEdit(data.id)\">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>\n                <button ngbDropdownItem (click)=\"providerKey = data.id; visiblePermissions = true\">\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\n                </button>\n                <button ngbDropdownItem (click)=\"delete(data.id, data.userName)\">\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.userName }}</td>\n          <td>{{ data.email }}</td>\n          <td>{{ data.phoneNumber }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\" *ngIf=\"isModalVisible\">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 65vh;\">\n      <form [formGroup]=\"form\">\n        <ngb-tabset>\n          <ngb-tab [title]=\"'AbpIdentity::UserInformations' | abpLocalization\">\n            <ng-template ngbTabContent>\n              <div class=\"mt-2\">\n                <div class=\"form-group\">\n                  <label for=\"user-name\">{{ 'AbpIdentity::UserName' | abpLocalization }}</label\n                  ><span> * </span>\n                  <input type=\"text\" id=\"user-name\" class=\"form-control\" formControlName=\"userName\" />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>\n                  <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>\n                  <input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"password\">{{ 'AbpIdentity::Password' | abpLocalization }}</label\n                  ><span> * </span>\n                  <input\n                    type=\"password\"\n                    id=\"password\"\n                    autocomplete=\"new-password\"\n                    class=\"form-control\"\n                    formControlName=\"password\"\n                  />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"email\">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label\n                  ><span> * </span>\n                  <input type=\"text\" id=\"email\" class=\"form-control\" formControlName=\"email\" />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"phone-number\">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>\n                  <input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n                </div>\n\n                <div class=\"custom-checkbox custom-control mb-2\">\n                  <input\n                    type=\"checkbox\"\n                    id=\"lockout-checkbox\"\n                    class=\"custom-control-input\"\n                    formControlName=\"lockoutEnabled\"\n                  />\n                  <label class=\"custom-control-label\" for=\"lockout-checkbox\">{{\n                    'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization\n                  }}</label>\n                </div>\n\n                <div class=\"custom-checkbox custom-control mb-2\">\n                  <input\n                    type=\"checkbox\"\n                    id=\"two-factor-checkbox\"\n                    class=\"custom-control-input\"\n                    formControlName=\"twoFactorEnabled\"\n                  />\n                  <label class=\"custom-control-label\" for=\"two-factor-checkbox\">{{\n                    'AbpIdentity::DisplayName:TwoFactorEnabled' | abpLocalization\n                  }}</label>\n                </div>\n              </div>\n            </ng-template>\n          </ngb-tab>\n          <ngb-tab [title]=\"'AbpIdentity::Roles' | abpLocalization\">\n            <ng-template ngbTabContent>\n              <div class=\"mt-2\">\n                <div\n                  *ngFor=\"let roleGroup of roleGroups; let i = index; trackBy: trackByFn\"\n                  class=\"custom-checkbox custom-control mb-2\"\n                >\n                  <input\n                    type=\"checkbox\"\n                    name=\"Roles[0].IsAssigned\"\n                    value=\"true\"\n                    class=\"custom-control-input\"\n                    [attr.id]=\"'roles-' + i\"\n                    [formControl]=\"roleGroup.controls[roles[i].name]\"\n                  />\n                  <label class=\"custom-control-label\" [attr.for]=\"'roles-' + i\">{{ roles[i].name }}</label>\n                </div>\n              </div>\n            </ng-template>\n          </ngb-tab>\n        </ngb-tabset>\n      </form>\n    </perfect-scrollbar>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"save()\">\n      <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n    </button>\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management\n  [(visible)]=\"visiblePermissions\"\n  providerName=\"User\"\n  [providerKey]=\"providerKey\"\n></abp-permission-management>\n"
+                template: "<div id=\"identity-roles-wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button\n          [abpPermission]=\"'AbpIdentity.Users.Create'\"\n          id=\"create-role\"\n          class=\"btn btn-primary\"\n          type=\"button\"\n          (click)=\"onAdd()\"\n        >\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          [placeholder]=\"'AbpUi::PagerSearch' | abpLocalization\"\n          (input.debounce)=\"onSearch($event.target.value)\"\n      /></label>\n    </div>\n    <p-table\n      [value]=\"data$ | async\"\n      [lazy]=\"true\"\n      [lazyLoadOnInit]=\"false\"\n      [paginator]=\"true\"\n      [rows]=\"10\"\n      [totalRecords]=\"totalCount$ | async\"\n      [loading]=\"loading\"\n      (onLazyLoad)=\"onPageChange($event)\"\n    >\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::UserName' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</th>\n          <th>{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button ngbDropdownItem (click)=\"onEdit(data.id)\">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>\n                <button ngbDropdownItem (click)=\"providerKey = data.id; visiblePermissions = true\">\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\n                </button>\n                <button ngbDropdownItem (click)=\"delete(data.id, data.userName)\">\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.userName }}</td>\n          <td>{{ data.email }}</td>\n          <td>{{ data.phoneNumber }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n      <form [formGroup]=\"form\" validateOnSubmit>\n        <ngb-tabset>\n          <ngb-tab [title]=\"'AbpIdentity::UserInformations' | abpLocalization\">\n            <ng-template ngbTabContent>\n              <div class=\"mt-2 fade-in-top\">\n                <div class=\"form-group\">\n                  <label for=\"user-name\">{{ 'AbpIdentity::UserName' | abpLocalization }}</label\n                  ><span> * </span>\n                  <input type=\"text\" id=\"user-name\" class=\"form-control\" formControlName=\"userName\" autofocus />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>\n                  <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>\n                  <input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n                </div>\n\n                <div *ngIf=\"!selected.userName\" class=\"form-group\">\n                  <label for=\"password\">{{ 'AbpIdentity::Password' | abpLocalization }}</label\n                  ><span> * </span>\n                  <input\n                    type=\"password\"\n                    id=\"password\"\n                    autocomplete=\"new-password\"\n                    class=\"form-control\"\n                    formControlName=\"password\"\n                  />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"email\">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label\n                  ><span> * </span>\n                  <input type=\"text\" id=\"email\" class=\"form-control\" formControlName=\"email\" />\n                </div>\n\n                <div class=\"form-group\">\n                  <label for=\"phone-number\">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>\n                  <input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n                </div>\n\n                <div class=\"custom-checkbox custom-control mb-2\">\n                  <input\n                    type=\"checkbox\"\n                    id=\"lockout-checkbox\"\n                    class=\"custom-control-input\"\n                    formControlName=\"lockoutEnabled\"\n                  />\n                  <label class=\"custom-control-label\" for=\"lockout-checkbox\">{{\n                    'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization\n                  }}</label>\n                </div>\n\n                <div class=\"custom-checkbox custom-control mb-2\">\n                  <input\n                    type=\"checkbox\"\n                    id=\"two-factor-checkbox\"\n                    class=\"custom-control-input\"\n                    formControlName=\"twoFactorEnabled\"\n                  />\n                  <label class=\"custom-control-label\" for=\"two-factor-checkbox\">{{\n                    'AbpIdentity::DisplayName:TwoFactorEnabled' | abpLocalization\n                  }}</label>\n                </div>\n              </div>\n            </ng-template>\n          </ngb-tab>\n          <ngb-tab [title]=\"'AbpIdentity::Roles' | abpLocalization\">\n            <ng-template ngbTabContent>\n              <div class=\"mt-2 fade-in-top\">\n                <div\n                  *ngFor=\"let roleGroup of roleGroups; let i = index; trackBy: trackByFn\"\n                  class=\"custom-checkbox custom-control mb-2\"\n                >\n                  <input\n                    type=\"checkbox\"\n                    name=\"Roles[0].IsAssigned\"\n                    value=\"true\"\n                    class=\"custom-control-input\"\n                    [attr.id]=\"'roles-' + i\"\n                    [formControl]=\"roleGroup.controls[roles[i].name]\"\n                  />\n                  <label class=\"custom-control-label\" [attr.for]=\"'roles-' + i\">{{ roles[i].name }}</label>\n                </div>\n              </div>\n            </ng-template>\n          </ngb-tab>\n        </ngb-tabset>\n      </form>\n    </perfect-scrollbar>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button\n      [requestType]=\"['POST', 'PUT']\"\n      requestURLContainSearchValue=\"users\"\n      iconClass=\"fa fa-check\"\n      (click)=\"save()\"\n      [disabled]=\"form.invalid\"\n      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button\n    >\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management\n  [(visible)]=\"visiblePermissions\"\n  providerName=\"User\"\n  [providerKey]=\"providerKey\"\n></abp-permission-management>\n"
             }] }
 ];
 /** @nocollapse */
@@ -938,7 +975,7 @@ class UserResolver {
     resolve() {
         /** @type {?} */
         const users = this.store.selectSnapshot(IdentityState.getUsers);
-        return users && users.length ? null : this.store.dispatch(new IdentityGetUsers());
+        return users && users.length ? null : this.store.dispatch(new GetUsers());
     }
 }
 UserResolver.decorators = [
@@ -1019,20 +1056,21 @@ IdentityModule.decorators = [
 /** @type {?} */
 const IDENTITY_ROUTES = (/** @type {?} */ ([
     {
-        name: 'Administration',
+        name: 'AbpUiNavigation::Menu:Administration',
         path: '',
         order: 1,
         wrapper: true,
     },
     {
-        name: 'Identity',
+        name: 'AbpIdentity::Menu:IdentityManagement',
         path: 'identity',
         order: 1,
-        parentName: 'Administration',
+        parentName: 'AbpUiNavigation::Menu:Administration',
         layout: "application" /* application */,
+        iconClass: 'fa fa-id-card-o',
         children: [
-            { path: 'roles', name: 'Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
-            { path: 'users', name: 'Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
+            { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
+            { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
         ],
     },
 ]));
@@ -1075,5 +1113,5 @@ var Identity;
     Identity.UserSaveRequest = UserSaveRequest;
 })(Identity || (Identity = {}));
 
-export { IDENTITY_ROUTES, IdentityAddRole, IdentityAddUser, IdentityDeleteRole, IdentityDeleteUser, IdentityGetRoleById, IdentityGetRoles, IdentityGetUserById, IdentityGetUserRoles, IdentityGetUsers, IdentityModule, IdentityService, IdentityState, IdentityUpdateRole, IdentityUpdateUser, RoleResolver, RolesComponent, UsersComponent as ɵb, IdentityRoutingModule as ɵc, UserResolver as ɵd };
+export { CreateRole, CreateUser, DeleteRole, DeleteUser, GetRoleById, GetRoles, GetUserById, GetUserRoles, GetUsers, IDENTITY_ROUTES, IdentityModule, IdentityService, IdentityState, RoleResolver, RolesComponent, UpdateRole, UpdateUser, UsersComponent as ɵb, IdentityRoutingModule as ɵc, UserResolver as ɵd };
 //# sourceMappingURL=abp-ng.identity.js.map

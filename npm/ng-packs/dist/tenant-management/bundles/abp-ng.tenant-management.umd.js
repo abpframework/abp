@@ -45,39 +45,40 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var TenantManagementGet = /** @class */ (function () {
-        function TenantManagementGet() {
-        }
-        TenantManagementGet.type = '[TenantManagement] Get';
-        return TenantManagementGet;
-    }());
-    var TenantManagementGetById = /** @class */ (function () {
-        function TenantManagementGetById(payload) {
+    var GetTenants = /** @class */ (function () {
+        function GetTenants(payload) {
             this.payload = payload;
         }
-        TenantManagementGetById.type = '[TenantManagement] Get By Id';
-        return TenantManagementGetById;
+        GetTenants.type = '[TenantManagement] Get Tenant';
+        return GetTenants;
     }());
-    var TenantManagementAdd = /** @class */ (function () {
-        function TenantManagementAdd(payload) {
+    var GetTenantById = /** @class */ (function () {
+        function GetTenantById(payload) {
             this.payload = payload;
         }
-        TenantManagementAdd.type = '[TenantManagement] Add';
-        return TenantManagementAdd;
+        GetTenantById.type = '[TenantManagement] Get Tenant By Id';
+        return GetTenantById;
     }());
-    var TenantManagementUpdate = /** @class */ (function () {
-        function TenantManagementUpdate(payload) {
+    var CreateTenant = /** @class */ (function () {
+        function CreateTenant(payload) {
             this.payload = payload;
         }
-        TenantManagementUpdate.type = '[TenantManagement] Update';
-        return TenantManagementUpdate;
+        CreateTenant.type = '[TenantManagement] Create Tenant';
+        return CreateTenant;
     }());
-    var TenantManagementDelete = /** @class */ (function () {
-        function TenantManagementDelete(payload) {
+    var UpdateTenant = /** @class */ (function () {
+        function UpdateTenant(payload) {
             this.payload = payload;
         }
-        TenantManagementDelete.type = '[TenantManagement] Delete';
-        return TenantManagementDelete;
+        UpdateTenant.type = '[TenantManagement] Update Tenant';
+        return UpdateTenant;
+    }());
+    var DeleteTenant = /** @class */ (function () {
+        function DeleteTenant(payload) {
+            this.payload = payload;
+        }
+        DeleteTenant.type = '[TenantManagement] Delete Tenant';
+        return DeleteTenant;
     }());
 
     /**
@@ -89,16 +90,20 @@
             this.rest = rest;
         }
         /**
+         * @param {?=} params
          * @return {?}
          */
-        TenantManagementService.prototype.get = /**
+        TenantManagementService.prototype.getTenant = /**
+         * @param {?=} params
          * @return {?}
          */
-        function () {
+        function (params) {
+            if (params === void 0) { params = (/** @type {?} */ ({})); }
             /** @type {?} */
             var request = {
                 method: 'GET',
                 url: '/api/multi-tenancy/tenants',
+                params: params,
             };
             return this.rest.request(request);
         };
@@ -106,7 +111,7 @@
          * @param {?} id
          * @return {?}
          */
-        TenantManagementService.prototype.getById = /**
+        TenantManagementService.prototype.getTenantById = /**
          * @param {?} id
          * @return {?}
          */
@@ -122,7 +127,7 @@
          * @param {?} id
          * @return {?}
          */
-        TenantManagementService.prototype.delete = /**
+        TenantManagementService.prototype.deleteTenant = /**
          * @param {?} id
          * @return {?}
          */
@@ -138,7 +143,7 @@
          * @param {?} body
          * @return {?}
          */
-        TenantManagementService.prototype.add = /**
+        TenantManagementService.prototype.createTenant = /**
          * @param {?} body
          * @return {?}
          */
@@ -155,7 +160,7 @@
          * @param {?} body
          * @return {?}
          */
-        TenantManagementService.prototype.update = /**
+        TenantManagementService.prototype.updateTenant = /**
          * @param {?} body
          * @return {?}
          */
@@ -181,7 +186,7 @@
          */
         function (id) {
             /** @type {?} */
-            var url = "/api/multi-tenancy/tenants/" + id + "/defaultConnectionString";
+            var url = "/api/multi-tenancy/tenants/" + id + "/default-connection-string";
             /** @type {?} */
             var request = {
                 method: 'GET',
@@ -200,7 +205,7 @@
          */
         function (payload) {
             /** @type {?} */
-            var url = "/api/multi-tenancy/tenants/" + payload.id + "/defaultConnectionString";
+            var url = "/api/multi-tenancy/tenants/" + payload.id + "/default-connection-string";
             /** @type {?} */
             var request = {
                 method: 'PUT',
@@ -219,7 +224,7 @@
          */
         function (id) {
             /** @type {?} */
-            var url = "/api/multi-tenancy/tenant/" + id + "/defaultConnectionString";
+            var url = "/api/multi-tenancy/tenant/" + id + "/default-connection-string";
             /** @type {?} */
             var request = {
                 method: 'DELETE',
@@ -264,13 +269,28 @@
          * @param {?} __0
          * @return {?}
          */
-        TenantManagementState.prototype.get = /**
+        TenantManagementState.getTenantsTotalCount = /**
          * @param {?} __0
          * @return {?}
          */
         function (_a) {
+            var result = _a.result;
+            return result.totalCount;
+        };
+        /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        TenantManagementState.prototype.get = /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        function (_a, _b) {
             var patchState = _a.patchState;
-            return this.tenantManagementService.get().pipe(operators.tap((/**
+            var payload = _b.payload;
+            return this.tenantManagementService.getTenant(payload).pipe(operators.tap((/**
              * @param {?} result
              * @return {?}
              */
@@ -293,7 +313,7 @@
         function (_a, _b) {
             var patchState = _a.patchState;
             var payload = _b.payload;
-            return this.tenantManagementService.getById(payload).pipe(operators.tap((/**
+            return this.tenantManagementService.getTenantById(payload).pipe(operators.tap((/**
              * @param {?} selectedItem
              * @return {?}
              */
@@ -316,10 +336,10 @@
         function (_a, _b) {
             var dispatch = _a.dispatch;
             var payload = _b.payload;
-            return this.tenantManagementService.delete(payload).pipe(operators.switchMap((/**
+            return this.tenantManagementService.deleteTenant(payload).pipe(operators.switchMap((/**
              * @return {?}
              */
-            function () { return dispatch(new TenantManagementGet()); })));
+            function () { return dispatch(new GetTenants()); })));
         };
         /**
          * @param {?} __0
@@ -334,10 +354,10 @@
         function (_a, _b) {
             var dispatch = _a.dispatch;
             var payload = _b.payload;
-            return this.tenantManagementService.add(payload).pipe(operators.switchMap((/**
+            return this.tenantManagementService.createTenant(payload).pipe(operators.switchMap((/**
              * @return {?}
              */
-            function () { return dispatch(new TenantManagementGet()); })));
+            function () { return dispatch(new GetTenants()); })));
         };
         /**
          * @param {?} __0
@@ -353,42 +373,42 @@
             var _this = this;
             var dispatch = _a.dispatch, getState = _a.getState;
             var payload = _b.payload;
-            return dispatch(new TenantManagementGetById(payload.id)).pipe(operators.switchMap((/**
+            return dispatch(new GetTenantById(payload.id)).pipe(operators.switchMap((/**
              * @return {?}
              */
-            function () { return _this.tenantManagementService.update(__assign({}, getState().selectedItem, payload)); })), operators.switchMap((/**
+            function () { return _this.tenantManagementService.updateTenant(__assign({}, getState().selectedItem, payload)); })), operators.switchMap((/**
              * @return {?}
              */
-            function () { return dispatch(new TenantManagementGet()); })));
+            function () { return dispatch(new GetTenants()); })));
         };
         __decorate([
-            store.Action(TenantManagementGet),
+            store.Action(GetTenants),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object]),
+            __metadata("design:paramtypes", [Object, GetTenants]),
             __metadata("design:returntype", void 0)
         ], TenantManagementState.prototype, "get", null);
         __decorate([
-            store.Action(TenantManagementGetById),
+            store.Action(GetTenantById),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, TenantManagementGetById]),
+            __metadata("design:paramtypes", [Object, GetTenantById]),
             __metadata("design:returntype", void 0)
         ], TenantManagementState.prototype, "getById", null);
         __decorate([
-            store.Action(TenantManagementDelete),
+            store.Action(DeleteTenant),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, TenantManagementDelete]),
+            __metadata("design:paramtypes", [Object, DeleteTenant]),
             __metadata("design:returntype", void 0)
         ], TenantManagementState.prototype, "delete", null);
         __decorate([
-            store.Action(TenantManagementAdd),
+            store.Action(CreateTenant),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, TenantManagementAdd]),
+            __metadata("design:paramtypes", [Object, CreateTenant]),
             __metadata("design:returntype", void 0)
         ], TenantManagementState.prototype, "add", null);
         __decorate([
-            store.Action(TenantManagementUpdate),
+            store.Action(UpdateTenant),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, TenantManagementUpdate]),
+            __metadata("design:paramtypes", [Object, UpdateTenant]),
             __metadata("design:returntype", void 0)
         ], TenantManagementState.prototype, "update", null);
         __decorate([
@@ -397,6 +417,12 @@
             __metadata("design:paramtypes", [Object]),
             __metadata("design:returntype", Array)
         ], TenantManagementState, "get", null);
+        __decorate([
+            store.Selector(),
+            __metadata("design:type", Function),
+            __metadata("design:paramtypes", [Object]),
+            __metadata("design:returntype", Number)
+        ], TenantManagementState, "getTenantsTotalCount", null);
         TenantManagementState = __decorate([
             store.State({
                 name: 'TenantManagementState',
@@ -418,6 +444,10 @@
             this.fb = fb;
             this.store = store;
             this.selectedModalContent = (/** @type {?} */ ({}));
+            this.pageQuery = {
+                sorting: 'name',
+            };
+            this.loading = false;
         }
         Object.defineProperty(TenantsComponent.prototype, "useSharedDatabase", {
             get: /**
@@ -439,6 +469,18 @@
             enumerable: true,
             configurable: true
         });
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        TenantsComponent.prototype.onSearch = /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this.pageQuery.filter = value;
+            this.get();
+        };
         /**
          * @private
          * @return {?}
@@ -497,7 +539,7 @@
         function (id) {
             var _this = this;
             this.store
-                .dispatch(new TenantManagementGetById(id))
+                .dispatch(new GetTenantById(id))
                 .pipe(operators.pluck('TenantManagementState', 'selectedItem'), operators.switchMap((/**
              * @param {?} selected
              * @return {?}
@@ -516,17 +558,6 @@
                 _this.createDefaultConnectionStringForm();
                 _this.openModal('AbpTenantManagement::ConnectionStrings', _this.connectionStringModalTemplate, 'saveConnStr');
             }));
-        };
-        /**
-         * @param {?} id
-         * @return {?}
-         */
-        TenantsComponent.prototype.onManageFeatures = /**
-         * @param {?} id
-         * @return {?}
-         */
-        function (id) {
-            this.openModal('AbpTenantManagement::Features', this.featuresModalTemplate, 'saveFeatures');
         };
         /**
          * @return {?}
@@ -550,7 +581,7 @@
         function (id) {
             var _this = this;
             this.store
-                .dispatch(new TenantManagementGetById(id))
+                .dispatch(new GetTenantById(id))
                 .pipe(operators.pluck('TenantManagementState', 'selectedItem'))
                 .subscribe((/**
              * @param {?} selected
@@ -620,8 +651,8 @@
                 return;
             this.store
                 .dispatch(this.selected.id
-                ? new TenantManagementUpdate(__assign({}, this.tenantForm.value, { id: this.selected.id }))
-                : new TenantManagementAdd(this.tenantForm.value))
+                ? new UpdateTenant(__assign({}, this.tenantForm.value, { id: this.selected.id }))
+                : new CreateTenant(this.tenantForm.value))
                 .subscribe((/**
              * @return {?}
              */
@@ -651,14 +682,44 @@
              */
             function (status) {
                 if (status === "confirm" /* confirm */) {
-                    _this.store.dispatch(new TenantManagementDelete(id));
+                    _this.store.dispatch(new DeleteTenant(id));
                 }
             }));
+        };
+        /**
+         * @param {?} data
+         * @return {?}
+         */
+        TenantsComponent.prototype.onPageChange = /**
+         * @param {?} data
+         * @return {?}
+         */
+        function (data) {
+            this.pageQuery.skipCount = data.first;
+            this.pageQuery.maxResultCount = data.rows;
+            this.get();
+        };
+        /**
+         * @return {?}
+         */
+        TenantsComponent.prototype.get = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            this.loading = true;
+            this.store
+                .dispatch(new GetTenants(this.pageQuery))
+                .pipe(operators.finalize((/**
+             * @return {?}
+             */
+            function () { return (_this.loading = false); })))
+                .subscribe();
         };
         TenantsComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-tenants',
-                        template: "<div id=\"wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">\n          {{ 'AbpTenantManagement::Tenants' | abpLocalization }}\n        </h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button\n          [abpPermission]=\"'AbpTenantManagement.Tenants.Create'\"\n          id=\"create-tenants\"\n          class=\"btn btn-primary\"\n          type=\"button\"\n          (click)=\"onAddTenant()\"\n        >\n          <i class=\"fa fa-plus mr-1\"></i>\n          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          placeholder=\"Search\"\n          (input)=\"dt.filterGlobal($event.target.value, 'contains')\"\n      /></label>\n    </div>\n    <p-table #dt [value]=\"datas$ | async\" [globalFilterFields]=\"['name']\" [paginator]=\"true\" [rows]=\"10\">\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Update'\"\n                  ngbDropdownItem\n                  (click)=\"onEditTenant(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Edit' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageConnectionStrings'\"\n                  ngbDropdownItem\n                  (click)=\"onEditConnectionString(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageFeatures'\"\n                  ngbDropdownItem\n                  (click)=\"onManageFeatures(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Features' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Delete'\"\n                  ngbDropdownItem\n                  (click)=\"delete(data.id, data.name)\"\n                >\n                  {{ 'AbpTenantManagement::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\" *ngIf=\"isModalVisible\">\n  <ng-template #abpHeader>\n    <h3>{{ selectedModalContent.title | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <ng-container *ngTemplateOutlet=\"selectedModalContent?.template\"></ng-container>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n    </button>\n    <button class=\"btn btn-primary\" type=\"button\" (click)=\"save()\">\n      {{ 'AbpTenantManagement::Save' | abpLocalization }}\n    </button>\n  </ng-template>\n</abp-modal>\n\n<ng-template #tenantModalTemplate>\n  <form [formGroup]=\"tenantForm\">\n    <div class=\"mt-2\">\n      <div class=\"form-group\">\n        <label for=\"name\">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>\n        <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n      </div>\n    </div>\n  </form>\n</ng-template>\n\n<ng-template #connectionStringModalTemplate>\n  <form [formGroup]=\"defaultConnectionStringForm\">\n    <div class=\"mt-2\">\n      <div class=\"form-group\">\n        <div class=\"form-check\">\n          <input id=\"useSharedDatabase\" type=\"checkbox\" class=\"form-check-input\" formControlName=\"useSharedDatabase\" />\n          <label for=\"useSharedDatabase\" class=\"font-check-label\">{{\n            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization\n          }}</label>\n        </div>\n      </div>\n      <div class=\"form-group\" *ngIf=\"!useSharedDatabase\">\n        <label for=\"defaultConnectionString\">{{\n          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization\n        }}</label>\n        <input\n          type=\"text\"\n          id=\"defaultConnectionString\"\n          class=\"form-control\"\n          formControlName=\"defaultConnectionString\"\n        />\n      </div>\n    </div>\n  </form>\n</ng-template>\n\n<ng-template #featuresModalTemplate>\n  Manage Features\n</ng-template>\n"
+                        template: "<div id=\"wrapper\" class=\"card\">\n  <div class=\"card-header\">\n    <div class=\"row\">\n      <div class=\"col col-md-6\">\n        <h5 class=\"card-title\">\n          {{ 'AbpTenantManagement::Tenants' | abpLocalization }}\n        </h5>\n      </div>\n      <div class=\"text-right col col-md-6\">\n        <button\n          [abpPermission]=\"'AbpTenantManagement.Tenants.Create'\"\n          id=\"create-tenants\"\n          class=\"btn btn-primary\"\n          type=\"button\"\n          (click)=\"onAddTenant()\"\n        >\n          <i class=\"fa fa-plus mr-1\"></i>\n          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>\n        </button>\n      </div>\n    </div>\n  </div>\n  <div class=\"card-body\">\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\n      <label\n        ><input\n          type=\"search\"\n          class=\"form-control form-control-sm\"\n          [placeholder]=\"'AbpUi::PagerSearch' | abpLocalization\"\n          (input.debounce)=\"onSearch($event.target.value)\"\n      /></label>\n    </div>\n    <p-table\n      [value]=\"data$ | async\"\n      [lazy]=\"true\"\n      [lazyLoadOnInit]=\"false\"\n      [paginator]=\"true\"\n      [rows]=\"10\"\n      [totalRecords]=\"totalCount$ | async\"\n      [loading]=\"loading\"\n      (onLazyLoad)=\"onPageChange($event)\"\n    >\n      <ng-template pTemplate=\"header\">\n        <tr>\n          <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>\n          <th>{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate=\"body\" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown class=\"d-inline-block\">\n              <button\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                ngbDropdownToggle\n              >\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpTenantManagement::Actions' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Update'\"\n                  ngbDropdownItem\n                  (click)=\"onEditTenant(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::Edit' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.ManageConnectionStrings'\"\n                  ngbDropdownItem\n                  (click)=\"onEditConnectionString(data.id)\"\n                >\n                  {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]=\"'AbpTenantManagement.Tenants.Delete'\"\n                  ngbDropdownItem\n                  (click)=\"delete(data.id, data.name)\"\n                >\n                  {{ 'AbpTenantManagement::Delete' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\">\n  <ng-template #abpHeader>\n    <h3>{{ selectedModalContent.title | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <ng-container *ngTemplateOutlet=\"selectedModalContent?.template\"></ng-container>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n    </button>\n    <abp-button\n      [requestType]=\"['POST', 'PUT', 'DELETE']\"\n      requestURLContainSearchValue=\"multi-tenancy\"\n      iconClass=\"fa fa-check\"\n      (click)=\"save()\"\n      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button\n    >\n  </ng-template>\n</abp-modal>\n\n<ng-template #tenantModalTemplate>\n  <form [formGroup]=\"tenantForm\" (ngSubmit)=\"save()\">\n    <div class=\"mt-2\">\n      <div class=\"form-group\">\n        <label for=\"name\">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>\n        <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" autofocus />\n      </div>\n    </div>\n  </form>\n</ng-template>\n\n<ng-template #connectionStringModalTemplate>\n  <form [formGroup]=\"defaultConnectionStringForm\" (ngSubmit)=\"save()\">\n    <div class=\"mt-2\">\n      <div class=\"form-group\">\n        <div class=\"form-check\">\n          <input\n            id=\"useSharedDatabase\"\n            type=\"checkbox\"\n            class=\"form-check-input\"\n            formControlName=\"useSharedDatabase\"\n            autofocus\n          />\n          <label for=\"useSharedDatabase\" class=\"font-check-label\">{{\n            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization\n          }}</label>\n        </div>\n      </div>\n      <div class=\"form-group\" *ngIf=\"!useSharedDatabase\">\n        <label for=\"defaultConnectionString\">{{\n          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization\n        }}</label>\n        <input\n          type=\"text\"\n          id=\"defaultConnectionString\"\n          class=\"form-control\"\n          formControlName=\"defaultConnectionString\"\n        />\n      </div>\n    </div>\n  </form>\n</ng-template>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -670,13 +731,16 @@
         ]; };
         TenantsComponent.propDecorators = {
             tenantModalTemplate: [{ type: core.ViewChild, args: ['tenantModalTemplate', { static: false },] }],
-            connectionStringModalTemplate: [{ type: core.ViewChild, args: ['connectionStringModalTemplate', { static: false },] }],
-            featuresModalTemplate: [{ type: core.ViewChild, args: ['featuresModalTemplate', { static: false },] }]
+            connectionStringModalTemplate: [{ type: core.ViewChild, args: ['connectionStringModalTemplate', { static: false },] }]
         };
         __decorate([
             store.Select(TenantManagementState.get),
             __metadata("design:type", rxjs.Observable)
-        ], TenantsComponent.prototype, "datas$", void 0);
+        ], TenantsComponent.prototype, "data$", void 0);
+        __decorate([
+            store.Select(TenantManagementState.getTenantsTotalCount),
+            __metadata("design:type", rxjs.Observable)
+        ], TenantsComponent.prototype, "totalCount$", void 0);
         return TenantsComponent;
     }());
 
@@ -697,9 +761,7 @@
         function () {
             /** @type {?} */
             var data = this.store.selectSnapshot(TenantManagementState.get);
-            return data && data.length
-                ? null
-                : this.store.dispatch(new TenantManagementGet());
+            return data && data.length ? null : this.store.dispatch(new GetTenants());
         };
         TenantsResolver.decorators = [
             { type: core.Injectable }
@@ -770,14 +832,15 @@
     /** @type {?} */
     var TENANT_MANAGEMENT_ROUTES = (/** @type {?} */ ([
         {
-            name: 'Tenant Management',
+            name: 'AbpTenantManagement::Menu:TenantManagement',
             path: 'tenant-management',
-            parentName: 'Administration',
+            parentName: 'AbpUiNavigation::Menu:Administration',
             layout: "application" /* application */,
+            iconClass: 'fa fa-users',
             children: [
                 {
                     path: 'tenants',
-                    name: 'Tenants',
+                    name: 'AbpTenantManagement::Tenants',
                     order: 1,
                     requiredPolicy: 'AbpTenantManagement.Tenants',
                 },
@@ -818,25 +881,25 @@
         TenantManagement.DefaultConnectionStringRequest = DefaultConnectionStringRequest;
     })(TenantManagement || (TenantManagement = {}));
 
+    exports.CreateTenant = CreateTenant;
+    exports.DeleteTenant = DeleteTenant;
+    exports.GetTenantById = GetTenantById;
+    exports.GetTenants = GetTenants;
     exports.TENANT_MANAGEMENT_ROUTES = TENANT_MANAGEMENT_ROUTES;
-    exports.TenantManagementAdd = TenantManagementAdd;
-    exports.TenantManagementDelete = TenantManagementDelete;
-    exports.TenantManagementGet = TenantManagementGet;
-    exports.TenantManagementGetById = TenantManagementGetById;
     exports.TenantManagementModule = TenantManagementModule;
     exports.TenantManagementService = TenantManagementService;
     exports.TenantManagementState = TenantManagementState;
-    exports.TenantManagementUpdate = TenantManagementUpdate;
     exports.TenantsComponent = TenantsComponent;
     exports.TenantsResolver = TenantsResolver;
+    exports.UpdateTenant = UpdateTenant;
     exports.ɵa = TenantsComponent;
     exports.ɵb = TenantManagementState;
     exports.ɵc = TenantManagementService;
-    exports.ɵd = TenantManagementGet;
-    exports.ɵe = TenantManagementGetById;
-    exports.ɵf = TenantManagementAdd;
-    exports.ɵg = TenantManagementUpdate;
-    exports.ɵh = TenantManagementDelete;
+    exports.ɵd = GetTenants;
+    exports.ɵe = GetTenantById;
+    exports.ɵf = CreateTenant;
+    exports.ɵg = UpdateTenant;
+    exports.ɵh = DeleteTenant;
     exports.ɵj = TenantManagementRoutingModule;
     exports.ɵk = TenantsResolver;
 
