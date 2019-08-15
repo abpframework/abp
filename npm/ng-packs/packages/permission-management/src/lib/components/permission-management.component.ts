@@ -64,6 +64,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
   selectAllTab: boolean = false;
 
+  modalBusy: boolean = false;
+
   trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
 
   get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
@@ -175,6 +177,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 
   onSubmit() {
+    this.modalBusy = true;
     const unchangedPermissions = getPermissions(
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
     );
@@ -195,9 +198,11 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
           }),
         )
         .subscribe(() => {
+          this.modalBusy = false;
           this.visible = false;
         });
     } else {
+      this.modalBusy = false;
       this.visible = false;
     }
   }
