@@ -12,7 +12,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { fromEvent, Subject, timer } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil, debounceTime } from 'rxjs/operators';
 import { Toaster } from '../../models/toaster';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
@@ -127,9 +127,18 @@ export class ModalComponent implements OnDestroy {
   }
 
   listen() {
+    fromEvent(document, 'keyup')
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(150),
+        filter((key: KeyboardEvent) => key && key.code === 'Escape' && this.closable),
+      )
+      .subscribe(_ => {
+        this.close();
+      });
+
     setTimeout(() => {
       if (!this.abpClose) return;
-
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(
           takeUntil(this.destroy$),
@@ -138,7 +147,6 @@ export class ModalComponent implements OnDestroy {
         .subscribe(() => this.close());
     }, 0);
 
-    window.location.hash = '#abp-modal';
     this.init.emit();
   }
 
@@ -167,8 +175,6 @@ export class ModalComponent implements OnDestroy {
     } else {
       this.visible = false;
     }
-
-    window.location.hash = 'body';
   }
 }
 

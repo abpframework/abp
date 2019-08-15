@@ -1,15 +1,14 @@
 <div
   *ngIf="showModal"
   (click)="close()"
-  (keyup.esc)="close()"
   id="abp-modal"
-  tabindex="-1"
   class="modal fade {{ modalClass }} d-block show"
   [style.padding-right.px]="'15'"
 >
   <div
     id="abp-modal-container"
     class="modal-dialog modal-{{ size }} fade-in-top"
+    tabindex="-1"
     [class.modal-dialog-centered]="centered"
     #abpModalContent
   >
