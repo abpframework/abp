@@ -16,8 +16,8 @@ namespace MyCompanyName.MyProjectName.MongoDB
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
-                                   "MyProjectName_" +
-                                   Guid.NewGuid().ToString("N");
+                                    "Db_" +		
+                                    Guid.NewGuid().ToString("N");
 
             Configure<DbConnectionOptions>(options =>
             {
