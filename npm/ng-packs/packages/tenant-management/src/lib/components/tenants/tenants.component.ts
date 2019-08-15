@@ -52,6 +52,8 @@ export class TenantsComponent {
 
   loading: boolean = false;
 
+  modalBusy: boolean = false;
+
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
   }
@@ -144,11 +146,13 @@ export class TenantsComponent {
   }
 
   saveConnectionString() {
+    this.modalBusy = true;
     if (this.useSharedDatabase) {
       this.tenantService
         .deleteDefaultConnectionString(this.selected.id)
         .pipe(take(1))
         .subscribe(() => {
+          this.modalBusy = false;
           this.isModalVisible = false;
         });
     } else {
@@ -156,6 +160,7 @@ export class TenantsComponent {
         .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
         .pipe(take(1))
         .subscribe(() => {
+          this.modalBusy = false;
           this.isModalVisible = false;
         });
     }
@@ -163,6 +168,7 @@ export class TenantsComponent {
 
   saveTenant() {
     if (!this.tenantForm.valid) return;
+    this.modalBusy = true;
 
     this.store
       .dispatch(
@@ -171,6 +177,7 @@ export class TenantsComponent {
           : new CreateTenant(this.tenantForm.value),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
@@ -183,6 +190,7 @@ export class TenantsComponent {
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
           this.store.dispatch(new DeleteTenant(id));
+          this.modalBusy = false;
         }
       });
   }

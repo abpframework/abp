@@ -90,7 +90,7 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible">
+<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ selectedModalContent.title | abpLocalization }}</h3>
   </ng-template>
@@ -103,13 +103,7 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
-    <abp-button
-      [requestType]="['POST', 'PUT', 'DELETE']"
-      requestURLContainSearchValue="multi-tenancy"
-      iconClass="fa fa-check"
-      (click)="save()"
-      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
-    >
+    <abp-button iconClass="fa fa-check" (click)="save()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
   </ng-template>
 </abp-modal>
 
