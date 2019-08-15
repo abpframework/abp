@@ -35,7 +35,6 @@ $projects = (
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bootstrap",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Bundling",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI",
-    "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Dashboards",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages",
     "framework/src/Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic",
