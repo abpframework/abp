@@ -7,7 +7,7 @@
         </h5>
       </div>
       <div class="text-right col col-md-6">
-        <button id="create-role" class="btn btn-primary" type="button" (click)="onAdd()">
+        <button id="create-role" class="btn btn-primary" type="button" (click)="createBook()">
           <i class="fa fa-plus mr-1"></i> <span>New book</span>
         </button>
       </div>
@@ -37,7 +37,7 @@
                 <i class="fa fa-cog mr-1"></i>Actions
               </button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem (click)="onEdit(data.id)">Edit</button>
+                <button ngbDropdownItem (click)="editBook(data.id)">Edit</button>
                 <button ngbDropdownItem (click)="delete(data.id, data.name)">
                   Delete
                 </button>
@@ -97,6 +97,9 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       Cancel
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()">Save</abp-button>
+    <button class="btn btn-primary" (click)="save()">
+      <i class="fa fa-check mr-1"></i>
+      Save
+    </button>
   </ng-template>
 </abp-modal>

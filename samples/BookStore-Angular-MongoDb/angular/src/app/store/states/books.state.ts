@@ -10,38 +10,38 @@ import { GetBooks, CreateUpdateBook, DeleteBook } from '../actions/books.actions
 })
 export class BooksState {
   @Selector()
-  static getBooks({ books }: Books.State) {
-    return books.items || [];
+  static getBooks(state: Books.State) {
+    return state.books.items || [];
   }
 
   constructor(private booksService: BooksService) {}
 
   @Action(GetBooks)
-  get({ patchState }: StateContext<Books.State>) {
+  get(ctx: StateContext<Books.State>) {
     return this.booksService.get().pipe(
-      tap(books => {
-        patchState({
-          books,
+      tap(booksResponse => {
+        ctx.patchState({
+          books: booksResponse,
         });
       }),
     );
   }
 
   @Action(CreateUpdateBook)
-  save({ dispatch }: StateContext<Books.State>, { payload, id }: CreateUpdateBook) {
+  save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
     let request;
 
-    if (id) {
-      request = this.booksService.update(payload, id);
+    if (action.id) {
+      request = this.booksService.update(action.payload, action.id);
     } else {
-      request = this.booksService.create(payload);
+      request = this.booksService.create(action.payload);
     }
 
-    return request.pipe(switchMap(() => dispatch(new GetBooks())));
+    return request.pipe(switchMap(() => ctx.dispatch(new GetBooks())));
   }
 
   @Action(DeleteBook)
-  delete({ dispatch }: StateContext<Books.State>, { id }: DeleteBook) {
-    return this.booksService.delete(id).pipe(switchMap(() => dispatch(new GetBooks())));
+  delete(ctx: StateContext<Books.State>, action: DeleteBook) {
+    return this.booksService.delete(action.id).pipe(switchMap(() => ctx.dispatch(new GetBooks())));
   }
 }

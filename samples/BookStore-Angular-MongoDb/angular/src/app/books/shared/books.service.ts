@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { RestService, Rest } from '@abp/ng.core';
+import { RestService } from '@abp/ng.core';
 import { Books } from '../../store/models';
 import { Observable } from 'rxjs';
 
@@ -7,52 +7,42 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BooksService {
-  constructor(private rest: RestService) {}
+  constructor(private restService: RestService) {}
 
   get(): Observable<Books.Response> {
-    const request: Rest.Request<null> = {
+    return this.restService.request<void, Books.Response>({
       method: 'GET',
       url: '/api/app/book',
-    };
-
-    return this.rest.request<null, Books.Response>(request);
+    });
   }
 
-  create(body: Books.CreateUpdateBookInput): Observable<Books.Book> {
-    const request: Rest.Request<Books.CreateUpdateBookInput> = {
+  create(createBookInput: Books.CreateUpdateBookInput): Observable<Books.Book> {
+    return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
       method: 'POST',
       url: '/api/app/book',
-      body,
-    };
-
-    return this.rest.request<Books.CreateUpdateBookInput, Books.Book>(request);
+      body: createBookInput,
+    });
   }
 
   getById(id: string): Observable<Books.Book> {
-    const request: Rest.Request<null> = {
+    return this.restService.request<void, Books.Book>({
       method: 'GET',
       url: `/api/app/book/${id}`,
-    };
-
-    return this.rest.request<null, Books.Book>(request);
+    });
   }
 
-  update(body: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
-    const request: Rest.Request<Books.CreateUpdateBookInput> = {
+  update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
+    return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
       method: 'PUT',
       url: `/api/app/book/${id}`,
-      body,
-    };
-
-    return this.rest.request<Books.CreateUpdateBookInput, Books.Book>(request);
+      body: updateBookInput,
+    });
   }
 
-  delete(id: string): Observable<null> {
-    const request: Rest.Request<null> = {
+  delete(id: string): Observable<void> {
+    return this.restService.request<void, void>({
       method: 'DELETE',
       url: `/api/app/book/${id}`,
-    };
-
-    return this.rest.request<null, null>(request);
+    });
   }
 }

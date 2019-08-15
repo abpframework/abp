@@ -54,13 +54,13 @@ export class BookListComponent implements OnInit {
     });
   }
 
-  onAdd() {
+  createBook() {
     this.selectedBook = {} as Books.Book;
     this.buildForm();
     this.isModalOpen = true;
   }
 
-  onEdit(id: string) {
+  editBook(id: string) {
     this.booksService.getById(id).subscribe(book => {
       this.selectedBook = book;
       this.buildForm();
