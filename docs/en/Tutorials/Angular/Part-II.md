@@ -37,16 +37,16 @@ export namespace Books {
 Open the `books.service.ts` and add a new method, named `create` to perform an HTTP POST request to the server:
 
 ```typescript
-create(body: Books.CreateUpdateBookInput): Observable<Books.Book> {
-  return this.rest.request<Books.CreateUpdateBookInput, Books.Book>({
+create(createBookInput: Books.CreateUpdateBookInput): Observable<Books.Book> {
+  return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
     method: 'POST',
     url: '/api/app/book',
-    body,
+    body: createBookInput
   });
 }
 ```
 
-* `rest.request` function gets generic parameters for the types sent to and received from the server. This example sends a `CreateUpdateBookInput` object and receives a `Book` object (you can set `void` for request or return type if not used).
+- `restService.request` function gets generic parameters for the types sent to and received from the server. This example sends a `CreateUpdateBookInput` object and receives a `Book` object (you can set `void` for request or return type if not used).
 
 #### State Definitions
 
@@ -64,14 +64,14 @@ export class CreateUpdateBook {
 Open `books.state.ts` and define the `save` method that will listen to a `CreateUpdateBook` action to create a book:
 
 ```typescript
-import { GetBooks, CreateUpdateBook } from '../actions/books.actions';
-import { tap, switchMap } from 'rxjs/operators';
+import { ... , CreateUpdateBook } from '../actions/books.actions';
+import { ... , switchMap } from 'rxjs/operators';
 //...
 @Action(CreateUpdateBook)
-save({ dispatch }: StateContext<Books.State>, { payload }: CreateUpdateBook) {
+save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
   return this.booksService
-      .create(payload)
-      .pipe(switchMap(() => dispatch(new GetBooks())));
+      .create(action.payload)
+      .pipe(switchMap(() => ctx.dispatch(new GetBooks())));
 }
 ```
 
@@ -109,21 +109,21 @@ Add a button, labeled `New book` to show the modal:
     </h5>
   </div>
   <div class="text-right col col-md-6">
-    <button id="create-role" class="btn btn-primary" type="button" (click)="onAdd()">
+    <button id="create-role" class="btn btn-primary" type="button" (click)="createBook()">
       <i class="fa fa-plus mr-1"></i> <span>New book</span>
     </button>
   </div>
 </div>
 ```
 
-Open the `book-list.component.ts` and add `isModalOpen` variable and `onAdd` method to show/hide the modal.
+Open the `book-list.component.ts` and add `isModalOpen` variable and `createBook` method to show/hide the modal.
 
 ```typescript
 isModalOpen = false;
 
 //...
 
-onAdd() {
+createBook() {
   this.isModalOpen = true;
 }
 ```
@@ -165,10 +165,10 @@ buildForm() {
 - The `group` method of `FormBuilder` (`fb`) creates a `FormGroup`.
 - Added `Validators.required` static method that validates the related form element.
 
-Modify the `onAdd` method as shown below:
+Modify the `createBook` method as shown below:
 
 ```typescript
-onAdd() {
+createBook() {
   this.buildForm();
   this.isModalOpen = true;
 }
@@ -214,7 +214,7 @@ Open `book-list.component.html` and add the form in the body template of the mod
 </ng-template>
 ```
 
-* This template creates a form with Name, Price, Type and Publish date fields.
+- This template creates a form with Name, Price, Type and Publish date fields.
 
 > We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
 
@@ -256,6 +256,8 @@ export class BooksModule {}
 Then open the `book-list.component.html` and add `providers` as shown below:
 
 ```typescript
+import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   // ...
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
@@ -277,7 +279,10 @@ Open the `book-list.component.html` and add an `abp-button` to save the form.
   <button type="button" class="btn btn-secondary" #abpClose>
     Cancel
   </button>
-  <abp-button iconClass="fa fa-check" (click)="save()">Save</abp-button>
+  <button class="btn btn-primary" (click)="save()">
+    <i class="fa fa-check mr-1"></i>
+    Save
+  </button>
 </ng-template>
 ```
 
@@ -308,17 +313,17 @@ Open the `books.service.ts` and then add the `getById` and `update` methods.
 
 ```typescript
 getById(id: string): Observable<Books.Book> {
-  return this.rest.request<null, Books.Book>({
+  return this.restService.request<void, Books.Book>({
     method: 'GET',
-    url: `/api/app/book/${id}`,
+    url: `/api/app/book/${id}`
   });
 }
 
-update(body: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
-  return this.rest.request<Books.CreateUpdateBookInput, Books.Book>({
+update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
+  return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
     method: 'PUT',
     url: `/api/app/book/${id}`,
-    body,
+    body: updateBookInput
   });
 }
 ```
@@ -338,16 +343,16 @@ Open `books.state.ts` and modify the `save` method as show below:
 
 ```typescript
 @Action(CreateUpdateBook)
-save({ dispatch }: StateContext<Books.State>, { payload, id }: CreateUpdateBook) {
+save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
   let request;
 
-  if (id) {
-    request = this.booksService.update(payload, id);
+  if (action.id) {
+    request = this.booksService.update(action.payload, action.id);
   } else {
-    request = this.booksService.create(payload);
+    request = this.booksService.create(action.payload);
   }
 
-  return request.pipe(switchMap(() => dispatch(new GetBooks())));
+  return request.pipe(switchMap(() => ctx.dispatch(new GetBooks())));
 }
 ```
 
@@ -379,10 +384,10 @@ buildForm() {
 }
 ```
 
-Add the `onEdit` method as shown below:
+Add the `editBook` method as shown below:
 
 ```typescript
-  onEdit(id: string) {
+  editBook(id: string) {
     this.booksService.getById(id).subscribe(book => {
       this.selectedBook = book;
       this.buildForm();
@@ -391,12 +396,12 @@ Add the `onEdit` method as shown below:
   }
 ```
 
-Added `onEdit` method to get the editing book, build the form and show the modal.
+Added `editBook` method to get the editing book, build the form and show the modal.
 
-Now, add the `selectedBook` definition to `onAdd` method to reuse the same form while creating a new book:
+Now, add the `selectedBook` definition to `createBook` method to reuse the same form while creating a new book:
 
 ```typescript
-  onAdd() {
+  createBook() {
     this.selectedBook = {} as Books.Book;
     //...
   }
@@ -446,7 +451,7 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
             <i class="fa fa-cog mr-1"></i>Actions
           </button>
           <div ngbDropdownMenu>
-            <button ngbDropdownItem (click)="onEdit(data.id)">Edit</button>
+            <button ngbDropdownItem (click)="editBook(data.id)">Edit</button>
           </div>
         </div>
       </td>
@@ -459,8 +464,8 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
 </p-table>
 ```
 
-* Added a `th` for the "Actions" column.
-* Added `button` with `ngbDropdownToggle` to open actions when clicked the button.
+- Added a `th` for the "Actions" column.
+- Added `button` with `ngbDropdownToggle` to open actions when clicked the button.
 
 > We've used to [NgbDropdown](https://ng-bootstrap.github.io/#/components/dropdown/examples) for the dropdown menu of actions.
 
@@ -486,7 +491,7 @@ Open `books.service.ts` and add a `delete` method to delete a book with the `id`
 
 ```typescript
 delete(id: string): Observable<void> {
-  return this.rest.request<void, void>({
+  return this.restService.request<void, void>({
     method: 'DELETE',
     url: `/api/app/book/${id}`
   });
@@ -510,13 +515,13 @@ Open the `books.state.ts` and add the `delete` method that will listen to the `D
 import { ... , DeleteBook } from '../actions/books.actions';
 //...
 @Action(DeleteBook)
-delete({ dispatch }: StateContext<Books.State>, { id }: DeleteBook) {
-  return this.booksService.delete(id).pipe(switchMap(() => dispatch(new GetBooks())));
+delete(ctx: StateContext<Books.State>, action: DeleteBook) {
+  return this.booksService.delete(action.id).pipe(switchMap(() => ctx.dispatch(new GetBooks())));
 }
 ```
 
-* Added `DeleteBook` to the import list.
-* Uses `bookService` to delete the book.
+- Added `DeleteBook` to the import list.
+- Uses `bookService` to delete the book.
 
 #### Add a Delete Button
 

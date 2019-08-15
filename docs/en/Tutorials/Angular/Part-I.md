@@ -499,7 +499,7 @@ Modify `books.service.ts` as shown below:
 
 ```typescript
 import { Injectable } from '@angular/core';
-import { RestService, Rest } from '@abp/ng.core';
+import { RestService } from '@abp/ng.core';
 import { Books } from '../../store/models';
 import { Observable } from 'rxjs';
 
@@ -507,15 +507,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BooksService {
-  constructor(private rest: RestService) {}
+  constructor(private restService: RestService) {}
 
   get(): Observable<Books.Response> {
-    const request: Rest.Request<null> = {
+    return this.restService.request<void, Books.Response>({
       method: 'GET',
-      url: '/api/app/book',
-    };
-
-    return this.rest.request<null, Books.Response>(request);
+      url: '/api/app/book'
+    });
   }
 }
 ```
@@ -547,18 +545,18 @@ import { tap } from 'rxjs/operators';
 })
 export class BooksState {
   @Selector()
-  static getBooks({ books }: Books.State) {
-    return books.items || [];
+  static getBooks(state: Books.State) {
+    return state.books.items || [];
   }
 
   constructor(private booksService: BooksService) {}
 
   @Action(GetBooks)
-  get({ patchState }: StateContext<Books.State>) {
+  get(ctx: StateContext<Books.State>) {
     return this.booksService.get().pipe(
-      tap(books => {
-        patchState({
-          books,
+      tap(booksResponse => {
+        ctx.patchState({
+          books: booksResponse,
         });
       }),
     );
