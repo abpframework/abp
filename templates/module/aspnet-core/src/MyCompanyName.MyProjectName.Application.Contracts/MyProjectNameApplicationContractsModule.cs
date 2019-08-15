@@ -14,7 +14,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<VirtualFileSystemOptions>(options =>
             {
-                options.FileSets.AddEmbedded<MyProjectNameApplicationContractsModule>();
+                options.FileSets.AddEmbedded<MyProjectNameApplicationContractsModule>("MyCompanyName.MyProjectName");
             });
         }
     }
