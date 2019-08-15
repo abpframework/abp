@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'abp-button',
   template: `
-    <button [attr.type]="buttonType" [ngClass]="buttonClass" [disabled]="loading" [disabled]="disabled">
+    <button [attr.type]="buttonType" [ngClass]="buttonClass" [disabled]="loading || disabled">
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
   `,
