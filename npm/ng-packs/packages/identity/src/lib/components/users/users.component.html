@@ -188,6 +188,7 @@
       requestURLContainSearchValue="users"
       iconClass="fa fa-check"
       (click)="save()"
+      [disabled]="form.invalid"
       >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
     >
   </ng-template>

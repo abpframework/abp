@@ -6,6 +6,7 @@ This is the second part of the Angular tutorial series. See all parts:
 
 - [Part I: Create the project and a book list page](Part-I.md)
 - **Part II: Create, Update and Delete books (this tutorial)**
+- [Part III: Integration Tests](Part-III.md)
 
 You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
 
@@ -37,19 +38,19 @@ Open the `books.service.ts` and add a new method, named `create` to perform an H
 
 ```typescript
 create(body: Books.CreateUpdateBookInput): Observable<Books.Book> {
-  const request: Rest.Request<Books.CreateUpdateBookInput> = {
+  return this.rest.request<Books.CreateUpdateBookInput, Books.Book>({
     method: 'POST',
     url: '/api/app/book',
     body,
-  };
-
-  return this.rest.request<Books.CreateUpdateBookInput, Books.Book>(request);
+  });
 }
 ```
 
+* `rest.request` function gets generic parameters for the types sent to and received from the server. This example sends a `CreateUpdateBookInput` object and receives a `Book` object (you can set `void` for request or return type if not used).
+
 #### State Definitions
 
-Add the `CreateUpdateBook` action to `books.actions.ts` as shown below:
+Add the `CreateUpdateBook` action to the `books.actions.ts` as shown below:
 
 ```typescript
 import { Books } from '../models';
@@ -78,7 +79,7 @@ When the `SaveBook` action dispatched, the save method is executed. It call `cre
 
 #### Add a Modal to BookListComponent
 
-Open the `book-list.component.html` and add the `abp-modal` to show/hide the book form.
+Open the `book-list.component.html` and add the `abp-modal` to show/hide the modal to create a new book.
 
 ```html
 <abp-modal [(visible)]="isModalOpen">
@@ -98,7 +99,7 @@ Open the `book-list.component.html` and add the `abp-modal` to show/hide the boo
 
 `abp-modal` is a pre-built component to show modals. While you could use another approach to show a modal, `abp-modal` provides additional benefits.
 
-Add a button, labeled `New book` to show the modal.
+Add a button, labeled `New book` to show the modal:
 
 ```html
 <div class="row">
@@ -161,8 +162,8 @@ buildForm() {
 }
 ```
 
-- The `group` method of `FormBuilder` creates a `FormGroup`.
-- Added `Validators.required` static method that validation of form element.
+- The `group` method of `FormBuilder` (`fb`) creates a `FormGroup`.
+- Added `Validators.required` static method that validates the related form element.
 
 Modify the `onAdd` method as shown below:
 
@@ -173,7 +174,7 @@ onAdd() {
 }
 ```
 
-### Create the DOM Elements of the Form
+#### Create the DOM Elements of the Form
 
 Open `book-list.component.html` and add the form in the body template of the modal.
 
@@ -213,28 +214,32 @@ Open `book-list.component.html` and add the form in the body template of the mod
 </ng-template>
 ```
 
-TODO: Add a short description.
+* This template creates a form with Name, Price, Type and Publish date fields.
 
 > We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
 
-Open the `book-list.component.ts` and then add the `bookTypes`.
+Open the `book-list.component.ts` and then create an array, named `bookTypeArr`:
 
 ```typescript
 //...
 form: FormGroup;
 
-bookTypeArr = Object.keys(Books.BookType).filter(bookType => typeof this.booksType[bookType] === 'number');
+bookTypeArr = Object.keys(Books.BookType).filter(
+    bookType => typeof this.booksType[bookType] === 'number'
+);
 ```
 
-The `bookTypes` variable added to generate array from `BookType` enum. The `bookTypes` equals like this:
+The `bookTypeArr` contains the fields of the `BookType` enum. Resulting array is shown below:
 
 ```js
 ['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
 ```
 
-### Add the Datepicker Requirements
+This array was used in the previous form template (in the `ngFor` loop).
 
-Import `NgbDatepickerModule` to the `books.module.ts`.
+#### Datepicker Requirements
+
+You need to import `NgbDatepickerModule` to the `books.module.ts`:
 
 ```typescript
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
@@ -248,25 +253,39 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 export class BooksModule {}
 ```
 
-Open the `book-list.component.html` and then add `providers` as shown below:
+Then open the `book-list.component.html` and add `providers` as shown below:
 
 ```typescript
 @Component({
   // ...
-  styleUrls: ['./book-list.component.scss'],
   providers: [{ provide: NgbDateAdapter, useClass: NgbDateNativeAdapter }],
 })
 export class BookListComponent implements OnInit {
 // ...
 ```
 
-> The `NgbDateAdapter` convert Datepicker value type to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
+> The `NgbDateAdapter` converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
 ![new-book-form](images/bookstore-new-book-form.png)
 
-### Create a New Book
+#### Saving the Book
 
-Add the `save` method to `BookListComponent`
+Open the `book-list.component.html` and add an `abp-button` to save the form.
+
+```html
+<ng-template #abpFooter>
+  <button type="button" class="btn btn-secondary" #abpClose>
+    Cancel
+  </button>
+  <abp-button iconClass="fa fa-check" (click)="save()">Save</abp-button>
+</ng-template>
+```
+
+This adds a save button to the bottom area of the modal:
+
+![bookstore-new-book-form-v2](images/bookstore-new-book-form-v2.png)
+
+Then define a `save` method in the `BookListComponent`:
 
 ```typescript
 save() {
@@ -281,56 +300,32 @@ save() {
 }
 ```
 
-TODO: description ??
+### Updating An Existing Book
 
-Then, open the `book-list.component.html` and add the `abp-button` for the run `save` method.
-
-```html
-<ng-template #abpFooter>
-  <button type="button" class="btn btn-secondary" #abpClose>
-    Cancel
-  </button>
-  <abp-button iconClass="fa fa-check" (click)="save()">Save</abp-button>
-</ng-template>
-```
-
-Now, You can add a new book.
-
-![bookstore-new-book-form-v2](images/bookstore-new-book-form-v2.png)
-
-### Add HTTP GET and PUT Methods
-
-TODO: Description
+#### BooksService
 
 Open the `books.service.ts` and then add the `getById` and `update` methods.
 
 ```typescript
 getById(id: string): Observable<Books.Book> {
-  const request: Rest.Request<null> = {
+  return this.rest.request<null, Books.Book>({
     method: 'GET',
     url: `/api/app/book/${id}`,
-  };
-
-  return this.rest.request<null, Books.Book>(request);
+  });
 }
 
 update(body: Books.CreateUpdateBookInput, id: string): Observable<Books.Book> {
-  const request: Rest.Request<Books.CreateUpdateBookInput> = {
+  return this.rest.request<Books.CreateUpdateBookInput, Books.Book>({
     method: 'PUT',
     url: `/api/app/book/${id}`,
     body,
-  };
-
-  return this.rest.request<Books.CreateUpdateBookInput, Books.Book>(request);
+  });
 }
 ```
 
-- Added the `getById` method to get the editing book by performing an HTTP request to the related endpoint.
-- Added the `update` method to update a book with the `id` by performing an HTTP request to the related endpoint.
+#### CreateUpdateBook Action
 
-TODO: header ??
-
-Open the `books.actins.ts` and add `id` parameter.
+Open the `books.actins.ts` and add `id` parameter to the `CreateUpdateBook` action:
 
 ```typescript
 export class CreateUpdateBook {
@@ -339,9 +334,7 @@ export class CreateUpdateBook {
 }
 ```
 
-Added `id` parameter to reuse the `BooksSave` while updating and creating a book.
-
-Open `books.state.ts` and then modify the `save` method as show below:
+Open `books.state.ts` and modify the `save` method as show below:
 
 ```typescript
 @Action(CreateUpdateBook)
@@ -358,9 +351,9 @@ save({ dispatch }: StateContext<Books.State>, { payload, id }: CreateUpdateBook)
 }
 ```
 
-### Update a Book
+#### BookListComponent
 
-Inject `BooksService` dependency by adding it to the `book-list.component.ts` constructor and add variable named `selectedBook`.
+Inject `BooksService` dependency by adding it to the `book-list.component.ts` constructor and add a variable named `selectedBook`.
 
 ```typescript
 import { BooksService } from '../shared/books.service';
@@ -373,10 +366,7 @@ constructor(
 )
 ```
 
-- Added `booksService` to get the detail of selected book by `id` before creating the form
-- Added `selectedBook` variable to reuse detail of selected book.
-
-Modify the `buildForm` method to reuse the same form while editing a book.
+`booksService` is used to get the editing book to prepare the form. Modify the `buildForm` method to reuse the same form while editing a book.
 
 ```typescript
 buildForm() {
@@ -401,9 +391,9 @@ Add the `onEdit` method as shown below:
   }
 ```
 
-- Added `onEdit` method to get selected book detail, build form and then show the modal.
+Added `onEdit` method to get the editing book, build the form and show the modal.
 
-Add the `selectedBook` definition to `onAdd` method for reuse same form while adding a new book.
+Now, add the `selectedBook` definition to `onAdd` method to reuse the same form while creating a new book:
 
 ```typescript
   onAdd() {
@@ -412,7 +402,7 @@ Add the `selectedBook` definition to `onAdd` method for reuse same form while ad
   }
 ```
 
-Modify the `save` method as shown below:
+Modify the `save` method to pass the id of the selected book as shown below:
 
 ```typescript
 save() {
@@ -427,8 +417,6 @@ save() {
     });
 }
 ```
-
-Added the `this.selectedBook.id` property to reuse the `CreateUpdateBook` action.
 
 #### Add "Actions" Dropdown to the Table
 
@@ -471,15 +459,16 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
 </p-table>
 ```
 
-Actions button added to each row of the table.
+* Added a `th` for the "Actions" column.
+* Added `button` with `ngbDropdownToggle` to open actions when clicked the button.
 
 > We've used to [NgbDropdown](https://ng-bootstrap.github.io/#/components/dropdown/examples) for the dropdown menu of actions.
 
-The Actions buttons looks like this:
+The final UI looks like:
 
 ![actions-buttons](images/bookstore-actions-buttons.png)
 
-Update the modal header for reuse the same modal.
+Update the modal header to change the title based on the current operation:
 
 ```html
 <ng-template #abpHeader>
@@ -489,26 +478,24 @@ Update the modal header for reuse the same modal.
 
 ![actions-buttons](images/bookstore-edit-modal.png)
 
-TODO: description & screenshot ??
+### Deleting an Existing Book
 
-### Delete a Book
+#### BooksService
 
-Open `books.service.ts` and the the `delete` method for delete a book with the `id` by performing an HTTP request to the related endpoint.
+Open `books.service.ts` and add a `delete` method to delete a book with the `id` by performing an HTTP request to the related endpoint:
 
 ```typescript
-delete(id: string): Observable<null> {
-  const request: Rest.Request<null> = {
+delete(id: string): Observable<void> {
+  return this.rest.request<void, void>({
     method: 'DELETE',
-    url: `/api/app/book/${id}`,
-  };
-
-  return this.rest.request<null, null>(request);
+    url: `/api/app/book/${id}`
+  });
 }
 ```
 
-### State Definitions
+#### DeleteBook Action
 
-Add an action named `BooksDelete` to `books.actions.ts`
+Add an action named `DeleteBook` to `books.actions.ts`:
 
 ```typescript
 export class DeleteBook {
@@ -517,7 +504,7 @@ export class DeleteBook {
 }
 ```
 
-Then, open the `books.state.ts` and add the `delete` method that will listen to a `CreateUpdateBook` action to create a book
+Open the `books.state.ts` and add the `delete` method that will listen to the `DeleteBook` action to delete a book:
 
 ```typescript
 import { ... , DeleteBook } from '../actions/books.actions';
@@ -528,11 +515,12 @@ delete({ dispatch }: StateContext<Books.State>, { id }: DeleteBook) {
 }
 ```
 
-TODO: description??
+* Added `DeleteBook` to the import list.
+* Uses `bookService` to delete the book.
 
-### Add a Delete Button
+#### Add a Delete Button
 
-Open `book-list.component.html` and modify the `ngbDropdownMenu` for add the delete button as shown below:
+Open `book-list.component.html` and modify the `ngbDropdownMenu` to add the delete button as shown below:
 
 ```html
 <div ngbDropdownMenu>
@@ -543,13 +531,13 @@ Open `book-list.component.html` and modify the `ngbDropdownMenu` for add the del
 </div>
 ```
 
-The final actions dropdown UI looks like this:
+The final actions dropdown UI looks like below:
 
 ![bookstore-final-actions-dropdown](images/bookstore-final-actions-dropdown.png)
 
-### Open Confirmation Popup
+#### Delete Confirmation Dialog
 
-Open `book-list.component.ts` and inject the `ConfirmationService` for show confirmation popup.
+Open `book-list.component.ts` and inject the `ConfirmationService`.
 
 ```typescript
 import { ConfirmationService } from '@abp/ng.theme.shared';
@@ -560,7 +548,9 @@ constructor(
 )
 ```
 
-Add the following method to `BookListComponent`.
+> `ConfirmationService` is a simple service provided by ABP framework that internally uses the PrimeNG.
+
+Add a delete method to the `BookListComponent`:
 
 ```typescript
 import { ... , DeleteBook } from '../../store/actions';
@@ -577,10 +567,10 @@ delete(id: string, name: string) {
 }
 ```
 
-The `delete` method shows confirmation popup and listens to them. When close the popup, the subscribe block runs. If confirmed this popup, it will dispatch the `DeleteBook` action.
-
-The confirmation popup looks like this:
+The `delete` method shows a confirmation popup and subscribes for the user response. `DeleteBook` action dispatched only if user clicks to the `Yes` button. The confirmation popup looks like below:
 
 ![bookstore-confirmation-popup](images/bookstore-confirmation-popup.png)
 
-TODO: End
+### Next Part
+
+See the [next part](Part-III.md) of this tutorial.
