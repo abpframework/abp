@@ -39,5 +39,11 @@ import fse from 'fs-extra';
   await execa('git', ['add', '../dist/*', '../package.json'], { stdout: 'inherit' });
   await execa('git', ['commit', '-m', 'Build ng packages'], { stdout: 'inherit' });
 
+  try {
+    await execa('git', ['push', 'origin']);
+  } catch (error) {
+    console.error('An error occured while pushing the git files:\n' + error.stderr);
+  }
+
   process.exit(0);
 })();
