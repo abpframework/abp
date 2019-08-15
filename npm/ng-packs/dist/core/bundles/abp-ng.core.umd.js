@@ -20,6 +20,20 @@
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
+    /* global Reflect, Promise */
+
+    var extendStatics = function(d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+
+    function __extends(d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
 
     var __assign = function() {
         __assign = Object.assign || function __assign(t) {
@@ -51,8 +65,64 @@
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     }
 
+    function __param(paramIndex, decorator) {
+        return function (target, key) { decorator(target, key, paramIndex); }
+    }
+
     function __metadata(metadataKey, metadataValue) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+    }
+
+    function __awaiter(thisArg, _arguments, P, generator) {
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+    }
+
+    function __generator(thisArg, body) {
+        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        function verb(n) { return function (v) { return step([n, v]); }; }
+        function step(op) {
+            if (f) throw new TypeError("Generator is already executing.");
+            while (_) try {
+                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+                if (y = 0, t) op = [op[0] & 2, t.value];
+                switch (op[0]) {
+                    case 0: case 1: t = op; break;
+                    case 4: _.label++; return { value: op[1], done: false };
+                    case 5: _.label++; y = op[1]; op = [0]; continue;
+                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                    default:
+                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                        if (t[2]) _.ops.pop();
+                        _.trys.pop(); continue;
+                }
+                op = body.call(thisArg, _);
+            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+    }
+
+    function __exportStar(m, exports) {
+        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    }
+
+    function __values(o) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+        if (m) return m.call(o);
+        return {
+            next: function () {
+                if (o && i >= o.length) o = void 0;
+                return { value: o && o[i++], done: !o };
+            }
+        };
     }
 
     function __read(o, n) {
@@ -78,6 +148,61 @@
         return ar;
     }
 
+    function __spreadArrays() {
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var r = Array(s), k = 0, i = 0; i < il; i++)
+            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                r[k] = a[j];
+        return r;
+    };
+
+    function __await(v) {
+        return this instanceof __await ? (this.v = v, this) : new __await(v);
+    }
+
+    function __asyncGenerator(thisArg, _arguments, generator) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var g = generator.apply(thisArg, _arguments || []), i, q = [];
+        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+        function fulfill(value) { resume("next", value); }
+        function reject(value) { resume("throw", value); }
+        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+    }
+
+    function __asyncDelegator(o) {
+        var i, p;
+        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+    }
+
+    function __asyncValues(o) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var m = o[Symbol.asyncIterator], i;
+        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    }
+
+    function __makeTemplateObject(cooked, raw) {
+        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        return cooked;
+    };
+
+    function __importStar(mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+        result.default = mod;
+        return result;
+    }
+
+    function __importDefault(mod) {
+        return (mod && mod.__esModule) ? mod : { default: mod };
+    }
+
     /**
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
@@ -90,12 +215,24 @@
         PatchRouteByName.type = '[Config] Patch Route By Name';
         return PatchRouteByName;
     }());
+    if (false) {
+        /** @type {?} */
+        PatchRouteByName.type;
+        /** @type {?} */
+        PatchRouteByName.prototype.name;
+        /** @type {?} */
+        PatchRouteByName.prototype.newValue;
+    }
     var GetAppConfiguration = /** @class */ (function () {
         function GetAppConfiguration() {
         }
         GetAppConfiguration.type = '[Config] Get App Configuration';
         return GetAppConfiguration;
     }());
+    if (false) {
+        /** @type {?} */
+        GetAppConfiguration.type;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -108,6 +245,12 @@
         StartLoader.type = '[Loader] Start';
         return StartLoader;
     }());
+    if (false) {
+        /** @type {?} */
+        StartLoader.type;
+        /** @type {?} */
+        StartLoader.prototype.payload;
+    }
     var StopLoader = /** @class */ (function () {
         function StopLoader(payload) {
             this.payload = payload;
@@ -115,6 +258,12 @@
         StopLoader.type = '[Loader] Stop';
         return StopLoader;
     }());
+    if (false) {
+        /** @type {?} */
+        StopLoader.type;
+        /** @type {?} */
+        StopLoader.prototype.payload;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -126,6 +275,10 @@
         GetProfile.type = '[Profile] Get';
         return GetProfile;
     }());
+    if (false) {
+        /** @type {?} */
+        GetProfile.type;
+    }
     var UpdateProfile = /** @class */ (function () {
         function UpdateProfile(payload) {
             this.payload = payload;
@@ -133,6 +286,12 @@
         UpdateProfile.type = '[Profile] Update';
         return UpdateProfile;
     }());
+    if (false) {
+        /** @type {?} */
+        UpdateProfile.type;
+        /** @type {?} */
+        UpdateProfile.prototype.payload;
+    }
     var ChangePassword = /** @class */ (function () {
         function ChangePassword(payload) {
             this.payload = payload;
@@ -140,6 +299,12 @@
         ChangePassword.type = '[Profile] Change Password';
         return ChangePassword;
     }());
+    if (false) {
+        /** @type {?} */
+        ChangePassword.type;
+        /** @type {?} */
+        ChangePassword.prototype.payload;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -152,6 +317,12 @@
         RestOccurError.type = '[Rest] Error';
         return RestOccurError;
     }());
+    if (false) {
+        /** @type {?} */
+        RestOccurError.type;
+        /** @type {?} */
+        RestOccurError.prototype.payload;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -164,6 +335,12 @@
         SetLanguage.type = '[Session] Set Language';
         return SetLanguage;
     }());
+    if (false) {
+        /** @type {?} */
+        SetLanguage.type;
+        /** @type {?} */
+        SetLanguage.prototype.payload;
+    }
     var SetTenant = /** @class */ (function () {
         function SetTenant(payload) {
             this.payload = payload;
@@ -171,6 +348,17 @@
         SetTenant.type = '[Session] Set Tenant';
         return SetTenant;
     }());
+    if (false) {
+        /** @type {?} */
+        SetTenant.type;
+        /** @type {?} */
+        SetTenant.prototype.payload;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -239,6 +427,18 @@
         /** @nocollapse */ RestService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function RestService_Factory() { return new RestService(core.ɵɵinject(http.HttpClient), core.ɵɵinject(store.Store)); }, token: RestService, providedIn: "root" });
         return RestService;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        RestService.prototype.http;
+        /**
+         * @type {?}
+         * @private
+         */
+        RestService.prototype.store;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -311,6 +511,13 @@
         /** @nocollapse */ ProfileService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ProfileService_Factory() { return new ProfileService(core.ɵɵinject(RestService)); }, token: ProfileService, providedIn: "root" });
         return ProfileService;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ProfileService.prototype.rest;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -422,6 +629,13 @@
         ], ProfileState);
         return ProfileState;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ProfileState.prototype.profileService;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -457,6 +671,13 @@
         /** @nocollapse */ ApplicationConfigurationService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ApplicationConfigurationService_Factory() { return new ApplicationConfigurationService(core.ɵɵinject(RestService)); }, token: ApplicationConfigurationService, providedIn: "root" });
         return ApplicationConfigurationService;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ApplicationConfigurationService.prototype.rest;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -988,6 +1209,18 @@
         ], ConfigState);
         return ConfigState;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ConfigState.prototype.appConfigurationService;
+        /**
+         * @type {?}
+         * @private
+         */
+        ConfigState.prototype.store;
+    }
     /**
      * @param {?} routes
      * @param {?} name
@@ -1026,6 +1259,11 @@
         }
         return organizeRoutes(routes);
     }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -1111,6 +1349,11 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var DynamicLayoutComponent = /** @class */ (function () {
         function DynamicLayoutComponent(router$1, store) {
             var _this = this;
@@ -1165,6 +1408,22 @@
         ], DynamicLayoutComponent.prototype, "requirements$", void 0);
         return DynamicLayoutComponent;
     }());
+    if (false) {
+        /** @type {?} */
+        DynamicLayoutComponent.prototype.requirements$;
+        /** @type {?} */
+        DynamicLayoutComponent.prototype.layout;
+        /**
+         * @type {?}
+         * @private
+         */
+        DynamicLayoutComponent.prototype.router;
+        /**
+         * @type {?}
+         * @private
+         */
+        DynamicLayoutComponent.prototype.store;
+    }
     /**
      * @param {?} segments
      * @param {?} routes
@@ -1225,6 +1484,11 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var AutofocusDirective = /** @class */ (function () {
         function AutofocusDirective(elRef) {
             this.elRef = elRef;
@@ -1257,6 +1521,15 @@
         };
         return AutofocusDirective;
     }());
+    if (false) {
+        /** @type {?} */
+        AutofocusDirective.prototype.delay;
+        /**
+         * @type {?}
+         * @private
+         */
+        AutofocusDirective.prototype.elRef;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1283,7 +1556,7 @@
              * @return {?}
              */
             function () {
-                return this.enabled ? this.witdh || '160px' : undefined;
+                return this.enabled ? this.width || '170px' : undefined;
             },
             enumerable: true,
             configurable: true
@@ -1319,7 +1592,7 @@
             { type: core.ElementRef }
         ]; };
         EllipsisDirective.propDecorators = {
-            witdh: [{ type: core.Input, args: ['abpEllipsis',] }],
+            width: [{ type: core.Input, args: ['abpEllipsis',] }],
             title: [{ type: core.HostBinding, args: ['title',] }, { type: core.Input }],
             enabled: [{ type: core.Input, args: ['abpEllipsisEnabled',] }],
             class: [{ type: core.HostBinding, args: ['class.abp-ellipsis',] }],
@@ -1327,6 +1600,24 @@
         };
         return EllipsisDirective;
     }());
+    if (false) {
+        /** @type {?} */
+        EllipsisDirective.prototype.width;
+        /** @type {?} */
+        EllipsisDirective.prototype.title;
+        /** @type {?} */
+        EllipsisDirective.prototype.enabled;
+        /**
+         * @type {?}
+         * @private
+         */
+        EllipsisDirective.prototype.cdRef;
+        /**
+         * @type {?}
+         * @private
+         */
+        EllipsisDirective.prototype.elRef;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1384,6 +1675,25 @@
         };
         return PermissionDirective;
     }());
+    if (false) {
+        /** @type {?} */
+        PermissionDirective.prototype.condition;
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionDirective.prototype.elRef;
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionDirective.prototype.renderer;
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionDirective.prototype.store;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1472,6 +1782,43 @@
         };
         return VisibilityDirective;
     }());
+    if (false) {
+        /** @type {?} */
+        VisibilityDirective.prototype.focusedElement;
+        /** @type {?} */
+        VisibilityDirective.prototype.completed$;
+        /**
+         * @type {?}
+         * @private
+         */
+        VisibilityDirective.prototype.elRef;
+        /**
+         * @type {?}
+         * @private
+         */
+        VisibilityDirective.prototype.renderer;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    /** @enum {string} */
+    var eLayoutType = {
+        account: 'account',
+        application: 'application',
+        empty: 'empty',
+    };
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -1514,6 +1861,18 @@
         /** @nocollapse */ AuthGuard.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(core.ɵɵinject(angularOauth2Oidc.OAuthService), core.ɵɵinject(store.Store)); }, token: AuthGuard, providedIn: "root" });
         return AuthGuard;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        AuthGuard.prototype.oauthService;
+        /**
+         * @type {?}
+         * @private
+         */
+        AuthGuard.prototype.store;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1549,6 +1908,18 @@
         /** @nocollapse */ PermissionGuard.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function PermissionGuard_Factory() { return new PermissionGuard(core.ɵɵinject(store.Store)); }, token: PermissionGuard, providedIn: "root" });
         return PermissionGuard;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionGuard.prototype.store;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -1608,6 +1979,272 @@
         ]; };
         return ApiInterceptor;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ApiInterceptor.prototype.oAuthService;
+        /**
+         * @type {?}
+         * @private
+         */
+        ApiInterceptor.prototype.store;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var ApplicationConfiguration;
+    (function (ApplicationConfiguration) {
+        /**
+         * @record
+         */
+        function Response() { }
+        ApplicationConfiguration.Response = Response;
+        if (false) {
+            /** @type {?} */
+            Response.prototype.localization;
+            /** @type {?} */
+            Response.prototype.auth;
+            /** @type {?} */
+            Response.prototype.setting;
+            /** @type {?} */
+            Response.prototype.currentUser;
+            /** @type {?} */
+            Response.prototype.features;
+        }
+        /**
+         * @record
+         */
+        function Localization() { }
+        ApplicationConfiguration.Localization = Localization;
+        if (false) {
+            /** @type {?} */
+            Localization.prototype.values;
+            /** @type {?} */
+            Localization.prototype.languages;
+        }
+        /**
+         * @record
+         */
+        function LocalizationValue() { }
+        ApplicationConfiguration.LocalizationValue = LocalizationValue;
+        /**
+         * @record
+         */
+        function Language() { }
+        ApplicationConfiguration.Language = Language;
+        if (false) {
+            /** @type {?} */
+            Language.prototype.cultureName;
+            /** @type {?} */
+            Language.prototype.uiCultureName;
+            /** @type {?} */
+            Language.prototype.displayName;
+            /** @type {?} */
+            Language.prototype.flagIcon;
+        }
+        /**
+         * @record
+         */
+        function Auth() { }
+        ApplicationConfiguration.Auth = Auth;
+        if (false) {
+            /** @type {?} */
+            Auth.prototype.policies;
+            /** @type {?} */
+            Auth.prototype.grantedPolicies;
+        }
+        /**
+         * @record
+         */
+        function Policy() { }
+        ApplicationConfiguration.Policy = Policy;
+        /**
+         * @record
+         */
+        function Setting() { }
+        ApplicationConfiguration.Setting = Setting;
+        if (false) {
+            /** @type {?} */
+            Setting.prototype.values;
+        }
+        /**
+         * @record
+         */
+        function CurrentUser() { }
+        ApplicationConfiguration.CurrentUser = CurrentUser;
+        if (false) {
+            /** @type {?} */
+            CurrentUser.prototype.isAuthenticated;
+            /** @type {?} */
+            CurrentUser.prototype.id;
+            /** @type {?} */
+            CurrentUser.prototype.tenantId;
+            /** @type {?} */
+            CurrentUser.prototype.userName;
+        }
+        /**
+         * @record
+         */
+        function Features() { }
+        ApplicationConfiguration.Features = Features;
+        if (false) {
+            /** @type {?} */
+            Features.prototype.values;
+        }
+    })(ApplicationConfiguration || (ApplicationConfiguration = {}));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var ABP;
+    (function (ABP) {
+        /**
+         * @record
+         */
+        function Root() { }
+        ABP.Root = Root;
+        if (false) {
+            /** @type {?} */
+            Root.prototype.environment;
+            /** @type {?} */
+            Root.prototype.requirements;
+        }
+        /**
+         * @record
+         * @template T
+         */
+        function PagedItemsResponse() { }
+        ABP.PagedItemsResponse = PagedItemsResponse;
+        if (false) {
+            /** @type {?} */
+            PagedItemsResponse.prototype.items;
+        }
+        /**
+         * @record
+         */
+        function PageQueryParams() { }
+        ABP.PageQueryParams = PageQueryParams;
+        if (false) {
+            /** @type {?|undefined} */
+            PageQueryParams.prototype.filter;
+            /** @type {?|undefined} */
+            PageQueryParams.prototype.sorting;
+            /** @type {?|undefined} */
+            PageQueryParams.prototype.skipCount;
+            /** @type {?|undefined} */
+            PageQueryParams.prototype.maxResultCount;
+        }
+        /**
+         * @record
+         */
+        function Route() { }
+        ABP.Route = Route;
+        if (false) {
+            /** @type {?|undefined} */
+            Route.prototype.children;
+            /** @type {?|undefined} */
+            Route.prototype.invisible;
+            /** @type {?|undefined} */
+            Route.prototype.layout;
+            /** @type {?} */
+            Route.prototype.name;
+            /** @type {?|undefined} */
+            Route.prototype.order;
+            /** @type {?|undefined} */
+            Route.prototype.parentName;
+            /** @type {?} */
+            Route.prototype.path;
+            /** @type {?|undefined} */
+            Route.prototype.requiredPolicy;
+            /** @type {?|undefined} */
+            Route.prototype.iconClass;
+        }
+        /**
+         * @record
+         */
+        function FullRoute() { }
+        ABP.FullRoute = FullRoute;
+        if (false) {
+            /** @type {?|undefined} */
+            FullRoute.prototype.url;
+            /** @type {?|undefined} */
+            FullRoute.prototype.wrapper;
+        }
+        /**
+         * @record
+         */
+        function BasicItem() { }
+        ABP.BasicItem = BasicItem;
+        if (false) {
+            /** @type {?} */
+            BasicItem.prototype.id;
+            /** @type {?} */
+            BasicItem.prototype.name;
+        }
+    })(ABP || (ABP = {}));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var Config;
+    (function (Config) {
+        /**
+         * @record
+         */
+        function State() { }
+        Config.State = State;
+        /**
+         * @record
+         */
+        function Environment() { }
+        Config.Environment = Environment;
+        if (false) {
+            /** @type {?} */
+            Environment.prototype.application;
+            /** @type {?} */
+            Environment.prototype.production;
+            /** @type {?} */
+            Environment.prototype.oAuthConfig;
+            /** @type {?} */
+            Environment.prototype.apis;
+        }
+        /**
+         * @record
+         */
+        function Application() { }
+        Config.Application = Application;
+        if (false) {
+            /** @type {?} */
+            Application.prototype.name;
+            /** @type {?|undefined} */
+            Application.prototype.logoUrl;
+        }
+        /**
+         * @record
+         */
+        function Apis() { }
+        Config.Apis = Apis;
+        /**
+         * @record
+         */
+        function Requirements() { }
+        Config.Requirements = Requirements;
+        if (false) {
+            /** @type {?} */
+            Requirements.prototype.layouts;
+        }
+    })(Config || (Config = {}));
 
     /**
      * @fileoverview added by tsickle
@@ -1620,13 +2257,106 @@
          */
         function Config() { }
         Rest.Config = Config;
+        if (false) {
+            /** @type {?|undefined} */
+            Config.prototype.throwErr;
+            /** @type {?|undefined} */
+            Config.prototype.observe;
+        }
         /**
          * @record
          * @template T
          */
         function Request() { }
         Rest.Request = Request;
+        if (false) {
+            /** @type {?|undefined} */
+            Request.prototype.body;
+            /** @type {?|undefined} */
+            Request.prototype.headers;
+            /** @type {?} */
+            Request.prototype.method;
+            /** @type {?|undefined} */
+            Request.prototype.params;
+            /** @type {?|undefined} */
+            Request.prototype.reportProgress;
+            /** @type {?|undefined} */
+            Request.prototype.responseType;
+            /** @type {?} */
+            Request.prototype.url;
+            /** @type {?|undefined} */
+            Request.prototype.withCredentials;
+        }
     })(exports.Rest || (exports.Rest = {}));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var Session;
+    (function (Session) {
+        /**
+         * @record
+         */
+        function State() { }
+        Session.State = State;
+        if (false) {
+            /** @type {?} */
+            State.prototype.language;
+            /** @type {?} */
+            State.prototype.tenant;
+        }
+    })(Session || (Session = {}));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var Profile;
+    (function (Profile) {
+        /**
+         * @record
+         */
+        function State() { }
+        Profile.State = State;
+        if (false) {
+            /** @type {?} */
+            State.prototype.profile;
+        }
+        /**
+         * @record
+         */
+        function Response() { }
+        Profile.Response = Response;
+        if (false) {
+            /** @type {?} */
+            Response.prototype.userName;
+            /** @type {?} */
+            Response.prototype.email;
+            /** @type {?} */
+            Response.prototype.name;
+            /** @type {?} */
+            Response.prototype.surname;
+            /** @type {?} */
+            Response.prototype.phoneNumber;
+        }
+        /**
+         * @record
+         */
+        function ChangePasswordRequest() { }
+        Profile.ChangePasswordRequest = ChangePasswordRequest;
+        if (false) {
+            /** @type {?} */
+            ChangePasswordRequest.prototype.currentPassword;
+            /** @type {?} */
+            ChangePasswordRequest.prototype.newPassword;
+        }
+    })(Profile || (Profile = {}));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -1676,6 +2406,23 @@
         ]; };
         return ConfigPlugin;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ConfigPlugin.prototype.initialized;
+        /**
+         * @type {?}
+         * @private
+         */
+        ConfigPlugin.prototype.options;
+        /**
+         * @type {?}
+         * @private
+         */
+        ConfigPlugin.prototype.router;
+    }
     /**
      * @param {?=} routes
      * @param {?=} wrappers
@@ -1781,6 +2528,11 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var ConfigService = /** @class */ (function () {
         function ConfigService(store) {
             this.store = store;
@@ -1839,6 +2591,13 @@
         /** @nocollapse */ ConfigService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ConfigService_Factory() { return new ConfigService(core.ɵɵinject(store.Store)); }, token: ConfigService, providedIn: "root" });
         return ConfigService;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ConfigService.prototype.store;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1917,6 +2676,10 @@
         /** @nocollapse */ LazyLoadService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LazyLoadService_Factory() { return new LazyLoadService(); }, token: LazyLoadService, providedIn: "root" });
         return LazyLoadService;
     }());
+    if (false) {
+        /** @type {?} */
+        LazyLoadService.prototype.loadedLibraries;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1970,6 +2733,18 @@
         /** @nocollapse */ LocalizationService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(core.ɵɵinject(store.Store)); }, token: LocalizationService, providedIn: "root" });
         return LocalizationService;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        LocalizationService.prototype.store;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -1993,6 +2768,11 @@
     var ENVIRONMENT = new core.InjectionToken('ENVIRONMENT');
     /** @type {?} */
     var CONFIG = new core.InjectionToken('CONFIG');
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
 
     /**
      * @fileoverview added by tsickle
@@ -2056,6 +2836,17 @@
         ]; };
         return LocalizationPipe;
     }());
+    if (false) {
+        /** @type {?} */
+        LocalizationPipe.prototype.initialized;
+        /** @type {?} */
+        LocalizationPipe.prototype.value;
+        /**
+         * @type {?}
+         * @private
+         */
+        LocalizationPipe.prototype.store;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -2102,6 +2893,22 @@
         };
         return InputEventDebounceDirective;
     }());
+    if (false) {
+        /** @type {?} */
+        InputEventDebounceDirective.prototype.debounce;
+        /** @type {?} */
+        InputEventDebounceDirective.prototype.debounceEvent;
+        /**
+         * @type {?}
+         * @private
+         */
+        InputEventDebounceDirective.prototype.renderer;
+        /**
+         * @type {?}
+         * @private
+         */
+        InputEventDebounceDirective.prototype.el;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -2147,6 +2954,20 @@
         };
         return ClickEventStopPropagationDirective;
     }());
+    if (false) {
+        /** @type {?} */
+        ClickEventStopPropagationDirective.prototype.stopPropEvent;
+        /**
+         * @type {?}
+         * @private
+         */
+        ClickEventStopPropagationDirective.prototype.renderer;
+        /**
+         * @type {?}
+         * @private
+         */
+        ClickEventStopPropagationDirective.prototype.el;
+    }
 
     /**
      * @fileoverview added by tsickle

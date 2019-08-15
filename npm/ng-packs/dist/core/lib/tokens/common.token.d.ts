@@ -9,5 +9,5 @@ export declare function environmentFactory(environment: Config.Environment): {
 export declare function configFactory(config: Config.Requirements): {
     layouts: import("@angular/core").Type<any>[];
 };
-export declare const ENVIRONMENT: InjectionToken<{}>;
-export declare const CONFIG: InjectionToken<{}>;
+export declare const ENVIRONMENT: InjectionToken<unknown>;
+export declare const CONFIG: InjectionToken<unknown>;

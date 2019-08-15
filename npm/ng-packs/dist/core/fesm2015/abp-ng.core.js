@@ -28,9 +28,21 @@ class PatchRouteByName {
     }
 }
 PatchRouteByName.type = '[Config] Patch Route By Name';
+if (false) {
+    /** @type {?} */
+    PatchRouteByName.type;
+    /** @type {?} */
+    PatchRouteByName.prototype.name;
+    /** @type {?} */
+    PatchRouteByName.prototype.newValue;
+}
 class GetAppConfiguration {
 }
 GetAppConfiguration.type = '[Config] Get App Configuration';
+if (false) {
+    /** @type {?} */
+    GetAppConfiguration.type;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -45,6 +57,12 @@ class StartLoader {
     }
 }
 StartLoader.type = '[Loader] Start';
+if (false) {
+    /** @type {?} */
+    StartLoader.type;
+    /** @type {?} */
+    StartLoader.prototype.payload;
+}
 class StopLoader {
     /**
      * @param {?} payload
@@ -54,6 +72,12 @@ class StopLoader {
     }
 }
 StopLoader.type = '[Loader] Stop';
+if (false) {
+    /** @type {?} */
+    StopLoader.type;
+    /** @type {?} */
+    StopLoader.prototype.payload;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -62,6 +86,10 @@ StopLoader.type = '[Loader] Stop';
 class GetProfile {
 }
 GetProfile.type = '[Profile] Get';
+if (false) {
+    /** @type {?} */
+    GetProfile.type;
+}
 class UpdateProfile {
     /**
      * @param {?} payload
@@ -71,6 +99,12 @@ class UpdateProfile {
     }
 }
 UpdateProfile.type = '[Profile] Update';
+if (false) {
+    /** @type {?} */
+    UpdateProfile.type;
+    /** @type {?} */
+    UpdateProfile.prototype.payload;
+}
 class ChangePassword {
     /**
      * @param {?} payload
@@ -80,6 +114,12 @@ class ChangePassword {
     }
 }
 ChangePassword.type = '[Profile] Change Password';
+if (false) {
+    /** @type {?} */
+    ChangePassword.type;
+    /** @type {?} */
+    ChangePassword.prototype.payload;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -94,6 +134,12 @@ class RestOccurError {
     }
 }
 RestOccurError.type = '[Rest] Error';
+if (false) {
+    /** @type {?} */
+    RestOccurError.type;
+    /** @type {?} */
+    RestOccurError.prototype.payload;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -108,6 +154,12 @@ class SetLanguage {
     }
 }
 SetLanguage.type = '[Session] Set Language';
+if (false) {
+    /** @type {?} */
+    SetLanguage.type;
+    /** @type {?} */
+    SetLanguage.prototype.payload;
+}
 class SetTenant {
     /**
      * @param {?} payload
@@ -117,6 +169,17 @@ class SetTenant {
     }
 }
 SetTenant.type = '[Session] Set Tenant';
+if (false) {
+    /** @type {?} */
+    SetTenant.type;
+    /** @type {?} */
+    SetTenant.prototype.payload;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -175,6 +238,18 @@ RestService.ctorParameters = () => [
     { type: Store }
 ];
 /** @nocollapse */ RestService.ngInjectableDef = ɵɵdefineInjectable({ factory: function RestService_Factory() { return new RestService(ɵɵinject(HttpClient), ɵɵinject(Store)); }, token: RestService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RestService.prototype.http;
+    /**
+     * @type {?}
+     * @private
+     */
+    RestService.prototype.store;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -236,6 +311,13 @@ ProfileService.ctorParameters = () => [
     { type: RestService }
 ];
 /** @nocollapse */ ProfileService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileService_Factory() { return new ProfileService(ɵɵinject(RestService)); }, token: ProfileService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileService.prototype.rest;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -322,6 +404,13 @@ ProfileState = __decorate([
     }),
     __metadata("design:paramtypes", [ProfileService])
 ], ProfileState);
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileState.prototype.profileService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -356,6 +445,13 @@ ApplicationConfigurationService.ctorParameters = () => [
     { type: RestService }
 ];
 /** @nocollapse */ ApplicationConfigurationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ApplicationConfigurationService_Factory() { return new ApplicationConfigurationService(ɵɵinject(RestService)); }, token: ApplicationConfigurationService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplicationConfigurationService.prototype.rest;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -806,6 +902,18 @@ ConfigState = ConfigState_1 = __decorate([
     }),
     __metadata("design:paramtypes", [ApplicationConfigurationService, Store])
 ], ConfigState);
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigState.prototype.appConfigurationService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigState.prototype.store;
+}
 /**
  * @param {?} routes
  * @param {?} name
@@ -843,6 +951,11 @@ function patchRouteDeep(routes, name, newValue, parentUrl = null) {
     }
     return organizeRoutes(routes);
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -925,6 +1038,11 @@ const takeUntilDestroy = (/**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class DynamicLayoutComponent {
     /**
      * @param {?} router
@@ -983,6 +1101,22 @@ __decorate([
     Select(ConfigState.getOne('requirements')),
     __metadata("design:type", Observable)
 ], DynamicLayoutComponent.prototype, "requirements$", void 0);
+if (false) {
+    /** @type {?} */
+    DynamicLayoutComponent.prototype.requirements$;
+    /** @type {?} */
+    DynamicLayoutComponent.prototype.layout;
+    /**
+     * @type {?}
+     * @private
+     */
+    DynamicLayoutComponent.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    DynamicLayoutComponent.prototype.store;
+}
 /**
  * @param {?} segments
  * @param {?} routes
@@ -1042,6 +1176,11 @@ RouterOutletComponent.decorators = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class AutofocusDirective {
     /**
      * @param {?} elRef
@@ -1072,6 +1211,15 @@ AutofocusDirective.ctorParameters = () => [
 AutofocusDirective.propDecorators = {
     delay: [{ type: Input, args: ['autofocus',] }]
 };
+if (false) {
+    /** @type {?} */
+    AutofocusDirective.prototype.delay;
+    /**
+     * @type {?}
+     * @private
+     */
+    AutofocusDirective.prototype.elRef;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1097,7 +1245,7 @@ class EllipsisDirective {
      * @return {?}
      */
     get maxWidth() {
-        return this.enabled ? this.witdh || '160px' : undefined;
+        return this.enabled ? this.width || '170px' : undefined;
     }
     /**
      * @return {?}
@@ -1127,12 +1275,30 @@ EllipsisDirective.ctorParameters = () => [
     { type: ElementRef }
 ];
 EllipsisDirective.propDecorators = {
-    witdh: [{ type: Input, args: ['abpEllipsis',] }],
+    width: [{ type: Input, args: ['abpEllipsis',] }],
     title: [{ type: HostBinding, args: ['title',] }, { type: Input }],
     enabled: [{ type: Input, args: ['abpEllipsisEnabled',] }],
     class: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
     maxWidth: [{ type: HostBinding, args: ['style.max-width',] }]
 };
+if (false) {
+    /** @type {?} */
+    EllipsisDirective.prototype.width;
+    /** @type {?} */
+    EllipsisDirective.prototype.title;
+    /** @type {?} */
+    EllipsisDirective.prototype.enabled;
+    /**
+     * @type {?}
+     * @private
+     */
+    EllipsisDirective.prototype.cdRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    EllipsisDirective.prototype.elRef;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1187,6 +1353,25 @@ PermissionDirective.ctorParameters = () => [
 PermissionDirective.propDecorators = {
     condition: [{ type: Input, args: ['abpPermission',] }]
 };
+if (false) {
+    /** @type {?} */
+    PermissionDirective.prototype.condition;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.elRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.store;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1271,6 +1456,43 @@ VisibilityDirective.ctorParameters = () => [
 VisibilityDirective.propDecorators = {
     focusedElement: [{ type: Input, args: ['abpVisibility',] }]
 };
+if (false) {
+    /** @type {?} */
+    VisibilityDirective.prototype.focusedElement;
+    /** @type {?} */
+    VisibilityDirective.prototype.completed$;
+    /**
+     * @type {?}
+     * @private
+     */
+    VisibilityDirective.prototype.elRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    VisibilityDirective.prototype.renderer;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @enum {string} */
+const eLayoutType = {
+    account: 'account',
+    application: 'application',
+    empty: 'empty',
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1311,6 +1533,18 @@ AuthGuard.ctorParameters = () => [
     { type: Store }
 ];
 /** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store)); }, token: AuthGuard, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AuthGuard.prototype.oauthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    AuthGuard.prototype.store;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1343,6 +1577,18 @@ PermissionGuard.ctorParameters = () => [
     { type: Store }
 ];
 /** @nocollapse */ PermissionGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function PermissionGuard_Factory() { return new PermissionGuard(ɵɵinject(Store)); }, token: PermissionGuard, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionGuard.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1399,6 +1645,272 @@ ApiInterceptor.ctorParameters = () => [
     { type: OAuthService },
     { type: Store }
 ];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ApiInterceptor.prototype.oAuthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApiInterceptor.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ApplicationConfiguration;
+(function (ApplicationConfiguration) {
+    /**
+     * @record
+     */
+    function Response() { }
+    ApplicationConfiguration.Response = Response;
+    if (false) {
+        /** @type {?} */
+        Response.prototype.localization;
+        /** @type {?} */
+        Response.prototype.auth;
+        /** @type {?} */
+        Response.prototype.setting;
+        /** @type {?} */
+        Response.prototype.currentUser;
+        /** @type {?} */
+        Response.prototype.features;
+    }
+    /**
+     * @record
+     */
+    function Localization() { }
+    ApplicationConfiguration.Localization = Localization;
+    if (false) {
+        /** @type {?} */
+        Localization.prototype.values;
+        /** @type {?} */
+        Localization.prototype.languages;
+    }
+    /**
+     * @record
+     */
+    function LocalizationValue() { }
+    ApplicationConfiguration.LocalizationValue = LocalizationValue;
+    /**
+     * @record
+     */
+    function Language() { }
+    ApplicationConfiguration.Language = Language;
+    if (false) {
+        /** @type {?} */
+        Language.prototype.cultureName;
+        /** @type {?} */
+        Language.prototype.uiCultureName;
+        /** @type {?} */
+        Language.prototype.displayName;
+        /** @type {?} */
+        Language.prototype.flagIcon;
+    }
+    /**
+     * @record
+     */
+    function Auth() { }
+    ApplicationConfiguration.Auth = Auth;
+    if (false) {
+        /** @type {?} */
+        Auth.prototype.policies;
+        /** @type {?} */
+        Auth.prototype.grantedPolicies;
+    }
+    /**
+     * @record
+     */
+    function Policy() { }
+    ApplicationConfiguration.Policy = Policy;
+    /**
+     * @record
+     */
+    function Setting() { }
+    ApplicationConfiguration.Setting = Setting;
+    if (false) {
+        /** @type {?} */
+        Setting.prototype.values;
+    }
+    /**
+     * @record
+     */
+    function CurrentUser() { }
+    ApplicationConfiguration.CurrentUser = CurrentUser;
+    if (false) {
+        /** @type {?} */
+        CurrentUser.prototype.isAuthenticated;
+        /** @type {?} */
+        CurrentUser.prototype.id;
+        /** @type {?} */
+        CurrentUser.prototype.tenantId;
+        /** @type {?} */
+        CurrentUser.prototype.userName;
+    }
+    /**
+     * @record
+     */
+    function Features() { }
+    ApplicationConfiguration.Features = Features;
+    if (false) {
+        /** @type {?} */
+        Features.prototype.values;
+    }
+})(ApplicationConfiguration || (ApplicationConfiguration = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ABP;
+(function (ABP) {
+    /**
+     * @record
+     */
+    function Root() { }
+    ABP.Root = Root;
+    if (false) {
+        /** @type {?} */
+        Root.prototype.environment;
+        /** @type {?} */
+        Root.prototype.requirements;
+    }
+    /**
+     * @record
+     * @template T
+     */
+    function PagedItemsResponse() { }
+    ABP.PagedItemsResponse = PagedItemsResponse;
+    if (false) {
+        /** @type {?} */
+        PagedItemsResponse.prototype.items;
+    }
+    /**
+     * @record
+     */
+    function PageQueryParams() { }
+    ABP.PageQueryParams = PageQueryParams;
+    if (false) {
+        /** @type {?|undefined} */
+        PageQueryParams.prototype.filter;
+        /** @type {?|undefined} */
+        PageQueryParams.prototype.sorting;
+        /** @type {?|undefined} */
+        PageQueryParams.prototype.skipCount;
+        /** @type {?|undefined} */
+        PageQueryParams.prototype.maxResultCount;
+    }
+    /**
+     * @record
+     */
+    function Route() { }
+    ABP.Route = Route;
+    if (false) {
+        /** @type {?|undefined} */
+        Route.prototype.children;
+        /** @type {?|undefined} */
+        Route.prototype.invisible;
+        /** @type {?|undefined} */
+        Route.prototype.layout;
+        /** @type {?} */
+        Route.prototype.name;
+        /** @type {?|undefined} */
+        Route.prototype.order;
+        /** @type {?|undefined} */
+        Route.prototype.parentName;
+        /** @type {?} */
+        Route.prototype.path;
+        /** @type {?|undefined} */
+        Route.prototype.requiredPolicy;
+        /** @type {?|undefined} */
+        Route.prototype.iconClass;
+    }
+    /**
+     * @record
+     */
+    function FullRoute() { }
+    ABP.FullRoute = FullRoute;
+    if (false) {
+        /** @type {?|undefined} */
+        FullRoute.prototype.url;
+        /** @type {?|undefined} */
+        FullRoute.prototype.wrapper;
+    }
+    /**
+     * @record
+     */
+    function BasicItem() { }
+    ABP.BasicItem = BasicItem;
+    if (false) {
+        /** @type {?} */
+        BasicItem.prototype.id;
+        /** @type {?} */
+        BasicItem.prototype.name;
+    }
+})(ABP || (ABP = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var Config;
+(function (Config) {
+    /**
+     * @record
+     */
+    function State() { }
+    Config.State = State;
+    /**
+     * @record
+     */
+    function Environment() { }
+    Config.Environment = Environment;
+    if (false) {
+        /** @type {?} */
+        Environment.prototype.application;
+        /** @type {?} */
+        Environment.prototype.production;
+        /** @type {?} */
+        Environment.prototype.oAuthConfig;
+        /** @type {?} */
+        Environment.prototype.apis;
+    }
+    /**
+     * @record
+     */
+    function Application() { }
+    Config.Application = Application;
+    if (false) {
+        /** @type {?} */
+        Application.prototype.name;
+        /** @type {?|undefined} */
+        Application.prototype.logoUrl;
+    }
+    /**
+     * @record
+     */
+    function Apis() { }
+    Config.Apis = Apis;
+    /**
+     * @record
+     */
+    function Requirements() { }
+    Config.Requirements = Requirements;
+    if (false) {
+        /** @type {?} */
+        Requirements.prototype.layouts;
+    }
+})(Config || (Config = {}));
 
 /**
  * @fileoverview added by tsickle
@@ -1411,13 +1923,106 @@ var Rest;
      */
     function Config() { }
     Rest.Config = Config;
+    if (false) {
+        /** @type {?|undefined} */
+        Config.prototype.throwErr;
+        /** @type {?|undefined} */
+        Config.prototype.observe;
+    }
     /**
      * @record
      * @template T
      */
     function Request() { }
     Rest.Request = Request;
+    if (false) {
+        /** @type {?|undefined} */
+        Request.prototype.body;
+        /** @type {?|undefined} */
+        Request.prototype.headers;
+        /** @type {?} */
+        Request.prototype.method;
+        /** @type {?|undefined} */
+        Request.prototype.params;
+        /** @type {?|undefined} */
+        Request.prototype.reportProgress;
+        /** @type {?|undefined} */
+        Request.prototype.responseType;
+        /** @type {?} */
+        Request.prototype.url;
+        /** @type {?|undefined} */
+        Request.prototype.withCredentials;
+    }
 })(Rest || (Rest = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var Session;
+(function (Session) {
+    /**
+     * @record
+     */
+    function State() { }
+    Session.State = State;
+    if (false) {
+        /** @type {?} */
+        State.prototype.language;
+        /** @type {?} */
+        State.prototype.tenant;
+    }
+})(Session || (Session = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var Profile;
+(function (Profile) {
+    /**
+     * @record
+     */
+    function State() { }
+    Profile.State = State;
+    if (false) {
+        /** @type {?} */
+        State.prototype.profile;
+    }
+    /**
+     * @record
+     */
+    function Response() { }
+    Profile.Response = Response;
+    if (false) {
+        /** @type {?} */
+        Response.prototype.userName;
+        /** @type {?} */
+        Response.prototype.email;
+        /** @type {?} */
+        Response.prototype.name;
+        /** @type {?} */
+        Response.prototype.surname;
+        /** @type {?} */
+        Response.prototype.phoneNumber;
+    }
+    /**
+     * @record
+     */
+    function ChangePasswordRequest() { }
+    Profile.ChangePasswordRequest = ChangePasswordRequest;
+    if (false) {
+        /** @type {?} */
+        ChangePasswordRequest.prototype.currentPassword;
+        /** @type {?} */
+        ChangePasswordRequest.prototype.newPassword;
+    }
+})(Profile || (Profile = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1464,6 +2069,23 @@ ConfigPlugin.ctorParameters = () => [
     { type: undefined, decorators: [{ type: Inject, args: [NGXS_CONFIG_PLUGIN_OPTIONS,] }] },
     { type: Router }
 ];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigPlugin.prototype.initialized;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigPlugin.prototype.options;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigPlugin.prototype.router;
+}
 /**
  * @param {?=} routes
  * @param {?=} wrappers
@@ -1567,6 +2189,11 @@ function setUrls(routes, parentUrl) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class ConfigService {
     /**
      * @param {?} store
@@ -1612,6 +2239,13 @@ ConfigService.ctorParameters = () => [
     { type: Store }
 ];
 /** @nocollapse */ ConfigService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfigService_Factory() { return new ConfigService(ɵɵinject(Store)); }, token: ConfigService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigService.prototype.store;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1677,6 +2311,10 @@ LazyLoadService.decorators = [
             },] }
 ];
 /** @nocollapse */ LazyLoadService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LazyLoadService_Factory() { return new LazyLoadService(); }, token: LazyLoadService, providedIn: "root" });
+if (false) {
+    /** @type {?} */
+    LazyLoadService.prototype.loadedLibraries;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1714,6 +2352,18 @@ LocalizationService.ctorParameters = () => [
     { type: Store }
 ];
 /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store)); }, token: LocalizationService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1737,6 +2387,11 @@ function configFactory(config) {
 const ENVIRONMENT = new InjectionToken('ENVIRONMENT');
 /** @type {?} */
 const CONFIG = new InjectionToken('CONFIG');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1789,6 +2444,17 @@ LocalizationPipe.decorators = [
 LocalizationPipe.ctorParameters = () => [
     { type: Store }
 ];
+if (false) {
+    /** @type {?} */
+    LocalizationPipe.prototype.initialized;
+    /** @type {?} */
+    LocalizationPipe.prototype.value;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationPipe.prototype.store;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1834,6 +2500,22 @@ InputEventDebounceDirective.propDecorators = {
     debounce: [{ type: Input }],
     debounceEvent: [{ type: Output, args: ['input.debounce',] }]
 };
+if (false) {
+    /** @type {?} */
+    InputEventDebounceDirective.prototype.debounce;
+    /** @type {?} */
+    InputEventDebounceDirective.prototype.debounceEvent;
+    /**
+     * @type {?}
+     * @private
+     */
+    InputEventDebounceDirective.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    InputEventDebounceDirective.prototype.el;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1878,6 +2560,20 @@ ClickEventStopPropagationDirective.ctorParameters = () => [
 ClickEventStopPropagationDirective.propDecorators = {
     stopPropEvent: [{ type: Output, args: ['click.stop',] }]
 };
+if (false) {
+    /** @type {?} */
+    ClickEventStopPropagationDirective.prototype.stopPropEvent;
+    /**
+     * @type {?}
+     * @private
+     */
+    ClickEventStopPropagationDirective.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    ClickEventStopPropagationDirective.prototype.el;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1960,6 +2656,16 @@ CoreModule.decorators = [
                 entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
             },] }
 ];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ConfigPlugin as ɵba, ApiInterceptor as ɵbb, getInitialData as ɵbc, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, SetLanguage as ɵi, SetTenant as ɵj, ConfigState as ɵl, ApplicationConfigurationService as ɵm, PatchRouteByName as ɵn, GetAppConfiguration as ɵo, RouterOutletComponent as ɵp, DynamicLayoutComponent as ɵq, ConfigState as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, LocalizationPipe as ɵu, PermissionDirective as ɵv, VisibilityDirective as ɵw, InputEventDebounceDirective as ɵx, ClickEventStopPropagationDirective as ɵy, NGXS_CONFIG_PLUGIN_OPTIONS as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

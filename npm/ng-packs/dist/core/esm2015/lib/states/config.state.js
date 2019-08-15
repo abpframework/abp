@@ -1,9 +1,9 @@
-import * as tslib_1 from "tslib";
 var ConfigState_1;
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+import * as tslib_1 from "tslib";
 import { State, Selector, createSelector, Action, Store } from '@ngxs/store';
 import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
 import { ApplicationConfigurationService } from '../services/application-configuration.service';

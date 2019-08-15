@@ -11,6 +11,7 @@ export declare class ChangePasswordComponent implements OnInit, OnChanges {
     visibleChange: EventEmitter<boolean>;
     modalContent: TemplateRef<any>;
     form: FormGroup;
+    modalBusy: boolean;
     constructor(fb: FormBuilder, store: Store, toasterService: ToasterService);
     ngOnInit(): void;
     onSubmit(): void;

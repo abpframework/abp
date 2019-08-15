@@ -1,7 +1,7 @@
 import { ConfigState, GetAppConfiguration, RestService, DynamicLayoutComponent, SessionState, SetTenant, CoreModule } from '@abp/ng.core';
 import { Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject, NgModule, InjectionToken } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Validators, FormBuilder } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -97,6 +97,37 @@ LoginComponent.ctorParameters = () => [
     { type: ToasterService },
     { type: undefined, decorators: [{ type: Optional }, { type: Inject, args: ['ACCOUNT_OPTIONS',] }] }
 ];
+if (false) {
+    /** @type {?} */
+    LoginComponent.prototype.form;
+    /** @type {?} */
+    LoginComponent.prototype.inProgress;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.fb;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.oauthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.toasterService;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.options;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -145,6 +176,13 @@ AccountService.ctorParameters = () => [
     { type: RestService }
 ];
 /** @nocollapse */ AccountService.ngInjectableDef = ɵɵdefineInjectable({ factory: function AccountService_Factory() { return new AccountService(ɵɵinject(RestService)); }, token: AccountService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AccountService.prototype.rest;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -216,6 +254,27 @@ RegisterComponent.ctorParameters = () => [
     { type: AccountService },
     { type: ToasterService }
 ];
+if (false) {
+    /** @type {?} */
+    RegisterComponent.prototype.form;
+    /** @type {?} */
+    RegisterComponent.prototype.inProgress;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.fb;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.accountService;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.toasterService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -327,6 +386,29 @@ TenantBoxComponent.ctorParameters = () => [
     { type: ToasterService },
     { type: AccountService }
 ];
+if (false) {
+    /** @type {?} */
+    TenantBoxComponent.prototype.tenant;
+    /** @type {?} */
+    TenantBoxComponent.prototype.tenantName;
+    /** @type {?} */
+    TenantBoxComponent.prototype.isModalVisible;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantBoxComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantBoxComponent.prototype.toasterService;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantBoxComponent.prototype.accountService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -377,6 +459,11 @@ AccountModule.decorators = [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 /** @type {?} */
 const ACCOUNT_ROUTES = (/** @type {?} */ ([
     {
@@ -387,6 +474,119 @@ const ACCOUNT_ROUTES = (/** @type {?} */ ([
         children: [{ path: 'login', name: 'Login', order: 1 }, { path: 'register', name: 'Register', order: 2 }],
     },
 ]));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function Options() { }
+if (false) {
+    /** @type {?|undefined} */
+    Options.prototype.redirectUrl;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function RegisterRequest() { }
+if (false) {
+    /** @type {?} */
+    RegisterRequest.prototype.userName;
+    /** @type {?} */
+    RegisterRequest.prototype.emailAddress;
+    /** @type {?} */
+    RegisterRequest.prototype.password;
+    /** @type {?|undefined} */
+    RegisterRequest.prototype.appName;
+}
+/**
+ * @record
+ */
+function RegisterResponse() { }
+if (false) {
+    /** @type {?} */
+    RegisterResponse.prototype.tenantId;
+    /** @type {?} */
+    RegisterResponse.prototype.userName;
+    /** @type {?} */
+    RegisterResponse.prototype.name;
+    /** @type {?} */
+    RegisterResponse.prototype.surname;
+    /** @type {?} */
+    RegisterResponse.prototype.email;
+    /** @type {?} */
+    RegisterResponse.prototype.emailConfirmed;
+    /** @type {?} */
+    RegisterResponse.prototype.phoneNumber;
+    /** @type {?} */
+    RegisterResponse.prototype.phoneNumberConfirmed;
+    /** @type {?} */
+    RegisterResponse.prototype.twoFactorEnabled;
+    /** @type {?} */
+    RegisterResponse.prototype.lockoutEnabled;
+    /** @type {?} */
+    RegisterResponse.prototype.lockoutEnd;
+    /** @type {?} */
+    RegisterResponse.prototype.concurrencyStamp;
+    /** @type {?} */
+    RegisterResponse.prototype.isDeleted;
+    /** @type {?} */
+    RegisterResponse.prototype.deleterId;
+    /** @type {?} */
+    RegisterResponse.prototype.deletionTime;
+    /** @type {?} */
+    RegisterResponse.prototype.lastModificationTime;
+    /** @type {?} */
+    RegisterResponse.prototype.lastModifierId;
+    /** @type {?} */
+    RegisterResponse.prototype.creationTime;
+    /** @type {?} */
+    RegisterResponse.prototype.creatorId;
+    /** @type {?} */
+    RegisterResponse.prototype.id;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function TenantIdResponse() { }
+if (false) {
+    /** @type {?} */
+    TenantIdResponse.prototype.success;
+    /** @type {?} */
+    TenantIdResponse.prototype.tenantId;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, LoginComponent, RegisterComponent, optionsFactory, LoginComponent as ɵa, RegisterComponent as ɵc, AccountService as ɵd, TenantBoxComponent as ɵe, AccountRoutingModule as ɵf, optionsFactory as ɵg, ACCOUNT_OPTIONS as ɵh };
 //# sourceMappingURL=abp-ng.account.js.map

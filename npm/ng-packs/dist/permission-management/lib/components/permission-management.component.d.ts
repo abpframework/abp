@@ -19,11 +19,13 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     permissions: PermissionManagement.Permission[];
     selectThisTab: boolean;
     selectAllTab: boolean;
+    modalBusy: boolean;
     trackByFn: TrackByFunction<PermissionManagement.Group>;
     readonly selectedGroupPermissions$: Observable<PermissionWithMargin[]>;
     constructor(store: Store, renderer: Renderer2);
     ngOnInit(): void;
     getChecked(name: string): boolean;
+    isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean;
     onClickCheckbox(clickedPermission: PermissionManagement.Permission, value: any): void;
     setTabCheckboxState(): void;
     setGrantCheckboxState(): void;

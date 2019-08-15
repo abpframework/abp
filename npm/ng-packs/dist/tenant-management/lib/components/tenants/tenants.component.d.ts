@@ -26,6 +26,7 @@ export declare class TenantsComponent {
     _useSharedDatabase: boolean;
     pageQuery: ABP.PageQueryParams;
     loading: boolean;
+    modalBusy: boolean;
     readonly useSharedDatabase: boolean;
     readonly connectionString: string;
     tenantModalTemplate: TemplateRef<any>;

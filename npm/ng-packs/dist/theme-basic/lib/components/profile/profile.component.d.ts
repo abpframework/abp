@@ -11,6 +11,7 @@ export declare class ProfileComponent implements OnChanges {
     visibleChange: EventEmitter<boolean>;
     profile$: Observable<Profile.Response>;
     form: FormGroup;
+    modalBusy: boolean;
     constructor(fb: FormBuilder, store: Store);
     buildForm(): void;
     onSubmit(): void;

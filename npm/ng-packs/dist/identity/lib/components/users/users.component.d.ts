@@ -21,6 +21,7 @@ export declare class UsersComponent {
     pageQuery: ABP.PageQueryParams;
     isModalVisible: boolean;
     loading: boolean;
+    modalBusy: boolean;
     trackByFn: TrackByFunction<AbstractControl>;
     readonly roleGroups: FormGroup[];
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);

@@ -1,4 +1,4 @@
-import { StartLoader, StopLoader, RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
+import { StartLoader, StopLoader, RestOccurError, LazyLoadService, CoreModule } from '@abp/ng.core';
 import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, EventEmitter, Renderer2, Output, ContentChild, ElementRef, ViewChild, ViewChildren, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, ChangeDetectionStrategy, ViewEncapsulation, APP_INITIALIZER, NgModule } from '@angular/core';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroy, ValidationErrorComponent as ValidationErrorComponent$1, NgxValidateCoreModule } from '@ngx-validate/core';
@@ -88,6 +88,19 @@ class AbstractToaster {
         this.status$.complete();
     }
 }
+if (false) {
+    /** @type {?} */
+    AbstractToaster.prototype.status$;
+    /** @type {?} */
+    AbstractToaster.prototype.key;
+    /** @type {?} */
+    AbstractToaster.prototype.sticky;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractToaster.prototype.messageService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -104,6 +117,12 @@ ConfirmationService.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
 /** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfirmationService_Factory() { return new ConfirmationService(ɵɵinject(MessageService)); }, token: ConfirmationService, providedIn: "root" });
+if (false) {
+    /** @type {?} */
+    ConfirmationService.prototype.key;
+    /** @type {?} */
+    ConfirmationService.prototype.sticky;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -166,6 +185,19 @@ ConfirmationComponent.decorators = [
 ConfirmationComponent.ctorParameters = () => [
     { type: ConfirmationService }
 ];
+if (false) {
+    /** @type {?} */
+    ConfirmationComponent.prototype.confirm;
+    /** @type {?} */
+    ConfirmationComponent.prototype.reject;
+    /** @type {?} */
+    ConfirmationComponent.prototype.dismiss;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfirmationComponent.prototype.confirmationService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -213,6 +245,18 @@ ErrorComponent.decorators = [
                 styles: [".error{position:fixed;top:0;background-color:#fff;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)}"]
             }] }
 ];
+if (false) {
+    /** @type {?} */
+    ErrorComponent.prototype.title;
+    /** @type {?} */
+    ErrorComponent.prototype.details;
+    /** @type {?} */
+    ErrorComponent.prototype.renderer;
+    /** @type {?} */
+    ErrorComponent.prototype.elementRef;
+    /** @type {?} */
+    ErrorComponent.prototype.host;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -330,17 +374,37 @@ LoaderBarComponent.propDecorators = {
     isLoading: [{ type: Input }],
     filter: [{ type: Input }]
 };
+if (false) {
+    /** @type {?} */
+    LoaderBarComponent.prototype.containerClass;
+    /** @type {?} */
+    LoaderBarComponent.prototype.progressClass;
+    /** @type {?} */
+    LoaderBarComponent.prototype.isLoading;
+    /** @type {?} */
+    LoaderBarComponent.prototype.filter;
+    /** @type {?} */
+    LoaderBarComponent.prototype.progressLevel;
+    /** @type {?} */
+    LoaderBarComponent.prototype.interval;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.router;
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ButtonComponent {
-    /**
-     * @param {?} actions
-     */
-    constructor(actions) {
-        this.actions = actions;
+    constructor() {
         this.buttonClass = 'btn btn-primary';
         this.buttonType = 'button';
         this.loading = false;
@@ -351,50 +415,6 @@ class ButtonComponent {
      */
     get icon() {
         return `${this.loading ? 'fa fa-spin fa-spinner' : this.iconClass || 'd-none'}`;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnInit() {
-        if (this.requestType || this.requestURLContainSearchValue) {
-            this.actions
-                .pipe(ofActionSuccessful(StartLoader, StopLoader), filter((/**
-             * @param {?} event
-             * @return {?}
-             */
-            (event) => {
-                /** @type {?} */
-                let condition = true;
-                if (this.requestType) {
-                    if (!Array.isArray(this.requestType))
-                        this.requestType = [this.requestType];
-                    condition =
-                        condition &&
-                            this.requestType.findIndex((/**
-                             * @param {?} type
-                             * @return {?}
-                             */
-                            type => type.toLowerCase() === event.payload.method.toLowerCase())) > -1;
-                }
-                if (condition && this.requestURLContainSearchValue) {
-                    condition =
-                        condition &&
-                            event.payload.url.toLowerCase().indexOf(this.requestURLContainSearchValue.toLowerCase()) > -1;
-                }
-                return condition;
-            })))
-                .subscribe((/**
-             * @return {?}
-             */
-            () => {
-                setTimeout((/**
-                 * @return {?}
-                 */
-                () => {
-                    this.loading = !this.loading;
-                }), 0);
-            }));
-        }
     }
 }
 ButtonComponent.decorators = [
@@ -407,19 +427,25 @@ ButtonComponent.decorators = [
   `
             }] }
 ];
-/** @nocollapse */
-ButtonComponent.ctorParameters = () => [
-    { type: Actions }
-];
 ButtonComponent.propDecorators = {
     buttonClass: [{ type: Input }],
     buttonType: [{ type: Input }],
     iconClass: [{ type: Input }],
     loading: [{ type: Input }],
-    disabled: [{ type: Input }],
-    requestType: [{ type: Input }],
-    requestURLContainSearchValue: [{ type: Input }]
+    disabled: [{ type: Input }]
 };
+if (false) {
+    /** @type {?} */
+    ButtonComponent.prototype.buttonClass;
+    /** @type {?} */
+    ButtonComponent.prototype.buttonType;
+    /** @type {?} */
+    ButtonComponent.prototype.iconClass;
+    /** @type {?} */
+    ButtonComponent.prototype.loading;
+    /** @type {?} */
+    ButtonComponent.prototype.disabled;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -627,6 +653,58 @@ ModalComponent.propDecorators = {
     modalContent: [{ type: ViewChild, args: ['abpModalContent', { static: false },] }],
     abpButtons: [{ type: ViewChildren, args: ['abp-button',] }]
 };
+if (false) {
+    /** @type {?} */
+    ModalComponent.prototype.centered;
+    /** @type {?} */
+    ModalComponent.prototype.modalClass;
+    /** @type {?} */
+    ModalComponent.prototype.size;
+    /** @type {?} */
+    ModalComponent.prototype.height;
+    /** @type {?} */
+    ModalComponent.prototype.minHeight;
+    /** @type {?} */
+    ModalComponent.prototype.visibleChange;
+    /** @type {?} */
+    ModalComponent.prototype.init;
+    /** @type {?} */
+    ModalComponent.prototype.abpHeader;
+    /** @type {?} */
+    ModalComponent.prototype.abpBody;
+    /** @type {?} */
+    ModalComponent.prototype.abpFooter;
+    /** @type {?} */
+    ModalComponent.prototype.abpClose;
+    /** @type {?} */
+    ModalComponent.prototype.abpSubmit;
+    /** @type {?} */
+    ModalComponent.prototype.modalContent;
+    /** @type {?} */
+    ModalComponent.prototype.abpButtons;
+    /** @type {?} */
+    ModalComponent.prototype._visible;
+    /** @type {?} */
+    ModalComponent.prototype._busy;
+    /** @type {?} */
+    ModalComponent.prototype.showModal;
+    /** @type {?} */
+    ModalComponent.prototype.isOpenConfirmation;
+    /** @type {?} */
+    ModalComponent.prototype.closable;
+    /** @type {?} */
+    ModalComponent.prototype.destroy$;
+    /**
+     * @type {?}
+     * @private
+     */
+    ModalComponent.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    ModalComponent.prototype.confirmationService;
+}
 /**
  * @param {?} nodes
  * @return {?}
@@ -713,7 +791,7 @@ var styles = `
 }
 
 .navbar .dropdown-menu {
-  min-width: 200px;
+  min-width: 215px;
 }
 
 .modal {
@@ -931,6 +1009,43 @@ ErrorHandler.ctorParameters = () => [
     { type: Injector }
 ];
 /** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService), ɵɵinject(ApplicationRef), ɵɵinject(ComponentFactoryResolver), ɵɵinject(RendererFactory2), ɵɵinject(INJECTOR)); }, token: ErrorHandler, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.confirmationService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.appRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.cfRes;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.rendererFactory;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.injector;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1058,6 +1173,16 @@ const slideFromBottom = trigger('routeAnimations', [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var Confirmation;
 (function (Confirmation) {
     /**
@@ -1065,6 +1190,16 @@ var Confirmation;
      */
     function Options() { }
     Confirmation.Options = Options;
+    if (false) {
+        /** @type {?|undefined} */
+        Options.prototype.hideCancelBtn;
+        /** @type {?|undefined} */
+        Options.prototype.hideYesBtn;
+        /** @type {?|undefined} */
+        Options.prototype.cancelCopy;
+        /** @type {?|undefined} */
+        Options.prototype.yesCopy;
+    }
 })(Confirmation || (Confirmation = {}));
 
 /**
@@ -1078,7 +1213,28 @@ var Toaster;
      */
     function Options() { }
     Toaster.Options = Options;
+    if (false) {
+        /** @type {?|undefined} */
+        Options.prototype.id;
+        /** @type {?|undefined} */
+        Options.prototype.closable;
+        /** @type {?|undefined} */
+        Options.prototype.life;
+        /** @type {?|undefined} */
+        Options.prototype.sticky;
+        /** @type {?|undefined} */
+        Options.prototype.data;
+        /** @type {?|undefined} */
+        Options.prototype.messageLocalizationParams;
+        /** @type {?|undefined} */
+        Options.prototype.titleLocalizationParams;
+    }
 })(Toaster || (Toaster = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1101,6 +1257,21 @@ ToasterService.decorators = [
     { type: Injectable, args: [{ providedIn: 'root' },] }
 ];
 /** @nocollapse */ ToasterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(ɵɵinject(MessageService)); }, token: ToasterService, providedIn: "root" });
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 export { ButtonComponent, ConfirmationComponent, ConfirmationService, LoaderBarComponent, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, slideFromBottom, ValidationErrorComponent as ɵa, ButtonComponent as ɵb, ConfirmationComponent as ɵc, ConfirmationService as ɵd, AbstractToaster as ɵe, ToastComponent as ɵf, ModalComponent as ɵg, ErrorComponent as ɵh, LoaderBarComponent as ɵi, ErrorHandler as ɵj };
 //# sourceMappingURL=abp-ng.theme.shared.js.map

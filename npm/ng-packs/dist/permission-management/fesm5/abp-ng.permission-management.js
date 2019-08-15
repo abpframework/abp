@@ -1,6 +1,6 @@
 import { RestService, CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Renderer2, Input, Output, EventEmitter, NgModule } from '@angular/core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Component, Renderer2, Input, Output, NgModule } from '@angular/core';
 import { Action, Selector, State, Store, Select, NgxsModule } from '@ngxs/store';
 import { __decorate, __metadata, __assign, __spread } from 'tslib';
 import { Observable } from 'rxjs';
@@ -18,6 +18,12 @@ var GetPermissions = /** @class */ (function () {
     GetPermissions.type = '[PermissionManagement] Get Permissions';
     return GetPermissions;
 }());
+if (false) {
+    /** @type {?} */
+    GetPermissions.type;
+    /** @type {?} */
+    GetPermissions.prototype.payload;
+}
 var UpdatePermissions = /** @class */ (function () {
     function UpdatePermissions(payload) {
         this.payload = payload;
@@ -25,6 +31,12 @@ var UpdatePermissions = /** @class */ (function () {
     UpdatePermissions.type = '[PermissionManagement] Update Permissions';
     return UpdatePermissions;
 }());
+if (false) {
+    /** @type {?} */
+    UpdatePermissions.type;
+    /** @type {?} */
+    UpdatePermissions.prototype.payload;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -82,6 +94,13 @@ var PermissionManagementService = /** @class */ (function () {
     /** @nocollapse */ PermissionManagementService.ngInjectableDef = ɵɵdefineInjectable({ factory: function PermissionManagementService_Factory() { return new PermissionManagementService(ɵɵinject(RestService)); }, token: PermissionManagementService, providedIn: "root" });
     return PermissionManagementService;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionManagementService.prototype.rest;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -185,6 +204,13 @@ var PermissionManagementState = /** @class */ (function () {
     ], PermissionManagementState);
     return PermissionManagementState;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionManagementState.prototype.permissionManagementService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -198,6 +224,7 @@ var PermissionManagementComponent = /** @class */ (function () {
         this.permissions = [];
         this.selectThisTab = false;
         this.selectAllTab = false;
+        this.modalBusy = false;
         this.trackByFn = (/**
          * @param {?} _
          * @param {?} item
@@ -288,6 +315,24 @@ var PermissionManagementComponent = /** @class */ (function () {
         function (per) { return per.name === name; })) || { isGranted: false }).isGranted;
     };
     /**
+     * @param {?} grantedProviders
+     * @return {?}
+     */
+    PermissionManagementComponent.prototype.isGrantedByRole = /**
+     * @param {?} grantedProviders
+     * @return {?}
+     */
+    function (grantedProviders) {
+        if (grantedProviders.length) {
+            return grantedProviders.findIndex((/**
+             * @param {?} p
+             * @return {?}
+             */
+            function (p) { return p.providerName === 'Role'; })) > -1;
+        }
+        return false;
+    };
+    /**
      * @param {?} clickedPermission
      * @param {?} value
      * @return {?}
@@ -299,7 +344,7 @@ var PermissionManagementComponent = /** @class */ (function () {
      */
     function (clickedPermission, value) {
         var _this = this;
-        if (clickedPermission.isGranted && clickedPermission.grantedProviders.length > 0)
+        if (clickedPermission.isGranted && this.isGrantedByRole(clickedPermission.grantedProviders))
             return;
         setTimeout((/**
          * @return {?}
@@ -404,7 +449,7 @@ var PermissionManagementComponent = /** @class */ (function () {
              * @return {?}
              */
             function (permission) {
-                if (permission.isGranted && permission.grantedProviders.length > 0)
+                if (permission.isGranted && _this.isGrantedByRole(permission.grantedProviders))
                     return;
                 /** @type {?} */
                 var index = _this.permissions.findIndex((/**
@@ -454,6 +499,7 @@ var PermissionManagementComponent = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        this.modalBusy = true;
         /** @type {?} */
         var unchangedPermissions = getPermissions(this.store.selectSnapshot(PermissionManagementState.getPermissionGroups));
         /** @type {?} */
@@ -488,10 +534,12 @@ var PermissionManagementComponent = /** @class */ (function () {
              * @return {?}
              */
             function () {
+                _this.modalBusy = false;
                 _this.visible = false;
             }));
         }
         else {
+            this.modalBusy = false;
             this.visible = false;
         }
     };
@@ -551,7 +599,7 @@ var PermissionManagementComponent = /** @class */ (function () {
     PermissionManagementComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-permission-management',
-                    template: "<abp-modal [(visible)]=\"visible\" (init)=\"initModal()\">\n  <ng-container *ngIf=\"{ entityName: entityName$ | async } as data\">\n    <ng-template #abpHeader>\n      <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>\n    </ng-template>\n    <ng-template #abpBody>\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input\n          type=\"checkbox\"\n          id=\"select-all-in-all-tabs\"\n          name=\"select-all-in-all-tabs\"\n          class=\"custom-control-input\"\n          [(ngModel)]=\"selectAllTab\"\n          (click)=\"onClickSelectAll()\"\n        />\n        <label class=\"custom-control-label\" for=\"select-all-in-all-tabs\">{{\n          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization\n        }}</label>\n      </div>\n\n      <hr class=\"mt-2 mb-2\" />\n      <div class=\"row\">\n        <div class=\"col-4\">\n          <ul class=\"nav nav-pills flex-column\">\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n              <li *ngFor=\"let group of groups$ | async; trackBy: trackByFn\" class=\"nav-item\">\n                <a\n                  class=\"nav-link pointer\"\n                  [class.active]=\"selectedGroup.name === group.name\"\n                  (click)=\"onChangeGroup(group)\"\n                  >{{ group?.displayName }}</a\n                >\n              </li>\n            </perfect-scrollbar>\n          </ul>\n        </div>\n        <div class=\"col-8\">\n          <h4>{{ selectedGroup.displayName }}</h4>\n          <hr class=\"mt-2 mb-3\" />\n          <div class=\"pl-1 pt-1\">\n            <div class=\"custom-checkbox custom-control mb-2\">\n              <input\n                type=\"checkbox\"\n                id=\"select-all-in-this-tabs\"\n                name=\"select-all-in-this-tabs\"\n                class=\"custom-control-input\"\n                [(ngModel)]=\"selectThisTab\"\n                (click)=\"onClickSelectThisTab()\"\n              />\n              <label class=\"custom-control-label\" for=\"select-all-in-this-tabs\">{{\n                'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization\n              }}</label>\n            </div>\n            <hr class=\"mb-3\" />\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 60vh;\">\n              <div\n                *ngFor=\"let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn\"\n                [style.margin-left]=\"permission.margin + 'px'\"\n                class=\"custom-checkbox custom-control mb-2\"\n              >\n                <input\n                  #permissionCheckbox\n                  type=\"checkbox\"\n                  [checked]=\"getChecked(permission.name)\"\n                  [value]=\"getChecked(permission.name)\"\n                  [attr.id]=\"permission.name\"\n                  class=\"custom-control-input\"\n                  [disabled]=\"permission.isGranted && permission.grantedProviders.length > 0\"\n                />\n                <label\n                  class=\"custom-control-label\"\n                  [attr.for]=\"permission.name\"\n                  (click)=\"onClickCheckbox(permission, permissionCheckbox.value)\"\n                  >{{ permission.displayName }}\n                  <span *ngFor=\"let provider of permission.grantedProviders\" class=\"badge badge-light\"\n                    >{{ provider.providerName }}: {{ provider.providerKey }}</span\n                  ></label\n                >\n              </div>\n            </perfect-scrollbar>\n          </div>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template #abpFooter>\n      <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <abp-button\n        [requestType]=\"['PUT']\"\n        requestURLContainSearchValue=\"permissions\"\n        iconClass=\"fa fa-check\"\n        (click)=\"onSubmit()\"\n        >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button\n      >\n    </ng-template>\n  </ng-container>\n</abp-modal>\n"
+                    template: "<abp-modal [(visible)]=\"visible\" (init)=\"initModal()\" [busy]=\"modalBusy\">\n  <ng-container *ngIf=\"{ entityName: entityName$ | async } as data\">\n    <ng-template #abpHeader>\n      <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>\n    </ng-template>\n    <ng-template #abpBody>\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input\n          type=\"checkbox\"\n          id=\"select-all-in-all-tabs\"\n          name=\"select-all-in-all-tabs\"\n          class=\"custom-control-input\"\n          [(ngModel)]=\"selectAllTab\"\n          (click)=\"onClickSelectAll()\"\n        />\n        <label class=\"custom-control-label\" for=\"select-all-in-all-tabs\">{{\n          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization\n        }}</label>\n      </div>\n\n      <hr class=\"mt-2 mb-2\" />\n      <div class=\"row\">\n        <div class=\"col-4\">\n          <ul class=\"nav nav-pills flex-column\">\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n              <li *ngFor=\"let group of groups$ | async; trackBy: trackByFn\" class=\"nav-item\">\n                <a\n                  class=\"nav-link pointer\"\n                  [class.active]=\"selectedGroup?.name === group?.name\"\n                  (click)=\"onChangeGroup(group)\"\n                  >{{ group?.displayName }}</a\n                >\n              </li>\n            </perfect-scrollbar>\n          </ul>\n        </div>\n        <div class=\"col-8\">\n          <h4>{{ selectedGroup.displayName }}</h4>\n          <hr class=\"mt-2 mb-3\" />\n          <div class=\"pl-1 pt-1\">\n            <div class=\"custom-checkbox custom-control mb-2\">\n              <input\n                type=\"checkbox\"\n                id=\"select-all-in-this-tabs\"\n                name=\"select-all-in-this-tabs\"\n                class=\"custom-control-input\"\n                [(ngModel)]=\"selectThisTab\"\n                (click)=\"onClickSelectThisTab()\"\n              />\n              <label class=\"custom-control-label\" for=\"select-all-in-this-tabs\">{{\n                'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization\n              }}</label>\n            </div>\n            <hr class=\"mb-3\" />\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 60vh;\">\n              <div\n                *ngFor=\"let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn\"\n                [style.margin-left]=\"permission.margin + 'px'\"\n                class=\"custom-checkbox custom-control mb-2\"\n              >\n                <input\n                  #permissionCheckbox\n                  type=\"checkbox\"\n                  [checked]=\"getChecked(permission.name)\"\n                  [value]=\"getChecked(permission.name)\"\n                  [attr.id]=\"permission.name\"\n                  class=\"custom-control-input\"\n                  [disabled]=\"isGrantedByRole(permission.grantedProviders)\"\n                />\n                <label\n                  class=\"custom-control-label\"\n                  [attr.for]=\"permission.name\"\n                  (click)=\"onClickCheckbox(permission, permissionCheckbox.value)\"\n                  >{{ permission.displayName }}\n                  <span *ngFor=\"let provider of permission.grantedProviders\" class=\"badge badge-light\"\n                    >{{ provider.providerName }}: {{ provider.providerKey }}</span\n                  ></label\n                >\n              </div>\n            </perfect-scrollbar>\n          </div>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template #abpFooter>\n      <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <abp-button iconClass=\"fa fa-check\" (click)=\"onSubmit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n    </ng-template>\n  </ng-container>\n</abp-modal>\n"
                 }] }
     ];
     /** @nocollapse */
@@ -575,6 +623,45 @@ var PermissionManagementComponent = /** @class */ (function () {
     ], PermissionManagementComponent.prototype, "entityName$", void 0);
     return PermissionManagementComponent;
 }());
+if (false) {
+    /** @type {?} */
+    PermissionManagementComponent.prototype.providerName;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.providerKey;
+    /**
+     * @type {?}
+     * @protected
+     */
+    PermissionManagementComponent.prototype._visible;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.visibleChange;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.groups$;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.entityName$;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.selectedGroup;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.permissions;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.selectThisTab;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.selectAllTab;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.modalBusy;
+    /** @type {?} */
+    PermissionManagementComponent.prototype.trackByFn;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionManagementComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionManagementComponent.prototype.renderer;
+}
 /**
  * @param {?} permissions
  * @param {?} permission
@@ -628,6 +715,16 @@ var PermissionManagementModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var PermissionManagement;
 (function (PermissionManagement) {
     /**
@@ -635,37 +732,106 @@ var PermissionManagement;
      */
     function State() { }
     PermissionManagement.State = State;
+    if (false) {
+        /** @type {?} */
+        State.prototype.permissionRes;
+    }
     /**
      * @record
      */
     function Response() { }
     PermissionManagement.Response = Response;
+    if (false) {
+        /** @type {?} */
+        Response.prototype.entityDisplayName;
+        /** @type {?} */
+        Response.prototype.groups;
+    }
     /**
      * @record
      */
     function Group() { }
     PermissionManagement.Group = Group;
+    if (false) {
+        /** @type {?} */
+        Group.prototype.name;
+        /** @type {?} */
+        Group.prototype.displayName;
+        /** @type {?} */
+        Group.prototype.permissions;
+    }
     /**
      * @record
      */
     function MinimumPermission() { }
     PermissionManagement.MinimumPermission = MinimumPermission;
+    if (false) {
+        /** @type {?} */
+        MinimumPermission.prototype.name;
+        /** @type {?} */
+        MinimumPermission.prototype.isGranted;
+    }
     /**
      * @record
      */
     function Permission() { }
     PermissionManagement.Permission = Permission;
+    if (false) {
+        /** @type {?} */
+        Permission.prototype.displayName;
+        /** @type {?} */
+        Permission.prototype.parentName;
+        /** @type {?} */
+        Permission.prototype.allowedProviders;
+        /** @type {?} */
+        Permission.prototype.grantedProviders;
+    }
     /**
      * @record
      */
     function GrantedProvider() { }
     PermissionManagement.GrantedProvider = GrantedProvider;
+    if (false) {
+        /** @type {?} */
+        GrantedProvider.prototype.providerName;
+        /** @type {?} */
+        GrantedProvider.prototype.providerKey;
+    }
     /**
      * @record
      */
     function UpdateRequest() { }
     PermissionManagement.UpdateRequest = UpdateRequest;
+    if (false) {
+        /** @type {?} */
+        UpdateRequest.prototype.permissions;
+    }
 })(PermissionManagement || (PermissionManagement = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 export { GetPermissions, PermissionManagementComponent, PermissionManagementModule, PermissionManagementService, PermissionManagementState, UpdatePermissions, PermissionManagementComponent as ɵa, PermissionManagementState as ɵb, PermissionManagementService as ɵc, GetPermissions as ɵd, UpdatePermissions as ɵe };
 //# sourceMappingURL=abp-ng.permission-management.js.map

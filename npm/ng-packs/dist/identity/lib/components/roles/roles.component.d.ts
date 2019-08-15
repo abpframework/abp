@@ -18,6 +18,7 @@ export declare class RolesComponent {
     providerKey: string;
     pageQuery: ABP.PageQueryParams;
     loading: boolean;
+    modalBusy: boolean;
     modalContent: TemplateRef<any>;
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
     onSearch(value: any): void;

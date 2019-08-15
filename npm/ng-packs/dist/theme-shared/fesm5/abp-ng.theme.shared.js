@@ -1,5 +1,5 @@
-import { StartLoader, StopLoader, RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, Renderer2, Output, ContentChild, ElementRef, ViewChild, ViewChildren, EventEmitter, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, ChangeDetectionStrategy, ViewEncapsulation, NgModule, APP_INITIALIZER } from '@angular/core';
+import { StartLoader, StopLoader, RestOccurError, LazyLoadService, CoreModule } from '@abp/ng.core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, EventEmitter, Renderer2, Output, ContentChild, ElementRef, ViewChild, ViewChildren, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, ChangeDetectionStrategy, ViewEncapsulation, APP_INITIALIZER, NgModule } from '@angular/core';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { takeUntilDestroy, ValidationErrorComponent as ValidationErrorComponent$1, NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -7,8 +7,8 @@ import { ToastModule } from 'primeng/toast';
 import { Subject, timer, fromEvent, forkJoin } from 'rxjs';
 import { filter, take, takeUntil, debounceTime } from 'rxjs/operators';
 import { __assign, __extends, __spread } from 'tslib';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
+import { NavigationStart, NavigationEnd, Router } from '@angular/router';
+import { ofActionSuccessful, Actions, Store } from '@ngxs/store';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import snq from 'snq';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -126,6 +126,19 @@ AbstractToaster = /** @class */ (function () {
     };
     return AbstractToaster;
 }());
+if (false) {
+    /** @type {?} */
+    AbstractToaster.prototype.status$;
+    /** @type {?} */
+    AbstractToaster.prototype.key;
+    /** @type {?} */
+    AbstractToaster.prototype.sticky;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractToaster.prototype.messageService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -145,6 +158,12 @@ var ConfirmationService = /** @class */ (function (_super) {
     /** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfirmationService_Factory() { return new ConfirmationService(ɵɵinject(MessageService)); }, token: ConfirmationService, providedIn: "root" });
     return ConfirmationService;
 }(AbstractToaster));
+if (false) {
+    /** @type {?} */
+    ConfirmationService.prototype.key;
+    /** @type {?} */
+    ConfirmationService.prototype.sticky;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -180,6 +199,19 @@ var ConfirmationComponent = /** @class */ (function () {
     ]; };
     return ConfirmationComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ConfirmationComponent.prototype.confirm;
+    /** @type {?} */
+    ConfirmationComponent.prototype.reject;
+    /** @type {?} */
+    ConfirmationComponent.prototype.dismiss;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfirmationComponent.prototype.confirmationService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -208,6 +240,18 @@ var ErrorComponent = /** @class */ (function () {
     ];
     return ErrorComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ErrorComponent.prototype.title;
+    /** @type {?} */
+    ErrorComponent.prototype.details;
+    /** @type {?} */
+    ErrorComponent.prototype.renderer;
+    /** @type {?} */
+    ErrorComponent.prototype.elementRef;
+    /** @type {?} */
+    ErrorComponent.prototype.host;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -330,14 +374,37 @@ var LoaderBarComponent = /** @class */ (function () {
     };
     return LoaderBarComponent;
 }());
+if (false) {
+    /** @type {?} */
+    LoaderBarComponent.prototype.containerClass;
+    /** @type {?} */
+    LoaderBarComponent.prototype.progressClass;
+    /** @type {?} */
+    LoaderBarComponent.prototype.isLoading;
+    /** @type {?} */
+    LoaderBarComponent.prototype.filter;
+    /** @type {?} */
+    LoaderBarComponent.prototype.progressLevel;
+    /** @type {?} */
+    LoaderBarComponent.prototype.interval;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.router;
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ButtonComponent = /** @class */ (function () {
-    function ButtonComponent(actions) {
-        this.actions = actions;
+    function ButtonComponent() {
         this.buttonClass = 'btn btn-primary';
         this.buttonType = 'button';
         this.loading = false;
@@ -353,75 +420,33 @@ var ButtonComponent = /** @class */ (function () {
         enumerable: true,
         configurable: true
     });
-    /**
-     * @return {?}
-     */
-    ButtonComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        if (this.requestType || this.requestURLContainSearchValue) {
-            this.actions
-                .pipe(ofActionSuccessful(StartLoader, StopLoader), filter((/**
-             * @param {?} event
-             * @return {?}
-             */
-            function (event) {
-                /** @type {?} */
-                var condition = true;
-                if (_this.requestType) {
-                    if (!Array.isArray(_this.requestType))
-                        _this.requestType = [_this.requestType];
-                    condition =
-                        condition &&
-                            _this.requestType.findIndex((/**
-                             * @param {?} type
-                             * @return {?}
-                             */
-                            function (type) { return type.toLowerCase() === event.payload.method.toLowerCase(); })) > -1;
-                }
-                if (condition && _this.requestURLContainSearchValue) {
-                    condition =
-                        condition &&
-                            event.payload.url.toLowerCase().indexOf(_this.requestURLContainSearchValue.toLowerCase()) > -1;
-                }
-                return condition;
-            })))
-                .subscribe((/**
-             * @return {?}
-             */
-            function () {
-                setTimeout((/**
-                 * @return {?}
-                 */
-                function () {
-                    _this.loading = !_this.loading;
-                }), 0);
-            }));
-        }
-    };
     ButtonComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-button',
                     template: "\n    <button [attr.type]=\"buttonType\" [ngClass]=\"buttonClass\" [disabled]=\"loading || disabled\">\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
                 }] }
     ];
-    /** @nocollapse */
-    ButtonComponent.ctorParameters = function () { return [
-        { type: Actions }
-    ]; };
     ButtonComponent.propDecorators = {
         buttonClass: [{ type: Input }],
         buttonType: [{ type: Input }],
         iconClass: [{ type: Input }],
         loading: [{ type: Input }],
-        disabled: [{ type: Input }],
-        requestType: [{ type: Input }],
-        requestURLContainSearchValue: [{ type: Input }]
+        disabled: [{ type: Input }]
     };
     return ButtonComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ButtonComponent.prototype.buttonClass;
+    /** @type {?} */
+    ButtonComponent.prototype.buttonType;
+    /** @type {?} */
+    ButtonComponent.prototype.iconClass;
+    /** @type {?} */
+    ButtonComponent.prototype.loading;
+    /** @type {?} */
+    ButtonComponent.prototype.disabled;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -651,6 +676,58 @@ var ModalComponent = /** @class */ (function () {
     };
     return ModalComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ModalComponent.prototype.centered;
+    /** @type {?} */
+    ModalComponent.prototype.modalClass;
+    /** @type {?} */
+    ModalComponent.prototype.size;
+    /** @type {?} */
+    ModalComponent.prototype.height;
+    /** @type {?} */
+    ModalComponent.prototype.minHeight;
+    /** @type {?} */
+    ModalComponent.prototype.visibleChange;
+    /** @type {?} */
+    ModalComponent.prototype.init;
+    /** @type {?} */
+    ModalComponent.prototype.abpHeader;
+    /** @type {?} */
+    ModalComponent.prototype.abpBody;
+    /** @type {?} */
+    ModalComponent.prototype.abpFooter;
+    /** @type {?} */
+    ModalComponent.prototype.abpClose;
+    /** @type {?} */
+    ModalComponent.prototype.abpSubmit;
+    /** @type {?} */
+    ModalComponent.prototype.modalContent;
+    /** @type {?} */
+    ModalComponent.prototype.abpButtons;
+    /** @type {?} */
+    ModalComponent.prototype._visible;
+    /** @type {?} */
+    ModalComponent.prototype._busy;
+    /** @type {?} */
+    ModalComponent.prototype.showModal;
+    /** @type {?} */
+    ModalComponent.prototype.isOpenConfirmation;
+    /** @type {?} */
+    ModalComponent.prototype.closable;
+    /** @type {?} */
+    ModalComponent.prototype.destroy$;
+    /**
+     * @type {?}
+     * @private
+     */
+    ModalComponent.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    ModalComponent.prototype.confirmationService;
+}
 /**
  * @param {?} nodes
  * @return {?}
@@ -695,7 +772,7 @@ var ToastComponent = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 200px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
+var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
 
 /**
  * @fileoverview added by tsickle
@@ -877,6 +954,43 @@ var ErrorHandler = /** @class */ (function () {
     /** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService), ɵɵinject(ApplicationRef), ɵɵinject(ComponentFactoryResolver), ɵɵinject(RendererFactory2), ɵɵinject(INJECTOR)); }, token: ErrorHandler, providedIn: "root" });
     return ErrorHandler;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.confirmationService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.appRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.cfRes;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.rendererFactory;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.injector;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1015,6 +1129,16 @@ var slideFromBottom = trigger('routeAnimations', [
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var Confirmation;
 (function (Confirmation) {
     /**
@@ -1022,6 +1146,16 @@ var Confirmation;
      */
     function Options() { }
     Confirmation.Options = Options;
+    if (false) {
+        /** @type {?|undefined} */
+        Options.prototype.hideCancelBtn;
+        /** @type {?|undefined} */
+        Options.prototype.hideYesBtn;
+        /** @type {?|undefined} */
+        Options.prototype.cancelCopy;
+        /** @type {?|undefined} */
+        Options.prototype.yesCopy;
+    }
 })(Confirmation || (Confirmation = {}));
 
 /**
@@ -1035,7 +1169,28 @@ var Toaster;
      */
     function Options() { }
     Toaster.Options = Options;
+    if (false) {
+        /** @type {?|undefined} */
+        Options.prototype.id;
+        /** @type {?|undefined} */
+        Options.prototype.closable;
+        /** @type {?|undefined} */
+        Options.prototype.life;
+        /** @type {?|undefined} */
+        Options.prototype.sticky;
+        /** @type {?|undefined} */
+        Options.prototype.data;
+        /** @type {?|undefined} */
+        Options.prototype.messageLocalizationParams;
+        /** @type {?|undefined} */
+        Options.prototype.titleLocalizationParams;
+    }
 })(Toaster || (Toaster = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1068,6 +1223,21 @@ var ToasterService = /** @class */ (function (_super) {
     /** @nocollapse */ ToasterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(ɵɵinject(MessageService)); }, token: ToasterService, providedIn: "root" });
     return ToasterService;
 }(AbstractToaster));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 export { ButtonComponent, ConfirmationComponent, ConfirmationService, LoaderBarComponent, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, slideFromBottom, ValidationErrorComponent as ɵa, ButtonComponent as ɵb, ConfirmationComponent as ɵc, ConfirmationService as ɵd, AbstractToaster as ɵe, ToastComponent as ɵf, ModalComponent as ɵg, ErrorComponent as ɵh, LoaderBarComponent as ɵi, ErrorHandler as ɵj };
 //# sourceMappingURL=abp-ng.theme.shared.js.map
