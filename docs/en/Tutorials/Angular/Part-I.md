@@ -8,6 +8,7 @@ This is the first part of the Angular tutorial series. See all parts:
 
 - **Part I: Create the project and a book list page (this tutorial)**
 - [Part II: Create, Update and Delete books](Part-II.md)
+- [Part III: Integration Tests](Part-III.md)
 
 You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
 
