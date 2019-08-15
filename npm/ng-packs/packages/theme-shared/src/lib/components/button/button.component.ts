@@ -6,7 +6,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'abp-button',
   template: `
-    <button [attr.type]="buttonType" [ngClass]="buttonClass" [disabled]="loading">
+    <button [attr.type]="buttonType" [ngClass]="buttonClass" [disabled]="loading" [disabled]="disabled">
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
   `,
@@ -23,6 +23,9 @@ export class ButtonComponent implements OnInit {
 
   @Input()
   loading: boolean = false;
+
+  @Input()
+  disabled: boolean = false;
 
   @Input()
   requestType: string | string[];
