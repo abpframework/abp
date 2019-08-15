@@ -32,6 +32,8 @@ export class ProfileComponent implements OnChanges {
 
   form: FormGroup;
 
+  modalBusy: boolean = false;
+
   constructor(private fb: FormBuilder, private store: Store) {}
 
   buildForm() {
@@ -54,8 +56,10 @@ export class ProfileComponent implements OnChanges {
 
   onSubmit() {
     if (this.form.invalid) return;
+    this.modalBusy = true;
 
     this.store.dispatch(new UpdateProfile(this.form.value)).subscribe(() => {
+      this.modalBusy = false;
       this.visible = false;
       this.form.reset();
     });

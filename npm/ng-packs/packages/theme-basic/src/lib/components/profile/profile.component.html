@@ -1,9 +1,9 @@
-<abp-modal [(visible)]="visible">
+<abp-modal [(visible)]="visible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>
   </ng-template>
   <ng-template #abpBody>
-    <form *ngIf="form" [formGroup]="form" novalidate>
+    <form novalidate *ngIf="form" [formGroup]="form" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <label for="username">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label
         ><span> * </span><input type="text" id="username" class="form-control" formControlName="userName" autofocus />
@@ -36,12 +36,6 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button
-      [requestType]="['PUT']"
-      requestURLContainSearchValue="my-profile"
-      iconClass="fa fa-check"
-      (click)="onSubmit()"
-      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
-    >
+    <abp-button iconClass="fa fa-check" (click)="onSubmit()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
   </ng-template>
 </abp-modal>
