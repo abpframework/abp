@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { comparePasswords } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import snq from 'snq';
+import { finalize } from 'rxjs/operators';
 
 const { minLength, required } = Validators;
 
@@ -43,6 +44,8 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
 
   form: FormGroup;
 
+  modalBusy: boolean = false;
+
   constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
 
   ngOnInit(): void {
@@ -60,12 +63,18 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
 
   onSubmit() {
     if (this.form.invalid) return;
+    this.modalBusy = true;
 
     this.store
       .dispatch(
         new ChangePassword({
           currentPassword: this.form.get('password').value,
           newPassword: this.form.get('newPassword').value,
+        }),
+      )
+      .pipe(
+        finalize(() => {
+          this.modalBusy = false;
         }),
       )
       .subscribe({
