@@ -406,7 +406,7 @@ if (false) {
 class ButtonComponent {
     constructor() {
         this.buttonClass = 'btn btn-primary';
-        this.buttonType = 'button';
+        this.type = 'button';
         this.loading = false;
         this.disabled = false;
     }
@@ -421,7 +421,7 @@ ButtonComponent.decorators = [
     { type: Component, args: [{
                 selector: 'abp-button',
                 template: `
-    <button [attr.type]="buttonType" [ngClass]="buttonClass" [disabled]="loading || disabled">
+    <button [attr.type]="type" [ngClass]="buttonClass" [disabled]="loading || disabled">
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
   `
@@ -429,7 +429,7 @@ ButtonComponent.decorators = [
 ];
 ButtonComponent.propDecorators = {
     buttonClass: [{ type: Input }],
-    buttonType: [{ type: Input }],
+    type: [{ type: Input }],
     iconClass: [{ type: Input }],
     loading: [{ type: Input }],
     disabled: [{ type: Input }]
@@ -438,7 +438,7 @@ if (false) {
     /** @type {?} */
     ButtonComponent.prototype.buttonClass;
     /** @type {?} */
-    ButtonComponent.prototype.buttonType;
+    ButtonComponent.prototype.type;
     /** @type {?} */
     ButtonComponent.prototype.iconClass;
     /** @type {?} */
@@ -1056,7 +1056,9 @@ class ValidationErrorComponent extends ValidationErrorComponent$1 {
      * @return {?}
      */
     get abpErrors() {
-        return this.validationErrors.map((/**
+        if (!this.errors || !this.errors.length)
+            return [];
+        return this.errors.map((/**
          * @param {?} error
          * @return {?}
          */

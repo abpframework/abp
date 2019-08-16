@@ -596,7 +596,7 @@
     var ButtonComponent = /** @class */ (function () {
         function ButtonComponent() {
             this.buttonClass = 'btn btn-primary';
-            this.buttonType = 'button';
+            this.type = 'button';
             this.loading = false;
             this.disabled = false;
         }
@@ -613,12 +613,12 @@
         ButtonComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-button',
-                        template: "\n    <button [attr.type]=\"buttonType\" [ngClass]=\"buttonClass\" [disabled]=\"loading || disabled\">\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
+                        template: "\n    <button [attr.type]=\"type\" [ngClass]=\"buttonClass\" [disabled]=\"loading || disabled\">\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
                     }] }
         ];
         ButtonComponent.propDecorators = {
             buttonClass: [{ type: core.Input }],
-            buttonType: [{ type: core.Input }],
+            type: [{ type: core.Input }],
             iconClass: [{ type: core.Input }],
             loading: [{ type: core.Input }],
             disabled: [{ type: core.Input }]
@@ -629,7 +629,7 @@
         /** @type {?} */
         ButtonComponent.prototype.buttonClass;
         /** @type {?} */
-        ButtonComponent.prototype.buttonType;
+        ButtonComponent.prototype.type;
         /** @type {?} */
         ButtonComponent.prototype.iconClass;
         /** @type {?} */
@@ -1196,7 +1196,9 @@
              * @return {?}
              */
             function () {
-                return this.validationErrors.map((/**
+                if (!this.errors || !this.errors.length)
+                    return [];
+                return this.errors.map((/**
                  * @param {?} error
                  * @return {?}
                  */
