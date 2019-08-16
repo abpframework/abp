@@ -41,11 +41,11 @@ namespace Volo.Docs
 
             Configure<RazorPagesOptions>(options =>
             {
-                var urlOptions = context.Services
-                    .GetRequiredServiceLazy<IOptions<DocsUrlOptions>>()
+                var docsOptions = context.Services
+                    .GetRequiredServiceLazy<IOptions<DocsUiOptions>>()
                     .Value.Value;
 
-                var routePrefix = urlOptions.RoutePrefix;
+                var routePrefix = docsOptions.RoutePrefix;
 
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
