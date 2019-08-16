@@ -34,21 +34,27 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
-            if (fileList.Any())
+            if (!fileList.Any())
             {
-                _npmGlobalPackagesChecker.Check();
+                return;
+            }
 
-                foreach (var file in fileList)
+            _npmGlobalPackagesChecker.Check();
+
+            foreach (var file in fileList)
+            {
+                UpdatePackagesInFile(file, out var needsYarnAndGulp);
+
+                if (needsYarnAndGulp)
                 {
-                    UpdatePackagesInFile(file);
-
                     RunYarnAndGulp(file);
                 }
             }
         }
 
-        protected virtual void UpdatePackagesInFile(string file)
+        protected virtual void UpdatePackagesInFile(string file, out bool needsYarnAndGulp)
         {
+            needsYarnAndGulp = false;
             var fileContent = File.ReadAllText(file);
             var packageJson = JObject.Parse(fileContent);
             var abpPackages = GetAbpPackagesFromPackageJson(packageJson);
@@ -60,7 +66,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var abpPackage in abpPackages)
             {
-                UpdatePackage(file, abpPackage);
+                TryUpdatePackage(file, abpPackage, out var updated);
+
+                if (updated)
+                {
+                    needsYarnAndGulp = true;
+                }
             }
 
             var modifiedFileContent = packageJson.ToString(Formatting.Indented);
@@ -68,7 +79,7 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(file, modifiedFileContent);
         }
 
-        protected virtual void UpdatePackage(string file, JProperty package)
+        protected virtual void TryUpdatePackage(string file, JProperty package, out bool updated)
         {
             var version = GetLatestVersion(package);
 
@@ -76,7 +87,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (versionWithPrefix == (string)package.Value)
             {
+                updated = false;
                 return;
+            }
+            else
+            {
+                updated = true;
             }
 
             package.Value.Replace(versionWithPrefix);
@@ -92,7 +108,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             var version = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
-            
+
             _fileVersionStorage[package.Name] = version;
 
             return version;
