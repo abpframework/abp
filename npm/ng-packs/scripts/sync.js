@@ -1,5 +1,6 @@
 // ESM syntax is supported.
 import fse from 'fs-extra';
+import execa from 'execa';
 
 (async () => {
   const { projects } = await fse.readJSON('../angular.json');
@@ -23,12 +24,6 @@ import fse from 'fs-extra';
 
   await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
   await execa('git', ['commit', '-m', 'Update source packages versions'], { stdout: 'inherit' });
-
-  try {
-    await execa('git', ['push', 'origin']);
-  } catch (error) {
-    console.error('An error occured while pushing the git files:\n' + error.stderr);
-  }
 
   process.exit(0);
 })();

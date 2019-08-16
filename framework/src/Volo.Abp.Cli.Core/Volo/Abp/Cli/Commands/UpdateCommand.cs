@@ -45,15 +45,6 @@ namespace Volo.Abp.Cli.Commands
         {
             await UpdateNugetPackages(commandLineArgs);
             UpdateNpmPackages();
-
-            var options = commandLineArgs.Options
-                .Select(x => x.Key).ToList();
-            await _cliAnalyticsCollect.CollectAsync(new CliAnalyticsCollectInputDto
-            {
-                Tool = _options.ToolName,
-                Command = commandLineArgs.Command,
-                Options = _jsonSerializer.Serialize(options)
-            });
         }
 
         private void UpdateNpmPackages()

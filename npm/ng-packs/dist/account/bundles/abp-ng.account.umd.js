@@ -272,7 +272,7 @@
         LoginComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-login',
-                        template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n            autofocus\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                        template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n            autofocus\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <abp-button [loading]=\"inProgress\" type=\"submit\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </abp-button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -384,10 +384,14 @@
      */
     var maxLength$1 = forms.Validators.maxLength, minLength$1 = forms.Validators.minLength, required$1 = forms.Validators.required, email = forms.Validators.email;
     var RegisterComponent = /** @class */ (function () {
-        function RegisterComponent(fb, accountService, toasterService) {
+        function RegisterComponent(fb, accountService, oauthService, store, toasterService) {
             this.fb = fb;
             this.accountService = accountService;
+            this.oauthService = oauthService;
+            this.store = store;
             this.toasterService = toasterService;
+            this.oauthService.configure(this.store.selectSnapshot(ng_core.ConfigState.getOne('environment')).oAuthConfig);
+            this.oauthService.loadDiscoveryDocument();
             this.form = this.fb.group({
                 username: ['', [required$1, maxLength$1(255)]],
                 password: ['', [required$1, maxLength$1(32)]],
@@ -414,7 +418,16 @@
             }));
             this.accountService
                 .register(newUser)
-                .pipe(operators.take(1), operators.catchError((/**
+                .pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return rxjs.from(_this.oauthService.fetchTokenUsingPasswordFlow(newUser.userName, newUser.password)); })), operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return _this.store.dispatch(new ng_core.GetAppConfiguration()); })), operators.tap((/**
+             * @return {?}
+             */
+            function () { return _this.store.dispatch(new routerPlugin.Navigate(['/'])); })), operators.take(1), operators.catchError((/**
              * @param {?} err
              * @return {?}
              */
@@ -437,13 +450,15 @@
         RegisterComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-register',
-                        template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Register' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"input-user-name\">{{ 'AbpAccount::UserName' | abpLocalization }}</label\n          ><span> * </span\n          ><input autofocus type=\"text\" id=\"input-user-name\" class=\"form-control\" formControlName=\"username\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-email-address\">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label\n          ><span> * </span><input type=\"email\" id=\"input-email-address\" class=\"form-control\" formControlName=\"email\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label\n          ><span> * </span><input type=\"password\" id=\"input-password\" class=\"form-control\" formControlName=\"password\" />\n        </div>\n        <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Register\" class=\"btn btn-primary\">\n          {{ 'AbpAccount::Register' | abpLocalization }}\n        </button>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/login\">{{ 'AbpAccount::Login' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                        template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Register' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"input-user-name\">{{ 'AbpAccount::UserName' | abpLocalization }}</label\n          ><span> * </span\n          ><input autofocus type=\"text\" id=\"input-user-name\" class=\"form-control\" formControlName=\"username\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-email-address\">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label\n          ><span> * </span><input type=\"email\" id=\"input-email-address\" class=\"form-control\" formControlName=\"email\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label\n          ><span> * </span><input type=\"password\" id=\"input-password\" class=\"form-control\" formControlName=\"password\" />\n        </div>\n        <abp-button [loading]=\"inProgress\" type=\"submit\">\n          {{ 'AbpAccount::Register' | abpLocalization }}\n        </abp-button>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/login\">{{ 'AbpAccount::Login' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
                     }] }
         ];
         /** @nocollapse */
         RegisterComponent.ctorParameters = function () { return [
             { type: forms.FormBuilder },
             { type: AccountService },
+            { type: angularOauth2Oidc.OAuthService },
+            { type: store.Store },
             { type: ng_theme_shared.ToasterService }
         ]; };
         return RegisterComponent;
@@ -463,6 +478,16 @@
          * @private
          */
         RegisterComponent.prototype.accountService;
+        /**
+         * @type {?}
+         * @private
+         */
+        RegisterComponent.prototype.oauthService;
+        /**
+         * @type {?}
+         * @private
+         */
+        RegisterComponent.prototype.store;
         /**
          * @type {?}
          * @private

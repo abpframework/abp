@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.identity",
-  "version": "0.8.0",
+  "version": "0.8.3",
   "dependencies": {
-    "@abp/ng.permission-management": "^0.8.0"
+    "@abp/ng.permission-management": "^0.8.3"
   },
   "publishConfig": {
     "access": "public"

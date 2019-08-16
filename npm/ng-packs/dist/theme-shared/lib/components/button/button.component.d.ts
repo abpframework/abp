@@ -1,6 +1,6 @@
 export declare class ButtonComponent {
     buttonClass: string;
-    buttonType: string;
+    type: string;
     iconClass: string;
     loading: boolean;
     disabled: boolean;

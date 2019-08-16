@@ -13,7 +13,9 @@ import { Validation, ValidationErrorComponent as ErrorComponent } from '@ngx-val
 })
 export class ValidationErrorComponent extends ErrorComponent {
   get abpErrors(): Validation.Error[] & { interpoliteParams?: string[] } {
-    return this.validationErrors.map(error => {
+    if (!this.errors || !this.errors.length) return [];
+
+    return this.errors.map(error => {
       if (!error.message) return error;
 
       const index = error.message.indexOf('[');
