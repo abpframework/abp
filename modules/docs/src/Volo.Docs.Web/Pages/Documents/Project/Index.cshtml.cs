@@ -179,7 +179,7 @@ namespace Volo.Docs.Pages.Documents.Project
             ProjectSelectItems = projects.Items.Select(p => new SelectListItem
             {
                 Text = p.Name,
-                Value = p.Id != Project.Id ? "/documents/" + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
+                Value = p.Id != Project.Id ? "/" + DocumentsUrlPrefix + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
                 Selected = p.Id == Project.Id
             }).ToList();
         }
