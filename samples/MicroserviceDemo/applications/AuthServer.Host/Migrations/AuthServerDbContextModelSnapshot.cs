@@ -15,7 +15,7 @@ namespace AuthServer.Host.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -522,7 +522,9 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
@@ -561,6 +563,8 @@ namespace AuthServer.Host.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<string>("Properties");
 
                     b.HasKey("Id");
 
@@ -681,7 +685,9 @@ namespace AuthServer.Host.Migrations
                     b.Property<string>("ClientUri")
                         .HasMaxLength(300);
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<int?>("ConsentLifetime");
 
@@ -699,6 +705,8 @@ namespace AuthServer.Host.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
+
+                    b.Property<int>("DeviceCodeLifetime");
 
                     b.Property<bool>("EnableLocalLogin");
 
@@ -750,6 +758,11 @@ namespace AuthServer.Host.Migrations
                     b.Property<int>("SlidingRefreshTokenLifetime");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh");
+
+                    b.Property<string>("UserCodeType")
+                        .HasMaxLength(100);
+
+                    b.Property<int?>("UserSsoLifetime");
 
                     b.HasKey("Id");
 
@@ -936,7 +949,9 @@ namespace AuthServer.Host.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("ConcurrencyStamp");
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnName("ConcurrencyStamp");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime");
@@ -977,6 +992,8 @@ namespace AuthServer.Host.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<string>("Properties");
 
                     b.Property<bool>("Required");
 

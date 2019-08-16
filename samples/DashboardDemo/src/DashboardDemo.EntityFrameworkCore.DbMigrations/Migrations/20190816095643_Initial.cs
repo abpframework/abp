@@ -218,7 +218,8 @@ namespace DashboardDemo.Migrations
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Enabled = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -272,7 +273,10 @@ namespace DashboardDemo.Migrations
                     IncludeJwtId = table.Column<bool>(nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(nullable: false),
                     ClientClaimsPrefix = table.Column<string>(maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true)
+                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true),
+                    UserSsoLifetime = table.Column<int>(nullable: true),
+                    UserCodeType = table.Column<string>(maxLength: 100, nullable: true),
+                    DeviceCodeLifetime = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -299,7 +303,8 @@ namespace DashboardDemo.Migrations
                     Enabled = table.Column<bool>(nullable: false),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
