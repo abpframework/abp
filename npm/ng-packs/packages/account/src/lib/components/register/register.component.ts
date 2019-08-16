@@ -1,8 +1,12 @@
+import { ConfigState, GetAppConfiguration } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { throwError } from 'rxjs';
-import { catchError, finalize, take } from 'rxjs/operators';
+import { Navigate } from '@ngxs/router-plugin';
+import { Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { from, throwError } from 'rxjs';
+import { catchError, finalize, switchMap, take, tap } from 'rxjs/operators';
 import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
@@ -17,7 +21,16 @@ export class RegisterComponent {
 
   inProgress: boolean;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private toasterService: ToasterService) {
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private oauthService: OAuthService,
+    private store: Store,
+    private toasterService: ToasterService,
+  ) {
+    this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
+    this.oauthService.loadDiscoveryDocument();
+
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
       password: ['', [required, maxLength(32)]],
@@ -40,6 +53,9 @@ export class RegisterComponent {
     this.accountService
       .register(newUser)
       .pipe(
+        switchMap(() => from(this.oauthService.fetchTokenUsingPasswordFlow(newUser.userName, newUser.password))),
+        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
+        tap(() => this.store.dispatch(new Navigate(['/']))),
         take(1),
         catchError(err => {
           this.toasterService.error(

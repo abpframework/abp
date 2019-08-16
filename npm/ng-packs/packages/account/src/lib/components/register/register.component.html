@@ -18,9 +18,9 @@
           <label for="input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label
           ><span> * </span><input type="password" id="input-password" class="form-control" formControlName="password" />
         </div>
-        <button [disabled]="inProgress" type="submit" name="Action" value="Register" class="btn btn-primary">
+        <abp-button [loading]="inProgress" type="submit">
           {{ 'AbpAccount::Register' | abpLocalization }}
-        </button>
+        </abp-button>
       </form>
       <div style="padding-top: 20px">
         <a routerLink="/account/login">{{ 'AbpAccount::Login' | abpLocalization }}</a>
