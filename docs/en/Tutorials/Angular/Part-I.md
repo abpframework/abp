@@ -342,7 +342,7 @@ Run `yarn start`, wait Angular to run the application and open `http://localhost
 
 Open the `app-routing.module.ts` and replace `books` as shown below:
 
-```js
+```ts
 import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';-
 
 //...
@@ -380,7 +380,7 @@ yarn ng generate component books/book-list
 
 Import the `SharedModule` to the `BooksModule` to reuse some components and services defined in:
 
-```js
+```ts
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -395,7 +395,7 @@ export class BooksModule {}
 
 Then, update the `routes` in the `books-routing.module.ts` to add the new book-list component:
 
-```js
+```ts
 import { BookListComponent } from './book-list/book-list.component';
 
 const routes: Routes = [
@@ -425,7 +425,7 @@ yarn ng generate ngxs-schematic:state books
 
 This command creates several new files and edits `app.modules.ts` to import the `NgxsModule` with the new state:
 
-```js
+```ts
 // app.module.ts
 
 import { BooksState } from './store/states/books.state';
@@ -446,7 +446,7 @@ First, create data types to map data returning from the backend (you can check s
 
 Modify the `books.ts` as shown below:
 
-```js
+```ts
 export namespace Books {
   export interface State {
     books: Response;
@@ -497,7 +497,7 @@ yarn ng generate service books/shared/books
 
 Modify `books.service.ts` as shown below:
 
-```js
+```ts
 import { Injectable } from '@angular/core';
 import { RestService } from '@abp/ng.core';
 import { Books } from '../../store/models';
@@ -522,7 +522,7 @@ Added the `get` method to get the list of books by performing an HTTP request to
 
 Replace `books.actions.ts` content as shown below:
 
-```js
+```ts
 export class GetBooks {
   static readonly type = '[Books] Get';
 }
@@ -532,7 +532,7 @@ export class GetBooks {
 
 Open the `books.state.ts` and change the file as shown below:
 
-```js
+```ts
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { GetBooks } from '../actions/books.actions';
 import { Books } from '../models/books';
@@ -572,7 +572,7 @@ Added the `GetBooks` action that uses the `BookService` defined above to get the
 
 Modify the `book-list.component.ts` as shown below:
 
-```js
+```ts
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { BooksState } from '../../store/states';
