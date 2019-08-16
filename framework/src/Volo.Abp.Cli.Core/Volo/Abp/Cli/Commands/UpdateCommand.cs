@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -43,8 +44,21 @@ namespace Volo.Abp.Cli.Commands
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            await UpdateNugetPackages(commandLineArgs);
-            UpdateNpmPackages();
+            var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
+            var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
+
+            var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
+
+            if (updateNpm || both)
+            {
+                await UpdateNugetPackages(commandLineArgs);
+            }
+
+            if (updateNpm || both)
+            {
+                UpdateNpmPackages();
+            }
+
         }
 
         private void UpdateNpmPackages()
@@ -99,6 +113,8 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-p|--include-previews                       (if supported by the template)");
+            sb.AppendLine("--npm                                       (Only updates NPM packages)");
+            sb.AppendLine("--nuget                                     (Only updates Nuget packages)");
             sb.AppendLine("");
             sb.AppendLine("Some examples:");
             sb.AppendLine("");
@@ -122,6 +138,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "p";
                 public const string Long = "include-previews";
+            }
+
+            public static class Packages
+            {
+                public const string Npm = "npm";
+                public const string NuGet = "nuget";
             }
         }
     }
