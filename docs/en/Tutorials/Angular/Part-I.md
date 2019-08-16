@@ -20,7 +20,7 @@ Create a new project named `Acme.BookStore` by selecting the Angular as the UI f
 
 This is how the layered solution structure looks after it's created:
 
-![bookstore-backend-solution](images\bookstore-backend-solution-v2.png)
+![bookstore-backend-solution](images/bookstore-backend-solution-v2.png)
 
 > You can see the [Application template document](../../Startup-Templates/Application.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
