@@ -1,5 +1,6 @@
 // ESM syntax is supported.
 import fse from 'fs-extra';
+import execa from 'execa';
 
 (async () => {
   const { projects } = await fse.readJSON('../angular.json');
