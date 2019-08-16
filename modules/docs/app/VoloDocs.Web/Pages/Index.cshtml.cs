@@ -8,9 +8,9 @@ namespace VoloDocs.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly DocsUrlOptions _urlOptions;
+        private readonly DocsOptions _urlOptions;
 
-        public IndexModel(IOptions<DocsUrlOptions> urlOptions)
+        public IndexModel(IOptions<DocsOptions> urlOptions)
         {
             _urlOptions = urlOptions.Value;
         }

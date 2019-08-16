@@ -52,18 +52,20 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public string DocumentsUrlPrefix { get; set; }
 
+        public bool ShowProjectsCombobox { get; set; }
+
         public bool DocumentLanguageIsDifferent { get; set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
-        private readonly DocsUrlOptions _options;
+        private readonly DocsOptions _options;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
-            IOptions<DocsUrlOptions> options)
+            IOptions<DocsOptions> options)
         {
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
@@ -74,6 +76,7 @@ namespace Volo.Docs.Pages.Documents.Project
         public async Task<IActionResult> OnGetAsync()
         {
             DocumentsUrlPrefix = _options.RoutePrefix;
+            ShowProjectsCombobox = _options.ShowProjectsComboboxInUi;
 
             if (IsDocumentCultureDifferentThanCurrent())
             {
@@ -81,7 +84,12 @@ namespace Volo.Docs.Pages.Documents.Project
             }
 
             await SetProjectAsync();
-            await SetProjectsAsync();
+
+            if (ShowProjectsCombobox)
+            {
+                await SetProjectsAsync();
+            }
+
             await SetVersionAsync();
             await SetLanguageList();
 

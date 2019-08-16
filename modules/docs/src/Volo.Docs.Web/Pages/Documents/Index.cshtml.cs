@@ -15,19 +15,19 @@ namespace Volo.Docs.Pages.Documents
         public IReadOnlyList<ProjectDto> Projects { get; set; }
 
         private readonly IProjectAppService _projectAppService;
-        private readonly DocsUrlOptions _urlOptions;
+        private readonly DocsOptions _options;
 
         public IndexModel(
             IProjectAppService projectAppService,
-            IOptions<DocsUrlOptions> urlOptions)
+            IOptions<DocsOptions> urlOptions)
         {
             _projectAppService = projectAppService;
-            _urlOptions = urlOptions.Value;
+            _options = urlOptions.Value;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = _urlOptions.RoutePrefix;
+            DocumentsUrlPrefix = _options.RoutePrefix;
 
             var listResult = await _projectAppService.GetListAsync();
 
