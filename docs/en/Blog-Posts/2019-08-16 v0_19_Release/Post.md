@@ -1,6 +1,6 @@
 # ABP v0.19 Release with Angular UI Option
 
-ABP v0.19 has been released with [~90 issues](https://github.com/abpframework/abp/milestone/17?closed=1) resolved and [600+ commits](https://github.com/abpframework/abp/compare/0.18.1...0.19.0) pushed.
+ABP v0.19 has been released with [90 issues](https://github.com/abpframework/abp/milestone/17?closed=1) resolved and [650+ commits](https://github.com/abpframework/abp/compare/0.18.1...0.19.0) pushed.
 
 ## New Features
 
