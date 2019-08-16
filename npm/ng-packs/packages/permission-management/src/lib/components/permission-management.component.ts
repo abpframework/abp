@@ -183,7 +183,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     this.setTabCheckboxState();
   }
 
-  onSubmit() {
+  submit() {
     this.modalBusy = true;
     const unchangedPermissions = getPermissions(
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
