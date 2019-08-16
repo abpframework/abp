@@ -2,7 +2,7 @@
 
 namespace Volo.Docs
 {
-    public class DocsOptions
+    public class DocsUiOptions
     {
         private string _routePrefix = "documents";
 
@@ -19,7 +19,7 @@ namespace Volo.Docs
         /// Allows user to see a combobox in user interface for swapping across projects
         /// Default value: True;
         /// </summary>
-        public bool ShowProjectsComboboxInUi = true;
+        public bool ShowProjectsCombobox = true;
 
         private string GetFormattedRoutePrefix()
         {

@@ -59,24 +59,24 @@ namespace Volo.Docs.Pages.Documents.Project
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
-        private readonly DocsOptions _options;
+        private readonly DocsUiOptions _uiOptions;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
-            IOptions<DocsOptions> options)
+            IOptions<DocsUiOptions> options)
         {
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
-            _options = options.Value;
+            _uiOptions = options.Value;
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            DocumentsUrlPrefix = _options.RoutePrefix;
-            ShowProjectsCombobox = _options.ShowProjectsComboboxInUi;
+            DocumentsUrlPrefix = _uiOptions.RoutePrefix;
+            ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
 
             if (IsDocumentCultureDifferentThanCurrent())
             {

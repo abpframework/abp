@@ -13,7 +13,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
     [HtmlTargetElement("ul", Attributes = "root-node")]
     public class TreeTagHelper : TagHelper
     {
-        private readonly DocsOptions _options;
+        private readonly DocsUiOptions _uiOptions;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -41,9 +41,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsOptions> urlOptions)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions)
         {
-            _options = urlOptions.Value;
+            _uiOptions = urlOptions.Value;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -142,7 +142,7 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
                 return "javascript:;";
             }
 
-            var prefix = _options.RoutePrefix;
+            var prefix = _uiOptions.RoutePrefix;
 
             return  prefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" + pathWithoutFileExtension;
         }

@@ -14,13 +14,13 @@ namespace Volo.Docs.Markdown
         public const string Type = "md";
 
         private readonly IMarkdownConverter _markdownConverter;
-        private readonly DocsOptions _options;
+        private readonly DocsUiOptions _uiOptions;
 
         public MarkdownDocumentToHtmlConverter(IMarkdownConverter markdownConverter,
-            IOptions<DocsOptions> urlOptions)
+            IOptions<DocsUiOptions> urlOptions)
         {
             _markdownConverter = markdownConverter;
-            _options = urlOptions.Value;
+            _uiOptions = urlOptions.Value;
         }
 
         private const string MdLinkFormat = "[{0}]({1}{2}/{3}/{4}{5}/{6})";
@@ -73,7 +73,7 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
-                    _options.RoutePrefix,
+                    _uiOptions.RoutePrefix,
                     languageCode,
                     projectShortName,
                     version,
@@ -101,7 +101,7 @@ namespace Volo.Docs.Markdown
                 return string.Format(
                     MdLinkFormat,
                     displayText,
-                    _options.RoutePrefix,
+                    _uiOptions.RoutePrefix,
                     languageCode,
                     projectShortName,
                     version,

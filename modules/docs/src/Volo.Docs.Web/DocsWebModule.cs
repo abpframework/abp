@@ -42,7 +42,7 @@ namespace Volo.Docs
             Configure<RazorPagesOptions>(options =>
             {
                 var docsOptions = context.Services
-                    .GetRequiredServiceLazy<IOptions<DocsOptions>>()
+                    .GetRequiredServiceLazy<IOptions<DocsUiOptions>>()
                     .Value.Value;
 
                 var routePrefix = docsOptions.RoutePrefix;
