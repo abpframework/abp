@@ -123,8 +123,8 @@ abp update [options]
 #### Options
 
 * `--include-previews` or `-p`: Includes preview, beta and rc packages while checking the latest versions.
-* `--npm`: Only updates NPM packages
-* `--nuget`: Only updates NuGet packages
+* `--npm`: Only updates NPM packages.
+* `--nuget`: Only updates NuGet packages.
 
 ### help
 
