@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Volo.Abp.Domain.Entities;
-
 namespace Volo.Abp.TestApp.Domain
 {
     [Table("AppPhones")]
@@ -15,7 +14,7 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual PhoneType Type { get; set; }
 
-        private Phone()
+        protected Phone()
         {
             
         }
@@ -30,6 +29,28 @@ namespace Volo.Abp.TestApp.Domain
         public override object[] GetKeys()
         {
             return new object[] {PersonId, Number};
+        }
+        public override bool Equals(object obj)
+        {
+            if (obj == null || !(obj is Phone))
+            {
+                return false;
+            }
+
+            //Same instances must be considered as equal
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+
+            //Transient objects are not considered as equal
+            var other = (Phone)obj;
+
+            return PersonId.Equals(other.PersonId) && Number.Equals(other.Number);
+        }
+        public override int GetHashCode()
+        {
+            return PersonId.GetHashCode() + Number.GetHashCode();
         }
     }
 

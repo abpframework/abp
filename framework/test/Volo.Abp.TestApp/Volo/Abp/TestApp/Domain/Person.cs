@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Domain.Entities.Auditing;
@@ -13,13 +14,13 @@ namespace Volo.Abp.TestApp.Domain
 
         public virtual Guid? CityId { get; set; }
 
-        public virtual string Name { get; private set; }
+        public virtual string Name { get; protected set; }
 
         public virtual int Age { get; set; }
 
-        public virtual Collection<Phone> Phones { get; set; }
+        public virtual IList<Phone> Phones { get; set; }
 
-        private Person()
+        protected Person()
         {
             
         }
