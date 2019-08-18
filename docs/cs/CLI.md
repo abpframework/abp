@@ -37,7 +37,7 @@ abp new Acme.BookStore
 * `Acme.BookStore` je tady název řešení.
 * Běžná konvence je nazvat řešení stylem *VaseSpolecnost.VasProjekt*. Nicméně můžete použít i jiné pojmenování jako *VasProjekt* (jednostupňový jmenný prostor) nebo *VaseSpolecnost.VasProjekt.VasModul* (třístupňový jmenný prostor).
 
-#### Options
+#### Možnosti
 
 * `--template` nebo `-t`: Určuje název šablony. Výchozí šablona je `app`, která generuje webovou aplikaci. Dostupné šablony:
   * `app` (výchozí): [Aplikační šablona](Startup-Templates/Application.md). Dodatečné možnosti:
