@@ -3,6 +3,5 @@
   "dest": "../../dist/feature-management",
   "lib": {
     "entryFile": "src/public-api.ts"
-  },
-  "deleteDestPath": false
+  }
 }
