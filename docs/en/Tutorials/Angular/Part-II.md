@@ -18,7 +18,7 @@ In this section, you will learn how to create a new modal dialog form to create 
 
 Create an interface, named `CreateUpdateBookInput` in the `books.ts` as shown below:
 
-```typescript
+```js
 export namespace Books {
   //...
   export interface CreateUpdateBookInput {
@@ -36,7 +36,7 @@ export namespace Books {
 
 Open the `books.service.ts` and add a new method, named `create` to perform an HTTP POST request to the server:
 
-```typescript
+```js
 create(createBookInput: Books.CreateUpdateBookInput): Observable<Books.Book> {
   return this.restService.request<Books.CreateUpdateBookInput, Books.Book>({
     method: 'POST',
@@ -52,7 +52,7 @@ create(createBookInput: Books.CreateUpdateBookInput): Observable<Books.Book> {
 
 Add the `CreateUpdateBook` action to the `books.actions.ts` as shown below:
 
-```typescript
+```js
 import { Books } from '../models';
 
 export class CreateUpdateBook {
@@ -63,7 +63,7 @@ export class CreateUpdateBook {
 
 Open `books.state.ts` and define the `save` method that will listen to a `CreateUpdateBook` action to create a book:
 
-```typescript
+```js
 import { ... , CreateUpdateBook } from '../actions/books.actions';
 import { ... , switchMap } from 'rxjs/operators';
 //...
@@ -118,7 +118,7 @@ Add a button, labeled `New book` to show the modal:
 
 Open the `book-list.component.ts` and add `isModalOpen` variable and `createBook` method to show/hide the modal.
 
-```typescript
+```js
 isModalOpen = false;
 
 //...
@@ -136,7 +136,7 @@ createBook() {
 
 Add a `form` variable and inject a `FormBuilder` service to the `book-list.component.ts` as shown below (remember add the import statement).
 
-```typescript
+```js
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 form: FormGroup;
@@ -151,7 +151,7 @@ constructor(
 
 Add the `buildForm` method to create book form.
 
-```typescript
+```js
 buildForm() {
   this.form = this.fb.group({
     name: ['', Validators.required],
@@ -167,7 +167,7 @@ buildForm() {
 
 Modify the `createBook` method as shown below:
 
-```typescript
+```js
 createBook() {
   this.buildForm();
   this.isModalOpen = true;
@@ -220,7 +220,7 @@ Open `book-list.component.html` and add the form in the body template of the mod
 
 Open the `book-list.component.ts` and then create an array, named `bookTypeArr`:
 
-```typescript
+```js
 //...
 form: FormGroup;
 
@@ -241,7 +241,7 @@ This array was used in the previous form template (in the `ngFor` loop).
 
 You need to import `NgbDatepickerModule` to the `books.module.ts`:
 
-```typescript
+```js
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
@@ -253,9 +253,9 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 export class BooksModule {}
 ```
 
-Then open the `book-list.component.html` and add `providers` as shown below:
+Then open the `book-list.component.ts` and add `providers` as shown below:
 
-```typescript
+```js
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -292,7 +292,7 @@ This adds a save button to the bottom area of the modal:
 
 Then define a `save` method in the `BookListComponent`:
 
-```typescript
+```js
 save() {
   if (this.form.invalid) {
     return;
@@ -311,7 +311,7 @@ save() {
 
 Open the `books.service.ts` and then add the `getById` and `update` methods.
 
-```typescript
+```js
 getById(id: string): Observable<Books.Book> {
   return this.restService.request<void, Books.Book>({
     method: 'GET',
@@ -332,7 +332,7 @@ update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Boo
 
 Open the `books.actins.ts` and add `id` parameter to the `CreateUpdateBook` action:
 
-```typescript
+```js
 export class CreateUpdateBook {
   static readonly type = '[Books] Create Update Book';
   constructor(public payload: Books.CreateUpdateBookInput, public id?: string) {}
@@ -341,7 +341,7 @@ export class CreateUpdateBook {
 
 Open `books.state.ts` and modify the `save` method as show below:
 
-```typescript
+```js
 @Action(CreateUpdateBook)
 save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
   let request;
@@ -360,7 +360,7 @@ save(ctx: StateContext<Books.State>, action: CreateUpdateBook) {
 
 Inject `BooksService` dependency by adding it to the `book-list.component.ts` constructor and add a variable named `selectedBook`.
 
-```typescript
+```js
 import { BooksService } from '../shared/books.service';
 //...
 selectedBook = {} as Books.Book;
@@ -373,7 +373,7 @@ constructor(
 
 `booksService` is used to get the editing book to prepare the form. Modify the `buildForm` method to reuse the same form while editing a book.
 
-```typescript
+```js
 buildForm() {
   this.form = this.fb.group({
     name: [this.selectedBook.name || '', Validators.required],
@@ -386,7 +386,7 @@ buildForm() {
 
 Add the `editBook` method as shown below:
 
-```typescript
+```js
   editBook(id: string) {
     this.booksService.getById(id).subscribe(book => {
       this.selectedBook = book;
@@ -400,7 +400,7 @@ Added `editBook` method to get the editing book, build the form and show the mod
 
 Now, add the `selectedBook` definition to `createBook` method to reuse the same form while creating a new book:
 
-```typescript
+```js
   createBook() {
     this.selectedBook = {} as Books.Book;
     //...
@@ -409,7 +409,7 @@ Now, add the `selectedBook` definition to `createBook` method to reuse the same 
 
 Modify the `save` method to pass the id of the selected book as shown below:
 
-```typescript
+```js
 save() {
   if (this.form.invalid) {
     return;
@@ -489,7 +489,7 @@ Update the modal header to change the title based on the current operation:
 
 Open `books.service.ts` and add a `delete` method to delete a book with the `id` by performing an HTTP request to the related endpoint:
 
-```typescript
+```js
 delete(id: string): Observable<void> {
   return this.restService.request<void, void>({
     method: 'DELETE',
@@ -502,7 +502,7 @@ delete(id: string): Observable<void> {
 
 Add an action named `DeleteBook` to `books.actions.ts`:
 
-```typescript
+```js
 export class DeleteBook {
   static readonly type = '[Books] Delete';
   constructor(public id: string) {}
@@ -511,7 +511,7 @@ export class DeleteBook {
 
 Open the `books.state.ts` and add the `delete` method that will listen to the `DeleteBook` action to delete a book:
 
-```typescript
+```js
 import { ... , DeleteBook } from '../actions/books.actions';
 //...
 @Action(DeleteBook)
@@ -544,7 +544,7 @@ The final actions dropdown UI looks like below:
 
 Open `book-list.component.ts` and inject the `ConfirmationService`.
 
-```typescript
+```js
 import { ConfirmationService } from '@abp/ng.theme.shared';
 //...
 constructor(
@@ -557,7 +557,7 @@ constructor(
 
 Add a delete method to the `BookListComponent`:
 
-```typescript
+```js
 import { ... , DeleteBook } from '../../store/actions';
 import { ... , Toaster } from '@abp/ng.theme.shared';
 //...

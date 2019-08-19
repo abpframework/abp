@@ -3,5 +3,6 @@
   "dest": "../../dist/feature-management",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": ["@abp/ng.theme.shared"]
 }
