@@ -22,7 +22,7 @@ namespace Volo.Blogging
                 options.Resources
                     .Add<BloggingResource>("en")
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddVirtualJson("/Localization/Resources");
+                    .AddVirtualJson("Volo/Blogging/Localization/Resources");
             });
         }
     }
