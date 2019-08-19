@@ -37,7 +37,7 @@ Otevřete řešení ve **Visual Studio**:
 
 Řešení má vrstvenou strukturu (založenou na [Domain Driven Design](Domain-Driven-Design.md)) a obsahuje projekty jednotkovových a integračních testů předkonfigurované pro práci s **EF Core** & **SQLite in-memory** databází.
 
-> Podívejte se na [dokument šablony MVC aplikace](Startup-Templates/Mvc.md) k detailnímu pochopení struktury řešení.
+> Podívejte se na [dokument šablony aplikace](Startup-Templates/Application.md) k detailnímu pochopení struktury řešení.
 
 ### Connection string databáze
 

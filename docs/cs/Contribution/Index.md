@@ -35,7 +35,7 @@ Existuje několik základních dokumentů, které je třeba přeložit než bude
 * Tutoriály
 * CLI
 
-Nový jazyk je publikován jakmile budou minimálně tyto překlady dokončeny.
+Nový jazyk je publikován jakmile jsou minimálně tyto překlady dokončeny.
 
 ### Lokalizace zdrojů
 
