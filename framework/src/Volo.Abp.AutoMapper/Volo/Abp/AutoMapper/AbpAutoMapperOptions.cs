@@ -30,5 +30,13 @@ namespace Volo.Abp.AutoMapper
                 ValidatingProfiles.Add<TProfile>();
             }
         }
+
+        public void AddProfiles<TAbpModule>()
+        {
+            Configurators.Add(context =>
+            {
+                context.MapperConfiguration.AddMaps(typeof(TAbpModule).Assembly);
+            });
+        }
     }
 }
