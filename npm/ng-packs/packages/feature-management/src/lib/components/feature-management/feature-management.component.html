@@ -25,8 +25,8 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
     </button>
-    <button type="button" class="btn btn-primary" (click)="save()">
+    <abp-button iconClass="fa fa-check" (click)="save()">
       {{ 'AbpFeatureManagement::Save' | abpLocalization }}
-    </button>
+    </abp-button>
   </ng-template>
 </abp-modal>

@@ -11,7 +11,7 @@ import { pluck, tap } from 'rxjs/operators';
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
 })
-export class FeatureManagementComponent implements OnChanges {
+export class FeatureManagementComponent {
   @Input()
   providerKey: string;
 
@@ -28,6 +28,8 @@ export class FeatureManagementComponent implements OnChanges {
   set visible(value: boolean) {
     this._visible = value;
     this.visibleChange.emit(value);
+
+    if (value) this.openModal();
   }
 
   @Output()
@@ -41,16 +43,6 @@ export class FeatureManagementComponent implements OnChanges {
   form: FormGroup;
 
   constructor(private store: Store) {}
-
-  ngOnChanges({ visible }: SimpleChanges): void {
-    if (!visible) return;
-
-    if (visible.currentValue) {
-      this.openModal();
-    } else if (this.visible && visible.currentValue === false) {
-      this.visible = false;
-    }
-  }
 
   openModal() {
     if (!this.providerKey || !this.providerName) {
@@ -66,7 +58,6 @@ export class FeatureManagementComponent implements OnChanges {
       .pipe(pluck('FeatureManagementState', 'features'))
       .subscribe(features => {
         this.buildForm(features);
-        this.visible = true;
       });
   }
 
