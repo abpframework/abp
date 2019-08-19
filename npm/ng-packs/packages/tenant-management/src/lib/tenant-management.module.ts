@@ -7,12 +7,14 @@ import { TableModule } from 'primeng/table';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementState } from './states/tenant-management.state';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @NgModule({
   declarations: [TenantsComponent],
   imports: [
     TenantManagementRoutingModule,
     NgxsModule.forFeature([TenantManagementState]),
+    NgxValidateCoreModule,
     CoreModule,
     TableModule,
     ThemeSharedModule,

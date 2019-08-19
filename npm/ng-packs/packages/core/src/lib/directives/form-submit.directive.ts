@@ -22,10 +22,7 @@ type Controls = { [key: string]: FormControl } | FormGroup[];
 })
 export class FormSubmitDirective implements OnInit, OnDestroy {
   @Input()
-  noValidateOnSubmit;
-
-  @Input()
-  allowSubmit: boolean = true;
+  notValidateOnSubmit: string | boolean;
 
   constructor(
     @Self() private formGroupDirective: FormGroupDirective,
@@ -37,19 +34,18 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
     fromEvent(this.host.nativeElement as HTMLElement, 'keyup')
       .pipe(
         debounceTime(200),
-        filter((key: KeyboardEvent) => key && key.key === 'Enter' && this.allowSubmit),
+        filter((key: KeyboardEvent) => key && key.key === 'Enter'),
         takeUntilDestroy(this),
       )
       .subscribe(() => {
         this.host.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
       });
 
-    if (this.noValidateOnSubmit || typeof this.noValidateOnSubmit === 'string') {
-      return;
-    }
-
     fromEvent(this.host.nativeElement, 'submit')
-      .pipe(takeUntilDestroy(this))
+      .pipe(
+        takeUntilDestroy(this),
+        filter(() => !this.notValidateOnSubmit && typeof this.notValidateOnSubmit !== 'string'),
+      )
       .subscribe(() => {
         const { form } = this.formGroupDirective;
 
