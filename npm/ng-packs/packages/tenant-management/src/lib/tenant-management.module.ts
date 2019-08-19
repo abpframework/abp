@@ -7,6 +7,7 @@ import { TableModule } from 'primeng/table';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementState } from './states/tenant-management.state';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
+import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 @NgModule({
@@ -19,6 +20,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     TableModule,
     ThemeSharedModule,
     NgbDropdownModule,
+    FeatureManagementModule,
   ],
 })
 export class TenantManagementModule {}
