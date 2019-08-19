@@ -3,7 +3,7 @@
   "version": "0.8.3",
   "dependencies": {
     "@abp/ng.theme.shared": "^0.8.3",
-    "@abp/ng.feature-management": "^0.8.4"
+    "@abp/ng.feature-management": "^0.8.3"
   },
   "publishConfig": {
     "access": "public"
