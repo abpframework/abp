@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.feature-management",
-  "version": "0.8.3",
+  "version": "0.0.83",
   "dependencies": {
     "@abp/ng.theme.shared": "^0.8.3"
   },
