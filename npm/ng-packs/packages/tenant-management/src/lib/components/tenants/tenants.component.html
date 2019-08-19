@@ -71,7 +71,14 @@
                   ngbDropdownItem
                   (click)="onEditConnectionString(data.id)"
                 >
-                  {{ 'AbpTenantManagement::ConnectionStrings' | abpLocalization }}
+                  {{ 'AbpTenantManagement::Permission:ManageConnectionStrings' | abpLocalization }}
+                </button>
+                <button
+                  [abpPermission]="'AbpTenantManagement.Tenants.ManageFeatures'"
+                  ngbDropdownItem
+                  (click)="providerKey = data.id; visibleFeatures = true"
+                >
+                  {{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}
                 </button>
                 <button
                   [abpPermission]="'AbpTenantManagement.Tenants.Delete'"
@@ -149,3 +156,9 @@
     </div>
   </form>
 </ng-template>
+
+<abp-feature-management
+  [(visible)]="visibleFeatures"
+  providerName="Tenant"
+  [providerKey]="providerKey"
+></abp-feature-management>

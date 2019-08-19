@@ -7,6 +7,7 @@ import { TableModule } from 'primeng/table';
 import { TenantsComponent } from './components/tenants/tenants.component';
 import { TenantManagementState } from './states/tenant-management.state';
 import { TenantManagementRoutingModule } from './tenant-management-routing.module';
+import { FeatureManagementModule } from '@abp/ng.feature-management';
 
 @NgModule({
   declarations: [TenantsComponent],
@@ -17,6 +18,7 @@ import { TenantManagementRoutingModule } from './tenant-management-routing.modul
     TableModule,
     ThemeSharedModule,
     NgbDropdownModule,
+    FeatureManagementModule,
   ],
 })
 export class TenantManagementModule {}
