@@ -253,7 +253,7 @@ import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 export class BooksModule {}
 ```
 
-Then open the `book-list.component.html` and add `providers` as shown below:
+Then open the `book-list.component.ts` and add `providers` as shown below:
 
 ```js
 import { NgbDateNativeAdapter, NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
