@@ -22,7 +22,7 @@ import { EllipsisDirective } from './directives/ellipsis.directive';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { InputEventDebounceDirective } from './directives/debounce.directive';
 import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
-import { FormKeyupListenerDirective } from './directives/form-keyup-listener.directive';
+import { FormSubmitDirective } from './directives/form-submit.directive';
 
 @NgModule({
   imports: [
@@ -40,7 +40,7 @@ import { FormKeyupListenerDirective } from './directives/form-keyup-listener.dir
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
-    FormKeyupListenerDirective,
+    FormSubmitDirective,
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
@@ -57,7 +57,7 @@ import { FormKeyupListenerDirective } from './directives/form-keyup-listener.dir
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
-    FormKeyupListenerDirective,
+    FormSubmitDirective,
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,

@@ -188,6 +188,39 @@
         }
       }
     },
+    "feature-management": {
+      "projectType": "library",
+      "root": "packages/feature-management",
+      "sourceRoot": "packages/feature-management/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/feature-management/tsconfig.lib.json",
+            "project": "packages/feature-management/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "packages/feature-management/src/test.ts",
+            "tsConfig": "packages/feature-management/tsconfig.spec.json",
+            "karmaConfig": "packages/feature-management/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/feature-management/tsconfig.lib.json",
+              "packages/feature-management/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
     "tenant-management": {
       "projectType": "library",
       "root": "packages/tenant-management",

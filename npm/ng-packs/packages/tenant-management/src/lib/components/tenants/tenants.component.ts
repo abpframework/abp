@@ -44,6 +44,10 @@ export class TenantsComponent {
 
   selectedModalContent = {} as SelectedModalContent;
 
+  visibleFeatures: boolean = false;
+
+  providerKey: string;
+
   _useSharedDatabase: boolean;
 
   pageQuery: ABP.PageQueryParams = {

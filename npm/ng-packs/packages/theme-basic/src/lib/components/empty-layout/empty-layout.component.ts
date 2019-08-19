@@ -9,6 +9,5 @@ import { eLayoutType } from '@abp/ng.core';
   `,
 })
 export class EmptyLayoutComponent {
-  // required for dynamic component
   static type = eLayoutType.empty;
 }
