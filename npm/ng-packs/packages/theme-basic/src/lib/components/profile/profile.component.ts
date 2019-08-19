@@ -54,7 +54,7 @@ export class ProfileComponent implements OnChanges {
       });
   }
 
-  onSubmit() {
+  submit() {
     if (this.form.invalid) return;
     this.modalBusy = true;
 

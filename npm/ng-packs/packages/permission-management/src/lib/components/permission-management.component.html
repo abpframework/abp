@@ -35,7 +35,7 @@
           </ul>
         </div>
         <div class="col-8">
-          <h4>{{ selectedGroup.displayName }}</h4>
+          <h4>{{ selectedGroup?.displayName }}</h4>
           <hr class="mt-2 mb-3" />
           <div class="pl-1 pt-1">
             <div class="custom-checkbox custom-control mb-2">
@@ -86,7 +86,7 @@
       <button type="button" class="btn btn-secondary" #abpClose>
         {{ 'AbpIdentity::Cancel' | abpLocalization }}
       </button>
-      <abp-button iconClass="fa fa-check" (click)="onSubmit()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
+      <abp-button iconClass="fa fa-check" (click)="submit()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
     </ng-template>
   </ng-container>
 </abp-modal>

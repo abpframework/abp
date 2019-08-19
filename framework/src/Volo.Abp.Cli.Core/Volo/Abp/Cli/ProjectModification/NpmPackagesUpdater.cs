@@ -43,18 +43,31 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var file in fileList)
             {
-                UpdatePackagesInFile(file, out var needsYarnAndGulp);
+                UpdatePackagesInFile(file, out var packagesUpdated);
 
-                if (needsYarnAndGulp)
+                if (packagesUpdated)
                 {
-                    RunYarnAndGulp(file);
+                    var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
+
+                    RunYarn(fileDirectory);
+
+                    if (IsAngularProject(fileDirectory) == false)
+                    {
+                        Thread.Sleep(500);
+                        RunGulp(fileDirectory);
+                    }
                 }
             }
         }
 
-        protected virtual void UpdatePackagesInFile(string file, out bool needsYarnAndGulp)
+        private bool IsAngularProject(string fileDirectory)
         {
-            needsYarnAndGulp = false;
+            return File.Exists(Path.Combine(fileDirectory, "angular.json"));
+        }
+
+        protected virtual void UpdatePackagesInFile(string file, out bool packagesUpdated)
+        {
+            packagesUpdated = false;
             var fileContent = File.ReadAllText(file);
             var packageJson = JObject.Parse(fileContent);
             var abpPackages = GetAbpPackagesFromPackageJson(packageJson);
@@ -70,7 +83,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 if (updated)
                 {
-                    needsYarnAndGulp = true;
+                    packagesUpdated = true;
                 }
             }
 
@@ -120,14 +133,6 @@ namespace Volo.Abp.Cli.ProjectModification
             var properties = dependencies.Properties().ToList();
             var abpPackages = properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList();
             return abpPackages;
-        }
-
-        protected virtual void RunYarnAndGulp(string file)
-        {
-            var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
-            RunYarn(fileDirectory);
-            Thread.Sleep(500);
-            RunGulp(fileDirectory);
         }
 
         protected virtual void RunGulp(string fileDirectory)
