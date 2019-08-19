@@ -21,5 +21,7 @@
         public const int ClientClaimsPrefixMaxLength = 200;
 
         public const int PairWiseSubjectSaltMaxLength = 200;
+
+        public const int UserCodeTypeMaxLength = 100;
     }
 }

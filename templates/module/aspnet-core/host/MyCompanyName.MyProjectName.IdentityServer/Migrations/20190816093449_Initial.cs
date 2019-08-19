@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace AuthServer.Host.Migrations
+namespace MyCompanyName.MyProjectName.Migrations
 {
     public partial class Initial : Migration
     {
@@ -109,6 +109,27 @@ namespace AuthServer.Host.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpTenants",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    IsDeleted = table.Column<bool>(nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(nullable: true),
+                    DeletionTime = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(maxLength: 64, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpTenants", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpUsers",
                 columns: table => new
                 {
@@ -161,7 +182,8 @@ namespace AuthServer.Host.Migrations
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Enabled = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -215,7 +237,10 @@ namespace AuthServer.Host.Migrations
                     IncludeJwtId = table.Column<bool>(nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(nullable: false),
                     ClientClaimsPrefix = table.Column<string>(maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true)
+                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true),
+                    UserSsoLifetime = table.Column<int>(nullable: true),
+                    UserCodeType = table.Column<string>(maxLength: 100, nullable: true),
+                    DeviceCodeLifetime = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -242,7 +267,8 @@ namespace AuthServer.Host.Migrations
                     Enabled = table.Column<bool>(nullable: false),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -336,6 +362,25 @@ namespace AuthServer.Host.Migrations
                         name: "FK_AbpRoleClaims_AbpRoles_RoleId",
                         column: x => x.RoleId,
                         principalTable: "AbpRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpTenantConnectionStrings",
+                columns: table => new
+                {
+                    TenantId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 64, nullable: false),
+                    Value = table.Column<string>(maxLength: 1024, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpTenantConnectionStrings", x => new { x.TenantId, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AbpTenantConnectionStrings_AbpTenants_TenantId",
+                        column: x => x.TenantId,
+                        principalTable: "AbpTenants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -773,6 +818,12 @@ namespace AuthServer.Host.Migrations
                 columns: new[] { "Name", "ProviderName", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpTenants_Name",
+                table: "AbpTenants",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
                 table: "AbpUserClaims",
                 column: "UserId");
@@ -840,6 +891,9 @@ namespace AuthServer.Host.Migrations
                 name: "AbpSettings");
 
             migrationBuilder.DropTable(
+                name: "AbpTenantConnectionStrings");
+
+            migrationBuilder.DropTable(
                 name: "AbpUserClaims");
 
             migrationBuilder.DropTable(
@@ -895,6 +949,9 @@ namespace AuthServer.Host.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");
+
+            migrationBuilder.DropTable(
+                name: "AbpTenants");
 
             migrationBuilder.DropTable(
                 name: "AbpRoles");
