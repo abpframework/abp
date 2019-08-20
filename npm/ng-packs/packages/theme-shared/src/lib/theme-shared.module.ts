@@ -15,6 +15,8 @@ import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
 import { ButtonComponent } from './components/button/button.component';
 import { ValidationErrorComponent } from './components/errors/validation-error.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -61,8 +63,19 @@ export function appendScript(injector: Injector) {
     ErrorComponent,
     LoaderBarComponent,
     ValidationErrorComponent,
+    ChangePasswordComponent,
+    ProfileComponent,
   ],
-  exports: [NgbModalModule, ButtonComponent, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+  exports: [
+    NgbModalModule,
+    ButtonComponent,
+    ConfirmationComponent,
+    ToastComponent,
+    ModalComponent,
+    LoaderBarComponent,
+    ChangePasswordComponent,
+    ProfileComponent,
+  ],
   entryComponents: [ErrorComponent, ValidationErrorComponent],
 })
 export class ThemeSharedModule {
