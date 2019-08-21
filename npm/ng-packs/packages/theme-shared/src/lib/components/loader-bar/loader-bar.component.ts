@@ -1,6 +1,6 @@
 import { StartLoader, StopLoader } from '@abp/ng.core';
 import { Component, Input, OnDestroy } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationEnd, NavigationStart, Router, NavigationError } from '@angular/router';
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { filter } from 'rxjs/operators';
@@ -45,7 +45,10 @@ export class LoaderBarComponent implements OnDestroy {
 
     router.events
       .pipe(
-        filter(event => event instanceof NavigationStart || event instanceof NavigationEnd),
+        filter(
+          event =>
+            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError,
+        ),
         takeUntilDestroy(this),
       )
       .subscribe(event => {

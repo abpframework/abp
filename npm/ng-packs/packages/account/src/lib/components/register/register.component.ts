@@ -47,7 +47,7 @@ export class RegisterComponent {
       userName: this.form.get('username').value,
       password: this.form.get('password').value,
       emailAddress: this.form.get('email').value,
-      appName: 'angular',
+      appName: 'Angular',
     } as RegisterRequest;
 
     this.accountService

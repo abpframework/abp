@@ -1,5 +1,4 @@
 import { ChangePassword } from '@abp/ng.core';
-import { ToasterService } from '@abp/ng.theme.shared';
 import {
   Component,
   EventEmitter,
@@ -16,6 +15,7 @@ import { comparePasswords } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { finalize } from 'rxjs/operators';
+import { ToasterService } from '../../services/toaster.service';
 
 const { minLength, required } = Validators;
 

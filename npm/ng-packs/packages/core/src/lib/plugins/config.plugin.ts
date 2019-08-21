@@ -58,6 +58,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
 
       if (transformed.length === length) {
         transformed.push({
+          ...route.data.routes,
           path: route.path,
           name: snq(() => route.data.routes.name, route.path),
           children: route.data.routes.children || [],

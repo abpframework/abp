@@ -27,7 +27,13 @@ import { Toaster } from '../../models/toaster';
           <button *ngIf="!message.hideCancelBtn" type="button" class="btn btn-secondary" (click)="close(reject)">
             {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
           </button>
-          <button *ngIf="!message.hideYesBtn" type="button" class="btn btn-secondary" (click)="close(confirm)">
+          <button
+            *ngIf="!message.hideYesBtn"
+            type="button"
+            class="btn btn-secondary"
+            (click)="close(confirm)"
+            autofocus
+          >
             <span>{{ message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>
           </button>
         </div>
