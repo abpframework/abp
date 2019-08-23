@@ -1,6 +1,5 @@
 import { CoreModule, LazyLoadService } from '@abp/ng.core';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
@@ -40,7 +39,6 @@ export function appendScript(injector: Injector) {
   imports: [
     CoreModule,
     ToastModule,
-    NgbModalModule,
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
       blueprints: {
@@ -67,7 +65,6 @@ export function appendScript(injector: Injector) {
     ProfileComponent,
   ],
   exports: [
-    NgbModalModule,
     ButtonComponent,
     ConfirmationComponent,
     ToastComponent,
