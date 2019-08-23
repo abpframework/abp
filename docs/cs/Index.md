@@ -6,7 +6,7 @@ K procházení dokumentace využijte navigační nabídky vlevo.
 
 ## Stav projektu
 
-ABP je **novou generací** open source frameworku [ASP.NET Boilerplate](https://aspnetboilerplate.com/). V současné době je v ranné fázi a není připraven k ostrému nasazení. Na dokumentaci se stále pracuje a ještě zdaleka není dokončena.
+ABP je **novou generací** open source frameworku [ASP.NET Boilerplate](https://aspnetboilerplate.com/). V současné době je v náhledové fázi a není připraven k ostrému nasazení. Na dokumentaci se stále pracuje a ještě zdaleka není dokončena.
 
 Pro aplikace na krátkodobé a ostré nasazení je doporučeno použít [ASP.NET Boilerplate](https://aspnetboilerplate.com/) framework, který je bohatý na funkce, vyspělý, aktivně udržovaný a aktuální.
 
@@ -14,7 +14,8 @@ Pro aplikace na krátkodobé a ostré nasazení je doporučeno použít [ASP.NET
 
 Nejsnazší cestou jak začít nový projekt s ABP je užití startovací šablony:
 
-* [ASP.NET Core MVC Šablona](Getting-Started-AspNetCore-MVC-Template.md)
+* [ASP.NET Core MVC (Razor Pages) UI Šablona](Getting-Started-AspNetCore-MVC-Template.md)
+* [Angular UI Šablona](Getting-Started-Angular-Template.md)
 
 Pokud chcete začít od nuly (s prázdným projektem) tak manuálně nainstalujte ABP Framework s pomocí následujících tutoriálů:
 
