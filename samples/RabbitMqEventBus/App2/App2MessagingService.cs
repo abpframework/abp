@@ -30,11 +30,11 @@ namespace App2
 
                 if (!message.IsNullOrEmpty())
                 {
-                    _distributedEventBus.Publish(new App2ToApp1TextEventData(message));
+                    _distributedEventBus.PublishAsync(new App2ToApp1TextEventData(message));
                 }
                 else
                 {
-                    _distributedEventBus.Publish(new App2ToApp1TextEventData("App2 is exiting. Bye bye...!"));
+                    _distributedEventBus.PublishAsync(new App2ToApp1TextEventData("App2 is exiting. Bye bye...!"));
                 }
 
             } while (!message.IsNullOrEmpty());
