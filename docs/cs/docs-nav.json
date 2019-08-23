@@ -7,8 +7,12 @@
           "text": "Ze startovacích šablon",
           "items": [
             {
-              "text": "ASP.NET Core MVC",
+              "text": "Aplikace s MVC (Razor Pages) UI",
               "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            },
+            {
+              "text": "Aplikace s Angular UI",
+              "path": "Getting-Started-Angular-Template.md"
             }
           ]
         },
@@ -34,8 +38,12 @@
           "text": "Vývoj aplikace",
           "items": [
             {
-              "text": "S ASP.NET Core MVC",
+              "text": "S ASP.NET Core MVC UI",
               "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            },
+            {
+              "text": "S Angular UI",
+              "path": "Tutorials/Angular/Part-I.md"
             }
           ]
         }
@@ -261,6 +269,20 @@
               "path": "Background-Jobs-RabbitMq.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Startovací šablony",
+      "path": "Startup-Templates/Index.md",
+      "items": [
+        {
+          "text": "Aplikace",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Modul",
+          "path": "Startup-Templates/Module.md"
         }
       ]
     },
