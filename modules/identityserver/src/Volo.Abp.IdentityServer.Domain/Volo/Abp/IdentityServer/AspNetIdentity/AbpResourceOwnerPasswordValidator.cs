@@ -53,7 +53,15 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     _logger.LogInformation("Credentials validated for username: {username}", context.UserName);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(context.UserName, sub, context.UserName, interactive: false));
 
-                    context.Result = new GrantValidationResult(sub, OidcConstants.AuthenticationMethods.Password, GetAdditionalClaimsOrNull(user));
+                    var additionalClaims = new List<Claim>();
+
+                    await AddCustomClaimsAsync(additionalClaims, user, context);
+
+                    context.Result = new GrantValidationResult(
+                        sub,
+                        OidcConstants.AuthenticationMethods.Password,
+                        additionalClaims.ToArray()
+                    );
 
                     return;
                 }
@@ -82,14 +90,14 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
         }
 
-        protected virtual IEnumerable<Claim> GetAdditionalClaimsOrNull(IdentityUser user)
+        protected virtual Task AddCustomClaimsAsync(List<Claim> customClaims, IdentityUser user, ResourceOwnerPasswordValidationContext context)
         {
-            if (!user.TenantId.HasValue)
+            if (user.TenantId.HasValue)
             {
-                return null;
+                customClaims.Add(new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString()));
             }
 
-            return new[] { new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString()) };
+            return Task.CompletedTask;
         }
     }
 }
