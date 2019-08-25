@@ -20,7 +20,7 @@
     left: 0;
     position: fixed; }
     .docs-page .docs-sidebar .docs-sidebar-wrapper {
-      width: 328px;
+      width: 307px;
       float: right; }
       .docs-page .docs-sidebar .docs-sidebar-wrapper input.form-control {
         background: none;
@@ -201,13 +201,6 @@
       padding-top: 2rem;
       padding-bottom: 10px;
       font-size: 2rem; }
-    .docs-page .docs-content article.docs-body .blockquote {
-        margin-bottom: 1rem;
-        margin-left: 0;
-        border-left: 2px solid gray;
-        padding: 1em;
-        background-color: #eee;
-        padding-bottom: .2em; }
     .docs-page .docs-content article.docs-body h3, .docs-page .docs-content article.docs-body h4, .docs-page .docs-content article.docs-body h5, .docs-page .docs-content article.docs-body h6 {
       padding-top: 20px;
       padding-bottom: 5px;
@@ -224,6 +217,13 @@
         transition: .5s; }
       .docs-page .docs-content article.docs-body h1:hover .anchor, .docs-page .docs-content article.docs-body h2:hover .anchor, .docs-page .docs-content article.docs-body h3:hover .anchor, .docs-page .docs-content article.docs-body h4:hover .anchor, .docs-page .docs-content article.docs-body h5:hover .anchor, .docs-page .docs-content article.docs-body h6:hover .anchor {
         opacity: 1; }
+    .docs-page .docs-content article.docs-body .blockquote {
+      margin-bottom: 1rem;
+      margin-left: 0;
+      border-left: 2px solid gray;
+      padding: 1em;
+      background-color: #eee;
+      padding-bottom: .2em; }
     .docs-page .docs-content article.docs-body img {
       max-width: 100%;
       border: 1px solid #f4f5f7;
