@@ -1,11 +1,11 @@
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable, Subject } from 'rxjs';
 import { Toaster } from '../models/toaster';
-export declare class AbstractToasterClass<T = Toaster.Options> {
+export declare class AbstractToaster<T = Toaster.Options> {
     protected messageService: MessageService;
-    protected status$: Subject<Toaster.Status>;
-    protected key: string;
-    protected sticky: boolean;
+    status$: Subject<Toaster.Status>;
+    key: string;
+    sticky: boolean;
     constructor(messageService: MessageService);
     info(message: string, title: string, options?: T): Observable<Toaster.Status>;
     success(message: string, title: string, options?: T): Observable<Toaster.Status>;

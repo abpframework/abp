@@ -1,17 +1,11 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { debounceTime, finalize, pluck } from 'rxjs/operators';
-import {
-  IdentityAddRole,
-  IdentityDeleteRole,
-  IdentityGetRoleById,
-  IdentityGetRoles,
-  IdentityUpdateRole,
-} from '../../actions/identity.actions';
+import { finalize, pluck } from 'rxjs/operators';
+import { CreateRole, DeleteRole, GetRoleById, GetRoles, UpdateRole } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
 
@@ -42,6 +36,8 @@ export class RolesComponent {
 
   loading: boolean = false;
 
+  modalBusy: boolean = false;
+
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
@@ -54,7 +50,10 @@ export class RolesComponent {
 
   createForm() {
     this.form = this.fb.group({
-      name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
+      name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
+        Validators.required,
+        Validators.maxLength(256),
+      ]),
       isDefault: [this.selected.isDefault || false],
       isPublic: [this.selected.isPublic || false],
     });
@@ -72,7 +71,7 @@ export class RolesComponent {
 
   onEdit(id: string) {
     this.store
-      .dispatch(new IdentityGetRoleById(id))
+      .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
       .subscribe(selectedRole => {
         this.selected = selectedRole;
@@ -82,14 +81,16 @@ export class RolesComponent {
 
   save() {
     if (!this.form.valid) return;
+    this.modalBusy = true;
 
     this.store
       .dispatch(
         this.selected.id
-          ? new IdentityUpdateRole({ ...this.form.value, id: this.selected.id })
-          : new IdentityAddRole(this.form.value),
+          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
+          : new CreateRole(this.form.value),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
@@ -101,7 +102,7 @@ export class RolesComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new IdentityDeleteRole(id));
+          this.store.dispatch(new DeleteRole(id));
         }
       });
   }
@@ -116,7 +117,7 @@ export class RolesComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new IdentityGetRoles(this.pageQuery))
+      .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

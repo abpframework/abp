@@ -1,15 +1,16 @@
-import { ABP } from '@abp/ng.core';
-
 export namespace Books {
   export interface State {
-    data: Response;
+    books: Response;
   }
 
-  export type Response = ABP.PagedResponse<Item>;
+  export interface Response {
+    items: Book[];
+    totalCount: number;
+  }
 
-  export interface Item {
+  export interface Book {
     name: string;
-    type: Type;
+    type: BookType;
     publishDate: string;
     price: number;
     lastModificationTime: string;
@@ -19,7 +20,7 @@ export namespace Books {
     id: string;
   }
 
-  export enum Type {
+  export enum BookType {
     Undefined,
     Adventure,
     Biography,
@@ -31,9 +32,9 @@ export namespace Books {
     Poetry,
   }
 
-  export interface SaveRequest {
+  export interface CreateUpdateBookInput {
     name: string;
-    type: Type;
+    type: BookType;
     publishDate: string;
     price: number;
   }

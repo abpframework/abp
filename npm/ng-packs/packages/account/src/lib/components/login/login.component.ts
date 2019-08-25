@@ -1,4 +1,4 @@
-import { ConfigGetAppConfiguration, ConfigState } from '@abp/ng.core';
+import { GetAppConfiguration, ConfigState } from '@abp/ng.core';
 import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
@@ -40,14 +40,14 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.form.invalid) return;
-    this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
+    // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
 
     this.inProgress = true;
     from(
       this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value),
     )
       .pipe(
-        switchMap(() => this.store.dispatch(new ConfigGetAppConfiguration())),
+        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
         tap(() => {
           const redirectUrl = snq(() => window.history.state).redirectUrl || (this.options || {}).redirectUrl || '/';
           this.store.dispatch(new Navigate([redirectUrl]));

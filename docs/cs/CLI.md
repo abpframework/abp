@@ -34,26 +34,32 @@ Příklad:
 abp new Acme.BookStore
 ````
 
-* Acme.BookStore je tady název řešení.
+* `Acme.BookStore` je tady název řešení.
 * Běžná konvence je nazvat řešení stylem *VaseSpolecnost.VasProjekt*. Nicméně můžete použít i jiné pojmenování jako *VasProjekt* (jednostupňový jmenný prostor) nebo *VaseSpolecnost.VasProjekt.VasModul* (třístupňový jmenný prostor).
 
 #### Možnosti
 
-* `--template` nebo `-t`: Určuje název šablony. Výchozí šablona je `mvc`. Dostupné šablony:
-  * `mvc` (výchozí): ASP.NET Core [MVC aplikační šablona](Startup-Templates/Mvc.md). Dodatečné možnosti:
-    * `--database-provider` nebo `-d`: Určuje poskytovatele databáze. Vychozí poskytovatel je `ef`. Dostupní poskytovatelé:
+* `--template` nebo `-t`: Určuje název šablony. Výchozí šablona je `app`, která generuje webovou aplikaci. Dostupné šablony:
+  * `app` (výchozí): [Aplikační šablona](Startup-Templates/Application.md). Dodatečné možnosti:
+    * `--ui` nebo `-u`: Určuje UI framework. Výchozí framework je `mvc`. Dostupné frameworky:
+      * `mvc`: ASP.NET Core MVC. Pro tuto šablonu jsou dostupné dodatečné možnosti:
+        * `--tiered`: Vytvoří stupňovité řešení, kde jsou vrstvy Web a Http API fyzicky odděleny. Pokud není uvedeno, tak vytvoří vrstvené řešení, které je méně složité a vhodné pro většinu scénářů.
+      * `angular`: Angular. Pro tuto šablonu jsou dostupné dodatečné možnosti:
+        * `--separate-identity-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
+    * `--database-provider` nebo `-d`: Určuje poskytovatele databáze. Výchozí poskytovatel je `ef`. Dostupní poskytovatelé:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
-    * `--tiered`: Vytvoří stupňovité řešení, kde jsou vrstvy Web a Http API fyzicky odděleny. Pokud není uvedeno tak vytvoří vrstvené řešení, které je méně složité a vhodné pro většinu scénářů.
-  *  `mvc-module`: ASP.NET Core [MVC modulová šablona](Startup-Templates/Mvc-Module.md). Dodatečné možnosti:
-    * `--no-ui`: Určuje, že nebude zahrnuto uživatelské rozhraní. To umožňuje vytvářet moduly pouze pro služby (a.k.a. mikroslužby - bez UI).
+  *  `module`: [Šablona modulu](Startup-Templates/Module.md). Dodatečné možnosti:
+    * `--no-ui`: Určuje nezahrnutí uživatelského rozhraní. Umožňuje vytvořit moduly pouze pro služby (a.k.a. mikroslužby - bez uživatelského rozhraní).
 * `--output-folder` nebo `-o`: Určuje výstupní složku. Výchozí hodnota je aktuální adresář.
+* `--version` nebo `-v`: Určuje verzi ABP & šablony. Může to být [štítek vydání](https://github.com/abpframework/abp/releases) nebo [název větve](https://github.com/abpframework/abp/branches). Pokud není uvedeno, používá nejnovější vydání. Většinou budete chtít použít nejnovější verzi.
+
 
 ### add-package
 
-Přidá nový balíček ABP do projektu pomocí,
+Přidá ABP balíček do projektu,
 
-* Přidání souvisejícícho nuget balíčku jako závislost do projektu.
+* Přidáním souvisejícícho nuget balíčku jako závislost do projektu.
 * Přidáním `[DependsOn(...)]` atributu k modulové tříde v projektu (podívejte se na [dokument vývoje modulu](Module-Development-Basics.md)).
 
 > Všimněte si, že přidaný modul může vyžadovat další konfiguraci, která je obecně uvedena v dokumentaci příslušného balíčku.
@@ -78,7 +84,7 @@ abp add-package Volo.Abp.MongoDB
 
 ### add-module
 
-Přidá více-balíčkový modul k řešení tím, že najde všechny balíčky modulu, vyhledá související projekty v řešení a přidá každý balíček do odpovídajícího projektu v řešení.
+Přidá [více-balíčkový aplikační modul](Modules/Index) k řešení tím, že najde všechny balíčky modulu, vyhledá související projekty v řešení a přidá každý balíček do odpovídajícího projektu v řešení.
 
 > Modul se obecně skládá z několika balíčků (z důvodu vrstvení, různých možností poskytovatele databáze nebo jiných důvodů). Použití příkazu `add-module` dramaticky zjednodušuje přidání modulu do řešení. Každý modul však může vyžadovat další konfiguraci, která je obecně uvedena v dokumentaci příslušného modulu.
 
@@ -100,6 +106,7 @@ abp add-module Volo.Blogging
 
 * `--solution` nebo `-s`: Určuje cestu k řešení (.sln). Pokud není zadáno, CLI se pokusí najít soubor .sln v aktuálním adresáři.
 * `--skip-db-migrations`: Pro poskytovatele databáze EF Core automaticky přidá nový kód první migrace (`Add-Migration`) a v případě potřeby aktualizuje databázi (`Update-Database`). Tuto možnost určete k vynechání této operace.
+* `-sp` nebo `--startup-project`: Relativní cesta ke složce spouštěcího projektu. Výchozí hodnota je aktuální adresář.
 
 ### update
 
@@ -117,6 +124,8 @@ abp update [možnosti]
 #### Možnosti
 
 * `--include-previews` nebo `-p`: Zahrne náhledové, beta a rc balíčky při kontrole nových verzí.
+* `--npm`:  Aktualizuje pouze balíčky NPM.
+* `--nuget`: Aktualizuje pouze balíčky NuGet.
 
 ### help
 

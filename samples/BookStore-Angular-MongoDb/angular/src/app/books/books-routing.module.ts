@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { LayoutApplicationComponent } from '@abp/ng.theme.basic';
+import { RouterModule, Routes } from '@angular/router';
 import { BooksComponent } from './books.component';
+import { BookListComponent } from './book-list/book-list.component';
 
 const routes: Routes = [
-  { path: '', component: LayoutApplicationComponent, children: [{ path: '', component: BooksComponent }] },
+  {
+    path: '',
+    component: BooksComponent,
+    children: [{ path: '', component: BookListComponent }],
+  },
 ];
 
 @NgModule({

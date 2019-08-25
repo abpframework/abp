@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="Mongo2Go" Version="2.2.11" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
   </ItemGroup>
 
 </Project>

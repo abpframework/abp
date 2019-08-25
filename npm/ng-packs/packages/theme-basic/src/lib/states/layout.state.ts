@@ -1,5 +1,5 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { LayoutAddNavigationElement, LayoutRemoveNavigationElementByName } from '../actions/layout.actions';
+import { AddNavigationElement, RemoveNavigationElementByName } from '../actions/layout.actions';
 import { Layout } from '../models/layout';
 import { TemplateRef } from '@angular/core';
 import snq from 'snq';
@@ -14,8 +14,8 @@ export class LayoutState {
     return navigationElements;
   }
 
-  @Action(LayoutAddNavigationElement)
-  layoutAddAction({ getState, patchState }: StateContext<Layout.State>, { payload = [] }: LayoutAddNavigationElement) {
+  @Action(AddNavigationElement)
+  layoutAddAction({ getState, patchState }: StateContext<Layout.State>, { payload = [] }: AddNavigationElement) {
     let { navigationElements } = getState();
 
     if (!Array.isArray(payload)) {
@@ -43,11 +43,8 @@ export class LayoutState {
     });
   }
 
-  @Action(LayoutRemoveNavigationElementByName)
-  layoutRemoveAction(
-    { getState, patchState }: StateContext<Layout.State>,
-    { name }: LayoutRemoveNavigationElementByName,
-  ) {
+  @Action(RemoveNavigationElementByName)
+  layoutRemoveAction({ getState, patchState }: StateContext<Layout.State>, { name }: RemoveNavigationElementByName) {
     let { navigationElements } = getState();
 
     const index = navigationElements.findIndex(element => element.name === name);

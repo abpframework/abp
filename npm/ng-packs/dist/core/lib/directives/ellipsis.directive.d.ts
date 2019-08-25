@@ -2,7 +2,7 @@ import { AfterContentInit, ChangeDetectorRef, ElementRef } from '@angular/core';
 export declare class EllipsisDirective implements AfterContentInit {
     private cdRef;
     private elRef;
-    witdh: string;
+    width: string;
     title: string;
     enabled: boolean;
     readonly class: boolean;

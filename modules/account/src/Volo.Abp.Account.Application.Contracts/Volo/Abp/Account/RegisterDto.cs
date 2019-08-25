@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 
 namespace Volo.Abp.Account
@@ -17,6 +18,7 @@ namespace Volo.Abp.Account
         [Required]
         [StringLength(IdentityUserConsts.MaxPasswordLength)]
         [DataType(DataType.Password)]
+        [DisableAuditing]
         public string Password { get; set; }
 
         [Required]

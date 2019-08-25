@@ -62,7 +62,7 @@ namespace VoloDocs.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
-            Configure<DocsUrlOptions>(options =>
+            Configure<DocsUiOptions>(options =>
             {
                 options.RoutePrefix = null;
             });

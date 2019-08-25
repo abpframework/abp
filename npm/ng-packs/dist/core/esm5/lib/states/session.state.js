@@ -3,8 +3,8 @@
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import * as tslib_1 from "tslib";
-import { State, Action, Selector } from '@ngxs/store';
-import { SessionSetLanguage } from '../actions/session.actions';
+import { Action, Selector, State } from '@ngxs/store';
+import { SetLanguage, SetTenant } from '../actions/session.actions';
 var SessionState = /** @class */ (function () {
     function SessionState() {
     }
@@ -22,10 +22,22 @@ var SessionState = /** @class */ (function () {
     };
     /**
      * @param {?} __0
+     * @return {?}
+     */
+    SessionState.getTenant = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var tenant = _a.tenant;
+        return tenant;
+    };
+    /**
+     * @param {?} __0
      * @param {?} __1
      * @return {?}
      */
-    SessionState.prototype.sessionSetLanguage = /**
+    SessionState.prototype.setLanguage = /**
      * @param {?} __0
      * @param {?} __1
      * @return {?}
@@ -37,18 +49,47 @@ var SessionState = /** @class */ (function () {
             language: payload,
         });
     };
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    SessionState.prototype.setTenantId = /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    function (_a, _b) {
+        var patchState = _a.patchState;
+        var payload = _b.payload;
+        patchState({
+            tenant: payload,
+        });
+    };
     tslib_1.__decorate([
-        Action(SessionSetLanguage),
+        Action(SetLanguage),
         tslib_1.__metadata("design:type", Function),
-        tslib_1.__metadata("design:paramtypes", [Object, SessionSetLanguage]),
+        tslib_1.__metadata("design:paramtypes", [Object, SetLanguage]),
         tslib_1.__metadata("design:returntype", void 0)
-    ], SessionState.prototype, "sessionSetLanguage", null);
+    ], SessionState.prototype, "setLanguage", null);
+    tslib_1.__decorate([
+        Action(SetTenant),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Object, SetTenant]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], SessionState.prototype, "setTenantId", null);
     tslib_1.__decorate([
         Selector(),
         tslib_1.__metadata("design:type", Function),
         tslib_1.__metadata("design:paramtypes", [Object]),
         tslib_1.__metadata("design:returntype", String)
     ], SessionState, "getLanguage", null);
+    tslib_1.__decorate([
+        Selector(),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Object]),
+        tslib_1.__metadata("design:returntype", Object)
+    ], SessionState, "getTenant", null);
     SessionState = tslib_1.__decorate([
         State({
             name: 'SessionState',
@@ -59,4 +100,4 @@ var SessionState = /** @class */ (function () {
     return SessionState;
 }());
 export { SessionState };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2Vzc2lvbi5zdGF0ZS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuY29yZS8iLCJzb3VyY2VzIjpbImxpYi9zdGF0ZXMvc2Vzc2lvbi5zdGF0ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxLQUFLLEVBQUUsTUFBTSxFQUFnQixRQUFRLEVBQUUsTUFBTSxhQUFhLENBQUM7QUFDcEUsT0FBTyxFQUFFLGtCQUFrQixFQUFFLE1BQU0sNEJBQTRCLENBQUM7O0lBYTlEO0lBQWUsQ0FBQzs7Ozs7SUFKVCx3QkFBVzs7OztJQUFsQixVQUFtQixFQUEyQjtZQUF6QixzQkFBUTtRQUMzQixPQUFPLFFBQVEsQ0FBQztJQUNsQixDQUFDOzs7Ozs7SUFLRCx5Q0FBa0I7Ozs7O0lBQWxCLFVBQW1CLEVBQTJDLEVBQUUsRUFBK0I7WUFBMUUsMEJBQVU7WUFBbUMsb0JBQU87UUFDdkUsVUFBVSxDQUFDO1lBQ1QsUUFBUSxFQUFFLE9BQU87U0FDbEIsQ0FBQyxDQUFDO0lBQ0wsQ0FBQztJQUpEO1FBREMsTUFBTSxDQUFDLGtCQUFrQixDQUFDOzt5REFDa0Qsa0JBQWtCOzswREFJOUY7SUFYRDtRQURDLFFBQVEsRUFBRTs7Ozt5Q0FHVjtJQUpVLFlBQVk7UUFKeEIsS0FBSyxDQUFnQjtZQUNwQixJQUFJLEVBQUUsY0FBYztZQUNwQixRQUFRLEVBQUUsbUJBQUEsRUFBRSxFQUFpQjtTQUM5QixDQUFDOztPQUNXLFlBQVksQ0FjeEI7SUFBRCxtQkFBQztDQUFBLElBQUE7U0FkWSxZQUFZIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgU3RhdGUsIEFjdGlvbiwgU3RhdGVDb250ZXh0LCBTZWxlY3RvciB9IGZyb20gJ0BuZ3hzL3N0b3JlJztcbmltcG9ydCB7IFNlc3Npb25TZXRMYW5ndWFnZSB9IGZyb20gJy4uL2FjdGlvbnMvc2Vzc2lvbi5hY3Rpb25zJztcbmltcG9ydCB7IFNlc3Npb24gfSBmcm9tICcuLi9tb2RlbHMvc2Vzc2lvbic7XG5cbkBTdGF0ZTxTZXNzaW9uLlN0YXRlPih7XG4gIG5hbWU6ICdTZXNzaW9uU3RhdGUnLFxuICBkZWZhdWx0czoge30gYXMgU2Vzc2lvbi5TdGF0ZSxcbn0pXG5leHBvcnQgY2xhc3MgU2Vzc2lvblN0YXRlIHtcbiAgQFNlbGVjdG9yKClcbiAgc3RhdGljIGdldExhbmd1YWdlKHsgbGFuZ3VhZ2UgfTogU2Vzc2lvbi5TdGF0ZSk6IHN0cmluZyB7XG4gICAgcmV0dXJuIGxhbmd1YWdlO1xuICB9XG5cbiAgY29uc3RydWN0b3IoKSB7fVxuXG4gIEBBY3Rpb24oU2Vzc2lvblNldExhbmd1YWdlKVxuICBzZXNzaW9uU2V0TGFuZ3VhZ2UoeyBwYXRjaFN0YXRlIH06IFN0YXRlQ29udGV4dDxTZXNzaW9uLlN0YXRlPiwgeyBwYXlsb2FkIH06IFNlc3Npb25TZXRMYW5ndWFnZSkge1xuICAgIHBhdGNoU3RhdGUoe1xuICAgICAgbGFuZ3VhZ2U6IHBheWxvYWQsXG4gICAgfSk7XG4gIH1cbn1cbiJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2Vzc2lvbi5zdGF0ZS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuY29yZS8iLCJzb3VyY2VzIjpbImxpYi9zdGF0ZXMvc2Vzc2lvbi5zdGF0ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxNQUFNLEVBQUUsUUFBUSxFQUFFLEtBQUssRUFBZ0IsTUFBTSxhQUFhLENBQUM7QUFDcEUsT0FBTyxFQUFFLFdBQVcsRUFBRSxTQUFTLEVBQUUsTUFBTSw0QkFBNEIsQ0FBQzs7SUFrQmxFO0lBQWUsQ0FBQzs7Ozs7SUFUVCx3QkFBVzs7OztJQUFsQixVQUFtQixFQUEyQjtZQUF6QixzQkFBUTtRQUMzQixPQUFPLFFBQVEsQ0FBQztJQUNsQixDQUFDOzs7OztJQUdNLHNCQUFTOzs7O0lBQWhCLFVBQWlCLEVBQXlCO1lBQXZCLGtCQUFNO1FBQ3ZCLE9BQU8sTUFBTSxDQUFDO0lBQ2hCLENBQUM7Ozs7OztJQUtELGtDQUFXOzs7OztJQUFYLFVBQVksRUFBMkMsRUFBRSxFQUF3QjtZQUFuRSwwQkFBVTtZQUFtQyxvQkFBTztRQUNoRSxVQUFVLENBQUM7WUFDVCxRQUFRLEVBQUUsT0FBTztTQUNsQixDQUFDLENBQUM7SUFDTCxDQUFDOzs7Ozs7SUFHRCxrQ0FBVzs7Ozs7SUFBWCxVQUFZLEVBQTJDLEVBQUUsRUFBc0I7WUFBakUsMEJBQVU7WUFBbUMsb0JBQU87UUFDaEUsVUFBVSxDQUFDO1lBQ1QsTUFBTSxFQUFFLE9BQU87U0FDaEIsQ0FBQyxDQUFDO0lBQ0wsQ0FBQztJQVhEO1FBREMsTUFBTSxDQUFDLFdBQVcsQ0FBQzs7eURBQ2tELFdBQVc7O21EQUloRjtJQUdEO1FBREMsTUFBTSxDQUFDLFNBQVMsQ0FBQzs7eURBQ29ELFNBQVM7O21EQUk5RTtJQXZCRDtRQURDLFFBQVEsRUFBRTs7Ozt5Q0FHVjtJQUdEO1FBREMsUUFBUSxFQUFFOzs7O3VDQUdWO0lBVFUsWUFBWTtRQUp4QixLQUFLLENBQWdCO1lBQ3BCLElBQUksRUFBRSxjQUFjO1lBQ3BCLFFBQVEsRUFBRSxtQkFBQSxFQUFFLEVBQWlCO1NBQzlCLENBQUM7O09BQ1csWUFBWSxDQTBCeEI7SUFBRCxtQkFBQztDQUFBLElBQUE7U0ExQlksWUFBWSIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEFjdGlvbiwgU2VsZWN0b3IsIFN0YXRlLCBTdGF0ZUNvbnRleHQgfSBmcm9tICdAbmd4cy9zdG9yZSc7XG5pbXBvcnQgeyBTZXRMYW5ndWFnZSwgU2V0VGVuYW50IH0gZnJvbSAnLi4vYWN0aW9ucy9zZXNzaW9uLmFjdGlvbnMnO1xuaW1wb3J0IHsgQUJQLCBTZXNzaW9uIH0gZnJvbSAnLi4vbW9kZWxzJztcblxuQFN0YXRlPFNlc3Npb24uU3RhdGU+KHtcbiAgbmFtZTogJ1Nlc3Npb25TdGF0ZScsXG4gIGRlZmF1bHRzOiB7fSBhcyBTZXNzaW9uLlN0YXRlLFxufSlcbmV4cG9ydCBjbGFzcyBTZXNzaW9uU3RhdGUge1xuICBAU2VsZWN0b3IoKVxuICBzdGF0aWMgZ2V0TGFuZ3VhZ2UoeyBsYW5ndWFnZSB9OiBTZXNzaW9uLlN0YXRlKTogc3RyaW5nIHtcbiAgICByZXR1cm4gbGFuZ3VhZ2U7XG4gIH1cblxuICBAU2VsZWN0b3IoKVxuICBzdGF0aWMgZ2V0VGVuYW50KHsgdGVuYW50IH06IFNlc3Npb24uU3RhdGUpOiBBQlAuQmFzaWNJdGVtIHtcbiAgICByZXR1cm4gdGVuYW50O1xuICB9XG5cbiAgY29uc3RydWN0b3IoKSB7fVxuXG4gIEBBY3Rpb24oU2V0TGFuZ3VhZ2UpXG4gIHNldExhbmd1YWdlKHsgcGF0Y2hTdGF0ZSB9OiBTdGF0ZUNvbnRleHQ8U2Vzc2lvbi5TdGF0ZT4sIHsgcGF5bG9hZCB9OiBTZXRMYW5ndWFnZSkge1xuICAgIHBhdGNoU3RhdGUoe1xuICAgICAgbGFuZ3VhZ2U6IHBheWxvYWQsXG4gICAgfSk7XG4gIH1cblxuICBAQWN0aW9uKFNldFRlbmFudClcbiAgc2V0VGVuYW50SWQoeyBwYXRjaFN0YXRlIH06IFN0YXRlQ29udGV4dDxTZXNzaW9uLlN0YXRlPiwgeyBwYXlsb2FkIH06IFNldFRlbmFudCkge1xuICAgIHBhdGNoU3RhdGUoe1xuICAgICAgdGVuYW50OiBwYXlsb2FkLFxuICAgIH0pO1xuICB9XG59XG4iXX0=

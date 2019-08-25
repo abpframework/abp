@@ -1,10 +1,10 @@
 import { State, Selector, createSelector, Action, StateContext, Store } from '@ngxs/store';
 import { Config, ABP } from '../models';
-import { ConfigGetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
+import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
 import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { tap, switchMap } from 'rxjs/operators';
 import snq from 'snq';
-import { SessionSetLanguage } from '../actions';
+import { SetLanguage } from '../actions';
 import { SessionState } from './session.state';
 import { of } from 'rxjs';
 import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
@@ -17,6 +17,11 @@ export class ConfigState {
   @Selector()
   static getAll(state: Config.State) {
     return state;
+  }
+
+  @Selector()
+  static getApplicationInfo(state: Config.State) {
+    return state.environment.application || {};
   }
 
   static getOne(key: string) {
@@ -156,7 +161,7 @@ export class ConfigState {
 
   constructor(private appConfigurationService: ApplicationConfigurationService, private store: Store) {}
 
-  @Action(ConfigGetAppConfiguration)
+  @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
     return this.appConfigurationService.getConfiguration().pipe(
       tap(configuration =>
@@ -167,9 +172,7 @@ export class ConfigState {
       switchMap(configuration =>
         this.store.selectSnapshot(SessionState.getLanguage)
           ? of(null)
-          : dispatch(
-              new SessionSetLanguage(snq(() => configuration.setting.values['Abp.Localization.DefaultLanguage'])),
-            ),
+          : dispatch(new SetLanguage(snq(() => configuration.setting.values['Abp.Localization.DefaultLanguage']))),
       ),
     );
   }

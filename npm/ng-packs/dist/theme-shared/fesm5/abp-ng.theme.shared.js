@@ -1,15 +1,17 @@
-import { LoaderStart, LoaderStop, RestOccurError, CoreModule, LazyLoadService } from '@abp/ng.core';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, Renderer2, Output, ContentChild, ElementRef, ViewChild, EventEmitter, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, NgModule, APP_INITIALIZER } from '@angular/core';
+import { StartLoader, StopLoader, RestOccurError, LazyLoadService, CoreModule } from '@abp/ng.core';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Input, EventEmitter, Renderer2, Output, ContentChild, ElementRef, ViewChild, ViewChildren, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, ChangeDetectionStrategy, ViewEncapsulation, APP_INITIALIZER, NgModule } from '@angular/core';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
-import { takeUntilDestroy, NgxValidateCoreModule } from '@ngx-validate/core';
+import { takeUntilDestroy, ValidationErrorComponent as ValidationErrorComponent$1, NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
 import { Subject, timer, fromEvent, forkJoin } from 'rxjs';
-import { filter, take, debounceTime, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil, debounceTime } from 'rxjs/operators';
 import { __assign, __extends, __spread } from 'tslib';
-import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
-import { Router, NavigationStart, NavigationEnd } from '@angular/router';
+import { NavigationStart, NavigationEnd, Router } from '@angular/router';
+import { ofActionSuccessful, Actions, Store } from '@ngxs/store';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
+import snq from 'snq';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 /**
  * @fileoverview added by tsickle
@@ -21,8 +23,8 @@ import { Navigate, RouterState } from '@ngxs/router-plugin';
 var  /**
  * @template T
  */
-AbstractToasterClass = /** @class */ (function () {
-    function AbstractToasterClass(messageService) {
+AbstractToaster = /** @class */ (function () {
+    function AbstractToaster(messageService) {
         this.messageService = messageService;
         this.key = 'abpToast';
         this.sticky = false;
@@ -33,7 +35,7 @@ AbstractToasterClass = /** @class */ (function () {
      * @param {?=} options
      * @return {?}
      */
-    AbstractToasterClass.prototype.info = /**
+    AbstractToaster.prototype.info = /**
      * @param {?} message
      * @param {?} title
      * @param {?=} options
@@ -48,7 +50,7 @@ AbstractToasterClass = /** @class */ (function () {
      * @param {?=} options
      * @return {?}
      */
-    AbstractToasterClass.prototype.success = /**
+    AbstractToaster.prototype.success = /**
      * @param {?} message
      * @param {?} title
      * @param {?=} options
@@ -63,7 +65,7 @@ AbstractToasterClass = /** @class */ (function () {
      * @param {?=} options
      * @return {?}
      */
-    AbstractToasterClass.prototype.warn = /**
+    AbstractToaster.prototype.warn = /**
      * @param {?} message
      * @param {?} title
      * @param {?=} options
@@ -78,7 +80,7 @@ AbstractToasterClass = /** @class */ (function () {
      * @param {?=} options
      * @return {?}
      */
-    AbstractToasterClass.prototype.error = /**
+    AbstractToaster.prototype.error = /**
      * @param {?} message
      * @param {?} title
      * @param {?=} options
@@ -95,7 +97,7 @@ AbstractToasterClass = /** @class */ (function () {
      * @param {?=} options
      * @return {?}
      */
-    AbstractToasterClass.prototype.show = /**
+    AbstractToaster.prototype.show = /**
      * @protected
      * @param {?} message
      * @param {?} title
@@ -113,7 +115,7 @@ AbstractToasterClass = /** @class */ (function () {
      * @param {?=} status
      * @return {?}
      */
-    AbstractToasterClass.prototype.clear = /**
+    AbstractToaster.prototype.clear = /**
      * @param {?=} status
      * @return {?}
      */
@@ -122,8 +124,21 @@ AbstractToasterClass = /** @class */ (function () {
         this.status$.next(status || "dismiss" /* dismiss */);
         this.status$.complete();
     };
-    return AbstractToasterClass;
+    return AbstractToaster;
 }());
+if (false) {
+    /** @type {?} */
+    AbstractToaster.prototype.status$;
+    /** @type {?} */
+    AbstractToaster.prototype.key;
+    /** @type {?} */
+    AbstractToaster.prototype.sticky;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractToaster.prototype.messageService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -142,7 +157,13 @@ var ConfirmationService = /** @class */ (function (_super) {
     ];
     /** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfirmationService_Factory() { return new ConfirmationService(ɵɵinject(MessageService)); }, token: ConfirmationService, providedIn: "root" });
     return ConfirmationService;
-}(AbstractToasterClass));
+}(AbstractToaster));
+if (false) {
+    /** @type {?} */
+    ConfirmationService.prototype.key;
+    /** @type {?} */
+    ConfirmationService.prototype.sticky;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -178,6 +199,19 @@ var ConfirmationComponent = /** @class */ (function () {
     ]; };
     return ConfirmationComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ConfirmationComponent.prototype.confirm;
+    /** @type {?} */
+    ConfirmationComponent.prototype.reject;
+    /** @type {?} */
+    ConfirmationComponent.prototype.dismiss;
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfirmationComponent.prototype.confirmationService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -200,12 +234,24 @@ var ErrorComponent = /** @class */ (function () {
     ErrorComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-error',
-                    template: "\n    <div class=\"error\">\n      <button id=\"abp-close-button mr-2\" type=\"button\" class=\"close\" (click)=\"destroy()\">\n        <span aria-hidden=\"true\">&times;</span>\n      </button>\n      <div class=\"row centered\">\n        <div class=\"col-md-12\">\n          <div class=\"error-template\">\n            <h1>\n              {{ title }}\n            </h1>\n            <div class=\"error-details\">\n              {{ details }}\n            </div>\n            <div class=\"error-actions\">\n              <a routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\n                ><span class=\"glyphicon glyphicon-home\"></span> Take me home\n              </a>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  ",
+                    template: "\n    <div class=\"error\">\n      <button id=\"abp-close-button mr-2\" type=\"button\" class=\"close\" (click)=\"destroy()\">\n        <span aria-hidden=\"true\">&times;</span>\n      </button>\n      <div class=\"row centered\">\n        <div class=\"col-md-12\">\n          <div class=\"error-template\">\n            <h1>\n              {{ title | abpLocalization }}\n            </h1>\n            <div class=\"error-details\">\n              {{ details | abpLocalization }}\n            </div>\n            <div class=\"error-actions\">\n              <a (click)=\"destroy()\" routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\n                ><span class=\"glyphicon glyphicon-home\"></span> {{ '::Menu:Home' | abpLocalization }}\n              </a>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  ",
                     styles: [".error{position:fixed;top:0;background-color:#fff;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)}"]
                 }] }
     ];
     return ErrorComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ErrorComponent.prototype.title;
+    /** @type {?} */
+    ErrorComponent.prototype.details;
+    /** @type {?} */
+    ErrorComponent.prototype.renderer;
+    /** @type {?} */
+    ErrorComponent.prototype.elementRef;
+    /** @type {?} */
+    ErrorComponent.prototype.host;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -226,13 +272,13 @@ var LoaderBarComponent = /** @class */ (function () {
         function (action) { return action.payload.url.indexOf('openid-configuration') < 0; });
         this.progressLevel = 0;
         actions
-            .pipe(ofActionSuccessful(LoaderStart, LoaderStop), filter(this.filter), takeUntilDestroy(this))
+            .pipe(ofActionSuccessful(StartLoader, StopLoader), filter(this.filter), takeUntilDestroy(this))
             .subscribe((/**
          * @param {?} action
          * @return {?}
          */
         function (action) {
-            if (action instanceof LoaderStart)
+            if (action instanceof StartLoader)
                 _this.startLoading();
             else
                 _this.stopLoading();
@@ -328,22 +374,100 @@ var LoaderBarComponent = /** @class */ (function () {
     };
     return LoaderBarComponent;
 }());
+if (false) {
+    /** @type {?} */
+    LoaderBarComponent.prototype.containerClass;
+    /** @type {?} */
+    LoaderBarComponent.prototype.progressClass;
+    /** @type {?} */
+    LoaderBarComponent.prototype.isLoading;
+    /** @type {?} */
+    LoaderBarComponent.prototype.filter;
+    /** @type {?} */
+    LoaderBarComponent.prototype.progressLevel;
+    /** @type {?} */
+    LoaderBarComponent.prototype.interval;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.router;
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var ButtonComponent = /** @class */ (function () {
+    function ButtonComponent() {
+        this.buttonClass = 'btn btn-primary';
+        this.type = 'button';
+        this.loading = false;
+        this.disabled = false;
+    }
+    Object.defineProperty(ButtonComponent.prototype, "icon", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return "" + (this.loading ? 'fa fa-spin fa-spinner' : this.iconClass || 'd-none');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ButtonComponent.decorators = [
+        { type: Component, args: [{
+                    selector: 'abp-button',
+                    template: "\n    <button [attr.type]=\"type\" [ngClass]=\"buttonClass\" [disabled]=\"loading || disabled\">\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
+                }] }
+    ];
+    ButtonComponent.propDecorators = {
+        buttonClass: [{ type: Input }],
+        type: [{ type: Input }],
+        iconClass: [{ type: Input }],
+        loading: [{ type: Input }],
+        disabled: [{ type: Input }]
+    };
+    return ButtonComponent;
+}());
+if (false) {
+    /** @type {?} */
+    ButtonComponent.prototype.buttonClass;
+    /** @type {?} */
+    ButtonComponent.prototype.type;
+    /** @type {?} */
+    ButtonComponent.prototype.iconClass;
+    /** @type {?} */
+    ButtonComponent.prototype.loading;
+    /** @type {?} */
+    ButtonComponent.prototype.disabled;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var ANIMATION_TIMEOUT = 200;
 var ModalComponent = /** @class */ (function () {
     function ModalComponent(renderer, confirmationService) {
         this.renderer = renderer;
         this.confirmationService = confirmationService;
-        this.centered = true;
+        this.centered = false;
         this.modalClass = '';
         this.size = 'lg';
         this.visibleChange = new EventEmitter();
+        this.init = new EventEmitter();
         this._visible = false;
-        this.closable = false;
+        this._busy = false;
+        this.showModal = false;
         this.isOpenConfirmation = false;
+        this.closable = false;
         this.destroy$ = new Subject();
     }
     Object.defineProperty(ModalComponent.prototype, "visible", {
@@ -359,11 +483,18 @@ var ModalComponent = /** @class */ (function () {
          */
         function (value) {
             var _this = this;
+            if (typeof value !== 'boolean')
+                return;
             if (!this.modalContent) {
-                setTimeout((/**
-                 * @return {?}
-                 */
-                function () { return (_this.visible = value); }), 0);
+                if (value) {
+                    setTimeout((/**
+                     * @return {?}
+                     */
+                    function () {
+                        _this.showModal = value;
+                        _this.visible = value;
+                    }), 0);
+                }
                 return;
             }
             if (value) {
@@ -378,10 +509,29 @@ var ModalComponent = /** @class */ (function () {
                  */
                 function () {
                     _this.setVisible(value);
-                    _this.renderer.removeClass(_this.modalContent.nativeElement, 'fade-out-top');
                     _this.ngOnDestroy();
-                }), 350);
+                }), ANIMATION_TIMEOUT - 10);
             }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ModalComponent.prototype, "busy", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this._busy;
+        },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            if (this.abpSubmit && this.abpSubmit instanceof ButtonComponent) {
+                this.abpSubmit.loading = value;
+            }
+            this._busy = value;
         },
         enumerable: true,
         configurable: true
@@ -407,8 +557,9 @@ var ModalComponent = /** @class */ (function () {
         var _this = this;
         this._visible = value;
         this.visibleChange.emit(value);
+        this.showModal = value;
         value
-            ? timer(500)
+            ? timer(ANIMATION_TIMEOUT + 100)
                 .pipe(take(1))
                 .subscribe((/**
              * @param {?} _
@@ -425,31 +576,12 @@ var ModalComponent = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        fromEvent(document, 'click')
-            .pipe(debounceTime(350), takeUntil(this.destroy$), filter((/**
-         * @param {?} event
-         * @return {?}
-         */
-        function (event) {
-            return event &&
-                _this.closable &&
-                _this.modalContent &&
-                !_this.isOpenConfirmation &&
-                !_this.modalContent.nativeElement.contains(event.target);
-        })))
-            .subscribe((/**
-         * @param {?} _
-         * @return {?}
-         */
-        function (_) {
-            _this.close();
-        }));
         fromEvent(document, 'keyup')
-            .pipe(takeUntil(this.destroy$), filter((/**
+            .pipe(takeUntil(this.destroy$), debounceTime(150), filter((/**
          * @param {?} key
          * @return {?}
          */
-        function (key) { return key && key.code === 'Escape' && _this.closable; })), debounceTime(350))
+        function (key) { return key && key.code === 'Escape' && _this.closable; })))
             .subscribe((/**
          * @param {?} _
          * @return {?}
@@ -457,17 +589,23 @@ var ModalComponent = /** @class */ (function () {
         function (_) {
             _this.close();
         }));
-        if (!this.abpClose)
-            return;
-        fromEvent(this.abpClose.nativeElement, 'click')
-            .pipe(takeUntil(this.destroy$), filter((/**
+        setTimeout((/**
          * @return {?}
          */
-        function () { return !!(_this.closable && _this.modalContent); })), debounceTime(350))
-            .subscribe((/**
-         * @return {?}
-         */
-        function () { return _this.close(); }));
+        function () {
+            if (!_this.abpClose)
+                return;
+            fromEvent(_this.abpClose.nativeElement, 'click')
+                .pipe(takeUntil(_this.destroy$), filter((/**
+             * @return {?}
+             */
+            function () { return !!(_this.closable && _this.modalContent); })))
+                .subscribe((/**
+             * @return {?}
+             */
+            function () { return _this.close(); }));
+        }), 0);
+        this.init.emit();
     };
     /**
      * @return {?}
@@ -477,6 +615,8 @@ var ModalComponent = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        if (!this.closable || this.busy)
+            return;
         /** @type {?} */
         var nodes = getFlatNodes(((/** @type {?} */ (this.modalContent.nativeElement.querySelector('#abp-modal-body')))).childNodes);
         if (hasNgDirty(nodes)) {
@@ -490,7 +630,7 @@ var ModalComponent = /** @class */ (function () {
              * @return {?}
              */
             function (status) {
-                timer(400).subscribe((/**
+                timer(ANIMATION_TIMEOUT).subscribe((/**
                  * @return {?}
                  */
                 function () {
@@ -508,7 +648,7 @@ var ModalComponent = /** @class */ (function () {
     ModalComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-modal',
-                    template: "<div\n  id=\"abp-modal\"\n  tabindex=\"-1\"\n  class=\"modal fade {{ modalClass }}\"\n  [class.show]=\"visible\"\n  [style.display]=\"visible ? 'block' : 'none'\"\n  [style.padding-right.px]=\"'15'\"\n>\n  <div\n    id=\"abp-modal-container\"\n    class=\"modal-dialog modal-{{ size }} fade-in-top\"\n    [class.modal-dialog-centered]=\"centered\"\n    #abpModalContent\n  >\n    <div #content id=\"abp-modal-content\" class=\"modal-content\">\n      <div id=\"abp-modal-header\" class=\"modal-header\">\n        <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n\n        <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" (click)=\"close()\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div id=\"abp-modal-body\" class=\"modal-body\">\n        <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <ng-content></ng-content>\n</div>\n"
+                    template: "<div\n  *ngIf=\"showModal\"\n  (click)=\"close()\"\n  id=\"abp-modal\"\n  class=\"modal fade {{ modalClass }} d-block show\"\n  [style.padding-right.px]=\"'15'\"\n>\n  <div\n    id=\"abp-modal-container\"\n    class=\"modal-dialog modal-{{ size }} fade-in-top\"\n    tabindex=\"-1\"\n    [class.modal-dialog-centered]=\"centered\"\n    #abpModalContent\n  >\n    <div #content id=\"abp-modal-content\" class=\"modal-content\" (click)=\"$event.stopPropagation()\">\n      <div id=\"abp-modal-header\" class=\"modal-header\">\n        <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n\n        <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" (click)=\"close()\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div\n        id=\"abp-modal-body\"\n        class=\"modal-body\"\n        [style.height]=\"height || undefined\"\n        [style.minHeight]=\"minHeight || undefined\"\n      >\n        <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n  </div>\n\n  <ng-content></ng-content>\n</div>\n"
                 }] }
     ];
     /** @nocollapse */
@@ -518,18 +658,76 @@ var ModalComponent = /** @class */ (function () {
     ]; };
     ModalComponent.propDecorators = {
         visible: [{ type: Input }],
+        busy: [{ type: Input }],
         centered: [{ type: Input }],
         modalClass: [{ type: Input }],
         size: [{ type: Input }],
+        height: [{ type: Input }],
+        minHeight: [{ type: Input }],
         visibleChange: [{ type: Output }],
+        init: [{ type: Output }],
         abpHeader: [{ type: ContentChild, args: ['abpHeader', { static: false },] }],
         abpBody: [{ type: ContentChild, args: ['abpBody', { static: false },] }],
         abpFooter: [{ type: ContentChild, args: ['abpFooter', { static: false },] }],
         abpClose: [{ type: ContentChild, args: ['abpClose', { static: false, read: ElementRef },] }],
-        modalContent: [{ type: ViewChild, args: ['abpModalContent', { static: false },] }]
+        abpSubmit: [{ type: ContentChild, args: [ButtonComponent, { static: false, read: ButtonComponent },] }],
+        modalContent: [{ type: ViewChild, args: ['abpModalContent', { static: false },] }],
+        abpButtons: [{ type: ViewChildren, args: ['abp-button',] }]
     };
     return ModalComponent;
 }());
+if (false) {
+    /** @type {?} */
+    ModalComponent.prototype.centered;
+    /** @type {?} */
+    ModalComponent.prototype.modalClass;
+    /** @type {?} */
+    ModalComponent.prototype.size;
+    /** @type {?} */
+    ModalComponent.prototype.height;
+    /** @type {?} */
+    ModalComponent.prototype.minHeight;
+    /** @type {?} */
+    ModalComponent.prototype.visibleChange;
+    /** @type {?} */
+    ModalComponent.prototype.init;
+    /** @type {?} */
+    ModalComponent.prototype.abpHeader;
+    /** @type {?} */
+    ModalComponent.prototype.abpBody;
+    /** @type {?} */
+    ModalComponent.prototype.abpFooter;
+    /** @type {?} */
+    ModalComponent.prototype.abpClose;
+    /** @type {?} */
+    ModalComponent.prototype.abpSubmit;
+    /** @type {?} */
+    ModalComponent.prototype.modalContent;
+    /** @type {?} */
+    ModalComponent.prototype.abpButtons;
+    /** @type {?} */
+    ModalComponent.prototype._visible;
+    /** @type {?} */
+    ModalComponent.prototype._busy;
+    /** @type {?} */
+    ModalComponent.prototype.showModal;
+    /** @type {?} */
+    ModalComponent.prototype.isOpenConfirmation;
+    /** @type {?} */
+    ModalComponent.prototype.closable;
+    /** @type {?} */
+    ModalComponent.prototype.destroy$;
+    /**
+     * @type {?}
+     * @private
+     */
+    ModalComponent.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    ModalComponent.prototype.confirmationService;
+}
 /**
  * @param {?} nodes
  * @return {?}
@@ -540,7 +738,7 @@ function getFlatNodes(nodes) {
      * @param {?} val
      * @return {?}
      */
-    function (acc, val) { return __spread(acc, (val.childNodes && val.childNodes.length ? Array.from(val.childNodes) : [val])); }), []);
+    function (acc, val) { return __spread(acc, (val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])); }), []);
 }
 /**
  * @param {?} nodes
@@ -574,7 +772,7 @@ var ToastComponent = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.4s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.4s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
+var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
 
 /**
  * @fileoverview added by tsickle
@@ -616,7 +814,10 @@ var ErrorHandler = /** @class */ (function () {
         function (res) {
             var _a = res.payload, err = _a === void 0 ? (/** @type {?} */ ({})) : _a;
             /** @type {?} */
-            var body = ((/** @type {?} */ (err))).error.error;
+            var body = snq((/**
+             * @return {?}
+             */
+            function () { return ((/** @type {?} */ (err))).error.error; }), DEFAULTS.defaultError.message);
             if (err.headers.get('_AbpErrorFormat')) {
                 /** @type {?} */
                 var confirmation$ = _this.showError(null, null, body);
@@ -651,14 +852,14 @@ var ErrorHandler = /** @class */ (function () {
                     case 500:
                         _this.createErrorComponent({
                             title: '500',
-                            details: 'Sorry, an error has occured.',
+                            details: 'AbpAccount::InternalServerErrorMessage',
                         });
                         break;
                     case 0:
                         if (((/** @type {?} */ (err))).statusText === 'Unknown Error') {
                             _this.createErrorComponent({
                                 title: 'Unknown Error',
-                                details: 'Sorry, an error has occured.',
+                                details: 'AbpAccount::InternalServerErrorMessage',
                             });
                         }
                         break;
@@ -753,6 +954,88 @@ var ErrorHandler = /** @class */ (function () {
     /** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService), ɵɵinject(ApplicationRef), ɵɵinject(ComponentFactoryResolver), ɵɵinject(RendererFactory2), ɵɵinject(INJECTOR)); }, token: ErrorHandler, providedIn: "root" });
     return ErrorHandler;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.confirmationService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.appRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.cfRes;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.rendererFactory;
+    /**
+     * @type {?}
+     * @private
+     */
+    ErrorHandler.prototype.injector;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ValidationErrorComponent = /** @class */ (function (_super) {
+    __extends(ValidationErrorComponent, _super);
+    function ValidationErrorComponent() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Object.defineProperty(ValidationErrorComponent.prototype, "abpErrors", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            if (!this.errors || !this.errors.length)
+                return [];
+            return this.errors.map((/**
+             * @param {?} error
+             * @return {?}
+             */
+            function (error) {
+                if (!error.message)
+                    return error;
+                /** @type {?} */
+                var index = error.message.indexOf('[');
+                if (index > -1) {
+                    return __assign({}, error, { message: error.message.slice(0, index), interpoliteParams: error.message.slice(index + 1, error.message.length - 1).split(',') });
+                }
+                return error;
+            }));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ValidationErrorComponent.decorators = [
+        { type: Component, args: [{
+                    selector: 'abp-validation-error',
+                    template: "\n    <div class=\"invalid-feedback\" *ngFor=\"let error of abpErrors; trackBy: trackByFn\">\n      {{ error.message | abpLocalization: error.interpoliteParams }}\n    </div>\n  ",
+                    changeDetection: ChangeDetectionStrategy.OnPush,
+                    encapsulation: ViewEncapsulation.None
+                }] }
+    ];
+    return ValidationErrorComponent;
+}(ValidationErrorComponent$1));
 
 /**
  * @fileoverview added by tsickle
@@ -805,15 +1088,54 @@ var ThemeSharedModule = /** @class */ (function () {
                         NgbModalModule,
                         NgxValidateCoreModule.forRoot({
                             targetSelector: '.form-group',
+                            blueprints: {
+                                email: "AbpAccount::ThisFieldIsNotAValidEmailAddress.",
+                                max: "AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ max }}]",
+                                maxlength: "AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]",
+                                min: "AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]",
+                                minlength: "AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]",
+                                required: "AbpAccount::ThisFieldIsRequired.",
+                                passwordMismatch: "AbpIdentity::Identity.PasswordConfirmationFailed",
+                            },
+                            errorTemplate: ValidationErrorComponent,
                         }),
                     ],
-                    declarations: [ConfirmationComponent, ToastComponent, ModalComponent, ErrorComponent, LoaderBarComponent],
-                    exports: [NgbModalModule, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
-                    entryComponents: [ErrorComponent],
+                    declarations: [
+                        ButtonComponent,
+                        ConfirmationComponent,
+                        ToastComponent,
+                        ModalComponent,
+                        ErrorComponent,
+                        LoaderBarComponent,
+                        ValidationErrorComponent,
+                    ],
+                    exports: [NgbModalModule, ButtonComponent, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+                    entryComponents: [ErrorComponent, ValidationErrorComponent],
                 },] }
     ];
     return ThemeSharedModule;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var slideFromBottom = trigger('routeAnimations', [
+    state('void', style({ 'margin-top': '20px', opacity: '0' })),
+    state('*', style({ 'margin-top': '0px', opacity: '1' })),
+    transition(':enter', [animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' }))]),
+]);
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -826,6 +1148,16 @@ var Confirmation;
      */
     function Options() { }
     Confirmation.Options = Options;
+    if (false) {
+        /** @type {?|undefined} */
+        Options.prototype.hideCancelBtn;
+        /** @type {?|undefined} */
+        Options.prototype.hideYesBtn;
+        /** @type {?|undefined} */
+        Options.prototype.cancelCopy;
+        /** @type {?|undefined} */
+        Options.prototype.yesCopy;
+    }
 })(Confirmation || (Confirmation = {}));
 
 /**
@@ -839,7 +1171,28 @@ var Toaster;
      */
     function Options() { }
     Toaster.Options = Options;
+    if (false) {
+        /** @type {?|undefined} */
+        Options.prototype.id;
+        /** @type {?|undefined} */
+        Options.prototype.closable;
+        /** @type {?|undefined} */
+        Options.prototype.life;
+        /** @type {?|undefined} */
+        Options.prototype.sticky;
+        /** @type {?|undefined} */
+        Options.prototype.data;
+        /** @type {?|undefined} */
+        Options.prototype.messageLocalizationParams;
+        /** @type {?|undefined} */
+        Options.prototype.titleLocalizationParams;
+    }
 })(Toaster || (Toaster = {}));
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -871,7 +1224,22 @@ var ToasterService = /** @class */ (function (_super) {
     ];
     /** @nocollapse */ ToasterService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(ɵɵinject(MessageService)); }, token: ToasterService, providedIn: "root" });
     return ToasterService;
-}(AbstractToasterClass));
+}(AbstractToaster));
 
-export { ConfirmationComponent, ConfirmationService, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, ConfirmationComponent as ɵa, ConfirmationService as ɵb, AbstractToasterClass as ɵc, ToastComponent as ɵd, ModalComponent as ɵe, ErrorComponent as ɵf, LoaderBarComponent as ɵg, ErrorHandler as ɵh };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+export { ButtonComponent, ConfirmationComponent, ConfirmationService, LoaderBarComponent, ModalComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, slideFromBottom, ValidationErrorComponent as ɵa, ButtonComponent as ɵb, ConfirmationComponent as ɵc, ConfirmationService as ɵd, AbstractToaster as ɵe, ToastComponent as ɵf, ModalComponent as ɵg, ErrorComponent as ɵh, LoaderBarComponent as ɵi, ErrorHandler as ɵj };
 //# sourceMappingURL=abp-ng.theme.shared.js.map

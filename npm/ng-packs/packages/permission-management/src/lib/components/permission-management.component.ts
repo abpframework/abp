@@ -12,10 +12,7 @@ import {
 import { Select, Store } from '@ngxs/store';
 import { from, Observable } from 'rxjs';
 import { map, pluck, take } from 'rxjs/operators';
-import {
-  PermissionManagementGetPermissions,
-  PermissionManagementUpdatePermissions,
-} from '../actions/permission-management.actions';
+import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
 
@@ -67,6 +64,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
   selectAllTab: boolean = false;
 
+  modalBusy: boolean = false;
+
   trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
 
   get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
@@ -95,7 +94,16 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
+  isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean {
+    if (grantedProviders.length) {
+      return grantedProviders.findIndex(p => p.providerName === 'Role') > -1;
+    }
+    return false;
+  }
+
   onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
+    if (clickedPermission.isGranted && this.isGrantedByRole(clickedPermission.grantedProviders)) return;
+
     setTimeout(() => {
       this.permissions = this.permissions.map(per => {
         if (clickedPermission.name === per.name) {
@@ -149,6 +157,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
+        if (permission.isGranted && this.isGrantedByRole(permission.grantedProviders)) return;
+
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
         this.permissions = [
@@ -173,7 +183,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     this.setTabCheckboxState();
   }
 
-  onSubmit() {
+  submit() {
+    this.modalBusy = true;
     const unchangedPermissions = getPermissions(
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
     );
@@ -187,16 +198,18 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     if (changedPermissions.length) {
       this.store
         .dispatch(
-          new PermissionManagementUpdatePermissions({
+          new UpdatePermissions({
             providerKey: this.providerKey,
             providerName: this.providerName,
             permissions: changedPermissions,
           }),
         )
         .subscribe(() => {
+          this.modalBusy = false;
           this.visible = false;
         });
     } else {
+      this.modalBusy = false;
       this.visible = false;
     }
   }
@@ -207,9 +220,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     }
 
     this.store
-      .dispatch(
-        new PermissionManagementGetPermissions({ providerKey: this.providerKey, providerName: this.providerName }),
-      )
+      .dispatch(new GetPermissions({ providerKey: this.providerKey, providerName: this.providerName }))
       .pipe(pluck('PermissionManagementState', 'permissionRes'))
       .subscribe((permissionRes: PermissionManagement.Response) => {
         this.selectedGroup = permissionRes.groups[0];

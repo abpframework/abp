@@ -170,9 +170,9 @@
                 var $checkBox = $(this);
                 var $tab = $('#' + $checkBox.attr('data-tab-id'));
                 if ($checkBox.is(':checked')) {
-                    $tab.find('input[type="checkbox"]').prop('checked', true);
+                    $tab.find('input[type="checkbox"]').not(':disabled').prop('checked', true);
                 } else {
-                    $tab.find('input[type="checkbox"]').prop('checked', false);
+                    $tab.find('input[type="checkbox"]').not(':disabled').prop('checked', false);
                 }
                 $($checkBox).prop('indeterminate', false);
                 setSelectAllInAllTabs();
@@ -181,9 +181,9 @@
             $('input[name="SelectAllInAllTabs"]').change(function () {
                 var $checkBox = $(this);
                 if ($checkBox.is(':checked')) {
-                    $('.tab-pane input[type="checkbox"]').prop('checked', true);
+                    $('.tab-pane input[type="checkbox"]').not(':disabled').prop('checked', true);
                 } else {
-                    $('.tab-pane input[type="checkbox"]').prop('checked', false);
+                    $('.tab-pane input[type="checkbox"]').not(':disabled').prop('checked', false);
                 }
                 $($checkBox).prop('indeterminate', false);
             });

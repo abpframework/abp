@@ -1,8 +1,10 @@
 import { StateContext } from '@ngxs/store';
-import { SessionSetLanguage } from '../actions/session.actions';
-import { Session } from '../models/session';
+import { SetLanguage, SetTenant } from '../actions/session.actions';
+import { ABP, Session } from '../models';
 export declare class SessionState {
     static getLanguage({ language }: Session.State): string;
+    static getTenant({ tenant }: Session.State): ABP.BasicItem;
     constructor();
-    sessionSetLanguage({ patchState }: StateContext<Session.State>, { payload }: SessionSetLanguage): void;
+    setLanguage({ patchState }: StateContext<Session.State>, { payload }: SetLanguage): void;
+    setTenantId({ patchState }: StateContext<Session.State>, { payload }: SetTenant): void;
 }

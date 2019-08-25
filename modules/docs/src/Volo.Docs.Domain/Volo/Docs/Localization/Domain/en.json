@@ -14,6 +14,7 @@
     "NoProjectWarning": "There are no projects yet!",
     "DocumentNotFound": "Oops, the requested document was not found!",
     "NavigationDocumentNotFound": "This version does not have a navigation document!",
-    "DocumentNotFoundInSelectedLanguage": "Document in the language you wanted is not found. Document in the default language is shown."
+    "DocumentNotFoundInSelectedLanguage": "Document in the language you wanted is not found. Document in the default language is shown.",
+    "FilterTopics": "Filter topics"
   }
 }

@@ -1,5 +1,6 @@
 // ESM syntax is supported.
 import fse from 'fs-extra';
+import execa from 'execa';
 
 (async () => {
   const { projects } = await fse.readJSON('../angular.json');
@@ -20,6 +21,9 @@ import fse from 'fs-extra';
 
     await fse.writeJSON(srcPackagePath, { ...srcPackage, version }, { spaces: 2 });
   });
+
+  await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
+  await execa('git', ['commit', '-m', 'Update source packages versions'], { stdout: 'inherit' });
 
   process.exit(0);
 })();

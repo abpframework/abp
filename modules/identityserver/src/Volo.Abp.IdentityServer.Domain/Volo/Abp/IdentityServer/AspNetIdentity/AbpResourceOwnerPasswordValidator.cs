@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,52 +11,38 @@ using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Volo.Abp.Identity;
-using Volo.Abp.MultiTenancy;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity
 {
-    public class AbpResourceOwnerPasswordValidator : ResourceOwnerPasswordValidator<IdentityUser>
+    public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator //ResourceOwnerPasswordValidator<IdentityUser>
     {
-        private readonly ICurrentTenant _currentTenant;
-        private readonly ILogger<ResourceOwnerPasswordValidator<IdentityUser>> _logger;
-        private readonly IdentityUserManager _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEventService _events;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly ILogger<ResourceOwnerPasswordValidator<IdentityUser>> _logger;
+
         public AbpResourceOwnerPasswordValidator(
-            IdentityUserManager userManager,
+            UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             IEventService events,
-            ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger, ICurrentTenant currentTenant) : base(
-                userManager,
-                signInManager,
-                events,
-                logger)
+            ILogger<ResourceOwnerPasswordValidator<IdentityUser>> logger)
         {
-            _logger = logger;
-            _currentTenant = currentTenant;
-            _events = events;
             _userManager = userManager;
             _signInManager = signInManager;
+            _events = events;
+            _logger = logger;
         }
 
-        // [UnitOfWork]
-        //public override async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
-        //{
-        //    await base.ValidateAsync(context);
-
-        //}
-
+        /// <summary>
+        /// https://github.com/IdentityServer/IdentityServer4/blob/master/src/AspNetIdentity/src/ResourceOwnerPasswordValidator.cs#L53
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
         [UnitOfWork]
-        public override async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
+        public virtual async Task ValidateAsync(ResourceOwnerPasswordValidationContext context)
         {
-            string tenantId = context.Request.Raw["__tenant"];
-            if (!tenantId.IsNullOrEmpty())
-            {
-                _logger.LogInformation($"currentTenantId:{_currentTenant.Id}");
-                _currentTenant.Change(Guid.Parse(tenantId), "tenant1");
-            }
             var user = await _userManager.FindByNameAsync(context.UserName);
             if (user != null)
             {
@@ -69,7 +54,16 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
                     _logger.LogInformation("Credentials validated for username: {username}", context.UserName);
                     await _events.RaiseAsync(new UserLoginSuccessEvent(context.UserName, sub, context.UserName, interactive: false));
 
-                    context.Result = new GrantValidationResult(sub, OidcConstants.AuthenticationMethods.Password, GetAdditionalClaimsOrNull(user));
+                    var additionalClaims = new List<Claim>();
+
+                    await AddCustomClaimsAsync(additionalClaims, user, context);
+
+                    context.Result = new GrantValidationResult(
+                        sub,
+                        OidcConstants.AuthenticationMethods.Password,
+                        additionalClaims.ToArray()
+                    );
+
                     return;
                 }
                 else if (result.IsLockedOut)
@@ -97,14 +91,14 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidGrant);
         }
 
-        protected virtual IEnumerable<Claim> GetAdditionalClaimsOrNull(IdentityUser user)
+        protected virtual Task AddCustomClaimsAsync(List<Claim> customClaims, IdentityUser user, ResourceOwnerPasswordValidationContext context)
         {
-            if (!user.TenantId.HasValue)
+            if (user.TenantId.HasValue)
             {
-                return null;
+                customClaims.Add(new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString()));
             }
 
-            return new[] { new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString()) };
+            return Task.CompletedTask;
         }
     }
 }

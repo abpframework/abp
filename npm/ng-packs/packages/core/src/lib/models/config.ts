@@ -7,9 +7,15 @@ export namespace Config {
   }
 
   export interface Environment {
+    application: Application;
     production: boolean;
     oAuthConfig: AuthConfig;
     apis: Apis;
+  }
+
+  export interface Application {
+    name: string;
+    logoUrl?: string;
   }
 
   export interface Apis {

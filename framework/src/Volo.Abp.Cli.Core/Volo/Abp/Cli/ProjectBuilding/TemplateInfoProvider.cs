@@ -23,6 +23,8 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     return new AppProTemplate();
                 case ModuleTemplate.TemplateName:
                     return new ModuleTemplate();
+                case ModuleProTemplate.TemplateName:
+                    return new ModuleProTemplate();
                 default:
                     throw new Exception("There is no template found with given name: " + name);
             }

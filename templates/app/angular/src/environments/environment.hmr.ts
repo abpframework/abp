@@ -1,6 +1,10 @@
 export const environment = {
   production: false,
   hmr: true,
+  application: {
+    name: 'MyProjectName',
+    logoUrl: '',
+  },
   oAuthConfig: {
     issuer: 'https://localhost:44305',
     clientId: 'MyProjectName_App',

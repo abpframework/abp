@@ -1,18 +1,18 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, finalize, map, pluck, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import snq from 'snq';
 import {
-  IdentityAddUser,
-  IdentityDeleteUser,
-  IdentityGetUserById,
-  IdentityGetUserRoles,
-  IdentityGetUsers,
-  IdentityUpdateUser,
+  CreateUser,
+  DeleteUser,
+  GetUserById,
+  GetUserRoles,
+  GetUsers,
+  UpdateUser,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
@@ -50,6 +50,8 @@ export class UsersComponent {
 
   loading: boolean = false;
 
+  modalBusy: boolean = false;
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   get roleGroups(): FormGroup[] {
@@ -65,9 +67,7 @@ export class UsersComponent {
 
   buildForm() {
     this.roles = this.store.selectSnapshot(IdentityState.getRoles);
-
     this.form = this.fb.group({
-      password: ['', [Validators.required, Validators.maxLength(32)]],
       userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
       email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
       name: [this.selected.name || '', [Validators.maxLength(64)]],
@@ -83,6 +83,9 @@ export class UsersComponent {
         ),
       ),
     });
+    if (!this.selected.userName) {
+      this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
+    }
   }
 
   openModal() {
@@ -97,10 +100,10 @@ export class UsersComponent {
   }
 
   onEdit(id: string) {
-    combineLatest([this.store.dispatch(new IdentityGetUserById(id)), this.store.dispatch(new IdentityGetUserRoles(id))])
+    this.store
+      .dispatch(new GetUserById(id))
       .pipe(
-        filter(([res1, res2]) => res1 && res2),
-        map(([state, _]) => state),
+        switchMap(() => this.store.dispatch(new GetUserRoles(id))),
         pluck('IdentityState'),
         take(1),
       )
@@ -113,6 +116,7 @@ export class UsersComponent {
 
   save() {
     if (!this.form.valid) return;
+    this.modalBusy = true;
 
     const { roleNames } = this.form.value;
     const mappedRoleNames = snq(
@@ -123,17 +127,18 @@ export class UsersComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new IdentityUpdateUser({
+          ? new UpdateUser({
               ...this.form.value,
               id: this.selected.id,
               roleNames: mappedRoleNames,
             })
-          : new IdentityAddUser({
+          : new CreateUser({
               ...this.form.value,
               roleNames: mappedRoleNames,
             }),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
@@ -145,7 +150,7 @@ export class UsersComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new IdentityDeleteUser(id));
+          this.store.dispatch(new DeleteUser(id));
         }
       });
   }
@@ -160,7 +165,7 @@ export class UsersComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new IdentityGetUsers(this.pageQuery))
+      .dispatch(new GetUsers(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

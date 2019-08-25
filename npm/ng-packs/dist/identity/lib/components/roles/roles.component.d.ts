@@ -1,25 +1,33 @@
+import { ABP } from '@abp/ng.core';
+import { ConfirmationService } from '@abp/ng.theme.shared';
 import { TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { Identity } from '../../models/identity';
-import { ConfirmationService } from '@abp/ng.theme.shared';
 export declare class RolesComponent {
     private confirmationService;
     private fb;
     private store;
-    roles$: Observable<Identity.RoleItem[]>;
+    data$: Observable<Identity.RoleItem[]>;
+    totalCount$: Observable<number>;
     form: FormGroup;
     selected: Identity.RoleItem;
     isModalVisible: boolean;
     visiblePermissions: boolean;
     providerKey: string;
+    pageQuery: ABP.PageQueryParams;
+    loading: boolean;
+    modalBusy: boolean;
     modalContent: TemplateRef<any>;
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
+    onSearch(value: any): void;
     createForm(): void;
     openModal(): void;
     onAdd(): void;
     onEdit(id: string): void;
     save(): void;
     delete(id: string, name: string): void;
+    onPageChange(data: any): void;
+    get(): void;
 }

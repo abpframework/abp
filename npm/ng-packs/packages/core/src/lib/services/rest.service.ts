@@ -16,17 +16,17 @@ export class RestService {
   handleError(err: any): Observable<any> {
     this.store.dispatch(new RestOccurError(err));
     console.error(err);
-    return NEVER;
+    return throwError(err);
   }
 
   request<T, R>(request: HttpRequest<T> | Rest.Request<T>, config: Rest.Config = {}, api?: string): Observable<R> {
-    const { observe = Rest.Observe.Body, throwErr } = config;
+    const { observe = Rest.Observe.Body, skipHandleError } = config;
     const url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
     const { method, ...options } = request;
     return this.http.request<T>(method, url, { observe, ...options } as any).pipe(
       observe === Rest.Observe.Body ? take(1) : null,
       catchError(err => {
-        if (throwErr) {
+        if (skipHandleError) {
           return throwError(err);
         }
 

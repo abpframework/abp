@@ -2,11 +2,11 @@
  * Generated bundle index. Do not edit.
  */
 export * from './public-api';
-export { LayoutAddNavigationElement as ɵi, LayoutRemoveNavigationElementByName as ɵj } from './lib/actions/layout.actions';
+export { AddNavigationElement as ɵi, RemoveNavigationElementByName as ɵj } from './lib/actions/layout.actions';
+export { AccountLayoutComponent as ɵc } from './lib/components/account-layout/account-layout.component';
+export { ApplicationLayoutComponent as ɵa } from './lib/components/application-layout/application-layout.component';
 export { ChangePasswordComponent as ɵf } from './lib/components/change-password/change-password.component';
-export { LayoutAccountComponent as ɵc } from './lib/components/layout-account/layout-account.component';
-export { LayoutApplicationComponent as ɵa } from './lib/components/layout-application/layout-application.component';
-export { LayoutEmptyComponent as ɵd } from './lib/components/layout-empty/layout-empty.component';
+export { EmptyLayoutComponent as ɵd } from './lib/components/empty-layout/empty-layout.component';
 export { LayoutComponent as ɵe } from './lib/components/layout/layout.component';
 export { ProfileComponent as ɵg } from './lib/components/profile/profile.component';
 export { Layout as ɵk } from './lib/models/layout';

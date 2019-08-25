@@ -2,74 +2,7 @@
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-export class IdentityGetRoles {
-}
-IdentityGetRoles.type = '[Identity] Get Roles';
-if (false) {
-    /** @type {?} */
-    IdentityGetRoles.type;
-}
-export class IdentityGetRoleById {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityGetRoleById.type = '[Identity] Get Role By Id';
-if (false) {
-    /** @type {?} */
-    IdentityGetRoleById.type;
-    /** @type {?} */
-    IdentityGetRoleById.prototype.payload;
-}
-export class IdentityDeleteRole {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityDeleteRole.type = '[Identity] Delete Role';
-if (false) {
-    /** @type {?} */
-    IdentityDeleteRole.type;
-    /** @type {?} */
-    IdentityDeleteRole.prototype.payload;
-}
-export class IdentityAddRole {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityAddRole.type = '[Identity] Add Role';
-if (false) {
-    /** @type {?} */
-    IdentityAddRole.type;
-    /** @type {?} */
-    IdentityAddRole.prototype.payload;
-}
-export class IdentityUpdateRole {
-    /**
-     * @param {?} payload
-     */
-    constructor(payload) {
-        this.payload = payload;
-    }
-}
-IdentityUpdateRole.type = '[Identity] Update Role';
-if (false) {
-    /** @type {?} */
-    IdentityUpdateRole.type;
-    /** @type {?} */
-    IdentityUpdateRole.prototype.payload;
-}
-export class IdentityGetUsers {
+export class GetRoles {
     /**
      * @param {?=} payload
      */
@@ -77,14 +10,14 @@ export class IdentityGetUsers {
         this.payload = payload;
     }
 }
-IdentityGetUsers.type = '[Identity] Get Users';
+GetRoles.type = '[Identity] Get Roles';
 if (false) {
     /** @type {?} */
-    IdentityGetUsers.type;
+    GetRoles.type;
     /** @type {?} */
-    IdentityGetUsers.prototype.payload;
+    GetRoles.prototype.payload;
 }
-export class IdentityGetUserById {
+export class GetRoleById {
     /**
      * @param {?} payload
      */
@@ -92,14 +25,14 @@ export class IdentityGetUserById {
         this.payload = payload;
     }
 }
-IdentityGetUserById.type = '[Identity] Get User By Id';
+GetRoleById.type = '[Identity] Get Role By Id';
 if (false) {
     /** @type {?} */
-    IdentityGetUserById.type;
+    GetRoleById.type;
     /** @type {?} */
-    IdentityGetUserById.prototype.payload;
+    GetRoleById.prototype.payload;
 }
-export class IdentityDeleteUser {
+export class DeleteRole {
     /**
      * @param {?} payload
      */
@@ -107,14 +40,14 @@ export class IdentityDeleteUser {
         this.payload = payload;
     }
 }
-IdentityDeleteUser.type = '[Identity] Delete User';
+DeleteRole.type = '[Identity] Delete Role';
 if (false) {
     /** @type {?} */
-    IdentityDeleteUser.type;
+    DeleteRole.type;
     /** @type {?} */
-    IdentityDeleteUser.prototype.payload;
+    DeleteRole.prototype.payload;
 }
-export class IdentityAddUser {
+export class CreateRole {
     /**
      * @param {?} payload
      */
@@ -122,14 +55,14 @@ export class IdentityAddUser {
         this.payload = payload;
     }
 }
-IdentityAddUser.type = '[Identity] Add User';
+CreateRole.type = '[Identity] Create Role';
 if (false) {
     /** @type {?} */
-    IdentityAddUser.type;
+    CreateRole.type;
     /** @type {?} */
-    IdentityAddUser.prototype.payload;
+    CreateRole.prototype.payload;
 }
-export class IdentityUpdateUser {
+export class UpdateRole {
     /**
      * @param {?} payload
      */
@@ -137,14 +70,29 @@ export class IdentityUpdateUser {
         this.payload = payload;
     }
 }
-IdentityUpdateUser.type = '[Identity] Update User';
+UpdateRole.type = '[Identity] Update Role';
 if (false) {
     /** @type {?} */
-    IdentityUpdateUser.type;
+    UpdateRole.type;
     /** @type {?} */
-    IdentityUpdateUser.prototype.payload;
+    UpdateRole.prototype.payload;
 }
-export class IdentityGetUserRoles {
+export class GetUsers {
+    /**
+     * @param {?=} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+GetUsers.type = '[Identity] Get Users';
+if (false) {
+    /** @type {?} */
+    GetUsers.type;
+    /** @type {?} */
+    GetUsers.prototype.payload;
+}
+export class GetUserById {
     /**
      * @param {?} payload
      */
@@ -152,11 +100,71 @@ export class IdentityGetUserRoles {
         this.payload = payload;
     }
 }
-IdentityGetUserRoles.type = '[Identity] Get User Roles';
+GetUserById.type = '[Identity] Get User By Id';
 if (false) {
     /** @type {?} */
-    IdentityGetUserRoles.type;
+    GetUserById.type;
     /** @type {?} */
-    IdentityGetUserRoles.prototype.payload;
+    GetUserById.prototype.payload;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaWRlbnRpdHkuYWN0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuaWRlbnRpdHkvIiwic291cmNlcyI6WyJsaWIvYWN0aW9ucy9pZGVudGl0eS5hY3Rpb25zLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7QUFHQSxNQUFNLE9BQU8sZ0JBQWdCOztBQUNYLHFCQUFJLEdBQUcsc0JBQXNCLENBQUM7OztJQUE5QyxzQkFBOEM7O0FBR2hELE1BQU0sT0FBTyxtQkFBbUI7Ozs7SUFFOUIsWUFBbUIsT0FBZTtRQUFmLFlBQU8sR0FBUCxPQUFPLENBQVE7SUFBRyxDQUFDOztBQUR0Qix3QkFBSSxHQUFHLDJCQUEyQixDQUFDOzs7SUFBbkQseUJBQW1EOztJQUN2QyxzQ0FBc0I7O0FBR3BDLE1BQU0sT0FBTyxrQkFBa0I7Ozs7SUFFN0IsWUFBbUIsT0FBZTtRQUFmLFlBQU8sR0FBUCxPQUFPLENBQVE7SUFBRyxDQUFDOztBQUR0Qix1QkFBSSxHQUFHLHdCQUF3QixDQUFDOzs7SUFBaEQsd0JBQWdEOztJQUNwQyxxQ0FBc0I7O0FBR3BDLE1BQU0sT0FBTyxlQUFlOzs7O0lBRTFCLFlBQW1CLE9BQWlDO1FBQWpDLFlBQU8sR0FBUCxPQUFPLENBQTBCO0lBQUcsQ0FBQzs7QUFEeEMsb0JBQUksR0FBRyxxQkFBcUIsQ0FBQzs7O0lBQTdDLHFCQUE2Qzs7SUFDakMsa0NBQXdDOztBQUd0RCxNQUFNLE9BQU8sa0JBQWtCOzs7O0lBRTdCLFlBQW1CLE9BQTBCO1FBQTFCLFlBQU8sR0FBUCxPQUFPLENBQW1CO0lBQUcsQ0FBQzs7QUFEakMsdUJBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELHdCQUFnRDs7SUFDcEMscUNBQWlDOztBQUcvQyxNQUFNLE9BQU8sZ0JBQWdCOzs7O0lBRTNCLFlBQW1CLE9BQTZCO1FBQTdCLFlBQU8sR0FBUCxPQUFPLENBQXNCO0lBQUcsQ0FBQzs7QUFEcEMscUJBQUksR0FBRyxzQkFBc0IsQ0FBQzs7O0lBQTlDLHNCQUE4Qzs7SUFDbEMsbUNBQW9DOztBQUdsRCxNQUFNLE9BQU8sbUJBQW1COzs7O0lBRTlCLFlBQW1CLE9BQWU7UUFBZixZQUFPLEdBQVAsT0FBTyxDQUFRO0lBQUcsQ0FBQzs7QUFEdEIsd0JBQUksR0FBRywyQkFBMkIsQ0FBQzs7O0lBQW5ELHlCQUFtRDs7SUFDdkMsc0NBQXNCOztBQUdwQyxNQUFNLE9BQU8sa0JBQWtCOzs7O0lBRTdCLFlBQW1CLE9BQWU7UUFBZixZQUFPLEdBQVAsT0FBTyxDQUFRO0lBQUcsQ0FBQzs7QUFEdEIsdUJBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELHdCQUFnRDs7SUFDcEMscUNBQXNCOztBQUdwQyxNQUFNLE9BQU8sZUFBZTs7OztJQUUxQixZQUFtQixPQUFpQztRQUFqQyxZQUFPLEdBQVAsT0FBTyxDQUEwQjtJQUFHLENBQUM7O0FBRHhDLG9CQUFJLEdBQUcscUJBQXFCLENBQUM7OztJQUE3QyxxQkFBNkM7O0lBQ2pDLGtDQUF3Qzs7QUFHdEQsTUFBTSxPQUFPLGtCQUFrQjs7OztJQUU3QixZQUFtQixPQUFrRDtRQUFsRCxZQUFPLEdBQVAsT0FBTyxDQUEyQztJQUFHLENBQUM7O0FBRHpELHVCQUFJLEdBQUcsd0JBQXdCLENBQUM7OztJQUFoRCx3QkFBZ0Q7O0lBQ3BDLHFDQUF5RDs7QUFHdkUsTUFBTSxPQUFPLG9CQUFvQjs7OztJQUUvQixZQUFtQixPQUFlO1FBQWYsWUFBTyxHQUFQLE9BQU8sQ0FBUTtJQUFHLENBQUM7O0FBRHRCLHlCQUFJLEdBQUcsMkJBQTJCLENBQUM7OztJQUFuRCwwQkFBbUQ7O0lBQ3ZDLHVDQUFzQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IElkZW50aXR5IH0gZnJvbSAnLi4vbW9kZWxzL2lkZW50aXR5JztcbmltcG9ydCB7IEFCUCB9IGZyb20gJ0BhYnAvbmcuY29yZSc7XG5cbmV4cG9ydCBjbGFzcyBJZGVudGl0eUdldFJvbGVzIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBHZXQgUm9sZXMnO1xufVxuXG5leHBvcnQgY2xhc3MgSWRlbnRpdHlHZXRSb2xlQnlJZCB7XG4gIHN0YXRpYyByZWFkb25seSB0eXBlID0gJ1tJZGVudGl0eV0gR2V0IFJvbGUgQnkgSWQnO1xuICBjb25zdHJ1Y3RvcihwdWJsaWMgcGF5bG9hZDogc3RyaW5nKSB7fVxufVxuXG5leHBvcnQgY2xhc3MgSWRlbnRpdHlEZWxldGVSb2xlIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBEZWxldGUgUm9sZSc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBJZGVudGl0eUFkZFJvbGUge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIEFkZCBSb2xlJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ6IElkZW50aXR5LlJvbGVTYXZlUmVxdWVzdCkge31cbn1cblxuZXhwb3J0IGNsYXNzIElkZW50aXR5VXBkYXRlUm9sZSB7XG4gIHN0YXRpYyByZWFkb25seSB0eXBlID0gJ1tJZGVudGl0eV0gVXBkYXRlIFJvbGUnO1xuICBjb25zdHJ1Y3RvcihwdWJsaWMgcGF5bG9hZDogSWRlbnRpdHkuUm9sZUl0ZW0pIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBJZGVudGl0eUdldFVzZXJzIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBHZXQgVXNlcnMnO1xuICBjb25zdHJ1Y3RvcihwdWJsaWMgcGF5bG9hZD86IEFCUC5QYWdlUXVlcnlQYXJhbXMpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBJZGVudGl0eUdldFVzZXJCeUlkIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBHZXQgVXNlciBCeSBJZCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBJZGVudGl0eURlbGV0ZVVzZXIge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIERlbGV0ZSBVc2VyJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ6IHN0cmluZykge31cbn1cblxuZXhwb3J0IGNsYXNzIElkZW50aXR5QWRkVXNlciB7XG4gIHN0YXRpYyByZWFkb25seSB0eXBlID0gJ1tJZGVudGl0eV0gQWRkIFVzZXInO1xuICBjb25zdHJ1Y3RvcihwdWJsaWMgcGF5bG9hZDogSWRlbnRpdHkuVXNlclNhdmVSZXF1ZXN0KSB7fVxufVxuXG5leHBvcnQgY2xhc3MgSWRlbnRpdHlVcGRhdGVVc2VyIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBVcGRhdGUgVXNlcic7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBJZGVudGl0eS5Vc2VyU2F2ZVJlcXVlc3QgJiB7IGlkOiBzdHJpbmcgfSkge31cbn1cblxuZXhwb3J0IGNsYXNzIElkZW50aXR5R2V0VXNlclJvbGVzIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBHZXQgVXNlciBSb2xlcyc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG4iXX0=
+export class DeleteUser {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+DeleteUser.type = '[Identity] Delete User';
+if (false) {
+    /** @type {?} */
+    DeleteUser.type;
+    /** @type {?} */
+    DeleteUser.prototype.payload;
+}
+export class CreateUser {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+CreateUser.type = '[Identity] Create User';
+if (false) {
+    /** @type {?} */
+    CreateUser.type;
+    /** @type {?} */
+    CreateUser.prototype.payload;
+}
+export class UpdateUser {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+UpdateUser.type = '[Identity] Update User';
+if (false) {
+    /** @type {?} */
+    UpdateUser.type;
+    /** @type {?} */
+    UpdateUser.prototype.payload;
+}
+export class GetUserRoles {
+    /**
+     * @param {?} payload
+     */
+    constructor(payload) {
+        this.payload = payload;
+    }
+}
+GetUserRoles.type = '[Identity] Get User Roles';
+if (false) {
+    /** @type {?} */
+    GetUserRoles.type;
+    /** @type {?} */
+    GetUserRoles.prototype.payload;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaWRlbnRpdHkuYWN0aW9ucy5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuaWRlbnRpdHkvIiwic291cmNlcyI6WyJsaWIvYWN0aW9ucy9pZGVudGl0eS5hY3Rpb25zLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7QUFHQSxNQUFNLE9BQU8sUUFBUTs7OztJQUVuQixZQUFtQixPQUE2QjtRQUE3QixZQUFPLEdBQVAsT0FBTyxDQUFzQjtJQUFHLENBQUM7O0FBRHBDLGFBQUksR0FBRyxzQkFBc0IsQ0FBQzs7O0lBQTlDLGNBQThDOztJQUNsQywyQkFBb0M7O0FBR2xELE1BQU0sT0FBTyxXQUFXOzs7O0lBRXRCLFlBQW1CLE9BQWU7UUFBZixZQUFPLEdBQVAsT0FBTyxDQUFRO0lBQUcsQ0FBQzs7QUFEdEIsZ0JBQUksR0FBRywyQkFBMkIsQ0FBQzs7O0lBQW5ELGlCQUFtRDs7SUFDdkMsOEJBQXNCOztBQUdwQyxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUFlO1FBQWYsWUFBTyxHQUFQLE9BQU8sQ0FBUTtJQUFHLENBQUM7O0FBRHRCLGVBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELGdCQUFnRDs7SUFDcEMsNkJBQXNCOztBQUdwQyxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUFpQztRQUFqQyxZQUFPLEdBQVAsT0FBTyxDQUEwQjtJQUFHLENBQUM7O0FBRHhDLGVBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELGdCQUFnRDs7SUFDcEMsNkJBQXdDOztBQUd0RCxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUEwQjtRQUExQixZQUFPLEdBQVAsT0FBTyxDQUFtQjtJQUFHLENBQUM7O0FBRGpDLGVBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELGdCQUFnRDs7SUFDcEMsNkJBQWlDOztBQUcvQyxNQUFNLE9BQU8sUUFBUTs7OztJQUVuQixZQUFtQixPQUE2QjtRQUE3QixZQUFPLEdBQVAsT0FBTyxDQUFzQjtJQUFHLENBQUM7O0FBRHBDLGFBQUksR0FBRyxzQkFBc0IsQ0FBQzs7O0lBQTlDLGNBQThDOztJQUNsQywyQkFBb0M7O0FBR2xELE1BQU0sT0FBTyxXQUFXOzs7O0lBRXRCLFlBQW1CLE9BQWU7UUFBZixZQUFPLEdBQVAsT0FBTyxDQUFRO0lBQUcsQ0FBQzs7QUFEdEIsZ0JBQUksR0FBRywyQkFBMkIsQ0FBQzs7O0lBQW5ELGlCQUFtRDs7SUFDdkMsOEJBQXNCOztBQUdwQyxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUFlO1FBQWYsWUFBTyxHQUFQLE9BQU8sQ0FBUTtJQUFHLENBQUM7O0FBRHRCLGVBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELGdCQUFnRDs7SUFDcEMsNkJBQXNCOztBQUdwQyxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUFpQztRQUFqQyxZQUFPLEdBQVAsT0FBTyxDQUEwQjtJQUFHLENBQUM7O0FBRHhDLGVBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELGdCQUFnRDs7SUFDcEMsNkJBQXdDOztBQUd0RCxNQUFNLE9BQU8sVUFBVTs7OztJQUVyQixZQUFtQixPQUFrRDtRQUFsRCxZQUFPLEdBQVAsT0FBTyxDQUEyQztJQUFHLENBQUM7O0FBRHpELGVBQUksR0FBRyx3QkFBd0IsQ0FBQzs7O0lBQWhELGdCQUFnRDs7SUFDcEMsNkJBQXlEOztBQUd2RSxNQUFNLE9BQU8sWUFBWTs7OztJQUV2QixZQUFtQixPQUFlO1FBQWYsWUFBTyxHQUFQLE9BQU8sQ0FBUTtJQUFHLENBQUM7O0FBRHRCLGlCQUFJLEdBQUcsMkJBQTJCLENBQUM7OztJQUFuRCxrQkFBbUQ7O0lBQ3ZDLCtCQUFzQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IElkZW50aXR5IH0gZnJvbSAnLi4vbW9kZWxzL2lkZW50aXR5JztcbmltcG9ydCB7IEFCUCB9IGZyb20gJ0BhYnAvbmcuY29yZSc7XG5cbmV4cG9ydCBjbGFzcyBHZXRSb2xlcyB7XG4gIHN0YXRpYyByZWFkb25seSB0eXBlID0gJ1tJZGVudGl0eV0gR2V0IFJvbGVzJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ/OiBBQlAuUGFnZVF1ZXJ5UGFyYW1zKSB7fVxufVxuXG5leHBvcnQgY2xhc3MgR2V0Um9sZUJ5SWQge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIEdldCBSb2xlIEJ5IElkJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ6IHN0cmluZykge31cbn1cblxuZXhwb3J0IGNsYXNzIERlbGV0ZVJvbGUge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIERlbGV0ZSBSb2xlJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ6IHN0cmluZykge31cbn1cblxuZXhwb3J0IGNsYXNzIENyZWF0ZVJvbGUge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIENyZWF0ZSBSb2xlJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ6IElkZW50aXR5LlJvbGVTYXZlUmVxdWVzdCkge31cbn1cblxuZXhwb3J0IGNsYXNzIFVwZGF0ZVJvbGUge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIFVwZGF0ZSBSb2xlJztcbiAgY29uc3RydWN0b3IocHVibGljIHBheWxvYWQ6IElkZW50aXR5LlJvbGVJdGVtKSB7fVxufVxuXG5leHBvcnQgY2xhc3MgR2V0VXNlcnMge1xuICBzdGF0aWMgcmVhZG9ubHkgdHlwZSA9ICdbSWRlbnRpdHldIEdldCBVc2Vycyc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkPzogQUJQLlBhZ2VRdWVyeVBhcmFtcykge31cbn1cblxuZXhwb3J0IGNsYXNzIEdldFVzZXJCeUlkIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBHZXQgVXNlciBCeSBJZCc7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBEZWxldGVVc2VyIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBEZWxldGUgVXNlcic7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBzdHJpbmcpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBDcmVhdGVVc2VyIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBDcmVhdGUgVXNlcic7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBJZGVudGl0eS5Vc2VyU2F2ZVJlcXVlc3QpIHt9XG59XG5cbmV4cG9ydCBjbGFzcyBVcGRhdGVVc2VyIHtcbiAgc3RhdGljIHJlYWRvbmx5IHR5cGUgPSAnW0lkZW50aXR5XSBVcGRhdGUgVXNlcic7XG4gIGNvbnN0cnVjdG9yKHB1YmxpYyBwYXlsb2FkOiBJZGVudGl0eS5Vc2VyU2F2ZVJlcXVlc3QgJiB7IGlkOiBzdHJpbmcgfSkge31cbn1cblxuZXhwb3J0IGNsYXNzIEdldFVzZXJSb2xlcyB7XG4gIHN0YXRpYyByZWFkb25seSB0eXBlID0gJ1tJZGVudGl0eV0gR2V0IFVzZXIgUm9sZXMnO1xuICBjb25zdHJ1Y3RvcihwdWJsaWMgcGF5bG9hZDogc3RyaW5nKSB7fVxufVxuIl19

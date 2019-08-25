@@ -28,13 +28,13 @@ export class ProfileService {
     return this.rest.request<Profile.Response, Profile.Response>(request);
   }
 
-  changePassword(body: Profile.ChangePasswordRequest, throwErr: boolean = false): Observable<null> {
+  changePassword(body: Profile.ChangePasswordRequest, skipHandleError: boolean = false): Observable<null> {
     const request: Rest.Request<Profile.ChangePasswordRequest> = {
       method: 'POST',
       url: '/api/identity/my-profile/change-password',
       body,
     };
 
-    return this.rest.request<Profile.ChangePasswordRequest, null>(request, { throwErr });
+    return this.rest.request<Profile.ChangePasswordRequest, null>(request, { skipHandleError });
   }
 }

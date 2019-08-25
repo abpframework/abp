@@ -6,11 +6,11 @@ import { Select, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
-  TenantManagementAdd,
-  TenantManagementDelete,
-  TenantManagementGet,
-  TenantManagementGetById,
-  TenantManagementUpdate,
+  CreateTenant,
+  DeleteTenant,
+  GetTenants,
+  GetTenantById,
+  UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
@@ -44,6 +44,10 @@ export class TenantsComponent {
 
   selectedModalContent = {} as SelectedModalContent;
 
+  visibleFeatures: boolean = false;
+
+  providerKey: string;
+
   _useSharedDatabase: boolean;
 
   pageQuery: ABP.PageQueryParams = {
@@ -51,6 +55,8 @@ export class TenantsComponent {
   };
 
   loading: boolean = false;
+
+  modalBusy: boolean = false;
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -103,7 +109,7 @@ export class TenantsComponent {
 
   onEditConnectionString(id: string) {
     this.store
-      .dispatch(new TenantManagementGetById(id))
+      .dispatch(new GetTenantById(id))
       .pipe(
         pluck('TenantManagementState', 'selectedItem'),
         switchMap(selected => {
@@ -127,7 +133,7 @@ export class TenantsComponent {
 
   onEditTenant(id: string) {
     this.store
-      .dispatch(new TenantManagementGetById(id))
+      .dispatch(new GetTenantById(id))
       .pipe(pluck('TenantManagementState', 'selectedItem'))
       .subscribe(selected => {
         this.selected = selected;
@@ -144,11 +150,13 @@ export class TenantsComponent {
   }
 
   saveConnectionString() {
+    this.modalBusy = true;
     if (this.useSharedDatabase) {
       this.tenantService
         .deleteDefaultConnectionString(this.selected.id)
         .pipe(take(1))
         .subscribe(() => {
+          this.modalBusy = false;
           this.isModalVisible = false;
         });
     } else {
@@ -156,6 +164,7 @@ export class TenantsComponent {
         .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
         .pipe(take(1))
         .subscribe(() => {
+          this.modalBusy = false;
           this.isModalVisible = false;
         });
     }
@@ -163,14 +172,16 @@ export class TenantsComponent {
 
   saveTenant() {
     if (!this.tenantForm.valid) return;
+    this.modalBusy = true;
 
     this.store
       .dispatch(
         this.selected.id
-          ? new TenantManagementUpdate({ ...this.tenantForm.value, id: this.selected.id })
-          : new TenantManagementAdd(this.tenantForm.value),
+          ? new UpdateTenant({ ...this.tenantForm.value, id: this.selected.id })
+          : new CreateTenant(this.tenantForm.value),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
@@ -182,7 +193,8 @@ export class TenantsComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new TenantManagementDelete(id));
+          this.store.dispatch(new DeleteTenant(id));
+          this.modalBusy = false;
         }
       });
   }
@@ -197,7 +209,7 @@ export class TenantsComponent {
   get() {
     this.loading = true;
     this.store
-      .dispatch(new TenantManagementGet(this.pageQuery))
+      .dispatch(new GetTenants(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
   }

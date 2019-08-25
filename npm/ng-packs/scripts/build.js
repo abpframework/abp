@@ -30,11 +30,14 @@ import fse from 'fs-extra';
 
   npmPackageNames.forEach(name => {
     // do not convert to async
-    execa.sync('yarn', ['symlink', 'copy', '--angular', '--packages', name, '--no-watch'], {
+    execa.sync('yarn', ['symlink', 'copy', '--angular', '--packages', name, '--no-watch', '--sync-build'], {
       stdout: 'inherit',
       cwd: '../',
     });
   });
+
+  await execa('git', ['add', '../dist/*', '../package.json'], { stdout: 'inherit' });
+  await execa('git', ['commit', '-m', 'Build ng packages'], { stdout: 'inherit' });
 
   process.exit(0);
 })();

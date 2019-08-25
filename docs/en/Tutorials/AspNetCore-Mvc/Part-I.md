@@ -455,7 +455,7 @@ $(function () {
 
 The final UI is shown below:
 
-![bookstore-book-list](images/bookstore-book-list.png)
+![bookstore-book-list](images/bookstore-book-list-2.png)
 
 ### Next Part
 

@@ -1,5 +1,5 @@
 import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { ProfileGet, ProfileChangePassword, ProfileUpdate } from '../actions/profile.actions';
+import { GetProfile, ChangePassword, UpdateProfile } from '../actions/profile.actions';
 import { Profile } from '../models/profile';
 import { ProfileService } from '../services/profile.service';
 import { tap } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class ProfileState {
 
   constructor(private profileService: ProfileService) {}
 
-  @Action(ProfileGet)
+  @Action(GetProfile)
   profileGet({ patchState }: StateContext<Profile.State>) {
     return this.profileService.get().pipe(
       tap(profile =>
@@ -27,8 +27,8 @@ export class ProfileState {
     );
   }
 
-  @Action(ProfileUpdate)
-  profileUpdate({ patchState }: StateContext<Profile.State>, { payload }: ProfileUpdate) {
+  @Action(UpdateProfile)
+  profileUpdate({ patchState }: StateContext<Profile.State>, { payload }: UpdateProfile) {
     return this.profileService.update(payload).pipe(
       tap(profile =>
         patchState({
@@ -38,8 +38,8 @@ export class ProfileState {
     );
   }
 
-  @Action(ProfileChangePassword)
-  changePassword(_, { payload }: ProfileChangePassword) {
+  @Action(ChangePassword)
+  changePassword(_, { payload }: ChangePassword) {
     return this.profileService.changePassword(payload, true);
   }
 }

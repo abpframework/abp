@@ -16,7 +16,7 @@ You can access to the **source code** of the application from [the GitHub reposi
 
 In this section, you will learn how to create a new modal dialog form to create a new book. The result dialog will be like that:
 
-![bookstore-create-dialog](images/bookstore-create-dialog.png)
+![bookstore-create-dialog](images/bookstore-create-dialog-2.png)
 
 #### Create the Modal Form
 
