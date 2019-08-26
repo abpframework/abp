@@ -18,16 +18,14 @@ namespace App2
             _distributedEventBus = distributedEventBus;
         }
 
-        public Task HandleEventAsync(App1ToApp2TextEventData eventData)
+        public async Task HandleEventAsync(App1ToApp2TextEventData eventData)
         {
             Console.WriteLine("************************ INCOMING MESSAGE ****************************");
             Console.WriteLine(eventData.TextMessage);
             Console.WriteLine("**********************************************************************");
             Console.WriteLine();
 
-            _distributedEventBus.PublishAsync(new App2TextReceivedEventData(eventData.TextMessage));
-
-            return Task.CompletedTask;
+            await _distributedEventBus.PublishAsync(new App2TextReceivedEventData(eventData.TextMessage));
         }
     }
 }
