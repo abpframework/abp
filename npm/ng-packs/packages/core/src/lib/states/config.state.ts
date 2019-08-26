@@ -169,11 +169,15 @@ export class ConfigState {
           ...configuration,
         }),
       ),
-      switchMap(configuration =>
-        this.store.selectSnapshot(SessionState.getLanguage)
-          ? of(null)
-          : dispatch(new SetLanguage(snq(() => configuration.setting.values['Abp.Localization.DefaultLanguage']))),
-      ),
+      switchMap(configuration => {
+        let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
+
+        if (defaultLang.includes(';')) {
+          defaultLang = defaultLang.split(';')[0];
+        }
+
+        return this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
+      }),
     );
   }
 

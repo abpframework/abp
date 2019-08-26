@@ -1,6 +1,9 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { SetLanguage, SetTenant } from '../actions/session.actions';
 import { ABP, Session } from '../models';
+import { GetAppConfiguration } from '../actions/config.actions';
+import { LocalizationService } from '../services/localization.service';
+import { from, combineLatest } from 'rxjs';
 
 @State<Session.State>({
   name: 'SessionState',
@@ -17,13 +20,15 @@ export class SessionState {
     return tenant;
   }
 
-  constructor() {}
+  constructor(private localizationService: LocalizationService) {}
 
   @Action(SetLanguage)
-  setLanguage({ patchState }: StateContext<Session.State>, { payload }: SetLanguage) {
+  setLanguage({ patchState, dispatch }: StateContext<Session.State>, { payload }: SetLanguage) {
     patchState({
       language: payload,
     });
+
+    return combineLatest([dispatch(new GetAppConfiguration()), from(this.localizationService.registerLocale(payload))]);
   }
 
   @Action(SetTenant)
