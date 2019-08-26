@@ -5,7 +5,7 @@
 // export * from './lib/handlers';
 export * from './lib/actions';
 export * from './lib/components';
-// export * from './lib/constants';
+export * from './lib/constants';
 export * from './lib/directives';
 export * from './lib/enums';
 export * from './lib/guards';
