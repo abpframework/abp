@@ -24,4 +24,5 @@ Also, this guide is mostly usable for general **application development**.
 * Data Access
   * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
   * [MongoDB Integration](MongoDB-Integration.md)
+  * [PostgreSQL Integration](PostgreSQL-Integration.md)
 
