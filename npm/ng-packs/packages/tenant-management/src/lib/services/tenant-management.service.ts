@@ -83,7 +83,7 @@ export class TenantManagementService {
   }
 
   deleteDefaultConnectionString(id: string): Observable<string> {
-    const url = `/api/multi-tenancy/tenant/${id}/default-connection-string`;
+    const url = `/api/multi-tenancy/tenants/${id}/default-connection-string`;
 
     const request: Rest.Request<TenantManagement.DefaultConnectionStringRequest> = {
       method: 'DELETE',

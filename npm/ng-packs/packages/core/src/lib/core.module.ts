@@ -18,11 +18,12 @@ import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
-import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
+import { LocaleProvider } from './providers/locale.provider';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
-import { getInitialData } from './utils/initial-utils';
+import { getInitialData, localeInitializer } from './utils/initial-utils';
+import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
 
 @NgModule({
   imports: [
@@ -73,6 +74,7 @@ export class CoreModule {
     return {
       ngModule: CoreModule,
       providers: [
+        LocaleProvider,
         {
           provide: NGXS_PLUGINS,
           useClass: ConfigPlugin,
@@ -92,6 +94,12 @@ export class CoreModule {
           multi: true,
           deps: [Injector],
           useFactory: getInitialData,
+        },
+        {
+          provide: APP_INITIALIZER,
+          multi: true,
+          deps: [Injector],
+          useFactory: localeInitializer,
         },
       ],
     };
