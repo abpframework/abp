@@ -127,22 +127,22 @@
 
 <ng-template #connectionStringModalTemplate>
   <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()">
-    <div class="mt-2">
+    <label class="mt-2">
       <div class="form-group">
-        <div class="form-check">
+        <div class="custom-checkbox custom-control mb-2">
           <input
             id="useSharedDatabase"
             type="checkbox"
-            class="form-check-input"
+            class="custom-control-input"
             formControlName="useSharedDatabase"
             autofocus
           />
-          <label for="useSharedDatabase" class="font-check-label">{{
+          <label for="useSharedDatabase" class="custom-control-label">{{
             'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
           }}</label>
         </div>
       </div>
-      <div class="form-group" *ngIf="!useSharedDatabase">
+      <label class="form-group" *ngIf="!useSharedDatabase">
         <label for="defaultConnectionString">{{
           'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
         }}</label>
@@ -152,8 +152,8 @@
           class="form-control"
           formControlName="defaultConnectionString"
         />
-      </div>
-    </div>
+      </label>
+    </label>
   </form>
 </ng-template>
 
