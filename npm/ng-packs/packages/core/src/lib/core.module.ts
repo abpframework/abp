@@ -8,21 +8,21 @@ import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { RouterOutletComponent } from './components/router-outlet.component';
+import { AutofocusDirective } from './directives/autofocus.directive';
+import { InputEventDebounceDirective } from './directives/debounce.directive';
+import { EllipsisDirective } from './directives/ellipsis.directive';
+import { FormSubmitDirective } from './directives/form-submit.directive';
 import { PermissionDirective } from './directives/permission.directive';
+import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
-import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
+import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData } from './utils/initial-utils';
-import { EllipsisDirective } from './directives/ellipsis.directive';
-import { AutofocusDirective } from './directives/autofocus.directive';
-import { InputEventDebounceDirective } from './directives/debounce.directive';
-import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
-import { FormSubmitDirective } from './directives/form-submit.directive';
 
 @NgModule({
   imports: [

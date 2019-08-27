@@ -1,1 +1,1 @@
-export * from './config.plugin';
+export * from './config/config.plugin';

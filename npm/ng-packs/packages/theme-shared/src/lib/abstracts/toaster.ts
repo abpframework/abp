@@ -31,8 +31,8 @@ export class AbstractToaster<T = Toaster.Options> {
 
     this.messageService.add({
       severity,
-      detail: message,
-      summary: title,
+      detail: message || '',
+      summary: title || '',
       ...options,
       key: this.key,
       ...(typeof (options || ({} as any)).sticky === 'undefined' && { sticky: this.sticky }),
