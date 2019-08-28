@@ -38,9 +38,9 @@ export class ConfigPlugin implements NgxsPlugin {
 function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): any {
   const abpRoutes: ABP.FullRoute[] = routes
     .filter(route => {
-      return snq(() => route.data.routes.find(r => r.path === route.path), false);
+      return snq(() => route.data.routes.routes.find(r => r.path === route.path), false);
     })
-    .reduce((acc, val) => [...acc, ...val.data.routes], []);
+    .reduce((acc, val) => [...acc, ...val.data.routes.routes], []);
 
   wrappers = abpRoutes.filter(ar => ar.wrapper);
   const transformed = [] as ABP.FullRoute[];
@@ -48,7 +48,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
     .filter(route => (route.data || {}).routes && (route.component || route.loadChildren))
     .forEach(route => {
       const abpPackage = abpRoutes.find(
-        abp => abp.path.toLowerCase() === route.path.toLowerCase() && snq(() => route.data.routes.length, false),
+        abp => abp.path.toLowerCase() === route.path.toLowerCase() && snq(() => route.data.routes.routes.length, false),
       );
       const { length } = transformed;
 

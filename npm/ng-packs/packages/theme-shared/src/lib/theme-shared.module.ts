@@ -16,6 +16,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { ValidationErrorComponent } from './components/errors/validation-error.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -63,6 +64,7 @@ export function appendScript(injector: Injector) {
     ValidationErrorComponent,
     ChangePasswordComponent,
     ProfileComponent,
+    BreadcrumbComponent,
   ],
   exports: [
     ButtonComponent,
@@ -72,6 +74,7 @@ export function appendScript(injector: Injector) {
     LoaderBarComponent,
     ChangePasswordComponent,
     ProfileComponent,
+    BreadcrumbComponent,
   ],
   entryComponents: [ErrorComponent, ValidationErrorComponent],
 })

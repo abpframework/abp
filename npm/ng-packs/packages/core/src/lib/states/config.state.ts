@@ -60,6 +60,17 @@ export class ConfigState {
     return selector;
   }
 
+  static getRoute(path?: string, name?: string) {
+    const selector = createSelector(
+      [ConfigState],
+      function(state: Config.State) {
+        return findRoute(state.routes, path, name);
+      },
+    );
+
+    return selector;
+  }
+
   static getApiUrl(key?: string) {
     const selector = createSelector(
       [ConfigState],
@@ -228,4 +239,23 @@ function patchRouteDeep(
   }
 
   return organizeRoutes(routes);
+}
+
+function findRoute(routes: ABP.FullRoute[], path?: string, name?: string) {
+  let foundRoute;
+  routes.forEach(route => {
+    if (foundRoute) return;
+
+    if (path && route.path === path) {
+      foundRoute = route;
+    } else if (name && route.name === name) {
+      foundRoute = route;
+      return;
+    } else if (route.children && route.children.length) {
+      foundRoute = findRoute(route.children, path, name);
+      return;
+    }
+  });
+
+  return foundRoute;
 }
