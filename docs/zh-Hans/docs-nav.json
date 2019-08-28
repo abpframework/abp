@@ -242,6 +242,10 @@
         {
           "text": "MongoDB 集成",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper 集成",
+          "path": "Dapper.md"
         }
       ]
     },
