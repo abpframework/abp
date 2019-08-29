@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SettingTab } from '@abp/ng.theme.shared';
+import { SettingTab, fade } from '@abp/ng.theme.shared';
 import { InitialService } from '../services/initial.service';
 
 @Component({

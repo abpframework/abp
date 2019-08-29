@@ -44,10 +44,10 @@ export function appendScript(injector: Injector) {
       targetSelector: '.form-group',
       blueprints: {
         email: `AbpAccount::ThisFieldIsNotAValidEmailAddress.`,
-        max: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ max }}]`,
+        max: `AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]`,
         maxlength: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]`,
-        min: `AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]`,
-        minlength: `AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]`,
+        min: `AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]`,
+        minlength: `AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]`,
         required: `AbpAccount::ThisFieldIsRequired.`,
         passwordMismatch: `AbpIdentity::Identity.PasswordConfirmationFailed`,
       },

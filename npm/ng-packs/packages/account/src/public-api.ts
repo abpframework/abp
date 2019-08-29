@@ -1,7 +1,4 @@
-/*
- * Public API Surface of auth
- */
-
+export * from './lib/root-account.module';
 export * from './lib/account.module';
 export * from './lib/components';
 export * from './lib/constants/routes';

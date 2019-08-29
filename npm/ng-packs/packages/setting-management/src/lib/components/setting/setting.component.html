@@ -1,9 +1,9 @@
 <div class="row entry-row">
   <div class="col-auto">
-    <h1 class="content-header-title">{{'AbpSettingManagement::Settings' | abpLocalization}}</h1>
+    <h1 class="content-header-title">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>
   </div>
   <div id="breadcrumb" class="col-md-auto pl-md-0">
-  <abp-breadcrumb></abp-breadcrumb>
+    <abp-breadcrumb></abp-breadcrumb>
   </div>
   <div class="col">
     <div class="text-lg-right pt-2" id="AbpContentToolbar"></div>
@@ -16,7 +16,12 @@
       <div class="row">
         <div class="col-3">
           <ul class="nav flex-column nav-pills" id="T515ccf3324254f41a4a9a6b34b0dae56" role="tablist">
-            <li *ngFor="let setting of settings" (click)="selected = setting" class="nav-item">
+            <li
+              *ngFor="let setting of settings"
+              (click)="selected = setting"
+              class="nav-item"
+              [abpPermission]="setting.requiredPolicy"
+            >
               <a
                 class="nav-link"
                 [id]="setting.name + '-tab'"
@@ -33,140 +38,10 @@
               <h2>{{ selected.name | abpLocalization }}</h2>
               <hr class="my-4" />
 
-              <ng-container *ngComponentOutlet="selected.component"></ng-container>
-            </div>
-            <div
-              class="tab-pane fade  "
-              id="T515ccf3324254f41a4a9a6b34b0dae56_1"
-              role="tabpanel"
-              aria-labelledby="T515ccf3324254f41a4a9a6b34b0dae56_1-tab"
-            >
-              <h2>Lepton theme settings</h2>
-              <hr class="my-4" />
-
-              <form id="LeptonThemeSettingsForm" novalidate="novalidate">
-                <div class="row">
-                  <div class="col col-md-12">
-                    <div>
-                      <div class="form-group">
-                        <label for="MenuPlacement">Menu placement</label>
-                        <select
-                          class="custom-select form-control"
-                          data-val="true"
-                          data-val-required="The Menu placement field is required."
-                          id="MenuPlacement"
-                          name="MenuPlacement"
-                          ><option selected="selected" value="0">Left</option>
-                          <option value="1">Top</option>
-                        </select>
-
-                        <span
-                          class="text-danger field-validation-valid"
-                          data-valmsg-for="MenuPlacement"
-                          data-valmsg-replace="true"
-                        ></span>
-                      </div>
-                      <div class="form-group">
-                        <label for="MenuStatus">Menu status</label>
-                        <select
-                          class="custom-select form-control"
-                          data-val="true"
-                          data-val-required="The Menu status field is required."
-                          id="MenuStatus"
-                          name="MenuStatus"
-                          ><option selected="selected" value="0">Always opened</option>
-                          <option value="1">Open on hover</option>
-                        </select>
-
-                        <span
-                          class="text-danger field-validation-valid"
-                          data-valmsg-for="MenuStatus"
-                          data-valmsg-replace="true"
-                        ></span>
-                      </div>
-                      <div class="custom-checkbox custom-control mb-2">
-                        <input
-                          type="checkbox"
-                          data-val="true"
-                          data-val-required="The Boxed layout field is required."
-                          id="BoxedLayout"
-                          name="BoxedLayout"
-                          value="true"
-                          class="custom-control-input "
-                        /><label class="custom-control-label" for="BoxedLayout">Boxed layout</label>
-                      </div>
-                    </div>
-                    <hr class="my-4" />
-                    <div>
-                      <button type="submit" class="btn btn-primary" data-busy-text="Processing...">
-                        <i class="fa fa-save"></i> Save
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <input name="BoxedLayout" type="hidden" value="false" />
-              </form>
-            </div>
-            <div
-              class="tab-pane fade  "
-              id="T515ccf3324254f41a4a9a6b34b0dae56_2"
-              role="tabpanel"
-              aria-labelledby="T515ccf3324254f41a4a9a6b34b0dae56_2-tab"
-            >
-              <h2>Account</h2>
-              <hr class="my-4" />
-
-              <form id="AccountSettingsForm" novalidate="novalidate">
-                <div class="row">
-                  <div class="col-md-12">
-                    <div>
-                      <div class="custom-checkbox custom-control mb-2">
-                        <input
-                          type="checkbox"
-                          checked="checked"
-                          data-val="true"
-                          data-val-required="The Is self registration enabled field is required."
-                          id="IsSelfRegistrationEnabled"
-                          name="IsSelfRegistrationEnabled"
-                          value="true"
-                          class="custom-control-input "
-                        /><label class="custom-control-label" for="IsSelfRegistrationEnabled"
-                          >Is self registration enabled</label
-                        >
-                      </div>
-                    </div>
-                    <hr class="my-4" />
-                    <div>
-                      <h4>Two factor login settings</h4>
-                      <div class="custom-checkbox custom-control mb-2">
-                        <input
-                          type="checkbox"
-                          checked="checked"
-                          data-val="true"
-                          data-val-required="The Is remember browser enabled field is required."
-                          id="IsRememberBrowserEnabled"
-                          name="IsRememberBrowserEnabled"
-                          value="true"
-                          class="custom-control-input "
-                        /><label class="custom-control-label" for="IsRememberBrowserEnabled"
-                          >Is remember browser enabled</label
-                        >
-                      </div>
-                    </div>
-                    <hr class="my-4" />
-                    <div>
-                      <button type="submit" class="btn btn-primary" data-busy-text="Processing...">
-                        <i class="fa fa-save"></i> Save
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <input name="IsSelfRegistrationEnabled" type="hidden" value="false" /><input
-                  name="IsRememberBrowserEnabled"
-                  type="hidden"
-                  value="false"
-                />
-              </form>
+              <ng-container
+                *ngComponentOutlet="selected.component"
+                [abpPermission]="selected.requiredPolicy"
+              ></ng-container>
             </div>
           </div>
         </div>
