@@ -1,11 +1,11 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@abp/ng.theme.shared'), require('@angular/forms'), require('@ngx-validate/core'), require('@ngxs/store'), require('snq'), require('rxjs/operators'), require('@ngxs/router-plugin'), require('angular-oauth2-oidc'), require('just-compare'), require('rxjs'), require('primeng/toast')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.theme.basic', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@abp/ng.theme.shared', '@angular/forms', '@ngx-validate/core', '@ngxs/store', 'snq', 'rxjs/operators', '@ngxs/router-plugin', 'angular-oauth2-oidc', 'just-compare', 'rxjs', 'primeng/toast'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.basic = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.ng_theme_shared, global.ng.forms, global.core$1, global.store, global.snq, global.rxjs.operators, global.routerPlugin, global.angularOauth2Oidc, global.compare, global.rxjs, global.toast));
-}(this, function (exports, ng_core, core, ngBootstrap, ng_theme_shared, forms, core$1, store, snq, operators, routerPlugin, angularOauth2Oidc, compare, rxjs, toast) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('@ngxs/store'), require('primeng/toast'), require('@ngxs/router-plugin'), require('angular-oauth2-oidc'), require('just-compare'), require('rxjs'), require('rxjs/operators'), require('snq')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.theme.basic', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', '@ngxs/store', 'primeng/toast', '@ngxs/router-plugin', 'angular-oauth2-oidc', 'just-compare', 'rxjs', 'rxjs/operators', 'snq'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.basic = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.ngBootstrap, global.core$1, global.store, global.toast, global.routerPlugin, global.angularOauth2Oidc, global.compare, global.rxjs, global.rxjs.operators, global.snq));
+}(this, function (exports, ng_core, ng_theme_shared, core, ngBootstrap, core$1, store, toast, routerPlugin, angularOauth2Oidc, compare, rxjs, operators, snq) { 'use strict';
 
-    snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
     compare = compare && compare.hasOwnProperty('default') ? compare['default'] : compare;
+    snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -208,184 +208,15 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var minLength = forms.Validators.minLength, required = forms.Validators.required;
-    var ChangePasswordComponent = /** @class */ (function () {
-        function ChangePasswordComponent(fb, store, toasterService) {
-            this.fb = fb;
-            this.store = store;
-            this.toasterService = toasterService;
-            this.visibleChange = new core.EventEmitter();
-            this.modalBusy = false;
-        }
-        Object.defineProperty(ChangePasswordComponent.prototype, "visible", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this._visible;
-            },
-            set: /**
-             * @param {?} value
-             * @return {?}
-             */
-            function (value) {
-                this._visible = value;
-                this.visibleChange.emit(value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * @return {?}
-         */
-        ChangePasswordComponent.prototype.ngOnInit = /**
-         * @return {?}
-         */
-        function () {
-            this.form = this.fb.group({
-                password: ['', required],
-                newPassword: ['', required],
-                repeatNewPassword: ['', required],
-            }, {
-                validators: [core$1.comparePasswords(['newPassword', 'repeatNewPassword'])],
-            });
-        };
-        /**
-         * @return {?}
-         */
-        ChangePasswordComponent.prototype.onSubmit = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            if (this.form.invalid)
-                return;
-            this.modalBusy = true;
-            this.store
-                .dispatch(new ng_core.ChangePassword({
-                currentPassword: this.form.get('password').value,
-                newPassword: this.form.get('newPassword').value,
-            }))
-                .pipe(operators.finalize((/**
-             * @return {?}
-             */
-            function () {
-                _this.modalBusy = false;
-            })))
-                .subscribe({
-                next: (/**
-                 * @return {?}
-                 */
-                function () {
-                    _this.visible = false;
-                    _this.form.reset();
-                }),
-                error: (/**
-                 * @param {?} err
-                 * @return {?}
-                 */
-                function (err) {
-                    _this.toasterService.error(snq((/**
-                     * @return {?}
-                     */
-                    function () { return err.error.error.message; }), 'AbpAccount::DefaultErrorMessage'), 'Error', {
-                        life: 7000,
-                    });
-                }),
-            });
-        };
-        /**
-         * @return {?}
-         */
-        ChangePasswordComponent.prototype.openModal = /**
-         * @return {?}
-         */
-        function () {
-            this.visible = true;
-        };
-        /**
-         * @param {?} __0
-         * @return {?}
-         */
-        ChangePasswordComponent.prototype.ngOnChanges = /**
-         * @param {?} __0
-         * @return {?}
-         */
-        function (_a) {
-            var visible = _a.visible;
-            if (!visible)
-                return;
-            if (visible.currentValue) {
-                this.openModal();
-            }
-            else if (visible.currentValue === false && this.visible) {
-                this.visible = false;
-            }
-        };
-        ChangePasswordComponent.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'abp-change-password',
-                        template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::ChangePassword' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <div class=\"form-group\">\n        <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" autofocus />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n      </div>\n      <div class=\"form-group\" [class.is-invalid]=\"form.errors?.passwordMismatch\">\n        <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n        <div *ngIf=\"form.errors?.passwordMismatch\" class=\"invalid-feedback\">\n          {{ 'AbpIdentity::Identity.PasswordConfirmationFailed' | abpLocalization }}\n        </div>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" (click)=\"onSubmit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
-                    }] }
-        ];
-        /** @nocollapse */
-        ChangePasswordComponent.ctorParameters = function () { return [
-            { type: forms.FormBuilder },
-            { type: store.Store },
-            { type: ng_theme_shared.ToasterService }
-        ]; };
-        ChangePasswordComponent.propDecorators = {
-            visible: [{ type: core.Input }],
-            visibleChange: [{ type: core.Output }],
-            modalContent: [{ type: core.ViewChild, args: ['modalContent', { static: false },] }]
-        };
-        return ChangePasswordComponent;
-    }());
-    if (false) {
-        /**
-         * @type {?}
-         * @protected
-         */
-        ChangePasswordComponent.prototype._visible;
-        /** @type {?} */
-        ChangePasswordComponent.prototype.visibleChange;
-        /** @type {?} */
-        ChangePasswordComponent.prototype.modalContent;
-        /** @type {?} */
-        ChangePasswordComponent.prototype.form;
-        /** @type {?} */
-        ChangePasswordComponent.prototype.modalBusy;
-        /**
-         * @type {?}
-         * @private
-         */
-        ChangePasswordComponent.prototype.fb;
-        /**
-         * @type {?}
-         * @private
-         */
-        ChangePasswordComponent.prototype.store;
-        /**
-         * @type {?}
-         * @private
-         */
-        ChangePasswordComponent.prototype.toasterService;
-    }
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
     var AccountLayoutComponent = /** @class */ (function () {
         function AccountLayoutComponent() {
-            this.isCollapsed = false;
         }
         // required for dynamic component
         AccountLayoutComponent.type = "account" /* account */;
         AccountLayoutComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-layout-account',
-                        template: "<abp-layout>\n  <ul class=\"navbar-nav mr-auto\">\n    <li class=\"nav-item\">\n      <a class=\"nav-link\" href=\"/\">\n        {{ '::Menu:Home' | abpLocalization }}\n      </a>\n    </li>\n  </ul>\n\n  <span id=\"main-navbar-tools\">\n    <span>\n      <div class=\"dropdown d-inline\" ngbDropdown>\n        <a class=\"btn btn-link dropdown-toggle\" role=\"button\" data-toggle=\"dropdown\" ngbDropdownToggle>\n          English\n        </a>\n\n        <div class=\"dropdown-menu\" ngbDropdownMenu>\n          <a class=\"dropdown-item\">\u010Ce\u0161tina</a>\n          <a class=\"dropdown-item\">Portugu\u00EAs</a>\n          <a class=\"dropdown-item\">T\u00FCrk\u00E7e</a>\n          <a class=\"dropdown-item\">\u7B80\u4F53\u4E2D\u6587</a>\n        </div>\n      </div>\n    </span>\n  </span>\n</abp-layout>\n"
+                        template: "<router-outlet></router-outlet>\n"
                     }] }
         ];
         return AccountLayoutComponent;
@@ -393,8 +224,6 @@
     if (false) {
         /** @type {?} */
         AccountLayoutComponent.type;
-        /** @type {?} */
-        AccountLayoutComponent.prototype.isCollapsed;
     }
 
     /**
@@ -762,7 +591,6 @@
          */
         function (cultureName) {
             this.store.dispatch(new ng_core.SetLanguage(cultureName));
-            this.store.dispatch(new ng_core.GetAppConfiguration());
         };
         /**
          * @return {?}
@@ -880,7 +708,6 @@
     var EmptyLayoutComponent = /** @class */ (function () {
         function EmptyLayoutComponent() {
         }
-        // required for dynamic component
         EmptyLayoutComponent.type = "empty" /* empty */;
         EmptyLayoutComponent.decorators = [
             { type: core.Component, args: [{
@@ -941,158 +768,6 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var maxLength = forms.Validators.maxLength, required$1 = forms.Validators.required, email = forms.Validators.email;
-    var ProfileComponent = /** @class */ (function () {
-        function ProfileComponent(fb, store) {
-            this.fb = fb;
-            this.store = store;
-            this.visibleChange = new core.EventEmitter();
-            this.modalBusy = false;
-        }
-        Object.defineProperty(ProfileComponent.prototype, "visible", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this._visible;
-            },
-            set: /**
-             * @param {?} value
-             * @return {?}
-             */
-            function (value) {
-                this._visible = value;
-                this.visibleChange.emit(value);
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * @return {?}
-         */
-        ProfileComponent.prototype.buildForm = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            this.store
-                .dispatch(new ng_core.GetProfile())
-                .pipe(operators.withLatestFrom(this.profile$), operators.take(1))
-                .subscribe((/**
-             * @param {?} __0
-             * @return {?}
-             */
-            function (_a) {
-                var _b = __read(_a, 2), profile = _b[1];
-                _this.form = _this.fb.group({
-                    userName: [profile.userName, [required$1, maxLength(256)]],
-                    email: [profile.email, [required$1, email, maxLength(256)]],
-                    name: [profile.name || '', [maxLength(64)]],
-                    surname: [profile.surname || '', [maxLength(64)]],
-                    phoneNumber: [profile.phoneNumber || '', [maxLength(16)]],
-                });
-            }));
-        };
-        /**
-         * @return {?}
-         */
-        ProfileComponent.prototype.onSubmit = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            if (this.form.invalid)
-                return;
-            this.modalBusy = true;
-            this.store.dispatch(new ng_core.UpdateProfile(this.form.value)).subscribe((/**
-             * @return {?}
-             */
-            function () {
-                _this.modalBusy = false;
-                _this.visible = false;
-                _this.form.reset();
-            }));
-        };
-        /**
-         * @return {?}
-         */
-        ProfileComponent.prototype.openModal = /**
-         * @return {?}
-         */
-        function () {
-            this.buildForm();
-            this.visible = true;
-        };
-        /**
-         * @param {?} __0
-         * @return {?}
-         */
-        ProfileComponent.prototype.ngOnChanges = /**
-         * @param {?} __0
-         * @return {?}
-         */
-        function (_a) {
-            var visible = _a.visible;
-            if (!visible)
-                return;
-            if (visible.currentValue) {
-                this.openModal();
-            }
-            else if (visible.currentValue === false && this.visible) {
-                this.visible = false;
-            }
-        };
-        ProfileComponent.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'abp-profile',
-                        template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form novalidate *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <div class=\"form-group\">\n        <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" autofocus />\n      </div>\n      <div class=\"row\">\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n            ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n          </div>\n        </div>\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n            ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n        ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" (click)=\"onSubmit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
-                    }] }
-        ];
-        /** @nocollapse */
-        ProfileComponent.ctorParameters = function () { return [
-            { type: forms.FormBuilder },
-            { type: store.Store }
-        ]; };
-        ProfileComponent.propDecorators = {
-            visible: [{ type: core.Input }],
-            visibleChange: [{ type: core.Output }]
-        };
-        __decorate([
-            store.Select(ng_core.ProfileState.getProfile),
-            __metadata("design:type", rxjs.Observable)
-        ], ProfileComponent.prototype, "profile$", void 0);
-        return ProfileComponent;
-    }());
-    if (false) {
-        /**
-         * @type {?}
-         * @protected
-         */
-        ProfileComponent.prototype._visible;
-        /** @type {?} */
-        ProfileComponent.prototype.visibleChange;
-        /** @type {?} */
-        ProfileComponent.prototype.profile$;
-        /** @type {?} */
-        ProfileComponent.prototype.form;
-        /** @type {?} */
-        ProfileComponent.prototype.modalBusy;
-        /**
-         * @type {?}
-         * @private
-         */
-        ProfileComponent.prototype.fb;
-        /**
-         * @type {?}
-         * @private
-         */
-        ProfileComponent.prototype.store;
-    }
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
     /** @type {?} */
     var LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
     var ThemeBasicModule = /** @class */ (function () {
@@ -1100,7 +775,7 @@
         }
         ThemeBasicModule.decorators = [
             { type: core.NgModule, args: [{
-                        declarations: __spread(LAYOUTS, [LayoutComponent, ChangePasswordComponent, ProfileComponent]),
+                        declarations: __spread(LAYOUTS, [LayoutComponent]),
                         imports: [
                             ng_core.CoreModule,
                             ng_theme_shared.ThemeSharedModule,
@@ -1165,11 +840,9 @@
     exports.ɵc = AccountLayoutComponent;
     exports.ɵd = EmptyLayoutComponent;
     exports.ɵe = LayoutComponent;
-    exports.ɵf = ChangePasswordComponent;
-    exports.ɵg = ProfileComponent;
-    exports.ɵh = LayoutState;
-    exports.ɵi = AddNavigationElement;
-    exports.ɵj = RemoveNavigationElementByName;
+    exports.ɵf = LayoutState;
+    exports.ɵg = AddNavigationElement;
+    exports.ɵh = RemoveNavigationElementByName;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

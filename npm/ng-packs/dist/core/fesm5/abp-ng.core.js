@@ -1,15 +1,15 @@
-import { __rest, __assign, __decorate, __metadata, __spread } from 'tslib';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, Directive, ElementRef, Input, ChangeDetectorRef, HostBinding, Optional, Renderer2, InjectionToken, Inject, Pipe, EventEmitter, Output, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
-import { NavigationEnd, Router, RouterModule } from '@angular/router';
-import { Store, Action, Selector, State, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
-import { NEVER, throwError, of, Subject, Observable, ReplaySubject, fromEvent } from 'rxjs';
+import { __rest, __assign, __decorate, __metadata, __awaiter, __generator, __spread, __extends } from 'tslib';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, Component, Directive, ElementRef, Input, ChangeDetectorRef, HostBinding, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { Store, Action, Selector, State, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
+import { throwError, noop as noop$1, combineLatest, from, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
 import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { take, catchError, tap, switchMap, takeUntil, finalize, distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { take, catchError, tap, switchMap, takeUntil, debounceTime, filter, finalize, distinctUntilChanged } from 'rxjs/operators';
 import snq from 'snq';
+import { registerLocaleData, CommonModule } from '@angular/common';
+import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Navigate, NgxsRouterPluginModule } from '@ngxs/router-plugin';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
 
@@ -190,7 +190,7 @@ var RestService = /** @class */ (function () {
     function (err) {
         this.store.dispatch(new RestOccurError(err));
         console.error(err);
-        return NEVER;
+        return throwError(err);
     };
     /**
      * @template T, R
@@ -209,7 +209,7 @@ var RestService = /** @class */ (function () {
     function (request, config, api) {
         var _this = this;
         if (config === void 0) { config = {}; }
-        var _a = config.observe, observe = _a === void 0 ? "body" /* Body */ : _a, throwErr = config.throwErr;
+        var _a = config.observe, observe = _a === void 0 ? "body" /* Body */ : _a, skipHandleError = config.skipHandleError;
         /** @type {?} */
         var url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
         var method = request.method, options = __rest(request, ["method"]);
@@ -218,7 +218,7 @@ var RestService = /** @class */ (function () {
          * @return {?}
          */
         function (err) {
-            if (throwErr) {
+            if (skipHandleError) {
                 return throwError(err);
             }
             return _this.handleError(err);
@@ -291,23 +291,23 @@ var ProfileService = /** @class */ (function () {
     };
     /**
      * @param {?} body
-     * @param {?=} throwErr
+     * @param {?=} skipHandleError
      * @return {?}
      */
     ProfileService.prototype.changePassword = /**
      * @param {?} body
-     * @param {?=} throwErr
+     * @param {?=} skipHandleError
      * @return {?}
      */
-    function (body, throwErr) {
-        if (throwErr === void 0) { throwErr = false; }
+    function (body, skipHandleError) {
+        if (skipHandleError === void 0) { skipHandleError = false; }
         /** @type {?} */
         var request = {
             method: 'POST',
             url: '/api/identity/my-profile/change-password',
             body: body,
         };
-        return this.rest.request(request, { throwErr: throwErr });
+        return this.rest.request(request, { skipHandleError: skipHandleError });
     };
     ProfileService.decorators = [
         { type: Injectable, args: [{
@@ -493,8 +493,241 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+// Different locales from .NET
+// Key is .NET locale, value is Angular locale
+var localesMapping = {
+    'ar-sa': 'ar-SA',
+    'ca-ES-valencia': 'ca-ES-VALENCIA',
+    'de-de': 'de',
+    'es-ES': 'es',
+    'en-US': 'en',
+    'fil-Latn': 'en',
+    'ku-Arab': 'en',
+    'ky-Cyrl': 'en',
+    'mi-Latn': 'en',
+    'prs-Arab': 'en',
+    'qut-Latn': 'en',
+    nso: 'en',
+    quz: 'en',
+    'fr-FR': 'fr',
+    'gd-Latn': 'gd',
+    'ha-Latn': 'ha',
+    'ig-Latn': 'ig',
+    'it-it': 'it',
+    'mn-Cyrl': 'mn',
+    'pt-BR': 'pt',
+    'sd-Arab': 'pa-Arab',
+    'sr-Cyrl-RS': 'sr-Cyrl',
+    'sr-Latn-RS': 'sr-Latn',
+    'tg-Cyrl': 'tg',
+    'tk-Latn': 'tk',
+    'tt-Cyrl': 'tt',
+    'ug-Arab': 'ug',
+    'yo-Latn': 'yo',
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function getInitialData(injector) {
+    /** @type {?} */
+    var fn = (/**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var store = injector.get(Store);
+        return store.dispatch(new GetAppConfiguration()).toPromise();
+    });
+    return fn;
+}
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function localeInitializer(injector) {
+    /** @type {?} */
+    var fn = (/**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var store = injector.get(Store);
+        /** @type {?} */
+        var lang = store.selectSnapshot(SessionState.getLanguage) || 'en';
+        return new Promise((/**
+         * @param {?} resolve
+         * @param {?} reject
+         * @return {?}
+         */
+        function (resolve, reject) {
+            registerLocale(lang).then((/**
+             * @return {?}
+             */
+            function () { return resolve(); }), reject);
+        }));
+    });
+    return fn;
+}
+/**
+ * @param {?} locale
+ * @return {?}
+ */
+function registerLocale(locale) {
+    return import(
+    /* webpackInclude: /(af|am|ar-SA|as|az-Latn|be|bg|bn-BD|bn-IN|bs|ca|ca-ES-VALENCIA|cs|cy|da|de|de|el|en-GB|en|es|en|es-US|es-MX|et|eu|fa|fi|en|fr|fr|fr-CA|ga|gd|gl|gu|ha|he|hi|hr|hu|hy|id|ig|is|it|it|ja|ka|kk|km|kn|ko|kok|en|en|lb|lt|lv|en|mk|ml|mn|mr|ms|mt|nb|ne|nl|nl-BE|nn|en|or|pa|pa-Arab|pl|en|pt|pt-PT|en|en|ro|ru|rw|pa-Arab|si|sk|sl|sq|sr-Cyrl-BA|sr-Cyrl|sr-Latn|sv|sw|ta|te|tg|th|ti|tk|tn|tr|tt|ug|uk|ur|uz-Latn|vi|wo|xh|yo|zh-Hans|zh-Hant|zu)\.js$/ */
+    "@angular/common/locales/" + (localesMapping[locale] || locale) + ".js").then((/**
+     * @param {?} module
+     * @return {?}
+     */
+    function (module) {
+        registerLocaleData(module.default);
+    }));
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var LocalizationService = /** @class */ (function () {
+    function LocalizationService(store, router, actions, otherInstance) {
+        this.store = store;
+        this.router = router;
+        this.actions = actions;
+        if (otherInstance)
+            throw new Error('LocaleService should have only one instance.');
+    }
+    Object.defineProperty(LocalizationService.prototype, "currentLang", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.store.selectSnapshot(SessionState.getLanguage);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @private
+     * @param {?} reuse
+     * @return {?}
+     */
+    LocalizationService.prototype.setRouteReuse = /**
+     * @private
+     * @param {?} reuse
+     * @return {?}
+     */
+    function (reuse) {
+        this.router.routeReuseStrategy.shouldReuseRoute = reuse;
+    };
+    /**
+     * @param {?} locale
+     * @return {?}
+     */
+    LocalizationService.prototype.registerLocale = /**
+     * @param {?} locale
+     * @return {?}
+     */
+    function (locale) {
+        var _this = this;
+        var shouldReuseRoute = this.router.routeReuseStrategy.shouldReuseRoute;
+        this.setRouteReuse((/**
+         * @return {?}
+         */
+        function () { return false; }));
+        this.router.navigated = false;
+        return registerLocale(locale).then((/**
+         * @return {?}
+         */
+        function () { return __awaiter(_this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(noop$1)];
+                    case 1:
+                        _a.sent();
+                        this.setRouteReuse(shouldReuseRoute);
+                        return [2 /*return*/];
+                }
+            });
+        }); }));
+    };
+    /**
+     * @param {?} keys
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    LocalizationService.prototype.get = /**
+     * @param {?} keys
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    function (keys) {
+        var interpolateParams = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            interpolateParams[_i - 1] = arguments[_i];
+        }
+        return this.store.select(ConfigState.getCopy.apply(ConfigState, __spread([keys], interpolateParams)));
+    };
+    /**
+     * @param {?} keys
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    LocalizationService.prototype.instant = /**
+     * @param {?} keys
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    function (keys) {
+        var interpolateParams = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            interpolateParams[_i - 1] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getCopy.apply(ConfigState, __spread([keys], interpolateParams)));
+    };
+    LocalizationService.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    LocalizationService.ctorParameters = function () { return [
+        { type: Store },
+        { type: Router },
+        { type: Actions },
+        { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
+    ]; };
+    /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+    return LocalizationService;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.actions;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var SessionState = /** @class */ (function () {
-    function SessionState() {
+    function SessionState(localizationService) {
+        this.localizationService = localizationService;
     }
     /**
      * @param {?} __0
@@ -531,11 +764,12 @@ var SessionState = /** @class */ (function () {
      * @return {?}
      */
     function (_a, _b) {
-        var patchState = _a.patchState;
+        var patchState = _a.patchState, dispatch = _a.dispatch;
         var payload = _b.payload;
         patchState({
             language: payload,
         });
+        return combineLatest([dispatch(new GetAppConfiguration()), from(this.localizationService.registerLocale(payload))]);
     };
     /**
      * @param {?} __0
@@ -583,10 +817,17 @@ var SessionState = /** @class */ (function () {
             name: 'SessionState',
             defaults: (/** @type {?} */ ({})),
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [LocalizationService])
     ], SessionState);
     return SessionState;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionState.prototype.localizationService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -765,6 +1006,27 @@ var ConfigState = /** @class */ (function () {
                 }
                 return undefined;
             }), state);
+        }));
+        return selector;
+    };
+    /**
+     * @param {?=} path
+     * @param {?=} name
+     * @return {?}
+     */
+    ConfigState.getRoute = /**
+     * @param {?=} path
+     * @param {?=} name
+     * @return {?}
+     */
+    function (path, name) {
+        /** @type {?} */
+        var selector = createSelector([ConfigState_1], (/**
+         * @param {?} state
+         * @return {?}
+         */
+        function (state) {
+            return findRoute(state.routes, path, name);
         }));
         return selector;
     };
@@ -951,12 +1213,12 @@ var ConfigState = /** @class */ (function () {
          * @return {?}
          */
         function (configuration) {
-            return _this.store.selectSnapshot(SessionState.getLanguage)
-                ? of(null)
-                : dispatch(new SetLanguage(snq((/**
-                 * @return {?}
-                 */
-                function () { return configuration.setting.values['Abp.Localization.DefaultLanguage']; }))));
+            /** @type {?} */
+            var defaultLang = configuration.setting.values['Abp.Localization.DefaultLanguage'];
+            if (defaultLang.includes(';')) {
+                defaultLang = defaultLang.split(';')[0];
+            }
+            return _this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
         })));
     };
     /**
@@ -1069,11 +1331,57 @@ function patchRouteDeep(routes, name, newValue, parentUrl) {
     }
     return organizeRoutes(routes);
 }
+/**
+ * @param {?} routes
+ * @param {?=} path
+ * @param {?=} name
+ * @return {?}
+ */
+function findRoute(routes, path, name) {
+    /** @type {?} */
+    var foundRoute;
+    routes.forEach((/**
+     * @param {?} route
+     * @return {?}
+     */
+    function (route) {
+        if (foundRoute)
+            return;
+        if (path && route.path === path) {
+            foundRoute = route;
+        }
+        else if (name && route.name === name) {
+            foundRoute = route;
+            return;
+        }
+        else if (route.children && route.children.length) {
+            foundRoute = findRoute(route.children, path, name);
+            return;
+        }
+    }));
+    return foundRoute;
+}
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @return {?}
+ */
+function noop() {
+    /** @type {?} */
+    var fn = (/**
+     * @return {?}
+     */
+    function () { });
+    return fn;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -1087,27 +1395,6 @@ function uuid(a) {
     return a
         ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
         : ('' + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} injector
- * @return {?}
- */
-function getInitialData(injector) {
-    /** @type {?} */
-    var fn = (/**
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        var store = injector.get(Store);
-        return store.dispatch(new GetAppConfiguration()).toPromise();
-    });
-    return fn;
 }
 
 /**
@@ -1266,7 +1553,7 @@ function findLayout(segments, routes) {
              * @return {?}
              */
             function (c) { return c.path === segments[1].path; }));
-            if (child.layout) {
+            if (child && child.layout) {
                 layout = child.layout;
             }
         }
@@ -1289,6 +1576,11 @@ var RouterOutletComponent = /** @class */ (function () {
     ];
     return RouterOutletComponent;
 }());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1351,12 +1643,22 @@ var EllipsisDirective = /** @class */ (function () {
         this.elRef = elRef;
         this.enabled = true;
     }
+    Object.defineProperty(EllipsisDirective.prototype, "inlineClass", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.enabled && this.width;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(EllipsisDirective.prototype, "class", {
         get: /**
          * @return {?}
          */
         function () {
-            return this.enabled;
+            return this.enabled && !this.width;
         },
         enumerable: true,
         configurable: true
@@ -1366,7 +1668,7 @@ var EllipsisDirective = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return this.enabled ? this.width || '170px' : undefined;
+            return this.enabled && this.width ? this.width || '170px' : undefined;
         },
         enumerable: true,
         configurable: true
@@ -1405,6 +1707,7 @@ var EllipsisDirective = /** @class */ (function () {
         width: [{ type: Input, args: ['abpEllipsis',] }],
         title: [{ type: HostBinding, args: ['title',] }, { type: Input }],
         enabled: [{ type: Input, args: ['abpEllipsisEnabled',] }],
+        inlineClass: [{ type: HostBinding, args: ['class.abp-ellipsis-inline',] }],
         class: [{ type: HostBinding, args: ['class.abp-ellipsis',] }],
         maxWidth: [{ type: HostBinding, args: ['style.max-width',] }]
     };
@@ -1427,6 +1730,146 @@ if (false) {
      * @private
      */
     EllipsisDirective.prototype.elRef;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var FormSubmitDirective = /** @class */ (function () {
+    function FormSubmitDirective(formGroupDirective, host, cdRef) {
+        this.formGroupDirective = formGroupDirective;
+        this.host = host;
+        this.cdRef = cdRef;
+        this.ngSubmit = new EventEmitter();
+        this.executedNgSubmit = false;
+    }
+    /**
+     * @return {?}
+     */
+    FormSubmitDirective.prototype.ngOnInit = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this.formGroupDirective.ngSubmit.pipe(takeUntilDestroy(this)).subscribe((/**
+         * @return {?}
+         */
+        function () {
+            _this.markAsDirty();
+            _this.executedNgSubmit = true;
+        }));
+        fromEvent((/** @type {?} */ (this.host.nativeElement)), 'keyup')
+            .pipe(debounceTime(200), filter((/**
+         * @param {?} key
+         * @return {?}
+         */
+        function (key) { return key && key.key === 'Enter'; })), takeUntilDestroy(this))
+            .subscribe((/**
+         * @return {?}
+         */
+        function () {
+            if (!_this.executedNgSubmit) {
+                _this.host.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+            }
+            _this.executedNgSubmit = false;
+        }));
+        fromEvent(this.host.nativeElement, 'submit')
+            .pipe(takeUntilDestroy(this), filter((/**
+         * @return {?}
+         */
+        function () { return !_this.notValidateOnSubmit && typeof _this.notValidateOnSubmit !== 'string'; })))
+            .subscribe((/**
+         * @return {?}
+         */
+        function () {
+            if (!_this.executedNgSubmit) {
+                _this.markAsDirty();
+            }
+        }));
+    };
+    /**
+     * @return {?}
+     */
+    FormSubmitDirective.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @return {?}
+     */
+    FormSubmitDirective.prototype.markAsDirty = /**
+     * @return {?}
+     */
+    function () {
+        var form = this.formGroupDirective.form;
+        setDirty((/** @type {?} */ (form.controls)));
+        form.markAsDirty();
+        this.cdRef.detectChanges();
+    };
+    FormSubmitDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: 'form[ngSubmit][formGroup]',
+                },] }
+    ];
+    /** @nocollapse */
+    FormSubmitDirective.ctorParameters = function () { return [
+        { type: FormGroupDirective, decorators: [{ type: Self }] },
+        { type: ElementRef },
+        { type: ChangeDetectorRef }
+    ]; };
+    FormSubmitDirective.propDecorators = {
+        notValidateOnSubmit: [{ type: Input }],
+        ngSubmit: [{ type: Output }]
+    };
+    return FormSubmitDirective;
+}());
+if (false) {
+    /** @type {?} */
+    FormSubmitDirective.prototype.notValidateOnSubmit;
+    /** @type {?} */
+    FormSubmitDirective.prototype.ngSubmit;
+    /** @type {?} */
+    FormSubmitDirective.prototype.executedNgSubmit;
+    /**
+     * @type {?}
+     * @private
+     */
+    FormSubmitDirective.prototype.formGroupDirective;
+    /**
+     * @type {?}
+     * @private
+     */
+    FormSubmitDirective.prototype.host;
+    /**
+     * @type {?}
+     * @private
+     */
+    FormSubmitDirective.prototype.cdRef;
+}
+/**
+ * @param {?} controls
+ * @return {?}
+ */
+function setDirty(controls) {
+    if (Array.isArray(controls)) {
+        controls.forEach((/**
+         * @param {?} group
+         * @return {?}
+         */
+        function (group) {
+            setDirty((/** @type {?} */ (group.controls)));
+        }));
+        return;
+    }
+    Object.keys(controls).forEach((/**
+     * @param {?} key
+     * @return {?}
+     */
+    function (key) {
+        controls[key].markAsDirty();
+        controls[key].updateValueAndValidity();
+    }));
 }
 
 /**
@@ -1701,10 +2144,19 @@ var PermissionGuard = /** @class */ (function () {
      * @return {?}
      */
     function (_a) {
+        var _this = this;
         var data = _a.data;
         /** @type {?} */
         var resource = (/** @type {?} */ (data.requiredPolicy));
-        return this.store.select(ConfigState.getGrantedPolicy(resource));
+        return this.store.select(ConfigState.getGrantedPolicy(resource)).pipe(tap((/**
+         * @param {?} access
+         * @return {?}
+         */
+        function (access) {
+            if (!access) {
+                _this.store.dispatch(new RestOccurError({ status: 403 }));
+            }
+        })));
     };
     PermissionGuard.decorators = [
         { type: Injectable, args: [{
@@ -2069,7 +2521,7 @@ var Rest;
     Rest.Config = Config;
     if (false) {
         /** @type {?|undefined} */
-        Config.prototype.throwErr;
+        Config.prototype.skipHandleError;
         /** @type {?|undefined} */
         Config.prototype.observe;
     }
@@ -2251,7 +2703,7 @@ function transformRoutes(routes, wrappers) {
         return snq((/**
          * @return {?}
          */
-        function () { return route.data.routes.find((/**
+        function () { return route.data.routes.routes.find((/**
          * @param {?} r
          * @return {?}
          */
@@ -2262,7 +2714,7 @@ function transformRoutes(routes, wrappers) {
      * @param {?} val
      * @return {?}
      */
-    function (acc, val) { return __spread(acc, val.data.routes); }), []);
+    function (acc, val) { return __spread(acc, val.data.routes.routes); }), []);
     wrappers = abpRoutes.filter((/**
      * @param {?} ar
      * @return {?}
@@ -2289,20 +2741,16 @@ function transformRoutes(routes, wrappers) {
         function (abp) { return abp.path.toLowerCase() === route.path.toLowerCase() && snq((/**
          * @return {?}
          */
-        function () { return route.data.routes.length; }), false); }));
+        function () { return route.data.routes.routes.length; }), false); }));
         var length = transformed.length;
         if (abpPackage) {
             transformed.push(abpPackage);
         }
         if (transformed.length === length) {
-            transformed.push((/** @type {?} */ ({
-                path: route.path,
-                name: snq((/**
+            transformed.push((/** @type {?} */ (__assign({}, route.data.routes, { path: route.path, name: snq((/**
                  * @return {?}
                  */
-                function () { return route.data.routes.name; }), route.path),
-                children: route.data.routes.children || [],
-            })));
+                function () { return route.data.routes.name; }), route.path), children: route.data.routes.children || [] }))));
         }
     }));
     return { routes: setUrls(transformed), wrappers: wrappers };
@@ -2495,66 +2943,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var LocalizationService = /** @class */ (function () {
-    function LocalizationService(store) {
-        this.store = store;
-    }
-    /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    LocalizationService.prototype.get = /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    function (keys) {
-        var interpolateParams = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            interpolateParams[_i - 1] = arguments[_i];
-        }
-        return this.store.select(ConfigState.getCopy.apply(ConfigState, __spread([keys], interpolateParams)));
-    };
-    /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    LocalizationService.prototype.instant = /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    function (keys) {
-        var interpolateParams = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            interpolateParams[_i - 1] = arguments[_i];
-        }
-        return this.store.selectSnapshot(ConfigState.getCopy.apply(ConfigState, __spread([keys], interpolateParams)));
-    };
-    LocalizationService.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    LocalizationService.ctorParameters = function () { return [
-        { type: Store }
-    ]; };
-    /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store)); }, token: LocalizationService, providedIn: "root" });
-    return LocalizationService;
-}());
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 
 /**
  * @fileoverview added by tsickle
@@ -2583,80 +2971,6 @@ var CONFIG = new InjectionToken('CONFIG');
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var LocalizationPipe = /** @class */ (function () {
-    function LocalizationPipe(store) {
-        this.store = store;
-        this.initialized = false;
-    }
-    /**
-     * @param {?} value
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    LocalizationPipe.prototype.transform = /**
-     * @param {?} value
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    function (value) {
-        var _this = this;
-        var interpolateParams = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            interpolateParams[_i - 1] = arguments[_i];
-        }
-        if (!this.initialized) {
-            this.initialized = true;
-            this.store
-                .select(ConfigState.getCopy.apply(ConfigState, __spread([value], interpolateParams.reduce((/**
-             * @param {?} acc
-             * @param {?} val
-             * @return {?}
-             */
-            function (acc, val) { return (Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val])); }), []))))
-                .pipe(takeUntilDestroy(this), distinctUntilChanged())
-                .subscribe((/**
-             * @param {?} copy
-             * @return {?}
-             */
-            function (copy) { return (_this.value = copy); }));
-        }
-        return this.value;
-    };
-    /**
-     * @return {?}
-     */
-    LocalizationPipe.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () { };
-    LocalizationPipe.decorators = [
-        { type: Pipe, args: [{
-                    name: 'abpLocalization',
-                    pure: false,
-                },] }
-    ];
-    /** @nocollapse */
-    LocalizationPipe.ctorParameters = function () { return [
-        { type: Store }
-    ]; };
-    return LocalizationPipe;
-}());
-if (false) {
-    /** @type {?} */
-    LocalizationPipe.prototype.initialized;
-    /** @type {?} */
-    LocalizationPipe.prototype.value;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationPipe.prototype.store;
-}
 
 /**
  * @fileoverview added by tsickle
@@ -2783,6 +3097,131 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var LocalizationPipe = /** @class */ (function () {
+    function LocalizationPipe(store) {
+        this.store = store;
+        this.initialValue = '';
+        this.destroy$ = new Subject();
+    }
+    /**
+     * @param {?=} value
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    LocalizationPipe.prototype.transform = /**
+     * @param {?=} value
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    function (value) {
+        var _this = this;
+        if (value === void 0) { value = ''; }
+        var interpolateParams = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            interpolateParams[_i - 1] = arguments[_i];
+        }
+        if (this.initialValue !== value) {
+            this.initialValue = value;
+            this.destroy$.next();
+            this.store
+                .select(ConfigState.getCopy.apply(ConfigState, __spread([value], interpolateParams.reduce((/**
+             * @param {?} acc
+             * @param {?} val
+             * @return {?}
+             */
+            function (acc, val) { return (Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val])); }), []))))
+                .pipe(takeUntil(this.destroy$), takeUntilDestroy(this), distinctUntilChanged())
+                .subscribe((/**
+             * @param {?} copy
+             * @return {?}
+             */
+            function (copy) { return (_this.value = copy); }));
+        }
+        return this.value;
+    };
+    /**
+     * @return {?}
+     */
+    LocalizationPipe.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
+    LocalizationPipe.decorators = [
+        { type: Pipe, args: [{
+                    name: 'abpLocalization',
+                    pure: false,
+                },] }
+    ];
+    /** @nocollapse */
+    LocalizationPipe.ctorParameters = function () { return [
+        { type: Store }
+    ]; };
+    return LocalizationPipe;
+}());
+if (false) {
+    /** @type {?} */
+    LocalizationPipe.prototype.initialValue;
+    /** @type {?} */
+    LocalizationPipe.prototype.value;
+    /** @type {?} */
+    LocalizationPipe.prototype.destroy$;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationPipe.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var LocaleId = /** @class */ (function (_super) {
+    __extends(LocaleId, _super);
+    function LocaleId(localizationService) {
+        var _this = _super.call(this) || this;
+        _this.localizationService = localizationService;
+        return _this;
+    }
+    /**
+     * @return {?}
+     */
+    LocaleId.prototype.toString = /**
+     * @return {?}
+     */
+    function () {
+        var currentLang = this.localizationService.currentLang;
+        return localesMapping[currentLang] || currentLang;
+    };
+    /**
+     * @return {?}
+     */
+    LocaleId.prototype.valueOf = /**
+     * @return {?}
+     */
+    function () {
+        return this.toString();
+    };
+    return LocaleId;
+}(String));
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocaleId.prototype.localizationService;
+}
+/** @type {?} */
+var LocaleProvider = {
+    provide: LOCALE_ID,
+    useClass: LocaleId,
+    deps: [LocalizationService],
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var CoreModule = /** @class */ (function () {
     function CoreModule() {
     }
@@ -2799,6 +3238,7 @@ var CoreModule = /** @class */ (function () {
         return {
             ngModule: CoreModule,
             providers: [
+                LocaleProvider,
                 {
                     provide: NGXS_PLUGINS,
                     useClass: ConfigPlugin,
@@ -2818,6 +3258,12 @@ var CoreModule = /** @class */ (function () {
                     multi: true,
                     deps: [Injector],
                     useFactory: getInitialData,
+                },
+                {
+                    provide: APP_INITIALIZER,
+                    multi: true,
+                    deps: [Injector],
+                    useFactory: localeInitializer,
                 },
             ],
         };
@@ -2839,6 +3285,7 @@ var CoreModule = /** @class */ (function () {
                         DynamicLayoutComponent,
                         AutofocusDirective,
                         EllipsisDirective,
+                        FormSubmitDirective,
                         LocalizationPipe,
                         PermissionDirective,
                         VisibilityDirective,
@@ -2855,6 +3302,7 @@ var CoreModule = /** @class */ (function () {
                         DynamicLayoutComponent,
                         AutofocusDirective,
                         EllipsisDirective,
+                        FormSubmitDirective,
                         LocalizationPipe,
                         PermissionDirective,
                         VisibilityDirective,
@@ -2879,5 +3327,5 @@ var CoreModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, organizeRoutes, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ConfigPlugin as ɵba, ApiInterceptor as ɵbb, getInitialData as ɵbc, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, SetLanguage as ɵi, SetTenant as ɵj, ConfigState as ɵl, ApplicationConfigurationService as ɵm, PatchRouteByName as ɵn, GetAppConfiguration as ɵo, RouterOutletComponent as ɵp, DynamicLayoutComponent as ɵq, ConfigState as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, LocalizationPipe as ɵu, PermissionDirective as ɵv, VisibilityDirective as ɵw, InputEventDebounceDirective as ɵx, ClickEventStopPropagationDirective as ɵy, NGXS_CONFIG_PLUGIN_OPTIONS as ɵz };
+export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ClickEventStopPropagationDirective as ɵba, LocaleId as ɵbb, LocaleProvider as ɵbc, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbd, ConfigPlugin as ɵbe, ApiInterceptor as ɵbf, getInitialData as ɵbg, localeInitializer as ɵbh, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, ConfigState as ɵs, AutofocusDirective as ɵt, EllipsisDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, PermissionDirective as ɵx, VisibilityDirective as ɵy, InputEventDebounceDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

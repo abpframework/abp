@@ -1,7 +1,7 @@
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 export declare namespace Rest {
     interface Config {
-        throwErr?: boolean;
+        skipHandleError?: boolean;
         observe?: Observe;
     }
     const enum Observe {

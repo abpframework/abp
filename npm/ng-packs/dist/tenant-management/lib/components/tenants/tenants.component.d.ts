@@ -23,6 +23,8 @@ export declare class TenantsComponent {
     defaultConnectionString: string;
     isModalVisible: boolean;
     selectedModalContent: SelectedModalContent;
+    visibleFeatures: boolean;
+    providerKey: string;
     _useSharedDatabase: boolean;
     pageQuery: ABP.PageQueryParams;
     loading: boolean;

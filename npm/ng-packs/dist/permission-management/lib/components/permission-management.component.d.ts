@@ -32,7 +32,7 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     onClickSelectThisTab(): void;
     onClickSelectAll(): void;
     onChangeGroup(group: PermissionManagement.Group): void;
-    onSubmit(): void;
+    submit(): void;
     openModal(): void;
     initModal(): void;
     ngOnChanges({ visible }: SimpleChanges): void;
