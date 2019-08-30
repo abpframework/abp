@@ -1,11 +1,12 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 
 namespace App2
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        private static async Task Main(string[] args)
         {
             using (var application = AbpApplicationFactory.Create<App2Module>(options =>
             {
@@ -18,7 +19,7 @@ namespace App2
                     .ServiceProvider
                     .GetRequiredService<App2MessagingService>();
 
-                messagingService.Run();
+                await messagingService.RunAsync();
 
                 application.Shutdown();
             }
