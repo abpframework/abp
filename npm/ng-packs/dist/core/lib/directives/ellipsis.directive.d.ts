@@ -5,6 +5,7 @@ export declare class EllipsisDirective implements AfterContentInit {
     width: string;
     title: string;
     enabled: boolean;
+    readonly inlineClass: string;
     readonly class: boolean;
     readonly maxWidth: string;
     constructor(cdRef: ChangeDetectorRef, elRef: ElementRef);

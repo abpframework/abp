@@ -1,1 +1,2 @@
-export * from './slide.animation';
+export * from './fade.animations';
+export * from './slide.animations';

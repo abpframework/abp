@@ -147,7 +147,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   onChangeLang(cultureName: string) {
     this.store.dispatch(new SetLanguage(cultureName));
-    this.store.dispatch(new GetAppConfiguration());
   }
 
   logout() {

@@ -108,7 +108,7 @@ namespace Volo.Abp.EventBus
 
             foreach (var handlerFactories in GetHandlerFactories(eventType))
             {
-                foreach (var handlerFactory in handlerFactories.EventHandlerFactories.ToArray()) //TODO: ToArray should not be needed!
+                foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
                     await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions);
                 }

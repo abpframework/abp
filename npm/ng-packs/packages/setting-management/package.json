@@ -1,0 +1,10 @@
+{
+  "name": "@abp/ng.setting-management",
+  "version": "0.0.1",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^0.8.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

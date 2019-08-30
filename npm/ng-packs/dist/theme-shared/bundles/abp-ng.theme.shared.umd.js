@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/components/common/messageservice'), require('primeng/toast'), require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('@ngxs/store'), require('@ngxs/router-plugin'), require('snq'), require('@angular/animations')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.theme.shared', ['exports', '@abp/ng.core', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/components/common/messageservice', 'primeng/toast', 'rxjs', 'rxjs/operators', '@angular/router', '@ngxs/store', '@ngxs/router-plugin', 'snq', '@angular/animations'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.shared = {}), global.ng_core, global.ng.core, global.ngBootstrap, global.core$1, global.messageservice, global.toast, global.rxjs, global.rxjs.operators, global.ng.router, global.store, global.routerPlugin, global.snq, global.ng.animations));
-}(this, function (exports, ng_core, core, ngBootstrap, core$1, messageservice, toast, rxjs, operators, router, store, routerPlugin, snq, animations) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ngx-validate/core'), require('primeng/components/common/messageservice'), require('primeng/toast'), require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('@ngxs/store'), require('@angular/common/http'), require('@ngxs/router-plugin'), require('snq'), require('@angular/forms'), require('@angular/animations')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.theme.shared', ['exports', '@abp/ng.core', '@angular/core', '@ngx-validate/core', 'primeng/components/common/messageservice', 'primeng/toast', 'rxjs', 'rxjs/operators', '@angular/router', '@ngxs/store', '@angular/common/http', '@ngxs/router-plugin', 'snq', '@angular/forms', '@angular/animations'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.theme = global.abp.ng.theme || {}, global.abp.ng.theme.shared = {}), global.ng_core, global.ng.core, global.core$1, global.messageservice, global.toast, global.rxjs, global.rxjs.operators, global.ng.router, global.store, global.ng.common.http, global.routerPlugin, global.snq, global.ng.forms, global.ng.animations));
+}(this, function (exports, ng_core, core, core$1, messageservice, toast, rxjs, operators, router, store, http, routerPlugin, snq, forms, animations) { 'use strict';
 
     snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
@@ -297,7 +297,7 @@
          */
         function (message, title, severity, options) {
             this.messageService.clear(this.key);
-            this.messageService.add(__assign({ severity: severity, detail: message, summary: title }, options, { key: this.key }, (typeof (options || ((/** @type {?} */ ({})))).sticky === 'undefined' && { sticky: this.sticky })));
+            this.messageService.add(__assign({ severity: severity, detail: message || '', summary: title || '' }, options, { key: this.key }, (typeof (options || ((/** @type {?} */ ({})))).sticky === 'undefined' && { sticky: this.sticky })));
             this.status$ = new rxjs.Subject();
             return this.status$;
         };
@@ -380,7 +380,7 @@
         ConfirmationComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-confirmation',
-                        template: "\n    <p-toast\n      position=\"center\"\n      key=\"abpConfirmation\"\n      (onClose)=\"close(dismiss)\"\n      [modal]=\"true\"\n      [baseZIndex]=\"1000\"\n      styleClass=\"\"\n    >\n      <ng-template let-message pTemplate=\"message\">\n        <div *ngIf=\"message.summary\" class=\"modal-header\">\n          <h4 class=\"modal-title\">\n            {{ message.summary | abpLocalization: message.titleLocalizationParams }}\n          </h4>\n        </div>\n        <div class=\"modal-body\">\n          {{ message.detail | abpLocalization: message.messageLocalizationParams }}\n        </div>\n\n        <div class=\"modal-footer justify-content-center\">\n          <button *ngIf=\"!message.hideCancelBtn\" type=\"button\" class=\"btn btn-secondary\" (click)=\"close(reject)\">\n            {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}\n          </button>\n          <button *ngIf=\"!message.hideYesBtn\" type=\"button\" class=\"btn btn-secondary\" (click)=\"close(confirm)\">\n            <span>{{ message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>\n          </button>\n        </div>\n      </ng-template>\n    </p-toast>\n  "
+                        template: "\n    <p-toast\n      position=\"center\"\n      key=\"abpConfirmation\"\n      (onClose)=\"close(dismiss)\"\n      [modal]=\"true\"\n      [baseZIndex]=\"1000\"\n      styleClass=\"\"\n    >\n      <ng-template let-message pTemplate=\"message\">\n        <div *ngIf=\"message.summary\" class=\"modal-header\">\n          <h4 class=\"modal-title\">\n            {{ message.summary | abpLocalization: message.titleLocalizationParams }}\n          </h4>\n        </div>\n        <div class=\"modal-body\">\n          {{ message.detail | abpLocalization: message.messageLocalizationParams }}\n        </div>\n\n        <div class=\"modal-footer justify-content-center\">\n          <button *ngIf=\"!message.hideCancelBtn\" type=\"button\" class=\"btn btn-secondary\" (click)=\"close(reject)\">\n            {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}\n          </button>\n          <button\n            *ngIf=\"!message.hideYesBtn\"\n            type=\"button\"\n            class=\"btn btn-secondary\"\n            (click)=\"close(confirm)\"\n            autofocus\n          >\n            <span>{{ message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>\n          </button>\n        </div>\n      </ng-template>\n    </p-toast>\n  "
                     }] }
         ];
         /** @nocollapse */
@@ -478,7 +478,9 @@
              * @param {?} event
              * @return {?}
              */
-            function (event) { return event instanceof router.NavigationStart || event instanceof router.NavigationEnd; })), core$1.takeUntilDestroy(this))
+            function (event) {
+                return event instanceof router.NavigationStart || event instanceof router.NavigationEnd || event instanceof router.NavigationError;
+            })), core$1.takeUntilDestroy(this))
                 .subscribe((/**
              * @param {?} event
              * @return {?}
@@ -962,7 +964,7 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
+    var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
 
     /**
      * @fileoverview added by tsickle
@@ -1008,7 +1010,7 @@
                  * @return {?}
                  */
                 function () { return ((/** @type {?} */ (err))).error.error; }), DEFAULTS.defaultError.message);
-                if (err.headers.get('_AbpErrorFormat')) {
+                if (err instanceof http.HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
                     /** @type {?} */
                     var confirmation$ = _this.showError(null, null, body);
                     if (err.status === 401) {
@@ -1231,6 +1233,439 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var ToasterService = /** @class */ (function (_super) {
+        __extends(ToasterService, _super);
+        function ToasterService() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        /**
+         * @param {?} messages
+         * @return {?}
+         */
+        ToasterService.prototype.addAll = /**
+         * @param {?} messages
+         * @return {?}
+         */
+        function (messages) {
+            var _this = this;
+            this.messageService.addAll(messages.map((/**
+             * @param {?} message
+             * @return {?}
+             */
+            function (message) { return (__assign({ key: _this.key }, message)); })));
+        };
+        ToasterService.decorators = [
+            { type: core.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */ ToasterService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(core.ɵɵinject(messageservice.MessageService)); }, token: ToasterService, providedIn: "root" });
+        return ToasterService;
+    }(AbstractToaster));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var minLength = forms.Validators.minLength, required = forms.Validators.required;
+    var ChangePasswordComponent = /** @class */ (function () {
+        function ChangePasswordComponent(fb, store, toasterService) {
+            this.fb = fb;
+            this.store = store;
+            this.toasterService = toasterService;
+            this.visibleChange = new core.EventEmitter();
+            this.modalBusy = false;
+        }
+        Object.defineProperty(ChangePasswordComponent.prototype, "visible", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._visible;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                this._visible = value;
+                this.visibleChange.emit(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        ChangePasswordComponent.prototype.ngOnInit = /**
+         * @return {?}
+         */
+        function () {
+            this.form = this.fb.group({
+                password: ['', required],
+                newPassword: ['', required],
+                repeatNewPassword: ['', required],
+            }, {
+                validators: [core$1.comparePasswords(['newPassword', 'repeatNewPassword'])],
+            });
+        };
+        /**
+         * @return {?}
+         */
+        ChangePasswordComponent.prototype.onSubmit = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            if (this.form.invalid)
+                return;
+            this.modalBusy = true;
+            this.store
+                .dispatch(new ng_core.ChangePassword({
+                currentPassword: this.form.get('password').value,
+                newPassword: this.form.get('newPassword').value,
+            }))
+                .pipe(operators.finalize((/**
+             * @return {?}
+             */
+            function () {
+                _this.modalBusy = false;
+            })))
+                .subscribe({
+                next: (/**
+                 * @return {?}
+                 */
+                function () {
+                    _this.visible = false;
+                    _this.form.reset();
+                }),
+                error: (/**
+                 * @param {?} err
+                 * @return {?}
+                 */
+                function (err) {
+                    _this.toasterService.error(snq((/**
+                     * @return {?}
+                     */
+                    function () { return err.error.error.message; }), 'AbpAccount::DefaultErrorMessage'), 'Error', {
+                        life: 7000,
+                    });
+                }),
+            });
+        };
+        /**
+         * @return {?}
+         */
+        ChangePasswordComponent.prototype.openModal = /**
+         * @return {?}
+         */
+        function () {
+            this.visible = true;
+        };
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        ChangePasswordComponent.prototype.ngOnChanges = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var visible = _a.visible;
+            if (!visible)
+                return;
+            if (visible.currentValue) {
+                this.openModal();
+            }
+            else if (visible.currentValue === false && this.visible) {
+                this.visible = false;
+            }
+        };
+        ChangePasswordComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-change-password',
+                        template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::ChangePassword' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <div class=\"form-group\">\n        <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" autofocus />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n      </div>\n      <div class=\"form-group\" [class.is-invalid]=\"form.errors?.passwordMismatch\">\n        <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n        <div *ngIf=\"form.errors?.passwordMismatch\" class=\"invalid-feedback\">\n          {{ 'AbpIdentity::Identity.PasswordConfirmationFailed' | abpLocalization }}\n        </div>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" (click)=\"onSubmit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
+                    }] }
+        ];
+        /** @nocollapse */
+        ChangePasswordComponent.ctorParameters = function () { return [
+            { type: forms.FormBuilder },
+            { type: store.Store },
+            { type: ToasterService }
+        ]; };
+        ChangePasswordComponent.propDecorators = {
+            visible: [{ type: core.Input }],
+            visibleChange: [{ type: core.Output }],
+            modalContent: [{ type: core.ViewChild, args: ['modalContent', { static: false },] }]
+        };
+        return ChangePasswordComponent;
+    }());
+    if (false) {
+        /**
+         * @type {?}
+         * @protected
+         */
+        ChangePasswordComponent.prototype._visible;
+        /** @type {?} */
+        ChangePasswordComponent.prototype.visibleChange;
+        /** @type {?} */
+        ChangePasswordComponent.prototype.modalContent;
+        /** @type {?} */
+        ChangePasswordComponent.prototype.form;
+        /** @type {?} */
+        ChangePasswordComponent.prototype.modalBusy;
+        /**
+         * @type {?}
+         * @private
+         */
+        ChangePasswordComponent.prototype.fb;
+        /**
+         * @type {?}
+         * @private
+         */
+        ChangePasswordComponent.prototype.store;
+        /**
+         * @type {?}
+         * @private
+         */
+        ChangePasswordComponent.prototype.toasterService;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var maxLength = forms.Validators.maxLength, required$1 = forms.Validators.required, email = forms.Validators.email;
+    var ProfileComponent = /** @class */ (function () {
+        function ProfileComponent(fb, store) {
+            this.fb = fb;
+            this.store = store;
+            this.visibleChange = new core.EventEmitter();
+            this.modalBusy = false;
+        }
+        Object.defineProperty(ProfileComponent.prototype, "visible", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._visible;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                this._visible = value;
+                this.visibleChange.emit(value);
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        ProfileComponent.prototype.buildForm = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            this.store
+                .dispatch(new ng_core.GetProfile())
+                .pipe(operators.withLatestFrom(this.profile$), operators.take(1))
+                .subscribe((/**
+             * @param {?} __0
+             * @return {?}
+             */
+            function (_a) {
+                var _b = __read(_a, 2), profile = _b[1];
+                _this.form = _this.fb.group({
+                    userName: [profile.userName, [required$1, maxLength(256)]],
+                    email: [profile.email, [required$1, email, maxLength(256)]],
+                    name: [profile.name || '', [maxLength(64)]],
+                    surname: [profile.surname || '', [maxLength(64)]],
+                    phoneNumber: [profile.phoneNumber || '', [maxLength(16)]],
+                });
+            }));
+        };
+        /**
+         * @return {?}
+         */
+        ProfileComponent.prototype.submit = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            if (this.form.invalid)
+                return;
+            this.modalBusy = true;
+            this.store.dispatch(new ng_core.UpdateProfile(this.form.value)).subscribe((/**
+             * @return {?}
+             */
+            function () {
+                _this.modalBusy = false;
+                _this.visible = false;
+                _this.form.reset();
+            }));
+        };
+        /**
+         * @return {?}
+         */
+        ProfileComponent.prototype.openModal = /**
+         * @return {?}
+         */
+        function () {
+            this.buildForm();
+            this.visible = true;
+        };
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        ProfileComponent.prototype.ngOnChanges = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var visible = _a.visible;
+            if (!visible)
+                return;
+            if (visible.currentValue) {
+                this.openModal();
+            }
+            else if (visible.currentValue === false && this.visible) {
+                this.visible = false;
+            }
+        };
+        ProfileComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-profile',
+                        template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form novalidate *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"submit()\">\n      <div class=\"form-group\">\n        <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" autofocus />\n      </div>\n      <div class=\"row\">\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n            ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n          </div>\n        </div>\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n            ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n        ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" (click)=\"submit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
+                    }] }
+        ];
+        /** @nocollapse */
+        ProfileComponent.ctorParameters = function () { return [
+            { type: forms.FormBuilder },
+            { type: store.Store }
+        ]; };
+        ProfileComponent.propDecorators = {
+            visible: [{ type: core.Input }],
+            visibleChange: [{ type: core.Output }]
+        };
+        __decorate([
+            store.Select(ng_core.ProfileState.getProfile),
+            __metadata("design:type", rxjs.Observable)
+        ], ProfileComponent.prototype, "profile$", void 0);
+        return ProfileComponent;
+    }());
+    if (false) {
+        /**
+         * @type {?}
+         * @protected
+         */
+        ProfileComponent.prototype._visible;
+        /** @type {?} */
+        ProfileComponent.prototype.visibleChange;
+        /** @type {?} */
+        ProfileComponent.prototype.profile$;
+        /** @type {?} */
+        ProfileComponent.prototype.form;
+        /** @type {?} */
+        ProfileComponent.prototype.modalBusy;
+        /**
+         * @type {?}
+         * @private
+         */
+        ProfileComponent.prototype.fb;
+        /**
+         * @type {?}
+         * @private
+         */
+        ProfileComponent.prototype.store;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var BreadcrumbComponent = /** @class */ (function () {
+        function BreadcrumbComponent(router, store) {
+            this.router = router;
+            this.store = store;
+            this.segments = [];
+            this.show = !!this.store.selectSnapshot((/**
+             * @param {?} state
+             * @return {?}
+             */
+            function (state) { return state.LeptonLayoutState; }));
+        }
+        /**
+         * @return {?}
+         */
+        BreadcrumbComponent.prototype.ngOnInit = /**
+         * @return {?}
+         */
+        function () {
+            /** @type {?} */
+            var splittedUrl = this.router.url.split('/').filter((/**
+             * @param {?} chunk
+             * @return {?}
+             */
+            function (chunk) { return chunk; }));
+            /** @type {?} */
+            var currentUrl = this.store.selectSnapshot(ng_core.ConfigState.getRoute(splittedUrl[0]));
+            this.segments.push(currentUrl.name);
+            if (splittedUrl.length > 1) {
+                var _a = __read(splittedUrl), arr = _a.slice(1);
+                /** @type {?} */
+                var childRoute = currentUrl;
+                var _loop_1 = function (i) {
+                    /** @type {?} */
+                    var element = arr[i];
+                    childRoute = childRoute.children.find((/**
+                     * @param {?} child
+                     * @return {?}
+                     */
+                    function (child) { return child.path === element; }));
+                    this_1.segments.push(childRoute.name);
+                };
+                var this_1 = this;
+                for (var i = 0; i < arr.length; i++) {
+                    _loop_1(i);
+                }
+            }
+        };
+        BreadcrumbComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-breadcrumb',
+                        template: "\n    <ol *ngIf=\"show\" class=\"breadcrumb\">\n      <li class=\"breadcrumb-item\">\n        <a routerLink=\"/\"><i class=\"fa fa-home\"></i> </a>\n      </li>\n      <li\n        *ngFor=\"let segment of segments; let last = last\"\n        class=\"breadcrumb-item\"\n        [class.active]=\"last\"\n        aria-current=\"page\"\n      >\n        {{ segment | abpLocalization }}\n      </li>\n    </ol>\n  "
+                    }] }
+        ];
+        /** @nocollapse */
+        BreadcrumbComponent.ctorParameters = function () { return [
+            { type: router.Router },
+            { type: store.Store }
+        ]; };
+        return BreadcrumbComponent;
+    }());
+    if (false) {
+        /** @type {?} */
+        BreadcrumbComponent.prototype.show;
+        /** @type {?} */
+        BreadcrumbComponent.prototype.segments;
+        /**
+         * @type {?}
+         * @private
+         */
+        BreadcrumbComponent.prototype.router;
+        /**
+         * @type {?}
+         * @private
+         */
+        BreadcrumbComponent.prototype.store;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     /**
      * @param {?} injector
      * @return {?}
@@ -1275,15 +1710,14 @@
                         imports: [
                             ng_core.CoreModule,
                             toast.ToastModule,
-                            ngBootstrap.NgbModalModule,
                             core$1.NgxValidateCoreModule.forRoot({
                                 targetSelector: '.form-group',
                                 blueprints: {
                                     email: "AbpAccount::ThisFieldIsNotAValidEmailAddress.",
-                                    max: "AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ max }}]",
+                                    max: "AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]",
                                     maxlength: "AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]",
-                                    min: "AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]",
-                                    minlength: "AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]",
+                                    min: "AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]",
+                                    minlength: "AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]",
                                     required: "AbpAccount::ThisFieldIsRequired.",
                                     passwordMismatch: "AbpIdentity::Identity.PasswordConfirmationFailed",
                                 },
@@ -1298,13 +1732,36 @@
                             ErrorComponent,
                             LoaderBarComponent,
                             ValidationErrorComponent,
+                            ChangePasswordComponent,
+                            ProfileComponent,
+                            BreadcrumbComponent,
                         ],
-                        exports: [ngBootstrap.NgbModalModule, ButtonComponent, ConfirmationComponent, ToastComponent, ModalComponent, LoaderBarComponent],
+                        exports: [
+                            ButtonComponent,
+                            ConfirmationComponent,
+                            ToastComponent,
+                            ModalComponent,
+                            LoaderBarComponent,
+                            ChangePasswordComponent,
+                            ProfileComponent,
+                            BreadcrumbComponent,
+                        ],
                         entryComponents: [ErrorComponent, ValidationErrorComponent],
                     },] }
         ];
         return ThemeSharedModule;
     }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    /** @type {?} */
+    var fade = animations.trigger('fade', [
+        animations.state('void', animations.style({ opacity: 1 })),
+        animations.transition(':enter', [animations.style({ opacity: 0 }), animations.animate(250)]),
+        animations.transition(':leave', animations.animate(250, animations.style({ opacity: 0 }))),
+    ]);
 
     /**
      * @fileoverview added by tsickle
@@ -1383,48 +1840,34 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-
     /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-    var ToasterService = /** @class */ (function (_super) {
-        __extends(ToasterService, _super);
-        function ToasterService() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        /**
-         * @param {?} messages
-         * @return {?}
-         */
-        ToasterService.prototype.addAll = /**
-         * @param {?} messages
-         * @return {?}
-         */
-        function (messages) {
-            var _this = this;
-            this.messageService.addAll(messages.map((/**
-             * @param {?} message
-             * @return {?}
-             */
-            function (message) { return (__assign({ key: _this.key }, message)); })));
-        };
-        ToasterService.decorators = [
-            { type: core.Injectable, args: [{ providedIn: 'root' },] }
-        ];
-        /** @nocollapse */ ToasterService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function ToasterService_Factory() { return new ToasterService(core.ɵɵinject(messageservice.MessageService)); }, token: ToasterService, providedIn: "root" });
-        return ToasterService;
-    }(AbstractToaster));
+    function SettingTab() { }
+    if (false) {
+        /** @type {?} */
+        SettingTab.prototype.name;
+        /** @type {?} */
+        SettingTab.prototype.order;
+        /** @type {?} */
+        SettingTab.prototype.component;
+        /** @type {?|undefined} */
+        SettingTab.prototype.requiredPolicy;
+    }
 
+    exports.BreadcrumbComponent = BreadcrumbComponent;
     exports.ButtonComponent = ButtonComponent;
+    exports.ChangePasswordComponent = ChangePasswordComponent;
     exports.ConfirmationComponent = ConfirmationComponent;
     exports.ConfirmationService = ConfirmationService;
     exports.LoaderBarComponent = LoaderBarComponent;
     exports.ModalComponent = ModalComponent;
+    exports.ProfileComponent = ProfileComponent;
     exports.ThemeSharedModule = ThemeSharedModule;
     exports.ToastComponent = ToastComponent;
     exports.ToasterService = ToasterService;
     exports.appendScript = appendScript;
+    exports.fade = fade;
     exports.slideFromBottom = slideFromBottom;
     exports.ɵa = ValidationErrorComponent;
     exports.ɵb = ButtonComponent;
@@ -1435,7 +1878,11 @@
     exports.ɵg = ModalComponent;
     exports.ɵh = ErrorComponent;
     exports.ɵi = LoaderBarComponent;
-    exports.ɵj = ErrorHandler;
+    exports.ɵj = ChangePasswordComponent;
+    exports.ɵk = ToasterService;
+    exports.ɵl = ProfileComponent;
+    exports.ɵm = BreadcrumbComponent;
+    exports.ɵn = ErrorHandler;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

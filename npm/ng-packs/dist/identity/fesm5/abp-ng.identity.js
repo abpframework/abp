@@ -1,5 +1,5 @@
+import { NgModule, Injectable, ɵɵdefineInjectable, ɵɵinject, Component, ViewChild } from '@angular/core';
 import { RestService, DynamicLayoutComponent, AuthGuard, PermissionGuard, CoreModule } from '@abp/ng.core';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, ViewChild, NgModule } from '@angular/core';
 import { Action, Selector, State, Store, Select, NgxsModule } from '@ngxs/store';
 import { __assign, __decorate, __metadata } from 'tslib';
 import { ConfirmationService, ThemeSharedModule } from '@abp/ng.theme.shared';
@@ -13,6 +13,31 @@ import { PermissionManagementModule } from '@abp/ng.permission-management';
 import { TableModule } from 'primeng/table';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var RootIdentityModule = /** @class */ (function () {
+    function RootIdentityModule() {
+    }
+    /**
+     * @return {?}
+     */
+    RootIdentityModule.forRoot = /**
+     * @return {?}
+     */
+    function () {
+        return {
+            ngModule: RootIdentityModule,
+            providers: [],
+        };
+    };
+    RootIdentityModule.decorators = [
+        { type: NgModule, args: [{},] }
+    ];
+    return RootIdentityModule;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -1448,26 +1473,29 @@ var IdentityModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var IDENTITY_ROUTES = (/** @type {?} */ ([
-    {
-        name: 'AbpUiNavigation::Menu:Administration',
-        path: '',
-        order: 1,
-        wrapper: true,
-    },
-    {
-        name: 'AbpIdentity::Menu:IdentityManagement',
-        path: 'identity',
-        order: 1,
-        parentName: 'AbpUiNavigation::Menu:Administration',
-        layout: "application" /* application */,
-        iconClass: 'fa fa-id-card-o',
-        children: [
-            { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
-            { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
-        ],
-    },
-]));
+var IDENTITY_ROUTES = {
+    routes: (/** @type {?} */ ([
+        {
+            name: 'AbpUiNavigation::Menu:Administration',
+            path: '',
+            order: 1,
+            wrapper: true,
+        },
+        {
+            name: 'AbpIdentity::Menu:IdentityManagement',
+            path: 'identity',
+            order: 1,
+            parentName: 'AbpUiNavigation::Menu:Administration',
+            layout: "application" /* application */,
+            iconClass: 'fa fa-id-card-o',
+            children: [
+                { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
+                { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
+            ],
+        },
+    ])),
+    settings: [],
+};
 
 /**
  * @fileoverview added by tsickle
@@ -1581,5 +1609,5 @@ var Identity;
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { CreateRole, CreateUser, DeleteRole, DeleteUser, GetRoleById, GetRoles, GetUserById, GetUserRoles, GetUsers, IDENTITY_ROUTES, IdentityModule, IdentityService, IdentityState, RoleResolver, RolesComponent, UpdateRole, UpdateUser, UsersComponent as ɵb, IdentityRoutingModule as ɵc, UserResolver as ɵd };
+export { CreateRole, CreateUser, DeleteRole, DeleteUser, GetRoleById, GetRoles, GetUserById, GetUserRoles, GetUsers, IDENTITY_ROUTES, IdentityModule, IdentityService, IdentityState, RoleResolver, RolesComponent, RootIdentityModule, UpdateRole, UpdateUser, UsersComponent as ɵb, IdentityRoutingModule as ɵc, UserResolver as ɵd };
 //# sourceMappingURL=abp-ng.identity.js.map

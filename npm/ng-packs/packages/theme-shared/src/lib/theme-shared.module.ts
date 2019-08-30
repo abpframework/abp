@@ -1,6 +1,5 @@
 import { CoreModule, LazyLoadService } from '@abp/ng.core';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
-import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
@@ -17,6 +16,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { ValidationErrorComponent } from './components/errors/validation-error.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -40,15 +40,14 @@ export function appendScript(injector: Injector) {
   imports: [
     CoreModule,
     ToastModule,
-    NgbModalModule,
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
       blueprints: {
         email: `AbpAccount::ThisFieldIsNotAValidEmailAddress.`,
-        max: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ max }}]`,
+        max: `AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]`,
         maxlength: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]`,
-        min: `AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]`,
-        minlength: `AbpAccount::ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}[{{ min }},{{ max }}]`,
+        min: `AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]`,
+        minlength: `AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]`,
         required: `AbpAccount::ThisFieldIsRequired.`,
         passwordMismatch: `AbpIdentity::Identity.PasswordConfirmationFailed`,
       },
@@ -65,9 +64,9 @@ export function appendScript(injector: Injector) {
     ValidationErrorComponent,
     ChangePasswordComponent,
     ProfileComponent,
+    BreadcrumbComponent,
   ],
   exports: [
-    NgbModalModule,
     ButtonComponent,
     ConfirmationComponent,
     ToastComponent,
@@ -75,6 +74,7 @@ export function appendScript(injector: Injector) {
     LoaderBarComponent,
     ChangePasswordComponent,
     ProfileComponent,
+    BreadcrumbComponent,
   ],
   entryComponents: [ErrorComponent, ValidationErrorComponent],
 })

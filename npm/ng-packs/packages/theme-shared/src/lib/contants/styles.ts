@@ -32,9 +32,15 @@ export default `
  background-color: rgba(0, 0, 0, .6);
 }
 
-.abp-ellipsis {
+.abp-ellipsis-inline {
   display: inline-block;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.abp-ellipsis {
+  overflow: hidden !important;
   text-overflow: ellipsis;
   white-space: nowrap;
 }

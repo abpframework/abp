@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@ngxs/store'), require('@abp/ng.theme.shared'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('snq'), require('@ng-bootstrap/ng-bootstrap'), require('@abp/ng.permission-management'), require('primeng/table'), require('@ngx-validate/core'), require('ngx-perfect-scrollbar')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.identity', ['exports', '@abp/ng.core', '@angular/core', '@ngxs/store', '@abp/ng.theme.shared', '@angular/forms', 'rxjs', 'rxjs/operators', '@angular/router', 'snq', '@ng-bootstrap/ng-bootstrap', '@abp/ng.permission-management', 'primeng/table', '@ngx-validate/core', 'ngx-perfect-scrollbar'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.identity = {}), global.ng_core, global.ng.core, global.store, global.ng_theme_shared, global.ng.forms, global.rxjs, global.rxjs.operators, global.ng.router, global.snq, global.ngBootstrap, global.ng_permissionManagement, global.table, global.core$1, global.ngxPerfectScrollbar));
-}(this, function (exports, ng_core, core, store, ng_theme_shared, forms, rxjs, operators, router, snq, ngBootstrap, ng_permissionManagement, table, core$1, ngxPerfectScrollbar) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core'), require('@ngxs/store'), require('@abp/ng.theme.shared'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('snq'), require('@ng-bootstrap/ng-bootstrap'), require('@abp/ng.permission-management'), require('primeng/table'), require('@ngx-validate/core'), require('ngx-perfect-scrollbar')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.identity', ['exports', '@angular/core', '@abp/ng.core', '@ngxs/store', '@abp/ng.theme.shared', '@angular/forms', 'rxjs', 'rxjs/operators', '@angular/router', 'snq', '@ng-bootstrap/ng-bootstrap', '@abp/ng.permission-management', 'primeng/table', '@ngx-validate/core', 'ngx-perfect-scrollbar'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.identity = {}), global.ng.core, global.ng_core, global.store, global.ng_theme_shared, global.ng.forms, global.rxjs, global.rxjs.operators, global.ng.router, global.snq, global.ngBootstrap, global.ng_permissionManagement, global.table, global.core$1, global.ngxPerfectScrollbar));
+}(this, function (exports, core, ng_core, store, ng_theme_shared, forms, rxjs, operators, router, snq, ngBootstrap, ng_permissionManagement, table, core$1, ngxPerfectScrollbar) { 'use strict';
 
     snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
@@ -202,6 +202,31 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var RootIdentityModule = /** @class */ (function () {
+        function RootIdentityModule() {
+        }
+        /**
+         * @return {?}
+         */
+        RootIdentityModule.forRoot = /**
+         * @return {?}
+         */
+        function () {
+            return {
+                ngModule: RootIdentityModule,
+                providers: [],
+            };
+        };
+        RootIdentityModule.decorators = [
+            { type: core.NgModule, args: [{},] }
+        ];
+        return RootIdentityModule;
+    }());
 
     /**
      * @fileoverview added by tsickle
@@ -1637,26 +1662,29 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     /** @type {?} */
-    var IDENTITY_ROUTES = (/** @type {?} */ ([
-        {
-            name: 'AbpUiNavigation::Menu:Administration',
-            path: '',
-            order: 1,
-            wrapper: true,
-        },
-        {
-            name: 'AbpIdentity::Menu:IdentityManagement',
-            path: 'identity',
-            order: 1,
-            parentName: 'AbpUiNavigation::Menu:Administration',
-            layout: "application" /* application */,
-            iconClass: 'fa fa-id-card-o',
-            children: [
-                { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
-                { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
-            ],
-        },
-    ]));
+    var IDENTITY_ROUTES = {
+        routes: (/** @type {?} */ ([
+            {
+                name: 'AbpUiNavigation::Menu:Administration',
+                path: '',
+                order: 1,
+                wrapper: true,
+            },
+            {
+                name: 'AbpIdentity::Menu:IdentityManagement',
+                path: 'identity',
+                order: 1,
+                parentName: 'AbpUiNavigation::Menu:Administration',
+                layout: "application" /* application */,
+                iconClass: 'fa fa-id-card-o',
+                children: [
+                    { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
+                    { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
+                ],
+            },
+        ])),
+        settings: [],
+    };
 
     /**
      * @fileoverview added by tsickle
@@ -1775,6 +1803,7 @@
     exports.IdentityState = IdentityState;
     exports.RoleResolver = RoleResolver;
     exports.RolesComponent = RolesComponent;
+    exports.RootIdentityModule = RootIdentityModule;
     exports.UpdateRole = UpdateRole;
     exports.UpdateUser = UpdateUser;
     exports.ɵb = UsersComponent;

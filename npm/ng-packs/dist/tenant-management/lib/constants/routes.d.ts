@@ -1,2 +1,5 @@
 import { ABP } from '@abp/ng.core';
-export declare const TENANT_MANAGEMENT_ROUTES: ABP.FullRoute[];
+export declare const TENANT_MANAGEMENT_ROUTES: {
+    routes: ABP.FullRoute[];
+    settings: any[];
+};

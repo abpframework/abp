@@ -16,7 +16,7 @@ using Volo.Abp.Uow;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity
 {
-    public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator //ResourceOwnerPasswordValidator<IdentityUser>
+    public class AbpResourceOwnerPasswordValidator : IResourceOwnerPasswordValidator
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IEventService _events;

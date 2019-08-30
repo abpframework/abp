@@ -93,7 +93,7 @@ export class TenantsComponent {
   private createDefaultConnectionStringForm() {
     this.defaultConnectionStringForm = this.fb.group({
       useSharedDatabase: this._useSharedDatabase,
-      defaultConnectionString: this.defaultConnectionString || '',
+      defaultConnectionString: [this.defaultConnectionString || ''],
     });
   }
 
@@ -151,20 +151,24 @@ export class TenantsComponent {
 
   saveConnectionString() {
     this.modalBusy = true;
-    if (this.useSharedDatabase) {
+    if (this.useSharedDatabase || (!this.useSharedDatabase && !this.connectionString)) {
       this.tenantService
         .deleteDefaultConnectionString(this.selected.id)
-        .pipe(take(1))
+        .pipe(
+          take(1),
+          finalize(() => (this.modalBusy = false)),
+        )
         .subscribe(() => {
-          this.modalBusy = false;
           this.isModalVisible = false;
         });
     } else {
       this.tenantService
         .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
-        .pipe(take(1))
+        .pipe(
+          take(1),
+          finalize(() => (this.modalBusy = false)),
+        )
         .subscribe(() => {
-          this.modalBusy = false;
           this.isModalVisible = false;
         });
     }
