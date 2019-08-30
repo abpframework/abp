@@ -6,23 +6,22 @@
 
 - In `Acme.BookStore.EntityFrameworkCore` project replace package `Volo.Abp.EntityFrameworkCore.SqlServer` with `Volo.Abp.EntityFrameworkCore.PostgreSql` 
 - Update to use PostgreSQL in `BookStoreEntityFrameworkCoreModule`. 
+- Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
+- Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
+- In other projects update the PostgreSQL connection string in necessary `appsettings.json` files.
 
-1. **Do** Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
-2. **Do** Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
+#### Delete Existing Migrations
 
-### Update Connection String Settings
-- **Do** Update the PostgreSQL connection string in all `appsettings.json` files.
-
-### Regenerate Initial igration & Update the Database
-Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
-> Ensure your startup project is correcty set.
-
-#### Delete Existing Initial Migrations
+Delete all existing migration files (including `DbContextModelSnapshot`)
 
 ![postgresql-delete-initial-migrations](images/postgresql-delete-initial-migrations.png)
 
-Then create a new migration class inside the `Migrations` folder.
+#### Regenerate Initial Migration & Update the Database
 
+Set the correct startup project (usually a web project),
+Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **Default project** and execute the following command:
+
+Run `Add-Migration` command.
 ````
 PM> Add-Migration Initial
 ````
@@ -34,4 +33,3 @@ PM> Update-Database
 ````
 
 ![postgresql-update-database](images/postgresql-update-database.png)
-

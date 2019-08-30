@@ -246,7 +246,7 @@
         {
           "text": "Entity Framework Core Integration",
           "path": "Entity-Framework-Core.md",
-		  "items": [            
+          "items": [            
             {
               "text": "PostgreSQL Integration",
               "path": "Best-Practices/PostgreSQL-Integration.md"
