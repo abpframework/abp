@@ -36,26 +36,28 @@ public class Acme.BookStore.EntityFrameworkCoreModule : AbpModule
     }
 ````
 
-### EntityFrameworkCore.DbMigrations Project Update
-- **Do** update to use PostgreSQL in `BookStoreMigrationsDbContextModelSnapshot.cs`
-	
-import `Npgsql.EntityFrameworkCore.PostgreSQL.Metadata` by adding
-	
-````C#
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-````	
-	
-replace all references
-````
-.HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-````
-
- to
-
-````C#
-.HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn);
-````
-
 ### Update Connection String Settings
-> Update the PostgreSQL connection string in all `appsettings.json` files
+- **Do** Update the PostgreSQL connection string in all `appsettings.json` files.
+
+### Regenerate Initial igration & Update the Database
+Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
+> Ensure your startup project is correcty set.
+
+#### Delete Existing Initial Migrations
+
+![postgresql-delete-initial-migrations](images/postgresql-delete-initial-migrations.png)
+
+Then create a new migration class inside the `Migrations` folder.
+
+````
+PM> Add-Migration Initial
+````
+
+Then execute the `Update-Database` command to update the database schema:
+
+````
+PM> Update-Database
+````
+
+![postgresql-update-database](images/postgresql-update-database.png)
 
