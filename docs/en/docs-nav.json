@@ -245,7 +245,13 @@
       "items": [
         {
           "text": "Entity Framework Core Integration",
-          "path": "Entity-Framework-Core.md"
+          "path": "Entity-Framework-Core.md",
+		  "items": [            
+            {
+              "text": "PostgreSQL Integration",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
         },
         {
           "text": "MongoDB Integration",
