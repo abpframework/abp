@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Volo.Abp.Collections;
 
@@ -17,17 +18,43 @@ namespace Volo.Abp.AutoMapper
             ValidatingProfiles = new TypeList<Profile>();
         }
 
-        public void AddProfile<TProfile>(bool validate = false)
-            where TProfile: Profile, new()
+        public void AddMaps<TModule>(bool validate = false)
         {
+            var assembly = typeof(TModule).Assembly;
+
             Configurators.Add(context =>
             {
-                context.MapperConfiguration.AddProfile<TProfile>();
+                context.MapperConfiguration.AddMaps(assembly);
             });
 
             if (validate)
             {
-                ValidatingProfiles.Add<TProfile>();
+                var profileTypes = assembly
+                    .DefinedTypes
+                    .Where(type => typeof(Profile).IsAssignableFrom(type) && !type.IsAbstract && !type.IsGenericType);
+
+                foreach (var profileType in profileTypes)
+                {
+                    ValidatingProfiles.Add(profileType);
+                }
+            }
+        }
+
+        public void ValidateProfile<TProfile>(bool validate = true)
+            where TProfile : Profile
+        {
+            ValidateProfile(typeof(TProfile), validate);
+        }
+
+        public void ValidateProfile(Type profileType, bool validate = true)
+        {
+            if (validate)
+            {
+                ValidatingProfiles.AddIfNotContains(profileType);
+            }
+            else
+            {
+                ValidatingProfiles.Remove(profileType);
             }
         }
     }
