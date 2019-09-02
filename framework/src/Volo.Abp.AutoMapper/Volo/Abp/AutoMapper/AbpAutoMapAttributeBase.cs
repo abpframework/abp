@@ -3,11 +3,11 @@ using AutoMapper;
 
 namespace Volo.Abp.AutoMapper
 {
-    public abstract class AutoMapAttributeBase : Attribute
+    public abstract class AbpAutoMapAttributeBase : Attribute
     {
         public Type[] TargetTypes { get; }
 
-        protected AutoMapAttributeBase(params Type[] targetTypes)
+        protected AbpAutoMapAttributeBase(params Type[] targetTypes)
         {
             TargetTypes = targetTypes;
         }

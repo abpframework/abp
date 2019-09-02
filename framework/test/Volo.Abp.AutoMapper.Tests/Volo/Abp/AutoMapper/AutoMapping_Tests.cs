@@ -128,7 +128,7 @@ namespace Volo.Abp.AutoMapper
             obj2.NullableValue.ShouldBe(42);
         }
 
-        [AutoMap(typeof(MyClass2), typeof(MyClass3))]
+        [AbpAutoMap(typeof(MyClass2), typeof(MyClass3))]
         private class MyClass1
         {
             public string TestProp { get; set; }
@@ -136,7 +136,7 @@ namespace Volo.Abp.AutoMapper
             public long? NullableValue { get; set; }
         }
 
-        [AutoMapTo(typeof(MyClass3))]
+        [AbpAutoMapTo(typeof(MyClass3))]
         private class MyClass2
         {
             public string TestProp { get; set; }
