@@ -256,6 +256,10 @@
         {
           "text": "MongoDB Integration",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper Integration",
+          "path": "Dapper.md"
         }
       ]
     },

@@ -10,7 +10,7 @@
 Install-Package Volo.Abp.EntityFrameworkCore
 ```
 
-然后添加 `AbpEntityFrameworkCoreModule` 模块依赖项(`DependsOn` Attribute) 到 [module](Module-Development-Basics.cn.md)(项目中的Mudole类):
+然后添加 `AbpEntityFrameworkCoreModule` 模块依赖项(`DependsOn` Attribute) 到 [module](Module-Development-Basics.md)(项目中的Mudole类):
 
 ````C#
 using Volo.Abp.EntityFrameworkCore;
