@@ -21,17 +21,23 @@ namespace Volo.Abp.Identity.Web.Navigation
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<IdentityResource>>();
 
-            var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
-            administrationMenu.AddItem(identityMenuItem);
-
-            if (await authorizationService.IsGrantedAsync(IdentityPermissions.Roles.Default))
+            var hasRolePermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Roles.Default);
+            var hasUserPermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Users.Default);
+            
+            if (hasRolePermission || hasUserPermission)
             {
-                identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "/Identity/Roles"));
-            }
+                var identityMenuItem = new ApplicationMenuItem(IdentityMenuNames.GroupName, l["Menu:IdentityManagement"], icon: "fa fa-id-card-o");
+                administrationMenu.AddItem(identityMenuItem);
 
-            if (await authorizationService.IsGrantedAsync(IdentityPermissions.Users.Default))
-            {
-                identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "/Identity/Users"));
+                if (hasRolePermission)
+                {
+                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Roles, l["Roles"], url: "/Identity/Roles"));
+                }
+
+                if (hasUserPermission)
+                {
+                    identityMenuItem.AddItem(new ApplicationMenuItem(IdentityMenuNames.Users, l["Users"], url: "/Identity/Users"));
+                }
             }
         }
     }
