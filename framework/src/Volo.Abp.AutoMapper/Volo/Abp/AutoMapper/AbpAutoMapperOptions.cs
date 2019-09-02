@@ -40,6 +40,20 @@ namespace Volo.Abp.AutoMapper
             }
         }
 
+        public void AddProfile<TProfile>(bool validate = false)
+            where TProfile : Profile, new()
+        {
+            Configurators.Add(context =>
+            {
+                context.MapperConfiguration.AddProfile<TProfile>();
+            });
+
+            if (validate)
+            {
+                ValidateProfile(typeof(TProfile));
+            }
+        }
+
         public void ValidateProfile<TProfile>(bool validate = true)
             where TProfile : Profile
         {
