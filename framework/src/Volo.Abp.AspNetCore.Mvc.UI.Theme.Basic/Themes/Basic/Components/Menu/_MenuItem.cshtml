@@ -10,6 +10,13 @@
     if (Model.Url != null)
     {
         <a class="dropdown-item @cssClass @disabled" href="@(Model.Url ?? "#")" @Html.Raw(elementId)>
+            @if (Model.Icon != null)
+            {
+                if (Model.Icon.StartsWith("fa"))
+                {
+                    <i class="@Model.Icon"></i>
+                }
+            }
             @Model.DisplayName
         </a>
     }
