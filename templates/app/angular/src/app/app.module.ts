@@ -11,6 +11,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { RootAccountModule } from '@abp/ng.account';
+import { RootIdentityModule } from '@abp/ng.identity';
+import { RootTenantManagementModule } from '@abp/ng.tenant-management';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +29,10 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
         layouts: LAYOUTS,
       },
     }),
+    RootAccountModule.forRoot({ redirectUrl: '/' }),
+    RootIdentityModule.forRoot(),
+    RootTenantManagementModule.forRoot(),
+
     OAuthModule.forRoot(),
     NgxsModule.forRoot([]),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),

@@ -1,6 +1,10 @@
 export const environment = {
   production: false,
   hmr: true,
+  application: {
+    name: 'BookStore',
+    logoUrl: '',
+  },
   oAuthConfig: {
     issuer: 'https://localhost:44359',
     clientId: 'BookStore_ConsoleTestApp',

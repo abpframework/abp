@@ -2,7 +2,7 @@
  * Generated bundle index. Do not edit.
  */
 export * from './public-api';
-export { TenantManagementAdd as ɵf, TenantManagementDelete as ɵh, TenantManagementGet as ɵd, TenantManagementGetById as ɵe, TenantManagementUpdate as ɵg } from './lib/actions/tenant-management.actions';
+export { CreateTenant as ɵf, DeleteTenant as ɵh, GetTenantById as ɵe, GetTenants as ɵd, UpdateTenant as ɵg } from './lib/actions/tenant-management.actions';
 export { TenantsComponent as ɵa } from './lib/components/tenants/tenants.component';
 export { TenantManagement as ɵi } from './lib/models/tenant-management';
 export { TenantsResolver as ɵk } from './lib/resolvers/tenants.resolver';

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Modularity;
 using Volo.Abp.ObjectMapping;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.AutoMapper
 {
@@ -34,7 +30,6 @@ namespace Volo.Abp.AutoMapper
 
                 void ConfigureAll(IAbpAutoMapperConfigurationContext ctx)
                 {
-                    FindAndAutoMapTypes(ctx);
                     foreach (var configurator in options.Configurators)
                     {
                         configurator(ctx);
@@ -57,37 +52,6 @@ namespace Volo.Abp.AutoMapper
                 ValidateAll(mapperConfiguration);
 
                 scope.ServiceProvider.GetRequiredService<MapperAccessor>().Mapper = mapperConfiguration.CreateMapper();
-            }
-        }
-
-        private void FindAndAutoMapTypes(IAbpAutoMapperConfigurationContext context)
-        {
-            //TODO: AutoMapping (by attributes) can be optionally enabled/disabled.
-
-            var typeFinder = context.ServiceProvider.GetRequiredService<ITypeFinder>();
-            var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpAutoMapperModule>>();
-
-            var types = typeFinder.Types.Where(type =>
-                {
-                    var typeInfo = type.GetTypeInfo();
-                    return typeInfo.IsDefined(typeof(AutoMapAttribute)) ||
-                           typeInfo.IsDefined(typeof(AutoMapFromAttribute)) ||
-                           typeInfo.IsDefined(typeof(AutoMapToAttribute));
-                }
-            ).ToArray();
-
-            if (types.Length <= 0)
-            {
-                logger.LogDebug($"No class found with auto mapping attributes.");
-            }
-            else
-            {
-                logger.LogDebug($"Found {types.Length} classes define auto mapping attributes.");
-                foreach (var type in types)
-                {
-                    logger.LogDebug(type.FullName);
-                    context.MapperConfiguration.CreateAutoAttributeMaps(type);
-                }
             }
         }
     }

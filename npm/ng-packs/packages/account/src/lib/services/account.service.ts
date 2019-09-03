@@ -25,6 +25,6 @@ export class AccountService {
       body,
     };
 
-    return this.rest.request<RegisterRequest, RegisterResponse>(request, { throwErr: true });
+    return this.rest.request<RegisterRequest, RegisterResponse>(request, { skipHandleError: true });
   }
 }

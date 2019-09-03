@@ -44,7 +44,11 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            await AuthService.LoginAsync(commandLineArgs.Target, password);
+            await AuthService.LoginAsync(
+                commandLineArgs.Target,
+                password,
+                commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long)
+            );
 
             Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
         }
@@ -69,6 +73,15 @@ namespace Volo.Abp.Cli.Commands
         public string GetShortDescription()
         {
             return string.Empty;
+        }
+
+        public static class Options
+        {
+            public static class Organization
+            {
+                public const string Short = "o";
+                public const string Long = "organization";
+            }
         }
     }
 }

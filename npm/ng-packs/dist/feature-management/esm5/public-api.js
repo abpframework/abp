@@ -1,0 +1,8 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+export { RootFeatureManagementModule } from './lib/root-feature-management.module';
+export { FeatureManagementModule } from './lib/feature-management.module';
+export { FeatureManagementComponent } from './lib/components';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuZmVhdHVyZS1tYW5hZ2VtZW50LyIsInNvdXJjZXMiOlsicHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsNENBQWMsc0NBQXNDLENBQUM7QUFDckQsd0NBQWMsaUNBQWlDLENBQUM7QUFDaEQsMkNBQWMsa0JBQWtCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgKiBmcm9tICcuL2xpYi9yb290LWZlYXR1cmUtbWFuYWdlbWVudC5tb2R1bGUnO1xuZXhwb3J0ICogZnJvbSAnLi9saWIvZmVhdHVyZS1tYW5hZ2VtZW50Lm1vZHVsZSc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9jb21wb25lbnRzJztcbiJdfQ==

@@ -44,6 +44,10 @@ export class TenantsComponent {
 
   selectedModalContent = {} as SelectedModalContent;
 
+  visibleFeatures: boolean = false;
+
+  providerKey: string;
+
   _useSharedDatabase: boolean;
 
   pageQuery: ABP.PageQueryParams = {
@@ -51,6 +55,8 @@ export class TenantsComponent {
   };
 
   loading: boolean = false;
+
+  modalBusy: boolean = false;
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -87,7 +93,7 @@ export class TenantsComponent {
   private createDefaultConnectionStringForm() {
     this.defaultConnectionStringForm = this.fb.group({
       useSharedDatabase: this._useSharedDatabase,
-      defaultConnectionString: this.defaultConnectionString || '',
+      defaultConnectionString: [this.defaultConnectionString || ''],
     });
   }
 
@@ -144,17 +150,24 @@ export class TenantsComponent {
   }
 
   saveConnectionString() {
-    if (this.useSharedDatabase) {
+    this.modalBusy = true;
+    if (this.useSharedDatabase || (!this.useSharedDatabase && !this.connectionString)) {
       this.tenantService
         .deleteDefaultConnectionString(this.selected.id)
-        .pipe(take(1))
+        .pipe(
+          take(1),
+          finalize(() => (this.modalBusy = false)),
+        )
         .subscribe(() => {
           this.isModalVisible = false;
         });
     } else {
       this.tenantService
         .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
-        .pipe(take(1))
+        .pipe(
+          take(1),
+          finalize(() => (this.modalBusy = false)),
+        )
         .subscribe(() => {
           this.isModalVisible = false;
         });
@@ -163,6 +176,7 @@ export class TenantsComponent {
 
   saveTenant() {
     if (!this.tenantForm.valid) return;
+    this.modalBusy = true;
 
     this.store
       .dispatch(
@@ -171,6 +185,7 @@ export class TenantsComponent {
           : new CreateTenant(this.tenantForm.value),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
@@ -183,6 +198,7 @@ export class TenantsComponent {
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
           this.store.dispatch(new DeleteTenant(id));
+          this.modalBusy = false;
         }
       });
   }

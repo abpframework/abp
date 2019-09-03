@@ -5,7 +5,7 @@ import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, HostBinding
 })
 export class EllipsisDirective implements AfterContentInit {
   @Input('abpEllipsis')
-  witdh: string;
+  width: string;
 
   @HostBinding('title')
   @Input()
@@ -14,14 +14,19 @@ export class EllipsisDirective implements AfterContentInit {
   @Input('abpEllipsisEnabled')
   enabled = true;
 
+  @HostBinding('class.abp-ellipsis-inline')
+  get inlineClass() {
+    return this.enabled && this.width;
+  }
+
   @HostBinding('class.abp-ellipsis')
   get class() {
-    return this.enabled;
+    return this.enabled && !this.width;
   }
 
   @HostBinding('style.max-width')
   get maxWidth() {
-    return this.enabled ? this.witdh || '160px' : undefined;
+    return this.enabled && this.width ? this.width || '170px' : undefined;
   }
 
   constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}

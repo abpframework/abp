@@ -8,6 +8,7 @@ This is the first part of the Angular tutorial series. See all parts:
 
 - **Part I: Create the project and a book list page (this tutorial)**
 - [Part II: Create, Update and Delete books](Part-II.md)
+- [Part III: Integration Tests](Part-III.md)
 
 You can access to the **source code** of the application from the [GitHub repository](https://github.com/abpframework/abp/tree/dev/samples/BookStore-Angular-MongoDb).
 
@@ -19,7 +20,7 @@ Create a new project named `Acme.BookStore` by selecting the Angular as the UI f
 
 This is how the layered solution structure looks after it's created:
 
-![bookstore-backend-solution](images\bookstore-backend-solution-v2.png)
+![bookstore-backend-solution](images/bookstore-backend-solution-v2.png)
 
 > You can see the [Application template document](../../Startup-Templates/Application.md) to understand the solution structure in details. However, you will understand the basics with this tutorial.
 
@@ -341,13 +342,13 @@ Run `yarn start`, wait Angular to run the application and open `http://localhost
 
 Open the `app-routing.module.ts` and replace `books` as shown below:
 
-```typescript
-import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
+```js
+import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';-
 
 //...
 {
   path: 'books',
-  component: LayoutApplicationComponent,
+  component: ApplicationLayoutComponent,
   loadChildren: () => import('./books/books.module').then(m => m.BooksModule),
   data: {
     routes: {
@@ -357,7 +358,7 @@ import { LayoutApplicationComponent } from '@abp/ng.theme.basic';-
 },
 ```
 
-`LayoutApplicationComponent` configuration sets the application layout to the new page. If you would like to see your route on the navigation bar (main menu) you must also add the `data` object with `name` property in your route.
+`ApplicationLayoutComponent` configuration sets the application layout to the new page. If you would like to see your route on the navigation bar (main menu) you must also add the `data` object with `name` property in your route.
 
 ![initial-books-page](images/bookstore-initial-books-page-with-layout.png)
 
@@ -379,7 +380,7 @@ yarn ng generate component books/book-list
 
 Import the `SharedModule` to the `BooksModule` to reuse some components and services defined in:
 
-```typescript
+```js
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -394,7 +395,7 @@ export class BooksModule {}
 
 Then, update the `routes` in the `books-routing.module.ts` to add the new book-list component:
 
-```typescript
+```js
 import { BookListComponent } from './book-list/book-list.component';
 
 const routes: Routes = [
@@ -424,7 +425,7 @@ yarn ng generate ngxs-schematic:state books
 
 This command creates several new files and edits `app.modules.ts` to import the `NgxsModule` with the new state:
 
-```typescript
+```js
 // app.module.ts
 
 import { BooksState } from './store/states/books.state';
@@ -445,19 +446,20 @@ First, create data types to map data returning from the backend (you can check s
 
 Modify the `books.ts` as shown below:
 
-```typescript
-import { ABP } from '@abp/ng.core';
-
+```js
 export namespace Books {
   export interface State {
     books: Response;
   }
 
-  export type Response = ABP.PagedResponse<Book>;
+  export interface Response {
+    items: Book[];
+    totalCount: number;
+  }
 
   export interface Book {
     name: string;
-    type: Type;
+    type: BookType;
     publishDate: string;
     price: number;
     lastModificationTime: string;
@@ -493,11 +495,11 @@ yarn ng generate service books/shared/books
 
 ![service-terminal-output](images/bookstore-service-terminal-output.png)
 
-Modify `book.service.ts` as shown below:
+Modify `books.service.ts` as shown below:
 
-```typescript
+```js
 import { Injectable } from '@angular/core';
-import { RestService, Rest } from '@abp/ng.core';
+import { RestService } from '@abp/ng.core';
 import { Books } from '../../store/models';
 import { Observable } from 'rxjs';
 
@@ -505,15 +507,13 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class BooksService {
-  constructor(private rest: RestService) {}
+  constructor(private restService: RestService) {}
 
   get(): Observable<Books.Response> {
-    const request: Rest.Request<null> = {
+    return this.restService.request<void, Books.Response>({
       method: 'GET',
-      url: '/api/app/book',
-    };
-
-    return this.rest.request<null, Books.Response>(request);
+      url: '/api/app/book'
+    });
   }
 }
 ```
@@ -522,7 +522,7 @@ Added the `get` method to get the list of books by performing an HTTP request to
 
 Replace `books.actions.ts` content as shown below:
 
-```typescript
+```js
 export class GetBooks {
   static readonly type = '[Books] Get';
 }
@@ -532,7 +532,7 @@ export class GetBooks {
 
 Open the `books.state.ts` and change the file as shown below:
 
-```typescript
+```js
 import { State, Action, StateContext, Selector } from '@ngxs/store';
 import { GetBooks } from '../actions/books.actions';
 import { Books } from '../models/books';
@@ -545,18 +545,18 @@ import { tap } from 'rxjs/operators';
 })
 export class BooksState {
   @Selector()
-  static getBooks({ books }: Books.State) {
-    return books.items || [];
+  static getBooks(state: Books.State) {
+    return state.books.items || [];
   }
 
   constructor(private booksService: BooksService) {}
 
   @Action(GetBooks)
-  get({ patchState }: StateContext<Books.State>) {
+  get(ctx: StateContext<Books.State>) {
     return this.booksService.get().pipe(
-      tap(books => {
-        patchState({
-          books,
+      tap(booksResponse => {
+        ctx.patchState({
+          books: booksResponse,
         });
       }),
     );
@@ -572,7 +572,7 @@ Added the `GetBooks` action that uses the `BookService` defined above to get the
 
 Modify the `book-list.component.ts` as shown below:
 
-```typescript
+```js
 import { Component, OnInit } from '@angular/core';
 import { Store, Select } from '@ngxs/store';
 import { BooksState } from '../../store/states';
@@ -597,10 +597,9 @@ export class BookListComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.store.dispatch(new GetBooks())
-    .subscribe(() => {
-      this.loading = false
-    };
+    this.store.dispatch(new GetBooks()).subscribe(() => {
+      this.loading = false;
+    });
   }
 }
 ```

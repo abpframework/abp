@@ -34,21 +34,40 @@ namespace Volo.Abp.Cli.ProjectModification
         {
             var fileList = _packageJsonFileFinder.Find(rootDirectory);
 
-            if (fileList.Any())
+            if (!fileList.Any())
             {
-                _npmGlobalPackagesChecker.Check();
+                return;
+            }
 
-                foreach (var file in fileList)
+            _npmGlobalPackagesChecker.Check();
+
+            foreach (var file in fileList)
+            {
+                UpdatePackagesInFile(file, out var packagesUpdated);
+
+                if (packagesUpdated)
                 {
-                    UpdatePackagesInFile(file);
+                    var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
 
-                    RunYarnAndGulp(file);
+                    RunYarn(fileDirectory);
+
+                    if (IsAngularProject(fileDirectory) == false)
+                    {
+                        Thread.Sleep(500);
+                        RunGulp(fileDirectory);
+                    }
                 }
             }
         }
 
-        protected virtual void UpdatePackagesInFile(string file)
+        private bool IsAngularProject(string fileDirectory)
         {
+            return File.Exists(Path.Combine(fileDirectory, "angular.json"));
+        }
+
+        protected virtual void UpdatePackagesInFile(string file, out bool packagesUpdated)
+        {
+            packagesUpdated = false;
             var fileContent = File.ReadAllText(file);
             var packageJson = JObject.Parse(fileContent);
             var abpPackages = GetAbpPackagesFromPackageJson(packageJson);
@@ -60,7 +79,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
             foreach (var abpPackage in abpPackages)
             {
-                UpdatePackage(file, abpPackage);
+                TryUpdatePackage(file, abpPackage, out var updated);
+
+                if (updated)
+                {
+                    packagesUpdated = true;
+                }
             }
 
             var modifiedFileContent = packageJson.ToString(Formatting.Indented);
@@ -68,7 +92,7 @@ namespace Volo.Abp.Cli.ProjectModification
             File.WriteAllText(file, modifiedFileContent);
         }
 
-        protected virtual void UpdatePackage(string file, JProperty package)
+        protected virtual void TryUpdatePackage(string file, JProperty package, out bool updated)
         {
             var version = GetLatestVersion(package);
 
@@ -76,7 +100,12 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (versionWithPrefix == (string)package.Value)
             {
+                updated = false;
                 return;
+            }
+            else
+            {
+                updated = true;
             }
 
             package.Value.Replace(versionWithPrefix);
@@ -92,7 +121,7 @@ namespace Volo.Abp.Cli.ProjectModification
             }
 
             var version = CmdHelper.RunCmdAndGetOutput($"npm show {package.Name} version");
-            
+
             _fileVersionStorage[package.Name] = version;
 
             return version;
@@ -104,14 +133,6 @@ namespace Volo.Abp.Cli.ProjectModification
             var properties = dependencies.Properties().ToList();
             var abpPackages = properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList();
             return abpPackages;
-        }
-
-        protected virtual void RunYarnAndGulp(string file)
-        {
-            var fileDirectory = Path.GetDirectoryName(file).EnsureEndsWith(Path.DirectorySeparatorChar);
-            RunYarn(fileDirectory);
-            Thread.Sleep(500);
-            RunGulp(fileDirectory);
         }
 
         protected virtual void RunGulp(string fileDirectory)

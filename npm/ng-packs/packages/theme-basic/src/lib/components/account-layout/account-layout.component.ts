@@ -8,6 +8,4 @@ import { eLayoutType } from '@abp/ng.core';
 export class AccountLayoutComponent {
   // required for dynamic component
   static type = eLayoutType.account;
-
-  isCollapsed: boolean = false;
 }

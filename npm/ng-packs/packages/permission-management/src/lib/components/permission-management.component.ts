@@ -64,6 +64,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
   selectAllTab: boolean = false;
 
+  modalBusy: boolean = false;
+
   trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
 
   get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
@@ -92,8 +94,15 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
+  isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean {
+    if (grantedProviders.length) {
+      return grantedProviders.findIndex(p => p.providerName === 'Role') > -1;
+    }
+    return false;
+  }
+
   onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
-    if (clickedPermission.isGranted && clickedPermission.grantedProviders.length > 0) return;
+    if (clickedPermission.isGranted && this.isGrantedByRole(clickedPermission.grantedProviders)) return;
 
     setTimeout(() => {
       this.permissions = this.permissions.map(per => {
@@ -148,7 +157,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
-        if (permission.isGranted && permission.grantedProviders.length > 0) return;
+        if (permission.isGranted && this.isGrantedByRole(permission.grantedProviders)) return;
 
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
@@ -174,7 +183,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     this.setTabCheckboxState();
   }
 
-  onSubmit() {
+  submit() {
+    this.modalBusy = true;
     const unchangedPermissions = getPermissions(
       this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
     );
@@ -195,9 +205,11 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
           }),
         )
         .subscribe(() => {
+          this.modalBusy = false;
           this.visible = false;
         });
     } else {
+      this.modalBusy = false;
       this.visible = false;
     }
   }

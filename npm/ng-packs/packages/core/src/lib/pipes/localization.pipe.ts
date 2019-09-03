@@ -2,22 +2,26 @@ import { Pipe, PipeTransform, OnDestroy } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ConfigState } from '../states';
 import { takeUntilDestroy } from '../utils';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Pipe({
   name: 'abpLocalization',
   pure: false, // required to update the value
 })
 export class LocalizationPipe implements PipeTransform, OnDestroy {
-  initialized: boolean = false;
+  initialValue: string = '';
 
   value: string;
 
+  destroy$ = new Subject();
+
   constructor(private store: Store) {}
 
-  transform(value: string, ...interpolateParams: string[]): string {
-    if (!this.initialized) {
-      this.initialized = true;
+  transform(value: string = '', ...interpolateParams: string[]): string {
+    if (this.initialValue !== value) {
+      this.initialValue = value;
+      this.destroy$.next();
 
       this.store
         .select(
@@ -27,6 +31,7 @@ export class LocalizationPipe implements PipeTransform, OnDestroy {
           ),
         )
         .pipe(
+          takeUntil(this.destroy$),
           takeUntilDestroy(this),
           distinctUntilChanged(),
         )

@@ -9,7 +9,7 @@ import { Store } from '@ngxs/store';
   animations: [slideFromBottom],
 })
 export class LayoutComponent {
-  isCollapsed: boolean = false;
+  isCollapsed: boolean = true;
 
   get appInfo(): Config.Application {
     return this.store.selectSnapshot(ConfigState.getApplicationInfo);

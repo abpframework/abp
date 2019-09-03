@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,10 +14,14 @@ namespace Volo.Abp.Validation
     {
         public const int MaxRecursiveParameterValidationDepth = 8;
 
+        protected IServiceProvider ServiceProvider { get; }
         protected AbpValidationOptions Options { get; }
 
-        public DataAnnotationObjectValidationContributor(IOptions<AbpValidationOptions> options)
+        public DataAnnotationObjectValidationContributor(
+            IOptions<AbpValidationOptions> options,
+            IServiceProvider serviceProvider)
         {
+            ServiceProvider = serviceProvider;
             Options = options.Value;
         }
 
@@ -90,7 +95,7 @@ namespace Volo.Abp.Validation
             if (validatingObject is IValidatableObject validatableObject)
             {
                 errors.AddRange(
-                    validatableObject.Validate(new ValidationContext(validatableObject))
+                    validatableObject.Validate(new ValidationContext(validatableObject, ServiceProvider, null))
                 );
             }
         }
@@ -103,7 +108,7 @@ namespace Volo.Abp.Validation
                 return;
             }
 
-            var validationContext = new ValidationContext(validatingObject)
+            var validationContext = new ValidationContext(validatingObject, ServiceProvider, null)
             {
                 DisplayName = property.DisplayName,
                 MemberName = property.Name

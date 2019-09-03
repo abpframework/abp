@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ABP } from '@abp/ng.core';
 import { TENANT_MANAGEMENT_ROUTES } from '@abp/ng.tenant-management';
+import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
   },
   {
     path: 'books',
+    component: ApplicationLayoutComponent,
     loadChildren: () => import('./books/books.module').then(m => m.BooksModule),
     data: {
       routes: {

@@ -26,6 +26,7 @@ export declare namespace ABP {
         parentName?: string;
         path: string;
         requiredPolicy?: string;
+        iconClass?: string;
     }
     interface FullRoute extends Route {
         url?: string;

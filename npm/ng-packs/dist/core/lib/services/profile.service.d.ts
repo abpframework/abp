@@ -6,5 +6,5 @@ export declare class ProfileService {
     constructor(rest: RestService);
     get(): Observable<Profile.Response>;
     update(body: Profile.Response): Observable<Profile.Response>;
-    changePassword(body: Profile.ChangePasswordRequest): Observable<null>;
+    changePassword(body: Profile.ChangePasswordRequest, skipHandleError?: boolean): Observable<null>;
 }

@@ -146,7 +146,7 @@ public interface IBookAppService : IApplicationService
 `BookDto`是一个简单的[DTO](Data-Transfer-Objects.md)类, 定义如下:
 
 ````csharp
-[AutoMapFrom(typeof(Book))] //Defines the mapping
+[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,7 +159,7 @@ public class BookDto
 }
 ````
 
-* `BookDto`定义了`[AutoMapFrom(typeof(Book))]`属性来从创建对象映射Book到BookDto.
+* `BookDto`定义了`[AbpAutoMapFrom(typeof(Book))]`属性来从创建对象映射Book到BookDto.
 
 然后你可以实现`GetAsync`方法. 如下所示:
 
@@ -247,7 +247,7 @@ public interface IAsyncCrudAppService<
 示例中使用的DTO类是`BookDto`和`CreateUpdateBookDto`:
 
 ````csharp
-[AutoMapFrom(typeof(Book))]
+[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -257,7 +257,7 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AutoMapTo(typeof(Book))]
+[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]

@@ -16,6 +16,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
 
         public bool? IsTiered { get; set; }
 
+        public string UiFramework { get; set; }
+
         public string Options { get; set; }
 
         public string Language { get; set; }

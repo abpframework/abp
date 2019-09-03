@@ -7,8 +7,12 @@
           "text": "From Startup Templates",
           "items": [
             {
-              "text": "ASP.NET Core MVC",
+              "text": "Application with MVC (Razor Pages) UI",
               "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            },
+            {
+              "text": "Application with Angular UI",
+              "path": "Getting-Started-Angular-Template.md"
             }
           ]
         },
@@ -34,8 +38,12 @@
           "text": "Application Development",
           "items": [
             {
-              "text": "With ASP.NET Core MVC",
+              "text": "With ASP.NET Core MVC UI",
               "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            },
+            {
+              "text": "With Angular UI",
+              "path": "Tutorials/Angular/Part-I.md"
             }
           ]
         }
@@ -237,11 +245,21 @@
       "items": [
         {
           "text": "Entity Framework Core Integration",
-          "path": "Entity-Framework-Core.md"
+          "path": "Entity-Framework-Core.md",
+          "items": [            
+            {
+              "text": "PostgreSQL Integration",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
         },
         {
           "text": "MongoDB Integration",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper Integration",
+          "path": "Dapper.md"
         }
       ]
     },
@@ -261,6 +279,20 @@
               "path": "Background-Jobs-RabbitMq.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Startup Templates",
+      "path": "Startup-Templates/Index.md",
+      "items": [
+        {
+          "text": "Application",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Module",
+          "path": "Startup-Templates/Module.md"
         }
       ]
     },

@@ -66,7 +66,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp add-module Volo.Blogging                      Adds the module to the current solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore    Adds the module to the given solution.");
             sb.AppendLine("  abp add-module Volo.Blogging -s Acme.BookStore --skip-db-migrations false    Adds the module to the given solution but doesn't create a database migration.");
-            sb.AppendLine(@"  abp add-module Volo.Blogging -s Acme.BookStore -sp src\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Adds the module to the given solution and specify migration startup project.");
+            sb.AppendLine(@"  abp add-module Volo.Blogging -s Acme.BookStore -sp ..\Acme.BookStore.Web\Acme.BookStore.Web.csproj   Adds the module to the given solution and specify migration startup project.");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 

@@ -3,10 +3,14 @@
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import * as tslib_1 from "tslib";
-import { State, Action, Selector } from '@ngxs/store';
-import { SessionSetLanguage } from '../actions/session.actions';
+import { Action, Selector, State } from '@ngxs/store';
+import { SetLanguage, SetTenant } from '../actions/session.actions';
+import { GetAppConfiguration } from '../actions/config.actions';
+import { LocalizationService } from '../services/localization.service';
+import { from, combineLatest } from 'rxjs';
 var SessionState = /** @class */ (function () {
-    function SessionState() {
+    function SessionState(localizationService) {
+        this.localizationService = localizationService;
     }
     /**
      * @param {?} __0
@@ -22,10 +26,40 @@ var SessionState = /** @class */ (function () {
     };
     /**
      * @param {?} __0
+     * @return {?}
+     */
+    SessionState.getTenant = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var tenant = _a.tenant;
+        return tenant;
+    };
+    /**
+     * @param {?} __0
      * @param {?} __1
      * @return {?}
      */
-    SessionState.prototype.sessionSetLanguage = /**
+    SessionState.prototype.setLanguage = /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    function (_a, _b) {
+        var patchState = _a.patchState, dispatch = _a.dispatch;
+        var payload = _b.payload;
+        patchState({
+            language: payload,
+        });
+        return combineLatest([dispatch(new GetAppConfiguration()), from(this.localizationService.registerLocale(payload))]);
+    };
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    SessionState.prototype.setTenantId = /**
      * @param {?} __0
      * @param {?} __1
      * @return {?}
@@ -34,29 +68,48 @@ var SessionState = /** @class */ (function () {
         var patchState = _a.patchState;
         var payload = _b.payload;
         patchState({
-            language: payload,
+            tenant: payload,
         });
     };
     tslib_1.__decorate([
-        Action(SessionSetLanguage),
+        Action(SetLanguage),
         tslib_1.__metadata("design:type", Function),
-        tslib_1.__metadata("design:paramtypes", [Object, SessionSetLanguage]),
+        tslib_1.__metadata("design:paramtypes", [Object, SetLanguage]),
         tslib_1.__metadata("design:returntype", void 0)
-    ], SessionState.prototype, "sessionSetLanguage", null);
+    ], SessionState.prototype, "setLanguage", null);
+    tslib_1.__decorate([
+        Action(SetTenant),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Object, SetTenant]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], SessionState.prototype, "setTenantId", null);
     tslib_1.__decorate([
         Selector(),
         tslib_1.__metadata("design:type", Function),
         tslib_1.__metadata("design:paramtypes", [Object]),
         tslib_1.__metadata("design:returntype", String)
     ], SessionState, "getLanguage", null);
+    tslib_1.__decorate([
+        Selector(),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Object]),
+        tslib_1.__metadata("design:returntype", Object)
+    ], SessionState, "getTenant", null);
     SessionState = tslib_1.__decorate([
         State({
             name: 'SessionState',
             defaults: (/** @type {?} */ ({})),
         }),
-        tslib_1.__metadata("design:paramtypes", [])
+        tslib_1.__metadata("design:paramtypes", [LocalizationService])
     ], SessionState);
     return SessionState;
 }());
 export { SessionState };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2Vzc2lvbi5zdGF0ZS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuY29yZS8iLCJzb3VyY2VzIjpbImxpYi9zdGF0ZXMvc2Vzc2lvbi5zdGF0ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxLQUFLLEVBQUUsTUFBTSxFQUFnQixRQUFRLEVBQUUsTUFBTSxhQUFhLENBQUM7QUFDcEUsT0FBTyxFQUFFLGtCQUFrQixFQUFFLE1BQU0sNEJBQTRCLENBQUM7O0lBYTlEO0lBQWUsQ0FBQzs7Ozs7SUFKVCx3QkFBVzs7OztJQUFsQixVQUFtQixFQUEyQjtZQUF6QixzQkFBUTtRQUMzQixPQUFPLFFBQVEsQ0FBQztJQUNsQixDQUFDOzs7Ozs7SUFLRCx5Q0FBa0I7Ozs7O0lBQWxCLFVBQW1CLEVBQTJDLEVBQUUsRUFBK0I7WUFBMUUsMEJBQVU7WUFBbUMsb0JBQU87UUFDdkUsVUFBVSxDQUFDO1lBQ1QsUUFBUSxFQUFFLE9BQU87U0FDbEIsQ0FBQyxDQUFDO0lBQ0wsQ0FBQztJQUpEO1FBREMsTUFBTSxDQUFDLGtCQUFrQixDQUFDOzt5REFDa0Qsa0JBQWtCOzswREFJOUY7SUFYRDtRQURDLFFBQVEsRUFBRTs7Ozt5Q0FHVjtJQUpVLFlBQVk7UUFKeEIsS0FBSyxDQUFnQjtZQUNwQixJQUFJLEVBQUUsY0FBYztZQUNwQixRQUFRLEVBQUUsbUJBQUEsRUFBRSxFQUFpQjtTQUM5QixDQUFDOztPQUNXLFlBQVksQ0FjeEI7SUFBRCxtQkFBQztDQUFBLElBQUE7U0FkWSxZQUFZIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgU3RhdGUsIEFjdGlvbiwgU3RhdGVDb250ZXh0LCBTZWxlY3RvciB9IGZyb20gJ0BuZ3hzL3N0b3JlJztcbmltcG9ydCB7IFNlc3Npb25TZXRMYW5ndWFnZSB9IGZyb20gJy4uL2FjdGlvbnMvc2Vzc2lvbi5hY3Rpb25zJztcbmltcG9ydCB7IFNlc3Npb24gfSBmcm9tICcuLi9tb2RlbHMvc2Vzc2lvbic7XG5cbkBTdGF0ZTxTZXNzaW9uLlN0YXRlPih7XG4gIG5hbWU6ICdTZXNzaW9uU3RhdGUnLFxuICBkZWZhdWx0czoge30gYXMgU2Vzc2lvbi5TdGF0ZSxcbn0pXG5leHBvcnQgY2xhc3MgU2Vzc2lvblN0YXRlIHtcbiAgQFNlbGVjdG9yKClcbiAgc3RhdGljIGdldExhbmd1YWdlKHsgbGFuZ3VhZ2UgfTogU2Vzc2lvbi5TdGF0ZSk6IHN0cmluZyB7XG4gICAgcmV0dXJuIGxhbmd1YWdlO1xuICB9XG5cbiAgY29uc3RydWN0b3IoKSB7fVxuXG4gIEBBY3Rpb24oU2Vzc2lvblNldExhbmd1YWdlKVxuICBzZXNzaW9uU2V0TGFuZ3VhZ2UoeyBwYXRjaFN0YXRlIH06IFN0YXRlQ29udGV4dDxTZXNzaW9uLlN0YXRlPiwgeyBwYXlsb2FkIH06IFNlc3Npb25TZXRMYW5ndWFnZSkge1xuICAgIHBhdGNoU3RhdGUoe1xuICAgICAgbGFuZ3VhZ2U6IHBheWxvYWQsXG4gICAgfSk7XG4gIH1cbn1cbiJdfQ==
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionState.prototype.localizationService;
+}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoic2Vzc2lvbi5zdGF0ZS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuY29yZS8iLCJzb3VyY2VzIjpbImxpYi9zdGF0ZXMvc2Vzc2lvbi5zdGF0ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxNQUFNLEVBQUUsUUFBUSxFQUFFLEtBQUssRUFBZ0IsTUFBTSxhQUFhLENBQUM7QUFDcEUsT0FBTyxFQUFFLFdBQVcsRUFBRSxTQUFTLEVBQUUsTUFBTSw0QkFBNEIsQ0FBQztBQUVwRSxPQUFPLEVBQUUsbUJBQW1CLEVBQUUsTUFBTSwyQkFBMkIsQ0FBQztBQUNoRSxPQUFPLEVBQUUsbUJBQW1CLEVBQUUsTUFBTSxrQ0FBa0MsQ0FBQztBQUN2RSxPQUFPLEVBQUUsSUFBSSxFQUFFLGFBQWEsRUFBRSxNQUFNLE1BQU0sQ0FBQzs7SUFpQnpDLHNCQUFvQixtQkFBd0M7UUFBeEMsd0JBQW1CLEdBQW5CLG1CQUFtQixDQUFxQjtJQUFHLENBQUM7Ozs7O0lBVHpELHdCQUFXOzs7O0lBQWxCLFVBQW1CLEVBQTJCO1lBQXpCLHNCQUFRO1FBQzNCLE9BQU8sUUFBUSxDQUFDO0lBQ2xCLENBQUM7Ozs7O0lBR00sc0JBQVM7Ozs7SUFBaEIsVUFBaUIsRUFBeUI7WUFBdkIsa0JBQU07UUFDdkIsT0FBTyxNQUFNLENBQUM7SUFDaEIsQ0FBQzs7Ozs7O0lBS0Qsa0NBQVc7Ozs7O0lBQVgsVUFBWSxFQUFxRCxFQUFFLEVBQXdCO1lBQTdFLDBCQUFVLEVBQUUsc0JBQVE7WUFBbUMsb0JBQU87UUFDMUUsVUFBVSxDQUFDO1lBQ1QsUUFBUSxFQUFFLE9BQU87U0FDbEIsQ0FBQyxDQUFDO1FBRUgsT0FBTyxhQUFhLENBQUMsQ0FBQyxRQUFRLENBQUMsSUFBSSxtQkFBbUIsRUFBRSxDQUFDLEVBQUUsSUFBSSxDQUFDLElBQUksQ0FBQyxtQkFBbUIsQ0FBQyxjQUFjLENBQUMsT0FBTyxDQUFDLENBQUMsQ0FBQyxDQUFDLENBQUM7SUFDdEgsQ0FBQzs7Ozs7O0lBR0Qsa0NBQVc7Ozs7O0lBQVgsVUFBWSxFQUEyQyxFQUFFLEVBQXNCO1lBQWpFLDBCQUFVO1lBQW1DLG9CQUFPO1FBQ2hFLFVBQVUsQ0FBQztZQUNULE1BQU0sRUFBRSxPQUFPO1NBQ2hCLENBQUMsQ0FBQztJQUNMLENBQUM7SUFiRDtRQURDLE1BQU0sQ0FBQyxXQUFXLENBQUM7O3lEQUM0RCxXQUFXOzttREFNMUY7SUFHRDtRQURDLE1BQU0sQ0FBQyxTQUFTLENBQUM7O3lEQUNvRCxTQUFTOzttREFJOUU7SUF6QkQ7UUFEQyxRQUFRLEVBQUU7Ozs7eUNBR1Y7SUFHRDtRQURDLFFBQVEsRUFBRTs7Ozt1Q0FHVjtJQVRVLFlBQVk7UUFKeEIsS0FBSyxDQUFnQjtZQUNwQixJQUFJLEVBQUUsY0FBYztZQUNwQixRQUFRLEVBQUUsbUJBQUEsRUFBRSxFQUFpQjtTQUM5QixDQUFDO2lEQVl5QyxtQkFBbUI7T0FYakQsWUFBWSxDQTRCeEI7SUFBRCxtQkFBQztDQUFBLElBQUE7U0E1QlksWUFBWTs7Ozs7O0lBV1gsMkNBQWdEIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgQWN0aW9uLCBTZWxlY3RvciwgU3RhdGUsIFN0YXRlQ29udGV4dCB9IGZyb20gJ0BuZ3hzL3N0b3JlJztcbmltcG9ydCB7IFNldExhbmd1YWdlLCBTZXRUZW5hbnQgfSBmcm9tICcuLi9hY3Rpb25zL3Nlc3Npb24uYWN0aW9ucyc7XG5pbXBvcnQgeyBBQlAsIFNlc3Npb24gfSBmcm9tICcuLi9tb2RlbHMnO1xuaW1wb3J0IHsgR2V0QXBwQ29uZmlndXJhdGlvbiB9IGZyb20gJy4uL2FjdGlvbnMvY29uZmlnLmFjdGlvbnMnO1xuaW1wb3J0IHsgTG9jYWxpemF0aW9uU2VydmljZSB9IGZyb20gJy4uL3NlcnZpY2VzL2xvY2FsaXphdGlvbi5zZXJ2aWNlJztcbmltcG9ydCB7IGZyb20sIGNvbWJpbmVMYXRlc3QgfSBmcm9tICdyeGpzJztcblxuQFN0YXRlPFNlc3Npb24uU3RhdGU+KHtcbiAgbmFtZTogJ1Nlc3Npb25TdGF0ZScsXG4gIGRlZmF1bHRzOiB7fSBhcyBTZXNzaW9uLlN0YXRlLFxufSlcbmV4cG9ydCBjbGFzcyBTZXNzaW9uU3RhdGUge1xuICBAU2VsZWN0b3IoKVxuICBzdGF0aWMgZ2V0TGFuZ3VhZ2UoeyBsYW5ndWFnZSB9OiBTZXNzaW9uLlN0YXRlKTogc3RyaW5nIHtcbiAgICByZXR1cm4gbGFuZ3VhZ2U7XG4gIH1cblxuICBAU2VsZWN0b3IoKVxuICBzdGF0aWMgZ2V0VGVuYW50KHsgdGVuYW50IH06IFNlc3Npb24uU3RhdGUpOiBBQlAuQmFzaWNJdGVtIHtcbiAgICByZXR1cm4gdGVuYW50O1xuICB9XG5cbiAgY29uc3RydWN0b3IocHJpdmF0ZSBsb2NhbGl6YXRpb25TZXJ2aWNlOiBMb2NhbGl6YXRpb25TZXJ2aWNlKSB7fVxuXG4gIEBBY3Rpb24oU2V0TGFuZ3VhZ2UpXG4gIHNldExhbmd1YWdlKHsgcGF0Y2hTdGF0ZSwgZGlzcGF0Y2ggfTogU3RhdGVDb250ZXh0PFNlc3Npb24uU3RhdGU+LCB7IHBheWxvYWQgfTogU2V0TGFuZ3VhZ2UpIHtcbiAgICBwYXRjaFN0YXRlKHtcbiAgICAgIGxhbmd1YWdlOiBwYXlsb2FkLFxuICAgIH0pO1xuXG4gICAgcmV0dXJuIGNvbWJpbmVMYXRlc3QoW2Rpc3BhdGNoKG5ldyBHZXRBcHBDb25maWd1cmF0aW9uKCkpLCBmcm9tKHRoaXMubG9jYWxpemF0aW9uU2VydmljZS5yZWdpc3RlckxvY2FsZShwYXlsb2FkKSldKTtcbiAgfVxuXG4gIEBBY3Rpb24oU2V0VGVuYW50KVxuICBzZXRUZW5hbnRJZCh7IHBhdGNoU3RhdGUgfTogU3RhdGVDb250ZXh0PFNlc3Npb24uU3RhdGU+LCB7IHBheWxvYWQgfTogU2V0VGVuYW50KSB7XG4gICAgcGF0Y2hTdGF0ZSh7XG4gICAgICB0ZW5hbnQ6IHBheWxvYWQsXG4gICAgfSk7XG4gIH1cbn1cbiJdfQ==

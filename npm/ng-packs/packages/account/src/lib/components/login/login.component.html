@@ -28,9 +28,9 @@
           </label>
         </div>
         <div class="mt-2">
-          <button [disabled]="inProgress" type="submit" name="Action" value="Login" class="btn btn-primary ml-1">
+          <abp-button [loading]="inProgress" type="submit">
             {{ 'AbpAccount::Login' | abpLocalization }}
-          </button>
+          </abp-button>
         </div>
       </form>
       <div style="padding-top: 20px">

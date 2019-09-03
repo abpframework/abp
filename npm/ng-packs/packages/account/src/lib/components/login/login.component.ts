@@ -40,7 +40,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.form.invalid) return;
-    this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
+    // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
 
     this.inProgress = true;
     from(

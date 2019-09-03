@@ -50,6 +50,8 @@ export class UsersComponent {
 
   loading: boolean = false;
 
+  modalBusy: boolean = false;
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   get roleGroups(): FormGroup[] {
@@ -114,6 +116,7 @@ export class UsersComponent {
 
   save() {
     if (!this.form.valid) return;
+    this.modalBusy = true;
 
     const { roleNames } = this.form.value;
     const mappedRoleNames = snq(
@@ -135,6 +138,7 @@ export class UsersComponent {
             }),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }

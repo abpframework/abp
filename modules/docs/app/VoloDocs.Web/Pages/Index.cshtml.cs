@@ -8,19 +8,19 @@ namespace VoloDocs.Web.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly DocsUrlOptions _urlOptions;
+        private readonly DocsUiOptions _urlUiOptions;
 
-        public IndexModel(IOptions<DocsUrlOptions> urlOptions)
+        public IndexModel(IOptions<DocsUiOptions> urlOptions)
         {
-            _urlOptions = urlOptions.Value;
+            _urlUiOptions = urlOptions.Value;
         }
 
         public IActionResult OnGet()
         {
             //TODO: Create HomeController & Index instead of Page. Otherwise, we have an empty Index.cshtml file.
-            if (!_urlOptions.RoutePrefix.IsNullOrWhiteSpace())
+            if (!_urlUiOptions.RoutePrefix.IsNullOrWhiteSpace())
             {
-                return Redirect("." + _urlOptions.RoutePrefix);
+                return Redirect("." + _urlUiOptions.RoutePrefix);
             }
 
             return Page();

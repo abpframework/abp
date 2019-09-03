@@ -1,5 +1,5 @@
-import { LayoutApplicationComponent } from './components/layout-application/layout-application.component';
-import { LayoutEmptyComponent } from './components/layout-empty/layout-empty.component';
-export declare const LAYOUTS: (typeof LayoutApplicationComponent | typeof LayoutEmptyComponent)[];
+import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
+import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
+export declare const LAYOUTS: (typeof ApplicationLayoutComponent | typeof AccountLayoutComponent)[];
 export declare class ThemeBasicModule {
 }

@@ -76,7 +76,7 @@
 
                 <div class="docs-tree-list">
 
-                    @if (Model.ProjectSelectItems.Count > 1)
+                    @if (Model.ShowProjectsCombobox && Model.ProjectSelectItems.Count > 1)
                     {
                         <div class="docs-version">
                             <div class="version-select">
@@ -139,7 +139,7 @@
                                     <label class="input-group-text"><i class="fa fa-filter"></i></label>
                                 </div>
 
-                                <input class="form-control" type="search" placeholder="Filter topics" aria-label="Filter">
+                                <input class="form-control" type="search" placeholder="@L["FilterTopics"].Value" aria-label="Filter">
                             </div>
                         </div>
                     </div>

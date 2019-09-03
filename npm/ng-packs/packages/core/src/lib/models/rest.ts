@@ -2,7 +2,7 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 
 export namespace Rest {
   export interface Config {
-    throwErr?: boolean;
+    skipHandleError?: boolean;
     observe?: Observe;
   }
 

@@ -67,13 +67,13 @@
   </div>
 </div>
 
-<abp-modal size="md" [(visible)]="isModalVisible">
+<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <form [formGroup]="form">
+    <form [formGroup]="form" (ngSubmit)="save()">
       <div class="form-group">
         <label for="role-name">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label
         ><span> * </span>
@@ -100,13 +100,7 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button
-      [requestType]="['POST', 'PUT']"
-      requestURLContainSearchValue="roles"
-      iconClass="fa fa-check"
-      (click)="save()"
-      >{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
-    >
+    <abp-button iconClass="fa fa-check" (click)="save()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
   </ng-template>
 </abp-modal>
 

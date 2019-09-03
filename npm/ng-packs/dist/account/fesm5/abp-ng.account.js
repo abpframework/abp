@@ -1,18 +1,67 @@
-import { ConfigGetAppConfiguration, ConfigState, DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
-import { Component, Optional, Inject, NgModule, ViewChild, InjectionToken } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { InjectionToken, NgModule, Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
+import { __assign } from 'tslib';
+import { ConfigState, GetAppConfiguration, RestService, DynamicLayoutComponent, SessionState, SetTenant, CoreModule } from '@abp/ng.core';
+import { ToasterService, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { TableModule } from 'primeng/table';
+import { RouterModule } from '@angular/router';
 import { Validators, FormBuilder } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { from, throwError } from 'rxjs';
-import { ToasterService, ThemeSharedModule } from '@abp/ng.theme.shared';
-import { switchMap, tap, catchError, finalize } from 'rxjs/operators';
+import { switchMap, tap, catchError, finalize, take } from 'rxjs/operators';
 import snq from 'snq';
-import { validatePassword, NgxValidateCoreModule } from '@ngx-validate/core';
-import { NgbModal, NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { __assign } from 'tslib';
-import { TableModule } from 'primeng/table';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} options
+ * @return {?}
+ */
+function optionsFactory(options) {
+    return __assign({ redirectUrl: '/' }, options);
+}
+/** @type {?} */
+var ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var RootAccountModule = /** @class */ (function () {
+    function RootAccountModule() {
+    }
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    RootAccountModule.forRoot = /**
+     * @param {?=} options
+     * @return {?}
+     */
+    function (options) {
+        if (options === void 0) { options = (/** @type {?} */ ({})); }
+        return {
+            ngModule: RootAccountModule,
+            providers: [
+                { provide: ACCOUNT_OPTIONS, useValue: options },
+                {
+                    provide: 'ACCOUNT_OPTIONS',
+                    useFactory: optionsFactory,
+                    deps: [ACCOUNT_OPTIONS],
+                },
+            ],
+        };
+    };
+    RootAccountModule.decorators = [
+        { type: NgModule, args: [{},] }
+    ];
+    return RootAccountModule;
+}());
 
 /**
  * @fileoverview added by tsickle
@@ -44,13 +93,13 @@ var LoginComponent = /** @class */ (function () {
         var _this = this;
         if (this.form.invalid)
             return;
-        this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
+        // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
         this.inProgress = true;
         from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value))
             .pipe(switchMap((/**
          * @return {?}
          */
-        function () { return _this.store.dispatch(new ConfigGetAppConfiguration()); })), tap((/**
+        function () { return _this.store.dispatch(new GetAppConfiguration()); })), tap((/**
          * @return {?}
          */
         function () {
@@ -68,7 +117,11 @@ var LoginComponent = /** @class */ (function () {
             _this.toasterService.error(snq((/**
              * @return {?}
              */
-            function () { return err.error.error_description; }), 'An error occured.'), 'Error');
+            function () { return err.error.error_description; })) ||
+                snq((/**
+                 * @return {?}
+                 */
+                function () { return err.error.error.message; }), 'AbpAccount::DefaultErrorMessage'), 'Error', { life: 7000 });
             return throwError(err);
         })), finalize((/**
          * @return {?}
@@ -79,7 +132,7 @@ var LoginComponent = /** @class */ (function () {
     LoginComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-login',
-                    template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <button type=\"button\" name=\"Action\" value=\"Cancel\" class=\"btn btn-secondary\">\n            {{ 'AbpAccount::Cancel' | abpLocalization }}\n          </button>\n          <button [disabled]=\"inProgress\" type=\"submit\" name=\"Action\" value=\"Login\" class=\"btn btn-primary ml-1\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                    template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Login' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"login-input-user-name-or-email-address\">{{\n            'AbpAccount::UserNameOrEmailAddress' | abpLocalization\n          }}</label>\n          <input\n            class=\"form-control\"\n            type=\"text\"\n            id=\"login-input-user-name-or-email-address\"\n            formControlName=\"username\"\n            autofocus\n          />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"login-input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label>\n          <input class=\"form-control\" type=\"password\" id=\"login-input-password\" formControlName=\"password\" />\n        </div>\n        <div class=\"form-check\" validationTarget validationStyle>\n          <label class=\"form-check-label\" for=\"login-input-remember-me\">\n            <input class=\"form-check-input\" type=\"checkbox\" id=\"login-input-remember-me\" formControlName=\"remember\" />\n            {{ 'AbpAccount::RememberMe' | abpLocalization }}\n          </label>\n        </div>\n        <div class=\"mt-2\">\n          <abp-button [loading]=\"inProgress\" type=\"submit\">\n            {{ 'AbpAccount::Login' | abpLocalization }}\n          </abp-button>\n        </div>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/register\">{{ 'AbpAccount::Register' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
                 }] }
     ];
     /** @nocollapse */
@@ -92,6 +145,98 @@ var LoginComponent = /** @class */ (function () {
     ]; };
     return LoginComponent;
 }());
+if (false) {
+    /** @type {?} */
+    LoginComponent.prototype.form;
+    /** @type {?} */
+    LoginComponent.prototype.inProgress;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.fb;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.oauthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.toasterService;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoginComponent.prototype.options;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var AccountService = /** @class */ (function () {
+    function AccountService(rest) {
+        this.rest = rest;
+    }
+    /**
+     * @param {?} tenantName
+     * @return {?}
+     */
+    AccountService.prototype.findTenant = /**
+     * @param {?} tenantName
+     * @return {?}
+     */
+    function (tenantName) {
+        /** @type {?} */
+        var request = {
+            method: 'GET',
+            url: "/api/abp/multi-tenancy/find-tenant/" + tenantName,
+        };
+        return this.rest.request(request);
+    };
+    /**
+     * @param {?} body
+     * @return {?}
+     */
+    AccountService.prototype.register = /**
+     * @param {?} body
+     * @return {?}
+     */
+    function (body) {
+        /** @type {?} */
+        var request = {
+            method: 'POST',
+            url: "/api/account/register",
+            body: body,
+        };
+        return this.rest.request(request, { skipHandleError: true });
+    };
+    AccountService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    AccountService.ctorParameters = function () { return [
+        { type: RestService }
+    ]; };
+    /** @nocollapse */ AccountService.ngInjectableDef = ɵɵdefineInjectable({ factory: function AccountService_Factory() { return new AccountService(ɵɵinject(RestService)); }, token: AccountService, providedIn: "root" });
+    return AccountService;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    AccountService.prototype.rest;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -99,16 +244,17 @@ var LoginComponent = /** @class */ (function () {
  */
 var maxLength$1 = Validators.maxLength, minLength$1 = Validators.minLength, required$1 = Validators.required, email = Validators.email;
 var RegisterComponent = /** @class */ (function () {
-    function RegisterComponent(fb, oauthService, router) {
+    function RegisterComponent(fb, accountService, oauthService, store, toasterService) {
         this.fb = fb;
+        this.accountService = accountService;
         this.oauthService = oauthService;
-        this.router = router;
+        this.store = store;
+        this.toasterService = toasterService;
+        this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
+        this.oauthService.loadDiscoveryDocument();
         this.form = this.fb.group({
             username: ['', [required$1, maxLength$1(255)]],
-            password: [
-                '',
-                [required$1, maxLength$1(32), minLength$1(6), validatePassword(['small', 'capital', 'number', 'special'])],
-            ],
+            password: ['', [required$1, maxLength$1(32)]],
             email: ['', [required$1, email]],
         });
     }
@@ -119,23 +265,95 @@ var RegisterComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        var _this = this;
         if (this.form.invalid)
             return;
+        this.inProgress = true;
+        /** @type {?} */
+        var newUser = (/** @type {?} */ ({
+            userName: this.form.get('username').value,
+            password: this.form.get('password').value,
+            emailAddress: this.form.get('email').value,
+            appName: 'Angular',
+        }));
+        this.accountService
+            .register(newUser)
+            .pipe(switchMap((/**
+         * @return {?}
+         */
+        function () { return from(_this.oauthService.fetchTokenUsingPasswordFlow(newUser.userName, newUser.password)); })), switchMap((/**
+         * @return {?}
+         */
+        function () { return _this.store.dispatch(new GetAppConfiguration()); })), tap((/**
+         * @return {?}
+         */
+        function () { return _this.store.dispatch(new Navigate(['/'])); })), take(1), catchError((/**
+         * @param {?} err
+         * @return {?}
+         */
+        function (err) {
+            _this.toasterService.error(snq((/**
+             * @return {?}
+             */
+            function () { return err.error.error_description; })) ||
+                snq((/**
+                 * @return {?}
+                 */
+                function () { return err.error.error.message; }), 'AbpAccount::DefaultErrorMessage'), 'Error', { life: 7000 });
+            return throwError(err);
+        })), finalize((/**
+         * @return {?}
+         */
+        function () { return (_this.inProgress = false); })))
+            .subscribe();
     };
     RegisterComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-register',
-                    template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>Register</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"input-user-name\">User name</label><span> * </span\n          ><input autofocus type=\"text\" id=\"input-user-name\" class=\"form-control\" formControlName=\"username\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-email-address\">Email address</label><span> * </span\n          ><input type=\"email\" id=\"input-email-address\" class=\"form-control\" formControlName=\"email\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-password\">Password</label><span> * </span\n          ><input type=\"password\" id=\"input-password\" class=\"form-control\" formControlName=\"password\" />\n        </div>\n        <button type=\"submit\" class=\"btn btn-primary\">Register</button>\n      </form>\n    </div>\n  </div>\n</div>\n"
+                    template: "<div class=\"row\">\n  <div class=\"col col-md-4 offset-md-4\">\n    <abp-tenant-box></abp-tenant-box>\n\n    <div class=\"abp-account-container\">\n      <h2>{{ 'AbpAccount::Register' | abpLocalization }}</h2>\n      <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" novalidate>\n        <div class=\"form-group\">\n          <label for=\"input-user-name\">{{ 'AbpAccount::UserName' | abpLocalization }}</label\n          ><span> * </span\n          ><input autofocus type=\"text\" id=\"input-user-name\" class=\"form-control\" formControlName=\"username\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-email-address\">{{ 'AbpAccount::EmailAddress' | abpLocalization }}</label\n          ><span> * </span><input type=\"email\" id=\"input-email-address\" class=\"form-control\" formControlName=\"email\" />\n        </div>\n        <div class=\"form-group\">\n          <label for=\"input-password\">{{ 'AbpAccount::Password' | abpLocalization }}</label\n          ><span> * </span><input type=\"password\" id=\"input-password\" class=\"form-control\" formControlName=\"password\" />\n        </div>\n        <abp-button [loading]=\"inProgress\" type=\"submit\">\n          {{ 'AbpAccount::Register' | abpLocalization }}\n        </abp-button>\n      </form>\n      <div style=\"padding-top: 20px\">\n        <a routerLink=\"/account/login\">{{ 'AbpAccount::Login' | abpLocalization }}</a>\n      </div>\n    </div>\n  </div>\n</div>\n"
                 }] }
     ];
     /** @nocollapse */
     RegisterComponent.ctorParameters = function () { return [
         { type: FormBuilder },
+        { type: AccountService },
         { type: OAuthService },
-        { type: Router }
+        { type: Store },
+        { type: ToasterService }
     ]; };
     return RegisterComponent;
 }());
+if (false) {
+    /** @type {?} */
+    RegisterComponent.prototype.form;
+    /** @type {?} */
+    RegisterComponent.prototype.inProgress;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.fb;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.accountService;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.oauthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    RegisterComponent.prototype.toasterService;
+}
 
 /**
  * @fileoverview added by tsickle
@@ -167,30 +385,21 @@ var AccountRoutingModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var TenantBoxComponent = /** @class */ (function () {
-    function TenantBoxComponent(modalService, fb) {
-        this.modalService = modalService;
-        this.fb = fb;
+    function TenantBoxComponent(store, toasterService, accountService) {
+        this.store = store;
+        this.toasterService = toasterService;
+        this.accountService = accountService;
+        this.tenant = (/** @type {?} */ ({}));
     }
     /**
      * @return {?}
      */
-    TenantBoxComponent.prototype.createForm = /**
+    TenantBoxComponent.prototype.ngOnInit = /**
      * @return {?}
      */
     function () {
-        this.form = this.fb.group({
-            name: [this.selected.name],
-        });
-    };
-    /**
-     * @return {?}
-     */
-    TenantBoxComponent.prototype.openModal = /**
-     * @return {?}
-     */
-    function () {
-        this.createForm();
-        this.modalService.open(this.modalContent);
+        this.tenant = this.store.selectSnapshot(SessionState.getTenant) || ((/** @type {?} */ ({})));
+        this.tenantName = this.tenant.name || '';
     };
     /**
      * @return {?}
@@ -199,8 +408,7 @@ var TenantBoxComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.selected = (/** @type {?} */ ({}));
-        this.openModal();
+        this.isModalVisible = true;
     };
     /**
      * @return {?}
@@ -209,39 +417,87 @@ var TenantBoxComponent = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        this.selected = this.form.value;
-        this.modalService.dismissAll();
+        var _this = this;
+        if (this.tenant.name) {
+            this.accountService
+                .findTenant(this.tenant.name)
+                .pipe(take(1), catchError((/**
+             * @param {?} err
+             * @return {?}
+             */
+            function (err) {
+                _this.toasterService.error(snq((/**
+                 * @return {?}
+                 */
+                function () { return err.error.error_description; }), 'AbpUi::DefaultErrorMessage'), 'AbpUi::Error');
+                return throwError(err);
+            })))
+                .subscribe((/**
+             * @param {?} __0
+             * @return {?}
+             */
+            function (_a) {
+                var success = _a.success, tenantId = _a.tenantId;
+                if (success) {
+                    _this.tenant = {
+                        id: tenantId,
+                        name: _this.tenant.name,
+                    };
+                    _this.tenantName = _this.tenant.name;
+                    _this.isModalVisible = false;
+                }
+                else {
+                    _this.toasterService.error("AbpUiMultiTenancy::GivenTenantIsNotAvailable", 'AbpUi::Error', {
+                        messageLocalizationParams: [_this.tenant.name],
+                    });
+                    _this.tenant = (/** @type {?} */ ({}));
+                }
+                _this.store.dispatch(new SetTenant(success ? _this.tenant : null));
+            }));
+        }
+        else {
+            this.store.dispatch(new SetTenant(null));
+            this.tenantName = null;
+            this.isModalVisible = false;
+        }
     };
     TenantBoxComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-tenant-box',
-                    template: "<div\n  class=\"tenant-switch-box\"\n  style=\"background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;\"\n>\n  <span style=\"color: #666;\">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>\n  <strong>\n    <i>{{ selected?.name ? selected.name : ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>\n  </strong>\n  (<a id=\"abp-tenant-switch-link\" style=\"color: #333; cursor: pointer\" (click)=\"onSwitch()\">{{\n    'AbpUiMultiTenancy::Switch' | abpLocalization\n  }}</a\n  >)\n</div>\n\n<ng-template #modalContent let-modal>\n  <div class=\"modal-header\">\n    <h5 class=\"modal-title\" id=\"modal-basic-title\">\n      SwitchTenant\n    </h5>\n    <button type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"modal.dismiss()\">\n      <span aria-hidden=\"true\">&times;</span>\n    </button>\n  </div>\n  <form [formGroup]=\"form\" (ngSubmit)=\"save()\">\n    <div class=\"modal-body\">\n      <div class=\"mt-2\">\n        <div class=\"form-group\">\n          <label for=\"name\">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>\n          <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n        </div>\n        <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>\n      </div>\n    </div>\n\n    <div class=\"modal-footer\">\n      <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\" (click)=\"modal.close()\">\n        {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>\n      </button>\n    </div>\n  </form>\n</ng-template>\n"
+                    template: "<div\n  class=\"tenant-switch-box\"\n  style=\"background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;\"\n>\n  <span style=\"color: #666;\">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>\n  <strong>\n    <i>{{ tenantName || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>\n  </strong>\n  (<a id=\"abp-tenant-switch-link\" style=\"color: #333; cursor: pointer\" (click)=\"onSwitch()\">{{\n    'AbpUiMultiTenancy::Switch' | abpLocalization\n  }}</a\n  >)\n</div>\n\n<abp-modal [(visible)]=\"isModalVisible\" size=\"md\">\n  <ng-template #abpHeader>\n    <h5>Switch Tenant</h5>\n  </ng-template>\n  <ng-template #abpBody>\n    <form (ngSubmit)=\"save()\">\n      <div class=\"mt-2\">\n        <div class=\"form-group\">\n          <label for=\"name\">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>\n          <input [(ngModel)]=\"tenant.name\" type=\"text\" id=\"name\" name=\"tenant\" class=\"form-control\" autofocus />\n        </div>\n        <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}\n    </button>\n    <button type=\"button\" class=\"btn btn-primary\" (click)=\"save()\">\n      <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>\n    </button>\n  </ng-template>\n</abp-modal>\n"
                 }] }
     ];
     /** @nocollapse */
     TenantBoxComponent.ctorParameters = function () { return [
-        { type: NgbModal },
-        { type: FormBuilder }
+        { type: Store },
+        { type: ToasterService },
+        { type: AccountService }
     ]; };
-    TenantBoxComponent.propDecorators = {
-        modalContent: [{ type: ViewChild, args: ['modalContent', { static: false },] }]
-    };
     return TenantBoxComponent;
 }());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} options
- * @return {?}
- */
-function optionsFactory(options) {
-    return __assign({ redirectUrl: '/' }, options);
+if (false) {
+    /** @type {?} */
+    TenantBoxComponent.prototype.tenant;
+    /** @type {?} */
+    TenantBoxComponent.prototype.tenantName;
+    /** @type {?} */
+    TenantBoxComponent.prototype.isModalVisible;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantBoxComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantBoxComponent.prototype.toasterService;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantBoxComponent.prototype.accountService;
 }
-/** @type {?} */
-var ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
 
 /**
  * @fileoverview added by tsickle
@@ -250,28 +506,6 @@ var ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
 var AccountModule = /** @class */ (function () {
     function AccountModule() {
     }
-    /**
-     * @param {?=} options
-     * @return {?}
-     */
-    AccountModule.forRoot = /**
-     * @param {?=} options
-     * @return {?}
-     */
-    function (options) {
-        if (options === void 0) { options = (/** @type {?} */ ({})); }
-        return {
-            ngModule: AccountModule,
-            providers: [
-                { provide: ACCOUNT_OPTIONS, useValue: options },
-                {
-                    provide: 'ACCOUNT_OPTIONS',
-                    useFactory: optionsFactory,
-                    deps: [ACCOUNT_OPTIONS],
-                },
-            ],
-        };
-    };
     AccountModule.decorators = [
         { type: NgModule, args: [{
                     declarations: [LoginComponent, RegisterComponent, TenantBoxComponent],
@@ -286,16 +520,137 @@ var AccountModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** @type {?} */
-var ACCOUNT_ROUTES = (/** @type {?} */ ([
-    {
-        name: 'Account',
-        path: 'account',
-        invisible: true,
-        layout: "application" /* application */,
-        children: [{ path: 'login', name: 'Login', order: 1 }, { path: 'register', name: 'Register', order: 2 }],
-    },
-]));
 
-export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, LoginComponent, RegisterComponent, optionsFactory, LoginComponent as ɵa, RegisterComponent as ɵc, TenantBoxComponent as ɵd, AccountRoutingModule as ɵe, optionsFactory as ɵf, ACCOUNT_OPTIONS as ɵg };
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var ACCOUNT_ROUTES = {
+    routes: (/** @type {?} */ ([
+        {
+            name: 'Account',
+            path: 'account',
+            invisible: true,
+            layout: "application" /* application */,
+            children: [{ path: 'login', name: 'Login', order: 1 }, { path: 'register', name: 'Register', order: 2 }],
+        },
+    ])),
+    settings: [],
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function Options() { }
+if (false) {
+    /** @type {?|undefined} */
+    Options.prototype.redirectUrl;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function RegisterRequest() { }
+if (false) {
+    /** @type {?} */
+    RegisterRequest.prototype.userName;
+    /** @type {?} */
+    RegisterRequest.prototype.emailAddress;
+    /** @type {?} */
+    RegisterRequest.prototype.password;
+    /** @type {?|undefined} */
+    RegisterRequest.prototype.appName;
+}
+/**
+ * @record
+ */
+function RegisterResponse() { }
+if (false) {
+    /** @type {?} */
+    RegisterResponse.prototype.tenantId;
+    /** @type {?} */
+    RegisterResponse.prototype.userName;
+    /** @type {?} */
+    RegisterResponse.prototype.name;
+    /** @type {?} */
+    RegisterResponse.prototype.surname;
+    /** @type {?} */
+    RegisterResponse.prototype.email;
+    /** @type {?} */
+    RegisterResponse.prototype.emailConfirmed;
+    /** @type {?} */
+    RegisterResponse.prototype.phoneNumber;
+    /** @type {?} */
+    RegisterResponse.prototype.phoneNumberConfirmed;
+    /** @type {?} */
+    RegisterResponse.prototype.twoFactorEnabled;
+    /** @type {?} */
+    RegisterResponse.prototype.lockoutEnabled;
+    /** @type {?} */
+    RegisterResponse.prototype.lockoutEnd;
+    /** @type {?} */
+    RegisterResponse.prototype.concurrencyStamp;
+    /** @type {?} */
+    RegisterResponse.prototype.isDeleted;
+    /** @type {?} */
+    RegisterResponse.prototype.deleterId;
+    /** @type {?} */
+    RegisterResponse.prototype.deletionTime;
+    /** @type {?} */
+    RegisterResponse.prototype.lastModificationTime;
+    /** @type {?} */
+    RegisterResponse.prototype.lastModifierId;
+    /** @type {?} */
+    RegisterResponse.prototype.creationTime;
+    /** @type {?} */
+    RegisterResponse.prototype.creatorId;
+    /** @type {?} */
+    RegisterResponse.prototype.id;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function TenantIdResponse() { }
+if (false) {
+    /** @type {?} */
+    TenantIdResponse.prototype.success;
+    /** @type {?} */
+    TenantIdResponse.prototype.tenantId;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, LoginComponent, RegisterComponent, RootAccountModule, optionsFactory, optionsFactory as ɵa, ACCOUNT_OPTIONS as ɵb, LoginComponent as ɵc, RegisterComponent as ɵe, AccountService as ɵf, TenantBoxComponent as ɵg, AccountRoutingModule as ɵh };
 //# sourceMappingURL=abp-ng.account.js.map

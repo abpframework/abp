@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ngxs/store'), require('rxjs'), require('rxjs/operators'), require('ngx-perfect-scrollbar')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.permission-management', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ngxs/store', 'rxjs', 'rxjs/operators', 'ngx-perfect-scrollbar'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['permission-management'] = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.store, global.rxjs, global.rxjs.operators, global.ngxPerfectScrollbar));
-}(this, function (exports, ng_core, ng_theme_shared, core, store, rxjs, operators, ngxPerfectScrollbar) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@ngxs/store'), require('rxjs'), require('rxjs/operators'), require('ngx-perfect-scrollbar')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.permission-management', ['exports', '@angular/core', '@abp/ng.core', '@abp/ng.theme.shared', '@ngxs/store', 'rxjs', 'rxjs/operators', 'ngx-perfect-scrollbar'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['permission-management'] = {}), global.ng.core, global.ng_core, global.ng_theme_shared, global.store, global.rxjs, global.rxjs.operators, global.ngxPerfectScrollbar));
+}(this, function (exports, core, ng_core, ng_theme_shared, store, rxjs, operators, ngxPerfectScrollbar) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -18,6 +18,20 @@
     See the Apache Version 2.0 License for specific language governing permissions
     and limitations under the License.
     ***************************************************************************** */
+    /* global Reflect, Promise */
+
+    var extendStatics = function(d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+
+    function __extends(d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    }
 
     var __assign = function() {
         __assign = Object.assign || function __assign(t) {
@@ -30,6 +44,18 @@
         return __assign.apply(this, arguments);
     };
 
+    function __rest(s, e) {
+        var t = {};
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+            t[p] = s[p];
+        if (s != null && typeof Object.getOwnPropertySymbols === "function")
+            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                    t[p[i]] = s[p[i]];
+            }
+        return t;
+    }
+
     function __decorate(decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -37,8 +63,64 @@
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     }
 
+    function __param(paramIndex, decorator) {
+        return function (target, key) { decorator(target, key, paramIndex); }
+    }
+
     function __metadata(metadataKey, metadataValue) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
+    }
+
+    function __awaiter(thisArg, _arguments, P, generator) {
+        return new (P || (P = Promise))(function (resolve, reject) {
+            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+            function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+            step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+    }
+
+    function __generator(thisArg, body) {
+        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+        function verb(n) { return function (v) { return step([n, v]); }; }
+        function step(op) {
+            if (f) throw new TypeError("Generator is already executing.");
+            while (_) try {
+                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+                if (y = 0, t) op = [op[0] & 2, t.value];
+                switch (op[0]) {
+                    case 0: case 1: t = op; break;
+                    case 4: _.label++; return { value: op[1], done: false };
+                    case 5: _.label++; y = op[1]; op = [0]; continue;
+                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                    default:
+                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                        if (t[2]) _.ops.pop();
+                        _.trys.pop(); continue;
+                }
+                op = body.call(thisArg, _);
+            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+    }
+
+    function __exportStar(m, exports) {
+        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+    }
+
+    function __values(o) {
+        var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
+        if (m) return m.call(o);
+        return {
+            next: function () {
+                if (o && i >= o.length) o = void 0;
+                return { value: o && o[i++], done: !o };
+            }
+        };
     }
 
     function __read(o, n) {
@@ -64,24 +146,116 @@
         return ar;
     }
 
+    function __spreadArrays() {
+        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+        for (var r = Array(s), k = 0, i = 0; i < il; i++)
+            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+                r[k] = a[j];
+        return r;
+    };
+
+    function __await(v) {
+        return this instanceof __await ? (this.v = v, this) : new __await(v);
+    }
+
+    function __asyncGenerator(thisArg, _arguments, generator) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var g = generator.apply(thisArg, _arguments || []), i, q = [];
+        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+        function fulfill(value) { resume("next", value); }
+        function reject(value) { resume("throw", value); }
+        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+    }
+
+    function __asyncDelegator(o) {
+        var i, p;
+        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
+        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+    }
+
+    function __asyncValues(o) {
+        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+        var m = o[Symbol.asyncIterator], i;
+        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    }
+
+    function __makeTemplateObject(cooked, raw) {
+        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+        return cooked;
+    };
+
+    function __importStar(mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+        result.default = mod;
+        return result;
+    }
+
+    function __importDefault(mod) {
+        return (mod && mod.__esModule) ? mod : { default: mod };
+    }
+
     /**
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var PermissionManagementGetPermissions = /** @class */ (function () {
-        function PermissionManagementGetPermissions(payload) {
+    var RootPermissionManagementModule = /** @class */ (function () {
+        function RootPermissionManagementModule() {
+        }
+        /**
+         * @return {?}
+         */
+        RootPermissionManagementModule.forRoot = /**
+         * @return {?}
+         */
+        function () {
+            return {
+                ngModule: RootPermissionManagementModule,
+                providers: [],
+            };
+        };
+        RootPermissionManagementModule.decorators = [
+            { type: core.NgModule, args: [{},] }
+        ];
+        return RootPermissionManagementModule;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var GetPermissions = /** @class */ (function () {
+        function GetPermissions(payload) {
             this.payload = payload;
         }
-        PermissionManagementGetPermissions.type = '[PermissionManagement] Get Permissions';
-        return PermissionManagementGetPermissions;
+        GetPermissions.type = '[PermissionManagement] Get Permissions';
+        return GetPermissions;
     }());
-    var PermissionManagementUpdatePermissions = /** @class */ (function () {
-        function PermissionManagementUpdatePermissions(payload) {
+    if (false) {
+        /** @type {?} */
+        GetPermissions.type;
+        /** @type {?} */
+        GetPermissions.prototype.payload;
+    }
+    var UpdatePermissions = /** @class */ (function () {
+        function UpdatePermissions(payload) {
             this.payload = payload;
         }
-        PermissionManagementUpdatePermissions.type = '[PermissionManagement] Update Permissions';
-        return PermissionManagementUpdatePermissions;
+        UpdatePermissions.type = '[PermissionManagement] Update Permissions';
+        return UpdatePermissions;
     }());
+    if (false) {
+        /** @type {?} */
+        UpdatePermissions.type;
+        /** @type {?} */
+        UpdatePermissions.prototype.payload;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -139,6 +313,13 @@
         /** @nocollapse */ PermissionManagementService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function PermissionManagementService_Factory() { return new PermissionManagementService(core.ɵɵinject(ng_core.RestService)); }, token: PermissionManagementService, providedIn: "root" });
         return PermissionManagementService;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionManagementService.prototype.rest;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -210,15 +391,15 @@
             return this.permissionManagementService.updatePermissions(payload);
         };
         __decorate([
-            store.Action(PermissionManagementGetPermissions),
+            store.Action(GetPermissions),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, PermissionManagementGetPermissions]),
+            __metadata("design:paramtypes", [Object, GetPermissions]),
             __metadata("design:returntype", void 0)
         ], PermissionManagementState.prototype, "permissionManagementGet", null);
         __decorate([
-            store.Action(PermissionManagementUpdatePermissions),
+            store.Action(UpdatePermissions),
             __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, PermissionManagementUpdatePermissions]),
+            __metadata("design:paramtypes", [Object, UpdatePermissions]),
             __metadata("design:returntype", void 0)
         ], PermissionManagementState.prototype, "permissionManagementUpdate", null);
         __decorate([
@@ -242,6 +423,13 @@
         ], PermissionManagementState);
         return PermissionManagementState;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionManagementState.prototype.permissionManagementService;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -255,6 +443,7 @@
             this.permissions = [];
             this.selectThisTab = false;
             this.selectAllTab = false;
+            this.modalBusy = false;
             this.trackByFn = (/**
              * @param {?} _
              * @param {?} item
@@ -345,6 +534,24 @@
             function (per) { return per.name === name; })) || { isGranted: false }).isGranted;
         };
         /**
+         * @param {?} grantedProviders
+         * @return {?}
+         */
+        PermissionManagementComponent.prototype.isGrantedByRole = /**
+         * @param {?} grantedProviders
+         * @return {?}
+         */
+        function (grantedProviders) {
+            if (grantedProviders.length) {
+                return grantedProviders.findIndex((/**
+                 * @param {?} p
+                 * @return {?}
+                 */
+                function (p) { return p.providerName === 'Role'; })) > -1;
+            }
+            return false;
+        };
+        /**
          * @param {?} clickedPermission
          * @param {?} value
          * @return {?}
@@ -356,6 +563,8 @@
          */
         function (clickedPermission, value) {
             var _this = this;
+            if (clickedPermission.isGranted && this.isGrantedByRole(clickedPermission.grantedProviders))
+                return;
             setTimeout((/**
              * @return {?}
              */
@@ -459,6 +668,8 @@
                  * @return {?}
                  */
                 function (permission) {
+                    if (permission.isGranted && _this.isGrantedByRole(permission.grantedProviders))
+                        return;
                     /** @type {?} */
                     var index = _this.permissions.findIndex((/**
                      * @param {?} per
@@ -502,11 +713,12 @@
         /**
          * @return {?}
          */
-        PermissionManagementComponent.prototype.onSubmit = /**
+        PermissionManagementComponent.prototype.submit = /**
          * @return {?}
          */
         function () {
             var _this = this;
+            this.modalBusy = true;
             /** @type {?} */
             var unchangedPermissions = getPermissions(this.store.selectSnapshot(PermissionManagementState.getPermissionGroups));
             /** @type {?} */
@@ -532,7 +744,7 @@
             }));
             if (changedPermissions.length) {
                 this.store
-                    .dispatch(new PermissionManagementUpdatePermissions({
+                    .dispatch(new UpdatePermissions({
                     providerKey: this.providerKey,
                     providerName: this.providerName,
                     permissions: changedPermissions,
@@ -541,10 +753,12 @@
                  * @return {?}
                  */
                 function () {
+                    _this.modalBusy = false;
                     _this.visible = false;
                 }));
             }
             else {
+                this.modalBusy = false;
                 this.visible = false;
             }
         };
@@ -560,7 +774,7 @@
                 throw new Error('Provider Key and Provider Name are required.');
             }
             this.store
-                .dispatch(new PermissionManagementGetPermissions({ providerKey: this.providerKey, providerName: this.providerName }))
+                .dispatch(new GetPermissions({ providerKey: this.providerKey, providerName: this.providerName }))
                 .pipe(operators.pluck('PermissionManagementState', 'permissionRes'))
                 .subscribe((/**
              * @param {?} permissionRes
@@ -570,14 +784,17 @@
                 _this.selectedGroup = permissionRes.groups[0];
                 _this.permissions = getPermissions(permissionRes.groups);
                 _this.visible = true;
-                setTimeout((/**
-                 * @return {?}
-                 */
-                function () {
-                    _this.setTabCheckboxState();
-                    _this.setGrantCheckboxState();
-                }), 0);
             }));
+        };
+        /**
+         * @return {?}
+         */
+        PermissionManagementComponent.prototype.initModal = /**
+         * @return {?}
+         */
+        function () {
+            this.setTabCheckboxState();
+            this.setGrantCheckboxState();
         };
         /**
          * @param {?} __0
@@ -601,7 +818,7 @@
         PermissionManagementComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-permission-management',
-                        template: "<abp-modal [(visible)]=\"visible\" *ngIf=\"visible\" size=\"lg\">\n  <ng-container *ngIf=\"{ entityName: entityName$ | async } as data\">\n    <ng-template #abpHeader>\n      <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>\n    </ng-template>\n    <ng-template #abpBody>\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input\n          type=\"checkbox\"\n          id=\"select-all-in-all-tabs\"\n          name=\"select-all-in-all-tabs\"\n          class=\"custom-control-input\"\n          [(ngModel)]=\"selectAllTab\"\n          (click)=\"onClickSelectAll()\"\n        />\n        <label class=\"custom-control-label\" for=\"select-all-in-all-tabs\">{{\n          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization\n        }}</label>\n      </div>\n\n      <hr class=\"mt-2 mb-2\" />\n      <div class=\"row\">\n        <div class=\"col-4\">\n          <ul class=\"nav nav-pills flex-column\">\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n              <li *ngFor=\"let group of groups$ | async; trackBy: trackByFn\" class=\"nav-item\">\n                <a class=\"nav-link\" [class.active]=\"selectedGroup.name === group.name\" (click)=\"onChangeGroup(group)\">{{\n                  group?.displayName\n                }}</a>\n              </li>\n            </perfect-scrollbar>\n          </ul>\n        </div>\n        <div class=\"col-8\">\n          <h4>{{ selectedGroup.displayName }}</h4>\n          <hr class=\"mt-2 mb-3\" />\n          <div class=\"pl-1 pt-1\">\n            <div class=\"custom-checkbox custom-control mb-2\">\n              <input\n                type=\"checkbox\"\n                id=\"select-all-in-this-tabs\"\n                name=\"select-all-in-this-tabs\"\n                class=\"custom-control-input\"\n                [(ngModel)]=\"selectThisTab\"\n                (click)=\"onClickSelectThisTab()\"\n              />\n              <label class=\"custom-control-label\" for=\"select-all-in-this-tabs\">{{\n                'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization\n              }}</label>\n            </div>\n            <hr class=\"mb-3\" />\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 60vh;\">\n              <div\n                *ngFor=\"let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn\"\n                [style.margin-left]=\"permission.margin + 'px'\"\n                class=\"custom-checkbox custom-control mb-2\"\n              >\n                <input\n                  #permissionCheckbox\n                  type=\"checkbox\"\n                  [checked]=\"getChecked(permission.name)\"\n                  [value]=\"getChecked(permission.name)\"\n                  [attr.id]=\"permission.name\"\n                  class=\"custom-control-input\"\n                />\n                <label\n                  class=\"custom-control-label\"\n                  [attr.for]=\"permission.name\"\n                  (click)=\"onClickCheckbox(permission, permissionCheckbox.value)\"\n                  >{{ permission.displayName }}</label\n                >\n              </div>\n            </perfect-scrollbar>\n          </div>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template #abpFooter>\n      <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <button type=\"submit\" class=\"btn btn-primary\" (click)=\"onSubmit()\">\n        <i class=\"fa fa-check mr-1\"></i> <span>{{ 'AbpIdentity::Save' | abpLocalization }}</span>\n      </button>\n    </ng-template>\n  </ng-container>\n</abp-modal>\n"
+                        template: "<abp-modal [(visible)]=\"visible\" (init)=\"initModal()\" [busy]=\"modalBusy\">\n  <ng-container *ngIf=\"{ entityName: entityName$ | async } as data\">\n    <ng-template #abpHeader>\n      <h4>{{ 'AbpPermissionManagement::Permissions' | abpLocalization }} - {{ data.entityName }}</h4>\n    </ng-template>\n    <ng-template #abpBody>\n      <div class=\"custom-checkbox custom-control mb-2\">\n        <input\n          type=\"checkbox\"\n          id=\"select-all-in-all-tabs\"\n          name=\"select-all-in-all-tabs\"\n          class=\"custom-control-input\"\n          [(ngModel)]=\"selectAllTab\"\n          (click)=\"onClickSelectAll()\"\n        />\n        <label class=\"custom-control-label\" for=\"select-all-in-all-tabs\">{{\n          'AbpPermissionManagement::SelectAllInAllTabs' | abpLocalization\n        }}</label>\n      </div>\n\n      <hr class=\"mt-2 mb-2\" />\n      <div class=\"row\">\n        <div class=\"col-4\">\n          <ul class=\"nav nav-pills flex-column\">\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 70vh;\">\n              <li *ngFor=\"let group of groups$ | async; trackBy: trackByFn\" class=\"nav-item\">\n                <a\n                  class=\"nav-link pointer\"\n                  [class.active]=\"selectedGroup?.name === group?.name\"\n                  (click)=\"onChangeGroup(group)\"\n                  >{{ group?.displayName }}</a\n                >\n              </li>\n            </perfect-scrollbar>\n          </ul>\n        </div>\n        <div class=\"col-8\">\n          <h4>{{ selectedGroup?.displayName }}</h4>\n          <hr class=\"mt-2 mb-3\" />\n          <div class=\"pl-1 pt-1\">\n            <div class=\"custom-checkbox custom-control mb-2\">\n              <input\n                type=\"checkbox\"\n                id=\"select-all-in-this-tabs\"\n                name=\"select-all-in-this-tabs\"\n                class=\"custom-control-input\"\n                [(ngModel)]=\"selectThisTab\"\n                (click)=\"onClickSelectThisTab()\"\n              />\n              <label class=\"custom-control-label\" for=\"select-all-in-this-tabs\">{{\n                'AbpPermissionManagement::SelectAllInThisTab' | abpLocalization\n              }}</label>\n            </div>\n            <hr class=\"mb-3\" />\n            <perfect-scrollbar class=\"ps-show-always\" style=\"max-height: 60vh;\">\n              <div\n                *ngFor=\"let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn\"\n                [style.margin-left]=\"permission.margin + 'px'\"\n                class=\"custom-checkbox custom-control mb-2\"\n              >\n                <input\n                  #permissionCheckbox\n                  type=\"checkbox\"\n                  [checked]=\"getChecked(permission.name)\"\n                  [value]=\"getChecked(permission.name)\"\n                  [attr.id]=\"permission.name\"\n                  class=\"custom-control-input\"\n                  [disabled]=\"isGrantedByRole(permission.grantedProviders)\"\n                />\n                <label\n                  class=\"custom-control-label\"\n                  [attr.for]=\"permission.name\"\n                  (click)=\"onClickCheckbox(permission, permissionCheckbox.value)\"\n                  >{{ permission.displayName }}\n                  <span *ngFor=\"let provider of permission.grantedProviders\" class=\"badge badge-light\"\n                    >{{ provider.providerName }}: {{ provider.providerKey }}</span\n                  ></label\n                >\n              </div>\n            </perfect-scrollbar>\n          </div>\n        </div>\n      </div>\n    </ng-template>\n    <ng-template #abpFooter>\n      <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n        {{ 'AbpIdentity::Cancel' | abpLocalization }}\n      </button>\n      <abp-button iconClass=\"fa fa-check\" (click)=\"submit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n    </ng-template>\n  </ng-container>\n</abp-modal>\n"
                     }] }
         ];
         /** @nocollapse */
@@ -625,6 +842,45 @@
         ], PermissionManagementComponent.prototype, "entityName$", void 0);
         return PermissionManagementComponent;
     }());
+    if (false) {
+        /** @type {?} */
+        PermissionManagementComponent.prototype.providerName;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.providerKey;
+        /**
+         * @type {?}
+         * @protected
+         */
+        PermissionManagementComponent.prototype._visible;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.visibleChange;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.groups$;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.entityName$;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.selectedGroup;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.permissions;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.selectThisTab;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.selectAllTab;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.modalBusy;
+        /** @type {?} */
+        PermissionManagementComponent.prototype.trackByFn;
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionManagementComponent.prototype.store;
+        /**
+         * @type {?}
+         * @private
+         */
+        PermissionManagementComponent.prototype.renderer;
+    }
     /**
      * @param {?} permissions
      * @param {?} permission
@@ -678,6 +934,16 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var PermissionManagement;
     (function (PermissionManagement) {
         /**
@@ -685,49 +951,94 @@
          */
         function State() { }
         PermissionManagement.State = State;
+        if (false) {
+            /** @type {?} */
+            State.prototype.permissionRes;
+        }
         /**
          * @record
          */
         function Response() { }
         PermissionManagement.Response = Response;
+        if (false) {
+            /** @type {?} */
+            Response.prototype.entityDisplayName;
+            /** @type {?} */
+            Response.prototype.groups;
+        }
         /**
          * @record
          */
         function Group() { }
         PermissionManagement.Group = Group;
+        if (false) {
+            /** @type {?} */
+            Group.prototype.name;
+            /** @type {?} */
+            Group.prototype.displayName;
+            /** @type {?} */
+            Group.prototype.permissions;
+        }
         /**
          * @record
          */
         function MinimumPermission() { }
         PermissionManagement.MinimumPermission = MinimumPermission;
+        if (false) {
+            /** @type {?} */
+            MinimumPermission.prototype.name;
+            /** @type {?} */
+            MinimumPermission.prototype.isGranted;
+        }
         /**
          * @record
          */
         function Permission() { }
         PermissionManagement.Permission = Permission;
+        if (false) {
+            /** @type {?} */
+            Permission.prototype.displayName;
+            /** @type {?} */
+            Permission.prototype.parentName;
+            /** @type {?} */
+            Permission.prototype.allowedProviders;
+            /** @type {?} */
+            Permission.prototype.grantedProviders;
+        }
         /**
          * @record
          */
         function GrantedProvider() { }
         PermissionManagement.GrantedProvider = GrantedProvider;
+        if (false) {
+            /** @type {?} */
+            GrantedProvider.prototype.providerName;
+            /** @type {?} */
+            GrantedProvider.prototype.providerKey;
+        }
         /**
          * @record
          */
         function UpdateRequest() { }
         PermissionManagement.UpdateRequest = UpdateRequest;
+        if (false) {
+            /** @type {?} */
+            UpdateRequest.prototype.permissions;
+        }
     })(PermissionManagement || (PermissionManagement = {}));
 
+    exports.GetPermissions = GetPermissions;
     exports.PermissionManagementComponent = PermissionManagementComponent;
-    exports.PermissionManagementGetPermissions = PermissionManagementGetPermissions;
     exports.PermissionManagementModule = PermissionManagementModule;
     exports.PermissionManagementService = PermissionManagementService;
     exports.PermissionManagementState = PermissionManagementState;
-    exports.PermissionManagementUpdatePermissions = PermissionManagementUpdatePermissions;
+    exports.RootPermissionManagementModule = RootPermissionManagementModule;
+    exports.UpdatePermissions = UpdatePermissions;
     exports.ɵa = PermissionManagementComponent;
     exports.ɵb = PermissionManagementState;
     exports.ɵc = PermissionManagementService;
-    exports.ɵd = PermissionManagementGetPermissions;
-    exports.ɵe = PermissionManagementUpdatePermissions;
+    exports.ɵd = GetPermissions;
+    exports.ɵe = UpdatePermissions;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -1,16 +1,17 @@
-import { TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ABP } from '@abp/ng.core';
-export declare class TenantBoxComponent {
-    private modalService;
-    private fb;
-    constructor(modalService: NgbModal, fb: FormBuilder);
-    form: FormGroup;
-    selected: ABP.BasicItem;
-    modalContent: TemplateRef<any>;
-    createForm(): void;
-    openModal(): void;
+import { ToasterService } from '@abp/ng.theme.shared';
+import { OnInit } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { AccountService } from '../../services/account.service';
+export declare class TenantBoxComponent implements OnInit {
+    private store;
+    private toasterService;
+    private accountService;
+    constructor(store: Store, toasterService: ToasterService, accountService: AccountService);
+    tenant: ABP.BasicItem;
+    tenantName: string;
+    isModalVisible: boolean;
+    ngOnInit(): void;
     onSwitch(): void;
     save(): void;
 }

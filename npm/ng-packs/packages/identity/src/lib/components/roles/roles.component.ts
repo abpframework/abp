@@ -36,6 +36,8 @@ export class RolesComponent {
 
   loading: boolean = false;
 
+  modalBusy: boolean = false;
+
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
@@ -79,6 +81,7 @@ export class RolesComponent {
 
   save() {
     if (!this.form.valid) return;
+    this.modalBusy = true;
 
     this.store
       .dispatch(
@@ -87,6 +90,7 @@ export class RolesComponent {
           : new CreateRole(this.form.value),
       )
       .subscribe(() => {
+        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }

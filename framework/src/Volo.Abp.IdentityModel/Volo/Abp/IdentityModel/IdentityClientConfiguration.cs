@@ -81,7 +81,7 @@ namespace Volo.Abp.IdentityModel
             get => this.GetOrDefault(nameof(RequireHttps))?.To<bool>() ?? true;
             set => this[nameof(RequireHttps)] = value.ToString().ToLowerInvariant();
         }
-
+        
         public IdentityClientConfiguration()
         {
             
