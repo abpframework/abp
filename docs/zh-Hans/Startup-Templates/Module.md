@@ -25,7 +25,7 @@ abp new Acme.IssueManagement -t module
 默认情况模板附带一个MVC UI,你可以使用`--no-ui`选项指定不包含UI层.
 
 ````bash
-abp new Acme.IssueManagement -t mvc-module --no-ui
+abp new Acme.IssueManagement -t module --no-ui
 ````
 
 ## 解决方案结构
