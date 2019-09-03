@@ -5,10 +5,10 @@
 ### EntityFrameworkCore Project Update
 
 - In `Acme.BookStore.EntityFrameworkCore` project replace package `Volo.Abp.EntityFrameworkCore.SqlServer` with `Volo.Abp.EntityFrameworkCore.PostgreSql` 
-- Update to use PostgreSQL in `BookStoreEntityFrameworkCoreModule`. 
-- Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
-- Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
-- In other projects update the PostgreSQL connection string in necessary `appsettings.json` files.
+- Update to use PostgreSQL in `BookStoreEntityFrameworkCoreModule`
+  - Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
+  - Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
+- In other projects update the PostgreSQL connection string in necessary `appsettings.json` files
 
 #### Delete Existing Migrations
 
