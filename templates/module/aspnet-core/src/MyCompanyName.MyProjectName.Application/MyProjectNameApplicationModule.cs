@@ -14,11 +14,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                //Adds all profiles in the MyProjectNameApplicationModule assembly by validating configurations
-                options.AddMaps<MyProjectNameApplicationModule>(validate: true);
-
-                //Exclude a profile from the configuration validation
-                options.ValidateProfile<MyProjectNameApplicationAutoMapperProfile>(validate: false);
+                options.AddMaps<MyProjectNameApplicationModule>();
             });
         }
     }

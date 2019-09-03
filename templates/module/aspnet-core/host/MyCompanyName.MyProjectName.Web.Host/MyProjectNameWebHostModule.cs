@@ -135,11 +135,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                //Adds all profiles in the MyProjectNameWebHostModule assembly by validating configurations
-                options.AddMaps<MyProjectNameWebHostModule>(validate: true);
-
-                //Exclude a profile from the configuration validation
-                options.ValidateProfile<MyProjectNameWebAutoMapperProfile>(validate: false);
+                options.AddMaps<MyProjectNameWebHostModule>();
             });
         }
 

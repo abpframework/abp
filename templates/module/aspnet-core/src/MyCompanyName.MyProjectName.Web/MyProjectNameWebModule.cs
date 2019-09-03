@@ -39,11 +39,7 @@ namespace MyCompanyName.MyProjectName.Web
 
             Configure<AbpAutoMapperOptions>(options =>
             {
-                //Adds all profiles in the MyProjectNameWebModule assembly by validating configurations
-                options.AddMaps<MyProjectNameWebModule>(validate: true);
-
-                //Exclude a profile from the configuration validation
-                options.ValidateProfile<MyProjectNameWebAutoMapperProfile>(validate: false);
+                options.AddMaps<MyProjectNameWebModule>();
             });
 
             Configure<RazorPagesOptions>(options =>
