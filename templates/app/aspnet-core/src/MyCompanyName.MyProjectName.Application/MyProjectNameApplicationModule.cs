@@ -23,7 +23,7 @@ namespace MyCompanyName.MyProjectName
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<MyProjectNameApplicationModule>();
+                options.AddMaps<MyProjectNameApplicationModule>(validate: true);
             });
         }
     }

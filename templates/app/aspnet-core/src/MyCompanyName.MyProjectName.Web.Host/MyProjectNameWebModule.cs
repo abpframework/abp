@@ -130,7 +130,7 @@ namespace MyCompanyName.MyProjectName.Web
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddMaps<MyProjectNameWebModule>();
+                options.AddMaps<MyProjectNameWebModule>(validate: true);
             });
         }
 
