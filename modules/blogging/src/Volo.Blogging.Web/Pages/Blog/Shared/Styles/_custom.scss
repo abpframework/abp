@@ -1,23 +1,4 @@
 @media (min-width: 767px) {
-    .box-articles  {
-        .img-container {
-            position: relative; 
-            overflow: hidden;
-        }
-        .img-container img {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            height: 100%;
-            width: auto;
-            -webkit-transform: translate(-50%,-50%);
-                -ms-transform: translate(-50%,-50%);
-                    transform: translate(-50%,-50%);
-                    max-width: initial;
-        }
-        .img-container img.portrait {
-            width: 100%;
-            height: auto;
-        }
+    .box-articles  { 
     } 
 }
