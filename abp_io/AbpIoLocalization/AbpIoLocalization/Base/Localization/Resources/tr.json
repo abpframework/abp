@@ -7,6 +7,8 @@
     "Volo.AbpIo.Domain:010007": "Bu kullanıcı zaten bu organizasyonda yazılımcı olarak var!",
     "Volo.AbpIo.Domain:010008": "Maksimum izin verilen kullanıcı sayısı mevcut kullanıcı sayısından az olamaz!",
     "Volo.AbpIo.Domain:010009": "Maksimum izin verilen kullanıcı sayısı sıfırdan az olamaz!",
-    "Volo.AbpIo.Domain:010010": "Maksimum mac adresi sayısı geçildi!"
+    "Volo.AbpIo.Domain:010010": "Maksimum mac adresi sayısı geçildi!",
+	"Volo.AbpIo.Domain:010011": "Bireysel lisans birden fazla geliştiriciye sahip olamaz!",
+	"Volo.AbpIo.Domain:010012": "Lisans, lisans süresi bittikten bir ay sonra uzatılamaz!",
   }
 }
