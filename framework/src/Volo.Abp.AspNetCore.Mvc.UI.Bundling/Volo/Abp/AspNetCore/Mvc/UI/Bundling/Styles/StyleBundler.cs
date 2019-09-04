@@ -17,18 +17,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
             _hostingEnvironment = hostingEnvironment;
         }
 
-        protected override string GetFileContent(IBundlerContext context, string file)
-        {
-            return CssRelativePath.Adjust(
-                base.GetFileContent(context, file),
-                GetAbsolutePath(file),
-                GetAbsolutePath(context.BundleRelativePath)
-            );
-        }
-
         public string GetAbsolutePath(string relativePath)
         {
             return Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", relativePath.RemovePreFix("/"));
+        }
+
+        protected override string ProcessBeforeAddingToTheBundle(IBundlerContext context, string filePath, string fileContent)
+        {
+            return CssRelativePath.Adjust(
+                fileContent,
+                GetAbsolutePath(filePath),
+                GetAbsolutePath(context.BundleRelativePath)
+            );
         }
     }
 }
