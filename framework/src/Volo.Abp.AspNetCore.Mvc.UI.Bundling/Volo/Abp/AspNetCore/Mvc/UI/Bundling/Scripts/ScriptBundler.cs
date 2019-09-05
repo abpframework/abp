@@ -13,9 +13,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Scripts
         {
         }
 
-        protected override string NormalizedCode(string code)
+        protected override string ProcessBeforeAddingToTheBundle(IBundlerContext context, string filePath, string fileContent)
         {
-            return code.EnsureEndsWith(';') + Environment.NewLine;
+            return fileContent.EnsureEndsWith(';') + Environment.NewLine;
         }
     }
 }
