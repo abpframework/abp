@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +45,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             //Configure Razor
             context.Services.Insert(0,
-                ServiceDescriptor.Singleton<IConfigureOptions<RazorViewEngineOptions>>(
-                    new ConfigureOptions<RazorViewEngineOptions>(options =>
+                ServiceDescriptor.Singleton<IConfigureOptions<MvcRazorRuntimeCompilationOptions>>(
+                    new ConfigureOptions<MvcRazorRuntimeCompilationOptions>(options =>
                         {
                             options.FileProviders.Add(
                                 new RazorViewEngineVirtualFileProvider(
@@ -112,10 +112,10 @@ namespace Volo.Abp.AspNetCore.Mvc
                 mvcOptions.AddAbp(context.Services);
             });
 
-            Configure<MvcJsonOptions>(jsonOptions =>
-            {
-                jsonOptions.SerializerSettings.ContractResolver = new AbpMvcJsonContractResolver(context.Services);
-            });
+            //Configure<MvcJsonOptions>(jsonOptions => @3.0.0!
+            //{
+            //    jsonOptions.SerializerSettings.ContractResolver = new AbpMvcJsonContractResolver(context.Services);
+            //});
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
