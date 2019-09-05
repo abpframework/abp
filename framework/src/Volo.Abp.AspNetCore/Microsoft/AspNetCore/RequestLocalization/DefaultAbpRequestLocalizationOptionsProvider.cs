@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
@@ -13,46 +14,49 @@ namespace Microsoft.AspNetCore.RequestLocalization
 {
     public class DefaultAbpRequestLocalizationOptionsProvider : IAbpRequestLocalizationOptionsProvider, ISingletonDependency
     {
-        private readonly ILanguageProvider _languageProvider;
-        private readonly ISettingProvider _settingProvider;
+        private readonly IServiceProvider _serviceProvider;
         private Lazy<RequestLocalizationOptions> _lazyRequestLocalizationOptions;
 
-        public DefaultAbpRequestLocalizationOptionsProvider(ILanguageProvider languageProvider,
-            ISettingProvider settingProvider)
+        public DefaultAbpRequestLocalizationOptionsProvider(IServiceProvider serviceProvider)
         {
-            _languageProvider = languageProvider;
-            _settingProvider = settingProvider;
+            _serviceProvider = serviceProvider;
         }
 
         public void InitLocalizationOptions(Action<RequestLocalizationOptions> optionsAction = null)
         {
             _lazyRequestLocalizationOptions = new Lazy<RequestLocalizationOptions>(() =>
             {
-                var languages = AsyncHelper.RunSync(_languageProvider.GetLanguagesAsync);
-                var defaultLanguage = AsyncHelper.RunSync(() =>
-                    _settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage));
+                using (var serviceScope = _serviceProvider.CreateScope())
+                {
+                    var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
+                    var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
 
-                var options = !languages.Any()
-                    ? new RequestLocalizationOptions()
-                    : new RequestLocalizationOptions
-                    {
-                        DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
+                    var languages = AsyncHelper.RunSync(languageProvider.GetLanguagesAsync);
+                    var defaultLanguage = AsyncHelper.RunSync(() =>
+                        settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage));
 
-                        SupportedCultures = languages
-                            .Select(l => l.CultureName)
-                            .Distinct()
-                            .Select(c => new CultureInfo(c))
-                            .ToArray(),
+                    var options = !languages.Any()
+                        ? new RequestLocalizationOptions()
+                        : new RequestLocalizationOptions
+                        {
+                            DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
 
-                        SupportedUICultures = languages
-                            .Select(l => l.UiCultureName)
-                            .Distinct()
-                            .Select(c => new CultureInfo(c))
-                            .ToArray()
-                    };
+                            SupportedCultures = languages
+                                .Select(l => l.CultureName)
+                                .Distinct()
+                                .Select(c => new CultureInfo(c))
+                                .ToArray(),
 
-                optionsAction?.Invoke(options);
-                return options;
+                            SupportedUICultures = languages
+                                .Select(l => l.UiCultureName)
+                                .Distinct()
+                                .Select(c => new CultureInfo(c))
+                                .ToArray()
+                        };
+
+                    optionsAction?.Invoke(options);
+                    return options;
+                }
             }, true);
         }
 
