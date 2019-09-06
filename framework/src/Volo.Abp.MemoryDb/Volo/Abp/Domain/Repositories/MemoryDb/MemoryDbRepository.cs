@@ -86,7 +86,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
-            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
+            return GetQueryable().FirstOrDefault(e => e.Id.Equals(id));
         }
 
         public virtual TEntity Get(TKey id, bool includeDetails = true)
