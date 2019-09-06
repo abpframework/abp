@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="3.0.0-preview9.19424.4" />
   </ItemGroup>
 
 </Project>

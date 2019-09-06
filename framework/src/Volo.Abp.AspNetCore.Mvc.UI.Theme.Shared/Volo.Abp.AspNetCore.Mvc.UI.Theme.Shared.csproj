@@ -33,10 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj" />
