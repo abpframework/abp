@@ -39,7 +39,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return auditLogs;
         }
@@ -58,7 +58,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, hasException, httpStatusCode);
 
-            var totalCount = await query.LongCountAsync();
+            var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
             return totalCount;
         }
@@ -79,11 +79,11 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .IncludeDetails(includeDetails)
                 .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions.Length > 0)
                 .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions.Length == 0)
-                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
-                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
-                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName.ToLowerInvariant() == userName.ToLowerInvariant())
-                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName != null && auditLog.ApplicationName.ToLowerInvariant() == applicationName.ToLowerInvariant())
-                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId != null && auditLog.CorrelationId.ToLowerInvariant() == correlationId.ToLowerInvariant())
+                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod == httpMethod)
+                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
+                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName != null && auditLog.ApplicationName == applicationName)
+                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId != null && auditLog.CorrelationId == correlationId)
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
                 .WhereIf(maxExecutionDuration != null && maxExecutionDuration > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
                 .WhereIf(minExecutionDuration != null && minExecutionDuration > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
