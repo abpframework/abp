@@ -110,9 +110,6 @@ export class ConfigState {
             const value = getPolicy(key);
             condition = condition.replace(key, value);
           });
-
-          // tslint:disable-next-line: no-eval
-          return eval(`!!${condition}`);
         }
 
         return getPolicy(condition);
