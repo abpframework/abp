@@ -27,9 +27,9 @@ namespace Volo.Abp.Identity
         {
             await _identityDataSeeder.SeedAsync("admin@abp.io", "1q2w3E*");
 
-            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("admin"))).ShouldNotBeNull();
-            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("admin"))).Name.ShouldBe("admin");
-            (await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize("admin"))).ShouldNotBeNull();
+            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("admin"))).ShouldNotBeNull();
+            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("admin"))).Name.ShouldBe("admin");
+            (await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"))).ShouldNotBeNull();
         }
     }
 }
