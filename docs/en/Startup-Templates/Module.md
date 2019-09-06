@@ -25,7 +25,7 @@ abp new Acme.IssueManagement -t module
 The template comes with an MVC UI by default. You can use `--no-ui` option to not include the UI layer.
 
 ````bash
-abp new Acme.IssueManagement -t mvc-module --no-ui
+abp new Acme.IssueManagement -t module --no-ui
 ````
 
 ## Solution Structure
