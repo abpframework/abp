@@ -23,16 +23,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
             }
 
             app.UseRouting();
-
             app.UseVirtualFiles();
-
-            //app.UseMvcWithDefaultRoute();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
-            });
+            app.UseMvcWithDefaultRouteAndArea();
         }
     }
 }
