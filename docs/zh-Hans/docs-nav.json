@@ -237,11 +237,21 @@
       "items": [
         {
           "text": "Entity Framework Core 集成",
-          "path": "Entity-Framework-Core.md"
+          "path": "Entity-Framework-Core.md",
+          "items": [            
+            {
+              "text": "PostgreSQL 集成",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
         },
         {
           "text": "MongoDB 集成",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper 集成",
+          "path": "Dapper.md"
         }
       ]
     },

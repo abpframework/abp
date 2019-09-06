@@ -23,302 +23,297 @@
     </abp-style-bundle>
 }
 
-<abp-input asp-for="FocusCommentId" />
+<div class="vs-blog vs-blog-detail">
+    <abp-input asp-for="FocusCommentId" class="m-0" />
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-lg-8 mx-auto">
+                <section class="hero-section">
+                    <div class="hero-articles">
+                        <div class="hero-content">
+                            <h1 class="mb-3">
+                                <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
+                            </h1>
 
-<div class="vs-blog">
-    <div class="row">
-        <div class="col-md-12 mx-auto">
-            <section class="hero-section">
-                <div class="hero-articles">
-                    <div class="img-container" style="min-height: 480px; background: url(@Model.Post.CoverImage) center center no-repeat; background-size: cover; ">
-                    </div>
-                    <div class="hero-content">
-                        <p class="tags">
-                            @foreach (var tag in Model.Post.Tags)
-                            {
-                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                            }
-                        </p>
-                        <h1>
-                            <a asp-page="./Detail" asp-route-postUrl="@Model.Post.Url" asp-route-blogShortName="@Model.BlogShortName">@Model.Post.Title</a>
-                        </h1>
-                    </div>
-                    <div class="article-owner">
-                        <div class="article-infos">
-                            <div class="user-card">
-                                @if (Model.Post.Writer != null)
-                                {
-                                    <a>
-                                        <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                    </a>
-                                }
-                                <a>
-                                    @if (Model.Post.Writer != null)
-                                    {
-                                        <strong>@(Model.Post.Writer.UserName),</strong>
-                                    }
-                                    @ConvertDatetimeToTimeAgo(Model.Post.CreationTime)
-                                </a>
-                                <span class="vs-seperator">|</span>
-                                <a>
-                                    <i class="fa fa-eye"></i> @L["WiewsWithCount", @Model.Post.ReadCount]
-                                </a>
-                                <span class="vs-seperator">|</span>
-                                <a>
-                                    <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
-                                </a>
-                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
-                                {
-                                    <span class="seperator">|</span>
-                                    <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
-                                        <i class="fa fa-pencil"></i> @L["Edit"]
-                                    </a>
-                                }
-                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id.HasValue && CurrentUser.Id == Model.Post.CreatorId))
-                                {
-                                    <span class="seperator">|</span>
-                                    <a href="#" id="DeletePostLink" data-postid="@Model.Post.Id" data-blogShortName="@Model.BlogShortName">
-                                        <i class="fa fa-trash"></i> @L["Delete"]
-                                    </a>
-                                }
+                            <div class="article-owner">
+                                <div class="article-infos">
+                                    <div class="user-card mt-3 mb-4">
+                                        <div class="row">
+                                            <div class="col-auto pr-1">
+                                                @if (Model.Post.Writer != null)
+                                                {
+                                                    <img gravatar-email="@Model.Post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                }
+                                            </div>
+                                            <div class="col pl-1">
+                                                @if (Model.Post.Writer != null)
+                                                {
+                                                    <h5 class="mt-2 mb-1">@(Model.Post.Writer.UserName) <span>@ConvertDatetimeToTimeAgo(Model.Post.CreationTime)</span></h5>
+
+                                                }
+                                                
+                                                <i class="fa fa-eye"></i> @L["WiewsWithCount", @Model.Post.ReadCount]
+                                                <span class="vs-seperator">|</span>
+                                                <i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]
+
+
+                                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Update))
+                                                {
+                                                    <span class="seperator">|</span>
+                                                    <a asp-page="./Edit" asp-route-postId="@Model.Post.Id" asp-route-blogShortName="@Model.BlogShortName">
+                                                        <i class="fa fa-pencil"></i> @L["Edit"]
+                                                    </a>
+                                                }
+                                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Delete) || (CurrentUser.Id.HasValue && CurrentUser.Id == Model.Post.CreatorId))
+                                                {
+                                                    <span class="seperator">|</span>
+                                                    <a href="#" id="DeletePostLink" data-postid="@Model.Post.Id" data-blogShortName="@Model.BlogShortName">
+                                                        <i class="fa fa-trash"></i> @L["Delete"]
+                                                    </a>
+                                                }
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                        <div class="img-container mb-3">
+                            <img src="@Model.Post.CoverImage" />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <section class="post-content">
-                <p>
-                    @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
-
-                </p>
-
-            </section>
+        <div class="row">
+            <div class="col-md-8 col-lg-8 mx-auto">
+                <section class="post-content">
+                    <p>
+                        @Html.Raw(RenderMarkdownToHtml(Model.Post.Content))
+                    </p>
+                </section>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            @if (Model.Post.Tags.Count > 0)
-            {
-                <div class="tags">
-                    <h5>@L["TagsInThisArticle"]</h5>
-                    @foreach (var tag in Model.Post.Tags)
-                    {
-                        <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                    }
-                </div>
-            }
-
-
-            @if (Model.CommentsWithReplies.Count > 0)
-            {
-                <abp-row v-align="Start">
-                    <abp-column size-sm="_12">
-                        <p class="float-left"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
-                        @if (hasCommentingPermission)
-                        {
-                            <a abp-button="Primary" class="btn-rounded float-right active" href="#LeaveComment">@L["LeaveComment"]</a>
-                        }
-                        else
-                        {
-                            <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
-                        }
-                    </abp-column>
-                </abp-row>
-            }
-
-            <div class="comment-area">
-                @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
+        <div class="row">
+            <div class="col-md-8 col-lg-8 mx-auto">
+                @if (Model.Post.Tags.Count > 0)
                 {
-                    <div class="media">
-                        <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
-                        <div class="media-body">
-                            <h5 class="comment-owner">
-                                @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
-                                <span class="float-right">@ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
-                            </h5>
-                            <p id="@commentWithRepliesDto.Comment.Id">
-                                @commentWithRepliesDto.Comment.Text
-                            </p>
-                            <div class="comment-buttons font-75 bg-light">
+                    <div class="tags">
+                        <h5>@L["TagsInThisArticle"]</h5>
+                        @foreach (var tag in Model.Post.Tags)
+                        {
+                            <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                        }
+                    </div>
+                }
+
+
+                @if (Model.CommentsWithReplies.Count > 0)
+                {
+                    <abp-row v-align="Start">
+                        <abp-column size-sm="_12">
+                            <p class="float-left"><i class="fa fa-comment"></i> @L["CommentWithCount", @Model.CommentCount]</p>
+                            @if (hasCommentingPermission)
+                            {
+                                <a abp-button="Primary" class="btn-rounded float-right active" href="#LeaveComment">@L["LeaveComment"]</a>
+                            }
+                            else
+                            {
+                                <a abp-button="Primary" class="btn-rounded float-right active" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
+                            }
+                        </abp-column>
+                    </abp-row>
+                }
+
+                <div class="comment-area">
+                    @foreach (var commentWithRepliesDto in Model.CommentsWithReplies)
+                    {
+                        <div class="media">
+                            <img gravatar-email="@commentWithRepliesDto.Comment.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
+                            <div class="media-body">
+                                <h5 class="comment-owner">
+                                    @(commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName)
+                                    <span>@ConvertDatetimeToTimeAgo(commentWithRepliesDto.Comment.CreationTime)</span>
+                                </h5>
+                                <p id="@commentWithRepliesDto.Comment.Id">
+                                    @commentWithRepliesDto.Comment.Text
+                                </p>
+                                <div class="comment-buttons">
+
+                                    @if (hasCommentingPermission)
+                                    {
+                                        <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                            <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
+                                        </a>
+                                    }
+
+                                    @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
+                                    {
+                                        <span class="seperator">|</span>
+                                        <a href="#" class="tag deleteLink" data-deleteid="@commentWithRepliesDto.Comment.Id">
+                                            <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
+                                        </a>
+                                    }
+
+                                    @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                    {
+                                        <span class="seperator">|</span>
+                                        <a href="#" class="tag updateLink" data-updateid="@commentWithRepliesDto.Comment.Id">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
+                                        </a>
+                                    }
+                                </div>
 
                                 @if (hasCommentingPermission)
                                 {
-                                    <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
-                                        <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
-                                    </a>
-                                }
+                                    <div class="comment-form mt-4 replyForm">
+                                        <div class="clearfix p-4">
+                                            <h3 class="mt-0">
+                                                @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
 
-                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete))
-                                {
-                                    <span class="seperator">|</span>
-                                    <a href="#" class="tag deleteLink" data-deleteid="@commentWithRepliesDto.Comment.Id">
-                                        <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
-                                    </a>
-                                }
+                                            </h3>
+                                            <div>
+                                                <form method="post">
+                                                    <input name="postId" value="@Model.Post.Id" hidden />
+                                                    <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
 
+                                                    <div class="form-group">
+                                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                    </div>
+                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
+                                                    <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                                 @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                 {
-                                    <span class="seperator">|</span>
-                                    <a href="#" class="tag updateLink" data-updateid="@commentWithRepliesDto.Comment.Id">
-                                        <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
-                                    </a>
+                                    <div class="comment-form mt-4 editForm">
+                                        <div class="clearfix p-4">
+                                            <div>
+                                                <form class="editFormClass">
+                                                    <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                                                    <div class="form-group">
+                                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
+                                                    </div>
+                                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                                    <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 }
-                            </div>
 
-                            @if (hasCommentingPermission)
-                            {
-                                <div class="comment-form mt-4 replyForm">
-                                    <div class="clearfix bg-light p-4">
-                                        <h3 class="mt-0">
-                                            @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
+                                @foreach (var reply in commentWithRepliesDto.Replies)
+                                {
+                                    <div class="media">
+                                        <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
+                                        <div class="media-body">
+                                            <h5 class="comment-owner">
+                                                @(reply.Writer == null ? "" : reply.Writer.UserName)
+                                                <span>@ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
+                                            </h5>
+                                            <p id="@reply.Id">
+                                                @reply.Text
+                                            </p>
+                                            <div class="comment-buttons">
 
-                                        </h3>
-                                        <div>
-                                            <form method="post">
-                                                <input name="postId" value="@Model.Post.Id" hidden />
-                                                <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                                                @if (hasCommentingPermission)
+                                                {
+                                                    <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
+                                                        <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
+                                                    </a>
+                                                }
+                                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                                {
+                                                    <span class="seperator">|</span>
+                                                    <a href="#" class="tag deleteLink" data-deleteid="@reply.Id">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
+                                                    </a>
+                                                }
 
-                                                <div class="form-group">
-                                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                                </div>
-                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Comment"].Value" />
-                                                <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
-                            {
-                                <div class="comment-form mt-4 editForm">
-                                    <div class="clearfix bg-light p-4">
-                                        <div>
-                                            <form class="editFormClass">
-                                                <input name="commentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                <div class="form-group">
-                                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@commentWithRepliesDto.Comment.Text</textarea>
-                                                </div>
-                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-
-                            @foreach (var reply in commentWithRepliesDto.Replies)
-                            {
-                                <div class="media">
-                                    <img gravatar-email="@reply.Writer.Email" default-image="Identicon" class="d-flex mr-3 rounded-circle comment-avatar" />
-                                    <div class="media-body">
-                                        <h5 class="comment-owner">
-                                            @(reply.Writer == null ? "" : reply.Writer.UserName)
-                                            <span class="float-right">@ConvertDatetimeToTimeAgo(reply.CreationTime)</span>
-                                        </h5>
-                                        <p id="@reply.Id">
-                                            @reply.Text
-                                        </p>
-                                        <div class="comment-buttons font-75 bg-light">
+                                                @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
+                                                {
+                                                    <span class="seperator">|</span>
+                                                    <a href="#" class="tag updateLink" data-updateid="@reply.Id">
+                                                        <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
+                                                    </a>
+                                                }
+                                            </div>
 
                                             @if (hasCommentingPermission)
                                             {
-                                                <a href="#" class="tag replyLink" data-relpyid="@commentWithRepliesDto.Comment.Id">
-                                                    <i class="fa fa-reply" aria-hidden="true"></i> @L["Reply"]
-                                                </a>
+                                                <div class="comment-form mt-4 replyForm">
+                                                    <div class="clearfix bg-light p-4">
+                                                        <h3 class="mt-0">
+                                                            @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
+                                                        </h3>
+                                                        <div>
+                                                            <form method="post">
+                                                                <input name="postId" value="@Model.Post.Id" hidden />
+                                                                <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
+                                                                <div class="form-group">
+                                                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                                                </div>
+                                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                                                <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             }
-                                            @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Delete) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
-                                            {
-                                                <span class="seperator">|</span>
-                                                <a href="#" class="tag deleteLink" data-deleteid="@reply.Id">
-                                                    <i class="fa fa-trash" aria-hidden="true"></i> @L["Delete"]
-                                                </a>
-                                            }
-
                                             @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
                                             {
-                                                <span class="seperator">|</span>
-                                                <a href="#" class="tag updateLink" data-updateid="@reply.Id">
-                                                    <i class="fa fa-pencil" aria-hidden="true"></i> @L["Edit"]
-                                                </a>
+                                                <div class="comment-form mt-4 editForm">
+                                                    <div class="clearfix bg-light p-4">
+                                                        <div>
+                                                            <form class="editFormClass">
+                                                                <input name="commentId" value="@reply.Id" hidden />
+                                                                <div class="form-group">
+                                                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
+                                                                </div>
+                                                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                                                <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             }
                                         </div>
-
-                                        @if (hasCommentingPermission)
-                                        {
-                                            <div class="comment-form mt-4 replyForm">
-                                                <div class="clearfix bg-light p-4">
-                                                    <h3 class="mt-0">
-                                                        @L["ReplyTo", commentWithRepliesDto.Comment.Writer == null ? "" : commentWithRepliesDto.Comment.Writer.UserName]
-                                                    </h3>
-                                                    <div>
-                                                        <form method="post">
-                                                            <input name="postId" value="@Model.Post.Id" hidden />
-                                                            <input name="repliedCommentId" value="@commentWithRepliesDto.Comment.Id" hidden />
-                                                            <div class="form-group">
-                                                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                                            </div>
-                                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                            <abp-button button-type="Danger" class="btn-rounded float-right replyCancelButton" text="@L["Cancel"].Value" />
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Comments.Update) || (CurrentUser.Id == commentWithRepliesDto.Comment.CreatorId))
-                                        {
-                                            <div class="comment-form mt-4 editForm">
-                                                <div class="clearfix bg-light p-4">
-                                                    <div>
-                                                        <form class="editFormClass">
-                                                            <input name="commentId" value="@reply.Id" hidden />
-                                                            <div class="form-group">
-                                                                <textarea class="form-control no-border" name="text" id="textBoxId" rows="4">@reply.Text</textarea>
-                                                            </div>
-                                                            <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                                                            <abp-button button-type="Danger" class="btn-rounded float-right editCancelButton" text="@L["Cancel"].Value" />
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
                                     </div>
-                                </div>
-                            }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                @if (hasCommentingPermission)
+                {
+                    <div class="comment-form mt-4" id="LeaveComment">
+                        <div class="vs-blog-title mb-0">
+                            <h3>@L["LeaveComment"]</h3>
+                        </div>
+                        <div class="clearfix bg-light p-4">
+                            <div>
+                                <form method="post">
+                                    <input name="postId" value="@Model.Post.Id" hidden />
+                                    <input name="repliedCommentId" id="repliedCommentId" hidden />
+                                    <div class="form-group">
+                                        <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
+                                    </div>
+                                    <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
+                                </form>
+                            </div>
                         </div>
                     </div>
                 }
+                else
+                {
+                    <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
+                }
             </div>
-
-            @if (hasCommentingPermission)
-            {
-                <div class="comment-form mt-4" id="LeaveComment">
-                    <div class="vs-blog-title mb-0">
-                        <h3>@L["LeaveComment"]</h3>
-                    </div>
-                    <div class="clearfix bg-light p-4">
-                        <div>
-                            <form method="post">
-                                <input name="postId" value="@Model.Post.Id" hidden />
-                                <input name="repliedCommentId" id="repliedCommentId" hidden />
-                                <div class="form-group">
-                                    <textarea class="form-control no-border" name="text" id="textBoxId" rows="4"></textarea>
-                                </div>
-                                <abp-button button-type="Primary" class="btn-rounded float-right" type="submit" text="@L["Submit"].Value" />
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            }
-            else
-            {
-                <a abp-button="Primary" class="btn-rounded float-right active mt-3" href="/Account/Login?returnUrl=@Request.GetEncodedPathAndQuery()">@L["LeaveComment"]</a>
-            }
         </div>
     </div>
 </div>
