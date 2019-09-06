@@ -77,10 +77,12 @@ namespace Volo.Abp.AspNetCore.Mvc
             var app = context.GetApplicationBuilder();
 
             app.UseCorrelationId();
+            app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
+            app.UseAuthorization();
             app.UseAuditing();
             app.UseUnitOfWork();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRouteAndArea();
         }
     }
 }
