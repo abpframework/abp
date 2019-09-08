@@ -46,6 +46,6 @@
     "DatatableActionDropdownDefaultText": "Ações",
     "ChangePassword": "Alterar Senha",
     "PersonalInfo": "Perfil",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Você tem alterações não salvas."
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Há alterações não salvas."
   }
 }
