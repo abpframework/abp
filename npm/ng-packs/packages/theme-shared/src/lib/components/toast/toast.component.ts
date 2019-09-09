@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'abp-toast',
   template: `
-    <p-toast position="bottom-right" key="abpToast" [baseZIndex]="1000">
+    <p-toast position="bottom-right" key="abpToast" styleClass="abp-toast" [baseZIndex]="1000">
       <ng-template let-message pTemplate="message">
         <span
           class="ui-toast-icon pi"
