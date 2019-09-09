@@ -138,7 +138,9 @@ namespace Volo.Abp.IdentityServer.Clients
             //Arrange
             await _persistedGrantStore.StoreAsync(new PersistedGrant
             {
-                Key = "#1P3R"
+                Key = "#1P3R",
+                Type = "Type",
+                ClientId = "ClientId"
             });
 
             //Act
