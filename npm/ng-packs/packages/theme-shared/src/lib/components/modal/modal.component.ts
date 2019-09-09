@@ -119,11 +119,16 @@ export class ModalComponent implements OnDestroy {
     this.visibleChange.emit(value);
     this.showModal = value;
 
-    value
-      ? timer(ANIMATION_TIMEOUT + 100)
-          .pipe(take(1))
-          .subscribe(_ => (this.closable = true))
-      : (this.closable = false);
+    if (value) {
+      timer(ANIMATION_TIMEOUT + 100)
+        .pipe(take(1))
+        .subscribe(_ => (this.closable = true));
+
+      this.renderer.addClass(document.body, 'modal-open');
+    } else {
+      this.closable = false;
+      this.renderer.removeClass(document.body, 'modal-open');
+    }
   }
 
   listen() {
