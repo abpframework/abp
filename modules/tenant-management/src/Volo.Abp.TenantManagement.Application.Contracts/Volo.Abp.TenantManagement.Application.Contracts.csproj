@@ -18,8 +18,4 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Ddd.Application\Volo.Abp.Ddd.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\TenantManagement\Localization\ApplicationContracts\*.json" />
-  </ItemGroup>
-
 </Project>
