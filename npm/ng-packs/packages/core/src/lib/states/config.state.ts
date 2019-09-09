@@ -93,26 +93,12 @@ export class ConfigState {
     return selector;
   }
 
-  static getGrantedPolicy(condition: string = '') {
-    const keys = condition
-      .replace(/\(|\)|\!|\s/g, '')
-      .split(/\|\||&&/)
-      .filter(key => key);
-
+  static getGrantedPolicy(key: string) {
     const selector = createSelector(
       [ConfigState],
       function(state: Config.State): boolean {
-        if (!keys.length) return true;
-
-        const getPolicy = key => snq(() => state.auth.grantedPolicies[key], false);
-        if (keys.length > 1) {
-          keys.forEach(key => {
-            const value = getPolicy(key);
-            condition = condition.replace(key, value);
-          });
-        }
-
-        return getPolicy(condition);
+        if (!key) return true;
+        return snq(() => state.auth.grantedPolicies[key], false);
       },
     );
 

@@ -5,7 +5,7 @@
     "Tenant": "Inquilino",
     "Switch": "trocar",
     "Name": "Nome",
-    "SwitchTenantHint": "Deixe o campo de nome em branco para alternar para o lado do host.",
+    "SwitchTenantHint": "Deixe o campo de nome em branco para acessar o host.",
     "NotSelected": "Não selecionado"
   }
 }
