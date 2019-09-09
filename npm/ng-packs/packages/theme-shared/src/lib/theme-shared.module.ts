@@ -18,22 +18,26 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { ProfileComponent } from './components/profile/profile.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
-export function appendScript(injector: Injector) {
-  const fn = function() {
-    const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
+export function appendScript(styles) {
+  const higher = (injector: Injector) => {
+    const fn = function() {
+      const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
 
-    return forkJoin(
-      lazyLoadService.load(
-        null,
-        'style',
-        styles,
-        'head',
-        'afterbegin',
-      ) /* lazyLoadService.load(null, 'script', scripts) */,
-    ).pipe(take(1));
+      return forkJoin(
+        lazyLoadService.load(
+          null,
+          'style',
+          styles,
+          'head',
+          'afterbegin',
+        ) /* lazyLoadService.load(null, 'script', scripts) */,
+      ).pipe(take(1));
+    };
+
+    return fn;
   };
 
-  return fn;
+  return higher;
 }
 
 @NgModule({
@@ -87,7 +91,7 @@ export class ThemeSharedModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [Injector, ErrorHandler],
-          useFactory: appendScript,
+          useFactory: appendScript(styles),
         },
         { provide: MessageService, useClass: MessageService },
       ],

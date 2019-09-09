@@ -32,6 +32,11 @@ export default `
  background-color: rgba(0, 0, 0, .6);
 }
 
+.modal.show {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
 .abp-ellipsis-inline {
   display: inline-block;
   overflow: hidden;
