@@ -15,6 +15,20 @@
     "The field {0} must be a string with a maximum length of {1}.": "O campo {0} deve ser uma palavra com o tamanho máximo de {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "O campo {0} deve ser uma palavra com o tamanho mínimo de {2} e tamanho máximo de {1}.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "O campo {0} não é um http, https, ou FTP válido.",
-    "The field {0} is invalid.": "O campo {0} é inválido."
+    "The field {0} is invalid.": "O campo {0} é inválido.",
+    "ThisFieldIsNotAValidCreditCardNumber.": "Não é um cartão de crédito válido.",
+    "ThisFieldIsNotValid.": "Campo inválido.",
+    "ThisFieldIsNotAValidEmailAddress.": "E-mail inválido.",
+    "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "Este campo só aceita arquivos com asseguintes extensões: {0}",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}": "This field must be a string or array type with a maximum length of '{0}'.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "This field must be a string or array type with a minimum length of '{0}'.",
+    "ThisFieldIsNotAValidPhoneNumber.": "Número de telefone inválido.",
+    "ThisFieldMustBeBetween{0}And{1}": "Este campo deve estar entre {0} e {1}.",
+    "ThisFieldMustMatchTheRegularExpression{0}": "Este campo deve ser compatível com a expressao regular: '{0}'.",
+    "ThisFieldIsRequired.": "Campo Obrigatório.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "Campo com no máximo {0} caracteres.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "Este campo deve possuir entre {1} e {0} caracteres.",
+    "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "Este campo não é um http, https, ou ftp complatamente qualificado.",
+    "ThisFieldIsInvalid.": "Campo inválido."
   }
 }
