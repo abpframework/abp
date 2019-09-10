@@ -224,6 +224,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityServerApiResources", x => x.Id);
+                    table.UniqueConstraint("AK_IdentityServerApiResources_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -309,6 +310,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityServerIdentityResources", x => x.Id);
+                    table.UniqueConstraint("AK_IdentityServerIdentityResources_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(

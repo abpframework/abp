@@ -10,7 +10,7 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameMigrationsDbContext))]
-    [Migration("20190816092925_Initial")]
+    [Migration("20190910115959_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -640,6 +640,8 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Name");
+
                     b.ToTable("IdentityServerApiResources");
                 });
 
@@ -1072,6 +1074,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<bool>("ShowInDiscoveryDocument");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
 
                     b.ToTable("IdentityServerIdentityResources");
                 });

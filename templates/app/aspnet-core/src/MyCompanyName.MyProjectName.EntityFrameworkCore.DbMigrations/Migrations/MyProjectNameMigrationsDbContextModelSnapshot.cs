@@ -638,6 +638,8 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasAlternateKey("Name");
+
                     b.ToTable("IdentityServerApiResources");
                 });
 
@@ -1070,6 +1072,8 @@ namespace MyCompanyName.MyProjectName.Migrations
                     b.Property<bool>("ShowInDiscoveryDocument");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Name");
 
                     b.ToTable("IdentityServerIdentityResources");
                 });
