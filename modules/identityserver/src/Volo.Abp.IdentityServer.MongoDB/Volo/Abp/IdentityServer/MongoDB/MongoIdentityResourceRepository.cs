@@ -50,5 +50,10 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetCountAsync();
         }
+
+        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null)
+        {
+            return await GetMongoQueryable().AnyAsync(ir => ir.Id != expectedId && ir.Name == name);
+        }
     }
 }
