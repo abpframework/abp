@@ -24,6 +24,7 @@ import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
+import { ForDirective } from './directives/for.directive';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
+    ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
     PermissionDirective,
@@ -58,6 +60,7 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
+    ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
     PermissionDirective,
