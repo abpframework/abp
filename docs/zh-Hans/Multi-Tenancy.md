@@ -115,7 +115,7 @@ namespace MyCompany.MyProject
         {
             Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new MyCustomTenantResolver());
+                options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
 
             //...
@@ -124,14 +124,14 @@ namespace MyCompany.MyProject
 }
 ````
 
-MyCustomTenantResolver必须像下面这样实现**ITenantResolver**接口:
+`MyCustomTenantResolveContributor`必须像下面这样实现**ITenantResolveContributor**接口:
 
 ````C#
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    public class MyCustomTenantResolver : ITenantResolver
+    public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
         public void Resolve(ITenantResolveContext context)
         {

@@ -10,7 +10,6 @@ import { UsersComponent } from './components/users/users.component';
 import { PermissionManagementModule } from '@abp/ng.permission-management';
 import { TableModule } from 'primeng/table';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 @NgModule({
   declarations: [RolesComponent, UsersComponent],
@@ -24,7 +23,6 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     NgbDropdownModule,
     PermissionManagementModule,
     NgxValidateCoreModule,
-    PerfectScrollbarModule,
   ],
 })
 export class IdentityModule {}
