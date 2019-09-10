@@ -1,12 +1,13 @@
-import { Component, OnDestroy, Type } from '@angular/core';
-import { NavigationEnd, Router, UrlSegment } from '@angular/router';
+import { Component, Input, OnDestroy, Type } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, UrlSegment } from '@angular/router';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { eLayoutType } from '../enums';
-import { ABP, Config } from '../models';
-import { ConfigState } from '../states';
-import { takeUntilDestroy } from '../utils';
 import snq from 'snq';
+import { eLayoutType } from '../enums/common';
+import { Config } from '../models/config';
+import { ABP } from '../models/common';
+import { ConfigState } from '../states/config.state';
+import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Component({
   selector: 'abp-dynamic-layout',
@@ -23,16 +24,23 @@ export class DynamicLayoutComponent implements OnDestroy {
 
   layout: Type<any>;
 
-  constructor(private router: Router, private store: Store) {
+  constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
+    const {
+      requirements: { layouts },
+      routes,
+    } = this.store.selectSnapshot(ConfigState.getAll);
+
+    if ((this.route.snapshot.data || {}).layout) {
+      this.layout = layouts
+        .filter(l => !!l)
+        .find(l => snq(() => l.type.toLowerCase().indexOf(this.route.snapshot.data.layout), -1) > -1);
+    }
+
     this.router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
       if (event instanceof NavigationEnd) {
         const { segments } = this.router.parseUrl(event.url).root.children.primary;
-        const {
-          requirements: { layouts },
-          routes,
-        } = this.store.selectSnapshot(ConfigState.getAll);
 
-        const layout = findLayout(segments, routes);
+        const layout = (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
 
         this.layout = layouts.filter(l => !!l).find(l => snq(() => l.type.toLowerCase().indexOf(layout), -1) > -1);
       }

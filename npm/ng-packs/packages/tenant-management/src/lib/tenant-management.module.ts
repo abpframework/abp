@@ -1,6 +1,6 @@
 import { CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { NgModule } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxsModule } from '@ngxs/store';
 import { TableModule } from 'primeng/table';
@@ -24,3 +24,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   ],
 })
 export class TenantManagementModule {}
+
+export function TenantManagementProviders(): Provider[] {
+  return [];
+}

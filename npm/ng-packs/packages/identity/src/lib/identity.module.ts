@@ -1,5 +1,5 @@
 import { CoreModule } from '@abp/ng.core';
-import { NgModule } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 import { NgxsModule } from '@ngxs/store';
 import { RolesComponent } from './components/roles/roles.component';
 import { IdentityRoutingModule } from './identity-routing.module';
@@ -26,3 +26,7 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   ],
 })
 export class IdentityModule {}
+
+export function IdentityProviders(): Provider[] {
+  return [];
+}
