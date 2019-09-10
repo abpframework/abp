@@ -61,6 +61,11 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null)
+        {
+            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name);
+        }
+
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var scopeClaims = DbContext.Set<ApiScopeClaim>().Where(sc => sc.ApiResourceId == id);

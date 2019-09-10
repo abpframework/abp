@@ -11,5 +11,4 @@ export const SETTING_MANAGEMENT_ROUTES = {
       iconClass: 'fa fa-cog',
     },
   ] as ABP.FullRoute[],
-  settings: [],
 };
