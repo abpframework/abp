@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Microsoft.Extensions.FileProviders
 {
@@ -56,6 +57,18 @@ namespace Microsoft.Extensions.FileProviders
             {
                 return await stream.GetAllBytesAsync();
             }
+        }
+
+        public static string GetVirtualOrPhysicalPathOrNull([NotNull] this IFileInfo fileInfo)
+        {
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            if (fileInfo is EmbeddedResourceFileInfo embeddedFileInfo)
+            {
+                return embeddedFileInfo.VirtualPath;
+            }
+
+            return fileInfo.PhysicalPath;
         }
     }
 }

@@ -72,18 +72,6 @@ namespace Volo.Abp.VirtualFileSystem
                 );
             }
 
-            public override IFileInfo GetFileInfo(string subpath)
-            {
-                var result = base.GetFileInfo(subpath);
-                return result;
-            }
-
-            public override IDirectoryContents GetDirectoryContents(string subpath)
-            {
-                var result = base.GetDirectoryContents(subpath);
-                return result;
-            }
-
             private Dictionary<string, IFileInfo> CreateFiles()
             {
                 var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);
