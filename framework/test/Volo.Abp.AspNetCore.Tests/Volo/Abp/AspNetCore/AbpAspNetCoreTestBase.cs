@@ -8,6 +8,11 @@ using Volo.Abp.AspNetCore.TestBase;
 
 namespace Volo.Abp.AspNetCore
 {
+    public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Startup>
+    {
+
+    }
+
     public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
         where TStartup : class
     {

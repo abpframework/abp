@@ -77,6 +77,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var app = context.GetApplicationBuilder();
 
             app.UseCorrelationId();
+            app.UseVirtualFiles();
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAuthorization();
