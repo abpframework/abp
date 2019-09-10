@@ -46,10 +46,12 @@ namespace MyCompanyName.MyProjectName
             ConfigureUrls(configuration);
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
-            ConfigureSwagger(context);
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
             ConfigureCors(context, configuration);
+
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //ConfigureSwaggerServices(context);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -99,7 +101,7 @@ namespace MyCompanyName.MyProjectName
                 });
         }
 
-        private static void ConfigureSwagger(ServiceConfigurationContext context)
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
         {
             context.Services.AddSwaggerGen(
                 options =>
@@ -147,6 +149,7 @@ namespace MyCompanyName.MyProjectName
         {
             var app = context.GetApplicationBuilder();
 
+            app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
 
             app.UseVirtualFiles();
@@ -160,11 +163,15 @@ namespace MyCompanyName.MyProjectName
 
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
+
+            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
+            */
+
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

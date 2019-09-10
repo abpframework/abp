@@ -72,7 +72,9 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
-            ConfigureSwaggerServices(context.Services);
+
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //ConfigureSwaggerServices(context.Services);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -188,6 +190,7 @@ namespace MyCompanyName.MyProjectName.Web
                 app.UseErrorPage();
             }
 
+            app.UseRouting();
             app.UseVirtualFiles();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
@@ -199,11 +202,15 @@ namespace MyCompanyName.MyProjectName.Web
 
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
+
+            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
+            */
+
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

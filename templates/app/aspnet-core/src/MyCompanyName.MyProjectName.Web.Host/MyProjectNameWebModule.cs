@@ -73,8 +73,10 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices();
-            ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
+
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //ConfigureSwaggerServices(context.Services);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -209,6 +211,7 @@ namespace MyCompanyName.MyProjectName.Web
                 app.UseErrorPage();
             }
 
+            app.UseRouting();
             app.UseVirtualFiles();
             app.UseAuthentication();
 
@@ -219,11 +222,13 @@ namespace MyCompanyName.MyProjectName.Web
 
             app.UseAbpRequestLocalization();
 
+            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
+            */
 
             app.UseAuditing();
 
