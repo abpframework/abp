@@ -133,6 +133,7 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseAuthentication();
+            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();

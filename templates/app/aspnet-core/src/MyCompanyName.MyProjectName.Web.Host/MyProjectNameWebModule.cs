@@ -214,6 +214,7 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseRouting();
             app.UseVirtualFiles();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {

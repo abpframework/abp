@@ -78,6 +78,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 );
 
             var mvcBuilder = context.Services.AddMvc()
+                .AddRazorRuntimeCompilation()
                 .AddDataAnnotationsLocalization(options =>
                 {
 
@@ -88,7 +89,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                     };
                 })                
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
-            
 
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
