@@ -124,7 +124,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-MyCustomTenantResolveContributor必须像下面这样实现**ITenantResolveContributor**接口:
+`MyCustomTenantResolveContributor`必须像下面这样实现**ITenantResolveContributor**接口:
 
 ````C#
 using Volo.Abp.MultiTenancy;
