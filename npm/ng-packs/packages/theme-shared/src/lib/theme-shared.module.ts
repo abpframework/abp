@@ -20,10 +20,10 @@ import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
 
-import('chart.js').then(() => chartJsLoaded$.next(true));
-
 export function appendScript(injector: Injector) {
   const fn = function() {
+    import('chart.js').then(() => chartJsLoaded$.next(true));
+
     const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
 
     return forkJoin(
