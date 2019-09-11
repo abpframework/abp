@@ -17,27 +17,24 @@ import { ValidationErrorComponent } from './components/errors/validation-error.c
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+import { ChartComponent } from './components/chart/chart.component';
 
-export function appendScript(styles) {
-  const higher = (injector: Injector) => {
-    const fn = function() {
-      const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
+export function appendScript(injector: Injector) {
+  const fn = function() {
+    const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
 
-      return forkJoin(
-        lazyLoadService.load(
-          null,
-          'style',
-          styles,
-          'head',
-          'afterbegin',
-        ) /* lazyLoadService.load(null, 'script', scripts) */,
-      ).pipe(take(1));
-    };
-
-    return fn;
+    return forkJoin(
+      lazyLoadService.load(
+        null,
+        'style',
+        styles,
+        'head',
+        'afterbegin',
+      ) /* lazyLoadService.load(null, 'script', scripts) */,
+    ).pipe(take(1));
   };
 
-  return higher;
+  return fn;
 }
 
 @NgModule({
@@ -59,26 +56,28 @@ export function appendScript(styles) {
     }),
   ],
   declarations: [
+    BreadcrumbComponent,
     ButtonComponent,
+    ChangePasswordComponent,
+    ChartComponent,
     ConfirmationComponent,
-    ToastComponent,
-    ModalComponent,
     ErrorComponent,
     LoaderBarComponent,
-    ValidationErrorComponent,
-    ChangePasswordComponent,
+    ModalComponent,
     ProfileComponent,
-    BreadcrumbComponent,
+    ToastComponent,
+    ValidationErrorComponent,
   ],
   exports: [
-    ButtonComponent,
-    ConfirmationComponent,
-    ToastComponent,
-    ModalComponent,
-    LoaderBarComponent,
-    ChangePasswordComponent,
-    ProfileComponent,
     BreadcrumbComponent,
+    ButtonComponent,
+    ChangePasswordComponent,
+    ChartComponent,
+    ConfirmationComponent,
+    LoaderBarComponent,
+    ModalComponent,
+    ProfileComponent,
+    ToastComponent,
   ],
   entryComponents: [ErrorComponent, ValidationErrorComponent],
 })
@@ -91,7 +90,7 @@ export class ThemeSharedModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [Injector, ErrorHandler],
-          useFactory: appendScript(styles),
+          useFactory: appendScript,
         },
         { provide: MessageService, useClass: MessageService },
       ],
