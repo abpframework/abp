@@ -4,6 +4,7 @@ import { actionMatcher, InitState, NgxsNextPluginFn, NgxsPlugin, setValue, Updat
 import snq from 'snq';
 import { ABP } from '../../models';
 import { organizeRoutes } from '../../utils/route-utils';
+import clone from 'just-clone';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
@@ -21,11 +22,12 @@ export class ConfigPlugin implements NgxsPlugin {
     if (isInitAction && !this.initialized) {
       let { routes, wrappers } = transformRoutes(this.router.config);
       routes = organizeRoutes(routes, wrappers);
-
+      const flattedRoutes = flatRoutes(clone(routes));
       state = setValue(state, 'ConfigState', {
         ...(state.ConfigState && { ...state.ConfigState }),
         ...this.options,
         routes,
+        flattedRoutes,
       });
 
       this.initialized = true;
@@ -91,4 +93,21 @@ function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
         children: setUrls(route.children, `/${route.path}`),
       }),
   }));
+}
+
+function flatRoutes(routes: ABP.FullRoute[]): ABP.FullRoute[] {
+  const flat = (r: ABP.FullRoute[]) => {
+    return r.reduce((acc, val) => {
+      let value: ABP.FullRoute[] = [val];
+      if (val.children) {
+        const { children } = val;
+        delete val.children;
+        value = [val, ...flat(children)];
+      }
+
+      return [...acc, ...value];
+    }, []);
+  };
+
+  return flat(routes);
 }
