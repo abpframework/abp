@@ -100,9 +100,7 @@ function flatRoutes(routes: ABP.FullRoute[]): ABP.FullRoute[] {
     return r.reduce((acc, val) => {
       let value: ABP.FullRoute[] = [val];
       if (val.children) {
-        const { children } = val;
-        delete val.children;
-        value = [val, ...flat(children)];
+        value = [val, ...flat(val.children)];
       }
 
       return [...acc, ...value];

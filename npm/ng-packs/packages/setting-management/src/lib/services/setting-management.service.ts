@@ -1,11 +1,10 @@
 import { SettingTab } from '@abp/ng.theme.shared';
 import { Injectable } from '@angular/core';
-import { Router, RouteConfigLoadEnd, NavigationEnd } from '@angular/router';
+import { RouteConfigLoadEnd, Router } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
-import { filter } from 'rxjs/operators';
-import { takeUntilDestroy } from '@abp/ng.core';
-import { Subscription, timer } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class SettingManagementService {
@@ -13,22 +12,29 @@ export class SettingManagementService {
 
   selected = {} as SettingTab;
 
+  private destroy$ = new Subject();
+
   constructor(private router: Router, private store: Store) {
     let timeout: Subscription;
     this.router.events
       .pipe(
         filter(event => event instanceof RouteConfigLoadEnd),
-        takeUntilDestroy(this),
+        takeUntil(this.destroy$),
       )
       .subscribe(event => {
-        if (timeout) timeout.unsubscribe();
+        if (timeout) {
+          timeout.unsubscribe();
+          this.destroy$.next();
+        }
         timeout = timer(150).subscribe(() => {
           this.setSettings();
         });
       });
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.destroy$.next();
+  }
 
   setSettings() {
     setTimeout(() => {
