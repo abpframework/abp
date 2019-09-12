@@ -1150,7 +1150,7 @@
          * @return {?}
          */
         function (state) {
-            return state.environment.application || {};
+            return state.environment.application || ((/** @type {?} */ ({})));
         };
         /**
          * @param {?} key
@@ -1450,7 +1450,7 @@
             store.Selector(),
             __metadata("design:type", Function),
             __metadata("design:paramtypes", [Object]),
-            __metadata("design:returntype", void 0)
+            __metadata("design:returntype", Object)
         ], ConfigState, "getApplicationInfo", null);
         ConfigState = ConfigState_1 = __decorate([
             store.State({

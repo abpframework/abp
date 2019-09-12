@@ -856,7 +856,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
      * @return {?}
      */
     static getApplicationInfo(state) {
-        return state.environment.application || {};
+        return state.environment.application || ((/** @type {?} */ ({})));
     }
     /**
      * @param {?} key
@@ -1113,7 +1113,7 @@ __decorate([
     Selector(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Object)
 ], ConfigState, "getApplicationInfo", null);
 ConfigState = ConfigState_1 = __decorate([
     State({

@@ -6,7 +6,7 @@ export declare class ConfigState {
     private appConfigurationService;
     private store;
     static getAll(state: Config.State): Config.State;
-    static getApplicationInfo(state: Config.State): {};
+    static getApplicationInfo(state: Config.State): Config.Application;
     static getOne(key: string): (state: Config.State) => any;
     static getDeep(keys: string[] | string): (state: Config.State) => any;
     static getRoute(path?: string, name?: string): (state: Config.State) => ABP.FullRoute;
