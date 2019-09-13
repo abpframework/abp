@@ -18,6 +18,7 @@
     "Manage": "Yönet",
     "StartDate": "Başlangıç tarihi",
     "EndDate": "bitiş tarihi",
-    "Modules": "Modüller"
+    "Modules": "Modüller",
+    "Volo.AbpIo.Commercial:010004": "Kullanıcı bulunamadı! İlgili kullanıcının daha önceden sisteme kayıt olmuş olması gerekiyor."
   }
 }
