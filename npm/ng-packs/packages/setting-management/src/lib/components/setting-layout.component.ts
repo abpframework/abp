@@ -26,12 +26,4 @@ export class SettingLayoutComponent {
   }
 
   ngOnDestroy() {}
-
-  ngAfterViewInit() {
-    timer(250).subscribe(() => {
-      if (!this.settingManagementService.settings.length) {
-        this.settingManagementService.setSettings();
-      }
-    });
-  }
 }

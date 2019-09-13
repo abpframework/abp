@@ -15,21 +15,9 @@ export class SettingManagementService {
   private destroy$ = new Subject();
 
   constructor(private router: Router, private store: Store) {
-    let timeout: Subscription;
-    this.router.events
-      .pipe(
-        filter(event => event instanceof RouteConfigLoadEnd),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(event => {
-        if (timeout) {
-          timeout.unsubscribe();
-          this.destroy$.next();
-        }
-        timeout = timer(150).subscribe(() => {
-          this.setSettings();
-        });
-      });
+    setTimeout(() => {
+      this.setSettings();
+    }, 0);
   }
 
   ngOnDestroy() {
