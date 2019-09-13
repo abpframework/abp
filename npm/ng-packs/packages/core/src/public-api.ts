@@ -3,6 +3,7 @@
  */
 
 // export * from './lib/handlers';
+export * from './lib/abstracts';
 export * from './lib/actions';
 export * from './lib/components';
 export * from './lib/constants';
