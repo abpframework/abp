@@ -21,5 +21,4 @@ export const IDENTITY_ROUTES = {
       ],
     },
   ] as ABP.FullRoute[],
-  settings: [],
 };
