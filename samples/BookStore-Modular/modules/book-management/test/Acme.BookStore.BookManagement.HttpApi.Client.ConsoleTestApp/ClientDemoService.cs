@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Acme.BookStore.BookManagement.Books;
 using IdentityModel.Client;
 using Acme.BookStore.BookManagement.Samples;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityModel;
@@ -14,15 +16,18 @@ namespace Acme.BookStore.BookManagement
         private readonly ISampleAppService _sampleAppService;
         private readonly IIdentityModelAuthenticationService _authenticationService;
         private readonly IConfigurationAccessor _configurationAccessor;
+        private readonly IBookAppService _bookAppService;
 
         public ClientDemoService(
             ISampleAppService sampleAppService, 
             IIdentityModelAuthenticationService authenticationService, 
-            IConfigurationAccessor configurationAccessor)
+            IConfigurationAccessor configurationAccessor,
+            IBookAppService bookAppService)
         {
             _sampleAppService = sampleAppService;
             _authenticationService = authenticationService;
             _configurationAccessor = configurationAccessor;
+            _bookAppService = bookAppService;
         }
 
         public async Task RunAsync()
@@ -30,6 +35,12 @@ namespace Acme.BookStore.BookManagement
             await TestWithDynamicProxiesAsync();
             await TestWithHttpClientAndIdentityModelAuthenticationServiceAsync();
             await TestAllManuallyAsync();
+
+            var result = await _bookAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            foreach (var bookDto in result.Items)
+            {
+                Console.WriteLine(bookDto.Name);
+            }
         }
 
         /* Shows how to perform an HTTP request to the API using ABP's dynamic c# proxy

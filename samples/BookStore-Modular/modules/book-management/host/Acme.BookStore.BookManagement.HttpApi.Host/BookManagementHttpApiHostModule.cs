@@ -9,6 +9,7 @@ using StackExchange.Redis;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.EntityFrameworkCore;
@@ -98,6 +99,12 @@ namespace Acme.BookStore.BookManagement
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "BookManagement-Protection-Keys");
             }
+
+            Configure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                options.ConventionalControllers
+                    .Create(typeof(BookManagementApplicationModule).Assembly);
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
