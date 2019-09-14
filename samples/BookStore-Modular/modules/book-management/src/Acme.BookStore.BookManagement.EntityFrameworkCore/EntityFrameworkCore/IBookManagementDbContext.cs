@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Data;
+﻿using Acme.BookStore.BookManagement.Books;
+using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
 namespace Acme.BookStore.BookManagement.EntityFrameworkCore
@@ -6,8 +8,6 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
     [ConnectionStringName("BookManagement")]
     public interface IBookManagementDbContext : IEfCoreDbContext
     {
-        /* Add DbSet for each Aggregate Root here. Example:
-         * DbSet<Question> Questions { get; }
-         */
+        DbSet<Book> Books { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Acme.BookStore.BookManagement.Books;
+using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -11,9 +12,7 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
 
         public static string Schema { get; set; } = BookManagementConsts.DefaultDbSchema;
 
-        /* Add DbSet for each Aggregate Root here. Example:
-         * public DbSet<Question> Questions { get; set; }
-         */
+        public DbSet<Book> Books { get; set; }
 
         public BookManagementDbContext(DbContextOptions<BookManagementDbContext> options) 
             : base(options)

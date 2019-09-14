@@ -1,4 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Acme.BookStore.BookManagement.Localization;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Volo.Abp.UI.Navigation;
 
 namespace Acme.BookStore.BookManagement.Web
@@ -15,7 +18,12 @@ namespace Acme.BookStore.BookManagement.Web
 
         private Task ConfigureMainMenu(MenuConfigurationContext context)
         {
-            //Add main menu items.
+            var stringLocalizer = context.ServiceProvider.GetRequiredService<IStringLocalizer<BookManagementResource>>();
+
+            context.Menu.AddItem(
+                new ApplicationMenuItem("BookManagement", stringLocalizer["Menu:BookManagement"])
+                    .AddItem(new ApplicationMenuItem("BookManagement.Books", stringLocalizer["Menu:Books"], url: "/BookManagement/Books"))
+            );
 
             return Task.CompletedTask;
         }

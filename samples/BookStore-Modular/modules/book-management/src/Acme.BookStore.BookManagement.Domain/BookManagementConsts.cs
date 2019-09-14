@@ -2,7 +2,7 @@
 {
     public static class BookManagementConsts
     {
-        public const string DefaultDbTablePrefix = "BookManagement";
+        public const string DefaultDbTablePrefix = "Bm";
 
         public const string DefaultDbSchema = null;
     }

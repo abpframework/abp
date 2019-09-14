@@ -1,6 +1,8 @@
 ﻿using System;
+using Acme.BookStore.BookManagement.Books;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Acme.BookStore.BookManagement.EntityFrameworkCore
 {
@@ -16,25 +18,12 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
 
             optionsAction?.Invoke(options);
 
-            /* Configure all entities here. Example:
-
-            builder.Entity<Question>(b =>
-            {
-                //Configure table & schema name
-                b.ToTable(options.TablePrefix + "Questions", options.Schema);
-            
-                b.ConfigureFullAuditedAggregateRoot();
-            
-                //Properties
-                b.Property(q => q.Title).IsRequired().HasMaxLength(QuestionConsts.MaxTitleLength);
-                
-                //Relations
-                b.HasMany(question => question.Tags).WithOne().HasForeignKey(qt => qt.QuestionId);
-
-                //Indexes
-                b.HasIndex(q => q.CreationTime);
-            });
-            */
+            builder.Entity<Book>(b =>
+               {
+                   b.ToTable(BookManagementConsts.DefaultDbTablePrefix + "Books", BookManagementConsts.DefaultDbSchema);
+                   b.ConfigureByConvention(); //auto configure for the base class props
+                   b.Property(x => x.Name).IsRequired().HasMaxLength(128);
+               });
         }
     }
 }
