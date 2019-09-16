@@ -96,6 +96,12 @@ export class ModalComponent implements OnDestroy {
 
   @ViewChildren('abp-button') abpButtons;
 
+  @Output()
+  show = new EventEmitter();
+
+  @Output()
+  hide = new EventEmitter();
+
   _visible: boolean = false;
 
   _busy: boolean = false;
@@ -125,9 +131,11 @@ export class ModalComponent implements OnDestroy {
         .subscribe(_ => (this.closable = true));
 
       this.renderer.addClass(document.body, 'modal-open');
+      this.show.emit();
     } else {
       this.closable = false;
       this.renderer.removeClass(document.body, 'modal-open');
+      this.hide.emit();
     }
   }
 
