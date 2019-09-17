@@ -141,7 +141,7 @@ namespace MyCompanyName.MyProjectName
             }
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
-            //TODO: Enabled when Swagger supports ASP.NET Core 3.x
+            //TODO: Enable when Swagger supports ASP.NET Core 3.x
             //app.UseSwagger();
             //app.UseSwaggerUI(options =>
             //{
