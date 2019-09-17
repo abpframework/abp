@@ -94,13 +94,15 @@ namespace ProductService.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization(); //TODO: localization?
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Product Service API");
-            });
+            //TODO: Enable swagger UI once it supports asp.net core 3.x
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Product Service API");
+            //});
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
 
