@@ -133,6 +133,7 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseJwtTokenMiddleware();
             if (MultiTenancyConsts.IsEnabled)
             {
