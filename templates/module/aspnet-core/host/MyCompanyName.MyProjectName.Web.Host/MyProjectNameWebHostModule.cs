@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -139,7 +140,7 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
@@ -176,7 +177,7 @@ namespace MyCompanyName.MyProjectName
         private void ConfigureRedis(
             ServiceConfigurationContext context,
             IConfigurationRoot configuration,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
             {
@@ -209,6 +210,7 @@ namespace MyCompanyName.MyProjectName
 
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -218,11 +220,12 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
-            });
+            //TODO: Enabled when Swagger supports ASP.NET Core 3.x
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            //});
 
             app.UseAuditing();
 
