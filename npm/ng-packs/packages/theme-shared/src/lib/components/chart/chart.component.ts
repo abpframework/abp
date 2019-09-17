@@ -1,5 +1,15 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  Output,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { chartJsLoaded$ } from '../../utils/widget-utils';
 declare const Chart: any;
 
 @Component({
@@ -29,7 +39,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   chart: any;
 
-  constructor(public el: ElementRef) {}
+  constructor(public el: ElementRef, private cdRef: ChangeDetectorRef) {}
 
   @Input() get data(): any {
     return this._data;
@@ -49,17 +59,19 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    try {
-      Chart;
-    } catch (error) {
-      console.error(`Chart is not found. Import the Chart from app.module like shown below:
-      import('chart.js');
-      `);
-      return;
-    }
+    chartJsLoaded$.subscribe(() => {
+      try {
+        Chart;
+      } catch (error) {
+        console.error(`Chart is not found. Import the Chart from app.module like shown below:
+        import('chart.js');
+        `);
+        return;
+      }
 
-    this.initChart();
-    this._initialized = true;
+      this.initChart();
+      this._initialized = true;
+    });
   }
 
   onCanvasClick = event => {
@@ -87,6 +99,8 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       options: this.options,
       plugins: this.plugins,
     });
+
+    this.cdRef.detectChanges();
   };
 
   generateLegend = () => {
@@ -98,6 +112,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   refresh = () => {
     if (this.chart) {
       this.chart.update();
+      this.cdRef.detectChanges();
     }
   };
 

@@ -33,7 +33,7 @@ export class DynamicLayoutComponent implements OnDestroy {
     if ((this.route.snapshot.data || {}).layout) {
       this.layout = layouts
         .filter(l => !!l)
-        .find(l => snq(() => l.type.toLowerCase().indexOf(this.route.snapshot.data.layout), -1) > -1);
+        .find((l: any) => snq(() => l.type.toLowerCase().indexOf(this.route.snapshot.data.layout), -1) > -1);
     }
 
     this.router.events.pipe(takeUntilDestroy(this)).subscribe(event => {
@@ -42,7 +42,9 @@ export class DynamicLayoutComponent implements OnDestroy {
 
         const layout = (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
 
-        this.layout = layouts.filter(l => !!l).find(l => snq(() => l.type.toLowerCase().indexOf(layout), -1) > -1);
+        this.layout = layouts
+          .filter(l => !!l)
+          .find((l: any) => snq(() => l.type.toLowerCase().indexOf(layout), -1) > -1);
       }
     });
   }

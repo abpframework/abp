@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/table'), require('@angular/router'), require('@angular/forms'), require('@ngxs/router-plugin'), require('@ngxs/store'), require('angular-oauth2-oidc'), require('rxjs'), require('rxjs/operators'), require('snq')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.account', ['exports', '@angular/core', '@abp/ng.core', '@abp/ng.theme.shared', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/table', '@angular/router', '@angular/forms', '@ngxs/router-plugin', '@ngxs/store', 'angular-oauth2-oidc', 'rxjs', 'rxjs/operators', 'snq'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = {}), global.ng.core, global.ng_core, global.ng_theme_shared, global.ngBootstrap, global.core$1, global.table, global.ng.router, global.ng.forms, global.routerPlugin, global.store, global.angularOauth2Oidc, global.rxjs, global.rxjs.operators, global.snq));
-}(this, function (exports, core, ng_core, ng_theme_shared, ngBootstrap, core$1, table, router, forms, routerPlugin, store, angularOauth2Oidc, rxjs, operators, snq) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/table'), require('@angular/router'), require('@angular/forms'), require('@ngxs/router-plugin'), require('@ngxs/store'), require('angular-oauth2-oidc'), require('rxjs'), require('rxjs/operators'), require('snq')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.account', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/table', '@angular/router', '@angular/forms', '@ngxs/router-plugin', '@ngxs/store', 'angular-oauth2-oidc', 'rxjs', 'rxjs/operators', 'snq'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.ngBootstrap, global.core$1, global.table, global.ng.router, global.ng.forms, global.routerPlugin, global.store, global.angularOauth2Oidc, global.rxjs, global.rxjs.operators, global.snq));
+}(this, function (exports, ng_core, ng_theme_shared, core, ngBootstrap, core$1, table, router, forms, routerPlugin, store, angularOauth2Oidc, rxjs, operators, snq) { 'use strict';
 
     snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
@@ -202,55 +202,6 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    /**
-     * @param {?} options
-     * @return {?}
-     */
-    function optionsFactory(options) {
-        return __assign({ redirectUrl: '/' }, options);
-    }
-    /** @type {?} */
-    var ACCOUNT_OPTIONS = new core.InjectionToken('ACCOUNT_OPTIONS');
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var RootAccountModule = /** @class */ (function () {
-        function RootAccountModule() {
-        }
-        /**
-         * @param {?=} options
-         * @return {?}
-         */
-        RootAccountModule.forRoot = /**
-         * @param {?=} options
-         * @return {?}
-         */
-        function (options) {
-            if (options === void 0) { options = (/** @type {?} */ ({})); }
-            return {
-                ngModule: RootAccountModule,
-                providers: [
-                    { provide: ACCOUNT_OPTIONS, useValue: options },
-                    {
-                        provide: 'ACCOUNT_OPTIONS',
-                        useFactory: optionsFactory,
-                        deps: [ACCOUNT_OPTIONS],
-                    },
-                ],
-            };
-        };
-        RootAccountModule.decorators = [
-            { type: core.NgModule, args: [{},] }
-        ];
-        return RootAccountModule;
-    }());
 
     /**
      * @fileoverview added by tsickle
@@ -692,6 +643,20 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    /**
+     * @param {?} options
+     * @return {?}
+     */
+    function optionsFactory(options) {
+        return __assign({ redirectUrl: '/' }, options);
+    }
+    /** @type {?} */
+    var ACCOUNT_OPTIONS = new core.InjectionToken('ACCOUNT_OPTIONS');
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var AccountModule = /** @class */ (function () {
         function AccountModule() {
         }
@@ -704,6 +669,21 @@
         ];
         return AccountModule;
     }());
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    function AccountProviders(options) {
+        if (options === void 0) { options = (/** @type {?} */ ({})); }
+        return [
+            { provide: ACCOUNT_OPTIONS, useValue: options },
+            {
+                provide: 'ACCOUNT_OPTIONS',
+                useFactory: optionsFactory,
+                deps: [ACCOUNT_OPTIONS],
+            },
+        ];
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -829,17 +809,17 @@
     exports.ACCOUNT_OPTIONS = ACCOUNT_OPTIONS;
     exports.ACCOUNT_ROUTES = ACCOUNT_ROUTES;
     exports.AccountModule = AccountModule;
+    exports.AccountProviders = AccountProviders;
     exports.LoginComponent = LoginComponent;
     exports.RegisterComponent = RegisterComponent;
-    exports.RootAccountModule = RootAccountModule;
     exports.optionsFactory = optionsFactory;
-    exports.ɵa = optionsFactory;
-    exports.ɵb = ACCOUNT_OPTIONS;
-    exports.ɵc = LoginComponent;
-    exports.ɵe = RegisterComponent;
-    exports.ɵf = AccountService;
-    exports.ɵg = TenantBoxComponent;
-    exports.ɵh = AccountRoutingModule;
+    exports.ɵa = LoginComponent;
+    exports.ɵc = RegisterComponent;
+    exports.ɵd = AccountService;
+    exports.ɵe = TenantBoxComponent;
+    exports.ɵf = AccountRoutingModule;
+    exports.ɵg = optionsFactory;
+    exports.ɵh = ACCOUNT_OPTIONS;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

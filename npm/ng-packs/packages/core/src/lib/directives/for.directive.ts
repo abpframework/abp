@@ -12,6 +12,7 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import compare from 'just-compare';
+import clone from 'just-clone';
 
 export type CompareFn<T = any> = (value: T, comparison: T) => boolean;
 
@@ -146,7 +147,7 @@ export class ForDirective implements OnChanges {
   }
 
   ngOnChanges() {
-    let items = [...this.items] as any[];
+    let items = clone(this.items) as any[];
     if (!Array.isArray(items)) return;
 
     const compareFn = this.compareFn;

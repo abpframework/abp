@@ -18,5 +18,4 @@ export const TENANT_MANAGEMENT_ROUTES = {
       ],
     },
   ] as ABP.FullRoute[],
-  settings: [],
 };

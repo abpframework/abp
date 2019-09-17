@@ -1,4 +1,3 @@
-export * from './lib/root-tenant-management.module';
 export * from './lib/tenant-management.module';
 export * from './lib/actions';
 export * from './lib/components';

@@ -25,6 +25,7 @@ import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
 import { ForDirective } from './directives/for.directive';
+import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { ForDirective } from './directives/for.directive';
     VisibilityDirective,
     InputEventDebounceDirective,
     ClickEventStopPropagationDirective,
+    AbstractNgModelComponent,
   ],
   exports: [
     CommonModule,
@@ -68,6 +70,7 @@ import { ForDirective } from './directives/for.directive';
     InputEventDebounceDirective,
     LocalizationPipe,
     ClickEventStopPropagationDirective,
+    AbstractNgModelComponent,
   ],
   providers: [LocalizationPipe],
   entryComponents: [RouterOutletComponent, DynamicLayoutComponent],

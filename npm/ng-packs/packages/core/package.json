@@ -7,6 +7,7 @@
     "@ngxs/store": "^3.5.0",
     "angular-oauth2-oidc": "^8.0.1",
     "just-compare": "^1.3.0",
+    "just-clone": "3.1.0",
     "snq": "^1.0.3"
   },
   "peerDependencies": {

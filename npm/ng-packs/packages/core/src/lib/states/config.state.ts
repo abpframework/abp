@@ -20,8 +20,8 @@ export class ConfigState {
   }
 
   @Selector()
-  static getApplicationInfo(state: Config.State) {
-    return state.environment.application || {};
+  static getApplicationInfo(state: Config.State): Config.Application {
+    return state.environment.application || ({} as Config.Application);
   }
 
   static getOne(key: string) {
@@ -64,7 +64,14 @@ export class ConfigState {
     const selector = createSelector(
       [ConfigState],
       function(state: Config.State) {
-        return findRoute(state.routes, path, name);
+        const { flattedRoutes } = state;
+        return (flattedRoutes as ABP.FullRoute[]).find(route => {
+          if (path && route.path === path) {
+            return route;
+          } else if (name && route.name === name) {
+            return route;
+          }
+        });
       },
     );
 
@@ -131,7 +138,7 @@ export class ConfigState {
           keys[0] = snq(() => defaultResourceName);
         }
 
-        let copy = keys.reduce((acc, val) => {
+        let copy = (keys as any).reduce((acc, val) => {
           if (acc) {
             return acc[val];
           }
@@ -222,23 +229,4 @@ function patchRouteDeep(
   }
 
   return organizeRoutes(routes);
-}
-
-function findRoute(routes: ABP.FullRoute[], path?: string, name?: string) {
-  let foundRoute;
-  routes.forEach(route => {
-    if (foundRoute) return;
-
-    if (path && route.path === path) {
-      foundRoute = route;
-    } else if (name && route.name === name) {
-      foundRoute = route;
-      return;
-    } else if (route.children && route.children.length) {
-      foundRoute = findRoute(route.children, path, name);
-      return;
-    }
-  });
-
-  return foundRoute;
 }

@@ -13,6 +13,7 @@
     "font-awesome",
     "ngx-perfect-scrollbar",
     "primeicons",
-    "primeng"
+    "primeng",
+    "chart.js"
   ]
 }
