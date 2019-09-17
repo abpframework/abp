@@ -22,6 +22,7 @@
     "LicenseExtendMessage": "Your license end date is extended to {0}",
     "LicenseUpgradeMessage": "Your license is upgraded to {0}",
     "LicenseAddDeveloperMessage": "{0} developers added to your license",
-    "MyOrganizations":  "My organizations" 
+    "MyOrganizations":  "My organizations",
+	"ApiKey": "API key"
   }
 }
