@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 
@@ -12,9 +12,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="ProductManagement\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="ProductManagement\Localization\Domain\*.json" />
   </ItemGroup>
 
