@@ -19,7 +19,7 @@
     "StartDate": "Başlangıç tarihi",
     "EndDate": "bitiş tarihi",
     "Modules": "Modüller",
-    "Volo.AbpIo.Commercial:010004": "Kullanıcı bulunamadı! İlgili kullanıcının daha önceden sisteme kayıt olmuş olması gerekiyor."
+    "Volo.AbpIo.Commercial:010004": "Kullanıcı bulunamadı! İlgili kullanıcının daha önceden sisteme kayıt olmuş olması gerekiyor.",
     "LicenseExtendMessage": "Lisans bitiş tarihiniz {0} tarihine kadar uzatıldı",
     "LicenseUpgradeMessage": "Lisansınız {0} lisansa yükseltildi",
     "LicenseAddDeveloperMessage": "Lisansınıza {0} geliştirici eklendi",
