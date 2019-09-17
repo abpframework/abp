@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization;
 using DashboardDemo.MultiTenancy;
@@ -109,7 +110,7 @@ namespace DashboardDemo.Web
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
@@ -186,6 +187,7 @@ namespace DashboardDemo.Web
             }
 
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
@@ -196,11 +198,12 @@ namespace DashboardDemo.Web
 
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "DashboardDemo API");
-            });
+            //Swagger does not support ASP.NET Core 3.0 yet
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "DashboardDemo API");
+            //});
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }
