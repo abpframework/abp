@@ -10,6 +10,7 @@ import { ApplicationLayoutComponent } from './components/application-layout/appl
 import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { LayoutState } from './states/layout.state';
+import { InitialService } from "./services/initial.service";
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -27,4 +28,6 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
   exports: [...LAYOUTS],
   entryComponents: [...LAYOUTS],
 })
-export class ThemeBasicModule {}
+export class ThemeBasicModule {
+  constructor(private initialService: InitialService) {}
+}
