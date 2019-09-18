@@ -23,6 +23,7 @@
     "LicenseUpgradeMessage": "Lisansınız {0} lisansa yükseltildi",
     "LicenseAddDeveloperMessage": "Lisansınıza {0} geliştirici eklendi",
     "MyOrganizations":  "Organizasyonlarım",
-	"ApiKey": "API anahtarı"
+	"ApiKey": "API anahtarı",
+	"UserNameNotFound": "{0} kullanıcı adı ile bir kullanıcı yok"
   }
 }

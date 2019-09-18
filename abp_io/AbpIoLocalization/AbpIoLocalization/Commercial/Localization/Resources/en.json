@@ -23,6 +23,7 @@
     "LicenseUpgradeMessage": "Your license is upgraded to {0}",
     "LicenseAddDeveloperMessage": "{0} developers added to your license",
     "MyOrganizations":  "My organizations",
-	"ApiKey": "API key"
+	"ApiKey": "API key",
+	"UserNameNotFound": "There is no user with username {0}"
   }
 }
