@@ -224,7 +224,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityServerApiResources", x => x.Id);
-                    table.UniqueConstraint("AK_IdentityServerApiResources_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -310,7 +309,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityServerIdentityResources", x => x.Id);
-                    table.UniqueConstraint("AK_IdentityServerIdentityResources_Name", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -909,8 +907,7 @@ namespace MyCompanyName.MyProjectName.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
-                column: "ClientId",
-                unique: true);
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerPersistedGrants_SubjectId_ClientId_Type",
