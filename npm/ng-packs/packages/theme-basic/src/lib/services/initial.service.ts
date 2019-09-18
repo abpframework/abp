@@ -5,10 +5,7 @@ import styles from '../constants/styles';
 
 @Injectable({ providedIn: 'root' })
 export class InitialService {
-  constructor(
-    private router: Router,
-    private lazyLoadService: LazyLoadService,
-  ) {
+  constructor(private lazyLoadService: LazyLoadService) {
     this.appendStyle().subscribe();
   }
 
