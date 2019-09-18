@@ -1,14 +1,22 @@
 import { AuthConfig } from 'angular-oauth2-oidc';
 import { Type } from '@angular/core';
+import { ApplicationConfiguration } from './application-configuration';
+import { ABP } from './common';
 export declare namespace Config {
-    interface State {
-        [key: string]: any;
-    }
+    type State = ApplicationConfiguration.Response & ABP.Root & {
+        environment: Environment;
+    } & {
+        routes: ABP.FullRoute[];
+        flattedRoutes: ABP.FullRoute[];
+    };
     interface Environment {
         application: Application;
         production: boolean;
         oAuthConfig: AuthConfig;
         apis: Apis;
+        localization: {
+            defaultResourceName: string;
+        };
     }
     interface Application {
         name: string;

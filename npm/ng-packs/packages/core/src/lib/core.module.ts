@@ -24,6 +24,8 @@ import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
+import { ForDirective } from './directives/for.directive';
+import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 
 @NgModule({
   imports: [
@@ -41,12 +43,14 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
+    ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
     ClickEventStopPropagationDirective,
+    AbstractNgModelComponent,
   ],
   exports: [
     CommonModule,
@@ -58,6 +62,7 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
+    ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
     PermissionDirective,
@@ -65,6 +70,7 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     InputEventDebounceDirective,
     LocalizationPipe,
     ClickEventStopPropagationDirective,
+    AbstractNgModelComponent,
   ],
   providers: [LocalizationPipe],
   entryComponents: [RouterOutletComponent, DynamicLayoutComponent],

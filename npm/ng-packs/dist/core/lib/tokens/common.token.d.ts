@@ -5,6 +5,9 @@ export declare function environmentFactory(environment: Config.Environment): {
     production: boolean;
     oAuthConfig: import("angular-oauth2-oidc").AuthConfig;
     apis: Config.Apis;
+    localization: {
+        defaultResourceName: string;
+    };
 };
 export declare function configFactory(config: Config.Requirements): {
     layouts: import("@angular/core").Type<any>[];

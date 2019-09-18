@@ -5,5 +5,5 @@ export declare class ConfigService {
     getAll(): import("../models").Config.State;
     getOne(key: string): any;
     getDeep(keys: string[] | string): any;
-    getSetting(key: string): any;
+    getSetting(key: string): "Abp.Localization.DefaultLanguage";
 }

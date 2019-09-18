@@ -9,7 +9,14 @@ import { filter } from 'rxjs/operators';
   selector: 'abp-loader-bar',
   template: `
     <div id="abp-loader-bar" [ngClass]="containerClass" [class.is-loading]="isLoading">
-      <div [ngClass]="progressClass" [style.width.vw]="progressLevel"></div>
+      <div
+        class="abp-progress"
+        [style.width.vw]="progressLevel"
+        [ngStyle]="{
+          'background-color': color,
+          'box-shadow': boxShadow
+        }"
+      ></div>
     </div>
   `,
   styleUrls: ['./loader-bar.component.scss'],
@@ -19,7 +26,7 @@ export class LoaderBarComponent implements OnDestroy {
   containerClass: string = 'abp-loader-bar';
 
   @Input()
-  progressClass: string = 'abp-progress';
+  color: string = '#77b6ff';
 
   @Input()
   isLoading: boolean = false;
@@ -30,6 +37,10 @@ export class LoaderBarComponent implements OnDestroy {
   progressLevel: number = 0;
 
   interval: any;
+
+  get boxShadow(): string {
+    return `0 0 10px rgba(${this.color}, 0.5)`;
+  }
 
   constructor(private actions: Actions, private router: Router) {
     actions

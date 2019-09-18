@@ -1,0 +1,57 @@
+<div class="row entry-row">
+  <div class="col-auto">
+    <h1 class="content-header-title">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>
+  </div>
+  <!-- <div id="breadcrumb" class="col-md-auto pl-md-0">
+    <abp-breadcrumb></abp-breadcrumb>
+  </div> -->
+  <div class="col">
+    <div class="text-lg-right pt-2" id="AbpContentToolbar"></div>
+  </div>
+</div>
+
+<div id="SettingManagementWrapper">
+  <div class="card">
+    <div class="card-body">
+      <div *ngIf="!settingManagementService.settings.length" class="text-center">
+        <i class="fa fa-spinner fa-spin"></i>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
+            <li
+              *abpFor="
+                let setting of settingManagementService.settings;
+                trackBy: trackByFn;
+                orderBy: 'order';
+                orderDir: 'ASC'
+              "
+              (click)="settingManagementService.setSelected(setting)"
+              class="nav-item"
+              [abpPermission]="setting.requiredPolicy"
+            >
+              <a
+                class="nav-link"
+                [id]="setting.name + '-tab'"
+                role="tab"
+                [class.active]="setting.name === settingManagementService.selected.name"
+                >{{ setting.name | abpLocalization }}</a
+              >
+            </li>
+          </ul>
+        </div>
+        <div class="col-9">
+          <div *ngIf="settingManagementService.settings.length" class="tab-content">
+            <div
+              class="tab-pane fade show active"
+              [id]="settingManagementService.selected.name + '-tab'"
+              role="tabpanel"
+            >
+              <router-outlet></router-outlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

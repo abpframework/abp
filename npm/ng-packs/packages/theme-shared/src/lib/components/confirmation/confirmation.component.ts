@@ -11,26 +11,25 @@ import { Toaster } from '../../models/toaster';
       (onClose)="close(dismiss)"
       [modal]="true"
       [baseZIndex]="1000"
-      styleClass=""
+      styleClass="abp-confirm"
     >
       <ng-template let-message pTemplate="message">
-        <div *ngIf="message.summary" class="modal-header">
-          <h4 class="modal-title">
-            {{ message.summary | abpLocalization: message.titleLocalizationParams }}
-          </h4>
+        <i class="fa fa-exclamation-circle abp-confirm-icon"></i>
+        <div *ngIf="message.summary" class="abp-confirm-summary">
+          {{ message.summary | abpLocalization: message.titleLocalizationParams }}
         </div>
-        <div class="modal-body">
+        <div class="abp-confirm-body">
           {{ message.detail | abpLocalization: message.messageLocalizationParams }}
         </div>
 
-        <div class="modal-footer justify-content-center">
-          <button *ngIf="!message.hideCancelBtn" type="button" class="btn btn-secondary" (click)="close(reject)">
+        <div class="abp-confirm-footer justify-content-center">
+          <button *ngIf="!message.hideCancelBtn" type="button" class="btn btn-sm btn-primary" (click)="close(reject)">
             {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
           </button>
           <button
             *ngIf="!message.hideYesBtn"
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-sm btn-primary"
             (click)="close(confirm)"
             autofocus
           >

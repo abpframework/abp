@@ -8,11 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190816092925_Initial.cs" />
+    <Compile Remove="Migrations\20190816092925_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20190910115959_Initial.cs" />
+    <Compile Remove="Migrations\20190910115959_Initial.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MyCompanyName.MyProjectName.EntityFrameworkCore\MyCompanyName.MyProjectName.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.2.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

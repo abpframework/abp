@@ -22,16 +22,14 @@
       <div class="row">
         <div class="col-4">
           <ul class="nav nav-pills flex-column">
-            <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
-              <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
-                <a
-                  class="nav-link pointer"
-                  [class.active]="selectedGroup?.name === group?.name"
-                  (click)="onChangeGroup(group)"
-                  >{{ group?.displayName }}</a
-                >
-              </li>
-            </perfect-scrollbar>
+            <li *ngFor="let group of groups$ | async; trackBy: trackByFn" class="nav-item">
+              <a
+                class="nav-link pointer"
+                [class.active]="selectedGroup?.name === group?.name"
+                (click)="onChangeGroup(group)"
+                >{{ group?.displayName }}</a
+              >
+            </li>
           </ul>
         </div>
         <div class="col-8">
@@ -52,32 +50,30 @@
               }}</label>
             </div>
             <hr class="mb-3" />
-            <perfect-scrollbar class="ps-show-always" style="max-height: 60vh;">
-              <div
-                *ngFor="let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn"
-                [style.margin-left]="permission.margin + 'px'"
-                class="custom-checkbox custom-control mb-2"
+            <div
+              *ngFor="let permission of selectedGroupPermissions$ | async; let i = index; trackBy: trackByFn"
+              [style.margin-left]="permission.margin + 'px'"
+              class="custom-checkbox custom-control mb-2"
+            >
+              <input
+                #permissionCheckbox
+                type="checkbox"
+                [checked]="getChecked(permission.name)"
+                [value]="getChecked(permission.name)"
+                [attr.id]="permission.name"
+                class="custom-control-input"
+                [disabled]="isGrantedByRole(permission.grantedProviders)"
+              />
+              <label
+                class="custom-control-label"
+                [attr.for]="permission.name"
+                (click)="onClickCheckbox(permission, permissionCheckbox.value)"
+                >{{ permission.displayName }}
+                <span *ngFor="let provider of permission.grantedProviders" class="badge badge-light"
+                  >{{ provider.providerName }}: {{ provider.providerKey }}</span
+                ></label
               >
-                <input
-                  #permissionCheckbox
-                  type="checkbox"
-                  [checked]="getChecked(permission.name)"
-                  [value]="getChecked(permission.name)"
-                  [attr.id]="permission.name"
-                  class="custom-control-input"
-                  [disabled]="isGrantedByRole(permission.grantedProviders)"
-                />
-                <label
-                  class="custom-control-label"
-                  [attr.for]="permission.name"
-                  (click)="onClickCheckbox(permission, permissionCheckbox.value)"
-                  >{{ permission.displayName }}
-                  <span *ngFor="let provider of permission.grantedProviders" class="badge badge-light"
-                    >{{ provider.providerName }}: {{ provider.providerKey }}</span
-                  ></label
-                >
-              </div>
-            </perfect-scrollbar>
+            </div>
           </div>
         </div>
       </div>

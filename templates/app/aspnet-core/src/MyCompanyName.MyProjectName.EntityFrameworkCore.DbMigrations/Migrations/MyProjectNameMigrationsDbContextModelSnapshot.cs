@@ -836,8 +836,7 @@ namespace MyCompanyName.MyProjectName.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId")
-                        .IsUnique();
+                    b.HasIndex("ClientId");
 
                     b.ToTable("IdentityServerClients");
                 });

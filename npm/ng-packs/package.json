@@ -6,6 +6,7 @@
   },
   "devDependencies": {
     "@abp/ng.core": "^0.8.3",
+    "@abp/ng.feature-management": "^0.8.3",
     "@abp/ng.permission-management": "^0.8.3",
     "@abp/ng.theme.shared": "^0.8.3",
     "@angular-devkit/build-angular": "~0.802.2",
@@ -30,7 +31,6 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
-    "@volo/abp.ng.cli": "^1.0.1",
     "angular-oauth2-oidc": "^8.0.1",
     "bootstrap": "^4.3.1",
     "codelyzer": "^5.0.0",
@@ -57,9 +57,7 @@
     "tslint": "~5.15.0",
     "typescript": "~3.5.3",
     "zone.js": "~0.9.1",
-    "@abp/ng.feature-management": "^0.8.3"
-  },
-  "dependencies": {
-    "tslib": "^1.10.0"
+    "just-clone": "3.1.0",
+    "chart.js": "^2.8.0"
   }
 }

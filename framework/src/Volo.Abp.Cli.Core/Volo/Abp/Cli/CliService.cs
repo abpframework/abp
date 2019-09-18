@@ -171,31 +171,32 @@ namespace Volo.Abp.Cli
 
         private void LogNewVersionInfo(UpdateChannel updateChannel, SemanticVersion latestVersion, string toolPath)
         {
-            Logger.LogWarning(
-                $"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
-            Logger.LogWarning("");
+            Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
+            Logger.LogWarning(string.Empty);
             Logger.LogWarning("Update Command: ");
 
             // Update command doesn't support prerelease versions https://github.com/dotnet/sdk/issues/2551 workaround is to uninstall & install
             switch (updateChannel)
             {
                 case UpdateChannel.Stable:
-                    Logger.LogWarning($"    dotnet tool update --tool-path {toolPath} Volo.Abp.Cli");
+                    Logger.LogWarning("dotnet tool update -g Volo.Abp.Cli");
                     break;
 
                 case UpdateChannel.Prerelease:
-                    Logger.LogWarning($"    dotnet tool uninstall --tool-path {toolPath} Volo.Abp.Cli");
-                    Logger.LogWarning($"    dotnet tool install --tool-path {toolPath} --version {latestVersion} Volo.Abp.Cli");
+                    Logger.LogWarning("dotnet tool uninstall -g Volo.Abp.Cli");
+                    Logger.LogWarning($"dotnet tool install -g Volo.Abp.Cli --version {latestVersion}");
                     break;
 
                 case UpdateChannel.Nightly:
-                    Logger.LogWarning($"    dotnet tool uninstall --tool-path {toolPath} Volo.Abp.Cli");
-                    Logger.LogWarning(
-                        $"    dotnet tool install --tool-path {toolPath} --add-source https://www.myget.org/F/abp-nightly/api/v3/index.json --version {latestVersion} Volo.Abp.Cli");
+                case UpdateChannel.Development:
+                    Logger.LogWarning("dotnet tool uninstall -g Volo.Abp.Cli");
+                    Logger.LogWarning($"dotnet tool install -g Volo.Abp.Cli --add-source https://www.myget.org/F/abp-nightly/api/v3/index.json --version {latestVersion}");
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(updateChannel), updateChannel, null);
             }
 
-            Logger.LogWarning("");
+            Logger.LogWarning(string.Empty);
         }
 
         protected enum UpdateChannel
