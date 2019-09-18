@@ -61,9 +61,9 @@ namespace Volo.Abp.IdentityServer.ApiResources
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
-        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null)
+        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name);
+            return await DbSet.AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
         }
 
         public override async Task DeleteAsync(Guid id, bool autoSave = false, CancellationToken cancellationToken = default)

@@ -69,7 +69,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             if (!templateInfo.DocumentUrl.IsNullOrEmpty())
             {
-                Logger.LogInformation("Check the documentation of this template: " + templateInfo.DocumentUrl);
+                Logger.LogInformation("Check out the documents: " + templateInfo.DocumentUrl);
             }
 
             // Exclude unwanted or known options.

@@ -52,7 +52,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 client.HasMany(x => x.Claims).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
                 client.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
 
-                client.HasIndex(x => x.ClientId).IsUnique();
+                client.HasIndex(x => x.ClientId);
             });
 
             builder.Entity<ClientGrantType>(grantType =>
@@ -173,8 +173,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                         s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
                     );
 
-                identityResource.HasAlternateKey(x => x.Name);
-
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
 
@@ -201,8 +199,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                         d => JsonConvert.SerializeObject(d, Formatting.None),
                         s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
                     );
-
-                apiResource.HasAlternateKey(x => x.Name);
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();

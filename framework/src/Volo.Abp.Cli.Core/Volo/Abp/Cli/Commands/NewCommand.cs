@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            Logger.LogInformation("Creating a new project...");
+            Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + commandLineArgs.Target);
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
