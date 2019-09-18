@@ -52,6 +52,8 @@ export class UsersComponent {
 
   modalBusy: boolean = false;
 
+  sortOrder: string = 'asc';
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   get roleGroups(): FormGroup[] {
@@ -168,5 +170,9 @@ export class UsersComponent {
       .dispatch(new GetUsers(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
+  }
+
+  changeSortOrder() {
+    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
   }
 }

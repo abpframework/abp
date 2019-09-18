@@ -1,25 +1,24 @@
-<div id="wrapper" class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col col-md-6">
-        <h5 class="card-title">
-          {{ 'AbpTenantManagement::Tenants' | abpLocalization }}
-        </h5>
-      </div>
-      <div class="text-right col col-md-6">
-        <button
-          [abpPermission]="'AbpTenantManagement.Tenants.Create'"
-          id="create-tenants"
-          class="btn btn-primary"
-          type="button"
-          (click)="onAddTenant()"
-        >
-          <i class="fa fa-plus mr-1"></i>
-          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
-        </button>
-      </div>
+<div class="row entry-row">
+  <div class="col-auto">
+    <h1 class="content-header-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h1>
+  </div>
+  <div class="col">
+    <div class="text-lg-right pt-2" id="AbpContentToolbar">
+      <button
+        [abpPermission]="'AbpTenantManagement.Tenants.Create'"
+        id="create-tenants"
+        class="btn btn-primary"
+        type="button"
+        (click)="onAddTenant()"
+      >
+        <i class="fa fa-plus mr-1"></i>
+        <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
+      </button>
     </div>
   </div>
+</div>
+
+<div id="wrapper" class="card">
   <div class="card-body">
     <div id="data-tables-table-filter" class="data-tables-filter">
       <label
@@ -31,25 +30,37 @@
       /></label>
     </div>
     <p-table
-      [value]="data$ | async"
+      [value]="data$ | async | abpSort: sortOrder"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
       [rows]="10"
       [totalRecords]="totalCount$ | async"
       [loading]="loading"
+      [resizableColumns]="true"
+      [scrollable]="true"
       (onLazyLoad)="onPageChange($event)"
     >
-      <ng-template pTemplate="header">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let width of [65, 200]" [ngStyle]="{ 'width.px': width }" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th>{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</th>
+          <th pResizableColumn (click)="changeSortOrder()">
+            {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
+            <span class="float-right"
+              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
+            ></span>
+          </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
           <td>
-            <div ngbDropdown class="d-inline-block">
+            <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
                 data-toggle="dropdown"
@@ -97,7 +108,7 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ selectedModalContent.title | abpLocalization }}</h3>
   </ng-template>

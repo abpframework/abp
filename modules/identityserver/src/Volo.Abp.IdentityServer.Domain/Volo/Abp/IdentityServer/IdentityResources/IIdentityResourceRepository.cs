@@ -30,7 +30,8 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         Task<bool> CheckNameExistAsync(
             string name,
-            Guid? expectedId = null
+            Guid? expectedId = null,
+            CancellationToken cancellationToken = default
          );
     }
 }

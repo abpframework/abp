@@ -11,6 +11,7 @@ import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.com
 import { LayoutComponent } from './components/layout/layout.component';
 import { LayoutState } from './states/layout.state';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
+import { InitialService } from './services/initial.service';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
@@ -41,4 +42,6 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
   exports: [...LAYOUTS],
   entryComponents: [...LAYOUTS, ValidationErrorComponent],
 })
-export class ThemeBasicModule {}
+export class ThemeBasicModule {
+  constructor(private initialService: InitialService) {}
+}
