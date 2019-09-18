@@ -30,18 +30,30 @@
       [rows]="10"
       [totalRecords]="totalCount$ | async"
       [loading]="loading"
+      [resizableColumns]="true"
+      [scrollable]="true"
       (onLazyLoad)="onPageChange($event)"
     >
-      <ng-template pTemplate="header">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let width of [65, 200]" [ngStyle]="{ 'width.px': width }" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th>{{ 'AbpIdentity::RoleName' | abpLocalization }}</th>
+          <th pResizableColumn (click)="changeSortOrder()">
+            {{ 'AbpIdentity::RoleName' | abpLocalization }}
+            <span class="float-right"
+              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
+            ></span>
+          </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
           <td>
-            <div ngbDropdown class="d-inline-block">
+            <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
                 data-toggle="dropdown"
