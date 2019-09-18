@@ -23,6 +23,7 @@
       /></label>
     </div>
     <p-table
+      *ngIf="[65, 200] as columnWidths"
       [value]="data$ | async"
       [lazy]="true"
       [lazyLoadOnInit]="false"
@@ -36,8 +37,16 @@
     >
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let width of [65, 200]" [ngStyle]="{ 'width.px': width }" />
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width }" />
         </colgroup>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr
+          abp-table-empty-message
+          [attr.colspan]="columnWidths.length"
+          localizationResource="AbpIdentityServer"
+          localizationProp="NoDataAvailableInDatatable"
+        ></tr>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
