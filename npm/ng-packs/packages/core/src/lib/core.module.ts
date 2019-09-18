@@ -18,6 +18,7 @@ import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
+import { SortPipe } from './pipes/sort.pipe';
 import { LocaleProvider } from './providers/locale.provider';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
@@ -46,6 +47,7 @@ import { AbstractNgModelComponent } from './abstracts/ng-model.component';
     ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
+    SortPipe,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
@@ -65,6 +67,7 @@ import { AbstractNgModelComponent } from './abstracts/ng-model.component';
     ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
+    SortPipe,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
