@@ -33,9 +33,9 @@
     </form>
   </ng-template>
   <ng-template #abpFooter>
-    <button #abpClose type="button" class="btn btn-secondary">
+    <button #abpClose type="button" class="btn btn-secondary color-white">
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="submit()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
+    <abp-button iconClass="fa fa-check" buttonClass="btn btn-primary color-white" (click)="submit()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
   </ng-template>
 </abp-modal>
