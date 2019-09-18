@@ -1,12 +1,12 @@
 # Documentação ABP
 
-O ABP é uma **estrutura de aplicativos de código aberto** focada no desenvolvimento de aplicativos da Web baseado no ASP.NET Core, mas também suporta o desenvolvimento de outros tipos de aplicativos.
+O ABP é um **framework de aplicativos de código aberto** focada no desenvolvimento de aplicativos da Web baseado no ASP.NET Core, mas também suporta o desenvolvimento de outros tipos de aplicativos.
 
 Explore o menu de navegação esquerdo para mergulhar fundo na documentação.
 
 ## Status do projeto
 
-ABP é a **próxima geração** da estrutura de código aberto [ASP.NET Boilerplate](https://aspnetboilerplate.com/) . Atualmente, está em fase de visualização e não está pronto para uso na produção. A documentação ainda está em andamento e está longe de estar completa.
+ABP é a **próxima geração** de framework de código aberto [ASP.NET Boilerplate](https://aspnetboilerplate.com/). Atualmente, está em fase de pré-visualização e não está pronto para uso na produção. A documentação ainda está em andamento e está longe de estar completa.
 
 Para aplicativos de curto prazo e em nível de produção, é sugerido o uso da estrutura do [ASP.NET Boilerplate](https://aspnetboilerplate.com/) , que possui um rico conjunto de recursos, maduro, mantido ativamente e atualizado.
 
