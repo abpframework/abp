@@ -23,6 +23,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -35,7 +37,20 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, hasException, httpStatusCode, includeDetails);
+            var query = GetListQuery(
+                startTime,
+                endTime,
+                httpMethod,
+                url,
+                userName,
+                applicationName,
+                correlationId,
+                maxExecutionDuration,
+                minExecutionDuration,
+                hasException,
+                httpStatusCode,
+                includeDetails
+            );
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
@@ -45,6 +60,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         }
 
         public async Task<long> GetCountAsync(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -56,7 +73,19 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxExecutionDuration, minExecutionDuration, hasException, httpStatusCode);
+            var query = GetListQuery(
+                startTime,
+                endTime,
+                httpMethod,
+                url,
+                userName,
+                applicationName,
+                correlationId,
+                maxExecutionDuration,
+                minExecutionDuration,
+                hasException,
+                httpStatusCode
+            );
 
             var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
@@ -64,6 +93,8 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         }
 
         private IQueryable<AuditLog> GetListQuery(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -77,16 +108,18 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
         {
             return DbSet.AsNoTracking()
                 .IncludeDetails(includeDetails)
-                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions.Length > 0)
-                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions.Length == 0)
-                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod == httpMethod)
+                .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
+                .WhereIf(endTime.HasValue, auditLog => auditLog.ExecutionTime <= endTime)
+                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null)
+                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null)
+                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod == httpMethod)
                 .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
-                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName == userName)
-                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName != null && auditLog.ApplicationName == applicationName)
-                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId != null && auditLog.CorrelationId == correlationId)
+                .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
+                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
+                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
-                .WhereIf(maxExecutionDuration != null && maxExecutionDuration > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
-                .WhereIf(minExecutionDuration != null && minExecutionDuration > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
+                .WhereIf(maxExecutionDuration != null && maxExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration <= maxExecutionDuration)
+                .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }
 
         public override IQueryable<AuditLog> WithDetails()
