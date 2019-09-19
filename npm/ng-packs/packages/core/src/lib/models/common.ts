@@ -1,5 +1,5 @@
 import { Config } from './config';
-import { eLayoutType } from '../enums';
+import { eLayoutType } from '../enums/common';
 
 export namespace ABP {
   export interface Root {

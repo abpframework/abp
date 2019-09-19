@@ -1,36 +1,11 @@
-import { NgModule, Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Component, Input, Output } from '@angular/core';
 import { RestService, CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Component, Input, Output, NgModule } from '@angular/core';
 import { __decorate, __metadata } from 'tslib';
 import { Store, Action, Selector, State, Select, NgxsModule } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap, pluck } from 'rxjs/operators';
 import { FormControl, FormGroup } from '@angular/forms';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var RootFeatureManagementModule = /** @class */ (function () {
-    function RootFeatureManagementModule() {
-    }
-    /**
-     * @return {?}
-     */
-    RootFeatureManagementModule.forRoot = /**
-     * @return {?}
-     */
-    function () {
-        return {
-            ngModule: RootFeatureManagementModule,
-            providers: [],
-        };
-    };
-    RootFeatureManagementModule.decorators = [
-        { type: NgModule, args: [{},] }
-    ];
-    return RootFeatureManagementModule;
-}());
 
 /**
  * @fileoverview added by tsickle
@@ -427,5 +402,5 @@ var FeatureManagementModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { FeatureManagementComponent, FeatureManagementModule, RootFeatureManagementModule, FeatureManagementComponent as ɵa, FeatureManagementState as ɵb, FeatureManagementState as ɵc, FeatureManagementService as ɵd, GetFeatures as ɵe, UpdateFeatures as ɵf };
+export { FeatureManagementComponent, FeatureManagementModule, FeatureManagementComponent as ɵa, FeatureManagementState as ɵb, FeatureManagementState as ɵc, FeatureManagementService as ɵd, GetFeatures as ɵe, UpdateFeatures as ɵf };
 //# sourceMappingURL=abp-ng.feature-management.js.map

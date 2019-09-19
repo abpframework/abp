@@ -52,7 +52,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 client.HasMany(x => x.Claims).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
                 client.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
 
-                client.HasIndex(x => x.ClientId).IsUnique();
+                client.HasIndex(x => x.ClientId);
             });
 
             builder.Entity<ClientGrantType>(grantType =>

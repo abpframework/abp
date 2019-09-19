@@ -16,6 +16,7 @@
     "@abp/select2": "^0.8.0",
     "@abp/sweetalert": "^0.8.0",
     "@abp/timeago": "^0.8.0",
+    "@abp/luxon": "^0.8.0",
     "@abp/toastr": "^0.8.0"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"

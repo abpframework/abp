@@ -45,6 +45,11 @@ namespace Volo.Abp.IdentityServer.Clients
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        {
+            return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
+        }
+
         public override IQueryable<Client> WithDetails()
         {
             return GetQueryable().IncludeDetails();

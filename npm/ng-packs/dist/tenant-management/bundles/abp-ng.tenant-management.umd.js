@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@ng-bootstrap/ng-bootstrap'), require('@ngxs/store'), require('primeng/table'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('@abp/ng.feature-management'), require('@ngx-validate/core')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.tenant-management', ['exports', '@angular/core', '@abp/ng.core', '@abp/ng.theme.shared', '@ng-bootstrap/ng-bootstrap', '@ngxs/store', 'primeng/table', '@angular/forms', 'rxjs', 'rxjs/operators', '@angular/router', '@abp/ng.feature-management', '@ngx-validate/core'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['tenant-management'] = {}), global.ng.core, global.ng_core, global.ng_theme_shared, global.ngBootstrap, global.store, global.table, global.ng.forms, global.rxjs, global.rxjs.operators, global.ng.router, global.ng_featureManagement, global.core$1));
-}(this, function (exports, core, ng_core, ng_theme_shared, ngBootstrap, store, table, forms, rxjs, operators, router, ng_featureManagement, core$1) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngxs/store'), require('primeng/table'), require('@angular/forms'), require('rxjs'), require('rxjs/operators'), require('@angular/router'), require('@abp/ng.feature-management'), require('@ngx-validate/core')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.tenant-management', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngxs/store', 'primeng/table', '@angular/forms', 'rxjs', 'rxjs/operators', '@angular/router', '@abp/ng.feature-management', '@ngx-validate/core'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['tenant-management'] = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.ngBootstrap, global.store, global.table, global.ng.forms, global.rxjs, global.rxjs.operators, global.ng.router, global.ng_featureManagement, global.core$1));
+}(this, function (exports, ng_core, ng_theme_shared, core, ngBootstrap, store, table, forms, rxjs, operators, router, ng_featureManagement, core$1) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -200,31 +200,6 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var RootTenantManagementModule = /** @class */ (function () {
-        function RootTenantManagementModule() {
-        }
-        /**
-         * @return {?}
-         */
-        RootTenantManagementModule.forRoot = /**
-         * @return {?}
-         */
-        function () {
-            return {
-                ngModule: RootTenantManagementModule,
-                providers: [],
-            };
-        };
-        RootTenantManagementModule.decorators = [
-            { type: core.NgModule, args: [{},] }
-        ];
-        return RootTenantManagementModule;
-    }());
 
     /**
      * @fileoverview added by tsickle
@@ -1128,6 +1103,12 @@
         ];
         return TenantManagementModule;
     }());
+    /**
+     * @return {?}
+     */
+    function TenantManagementProviders() {
+        return [];
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -1233,9 +1214,9 @@
     exports.DeleteTenant = DeleteTenant;
     exports.GetTenantById = GetTenantById;
     exports.GetTenants = GetTenants;
-    exports.RootTenantManagementModule = RootTenantManagementModule;
     exports.TENANT_MANAGEMENT_ROUTES = TENANT_MANAGEMENT_ROUTES;
     exports.TenantManagementModule = TenantManagementModule;
+    exports.TenantManagementProviders = TenantManagementProviders;
     exports.TenantManagementService = TenantManagementService;
     exports.TenantManagementState = TenantManagementState;
     exports.TenantsComponent = TenantsComponent;

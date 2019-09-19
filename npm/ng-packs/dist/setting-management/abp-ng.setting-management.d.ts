@@ -2,6 +2,6 @@
  * Generated bundle index. Do not edit.
  */
 export * from './public-api';
-export { InitialService as ɵb } from './lib/components/services/initial.service';
-export { SettingComponent as ɵa } from './lib/components/setting/setting.component';
-export { SettingManagementRoutingModule as ɵc } from './lib/setting-management-routing.module';
+export { SETTING_MANAGEMENT_ROUTES as ɵc } from './lib/constants/routes';
+export { SettingManagementService as ɵa } from './lib/services/setting-management.service';
+export { SettingManagementRoutingModule as ɵb } from './lib/setting-management-routing.module';

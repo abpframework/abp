@@ -19,8 +19,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             new NugetReferenceReplacer(
                 context.Files,
-                "MyCompanyName",
-                "MyProjectName",
+                "MyCompanyName.MyProjectName",
                 nugetPackageVersion
             ).Run();
         }
@@ -47,19 +46,16 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         private class NugetReferenceReplacer
         {
             private readonly List<FileEntry> _entries;
-            private readonly string _companyNamePlaceHolder;
-            private readonly string _projectNamePlaceHolder;
+            private readonly string _companyAndProjectNamePlaceHolder;
             private readonly string _nugetPackageVersion;
 
             public NugetReferenceReplacer(
                 List<FileEntry> entries, 
-                string companyNamePlaceHolder, 
-                string projectNamePlaceHolder, 
+                string companyAndProjectNamePlaceHolder, 
                 string nugetPackageVersion)
             {
                 _entries = entries;
-                _companyNamePlaceHolder = companyNamePlaceHolder;
-                _projectNamePlaceHolder = projectNamePlaceHolder;
+                _companyAndProjectNamePlaceHolder = companyAndProjectNamePlaceHolder;
                 _nugetPackageVersion = nugetPackageVersion;
             }
 
@@ -96,7 +92,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains($"{_companyNamePlaceHolder}.{_projectNamePlaceHolder}"))
+                    if (oldNodeIncludeValue.Contains($"{_companyAndProjectNamePlaceHolder}"))
                     {
                         continue;
                     }

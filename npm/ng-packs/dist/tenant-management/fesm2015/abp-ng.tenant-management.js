@@ -1,6 +1,6 @@
-import { NgModule, Injectable, ɵɵdefineInjectable, ɵɵinject, Component, ViewChild } from '@angular/core';
 import { RestService, DynamicLayoutComponent, AuthGuard, PermissionGuard, CoreModule } from '@abp/ng.core';
 import { ConfirmationService, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, ViewChild, NgModule } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { Action, Selector, State, Store, Select, NgxsModule } from '@ngxs/store';
 import { TableModule } from 'primeng/table';
@@ -11,25 +11,6 @@ import { tap, switchMap, pluck, take, finalize } from 'rxjs/operators';
 import { RouterModule } from '@angular/router';
 import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class RootTenantManagementModule {
-    /**
-     * @return {?}
-     */
-    static forRoot() {
-        return {
-            ngModule: RootTenantManagementModule,
-            providers: [],
-        };
-    }
-}
-RootTenantManagementModule.decorators = [
-    { type: NgModule, args: [{},] }
-];
 
 /**
  * @fileoverview added by tsickle
@@ -798,6 +779,12 @@ TenantManagementModule.decorators = [
                 ],
             },] }
 ];
+/**
+ * @return {?}
+ */
+function TenantManagementProviders() {
+    return [];
+}
 
 /**
  * @fileoverview added by tsickle
@@ -929,5 +916,5 @@ var TenantManagement;
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { CreateTenant, DeleteTenant, GetTenantById, GetTenants, RootTenantManagementModule, TENANT_MANAGEMENT_ROUTES, TenantManagementModule, TenantManagementService, TenantManagementState, TenantsComponent, TenantsResolver, UpdateTenant, TenantsComponent as ɵa, TenantManagementState as ɵb, TenantManagementService as ɵc, GetTenants as ɵd, GetTenantById as ɵe, CreateTenant as ɵf, UpdateTenant as ɵg, DeleteTenant as ɵh, TenantManagementRoutingModule as ɵj, TenantsResolver as ɵk };
+export { CreateTenant, DeleteTenant, GetTenantById, GetTenants, TENANT_MANAGEMENT_ROUTES, TenantManagementModule, TenantManagementProviders, TenantManagementService, TenantManagementState, TenantsComponent, TenantsResolver, UpdateTenant, TenantsComponent as ɵa, TenantManagementState as ɵb, TenantManagementService as ɵc, GetTenants as ɵd, GetTenantById as ɵe, CreateTenant as ɵf, UpdateTenant as ɵg, DeleteTenant as ɵh, TenantManagementRoutingModule as ɵj, TenantsResolver as ɵk };
 //# sourceMappingURL=abp-ng.tenant-management.js.map

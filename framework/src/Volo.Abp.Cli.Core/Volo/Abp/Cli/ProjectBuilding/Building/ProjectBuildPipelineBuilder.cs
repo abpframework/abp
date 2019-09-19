@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
@@ -19,6 +20,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
             pipeline.Steps.Add(new SolutionRenameStep());
+
+            if (context.Template.Name == AppProTemplate.TemplateName)
+            {
+                pipeline.Steps.Add(new LicenseCodeReplaceStep());
+            }
+
             pipeline.Steps.Add(new CreateProjectResultZipStep());
 
             return pipeline;

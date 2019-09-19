@@ -1,7 +1,6 @@
-import { InjectionToken, NgModule, Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject } from '@angular/core';
-import { __assign } from 'tslib';
 import { ConfigState, GetAppConfiguration, RestService, DynamicLayoutComponent, SessionState, SetTenant, CoreModule } from '@abp/ng.core';
 import { ToasterService, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject, NgModule, InjectionToken } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { TableModule } from 'primeng/table';
@@ -13,55 +12,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { from, throwError } from 'rxjs';
 import { switchMap, tap, catchError, finalize, take } from 'rxjs/operators';
 import snq from 'snq';
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} options
- * @return {?}
- */
-function optionsFactory(options) {
-    return __assign({ redirectUrl: '/' }, options);
-}
-/** @type {?} */
-var ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var RootAccountModule = /** @class */ (function () {
-    function RootAccountModule() {
-    }
-    /**
-     * @param {?=} options
-     * @return {?}
-     */
-    RootAccountModule.forRoot = /**
-     * @param {?=} options
-     * @return {?}
-     */
-    function (options) {
-        if (options === void 0) { options = (/** @type {?} */ ({})); }
-        return {
-            ngModule: RootAccountModule,
-            providers: [
-                { provide: ACCOUNT_OPTIONS, useValue: options },
-                {
-                    provide: 'ACCOUNT_OPTIONS',
-                    useFactory: optionsFactory,
-                    deps: [ACCOUNT_OPTIONS],
-                },
-            ],
-        };
-    };
-    RootAccountModule.decorators = [
-        { type: NgModule, args: [{},] }
-    ];
-    return RootAccountModule;
-}());
+import { __assign } from 'tslib';
 
 /**
  * @fileoverview added by tsickle
@@ -503,6 +454,20 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/**
+ * @param {?} options
+ * @return {?}
+ */
+function optionsFactory(options) {
+    return __assign({ redirectUrl: '/' }, options);
+}
+/** @type {?} */
+var ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var AccountModule = /** @class */ (function () {
     function AccountModule() {
     }
@@ -515,6 +480,21 @@ var AccountModule = /** @class */ (function () {
     ];
     return AccountModule;
 }());
+/**
+ * @param {?=} options
+ * @return {?}
+ */
+function AccountProviders(options) {
+    if (options === void 0) { options = (/** @type {?} */ ({})); }
+    return [
+        { provide: ACCOUNT_OPTIONS, useValue: options },
+        {
+            provide: 'ACCOUNT_OPTIONS',
+            useFactory: optionsFactory,
+            deps: [ACCOUNT_OPTIONS],
+        },
+    ];
+}
 
 /**
  * @fileoverview added by tsickle
@@ -652,5 +632,5 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, LoginComponent, RegisterComponent, RootAccountModule, optionsFactory, optionsFactory as ɵa, ACCOUNT_OPTIONS as ɵb, LoginComponent as ɵc, RegisterComponent as ɵe, AccountService as ɵf, TenantBoxComponent as ɵg, AccountRoutingModule as ɵh };
+export { ACCOUNT_OPTIONS, ACCOUNT_ROUTES, AccountModule, AccountProviders, LoginComponent, RegisterComponent, optionsFactory, LoginComponent as ɵa, RegisterComponent as ɵc, AccountService as ɵd, TenantBoxComponent as ɵe, AccountRoutingModule as ɵf, optionsFactory as ɵg, ACCOUNT_OPTIONS as ɵh };
 //# sourceMappingURL=abp-ng.account.js.map

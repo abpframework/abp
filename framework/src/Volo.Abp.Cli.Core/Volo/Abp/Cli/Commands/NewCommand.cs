@@ -37,21 +37,32 @@ namespace Volo.Abp.Cli.Commands
                 );
             }
 
-            Logger.LogInformation("Creating a new project...");
+            Logger.LogInformation("Creating your project...");
             Logger.LogInformation("Project name: " + commandLineArgs.Target);
 
-            commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+            var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
+            if (template != null)
+            {
+                Logger.LogInformation("Template: " + template);
+            }
 
-            var result = await ProjectBuilder.BuildAsync(
-                new ProjectBuildArgs(
-                    SolutionName.Parse(commandLineArgs.Target),
-                    commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long),
-                    commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long),
-                    GetDatabaseProvider(commandLineArgs),
-                    GetUiFramework(commandLineArgs),
-                    commandLineArgs.Options
-                )
-            );
+            var version = commandLineArgs.Options.GetOrNull(Options.Version.Short, Options.Version.Long);
+            if (version != null)
+            {
+                Logger.LogInformation("Version: " + version);
+            }
+
+            var databaseProvider = GetDatabaseProvider(commandLineArgs);
+            if (databaseProvider != DatabaseProvider.NotSpecified)
+            {
+                Logger.LogInformation("Database provider: " + databaseProvider);
+            }
+
+            var uiFramework = GetUiFramework(commandLineArgs);
+            if (uiFramework != UiFramework.NotSpecified)
+            {
+                Logger.LogInformation("UI Framework: " + uiFramework);
+            }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
             if (outputFolder != null)
@@ -67,6 +78,21 @@ namespace Volo.Abp.Cli.Commands
             {
                 outputFolder = Directory.GetCurrentDirectory();
             }
+
+            Logger.LogInformation("Output folder: " + outputFolder);
+
+            commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
+
+            var result = await ProjectBuilder.BuildAsync(
+                new ProjectBuildArgs(
+                    SolutionName.Parse(commandLineArgs.Target),
+                    template,
+                    version,
+                    databaseProvider,
+                    uiFramework,
+                    commandLineArgs.Options
+                )
+            );
 
             using (var templateFileStream = new MemoryStream(result.ZipContent))
             {
@@ -101,8 +127,7 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            Logger.LogInformation($"Successfully created the project '{commandLineArgs.Target}'");
-            Logger.LogInformation($"The output folder is: '{outputFolder}'");
+            Logger.LogInformation($"'{commandLineArgs.Target}' has been successfully created to '{outputFolder}'");
         }
 
         public string GetUsageInfo()

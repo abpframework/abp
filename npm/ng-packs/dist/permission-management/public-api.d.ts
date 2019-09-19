@@ -1,4 +1,3 @@
-export * from './lib/root-permission-management.module';
 export * from './lib/permission-management.module';
 export * from './lib/actions';
 export * from './lib/components';

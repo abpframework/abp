@@ -1,129 +1,218 @@
-import { NgModule, Injectable, Component, Self } from '@angular/core';
 import { DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
-import { __spread } from 'tslib';
-import { Router, RouterModule } from '@angular/router';
-import snq from 'snq';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, NgModule } from '@angular/core';
+import { RouteConfigLoadEnd, Router, RouterModule } from '@angular/router';
+import { Subject, timer } from 'rxjs';
+import { Navigate } from '@ngxs/router-plugin';
+import { Store } from '@ngxs/store';
+import { filter, takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var RootSettingManagementModule = /** @class */ (function () {
-    function RootSettingManagementModule() {
+var SettingManagementService = /** @class */ (function () {
+    function SettingManagementService(router, store) {
+        var _this = this;
+        this.router = router;
+        this.store = store;
+        this.settings = [];
+        this.selected = (/** @type {?} */ ({}));
+        this.destroy$ = new Subject();
+        /** @type {?} */
+        var timeout;
+        this.router.events
+            .pipe(filter((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) { return event instanceof RouteConfigLoadEnd; })), takeUntil(this.destroy$))
+            .subscribe((/**
+         * @param {?} event
+         * @return {?}
+         */
+        function (event) {
+            if (timeout) {
+                timeout.unsubscribe();
+                _this.destroy$.next();
+            }
+            timeout = timer(150).subscribe((/**
+             * @return {?}
+             */
+            function () {
+                _this.setSettings();
+            }));
+        }));
     }
     /**
      * @return {?}
      */
-    RootSettingManagementModule.forRoot = /**
+    SettingManagementService.prototype.ngOnDestroy = /**
      * @return {?}
      */
     function () {
-        return {
-            ngModule: RootSettingManagementModule,
-            providers: [],
-        };
+        this.destroy$.next();
     };
-    RootSettingManagementModule.decorators = [
-        { type: NgModule, args: [{},] }
-    ];
-    return RootSettingManagementModule;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var InitialService = /** @class */ (function () {
-    function InitialService(router) {
-        this.router = router;
-        this.settings = this.router.config
-            .map((/**
-         * @param {?} route
+    /**
+     * @return {?}
+     */
+    SettingManagementService.prototype.setSettings = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        setTimeout((/**
          * @return {?}
          */
-        function (route) { return snq((/**
+        function () {
+            /** @type {?} */
+            var route = _this.router.config.find((/**
+             * @param {?} r
+             * @return {?}
+             */
+            function (r) { return r.path === 'setting-management'; }));
+            _this.settings = route.data.settings.sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function (a, b) { return a.order - b.order; }));
+            _this.checkSelected();
+        }), 0);
+    };
+    /**
+     * @return {?}
+     */
+    SettingManagementService.prototype.checkSelected = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        this.selected = this.settings.find((/**
+         * @param {?} setting
          * @return {?}
          */
-        function () { return route.data.routes.settings; })); }))
-            .filter((/**
-         * @param {?} settings
-         * @return {?}
-         */
-        function (settings) { return settings && settings.length; }))
-            .reduce((/**
-         * @param {?} acc
-         * @param {?} val
-         * @return {?}
-         */
-        function (acc, val) { return __spread(acc, val); }), [])
-            .sort((/**
-         * @param {?} a
-         * @param {?} b
-         * @return {?}
-         */
-        function (a, b) { return a.order - b.order; }));
-    }
-    InitialService.decorators = [
-        { type: Injectable }
+        function (setting) { return setting.url === _this.router.url; })) || ((/** @type {?} */ ({})));
+        if (!this.selected.name && this.settings.length) {
+            this.setSelected(this.settings[0]);
+        }
+    };
+    /**
+     * @param {?} selected
+     * @return {?}
+     */
+    SettingManagementService.prototype.setSelected = /**
+     * @param {?} selected
+     * @return {?}
+     */
+    function (selected) {
+        this.selected = selected;
+        this.store.dispatch(new Navigate([selected.url]));
+    };
+    SettingManagementService.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
     /** @nocollapse */
-    InitialService.ctorParameters = function () { return [
-        { type: Router }
+    SettingManagementService.ctorParameters = function () { return [
+        { type: Router },
+        { type: Store }
     ]; };
-    return InitialService;
+    /** @nocollapse */ SettingManagementService.ngInjectableDef = ɵɵdefineInjectable({ factory: function SettingManagementService_Factory() { return new SettingManagementService(ɵɵinject(Router), ɵɵinject(Store)); }, token: SettingManagementService, providedIn: "root" });
+    return SettingManagementService;
 }());
 if (false) {
     /** @type {?} */
-    InitialService.prototype.settings;
+    SettingManagementService.prototype.settings;
+    /** @type {?} */
+    SettingManagementService.prototype.selected;
     /**
      * @type {?}
      * @private
      */
-    InitialService.prototype.router;
+    SettingManagementService.prototype.destroy$;
+    /**
+     * @type {?}
+     * @private
+     */
+    SettingManagementService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    SettingManagementService.prototype.store;
 }
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var SettingComponent = /** @class */ (function () {
-    function SettingComponent(initialService) {
-        this.initialService = initialService;
-        this.selected = (/** @type {?} */ ({}));
+var SettingLayoutComponent = /** @class */ (function () {
+    function SettingLayoutComponent(settingManagementService, router) {
+        this.settingManagementService = settingManagementService;
+        this.router = router;
+        this.trackByFn = (/**
+         * @param {?} _
+         * @param {?} item
+         * @return {?}
+         */
+        function (_, item) { return item.name; });
+        if (settingManagementService.selected &&
+            this.router.url !== settingManagementService.selected.url &&
+            settingManagementService.settings.length) {
+            settingManagementService.setSelected(settingManagementService.settings[0]);
+        }
     }
     /**
      * @return {?}
      */
-    SettingComponent.prototype.ngOnInit = /**
+    SettingLayoutComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @return {?}
+     */
+    SettingLayoutComponent.prototype.ngAfterViewInit = /**
      * @return {?}
      */
     function () {
-        this.settings = this.initialService.settings;
-        this.selected = this.settings[0];
+        var _this = this;
+        timer(250).subscribe((/**
+         * @return {?}
+         */
+        function () {
+            if (!_this.settingManagementService.settings.length) {
+                _this.settingManagementService.setSettings();
+            }
+        }));
     };
-    SettingComponent.decorators = [
+    // required for dynamic component
+    SettingLayoutComponent.type = "setting" /* setting */;
+    SettingLayoutComponent.decorators = [
         { type: Component, args: [{
-                    selector: 'abp-setting',
-                    template: "<div class=\"row entry-row\">\n  <div class=\"col-auto\">\n    <h1 class=\"content-header-title\">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>\n  </div>\n  <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\">\n    <abp-breadcrumb></abp-breadcrumb>\n  </div>\n  <div class=\"col\">\n    <div class=\"text-lg-right pt-2\" id=\"AbpContentToolbar\"></div>\n  </div>\n</div>\n\n<div id=\"SettingManagementWrapper\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <div class=\"row\">\n        <div class=\"col-3\">\n          <ul class=\"nav flex-column nav-pills\" id=\"T515ccf3324254f41a4a9a6b34b0dae56\" role=\"tablist\">\n            <li\n              *ngFor=\"let setting of settings\"\n              (click)=\"selected = setting\"\n              class=\"nav-item\"\n              [abpPermission]=\"setting.requiredPolicy\"\n            >\n              <a\n                class=\"nav-link\"\n                [id]=\"setting.name + '-tab'\"\n                role=\"tab\"\n                [class.active]=\"setting.name === selected.name\"\n                >{{ setting.name | abpLocalization }}</a\n              >\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-9\">\n          <div class=\"tab-content\">\n            <div class=\"tab-pane fade show active\" [id]=\"selected.name + '-tab'\" role=\"tabpanel\">\n              <h2>{{ selected.name | abpLocalization }}</h2>\n              <hr class=\"my-4\" />\n\n              <ng-container\n                *ngComponentOutlet=\"selected.component\"\n                [abpPermission]=\"selected.requiredPolicy\"\n              ></ng-container>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                    selector: 'abp-setting-layout',
+                    template: "<div class=\"row entry-row\">\n  <div class=\"col-auto\">\n    <h1 class=\"content-header-title\">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>\n  </div>\n  <!-- <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\">\n    <abp-breadcrumb></abp-breadcrumb>\n  </div> -->\n  <div class=\"col\">\n    <div class=\"text-lg-right pt-2\" id=\"AbpContentToolbar\"></div>\n  </div>\n</div>\n\n<div id=\"SettingManagementWrapper\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <div *ngIf=\"!settingManagementService.settings.length\" class=\"text-center\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-3\">\n          <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\n            <li\n              *abpFor=\"\n                let setting of settingManagementService.settings;\n                trackBy: trackByFn;\n                orderBy: 'order';\n                orderDir: 'ASC'\n              \"\n              (click)=\"settingManagementService.setSelected(setting)\"\n              class=\"nav-item\"\n              [abpPermission]=\"setting.requiredPolicy\"\n            >\n              <a\n                class=\"nav-link\"\n                [id]=\"setting.name + '-tab'\"\n                role=\"tab\"\n                [class.active]=\"setting.name === settingManagementService.selected.name\"\n                >{{ setting.name | abpLocalization }}</a\n              >\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-9\">\n          <div *ngIf=\"settingManagementService.settings.length\" class=\"tab-content\">\n            <div\n              class=\"tab-pane fade show active\"\n              [id]=\"settingManagementService.selected.name + '-tab'\"\n              role=\"tabpanel\"\n            >\n              <h2>{{ settingManagementService.selected.name | abpLocalization }}</h2>\n              <hr class=\"my-4\" />\n              <router-outlet></router-outlet>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
                 }] }
     ];
     /** @nocollapse */
-    SettingComponent.ctorParameters = function () { return [
-        { type: InitialService }
+    SettingLayoutComponent.ctorParameters = function () { return [
+        { type: SettingManagementService },
+        { type: Router }
     ]; };
-    return SettingComponent;
+    return SettingLayoutComponent;
 }());
 if (false) {
     /** @type {?} */
-    SettingComponent.prototype.settings;
+    SettingLayoutComponent.type;
     /** @type {?} */
-    SettingComponent.prototype.selected;
+    SettingLayoutComponent.prototype.trackByFn;
+    /** @type {?} */
+    SettingLayoutComponent.prototype.settingManagementService;
     /**
      * @type {?}
      * @private
      */
-    SettingComponent.prototype.initialService;
+    SettingLayoutComponent.prototype.router;
 }
 
 /**
@@ -131,11 +220,31 @@ if (false) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
+var SETTING_MANAGEMENT_ROUTES = {
+    routes: (/** @type {?} */ ([
+        {
+            name: 'Settings',
+            path: 'setting-management',
+            parentName: 'AbpUiNavigation::Menu:Administration',
+            layout: "application" /* application */,
+            order: 6,
+            iconClass: 'fa fa-cog',
+        },
+    ])),
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ɵ0 = { routes: SETTING_MANAGEMENT_ROUTES, settings: [] };
+/** @type {?} */
 var routes = [
     {
-        path: '',
+        path: 'setting-management',
         component: DynamicLayoutComponent,
-        children: [{ path: '', component: SettingComponent }],
+        children: [{ path: '', component: SettingLayoutComponent }],
+        data: ɵ0,
     },
 ];
 var SettingManagementRoutingModule = /** @class */ (function () {
@@ -154,20 +263,18 @@ var SettingManagementRoutingModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+/** @type {?} */
+var SETTING_LAYOUT = SettingLayoutComponent;
 var SettingManagementModule = /** @class */ (function () {
-    function SettingManagementModule(initialService) {
+    function SettingManagementModule() {
     }
     SettingManagementModule.decorators = [
         { type: NgModule, args: [{
-                    declarations: [SettingComponent],
+                    declarations: [SETTING_LAYOUT],
                     imports: [SettingManagementRoutingModule, CoreModule, ThemeSharedModule],
-                    providers: [InitialService],
+                    entryComponents: [SETTING_LAYOUT],
                 },] }
     ];
-    /** @nocollapse */
-    SettingManagementModule.ctorParameters = function () { return [
-        { type: InitialService, decorators: [{ type: Self }] }
-    ]; };
     return SettingManagementModule;
 }());
 
@@ -180,35 +287,11 @@ var SettingManagementModule = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-/** @type {?} */
-var SETTING_MANAGEMENT_ROUTES = {
-    routes: (/** @type {?} */ ([
-        {
-            name: 'Settings',
-            path: 'setting-management',
-            parentName: 'AbpUiNavigation::Menu:Administration',
-            layout: "application" /* application */,
-            order: 6,
-            iconClass: 'fa fa-cog',
-        },
-    ])),
-    settings: [],
-};
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-export { RootSettingManagementModule, SETTING_MANAGEMENT_ROUTES, SettingComponent, SettingManagementModule, SettingComponent as ɵa, InitialService as ɵb, SettingManagementRoutingModule as ɵc };
+export { SETTING_LAYOUT, SETTING_MANAGEMENT_ROUTES, SettingLayoutComponent, SettingManagementModule, SettingManagementService as ɵa, SettingManagementRoutingModule as ɵb, SETTING_MANAGEMENT_ROUTES as ɵc };
 //# sourceMappingURL=abp-ng.setting-management.js.map
