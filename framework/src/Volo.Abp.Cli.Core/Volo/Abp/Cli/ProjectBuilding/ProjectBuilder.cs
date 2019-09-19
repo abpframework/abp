@@ -53,10 +53,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args.Version
             );
 
-            var apiKey = await ApiKeyService.GetApiKeyOrNullAsync();
-            if (apiKey != null)
+            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+            if (apiKeyResult?.ApiKey != null)
             {
-                args.ExtraProperties["api-key"] = apiKey;
+                args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
+            }
+
+            if (apiKeyResult?.LicenseCode != null)
+            {
+                args.ExtraProperties["license-code"] = apiKeyResult.LicenseCode;
             }
 
             var context = new ProjectBuildContext(
@@ -69,7 +74,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             if (!templateInfo.DocumentUrl.IsNullOrEmpty())
             {
-                Logger.LogInformation("Check out the documents: " + templateInfo.DocumentUrl);
+                Logger.LogInformation("Check out the documents at " + templateInfo.DocumentUrl);
             }
 
             // Exclude unwanted or known options.
