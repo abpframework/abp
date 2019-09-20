@@ -20,6 +20,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Auditing;
 using Volo.Abp.Autofac;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation.Urls;
@@ -89,6 +90,11 @@ namespace MyCompanyName.MyProjectName
             Configure<BackgroundJobOptions>(options =>
             {
                 options.IsJobExecutionEnabled = false;
+            });
+
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
             });
 
             context.Services.AddStackExchangeRedisCache(options =>

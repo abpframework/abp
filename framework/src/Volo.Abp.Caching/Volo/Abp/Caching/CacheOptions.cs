@@ -7,6 +7,11 @@ namespace Volo.Abp.Caching
     public class CacheOptions
     {
         /// <summary>
+        /// Cache key prefix.
+        /// </summary>
+        public string KeyPrefix { get; set; }
+
+        /// <summary>
         /// Global Cache entry options.
         /// </summary>
         public DistributedCacheEntryOptions GlobalCacheEntryOptions { get; set; }
@@ -21,6 +26,7 @@ namespace Volo.Abp.Caching
         {
             CacheConfigurators = new List<Func<string, DistributedCacheEntryOptions>>();
             GlobalCacheEntryOptions = new DistributedCacheEntryOptions();
+            KeyPrefix = "";
         }
     }
 }
