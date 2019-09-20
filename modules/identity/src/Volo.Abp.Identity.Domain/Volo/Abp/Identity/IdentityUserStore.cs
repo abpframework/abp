@@ -31,6 +31,7 @@ namespace Volo.Abp.Identity
         IUserAuthenticationTokenStore<IdentityUser>,
         IUserAuthenticatorKeyStore<IdentityUser>,
         IUserTwoFactorRecoveryCodeStore<IdentityUser>,
+        IIdentityStoreAutoSaveChanges,
         ITransientDependency
     {
         private const string InternalLoginProvider = "[AspNetUserStore]";
