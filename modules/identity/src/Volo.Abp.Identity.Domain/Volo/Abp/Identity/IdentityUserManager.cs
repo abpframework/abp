@@ -75,5 +75,20 @@ namespace Volo.Abp.Identity
 
             return IdentityResult.Success;
         }
+
+        public IDisposable AutoSaveUserChanges(bool autoSaveChanges)
+        {
+            if (!(Store is IIdentityStoreAutoSaveChanges store))
+            {
+                throw new InvalidOperationException(Store.GetType().FullName + " does not support AutoSaveChanges");
+            }
+
+            var currentAutoSaveChanges = store.AutoSaveChanges;
+            store.AutoSaveChanges = autoSaveChanges;
+            return new DisposeAction(() =>
+            {
+                store.AutoSaveChanges = currentAutoSaveChanges;
+            });
+        }
     }
 }

@@ -20,6 +20,7 @@ namespace Volo.Abp.Identity
     public class IdentityRoleStore :
         IRoleStore<IdentityRole>,
         IRoleClaimStore<IdentityRole>,
+        IIdentityStoreAutoSaveChanges,
         ITransientDependency
     {
         private readonly IIdentityRoleRepository _roleRepository;
