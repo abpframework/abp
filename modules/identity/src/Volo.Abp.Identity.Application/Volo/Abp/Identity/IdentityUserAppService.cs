@@ -53,55 +53,45 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Users.Create)]
         public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
-            using (_userManager.AutoSaveUserChanges(false))
-            {
-                var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
+            var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
 
-                (await _userManager.CreateAsync(user, input.Password)).CheckErrors();
-                await UpdateUserByInput(user, input);
+            (await _userManager.CreateAsync(user, input.Password)).CheckErrors();
+            await UpdateUserByInput(user, input);
 
-                await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
-                return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
-            }
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
         public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
-            using (_userManager.AutoSaveUserChanges(false))
-            {
-                var user = await _userManager.GetByIdAsync(id);
-                user.ConcurrencyStamp = input.ConcurrencyStamp;
+            var user = await _userManager.GetByIdAsync(id);
+            user.ConcurrencyStamp = input.ConcurrencyStamp;
 
-                (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
-                await UpdateUserByInput(user, input);
-                (await _userManager.UpdateAsync(user)).CheckErrors();
-                await CurrentUnitOfWork.SaveChangesAsync();
+            (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+            await UpdateUserByInput(user, input);
+            (await _userManager.UpdateAsync(user)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
-                return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
-            }
+            return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
         [Authorize(IdentityPermissions.Users.Delete)]
         public async Task DeleteAsync(Guid id)
         {
-            using (_userManager.AutoSaveUserChanges(false))
+            if (CurrentUser.Id == id)
             {
-                if (CurrentUser.Id == id)
-                {
-                    throw new BusinessException(code: IdentityErrorCodes.UserSelfDeletion);
-                }
-
-                var user = await _userManager.FindByIdAsync(id.ToString());
-                if (user == null)
-                {
-                    return;
-                }
-
-                (await _userManager.DeleteAsync(user)).CheckErrors();
-                await CurrentUnitOfWork.SaveChangesAsync();
+                throw new BusinessException(code: IdentityErrorCodes.UserSelfDeletion);
             }
+
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                return;
+            }
+
+            (await _userManager.DeleteAsync(user)).CheckErrors();
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
