@@ -15,6 +15,7 @@ using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Autofac;
 using Volo.Abp.Caching;
 using Volo.Abp.Localization;
@@ -27,6 +28,7 @@ namespace MyCompanyName.MyProjectName
         typeof(MyProjectNameHttpApiModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
         )]
