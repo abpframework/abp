@@ -25,6 +25,6 @@ export class ButtonComponent {
   disabled: boolean = false;
 
   get icon(): string {
-    return `${this.loading ? 'fa fa-spin fa-spinner' : this.iconClass || 'd-none'}`;
+    return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
   }
 }
