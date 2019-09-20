@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Pages.Abp.MultiTenancy
+namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy
 {
     public class FindTenantResult
     {

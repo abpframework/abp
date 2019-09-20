@@ -2,56 +2,33 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
-using Volo.Abp.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc.MultiTenancy;
 
 namespace Pages.Abp.MultiTenancy
 {
     [Route("api/abp/multi-tenancy")]
-    public class AbpTenantController : AbpController
+    public class AbpTenantController : AbpController, IAbpTenantAppService
     {
-        protected ITenantStore TenantStore { get; }
+        private readonly IAbpTenantAppService _abpTenantAppService;
 
-        public AbpTenantController(ITenantStore tenantStore)
+        public AbpTenantController(IAbpTenantAppService abpTenantAppService)
         {
-            TenantStore = tenantStore;
+            _abpTenantAppService = abpTenantAppService;
         }
 
         [HttpGet]
-        [Route("find-tenant/{name}")]
-        public async Task<FindTenantResult> FindTenantAsync(string name)
+        [Route("find-tenant/{name}")] //TODO: Remove on v1.0
+        [Route("tenants/by-name/{name}")]
+        public async Task<FindTenantResult> FindTenantByNameAsync(string name)
         {
-            var tenant = await TenantStore.FindAsync(name);
-
-            if (tenant == null)
-            {
-                return new FindTenantResult{Success = false};
-            }
-
-            return new FindTenantResult
-            {
-                Success = true,
-                TenantId = tenant.Id,
-                Name = tenant.Name
-            };
+            return await _abpTenantAppService.FindTenantByNameAsync(name);
         }
 
         [HttpGet]
-        [Route("find-tenant-by-id/{name}")]
+        [Route("tenants/by-id/{id}")]
         public async Task<FindTenantResult> FindTenantByIdAsync(Guid id)
         {
-            var tenant = await TenantStore.FindAsync(id);
-
-            if (tenant == null)
-            {
-                return new FindTenantResult { Success = false };
-            }
-
-            return new FindTenantResult
-            {
-                Success = true,
-                TenantId = tenant.Id,
-                Name = tenant.Name
-            };
+            return await _abpTenantAppService.FindTenantByIdAsync(id);
         }
     }
 }
