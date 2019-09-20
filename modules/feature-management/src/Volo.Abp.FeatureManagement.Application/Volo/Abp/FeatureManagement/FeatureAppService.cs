@@ -44,6 +44,7 @@ namespace Volo.Abp.FeatureManagement
                 features.Add(new FeatureDto
                 {
                     Name = featureDefinition.Name,
+                    DisplayName = featureDefinition.DisplayName?.Localize(_stringLocalizerFactory),
                     ValueType = featureDefinition.ValueType,
                     Description = featureDefinition.Description?.Localize(_stringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,

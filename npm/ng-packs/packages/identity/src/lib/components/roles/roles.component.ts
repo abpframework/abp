@@ -38,6 +38,8 @@ export class RolesComponent {
 
   modalBusy: boolean = false;
 
+  sortOrder: string = 'asc';
+
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
@@ -120,5 +122,9 @@ export class RolesComponent {
       .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
+  }
+
+  changeSortOrder() {
+    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
   }
 }

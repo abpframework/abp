@@ -48,9 +48,9 @@ namespace Volo.Abp.IdentityServer.MongoDB
             return await GetCountAsync();
         }
 
-        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null)
+        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name);
+            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
         }
     }
 }

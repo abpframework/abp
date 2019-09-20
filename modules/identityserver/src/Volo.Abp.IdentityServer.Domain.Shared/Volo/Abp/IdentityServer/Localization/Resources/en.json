@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource name already exist: {Name}",
-    "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource name already exist: {Name}"
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource name already exist: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId already exist: {ClientId}"
   }
 }
