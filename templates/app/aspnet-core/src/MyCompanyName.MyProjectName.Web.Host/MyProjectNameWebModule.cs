@@ -75,7 +75,8 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureNavigationServices();
+            ConfigureNavigationServices(configuration);
+            ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
 
             //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
@@ -168,11 +169,11 @@ namespace MyCompanyName.MyProjectName.Web
             }
         }
 
-        private void ConfigureNavigationServices()
+        private void ConfigureNavigationServices(IConfigurationRoot configuration)
         {
             Configure<NavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
         }
 

@@ -10,6 +10,7 @@ export class AbstractToaster<T = Toaster.Options> {
   sticky: boolean = false;
 
   constructor(protected messageService: MessageService) {}
+
   info(message: string, title: string, options?: T): Observable<Toaster.Status> {
     return this.show(message, title, 'info', options);
   }
