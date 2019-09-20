@@ -281,20 +281,37 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void CheckAndSetId(EntityEntry entry)
         {
-            //Set GUID Ids
-            var entity = entry.Entity as IEntity<Guid>;
-            if (entity != null && entity.Id == Guid.Empty)
+            if (entry.Entity is IEntity<Guid> entityWithGuidId)
             {
-                var dbGeneratedAttr = ReflectionHelper
-                    .GetSingleAttributeOrDefault<DatabaseGeneratedAttribute>(
-                        entry.Property("Id").Metadata.PropertyInfo
-                    );
-
-                if (dbGeneratedAttr == null || dbGeneratedAttr.DatabaseGeneratedOption == DatabaseGeneratedOption.None)
-                {
-                    entity.Id = GuidGenerator.Create();
-                }
+                TrySetGuidId(entry, entityWithGuidId);
             }
+        }
+
+        protected virtual void TrySetGuidId(EntityEntry entry, IEntity<Guid> entity)
+        {
+            if (entity.Id != default)
+            {
+                return;
+            }
+
+            var idProperty = entry.Property("Id").Metadata.PropertyInfo;
+
+            //Check for DatabaseGeneratedAttribute
+            var dbGeneratedAttr = ReflectionHelper
+                .GetSingleAttributeOrDefault<DatabaseGeneratedAttribute>(
+                    idProperty
+                );
+
+            if (dbGeneratedAttr != null && dbGeneratedAttr.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
+            {
+                return;
+            }
+
+            EntityHelper.TrySetId(
+                entity,
+                () => GuidGenerator.Create(),
+                true
+            );
         }
 
         protected virtual void SetCreationAuditProperties(EntityEntry entry)

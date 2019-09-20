@@ -289,7 +289,11 @@ namespace Volo.Abp.Application.Services
                 return;
             }
 
-            entityWithGuidId.Id = GuidGenerator.Create();
+            EntityHelper.TrySetId(
+                entityWithGuidId,
+                () => GuidGenerator.Create(),
+                true
+            );
         }
 
         /// <summary>
