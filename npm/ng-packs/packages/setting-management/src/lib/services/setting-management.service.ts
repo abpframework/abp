@@ -1,10 +1,10 @@
 import { SettingTab } from '@abp/ng.theme.shared';
 import { Injectable } from '@angular/core';
-import { RouteConfigLoadEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
-import { Subject, Subscription, timer } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { ConfigState } from '@abp/ng.core';
 
 @Injectable({ providedIn: 'root' })
 export class SettingManagementService {
@@ -27,7 +27,9 @@ export class SettingManagementService {
   setSettings() {
     setTimeout(() => {
       const route = this.router.config.find(r => r.path === 'setting-management');
-      this.settings = route.data.settings.sort((a, b) => a.order - b.order);
+      this.settings = (route.data.settings as SettingTab[])
+        .filter(setting => this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)))
+        .sort((a, b) => a.order - b.order);
       this.checkSelected();
     }, 0);
   }

@@ -12,7 +12,7 @@ export class BooksService {
   get(): Observable<Books.Response> {
     return this.restService.request<void, Books.Response>({
       method: 'GET',
-      url: '/api/app/book',
+      url: '/api/app/book?MaxResultCount=100',
     });
   }
 

@@ -15,5 +15,5 @@ export const collapse = trigger('collapse', [
       overflow: 'hidden',
     }),
   ),
-  transition('open <=> close', animate('{{duration}}ms')),
+  transition(`open <=> close`, animate('{{duration}}ms'), { params: { duration: '350' } }),
 ]);

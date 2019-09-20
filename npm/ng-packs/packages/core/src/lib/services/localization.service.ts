@@ -1,4 +1,4 @@
-import { Injectable, Optional, SkipSelf } from '@angular/core';
+import { Injectable, Optional, SkipSelf, NgZone } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Actions, Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
@@ -17,6 +17,7 @@ export class LocalizationService {
   constructor(
     private store: Store,
     private router: Router,
+    private ngZone: NgZone,
     private actions: Actions,
     @Optional()
     @SkipSelf()
@@ -35,9 +36,11 @@ export class LocalizationService {
     this.setRouteReuse(() => false);
     this.router.navigated = false;
 
-    return registerLocale(locale).then(async () => {
-      await this.router.navigateByUrl(this.router.url).catch(noop);
-      this.setRouteReuse(shouldReuseRoute);
+    return registerLocale(locale).then(() => {
+      this.ngZone.run(async () => {
+        await this.router.navigateByUrl(this.router.url).catch(noop);
+        this.setRouteReuse(shouldReuseRoute);
+      });
     });
   }
 

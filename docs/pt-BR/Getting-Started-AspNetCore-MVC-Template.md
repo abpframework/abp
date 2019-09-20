@@ -20,7 +20,7 @@ abp new Acme.BookStore
 
 > Você pode usar diferentes níveis de namespaces; por exemplo, BookStore, Acme.BookStore ou Acme.Retail.BookStore.
 
-`new`O comando cria um **aplicativo MVC em camadas** com o **Entity Framework Core** como o provedor de banco de dados. No entanto, possui opções adicionais. Consulte a [documentação](CLI.md) da [CLI](CLI.md) para todas as opções disponíveis.
+`new` O comando cria um **aplicativo MVC em camadas** com o **Entity Framework Core** como o provedor de banco de dados. No entanto, possui opções adicionais. Consulte a [documentação](CLI.md) da [CLI](CLI.md) para todas as opções disponíveis.
 
 #### Pré requisitos
 
@@ -41,7 +41,7 @@ A solução possui uma estrutura em camadas (baseada no [Domain Driven Design](D
 
 ### Cadeia de Conexão de Banco de Dados
 
-Verifique a **cadeia de conexão** no `appsettings.json`arquivo no `.Web`projeto:
+Verifique a **connection string** no `appsettings.json`arquivo no `.Web`projeto:
 
 ```json
 {
@@ -91,7 +91,7 @@ Verifique se o `.Web`projeto é o projeto de inicialização. Execute o aplicati
 
 ![livraria-homepage](images/bookstore-homepage.png)
 
-Clique no botão **Login** , insira `admin`como nome de usuário e `1q2w3E*`senha para acessar o aplicativo.
+Clique no botão **Login** , insira `admin` como nome de usuário e `1q2w3E*` senha para acessar o aplicativo.
 
 O modelo de inicialização inclui os módulos de **gerenciamento de** **identidade** e **gerenciamento de inquilino** . Após o login, o menu Administração estará disponível, onde você poderá gerenciar **inquilinos** , **funções** , **usuários** e suas **permissões** . A página de gerenciamento de usuários é mostrada abaixo:
 

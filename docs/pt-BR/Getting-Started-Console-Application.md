@@ -10,7 +10,7 @@ Crie um novo aplicativo regular .Net Core Console do Visual Studio:
 
 ## Instale o pacote Volo.Abp
 
-Volo.Abp.Core é o pacote principal de pepitas para criar aplicativos baseados em ABP. Então, instale-o no seu projeto:
+Volo.Abp.Core é o pacote principal de nuget para criar aplicativos baseados em ABP. Então, instale-o no seu projeto:
 
 ```
 Install-Package Volo.Abp.Core
@@ -18,7 +18,7 @@ Install-Package Volo.Abp.Core
 
 ## Criar o primeiro módulo ABP
 
-O ABP é uma estrutura modular e requer uma classe de **módulo de inicialização (raiz)** derivada de `AbpModule`:
+O ABP é um framework modular e requer uma classe de **módulo de inicialização (raiz)** derivada de `AbpModule`:
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -117,9 +117,9 @@ namespace AbpConsoleDemo
 
 Embora seja suficiente para este exemplo de código simples, é sempre recomendável criar escopos no caso de resolver diretamente dependências de `IServiceProvider`(consulte a [documentação de Injeção de Dependências](Dependency-Injection.md)).
 
-## Usando Autofac como a estrutura de injeção de dependência
+## Usando Autofac como framework de injeção de dependência
 
-Embora o sistema de Injeção de Dependência (DI) do AspNet Core seja adequado para requisitos básicos, o Autofac fornece recursos avançados, como Injeção de Propriedade e Interceptação de Método, exigidos pela ABP para executar recursos avançados da estrutura de aplicativos.
+Embora o sistema de Injeção de Dependência (DI) do AspNet Core seja adequado para requisitos básicos, o Autofac fornece recursos avançados, como Injeção de Propriedade e Interceptação de Método, exigidos pela ABP para executar recursos avançados do framework de aplicativos.
 
 Substituir o sistema DI do AspNet Core pelo Autofac e integrar ao ABP é bastante fácil.
 
@@ -179,4 +179,3 @@ Apenas chamado `options.UseAutofac()`método nas `AbpApplicationFactory.Create`o
 Obter código-fonte do projeto de exemplo criada neste tutorial a partir de [aqui](https://github.com/abpframework/abp/tree/master/samples/BasicConsoleApplication) .
 
 
-  
