@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using JetBrains.Annotations;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
@@ -12,9 +8,6 @@ using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Tracing;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Localization;
-using Volo.Abp.Settings;
-using Volo.Abp.Threading;
 
 namespace Microsoft.AspNetCore.Builder
 {
@@ -51,7 +44,10 @@ namespace Microsoft.AspNetCore.Builder
 
         public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app, Action<RequestLocalizationOptions> optionsAction = null)
         {
-            app.ApplicationServices.GetRequiredService<IAbpRequestLocalizationOptionsProvider>().InitLocalizationOptions(optionsAction);
+            app.ApplicationServices
+                .GetRequiredService<IAbpRequestLocalizationOptionsProvider>()
+                .InitLocalizationOptions(optionsAction);
+
             return app.UseMiddleware<AbpRequestLocalizationMiddleware>();
         }
 
