@@ -40,7 +40,7 @@ namespace Volo.Abp.Domain.Entities
 
         private class MyEntityImplementsIEntity : IEntity<Guid>
         {
-            public Guid Id { get; set; }
+            public Guid Id { get; protected set; }
 
             public object[] GetKeys()
             {
@@ -51,7 +51,7 @@ namespace Volo.Abp.Domain.Entities
         private class MyEntityDisablesIdGeneration : Entity<Guid>
         {
             [DisableIdGeneration]
-            public override Guid Id { get; set; }
+            public override Guid Id { get; protected set; }
         }
     }
 }

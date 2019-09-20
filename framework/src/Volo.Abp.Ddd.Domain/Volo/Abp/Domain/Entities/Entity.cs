@@ -23,7 +23,7 @@ namespace Volo.Abp.Domain.Entities
     public abstract class Entity<TKey> : Entity, IEntity<TKey>
     {
         /// <inheritdoc/>
-        public virtual TKey Id { get; set; }
+        public virtual TKey Id { get; protected set; }
 
         protected Entity()
         {
