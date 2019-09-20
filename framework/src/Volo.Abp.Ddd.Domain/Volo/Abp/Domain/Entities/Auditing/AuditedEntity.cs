@@ -28,5 +28,16 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         /// <inheritdoc />
         public virtual Guid? LastModifierId { get; set; }
+
+        protected AuditedEntity()
+        {
+
+        }
+
+        protected AuditedEntity(TKey id)
+            : base(id)
+        {
+
+        }
     }
 }

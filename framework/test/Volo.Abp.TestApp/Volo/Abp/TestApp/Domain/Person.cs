@@ -23,8 +23,8 @@ namespace Volo.Abp.TestApp.Domain
         }
 
         public Person(Guid id, string name, int age, Guid? tenantId = null, Guid? cityId = null)
+            : base(id)
         {
-            Id = id;
             Name = name;
             Age = age;
             TenantId = tenantId;
