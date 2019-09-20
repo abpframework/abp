@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
@@ -50,40 +51,8 @@ namespace Microsoft.AspNetCore.Builder
 
         public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app, Action<RequestLocalizationOptions> optionsAction = null)
         {
-            IReadOnlyList<LanguageInfo> languages;
-            string defaultLanguage;
-
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var languageProvider = scope.ServiceProvider.GetRequiredService<ILanguageProvider>();
-                languages = AsyncHelper.RunSync(() => languageProvider.GetLanguagesAsync());
-
-                var settingProvider = scope.ServiceProvider.GetRequiredService<ISettingProvider>();
-                defaultLanguage = AsyncHelper.RunSync(() => settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage));
-            }
-
-            var options = !languages.Any()
-                ? new RequestLocalizationOptions()
-                : new RequestLocalizationOptions
-                {
-                    DefaultRequestCulture = DefaultGetRequestCulture(defaultLanguage, languages),
-
-                    SupportedCultures = languages
-                        .Select(l => l.CultureName)
-                        .Distinct()
-                        .Select(c => new CultureInfo(c))
-                        .ToArray(),
-
-                    SupportedUICultures = languages
-                        .Select(l => l.UiCultureName)
-                        .Distinct()
-                        .Select(c => new CultureInfo(c))
-                        .ToArray()
-                };
-
-            optionsAction?.Invoke(options);
-
-            return app.UseRequestLocalization(options);
+            app.ApplicationServices.GetRequiredService<IAbpRequestLocalizationOptionsProvider>().InitLocalizationOptions(optionsAction);
+            return app.UseMiddleware<AbpRequestLocalizationMiddleware>();
         }
 
         public static IApplicationBuilder UseAbpExceptionHandling(this IApplicationBuilder app)
@@ -95,18 +64,6 @@ namespace Microsoft.AspNetCore.Builder
 
             app.Properties[ExceptionHandlingMiddlewareMarker] = true;
             return app.UseMiddleware<AbpExceptionHandlingMiddleware>();
-        }
-
-        private static RequestCulture DefaultGetRequestCulture(string defaultLanguage, IReadOnlyList<LanguageInfo> languages)
-        {
-            if (defaultLanguage == null)
-            {
-                var firstLanguage = languages.First();
-                return new RequestCulture(firstLanguage.CultureName, firstLanguage.UiCultureName);
-            }
-
-            var (cultureName, uiCultureName) = LocalizationSettingHelper.ParseLanguageSetting(defaultLanguage);
-            return new RequestCulture(cultureName, uiCultureName);
         }
     }
 }
