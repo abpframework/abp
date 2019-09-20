@@ -18,7 +18,7 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void FirstOrDefault()
+        public virtual void FirstOrDefault()
         {
             WithUnitOfWork(() =>
             {
@@ -29,7 +29,7 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void Get()
+        public virtual void Get()
         {
             WithUnitOfWork(() =>
             {
