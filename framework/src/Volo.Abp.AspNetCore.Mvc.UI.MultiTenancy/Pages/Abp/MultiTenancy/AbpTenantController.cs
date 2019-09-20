@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.MultiTenancy;
@@ -8,7 +9,6 @@ namespace Pages.Abp.MultiTenancy
     [Route("api/abp/multi-tenancy")]
     public class AbpTenantController : AbpController
     {
-
         protected ITenantStore TenantStore { get; }
 
         public AbpTenantController(ITenantStore tenantStore)
@@ -30,7 +30,27 @@ namespace Pages.Abp.MultiTenancy
             return new FindTenantResult
             {
                 Success = true,
-                TenantId = tenant.Id
+                TenantId = tenant.Id,
+                Name = tenant.Name
+            };
+        }
+
+        [HttpGet]
+        [Route("find-tenant-by-id/{name}")]
+        public async Task<FindTenantResult> FindTenantByIdAsync(Guid id)
+        {
+            var tenant = await TenantStore.FindAsync(id);
+
+            if (tenant == null)
+            {
+                return new FindTenantResult { Success = false };
+            }
+
+            return new FindTenantResult
+            {
+                Success = true,
+                TenantId = tenant.Id,
+                Name = tenant.Name
             };
         }
     }

@@ -7,5 +7,7 @@ namespace Pages.Abp.MultiTenancy
         public bool Success { get; set; }
 
         public Guid? TenantId { get; set; }
+
+        public string Name { get; set; }
     }
 }
