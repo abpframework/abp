@@ -41,54 +41,44 @@ namespace Volo.Abp.Identity
         [Authorize(IdentityPermissions.Roles.Create)]
         public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
-            using (_roleManager.AutoSaveRoleChanges(false))
-            {
-                var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
+            var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
 
-                role.IsDefault = input.IsDefault;
-                role.IsPublic = input.IsPublic;
+            role.IsDefault = input.IsDefault;
+            role.IsPublic = input.IsPublic;
 
-                (await _roleManager.CreateAsync(role)).CheckErrors();
-                await CurrentUnitOfWork.SaveChangesAsync();
+            (await _roleManager.CreateAsync(role)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
-                return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
-            }
+            return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
 
         [Authorize(IdentityPermissions.Roles.Update)]
         public async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
-            using (_roleManager.AutoSaveRoleChanges(false))
-            {
-                var role = await _roleManager.GetByIdAsync(id);
-                role.ConcurrencyStamp = input.ConcurrencyStamp;
+            var role = await _roleManager.GetByIdAsync(id);
+            role.ConcurrencyStamp = input.ConcurrencyStamp;
 
-                (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
+            (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
 
-                role.IsDefault = input.IsDefault;
-                role.IsPublic = input.IsPublic;
+            role.IsDefault = input.IsDefault;
+            role.IsPublic = input.IsPublic;
 
-                (await _roleManager.UpdateAsync(role)).CheckErrors();
-                await CurrentUnitOfWork.SaveChangesAsync();
+            (await _roleManager.UpdateAsync(role)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync();
 
-                return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
-            }
+            return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
 
         [Authorize(IdentityPermissions.Roles.Delete)]
         public async Task DeleteAsync(Guid id)
         {
-            using (_roleManager.AutoSaveRoleChanges(false))
+            var role = await _roleManager.FindByIdAsync(id.ToString());
+            if (role == null)
             {
-                var role = await _roleManager.FindByIdAsync(id.ToString());
-                if (role == null)
-                {
-                    return;
-                }
-
-                (await _roleManager.DeleteAsync(role)).CheckErrors();
-                await CurrentUnitOfWork.SaveChangesAsync();
+                return;
             }
+
+            (await _roleManager.DeleteAsync(role)).CheckErrors();
         }
     }
 }

@@ -74,7 +74,7 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureNavigationServices();
+            ConfigureNavigationServices(configuration);
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
         }
@@ -166,11 +166,11 @@ namespace MyCompanyName.MyProjectName.Web
             }
         }
 
-        private void ConfigureNavigationServices()
+        private void ConfigureNavigationServices(IConfigurationRoot configuration)
         {
             Configure<NavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
         }
 

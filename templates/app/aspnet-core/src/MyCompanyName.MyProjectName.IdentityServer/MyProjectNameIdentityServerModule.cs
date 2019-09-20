@@ -12,6 +12,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
 using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
@@ -32,6 +33,7 @@ namespace MyCompanyName.MyProjectName
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAccountApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
         )]
