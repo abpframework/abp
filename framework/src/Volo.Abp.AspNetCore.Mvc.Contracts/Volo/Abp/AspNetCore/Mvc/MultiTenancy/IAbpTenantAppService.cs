@@ -6,8 +6,8 @@ namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy
 {
     public interface IAbpTenantAppService : IApplicationService
     {
-        Task<FindTenantResult> FindTenantByNameAsync(string name);
+        Task<FindTenantResultDto> FindTenantByNameAsync(string name);
 
-        Task<FindTenantResult> FindTenantByIdAsync(Guid id);
+        Task<FindTenantResultDto> FindTenantByIdAsync(Guid id);
     }
 }

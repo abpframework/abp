@@ -15,16 +15,16 @@ namespace Pages.Abp.MultiTenancy
             TenantStore = tenantStore;
         }
 
-        public async Task<FindTenantResult> FindTenantByNameAsync(string name)
+        public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
         {
             var tenant = await TenantStore.FindAsync(name);
 
             if (tenant == null)
             {
-                return new FindTenantResult { Success = false };
+                return new FindTenantResultDto { Success = false };
             }
 
-            return new FindTenantResult
+            return new FindTenantResultDto
             {
                 Success = true,
                 TenantId = tenant.Id,
@@ -32,16 +32,16 @@ namespace Pages.Abp.MultiTenancy
             };
         }
         
-        public async Task<FindTenantResult> FindTenantByIdAsync(Guid id)
+        public async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
         {
             var tenant = await TenantStore.FindAsync(id);
 
             if (tenant == null)
             {
-                return new FindTenantResult { Success = false };
+                return new FindTenantResultDto { Success = false };
             }
 
-            return new FindTenantResult
+            return new FindTenantResultDto
             {
                 Success = true,
                 TenantId = tenant.Id,

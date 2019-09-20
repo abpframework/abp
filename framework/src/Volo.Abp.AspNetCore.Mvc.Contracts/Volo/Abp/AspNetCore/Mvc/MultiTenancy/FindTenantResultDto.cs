@@ -2,7 +2,8 @@
 
 namespace Volo.Abp.AspNetCore.Mvc.MultiTenancy
 {
-    public class FindTenantResult
+    [Serializable]
+    public class FindTenantResultDto
     {
         public bool Success { get; set; }
 

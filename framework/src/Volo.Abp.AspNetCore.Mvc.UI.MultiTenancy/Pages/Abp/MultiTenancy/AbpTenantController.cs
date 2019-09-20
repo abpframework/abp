@@ -19,14 +19,14 @@ namespace Pages.Abp.MultiTenancy
         [HttpGet]
         [Route("find-tenant/{name}")] //TODO: Remove on v1.0
         [Route("tenants/by-name/{name}")]
-        public async Task<FindTenantResult> FindTenantByNameAsync(string name)
+        public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
         {
             return await _abpTenantAppService.FindTenantByNameAsync(name);
         }
 
         [HttpGet]
         [Route("tenants/by-id/{id}")]
-        public async Task<FindTenantResult> FindTenantByIdAsync(Guid id)
+        public async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
         {
             return await _abpTenantAppService.FindTenantByIdAsync(id);
         }
