@@ -140,7 +140,8 @@ namespace Volo.Abp.IdentityServer.Clients
             {
                 Key = "#1P3R",
                 Type = "Type",
-                ClientId = "ClientId"
+                ClientId = "ClientId",
+                Data = ""
             });
 
             //Act
