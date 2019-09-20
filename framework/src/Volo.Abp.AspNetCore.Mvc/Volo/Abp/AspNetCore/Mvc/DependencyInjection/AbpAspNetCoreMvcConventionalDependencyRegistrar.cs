@@ -9,22 +9,36 @@ namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
 {
     public class AbpAspNetCoreMvcConventionalRegistrar : DefaultConventionalRegistrar
     {
-        protected override ServiceLifetime? GetServiceLifetimeFromClassHierarcy(Type type)
+        public override void AddType(IServiceCollection services, Type type)
         {
-            var lifeTime = base.GetServiceLifetimeFromClassHierarcy(type);
-            if (lifeTime != null)
+            if (!IsMvcService(type))
             {
-                return lifeTime;
+                return;
             }
 
-            if (IsController(type) ||
-                IsPageModel(type) ||
-                IsViewComponent(type))
-            {
-                return ServiceLifetime.Transient;
-            }
+            var lifeTime = GetMvcServiceLifetime(type);
 
-            return null;
+            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
+
+            TriggerServiceExposing(services, type, serviceTypes);
+
+            foreach (var serviceType in serviceTypes)
+            {
+                var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime);
+                services.Add(serviceDescriptor);
+            }
+        }
+
+        protected virtual bool IsMvcService(Type type)
+        {
+            return IsController(type) ||
+                   IsPageModel(type) ||
+                   IsViewComponent(type);
+        }
+
+        protected virtual ServiceLifetime GetMvcServiceLifetime(Type type)
+        {
+            return ServiceLifetime.Transient;
         }
 
         private static bool IsPageModel(Type type)
