@@ -150,6 +150,10 @@ export default `
   margin-left: 10px !important;
 }
 
+.ui-widget-overlay {
+  z-index: 1000;
+}
+
 /* <animations */
 
 .fade-in-top {
