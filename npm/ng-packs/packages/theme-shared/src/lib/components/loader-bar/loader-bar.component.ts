@@ -4,6 +4,7 @@ import { NavigationEnd, NavigationStart, Router, NavigationError } from '@angula
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
 import { filter } from 'rxjs/operators';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'abp-loader-bar',
@@ -92,8 +93,6 @@ export class LoaderBarComponent implements OnDestroy {
     this.progressLevel = 100;
     this.isLoading = false;
 
-    setTimeout(() => {
-      this.progressLevel = 0;
-    }, 800);
+    timer(810).subscribe(() => (this.progressLevel = 0));
   }
 }
