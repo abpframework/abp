@@ -19,7 +19,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             new NugetReferenceReplacer(
                 context.Files,
-                "MyCompanyName.MyProjectName",
+                context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                 nugetPackageVersion
             ).Run();
         }

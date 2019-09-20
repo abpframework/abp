@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Volo.Abp.Cli.ProjectBuilding
+{
+    public static class SourceCodeTypes
+    {
+        public const string Template = "template";
+
+        public const string Module = "module";
+    }
+}

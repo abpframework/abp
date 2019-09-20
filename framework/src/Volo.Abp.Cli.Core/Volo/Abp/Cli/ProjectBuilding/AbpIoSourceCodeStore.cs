@@ -15,9 +15,9 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class AbpIoTemplateStore : ITemplateStore, ITransientDependency
+    public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     {
-        public ILogger<AbpIoTemplateStore> Logger { get; set; }
+        public ILogger<AbpIoSourceCodeStore> Logger { get; set; }
 
         protected CliOptions Options { get; }
 
@@ -25,7 +25,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-        public AbpIoTemplateStore(
+        public AbpIoSourceCodeStore(
             IOptions<CliOptions> options,
             IJsonSerializer jsonSerializer,
             ICancellationTokenProvider cancellationTokenProvider)
@@ -34,14 +34,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
             CancellationTokenProvider = cancellationTokenProvider;
             Options = options.Value;
 
-            Logger = NullLogger<AbpIoTemplateStore>.Instance;
+            Logger = NullLogger<AbpIoSourceCodeStore>.Instance;
         }
 
         public async Task<TemplateFile> GetAsync(
             string name,
+            string type,
             string version = null)
         {
-            var latestVersion = await GetLatestTemplateVersionAsync(name);
+            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
             if (version == null)
             {
                 version = latestVersion;
@@ -52,16 +53,17 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
             if (Options.CacheTemplates && File.Exists(localCacheFile))
             {
-                Logger.LogInformation("Using cached template: " + name + ", version: " + version);
+                Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
                 return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion);
             }
 
-            Logger.LogInformation("Downloading template: " + name + ", version: " + version);
+            Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
 
-            var fileContent = await DownloadTemplateFileContentAsync(
-                new TemplateDownloadInputDto
+            var fileContent = await DownloadSourceCodeContentAsync(
+                new SourceCodeDownloadInputDto
                 {
                     Name = name,
+                    Type = type,
                     Version = version
                 }
             );
@@ -74,14 +76,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return new TemplateFile(fileContent, version, latestVersion);
         }
 
-        private async Task<string> GetLatestTemplateVersionAsync(string name)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
         {
-            var postData = JsonSerializer.Serialize(new GetLatestTemplateVersionDto { Name = name });
+            var postData = JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto { Name = name });
 
             using (var client = new CliHttpClient())
             {
                 var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/template/get-version/",
+                    $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     CancellationTokenProvider.Token
                 );
@@ -92,18 +94,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 }
 
                 var result = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<GetLatestTemplateVersionResultDto>(result).Version;
+                return JsonSerializer.Deserialize<GetLatestSourceCodeVersionResultDto>(result).Version;
             }
         }
 
-        private async Task<byte[]> DownloadTemplateFileContentAsync(TemplateDownloadInputDto input)
+        private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
         {
             var postData = JsonSerializer.Serialize(input);
 
             using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
             {
                 var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/template/",
+                    $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     CancellationTokenProvider.Token
                 );
@@ -117,19 +119,21 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
         }
 
-        public class TemplateDownloadInputDto
+        public class SourceCodeDownloadInputDto
         {
             public string Name { get; set; }
 
             public string Version { get; set; }
+
+            public string Type { get; set; }
         }
 
-        public class GetLatestTemplateVersionDto
+        public class GetLatestSourceCodeVersionDto
         {
             public string Name { get; set; }
         }
 
-        public class GetLatestTemplateVersionResultDto
+        public class GetLatestSourceCodeVersionResultDto
         {
             public string Version { get; set; }
         }

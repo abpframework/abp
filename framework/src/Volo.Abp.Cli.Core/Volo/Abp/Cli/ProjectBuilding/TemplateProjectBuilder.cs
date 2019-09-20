@@ -14,32 +14,32 @@ using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class ProjectBuilder : IProjectBuilder, ITransientDependency
+    public class TemplateProjectBuilder : IProjectBuilder, ITransientDependency
     {
-        public ILogger<ProjectBuilder> Logger { get; set; }
+        public ILogger<TemplateProjectBuilder> Logger { get; set; }
 
-        protected ITemplateStore TemplateStore { get; }
+        protected ISourceCodeStore SourceCodeStore { get; }
         protected ITemplateInfoProvider TemplateInfoProvider { get; }
         protected ICliAnalyticsCollect CliAnalyticsCollect { get; }
         protected CliOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
-        public ProjectBuilder(ITemplateStore templateStore, 
+        public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore, 
             ITemplateInfoProvider templateInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect, 
             IOptions<CliOptions> options,
             IJsonSerializer jsonSerializer, 
             IApiKeyService apiKeyService)
         {
-            TemplateStore = templateStore;
+            SourceCodeStore = sourceCodeStore;
             TemplateInfoProvider = templateInfoProvider;
             CliAnalyticsCollect = cliAnalyticsCollect;
             Options = options.Value;
             JsonSerializer = jsonSerializer;
             ApiKeyService = apiKeyService;
 
-            Logger = NullLogger<ProjectBuilder>.Instance;
+            Logger = NullLogger<TemplateProjectBuilder>.Instance;
         }
         
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
@@ -48,11 +48,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             NormalizeArgs(args, templateInfo);
 
-            var templateFile = await TemplateStore.GetAsync(
+            var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
+                SourceCodeTypes.Template,
                 args.Version
             );
-
+             
             var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
             if (apiKeyResult?.ApiKey != null)
             {
@@ -66,11 +67,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
             var context = new ProjectBuildContext(
                 templateInfo,
+                null,
                 templateFile,
                 args
             );
 
-            ProjectBuildPipelineBuilder.Build(context).Execute();
+            TemplateProjectBuildPipelineBuilder.Build(context).Execute();
 
             if (!templateInfo.DocumentUrl.IsNullOrEmpty())
             {
