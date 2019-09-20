@@ -22,21 +22,16 @@ export class SettingManagementService {
     private store: Store,
     private oAuthService: OAuthService,
   ) {
-    if (this.oAuthService.hasValidAccessToken()) {
-      setTimeout(() => {
-        this.setSettings();
-      }, 0);
-    } else {
-      this.actions
-        .pipe(ofActionSuccessful(GetAppConfiguration))
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          if (this.oAuthService.hasValidAccessToken()) {
-            this.setSettings();
-            this.destroy$.next();
-          }
-        });
-    }
+    setTimeout(() => this.setSettings(), 0);
+
+    this.actions
+      .pipe(ofActionSuccessful(GetAppConfiguration))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.oAuthService.hasValidAccessToken()) {
+          this.setSettings();
+        }
+      });
   }
 
   ngOnDestroy() {

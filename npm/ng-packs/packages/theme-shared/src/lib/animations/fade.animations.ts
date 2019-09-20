@@ -6,6 +6,12 @@ export const fade = trigger('fade', [
   transition(':leave', animate(250, style({ opacity: 0 }))),
 ]);
 
+export const fadeInOut = trigger('fadeInOut', [
+  state('out', style({ opacity: 0 })),
+  state('in', style({ opacity: 1 })),
+  transition('in <=> out', [animate(250)]),
+]);
+
 export const fadeIn = trigger('fadeIn', [
   state('*', style({ opacity: 1 })),
   transition('* => *', [style({ opacity: 0 }), animate(250)]),
