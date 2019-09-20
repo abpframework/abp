@@ -15,6 +15,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Auditing;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
@@ -105,6 +106,11 @@ namespace MyCompanyName.MyProjectName
                     options.RequireHttpsMetadata = false;
                     options.ApiName = configuration["AuthServer:ApiName"];
                 });
+
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
 
             context.Services.AddStackExchangeRedisCache(options =>
             {

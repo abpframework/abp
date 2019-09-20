@@ -16,6 +16,7 @@ using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -41,12 +42,21 @@ namespace MyCompanyName.MyProjectName
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
             ConfigureLocalization();
+            ConfigureCache(configuration);
             ConfigureVirtualFileSystem(context);
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureCors(context, configuration);
 
             //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             //ConfigureSwaggerServices(context);
+        }
+
+        private void ConfigureCache(IConfigurationRoot configuration)
+        {
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
         }
 
         private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)

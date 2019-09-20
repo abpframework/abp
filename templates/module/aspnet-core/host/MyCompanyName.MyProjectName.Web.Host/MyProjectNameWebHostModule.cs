@@ -23,6 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
@@ -73,6 +74,7 @@ namespace MyCompanyName.MyProjectName
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
@@ -80,6 +82,14 @@ namespace MyCompanyName.MyProjectName
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
             ConfigureRedis(context, configuration, hostingEnvironment);
+        }
+        
+        private void ConfigureCache(IConfigurationRoot configuration)
+        {
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)

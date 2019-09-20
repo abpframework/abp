@@ -23,6 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity.Web;
@@ -69,6 +70,7 @@ namespace MyCompanyName.MyProjectName.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
@@ -78,6 +80,14 @@ namespace MyCompanyName.MyProjectName.Web
 
             //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             //ConfigureSwaggerServices(context.Services);
+        }
+
+        private void ConfigureCache(IConfigurationRoot configuration)
+        {
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
