@@ -1,18 +1,18 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Identity;
 
-namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
+namespace Volo.Abp.Account.Web.Pages.Account
 {
-    public class PersonalSettingsModal : AbpPageModel
+    public class ManageModel : AccountPageModel
     {
-        [BindProperty]
+        public ChangePasswordInfoModel ChangePasswordInfoModel { get; set; }
+
         public PersonalSettingsInfoModel PersonalSettingsInfoModel { get; set; }
-    
+
         private readonly IProfileAppService _profileAppService;
 
-        public PersonalSettingsModal(IProfileAppService profileAppService)
+        public ManageModel(IProfileAppService profileAppService)
         {
             _profileAppService = profileAppService;
         }
@@ -23,19 +23,28 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Shared
 
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
         }
-
-        public async Task<IActionResult> OnPostAsync()
-        {
-            ValidateModel();
-
-            var updateDto = ObjectMapper.Map<PersonalSettingsInfoModel, UpdateProfileDto>(PersonalSettingsInfoModel);
-
-            await _profileAppService.UpdateAsync(updateDto);
-
-            return NoContent();
-        }
     }
 
+    public class ChangePasswordInfoModel
+    {
+        [Required]
+        [StringLength(IdentityUserConsts.MaxPasswordLength)]
+        [Display(Name = "DisplayName:CurrentPassword")]
+        [DataType(DataType.Password)]
+        public string CurrentPassword { get; set; }
+
+        [Required]
+        [StringLength(IdentityUserConsts.MaxPasswordLength)]
+        [Display(Name = "DisplayName:NewPassword")]
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; }
+
+        [Required]
+        [StringLength(IdentityUserConsts.MaxPasswordLength)]
+        [Display(Name = "DisplayName:NewPasswordConfirm")]
+        [DataType(DataType.Password)]
+        public string NewPasswordConfirm { get; set; }
+    }
     public class PersonalSettingsInfoModel
     {
         [Required]
