@@ -43,9 +43,7 @@ namespace Volo.Abp.AspNetCore
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
             {
                 requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
-
                 var response = await Client.SendAsync(requestMessage);
-
                 response.StatusCode.ShouldBe(expectedStatusCode);
                 return response;
             }
