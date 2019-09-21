@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Autofac;
+using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -20,7 +21,7 @@ namespace Volo.Abp.AspNetCore
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            
+
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreTestModule>();
@@ -45,7 +46,7 @@ namespace Volo.Abp.AspNetCore
                 directory = directory.Parent;
             }
 
-            return directory?.FullName 
+            return directory?.FullName
                    ?? throw new Exception("Could not find the project path by beginning from " + hostEnvironment.ContentRootPath + ", going through to parents and looking for Volo.Abp.AspNetCore.Tests");
         }
     }

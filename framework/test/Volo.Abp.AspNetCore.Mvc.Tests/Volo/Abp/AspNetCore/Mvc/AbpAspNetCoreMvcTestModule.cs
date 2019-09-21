@@ -69,6 +69,9 @@ namespace Volo.Abp.AspNetCore.Mvc
                         typeof(AbpUiResource),
                         typeof(AbpValidationResource)
                     ).AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/Localization/Resource");
+
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
             });
         }
 
@@ -78,6 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseAbpRequestLocalization();
             app.UseRouting();
             app.UseMiddleware<FakeAuthenticationMiddleware>();
             app.UseAuthorization();
