@@ -6,7 +6,7 @@ namespace Microsoft.AspNetCore.Hosting
     public static class AbpHostingEnvironmentExtensions
     {
         public static IConfigurationRoot BuildConfiguration(
-            this IHostingEnvironment env,
+            this IWebHostEnvironment env,
             ConfigurationBuilderOptions options = null)
         {
             options = options ?? new ConfigurationBuilderOptions();

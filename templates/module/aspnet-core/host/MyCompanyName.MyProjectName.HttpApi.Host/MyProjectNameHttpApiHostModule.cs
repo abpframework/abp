@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
@@ -117,17 +117,20 @@ namespace MyCompanyName.MyProjectName
             app.UseHttpsRedirection();
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
             app.UseAbpRequestLocalization();
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
-            });
+            //TODO: Enable when Swagger supports ASP.NET Core 3.x
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            //});
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

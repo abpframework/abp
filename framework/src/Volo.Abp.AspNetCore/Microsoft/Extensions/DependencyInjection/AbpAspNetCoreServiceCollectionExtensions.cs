@@ -5,9 +5,9 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AbpAspNetCoreServiceCollectionExtensions
     {
-        public static IHostingEnvironment GetHostingEnvironment(this IServiceCollection services)
+        public static IWebHostEnvironment GetHostingEnvironment(this IServiceCollection services)
         {
-            return services.GetSingletonInstance<IHostingEnvironment>();
+            return services.GetSingletonInstance<IWebHostEnvironment>();
         }
 
         public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)

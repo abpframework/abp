@@ -66,7 +66,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
-            app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+            app.UseMvcWithDefaultRouteAndArea();
         }
     }
 }

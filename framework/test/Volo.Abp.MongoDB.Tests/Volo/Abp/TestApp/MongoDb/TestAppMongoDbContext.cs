@@ -8,8 +8,10 @@ namespace Volo.Abp.TestApp.MongoDB
     [ConnectionStringName("TestApp")]
     public class TestAppMongoDbContext : AbpMongoDbContext, ITestAppMongoDbContext
     {
-        [MongoCollection("Persons")] //Intentially changed the collection name to test it
+        [MongoCollection("Persons")] //Intentionally changed the collection name to test it
         public IMongoCollection<Person> People => Collection<Person>();
+
+        public IMongoCollection<EntityWithIntPk> EntityWithIntPks => Collection<EntityWithIntPk>();
 
         public IMongoCollection<City> Cities => Collection<City>();
 

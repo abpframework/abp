@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\..\common.props" />
 
@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Identity.Domain\Volo.Abp.Identity.Domain.csproj" />
-
     <ProjectReference Include="..\..\..\users\src\Volo.Abp.Users.MongoDB\Volo.Abp.Users.MongoDB.csproj" />
   </ItemGroup>
 

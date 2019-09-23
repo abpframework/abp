@@ -23,7 +23,7 @@ namespace Volo.Abp.Domain.Entities
     public abstract class Entity<TKey> : Entity, IEntity<TKey>
     {
         /// <inheritdoc/>
-        public virtual TKey Id { get; set; }
+        public virtual TKey Id { get; protected set; }
 
         protected Entity()
         {
@@ -35,8 +35,7 @@ namespace Volo.Abp.Domain.Entities
             Id = id;
         }
 
-        /// <inheritdoc/>
-        public override bool Equals(object obj)
+        public bool EntityEquals(object obj)
         {
             if (obj == null || !(obj is Entity<TKey>))
             {
@@ -73,33 +72,7 @@ namespace Volo.Abp.Domain.Entities
 
             return Id.Equals(other.Id);
         }
-
-        /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            if (Id == null)
-            {
-                return 0;
-            }
-
-            return Id.GetHashCode();
-        }
-
-        public static bool operator ==(Entity<TKey> left, Entity<TKey> right)
-        {
-            if (Equals(left, null))
-            {
-                return Equals(right, null);
-            }
-
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Entity<TKey> left, Entity<TKey> right)
-        {
-            return !(left == right);
-        }
-
+        
         public override object[] GetKeys()
         {
             return new object[] {Id};

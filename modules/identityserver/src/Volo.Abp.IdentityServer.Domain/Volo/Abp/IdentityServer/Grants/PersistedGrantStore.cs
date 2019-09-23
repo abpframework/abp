@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Stores;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 
@@ -26,7 +27,7 @@ namespace Volo.Abp.IdentityServer.Grants
             if (entity == null)
             {
                 entity = _objectMapper.Map<IdentityServer4.Models.PersistedGrant, PersistedGrant>(grant);
-                entity.Id = _guidGenerator.Create();
+                EntityHelper.TrySetId(entity, () => _guidGenerator.Create());
                 await _persistentGrantRepository.InsertAsync(entity);
             }
             else

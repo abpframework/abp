@@ -12,7 +12,7 @@ export class AccountService {
   findTenant(tenantName: string): Observable<TenantIdResponse> {
     const request: Rest.Request<null> = {
       method: 'GET',
-      url: `/api/abp/multi-tenancy/find-tenant/${tenantName}`,
+      url: `/api/abp/multi-tenancy/tenants/by-name/${tenantName}`,
     };
 
     return this.rest.request<null, TenantIdResponse>(request);

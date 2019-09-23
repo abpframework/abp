@@ -24,6 +24,8 @@ namespace Volo.Abp.AuditLogging.MongoDB
             string sorting = null,
             int maxResultCount = 50, 
             int skipCount = 0,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -36,14 +38,29 @@ namespace Volo.Abp.AuditLogging.MongoDB
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxDuration, minDuration, hasException, httpStatusCode, includeDetails);
+            var query = GetListQuery(
+                startTime,
+                endTime,
+                httpMethod,
+                url,
+                userName,
+                applicationName,
+                correlationId,
+                maxDuration,
+                minDuration,
+                hasException,
+                httpStatusCode,
+                includeDetails
+            );
 
             return await query.OrderBy(sorting ?? "executionTime desc").As<IMongoQueryable<AuditLog>>()
                 .PageBy<AuditLog, IMongoQueryable<AuditLog>>(skipCount, maxResultCount)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<long> GetCountAsync(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -55,14 +72,29 @@ namespace Volo.Abp.AuditLogging.MongoDB
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default)
         {
-            var query = GetListQuery(httpMethod, url, userName, applicationName, correlationId, maxDuration, minDuration, hasException, httpStatusCode);
+            var query = GetListQuery(
+                startTime,
+                endTime,
+                httpMethod,
+                url,
+                userName,
+                applicationName,
+                correlationId,
+                maxDuration,
+                minDuration,
+                hasException,
+                httpStatusCode
+            );
 
-            var count = await query.As<IMongoQueryable<AuditLog>>().LongCountAsync();
+            var count = await query.As<IMongoQueryable<AuditLog>>()
+                .LongCountAsync(GetCancellationToken(cancellationToken));
 
             return count;
         }
 
         private IQueryable<AuditLog> GetListQuery(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -75,13 +107,15 @@ namespace Volo.Abp.AuditLogging.MongoDB
             bool includeDetails = false)
         {
             return GetMongoQueryable()
-                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions.Length > 0)
-                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions.Length == 0)
-                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod != null && auditLog.HttpMethod.ToLowerInvariant() == httpMethod.ToLowerInvariant())
-                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.ToLowerInvariant().Contains(url.ToLowerInvariant()))
-                .WhereIf(userName != null, auditLog => auditLog.UserName != null && auditLog.UserName.ToLowerInvariant() == userName.ToLowerInvariant())
-                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName != null && auditLog.ApplicationName.ToLowerInvariant() == applicationName.ToLowerInvariant())
-                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId != null && auditLog.CorrelationId.ToLowerInvariant() == correlationId.ToLowerInvariant())
+                .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
+                .WhereIf(endTime.HasValue, auditLog => auditLog.ExecutionTime <= endTime)
+                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null)
+                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null)
+                .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod == httpMethod)
+                .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
+                .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
+                .WhereIf(applicationName != null, auditLog => auditLog.ApplicationName == applicationName)
+                .WhereIf(correlationId != null, auditLog => auditLog.CorrelationId == correlationId)
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
                 .WhereIf(maxDuration != null && maxDuration > 0, auditLog => auditLog.ExecutionDuration <= maxDuration)
                 .WhereIf(minDuration != null && minDuration > 0, auditLog => auditLog.ExecutionDuration >= minDuration);

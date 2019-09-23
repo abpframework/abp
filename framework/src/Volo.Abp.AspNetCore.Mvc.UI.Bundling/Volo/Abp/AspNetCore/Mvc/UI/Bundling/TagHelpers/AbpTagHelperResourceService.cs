@@ -19,14 +19,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
         protected IBundleManager BundleManager { get; }
         protected IWebContentFileProvider WebContentFileProvider { get; }
-        protected IHostingEnvironment HostingEnvironment { get; }
+        protected IWebHostEnvironment HostingEnvironment { get; }
         protected readonly BundlingOptions Options;
         
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager,
             IWebContentFileProvider webContentFileProvider,
-            IOptions<BundlingOptions> options, 
-            IHostingEnvironment hostingEnvironment)
+            IOptions<BundlingOptions> options,
+            IWebHostEnvironment hostingEnvironment)
         {
             BundleManager = bundleManager;
             WebContentFileProvider = webContentFileProvider;

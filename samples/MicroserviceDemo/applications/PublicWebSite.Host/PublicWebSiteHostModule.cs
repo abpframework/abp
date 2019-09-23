@@ -89,6 +89,7 @@ namespace PublicWebSite.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization();
             app.UseMvcWithDefaultRouteAndArea();

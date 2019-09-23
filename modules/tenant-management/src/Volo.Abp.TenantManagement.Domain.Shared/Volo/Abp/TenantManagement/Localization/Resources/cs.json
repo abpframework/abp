@@ -9,6 +9,12 @@
     "TenantDeletionConfirmationMessage": "Tenant '{0}' bude smazán. Jste si jistí?",
     "ConnectionStrings": "Connection stringy",
     "DisplayName:DefaultConnectionString": "Výchozí connection string",
-    "DisplayName:UseSharedDatabase": "Použít sdílenou databázi"
+    "DisplayName:UseSharedDatabase": "Použít sdílenou databázi",
+    "Permission:TenantManagement": "Správa tenantů",
+    "Permission:Create": "Vytvořit",
+    "Permission:Edit": "Upravit",
+    "Permission:Delete": "Smazat",
+    "Permission:ManageConnectionStrings": "Spravovat connection stringy",
+    "Permission:ManageFeatures": "Spravovat funkce"
   }
 }

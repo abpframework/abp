@@ -3,15 +3,12 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\MyCompanyName.MyProjectName.Application.Contracts\MyCompanyName.MyProjectName.Application.Contracts.csproj" />
   </ItemGroup>
 
