@@ -96,8 +96,8 @@
                     <div class="row">
                         @if (Model.VersionSelectItems.Any())
                         {
-                            <div class="col @(Model.LanguageSelectListItems.Any()?"pr-0":"")">
-                                <div class="docs-version @(Model.LanguageSelectListItems.Any()?"pr-1":"")">
+                            <div class="col @(Model.LanguageSelectListItems.Count > 1?"pr-0":"")">
+                                <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pr-1":"")">
                                     <div class="version-select">
                                         <div class="input-group">
                                             <div class="input-group-prepend">
@@ -113,7 +113,7 @@
                             </div>
                         }
 
-                        @if (Model.VersionSelectItems.Any())
+                        @if (Model.LanguageSelectListItems.Count > 1)
                         {
                             <div class="col  @(Model.VersionSelectItems.Any()?"pl-0":"")">
                                 <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
