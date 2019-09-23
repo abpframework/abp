@@ -11,13 +11,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { comparePasswords } from '@ngx-validate/core';
+import { comparePasswords, Validation } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { finalize } from 'rxjs/operators';
 import { ToasterService } from '../../services/toaster.service';
 
 const { minLength, required } = Validators;
+
+const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
 @Component({
   selector: 'abp-change-password',
@@ -46,6 +48,12 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
 
   modalBusy: boolean = false;
 
+  mapErrorsFn: Validation.MapErrorsFn = function(errors, groupErrors, control) {
+    if (PASSWORD_FIELDS.indexOf(control.name) < 0) return errors;
+
+    return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
+  };
+
   constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
 
   ngOnInit(): void {
@@ -56,7 +64,7 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
         repeatNewPassword: ['', required],
       },
       {
-        validators: [comparePasswords(['newPassword', 'repeatNewPassword'])],
+        validators: [comparePasswords(PASSWORD_FIELDS)],
       },
     );
   }
