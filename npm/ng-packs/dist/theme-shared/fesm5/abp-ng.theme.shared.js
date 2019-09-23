@@ -1,14 +1,14 @@
 import { ConfigState, ChangePassword, StartLoader, StopLoader, GetProfile, UpdateProfile, ProfileState, RestOccurError, LazyLoadService, CoreModule } from '@abp/ng.core';
-import { Component, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy, ViewEncapsulation, Renderer2, ContentChild, ViewChildren, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, APP_INITIALIZER, NgModule } from '@angular/core';
-import { comparePasswords, ValidationErrorComponent as ValidationErrorComponent$1, takeUntilDestroy, NgxValidateCoreModule } from '@ngx-validate/core';
+import { Component, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, EventEmitter, Output, ViewChild, ElementRef, ChangeDetectorRef, Renderer2, ContentChild, ViewChildren, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, INJECTOR, APP_INITIALIZER, NgModule } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
-import { Subject, ReplaySubject, BehaviorSubject, timer, fromEvent, Observable, forkJoin } from 'rxjs';
-import { finalize, filter, take, takeUntil, debounceTime, withLatestFrom } from 'rxjs/operators';
+import { Subject, ReplaySubject, BehaviorSubject, fromEvent, interval, timer, Observable, forkJoin } from 'rxjs';
+import { finalize, takeUntil, debounceTime, filter, take, withLatestFrom } from 'rxjs/operators';
 import { __read, __assign, __extends, __spread, __decorate, __metadata } from 'tslib';
 import { Router, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 import { Store, ofActionSuccessful, Actions, Select } from '@ngxs/store';
 import { Validators, FormBuilder } from '@angular/forms';
+import { comparePasswords, takeUntilDestroy } from '@ngx-validate/core';
 import snq from 'snq';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
@@ -111,7 +111,7 @@ var ButtonComponent = /** @class */ (function () {
          * @return {?}
          */
         function () {
-            return "" + (this.loading ? 'fa fa-spin fa-spinner' : this.iconClass || 'd-none');
+            return "" + (this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none');
         },
         enumerable: true,
         configurable: true
@@ -424,7 +424,7 @@ var ChangePasswordComponent = /** @class */ (function () {
     ChangePasswordComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-change-password',
-                    template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::ChangePassword' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <div class=\"form-group\">\n        <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" autofocus />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n      </div>\n      <div class=\"form-group\" [class.is-invalid]=\"form.errors?.passwordMismatch\">\n        <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n        <div *ngIf=\"form.errors?.passwordMismatch\" class=\"invalid-feedback\">\n          {{ 'AbpIdentity::Identity.PasswordConfirmationFailed' | abpLocalization }}\n        </div>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" (click)=\"onSubmit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
+                    template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::ChangePassword' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\">\n      <div class=\"form-group\">\n        <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" autofocus />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n        ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n      </div>\n      <div class=\"form-group\" [class.is-invalid]=\"form.errors?.passwordMismatch\">\n        <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n        ><span> * </span\n        ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n        <div *ngIf=\"form.errors?.passwordMismatch\" class=\"invalid-feedback\">\n          {{ 'AbpIdentity::Identity.PasswordConfirmationFailed' | abpLocalization }}\n        </div>\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button type=\"button\" class=\"btn btn-secondary color-white\" #abpClose>\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" buttonClass=\"btn btn-primary color-white\" (click)=\"onSubmit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
                 }] }
     ];
     /** @nocollapse */
@@ -720,15 +720,73 @@ if (false) {
  */
 var ConfirmationService = /** @class */ (function (_super) {
     __extends(ConfirmationService, _super);
-    function ConfirmationService() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
+    function ConfirmationService(messageService) {
+        var _this = _super.call(this, messageService) || this;
+        _this.messageService = messageService;
         _this.key = 'abpConfirmation';
         _this.sticky = true;
+        _this.destroy$ = new Subject();
         return _this;
     }
+    /**
+     * @param {?} message
+     * @param {?} title
+     * @param {?} severity
+     * @param {?=} options
+     * @return {?}
+     */
+    ConfirmationService.prototype.show = /**
+     * @param {?} message
+     * @param {?} title
+     * @param {?} severity
+     * @param {?=} options
+     * @return {?}
+     */
+    function (message, title, severity, options) {
+        this.listenToEscape();
+        return _super.prototype.show.call(this, message, title, severity, options);
+    };
+    /**
+     * @param {?=} status
+     * @return {?}
+     */
+    ConfirmationService.prototype.clear = /**
+     * @param {?=} status
+     * @return {?}
+     */
+    function (status) {
+        _super.prototype.clear.call(this, status);
+        this.destroy$.next();
+    };
+    /**
+     * @return {?}
+     */
+    ConfirmationService.prototype.listenToEscape = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        fromEvent(document, 'keyup')
+            .pipe(takeUntil(this.destroy$), debounceTime(150), filter((/**
+         * @param {?} key
+         * @return {?}
+         */
+        function (key) { return key && key.code === 'Escape'; })))
+            .subscribe((/**
+         * @param {?} _
+         * @return {?}
+         */
+        function (_) {
+            _this.clear();
+        }));
+    };
     ConfirmationService.decorators = [
         { type: Injectable, args: [{ providedIn: 'root' },] }
     ];
+    /** @nocollapse */
+    ConfirmationService.ctorParameters = function () { return [
+        { type: MessageService }
+    ]; };
     /** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfirmationService_Factory() { return new ConfirmationService(ɵɵinject(MessageService)); }, token: ConfirmationService, providedIn: "root" });
     return ConfirmationService;
 }(AbstractToaster));
@@ -737,6 +795,13 @@ if (false) {
     ConfirmationService.prototype.key;
     /** @type {?} */
     ConfirmationService.prototype.sticky;
+    /** @type {?} */
+    ConfirmationService.prototype.destroy$;
+    /**
+     * @type {?}
+     * @protected
+     */
+    ConfirmationService.prototype.messageService;
 }
 
 /**
@@ -831,58 +896,14 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var ValidationErrorComponent = /** @class */ (function (_super) {
-    __extends(ValidationErrorComponent, _super);
-    function ValidationErrorComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    Object.defineProperty(ValidationErrorComponent.prototype, "abpErrors", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            if (!this.errors || !this.errors.length)
-                return [];
-            return this.errors.map((/**
-             * @param {?} error
-             * @return {?}
-             */
-            function (error) {
-                if (!error.message)
-                    return error;
-                /** @type {?} */
-                var index = error.message.indexOf('[');
-                if (index > -1) {
-                    return __assign({}, error, { message: error.message.slice(0, index), interpoliteParams: error.message.slice(index + 1, error.message.length - 1).split(',') });
-                }
-                return error;
-            }));
-        },
-        enumerable: true,
-        configurable: true
-    });
-    ValidationErrorComponent.decorators = [
-        { type: Component, args: [{
-                    selector: 'abp-validation-error',
-                    template: "\n    <div class=\"invalid-feedback\" *ngFor=\"let error of abpErrors; trackBy: trackByFn\">\n      {{ error.message | abpLocalization: error.interpoliteParams }}\n    </div>\n  ",
-                    changeDetection: ChangeDetectionStrategy.OnPush,
-                    encapsulation: ViewEncapsulation.None
-                }] }
-    ];
-    return ValidationErrorComponent;
-}(ValidationErrorComponent$1));
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 var LoaderBarComponent = /** @class */ (function () {
-    function LoaderBarComponent(actions, router) {
+    function LoaderBarComponent(actions, router, cdRef) {
         var _this = this;
         this.actions = actions;
         this.router = router;
+        this.cdRef = cdRef;
         this.containerClass = 'abp-loader-bar';
-        this.progressClass = 'abp-progress';
+        this.color = '#77b6ff';
         this.isLoading = false;
         this.filter = (/**
          * @param {?} action
@@ -921,13 +942,25 @@ var LoaderBarComponent = /** @class */ (function () {
                 _this.stopLoading();
         }));
     }
+    Object.defineProperty(LoaderBarComponent.prototype, "boxShadow", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return "0 0 10px rgba(" + this.color + ", 0.5)";
+        },
+        enumerable: true,
+        configurable: true
+    });
     /**
      * @return {?}
      */
     LoaderBarComponent.prototype.ngOnDestroy = /**
      * @return {?}
      */
-    function () { };
+    function () {
+        this.interval.unsubscribe();
+    };
     /**
      * @return {?}
      */
@@ -936,9 +969,10 @@ var LoaderBarComponent = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        if (this.isLoading || this.progressLevel !== 0)
+            return;
         this.isLoading = true;
-        /** @type {?} */
-        var interval = setInterval((/**
+        this.interval = interval(350).subscribe((/**
          * @return {?}
          */
         function () {
@@ -952,10 +986,10 @@ var LoaderBarComponent = /** @class */ (function () {
                 _this.progressLevel += 0.1;
             }
             else {
-                clearInterval(interval);
+                _this.interval.unsubscribe();
             }
-        }), 300);
-        this.interval = interval;
+            _this.cdRef.detectChanges();
+        }));
     };
     /**
      * @return {?}
@@ -965,31 +999,35 @@ var LoaderBarComponent = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        clearInterval(this.interval);
+        this.interval.unsubscribe();
         this.progressLevel = 100;
         this.isLoading = false;
-        setTimeout((/**
+        if (this.timer && !this.timer.closed)
+            return;
+        this.timer = timer(820).subscribe((/**
          * @return {?}
          */
         function () {
             _this.progressLevel = 0;
-        }), 800);
+            _this.cdRef.detectChanges();
+        }));
     };
     LoaderBarComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-loader-bar',
-                    template: "\n    <div id=\"abp-loader-bar\" [ngClass]=\"containerClass\" [class.is-loading]=\"isLoading\">\n      <div [ngClass]=\"progressClass\" [style.width.vw]=\"progressLevel\"></div>\n    </div>\n  ",
-                    styles: [".abp-loader-bar{left:0;opacity:0;position:fixed;top:0;transition:opacity .4s linear .4s;z-index:99999}.abp-loader-bar.is-loading{opacity:1;transition:none}.abp-loader-bar .abp-progress{background:#77b6ff;box-shadow:0 0 10px rgba(119,182,255,.7);height:2px;left:0;position:fixed;top:0;transition:width .4s}"]
+                    template: "\n    <div id=\"abp-loader-bar\" [ngClass]=\"containerClass\" [class.is-loading]=\"isLoading\">\n      <div\n        class=\"abp-progress\"\n        [style.width.vw]=\"progressLevel\"\n        [ngStyle]=\"{\n          'background-color': color,\n          'box-shadow': boxShadow\n        }\"\n      ></div>\n    </div>\n  ",
+                    styles: [".abp-loader-bar{left:0;opacity:0;position:fixed;top:0;transition:opacity .4s linear .4s;z-index:99999}.abp-loader-bar.is-loading{opacity:1;transition:none}.abp-loader-bar .abp-progress{height:3px;left:0;position:fixed;top:0;transition:width .4s}"]
                 }] }
     ];
     /** @nocollapse */
     LoaderBarComponent.ctorParameters = function () { return [
         { type: Actions },
-        { type: Router }
+        { type: Router },
+        { type: ChangeDetectorRef }
     ]; };
     LoaderBarComponent.propDecorators = {
         containerClass: [{ type: Input }],
-        progressClass: [{ type: Input }],
+        color: [{ type: Input }],
         isLoading: [{ type: Input }],
         filter: [{ type: Input }]
     };
@@ -999,7 +1037,7 @@ if (false) {
     /** @type {?} */
     LoaderBarComponent.prototype.containerClass;
     /** @type {?} */
-    LoaderBarComponent.prototype.progressClass;
+    LoaderBarComponent.prototype.color;
     /** @type {?} */
     LoaderBarComponent.prototype.isLoading;
     /** @type {?} */
@@ -1008,6 +1046,8 @@ if (false) {
     LoaderBarComponent.prototype.progressLevel;
     /** @type {?} */
     LoaderBarComponent.prototype.interval;
+    /** @type {?} */
+    LoaderBarComponent.prototype.timer;
     /**
      * @type {?}
      * @private
@@ -1018,6 +1058,11 @@ if (false) {
      * @private
      */
     LoaderBarComponent.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LoaderBarComponent.prototype.cdRef;
 }
 
 /**
@@ -1035,6 +1080,8 @@ var ModalComponent = /** @class */ (function () {
         this.size = 'lg';
         this.visibleChange = new EventEmitter();
         this.init = new EventEmitter();
+        this.show = new EventEmitter();
+        this.hide = new EventEmitter();
         this._visible = false;
         this._busy = false;
         this.showModal = false;
@@ -1139,10 +1186,12 @@ var ModalComponent = /** @class */ (function () {
              */
             function (_) { return (_this.closable = true); }));
             this.renderer.addClass(document.body, 'modal-open');
+            this.show.emit();
         }
         else {
             this.closable = false;
             this.renderer.removeClass(document.body, 'modal-open');
+            this.hide.emit();
         }
     };
     /**
@@ -1249,7 +1298,9 @@ var ModalComponent = /** @class */ (function () {
         abpClose: [{ type: ContentChild, args: ['abpClose', { static: false, read: ElementRef },] }],
         abpSubmit: [{ type: ContentChild, args: [ButtonComponent, { static: false, read: ButtonComponent },] }],
         modalContent: [{ type: ViewChild, args: ['abpModalContent', { static: false },] }],
-        abpButtons: [{ type: ViewChildren, args: ['abp-button',] }]
+        abpButtons: [{ type: ViewChildren, args: ['abp-button',] }],
+        show: [{ type: Output }],
+        hide: [{ type: Output }]
     };
     return ModalComponent;
 }());
@@ -1282,6 +1333,10 @@ if (false) {
     ModalComponent.prototype.modalContent;
     /** @type {?} */
     ModalComponent.prototype.abpButtons;
+    /** @type {?} */
+    ModalComponent.prototype.show;
+    /** @type {?} */
+    ModalComponent.prototype.hide;
     /** @type {?} */
     ModalComponent.prototype._visible;
     /** @type {?} */
@@ -1437,7 +1492,7 @@ var ProfileComponent = /** @class */ (function () {
     ProfileComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-profile',
-                    template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form novalidate *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"submit()\">\n      <div class=\"form-group\">\n        <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" autofocus />\n      </div>\n      <div class=\"row\">\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n            ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n          </div>\n        </div>\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n            ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n        ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" (click)=\"submit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
+                    template: "<abp-modal [(visible)]=\"visible\" [busy]=\"modalBusy\">\n  <ng-template #abpHeader>\n    <h4>{{ 'AbpIdentity::PersonalInfo' | abpLocalization }}</h4>\n  </ng-template>\n  <ng-template #abpBody>\n    <form novalidate *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"submit()\">\n      <div class=\"form-group\">\n        <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" autofocus />\n      </div>\n      <div class=\"row\">\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n            ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n          </div>\n        </div>\n        <div class=\"col col-md-6\">\n          <div class=\"form-group\">\n            <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n            ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n          </div>\n        </div>\n      </div>\n      <div class=\"form-group\">\n        <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n        ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n      </div>\n      <div class=\"form-group\">\n        <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n        ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n      </div>\n    </form>\n  </ng-template>\n  <ng-template #abpFooter>\n    <button #abpClose type=\"button\" class=\"btn btn-secondary color-white\">\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\n    </button>\n    <abp-button iconClass=\"fa fa-check\" buttonClass=\"btn btn-primary color-white\" (click)=\"submit()\">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n"
                 }] }
     ];
     /** @nocollapse */
@@ -1501,7 +1556,7 @@ var ToastComponent = /** @class */ (function () {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-toast .ui-toast-message {\n  box-sizing: border-box !important;\n  border: 2px solid transparent !important;\n  border-radius: 4px !important;\n  background-color: #f4f4f7 !important;\n  color: #1b1d29 !important;\n}\n\n.abp-toast .ui-toast-message-content {\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-message-content .ui-toast-icon {\n  top: 0 !important;\n  left: 0 !important;\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-summary {\n  margin: 0 !important;\n  font-weight: 700 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error {\n  border-color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error .ui-toast-message-content .ui-toast-icon {\n  color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning {\n  border-color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning .ui-toast-message-content .ui-toast-icon {\n  color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success {\n  border-color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success .ui-toast-message-content .ui-toast-icon {\n  color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info {\n  border-color: #fccb31 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info .ui-toast-message-content .ui-toast-icon {\n  color: #fccb31 !important;\n}\n\n.abp-confirm .ui-toast-message {\n  box-sizing: border-box !important;\n  padding: 0px !important;\n  border:0 none !important;\n  border-radius: 4px !important;\n  background-color: #fff !important;\n  color: rgba(0, 0, 0, .65) !important;\n  font-family: \"Poppins\", sans-serif;\n  text-align: center !important;\n}\n\n.abp-confirm .ui-toast-message-content {\n  padding: 0px !important;\n}\n\n.abp-confirm .abp-confirm-icon {\n  margin: 32px 50px 5px !important;\n  color: #f8bb86 !important;\n  font-size: 52px !important;\n}\n\n.abp-confirm .ui-toast-close-icon {\n  display: none !important;\n}\n\n.abp-confirm .abp-confirm-summary {\n  display: block !important;\n  margin-bottom: 13px !important;\n  padding: 13px 16px 0px !important;\n  font-weight: 600 !important;\n  font-size: 18px !important;\n}\n\n.abp-confirm .abp-confirm-body {\n  display: inline-block !important;\n  padding: 0px 10px !important;\n}\n\n.abp-confirm .abp-confirm-footer {\n  display: block !important;\n  margin-top: 30px !important;\n  padding: 16px !important;\n  background-color: #f4f4f7 !important;\n  text-align: right !important;\n}\n\n.abp-confirm .abp-confirm-footer .btn {\n  margin-left: 10px !important;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
+var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal {\n background-color: rgba(0, 0, 0, .6);\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-toast .ui-toast-message {\n  box-sizing: border-box !important;\n  border: 2px solid transparent !important;\n  border-radius: 4px !important;\n  background-color: #f4f4f7 !important;\n  color: #1b1d29 !important;\n}\n\n.abp-toast .ui-toast-message-content {\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-message-content .ui-toast-icon {\n  top: 0 !important;\n  left: 0 !important;\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-summary {\n  margin: 0 !important;\n  font-weight: 700 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error {\n  border-color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error .ui-toast-message-content .ui-toast-icon {\n  color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning {\n  border-color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning .ui-toast-message-content .ui-toast-icon {\n  color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success {\n  border-color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success .ui-toast-message-content .ui-toast-icon {\n  color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info {\n  border-color: #fccb31 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info .ui-toast-message-content .ui-toast-icon {\n  color: #fccb31 !important;\n}\n\n.abp-confirm .ui-toast-message {\n  box-sizing: border-box !important;\n  padding: 0px !important;\n  border:0 none !important;\n  border-radius: 4px !important;\n  background-color: #fff !important;\n  color: rgba(0, 0, 0, .65) !important;\n  font-family: \"Poppins\", sans-serif;\n  text-align: center !important;\n}\n\n.abp-confirm .ui-toast-message-content {\n  padding: 0px !important;\n}\n\n.abp-confirm .abp-confirm-icon {\n  margin: 32px 50px 5px !important;\n  color: #f8bb86 !important;\n  font-size: 52px !important;\n}\n\n.abp-confirm .ui-toast-close-icon {\n  display: none !important;\n}\n\n.abp-confirm .abp-confirm-summary {\n  display: block !important;\n  margin-bottom: 13px !important;\n  padding: 13px 16px 0px !important;\n  font-weight: 600 !important;\n  font-size: 18px !important;\n}\n\n.abp-confirm .abp-confirm-body {\n  display: inline-block !important;\n  padding: 0px 10px !important;\n}\n\n.abp-confirm .abp-confirm-footer {\n  display: block !important;\n  margin-top: 30px !important;\n  padding: 16px !important;\n  background-color: #f4f4f7 !important;\n  text-align: right !important;\n}\n\n.abp-confirm .abp-confirm-footer .btn {\n  margin-left: 10px !important;\n}\n\n.ui-widget-overlay {\n  z-index: 1000;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(5px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
 
 /**
  * @fileoverview added by tsickle
@@ -1725,6 +1780,51 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var TableEmptyMessageComponent = /** @class */ (function () {
+    function TableEmptyMessageComponent() {
+        this.colspan = 2;
+        this.localizationResource = 'AbpAccount';
+        this.localizationProp = 'NoDataAvailableInDatatable';
+    }
+    Object.defineProperty(TableEmptyMessageComponent.prototype, "emptyMessage", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.message || this.localizationResource + "::" + this.localizationProp;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TableEmptyMessageComponent.decorators = [
+        { type: Component, args: [{
+                    selector: '[abp-table-empty-message]',
+                    template: "\n    <td class=\"text-center\" [attr.colspan]=\"colspan\">\n      {{ emptyMessage | abpLocalization }}\n    </td>\n  "
+                }] }
+    ];
+    TableEmptyMessageComponent.propDecorators = {
+        colspan: [{ type: Input }],
+        message: [{ type: Input }],
+        localizationResource: [{ type: Input }],
+        localizationProp: [{ type: Input }]
+    };
+    return TableEmptyMessageComponent;
+}());
+if (false) {
+    /** @type {?} */
+    TableEmptyMessageComponent.prototype.colspan;
+    /** @type {?} */
+    TableEmptyMessageComponent.prototype.message;
+    /** @type {?} */
+    TableEmptyMessageComponent.prototype.localizationResource;
+    /** @type {?} */
+    TableEmptyMessageComponent.prototype.localizationProp;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 /**
  * @param {?} injector
  * @return {?}
@@ -1770,23 +1870,7 @@ var ThemeSharedModule = /** @class */ (function () {
     };
     ThemeSharedModule.decorators = [
         { type: NgModule, args: [{
-                    imports: [
-                        CoreModule,
-                        ToastModule,
-                        NgxValidateCoreModule.forRoot({
-                            targetSelector: '.form-group',
-                            blueprints: {
-                                email: "AbpAccount::ThisFieldIsNotAValidEmailAddress.",
-                                max: "AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]",
-                                maxlength: "AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]",
-                                min: "AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]",
-                                minlength: "AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]",
-                                required: "AbpAccount::ThisFieldIsRequired.",
-                                passwordMismatch: "AbpIdentity::Identity.PasswordConfirmationFailed",
-                            },
-                            errorTemplate: ValidationErrorComponent,
-                        }),
-                    ],
+                    imports: [CoreModule, ToastModule],
                     declarations: [
                         BreadcrumbComponent,
                         ButtonComponent,
@@ -1797,8 +1881,8 @@ var ThemeSharedModule = /** @class */ (function () {
                         LoaderBarComponent,
                         ModalComponent,
                         ProfileComponent,
+                        TableEmptyMessageComponent,
                         ToastComponent,
-                        ValidationErrorComponent,
                     ],
                     exports: [
                         BreadcrumbComponent,
@@ -1809,9 +1893,10 @@ var ThemeSharedModule = /** @class */ (function () {
                         LoaderBarComponent,
                         ModalComponent,
                         ProfileComponent,
+                        TableEmptyMessageComponent,
                         ToastComponent,
                     ],
-                    entryComponents: [ErrorComponent, ValidationErrorComponent],
+                    entryComponents: [ErrorComponent],
                 },] }
     ];
     return ThemeSharedModule;
@@ -1822,10 +1907,39 @@ var ThemeSharedModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
+var collapse = trigger('collapse', [
+    state('open', style({
+        height: '*',
+        overflow: 'hidden',
+    })),
+    state('close', style({
+        height: '0px',
+        overflow: 'hidden',
+    })),
+    transition("open <=> close", animate('{{duration}}ms'), { params: { duration: '350' } }),
+]);
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
 var fade = trigger('fade', [
     state('void', style({ opacity: 1 })),
     transition(':enter', [style({ opacity: 0 }), animate(250)]),
     transition(':leave', animate(250, style({ opacity: 0 }))),
+]);
+/** @type {?} */
+var fadeWithStates = trigger('fadeInOut', [
+    state('out', style({ opacity: 0 })),
+    state('in', style({ opacity: 1 })),
+    transition('in <=> out', [animate(250)]),
+]);
+/** @type {?} */
+var fadeIn = trigger('fadeIn', [
+    state('*', style({ opacity: 1 })),
+    transition('* => *', [style({ opacity: 0 }), animate(250)]),
+    transition(':enter', [style({ opacity: 0 }), animate(250)]),
 ]);
 
 /**
@@ -1978,5 +2092,5 @@ var Toaster;
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { BreadcrumbComponent, ButtonComponent, ChangePasswordComponent, ChartComponent, ConfirmationComponent, ConfirmationService, LoaderBarComponent, ModalComponent, ProfileComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, chartJsLoaded$, fade, getRandomBackgroundColor, slideFromBottom, ValidationErrorComponent as ɵa, BreadcrumbComponent as ɵb, ButtonComponent as ɵc, ChangePasswordComponent as ɵd, ToasterService as ɵe, AbstractToaster as ɵf, ChartComponent as ɵg, ConfirmationComponent as ɵh, ConfirmationService as ɵi, ErrorComponent as ɵj, LoaderBarComponent as ɵk, ModalComponent as ɵl, ProfileComponent as ɵm, ToastComponent as ɵn, ErrorHandler as ɵo };
+export { BreadcrumbComponent, ButtonComponent, ChangePasswordComponent, ChartComponent, ConfirmationComponent, ConfirmationService, LoaderBarComponent, ModalComponent, ProfileComponent, TableEmptyMessageComponent, ThemeSharedModule, ToastComponent, Toaster, ToasterService, appendScript, chartJsLoaded$, collapse, fade, fadeIn, fadeWithStates, getRandomBackgroundColor, slideFromBottom, BreadcrumbComponent as ɵa, ButtonComponent as ɵb, ChangePasswordComponent as ɵc, ToasterService as ɵd, AbstractToaster as ɵe, ChartComponent as ɵf, ConfirmationComponent as ɵg, ConfirmationService as ɵh, ErrorComponent as ɵi, LoaderBarComponent as ɵj, ModalComponent as ɵk, ProfileComponent as ɵl, TableEmptyMessageComponent as ɵm, ToastComponent as ɵn, ErrorHandler as ɵo };
 //# sourceMappingURL=abp-ng.theme.shared.js.map

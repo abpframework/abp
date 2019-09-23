@@ -1,47 +1,41 @@
-import { DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
+import { GetAppConfiguration, ConfigState, DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Injectable, ɵɵdefineInjectable, ɵɵinject, Component, NgModule } from '@angular/core';
-import { RouteConfigLoadEnd, Router, RouterModule } from '@angular/router';
-import { Subject, timer } from 'rxjs';
+import { Router, RouterModule } from '@angular/router';
 import { Navigate } from '@ngxs/router-plugin';
-import { Store } from '@ngxs/store';
-import { filter, takeUntil } from 'rxjs/operators';
+import { ofActionSuccessful, Actions, Store } from '@ngxs/store';
+import { Subject } from 'rxjs';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var SettingManagementService = /** @class */ (function () {
-    function SettingManagementService(router, store) {
+    function SettingManagementService(actions, router, store, oAuthService) {
         var _this = this;
+        this.actions = actions;
         this.router = router;
         this.store = store;
+        this.oAuthService = oAuthService;
         this.settings = [];
         this.selected = (/** @type {?} */ ({}));
         this.destroy$ = new Subject();
-        /** @type {?} */
-        var timeout;
-        this.router.events
-            .pipe(filter((/**
-         * @param {?} event
+        setTimeout((/**
          * @return {?}
          */
-        function (event) { return event instanceof RouteConfigLoadEnd; })), takeUntil(this.destroy$))
+        function () { return _this.setSettings(); }), 0);
+        this.actions
+            .pipe(ofActionSuccessful(GetAppConfiguration))
+            .pipe(takeUntil(this.destroy$))
             .subscribe((/**
-         * @param {?} event
          * @return {?}
          */
-        function (event) {
-            if (timeout) {
-                timeout.unsubscribe();
-                _this.destroy$.next();
-            }
-            timeout = timer(150).subscribe((/**
-             * @return {?}
-             */
-            function () {
+        function () {
+            if (_this.oAuthService.hasValidAccessToken()) {
                 _this.setSettings();
-            }));
+            }
         }));
     }
     /**
@@ -61,24 +55,25 @@ var SettingManagementService = /** @class */ (function () {
      */
     function () {
         var _this = this;
-        setTimeout((/**
+        /** @type {?} */
+        var route = this.router.config.find((/**
+         * @param {?} r
          * @return {?}
          */
-        function () {
-            /** @type {?} */
-            var route = _this.router.config.find((/**
-             * @param {?} r
-             * @return {?}
-             */
-            function (r) { return r.path === 'setting-management'; }));
-            _this.settings = route.data.settings.sort((/**
-             * @param {?} a
-             * @param {?} b
-             * @return {?}
-             */
-            function (a, b) { return a.order - b.order; }));
-            _this.checkSelected();
-        }), 0);
+        function (r) { return r.path === 'setting-management'; }));
+        this.settings = ((/** @type {?} */ (route.data.settings)))
+            .filter((/**
+         * @param {?} setting
+         * @return {?}
+         */
+        function (setting) { return _this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)); }))
+            .sort((/**
+         * @param {?} a
+         * @param {?} b
+         * @return {?}
+         */
+        function (a, b) { return a.order - b.order; }));
+        this.checkSelected();
     };
     /**
      * @return {?}
@@ -114,10 +109,12 @@ var SettingManagementService = /** @class */ (function () {
     ];
     /** @nocollapse */
     SettingManagementService.ctorParameters = function () { return [
+        { type: Actions },
         { type: Router },
-        { type: Store }
+        { type: Store },
+        { type: OAuthService }
     ]; };
-    /** @nocollapse */ SettingManagementService.ngInjectableDef = ɵɵdefineInjectable({ factory: function SettingManagementService_Factory() { return new SettingManagementService(ɵɵinject(Router), ɵɵinject(Store)); }, token: SettingManagementService, providedIn: "root" });
+    /** @nocollapse */ SettingManagementService.ngInjectableDef = ɵɵdefineInjectable({ factory: function SettingManagementService_Factory() { return new SettingManagementService(ɵɵinject(Actions), ɵɵinject(Router), ɵɵinject(Store), ɵɵinject(OAuthService)); }, token: SettingManagementService, providedIn: "root" });
     return SettingManagementService;
 }());
 if (false) {
@@ -134,12 +131,22 @@ if (false) {
      * @type {?}
      * @private
      */
+    SettingManagementService.prototype.actions;
+    /**
+     * @type {?}
+     * @private
+     */
     SettingManagementService.prototype.router;
     /**
      * @type {?}
      * @private
      */
     SettingManagementService.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    SettingManagementService.prototype.oAuthService;
 }
 
 /**
@@ -169,29 +176,12 @@ var SettingLayoutComponent = /** @class */ (function () {
      * @return {?}
      */
     function () { };
-    /**
-     * @return {?}
-     */
-    SettingLayoutComponent.prototype.ngAfterViewInit = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        timer(250).subscribe((/**
-         * @return {?}
-         */
-        function () {
-            if (!_this.settingManagementService.settings.length) {
-                _this.settingManagementService.setSettings();
-            }
-        }));
-    };
     // required for dynamic component
     SettingLayoutComponent.type = "setting" /* setting */;
     SettingLayoutComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-setting-layout',
-                    template: "<div class=\"row entry-row\">\n  <div class=\"col-auto\">\n    <h1 class=\"content-header-title\">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>\n  </div>\n  <!-- <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\">\n    <abp-breadcrumb></abp-breadcrumb>\n  </div> -->\n  <div class=\"col\">\n    <div class=\"text-lg-right pt-2\" id=\"AbpContentToolbar\"></div>\n  </div>\n</div>\n\n<div id=\"SettingManagementWrapper\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <div *ngIf=\"!settingManagementService.settings.length\" class=\"text-center\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-3\">\n          <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\n            <li\n              *abpFor=\"\n                let setting of settingManagementService.settings;\n                trackBy: trackByFn;\n                orderBy: 'order';\n                orderDir: 'ASC'\n              \"\n              (click)=\"settingManagementService.setSelected(setting)\"\n              class=\"nav-item\"\n              [abpPermission]=\"setting.requiredPolicy\"\n            >\n              <a\n                class=\"nav-link\"\n                [id]=\"setting.name + '-tab'\"\n                role=\"tab\"\n                [class.active]=\"setting.name === settingManagementService.selected.name\"\n                >{{ setting.name | abpLocalization }}</a\n              >\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-9\">\n          <div *ngIf=\"settingManagementService.settings.length\" class=\"tab-content\">\n            <div\n              class=\"tab-pane fade show active\"\n              [id]=\"settingManagementService.selected.name + '-tab'\"\n              role=\"tabpanel\"\n            >\n              <h2>{{ settingManagementService.selected.name | abpLocalization }}</h2>\n              <hr class=\"my-4\" />\n              <router-outlet></router-outlet>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                    template: "<div class=\"row entry-row\">\n  <div class=\"col-auto\">\n    <h1 class=\"content-header-title\">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>\n  </div>\n  <!-- <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\">\n    <abp-breadcrumb></abp-breadcrumb>\n  </div> -->\n  <div class=\"col\">\n    <div class=\"text-lg-right pt-2\" id=\"AbpContentToolbar\"></div>\n  </div>\n</div>\n\n<div id=\"SettingManagementWrapper\">\n  <div class=\"card\">\n    <div class=\"card-body\">\n      <div *ngIf=\"!settingManagementService.settings.length\" class=\"text-center\">\n        <i class=\"fa fa-spinner fa-spin\"></i>\n      </div>\n      <div class=\"row\">\n        <div class=\"col-3\">\n          <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\n            <li\n              *abpFor=\"\n                let setting of settingManagementService.settings;\n                trackBy: trackByFn;\n                orderBy: 'order';\n                orderDir: 'ASC'\n              \"\n              (click)=\"settingManagementService.setSelected(setting)\"\n              class=\"nav-item\"\n              [abpPermission]=\"setting.requiredPolicy\"\n            >\n              <a\n                class=\"nav-link\"\n                [id]=\"setting.name + '-tab'\"\n                role=\"tab\"\n                [class.active]=\"setting.name === settingManagementService.selected.name\"\n                >{{ setting.name | abpLocalization }}</a\n              >\n            </li>\n          </ul>\n        </div>\n        <div class=\"col-9\">\n          <div *ngIf=\"settingManagementService.settings.length\" class=\"tab-content\">\n            <div\n              class=\"tab-pane fade show active\"\n              [id]=\"settingManagementService.selected.name + '-tab'\"\n              role=\"tabpanel\"\n            >\n              <router-outlet></router-outlet>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
                 }] }
     ];
     /** @nocollapse */

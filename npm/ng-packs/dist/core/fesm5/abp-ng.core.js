@@ -1,5 +1,5 @@
+import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
 import { __decorate, __metadata, __awaiter, __generator, __spread, __rest, __assign, __extends } from 'tslib';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, Component, Directive, ElementRef, Input, ChangeDetectorRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
 import { Action, Selector, State, Store, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
 import { noop as noop$1, combineLatest, from, throwError, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
@@ -11,9 +11,138 @@ import compare from 'just-compare';
 import clone from 'just-clone';
 import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Navigate, NgxsRouterPluginModule } from '@ngxs/router-plugin';
+import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @template T
+ */
+var AbstractNgModelComponent = /** @class */ (function () {
+    function AbstractNgModelComponent(injector) {
+        this.injector = injector;
+        this.cdRef = injector.get((/** @type {?} */ (ChangeDetectorRef)));
+    }
+    Object.defineProperty(AbstractNgModelComponent.prototype, "value", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this._value;
+        },
+        set: /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            this._value = value;
+            this.notifyValueChange();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @return {?}
+     */
+    AbstractNgModelComponent.prototype.notifyValueChange = /**
+     * @return {?}
+     */
+    function () {
+        if (this.onChange) {
+            this.onChange(this.value);
+        }
+    };
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    AbstractNgModelComponent.prototype.writeValue = /**
+     * @param {?} value
+     * @return {?}
+     */
+    function (value) {
+        var _this = this;
+        this._value = value;
+        setTimeout((/**
+         * @return {?}
+         */
+        function () { return _this.cdRef.detectChanges(); }), 0);
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AbstractNgModelComponent.prototype.registerOnChange = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) {
+        this.onChange = fn;
+    };
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    AbstractNgModelComponent.prototype.registerOnTouched = /**
+     * @param {?} fn
+     * @return {?}
+     */
+    function (fn) {
+        this.onTouched = fn;
+    };
+    /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    AbstractNgModelComponent.prototype.setDisabledState = /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    function (isDisabled) {
+        this.disabled = isDisabled;
+    };
+    AbstractNgModelComponent.decorators = [
+        { type: Component, args: [{ template: '' }] }
+    ];
+    /** @nocollapse */
+    AbstractNgModelComponent.ctorParameters = function () { return [
+        { type: Injector }
+    ]; };
+    AbstractNgModelComponent.propDecorators = {
+        disabled: [{ type: Input }],
+        value: [{ type: Input }]
+    };
+    return AbstractNgModelComponent;
+}());
+if (false) {
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.disabled;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.onChange;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.onTouched;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractNgModelComponent.prototype._value;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractNgModelComponent.prototype.cdRef;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.injector;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -475,9 +604,10 @@ function registerLocale(locale) {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LocalizationService = /** @class */ (function () {
-    function LocalizationService(store, router, actions, otherInstance) {
+    function LocalizationService(store, router, ngZone, actions, otherInstance) {
         this.store = store;
         this.router = router;
+        this.ngZone = ngZone;
         this.actions = actions;
         if (otherInstance)
             throw new Error('LocaleService should have only one instance.');
@@ -524,17 +654,22 @@ var LocalizationService = /** @class */ (function () {
         return registerLocale(locale).then((/**
          * @return {?}
          */
-        function () { return __awaiter(_this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(noop$1)];
-                    case 1:
-                        _a.sent();
-                        this.setRouteReuse(shouldReuseRoute);
-                        return [2 /*return*/];
-                }
-            });
-        }); }));
+        function () {
+            _this.ngZone.run((/**
+             * @return {?}
+             */
+            function () { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(noop$1)];
+                        case 1:
+                            _a.sent();
+                            this.setRouteReuse(shouldReuseRoute);
+                            return [2 /*return*/];
+                    }
+                });
+            }); }));
+        }));
     };
     /**
      * @param {?} keys
@@ -577,10 +712,11 @@ var LocalizationService = /** @class */ (function () {
     LocalizationService.ctorParameters = function () { return [
         { type: Store },
         { type: Router },
+        { type: NgZone },
         { type: Actions },
         { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
     ]; };
-    /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+    /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
     return LocalizationService;
 }());
 if (false) {
@@ -594,6 +730,11 @@ if (false) {
      * @private
      */
     LocalizationService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.ngZone;
     /**
      * @type {?}
      * @private
@@ -2230,6 +2371,7 @@ var VisibilityDirective = /** @class */ (function () {
     function VisibilityDirective(elRef, renderer) {
         this.elRef = elRef;
         this.renderer = renderer;
+        this.mutationObserverEnabled = true;
         this.completed$ = new Subject();
     }
     /**
@@ -2241,44 +2383,65 @@ var VisibilityDirective = /** @class */ (function () {
     function () {
         var _this = this;
         /** @type {?} */
-        var observer = new MutationObserver((/**
-         * @param {?} mutations
-         * @return {?}
-         */
-        function (mutations) {
-            mutations.forEach((/**
-             * @param {?} mutation
+        var observer;
+        if (this.mutationObserverEnabled) {
+            observer = new MutationObserver((/**
+             * @param {?} mutations
              * @return {?}
              */
-            function (mutation) {
-                if (!mutation.target)
-                    return;
+            function (mutations) {
+                mutations.forEach((/**
+                 * @param {?} mutation
+                 * @return {?}
+                 */
+                function (mutation) {
+                    if (!mutation.target)
+                        return;
+                    /** @type {?} */
+                    var htmlNodes = snq((/**
+                     * @return {?}
+                     */
+                    function () { return Array.from(mutation.target.childNodes).filter((/**
+                     * @param {?} node
+                     * @return {?}
+                     */
+                    function (node) { return node instanceof HTMLElement; })); }), []);
+                    if (!htmlNodes.length) {
+                        _this.removeFromDOM();
+                        _this.disconnect();
+                    }
+                    else {
+                        setTimeout((/**
+                         * @return {?}
+                         */
+                        function () {
+                            _this.disconnect();
+                        }), 0);
+                    }
+                }));
+            }));
+            observer.observe(this.focusedElement, {
+                childList: true,
+            });
+        }
+        else {
+            setTimeout((/**
+             * @return {?}
+             */
+            function () {
                 /** @type {?} */
                 var htmlNodes = snq((/**
                  * @return {?}
                  */
-                function () { return Array.from(mutation.target.childNodes).filter((/**
+                function () { return Array.from(_this.focusedElement.childNodes).filter((/**
                  * @param {?} node
                  * @return {?}
                  */
                 function (node) { return node instanceof HTMLElement; })); }), []);
-                if (!htmlNodes.length) {
-                    _this.renderer.removeChild(_this.elRef.nativeElement.parentElement, _this.elRef.nativeElement);
-                    _this.disconnect();
-                }
-                else {
-                    setTimeout((/**
-                     * @return {?}
-                     */
-                    function () {
-                        _this.disconnect();
-                    }), 0);
-                }
-            }));
-        }));
-        observer.observe(this.focusedElement, {
-            childList: true,
-        });
+                if (!htmlNodes.length)
+                    _this.removeFromDOM();
+            }), 0);
+        }
         this.completed$.subscribe((/**
          * @return {?}
          */
@@ -2294,6 +2457,15 @@ var VisibilityDirective = /** @class */ (function () {
         this.completed$.next();
         this.completed$.complete();
     };
+    /**
+     * @return {?}
+     */
+    VisibilityDirective.prototype.removeFromDOM = /**
+     * @return {?}
+     */
+    function () {
+        this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
+    };
     VisibilityDirective.decorators = [
         { type: Directive, args: [{
                     selector: '[abpVisibility]',
@@ -2305,13 +2477,16 @@ var VisibilityDirective = /** @class */ (function () {
         { type: Renderer2 }
     ]; };
     VisibilityDirective.propDecorators = {
-        focusedElement: [{ type: Input, args: ['abpVisibility',] }]
+        focusedElement: [{ type: Input, args: ['abpVisibility',] }],
+        mutationObserverEnabled: [{ type: Input }]
     };
     return VisibilityDirective;
 }());
 if (false) {
     /** @type {?} */
     VisibilityDirective.prototype.focusedElement;
+    /** @type {?} */
+    VisibilityDirective.prototype.mutationObserverEnabled;
     /** @type {?} */
     VisibilityDirective.prototype.completed$;
     /**
@@ -2353,9 +2528,10 @@ var eLayoutType = {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AuthGuard = /** @class */ (function () {
-    function AuthGuard(oauthService, store) {
+    function AuthGuard(oauthService, store, router) {
         this.oauthService = oauthService;
         this.store = store;
+        this.router = router;
     }
     /**
      * @param {?} _
@@ -2373,8 +2549,7 @@ var AuthGuard = /** @class */ (function () {
         if (hasValidAccessToken) {
             return hasValidAccessToken;
         }
-        this.store.dispatch(new Navigate(['/account/login'], null, { state: { redirectUrl: state.url } }));
-        return false;
+        return this.router.createUrlTree(['/account/login'], { state: { redirectUrl: state.url } });
     };
     AuthGuard.decorators = [
         { type: Injectable, args: [{
@@ -2384,9 +2559,10 @@ var AuthGuard = /** @class */ (function () {
     /** @nocollapse */
     AuthGuard.ctorParameters = function () { return [
         { type: OAuthService },
-        { type: Store }
+        { type: Store },
+        { type: Router }
     ]; };
-    /** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store)); }, token: AuthGuard, providedIn: "root" });
+    /** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
     return AuthGuard;
 }());
 if (false) {
@@ -2400,6 +2576,11 @@ if (false) {
      * @private
      */
     AuthGuard.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    AuthGuard.prototype.router;
 }
 
 /**
@@ -3076,9 +3257,7 @@ function flatRoutes(routes) {
             /** @type {?} */
             var value = [val];
             if (val.children) {
-                var children = val.children;
-                delete val.children;
-                value = __spread([val], flat(children));
+                value = __spread([val], flat(val.children));
             }
             return __spread(acc, value);
         }), []);
@@ -3480,6 +3659,39 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var SortPipe = /** @class */ (function () {
+    function SortPipe() {
+    }
+    /**
+     * @param {?} value
+     * @param {?} sortOrder
+     * @return {?}
+     */
+    SortPipe.prototype.transform = /**
+     * @param {?} value
+     * @param {?} sortOrder
+     * @return {?}
+     */
+    function (value, sortOrder) {
+        sortOrder = sortOrder.toLowerCase();
+        if (sortOrder === "desc")
+            return value.reverse();
+        else
+            return value;
+    };
+    SortPipe.decorators = [
+        { type: Pipe, args: [{
+                    name: 'abpSort',
+                    pure: false
+                },] }
+    ];
+    return SortPipe;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 var LocaleId = /** @class */ (function (_super) {
     __extends(LocaleId, _super);
     function LocaleId(localizationService) {
@@ -3592,10 +3804,12 @@ var CoreModule = /** @class */ (function () {
                         ForDirective,
                         FormSubmitDirective,
                         LocalizationPipe,
+                        SortPipe,
                         PermissionDirective,
                         VisibilityDirective,
                         InputEventDebounceDirective,
                         ClickEventStopPropagationDirective,
+                        AbstractNgModelComponent,
                     ],
                     exports: [
                         CommonModule,
@@ -3610,11 +3824,13 @@ var CoreModule = /** @class */ (function () {
                         ForDirective,
                         FormSubmitDirective,
                         LocalizationPipe,
+                        SortPipe,
                         PermissionDirective,
                         VisibilityDirective,
                         InputEventDebounceDirective,
                         LocalizationPipe,
                         ClickEventStopPropagationDirective,
+                        AbstractNgModelComponent,
                     ],
                     providers: [LocalizationPipe],
                     entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
@@ -3633,5 +3849,5 @@ var CoreModule = /** @class */ (function () {
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ClickEventStopPropagationDirective as ɵba, LocaleId as ɵbb, LocaleProvider as ɵbc, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbd, ConfigPlugin as ɵbe, ApiInterceptor as ɵbf, getInitialData as ɵbg, localeInitializer as ɵbh, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, PermissionDirective as ɵx, VisibilityDirective as ɵy, InputEventDebounceDirective as ɵz };
+export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, InputEventDebounceDirective as ɵba, ClickEventStopPropagationDirective as ɵbb, AbstractNgModelComponent as ɵbc, LocaleId as ɵbd, LocaleProvider as ɵbe, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbf, ConfigPlugin as ɵbg, ApiInterceptor as ɵbh, getInitialData as ɵbi, localeInitializer as ɵbj, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, SortPipe as ɵx, PermissionDirective as ɵy, VisibilityDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

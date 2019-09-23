@@ -499,7 +499,6 @@ const ACCOUNT_ROUTES = {
             children: [{ path: 'login', name: 'Login', order: 1 }, { path: 'register', name: 'Register', order: 2 }],
         },
     ])),
-    settings: [],
 };
 
 /**
