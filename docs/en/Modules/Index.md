@@ -15,7 +15,7 @@ There are some **free and open source** application modules developed and mainta
 * **Audit Logging**: Used to persist audit logs to a database.
 * **Background Jobs**: Used to persist background jobs when using default background job manager.
 * **Blogging**: Used to create fancy blogs. ABP's [own blog](https://abp.io/blog/abp/) already using this module.
-* [**Docs**](Docs.md): Used to create technical documentation pages. ABP's [own documentation](https://abp.io/documents/) already using this module.
+* [**Docs**](Docs.md): Used to create technical documentation pages. ABP's [own documentation](https://docs.abp.io) already using this module.
 * **Identity**: Used to manage roles, users and their permissions.
 * **Identity Server**: Integrates to IdentityServer4.
 * **Permission Management**: Used to persist permissions.
