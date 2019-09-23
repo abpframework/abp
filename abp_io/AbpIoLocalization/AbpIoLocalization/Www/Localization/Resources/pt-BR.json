@@ -27,7 +27,7 @@
     "DomainDrivenDesign": "Design Orientado a Domínio",
     "DomainDrivenDesignExplanation": "Projetado e desenvolvido com base nos padrões e princípios DDD. Fornece um modelo em camadas para seu aplicativo.",
     "Authorization": "Autorização",
-    "AuthorizationExplanation": "Autorização avançada com usuário, função e sistema de permissão refinado. Criada na biblioteca Microsoft Identity library.",
+    "AuthorizationExplanation": "Autorização avançada com usuário, função e sistema de permissão refinado. Criada na biblioteca Microsoft Identity.",
     "MultiTenancy": "Múltiplos inquilinos",
     "MultiTenancyExplanation": "Aplicativos SaaS facilitados! Multilocação integrada do banco de dados à interface do usuário.",
     "CrossCuttingConcerns": "Preocupações transversais",
@@ -46,7 +46,7 @@
     "DomainDrivenDesignBasedLayeringModelExplanation": "Ajuda você a implementar uma arquitetura em camadas baseada em DDD e a construir uma base de código sustentável.",
     "DomainDrivenDesignBasedLayeringModelExplanationCont": "Fornece modelos de inicialização, abstrações, classes base, serviços, documentação e guias para ajudá-lo a desenvolver seu aplicativo com base nos padrões e princípios DDD.",
     "MicroserviceCompatibleModelExplanation": "O framework principal e os módulos de pré-construção foram projetados para a arquitetura de microsserviço.",
-    "MicroserviceCompatibleModelExplanationCont": "Fornece infraestrutura, integrações, amostras e documentação para implementar soluções de microsserviço mais facilmente, enquanto isso não\u2019t traga complexidade adicional se você quiser um aplicativo monolítico.",
+    "MicroserviceCompatibleModelExplanationCont": "Fornece infraestrutura, integrações, amostras e documentação para implementar soluções de microsserviço mais facilmente, enquanto isso não traga complexidade adicional se você quiser um aplicativo monolítico.",
     "ModularInfo": "O ABP fornece um sistema completo de modularidade para permitir o desenvolvimento de módulos de aplicativos reutilizáveis.",
     "PreBuiltModulesThemes": "Módulos pré-construídos & Temas",
     "PreBuiltModulesThemesExplanation": "Módulos e temas de código aberto e comerciais estão prontos para uso em seu aplicativo de negócios.",
@@ -153,7 +153,7 @@
     "Code": "Código",
     "Result": "Resultado",
     "SeeTheDocumentForMoreInformation": "Consulte o <a href=\"{1}\">{0} documento</a> para obter mais informações",
-    "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>código aberto</strong></span><span class=\"second-line text-uppercase\">Aplicativo da Web<br />Framework </span><span class=\"third-line shine2\"><strong>para o asp.net core</strong></span>",
+    "IndexPageHeroSection": "<span class=\"first-line shine\"><strong>código aberto</strong></span><span class=\"second-line text-uppercase\">Aplicativo da Web<br />Framework </span><span class=\"third-line shine2\"><strong>para o ASP.NET Core</strong></span>",
     "UiFramework": "UI Framework",
     "EmailAddress": "Endereço de email"
   }
