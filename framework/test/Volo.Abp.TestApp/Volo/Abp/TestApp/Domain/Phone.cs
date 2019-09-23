@@ -49,8 +49,8 @@ namespace Volo.Abp.TestApp.Domain
         }
 
         public Order(Guid id, string referenceNo)
+            : base(id)
         {
-            Id = id;
             ReferenceNo = referenceNo;
             OrderLines = new List<OrderLine>();
         }

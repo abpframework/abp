@@ -15,9 +15,6 @@
 
   <ItemGroup>
     <content Remove="Volo\Abp\PermissionManagement\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\PermissionManagement\Localization\Domain\*.json" />
   </ItemGroup>
 

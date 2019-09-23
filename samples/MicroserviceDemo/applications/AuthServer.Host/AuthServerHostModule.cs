@@ -83,6 +83,7 @@ namespace AuthServer.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();

@@ -9,6 +9,12 @@
     "TenantDeletionConfirmationMessage": "Tenant '{0}' zostanie usunięty. Czy na pewno?",
     "ConnectionStrings": "Connection Strings",
     "DisplayName:DefaultConnectionString": "Domyślny Connection String",
-    "DisplayName:UseSharedDatabase": "Użyj współdzielonej bazy danych"
+    "DisplayName:UseSharedDatabase": "Użyj współdzielonej bazy danych",
+    "Permission:TenantManagement": "Zarządzanie tenantami",
+    "Permission:Create": "Utwórz",
+    "Permission:Edit": "Edytuj",
+    "Permission:Delete": "Usuń",
+    "Permission:ManageConnectionStrings": "Zarządzaj connection string'ami",
+    "Permission:ManageFeatures": "Zarządzaj fukcjami"
   }
 }

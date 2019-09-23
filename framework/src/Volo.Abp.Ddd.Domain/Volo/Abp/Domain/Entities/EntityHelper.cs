@@ -81,5 +81,32 @@ namespace Volo.Abp.Domain.Entities
             var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
         }
+
+        public static void TrySetId<TKey>(
+            IEntity<TKey> entity, 
+            Func<TKey> idFactory, 
+            bool checkForDisableGuidGenerationAttribute = false)
+        {
+            //TODO: Can be optimized (by caching per entity type)?
+            var entityType = entity.GetType();
+            var idProperty = entityType.GetProperty(
+                nameof(entity.Id)
+            );
+
+            if (idProperty == null)
+            {
+                return;
+            }
+
+            if (checkForDisableGuidGenerationAttribute)
+            {
+                if (idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
+                {
+                    return;
+                }
+            }
+
+            idProperty.SetValue(entity, idFactory());
+        }
     }
 }

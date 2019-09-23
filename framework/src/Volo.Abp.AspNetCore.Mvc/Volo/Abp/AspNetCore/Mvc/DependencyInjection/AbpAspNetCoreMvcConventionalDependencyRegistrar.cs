@@ -7,10 +7,15 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.AspNetCore.Mvc.DependencyInjection
 {
-    public class AbpAspNetCoreMvcConventionalRegistrar : DefaultConventionalRegistrar
+    public class AbpAspNetCoreMvcConventionalRegistrar : ConventionalRegistrarBase
     {
         public override void AddType(IServiceCollection services, Type type)
         {
+            if (IsConventionalRegistrationDisabled(type))
+            {
+                return;
+            }
+
             if (!IsMvcService(type))
             {
                 return;

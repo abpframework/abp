@@ -39,7 +39,7 @@ namespace Volo.Abp.Identity
         {
             return (
                 await _userRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.Normalize(userName),
+                    _lookupNormalizer.NormalizeName(userName),
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )

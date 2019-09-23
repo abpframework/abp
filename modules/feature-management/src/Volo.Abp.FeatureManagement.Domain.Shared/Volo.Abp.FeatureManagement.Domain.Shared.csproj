@@ -9,9 +9,6 @@
 
   <ItemGroup>
     <content Remove="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
   </ItemGroup>
 

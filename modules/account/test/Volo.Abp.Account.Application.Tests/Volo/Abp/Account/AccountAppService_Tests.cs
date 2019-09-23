@@ -25,7 +25,7 @@ namespace Volo.Abp.Account.Pro.Application.Tests.Volo.Abp.Account
         [Fact]
         public async Task RegisterAsync()
         {
-            var registerDto = new RegisterDto()
+            var registerDto = new RegisterDto
             {
                 UserName = "bob.lee",
                 EmailAddress = "bob.lee@abp.io",
@@ -36,7 +36,7 @@ namespace Volo.Abp.Account.Pro.Application.Tests.Volo.Abp.Account
             await _accountAppService.RegisterAsync(registerDto);
 
             var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                _lookupNormalizer.Normalize("bob.lee"));
+                _lookupNormalizer.NormalizeName("bob.lee"));
 
             user.ShouldNotBeNull();
             user.UserName.ShouldBe("bob.lee");

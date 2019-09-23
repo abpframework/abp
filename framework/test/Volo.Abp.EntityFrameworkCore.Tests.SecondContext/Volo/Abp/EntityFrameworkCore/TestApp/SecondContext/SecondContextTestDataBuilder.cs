@@ -18,11 +18,12 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 
         public void Build()
         {
-            _bookRepository.Insert(new BookInSecondDbContext
-            {
-                Id = _guidGenerator.Create(),
-                Name = "TestBook1"
-            });
+            _bookRepository.Insert(
+                new BookInSecondDbContext(
+                    _guidGenerator.Create(),
+                    "TestBook1"
+                )
+            );
         }
     }
 }
