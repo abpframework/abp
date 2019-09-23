@@ -29,7 +29,10 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 return;
             }
 
-            file.ReplaceText("{api-key}", apiKey);
+            const string placeHolder = "<!-- {ABP_COMMERCIAL_NUGET_SOURCE} -->";
+            var nugetSourceTag = $"<add key=\"ABP Commercial NuGet Source\" value=\"https://nuget.abp.io/{apiKey}/v3/index.json\" />";
+
+            file.ReplaceText(placeHolder, nugetSourceTag);
         }
     }
 }
