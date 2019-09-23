@@ -97,7 +97,7 @@ export class LoaderBarComponent implements OnDestroy {
     this.interval.unsubscribe();
     this.progressLevel = 100;
     this.isLoading = false;
-    if (this.timer) this.timer.unsubscribe();
+    if (this.timer && !this.timer.closed) return;
 
     this.timer = timer(820).subscribe(() => {
       this.progressLevel = 0;
