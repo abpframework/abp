@@ -1,0 +1,13 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "Account": "Conta",
+    "Welcome": "Bem-vindo",
+    "UseOneOfTheFollowingLinksToContinue": "Use um dos seguintes links para continuar",
+    "FrameworkHomePage": "Página inicial do Framework",
+    "FrameworkDocumentation": " Documentação do Framework",
+    "OfficialBlog": "Blog oficial",
+    "CommercialHomePage": "Página inicial comercial",
+    "CommercialSupportWebSite": "Site de suporte comercial"
+  }
+}
