@@ -139,11 +139,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             DynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    Encoding.UTF8.GetBytes(bundleResult.Content),
                     "/wwwroot/" + bundleRelativePath, //TODO: get rid of wwwroot!
+                    Encoding.UTF8.GetBytes(bundleResult.Content),
                     fileName
-                    )
-                );
+                )
+            );
         }
 
         protected virtual bool IsBundlingEnabled()
