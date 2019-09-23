@@ -1,5 +1,5 @@
 {
-  "culture": "es",
+  "culture": "es-MX",
   "texts": {
     "GivenTenantIsNotAvailable": "El inquilino {0} no está disponible",
     "Tenant": "Inquilino",
