@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Repositories;
 namespace Acme.BookStore
 {
     public class BookAppService :
-        AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+        CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
             CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
