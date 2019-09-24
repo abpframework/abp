@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <RootNamespace>Acme.BookStore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
+    <ProjectReference Include="..\Acme.BookStore.Application.Contracts\Acme.BookStore.Application.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.Account.Application" Version="0.19.0" />
+    <PackageReference Include="Volo.Abp.Identity.Application" Version="0.19.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="0.19.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Application" Version="0.19.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="0.19.0" />
+    <ProjectReference Include="..\..\..\modules\book-management\src\Acme.BookStore.BookManagement.Application\Acme.BookStore.BookManagement.Application.csproj" />
+  </ItemGroup>
+
+</Project>

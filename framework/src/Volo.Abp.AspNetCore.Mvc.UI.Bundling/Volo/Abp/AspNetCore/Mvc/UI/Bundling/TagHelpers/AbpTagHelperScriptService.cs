@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 
@@ -14,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             IBundleManager bundleManager,
             IWebContentFileProvider webContentFileProvider,
             IOptions<BundlingOptions> options,
-            IHostingEnvironment hostingEnvironment
+            IWebHostEnvironment hostingEnvironment
             ) : base(
                 bundleManager,
                 webContentFileProvider,

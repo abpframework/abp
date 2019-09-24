@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
-                var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("moderator"), includeDetails: false);
+                var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"), includeDetails: false);
                 role.Claims.ShouldNotBeNull();
                 role.Claims.Any().ShouldBeTrue();
 
@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
-                var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.Normalize("john.nash"), includeDetails: false);
+                var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash"), includeDetails: false);
 
                 john.Roles.ShouldNotBeNull();
                 john.Roles.Any().ShouldBeTrue();

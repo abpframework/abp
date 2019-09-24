@@ -30,7 +30,7 @@
       /></label>
     </div>
     <p-table
-      *ngIf="[65, 200] as columnWidths"
+      *ngIf="[130, 200] as columnWidths"
       [value]="data$ | async | abpSort: sortOrder"
       [lazy]="true"
       [lazyLoadOnInit]="false"

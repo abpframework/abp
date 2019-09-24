@@ -38,5 +38,16 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         /// <inheritdoc />
         public TUser LastModifier { get; set; }
+
+        protected FullAuditedAggregateRootWithUser()
+        {
+
+        }
+
+        protected FullAuditedAggregateRootWithUser(TKey id)
+            : base(id)
+        {
+
+        }
     }
 }

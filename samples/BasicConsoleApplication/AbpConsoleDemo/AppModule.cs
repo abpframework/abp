@@ -3,7 +3,9 @@ using Volo.Abp.Modularity;
 
 namespace AbpConsoleDemo
 {
-    [DependsOn(typeof(AbpAutofacModule))]
+    [DependsOn(
+        typeof(AbpAutofacModule)
+        )]
     public class AppModule : AbpModule
     {
 

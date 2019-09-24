@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.Autofac;
@@ -40,8 +41,8 @@ namespace Volo.ClientSimulation.Demo
             }
 
             app.UseVirtualFiles();
-
-            app.UseMvcWithDefaultRoute();
+            app.UseRouting();
+            app.UseMvcWithDefaultRouteAndArea();
         }
     }
 }

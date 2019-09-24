@@ -18,10 +18,6 @@ import { TenantManagementProviders } from '@abp/ng.tenant-management';
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    SharedModule,
     ThemeSharedModule.forRoot(),
     CoreModule.forRoot({
       environment,
@@ -29,9 +25,12 @@ import { TenantManagementProviders } from '@abp/ng.tenant-management';
         layouts: LAYOUTS,
       },
     }),
-
     OAuthModule.forRoot(),
     NgxsModule.forRoot([]),
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    SharedModule,
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
   ],
   providers: [...AccountProviders({ redirectUrl: '/' }), ...IdentityProviders(), ...TenantManagementProviders()],

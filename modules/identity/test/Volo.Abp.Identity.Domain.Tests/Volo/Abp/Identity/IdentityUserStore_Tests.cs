@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
-using Volo.Abp.Guids;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -31,7 +29,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetUserIdAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetUserIdAsync(user)).ShouldBe(user.Id.ToString());
@@ -41,7 +39,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetUserNameAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetUserNameAsync(user)).ShouldBe(user.UserName);
@@ -50,7 +48,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetUserNameAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             await _identityUserStore.SetUserNameAsync(user, "bob.lee");
@@ -62,7 +60,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetNormalizedUserNameAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetNormalizedUserNameAsync(user)).ShouldBe(user.NormalizedUserName);
@@ -71,12 +69,12 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetNormalizedUserNameAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
-            await _identityUserStore.SetNormalizedUserNameAsync(user, _lookupNormalizer.Normalize("bob.lee"));
+            await _identityUserStore.SetNormalizedUserNameAsync(user, _lookupNormalizer.NormalizeName("bob.lee"));
 
-            user.NormalizedUserName.ShouldBe(_lookupNormalizer.Normalize("bob.lee"));
+            user.NormalizedUserName.ShouldBe(_lookupNormalizer.NormalizeName("bob.lee"));
         }
 
         [Fact]
@@ -87,7 +85,7 @@ namespace Volo.Abp.Identity
 
             await _identityUserStore.CreateAsync(user);
 
-            var bobLee = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("bob.lee"));
+            var bobLee = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("bob.lee"));
             bobLee.ShouldNotBeNull();
             bobLee.UserName.ShouldBe("bob.lee");
             bobLee.Email.ShouldBe("bob.lee@abp.io");
@@ -96,20 +94,20 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task UpdateAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             user.Name = "lee";
             (await _identityUserStore.UpdateAsync(user)).Succeeded.ShouldBeTrue();
 
-            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"))).Name
+            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"))).Name
                 .ShouldBe("lee");
         }
 
         [Fact]
         public async Task Update_Concurrency()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.UpdateAsync(user)).Succeeded.ShouldBeTrue();
@@ -128,12 +126,12 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task DeleteAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.DeleteAsync(user)).Succeeded.ShouldBeTrue();
 
-            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"))).ShouldBeNull();
+            (await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"))).ShouldBeNull();
         }
 
 
@@ -150,7 +148,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByNameAsync()
         {
-            var user = await _identityUserStore.FindByNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _identityUserStore.FindByNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
 
             user.ShouldNotBeNull();
             user.UserName.ShouldBe("john.nash");
@@ -160,7 +158,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetPasswordHashAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             user.PasswordHash.ShouldBeNull();
 
@@ -172,7 +170,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetPasswordHashAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             await _identityUserStore.SetPasswordHashAsync(user, "P@ssw0rd");
 
@@ -183,7 +181,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task HasPasswordAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             (await _identityUserStore.HasPasswordAsync(user)).ShouldBeFalse();
 
@@ -191,17 +189,16 @@ namespace Volo.Abp.Identity
             (await _identityUserStore.HasPasswordAsync(user)).ShouldBeTrue();
         }
 
-
         [Fact]
         public async Task AddToRoleAsync()
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("david"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("david"));
                 user.ShouldNotBeNull();
                 user.Roles.ShouldBeEmpty();
 
-                await _identityUserStore.AddToRoleAsync(user, _lookupNormalizer.Normalize("moderator"));
+                await _identityUserStore.AddToRoleAsync(user, _lookupNormalizer.NormalizeName("moderator"));
 
                 user.Roles.ShouldContain(x => x.RoleId == _testData.RoleModeratorId);
 
@@ -209,17 +206,16 @@ namespace Volo.Abp.Identity
             }
         }
 
-
         [Fact]
         public async Task RemoveFromRoleAsync()
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
                 user.Roles.ShouldContain(x => x.RoleId == _testData.RoleModeratorId);
 
-                await _identityUserStore.RemoveFromRoleAsync(user, _lookupNormalizer.Normalize("moderator"));
+                await _identityUserStore.RemoveFromRoleAsync(user, _lookupNormalizer.NormalizeName("moderator"));
 
                 user.Roles.ShouldNotContain(x => x.RoleId == _testData.RoleModeratorId);
 
@@ -231,7 +227,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetRolesAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             var roleNames = await _identityUserStore.GetRolesAsync(user);
@@ -245,23 +241,22 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
-                (await _identityUserStore.IsInRoleAsync(user, _lookupNormalizer.Normalize("moderator"))).ShouldBeTrue();
-                (await _identityUserStore.IsInRoleAsync(user, _lookupNormalizer.Normalize("moderatorNotExist"))).ShouldBeFalse();
+                (await _identityUserStore.IsInRoleAsync(user, _lookupNormalizer.NormalizeName("moderator"))).ShouldBeTrue();
+                (await _identityUserStore.IsInRoleAsync(user, _lookupNormalizer.NormalizeName("moderatorNotExist"))).ShouldBeFalse();
 
                 await uow.CompleteAsync();
             }
         }
-
 
         [Fact]
         public async Task GetClaimsAsync()
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 var claims = await _identityUserStore.GetClaimsAsync(user);
@@ -277,8 +272,9 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
+                user.Claims.ShouldNotContain(x => x.ClaimType == "MyClaimType" && x.ClaimValue == "MyClaimValue");
 
                 await _identityUserStore.AddClaimsAsync(user, new List<Claim>()
                 {
@@ -291,13 +287,12 @@ namespace Volo.Abp.Identity
             }
         }
 
-
         [Fact]
         public async Task ReplaceClaimAsync()
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 await _identityUserStore.ReplaceClaimAsync(user, new Claim("TestClaimType", "42"), new Claim("MyClaimType", "MyClaimValue"));
@@ -308,14 +303,13 @@ namespace Volo.Abp.Identity
                 await uow.CompleteAsync();
             }
         }
-
-
+        
         [Fact]
         public async Task RemoveClaimsAsync()
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 await _identityUserStore.RemoveClaimsAsync(user, new List<Claim>()
@@ -329,13 +323,12 @@ namespace Volo.Abp.Identity
             }  
         }
 
-
         [Fact]
         public async Task AddLoginAsync()
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
                 user.Logins.ShouldNotContain(x => x.LoginProvider == "facebook" && x.ProviderKey == "john");
 
@@ -352,7 +345,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
                 user.Logins.ShouldContain(x => x.LoginProvider == "github" && x.ProviderKey == "john");
 
@@ -370,7 +363,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 var logins = await _identityUserStore.GetLoginsAsync(user);
@@ -396,7 +389,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetEmailConfirmedAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetEmailConfirmedAsync(user)).ShouldBe(user.EmailConfirmed);
@@ -406,7 +399,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetEmailConfirmedAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             var emailConfirmed = user.EmailConfirmed;
 
@@ -418,7 +411,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetEmailAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             await _identityUserStore.SetEmailAsync(user, "john.nash.kobe@abp.io");
@@ -430,7 +423,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetEmailAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetEmailAsync(user)).ShouldBe(user.Email);
@@ -439,7 +432,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetNormalizedEmailAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetNormalizedEmailAsync(user)).ShouldBe(user.NormalizedEmail);
@@ -448,18 +441,18 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetNormalizedEmailAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
-            await _identityUserStore.SetNormalizedEmailAsync(user, _lookupNormalizer.Normalize("john.nash.kobe@abp.io"));
+            await _identityUserStore.SetNormalizedEmailAsync(user, _lookupNormalizer.NormalizeEmail("john.nash.kobe@abp.io"));
 
-            user.NormalizedEmail.ShouldBe(_lookupNormalizer.Normalize("john.nash.kobe@abp.io"));
+            user.NormalizedEmail.ShouldBe(_lookupNormalizer.NormalizeEmail("john.nash.kobe@abp.io"));
         }
 
         [Fact]
         public async Task FindByEmailAsync()
         {
-            var user = await _identityUserStore.FindByEmailAsync(_lookupNormalizer.Normalize("john.nash@abp.io"));
+            var user = await _identityUserStore.FindByEmailAsync(_lookupNormalizer.NormalizeEmail("john.nash@abp.io"));
 
             user.ShouldNotBeNull();
             user.Email.ShouldBe("john.nash@abp.io");
@@ -468,7 +461,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetLockoutEndDateAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetLockoutEndDateAsync(user)).ShouldBe(user.LockoutEnd);
@@ -477,7 +470,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetLockoutEndDateAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             await _identityUserStore.SetLockoutEndDateAsync(user, DateTimeOffset.Parse("01/01/2019"));
@@ -489,7 +482,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task IncrementAccessFailedCountAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             var count = user.AccessFailedCount;
 
@@ -501,7 +494,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task ResetAccessFailedCountAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             await _identityUserStore.ResetAccessFailedCountAsync(user);
@@ -512,7 +505,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetAccessFailedCountAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetAccessFailedCountAsync(user)).ShouldBe(user.AccessFailedCount);
@@ -521,7 +514,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetLockoutEnabledAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetLockoutEnabledAsync(user)).ShouldBe(user.LockoutEnabled);
@@ -530,7 +523,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetLockoutEnabledAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             var lockoutEnabled = user.LockoutEnabled;
 
@@ -543,7 +536,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetPhoneNumberAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             await _identityUserStore.SetPhoneNumberAsync(user, "13800138000");
@@ -555,7 +548,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetPhoneNumberAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetPhoneNumberAsync(user)).ShouldBe(user.PhoneNumber);
@@ -564,7 +557,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetPhoneNumberConfirmedAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetPhoneNumberConfirmedAsync(user)).ShouldBe(user.PhoneNumberConfirmed);
@@ -574,7 +567,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetPhoneNumberConfirmedAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             var phoneNumberConfirmed = user.PhoneNumberConfirmed;
 
@@ -587,7 +580,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetSecurityStampAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             var securityStamp = Guid.NewGuid().ToString();
 
@@ -599,7 +592,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetSecurityStampAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetSecurityStampAsync(user)).ShouldBe(user.SecurityStamp);
@@ -609,7 +602,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetTwoFactorEnabledAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
             var twoFactorEnabled = user.TwoFactorEnabled;
 
@@ -622,7 +615,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetTwoFactorEnabledAsync()
         {
-            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserStore.GetTwoFactorEnabledAsync(user)).ShouldBe(user.TwoFactorEnabled);
@@ -640,7 +633,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetUsersInRoleAsync()
         {
-            var user = await _identityUserStore.GetUsersInRoleAsync(_lookupNormalizer.Normalize("moderator"));
+            var user = await _identityUserStore.GetUsersInRoleAsync(_lookupNormalizer.NormalizeName("moderator"));
             user.ShouldNotBeNull();
             user.ShouldContain(x => x.UserName == "john.nash");
         }
@@ -650,7 +643,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 await _identityUserStore.SetTokenAsync(user, "test-provider", "test-name", "123123");
@@ -667,7 +660,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 await _identityUserStore.RemoveTokenAsync(user, "test-provider", "test-name");
@@ -683,7 +676,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 (await _identityUserStore.GetTokenAsync(user, "test-provider", "test-name")).ShouldBe("test-value");
@@ -697,7 +690,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 await _identityUserStore.SetAuthenticatorKeyAsync(user, "testKey");
@@ -713,7 +706,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
                 await _identityUserStore.SetAuthenticatorKeyAsync(user, "testKey");
 
@@ -729,7 +722,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
                 await _identityUserStore.SetTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes", "testKey;testKey2");
 
@@ -744,7 +737,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 await _identityUserStore.ReplaceCodesAsync(user, new List<string>()
@@ -764,7 +757,7 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
                 await _identityUserStore.SetTokenAsync(user, "[AspNetUserStore]", "RecoveryCodes", "testKey;testKey2");
 

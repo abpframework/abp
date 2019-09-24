@@ -75,18 +75,20 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         protected virtual void SetIdIfNeeded(TEntity entity)
         {
-            if (typeof(TKey) == typeof(int) || typeof(TKey) == typeof(long) || typeof(TKey) == typeof(Guid))
+            if (typeof(TKey) == typeof(int) || 
+                typeof(TKey) == typeof(long) || 
+                typeof(TKey) == typeof(Guid))
             {
                 if (EntityHelper.HasDefaultId(entity))
                 {
-                    entity.Id = Database.GenerateNextId<TEntity, TKey>();
+                    EntityHelper.TrySetId(entity, () => Database.GenerateNextId<TEntity, TKey>());
                 }
             }
         }
 
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
-            return GetQueryable().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id));
+            return GetQueryable().FirstOrDefault(e => e.Id.Equals(id));
         }
 
         public virtual TEntity Get(TKey id, bool includeDetails = true)

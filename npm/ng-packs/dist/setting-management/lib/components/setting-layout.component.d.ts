@@ -10,5 +10,4 @@ export declare class SettingLayoutComponent {
     trackByFn: TrackByFunction<SettingTab>;
     constructor(settingManagementService: SettingManagementService, router: Router);
     ngOnDestroy(): void;
-    ngAfterViewInit(): void;
 }

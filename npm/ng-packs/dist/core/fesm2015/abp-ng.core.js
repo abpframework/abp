@@ -1,5 +1,5 @@
+import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
 import { __decorate, __metadata, __awaiter, __rest } from 'tslib';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, Component, Directive, ElementRef, Input, ChangeDetectorRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
 import { Action, Selector, State, Store, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
 import { noop as noop$1, combineLatest, from, throwError, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
@@ -11,9 +11,116 @@ import compare from 'just-compare';
 import clone from 'just-clone';
 import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Navigate, NgxsRouterPluginModule } from '@ngxs/router-plugin';
+import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @template T
+ */
+class AbstractNgModelComponent {
+    /**
+     * @param {?} injector
+     */
+    constructor(injector) {
+        this.injector = injector;
+        this.cdRef = injector.get((/** @type {?} */ (ChangeDetectorRef)));
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set value(value) {
+        this._value = value;
+        this.notifyValueChange();
+    }
+    /**
+     * @return {?}
+     */
+    get value() {
+        return this._value;
+    }
+    /**
+     * @return {?}
+     */
+    notifyValueChange() {
+        if (this.onChange) {
+            this.onChange(this.value);
+        }
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    writeValue(value) {
+        this._value = value;
+        setTimeout((/**
+         * @return {?}
+         */
+        () => this.cdRef.detectChanges()), 0);
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    registerOnChange(fn) {
+        this.onChange = fn;
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    setDisabledState(isDisabled) {
+        this.disabled = isDisabled;
+    }
+}
+AbstractNgModelComponent.decorators = [
+    { type: Component, args: [{ template: '' }] }
+];
+/** @nocollapse */
+AbstractNgModelComponent.ctorParameters = () => [
+    { type: Injector }
+];
+AbstractNgModelComponent.propDecorators = {
+    disabled: [{ type: Input }],
+    value: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.disabled;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.onChange;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.onTouched;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractNgModelComponent.prototype._value;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractNgModelComponent.prototype.cdRef;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.injector;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -453,12 +560,14 @@ class LocalizationService {
     /**
      * @param {?} store
      * @param {?} router
+     * @param {?} ngZone
      * @param {?} actions
      * @param {?} otherInstance
      */
-    constructor(store, router, actions, otherInstance) {
+    constructor(store, router, ngZone, actions, otherInstance) {
         this.store = store;
         this.router = router;
+        this.ngZone = ngZone;
         this.actions = actions;
         if (otherInstance)
             throw new Error('LocaleService should have only one instance.');
@@ -491,10 +600,15 @@ class LocalizationService {
         return registerLocale(locale).then((/**
          * @return {?}
          */
-        () => __awaiter(this, void 0, void 0, function* () {
-            yield this.router.navigateByUrl(this.router.url).catch(noop$1);
-            this.setRouteReuse(shouldReuseRoute);
-        })));
+        () => {
+            this.ngZone.run((/**
+             * @return {?}
+             */
+            () => __awaiter(this, void 0, void 0, function* () {
+                yield this.router.navigateByUrl(this.router.url).catch(noop$1);
+                this.setRouteReuse(shouldReuseRoute);
+            })));
+        }));
     }
     /**
      * @param {?} keys
@@ -520,10 +634,11 @@ LocalizationService.decorators = [
 LocalizationService.ctorParameters = () => [
     { type: Store },
     { type: Router },
+    { type: NgZone },
     { type: Actions },
     { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
 ];
-/** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+/** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
 if (false) {
     /**
      * @type {?}
@@ -535,6 +650,11 @@ if (false) {
      * @private
      */
     LocalizationService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.ngZone;
     /**
      * @type {?}
      * @private
@@ -2038,6 +2158,7 @@ class VisibilityDirective {
     constructor(elRef, renderer) {
         this.elRef = elRef;
         this.renderer = renderer;
+        this.mutationObserverEnabled = true;
         this.completed$ = new Subject();
     }
     /**
@@ -2045,44 +2166,65 @@ class VisibilityDirective {
      */
     ngAfterViewInit() {
         /** @type {?} */
-        const observer = new MutationObserver((/**
-         * @param {?} mutations
-         * @return {?}
-         */
-        mutations => {
-            mutations.forEach((/**
-             * @param {?} mutation
+        let observer;
+        if (this.mutationObserverEnabled) {
+            observer = new MutationObserver((/**
+             * @param {?} mutations
              * @return {?}
              */
-            mutation => {
-                if (!mutation.target)
-                    return;
+            mutations => {
+                mutations.forEach((/**
+                 * @param {?} mutation
+                 * @return {?}
+                 */
+                mutation => {
+                    if (!mutation.target)
+                        return;
+                    /** @type {?} */
+                    const htmlNodes = snq((/**
+                     * @return {?}
+                     */
+                    () => Array.from(mutation.target.childNodes).filter((/**
+                     * @param {?} node
+                     * @return {?}
+                     */
+                    node => node instanceof HTMLElement))), []);
+                    if (!htmlNodes.length) {
+                        this.removeFromDOM();
+                        this.disconnect();
+                    }
+                    else {
+                        setTimeout((/**
+                         * @return {?}
+                         */
+                        () => {
+                            this.disconnect();
+                        }), 0);
+                    }
+                }));
+            }));
+            observer.observe(this.focusedElement, {
+                childList: true,
+            });
+        }
+        else {
+            setTimeout((/**
+             * @return {?}
+             */
+            () => {
                 /** @type {?} */
                 const htmlNodes = snq((/**
                  * @return {?}
                  */
-                () => Array.from(mutation.target.childNodes).filter((/**
+                () => Array.from(this.focusedElement.childNodes).filter((/**
                  * @param {?} node
                  * @return {?}
                  */
                 node => node instanceof HTMLElement))), []);
-                if (!htmlNodes.length) {
-                    this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
-                    this.disconnect();
-                }
-                else {
-                    setTimeout((/**
-                     * @return {?}
-                     */
-                    () => {
-                        this.disconnect();
-                    }), 0);
-                }
-            }));
-        }));
-        observer.observe(this.focusedElement, {
-            childList: true,
-        });
+                if (!htmlNodes.length)
+                    this.removeFromDOM();
+            }), 0);
+        }
         this.completed$.subscribe((/**
          * @return {?}
          */
@@ -2094,6 +2236,12 @@ class VisibilityDirective {
     disconnect() {
         this.completed$.next();
         this.completed$.complete();
+    }
+    /**
+     * @return {?}
+     */
+    removeFromDOM() {
+        this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
     }
 }
 VisibilityDirective.decorators = [
@@ -2107,11 +2255,14 @@ VisibilityDirective.ctorParameters = () => [
     { type: Renderer2 }
 ];
 VisibilityDirective.propDecorators = {
-    focusedElement: [{ type: Input, args: ['abpVisibility',] }]
+    focusedElement: [{ type: Input, args: ['abpVisibility',] }],
+    mutationObserverEnabled: [{ type: Input }]
 };
 if (false) {
     /** @type {?} */
     VisibilityDirective.prototype.focusedElement;
+    /** @type {?} */
+    VisibilityDirective.prototype.mutationObserverEnabled;
     /** @type {?} */
     VisibilityDirective.prototype.completed$;
     /**
@@ -2156,10 +2307,12 @@ class AuthGuard {
     /**
      * @param {?} oauthService
      * @param {?} store
+     * @param {?} router
      */
-    constructor(oauthService, store) {
+    constructor(oauthService, store, router) {
         this.oauthService = oauthService;
         this.store = store;
+        this.router = router;
     }
     /**
      * @param {?} _
@@ -2172,8 +2325,7 @@ class AuthGuard {
         if (hasValidAccessToken) {
             return hasValidAccessToken;
         }
-        this.store.dispatch(new Navigate(['/account/login'], null, { state: { redirectUrl: state.url } }));
-        return false;
+        return this.router.createUrlTree(['/account/login'], { state: { redirectUrl: state.url } });
     }
 }
 AuthGuard.decorators = [
@@ -2184,9 +2336,10 @@ AuthGuard.decorators = [
 /** @nocollapse */
 AuthGuard.ctorParameters = () => [
     { type: OAuthService },
-    { type: Store }
+    { type: Store },
+    { type: Router }
 ];
-/** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store)); }, token: AuthGuard, providedIn: "root" });
+/** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
 if (false) {
     /**
      * @type {?}
@@ -2198,6 +2351,11 @@ if (false) {
      * @private
      */
     AuthGuard.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    AuthGuard.prototype.router;
 }
 
 /**
@@ -2862,9 +3020,7 @@ function flatRoutes(routes) {
             /** @type {?} */
             let value = [val];
             if (val.children) {
-                const { children } = val;
-                delete val.children;
-                value = [val, ...flat(children)];
+                value = [val, ...flat(val.children)];
             }
             return [...acc, ...value];
         }), []);
@@ -3226,6 +3382,31 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class SortPipe {
+    /**
+     * @param {?} value
+     * @param {?} sortOrder
+     * @return {?}
+     */
+    transform(value, sortOrder) {
+        sortOrder = sortOrder.toLowerCase();
+        if (sortOrder === "desc")
+            return value.reverse();
+        else
+            return value;
+    }
+}
+SortPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'abpSort',
+                pure: false
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class LocaleId extends String {
     /**
      * @param {?} localizationService
@@ -3326,10 +3507,12 @@ CoreModule.decorators = [
                     ForDirective,
                     FormSubmitDirective,
                     LocalizationPipe,
+                    SortPipe,
                     PermissionDirective,
                     VisibilityDirective,
                     InputEventDebounceDirective,
                     ClickEventStopPropagationDirective,
+                    AbstractNgModelComponent,
                 ],
                 exports: [
                     CommonModule,
@@ -3344,11 +3527,13 @@ CoreModule.decorators = [
                     ForDirective,
                     FormSubmitDirective,
                     LocalizationPipe,
+                    SortPipe,
                     PermissionDirective,
                     VisibilityDirective,
                     InputEventDebounceDirective,
                     LocalizationPipe,
                     ClickEventStopPropagationDirective,
+                    AbstractNgModelComponent,
                 ],
                 providers: [LocalizationPipe],
                 entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
@@ -3365,5 +3550,5 @@ CoreModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ClickEventStopPropagationDirective as ɵba, LocaleId as ɵbb, LocaleProvider as ɵbc, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbd, ConfigPlugin as ɵbe, ApiInterceptor as ɵbf, getInitialData as ɵbg, localeInitializer as ɵbh, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, PermissionDirective as ɵx, VisibilityDirective as ɵy, InputEventDebounceDirective as ɵz };
+export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, InputEventDebounceDirective as ɵba, ClickEventStopPropagationDirective as ɵbb, AbstractNgModelComponent as ɵbc, LocaleId as ɵbd, LocaleProvider as ɵbe, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbf, ConfigPlugin as ɵbg, ApiInterceptor as ɵbh, getInitialData as ɵbi, localeInitializer as ɵbj, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, SortPipe as ɵx, PermissionDirective as ɵy, VisibilityDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

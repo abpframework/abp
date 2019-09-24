@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
-using Newtonsoft.Json.Linq;
 
 namespace Volo.Abp.AspNetCore.Authentication.OAuth.Claims
 {
@@ -9,31 +9,30 @@ namespace Volo.Abp.AspNetCore.Authentication.OAuth.Claims
         public MultipleClaimAction(string claimType, string jsonKey)
             : base(claimType, jsonKey)
         {
+
         }
 
-        public override void Run(JObject userData, ClaimsIdentity identity, string issuer)
-        {
-            var prop = userData?.Property(ValueType);
-            if (prop == null)
+        public override void Run(JsonElement userData, ClaimsIdentity identity, string issuer)
+        {            
+            var prop = userData.GetProperty(ValueType);
+            if (prop.ValueKind == JsonValueKind.Null)
             {
                 return;
             }
 
-            var propValue = prop.Value;
-
-            switch (propValue.Type)
+            switch (prop.ValueKind)
             {
-                case JTokenType.String:
-                    identity.AddClaim(new Claim(ClaimType, propValue.Value<string>(), ValueType, issuer));
+                case JsonValueKind.String:
+                    identity.AddClaim(new Claim(ClaimType, prop.GetString(), ValueType, issuer));
                     break;
-                case JTokenType.Array:
-                    foreach (var innterValue in propValue.Values<string>())
+                case JsonValueKind.Array:
+                    foreach (var arramItem in prop.EnumerateArray())
                     {
-                        identity.AddClaim(new Claim(ClaimType, innterValue, ValueType, issuer));
+                        identity.AddClaim(new Claim(ClaimType, arramItem.GetString(), ValueType, issuer));
                     }
                     break;
                 default:
-                    throw new AbpException("Unhandled JTokenType: " + propValue.Type);
+                    throw new AbpException("Unhandled JsonValueKind: " + prop.ValueKind);
             }
         }
     }

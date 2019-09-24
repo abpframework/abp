@@ -148,7 +148,7 @@ var AccountService = /** @class */ (function () {
         /** @type {?} */
         var request = {
             method: 'GET',
-            url: "/api/abp/multi-tenancy/find-tenant/" + tenantName,
+            url: "/api/abp/multi-tenancy/tenants/by-name/" + tenantName,
         };
         return this.rest.request(request);
     };
@@ -516,7 +516,6 @@ var ACCOUNT_ROUTES = {
             children: [{ path: 'login', name: 'Login', order: 1 }, { path: 'register', name: 'Register', order: 2 }],
         },
     ])),
-    settings: [],
 };
 
 /**
