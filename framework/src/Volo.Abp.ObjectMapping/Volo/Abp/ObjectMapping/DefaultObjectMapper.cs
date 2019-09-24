@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ObjectMapping
@@ -83,6 +84,16 @@ namespace Volo.Abp.ObjectMapping
             }
 
             return AutoMap(source, destination);
+        }
+
+        public IQueryable<TDestination> ProjectTo<TDestination>(IQueryable source)
+        {
+            return AutoProjectTo<TDestination>(source);
+        }
+
+        protected virtual IQueryable<TDestination> AutoProjectTo<TDestination>(IQueryable source)
+        {
+            throw new NotImplementedException($"Can not project to from given object ({source}) to {typeof(TDestination).AssemblyQualifiedName}.");
         }
 
         protected virtual TDestination AutoMap<TSource, TDestination>(object source)

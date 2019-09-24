@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.ObjectMapping;
@@ -24,6 +25,11 @@ namespace Volo.Abp.AutoMapper
         protected override TDestination AutoMap<TSource, TDestination>(TSource source, TDestination destination)
         {
             return MapperAccessor.Mapper.Map(source, destination);
+        }
+
+        protected override IQueryable<TDestination> AutoProjectTo<TDestination>(IQueryable source)
+        {
+            return MapperAccessor.Mapper.ProjectTo<TDestination>(source);
         }
     }
 }

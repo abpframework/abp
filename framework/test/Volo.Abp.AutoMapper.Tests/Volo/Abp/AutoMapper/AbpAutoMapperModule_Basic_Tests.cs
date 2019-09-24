@@ -29,7 +29,7 @@ namespace Volo.Abp.AutoMapper
             dto.Number.ShouldBe(42);
         }
 
-        //[Fact] TODO: Disabled because of https://github.com/AutoMapper/AutoMapper/pull/2379#issuecomment-355899664
+        [Fact]
         public void Should_Not_Map_Objects_With_AutoMap_Attributes()
         {
             Assert.ThrowsAny<Exception>(() =>
