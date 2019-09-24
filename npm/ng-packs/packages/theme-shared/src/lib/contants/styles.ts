@@ -154,6 +154,10 @@ export default `
   z-index: 1000;
 }
 
+.color-white {
+  color: #FFF !important;
+}
+
 /* <animations */
 
 .fade-in-top {
