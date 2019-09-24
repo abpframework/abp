@@ -18,6 +18,7 @@ import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
+import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 export function appendScript(injector: Injector) {
   const fn = function() {
@@ -40,7 +41,7 @@ export function appendScript(injector: Injector) {
 }
 
 @NgModule({
-  imports: [CoreModule, ToastModule],
+  imports: [CoreModule, ToastModule, NgxValidateCoreModule],
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,
