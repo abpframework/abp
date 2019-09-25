@@ -227,17 +227,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (string.IsNullOrEmpty(TagHelper.Label))
             {
-                return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output, inputTag);
+                return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output);
             }
 
             var checkboxClass = isCheckbox ? "class=\"custom-control-label\" " : "";
 
             return "<label " + checkboxClass + GetIdAttributeAsString(inputTag) + ">"
                    + TagHelper.Label +
-                   "</label>" + GetRequiredSymbol(context, output, inputTag);
+                   "</label>" + GetRequiredSymbol(context, output);
         }
 
-        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output, TagHelperOutput inputTag)
+        protected virtual string GetRequiredSymbol(TagHelperContext context, TagHelperOutput output)
         {
             if (!TagHelper.DisplayRequiredSymbol)
             {
