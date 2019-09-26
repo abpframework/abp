@@ -288,6 +288,41 @@
           }
         }
       }
+    },
+    "setting-management-config": {
+      "projectType": "library",
+      "root": "packages/setting-management-config",
+      "sourceRoot": "packages/setting-management-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/setting-management-config/tsconfig.lib.json",
+            "project": "packages/setting-management-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "packages/setting-management-config/src/test.ts",
+            "tsConfig": "packages/setting-management-config/tsconfig.spec.json",
+            "karmaConfig": "packages/setting-management-config/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/setting-management-config/tsconfig.lib.json",
+              "packages/setting-management-config/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "core"

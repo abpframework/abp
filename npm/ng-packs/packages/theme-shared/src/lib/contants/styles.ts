@@ -172,7 +172,7 @@ export default `
   }
 
   to {
-    transform: translateY(5px);
+    transform: translateY(0px);
     opacity: 1;
   }
 }
