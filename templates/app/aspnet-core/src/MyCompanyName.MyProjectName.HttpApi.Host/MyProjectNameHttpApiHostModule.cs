@@ -21,6 +21,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.OpenApi.Models;
 
 namespace MyCompanyName.MyProjectName
 {
@@ -50,7 +51,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureCors(context, configuration);
 
             //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
-            //ConfigureSwaggerServices(context);
+            ConfigureSwaggerServices(context);
         }
 
         private void ConfigureCache(IConfigurationRoot configuration)
@@ -101,7 +102,7 @@ namespace MyCompanyName.MyProjectName
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info {Title = "MyProjectName API", Version = "v1"});
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
                 });
         }
@@ -175,13 +176,13 @@ namespace MyCompanyName.MyProjectName
             }
             app.UseAbpRequestLocalization();
 
-            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-            */
+            
 
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
