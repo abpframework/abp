@@ -1,12 +1,12 @@
-import { ABP, eLayoutType } from '@abp/ng.core';
+import { Injectable } from '@angular/core';
+import { ABP_ROUTES, eLayoutType } from '@abp/ng.core';
 
-/**
- *
- * @deprecated since version 0.9.0
- */
-export const TENANT_MANAGEMENT_ROUTES = {
-  routes: [
-    {
+@Injectable({
+  providedIn: 'root',
+})
+export class TenantManagementConfigService {
+  constructor() {
+    ABP_ROUTES.push({
       name: 'AbpTenantManagement::Menu:TenantManagement',
       path: 'tenant-management',
       parentName: 'AbpUiNavigation::Menu:Administration',
@@ -20,6 +20,6 @@ export const TENANT_MANAGEMENT_ROUTES = {
           requiredPolicy: 'AbpTenantManagement.Tenants',
         },
       ],
-    },
-  ] as ABP.FullRoute[],
-};
+    });
+  }
+}

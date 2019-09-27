@@ -323,6 +323,111 @@
           }
         }
       }
+    },
+    "identity-config": {
+      "projectType": "library",
+      "root": "packages/identity-config",
+      "sourceRoot": "packages/identity-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/identity-config/tsconfig.lib.json",
+            "project": "packages/identity-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "packages/identity-config/src/test.ts",
+            "tsConfig": "packages/identity-config/tsconfig.spec.json",
+            "karmaConfig": "packages/identity-config/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/identity-config/tsconfig.lib.json",
+              "packages/identity-config/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "account-config": {
+      "projectType": "library",
+      "root": "packages/account-config",
+      "sourceRoot": "packages/account-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/account-config/tsconfig.lib.json",
+            "project": "packages/account-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "packages/account-config/src/test.ts",
+            "tsConfig": "packages/account-config/tsconfig.spec.json",
+            "karmaConfig": "packages/account-config/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/account-config/tsconfig.lib.json",
+              "packages/account-config/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "tenant-management-config": {
+      "projectType": "library",
+      "root": "packages/tenant-management-config",
+      "sourceRoot": "packages/tenant-management-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/tenant-management-config/tsconfig.lib.json",
+            "project": "packages/tenant-management-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "packages/tenant-management-config/src/test.ts",
+            "tsConfig": "packages/tenant-management-config/tsconfig.spec.json",
+            "karmaConfig": "packages/tenant-management-config/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/tenant-management-config/tsconfig.lib.json",
+              "packages/tenant-management-config/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "core"

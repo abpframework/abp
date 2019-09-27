@@ -6,3 +6,5 @@ export interface SettingTab {
   order: number;
   requiredPolicy?: string;
 }
+
+export const SETTING_TABS = [] as SettingTab[];
