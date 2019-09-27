@@ -18,6 +18,10 @@ import { ACCOUNT_OPTIONS, optionsFactory } from './tokens/options.token';
 })
 export class AccountModule {}
 
+/**
+ *
+ * @deprecated since version 0.9
+ */
 export function AccountProviders(options = {} as Options): Provider[] {
   return [
     { provide: ACCOUNT_OPTIONS, useValue: options },
