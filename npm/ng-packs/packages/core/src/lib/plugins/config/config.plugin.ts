@@ -8,7 +8,7 @@ import clone from 'just-clone';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
-export const ABP_ROUTES = [] as ABP.FullRoute[];
+export let ABP_ROUTES = [] as ABP.FullRoute[];
 
 @Injectable()
 export class ConfigPlugin implements NgxsPlugin {
@@ -40,6 +40,17 @@ export class ConfigPlugin implements NgxsPlugin {
 }
 
 function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): any {
+  /**
+   *
+   * @deprecated since version 0.9.0
+   */
+  const abpRoutes: ABP.FullRoute[] = routes
+    .filter(route => {
+      return snq(() => route.data.routes.routes.find(r => r.path === route.path), false);
+    })
+    .reduce((acc, val) => [...acc, ...val.data.routes.routes], []);
+  ABP_ROUTES = [...ABP_ROUTES, ...abpRoutes];
+
   wrappers = ABP_ROUTES.filter(ar => ar.wrapper);
   const transformed = [] as ABP.FullRoute[];
   routes
