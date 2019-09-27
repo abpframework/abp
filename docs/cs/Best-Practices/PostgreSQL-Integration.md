@@ -1,32 +1,32 @@
-﻿## Entity Framework Core PostgreSQL Integration
+﻿## Entity Framework Core PostgreSQL integrace
 
-> See [Entity Framework Core Integration document](../Entity-Framework-Core.md) for the basics of the EF Core integration.
+> Podívejte se na [Entity Framework Core integrační dokument](../Entity-Framework-Core.md) pro základy integrace EF Core.
 
-### EntityFrameworkCore Project Update
+### Aktualizace projektu EntityFrameworkCore
 
-- In `Acme.BookStore.EntityFrameworkCore` project replace package `Volo.Abp.EntityFrameworkCore.SqlServer` with `Volo.Abp.EntityFrameworkCore.PostgreSql` 
-- Update to use PostgreSQL in `BookStoreEntityFrameworkCoreModule`
-  - Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
-  - Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
-- In other projects update the PostgreSQL connection string in necessary `appsettings.json` files
+- V projektu `Acme.BookStore.EntityFrameworkCore` nahraďte balík `Volo.Abp.EntityFrameworkCore.SqlServer` za `Volo.Abp.EntityFrameworkCore.PostgreSql` 
+- Aktualizace pro použití PostgreSQL v `BookStoreEntityFrameworkCoreModule`
+  - Nahraďte `AbpEntityFrameworkCoreSqlServerModule` za `AbpEntityFrameworkCorePostgreSqlModule`
+  - Nahraďte `options.UseSqlServer()` za `options.UsePostgreSql()`
+- V jiných projektech aktualizujte PostgreSQL connection string v nezbytných `appsettings.json` souborech
 
-#### Delete Existing Migrations
+#### Odstranění stávajících migrací
 
-Delete all existing migration files (including `DbContextModelSnapshot`)
+Smažte všechny stavající migrační soubory (včetně `DbContextModelSnapshot`)
 
 ![postgresql-delete-initial-migrations](images/postgresql-delete-initial-migrations.png)
 
-#### Regenerate Initial Migration & Update the Database
+#### Znovu vygenerujte počáteční migraci & aktualizujte databázi
 
-Set the correct startup project (usually a web project),
-Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **Default project** and execute the following command:
+Nastavte správný spouštěcí projekt (obvykle web projekt),
+Otevřete **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), zvolte `Acme.BookStore.EntityFrameworkCore.DbMigrations` jako **Default project** a proveďte následující příkaz:
 
-Run `Add-Migration` command.
+Proveďte příkaz `Add-Migration`:
 ````
 PM> Add-Migration Initial
 ````
 
-Then execute the `Update-Database` command to update the database schema:
+Poté proveďte příkaz `Update-Database` k aktualizaci schématu databáze:
 
 ````
 PM> Update-Database

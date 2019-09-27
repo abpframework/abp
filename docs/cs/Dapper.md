@@ -1,22 +1,22 @@
-# Dapper Integration
+# Dapper integrace
 
-Because Dapper's idea is that the sql statement takes precedence, and mainly provides some extension methods for the `IDbConnection` interface.
+Jelikož myšlenka Dapper je taková, že sql příkaz má přednost, tak hlavně poskytuje metody rozšíření pro `IDbConnection` rozhraní.
 
-Abp does not encapsulate too many functions for Dapper. Abp Dapper provides a `DapperRepository<TDbContext>` base class based on Abp EntityFrameworkCore, which provides the `IDbConnection` and `IDbTransaction` properties required by Dapper.
+Abp nezapouzdřuje přílíš mnoho funkcí pro Dapper. Abp Dapper poskytuje základní třídu `DapperRepository<TDbContext>` založenou na Abp EntityFrameworkCore, který poskytuje vlastnosti `IDbConnection` a `IDbTransaction` vyžadované v Dapper.
 
-These two properties can work well with [Unit-Of-Work](Unit-Of-Work.md).
+Tyto dvě vlastnosti fungují dobře s [jednotkou práce](Unit-Of-Work.md).
 
-## Installation
+## Instalace
 
-Please install and configure EF Core according to [EF Core's integrated documentation](Entity-Framework-Core.md).
+Nainstalujte a nakonfigurujte EF Core podle [EF Core integrační dokumentace](Entity-Framework-Core.md).
 
-`Volo.Abp.Dapper` is the main nuget package for the Dapper integration. Install it to your project (for a layered application, to your data/infrastructure layer):
+`Volo.Abp.Dapper` je hlavní NuGet balík pro Dapper integraci. Nainstalujte jej proto do vašeho projektu (pro strukturovanou aplikaci do datové/infrastrukturní vrstvy):
 
 ```shell
 Install-Package Volo.Abp.Dapper
 ```
 
-Then add `AbpDapperModule` module dependency (`DependsOn` attribute) to your [module](Module-Development-Basics.md):
+Poté přidejte závislost na `AbpDapperModule` modulu (atribut `DependsOn`) do Vašeho [modulu](Module-Development-Basics.md):
 
 ````C#
 using Volo.Abp.Dapper;
@@ -32,11 +32,11 @@ namespace MyCompany.MyProject
 }
 ````
 
-## Implement Dapper Repository
+## Implementace Dapper repozitáře
 
-The following code implements the `Person` repository, which requires EF Core's `DbContext` (MyAppDbContext). You can inject `PersonDapperRepository` to call its methods.
+Následující kód implementuje repozitář `Person`, který vyžaduje `DbContext` z EF Core (MyAppDbContext). Můžete vložit `PersonDapperRepository` k volání jeho metod.
 
-`DbConnection` and `DbTransaction` are from the `DapperRepository` base class.
+`DbConnection` a `DbTransaction` jsou ze základní třídy `DapperRepository`.
 
 ```C#
 public class PersonDapperRepository : DapperRepository<MyAppDbContext>, ITransientDependency
