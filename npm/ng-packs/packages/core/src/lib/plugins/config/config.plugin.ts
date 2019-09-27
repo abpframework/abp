@@ -8,6 +8,8 @@ import clone from 'just-clone';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
+export let ABP_ROUTES = [] as ABP.FullRoute[];
+
 @Injectable()
 export class ConfigPlugin implements NgxsPlugin {
   private initialized: boolean = false;
@@ -38,27 +40,31 @@ export class ConfigPlugin implements NgxsPlugin {
 }
 
 function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): any {
+  /**
+   *
+   * @deprecated since version 0.9.0
+   */
   const abpRoutes: ABP.FullRoute[] = routes
     .filter(route => {
       return snq(() => route.data.routes.routes.find(r => r.path === route.path), false);
     })
     .reduce((acc, val) => [...acc, ...val.data.routes.routes], []);
+  ABP_ROUTES = [...ABP_ROUTES, ...abpRoutes];
 
-  wrappers = abpRoutes.filter(ar => ar.wrapper);
+  wrappers = ABP_ROUTES.filter(ar => ar.wrapper);
   const transformed = [] as ABP.FullRoute[];
   routes
-    .filter(route => (route.data || {}).routes && (route.component || route.loadChildren))
+    .filter(route => route.component || route.loadChildren)
     .forEach(route => {
-      const abpPackage = abpRoutes.find(
-        abp => abp.path.toLowerCase() === route.path.toLowerCase() && snq(() => route.data.routes.routes.length, false),
-      );
+      const abpPackage = ABP_ROUTES.find(abp => abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper);
+
       const { length } = transformed;
 
       if (abpPackage) {
         transformed.push(abpPackage);
       }
 
-      if (transformed.length === length) {
+      if (transformed.length === length && (route.data || {}).routes) {
         transformed.push({
           ...route.data.routes,
           path: route.path,

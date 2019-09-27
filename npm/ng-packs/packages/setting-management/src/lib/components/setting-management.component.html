@@ -13,20 +13,15 @@
 <div id="SettingManagementWrapper">
   <div class="card">
     <div class="card-body">
-      <div *ngIf="!settingManagementService.settings.length" class="text-center">
+      <div *ngIf="!settings.length" class="text-center">
         <i class="fa fa-spinner fa-spin"></i>
       </div>
       <div class="row">
         <div class="col-3">
           <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
             <li
-              *abpFor="
-                let setting of settingManagementService.settings;
-                trackBy: trackByFn;
-                orderBy: 'order';
-                orderDir: 'ASC'
-              "
-              (click)="settingManagementService.setSelected(setting)"
+              *abpFor="let setting of settings; trackBy: trackByFn"
+              (click)="selected = setting"
               class="nav-item"
               [abpPermission]="setting.requiredPolicy"
             >
@@ -34,20 +29,16 @@
                 class="nav-link"
                 [id]="setting.name + '-tab'"
                 role="tab"
-                [class.active]="setting.name === settingManagementService.selected.name"
+                [class.active]="setting.name === selected.name"
                 >{{ setting.name | abpLocalization }}</a
               >
             </li>
           </ul>
         </div>
         <div class="col-9">
-          <div *ngIf="settingManagementService.settings.length" class="tab-content">
-            <div
-              class="tab-pane fade show active"
-              [id]="settingManagementService.selected.name + '-tab'"
-              role="tabpanel"
-            >
-              <router-outlet></router-outlet>
+          <div *ngIf="settings.length" class="tab-content">
+            <div class="tab-pane fade show active" [id]="selected.name + '-tab'" role="tabpanel">
+              <ng-container *ngComponentOutlet="selected.component"></ng-container>
             </div>
           </div>
         </div>

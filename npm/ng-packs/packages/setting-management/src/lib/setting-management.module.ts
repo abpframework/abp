@@ -1,14 +1,11 @@
 import { CoreModule } from '@abp/ng.core';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgModule } from '@angular/core';
-import { SettingLayoutComponent } from './components/setting-layout.component';
 import { SettingManagementRoutingModule } from './setting-management-routing.module';
-
-export const SETTING_LAYOUT = SettingLayoutComponent;
+import { SettingManagementComponent } from './components/setting-management.component';
 
 @NgModule({
-  declarations: [SETTING_LAYOUT],
+  declarations: [SettingManagementComponent],
   imports: [SettingManagementRoutingModule, CoreModule, ThemeSharedModule],
-  entryComponents: [SETTING_LAYOUT],
 })
 export class SettingManagementModule {}
