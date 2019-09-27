@@ -56,7 +56,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
   routes
     .filter(route => route.component || route.loadChildren)
     .forEach(route => {
-      const abpPackage = ABP_ROUTES.find(abp => abp.path.toLowerCase() === route.path.toLowerCase());
+      const abpPackage = ABP_ROUTES.find(abp => abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper);
 
       const { length } = transformed;
 
