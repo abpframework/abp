@@ -16,25 +16,30 @@ import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
 import snq from 'snq';
 
-const DEFAULTS = {
+export const DEFAULT_ERROR_MESSAGES = {
   defaultError: {
-    message: 'An error has occurred!',
+    title: 'An error has occurred!',
     details: 'Error detail not sent by server.',
   },
-
   defaultError401: {
-    message: 'You are not authenticated!',
+    title: 'You are not authenticated!',
     details: 'You should be authenticated (sign in) in order to perform this operation.',
   },
-
   defaultError403: {
-    message: 'You are not authorized!',
+    title: 'You are not authorized!',
     details: 'You are not allowed to perform this operation.',
   },
-
   defaultError404: {
-    message: 'Resource not found!',
+    title: 'Resource not found!',
     details: 'The resource requested could not found on the server.',
+  },
+  defaultError500: {
+    title: '500',
+    details: 'AbpAccount::InternalServerErrorMessage',
+  },
+  defaultErrorUnknown: {
+    title: 'Unknown Error',
+    details: 'AbpAccount::InternalServerErrorMessage',
   },
 };
 
@@ -51,7 +56,7 @@ export class ErrorHandler {
   ) {
     actions.pipe(ofActionSuccessful(RestOccurError)).subscribe(res => {
       const { payload: err = {} as HttpErrorResponse | any } = res;
-      const body = snq(() => (err as HttpErrorResponse).error.error, DEFAULTS.defaultError.message);
+      const body = snq(() => (err as HttpErrorResponse).error.error, DEFAULT_ERROR_MESSAGES.defaultError.title);
 
       if (err instanceof HttpErrorResponse && err.headers.get('_AbpErrorFormat')) {
         const confirmation$ = this.showError(null, null, body);
@@ -64,35 +69,39 @@ export class ErrorHandler {
       } else {
         switch ((err as HttpErrorResponse).status) {
           case 401:
-            this.showError(DEFAULTS.defaultError401.details, DEFAULTS.defaultError401.message).subscribe(() =>
-              this.navigateToLogin(),
-            );
+            this.showError(
+              DEFAULT_ERROR_MESSAGES.defaultError401.details,
+              DEFAULT_ERROR_MESSAGES.defaultError401.title,
+            ).subscribe(() => this.navigateToLogin());
             break;
           case 403:
             this.createErrorComponent({
-              title: DEFAULTS.defaultError403.message,
-              details: DEFAULTS.defaultError403.details,
+              title: DEFAULT_ERROR_MESSAGES.defaultError403.title,
+              details: DEFAULT_ERROR_MESSAGES.defaultError403.details,
             });
             break;
           case 404:
-            this.showError(DEFAULTS.defaultError404.details, DEFAULTS.defaultError404.message);
+            this.showError(
+              DEFAULT_ERROR_MESSAGES.defaultError404.details,
+              DEFAULT_ERROR_MESSAGES.defaultError404.title,
+            );
             break;
           case 500:
             this.createErrorComponent({
-              title: '500',
-              details: 'AbpAccount::InternalServerErrorMessage',
+              title: DEFAULT_ERROR_MESSAGES.defaultError500.title,
+              details: DEFAULT_ERROR_MESSAGES.defaultError500.details,
             });
             break;
           case 0:
             if ((err as HttpErrorResponse).statusText === 'Unknown Error') {
               this.createErrorComponent({
-                title: 'Unknown Error',
-                details: 'AbpAccount::InternalServerErrorMessage',
+                title: DEFAULT_ERROR_MESSAGES.defaultErrorUnknown.title,
+                details: DEFAULT_ERROR_MESSAGES.defaultErrorUnknown.details,
               });
             }
             break;
           default:
-            this.showError(DEFAULTS.defaultError.details, DEFAULTS.defaultError.message);
+            this.showError(DEFAULT_ERROR_MESSAGES.defaultError.details, DEFAULT_ERROR_MESSAGES.defaultError.title);
             break;
         }
       }
@@ -105,7 +114,7 @@ export class ErrorHandler {
         message = body.details;
         title = body.message;
       } else {
-        message = body.message || DEFAULTS.defaultError.message;
+        message = body.message || DEFAULT_ERROR_MESSAGES.defaultError.title;
       }
     }
 
@@ -125,7 +134,7 @@ export class ErrorHandler {
 
   createErrorComponent(instance: Partial<ErrorComponent>) {
     const renderer = this.rendererFactory.createRenderer(null, null);
-    const host = renderer.selectRootElement('app-root', true);
+    const host = renderer.selectRootElement(document.body, true);
 
     const componentRef = this.cfRes.resolveComponentFactory(ErrorComponent).create(this.injector);
 
