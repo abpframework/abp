@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpPermissionManagement")]
+    [ConnectionStringName(AbpPermissionManagementConsts.ConnectionStringName)]
     public class PermissionManagementDbContext : AbpDbContext<PermissionManagementDbContext>, IPermissionManagementDbContext
     {
         public static string TablePrefix { get; set; } = AbpPermissionManagementConsts.DefaultDbTablePrefix;

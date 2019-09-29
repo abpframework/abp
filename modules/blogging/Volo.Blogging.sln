@@ -37,11 +37,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.Application.T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.MongoDB", "src\Volo.Blogging.MongoDB\Volo.Blogging.MongoDB.csproj", "{98C2D36A-F874-405D-8565-9CE59438E879}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.BloggingTestApp.MongoDb", "app\Volo.BloggingTestApp.MongoDb\Volo.BloggingTestApp.MongoDb.csproj", "{4C818374-2DE8-422F-8585-975E8366DB26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.BloggingTestApp.MongoDB", "app\Volo.BloggingTestApp.MongoDB\Volo.BloggingTestApp.MongoDB.csproj", "{4C818374-2DE8-422F-8585-975E8366DB26}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.MongoDB.Tests", "test\Volo.Blogging.MongoDB.Tests\Volo.Blogging.MongoDB.Tests.csproj", "{0A29F64C-11F1-40B6-8E6D-91E86823775E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Blogging.Domain.Tests", "test\Volo.Blogging.Domain.Tests\Volo.Blogging.Domain.Tests.csproj", "{B6D7EF20-9921-490A-AA95-47E3E174DC9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Blogging.Domain.Tests", "test\Volo.Blogging.Domain.Tests\Volo.Blogging.Domain.Tests.csproj", "{B6D7EF20-9921-490A-AA95-47E3E174DC9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

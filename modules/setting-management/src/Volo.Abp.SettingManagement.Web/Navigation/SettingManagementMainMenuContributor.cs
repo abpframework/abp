@@ -1,27 +1,32 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Threading.Tasks;
-using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.SettingManagement.Web.Pages.SettingManagement;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.SettingManagement.Localization;
 
 namespace Volo.Abp.SettingManagement.Web.Navigation
 {
     public class SettingManagementMainMenuContributor : IMenuContributor
     {
-        public Task ConfigureMenuAsync(MenuConfigurationContext context)
+        public async Task ConfigureMenuAsync(MenuConfigurationContext context)
         {
             if (context.Menu.Name != StandardMenus.Main)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var settingManagementPageOptions = context.ServiceProvider.GetRequiredService<IOptions<SettingManagementPageOptions>>().Value;
-            if (!settingManagementPageOptions.Contributors.Any())
+            var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
+            if (
+                !settingManagementPageOptions.Contributors.Any() ||
+                !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext))
+                )
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<AbpSettingManagementResource>>();
@@ -36,8 +41,20 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
                         icon: "fa fa-cog"
                     )
                 );
+        }
 
-            return Task.CompletedTask;
+        private async Task<bool> CheckAnyOfPagePermissionsGranted(
+            SettingManagementPageOptions settingManagementPageOptions,
+            SettingPageCreationContext settingPageCreationContext)
+        {
+            foreach (var contributor in settingManagementPageOptions.Contributors)
+            {
+                if (await contributor.CheckPermissionsAsync(settingPageCreationContext))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

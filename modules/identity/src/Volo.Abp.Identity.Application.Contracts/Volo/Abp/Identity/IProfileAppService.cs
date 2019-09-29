@@ -9,6 +9,6 @@ namespace Volo.Abp.Identity
 
         Task<ProfileDto> UpdateAsync(UpdateProfileDto input);
 
-        Task ChangePasswordAsync(string currentPassword, string newPassword);
+        Task ChangePasswordAsync(ChangePasswordInput input);
     }
 }

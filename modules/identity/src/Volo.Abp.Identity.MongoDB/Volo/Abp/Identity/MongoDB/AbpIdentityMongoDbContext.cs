@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
 {
-    [ConnectionStringName("AbpIdentity")]
+    [ConnectionStringName(AbpIdentityConsts.ConnectionStringName)]
     public class AbpIdentityMongoDbContext : AbpMongoDbContext, IAbpIdentityMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;

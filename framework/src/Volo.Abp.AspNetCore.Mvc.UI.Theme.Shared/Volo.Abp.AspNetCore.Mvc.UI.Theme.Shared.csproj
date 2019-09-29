@@ -1,9 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -33,12 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
+    <ProjectReference Include="..\Volo.Abp.AspNetCore.Mvc.UI.Widgets\Volo.Abp.AspNetCore.Mvc.UI.Widgets.csproj" />
   </ItemGroup>
 
 </Project>

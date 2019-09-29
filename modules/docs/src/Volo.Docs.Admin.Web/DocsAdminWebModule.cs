@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.Localization;
+﻿using Localization.Resources.AbpUi;
+using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Localization;
@@ -37,15 +38,6 @@ namespace Volo.Docs.Admin
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsAdminWebModule>("Volo.Docs.Admin");
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<DocsResource>()
-                    .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiModule))
-                    .AddVirtualJson("/Localization/Resources/Docs/Web");
             });
 
             Configure<AbpAutoMapperOptions>(options =>

@@ -11,7 +11,7 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.MongoDB
 {
-    [ConnectionStringName("Blogging")]
+    [ConnectionStringName(BloggingConsts.ConnectionStringName)]
     public class BloggingMongoDbContext : AbpMongoDbContext, IBloggingMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = BloggingConsts.DefaultDbTablePrefix;

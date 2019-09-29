@@ -5,5 +5,7 @@
         public const string DefaultDbTablePrefix = "Docs";
 
         public const string DefaultDbSchema = null;
+
+        public const string ConnectionStringName = "Docs";
     }
 }

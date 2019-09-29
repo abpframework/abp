@@ -1,4 +1,6 @@
-﻿namespace Volo.Docs.Admin
+﻿using Volo.Abp.Reflection;
+
+namespace Volo.Docs.Admin
 {
     public class DocsAdminPermissions
     {
@@ -14,14 +16,7 @@
 
         public static string[] GetAll()
         {
-            return new[]
-            {
-                GroupName,
-                Projects.Default,
-                Projects.Delete,
-                Projects.Update,
-                Projects.Create,
-            };
+            return ReflectionHelper.GetPublicConstantsRecursively(typeof(DocsAdminPermissions));
         }
     }
 }

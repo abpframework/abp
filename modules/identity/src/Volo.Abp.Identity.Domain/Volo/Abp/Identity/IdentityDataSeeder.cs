@@ -46,7 +46,7 @@ namespace Volo.Abp.Identity
             //"admin" user
             const string adminUserName = "admin";
             var adminUser = await _userRepository.FindByNormalizedUserNameAsync(
-                _lookupNormalizer.Normalize(adminUserName)
+                _lookupNormalizer.NormalizeName(adminUserName)
             );
 
             if (adminUser != null)
@@ -69,7 +69,7 @@ namespace Volo.Abp.Identity
 
             //"admin" role
             const string adminRoleName = "admin";
-            var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize(adminRoleName));
+            var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName(adminRoleName));
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(

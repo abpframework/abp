@@ -1,25 +1,21 @@
-using System.Collections;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Reflection;
 
 namespace Volo.Abp.Validation
 {
     public class ObjectValidator : IObjectValidator, ITransientDependency
     {
-        private const int MaxRecursiveParameterValidationDepth = 8;
+        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
+        protected AbpValidationOptions Options { get; }
 
-        private readonly AbpValidationOptions _options;
-        private readonly IDataAnnotationValidator _dataAnnotationValidator;
-
-        public ObjectValidator(IOptions<AbpValidationOptions> options, IDataAnnotationValidator dataAnnotationValidator)
+        public ObjectValidator(IOptions<AbpValidationOptions> options, IHybridServiceScopeFactory serviceScopeFactory)
         {
-            _dataAnnotationValidator = dataAnnotationValidator;
-            _options = options.Value;
+            ServiceScopeFactory = serviceScopeFactory;
+            Options = options.Value;
         }
 
         public virtual void Validate(object validatingObject, string name = null, bool allowNull = false)
@@ -37,75 +33,35 @@ namespace Volo.Abp.Validation
 
         public virtual List<ValidationResult> GetErrors(object validatingObject, string name = null, bool allowNull = false)
         {
-            var errors = new List<ValidationResult>();
-
-            if (validatingObject == null && !allowNull)
-            {
-                errors.Add(
-                    name == null
-                        ? new ValidationResult("Given object is null!")
-                        : new ValidationResult(name + " is null!", new[] { name })
-                );
-
-                return errors;
-            }
-
-            ValidateObjectRecursively(errors, validatingObject, currentDepth: 1);
-
-            return errors;
-        }
-
-        protected virtual void ValidateObjectRecursively(List<ValidationResult> errors, object validatingObject, int currentDepth)
-        {
-            if (currentDepth > MaxRecursiveParameterValidationDepth)
-            {
-                return;
-            }
-
             if (validatingObject == null)
             {
-                return;
-            }
-
-            errors.AddRange(_dataAnnotationValidator.GetErrors(validatingObject));
-
-            //Validate items of enumerable
-            if (validatingObject is IEnumerable)
-            {
-                if (!(validatingObject is IQueryable))
+                if (allowNull)
                 {
-                    foreach (var item in (validatingObject as IEnumerable))
+                    return new List<ValidationResult>(); //TODO: Returning an array would be more performent
+                }
+                else
+                {
+                    return new List<ValidationResult>
                     {
-                        ValidateObjectRecursively(errors, item, currentDepth + 1);
-                    }
+                        name == null
+                            ? new ValidationResult("Given object is null!")
+                            : new ValidationResult(name + " is null!", new[] {name})
+                    };
                 }
-
-                return;
             }
 
-            var validatingObjectType = validatingObject.GetType();
+            var context = new ObjectValidationContext(validatingObject);
 
-            //Do not recursively validate for primitive objects
-            if (TypeHelper.IsPrimitiveExtended(validatingObjectType))
+            using (var scope = ServiceScopeFactory.CreateScope())
             {
-                return;
-            }
-
-            if (_options.IgnoredTypes.Any(t => t.IsInstanceOfType(validatingObject)))
-            {
-                return;
-            }
-
-            var properties = TypeDescriptor.GetProperties(validatingObject).Cast<PropertyDescriptor>();
-            foreach (var property in properties)
-            {
-                if (property.Attributes.OfType<DisableValidationAttribute>().Any())
+                foreach (var contributorType in Options.ObjectValidationContributors)
                 {
-                    continue;
+                    var contributor = (IObjectValidationContributor) scope.ServiceProvider.GetRequiredService(contributorType);
+                    contributor.AddErrors(context);
                 }
-
-                ValidateObjectRecursively(errors, property.GetValue(validatingObject), currentDepth + 1);
             }
+
+            return context.Errors;
         }
     }
 }

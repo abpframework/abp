@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Volo.Abp.DependencyInjection;
@@ -10,9 +11,14 @@ namespace Volo.Abp.Json.Newtonsoft
     {
         private readonly IClock _clock;
 
-        public AbpJsonIsoDateTimeConverter(IClock clock)
+        public AbpJsonIsoDateTimeConverter(IClock clock, IOptions<AbpJsonOptions> abpJsonOptions)
         {
             _clock = clock;
+
+            if (abpJsonOptions.Value.DefaultDateTimeFormat != null)
+            {
+                DateTimeFormat = abpJsonOptions.Value.DefaultDateTimeFormat;
+            }
         }
 
         public override bool CanConvert(Type objectType)

@@ -6,5 +6,7 @@ namespace Volo.Abp.AuditLogging
         public const string DefaultDbTablePrefix = "Abp";
 
         public const string DefaultDbSchema = null;
+
+        public const string ConnectionStringName = "AbpAuditLogging";
     }
 }

@@ -24,6 +24,8 @@ namespace Volo.Abp.IdentityServer.ApiResources
 
         public virtual List<ApiResourceClaim> UserClaims { get; protected set; }
 
+        public virtual Dictionary<string, string> Properties { get; protected set; }
+
         protected ApiResource()
         {
 
@@ -45,6 +47,7 @@ namespace Volo.Abp.IdentityServer.ApiResources
             Secrets = new List<ApiSecret>();
             Scopes = new List<ApiScope>();
             UserClaims = new List<ApiResourceClaim>();
+            Properties = new Dictionary<string, string>();
 
             Scopes.Add(new ApiScope(id, name, displayName, description));
         }

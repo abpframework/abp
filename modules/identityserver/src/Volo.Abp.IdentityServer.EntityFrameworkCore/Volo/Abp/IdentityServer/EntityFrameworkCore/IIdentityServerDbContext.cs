@@ -8,7 +8,7 @@ using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpIdentityServer")]
+    [ConnectionStringName(AbpIdentityServerConsts.ConnectionStringName)]
     public interface IIdentityServerDbContext : IEfCoreDbContext
     {
         DbSet<ApiResource> ApiResources { get; set; }

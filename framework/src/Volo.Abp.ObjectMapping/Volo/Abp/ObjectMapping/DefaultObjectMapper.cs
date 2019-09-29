@@ -6,7 +6,7 @@ namespace Volo.Abp.ObjectMapping
 {
     //TODO: It can be slow to always check if service is available. Test it and optimize if necessary.
 
-    public class DefaultObjectMapper : IObjectMapper, ISingletonDependency
+    public class DefaultObjectMapper : IObjectMapper, ITransientDependency
     {
         private readonly IServiceProvider _serviceProvider;
 

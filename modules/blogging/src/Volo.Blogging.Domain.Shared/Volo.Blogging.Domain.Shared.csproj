@@ -10,6 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <content Remove="Volo\Blogging\Localization\Resources\*.json" />
+    <EmbeddedResource Include="Volo\Blogging\Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>
 

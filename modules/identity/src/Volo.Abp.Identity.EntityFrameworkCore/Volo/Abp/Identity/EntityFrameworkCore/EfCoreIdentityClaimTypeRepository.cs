@@ -24,9 +24,15 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                        .CountAsync(ct => ct.Name == name) > 0;
         }
 
-        public async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount)
+        public async Task<List<IdentityClaimType>> GetListAsync(string sorting, int maxResultCount, int skipCount, string filter)
         {
-            var identityClaimTypes = await DbSet.OrderBy(sorting ?? "name desc")
+            var identityClaimTypes = await DbSet
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                )
+                .OrderBy(sorting ?? "name desc")
                 .PageBy(skipCount, maxResultCount)
                 .ToListAsync();
 

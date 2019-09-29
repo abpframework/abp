@@ -45,16 +45,6 @@ namespace Volo.Abp.Identity.Web
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });
 
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddBaseTypes(
-                        typeof(AbpValidationResource),
-                        typeof(AbpUiResource)
-                    ).AddVirtualJson("/Localization/Resources/AbpIdentity");
-            });
-
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpIdentityWebAutoMapperProfile>(validate: true);
@@ -68,15 +58,6 @@ namespace Volo.Abp.Identity.Web
                 options.Conventions.AuthorizePage("/Identity/Roles/Index", IdentityPermissions.Roles.Default);
                 options.Conventions.AuthorizePage("/Identity/Roles/CreateModal", IdentityPermissions.Roles.Create);
                 options.Conventions.AuthorizePage("/Identity/Roles/EditModal", IdentityPermissions.Roles.Update);
-            });
-
-            Configure<BundlingOptions>(options =>
-            {
-                options
-                    .ScriptBundles
-                    .Get(StandardBundles.Scripts.Global)
-                    .AddFiles("/Pages/Identity/Shared/change-password-modal.js")
-                    .AddFiles("/Pages/Identity/Shared/personal-settings-modal.js");
             });
         }
     }

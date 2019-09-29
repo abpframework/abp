@@ -3,60 +3,26 @@
   .hero-section .hero-articles {
     position: relative;
     overflow: hidden; }
-    .hero-section .hero-articles .hero-content {
-      position: absolute;
-      left: 12%;
-      right: 12%;
-      bottom: 80px;
-      z-index: 4;
-      text-align: center; }
-      .hero-section .hero-articles .hero-content h2 {
-        margin-top: 0;
-        font-size: 2.5em;
-        font-weight: bold; }
-      .hero-section .hero-articles .hero-content a {
-        color: white;
-        text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); }
-      .hero-section .hero-articles .hero-content p {
-        color: white; }
+    .hero-section .hero-articles .hero-content h2 {
+      margin-top: .5rem;
+      font-size: 2em;
+      font-weight: bold; }
     .hero-section .hero-articles .tags .tag {
       background: rgba(208, 208, 208, 0.3);
       color: #fff !important; }
       .hero-section .hero-articles .tags .tag:hover {
         background: white;
         color: black !important; }
-    .hero-section .hero-articles .article-owner {
-      text-align: center;
-      position: relative;
-      z-index: 12; }
-      .hero-section .hero-articles .article-owner .article-infos {
-        color: black; }
-        .hero-section .hero-articles .article-owner .article-infos a {
-          color: black; }
-        .hero-section .hero-articles .article-owner .article-infos .seperator {
-          margin: 0 4px;
-          color: rgba(255, 255, 255, 0.2); }
-        .hero-section .hero-articles .article-owner .article-infos img.article-avatar {
-          width: 64px;
-          margin: -25px 10px 0px 0;
-          border: 3px solid #fff;
-          display: inline-block;
-          border-radius: 50%; }
-    .hero-section .hero-articles .img-container {
-      min-height: 320px; }
-      .hero-section .hero-articles .img-container img {
-        filter: grayscale(10%); }
-      .hero-section .hero-articles .img-container::after {
-        content: "";
-        display: block;
-        position: absolute;
-        z-index: 1;
-        bottom: 0px;
-        width: 100%;
-        top: 1% !important;
-        background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.75) 89%, rgba(0, 0, 0, 0.78) 93%) !important;
-        transition: .2s all ease-in-out;
-        opacity: .9; }
+    .hero-section .hero-articles .article-owner .article-infos {
+      color: black; }
+      .hero-section .hero-articles .article-owner .article-infos .seperator {
+        margin: 0 4px;
+        color: rgba(255, 255, 255, 0.2); }
+      .hero-section .hero-articles .article-owner .article-infos img.article-avatar {
+        display: inline-block;
+        border-radius: 50%; }
+    .hero-section .hero-articles .img-container img {
+      width: 100%; }
     .hero-section .hero-articles:hover .img-container::after {
       opacity: 1; }
 
@@ -68,10 +34,15 @@
     margin: 0 4px;
     color: rgba(0, 0, 0, 0.2); }
   .article-owner .article-infos img.article-avatar {
-    width: 30px;
+    width: 48px;
     margin: -1px 4px 0 0;
     display: inline-block;
     border-radius: 50%; }
+
+.user-card h5 span {
+  font-weight: 300;
+  opacity: .5;
+  padding: 0 5px; }
 
 .card-articles .card-content {
   padding: 10px 0px 10px; }
@@ -111,19 +82,32 @@
     .user-link-icons a:hover {
       color: #fff; }
 
-.tags .tag {
-  display: inline-block;
-  padding: 2px 8px;
-  background: rgba(208, 208, 208, 0.3);
-  border-radius: 30px;
-  margin: 0 1px 3px 0;
-  color: #b1b1b1 !important;
-  font-size: .7em;
-  line-height: 1.6em;
-  text-transform: uppercase; }
-  .tags .tag:hover {
-    background: black;
-    color: white !important; }
+.tags {
+  margin: 2rem 0;
+  padding: 0 0 1.25rem 0; }
+  .tags .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(208, 208, 208, 0.3);
+    border-radius: 4px;
+    margin: 0 2px 3px 0;
+    color: #b1b1b1 !important;
+    font-size: .85em;
+    line-height: 1.6em;
+    text-transform: uppercase;
+    transition: .25s;
+    text-decoration: none; }
+    .tags .tag:hover {
+      background: black;
+      color: white !important; }
+
+.hero-section .tags {
+  margin: 1rem 0;
+  padding: 0 0 .5rem 0; }
+
+.list-group-item .tags {
+  margin: 1rem 0 0;
+  padding: 0 0; }
 
 .popular-tags a {
   display: block;

@@ -13,7 +13,9 @@ namespace Volo.Abp.VirtualFileSystem
         private readonly IFileProvider _hybridFileProvider;
         private readonly VirtualFileSystemOptions _options;
 
-        public VirtualFileProvider(IOptions<VirtualFileSystemOptions> options, IDynamicFileProvider dynamicFileProvider)
+        public VirtualFileProvider(
+            IOptions<VirtualFileSystemOptions> options,
+            IDynamicFileProvider dynamicFileProvider)
         {
             _options = options.Value;
             _hybridFileProvider = CreateHybridProvider(dynamicFileProvider);
@@ -69,7 +71,7 @@ namespace Volo.Abp.VirtualFileSystem
                     true
                 );
             }
-            
+
             private Dictionary<string, IFileInfo> CreateFiles()
             {
                 var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);

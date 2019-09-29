@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    [ConnectionStringName("AbpFeatureManagement")]
+    [ConnectionStringName(FeatureManagementConsts.ConnectionStringName)]
     public class FeatureManagementMongoDbContext : AbpMongoDbContext, IFeatureManagementMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = FeatureManagementConsts.DefaultDbTablePrefix;

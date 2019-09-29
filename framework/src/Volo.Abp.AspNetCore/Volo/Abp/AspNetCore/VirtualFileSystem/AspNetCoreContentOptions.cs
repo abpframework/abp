@@ -22,7 +22,11 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
                 ".css",
                 ".png",
                 ".jpg",
-                ".jpeg"
+                ".jpeg",
+                ".woff",
+                ".woff2",
+                ".tff",
+                ".otf"
             };
         }
     }

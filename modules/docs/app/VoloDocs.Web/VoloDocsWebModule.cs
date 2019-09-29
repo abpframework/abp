@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -29,7 +28,8 @@ using Volo.Docs;
 using Volo.Docs.Admin;
 using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
-using VoloDocs.Web.Utils;
+using Localization.Resources.AbpUi;
+using Microsoft.Extensions.Hosting;
 
 namespace VoloDocs.Web
 {
@@ -61,6 +61,11 @@ namespace VoloDocs.Web
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
+
+            Configure<DocsUiOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
 
             Configure<DbConnectionOptions>(options =>
             {
@@ -98,8 +103,7 @@ namespace VoloDocs.Web
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
-
-
+            
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<VoloDocsWebModule>("VoloDocs.Web");
@@ -107,14 +111,15 @@ namespace VoloDocs.Web
 
             Configure<AbpLocalizationOptions>(options =>
             {
-                options
-                    .Languages
-                    .Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("cs", "cs", "Čeština"));
+                options.Languages.Add(new LanguageInfo("en", "en", "English"));
+                options.Languages.Add(new LanguageInfo("tr", "tr", "Türkçe"));
+                options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "简体中文"));
 
                 options.Resources
                     .Get<DocsResource>()
                     .AddBaseTypes(typeof(AbpValidationResource))
-                    .AddBaseTypes(typeof(AbpUiModule))
+                    .AddBaseTypes(typeof(AbpUiResource))
                     .AddVirtualJson("/Localization/Resources/VoloDocs/Web");
             });
 

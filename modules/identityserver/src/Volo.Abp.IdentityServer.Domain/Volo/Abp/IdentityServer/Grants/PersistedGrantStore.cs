@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using IdentityServer4.Stores;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Guids;
 using Volo.Abp.ObjectMapping;
 
@@ -22,15 +23,16 @@ namespace Volo.Abp.IdentityServer.Grants
 
         public virtual async Task StoreAsync(IdentityServer4.Models.PersistedGrant grant)
         {
-            var entity = _objectMapper.Map<IdentityServer4.Models.PersistedGrant, PersistedGrant>(grant);
-            var existing =  await _persistentGrantRepository.FindByKeyAsync(grant.Key);
-            if (existing == null)
+            var entity =  await _persistentGrantRepository.FindByKeyAsync(grant.Key);
+            if (entity == null)
             {
-                entity.Id = _guidGenerator.Create();
+                entity = _objectMapper.Map<IdentityServer4.Models.PersistedGrant, PersistedGrant>(grant);
+                EntityHelper.TrySetId(entity, () => _guidGenerator.Create());
                 await _persistentGrantRepository.InsertAsync(entity);
             }
             else
             {
+                _objectMapper.Map(grant, entity);
                 await _persistentGrantRepository.UpdateAsync(entity);
             }
         }

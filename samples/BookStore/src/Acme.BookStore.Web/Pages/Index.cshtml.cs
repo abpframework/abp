@@ -1,4 +1,4 @@
-﻿namespace Acme.BookStore.Pages
+﻿namespace Acme.BookStore.Web.Pages
 {
     public class IndexModel : BookStorePageModelBase
     {

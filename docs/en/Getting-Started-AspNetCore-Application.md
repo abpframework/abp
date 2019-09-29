@@ -159,6 +159,13 @@ public class Program
 {
     public static void Main(string[] args)
     {
+        /*
+            https://github.com/aspnet/AspNetCore/issues/4206#issuecomment-445612167
+            CurrentDirectoryHelpers exists in: \framework\src\Volo.Abp.AspNetCore.Mvc\Microsoft\AspNetCore\InProcess\CurrentDirectoryHelpers.cs
+            Will remove CurrentDirectoryHelpers.cs when upgrade to ASP.NET Core 3.0.
+        */
+        CurrentDirectoryHelpers.SetCurrentDirectory();
+
         BuildWebHostInternal(args).Run();
     }
 
@@ -166,6 +173,7 @@ public class Program
         new WebHostBuilder()
             .UseKestrel()
             .UseContentRoot(Directory.GetCurrentDirectory())
+            .UseIIS()
             .UseIISIntegration()
             .UseStartup<Startup>()
             .Build();

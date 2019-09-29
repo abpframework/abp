@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.MongoDB;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
     public class MongoTenantRepository : MongoDbRepository<ITenantManagementMongoDbContext, Tenant, Guid>, ITenantRepository
     {
@@ -25,7 +25,13 @@ namespace Volo.Abp.TenantManagement.MongoDb
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .FirstOrDefaultAsync(t => t.Name == name, cancellationToken);
+                .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
+        }
+
+        public Tenant FindByName(string name, bool includeDetails = true)
+        {
+            return GetMongoQueryable()
+                .FirstOrDefault(t => t.Name == name);
         }
 
         public virtual async Task<List<Tenant>> GetListAsync(
@@ -45,7 +51,17 @@ namespace Volo.Abp.TenantManagement.MongoDb
                 .OrderBy(sorting ?? nameof(Tenant.Name))
                 .As<IMongoQueryable<Tenant>>()
                 .PageBy<Tenant, IMongoQueryable<Tenant>>(skipCount, maxResultCount)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .WhereIf<Tenant, IMongoQueryable<Tenant>>(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                ).CountAsync(cancellationToken: cancellationToken);
         }
     }
 }

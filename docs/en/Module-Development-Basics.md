@@ -112,7 +112,7 @@ Lastly, you can override ``OnApplicationShutdown`` method if you want to execute
 
 ## Module Dependencies
 
-In a modular application, it's not unusual for one module to depend upon another module(s). An Abp module must declare ``[DependsOn]`` attribute if it does have a dependcy upon another module, as shown below:
+In a modular application, it's not unusual for one module to depend upon another module(s). An Abp module must declare ``[DependsOn]`` attribute if it does have a dependency upon another module, as shown below:
 
 ````C#
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]

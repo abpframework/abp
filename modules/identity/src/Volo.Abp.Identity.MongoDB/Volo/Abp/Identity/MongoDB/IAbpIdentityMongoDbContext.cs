@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
 {
-    [ConnectionStringName("AbpIdentity")]
+    [ConnectionStringName(AbpIdentityConsts.ConnectionStringName)]
     public interface IAbpIdentityMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<IdentityUser> Users { get; }

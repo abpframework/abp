@@ -1,0 +1,20 @@
+{
+  "culture": "pl",
+  "texts": {
+    "Menu:TenantManagement": "Zarządzanie tenantami",
+    "Tenants": "Tenanty",
+    "NewTenant": "Nowy tenant",
+    "TenantName": "Nazwa tenantu",
+    "DisplayName:TenantName": "Nazwa tenantu",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' zostanie usunięty. Czy na pewno?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Domyślny Connection String",
+    "DisplayName:UseSharedDatabase": "Użyj współdzielonej bazy danych",
+    "Permission:TenantManagement": "Zarządzanie tenantami",
+    "Permission:Create": "Utwórz",
+    "Permission:Edit": "Edytuj",
+    "Permission:Delete": "Usuń",
+    "Permission:ManageConnectionStrings": "Zarządzaj connection string'ami",
+    "Permission:ManageFeatures": "Zarządzaj fukcjami"
+  }
+}

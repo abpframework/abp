@@ -34,7 +34,10 @@ namespace Volo.Blogging.Pages.Blog
             var closingTag = "</p>";
 
             var html = RenderMarkdownToString(content);
-
+            if (string.IsNullOrWhiteSpace(html))
+            {
+                return "";
+            }
             var splittedHtml = html.Split(closingTag);
 
             if (splittedHtml.Length < 1)
@@ -55,6 +58,11 @@ namespace Volo.Blogging.Pages.Blog
 
         public IHtmlContent RenderMarkdownToHtml(string content)
         {
+            if(content.IsNullOrWhiteSpace())
+            {
+                return new HtmlString("");
+            }
+            
             byte[] bytes = Encoding.Default.GetBytes(content);
             var utf8Content = Encoding.UTF8.GetString(bytes);
 
@@ -65,6 +73,11 @@ namespace Volo.Blogging.Pages.Blog
 
         public string RenderMarkdownToString(string content)
         {
+            if (content.IsNullOrWhiteSpace())
+            {
+                return "";
+            }
+
             byte[] bytes = Encoding.Default.GetBytes(content);
             var utf8Content = Encoding.UTF8.GetString(bytes);
 

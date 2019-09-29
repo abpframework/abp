@@ -1,0 +1,11 @@
+﻿{
+  "culture": "cs",
+  "texts": {
+    "Hello <b>{0}</b>.": "Ahoj <b>{0}</b>.",
+    "Car": "Auto",
+    "CarPlural": "Auta",
+    "MaxLenghtErrorMessage": "Toto pole může mít nanejvýš '{0}' znaků",
+    "Universe": "Vesmír",
+    "FortyTwo": "Čtyřicet dva"
+  }
+}

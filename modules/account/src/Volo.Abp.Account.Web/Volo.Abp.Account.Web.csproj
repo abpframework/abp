@@ -3,35 +3,41 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Abp.Account.Web</AssemblyName>
     <PackageId>Volo.Abp.Account.Web</PackageId>
-    <IsPackable>true</IsPackable>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <RootNamespace>Volo.Abp.Account.Web</RootNamespace>
+    <IsPackable>true</IsPackable>
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Modules\**\*.*" Exclude="*.cs" />
-    <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
-    <EmbeddedResource Include="Localization\**\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <EmbeddedResource Include="Modules\**\*.cshtml" />
+    <EmbeddedResource Include="Modules\**\*.js" />
+    <EmbeddedResource Include="Modules\**\*.css" />
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Pages\**\*.css" />
     <Content Remove="Modules\**\*.cshtml" />
+    <Content Remove="Modules\**\*.js" />
+    <Content Remove="Modules\**\*.css" />
     <Content Remove="Pages\**\*.cshtml" />
-    <Content Remove="Localization\**\*.json" />
+    <Content Remove="Pages\**\*.js" />
+    <Content Remove="Pages\**\*.css" />
     <Content Remove="Properties\launchSettings.json" />
+    <None Remove="Pages\Account\Manage.js" />
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.AspNetCore\Volo.Abp.Identity.AspNetCore.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AutoMapper\Volo.Abp.AutoMapper.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Account.HttpApi\Volo.Abp.Account.HttpApi.csproj" />
   </ItemGroup>
 
 </Project>

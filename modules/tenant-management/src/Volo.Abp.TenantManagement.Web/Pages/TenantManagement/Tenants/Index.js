@@ -25,7 +25,7 @@
                             [
                                 {
                                     text: l('Edit'),
-                                    visible: function () { return true; }, //TODO: Check permission
+                                    visible: abp.auth.isGranted('AbpTenantManagement.Tenants.Update'),
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
@@ -34,9 +34,7 @@
                                 },
 	                            {
                                     text: l('ConnectionStrings'),
-		                            visible: function () {
-			                            return true; //TODO: Check permission
-		                            },
+                                    visible: abp.auth.isGranted('AbpTenantManagement.Tenants.ManageConnectionStrings'),
 		                            action: function (data) {
 			                            _connectionStringsModal.open({
 				                            id: data.record.id
@@ -45,9 +43,7 @@
 	                            },
                                 {
                                     text: l('Features'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpTenantManagement.Tenants.ManageFeatures'),
                                     action: function (data) {
                                         _featuresModal.open({
                                             providerName: 'Tenant',
@@ -57,7 +53,7 @@
                                 },
                                 {
                                     text: l('Delete'),
-                                    visible: function () { return true; }, //TODO: Check permission
+                                    visible: abp.auth.isGranted('AbpTenantManagement.Tenants.Delete'),
                                     confirmMessage: function (data) { return l('TenantDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {
                                         _tenantAppService

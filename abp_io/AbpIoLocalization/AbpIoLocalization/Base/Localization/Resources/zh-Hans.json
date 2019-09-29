@@ -1,0 +1,12 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Volo.AbpIo.Domain:010004": "超过最大成员数!",
+    "Volo.AbpIo.Domain:010005": "超过最大所有者数!",
+    "Volo.AbpIo.Domain:010006": "T用户已经是该组织的所有者!",
+    "Volo.AbpIo.Domain:010007": "该用户已经是该组织的开发者!",
+    "Volo.AbpIo.Domain:010008": "允许的开发者数量不能低于当前开发者数量!",
+    "Volo.AbpIo.Domain:010009": "允许的开发者数量不能小于零!",
+    "Volo.AbpIo.Domain:010010": "超出了最大mac地址数!"
+  }
+}

@@ -12,9 +12,6 @@
 
   <ItemGroup>
     <EmbeddedResource Include="ProductManagement\Localization\ApplicationContracts\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="ProductManagement\Localization\ApplicationContracts\*.json" />
   </ItemGroup>
 

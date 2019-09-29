@@ -3,13 +3,13 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Blogging.Web</AssemblyName>
     <PackageId>Volo.Blogging.Web</PackageId>
+    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
     <OutputType>Library</OutputType>
     <IsPackable>true</IsPackable>
     <RootNamespace>Volo.Blogging</RootNamespace>
-    <TypeScriptToolsVersion>2.8</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,14 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Localization\Resources\**\*.json" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Pages\**\*.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />

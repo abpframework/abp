@@ -81,7 +81,7 @@ namespace BackendAdminApp.Host
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -97,13 +97,14 @@ namespace BackendAdminApp.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization();
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend Admin Application API");
-            });
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend Admin Application API");
+            //});
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

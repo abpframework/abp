@@ -1,21 +1,54 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+using Serilog.Events;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            BuildWebHostInternal(args).Run();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug() //TODO: Should be configurable!
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.File("Logs/logs.txt")
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting web host.");
+                BuildWebHostInternal(args).Build().Run();
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly!");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
-        public static IWebHost BuildWebHostInternal(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .Build();
+        //internal static IWebHost BuildWebHostInternal(string[] args) =>
+        //    new WebHostBuilder()
+        //        .UseKestrel()
+        //        .UseContentRoot(Directory.GetCurrentDirectory())
+        //        .UseIISIntegration()
+        //        .UseStartup<Startup>()
+        //        .UseSerilog()
+        //        .Build();
+
+        internal static IHostBuilder BuildWebHostInternal(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

@@ -8,7 +8,7 @@ using ApiResource = Volo.Abp.IdentityServer.ApiResources.ApiResource;
 
 namespace Volo.Abp.IdentityServer.MongoDB
 {
-    [ConnectionStringName("AbpIdentityServer")]
+    [ConnectionStringName(AbpIdentityServerConsts.ConnectionStringName)]
     public interface IAbpIdentityServerMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<ApiResource> ApiResources { get; }

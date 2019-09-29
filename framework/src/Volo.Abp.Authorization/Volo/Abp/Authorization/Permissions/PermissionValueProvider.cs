@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public abstract class PermissionValueProvider : IPermissionValueProvider, ISingletonDependency  //TODO: to transient?
+    public abstract class PermissionValueProvider : IPermissionValueProvider, ITransientDependency
     {
         public abstract string Name { get; }
 

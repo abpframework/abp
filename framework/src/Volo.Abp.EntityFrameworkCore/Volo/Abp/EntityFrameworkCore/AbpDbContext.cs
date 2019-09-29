@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Newtonsoft.Json;
@@ -282,20 +281,37 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void CheckAndSetId(EntityEntry entry)
         {
-            //Set GUID Ids
-            var entity = entry.Entity as IEntity<Guid>;
-            if (entity != null && entity.Id == Guid.Empty)
+            if (entry.Entity is IEntity<Guid> entityWithGuidId)
             {
-                var dbGeneratedAttr = ReflectionHelper
-                    .GetSingleAttributeOrDefault<DatabaseGeneratedAttribute>(
-                        entry.Property("Id").Metadata.PropertyInfo
-                    );
-
-                if (dbGeneratedAttr == null || dbGeneratedAttr.DatabaseGeneratedOption == DatabaseGeneratedOption.None)
-                {
-                    entity.Id = GuidGenerator.Create();
-                }
+                TrySetGuidId(entry, entityWithGuidId);
             }
+        }
+
+        protected virtual void TrySetGuidId(EntityEntry entry, IEntity<Guid> entity)
+        {
+            if (entity.Id != default)
+            {
+                return;
+            }
+
+            var idProperty = entry.Property("Id").Metadata.PropertyInfo;
+
+            //Check for DatabaseGeneratedAttribute
+            var dbGeneratedAttr = ReflectionHelper
+                .GetSingleAttributeOrDefault<DatabaseGeneratedAttribute>(
+                    idProperty
+                );
+
+            if (dbGeneratedAttr != null && dbGeneratedAttr.DatabaseGeneratedOption != DatabaseGeneratedOption.None)
+            {
+                return;
+            }
+
+            EntityHelper.TrySetId(
+                entity,
+                () => GuidGenerator.Create(),
+                true
+            );
         }
 
         protected virtual void SetCreationAuditProperties(EntityEntry entry)
@@ -494,24 +510,12 @@ namespace Volo.Abp.EntityFrameworkCore
 
             if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)))
             {
-                /* This condition should normally be defined as below:
-                 * !IsSoftDeleteFilterEnabled || !((ISoftDelete) e).IsDeleted
-                 * But this causes a problem with EF Core (see https://github.com/aspnet/EntityFrameworkCore/issues/9502)
-                 * So, we made a workaround to make it working. It works same as above.
-                 */
-
-                Expression<Func<TEntity, bool>> softDeleteFilter = e => !((ISoftDelete)e).IsDeleted || ((ISoftDelete)e).IsDeleted != IsSoftDeleteFilterEnabled;
-                expression = expression == null ? softDeleteFilter : CombineExpressions(expression, softDeleteFilter);
+                expression = e => !IsSoftDeleteFilterEnabled || !EF.Property<bool>(e, "IsDeleted");
             }
 
             if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
             {
-                /* This condition should normally be defined as below:
-                 * !IsMayHaveTenantFilterEnabled || ((IMayHaveTenant)e).TenantId == CurrentTenantId
-                 * But this causes a problem with EF Core (see https://github.com/aspnet/EntityFrameworkCore/issues/9502)
-                 * So, we made a workaround to make it working. It works same as above.
-                 */
-                Expression<Func<TEntity, bool>> multiTenantFilter = e => ((IMultiTenant)e).TenantId == CurrentTenantId || (((IMultiTenant)e).TenantId == CurrentTenantId) == IsMultiTenantFilterEnabled;
+                Expression<Func<TEntity, bool>> multiTenantFilter = e => !IsMultiTenantFilterEnabled || EF.Property<Guid>(e, "TenantId") == CurrentTenantId;
                 expression = expression == null ? multiTenantFilter : CombineExpressions(expression, multiTenantFilter);
             }
 

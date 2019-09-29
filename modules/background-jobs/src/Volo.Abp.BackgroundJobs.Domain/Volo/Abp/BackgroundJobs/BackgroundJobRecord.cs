@@ -39,7 +39,7 @@ namespace Volo.Abp.BackgroundJobs
         public virtual DateTime? LastTryTime { get; set; }
 
         /// <summary>
-        /// This is true if this job is continously failed and will not be executed again.
+        /// This is true if this job is continuously failed and will not be executed again.
         /// </summary>
         public virtual bool IsAbandoned { get; set; }
 
@@ -48,7 +48,13 @@ namespace Volo.Abp.BackgroundJobs
         /// </summary>
         public virtual BackgroundJobPriority Priority { get; set; }
 
-        public BackgroundJobRecord()
+        private BackgroundJobRecord()
+        {
+            
+        }
+
+        public BackgroundJobRecord(Guid id)
+            : base(id)
         {
             
         }

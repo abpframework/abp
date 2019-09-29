@@ -24,7 +24,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByIdAsync()
         {
-            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserLookupAppService.FindByIdAsync(user.Id)).UserName.ShouldBe(user.UserName);
@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByUserNameAsync()
         {
-            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.Normalize("john.nash"));
+            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
             (await _identityUserLookupAppService.FindByUserNameAsync(user.UserName)).UserName.ShouldBe(user.UserName);

@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
-    [ConnectionStringName("AbpBackgroundJobs")]
+    [ConnectionStringName(BackgroundJobsConsts.ConnectionStringName)]
     public class BackgroundJobsMongoDbContext : AbpMongoDbContext, IBackgroundJobsMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = BackgroundJobsConsts.DefaultDbTablePrefix;

@@ -52,15 +52,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
-                if (string.IsNullOrEmpty(tenant))
-                {
-                    if (Request.Cookies.ContainsKey(TenantResolverConsts.DefaultTenantKey))
-                    {
-                        CurrentTenant.Change(null);
-                        Response.Cookies.Delete(TenantResolverConsts.DefaultTenantKey);
-                    }
-                }
-                else
+                if (!string.IsNullOrEmpty(tenant))
                 {
                     CurrentTenant.Change(Guid.Parse(tenant));
                     Response.Cookies.Append(TenantResolverConsts.DefaultTenantKey, tenant);
@@ -152,11 +144,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 Alerts.Warning(L["UserLockedOutMessage"]);
                 return Page();
-            }
-
-            if (result.RequiresTwoFactor)
-            {
-                return RedirectToPage("./SendSecurityCode");
             }
 
             if (result.IsNotAllowed)

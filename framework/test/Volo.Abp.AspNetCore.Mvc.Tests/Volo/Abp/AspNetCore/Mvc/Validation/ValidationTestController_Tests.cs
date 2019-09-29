@@ -47,5 +47,16 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
             var result = await GetResponseAsStringAsync("/api/validation-test/action-result-action"); //Missed the value1
             result.ShouldBe("ModelState.IsValid: false");
         }
+
+        [Fact]
+        public async Task Should_Return_Custom_Validate_Errors()
+        {
+            var result = await GetResponseAsObjectAsync<RemoteServiceErrorResponse>(
+                "/api/validation-test/object-result-action-with-custom_validate?value1=abc", HttpStatusCode.BadRequest); //value1 should be hello.
+
+            result.Error.ValidationErrors.Length.ShouldBeGreaterThan(0);
+            result.Error.ValidationErrors.ShouldContain(x => x.Message == "Value1 should be hello");
+        }
+
     }
 }

@@ -9,7 +9,7 @@ using Volo.Blogging.Users;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
-    [ConnectionStringName("Blogging")]
+    [ConnectionStringName(BloggingConsts.ConnectionStringName)]
     public interface IBloggingDbContext : IEfCoreDbContext
     {
         DbSet<BlogUser> Users { get; }

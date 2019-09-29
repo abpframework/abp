@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.MongoDB
 {
@@ -19,24 +20,40 @@ namespace Volo.Abp.MongoDB
 
         public MongoDbContextModel Build()
         {
-            var entityModels = _entityModelBuilders
-                .Select(x => x.Value)
-                .Cast<IMongoEntityModel>()
-                .ToImmutableDictionary(x => x.EntityType, x => x);
-
-            foreach (var entityModel in entityModels.Values)
+            lock (SyncObj)
             {
-                var map = entityModel.As<IHasBsonClassMap>().GetMap();
-                lock (SyncObj)
+                var entityModels = _entityModelBuilders
+                    .Select(x => x.Value)
+                    .Cast<IMongoEntityModel>()
+                    .ToImmutableDictionary(x => x.EntityType, x => x);
+
+                var baseClasses = new List<Type>();
+
+                foreach (var entityModel in entityModels.Values)
                 {
+                    var map = entityModel.As<IHasBsonClassMap>().GetMap();
                     if (!BsonClassMap.IsClassMapRegistered(map.ClassType))
                     {
                         BsonClassMap.RegisterClassMap(map);
                     }
-                }
-            }
 
-            return new MongoDbContextModel(entityModels);
+                    baseClasses.AddRange(entityModel.EntityType.GetBaseClasses(includeObject: false));
+                }
+
+                baseClasses = baseClasses.Distinct().ToList();
+
+                foreach (var baseClass in baseClasses)
+                {
+                    if (!BsonClassMap.IsClassMapRegistered(baseClass))
+                    {
+                        var map = new BsonClassMap(baseClass);
+                        map.ConfigureAbpConventions();
+                        BsonClassMap.RegisterClassMap(map);
+                    }
+                }
+
+                return new MongoDbContextModel(entityModels);
+            }
         }
 
         public virtual void Entity<TEntity>(Action<IMongoEntityModelBuilder<TEntity>> buildAction = null)

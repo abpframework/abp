@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Abp.Account.Application</AssemblyName>
+    <PackageId>Volo.Abp.Account.Application</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Encodings.Web" Version="4.6.0" />
+    <ProjectReference Include="..\Volo.Abp.Account.Application.Contracts\Volo.Abp.Account.Application.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\identity\src\Volo.Abp.Identity.Application\Volo.Abp.Identity.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
+  </ItemGroup>
+
+</Project>

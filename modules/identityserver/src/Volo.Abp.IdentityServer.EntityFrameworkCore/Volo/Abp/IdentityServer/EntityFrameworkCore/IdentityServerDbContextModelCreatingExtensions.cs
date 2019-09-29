@@ -1,5 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
@@ -26,8 +28,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 client.ToTable(tablePrefix + "Clients", schema);
 
-                client.ConfigureFullAudited();
-                client.ConfigureExtraProperties();
+                client.ConfigureFullAuditedAggregateRoot();
 
                 client.Property(x => x.ClientId).HasMaxLength(ClientConsts.ClientIdMaxLength).IsRequired();
                 client.Property(x => x.ProtocolType).HasMaxLength(ClientConsts.ProtocolTypeMaxLength).IsRequired();
@@ -39,6 +40,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 client.Property(x => x.BackChannelLogoutUri).HasMaxLength(ClientConsts.BackChannelLogoutUriMaxLength);
                 client.Property(x => x.ClientClaimsPrefix).HasMaxLength(ClientConsts.ClientClaimsPrefixMaxLength);
                 client.Property(x => x.PairWiseSubjectSalt).HasMaxLength(ClientConsts.PairWiseSubjectSaltMaxLength);
+                client.Property(x => x.UserCodeType).HasMaxLength(ClientConsts.UserCodeTypeMaxLength);
 
                 client.HasMany(x => x.AllowedScopes).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
                 client.HasMany(x => x.ClientSecrets).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
@@ -50,7 +52,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 client.HasMany(x => x.Claims).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
                 client.HasMany(x => x.Properties).WithOne().HasForeignKey(x => x.ClientId).IsRequired();
 
-                client.HasIndex(x => x.ClientId).IsUnique();
+                client.HasIndex(x => x.ClientId);
             });
 
             builder.Entity<ClientGrantType>(grantType =>
@@ -160,12 +162,16 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 identityResource.ToTable(tablePrefix + "IdentityResources", schema);
 
-                identityResource.ConfigureFullAudited();
-                identityResource.ConfigureExtraProperties();
+                identityResource.ConfigureFullAuditedAggregateRoot();
 
                 identityResource.Property(x => x.Name).HasMaxLength(IdentityResourceConsts.NameMaxLength).IsRequired();
                 identityResource.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
                 identityResource.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
+                identityResource.Property(x => x.Properties)
+                    .HasConversion(
+                        d => JsonConvert.SerializeObject(d, Formatting.None),
+                        s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
+                    );
 
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
@@ -183,12 +189,16 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 apiResource.ToTable(tablePrefix + "ApiResources", schema);
 
-                apiResource.ConfigureFullAudited();
-                apiResource.ConfigureExtraProperties();
+                apiResource.ConfigureFullAuditedAggregateRoot();
 
                 apiResource.Property(x => x.Name).HasMaxLength(ApiResourceConsts.NameMaxLength).IsRequired();
                 apiResource.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 apiResource.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
+                apiResource.Property(x => x.Properties)
+                    .HasConversion(
+                        d => JsonConvert.SerializeObject(d, Formatting.None),
+                        s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
+                    );
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();

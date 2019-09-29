@@ -1,0 +1,14 @@
+{
+  "culture": "pl",
+  "texts": {
+    "Permission:Blogging": "Blog",
+    "Permission:Blogs": "Blogi",
+    "Permission:Posts": "Posty",
+    "Permission:Tags": "Tagi",
+    "Permission:Comments": "Komentarze",
+    "Permission:Management": "Zarządzanie",
+    "Permission:Edit": "Edytuj",
+    "Permission:Create": "Utwórz",
+    "Permission:Delete": "Usuń"
+  }
+}
