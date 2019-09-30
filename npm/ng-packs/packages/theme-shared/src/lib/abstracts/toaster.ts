@@ -2,7 +2,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable, Subject } from 'rxjs';
 import { Toaster } from '../models/toaster';
 
-export class AbstractToaster<T = Toaster.Options> {
+export abstract class AbstractToaster<T = Toaster.Options> {
   status$: Subject<Toaster.Status>;
 
   key: string = 'abpToast';

@@ -23,11 +23,18 @@ import { Toaster } from '../../models/toaster';
         </div>
 
         <div class="abp-confirm-footer justify-content-center">
-          <button *ngIf="!message.hideCancelBtn" type="button" class="btn btn-sm btn-primary" (click)="close(reject)">
+          <button
+            *ngIf="!message.hideCancelBtn"
+            id="cancel"
+            type="button"
+            class="btn btn-sm btn-primary"
+            (click)="close(reject)"
+          >
             {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
           </button>
           <button
             *ngIf="!message.hideYesBtn"
+            id="confirm"
             type="button"
             class="btn btn-sm btn-primary"
             (click)="close(confirm)"
