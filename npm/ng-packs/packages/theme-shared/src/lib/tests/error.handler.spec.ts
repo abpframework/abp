@@ -1,8 +1,7 @@
-import { ConfigState, CoreModule, RestOccurError, RouterOutletComponent } from '@abp/ng.core';
+import { CoreModule, RestOccurError, RouterOutletComponent } from '@abp/ng.core';
 import { Location } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator';
 import { RouterState } from '@ngxs/router-plugin';
 import { NgxsModule, Store } from '@ngxs/store';
