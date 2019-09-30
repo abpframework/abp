@@ -172,7 +172,7 @@ namespace Volo.Abp.Cli
         private static bool IsGlobalTool(string toolPath)
         {
             var globalPaths = new[] { @"%USERPROFILE%\.dotnet\tools\", "%HOME%/.dotnet/tools/", };
-            return globalPaths.Select(path => Environment.ExpandEnvironmentVariables(path)).Contains(toolPath);
+            return globalPaths.Select(Environment.ExpandEnvironmentVariables).Contains(toolPath);
         }
 
         private void LogNewVersionInfo(UpdateChannel updateChannel, SemanticVersion latestVersion, string toolPath)
