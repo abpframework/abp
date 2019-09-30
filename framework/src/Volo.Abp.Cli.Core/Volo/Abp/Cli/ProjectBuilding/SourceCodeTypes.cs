@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Volo.Abp.Cli.ProjectBuilding
+﻿namespace Volo.Abp.Cli.ProjectBuilding
 {
     public static class SourceCodeTypes
     {

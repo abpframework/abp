@@ -6,7 +6,6 @@ using Volo.Abp.Json;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Http;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectBuilding
