@@ -9,7 +9,7 @@ import { ButtonComponent } from './components/button/button.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-import { ErrorComponent } from './components/errors/error.component';
+import { ErrorComponent } from './components/error/error.component';
 import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { ProfileComponent } from './components/profile/profile.component';

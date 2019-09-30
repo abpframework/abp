@@ -4,7 +4,7 @@ import { Component, Renderer2, ElementRef } from '@angular/core';
   selector: 'abp-error',
   template: `
     <div class="error">
-      <button id="abp-close-button mr-2" type="button" class="close" (click)="destroy()">
+      <button id="abp-close-button mr-4" type="button" class="close" (click)="destroy()">
         <span aria-hidden="true">&times;</span>
       </button>
       <div class="row centered">

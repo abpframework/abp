@@ -11,7 +11,7 @@ import {
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { ErrorComponent } from '../components/errors/error.component';
+import { ErrorComponent } from '../components/error/error.component';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
 import snq from 'snq';

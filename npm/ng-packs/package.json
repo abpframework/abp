@@ -48,6 +48,7 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "ng-packagr": "^5.5.0",
     "ngx-perfect-scrollbar": "^8.0.0",
+    "ngxs-reset-plugin": "^1.2.0",
     "primeicons": "^1.0.0",
     "primeng": "^8.0.0",
     "protractor": "~5.4.0",
