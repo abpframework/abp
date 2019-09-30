@@ -25,22 +25,24 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
 
         private void DeleteUnrelatedProjects(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
-            if (context.BuildArgs.ExtraProperties.ContainsKey("no-ui"))
+            if (!context.BuildArgs.ExtraProperties.ContainsKey("no-ui"))
             {
-                steps.Add(new RemoveProjectFromSolutionStep(
-                    "MyCompanyName.MyProjectName.Web"
-                ));
-
-                steps.Add(new RemoveProjectFromSolutionStep(
-                    "MyCompanyName.MyProjectName.Web.Host",
-                    projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
-                ));
-
-                steps.Add(new RemoveProjectFromSolutionStep(
-                    "MyCompanyName.MyProjectName.Web.Unified",
-                    projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified"
-                ));
+                return;
             }
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Web"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Web.Host",
+                projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Host"
+            ));
+
+            steps.Add(new RemoveProjectFromSolutionStep(
+                "MyCompanyName.MyProjectName.Web.Unified",
+                projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified"
+            ));
         }
 
         private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
