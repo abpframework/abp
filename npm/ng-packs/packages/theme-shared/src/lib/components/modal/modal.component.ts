@@ -9,7 +9,7 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
 import { fromEvent, Subject, timer } from 'rxjs';
 import { filter, take, takeUntil, debounceTime } from 'rxjs/operators';
@@ -23,7 +23,7 @@ const ANIMATION_TIMEOUT = 200;
 
 @Component({
   selector: 'abp-modal',
-  templateUrl: './modal.component.html',
+  templateUrl: './modal.component.html'
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -51,7 +51,7 @@ export class ModalComponent implements OnDestroy {
       this.renderer.addClass(this.modalContent.nativeElement, 'fade-out-top');
       setTimeout(() => {
         this.setVisible(value);
-        this.ngOnDestroy();
+        this.destroy$.next();
       }, ANIMATION_TIMEOUT - 10);
     }
   }
@@ -68,9 +68,9 @@ export class ModalComponent implements OnDestroy {
     this._busy = value;
   }
 
-  @Input() centered: boolean = false;
+  @Input() centered = false;
 
-  @Input() modalClass: string = '';
+  @Input() modalClass = '';
 
   @Input() size: ModalSize = 'lg';
 
@@ -78,9 +78,9 @@ export class ModalComponent implements OnDestroy {
 
   @Input() minHeight: number;
 
-  @Output() visibleChange = new EventEmitter<boolean>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-  @Output() init = new EventEmitter<void>();
+  @Output() readonly init = new EventEmitter<void>();
 
   @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
 
@@ -88,29 +88,29 @@ export class ModalComponent implements OnDestroy {
 
   @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
 
-  @ContentChild('abpClose', { static: false, read: ElementRef }) abpClose: ElementRef<any>;
+  @ContentChild('abpClose', { static: false, read: ElementRef })
+  abpClose: ElementRef<any>;
 
-  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent }) abpSubmit: ButtonComponent;
+  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
+  abpSubmit: ButtonComponent;
 
   @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
 
   @ViewChildren('abp-button') abpButtons;
 
-  @Output()
-  show = new EventEmitter();
+  @Output() readonly appear = new EventEmitter();
 
-  @Output()
-  hide = new EventEmitter();
+  @Output() readonly disappear = new EventEmitter();
 
-  _visible: boolean = false;
+  _visible = false;
 
-  _busy: boolean = false;
+  _busy = false;
 
-  showModal: boolean = false;
+  showModal = false;
 
-  isOpenConfirmation: boolean = false;
+  isOpenConfirmation = false;
 
-  closable: boolean = false;
+  closable = false;
 
   destroy$ = new Subject<void>();
 
@@ -131,11 +131,11 @@ export class ModalComponent implements OnDestroy {
         .subscribe(_ => (this.closable = true));
 
       this.renderer.addClass(document.body, 'modal-open');
-      this.show.emit();
+      this.appear.emit();
     } else {
       this.closable = false;
       this.renderer.removeClass(document.body, 'modal-open');
-      this.hide.emit();
+      this.disappear.emit();
     }
   }
 
@@ -144,7 +144,7 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape' && this.closable),
+        filter((key: KeyboardEvent) => key && key.code === 'Escape' && this.closable)
       )
       .subscribe(_ => {
         this.close();
@@ -155,7 +155,7 @@ export class ModalComponent implements OnDestroy {
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(
           takeUntil(this.destroy$),
-          filter(() => !!(this.closable && this.modalContent)),
+          filter(() => !!(this.closable && this.modalContent))
         )
         .subscribe(() => this.close());
     }, 0);
@@ -167,7 +167,7 @@ export class ModalComponent implements OnDestroy {
     if (!this.closable || this.busy) return;
 
     const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
+      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes
     );
 
     if (hasNgDirty(nodes)) {
@@ -194,7 +194,7 @@ export class ModalComponent implements OnDestroy {
 function getFlatNodes(nodes: NodeList): HTMLElement[] {
   return Array.from(nodes).reduce(
     (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
-    [],
+    []
   );
 }
 

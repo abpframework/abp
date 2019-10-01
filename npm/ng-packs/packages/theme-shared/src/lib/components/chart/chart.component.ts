@@ -6,7 +6,7 @@ import {
   Input,
   OnDestroy,
   Output,
-  ChangeDetectorRef,
+  ChangeDetectorRef
 } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { chartJsLoaded$ } from '../../utils/widget-utils';
@@ -14,7 +14,7 @@ declare const Chart: any;
 
 @Component({
   selector: 'abp-chart',
-  templateUrl: './chart.component.html',
+  templateUrl: './chart.component.html'
 })
 export class ChartComponent implements AfterViewInit, OnDestroy {
   @Input() type: string;
@@ -27,11 +27,12 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   @Input() height: string;
 
-  @Input() responsive: boolean = true;
+  @Input() responsive = true;
 
-  @Output() onDataSelect: EventEmitter<any> = new EventEmitter();
+  // tslint:disable-next-line: no-output-on-prefix
+  @Output() readonly onDataSelect: EventEmitter<any> = new EventEmitter();
 
-  @Output() initialized = new BehaviorSubject(this);
+  @Output() readonly initialized = new BehaviorSubject(this);
 
   private _initialized: boolean;
 
@@ -61,6 +62,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     chartJsLoaded$.subscribe(() => {
       try {
+        // tslint:disable-next-line: no-unused-expression
         Chart;
       } catch (error) {
         console.error(`Chart is not found. Import the Chart from app.module like shown below:
@@ -76,16 +78,20 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   onCanvasClick = event => {
     if (this.chart) {
-      let element = this.chart.getElementAtEvent(event);
-      let dataset = this.chart.getDatasetAtEvent(event);
+      const element = this.chart.getElementAtEvent(event);
+      const dataset = this.chart.getDatasetAtEvent(event);
       if (element && element[0] && dataset) {
-        this.onDataSelect.emit({ originalEvent: event, element: element[0], dataset: dataset });
+        this.onDataSelect.emit({
+          originalEvent: event,
+          element: element[0],
+          dataset
+        });
       }
     }
   };
 
   initChart = () => {
-    let opts = this.options || {};
+    const opts = this.options || {};
     opts.responsive = this.responsive;
 
     // allows chart to resize in responsive mode
@@ -97,7 +103,7 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       type: this.type,
       data: this.data,
       options: this.options,
-      plugins: this.plugins,
+      plugins: this.plugins
     });
 
     this.cdRef.detectChanges();

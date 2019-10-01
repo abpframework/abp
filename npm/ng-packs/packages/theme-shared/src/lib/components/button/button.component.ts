@@ -6,23 +6,23 @@ import { Component, Input } from '@angular/core';
     <button [attr.type]="type" [ngClass]="buttonClass" [disabled]="loading || disabled">
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
-  `,
+  `
 })
 export class ButtonComponent {
   @Input()
-  buttonClass: string = 'btn btn-primary';
+  buttonClass = 'btn btn-primary';
 
   @Input()
-  type: string = 'button';
+  type = 'button';
 
   @Input()
   iconClass: string;
 
   @Input()
-  loading: boolean = false;
+  loading = false;
 
   @Input()
-  disabled: boolean = false;
+  disabled = false;
 
   get icon(): string {
     return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
