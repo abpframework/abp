@@ -12,7 +12,7 @@ export let ABP_ROUTES = [] as ABP.FullRoute[];
 
 @Injectable()
 export class ConfigPlugin implements NgxsPlugin {
-  private initialized: boolean = false;
+  private initialized = false;
 
   constructor(@Inject(NGXS_CONFIG_PLUGIN_OPTIONS) private options: ABP.Root, private router: Router) {}
 
@@ -22,14 +22,17 @@ export class ConfigPlugin implements NgxsPlugin {
 
     // const layouts = snq(() => this.options.requirements.layouts.filter(layout => layout instanceof Type), []);
     if (isInitAction && !this.initialized) {
-      let { routes, wrappers } = transformRoutes(this.router.config);
+      const transformedRoutes = transformRoutes(this.router.config);
+      let { routes } = transformedRoutes;
+      const { wrappers } = transformedRoutes;
+
       routes = organizeRoutes(routes, wrappers);
       const flattedRoutes = flatRoutes(clone(routes));
       state = setValue(state, 'ConfigState', {
         ...(state.ConfigState && { ...state.ConfigState }),
         ...this.options,
         routes,
-        flattedRoutes,
+        flattedRoutes
       });
 
       this.initialized = true;
@@ -49,6 +52,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
       return snq(() => route.data.routes.routes.find(r => r.path === route.path), false);
     })
     .reduce((acc, val) => [...acc, ...val.data.routes.routes], []);
+  // tslint:disable-next-line: deprecation
   ABP_ROUTES = [...ABP_ROUTES, ...abpRoutes];
 
   wrappers = ABP_ROUTES.filter(ar => ar.wrapper);
@@ -69,7 +73,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
           ...route.data.routes,
           path: route.path,
           name: snq(() => route.data.routes.name, route.path),
-          children: route.data.routes.children || [],
+          children: route.data.routes.children || []
         } as ABP.FullRoute);
       }
     });
@@ -86,8 +90,8 @@ function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
       url: `${parentUrl}/${route.path}`,
       ...(route.children &&
         route.children.length && {
-          children: setUrls(route.children, `${parentUrl}/${route.path}`),
-        }),
+          children: setUrls(route.children, `${parentUrl}/${route.path}`)
+        })
     }));
   }
 
@@ -96,8 +100,8 @@ function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
     url: `/${route.path}`,
     ...(route.children &&
       route.children.length && {
-        children: setUrls(route.children, `/${route.path}`),
-      }),
+        children: setUrls(route.children, `/${route.path}`)
+      })
   }));
 }
 

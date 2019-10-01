@@ -7,10 +7,11 @@ import { Subject } from 'rxjs';
 
 @Pipe({
   name: 'abpLocalization',
-  pure: false, // required to update the value
+  // tslint:disable-next-line: no-pipe-impure
+  pure: false // required to update the value
 })
 export class LocalizationPipe implements PipeTransform, OnDestroy {
-  initialValue: string = '';
+  initialValue = '';
 
   value: string;
 
@@ -27,13 +28,13 @@ export class LocalizationPipe implements PipeTransform, OnDestroy {
         .select(
           ConfigState.getCopy(
             value,
-            ...interpolateParams.reduce((acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]), []),
-          ),
+            ...interpolateParams.reduce((acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]), [])
+          )
         )
         .pipe(
           takeUntil(this.destroy$),
           takeUntilDestroy(this),
-          distinctUntilChanged(),
+          distinctUntilChanged()
         )
         .subscribe(copy => (this.value = copy));
     }

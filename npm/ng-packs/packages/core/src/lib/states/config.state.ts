@@ -11,7 +11,7 @@ import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils'
 
 @State<Config.State>({
   name: 'ConfigState',
-  defaults: {} as Config.State,
+  defaults: {} as Config.State
 })
 export class ConfigState {
   @Selector()
@@ -27,9 +27,9 @@ export class ConfigState {
   static getOne(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return state[key];
-      },
+      }
     );
 
     return selector;
@@ -46,7 +46,7 @@ export class ConfigState {
 
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return (keys as string[]).reduce((acc, val) => {
           if (acc) {
             return acc[val];
@@ -54,7 +54,7 @@ export class ConfigState {
 
           return undefined;
         }, state);
-      },
+      }
     );
 
     return selector;
@@ -63,7 +63,7 @@ export class ConfigState {
   static getRoute(path?: string, name?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         const { flattedRoutes } = state;
         return (flattedRoutes as ABP.FullRoute[]).find(route => {
           if (path && route.path === path) {
@@ -72,7 +72,7 @@ export class ConfigState {
             return route;
           }
         });
-      },
+      }
     );
 
     return selector;
@@ -81,9 +81,9 @@ export class ConfigState {
   static getApiUrl(key?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State): string {
+      (state: Config.State): string => {
         return state.environment.apis[key || 'default'].url;
-      },
+      }
     );
 
     return selector;
@@ -92,9 +92,9 @@ export class ConfigState {
   static getSetting(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return snq(() => state.setting.values[key]);
-      },
+      }
     );
 
     return selector;
@@ -103,10 +103,10 @@ export class ConfigState {
   static getGrantedPolicy(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State): boolean {
+      (state: Config.State): boolean => {
         if (!key) return true;
         return snq(() => state.auth.grantedPolicies[key], false);
-      },
+      }
     );
 
     return selector;
@@ -118,20 +118,20 @@ export class ConfigState {
     const keys = key.split('::') as string[];
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         if (!state.localization) return key;
 
         const { defaultResourceName } = state.environment.localization;
         if (keys[0] === '') {
           if (!defaultResourceName) {
             throw new Error(
-              `Please check your environment. May you forget set defaultResourceName? 
+              `Please check your environment. May you forget set defaultResourceName?
               Here is the example:
                { production: false,
                  localization: {
                    defaultResourceName: 'MyProjectName'
                   }
-               }`,
+               }`
             );
           }
 
@@ -154,7 +154,7 @@ export class ConfigState {
         }
 
         return copy || key;
-      },
+      }
     );
 
     return selector;
@@ -167,8 +167,8 @@ export class ConfigState {
     return this.appConfigurationService.getConfiguration().pipe(
       tap(configuration =>
         patchState({
-          ...configuration,
-        }),
+          ...configuration
+        })
       ),
       switchMap(configuration => {
         let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
@@ -178,7 +178,7 @@ export class ConfigState {
         }
 
         return this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
-      }),
+      })
     );
   }
 
@@ -191,7 +191,7 @@ export class ConfigState {
     routes = patchRouteDeep(routes, name, newValue);
 
     return patchState({
-      routes,
+      routes
     });
   }
 }
@@ -200,7 +200,7 @@ function patchRouteDeep(
   routes: ABP.FullRoute[],
   name: string,
   newValue: Partial<ABP.FullRoute>,
-  parentUrl: string = null,
+  parentUrl: string = null
 ): ABP.FullRoute[] {
   routes = routes.map(route => {
     if (route.name === name) {
@@ -211,7 +211,7 @@ function patchRouteDeep(
       if (newValue.children && newValue.children.length) {
         newValue.children = newValue.children.map(child => ({
           ...child,
-          url: `${parentUrl}/${route.path}/${child.path}`,
+          url: `${parentUrl}/${route.path}/${child.path}`
         }));
       }
 

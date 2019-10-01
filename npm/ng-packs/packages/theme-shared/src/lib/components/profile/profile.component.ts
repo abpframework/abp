@@ -9,7 +9,7 @@ const { maxLength, required, email } = Validators;
 
 @Component({
   selector: 'abp-profile',
-  templateUrl: './profile.component.html',
+  templateUrl: './profile.component.html'
 })
 export class ProfileComponent implements OnChanges {
   protected _visible;
@@ -24,15 +24,14 @@ export class ProfileComponent implements OnChanges {
     this.visibleChange.emit(value);
   }
 
-  @Output()
-  visibleChange = new EventEmitter<boolean>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @Select(ProfileState.getProfile)
   profile$: Observable<Profile.Response>;
 
   form: FormGroup;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
   constructor(private fb: FormBuilder, private store: Store) {}
 
@@ -41,7 +40,7 @@ export class ProfileComponent implements OnChanges {
       .dispatch(new GetProfile())
       .pipe(
         withLatestFrom(this.profile$),
-        take(1),
+        take(1)
       )
       .subscribe(([, profile]) => {
         this.form = this.fb.group({
@@ -49,7 +48,7 @@ export class ProfileComponent implements OnChanges {
           email: [profile.email, [required, email, maxLength(256)]],
           name: [profile.name || '', [maxLength(64)]],
           surname: [profile.surname || '', [maxLength(64)]],
-          phoneNumber: [profile.phoneNumber || '', [maxLength(16)]],
+          phoneNumber: [profile.phoneNumber || '', [maxLength(16)]]
         });
       });
   }

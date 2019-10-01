@@ -20,27 +20,9 @@ import { filter } from 'rxjs/operators';
       ></div>
     </div>
   `,
-  styleUrls: ['./loader-bar.component.scss'],
+  styleUrls: ['./loader-bar.component.scss']
 })
 export class LoaderBarComponent implements OnDestroy {
-  @Input()
-  containerClass: string = 'abp-loader-bar';
-
-  @Input()
-  color: string = '#77b6ff';
-
-  @Input()
-  isLoading: boolean = false;
-
-  @Input()
-  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
-
-  progressLevel: number = 0;
-
-  interval: Subscription;
-
-  timer: Subscription;
-
   get boxShadow(): string {
     return `0 0 10px rgba(${this.color}, 0.5)`;
   }
@@ -50,7 +32,7 @@ export class LoaderBarComponent implements OnDestroy {
       .pipe(
         ofActionSuccessful(StartLoader, StopLoader),
         filter(this.filter),
-        takeUntilDestroy(this),
+        takeUntilDestroy(this)
       )
       .subscribe(action => {
         if (action instanceof StartLoader) this.startLoading();
@@ -61,15 +43,32 @@ export class LoaderBarComponent implements OnDestroy {
       .pipe(
         filter(
           event =>
-            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError,
+            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError
         ),
-        takeUntilDestroy(this),
+        takeUntilDestroy(this)
       )
       .subscribe(event => {
         if (event instanceof NavigationStart) this.startLoading();
         else this.stopLoading();
       });
   }
+  @Input()
+  containerClass = 'abp-loader-bar';
+
+  @Input()
+  color = '#77b6ff';
+
+  @Input()
+  isLoading = false;
+
+  progressLevel = 0;
+
+  interval: Subscription;
+
+  timer: Subscription;
+
+  @Input()
+  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
 
   ngOnDestroy() {
     this.interval.unsubscribe();
