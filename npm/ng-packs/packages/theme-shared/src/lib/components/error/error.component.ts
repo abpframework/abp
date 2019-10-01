@@ -2,31 +2,8 @@ import { Component, Renderer2, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'abp-error',
-  template: `
-    <div class="error">
-      <button id="abp-close-button mr-4" type="button" class="close" (click)="destroy()">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <div class="row centered">
-        <div class="col-md-12">
-          <div class="error-template">
-            <h1>
-              {{ title | abpLocalization }}
-            </h1>
-            <div class="error-details">
-              {{ details | abpLocalization }}
-            </div>
-            <div class="error-actions">
-              <a (click)="destroy()" routerLink="/" class="btn btn-primary btn-md mt-2"
-                ><span class="glyphicon glyphicon-home"></span> {{ '::Menu:Home' | abpLocalization }}
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  `,
-  styleUrls: ['error.component.scss'],
+  templateUrl: './error.component.html',
+  styleUrls: ['error.component.scss']
 })
 export class ErrorComponent {
   title = 'Oops!';

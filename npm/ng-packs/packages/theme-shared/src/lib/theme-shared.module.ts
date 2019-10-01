@@ -21,7 +21,7 @@ import { TableEmptyMessageComponent } from './components/table-empty-message/tab
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 
 export function appendScript(injector: Injector) {
-  const fn = function() {
+  const fn = () => {
     import('chart.js').then(() => chartJsLoaded$.next(true));
 
     const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
@@ -32,8 +32,8 @@ export function appendScript(injector: Injector) {
         'style',
         styles,
         'head',
-        'afterbegin',
-      ) /* lazyLoadService.load(null, 'script', scripts) */,
+        'afterbegin'
+      ) /* lazyLoadService.load(null, 'script', scripts) */
     ).pipe(take(1));
   };
 
@@ -53,7 +53,7 @@ export function appendScript(injector: Injector) {
     ModalComponent,
     ProfileComponent,
     TableEmptyMessageComponent,
-    ToastComponent,
+    ToastComponent
   ],
   exports: [
     BreadcrumbComponent,
@@ -65,9 +65,9 @@ export function appendScript(injector: Injector) {
     ModalComponent,
     ProfileComponent,
     TableEmptyMessageComponent,
-    ToastComponent,
+    ToastComponent
   ],
-  entryComponents: [ErrorComponent],
+  entryComponents: [ErrorComponent]
 })
 export class ThemeSharedModule {
   static forRoot(): ModuleWithProviders {
@@ -78,10 +78,10 @@ export class ThemeSharedModule {
           provide: APP_INITIALIZER,
           multi: true,
           deps: [Injector, ErrorHandler],
-          useFactory: appendScript,
+          useFactory: appendScript
         },
-        { provide: MessageService, useClass: MessageService },
-      ],
+        { provide: MessageService, useClass: MessageService }
+      ]
     };
   }
 }

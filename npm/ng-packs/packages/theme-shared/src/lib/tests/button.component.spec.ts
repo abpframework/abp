@@ -4,7 +4,7 @@ import {
   createHostFactory,
   Spectator,
   SpectatorHost,
-  createTestComponentFactory,
+  createTestComponentFactory
 } from '@ngneat/spectator';
 import { ButtonComponent } from '../components';
 
@@ -13,7 +13,7 @@ describe('ButtonComponent', () => {
 
   const createHost = createHostFactory(ButtonComponent);
 
-  beforeEach(() => (host = createHost(`<abp-button iconClass="fa fa-check">Button</abp-button>`)));
+  beforeEach(() => (host = createHost('<abp-button iconClass="fa fa-check">Button</abp-button>')));
 
   it('should display the button', () => {
     expect(host.query('button')).toBeTruthy();

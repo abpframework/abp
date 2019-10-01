@@ -9,18 +9,18 @@ import { NgxsResetPluginModule, StateOverwrite } from 'ngxs-reset-plugin';
 import { DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ThemeSharedModule } from '../theme-shared.module';
 
-@Component({ selector: 'dummy', template: 'dummy works! <abp-confirmation></abp-confirmation>' })
+@Component({ selector: 'abp-dummy', template: 'dummy works! <abp-confirmation></abp-confirmation>' })
 class DummyComponent {
   constructor(public errorHandler: ErrorHandler, public store: Store) {}
 }
 
-describe('With Custom Host Component', function() {
+describe('With Custom Host Component', () => {
   let component: SpectatorRouting<DummyComponent>;
   const createComponent = createRoutingFactory({
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot([]), NgxsResetPluginModule.forRoot()],
     stubsEnabled: false,
-    routes: [{ path: '', component: DummyComponent }, { path: 'account/login', component: RouterOutletComponent }],
+    routes: [{ path: '', component: DummyComponent }, { path: 'account/login', component: RouterOutletComponent }]
   });
 
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('With Custom Host Component', function() {
 
   it('should display the error component when unknown error occurs', () => {
     component.component.store.dispatch(
-      new RestOccurError(new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' })),
+      new RestOccurError(new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' }))
     );
     component.detectChanges();
     expect(document.querySelector('.error-template')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultErrorUnknown.title);
@@ -97,9 +97,9 @@ describe('With Custom Host Component', function() {
         new HttpErrorResponse({
           error: { error: { message: 'test message', details: 'test detail' } },
           status: 412,
-          headers,
-        }),
-      ),
+          headers
+        })
+      )
     );
     component.detectChanges();
 

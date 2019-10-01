@@ -5,15 +5,15 @@ export const collapse = trigger('collapse', [
     'open',
     style({
       height: '*',
-      overflow: 'hidden',
-    }),
+      overflow: 'hidden'
+    })
   ),
   state(
     'close',
     style({
       height: '0px',
-      overflow: 'hidden',
-    }),
+      overflow: 'hidden'
+    })
   ),
-  transition(`open <=> close`, animate('{{duration}}ms'), { params: { duration: '350' } }),
+  transition('open <=> close', animate('{{duration}}ms'), { params: { duration: '350' } })
 ]);

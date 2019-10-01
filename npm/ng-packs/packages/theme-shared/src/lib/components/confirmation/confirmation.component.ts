@@ -4,6 +4,7 @@ import { Toaster } from '../../models/toaster';
 
 @Component({
   selector: 'abp-confirmation',
+  // tslint:disable-next-line: component-max-inline-declarations
   template: `
     <p-toast
       position="center"
@@ -45,7 +46,7 @@ import { Toaster } from '../../models/toaster';
         </div>
       </ng-template>
     </p-toast>
-  `,
+  `
 })
 export class ConfirmationComponent {
   confirm = Toaster.Status.confirm;

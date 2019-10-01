@@ -9,7 +9,7 @@ import {
   OnChanges,
   TemplateRef,
   TrackByFunction,
-  ViewContainerRef,
+  ViewContainerRef
 } from '@angular/core';
 import compare from 'just-compare';
 import clone from 'just-clone';
@@ -25,7 +25,7 @@ class RecordView {
 }
 
 @Directive({
-  selector: '[abpFor]',
+  selector: '[abpFor]'
 })
 export class ForDirective implements OnChanges {
   @Input('abpForOf')
@@ -67,7 +67,7 @@ export class ForDirective implements OnChanges {
   constructor(
     private tempRef: TemplateRef<AbpForContext>,
     private vcRef: ViewContainerRef,
-    private differs: IterableDiffers,
+    private differs: IterableDiffers
   ) {}
 
   private iterateOverAppliedOperations(changes: IterableChanges<any>) {
@@ -78,7 +78,7 @@ export class ForDirective implements OnChanges {
         const view = this.vcRef.createEmbeddedView(
           this.tempRef,
           new AbpForContext(null, -1, -1, this.items),
-          currentIndex,
+          currentIndex
         );
 
         rw.push(new RecordView(record, view));
@@ -114,6 +114,7 @@ export class ForDirective implements OnChanges {
   private projectItems(items: any[]): void {
     if (!items.length && this.emptyRef) {
       this.vcRef.clear();
+      // tslint:disable-next-line: no-unused-expression
       this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
       this.isShowEmptyRef = true;
       this.differ = null;

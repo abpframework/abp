@@ -8,9 +8,9 @@ import { Toaster } from '../models/toaster';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
-  key: string = 'abpConfirmation';
+  key = 'abpConfirmation';
 
-  sticky: boolean = true;
+  sticky = true;
 
   destroy$ = new Subject();
 
@@ -22,7 +22,7 @@ export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
     message: string,
     title: string,
     severity: Toaster.Severity,
-    options?: Confirmation.Options,
+    options?: Confirmation.Options
   ): Observable<Toaster.Status> {
     this.listenToEscape();
 
@@ -40,7 +40,7 @@ export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape'),
+        filter((key: KeyboardEvent) => key && key.code === 'Escape')
       )
       .subscribe(_ => {
         this.clear();

@@ -10,8 +10,8 @@
     "chart.js": "^2.8.0",
     "font-awesome": "^4.7.0",
     "ngx-perfect-scrollbar": "^8.0.0",
-    "primeicons": "^1.0.0",
-    "primeng": "^8.0.0"
+    "primeicons": "^2.0.0",
+    "primeng": "^8.0.3"
   },
   "publishConfig": {
     "access": "public"

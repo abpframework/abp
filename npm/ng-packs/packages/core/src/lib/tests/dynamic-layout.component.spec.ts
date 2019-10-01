@@ -9,7 +9,10 @@ import { NgxsResetPluginModule, StateOverwrite } from 'ngxs-reset-plugin';
 import { ThemeSharedModule } from '../../../../theme-shared/src/public-api';
 import { ActivatedRoute } from '@angular/router';
 
-@Component({ selector: 'dummy', template: '{{route.snapshot.data?.name}} works!' })
+@Component({
+  selector: 'abp-dummy',
+  template: '{{route.snapshot.data?.name}} works!'
+})
 class DummyComponent {
   constructor(public route: ActivatedRoute) {}
 }
@@ -23,7 +26,7 @@ describe('DynamicLayoutComponent', () => {
       NgxsModule.forRoot([ConfigState]),
       NgxsResetPluginModule.forRoot(),
       ThemeSharedModule.forRoot(),
-      ThemeBasicModule,
+      ThemeBasicModule
     ],
     declarations: [DummyComponent],
     stubsEnabled: false,
@@ -37,14 +40,14 @@ describe('DynamicLayoutComponent', () => {
           {
             path: 'childWithoutLayout',
             component: DummyComponent,
-            data: { name: 'childWithoutLayout' },
+            data: { name: 'childWithoutLayout' }
           },
           {
             path: 'childWithLayout',
             component: DummyComponent,
-            data: { name: 'childWithLayout' },
-          },
-        ],
+            data: { name: 'childWithLayout' }
+          }
+        ]
       },
       {
         path: 'withData',
@@ -53,10 +56,10 @@ describe('DynamicLayoutComponent', () => {
           {
             path: '',
             component: DummyComponent,
-            data: { name: 'withData' },
-          },
+            data: { name: 'withData' }
+          }
         ],
-        data: { layout: eLayoutType.empty },
+        data: { layout: eLayoutType.empty }
       },
       {
         path: 'withoutLayout',
@@ -65,12 +68,12 @@ describe('DynamicLayoutComponent', () => {
           {
             path: '',
             component: DummyComponent,
-            data: { name: 'withoutLayout' },
-          },
+            data: { name: 'withoutLayout' }
+          }
         ],
-        data: { layout: null },
-      },
-    ],
+        data: { layout: null }
+      }
+    ]
   });
 
   let spectator: SpectatorRouting<RouterOutletComponent>;
@@ -92,16 +95,16 @@ describe('DynamicLayoutComponent', () => {
                 {
                   path: 'parentWithLayout',
                   layout: eLayoutType.application,
-                  children: [{ path: 'childWithoutLayout' }, { path: 'childWithLayout', layout: eLayoutType.account }],
-                },
-              ],
+                  children: [{ path: 'childWithoutLayout' }, { path: 'childWithLayout', layout: eLayoutType.account }]
+                }
+              ]
             },
             { path: 'withData', layout: eLayoutType.application },
             ,
           ] as ABP.FullRoute[],
-          environment: { application: {} },
-        },
-      ]),
+          environment: { application: {} }
+        }
+      ])
     );
   });
 
@@ -136,7 +139,7 @@ describe('DynamicLayoutComponent', () => {
 
   it('should not display any layout when layouts are empty', async () => {
     store.dispatch(
-      new StateOverwrite([ConfigState, { ...store.selectSnapshot(ConfigState), requirements: { layouts: [] } }]),
+      new StateOverwrite([ConfigState, { ...store.selectSnapshot(ConfigState), requirements: { layouts: [] } }])
     );
 
     spectator.detectChanges();

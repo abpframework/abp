@@ -3,28 +3,28 @@
     "ng": "ng",
     "symlink": "symlink",
     "abpng": "abpng",
-    "commit": "ng lint && git-cz",
-    "lint": "ng lint"
+    "commit": "git-cz",
+    "lint": "ng lint --fix"
   },
   "devDependencies": {
     "@abp/ng.core": "^0.9.0",
     "@abp/ng.feature-management": "^0.9.0",
     "@abp/ng.permission-management": "^0.9.0",
     "@abp/ng.theme.shared": "^0.9.0",
-    "@angular-devkit/build-angular": "~0.803.5",
-    "@angular-devkit/build-ng-packagr": "~0.803.5",
-    "@angular/animations": "~8.2.7",
-    "@angular/cdk": "^8.0.1",
-    "@angular/cli": "~8.3.5",
-    "@angular/common": "~8.1.2",
-    "@angular/compiler-cli": "~8.2.7",
-    "@angular/compiler": "~8.2.7",
-    "@angular/core": "~8.1.2",
-    "@angular/forms": "~8.1.2",
-    "@angular/language-service": "~8.2.7",
-    "@angular/platform-browser-dynamic": "~8.2.7",
-    "@angular/platform-browser": "~8.2.7",
-    "@angular/router": "~8.1.2",
+    "@angular-devkit/build-angular": "~0.803.6",
+    "@angular-devkit/build-ng-packagr": "~0.803.6",
+    "@angular/animations": "~8.2.8",
+    "@angular/cdk": "^8.2.2",
+    "@angular/cli": "~8.3.6",
+    "@angular/common": "~8.2.8",
+    "@angular/compiler-cli": "~8.2.8",
+    "@angular/compiler": "~8.2.8",
+    "@angular/core": "~8.2.8",
+    "@angular/forms": "~8.2.8",
+    "@angular/language-service": "~8.2.8",
+    "@angular/platform-browser-dynamic": "~8.2.8",
+    "@angular/platform-browser": "~8.2.8",
+    "@angular/router": "~8.2.8",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ngneat/spectator": "^4.3.2",
     "@ngx-validate/core": "^0.0.5",
@@ -55,7 +55,7 @@
     "ngx-perfect-scrollbar": "^8.0.0",
     "ngxs-reset-plugin": "^1.2.0",
     "prettier": "^1.18.2",
-    "primeicons": "^1.0.0",
+    "primeicons": "^2.0.0",
     "primeng": "^8.0.0",
     "protractor": "~5.4.0",
     "rxjs": "~6.4.0",
@@ -77,7 +77,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged && touch index.js"
+      "pre-commit": "lint-staged"
     }
   },
   "lint-staged": {
@@ -86,6 +86,7 @@
       "git add"
     ],
     "*.ts": [
+      "prettier --write",
       "tslint --fix",
       "git add"
     ]

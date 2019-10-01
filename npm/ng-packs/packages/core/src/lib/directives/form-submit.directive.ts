@@ -7,7 +7,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  Self,
+  Self
 } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective } from '@angular/forms';
 import { fromEvent } from 'rxjs';
@@ -17,21 +17,21 @@ import { takeUntilDestroy } from '../utils';
 type Controls = { [key: string]: FormControl } | FormGroup[];
 
 @Directive({
-  selector: 'form[ngSubmit][formGroup]',
+  // tslint:disable-next-line: directive-selector
+  selector: 'form[ngSubmit][formGroup]'
 })
 export class FormSubmitDirective implements OnInit, OnDestroy {
   @Input()
   notValidateOnSubmit: string | boolean;
 
-  @Output()
-  ngSubmit = new EventEmitter();
+  @Output() readonly ngSubmit = new EventEmitter();
 
-  executedNgSubmit: boolean = false;
+  executedNgSubmit = false;
 
   constructor(
     @Self() private formGroupDirective: FormGroupDirective,
     private host: ElementRef<HTMLFormElement>,
-    private cdRef: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -44,7 +44,7 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
       .pipe(
         debounceTime(200),
         filter((key: KeyboardEvent) => key && key.key === 'Enter'),
-        takeUntilDestroy(this),
+        takeUntilDestroy(this)
       )
       .subscribe(() => {
         if (!this.executedNgSubmit) {
@@ -57,7 +57,7 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
     fromEvent(this.host.nativeElement, 'submit')
       .pipe(
         takeUntilDestroy(this),
-        filter(() => !this.notValidateOnSubmit && typeof this.notValidateOnSubmit !== 'string'),
+        filter(() => !this.notValidateOnSubmit && typeof this.notValidateOnSubmit !== 'string')
       )
       .subscribe(() => {
         if (!this.executedNgSubmit) {
