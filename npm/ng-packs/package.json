@@ -2,7 +2,8 @@
   "scripts": {
     "ng": "ng",
     "symlink": "symlink",
-    "abpng": "abpng"
+    "abpng": "abpng",
+    "commit": "git-cz"
   },
   "devDependencies": {
     "@abp/ng.core": "^0.9.0",
@@ -36,6 +37,7 @@
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
     "codelyzer": "^5.0.0",
+    "cz-conventional-changelog": "3.0.2",
     "font-awesome": "^4.7.0",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
@@ -63,5 +65,10 @@
   },
   "dependencies": {
     "tslib": "^1.10.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
