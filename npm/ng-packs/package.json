@@ -4,7 +4,7 @@
     "ng": "ng",
     "symlink": "symlink",
     "abpng": "abpng",
-    "commit": "git-cz",
+    "commit": "git-cz && node scripts/push.js",
     "lint": "ng lint --fix"
   },
   "devDependencies": {
