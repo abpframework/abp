@@ -1,17 +1,18 @@
 import { State, Selector, createSelector, Action, StateContext, Store } from '@ngxs/store';
-import { Config, ABP } from '../models';
+import { Config } from '../models/config';
+import { ABP } from '../models/common';
 import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
 import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { tap, switchMap } from 'rxjs/operators';
 import snq from 'snq';
-import { SetLanguage } from '../actions';
+import { SetLanguage } from '../actions/session.actions';
 import { SessionState } from './session.state';
 import { of } from 'rxjs';
 import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
 
 @State<Config.State>({
   name: 'ConfigState',
-  defaults: {} as Config.State
+  defaults: {} as Config.State,
 })
 export class ConfigState {
   @Selector()
@@ -29,7 +30,7 @@ export class ConfigState {
       [ConfigState],
       (state: Config.State) => {
         return state[key];
-      }
+      },
     );
 
     return selector;
@@ -54,7 +55,7 @@ export class ConfigState {
 
           return undefined;
         }, state);
-      }
+      },
     );
 
     return selector;
@@ -72,7 +73,7 @@ export class ConfigState {
             return route;
           }
         });
-      }
+      },
     );
 
     return selector;
@@ -83,7 +84,7 @@ export class ConfigState {
       [ConfigState],
       (state: Config.State): string => {
         return state.environment.apis[key || 'default'].url;
-      }
+      },
     );
 
     return selector;
@@ -94,7 +95,7 @@ export class ConfigState {
       [ConfigState],
       (state: Config.State) => {
         return snq(() => state.setting.values[key]);
-      }
+      },
     );
 
     return selector;
@@ -106,7 +107,7 @@ export class ConfigState {
       (state: Config.State): boolean => {
         if (!key) return true;
         return snq(() => state.auth.grantedPolicies[key], false);
-      }
+      },
     );
 
     return selector;
@@ -131,7 +132,7 @@ export class ConfigState {
                  localization: {
                    defaultResourceName: 'MyProjectName'
                   }
-               }`
+               }`,
             );
           }
 
@@ -154,7 +155,7 @@ export class ConfigState {
         }
 
         return copy || key;
-      }
+      },
     );
 
     return selector;
@@ -167,8 +168,8 @@ export class ConfigState {
     return this.appConfigurationService.getConfiguration().pipe(
       tap(configuration =>
         patchState({
-          ...configuration
-        })
+          ...configuration,
+        }),
       ),
       switchMap(configuration => {
         let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
@@ -178,7 +179,7 @@ export class ConfigState {
         }
 
         return this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
-      })
+      }),
     );
   }
 
@@ -191,7 +192,7 @@ export class ConfigState {
     routes = patchRouteDeep(routes, name, newValue);
 
     return patchState({
-      routes
+      routes,
     });
   }
 }
@@ -200,7 +201,7 @@ function patchRouteDeep(
   routes: ABP.FullRoute[],
   name: string,
   newValue: Partial<ABP.FullRoute>,
-  parentUrl: string = null
+  parentUrl: string = null,
 ): ABP.FullRoute[] {
   routes = routes.map(route => {
     if (route.name === name) {
@@ -211,7 +212,7 @@ function patchRouteDeep(
       if (newValue.children && newValue.children.length) {
         newValue.children = newValue.children.map(child => ({
           ...child,
-          url: `${parentUrl}/${route.path}/${child.path}`
+          url: `${parentUrl}/${route.path}/${child.path}`,
         }));
       }
 
