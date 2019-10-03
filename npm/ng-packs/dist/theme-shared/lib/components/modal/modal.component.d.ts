@@ -22,6 +22,8 @@ export declare class ModalComponent implements OnDestroy {
     abpSubmit: ButtonComponent;
     modalContent: ElementRef;
     abpButtons: any;
+    show: EventEmitter<unknown>;
+    hide: EventEmitter<unknown>;
     _visible: boolean;
     _busy: boolean;
     showModal: boolean;

@@ -8,10 +8,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.Styles
 {
     public class StyleBundler : BundlerBase, IStyleBundler
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         public override string FileExtension => "css";
 
-        public StyleBundler(IWebContentFileProvider webContentFileProvider, ICssMinifier minifier, IHostingEnvironment hostingEnvironment) 
+        public StyleBundler(IWebContentFileProvider webContentFileProvider, ICssMinifier minifier, IWebHostEnvironment hostingEnvironment) 
             : base(webContentFileProvider, minifier)
         {
             _hostingEnvironment = hostingEnvironment;

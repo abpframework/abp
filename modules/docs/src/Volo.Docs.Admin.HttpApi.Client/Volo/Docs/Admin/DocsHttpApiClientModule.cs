@@ -6,6 +6,6 @@ namespace Volo.Docs.Admin
         typeof(DocsAdminApplicationContractsModule))]
     public class DocsAdminHttpApiClientModule : AbpModule
     {
-        
+        //TODO: Create client proxies!
     }
 }

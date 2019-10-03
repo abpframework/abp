@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,8 @@ namespace Acme.BookStore.Web
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
         {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             app.InitializeApplication();
         }
     }

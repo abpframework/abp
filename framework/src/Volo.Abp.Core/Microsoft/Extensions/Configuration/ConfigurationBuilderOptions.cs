@@ -30,5 +30,10 @@ namespace Microsoft.Extensions.Configuration
         /// Base path to read the configuration file indicated by <see cref="FileName"/>.
         /// </summary>
         public string BasePath { get; set; }
+
+        /// <summary>
+        /// Prefix for the environment variables.
+        /// </summary>
+        public string EnvironmentVariablesPrefix { get; set; }
     }
 }

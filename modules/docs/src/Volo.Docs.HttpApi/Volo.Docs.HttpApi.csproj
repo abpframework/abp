@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Docs.HttpApi</AssemblyName>
     <PackageId>Volo.Docs.HttpApi</PackageId>
     <RootNamespace />

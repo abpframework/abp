@@ -43,4 +43,8 @@ export namespace ABP {
     id: string;
     name: string;
   }
+
+  export interface Dictionary<T = any> {
+    [key: string]: T;
+  }
 }

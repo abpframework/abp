@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
@@ -13,6 +15,7 @@ namespace Volo.Abp.Account.Web
     [DependsOn(
         typeof(AbpAccountHttpApiModule),
         typeof(AbpIdentityAspNetCoreModule),
+        typeof(AbpAutoMapperModule),
         typeof(AbpAspNetCoreMvcUiThemeSharedModule)
         )]
     public class AbpAccountWebModule : AbpModule
@@ -40,6 +43,16 @@ namespace Volo.Abp.Account.Web
             Configure<ToolbarOptions>(options =>
             {
                 options.Contributors.Add(new AccountModuleToolbarContributor());
+            });
+
+            Configure<RazorPagesOptions>(options =>
+            {
+                options.Conventions.AuthorizePage("/Account/Manage");
+            });
+
+            Configure<AbpAutoMapperOptions>(options =>
+            {
+                options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
             });
         }
     }

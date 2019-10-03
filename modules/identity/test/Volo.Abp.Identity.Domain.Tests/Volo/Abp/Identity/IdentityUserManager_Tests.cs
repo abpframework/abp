@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.Normalize("david"));
+                    _lookupNormalizer.NormalizeName("david"));
                 user.ShouldNotBeNull();
 
                 var identityResult = await _identityUserManager.SetRolesAsync(user, new List<string>()
@@ -64,11 +64,11 @@ namespace Volo.Abp.Identity
             using (var uow = _unitOfWorkManager.Begin())
             {
                 var roleSupporter =
-                    await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize("supporter"));
+                    await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("supporter"));
                 roleSupporter.ShouldNotBeNull();
 
                 var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
-                    _lookupNormalizer.Normalize("john.nash"));
+                    _lookupNormalizer.NormalizeName("john.nash"));
                 user.ShouldNotBeNull();
 
                 var identityResult = await _identityUserManager.SetRolesAsync(user, new List<string>()

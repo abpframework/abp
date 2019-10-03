@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace Volo.Abp.Http
 {
@@ -10,7 +8,7 @@ namespace Volo.Abp.Http
     {
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpHttpTestModule>(options =>
+            services.AddApplication<AbpHttpClientTestModule>(options =>
             {
                 options.UseAutofac();
             });
@@ -19,7 +17,7 @@ namespace Volo.Abp.Http
             return services.BuildServiceProviderFromFactory();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
             app.InitializeApplication();
         }

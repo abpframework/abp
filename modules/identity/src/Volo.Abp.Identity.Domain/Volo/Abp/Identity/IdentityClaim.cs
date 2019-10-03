@@ -20,11 +20,6 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual string ClaimValue { get; protected set; }
 
-        public virtual bool Equals([NotNull] string claimType, [NotNull] string claimValue)
-        {
-            return ClaimType == claimType && ClaimValue == claimValue;
-        }
-
         protected IdentityClaim()
         {
 

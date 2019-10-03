@@ -11,7 +11,7 @@ import { IdentityState } from '../../states/identity.state';
 
 @Component({
   selector: 'abp-roles',
-  templateUrl: './roles.component.html',
+  templateUrl: './roles.component.html'
 })
 export class RolesComponent {
   @Select(IdentityState.getRoles)
@@ -26,19 +26,19 @@ export class RolesComponent {
 
   isModalVisible: boolean;
 
-  visiblePermissions: boolean = false;
+  visiblePermissions = false;
 
   providerKey: string;
 
   pageQuery: ABP.PageQueryParams = {
-    sorting: 'name',
+    sorting: 'name'
   };
 
-  loading: boolean = false;
+  loading = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
-  sortOrder: string = 'asc';
+  sortOrder = 'asc';
 
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
@@ -54,10 +54,10 @@ export class RolesComponent {
     this.form = this.fb.group({
       name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
         Validators.required,
-        Validators.maxLength(256),
+        Validators.maxLength(256)
       ]),
       isDefault: [this.selected.isDefault || false],
-      isPublic: [this.selected.isPublic || false],
+      isPublic: [this.selected.isPublic || false]
     });
   }
 
@@ -89,7 +89,7 @@ export class RolesComponent {
       .dispatch(
         this.selected.id
           ? new UpdateRole({ ...this.form.value, id: this.selected.id })
-          : new CreateRole(this.form.value),
+          : new CreateRole(this.form.value)
       )
       .subscribe(() => {
         this.modalBusy = false;
@@ -100,7 +100,7 @@ export class RolesComponent {
   delete(id: string, name: string) {
     this.confirmationService
       .warn('AbpIdentity::RoleDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
-        messageLocalizationParams: [name],
+        messageLocalizationParams: [name]
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {

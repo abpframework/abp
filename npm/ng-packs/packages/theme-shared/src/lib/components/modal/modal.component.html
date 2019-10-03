@@ -1,31 +1,15 @@
-<div
-  *ngIf="showModal"
-  (click)="close()"
-  id="abp-modal"
-  class="modal fade {{ modalClass }} d-block show"
-  [style.padding-right.px]="'15'"
->
-  <div
-    id="abp-modal-container"
-    class="modal-dialog modal-{{ size }} fade-in-top"
-    tabindex="-1"
-    [class.modal-dialog-centered]="centered"
-    #abpModalContent
-  >
-    <div #content id="abp-modal-content" class="modal-content" (click)="$event.stopPropagation()">
+<div class="modal {{ modalClass }}" tabindex="-1" role="dialog" *ngIf="visible">
+  <div class="modal-backdrop" [@backdrop]="visible" (click)="close()"></div>
+  <div id="abp-modal-dialog" class="modal-dialog modal-{{ size }}" role="document" [@dialog]="visible" #abpModalContent>
+    <div id="abp-modal-content" class="modal-content">
       <div id="abp-modal-header" class="modal-header">
         <ng-container *ngTemplateOutlet="abpHeader"></ng-container>
 
-        <button id="abp-modal-close-button" type="button" class="close" (click)="close()">
+        <button id="abp-modal-close-button" type="button" class="close" aria-label="Close" (click)="close()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div
-        id="abp-modal-body"
-        class="modal-body"
-        [style.height]="height || undefined"
-        [style.minHeight]="minHeight || undefined"
-      >
+      <div id="abp-modal-body" class="modal-body">
         <ng-container *ngTemplateOutlet="abpBody"></ng-container>
       </div>
       <div id="abp-modal-footer" class="modal-footer">
@@ -33,6 +17,5 @@
       </div>
     </div>
   </div>
-
   <ng-content></ng-content>
 </div>

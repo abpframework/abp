@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity
 
         private void AddRoles()
         {
-            _adminRole = _roleRepository.FindByNormalizedName(_lookupNormalizer.Normalize("admin"));
+            _adminRole = _roleRepository.FindByNormalizedName(_lookupNormalizer.NormalizeName("admin"));
 
             _moderator = new IdentityRole(_testData.RoleModeratorId, "moderator");
             _moderator.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));

@@ -209,6 +209,135 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    /**
+     * @template T
+     */
+    var AbstractNgModelComponent = /** @class */ (function () {
+        function AbstractNgModelComponent(injector) {
+            this.injector = injector;
+            this.cdRef = injector.get((/** @type {?} */ (core.ChangeDetectorRef)));
+        }
+        Object.defineProperty(AbstractNgModelComponent.prototype, "value", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                return this._value;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                this._value = value;
+                this.notifyValueChange();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        AbstractNgModelComponent.prototype.notifyValueChange = /**
+         * @return {?}
+         */
+        function () {
+            if (this.onChange) {
+                this.onChange(this.value);
+            }
+        };
+        /**
+         * @param {?} value
+         * @return {?}
+         */
+        AbstractNgModelComponent.prototype.writeValue = /**
+         * @param {?} value
+         * @return {?}
+         */
+        function (value) {
+            var _this = this;
+            this._value = value;
+            setTimeout((/**
+             * @return {?}
+             */
+            function () { return _this.cdRef.detectChanges(); }), 0);
+        };
+        /**
+         * @param {?} fn
+         * @return {?}
+         */
+        AbstractNgModelComponent.prototype.registerOnChange = /**
+         * @param {?} fn
+         * @return {?}
+         */
+        function (fn) {
+            this.onChange = fn;
+        };
+        /**
+         * @param {?} fn
+         * @return {?}
+         */
+        AbstractNgModelComponent.prototype.registerOnTouched = /**
+         * @param {?} fn
+         * @return {?}
+         */
+        function (fn) {
+            this.onTouched = fn;
+        };
+        /**
+         * @param {?} isDisabled
+         * @return {?}
+         */
+        AbstractNgModelComponent.prototype.setDisabledState = /**
+         * @param {?} isDisabled
+         * @return {?}
+         */
+        function (isDisabled) {
+            this.disabled = isDisabled;
+        };
+        AbstractNgModelComponent.decorators = [
+            { type: core.Component, args: [{ template: '' }] }
+        ];
+        /** @nocollapse */
+        AbstractNgModelComponent.ctorParameters = function () { return [
+            { type: core.Injector }
+        ]; };
+        AbstractNgModelComponent.propDecorators = {
+            disabled: [{ type: core.Input }],
+            value: [{ type: core.Input }]
+        };
+        return AbstractNgModelComponent;
+    }());
+    if (false) {
+        /** @type {?} */
+        AbstractNgModelComponent.prototype.disabled;
+        /** @type {?} */
+        AbstractNgModelComponent.prototype.onChange;
+        /** @type {?} */
+        AbstractNgModelComponent.prototype.onTouched;
+        /**
+         * @type {?}
+         * @protected
+         */
+        AbstractNgModelComponent.prototype._value;
+        /**
+         * @type {?}
+         * @protected
+         */
+        AbstractNgModelComponent.prototype.cdRef;
+        /** @type {?} */
+        AbstractNgModelComponent.prototype.injector;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var PatchRouteByName = /** @class */ (function () {
         function PatchRouteByName(name, newValue) {
             this.name = name;
@@ -665,9 +794,10 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var LocalizationService = /** @class */ (function () {
-        function LocalizationService(store, router, actions, otherInstance) {
+        function LocalizationService(store, router, ngZone, actions, otherInstance) {
             this.store = store;
             this.router = router;
+            this.ngZone = ngZone;
             this.actions = actions;
             if (otherInstance)
                 throw new Error('LocaleService should have only one instance.');
@@ -714,17 +844,22 @@
             return registerLocale(locale).then((/**
              * @return {?}
              */
-            function () { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(rxjs.noop)];
-                        case 1:
-                            _a.sent();
-                            this.setRouteReuse(shouldReuseRoute);
-                            return [2 /*return*/];
-                    }
-                });
-            }); }));
+            function () {
+                _this.ngZone.run((/**
+                 * @return {?}
+                 */
+                function () { return __awaiter(_this, void 0, void 0, function () {
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(rxjs.noop)];
+                            case 1:
+                                _a.sent();
+                                this.setRouteReuse(shouldReuseRoute);
+                                return [2 /*return*/];
+                        }
+                    });
+                }); }));
+            }));
         };
         /**
          * @param {?} keys
@@ -767,10 +902,11 @@
         LocalizationService.ctorParameters = function () { return [
             { type: store.Store },
             { type: router.Router },
+            { type: core.NgZone },
             { type: store.Actions },
             { type: LocalizationService, decorators: [{ type: core.Optional }, { type: core.SkipSelf }] }
         ]; };
-        /** @nocollapse */ LocalizationService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(core.ɵɵinject(store.Store), core.ɵɵinject(router.Router), core.ɵɵinject(store.Actions), core.ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+        /** @nocollapse */ LocalizationService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(core.ɵɵinject(store.Store), core.ɵɵinject(router.Router), core.ɵɵinject(core.NgZone), core.ɵɵinject(store.Actions), core.ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
         return LocalizationService;
     }());
     if (false) {
@@ -784,6 +920,11 @@
          * @private
          */
         LocalizationService.prototype.router;
+        /**
+         * @type {?}
+         * @private
+         */
+        LocalizationService.prototype.ngZone;
         /**
          * @type {?}
          * @private
@@ -2420,6 +2561,7 @@
         function VisibilityDirective(elRef, renderer) {
             this.elRef = elRef;
             this.renderer = renderer;
+            this.mutationObserverEnabled = true;
             this.completed$ = new rxjs.Subject();
         }
         /**
@@ -2431,44 +2573,65 @@
         function () {
             var _this = this;
             /** @type {?} */
-            var observer = new MutationObserver((/**
-             * @param {?} mutations
-             * @return {?}
-             */
-            function (mutations) {
-                mutations.forEach((/**
-                 * @param {?} mutation
+            var observer;
+            if (this.mutationObserverEnabled) {
+                observer = new MutationObserver((/**
+                 * @param {?} mutations
                  * @return {?}
                  */
-                function (mutation) {
-                    if (!mutation.target)
-                        return;
+                function (mutations) {
+                    mutations.forEach((/**
+                     * @param {?} mutation
+                     * @return {?}
+                     */
+                    function (mutation) {
+                        if (!mutation.target)
+                            return;
+                        /** @type {?} */
+                        var htmlNodes = snq((/**
+                         * @return {?}
+                         */
+                        function () { return Array.from(mutation.target.childNodes).filter((/**
+                         * @param {?} node
+                         * @return {?}
+                         */
+                        function (node) { return node instanceof HTMLElement; })); }), []);
+                        if (!htmlNodes.length) {
+                            _this.removeFromDOM();
+                            _this.disconnect();
+                        }
+                        else {
+                            setTimeout((/**
+                             * @return {?}
+                             */
+                            function () {
+                                _this.disconnect();
+                            }), 0);
+                        }
+                    }));
+                }));
+                observer.observe(this.focusedElement, {
+                    childList: true,
+                });
+            }
+            else {
+                setTimeout((/**
+                 * @return {?}
+                 */
+                function () {
                     /** @type {?} */
                     var htmlNodes = snq((/**
                      * @return {?}
                      */
-                    function () { return Array.from(mutation.target.childNodes).filter((/**
+                    function () { return Array.from(_this.focusedElement.childNodes).filter((/**
                      * @param {?} node
                      * @return {?}
                      */
                     function (node) { return node instanceof HTMLElement; })); }), []);
-                    if (!htmlNodes.length) {
-                        _this.renderer.removeChild(_this.elRef.nativeElement.parentElement, _this.elRef.nativeElement);
-                        _this.disconnect();
-                    }
-                    else {
-                        setTimeout((/**
-                         * @return {?}
-                         */
-                        function () {
-                            _this.disconnect();
-                        }), 0);
-                    }
-                }));
-            }));
-            observer.observe(this.focusedElement, {
-                childList: true,
-            });
+                    if (!htmlNodes.length)
+                        _this.removeFromDOM();
+                }), 0);
+            }
             this.completed$.subscribe((/**
              * @return {?}
              */
@@ -2484,6 +2647,15 @@
             this.completed$.next();
             this.completed$.complete();
         };
+        /**
+         * @return {?}
+         */
+        VisibilityDirective.prototype.removeFromDOM = /**
+         * @return {?}
+         */
+        function () {
+            this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
+        };
         VisibilityDirective.decorators = [
             { type: core.Directive, args: [{
                         selector: '[abpVisibility]',
@@ -2495,13 +2667,16 @@
             { type: core.Renderer2 }
         ]; };
         VisibilityDirective.propDecorators = {
-            focusedElement: [{ type: core.Input, args: ['abpVisibility',] }]
+            focusedElement: [{ type: core.Input, args: ['abpVisibility',] }],
+            mutationObserverEnabled: [{ type: core.Input }]
         };
         return VisibilityDirective;
     }());
     if (false) {
         /** @type {?} */
         VisibilityDirective.prototype.focusedElement;
+        /** @type {?} */
+        VisibilityDirective.prototype.mutationObserverEnabled;
         /** @type {?} */
         VisibilityDirective.prototype.completed$;
         /**
@@ -2543,9 +2718,10 @@
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var AuthGuard = /** @class */ (function () {
-        function AuthGuard(oauthService, store) {
+        function AuthGuard(oauthService, store, router) {
             this.oauthService = oauthService;
             this.store = store;
+            this.router = router;
         }
         /**
          * @param {?} _
@@ -2563,8 +2739,7 @@
             if (hasValidAccessToken) {
                 return hasValidAccessToken;
             }
-            this.store.dispatch(new routerPlugin.Navigate(['/account/login'], null, { state: { redirectUrl: state.url } }));
-            return false;
+            return this.router.createUrlTree(['/account/login'], { state: { redirectUrl: state.url } });
         };
         AuthGuard.decorators = [
             { type: core.Injectable, args: [{
@@ -2574,9 +2749,10 @@
         /** @nocollapse */
         AuthGuard.ctorParameters = function () { return [
             { type: angularOauth2Oidc.OAuthService },
-            { type: store.Store }
+            { type: store.Store },
+            { type: router.Router }
         ]; };
-        /** @nocollapse */ AuthGuard.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(core.ɵɵinject(angularOauth2Oidc.OAuthService), core.ɵɵinject(store.Store)); }, token: AuthGuard, providedIn: "root" });
+        /** @nocollapse */ AuthGuard.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(core.ɵɵinject(angularOauth2Oidc.OAuthService), core.ɵɵinject(store.Store), core.ɵɵinject(router.Router)); }, token: AuthGuard, providedIn: "root" });
         return AuthGuard;
     }());
     if (false) {
@@ -2590,6 +2766,11 @@
          * @private
          */
         AuthGuard.prototype.store;
+        /**
+         * @type {?}
+         * @private
+         */
+        AuthGuard.prototype.router;
     }
 
     /**
@@ -3266,9 +3447,7 @@
                 /** @type {?} */
                 var value = [val];
                 if (val.children) {
-                    var children = val.children;
-                    delete val.children;
-                    value = __spread([val], flat(children));
+                    value = __spread([val], flat(val.children));
                 }
                 return __spread(acc, value);
             }), []);
@@ -3670,6 +3849,39 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var SortPipe = /** @class */ (function () {
+        function SortPipe() {
+        }
+        /**
+         * @param {?} value
+         * @param {?} sortOrder
+         * @return {?}
+         */
+        SortPipe.prototype.transform = /**
+         * @param {?} value
+         * @param {?} sortOrder
+         * @return {?}
+         */
+        function (value, sortOrder) {
+            sortOrder = sortOrder.toLowerCase();
+            if (sortOrder === "desc")
+                return value.reverse();
+            else
+                return value;
+        };
+        SortPipe.decorators = [
+            { type: core.Pipe, args: [{
+                        name: 'abpSort',
+                        pure: false
+                    },] }
+        ];
+        return SortPipe;
+    }());
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     var LocaleId = /** @class */ (function (_super) {
         __extends(LocaleId, _super);
         function LocaleId(localizationService) {
@@ -3782,10 +3994,12 @@
                             ForDirective,
                             FormSubmitDirective,
                             LocalizationPipe,
+                            SortPipe,
                             PermissionDirective,
                             VisibilityDirective,
                             InputEventDebounceDirective,
                             ClickEventStopPropagationDirective,
+                            AbstractNgModelComponent,
                         ],
                         exports: [
                             common.CommonModule,
@@ -3800,11 +4014,13 @@
                             ForDirective,
                             FormSubmitDirective,
                             LocalizationPipe,
+                            SortPipe,
                             PermissionDirective,
                             VisibilityDirective,
                             InputEventDebounceDirective,
                             LocalizationPipe,
                             ClickEventStopPropagationDirective,
+                            AbstractNgModelComponent,
                         ],
                         providers: [LocalizationPipe],
                         entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
@@ -3813,6 +4029,7 @@
         return CoreModule;
     }());
 
+    exports.AbstractNgModelComponent = AbstractNgModelComponent;
     exports.ApiInterceptor = ApiInterceptor;
     exports.ApplicationConfigurationService = ApplicationConfigurationService;
     exports.AuthGuard = AuthGuard;
@@ -3861,14 +4078,16 @@
     exports.uuid = uuid;
     exports.ɵa = ProfileState;
     exports.ɵb = ProfileService;
-    exports.ɵba = ClickEventStopPropagationDirective;
-    exports.ɵbb = LocaleId;
-    exports.ɵbc = LocaleProvider;
-    exports.ɵbd = NGXS_CONFIG_PLUGIN_OPTIONS;
-    exports.ɵbe = ConfigPlugin;
-    exports.ɵbf = ApiInterceptor;
-    exports.ɵbg = getInitialData;
-    exports.ɵbh = localeInitializer;
+    exports.ɵba = InputEventDebounceDirective;
+    exports.ɵbb = ClickEventStopPropagationDirective;
+    exports.ɵbc = AbstractNgModelComponent;
+    exports.ɵbd = LocaleId;
+    exports.ɵbe = LocaleProvider;
+    exports.ɵbf = NGXS_CONFIG_PLUGIN_OPTIONS;
+    exports.ɵbg = ConfigPlugin;
+    exports.ɵbh = ApiInterceptor;
+    exports.ɵbi = getInitialData;
+    exports.ɵbj = localeInitializer;
     exports.ɵc = RestService;
     exports.ɵd = GetProfile;
     exports.ɵe = UpdateProfile;
@@ -3888,9 +4107,9 @@
     exports.ɵu = ForDirective;
     exports.ɵv = FormSubmitDirective;
     exports.ɵw = LocalizationPipe;
-    exports.ɵx = PermissionDirective;
-    exports.ɵy = VisibilityDirective;
-    exports.ɵz = InputEventDebounceDirective;
+    exports.ɵx = SortPipe;
+    exports.ɵy = PermissionDirective;
+    exports.ɵz = VisibilityDirective;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

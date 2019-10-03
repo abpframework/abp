@@ -169,8 +169,16 @@ namespace Volo.Abp.Cli
             }
         }
 
+        private static bool IsGlobalTool(string toolPath)
+        {
+            var globalPaths = new[] { @"%USERPROFILE%\.dotnet\tools\", "%HOME%/.dotnet/tools/", };
+            return globalPaths.Select(Environment.ExpandEnvironmentVariables).Contains(toolPath);
+        }
+
         private void LogNewVersionInfo(UpdateChannel updateChannel, SemanticVersion latestVersion, string toolPath)
         {
+            var toolPathArg = IsGlobalTool(toolPath) ? "-g" : $"--tool-path {toolPath}";
+
             Logger.LogWarning($"ABP CLI has a newer {updateChannel.ToString().ToLowerInvariant()} version {latestVersion}, please update to get the latest features and fixes.");
             Logger.LogWarning(string.Empty);
             Logger.LogWarning("Update Command: ");
@@ -179,18 +187,18 @@ namespace Volo.Abp.Cli
             switch (updateChannel)
             {
                 case UpdateChannel.Stable:
-                    Logger.LogWarning("dotnet tool update -g Volo.Abp.Cli");
+                    Logger.LogWarning($"dotnet tool update {toolPathArg} Volo.Abp.Cli");
                     break;
 
                 case UpdateChannel.Prerelease:
-                    Logger.LogWarning("dotnet tool uninstall -g Volo.Abp.Cli");
-                    Logger.LogWarning($"dotnet tool install -g Volo.Abp.Cli --version {latestVersion}");
+                    Logger.LogWarning($"dotnet tool uninstall {toolPathArg} Volo.Abp.Cli");
+                    Logger.LogWarning($"dotnet tool install {toolPathArg} Volo.Abp.Cli --version {latestVersion}");
                     break;
 
                 case UpdateChannel.Nightly:
                 case UpdateChannel.Development:
-                    Logger.LogWarning("dotnet tool uninstall -g Volo.Abp.Cli");
-                    Logger.LogWarning($"dotnet tool install -g Volo.Abp.Cli --add-source https://www.myget.org/F/abp-nightly/api/v3/index.json --version {latestVersion}");
+                    Logger.LogWarning($"dotnet tool uninstall {toolPathArg} Volo.Abp.Cli");
+                    Logger.LogWarning($"dotnet tool install {toolPathArg} Volo.Abp.Cli --add-source https://www.myget.org/F/abp-nightly/api/v3/index.json --version {latestVersion}");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(updateChannel), updateChannel, null);

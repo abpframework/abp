@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
@@ -30,6 +29,7 @@ using Volo.Docs.Admin;
 using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
+using Microsoft.Extensions.Hosting;
 
 namespace VoloDocs.Web
 {
@@ -103,8 +103,7 @@ namespace VoloDocs.Web
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
-
-
+            
             Configure<VirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<VoloDocsWebModule>("VoloDocs.Web");

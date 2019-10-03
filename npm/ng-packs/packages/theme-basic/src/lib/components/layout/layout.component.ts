@@ -6,10 +6,10 @@ import { Store } from '@ngxs/store';
 @Component({
   selector: ' abp-layout',
   templateUrl: './layout.component.html',
-  animations: [slideFromBottom],
+  animations: [slideFromBottom]
 })
 export class LayoutComponent {
-  isCollapsed: boolean = true;
+  isCollapsed = true;
 
   get appInfo(): Config.Application {
     return this.store.selectSnapshot(ConfigState.getApplicationInfo);

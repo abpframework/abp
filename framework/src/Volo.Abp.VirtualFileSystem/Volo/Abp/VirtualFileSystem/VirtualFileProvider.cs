@@ -71,7 +71,7 @@ namespace Volo.Abp.VirtualFileSystem
                     true
                 );
             }
-            
+
             private Dictionary<string, IFileInfo> CreateFiles()
             {
                 var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);

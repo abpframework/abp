@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -23,7 +24,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         protected readonly BundlingOptions Options;
         protected readonly BundleContributorOptions ContributorOptions;
         protected readonly IWebContentFileProvider WebContentFileProvider;
-        protected readonly IHostingEnvironment HostingEnvironment;
+        protected readonly IWebHostEnvironment HostingEnvironment;
         protected readonly IScriptBundler ScriptBundler;
         protected readonly IStyleBundler StyleBundler;
         protected readonly IServiceProvider ServiceProvider;
@@ -36,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             IOptions<BundleContributorOptions> contributorOptions,
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             IServiceProvider serviceProvider,
             IDynamicFileProvider dynamicFileProvider,
             IBundleCache bundleCache,
@@ -138,11 +139,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             DynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    Encoding.UTF8.GetBytes(bundleResult.Content),
                     "/wwwroot/" + bundleRelativePath, //TODO: get rid of wwwroot!
+                    Encoding.UTF8.GetBytes(bundleResult.Content),
                     fileName
-                    )
-                );
+                )
+            );
         }
 
         protected virtual bool IsBundlingEnabled()

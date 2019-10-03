@@ -5,7 +5,7 @@
 [![NuGet Download](https://img.shields.io/nuget/dt/Volo.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/Volo.Abp.Core)
 [![MyGet (with prereleases)](https://img.shields.io/myget/abp-nightly/vpre/Volo.Abp.Core.svg?style=flat-square)](https://docs.abp.io/en/abp/latest/Nightly-Builds)
 
-This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework. See [the announcement](https://abp.io/blog/abp/Abp-vNext-Announcement).
+This project is the next generation of the [ASP.NET Boilerplate](https://aspnetboilerplate.com/) web application framework. See [the announcement](https://blog.abp.io/abp/Abp-vNext-Announcement).
 
 See the official [web site (abp.io)](https://abp.io/) for more information.
 
@@ -21,7 +21,7 @@ See the <a href="https://docs.abp.io/" target="_blank">documentation</a>.
 
 #### Pre Requirements
 
-- Visual Studio 2019 16.1.0+
+- Visual Studio 2019 16.3.0+
 
 #### Framework
 

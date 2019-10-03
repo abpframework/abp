@@ -27,6 +27,10 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 })
 export class IdentityModule {}
 
+/**
+ *
+ * @deprecated
+ */
 export function IdentityProviders(): Provider[] {
   return [];
 }

@@ -150,6 +150,14 @@ export default `
   margin-left: 10px !important;
 }
 
+.ui-widget-overlay {
+  z-index: 1000;
+}
+
+.color-white {
+  color: #FFF !important;
+}
+
 /* <animations */
 
 .fade-in-top {
@@ -168,7 +176,7 @@ export default `
   }
 
   to {
-    transform: translateY(5px);
+    transform: translateY(0px);
     opacity: 1;
   }
 }
