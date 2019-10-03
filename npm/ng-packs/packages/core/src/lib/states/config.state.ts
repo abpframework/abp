@@ -113,6 +113,11 @@ export class ConfigState {
     return selector;
   }
 
+  /**
+   *
+   * @param deprecated, Use getLocalization instead. To be delete in v1
+   *
+   */
   static getCopy(key: string, ...interpolateParams: string[]) {
     if (!key) key = '';
 
@@ -155,6 +160,54 @@ export class ConfigState {
         }
 
         return copy || key;
+      },
+    );
+
+    return selector;
+  }
+
+  static getLocalization(key: string, ...interpolateParams: string[]) {
+    if (!key) key = '';
+
+    const keys = key.split('::') as string[];
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State) => {
+        if (!state.localization) return key;
+
+        const { defaultResourceName } = state.environment.localization;
+        if (keys[0] === '') {
+          if (!defaultResourceName) {
+            throw new Error(
+              `Please check your environment. May you forget set defaultResourceName?
+              Here is the example:
+               { production: false,
+                 localization: {
+                   defaultResourceName: 'MyProjectName'
+                  }
+               }`,
+            );
+          }
+
+          keys[0] = snq(() => defaultResourceName);
+        }
+
+        let localization = (keys as any).reduce((acc, val) => {
+          if (acc) {
+            return acc[val];
+          }
+
+          return undefined;
+        }, state.localization.values);
+
+        interpolateParams = interpolateParams.filter(params => params != null);
+        if (localization && interpolateParams && interpolateParams.length) {
+          interpolateParams.forEach(param => {
+            localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
+          });
+        }
+
+        return localization || key;
       },
     );
 

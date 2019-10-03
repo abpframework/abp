@@ -23,13 +23,12 @@ export class LocalizationService {
     if (otherInstance) throw new Error('LocaleService should have only one instance.');
   }
 
-  private setRouteReuse(reuse: ShouldReuseRoute) {
+  setRouteReuse(reuse: ShouldReuseRoute) {
     this.router.routeReuseStrategy.shouldReuseRoute = reuse;
   }
 
   registerLocale(locale: string) {
     const { shouldReuseRoute } = this.router.routeReuseStrategy;
-
     this.setRouteReuse(() => false);
     this.router.navigated = false;
 
@@ -41,11 +40,11 @@ export class LocalizationService {
     });
   }
 
-  get(keys: string, ...interpolateParams: string[]): Observable<string> {
-    return this.store.select(state => state.ConfigState.getCopy(keys, ...interpolateParams));
+  get(key: string, ...interpolateParams: string[]): Observable<string> {
+    return this.store.select(state => state.ConfigState.getLocalization(key, ...interpolateParams));
   }
 
-  instant(keys: string, ...interpolateParams: string[]): string {
-    return this.store.selectSnapshot(state => state.ConfigState.getCopy(keys, ...interpolateParams));
+  instant(key: string, ...interpolateParams: string[]): string {
+    return this.store.selectSnapshot(state => state.ConfigState.getLocalization(key, ...interpolateParams));
   }
 }
