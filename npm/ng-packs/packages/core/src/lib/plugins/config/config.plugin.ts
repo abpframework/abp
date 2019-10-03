@@ -20,7 +20,6 @@ export class ConfigPlugin implements NgxsPlugin {
     const matches = actionMatcher(event);
     const isInitAction = matches(InitState) || matches(UpdateState);
 
-    // const layouts = snq(() => this.options.requirements.layouts.filter(layout => layout instanceof Type), []);
     if (isInitAction && !this.initialized) {
       const transformedRoutes = transformRoutes(this.router.config);
       let { routes } = transformedRoutes;
@@ -32,7 +31,7 @@ export class ConfigPlugin implements NgxsPlugin {
         ...(state.ConfigState && { ...state.ConfigState }),
         ...this.options,
         routes,
-        flattedRoutes
+        flattedRoutes,
       });
 
       this.initialized = true;
@@ -73,7 +72,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
           ...route.data.routes,
           path: route.path,
           name: snq(() => route.data.routes.name, route.path),
-          children: route.data.routes.children || []
+          children: route.data.routes.children || [],
         } as ABP.FullRoute);
       }
     });
@@ -90,8 +89,8 @@ function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
       url: `${parentUrl}/${route.path}`,
       ...(route.children &&
         route.children.length && {
-          children: setUrls(route.children, `${parentUrl}/${route.path}`)
-        })
+          children: setUrls(route.children, `${parentUrl}/${route.path}`),
+        }),
     }));
   }
 
@@ -100,8 +99,8 @@ function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
     url: `/${route.path}`,
     ...(route.children &&
       route.children.length && {
-        children: setUrls(route.children, `/${route.path}`)
-      })
+        children: setUrls(route.children, `/${route.path}`),
+      }),
   }));
 }
 
