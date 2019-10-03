@@ -6,15 +6,16 @@ import {
   EmbeddedViewRef,
   Injectable,
   Injector,
+  NgZone,
   RendererFactory2,
 } from '@angular/core';
-import { Navigate, RouterState } from '@ngxs/router-plugin';
+import { Router } from '@angular/router';
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import snq from 'snq';
 import { ErrorComponent } from '../components/error/error.component';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
-import snq from 'snq';
 
 export const DEFAULT_ERROR_MESSAGES = {
   defaultError: {
@@ -47,6 +48,8 @@ export const DEFAULT_ERROR_MESSAGES = {
 export class ErrorHandler {
   constructor(
     private actions: Actions,
+    private router: Router,
+    private ngZone: NgZone,
     private store: Store,
     private confirmationService: ConfirmationService,
     private appRef: ApplicationRef,
@@ -125,11 +128,11 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    this.store.dispatch(
-      new Navigate(['/account/login'], null, {
-        state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
-      }),
-    );
+    this.ngZone.run(() => {
+      this.router.navigate(['/account/login'], {
+        state: { redirectUrl: this.router.url },
+      });
+    });
   }
 
   createErrorComponent(instance: Partial<ErrorComponent>) {

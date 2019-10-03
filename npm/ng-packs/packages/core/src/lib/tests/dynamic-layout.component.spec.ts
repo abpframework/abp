@@ -1,17 +1,19 @@
-import { ConfigState, CoreModule, DynamicLayoutComponent, eLayoutType, ABP, RouterOutletComponent } from '@abp/ng.core';
-import { Location } from '@angular/common';
 import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator';
 import { NgxsModule, Store } from '@ngxs/store';
-import { LAYOUTS, ThemeBasicModule } from '../../../../theme-basic/src/public-api';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { NgxsResetPluginModule, StateOverwrite } from 'ngxs-reset-plugin';
+import { LAYOUTS, ThemeBasicModule } from '../../../../theme-basic/src/public-api';
+import { eLayoutType } from '../enums';
+import { ABP } from '../models';
+import { RouterOutletComponent, CoreModule, DynamicLayoutComponent, ConfigState } from '@abp/ng.core';
 import { ThemeSharedModule } from '../../../../theme-shared/src/public-api';
-import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'abp-dummy',
-  template: '{{route.snapshot.data?.name}} works!'
+  template: '{{route.snapshot.data?.name}} works!',
 })
 class DummyComponent {
   constructor(public route: ActivatedRoute) {}
@@ -25,12 +27,13 @@ describe('DynamicLayoutComponent', () => {
       CoreModule,
       NgxsModule.forRoot([ConfigState]),
       NgxsResetPluginModule.forRoot(),
-      ThemeSharedModule.forRoot(),
-      ThemeBasicModule
+      ThemeSharedModule,
+      ThemeBasicModule,
     ],
     declarations: [DummyComponent],
+    entryComponents: [],
     stubsEnabled: false,
-    providers: [{ provide: OAuthService, useValue: { getAccessToken: () => true } }],
+    providers: [MessageService, { provide: OAuthService, useValue: { getAccessToken: () => true } }],
     routes: [
       { path: '', component: RouterOutletComponent },
       {
@@ -40,14 +43,14 @@ describe('DynamicLayoutComponent', () => {
           {
             path: 'childWithoutLayout',
             component: DummyComponent,
-            data: { name: 'childWithoutLayout' }
+            data: { name: 'childWithoutLayout' },
           },
           {
             path: 'childWithLayout',
             component: DummyComponent,
-            data: { name: 'childWithLayout' }
-          }
-        ]
+            data: { name: 'childWithLayout' },
+          },
+        ],
       },
       {
         path: 'withData',
@@ -56,10 +59,10 @@ describe('DynamicLayoutComponent', () => {
           {
             path: '',
             component: DummyComponent,
-            data: { name: 'withData' }
-          }
+            data: { name: 'withData' },
+          },
         ],
-        data: { layout: eLayoutType.empty }
+        data: { layout: eLayoutType.empty },
       },
       {
         path: 'withoutLayout',
@@ -68,12 +71,12 @@ describe('DynamicLayoutComponent', () => {
           {
             path: '',
             component: DummyComponent,
-            data: { name: 'withoutLayout' }
-          }
+            data: { name: 'withoutLayout' },
+          },
         ],
-        data: { layout: null }
-      }
-    ]
+        data: { layout: null },
+      },
+    ],
   });
 
   let spectator: SpectatorRouting<RouterOutletComponent>;
@@ -95,16 +98,16 @@ describe('DynamicLayoutComponent', () => {
                 {
                   path: 'parentWithLayout',
                   layout: eLayoutType.application,
-                  children: [{ path: 'childWithoutLayout' }, { path: 'childWithLayout', layout: eLayoutType.account }]
-                }
-              ]
+                  children: [{ path: 'childWithoutLayout' }, { path: 'childWithLayout', layout: eLayoutType.account }],
+                },
+              ],
             },
             { path: 'withData', layout: eLayoutType.application },
             ,
           ] as ABP.FullRoute[],
-          environment: { application: {} }
-        }
-      ])
+          environment: { application: {} },
+        },
+      ]),
     );
   });
 
@@ -139,7 +142,7 @@ describe('DynamicLayoutComponent', () => {
 
   it('should not display any layout when layouts are empty', async () => {
     store.dispatch(
-      new StateOverwrite([ConfigState, { ...store.selectSnapshot(ConfigState), requirements: { layouts: [] } }])
+      new StateOverwrite([ConfigState, { ...store.selectSnapshot(ConfigState), requirements: { layouts: [] } }]),
     );
 
     spectator.detectChanges();
