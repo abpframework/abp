@@ -1,4 +1,4 @@
-import { animation, animate, style, trigger, transition, state, useAnimation, keyframes } from '@angular/animations';
+import { animate, animation, keyframes, style } from '@angular/animations';
 
 export const bounceIn = animation(
   [
