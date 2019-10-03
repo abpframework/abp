@@ -18,10 +18,10 @@ export class SettingManagementComponent implements OnInit {
   constructor(private router: Router, private store: Store) {}
 
   ngOnInit() {
+    this.settings = SETTING_TABS.filter(setting =>
+      this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)),
+    ).sort((a, b) => a.order - b.order);
     if (this.settings.length) {
-      this.settings = SETTING_TABS.filter(setting =>
-        this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)),
-      ).sort((a, b) => a.order - b.order);
       this.selected = this.settings[0];
     }
   }

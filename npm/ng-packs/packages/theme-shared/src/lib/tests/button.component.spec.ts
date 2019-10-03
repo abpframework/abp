@@ -1,11 +1,4 @@
-import { CoreModule } from '@abp/ng.core';
-import {
-  createComponentFactory,
-  createHostFactory,
-  Spectator,
-  SpectatorHost,
-  createTestComponentFactory
-} from '@ngneat/spectator';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator';
 import { ButtonComponent } from '../components';
 
 describe('ButtonComponent', () => {

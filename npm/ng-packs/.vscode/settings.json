@@ -1,5 +1,22 @@
 {
   "search.exclude": {
     "**/dist": true
-  }
+  },
+  "tslint.rulesDirectory": "../node_modules/codelyzer",
+  "typescript.tsdk": "../node_modules/typescript/lib",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#df7fa2",
+    "activityBar.foreground": "#15202b",
+    "activityBar.inactiveForeground": "#15202b99",
+    "activityBarBadge.background": "#c7ecb3",
+    "activityBarBadge.foreground": "#15202b",
+    "titleBar.activeBackground": "#d55685",
+    "titleBar.inactiveBackground": "#d5568599",
+    "titleBar.activeForeground": "#15202b",
+    "titleBar.inactiveForeground": "#15202b99",
+    "statusBar.background": "#d55685",
+    "statusBarItem.hoverBackground": "#c73169",
+    "statusBar.foreground": "#15202b"
+  },
+  "peacock.color": "#d55685"
 }
