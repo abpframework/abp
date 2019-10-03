@@ -2,7 +2,7 @@ import { Spectator, createComponentFactory, createHostFactory } from '@ngneat/sp
 import { RouterTestingModule } from '@angular/router/testing';
 import { RouterOutletComponent } from '../components/router-outlet.component';
 
-xdescribe('RouterOutletComponent', () => {
+describe('RouterOutletComponent', () => {
   let spectator: Spectator<RouterOutletComponent>;
   const createHost = createHostFactory({ component: RouterOutletComponent, imports: [RouterTestingModule] });
 

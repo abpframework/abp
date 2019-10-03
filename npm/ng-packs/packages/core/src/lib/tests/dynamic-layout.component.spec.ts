@@ -19,7 +19,7 @@ class DummyComponent {
   constructor(public route: ActivatedRoute) {}
 }
 
-xdescribe('DynamicLayoutComponent', () => {
+describe('DynamicLayoutComponent', () => {
   const createComponent = createRoutingFactory({
     component: RouterOutletComponent,
     declareComponent: false,
