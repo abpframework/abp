@@ -19,11 +19,10 @@ export class OverwritePlugin implements NgxsPlugin {
 
     if (action instanceof InitState && !this.initialized) {
       state = { ...state, ...this.options };
-      console.log(state);
       this.initialized = true;
     }
 
-    if (action instanceof StateOverwrite) {
+    if (type === StateOverwrite.type) {
       state = setValue(state, action.payload.stateName, action.payload.value);
     }
 
