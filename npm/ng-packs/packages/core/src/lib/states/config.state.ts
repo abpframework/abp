@@ -115,8 +115,7 @@ export class ConfigState {
 
   /**
    *
-   * @param deprecated, Use getLocalization instead. To be delete in v1
-   *
+   * @deprecated, Use getLocalization instead. To be delete in v1
    */
   static getCopy(key: string, ...interpolateParams: string[]) {
     if (!key) key = '';
@@ -166,14 +165,21 @@ export class ConfigState {
     return selector;
   }
 
-  static getLocalization(key: string, ...interpolateParams: string[]) {
+  static getLocalization(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]) {
+    let defaultValue: string;
+
+    if (typeof key !== 'string') {
+      defaultValue = key.defaultValue;
+      key = key.key;
+    }
+
     if (!key) key = '';
 
     const keys = key.split('::') as string[];
     const selector = createSelector(
       [ConfigState],
       (state: Config.State) => {
-        if (!state.localization) return key;
+        if (!state.localization) return defaultValue || key;
 
         const { defaultResourceName } = state.environment.localization;
         if (keys[0] === '') {
@@ -207,7 +213,7 @@ export class ConfigState {
           });
         }
 
-        return localization || key;
+        return localization || defaultValue || key;
       },
     );
 

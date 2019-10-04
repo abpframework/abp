@@ -1,5 +1,5 @@
 <div class="error">
-  <button id="abp-close-button mr-4" type="button" class="close" (click)="destroy()">
+  <button id="abp-close-button mr-3" type="button" class="close" (click)="destroy()">
     <span aria-hidden="true">&times;</span>
   </button>
   <div class="row centered">
@@ -13,7 +13,8 @@
         </div>
         <div class="error-actions">
           <a (click)="destroy()" routerLink="/" class="btn btn-primary btn-md mt-2"
-            ><span class="glyphicon glyphicon-home"></span> {{ '::Menu:Home' | abpLocalization }}
+            ><span class="glyphicon glyphicon-home"></span>
+            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}
           </a>
         </div>
       </div>
