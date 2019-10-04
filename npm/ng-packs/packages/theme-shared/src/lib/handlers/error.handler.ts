@@ -36,11 +36,11 @@ export const DEFAULT_ERROR_MESSAGES = {
   },
   defaultError500: {
     title: '500',
-    details: 'AbpAccount::InternalServerErrorMessage',
+    details: { key: 'AbpAccount::InternalServerErrorMessage', defaultValue: 'Error detail not sent by server.' },
   },
   defaultErrorUnknown: {
     title: 'Unknown Error',
-    details: 'AbpAccount::InternalServerErrorMessage',
+    details: { key: 'AbpAccount::InternalServerErrorMessage', defaultValue: 'Error detail not sent by server.' },
   },
 };
 
