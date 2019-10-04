@@ -2,6 +2,7 @@ import { Injectable, NgZone, Optional, SkipSelf } from '@angular/core';
 import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { noop, Observable } from 'rxjs';
+import { ConfigState } from '../states/config.state';
 import { registerLocale } from '../utils/initial-utils';
 
 type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSnapshot) => boolean;
@@ -9,7 +10,7 @@ type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSna
 @Injectable({ providedIn: 'root' })
 export class LocalizationService {
   get currentLang(): string {
-    return this.store.selectSnapshot(state => state.SessionState.getLanguage);
+    return this.store.selectSnapshot(state => state.SessionState.language);
   }
 
   constructor(
@@ -41,10 +42,10 @@ export class LocalizationService {
   }
 
   get(key: string, ...interpolateParams: string[]): Observable<string> {
-    return this.store.select(state => state.ConfigState.getLocalization(key, ...interpolateParams));
+    return this.store.select(ConfigState.getLocalization(key, ...interpolateParams));
   }
 
   instant(key: string, ...interpolateParams: string[]): string {
-    return this.store.selectSnapshot(state => state.ConfigState.getLocalization(key, ...interpolateParams));
+    return this.store.selectSnapshot(ConfigState.getLocalization(key, ...interpolateParams));
   }
 }
