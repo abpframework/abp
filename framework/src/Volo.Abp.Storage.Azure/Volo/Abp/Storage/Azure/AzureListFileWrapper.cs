@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
-using Microsoft.WindowsAzure.Storage.Blob;
+﻿using Microsoft.Azure.Storage.Blob;
+using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 
 namespace Volo.Abp.Storage.Azure
 {

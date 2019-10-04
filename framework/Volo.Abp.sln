@@ -1,4 +1,4 @@
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -249,6 +249,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MailKit", "src\Volo.Abp.MailKit\Volo.Abp.MailKit.csproj", "{0CAED4CC-1CFD-4092-A326-AFE4DB3A9AB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.MailKit.Tests", "test\Volo.Abp.MailKit.Tests\Volo.Abp.MailKit.Tests.csproj", "{70DD6E17-B98B-4B00-8F38-C489E291BB53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage", "src\Volo.Abp.Storage\Volo.Abp.Storage.csproj", "{54EC6CAA-5E01-42F5-9130-101BAC543556}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage.Azure", "src\Volo.Abp.Storage.Azure\Volo.Abp.Storage.Azure.csproj", "{91A22F7E-D437-4F25-9BA0-23974958DD50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage.FileSystem", "src\Volo.Abp.Storage.FileSystem\Volo.Abp.Storage.FileSystem.csproj", "{37BC9531-20FE-4295-89F3-A58B9E81FBD5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage.FileSystem.ExtendedProperties", "src\Volo.Abp.Storage.FileSystem.ExtendedProperties\Volo.Abp.Storage.FileSystem.ExtendedProperties.csproj", "{B2CA09B1-9A82-418A-9980-CA8DC0259E1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage.FileSystem.Server", "src\Volo.Abp.Storage.FileSystem.Server\Volo.Abp.Storage.FileSystem.Server.csproj", "{405BB656-3781-4777-BE6B-49F6243F14B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Storage.Tests", "test\Volo.Abp.Storage.Tests\Volo.Abp.Storage.Tests.csproj", "{B00F1AF0-5DF4-4205-83B0-A5145F5D9949}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -744,6 +756,30 @@ Global
 		{70DD6E17-B98B-4B00-8F38-C489E291BB53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70DD6E17-B98B-4B00-8F38-C489E291BB53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70DD6E17-B98B-4B00-8F38-C489E291BB53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54EC6CAA-5E01-42F5-9130-101BAC543556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54EC6CAA-5E01-42F5-9130-101BAC543556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54EC6CAA-5E01-42F5-9130-101BAC543556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54EC6CAA-5E01-42F5-9130-101BAC543556}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91A22F7E-D437-4F25-9BA0-23974958DD50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91A22F7E-D437-4F25-9BA0-23974958DD50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91A22F7E-D437-4F25-9BA0-23974958DD50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91A22F7E-D437-4F25-9BA0-23974958DD50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37BC9531-20FE-4295-89F3-A58B9E81FBD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37BC9531-20FE-4295-89F3-A58B9E81FBD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37BC9531-20FE-4295-89F3-A58B9E81FBD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37BC9531-20FE-4295-89F3-A58B9E81FBD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2CA09B1-9A82-418A-9980-CA8DC0259E1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2CA09B1-9A82-418A-9980-CA8DC0259E1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2CA09B1-9A82-418A-9980-CA8DC0259E1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2CA09B1-9A82-418A-9980-CA8DC0259E1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{405BB656-3781-4777-BE6B-49F6243F14B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{405BB656-3781-4777-BE6B-49F6243F14B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{405BB656-3781-4777-BE6B-49F6243F14B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{405BB656-3781-4777-BE6B-49F6243F14B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B00F1AF0-5DF4-4205-83B0-A5145F5D9949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B00F1AF0-5DF4-4205-83B0-A5145F5D9949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B00F1AF0-5DF4-4205-83B0-A5145F5D9949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B00F1AF0-5DF4-4205-83B0-A5145F5D9949}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -871,6 +907,12 @@ Global
 		{E026A085-D881-4AE0-9F08-422AC3903BD7} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 		{0CAED4CC-1CFD-4092-A326-AFE4DB3A9AB4} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{70DD6E17-B98B-4B00-8F38-C489E291BB53} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{54EC6CAA-5E01-42F5-9130-101BAC543556} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{91A22F7E-D437-4F25-9BA0-23974958DD50} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{37BC9531-20FE-4295-89F3-A58B9E81FBD5} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{B2CA09B1-9A82-418A-9980-CA8DC0259E1B} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{405BB656-3781-4777-BE6B-49F6243F14B3} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
+		{B00F1AF0-5DF4-4205-83B0-A5145F5D9949} = {447C8A77-E5F0-4538-8687-7383196D04EA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}

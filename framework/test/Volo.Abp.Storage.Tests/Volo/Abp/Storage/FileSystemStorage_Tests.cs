@@ -375,7 +375,7 @@ namespace Volo.Abp.Storage
 
             var expectedText = ">42";
 
-            var file = await store.GetAsync("SubDirectory/TextFile2.txt");
+            var file = await store.GetAsync(Path.Combine("SubDirectory", "TextFile2.txt"));
 
             using (var reader = new StreamReader(new MemoryStream(await file.ReadAllBytesAsync())))
             {

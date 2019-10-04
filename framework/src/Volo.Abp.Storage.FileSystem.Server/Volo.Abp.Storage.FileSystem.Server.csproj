@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Abp.Storage.FileSystem.Server</AssemblyName>
     <PackageId>Volo.Abp.Storage.FileSystem.Server</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
@@ -19,5 +19,4 @@
     <ProjectReference Include="..\Volo.Abp.AspNetCore\Volo.Abp.AspNetCore.csproj" />
     <ProjectReference Include="..\Volo.Abp.Storage.FileSystem\Volo.Abp.Storage.FileSystem.csproj" />
   </ItemGroup>
-
 </Project>

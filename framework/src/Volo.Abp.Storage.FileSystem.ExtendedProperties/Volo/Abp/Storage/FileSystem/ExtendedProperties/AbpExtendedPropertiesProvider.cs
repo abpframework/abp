@@ -3,17 +3,21 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Json;
 
 namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
 {
     [Dependency(ReplaceServices = true)]
     public class AbpExtendedPropertiesProvider : IAbpExtendedPropertiesProvider, ITransientDependency
     {
+        private readonly IJsonSerializer _serializer;
         private readonly FileSystemExtendedPropertiesOptions _options;
 
         public AbpExtendedPropertiesProvider(
-            IOptions<FileSystemExtendedPropertiesOptions> options)
+            IOptions<FileSystemExtendedPropertiesOptions> options,
+            IJsonSerializer serializer)
         {
+            _serializer = serializer;
             _options = options.Value;
         }
 
@@ -26,7 +30,7 @@ namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
 
             var content = File.ReadAllText(extendedPropertiesPath);
             return new ValueTask<FileExtendedProperties>(
-                JsonConvert.DeserializeObject<FileExtendedProperties>(content));
+                _serializer.Deserialize<FileExtendedProperties>(content));
         }
 
         public Task SaveExtendedPropertiesAsync(string storeAbsolutePath, IPrivateFileReference file,
@@ -53,7 +57,10 @@ namespace Volo.Abp.Storage.FileSystem.ExtendedProperties
         private static void EnsurePathExists(string path)
         {
             var directoryPath = Path.GetDirectoryName(path);
-            if (!Directory.Exists(directoryPath)) Directory.CreateDirectory(directoryPath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
         }
     }
 }
