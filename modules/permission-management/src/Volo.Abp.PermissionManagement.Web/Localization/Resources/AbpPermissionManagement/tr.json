@@ -3,6 +3,8 @@
   "texts": {
     "Permissions": "İzinler",
     "OnlyProviderPermissons": "Sadece bu sağlayıcı",
-    "All": "Hepsi"
+    "All": "Hepsi",
+    "SelectAllInAllTabs": "Tüm izinleri ver",
+    "SelectAllInThisTab": "Hepsini seç"
   }
 }

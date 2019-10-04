@@ -1,5 +1,6 @@
 ﻿@page
 @using Microsoft.Extensions.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Modal
 @using Volo.Abp.TenantManagement.Localization
 @using Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 @model CreateModalModel
@@ -13,6 +14,6 @@
         <abp-modal-body>
             <abp-input asp-for="Tenant.Name" label="@L["TenantName"].Value"  />
         </abp-modal-body>
-        <abp-modal-footer></abp-modal-footer>
+        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
     </abp-modal>
 </form>

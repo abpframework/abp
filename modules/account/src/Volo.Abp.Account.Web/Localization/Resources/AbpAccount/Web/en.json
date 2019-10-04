@@ -14,7 +14,6 @@
     "Login": "Login",
     "Cancel": "Cancel",
     "Register": "Register",
-    "UseAnotherServiceToLogIn.": "Use another service to log in.",
     "InvalidLoginRequest": "Invalid login request",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client.",
     "LogInUsingYourProviderAccount": "Log in using your {0} account"

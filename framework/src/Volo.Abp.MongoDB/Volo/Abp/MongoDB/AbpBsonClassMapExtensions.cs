@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using MongoDB.Bson.Serialization;
 using Volo.Abp.Data;
 
@@ -9,34 +10,50 @@ namespace Volo.Abp.MongoDB
         public static void ConfigureAbpConventions(this BsonClassMap map)
         {
             map.AutoMap();
-            map.ConfigureExtraProperties();
+            map.TryConfigureExtraProperties();
         }
 
-        public static void ConfigureExtraProperties<TEntity>(this BsonClassMap<TEntity> map)
+        public static bool TryConfigureExtraProperties<TEntity>(this BsonClassMap<TEntity> map)
             where TEntity : class, IHasExtraProperties
         {
+            var property = map.ClassType.GetProperty(
+                nameof(IHasExtraProperties.ExtraProperties),
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty
+            );
+
+            if (property?.DeclaringType != map.ClassType)
+            {
+                return false;
+            }
+
             map.SetExtraElementsMember(new BsonMemberMap(
                 map,
                 typeof(TEntity).GetMember(nameof(IHasExtraProperties.ExtraProperties))[0])
             );
+
+            return true;
         }
 
-        /// <summary>
-        /// Configures SetExtraElementsMember if the <see cref="BsonClassMap.ClassType"/>
-        /// implements the <see cref="IHasExtraProperties"/> interface.
-        /// Otherwise, does nothing 
-        /// </summary>
-        public static void ConfigureExtraProperties(this BsonClassMap map)
+        public static bool TryConfigureExtraProperties(this BsonClassMap map)
         {
-            if (map.ClassType.IsAssignableTo<IHasExtraProperties>())
+            if (!map.ClassType.IsAssignableTo<IHasExtraProperties>())
             {
-                map.SetExtraElementsMember(
-                    new BsonMemberMap(
-                        map,
-                        map.ClassType.GetMember(nameof(IHasExtraProperties.ExtraProperties))[0]
-                    )
-                );
+                return false;
             }
+
+            var property = map.ClassType.GetProperty(
+                nameof(IHasExtraProperties.ExtraProperties),
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetProperty
+            );
+
+            if (property?.DeclaringType != map.ClassType)
+            {
+                return false;
+            }
+
+            map.MapExtraElementsMember(property);
+
+            return true;
         }
     }
 }

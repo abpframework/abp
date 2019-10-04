@@ -116,11 +116,29 @@ To be able to run the solution from source code, following tools should be insta
 * Run `dotnet restore` from the command line inside the `samples\MicroserviceDemo` folder.
 * Build the solution in Visual Studio.
 
-#### Restore Databases
+#### Create Databases
 
-Open `MsDemo_Identity.zip` and `MsDemo_ProductManagement.zip` inside the `samples\MicroserviceDemo\databases` folder and restore to the SQL Server.
+MongoDB database is created dynamically, however you need to create database schemas for SQL server databases. The solution is configured to use Entity Core Code First migrations, so you can easily create databases.
 
-> Notice that: These databases have EF Core migrations in the solution, however they don't have seed data, especially required for IdentityServer4 configuration. So, restoring the databases is much more easier.
+There are two SQL server databases in this solution.
+
+##### MsDemo_Identity Database
+
+* Right click to the `AuthServer.Host` project and click to the `Set as startup project`.
+* Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console)
+* Select `AuthServer.Host` as the **Default project**.
+* Run `Update-Database` command.
+
+![microservice-sample-update-database-authserver](../images/microservice-sample-update-database-authserver.png)
+
+##### MsDemo_ProductManagement
+
+- Right click to the `ProductService.Host` project and click to the `Set as startup project`.
+- Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console)
+- Select `ProductService.Host` as the **Default project**.
+- Run `Update-Database` command.
+
+![microservice-sample-update-database-products](../images/microservice-sample-update-database-products.png)
 
 #### Run Projects
 
@@ -136,6 +154,8 @@ Run the projects with the following order (right click to each project, set as s
 * BackendAdminApp.Host
 * PublicWebSite.Host
 
+When you run projects, they will add some initial demo data to their databases.
+
 ## A Brief Overview of the Solution
 
 The Visual Studio solution consists of multiple projects each have different roles in the system:
@@ -148,7 +168,7 @@ These are the actual applications those have user interfaces to interact to the 
 
 - **AuthServer.Host**: Host the IdentityServer4 to provide an authentication service to other services and applications. It is a single-sign server and contains the login page.
 - **BackendAdminApp.Host**: This is a backend admin application that host UI for Identity and Product management modules.
-- **PubicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
+- **PublicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
 - **ConsoleClientDemo**: A simple console application to demonstrate the usage of services from a C# application.
 
 ### Gateways / BFFs (Backend for Frontend)

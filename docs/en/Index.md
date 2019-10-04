@@ -6,7 +6,7 @@ Explore the left navigation menu to deep dive in the documentation.
 
 ## Project Status
 
-ABP is the **next generation** of the open source [ASP.NET Boilerplate](https://aspnetboilerplate.com/) framework. It's currently in early preview stage and not ready to use in production. The documentation is still in progress and it is incomplete yet.
+ABP is the **next generation** of the open source [ASP.NET Boilerplate](https://aspnetboilerplate.com/) framework. It's currently in early preview stage and not ready to use in production. The documentation is still in progress and it is far from complete.
 
 For short-term and production level applications, it's suggested to use [ASP.NET Boilerplate](https://aspnetboilerplate.com/) framework which has rich feature set, mature, actively maintained and up-to-date.
 

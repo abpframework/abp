@@ -1,7 +1,7 @@
 ﻿using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation;
-using Volo.Abp.Ui.Navigation.Localization.Resource;
+using Volo.Abp.UI.Navigation;
+using Volo.Abp.UI.Navigation.Localization.Resource;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.UI.Navigation

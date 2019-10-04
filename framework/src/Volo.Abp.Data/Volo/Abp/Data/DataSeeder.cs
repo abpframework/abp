@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Data
 {
@@ -19,7 +20,8 @@ namespace Volo.Abp.Data
             Options = options.Value;
         }
 
-        public async Task SeedAsync(DataSeedContext context)
+        [UnitOfWork]
+        public virtual async Task SeedAsync(DataSeedContext context)
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {

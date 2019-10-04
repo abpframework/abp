@@ -11,7 +11,6 @@
     "ShortName": "Kısa isim",
     "DocumentStoreType": "Döküman saklama tipi",
     "Format": "Format",
-    "Actions": "İşlemler",
     "ShortNameInfoText": "URL oluştururken kullanılacak.",
     "DisplayName:Name": "Adı",
     "DisplayName:ShortName": "Kısa adı",
@@ -19,9 +18,9 @@
     "DisplayName:DefaultDocumentName": "Varsayılan döküman adı",
     "DisplayName:NavigationDocumentName": "Navigasyon dökümanı adı",
     "DisplayName:MinimumVersion": "Minimum versiyon",
-    "DisplayName:MainWebsiteUrl": "Ana web site url'i",
+    "DisplayName:MainWebsiteUrl": "Ana web site URL",
     "DisplayName:LatestVersionBranchName": "Son versiyon Branch adı",
-    "DisplayName:GitHubRootUrl": "GitHub kök url'i",
-    "DisplayName:GitHubAccessToken": "GitHub erişim jetonu"
+    "DisplayName:GitHubRootUrl": "GitHub kök adresi",
+    "DisplayName:GitHubAccessToken": "GitHub erişim token"
   }
 }

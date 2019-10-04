@@ -12,6 +12,7 @@ namespace Volo.Abp.TenantManagement
         public TenantManager(ITenantRepository tenantRepository)
         {
             _tenantRepository = tenantRepository;
+
         }
 
         public async Task<Tenant> CreateAsync(string name)

@@ -1,1 +1,1 @@
-lerna publish --skip-git
+lerna publish --no-push

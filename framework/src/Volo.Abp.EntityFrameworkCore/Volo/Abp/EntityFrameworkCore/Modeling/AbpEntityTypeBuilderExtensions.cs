@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
@@ -259,6 +260,31 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                     .HasColumnName(nameof(IMultiTenant.TenantId));
             }
         }
+
+        public static void ConfigureCreationAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
+            where T : class
+        {
+            b.As<EntityTypeBuilder>().TryConfigureCreationAudited();
+            b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
+            b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
+        }
+
+        public static void ConfigureAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
+            where T : class
+        {
+            b.As<EntityTypeBuilder>().TryConfigureAudited();
+            b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
+            b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
+        }
+
+        public static void ConfigureFullAuditedAggregateRoot<T>(this EntityTypeBuilder<T> b)
+            where T : class 
+        {
+            b.As<EntityTypeBuilder>().TryConfigureFullAudited();
+            b.As<EntityTypeBuilder>().TryConfigureExtraProperties();
+            b.As<EntityTypeBuilder>().TryConfigureConcurrencyStamp();
+        }
+
 
         //TODO: Add other interfaces (IAuditedObject<TUser>...)
     }

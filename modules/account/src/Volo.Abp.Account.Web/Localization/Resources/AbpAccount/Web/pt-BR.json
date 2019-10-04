@@ -14,7 +14,6 @@
     "Login": "Entrar",
     "Cancel": "Cancelar",
     "Register": "Registrar-se",
-    "UseAnotherServiceToLogIn.": "Use outro serviço para entrar.",
     "InvalidLoginRequest": "Requisição de acesso inválida!",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "Não existe um esquema de acesso para este usuário",
     "LogInUsingYourProviderAccount": "Acessse utilizando sua conta {0}"

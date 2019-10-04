@@ -10,7 +10,7 @@ using Volo.Abp.TestApp.Application.Dto;
 
 namespace Volo.Abp.TestApp.Application
 {
-    public class PeopleAppService : AsyncCrudAppService<Person, PersonDto, Guid>, IPeopleAppService
+    public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeopleAppService
     {
         public PeopleAppService(IRepository<Person, Guid> repository) 
             : base(repository)
@@ -35,7 +35,7 @@ namespace Volo.Abp.TestApp.Application
             var phone = new Phone(person.Id, phoneDto.Number, phoneDto.Type);
 
             person.Phones.Add(phone);
-
+            Repository.Update(person);
             return ObjectMapper.Map<Phone, PhoneDto>(phone);
         }
 
@@ -43,6 +43,7 @@ namespace Volo.Abp.TestApp.Application
         {
             var person = await GetEntityByIdAsync(id);
             person.Phones.RemoveAll(p => p.Number == number);
+            Repository.Update(person);
         }
 
         public Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input)

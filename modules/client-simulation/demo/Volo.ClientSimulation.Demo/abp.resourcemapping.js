@@ -1,0 +1,8 @@
+﻿module.exports = {
+    aliases: {
+        
+    },
+    mappings: {
+        
+    }
+}

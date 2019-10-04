@@ -1,0 +1,23 @@
+{
+  "culture": "en",
+  "texts": {
+    "OrganizationManagement": "Organization Management",
+    "OrganizationList": "Organization list",
+    "Volo.AbpIo.Commercial:010003": "You are not owner of this organization!",
+    "OrganizationNotFoundMessage": "No organization found!",
+    "DeveloperCount": "Developer count",
+    "Owners": "Owners",
+    "AddMember": "Add member",
+    "AddOwner": "Add owner",
+    "AddDeveloper": "Add developer",
+    "UserName": "Username",
+    "Name": "Name",
+    "EmailAddress": "Email address",
+    "Developers": "Developers",
+    "LicenseType": "License type",
+    "Manage": "Manage",
+    "StartDate": "Start date",
+    "EndDate": "End date",
+    "Modules": "Modules"
+  }
+}

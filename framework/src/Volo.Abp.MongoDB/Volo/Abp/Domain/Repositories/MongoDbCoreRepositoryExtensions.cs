@@ -1,5 +1,6 @@
 ﻿using System;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.MongoDB;
 
@@ -17,6 +18,12 @@ namespace Volo.Abp.Domain.Repositories
             where TEntity : class, IEntity<TKey>
         {
             return repository.ToMongoDbRepository().Collection;
+        }
+
+        public static IMongoQueryable<TEntity> GetMongoQueryable<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)
+            where TEntity : class, IEntity<TKey>
+        {
+            return repository.ToMongoDbRepository().GetMongoQueryable();
         }
 
         public static IMongoDbRepository<TEntity, TKey> ToMongoDbRepository<TEntity, TKey>(this IBasicRepository<TEntity, TKey> repository)

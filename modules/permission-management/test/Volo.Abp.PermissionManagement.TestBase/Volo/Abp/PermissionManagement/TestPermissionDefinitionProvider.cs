@@ -1,4 +1,5 @@
 ﻿using Volo.Abp.Authorization.Permissions;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -12,6 +13,8 @@ namespace Volo.Abp.PermissionManagement
 
             var myPermission2 = testGroup.AddPermission("MyPermission2");
             myPermission2.AddChild("MyPermission2.ChildPermission1");
+
+            testGroup.AddPermission("MyPermission3", multiTenancySide: MultiTenancySides.Host);
         }
     }
 }

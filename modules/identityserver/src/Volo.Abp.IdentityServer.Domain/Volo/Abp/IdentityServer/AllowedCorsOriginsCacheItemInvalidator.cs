@@ -7,7 +7,10 @@ using Volo.Abp.IdentityServer.Clients;
 
 namespace Volo.Abp.IdentityServer
 {
-    public class AllowedCorsOriginsCacheItemInvalidator : ILocalEventHandler<EntityChangedEventData<Client>>, ITransientDependency
+    public class AllowedCorsOriginsCacheItemInvalidator : 
+        ILocalEventHandler<EntityChangedEventData<Client>>,
+        ILocalEventHandler<EntityChangedEventData<ClientCorsOrigin>>,
+        ITransientDependency
     {
         protected IDistributedCache<AllowedCorsOriginsCacheItem> Cache { get; }
 
@@ -17,6 +20,11 @@ namespace Volo.Abp.IdentityServer
         }
         
         public async Task HandleEventAsync(EntityChangedEventData<Client> eventData)
+        {
+            await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
+        }
+
+        public async Task HandleEventAsync(EntityChangedEventData<ClientCorsOrigin> eventData)
         {
             await Cache.RemoveAsync(AllowedCorsOriginsCacheItem.AllOrigins);
         }

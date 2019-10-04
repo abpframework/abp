@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using IdentityServer4;
 using JetBrains.Annotations;
-using Volo.Abp.Domain.Entities;
+using Volo.Abp.Domain.Entities.Auditing;
 
 namespace Volo.Abp.IdentityServer.ApiResources
 {
-    public class ApiResource : AggregateRoot<Guid>
+    public class ApiResource : FullAuditedAggregateRoot<Guid>
     {
         [NotNull]
         public virtual string Name { get; protected set; }

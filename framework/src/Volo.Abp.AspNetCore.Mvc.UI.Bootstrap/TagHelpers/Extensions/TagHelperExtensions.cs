@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 {
     public static class TagHelperExtensions
     {
-        public static TagHelperOutput ProcessAndGetOutput(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
+        public static async Task<TagHelperOutput> ProcessAndGetOutputAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
             var innerOutput = new TagHelperOutput(tagName, attributeList, (useCachedResult, encoder) => Task.Run<TagHelperContent>(() => new DefaultTagHelperContent()))
             {
@@ -19,21 +19,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 
             tagHelper.Init(context);
 
-            if (runAsync)
-            {
-                AsyncHelper.RunSync(() => tagHelper.ProcessAsync(innerContext, innerOutput));
-            }
-            else
-            {
-                tagHelper.Process(innerContext, innerOutput);
-            }
+            await tagHelper.ProcessAsync(innerContext, innerOutput);
 
             return innerOutput;
         }
 
-        public static string Render(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing, bool runAsync = false)
+        public static async Task<string> RenderAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
-            var innerOutput = tagHelper.ProcessAndGetOutput(attributeList, context, tagName, tagMode, runAsync);
+            var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode);
 
             return innerOutput.Render(htmlEncoder);
         }

@@ -1,12 +1,7 @@
-﻿using Volo.Abp;
-
-namespace Acme.BookStore
+﻿namespace Acme.BookStore
 {
-    public abstract class BookStoreApplicationTestBase : AbpIntegratedTest<BookStoreApplicationTestModule>
+    public abstract class BookStoreApplicationTestBase : BookStoreTestBase<BookStoreApplicationTestModule> 
     {
-        protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)
-        {
-            options.UseAutofac();
-        }
+
     }
 }

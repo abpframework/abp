@@ -1,0 +1,10 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Permission:DocumentManagement": "Quản lý tài liệu",
+    "Permission:Projects": "Dự án",
+    "Permission:Edit": "Sửa",
+    "Permission:Delete": "Xóa",
+    "Permission:Create": "Tạo"
+  }
+}

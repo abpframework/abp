@@ -22,15 +22,16 @@ namespace Volo.Abp.IdentityServer.Grants
 
         public virtual async Task StoreAsync(IdentityServer4.Models.PersistedGrant grant)
         {
-            var entity = _objectMapper.Map<IdentityServer4.Models.PersistedGrant, PersistedGrant>(grant);
-            var existing =  await _persistentGrantRepository.FindByKeyAsync(grant.Key);
-            if (existing == null)
+            var entity =  await _persistentGrantRepository.FindByKeyAsync(grant.Key);
+            if (entity == null)
             {
+                entity = _objectMapper.Map<IdentityServer4.Models.PersistedGrant, PersistedGrant>(grant);
                 entity.Id = _guidGenerator.Create();
                 await _persistentGrantRepository.InsertAsync(entity);
             }
             else
             {
+                _objectMapper.Map(grant, entity);
                 await _persistentGrantRepository.UpdateAsync(entity);
             }
         }

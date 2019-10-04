@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{799CA525-4748-421A-9892-05C68BB2FA13}"
 EndProject
@@ -32,6 +32,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.MongoDB.Tests", "test\Volo.Abp.TenantManagement.MongoDB.Tests\Volo.Abp.TenantManagement.MongoDB.Tests.csproj", "{F75B4C54-A5F1-4101-99F5-A5B868A5146B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.TenantManagement.TestBase", "test\Volo.Abp.TenantManagement.TestBase\Volo.Abp.TenantManagement.TestBase.csproj", "{C3BAD6E8-00CD-4283-9416-64287BB5B265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.TenantManagement.Domain.Tests", "test\Volo.Abp.TenantManagement.Domain.Tests\Volo.Abp.TenantManagement.Domain.Tests.csproj", "{F7219BE2-4588-489C-9D31-647C59694C03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,10 @@ Global
 		{C3BAD6E8-00CD-4283-9416-64287BB5B265}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3BAD6E8-00CD-4283-9416-64287BB5B265}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3BAD6E8-00CD-4283-9416-64287BB5B265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7219BE2-4588-489C-9D31-647C59694C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7219BE2-4588-489C-9D31-647C59694C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7219BE2-4588-489C-9D31-647C59694C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7219BE2-4588-489C-9D31-647C59694C03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -109,6 +115,7 @@ Global
 		{ED95242E-3C31-4A89-9C62-93B306EFEB15} = {799CA525-4748-421A-9892-05C68BB2FA13}
 		{F75B4C54-A5F1-4101-99F5-A5B868A5146B} = {C6941869-A9FC-4BEA-AD3F-C1E104826ECA}
 		{C3BAD6E8-00CD-4283-9416-64287BB5B265} = {C6941869-A9FC-4BEA-AD3F-C1E104826ECA}
+		{F7219BE2-4588-489C-9D31-647C59694C03} = {C6941869-A9FC-4BEA-AD3F-C1E104826ECA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C258726-2CE0-44D3-A2D7-71812E8F505C}

@@ -1,0 +1,21 @@
+{
+  "culture": "cs",
+  "texts": {
+    "UserName": "Uživatelské jméno",
+    "EmailAddress": "Email",
+    "UserNameOrEmailAddress": "Uživatelské jméno nebo email",
+    "Password": "Heslo",
+    "RememberMe": "Zapamatovat si mě",
+    "UseAnotherServiceToLogin": "Použít jinou službu k přihlášení",
+    "UserLockedOutMessage": "Tento účet byl uzamčen z důvodu neúspěšných přihlášení. Přihlaste se prosím později.",
+    "InvalidUserNameOrPassword": "Neplatné uživatelské jméno nebo heslo!",
+    "LoginIsNotAllowed": "Není vám dovoleno se přihlásit! Musíte první potvrdit email/telefonní číslo.",
+    "SelfRegistrationDisabledMessage": "Vlastní registrace uživatele není povolena. K vytvoření účtu kontaktujte správce.",
+    "Login": "Přihlásit",
+    "Cancel": "Zrušit",
+    "Register": "Registrovat",
+    "InvalidLoginRequest": "Neplatný požadavek k přihlášení",
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "Pro tohoto klienta nejsou nakonfigurovány žádné přihlašovací schémata.",
+    "LogInUsingYourProviderAccount": "Přihlásit pomocí vašeho účtu {0}"
+  }
+}

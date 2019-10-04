@@ -8,17 +8,29 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test
 {
     public class HelloController_Tests: AspNetCoreMvcVersioningTestBase
     {
-        private readonly IHelloController _todoAppService;
+        private readonly IHelloController _helloController;
 
         public HelloController_Tests()
         {
-            _todoAppService = ServiceProvider.GetRequiredService<IHelloController>();
+            _helloController = ServiceProvider.GetRequiredService<IHelloController>();
         }
 
         [Fact]
-        public async Task PostAsync()
+        public async Task GetAsync()
         {
-            (await _todoAppService.PostAsync()).ShouldBe("42-2.0");
+            (await _helloController.GetAsync()).ShouldBe("Get-2.0");
+        }
+
+        [Fact]
+        public async Task PostAsyncV1()
+        {
+            (await _helloController.PostAsyncV1()).ShouldBe("Post-1.0");
+        }
+
+        [Fact]
+        public async Task PostAsyncV2()
+        {
+            (await _helloController.PostAsyncV2()).ShouldBe("Post-2.0");
         }
     }
 }

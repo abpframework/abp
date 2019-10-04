@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Volo.Abp.Application.Dtos;
 using Volo.Blogging.Tagging.Dtos;
 
@@ -21,6 +22,7 @@ namespace Volo.Blogging.Posts
 
         public int CommentCount { get; set; }
 
+        [CanBeNull]
         public BlogUserDto Writer { get; set; }
 
         public List<TagDto> Tags { get; set; }

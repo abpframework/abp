@@ -1,9 +1,11 @@
 {
   "culture": "pt-BR",
   "texts": {
-    "GivenTenantIsNotAvailable": "Tenant não está disponível: {0}",
-    "SwitchTenant": "Trocar tenant",
+    "GivenTenantIsNotAvailable": "Inquilino não está disponível: {0}",
+    "Tenant": "Inquilino",
+    "Switch": "trocar",
     "Name": "Nome",
-    "SwitchTenantHint": "Deixe o campo de nome em branco para alternar para o lado do host."
+    "SwitchTenantHint": "Deixe o campo de nome em branco para alternar para o lado do host.",
+    "NotSelected": "Não selecionado"
   }
 }

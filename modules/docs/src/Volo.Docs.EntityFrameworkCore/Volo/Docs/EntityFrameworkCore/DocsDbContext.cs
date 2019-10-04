@@ -5,7 +5,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.EntityFrameworkCore
 {
-    [ConnectionStringName("Docs")]
+    [ConnectionStringName(DocsConsts.ConnectionStringName)]
     public class DocsDbContext: AbpDbContext<DocsDbContext>, IDocsDbContext
     {
         public static string TablePrefix { get; set; } = DocsConsts.DefaultDbTablePrefix;

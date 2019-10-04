@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
-    [ConnectionStringName("AbpBackgroundJobs")]
+    [ConnectionStringName(BackgroundJobsConsts.ConnectionStringName)]
     public class BackgroundJobsDbContext : AbpDbContext<BackgroundJobsDbContext>, IBackgroundJobsDbContext
     {
         public static string TablePrefix { get; set; } = BackgroundJobsConsts.DefaultDbTablePrefix;

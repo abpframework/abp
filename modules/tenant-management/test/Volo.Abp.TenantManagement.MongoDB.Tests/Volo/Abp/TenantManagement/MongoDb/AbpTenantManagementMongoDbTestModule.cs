@@ -3,7 +3,7 @@ using Mongo2Go;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp.TenantManagement.MongoDb
+namespace Volo.Abp.TenantManagement.MongoDB
 {
     [DependsOn(
         typeof(AbpTenantManagementMongoDbModule),

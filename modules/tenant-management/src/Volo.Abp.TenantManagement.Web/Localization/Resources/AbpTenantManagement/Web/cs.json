@@ -1,0 +1,14 @@
+{
+  "culture": "cs",
+  "texts": {
+    "Menu:TenantManagement": "Správa tenantů",
+    "Tenants": "Tenanty",
+    "NewTenant": "Nový tenant",
+    "TenantName": "Název tenantu",
+    "DisplayName:TenantName": "Název tenantu",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' bude smazán. Jste si jistí?",
+    "ConnectionStrings": "Connection stringy",
+    "DisplayName:DefaultConnectionString": "Výchozí connection string",
+    "DisplayName:UseSharedDatabase": "Použít sdílenou databázi"
+  }
+}

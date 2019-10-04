@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.InProcess;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
@@ -12,6 +13,8 @@ namespace BloggingService.Host
     {
         public static int Main(string[] args)
         {
+            CurrentDirectoryHelpers.SetCurrentDirectory();
+
             //TODO: Temporary: it's not good to read appsettings.json here just to configure logging
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -55,6 +58,7 @@ namespace BloggingService.Host
             new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIIS()
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseSerilog()

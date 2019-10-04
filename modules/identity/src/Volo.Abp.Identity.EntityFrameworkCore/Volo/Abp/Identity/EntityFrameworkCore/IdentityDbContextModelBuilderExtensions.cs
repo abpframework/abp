@@ -22,9 +22,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "Users", options.Schema);
 
-                b.ConfigureFullAudited();
-                b.ConfigureExtraProperties();
-                b.ConfigureConcurrencyStamp();
+                b.ConfigureFullAuditedAggregateRoot();
                 b.ConfigureAbpUser();
 
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength).HasColumnName(nameof(IdentityUser.NormalizedUserName));

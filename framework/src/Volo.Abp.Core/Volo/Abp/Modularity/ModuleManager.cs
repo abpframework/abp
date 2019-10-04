@@ -42,12 +42,12 @@ namespace Volo.Abp.Modularity
                 }
             }
 
-            _logger.LogInformation("Initialized all modules.");
+            _logger.LogInformation("Initialized all ABP modules.");
         }
 
         private void LogListOfModules()
         {
-            _logger.LogInformation("Loaded modules:");
+            _logger.LogInformation("Loaded ABP modules:");
 
             foreach (var module in _moduleContainer.Modules)
             {

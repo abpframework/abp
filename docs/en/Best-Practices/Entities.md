@@ -63,7 +63,7 @@ public class Issue : FullAuditedAggregateRoot<Guid> //Using Guid as the key/iden
 
     protected Issue()
     {
-        /* This conctructor is for ORMs to be used while getting the entity from database.
+        /* This constructor is for ORMs to be used while getting the entity from database.
          * - No need to initialize the Labels collection
              since it will be overrided from the database.
            - It's protected since proxying and deserialization tools

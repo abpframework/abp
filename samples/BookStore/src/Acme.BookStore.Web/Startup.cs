@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Web
 {
     public class Startup
     {

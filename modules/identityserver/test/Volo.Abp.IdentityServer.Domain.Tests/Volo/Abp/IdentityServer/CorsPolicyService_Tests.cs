@@ -2,6 +2,7 @@
 using IdentityServer4.Services;
 using Shouldly;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.Uow;
 using Xunit;
 
 namespace Volo.Abp.IdentityServer
@@ -10,11 +11,13 @@ namespace Volo.Abp.IdentityServer
     {
         private readonly ICorsPolicyService _corsPolicyService;
         private readonly IClientRepository _clientRepository;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public CorsPolicyService_Tests()
         {
             _corsPolicyService = GetRequiredService<ICorsPolicyService>();
             _clientRepository = GetRequiredService<IClientRepository>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         [Fact]
@@ -30,9 +33,14 @@ namespace Volo.Abp.IdentityServer
             //It does not exists before
             (await _corsPolicyService.IsOriginAllowedAsync("https://new-origin.com")).ShouldBeFalse();
 
-            var client1 = await _clientRepository.FindByCliendIdAsync("ClientId1");
-            client1.AddCorsOrigin("https://new-origin.com");
-            await _clientRepository.UpdateAsync(client1);
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var client1 = await _clientRepository.FindByCliendIdAsync("ClientId1");
+                client1.AddCorsOrigin("https://new-origin.com");
+                await _clientRepository.UpdateAsync(client1);
+
+                await uow.CompleteAsync();
+            }
 
             //It does exists now
             (await _corsPolicyService.IsOriginAllowedAsync("https://new-origin.com")).ShouldBeTrue();

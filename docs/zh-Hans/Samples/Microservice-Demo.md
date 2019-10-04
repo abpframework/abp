@@ -116,11 +116,29 @@ ABP框架的主要目标之一就是提供[便捷的基础设施来创建微服�
 * 在`samples\MicroserviceDemo`文件夹中的命令行运行`dotnet restore`命令.
 * 在Visual Studio中构建解决方案.
 
-#### 还原数据库
+#### 创建数据库
 
-在`samples\MicroserviceDemo\databases`文件夹中打开`MsDemo_Identity.zip`和`MsDemo_ProductManagement.zip`并恢复到SQL Server.
+MongoDB 数据库是动态创建的，但是你需要创建 SQL server 数据库的结构。其实你可以很轻松的创建数据库，因为这个解决方案配置了使用 Entity Core Code First 来做迁移。
 
-> 请注意:这些数据库在解决方案中具有EF Core迁移,但它们没有种子数据,尤其是IdentityServer4所需的配置. 因此,恢复数据库要容易得多.
+这个解决方案中有两个 SQL server 数据库。
+
+##### MsDemo_Identity 数据库
+
+* 右键 `AuthServer.Host` 项目，然后点击 `设置为启动项目`.
+* 打开 **程序包管理器控制台** (工具 -> NuGet 包管理器 -> 程序包管理器控制台)
+* 选择 `AuthServer.Host` 成为 **默认项目**.
+* 执行 `Update-Database` 命令.
+
+![microservice-sample-update-database-authserver](../images/microservice-sample-update-database-authserver.png)
+
+##### MsDemo_ProductManagement
+
+* 右键 `ProductService.Host` 项目，然后点击 `设置为启动项目`.
+* 打开 **程序包管理器控制台** (工具 -> NuGet 包管理器 -> 程序包管理器控制台)
+* 选择 `ProductService.Host` 成为 **默认项目**.
+* 执行 `Update-Database` 命令.
+
+![microservice-sample-update-database-products](../images/microservice-sample-update-database-products.png)
 
 #### 运行项目
 
@@ -148,7 +166,7 @@ Visual Studio解决方案由多个项目组成,每个项目在系统中具有不
 
 - **AuthServer.Host**: 托管IdentityServer4以向其他服务和应用程序提供身份验证服务. 它是一个单点登录服务器,包含登录页面.
 - **BackendAdminApp.Host**: 这是一个后端管理应用程序,用于托管身份和产品管理模块的UI.
-- **PubicWebSite.Host**: 作为包含简单产品列表页面和博客模块UI的公共网站.
+- **PublicWebSite.Host**: 作为包含简单产品列表页面和博客模块UI的公共网站.
 - **ConsoleClientDemo**: 一个简单的控制台应用程序,用于演示C＃应用程序中使用服务.
 
 ### 网关/BFF(前端后端)
@@ -276,8 +294,7 @@ context.Services.AddAuthentication(options =>
 
 * 它将"Cookies"身份验证添加为主要身份验证类型.
 * "oidc"身份验证配置为使用AuthServer应用程序作为身份验证服务器.
-* 它需要额外的身份范围(scopes) *role*, *email* and *phone*.
-* It requires the API resource scopes *BackendAdminAppGateway*, *IdentityService* and *ProductService* because it will use these services as APIs.
+* 它需要额外的身份范围(scopes) *role*, *email* 和 *phone*.
 * 它需要API资源范围 *BackendAdminAppGateway*, *IdentityService* 和 *ProductService*,因为它将这些服务用作API.
 
 IdentityServer客户端设置存储在`appsettings.json`文件中:
@@ -576,8 +593,6 @@ Ocelot需要知道微服务的真实URL才能重定向HTTP请求. 此网关的�
 ````
 
 `ReRoutes`是一个URL映射数组. `GlobalConfiguration`部分中的`BaseUrl`是该网关的URL(Ocelot需要知道自己的URL). 参见 [ocelot文档](https://ocelot.readthedocs.io/en/latest/features/configuration.html) 更好地了解配置.
-
-Ocelot is a finalizer ASP.NET Core middleware and should be written as the last item in the pipeline:
 
 Ocelot是一个终结ASP.NET核心中间件,应该写成管道中的最后一项:
 
@@ -935,7 +950,7 @@ context.Services.AddAuthentication("Bearer")
 
 #### IdentityServer Client
 
-此微服务还通过内部网关使用Identity微服务API, 因为在某些情况下它需要查询用户详细信息(username, email, phone, name and surname). 因此,它也是IdentityServer的客户端,并在`appsettings.json`文件中定义了一个部分:
+此微服务还通过内部网关使用Identity微服务API, 因为在某些情况下它需要查询用户详细信息(username, email, phone, name 和 surname). 因此,它也是IdentityServer的客户端,并在`appsettings.json`文件中定义了一个部分:
 
 ````json
 "IdentityClients": {
@@ -1334,7 +1349,7 @@ public async Task<ProductDto> UpdateAsync(Guid id, UpdateProductDto input)
 AddDistributedEvent(new ProductStockCountChangedEto(Id, StockCount, stockCount));
 ````
 
-`ProductStockCountChangedEto` was defined as shown below:
+`ProductStockCountChangedEto` 定义如下:
 
 ````csharp
 [Serializable]

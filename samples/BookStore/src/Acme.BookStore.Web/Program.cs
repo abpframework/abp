@@ -1,17 +1,24 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.InProcess;
 using Serilog;
 using Serilog.Events;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Web
 {
     public class Program
     {
         public static int Main(string[] args)
         {
+            CurrentDirectoryHelpers.SetCurrentDirectory();
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug() //TODO: Should be configurable!
+#if DEBUG
+                .MinimumLevel.Debug()
+#else
+                .MinimumLevel.Information()
+#endif
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.File("Logs/logs.txt")
@@ -38,6 +45,7 @@ namespace Acme.BookStore
             new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIIS()
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .UseSerilog()

@@ -35,13 +35,13 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            AsyncHelper.RunSync(() => AuthorizeAsync(invocation));
+            await AuthorizeAsync(invocation);
             await invocation.ProceedAsync();
         }
 
-        protected virtual Task AuthorizeAsync(IAbpMethodInvocation invocation)
+        protected virtual async Task AuthorizeAsync(IAbpMethodInvocation invocation)
         {
-            return _methodInvocationAuthorizationService.CheckAsync(
+            await _methodInvocationAuthorizationService.CheckAsync(
                 new MethodInvocationAuthorizationContext(
                     invocation.Method
                 )

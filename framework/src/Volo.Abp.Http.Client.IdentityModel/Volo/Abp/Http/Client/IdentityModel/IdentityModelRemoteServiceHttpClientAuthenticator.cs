@@ -13,11 +13,12 @@ namespace Volo.Abp.Http.Client.IdentityModel
     {
         public IHttpContextAccessor HttpContextAccessor { get; set; }
 
-        protected IIdentityModelHttpClientAuthenticator IdentityModelHttpClientAuthenticator { get; }
+        protected IIdentityModelAuthenticationService IdentityModelAuthenticationService { get; }
 
-        public IdentityModelRemoteServiceHttpClientAuthenticator(IIdentityModelHttpClientAuthenticator identityModelHttpClientAuthenticator)
+        public IdentityModelRemoteServiceHttpClientAuthenticator(
+            IIdentityModelAuthenticationService identityModelAuthenticationService)
         {
-            IdentityModelHttpClientAuthenticator = identityModelHttpClientAuthenticator;
+            IdentityModelAuthenticationService = identityModelAuthenticationService;
         }
 
         public async Task Authenticate(RemoteServiceHttpClientAuthenticateContext context)
@@ -27,12 +28,12 @@ namespace Volo.Abp.Http.Client.IdentityModel
                 var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
                 if (accessToken != null)
                 {
-                    context.Client.SetBearerToken(accessToken);
+                    context.Request.SetBearerToken(accessToken);
                     return;
                 }
             }
 
-            await IdentityModelHttpClientAuthenticator.AuthenticateAsync(
+            await IdentityModelAuthenticationService.TryAuthenticateAsync(
                 context.Client,
                 context.RemoteService.GetIdentityClient()
             );

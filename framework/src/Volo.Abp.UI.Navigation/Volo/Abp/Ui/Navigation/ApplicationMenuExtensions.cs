@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 using System.Linq;
-using Volo.Abp.Ui.Navigation;
+using Volo.Abp.UI.Navigation;
 
 namespace Volo.Abp.UI.Navigation
 {
@@ -37,6 +37,15 @@ namespace Volo.Abp.UI.Navigation
             Check.NotNull(menuWithItems, nameof(menuWithItems));
 
             return menuWithItems.Items.FirstOrDefault(mi => mi.Name == menuItemName);
+        }
+
+        public static bool TryRemoveMenuItem(
+            [NotNull] this IHasMenuItems menuWithItems,
+            string menuItemName)
+        {
+            Check.NotNull(menuWithItems, nameof(menuWithItems));
+
+            return menuWithItems.Items.RemoveAll(item => item.Name == menuItemName) > 0;
         }
 
         [NotNull]

@@ -14,7 +14,7 @@ namespace Volo.Abp.DynamicProxy
 
 	    public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-			//await Task.Delay(5); CAN NOT USE await before method execution! This is a restriction of Castle DynamicProxy
+			await Task.Delay(5);
 			(invocation.TargetObject as ICanLogOnObject)?.Logs?.Add($"{GetType().Name}_InterceptAsync_BeforeInvocation");
             await invocation.ProceedAsync();
             (invocation.TargetObject as ICanLogOnObject)?.Logs?.Add($"{GetType().Name}_InterceptAsync_AfterInvocation");

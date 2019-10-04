@@ -6,5 +6,9 @@
   {
     "outputFile": "Pages/Blog/Shared/Styles/_home.css",
     "inputFile": "Pages/Blog/Shared/Styles/_home.scss"
+  },
+  {
+    "outputFile": "Pages/Blog/Posts/Index.css",
+    "inputFile": "Pages/Blog/Posts/Index.scss"
   }
 ]

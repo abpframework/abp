@@ -24,7 +24,7 @@ namespace Volo.Abp.SettingManagement
         {
             _settingRepository.Insert(
                 new Setting(
-                    _guidGenerator.Create(),
+                    _testData.SettingId,
                     "MySetting1",
                     "42",
                     GlobalSettingValueProvider.ProviderName

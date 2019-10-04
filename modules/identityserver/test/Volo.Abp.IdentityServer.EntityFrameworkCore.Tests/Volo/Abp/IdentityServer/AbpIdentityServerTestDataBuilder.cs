@@ -12,6 +12,8 @@ using PersistedGrant = Volo.Abp.IdentityServer.Grants.PersistedGrant;
 
 namespace Volo.Abp.IdentityServer
 {
+    //TODO: There are two data builders (ses  AbpIdentityServerTestDataBuilder in Volo.Abp.IdentityServer.TestBase). It should be somehow unified!
+
     public class AbpIdentityServerTestDataBuilder : ITransientDependency
     {
         private readonly IGuidGenerator _guidGenerator;

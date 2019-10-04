@@ -14,7 +14,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
     {
         //TODO: Add dbcontext just like mongodb implementation!
 
-        public virtual List<TEntity> Collection => Database.Collection<TEntity>();
+        public virtual IMemoryDatabaseCollection<TEntity> Collection => Database.Collection<TEntity>();
 
         public virtual IMemoryDatabase Database => DatabaseProvider.GetDatabase();
 
@@ -33,6 +33,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public override TEntity Update(TEntity entity, bool autoSave = false)
         {
+            Collection.Update(entity);
             return entity;
         }
 
@@ -48,7 +49,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public override long GetCount()
         {
-            return Collection.Count;
+            return Collection.Count();
         }
 
         protected override IQueryable<TEntity> GetQueryable()

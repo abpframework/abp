@@ -33,7 +33,7 @@ using Volo.Abp.VirtualFileSystem;
 using Volo.Blogging;
 using Volo.Blogging.Files;
 using Volo.BloggingTestApp.EntityFrameworkCore;
-using Volo.BloggingTestApp.MongoDb;
+using Volo.BloggingTestApp.MongoDB;
 
 namespace Volo.BloggingTestApp
 {
@@ -59,6 +59,11 @@ namespace Volo.BloggingTestApp
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.BuildConfiguration();
+
+            Configure<BloggingUrlOptions>(options =>
+            {
+                options.RoutePrefix = null;
+            });
 
             Configure<DbConnectionOptions>(options =>
             {
@@ -98,7 +103,14 @@ namespace Volo.BloggingTestApp
                     options.CustomSchemaIds(type => type.FullName);
                 });
 
-            var cultures = new List<CultureInfo> { new CultureInfo("en"), new CultureInfo("tr") };
+            var cultures = new List<CultureInfo> 
+            { 
+                new CultureInfo("cs"), 
+                new CultureInfo("en"), 
+                new CultureInfo("tr"), 
+                new CultureInfo("zh-Hans") 
+            };
+
             Configure<RequestLocalizationOptions>(options =>
             {
                 options.DefaultRequestCulture = new RequestCulture("en");

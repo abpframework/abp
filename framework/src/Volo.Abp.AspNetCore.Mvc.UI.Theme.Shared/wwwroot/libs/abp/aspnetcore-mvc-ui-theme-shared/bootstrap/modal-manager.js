@@ -69,6 +69,10 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     //TODO: data-ajaxForm comparison seems wrong!
                     if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
                         _$form.abpAjaxForm();
+                    } 
+
+                    if (_$form.attr('data-check-form-on-close') === undefined || _$form.attr('data-check-form-on-close') != 'false') {
+                        _$form.needConfirmationOnUnsavedClose(_$modal);
                     }
 
                     _$form.on('abp-ajax-success',

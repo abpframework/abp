@@ -22,9 +22,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
             {
                 b.ToTable(tablePrefix + "Tenants", schema);
 
-                b.ConfigureFullAudited();
-                b.ConfigureExtraProperties();
-                b.ConfigureConcurrencyStamp();
+                b.ConfigureFullAuditedAggregateRoot();
 
                 b.Property(t => t.Name).IsRequired().HasMaxLength(TenantConsts.MaxNameLength);
 

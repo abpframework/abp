@@ -3,7 +3,7 @@ using MyCompanyName.MyProjectName.Users;
 using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
-namespace MyCompanyName.MyProjectName.MongoDb
+namespace MyCompanyName.MyProjectName.MongoDB
 {
     [ConnectionStringName("Default")]
     public class MyProjectNameMongoDbContext : AbpMongoDbContext
@@ -16,7 +16,9 @@ namespace MyCompanyName.MyProjectName.MongoDb
 
             modelBuilder.Entity<AppUser>(b =>
             {
-                b.CollectionName = "AbpUsers"; //Sharing the same collection "AbpUsers" with the IdentityUser
+                /* Sharing the same "AbpUsers" collection
+                 * with the Identity module's IdentityUser class. */
+                b.CollectionName = "AbpUsers";
             });
         }
     }

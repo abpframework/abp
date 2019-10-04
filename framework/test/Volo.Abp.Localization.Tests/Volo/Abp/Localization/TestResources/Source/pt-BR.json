@@ -5,6 +5,7 @@
     "Car": "Carro",
     "CarPlural": "Carros",
     "MaxLenghtErrorMessage": "O comprimento deste campo pode ser no máximo de '{0}' caracteres",
-    "Universe": "Universo"
+    "Universe": "Universo",
+    "FortyTwo": "Quarenta e Dois"
   }
 }

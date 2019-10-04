@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Castle.DynamicProxy;
 using JetBrains.Annotations;
+using Polly;
 using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
@@ -105,6 +106,12 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(type, remoteServiceConfigurationName);
             });
+            
+            //use IHttpClientFactory and polly
+            services.AddHttpClient(remoteServiceConfigurationName)
+                .AddTransientHttpErrorPolicy(builder =>
+                    // retry 3 times
+                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
 
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);
             services.AddTransient(interceptorType);

@@ -42,6 +42,10 @@
       ]
     },
     {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
       "text": "Fundamentals",
       "items": [
         {
@@ -214,7 +218,11 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "Tag-Helpers.md"
+              "path": "AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Dashboard & Widget System",
+              "path": "AspNetCore/Tag-Helpers/DashboardWidgetSystem.md"
             },
             {
               "text": "Theming",
@@ -275,6 +283,10 @@
     },
     {
       "text": "Testing"
+    },
+    {
+      "text": "Nightly Builds",
+      "path": "Nightly-Builds.md"
     },
     {
       "text": "Contribution Guide",

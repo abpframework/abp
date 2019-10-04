@@ -7,7 +7,7 @@
 }
 @if (Model.IsLeaf)
 {
-    @if (Model.Url != null)
+    if (Model.Url != null)
     {
         <a class="dropdown-item @cssClass @disabled" href="@(Model.Url ?? "#")" @Html.Raw(elementId)>
             @Model.DisplayName

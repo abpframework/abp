@@ -18,11 +18,11 @@ $solutionPaths = (
     "modules/blogging",
     "modules/audit-logging",
     "modules/background-jobs",
-    "abp_io",
-    "templates/module",
-    "templates/service",
+    "modules/client-simulation",
+    "templates/mvc-module",
     "templates/mvc",
-    "samples/MicroserviceDemo"
+    "samples/MicroserviceDemo",
+    "abp_io/AbpIoLocalization"
 )
 
 # Build all solutions

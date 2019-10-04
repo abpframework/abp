@@ -31,7 +31,7 @@ ABP是[开源](https://github.com/abpframework)和社区驱动项目. 本指南�
 
 ### 资源本地化
 
-ABP框架具有灵活的[本地化系统](https://abp.io/documents/abp/latest/Localization). 你可以为自己的应用程序创建本地化用户界面.
+ABP框架具有灵活的[本地化系统](../Localization.md). 你可以为自己的应用程序创建本地化用户界面.
 
 除此之外,框架和预构建模块已经本地化了文本.请参阅[Volo.Abp.UI包的本地化文本](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json).你可以在[相同文件夹](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi)中创建一个新文件进行翻译.
 

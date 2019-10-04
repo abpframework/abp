@@ -1,0 +1,16 @@
+﻿@inject IHtmlLocalizer<DashboardDemoResource> L
+@using DashboardDemo.Localization.DashboardDemo
+@using Microsoft.AspNetCore.Mvc.Localization
+@model DashboardDemo.Pages.widgets.MonthlyProfitWidgetViewComponent
+@{
+}
+<div id="MonthlyProfitWidgetContainer">
+    <abp-card background="Light">
+        <abp-card-header background="Info">@L["Monthly Profit"]</abp-card-header>
+        <abp-card-body>
+            <div class="row margin-bottom-5">
+                <canvas  id="MonthlyProfitStatistics"></canvas>
+            </div>
+        </abp-card-body>
+    </abp-card>
+</div>

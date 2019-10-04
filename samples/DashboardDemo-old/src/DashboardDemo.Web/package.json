@@ -1,0 +1,9 @@
+{
+  "version": "0.1.0",
+  "name": "DashboardDemo",
+  "private": true,
+  "dependencies": {
+    "@abp/aspnetcore.mvc.ui.theme.basic": "^0.6.6",
+    "chart.js": "^2.8.0"
+  }
+}

@@ -35,11 +35,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 schemeProvider, 
                 accountOptions)
         {
-            _schemeProvider = schemeProvider;
             Interaction = interaction;
             ClientStore = clientStore;
             IdentityServerEvents = identityServerEvents;
-            _accountOptions = accountOptions.Value;
         }
 
         public override async Task OnGetAsync()
@@ -154,11 +152,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 Alerts.Warning(L["UserLockedOutMessage"]);
                 return Page();
-            }
-
-            if (result.RequiresTwoFactor)
-            {
-                return RedirectToPage("./SendSecurityCode");
             }
 
             if (result.IsNotAllowed)

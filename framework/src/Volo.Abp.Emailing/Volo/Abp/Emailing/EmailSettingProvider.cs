@@ -18,8 +18,8 @@ namespace Volo.Abp.Emailing
                 new SettingDefinition(EmailSettingNames.Smtp.Domain),
                 new SettingDefinition(EmailSettingNames.Smtp.EnableSsl, "false"),
                 new SettingDefinition(EmailSettingNames.Smtp.UseDefaultCredentials, "true"),
-                new SettingDefinition(EmailSettingNames.DefaultFromAddress),
-                new SettingDefinition(EmailSettingNames.DefaultFromDisplayName)
+                new SettingDefinition(EmailSettingNames.DefaultFromAddress, "noreply@abp.io"),
+                new SettingDefinition(EmailSettingNames.DefaultFromDisplayName, "ABP application")
             );
         }
     }

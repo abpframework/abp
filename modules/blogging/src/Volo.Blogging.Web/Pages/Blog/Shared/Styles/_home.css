@@ -43,7 +43,7 @@
           display: inline-block;
           border-radius: 50%; }
     .hero-section .hero-articles .img-container {
-      background: black; }
+      min-height: 320px; }
       .hero-section .hero-articles .img-container img {
         filter: grayscale(10%); }
       .hero-section .hero-articles .img-container::after {
@@ -54,7 +54,7 @@
         bottom: 0px;
         width: 100%;
         top: 1% !important;
-        background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.91) 89%, rgba(0, 0, 0, 0.93) 93%) !important;
+        background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.75) 89%, rgba(0, 0, 0, 0.78) 93%) !important;
         transition: .2s all ease-in-out;
         opacity: .9; }
     .hero-section .hero-articles:hover .img-container::after {
@@ -136,5 +136,5 @@
 .img-container {
   position: relative;
   overflow: hidden;
-  border-radius: 4px; }
-
+  border-radius: 4px;
+  background: gainsboro; }

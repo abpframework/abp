@@ -45,7 +45,7 @@ namespace Volo.Abp.FeatureManagement
                 {
                     Name = featureDefinition.Name,
                     ValueType = featureDefinition.ValueType,
-                    Description = featureDefinition.Description.Localize(_stringLocalizerFactory),
+                    Description = featureDefinition.Description?.Localize(_stringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,
                     Value = await _featureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey)
                 });

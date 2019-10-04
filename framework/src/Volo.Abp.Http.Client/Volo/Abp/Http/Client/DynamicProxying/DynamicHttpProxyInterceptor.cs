@@ -128,41 +128,41 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private async Task<string> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
-            using (var client = HttpClientFactory.Create())
+            var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+
+            var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
+
+            var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
+            var apiVersion = GetApiVersionInfo(action);
+            var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+
+            var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
             {
-                var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
-                var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+                Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, JsonSerializer, apiVersion)
+            };
 
-                var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
-                var apiVersion = GetApiVersionInfo(action);
-                var url = remoteServiceConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+            AddHeaders(invocation, action, requestMessage, apiVersion);
 
-                var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
-                {
-                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, JsonSerializer, apiVersion)
-                };
+            await ClientAuthenticator.Authenticate(
+                new RemoteServiceHttpClientAuthenticateContext(
+                    client,
+                    requestMessage,
+                    remoteServiceConfig,
+                    clientConfig.RemoteServiceName
+                )
+            );
 
-                AddHeaders(invocation, action, requestMessage, apiVersion);
+            var response = await client.SendAsync(requestMessage, GetCancellationToken());
 
-                await ClientAuthenticator.Authenticate(
-                    new RemoteServiceHttpClientAuthenticateContext(
-                        client,
-                        requestMessage,
-                        remoteServiceConfig,
-                        clientConfig.RemoteServiceName
-                    )
-                );
-
-                var response = await client.SendAsync(requestMessage, GetCancellationToken());
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    await ThrowExceptionForResponseAsync(response);
-                }
-
-                return await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                await ThrowExceptionForResponseAsync(response);
             }
-        }
+
+            return await response.Content.ReadAsStringAsync();
+        } 
+        
 
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
         {
@@ -225,7 +225,11 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
-            requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(CultureInfo.CurrentUICulture.Name));
+            var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
+            if (!currentCulture.IsNullOrEmpty())
+            {
+                requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
+            }
         }
 
         private string GetConfiguredApiVersion()

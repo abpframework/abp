@@ -36,6 +36,12 @@
     "CoverImage": "Cover Image",
     "CreateANewPost": "Create A New Post",
     "CreateANewBlog": "Create A New Blog",
-    "WhatIsNew": "What is new?"
+    "WhatIsNew": "What is new?",
+    "Name": "Name",
+    "ShortName": "Short Name",
+    "CreationTime": "Creation Time",
+    "Description": "Description",
+    "Blogs": "Blogs",
+    "Tags": "Tags"
   }
 }

@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Aspects;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Aspects;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
@@ -6,11 +7,11 @@ namespace Volo.Abp.Validation
 {
     public class ValidationInterceptor : AbpInterceptor, ITransientDependency
     {
-        private readonly IMethodInvocationValidator _validator;
+        private readonly IMethodInvocationValidator _methodInvocationValidator;
 
-        public ValidationInterceptor(IMethodInvocationValidator validator)
+        public ValidationInterceptor(IMethodInvocationValidator methodInvocationValidator)
         {
-            _validator = validator;
+            _methodInvocationValidator = methodInvocationValidator;
         }
 
         public override void Intercept(IAbpMethodInvocation invocation)
@@ -26,9 +27,22 @@ namespace Volo.Abp.Validation
             invocation.Proceed();
         }
 
+        public override async Task InterceptAsync(IAbpMethodInvocation invocation)
+        {
+            if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.Validation))
+            {
+                await invocation.ProceedAsync();
+                return;
+            }
+
+            Validate(invocation);
+
+            await invocation.ProceedAsync();
+        }
+
         protected virtual void Validate(IAbpMethodInvocation invocation)
         {
-            _validator.Validate(
+            _methodInvocationValidator.Validate(
                 new MethodInvocationValidationContext(
                     invocation.TargetObject,
                     invocation.Method,

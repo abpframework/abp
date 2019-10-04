@@ -73,7 +73,7 @@ namespace PublicWebSite.Host
                     options.ClaimActions.MapAbpClaimTypes();
                 });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });

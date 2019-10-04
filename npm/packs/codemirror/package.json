@@ -1,11 +1,11 @@
 {
-  "version": "0.4.9",
+  "version": "0.6.5",
   "name": "@abp/codemirror",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/core": "^0.4.9",
+    "@abp/core": "^0.6.5",
     "codemirror": "^5.38.0"
   },
   "gitHead": "2e846ad3e5a8cbe04100484865335fbcd845a342"

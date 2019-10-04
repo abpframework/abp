@@ -81,7 +81,7 @@ namespace BackendAdminApp.Host
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });

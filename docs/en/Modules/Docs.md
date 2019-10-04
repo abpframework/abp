@@ -473,3 +473,8 @@ The upper sample `JSON` file renders the below navigation menu as `HTML`.
 
 
 Finally a new Docs Module is added to your project which is feeded with GitHub.
+
+## Next
+
+Docs Module is also available as a standalone application. Check out [VoloDocs](../Apps/VoloDocs).
+

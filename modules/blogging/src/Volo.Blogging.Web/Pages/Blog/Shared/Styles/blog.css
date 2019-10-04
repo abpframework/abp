@@ -1,11 +1,9 @@
 ﻿div.vs-blog {
   position: relative;
   background: white;
-  padding: 0 30px;
+  padding: 30px;
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  margin: 0 auto;
-  max-width: 1080px; }
+  font-size: 14px; }
   div.vs-blog a, div.vs-blog a:hover {
     text-decoration: none;
     color: #000000; }
@@ -132,7 +130,7 @@
             display: inline-block;
             border-radius: 50%; }
       div.vs-blog .hero-section .hero-articles .img-container {
-        background: black; }
+        min-height: 320px; }
         div.vs-blog .hero-section .hero-articles .img-container img {
           filter: grayscale(10%); }
         div.vs-blog .hero-section .hero-articles .img-container::after {
@@ -143,7 +141,7 @@
           bottom: 0px;
           width: 100%;
           top: 1% !important;
-          background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.91) 89%, rgba(0, 0, 0, 0.93) 93%) !important;
+          background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.75) 89%, rgba(0, 0, 0, 0.78) 93%) !important;
           transition: .2s all ease-in-out;
           opacity: .9; }
       div.vs-blog .hero-section .hero-articles:hover .img-container::after {
@@ -217,7 +215,8 @@
   div.vs-blog .img-container {
     position: relative;
     overflow: hidden;
-    border-radius: 4px; }
+    border-radius: 4px;
+    background: gainsboro; }
   div.vs-blog .post-detail h1 {
     padding: 0px 0;
     line-height: 1.25em;
@@ -309,4 +308,3 @@
     div.vs-blog .box-articles .img-container img.portrait {
       width: 100%;
       height: auto; } }
-

@@ -26,7 +26,7 @@ namespace Volo.Docs.Admin.Projects
         {
             var projects = await _projectRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount);
 
-            var totalCount = await _projectRepository.GetTotalProjectCount();
+            var totalCount = await _projectRepository.GetCountAsync();
 
             var dtos = ObjectMapper.Map<List<Project>, List<ProjectDto>>(projects);
 

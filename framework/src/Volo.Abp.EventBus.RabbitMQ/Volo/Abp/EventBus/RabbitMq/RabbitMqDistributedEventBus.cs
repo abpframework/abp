@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -36,7 +37,7 @@ namespace Volo.Abp.EventBus.RabbitMq
             IOptions<RabbitMqEventBusOptions> options,
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
-            IHybridServiceScopeFactory serviceScopeFactory, 
+            IServiceScopeFactory serviceScopeFactory, 
             IOptions<DistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory)
             : base(serviceScopeFactory)
@@ -49,8 +50,6 @@ namespace Volo.Abp.EventBus.RabbitMq
             
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
-
-            Initialize();
         }
 
         public void Initialize()
@@ -97,7 +96,12 @@ namespace Volo.Abp.EventBus.RabbitMq
         public override IDisposable Subscribe(Type eventType, IEventHandlerFactory factory)
         {
             var handlerFactories = GetOrCreateHandlerFactories(eventType);
-            
+
+            if (factory.IsInFactories(handlerFactories))
+            {
+                return NullDisposable.Instance;
+            }
+
             handlerFactories.Add(factory);
 
             if (handlerFactories.Count == 1) //TODO: Multi-threading!

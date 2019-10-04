@@ -22,14 +22,14 @@ The benefit of a **standard package** is:
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
-
-    {
-      ...
-      "dependencies": {
-        "@abp/bootstrap": "^1.0.0"
-      }
-    }
-
+````
+{
+  ...
+  "dependencies": {
+    "@abp/bootstrap": "^1.0.0"
+  }
+}
+````
 
 It's suggested to depend on a standard package instead of directly depending on a third-party package.
 

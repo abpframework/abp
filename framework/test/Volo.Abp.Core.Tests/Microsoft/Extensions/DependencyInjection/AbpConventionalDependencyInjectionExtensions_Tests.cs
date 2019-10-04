@@ -85,7 +85,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             //Assert
 
-            //Check descriptons in service collection
+            //Check descriptions in service collection
             var descriptions = _services.Where(s => s.ServiceType == typeof(IMyService)).ToList();
             descriptions.Count.ShouldBe(2);
             descriptions[0].ImplementationType.ShouldBe(typeof(FirstImplOfMyService));
@@ -113,7 +113,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             //Assert
 
-            //Check descriptons in service collection
+            //Check descriptions in service collection
             var descriptions = _services.Where(s => s.ServiceType == typeof(IMyService)).ToList();
             descriptions.Count.ShouldBe(1);
             descriptions[0].ImplementationType.ShouldBe(typeof(FirstImplOfMyService));
@@ -139,7 +139,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             //Assert
 
-            //Check descriptons in service collection
+            //Check descriptions in service collection
             var descriptions = _services.Where(s => s.ServiceType == typeof(IMyService)).ToList();
             descriptions.Count.ShouldBe(1);
             descriptions[0].ImplementationType.ShouldBe(typeof(MyServiceReplacesIMyService));

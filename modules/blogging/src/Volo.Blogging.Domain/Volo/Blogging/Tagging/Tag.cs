@@ -44,6 +44,13 @@ namespace Volo.Blogging.Tagging
             {
                 return;
             }
+
+            if (UsageCount - number <= 0)
+            {
+                UsageCount = 0;
+                return;
+            }
+
             UsageCount -= number;
         }
 

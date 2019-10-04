@@ -7,7 +7,7 @@
     var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
     if (menuItem.IsLeaf)
     {
-        @if (menuItem.Url != null)
+        if (menuItem.Url != null)
         {
             <li class="nav-item @cssClass @disabled" @elementId>
                 <a class="nav-link" href="@(menuItem.Url ?? "#")">

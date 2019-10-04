@@ -2,12 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Blogging.EntityFrameworkCore;
 
-namespace Volo.Blogging.EntityFrameworkCore
+namespace Volo.Blogging
 {
     [DependsOn(
         typeof(BloggingEntityFrameworkCoreModule),

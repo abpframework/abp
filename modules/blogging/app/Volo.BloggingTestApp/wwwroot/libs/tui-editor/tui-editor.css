@@ -1,7 +1,7 @@
 @charset "UTF-8";
 /**
 * @fileoverview style for editor ui
-* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+* @author NHN FE Development Lab <dl_javascript@nhn.com>
 */
 
 /* height */
@@ -183,7 +183,12 @@
 
 .tui-editor-defaultUI .CodeMirror-line {
     padding-left: 25px;
-    padding-right: 25px
+    padding-right: 25px;
+}
+
+.tui-editor-defaultUI .CodeMirror pre.CodeMirror-placeholder {
+    padding-left: 25px;
+    color: grey;
 }
 
 .tui-editor-defaultUI .CodeMirror-scroll {
