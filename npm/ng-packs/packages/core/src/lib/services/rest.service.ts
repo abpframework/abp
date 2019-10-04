@@ -5,6 +5,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
 import { RestOccurError } from '../actions/rest.actions';
 import { Rest } from '../models/rest';
+import { ConfigState } from '../states/config.state';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +21,7 @@ export class RestService {
 
   request<T, R>(request: HttpRequest<T> | Rest.Request<T>, config: Rest.Config = {}, api?: string): Observable<R> {
     const { observe = Rest.Observe.Body, skipHandleError } = config;
-    const url = api || this.store.selectSnapshot(state => state.ConfigState).environment.apis.default.url + request.url;
+    const url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
     const { method, ...options } = request;
     return this.http.request<T>(method, url, { observe, ...options } as any).pipe(
       observe === Rest.Observe.Body ? take(1) : null,

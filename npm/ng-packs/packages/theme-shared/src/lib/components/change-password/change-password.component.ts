@@ -8,7 +8,7 @@ import {
   Output,
   SimpleChanges,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
@@ -23,7 +23,7 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
 @Component({
   selector: 'abp-change-password',
-  templateUrl: './change-password.component.html'
+  templateUrl: './change-password.component.html',
 })
 export class ChangePasswordComponent implements OnInit, OnChanges {
   protected _visible;
@@ -60,11 +60,11 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
       {
         password: ['', required],
         newPassword: ['', required],
-        repeatNewPassword: ['', required]
+        repeatNewPassword: ['', required],
       },
       {
-        validators: [comparePasswords(PASSWORD_FIELDS)]
-      }
+        validators: [comparePasswords(PASSWORD_FIELDS)],
+      },
     );
   }
 
@@ -76,13 +76,13 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
       .dispatch(
         new ChangePassword({
           currentPassword: this.form.get('password').value,
-          newPassword: this.form.get('newPassword').value
-        })
+          newPassword: this.form.get('newPassword').value,
+        }),
       )
       .pipe(
         finalize(() => {
           this.modalBusy = false;
-        })
+        }),
       )
       .subscribe({
         next: () => {
@@ -91,9 +91,9 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
         },
         error: err => {
           this.toasterService.error(snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'), 'Error', {
-            life: 7000
+            life: 7000,
           });
-        }
+        },
       });
   }
 
