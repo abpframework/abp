@@ -38,7 +38,7 @@ export class ModalComponent implements OnDestroy {
     this.visibleChange.emit(value);
 
     if (value) {
-      this.listen();
+      setTimeout(() => this.listen(), 0);
       this.renderer.addClass(document.body, 'modal-open');
       this.appear.emit();
     } else {
