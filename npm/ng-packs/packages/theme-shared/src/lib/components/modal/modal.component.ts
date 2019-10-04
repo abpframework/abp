@@ -9,12 +9,12 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { Toaster } from '../../models/toaster';
-import { ConfirmationService } from '../../services';
+import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
 import { backdropAnimation, dialogAnimation } from './modal.animations';
 
@@ -23,7 +23,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
-  animations: [backdropAnimation, dialogAnimation]
+  animations: [backdropAnimation, dialogAnimation],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -32,7 +32,11 @@ export class ModalComponent implements OnDestroy {
   }
   set visible(value: boolean) {
     if (typeof value !== 'boolean') return;
+
+    this.isModalOpen = value;
     this._visible = value;
+    this.visibleChange.emit(value);
+
     if (value) {
       this.listen();
       this.renderer.addClass(document.body, 'modal-open');
@@ -89,6 +93,8 @@ export class ModalComponent implements OnDestroy {
 
   _busy = false;
 
+  isModalOpen = false;
+
   isConfirmationOpen = false;
 
   destroy$ = new Subject<void>();
@@ -103,7 +109,7 @@ export class ModalComponent implements OnDestroy {
     if (this.busy) return;
 
     const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes
+      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
     );
 
     if (hasNgDirty(nodes)) {
@@ -128,7 +134,7 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape')
+        filter((key: KeyboardEvent) => key && key.code === 'Escape'),
       )
       .subscribe(_ => {
         this.close();
@@ -139,7 +145,7 @@ export class ModalComponent implements OnDestroy {
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(
           takeUntil(this.destroy$),
-          filter(() => !!this.modalContent)
+          filter(() => !!this.modalContent),
         )
         .subscribe(() => this.close());
     }, 0);
@@ -151,7 +157,7 @@ export class ModalComponent implements OnDestroy {
 function getFlatNodes(nodes: NodeList): HTMLElement[] {
   return Array.from(nodes).reduce(
     (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
-    []
+    [],
   );
 }
 

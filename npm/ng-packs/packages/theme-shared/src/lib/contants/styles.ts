@@ -28,8 +28,22 @@ export default `
   min-width: 215px;
 }
 
-.modal {
- background-color: rgba(0, 0, 0, .6);
+.modal.show {
+  display: block !important;
+}
+
+.modal-backdrop {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-color: rgba(0, 0, 0, .6) !important;
+  z-index: 1040 !important;
+}
+
+.modal-dialog {
+  z-index: 1050 !important;
 }
 
 .abp-ellipsis-inline {
