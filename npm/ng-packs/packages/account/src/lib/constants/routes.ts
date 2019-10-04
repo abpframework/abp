@@ -1,5 +1,9 @@
 import { ABP, eLayoutType } from '@abp/ng.core';
 
+/**
+ *
+ * @deprecated since version 0.9
+ */
 export const ACCOUNT_ROUTES = {
   routes: [
     {

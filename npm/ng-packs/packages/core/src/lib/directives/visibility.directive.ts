@@ -3,14 +3,14 @@ import { Subject } from 'rxjs';
 import snq from 'snq';
 
 @Directive({
-  selector: '[abpVisibility]',
+  selector: '[abpVisibility]'
 })
 export class VisibilityDirective implements AfterViewInit {
   @Input('abpVisibility')
   focusedElement: HTMLElement;
 
   @Input()
-  mutationObserverEnabled: boolean = true;
+  mutationObserverEnabled = true;
 
   completed$ = new Subject<boolean>();
 
@@ -25,7 +25,7 @@ export class VisibilityDirective implements AfterViewInit {
 
           const htmlNodes = snq(
             () => Array.from(mutation.target.childNodes).filter(node => node instanceof HTMLElement),
-            [],
+            []
           );
 
           if (!htmlNodes.length) {
@@ -40,13 +40,13 @@ export class VisibilityDirective implements AfterViewInit {
       });
 
       observer.observe(this.focusedElement, {
-        childList: true,
+        childList: true
       });
     } else {
       setTimeout(() => {
         const htmlNodes = snq(
           () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
-          [],
+          []
         );
 
         if (!htmlNodes.length) this.removeFromDOM();

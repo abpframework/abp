@@ -1,11 +1,11 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { NEVER, Observable, throwError } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError, take } from 'rxjs/operators';
+import { RestOccurError } from '../actions/rest.actions';
 import { Rest } from '../models/rest';
-import { ConfigState } from '../states';
-import { RestOccurError } from '../actions';
+import { ConfigState } from '../states/config.state';
 
 @Injectable({
   providedIn: 'root',

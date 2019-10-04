@@ -38,17 +38,16 @@ export class ChangePasswordComponent implements OnInit, OnChanges {
     this.visibleChange.emit(value);
   }
 
-  @Output()
-  visibleChange = new EventEmitter<boolean>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
 
   form: FormGroup;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
-  mapErrorsFn: Validation.MapErrorsFn = function(errors, groupErrors, control) {
+  mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(control.name) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));

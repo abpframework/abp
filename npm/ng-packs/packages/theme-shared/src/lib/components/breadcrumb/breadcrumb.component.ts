@@ -5,21 +5,7 @@ import { ConfigState, ABP } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-breadcrumb',
-  template: `
-    <ol *ngIf="show" class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a routerLink="/"><i class="fa fa-home"></i> </a>
-      </li>
-      <li
-        *ngFor="let segment of segments; let last = last"
-        class="breadcrumb-item"
-        [class.active]="last"
-        aria-current="page"
-      >
-        {{ segment | abpLocalization }}
-      </li>
-    </ol>
-  `,
+  templateUrl: './breadcrumb.component.html'
 })
 export class BreadcrumbComponent implements OnInit {
   show: boolean;

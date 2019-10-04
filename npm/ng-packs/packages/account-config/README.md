@@ -1,0 +1,1 @@
+# @abp/ng.account.config
