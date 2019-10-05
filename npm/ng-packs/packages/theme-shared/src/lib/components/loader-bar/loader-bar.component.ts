@@ -1,8 +1,9 @@
 import { StartLoader, StopLoader } from '@abp/ng.core';
-import { Component, Input, OnDestroy } from '@angular/core';
-import { NavigationEnd, NavigationStart, Router, NavigationError } from '@angular/router';
+import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
+import { interval, Subscription, timer } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -19,35 +20,19 @@ import { filter } from 'rxjs/operators';
       ></div>
     </div>
   `,
-  styleUrls: ['./loader-bar.component.scss'],
+  styleUrls: ['./loader-bar.component.scss']
 })
 export class LoaderBarComponent implements OnDestroy {
-  @Input()
-  containerClass: string = 'abp-loader-bar';
-
-  @Input()
-  color: string = '#77b6ff';
-
-  @Input()
-  isLoading: boolean = false;
-
-  @Input()
-  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
-
-  progressLevel: number = 0;
-
-  interval: any;
-
   get boxShadow(): string {
     return `0 0 10px rgba(${this.color}, 0.5)`;
   }
 
-  constructor(private actions: Actions, private router: Router) {
+  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {
     actions
       .pipe(
         ofActionSuccessful(StartLoader, StopLoader),
         filter(this.filter),
-        takeUntilDestroy(this),
+        takeUntilDestroy(this)
       )
       .subscribe(action => {
         if (action instanceof StartLoader) this.startLoading();
@@ -58,21 +43,42 @@ export class LoaderBarComponent implements OnDestroy {
       .pipe(
         filter(
           event =>
-            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError,
+            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError
         ),
-        takeUntilDestroy(this),
+        takeUntilDestroy(this)
       )
       .subscribe(event => {
         if (event instanceof NavigationStart) this.startLoading();
         else this.stopLoading();
       });
   }
+  @Input()
+  containerClass = 'abp-loader-bar';
 
-  ngOnDestroy() {}
+  @Input()
+  color = '#77b6ff';
+
+  @Input()
+  isLoading = false;
+
+  progressLevel = 0;
+
+  interval: Subscription;
+
+  timer: Subscription;
+
+  @Input()
+  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
+
+  ngOnDestroy() {
+    this.interval.unsubscribe();
+  }
 
   startLoading() {
+    if (this.isLoading || this.progressLevel !== 0) return;
+
     this.isLoading = true;
-    const interval = setInterval(() => {
+    this.interval = interval(350).subscribe(() => {
       if (this.progressLevel < 75) {
         this.progressLevel += Math.random() * 10;
       } else if (this.progressLevel < 90) {
@@ -80,20 +86,21 @@ export class LoaderBarComponent implements OnDestroy {
       } else if (this.progressLevel < 100) {
         this.progressLevel += 0.1;
       } else {
-        clearInterval(interval);
+        this.interval.unsubscribe();
       }
-    }, 300);
-
-    this.interval = interval;
+      this.cdRef.detectChanges();
+    });
   }
 
   stopLoading() {
-    clearInterval(this.interval);
+    this.interval.unsubscribe();
     this.progressLevel = 100;
     this.isLoading = false;
+    if (this.timer && !this.timer.closed) return;
 
-    setTimeout(() => {
+    this.timer = timer(820).subscribe(() => {
       this.progressLevel = 0;
-    }, 800);
+      this.cdRef.detectChanges();
+    });
   }
 }

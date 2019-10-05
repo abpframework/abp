@@ -15,7 +15,7 @@ namespace Volo.Abp.Cli.Licensing
 
         protected IJsonSerializer JsonSerializer { get; }
 
-        public async Task<string> GetApiKeyOrNullAsync()
+        public async Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync()
         {
             using (var client = new CliHttpClient())
             {
@@ -29,7 +29,7 @@ namespace Volo.Abp.Cli.Licensing
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent).ApiKey;
+                return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
             }
         }
     }

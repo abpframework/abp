@@ -31,8 +31,9 @@ namespace Volo.Abp.VirtualFileSystem
 
         public void AddOrUpdate(IFileInfo fileInfo)
         {
-            DynamicFiles.AddOrUpdate(fileInfo.PhysicalPath, fileInfo, (key, value) => fileInfo);
-            ReportChange(fileInfo.PhysicalPath);
+            var filePath = fileInfo.GetVirtualOrPhysicalPathOrNull();
+            DynamicFiles.AddOrUpdate(filePath, fileInfo, (key, value) => fileInfo);
+            ReportChange(filePath);
         }
 
         public bool Delete(string filePath)

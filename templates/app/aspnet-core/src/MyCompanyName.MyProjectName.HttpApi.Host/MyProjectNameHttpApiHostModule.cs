@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
@@ -14,7 +15,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.Autofac;
+using Volo.Abp.Caching;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -25,6 +28,7 @@ namespace MyCompanyName.MyProjectName
         typeof(MyProjectNameHttpApiModule),
         typeof(AbpAutofacModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
+        typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule)
         )]
@@ -39,11 +43,22 @@ namespace MyCompanyName.MyProjectName
 
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
-            ConfigureSwagger(context);
             ConfigureLocalization();
+            ConfigureCache(configuration);
             ConfigureVirtualFileSystem(context);
             ConfigureRedis(context, configuration, hostingEnvironment);
             ConfigureCors(context, configuration);
+
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //ConfigureSwaggerServices(context);
+        }
+
+        private void ConfigureCache(IConfigurationRoot configuration)
+        {
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
         }
 
         private void ConfigureVirtualFileSystem(ServiceConfigurationContext context)
@@ -81,7 +96,7 @@ namespace MyCompanyName.MyProjectName
                 });
         }
 
-        private static void ConfigureSwagger(ServiceConfigurationContext context)
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
         {
             context.Services.AddSwaggerGen(
                 options =>
@@ -106,7 +121,7 @@ namespace MyCompanyName.MyProjectName
         private void ConfigureRedis(
             ServiceConfigurationContext context,
             IConfigurationRoot configuration,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
             {
@@ -148,20 +163,26 @@ namespace MyCompanyName.MyProjectName
         {
             var app = context.GetApplicationBuilder();
 
-            app.UseCors(DefaultCorsPolicyName);
-
+            app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
+            app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
+            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
             app.UseAbpRequestLocalization();
+
+            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
+            */
+
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

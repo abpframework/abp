@@ -13,6 +13,8 @@ namespace Volo.Abp.AuditLogging
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -26,6 +28,8 @@ namespace Volo.Abp.AuditLogging
             CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,

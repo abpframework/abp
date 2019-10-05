@@ -7,7 +7,10 @@ namespace IdentityService.Host.Controllers
     {
         public ActionResult Index()
         {
-            return Redirect("/swagger");
+            //TODO: Enable swagger UI once it supports asp.net core 3.x
+            //return Redirect("/swagger");
+
+            return Content("OK: IdentityService.Host is working...");
         }
     }
 }

@@ -25,6 +25,10 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
 })
 export class TenantManagementModule {}
 
+/**
+ *
+ * @deprecated since version 0.9.0
+ */
 export function TenantManagementProviders(): Provider[] {
   return [];
 }

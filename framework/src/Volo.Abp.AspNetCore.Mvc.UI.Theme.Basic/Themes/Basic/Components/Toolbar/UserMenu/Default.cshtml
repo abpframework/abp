@@ -21,7 +21,7 @@
                 var cssClass = string.IsNullOrEmpty(menuItem.CssClass) ? string.Empty : menuItem.CssClass;
                 var disabled = menuItem.IsDisabled ? "disabled" : string.Empty;
 
-                <a class="dropdown-item @cssClass @disabled" href="@(menuItem.Url ?? "#")" @Html.Raw(elementId)>
+                <a class="dropdown-item @cssClass @disabled" href="@(menuItem.Url ?? "#")" target="@menuItem.Target" @Html.Raw(elementId)>
                     @menuItem.DisplayName
                 </a>
             }

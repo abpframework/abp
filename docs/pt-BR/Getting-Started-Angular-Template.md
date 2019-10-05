@@ -1,4 +1,4 @@
-## Introdução ao modelo de aplicativo angular
+## Introdução ao modelo de aplicativo Angular
 
 Este tutorial explica como criar um novo aplicativo Angular usando o modelo de inicialização, configurar e executá-lo.
 
@@ -37,13 +37,13 @@ Abra a solução no **Visual Studio** :
 
 ![livraria-visual-studio-solução](images/bookstore-visual-studio-solution-for-spa.png)
 
-A solução possui uma estrutura em camadas (baseada no [Domain Driven Design](Domain-Driven-Design.md) ) e contém projetos de teste de unidade e integração adequadamente configurados para trabalhar com o **banco de** dados de **memória** **EF Core** e **SQLite** .
+A solução possui uma estrutura em camadas (baseada no [Domain Driven Design](Domain-Driven-Design.md) ) e contém projetos de teste de unidade e integração adequadamente configurados para trabalhar com o **banco de dados** **EF Core** & **SQLite in-memory**.
 
 > Consulte o [documento do modelo do aplicativo](Startup-Templates/Application.md)  para entender a estrutura da solução em detalhes.
 
-### Cadeia de Conexão de Banco de Dados
+### String de Conexão de Banco de Dados
 
-Verifique a **cadeia de conexão** no `appsettings.json`arquivo no `.HttpApi.Host`projeto:
+Verifique o **connection string** no `appsettings.json`arquivo no `.HttpApi.Host`projeto:
 
 ```json
 {

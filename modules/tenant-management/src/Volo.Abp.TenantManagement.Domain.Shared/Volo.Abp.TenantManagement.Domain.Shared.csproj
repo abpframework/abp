@@ -14,13 +14,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\TenantManagement\Localization\Resources\*.json" />
     <Content Remove="Volo\Abp\TenantManagement\Localization\Resources\*.json" />
   </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\TenantManagement\Localization\Resources\*.json" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>

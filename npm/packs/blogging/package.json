@@ -1,13 +1,13 @@
 {
-  "version": "0.8.0",
+  "version": "0.9.0",
   "name": "@abp/blogging",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.8.0",
-    "@abp/owl.carousel": "^0.8.0",
-    "@abp/tui-editor": "^0.8.0"
+    "@abp/aspnetcore.mvc.ui.theme.shared": "^0.9.0",
+    "@abp/owl.carousel": "^0.9.0",
+    "@abp/tui-editor": "^0.9.0"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
 }

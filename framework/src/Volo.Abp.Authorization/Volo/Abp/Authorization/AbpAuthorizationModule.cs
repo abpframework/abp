@@ -25,7 +25,7 @@ namespace Volo.Abp.Authorization
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAuthorization();
+            context.Services.AddAuthorizationCore();
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 

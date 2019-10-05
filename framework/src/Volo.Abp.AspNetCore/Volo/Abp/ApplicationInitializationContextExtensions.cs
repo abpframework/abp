@@ -13,9 +13,9 @@ namespace Volo.Abp
             return context.ServiceProvider.GetRequiredService<IObjectAccessor<IApplicationBuilder>>().Value;
         }
 
-        public static IHostingEnvironment GetEnvironment(this ApplicationInitializationContext context)
+        public static IWebHostEnvironment GetEnvironment(this ApplicationInitializationContext context)
         {
-            return context.ServiceProvider.GetRequiredService<IHostingEnvironment>();
+            return context.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         }
 
         public static ILoggerFactory GetLoggerFactory(this ApplicationInitializationContext context)

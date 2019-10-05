@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\..\..\common.test.props" />
+
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <IsPackable>false</IsPackable>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace />
   </PropertyGroup>
 

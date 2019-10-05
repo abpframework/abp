@@ -9,21 +9,20 @@ import { UserResolver } from './resolvers/users.resolver';
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
   {
-    path: 'roles',
+    path: '',
     component: DynamicLayoutComponent,
     canActivate: [AuthGuard, PermissionGuard],
-    data: { requiredPolicy: 'AbpIdentity.Roles' },
-    children: [{ path: '', component: RolesComponent, resolve: [RoleResolver] }],
-  },
-  {
-    path: 'users',
-    component: DynamicLayoutComponent,
-    canActivate: [AuthGuard, PermissionGuard],
-    data: { requiredPolicy: 'AbpIdentity.Users' },
     children: [
       {
-        path: '',
+        path: 'roles',
+        component: RolesComponent,
+        resolve: [RoleResolver],
+        data: { requiredPolicy: 'AbpIdentity.Roles' },
+      },
+      {
+        path: 'users',
         component: UsersComponent,
+        data: { requiredPolicy: 'AbpIdentity.Users' },
         resolve: [RoleResolver, UserResolver],
       },
     ],

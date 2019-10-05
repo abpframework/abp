@@ -80,7 +80,7 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
                     _unitOfWorkManager.Current.ShouldNotBeNull();
 
                     await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
-                    await _bookRepository.InsertAsync(new BookInSecondDbContext { Id = bookId, Name = bookId.ToString() });
+                    await _bookRepository.InsertAsync(new BookInSecondDbContext(bookId, bookId.ToString()));
 
                     await _unitOfWorkManager.Current.SaveChangesAsync();
 

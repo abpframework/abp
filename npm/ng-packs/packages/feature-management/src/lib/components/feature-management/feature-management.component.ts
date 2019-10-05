@@ -9,7 +9,7 @@ import { pluck, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-feature-management',
-  templateUrl: './feature-management.component.html',
+  templateUrl: './feature-management.component.html'
 })
 export class FeatureManagementComponent {
   @Input()
@@ -32,13 +32,12 @@ export class FeatureManagementComponent {
     if (value) this.openModal();
   }
 
-  @Output()
-  visibleChange = new EventEmitter<boolean>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @Select(FeatureManagementState.getFeatures)
   features$: Observable<FeatureManagement.Feature[]>;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
   form: FormGroup;
 
@@ -54,7 +53,12 @@ export class FeatureManagementComponent {
 
   getFeatures() {
     this.store
-      .dispatch(new GetFeatures({ providerKey: this.providerKey, providerName: this.providerName }))
+      .dispatch(
+        new GetFeatures({
+          providerKey: this.providerKey,
+          providerName: this.providerName
+        })
+      )
       .pipe(pluck('FeatureManagementState', 'features'))
       .subscribe(features => {
         this.buildForm(features);
@@ -78,7 +82,7 @@ export class FeatureManagementComponent {
 
     features = features.map((feature, i) => ({
       name: feature.name,
-      value: !this.form.value[i] || this.form.value[i] === 'false' ? null : this.form.value[i],
+      value: !this.form.value[i] || this.form.value[i] === 'false' ? null : this.form.value[i]
     }));
 
     this.store
@@ -86,8 +90,8 @@ export class FeatureManagementComponent {
         new UpdateFeatures({
           providerKey: this.providerKey,
           providerName: this.providerName,
-          features,
-        }),
+          features
+        })
       )
       .subscribe(() => {
         this.modalBusy = false;

@@ -3,10 +3,11 @@ import { fromEvent } from 'rxjs';
 import { takeUntilDestroy } from '@ngx-validate/core';
 
 @Directive({
-  selector: '[click.stop]',
+  // tslint:disable-next-line: directive-selector
+  selector: '[click.stop]'
 })
 export class ClickEventStopPropagationDirective implements OnInit {
-  @Output('click.stop') stopPropEvent = new EventEmitter<MouseEvent>();
+  @Output('click.stop') readonly stopPropEvent = new EventEmitter<MouseEvent>();
 
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 

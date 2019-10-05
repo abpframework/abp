@@ -9,9 +9,9 @@ using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.IdentityServer.AspNetIdentity
 {

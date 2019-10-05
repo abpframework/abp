@@ -1,10 +1,10 @@
-# Introdução ao ABP com o aplicativo Web MVC AspNet Core
+# Introdução ao ABP com o AspNet Core MVC Web Application
 
 Este tutorial explica como iniciar o ABP do zero com dependências mínimas. Você geralmente deseja começar com o **modelo de inicialização** .
 
 ## Criar um novo projeto
 
-1. Crie um novo aplicativo da Web vazio do AspNet Core no Visual Studio:
+1. Crie um novo aplicativo da Web vazio AspNet Core Web Application no Visual Studio:
 
 ![img](images/create-new-aspnet-core-application.png)
 
@@ -58,7 +58,7 @@ namespace BasicAspNetCoreApplication
 
 `AppModule` é um bom nome para o módulo de inicialização de um aplicativo.
 
-Os pacotes ABP definem as classes do módulo e um módulo pode depender de outro módulo. No código acima, nosso `AppModule`depende `AbpAspNetCoreMvcModule`(definido pelo pacote Volo.Abp.AspNetCore.Mvc). É comum adicionar um `DependsOn`atributo após a instalação de um novo pacote de nuget ABP.
+Os pacotes ABP definem as classes do módulo e um módulo pode depender de outro módulo. No código acima, nosso `AppModule` depende `AbpAspNetCoreMvcModule`(definido pelo pacote Volo.Abp.AspNetCore.Mvc). É comum adicionar um `DependsOn`atributo após a instalação de um novo pacote de nuget ABP.
 
 Em vez da classe Startup, estamos configurando o pipeline do ASP.NET Core nesta classe de módulo.
 
@@ -90,7 +90,7 @@ namespace BasicAspNetCoreApplication
 }
 ```
 
-`ConfigureServices`Método alterado para retornar em `IServiceProvider`vez de `void`. Essa alteração nos permite substituir a injeção de dependência do AspNet Core por outra estrutura (consulte a seção de integração com Autofac abaixo). `services.AddApplication<AppModule>()`adiciona todos os serviços definidos em todos os módulos a partir do `AppModule`.
+`ConfigureServices` Método alterado para retornar em `IServiceProvider` vez de `void`. Essa alteração nos permite substituir a injeção de dependência do AspNet Core por outra estrutura (consulte a seção de integração com Autofac abaixo). `services.AddApplication<AppModule>()` adiciona todos os serviços definidos em todos os módulos a partir do `AppModule`.
 
 `app.InitializeApplication()`O `Configure`método call in inicializa e inicia o aplicativo.
 
@@ -118,7 +118,7 @@ Se você executar o aplicativo, verá um "Olá, mundo!" mensagem na página.
 
 Derivado `HomeController`de em `AbpController`vez de `Controller`classe padrão . Isso não é necessário, mas a `AbpController`classe possui propriedades e métodos base úteis para facilitar seu desenvolvimento.
 
-## Usando Autofac como a estrutura de injeção de dependência
+## Usando Autofac como framework de injeção de dependência
 
 Embora o sistema de Injeção de Dependência (DI) do AspNet Core seja adequado para requisitos básicos, o Autofac fornece recursos avançados, como Injeção de Propriedade e Interceptação de Método, exigidos pela ABP para executar recursos avançados da estrutura de aplicativos.
 
@@ -130,7 +130,7 @@ Substituir o sistema DI do AspNet Core pelo Autofac e integrar ao ABP é bastant
 Install-Package Volo.Abp.Autofac
 ```
 
-1. Adicionar `AbpAutofacModule`dependência
+1. Adicionar `AbpAutofacModule` dependência
 
 ```csharp
 [DependsOn(typeof(AbpAspNetCoreMvcModule))]
@@ -141,7 +141,7 @@ public class AppModule : AbpModule
 }
 ```
 
-1. Altere a `services.AddApplication<AppModule>();`linha na `Startup`classe, como mostrado abaixo:
+1. Altere a `services.AddApplication<AppModule>();` linha na `Startup`classe, como mostrado abaixo:
 
 ```csharp
 services.AddApplication<AppModule>(options =>
@@ -150,7 +150,7 @@ services.AddApplication<AppModule>(options =>
 });
 ```
 
-1. Atualize `Program.cs`para não usar o `WebHost.CreateDefaultBuilder()`método, pois ele usa o contêiner DI padrão:
+1. Atualize `Program.cs` para não usar o `WebHost.CreateDefaultBuilder()` método, pois ele usa o contêiner DI padrão:
 
 ```csharp
 public class Program

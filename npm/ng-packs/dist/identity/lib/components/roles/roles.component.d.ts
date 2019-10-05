@@ -19,6 +19,7 @@ export declare class RolesComponent {
     pageQuery: ABP.PageQueryParams;
     loading: boolean;
     modalBusy: boolean;
+    sortOrder: string;
     modalContent: TemplateRef<any>;
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
     onSearch(value: any): void;
@@ -30,4 +31,5 @@ export declare class RolesComponent {
     delete(id: string, name: string): void;
     onPageChange(data: any): void;
     get(): void;
+    changeSortOrder(): void;
 }

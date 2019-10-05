@@ -10,7 +10,7 @@ namespace Volo.Abp.VirtualFileSystem
 
         public long Length => _fileContent.Length;
 
-        public string PhysicalPath { get; }
+        public string PhysicalPath => null;
 
         public string Name { get; }
 
@@ -20,9 +20,11 @@ namespace Volo.Abp.VirtualFileSystem
 
         private readonly byte[] _fileContent;
 
-        public InMemoryFileInfo(byte[] fileContent, string physicalPath, string name)
+        public string DynamicPath { get; }
+
+        public InMemoryFileInfo(string dynamicPath, byte[] fileContent, string name)
         {
-            PhysicalPath = physicalPath;
+            DynamicPath = dynamicPath;
             Name = name;
             _fileContent = fileContent;
             LastModified = DateTimeOffset.Now;

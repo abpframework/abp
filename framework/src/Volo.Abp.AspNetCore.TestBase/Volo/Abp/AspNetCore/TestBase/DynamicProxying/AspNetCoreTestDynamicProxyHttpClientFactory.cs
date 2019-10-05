@@ -8,11 +8,11 @@ namespace Volo.Abp.AspNetCore.TestBase.DynamicProxying
     public class AspNetCoreTestDynamicProxyHttpClientFactory : IDynamicProxyHttpClientFactory, ITransientDependency
     {
         private readonly ITestServerAccessor _testServerAccessor;
-        private readonly IHttpClientFactory _httpClientFactory;
 
-        public AspNetCoreTestDynamicProxyHttpClientFactory(ITestServerAccessor testServerAccessor, IHttpClientFactory httpClientFactory) {
+        public AspNetCoreTestDynamicProxyHttpClientFactory(
+            ITestServerAccessor testServerAccessor)
+        {
             _testServerAccessor = testServerAccessor;
-            _httpClientFactory = httpClientFactory;
         }
 
         public HttpClient Create()
@@ -20,7 +20,8 @@ namespace Volo.Abp.AspNetCore.TestBase.DynamicProxying
             return _testServerAccessor.Server.CreateClient();
         }
 
-        public HttpClient Create(string name) {
+        public HttpClient Create(string name)
+        {
             return Create();
         }
     }

@@ -1,10 +1,11 @@
 import { State, Selector, createSelector, Action, StateContext, Store } from '@ngxs/store';
-import { Config, ABP } from '../models';
+import { Config } from '../models/config';
+import { ABP } from '../models/common';
 import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
 import { ApplicationConfigurationService } from '../services/application-configuration.service';
 import { tap, switchMap } from 'rxjs/operators';
 import snq from 'snq';
-import { SetLanguage } from '../actions';
+import { SetLanguage } from '../actions/session.actions';
 import { SessionState } from './session.state';
 import { of } from 'rxjs';
 import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
@@ -27,7 +28,7 @@ export class ConfigState {
   static getOne(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return state[key];
       },
     );
@@ -46,7 +47,7 @@ export class ConfigState {
 
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return (keys as string[]).reduce((acc, val) => {
           if (acc) {
             return acc[val];
@@ -63,7 +64,7 @@ export class ConfigState {
   static getRoute(path?: string, name?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         const { flattedRoutes } = state;
         return (flattedRoutes as ABP.FullRoute[]).find(route => {
           if (path && route.path === path) {
@@ -81,7 +82,7 @@ export class ConfigState {
   static getApiUrl(key?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State): string {
+      (state: Config.State): string => {
         return state.environment.apis[key || 'default'].url;
       },
     );
@@ -92,7 +93,7 @@ export class ConfigState {
   static getSetting(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return snq(() => state.setting.values[key]);
       },
     );
@@ -103,7 +104,7 @@ export class ConfigState {
   static getGrantedPolicy(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State): boolean {
+      (state: Config.State): boolean => {
         if (!key) return true;
         return snq(() => state.auth.grantedPolicies[key], false);
       },
@@ -112,20 +113,24 @@ export class ConfigState {
     return selector;
   }
 
+  /**
+   *
+   * @deprecated, Use getLocalization instead. To be delete in v1
+   */
   static getCopy(key: string, ...interpolateParams: string[]) {
     if (!key) key = '';
 
     const keys = key.split('::') as string[];
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         if (!state.localization) return key;
 
         const { defaultResourceName } = state.environment.localization;
         if (keys[0] === '') {
           if (!defaultResourceName) {
             throw new Error(
-              `Please check your environment. May you forget set defaultResourceName? 
+              `Please check your environment. May you forget set defaultResourceName?
               Here is the example:
                { production: false,
                  localization: {
@@ -154,6 +159,61 @@ export class ConfigState {
         }
 
         return copy || key;
+      },
+    );
+
+    return selector;
+  }
+
+  static getLocalization(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]) {
+    let defaultValue: string;
+
+    if (typeof key !== 'string') {
+      defaultValue = key.defaultValue;
+      key = key.key;
+    }
+
+    if (!key) key = '';
+
+    const keys = key.split('::') as string[];
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State) => {
+        if (!state.localization) return defaultValue || key;
+
+        const { defaultResourceName } = state.environment.localization;
+        if (keys[0] === '') {
+          if (!defaultResourceName) {
+            throw new Error(
+              `Please check your environment. May you forget set defaultResourceName?
+              Here is the example:
+               { production: false,
+                 localization: {
+                   defaultResourceName: 'MyProjectName'
+                  }
+               }`,
+            );
+          }
+
+          keys[0] = snq(() => defaultResourceName);
+        }
+
+        let localization = (keys as any).reduce((acc, val) => {
+          if (acc) {
+            return acc[val];
+          }
+
+          return undefined;
+        }, state.localization.values);
+
+        interpolateParams = interpolateParams.filter(params => params != null);
+        if (localization && interpolateParams && interpolateParams.length) {
+          interpolateParams.forEach(param => {
+            localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
+          });
+        }
+
+        return localization || defaultValue || key;
       },
     );
 

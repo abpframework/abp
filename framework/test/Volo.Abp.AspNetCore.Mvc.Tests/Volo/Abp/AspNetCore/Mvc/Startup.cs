@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             return services.BuildServiceProviderFromFactory();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.InitializeApplication();
         }
