@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -130,7 +130,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (!selectItems.Any(si => si.Selected))
             {
-                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value.ToString() == selectedValue);
+                var itemToBeSelected = selectItems.FirstOrDefault(si => si.Value == selectedValue);
 
                 if (itemToBeSelected != null)
                 {
