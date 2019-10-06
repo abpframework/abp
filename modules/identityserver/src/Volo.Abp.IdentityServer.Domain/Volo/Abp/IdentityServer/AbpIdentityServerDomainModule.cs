@@ -7,6 +7,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -15,7 +16,8 @@ namespace Volo.Abp.IdentityServer
         typeof(AbpAutoMapperModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpSecurityModule),
-        typeof(AbpCachingModule)
+        typeof(AbpCachingModule),
+        typeof(AbpValidationModule)
         )]
     public class AbpIdentityServerDomainModule : AbpModule
     {
