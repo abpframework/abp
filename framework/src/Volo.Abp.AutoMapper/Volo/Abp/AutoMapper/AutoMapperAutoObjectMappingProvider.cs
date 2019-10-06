@@ -1,13 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.DependencyInjection;
-using Volo.Abp.ObjectMapping;
+﻿using Volo.Abp.ObjectMapping;
 
 namespace Volo.Abp.AutoMapper
 {
-    [Dependency(ServiceLifetime.Transient, ReplaceServices = true)]
+    public class AutoMapperAutoObjectMappingProvider<TContext> : AutoMapperAutoObjectMappingProvider, IAutoObjectMappingProvider<TContext>
+    {
+        public AutoMapperAutoObjectMappingProvider(IMapperAccessor mapperAccessor) 
+            : base(mapperAccessor)
+        {
+        }
+    }
+
     public class AutoMapperAutoObjectMappingProvider : IAutoObjectMappingProvider
     {
-        protected IMapperAccessor MapperAccessor { get; }
+        public IMapperAccessor MapperAccessor { get; }
 
         public AutoMapperAutoObjectMappingProvider(IMapperAccessor mapperAccessor)
         {

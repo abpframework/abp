@@ -23,6 +23,13 @@ namespace Volo.Abp.AutoMapper
         }
 
         [Fact]
+        public void Should_Get_Internal_Mapper()
+        {
+            _objectMapper.GetMapper().ShouldNotBeNull();
+            _objectMapper.AutoObjectMappingProvider.GetMapper().ShouldNotBeNull();
+        }
+
+        [Fact]
         public void Should_Map_Objects_With_AutoMap_Attributes()
         {
             var dto = _objectMapper.Map<MyEntity, MyEntityDto>(new MyEntity {Number = 42});
