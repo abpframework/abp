@@ -4,14 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
     [Authorize(IdentityPermissions.Roles.Default)]
-    public class IdentityRoleAppService : ApplicationService, IIdentityRoleAppService
+    public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
     {
         private readonly IdentityRoleManager _roleManager;
         private readonly IIdentityRoleRepository _roleRepository;
