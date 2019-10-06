@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AutoMapper;
+﻿using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 
@@ -17,7 +16,7 @@ namespace Volo.Abp.Identity
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>();
+                options.AddProfile<AbpIdentityApplicationModuleAutoMapperProfile>(validate: true);
             });
         }
     }
