@@ -12,6 +12,8 @@ namespace Volo.Abp.AutoMapper
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper();
+
             var mapperAccessor = new MapperAccessor();
             context.Services.AddSingleton<IMapperAccessor>(_ => mapperAccessor);
             context.Services.AddSingleton<MapperAccessor>(_ => mapperAccessor);

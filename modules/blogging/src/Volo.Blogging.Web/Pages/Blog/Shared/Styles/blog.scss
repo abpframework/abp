@@ -8,6 +8,9 @@ div.vs-blog {
     @import "header.scss";  
     @import "home.scss";        
     @import "post.scss";  
-    @import "custom.scss";             
+    @import "custom.scss";     
+    & >.form-group {
+        margin: 0 !important;
+    }
 }  
                         

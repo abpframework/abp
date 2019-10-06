@@ -22,6 +22,7 @@ export declare class UsersComponent {
     isModalVisible: boolean;
     loading: boolean;
     modalBusy: boolean;
+    sortOrder: string;
     trackByFn: TrackByFunction<AbstractControl>;
     readonly roleGroups: FormGroup[];
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
@@ -34,4 +35,5 @@ export declare class UsersComponent {
     delete(id: string, userName: string): void;
     onPageChange(data: any): void;
     get(): void;
+    changeSortOrder(): void;
 }

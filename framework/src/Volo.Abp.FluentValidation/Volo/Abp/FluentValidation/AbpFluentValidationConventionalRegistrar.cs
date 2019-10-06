@@ -1,14 +1,20 @@
 ﻿using System;
+using System.Collections.Generic;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.FluentValidation
 {
-    public class AbpFluentValidationConventionalRegistrar : DefaultConventionalRegistrar
+    public class AbpFluentValidationConventionalRegistrar : ConventionalRegistrarBase
     {
         public override void AddType(IServiceCollection services, Type type)
         {
+            if (IsConventionalRegistrationDisabled(type))
+            {
+                return;
+            }
+
             if (!typeof(IValidator).IsAssignableFrom(type))
             {
                 return;
@@ -20,8 +26,12 @@ namespace Volo.Abp.FluentValidation
                 return;
             }
 
+            var serviceType = typeof(IValidator<>).MakeGenericType(validatingType);
+
+            TriggerServiceExposing(services, type, new List<Type>{ serviceType });
+
             services.AddTransient(
-                typeof(IValidator<>).MakeGenericType(validatingType),
+                serviceType,
                 type
             );
         }

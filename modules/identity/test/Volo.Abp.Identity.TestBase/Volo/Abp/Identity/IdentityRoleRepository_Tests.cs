@@ -23,8 +23,8 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("admin"))).ShouldNotBeNull();
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("undefined-role"))).ShouldBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("admin"))).ShouldNotBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("undefined-role"))).ShouldBeNull();
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task Should_Eager_Load_Role_Collections()
         {
-            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.Normalize("moderator"));
+            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"));
             role.Claims.ShouldNotBeNull();
             role.Claims.Any().ShouldBeTrue();
         }

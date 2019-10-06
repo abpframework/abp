@@ -768,14 +768,102 @@
      * @fileoverview added by tsickle
      * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
+    var ValidationErrorComponent = /** @class */ (function (_super) {
+        __extends(ValidationErrorComponent, _super);
+        function ValidationErrorComponent() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Object.defineProperty(ValidationErrorComponent.prototype, "abpErrors", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                if (!this.errors || !this.errors.length)
+                    return [];
+                return this.errors.map((/**
+                 * @param {?} error
+                 * @return {?}
+                 */
+                function (error) {
+                    if (!error.message)
+                        return error;
+                    /** @type {?} */
+                    var index = error.message.indexOf('[');
+                    if (index > -1) {
+                        return __assign({}, error, { message: error.message.slice(0, index), interpoliteParams: error.message.slice(index + 1, error.message.length - 1).split(',') });
+                    }
+                    return error;
+                }));
+            },
+            enumerable: true,
+            configurable: true
+        });
+        ValidationErrorComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-validation-error',
+                        template: "\n    <div class=\"invalid-feedback\" *ngFor=\"let error of abpErrors; trackBy: trackByFn\">\n      {{ error.message | abpLocalization: error.interpoliteParams }}\n    </div>\n  ",
+                        changeDetection: core.ChangeDetectionStrategy.OnPush,
+                        encapsulation: core.ViewEncapsulation.None
+                    }] }
+        ];
+        return ValidationErrorComponent;
+    }(core$1.ValidationErrorComponent));
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var styles = "\n.content-header-title {\n    font-size: 24px;\n}\n\n.entry-row {\n    margin-bottom: 15px;\n}\n";
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var InitialService = /** @class */ (function () {
+        function InitialService(lazyLoadService) {
+            this.lazyLoadService = lazyLoadService;
+            this.appendStyle().subscribe();
+        }
+        /**
+         * @return {?}
+         */
+        InitialService.prototype.appendStyle = /**
+         * @return {?}
+         */
+        function () {
+            return this.lazyLoadService.load(null, 'style', styles, 'head', 'afterbegin');
+        };
+        InitialService.decorators = [
+            { type: core.Injectable, args: [{ providedIn: 'root' },] }
+        ];
+        /** @nocollapse */
+        InitialService.ctorParameters = function () { return [
+            { type: ng_core.LazyLoadService }
+        ]; };
+        /** @nocollapse */ InitialService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function InitialService_Factory() { return new InitialService(core.ɵɵinject(ng_core.LazyLoadService)); }, token: InitialService, providedIn: "root" });
+        return InitialService;
+    }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        InitialService.prototype.lazyLoadService;
+    }
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
     /** @type {?} */
     var LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
     var ThemeBasicModule = /** @class */ (function () {
-        function ThemeBasicModule() {
+        function ThemeBasicModule(initialService) {
+            this.initialService = initialService;
         }
         ThemeBasicModule.decorators = [
             { type: core.NgModule, args: [{
-                        declarations: __spread(LAYOUTS, [LayoutComponent]),
+                        declarations: __spread(LAYOUTS, [LayoutComponent, ValidationErrorComponent]),
                         imports: [
                             ng_core.CoreModule,
                             ng_theme_shared.ThemeSharedModule,
@@ -784,13 +872,37 @@
                             toast.ToastModule,
                             core$1.NgxValidateCoreModule,
                             store.NgxsModule.forFeature([LayoutState]),
+                            core$1.NgxValidateCoreModule.forRoot({
+                                targetSelector: '.form-group',
+                                blueprints: {
+                                    email: "AbpAccount::ThisFieldIsNotAValidEmailAddress.",
+                                    max: "AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]",
+                                    maxlength: "AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]",
+                                    min: "AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]",
+                                    minlength: "AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]",
+                                    required: "AbpAccount::ThisFieldIsRequired.",
+                                    passwordMismatch: "AbpIdentity::Identity.PasswordConfirmationFailed",
+                                },
+                                errorTemplate: ValidationErrorComponent,
+                            }),
                         ],
                         exports: __spread(LAYOUTS),
-                        entryComponents: __spread(LAYOUTS),
+                        entryComponents: __spread(LAYOUTS, [ValidationErrorComponent]),
                     },] }
         ];
+        /** @nocollapse */
+        ThemeBasicModule.ctorParameters = function () { return [
+            { type: InitialService }
+        ]; };
         return ThemeBasicModule;
     }());
+    if (false) {
+        /**
+         * @type {?}
+         * @private
+         */
+        ThemeBasicModule.prototype.initialService;
+    }
 
     /**
      * @fileoverview added by tsickle
@@ -835,14 +947,17 @@
     exports.LayoutState = LayoutState;
     exports.RemoveNavigationElementByName = RemoveNavigationElementByName;
     exports.ThemeBasicModule = ThemeBasicModule;
+    exports.ValidationErrorComponent = ValidationErrorComponent;
     exports.ɵa = ApplicationLayoutComponent;
     exports.ɵb = LayoutState;
     exports.ɵc = AccountLayoutComponent;
     exports.ɵd = EmptyLayoutComponent;
     exports.ɵe = LayoutComponent;
-    exports.ɵf = LayoutState;
-    exports.ɵg = AddNavigationElement;
-    exports.ɵh = RemoveNavigationElementByName;
+    exports.ɵf = ValidationErrorComponent;
+    exports.ɵg = LayoutState;
+    exports.ɵh = AddNavigationElement;
+    exports.ɵi = RemoveNavigationElementByName;
+    exports.ɵk = InitialService;
 
     Object.defineProperty(exports, '__esModule', { value: true });
 

@@ -1,22 +1,23 @@
-<div id="identity-roles-wrapper" class="card">
-  <div class="card-header">
-    <div class="row">
-      <div class="col col-md-6">
-        <h5 class="card-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>
-      </div>
-      <div class="text-right col col-md-6">
-        <button
-          [abpPermission]="'AbpIdentity.Users.Create'"
-          id="create-role"
-          class="btn btn-primary"
-          type="button"
-          (click)="onAdd()"
-        >
-          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
-        </button>
-      </div>
+<div class="row entry-row">
+  <div class="col-auto">
+    <h1 class="content-header-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h1>
+  </div>
+  <div class="col">
+    <div class="text-lg-right pt-2" id="AbpContentToolbar">
+      <button
+        [abpPermission]="'AbpIdentity.Users.Create'"
+        id="create-role"
+        class="btn btn-primary"
+        type="button"
+        (click)="onAdd()"
+      >
+        <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
+      </button>
     </div>
   </div>
+</div>
+
+<div id="identity-roles-wrapper" class="card">
   <div class="card-body">
     <div id="data-tables-table-filter" class="data-tables-filter">
       <label
@@ -28,6 +29,7 @@
       /></label>
     </div>
     <p-table
+      *ngIf="[130, 200, 200, 200] as columnWidths"
       [value]="data$ | async"
       [lazy]="true"
       [lazyLoadOnInit]="false"
@@ -35,20 +37,40 @@
       [rows]="10"
       [totalRecords]="totalCount$ | async"
       [loading]="loading"
+      [resizableColumns]="true"
+      [scrollable]="true"
       (onLazyLoad)="onPageChange($event)"
     >
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width }" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr
+          abp-table-empty-message
+          [attr.colspan]="columnWidths.length"
+          localizationResource="AbpIdentityServer"
+          localizationProp="NoDataAvailableInDatatable"
+        ></tr>
+      </ng-template>
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th>{{ 'AbpIdentity::UserName' | abpLocalization }}</th>
-          <th>{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</th>
-          <th>{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</th>
+          <th pResizableColumn (click)="changeSortOrder()">
+            {{ 'AbpIdentity::UserName' | abpLocalization }}
+            <span class="float-right"
+              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
+            ></span>
+          </th>
+          <th pResizableColumn>{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</th>
+          <th pResizableColumn>{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
           <td>
-            <div ngbDropdown class="d-inline-block">
+            <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
                 data-toggle="dropdown"
@@ -83,100 +105,98 @@
   </ng-template>
 
   <ng-template #abpBody>
-    <perfect-scrollbar class="ps-show-always" style="max-height: 70vh;">
-      <form [formGroup]="form" (ngSubmit)="save()">
-        <ngb-tabset>
-          <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
-            <ng-template ngbTabContent>
-              <div class="mt-2 fade-in-top">
-                <div class="form-group">
-                  <label for="user-name">{{ 'AbpIdentity::UserName' | abpLocalization }}</label
-                  ><span> * </span>
-                  <input type="text" id="user-name" class="form-control" formControlName="userName" autofocus />
-                </div>
-
-                <div class="form-group">
-                  <label for="name">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>
-                  <input type="text" id="name" class="form-control" formControlName="name" />
-                </div>
-
-                <div class="form-group">
-                  <label for="surname">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>
-                  <input type="text" id="surname" class="form-control" formControlName="surname" />
-                </div>
-
-                <div *ngIf="!selected.userName" class="form-group">
-                  <label for="password">{{ 'AbpIdentity::Password' | abpLocalization }}</label
-                  ><span> * </span>
-                  <input
-                    type="password"
-                    id="password"
-                    autocomplete="new-password"
-                    class="form-control"
-                    formControlName="password"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label for="email">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label
-                  ><span> * </span>
-                  <input type="text" id="email" class="form-control" formControlName="email" />
-                </div>
-
-                <div class="form-group">
-                  <label for="phone-number">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>
-                  <input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
-                </div>
-
-                <div class="custom-checkbox custom-control mb-2">
-                  <input
-                    type="checkbox"
-                    id="lockout-checkbox"
-                    class="custom-control-input"
-                    formControlName="lockoutEnabled"
-                  />
-                  <label class="custom-control-label" for="lockout-checkbox">{{
-                    'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization
-                  }}</label>
-                </div>
-
-                <div class="custom-checkbox custom-control mb-2">
-                  <input
-                    type="checkbox"
-                    id="two-factor-checkbox"
-                    class="custom-control-input"
-                    formControlName="twoFactorEnabled"
-                  />
-                  <label class="custom-control-label" for="two-factor-checkbox">{{
-                    'AbpIdentity::DisplayName:TwoFactorEnabled' | abpLocalization
-                  }}</label>
-                </div>
+    <form [formGroup]="form" (ngSubmit)="save()">
+      <ngb-tabset>
+        <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
+          <ng-template ngbTabContent>
+            <div class="mt-2 fade-in-top">
+              <div class="form-group">
+                <label for="user-name">{{ 'AbpIdentity::UserName' | abpLocalization }}</label
+                ><span> * </span>
+                <input type="text" id="user-name" class="form-control" formControlName="userName" autofocus />
               </div>
-            </ng-template>
-          </ngb-tab>
-          <ngb-tab [title]="'AbpIdentity::Roles' | abpLocalization">
-            <ng-template ngbTabContent>
-              <div class="mt-2 fade-in-top">
-                <div
-                  *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
-                  class="custom-checkbox custom-control mb-2"
-                >
-                  <input
-                    type="checkbox"
-                    name="Roles[0].IsAssigned"
-                    value="true"
-                    class="custom-control-input"
-                    [attr.id]="'roles-' + i"
-                    [formControl]="roleGroup.controls[roles[i].name]"
-                  />
-                  <label class="custom-control-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
-                </div>
+
+              <div class="form-group">
+                <label for="name">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>
+                <input type="text" id="name" class="form-control" formControlName="name" />
               </div>
-            </ng-template>
-          </ngb-tab>
-        </ngb-tabset>
-      </form>
-    </perfect-scrollbar>
+
+              <div class="form-group">
+                <label for="surname">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>
+                <input type="text" id="surname" class="form-control" formControlName="surname" />
+              </div>
+
+              <div *ngIf="!selected.userName" class="form-group">
+                <label for="password">{{ 'AbpIdentity::Password' | abpLocalization }}</label
+                ><span> * </span>
+                <input
+                  type="password"
+                  id="password"
+                  autocomplete="new-password"
+                  class="form-control"
+                  formControlName="password"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label
+                ><span> * </span>
+                <input type="text" id="email" class="form-control" formControlName="email" />
+              </div>
+
+              <div class="form-group">
+                <label for="phone-number">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>
+                <input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
+              </div>
+
+              <div class="custom-checkbox custom-control mb-2">
+                <input
+                  type="checkbox"
+                  id="lockout-checkbox"
+                  class="custom-control-input"
+                  formControlName="lockoutEnabled"
+                />
+                <label class="custom-control-label" for="lockout-checkbox">{{
+                  'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization
+                }}</label>
+              </div>
+
+              <div class="custom-checkbox custom-control mb-2">
+                <input
+                  type="checkbox"
+                  id="two-factor-checkbox"
+                  class="custom-control-input"
+                  formControlName="twoFactorEnabled"
+                />
+                <label class="custom-control-label" for="two-factor-checkbox">{{
+                  'AbpIdentity::DisplayName:TwoFactorEnabled' | abpLocalization
+                }}</label>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+        <ngb-tab [title]="'AbpIdentity::Roles' | abpLocalization">
+          <ng-template ngbTabContent>
+            <div class="mt-2 fade-in-top">
+              <div
+                *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"
+                class="custom-checkbox custom-control mb-2"
+              >
+                <input
+                  type="checkbox"
+                  name="Roles[0].IsAssigned"
+                  value="true"
+                  class="custom-control-input"
+                  [attr.id]="'roles-' + i"
+                  [formControl]="roleGroup.controls[roles[i].name]"
+                />
+                <label class="custom-control-label" [attr.for]="'roles-' + i">{{ roles[i].name }}</label>
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+      </ngb-tabset>
+    </form>
   </ng-template>
 
   <ng-template #abpFooter>

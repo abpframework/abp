@@ -22,205 +22,192 @@
     </abp-style-bundle>
 }
 
-    <div class="vs-blog">
-        <div class="container">
-            <div class="pb-3">
-                <div class="row">
-                    <div class="col-md-8">
-                        <section class="hero-section">
-                            @for (var index = 0; index < Model.Posts.Count && index < 1; index++)
-                            {
-                                var post = Model.Posts[index];
-                                <div class="hero-articles">
-                                    <div class="img-container">
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                            <img src="@post.CoverImage" class="hero-article-img">
-                                        </a>
-                                    </div>
-                                    <div class="hero-content">
-                                        <p class="tags">
-                                            @foreach (var tag in post.Tags)
-                                            {
-                                                <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                                            }
-                                        </p>
-                                        <h2>
-                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
-                                        </h2>
-                                        <p class="article-sum">
-                                            @Html.Raw(GetShortContent(post.Content))
-                                        </p>
-                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName" class="btn btn-primary btn-rounded">@L["ContinueReading"]</a>
-
-                                    </div>
-                                    @if (post.Writer != null)
-                                    {
-                                        <div class="article-owner">
-                                            <div class="article-infos">
-                                                <div class="user-card">
-                                                    <a>
+<div class="vs-blog blah">
+    <div class="container">
+        <div class="pb-3">
+            <div class="row">
+                <div class="col-md-8">
+                    <section class="hero-section">
+                        @for (var index = 0; index < Model.Posts.Count && index < 1; index++)
+                        {
+                            var post = Model.Posts[index];
+                            <div class="hero-articles">
+                                <div class="img-container">
+                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                        <img src="@post.CoverImage" class="hero-article-img">
+                                    </a>
+                                </div>
+                                <div class="hero-content pt-3">
+                                    <h2>
+                                        <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                    </h2>
+                                    <p class="article-sum">
+                                        @Html.Raw(GetShortContent(post.Content))
+                                    </p>
+                                </div>
+                                @if (post.Writer != null)
+                                {
+                                    <div class="article-owner">
+                                        <div class="article-infos">
+                                            <div class="user-card">
+                                                <div class="row">
+                                                    <div class="col-auto pr-1">
                                                         <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                                    </a>
-                                                    <a>
-                                                        <strong>@post.Writer.UserName</strong>, @ConvertDatetimeToTimeAgo(post.CreationTime)
-                                                    </a>
-                                                    <span class="vs-seperator">|</span>
-                                                    <a>
+                                                    </div>
+                                                    <div class="col pl-1">
+                                                        <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
                                                         <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
-                                                    </a>
-                                                    <span class="vs-seperator">|</span>
-                                                    <a>
+                                                        <span class="vs-seperator">|</span>
                                                         <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div>
-
-                            }
-                        </section>
-                    </div>
-
-                    <div class="col-md-4">
-
-
-                        @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
-                        {
-                            <a class="btn btn-primary btn-rounded mb-3 active " asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
-                        }
-
-                        <div class="list-group">
-                            @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
-                            {
-                                var post = Model.Posts[index];
-                                <div class="list-group-item list-group-item-action flex-column align-items-start">
-                                    <section class="box-articles p-0">
-                                        <div class="row  align-middle">
-                                            <div class="col-4">
-                                                <div class="img-container" style="height: 80px;">
-                                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                        <img src="@post.CoverImage" class="box-article-img">
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <div class="col-8 pl-0">
-                                                <h3 class="font-125">
-                                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
-                                                </h3>
-                                                <div class="article-owner">
-                                                    <div class="article-infos">
-                                                        <div class="user-card">
-                                                            <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                                @if (post.Writer != null)
-                                                                {
-                                                                    <strong>@(post.Writer.UserName),</strong>
-                                                                }
-
-                                                                @ConvertDatetimeToTimeAgo(post.CreationTime)
-                                                            </a>
-                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </section>
-                                </div>
-                            }
-                        </div>
-                    </div>
+                                    </div>
+                                }
+                            </div>
+                            <p class="tags">
+                                @foreach (var tag in post.Tags)
+                                {
+                                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                }
+                            </p>
+
+                        }
+                    </section>
                 </div>
-            </div>
+
+                <div class="col-md-4">
 
 
-            <div class="pb-5">
-                <div class="row">
-                    <div class="col-md-8 box-articles">
-                        @if (Model.Posts.Count > 3)
+                    @if (await Authorization.IsGrantedAsync(BloggingPermissions.Posts.Create))
+                    {
+                        <a class="btn btn-primary btn-rounded mb-3 active " asp-page="./New" asp-route-blogShortName="@Model.BlogShortName">@L["CreateANewPost"]</a>
+                    }
+
+                    <div class="list-group">
+                        @for (var index = 0; index < Model.Posts.Count && index < 3; index++)
                         {
-                            <div class="vs-blog-title">
-                                <h2>@L["LastPosts"]</h2>
-                            </div>
-                            <div class="list-group">
-                                @for (var index = 3; index < Model.Posts.Count; index++)
-                                {
-                                    var post = Model.Posts[index];
-                                    var oddPost = index % 2 == 1;
-
-                                    <div class="list-group-item">
-                                        <div class="row @(oddPost ? "align-middle" : "")">
-                                            <div class="col-md-4 order-md-@(oddPost ? "last" : "first")">
-                                                <div class="img-container">
-                                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
-                                                        <img src="@post.CoverImage" class="box-article-img">
-                                                    </a>
-                                                </div>
+                            var post = Model.Posts[index];
+                            <div class="list-group-item list-group-item-action flex-column align-items-start">
+                                <section class="box-articles p-0">
+                                    <div class="row  align-middle">
+                                        <div class="col-4">
+                                            <div class="img-container">
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                </a>
                                             </div>
-                                            <div class="col order-md-@(oddPost ? "first" : "last")">
-                                                <p class="tags">
-                                                    @foreach (var tag in post.Tags)
-                                                    {
-                                                        <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
-                                                    }
-                                                </p>
-                                                <h3>
-                                                    <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
-                                                </h3>
-                                                <p>
-                                                    @Html.Raw(GetShortContent(post.Content))
-                                                </p>
-                                                <div class="article-owner">
-                                                    <div class="article-infos">
-                                                        <div class="user-card">
-                                                            <a>
-                                                                <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
-                                                            </a>
-                                                            <a>
-                                                                @if (post.Writer != null)
-                                                                {
-                                                                    <strong>@(post.Writer.UserName),</strong>
-                                                                }
-
-                                                                @ConvertDatetimeToTimeAgo(post.CreationTime)
-                                                            </a>
-                                                            <span class="vs-seperator">|</span>
-                                                            <a>
-                                                                <i class="fa fa-eye"></i> @post.ReadCount
-                                                            </a>
-                                                            <span class="vs-seperator">|</span>
-                                                            <a>
-                                                                <i class="fa fa-comment"></i> @post.CommentCount
-                                                            </a>
-                                                        </div>
+                                        </div>
+                                        <div class="col-8 pl-0">
+                                            <h3 class="font-125">
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                            </h3>
+                                            <div class="article-owner">
+                                                <div class="article-infos">
+                                                    <div class="user-card">
+                                                        @if (post.Writer != null)
+                                                        {
+                                                            <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                        }
+                                                        <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                                        <span class="vs-seperator">|</span>
+                                                        <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount] 
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                }
+                                </section>
                             </div>
                         }
                     </div>
-
-
-                    @if (Model.PopularTags.Count > 0)
-                    {
-                        <div class="col-md-4">
-                            <div class="vs-blog-title">
-                                <h2>@L["PopularTags"]</h2>
-                            </div>
-                            <div class="list-group small-list popular-tags">
-                                @foreach (var popularTag in Model.PopularTags)
-                                {
-                                    <div class="list-group-item">
-                                        <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
-                                    </div>
-
-                                }
-                            </div>
-                        </div>
-                    }
                 </div>
             </div>
         </div>
+
+
+        <div class="pb-5">
+            <div class="row">
+                <div class="col-md-8 box-articles">
+                    @if (Model.Posts.Count > 3)
+                    {
+                        <div class="vs-blog-title">
+                            <h2>@L["LastPosts"]</h2>
+                        </div>
+                        <div class="list-group">
+                            @for (var index = 3; index < Model.Posts.Count; index++)
+                            {
+                                var post = Model.Posts[index];
+                                var oddPost = index % 2 == 1;
+
+                                <div class="list-group-item">
+                                    <div class="row @(oddPost ? "align-middle" : "")">
+                                        <div class="col-md-4 order-md-@(oddPost ? "last" : "first")">
+                                            <div class="img-container">
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">
+                                                    <img src="@post.CoverImage" class="box-article-img">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col order-md-@(oddPost ? "first" : "last")">
+                                            <h3>
+                                                <a asp-page="./Detail" asp-route-postUrl="@post.Url" asp-route-blogShortName="@Model.BlogShortName">@post.Title</a>
+                                            </h3>
+                                            <p>
+                                                @Html.Raw(GetShortContent(post.Content))
+                                            </p>
+                                            <div class="article-owner">
+                                                <div class="article-infos">
+                                                    <div class="user-card">  
+                                                        <div class="row">
+                                                            <div class="col-auto pr-1">
+                                                                <img gravatar-email="@post.Writer.Email" default-image="Identicon" class="article-avatar" />
+                                                            </div>
+                                                            <div class="col pl-1">
+                                                                <h5 class="mt-2 mb-1">@post.Writer.UserName <span>@ConvertDatetimeToTimeAgo(post.CreationTime)</span></h5>
+                                                                <i class="fa fa-eye"></i>  @L["WiewsWithCount", post.ReadCount]
+                                                                <span class="vs-seperator">|</span>
+                                                                <i class="fa fa-comment"></i>  @L["CommentWithCount", post.CommentCount]
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <p class="tags">
+                                                @foreach (var tag in post.Tags)
+                                                {
+                                                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                                }
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
+
+                @if (Model.PopularTags.Count > 0)
+                {
+                    <div class="col-md-4">
+                        <div class="vs-blog-title">
+                            <h2>@L["PopularTags"]</h2>
+                        </div>
+                        <div class="list-group small-list popular-tags">
+                            @foreach (var popularTag in Model.PopularTags)
+                            {
+                                <div class="list-group-item">
+                                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
+</div>

@@ -188,8 +188,7 @@ namespace Volo.Abp.Application.Services
         protected virtual IQueryable<TEntity> ApplySorting(IQueryable<TEntity> query, TGetListInput input)
         {
             //Try to sort query if available
-            var sortInput = input as ISortedResultRequest;
-            if (sortInput != null)
+            if (input is ISortedResultRequest sortInput)
             {
                 if (!sortInput.Sorting.IsNullOrWhiteSpace())
                 {
@@ -215,15 +214,13 @@ namespace Volo.Abp.Application.Services
         protected virtual IQueryable<TEntity> ApplyPaging(IQueryable<TEntity> query, TGetListInput input)
         {
             //Try to use paging if available
-            var pagedInput = input as IPagedResultRequest;
-            if (pagedInput != null)
+            if (input is IPagedResultRequest pagedInput)
             {
                 return query.PageBy(pagedInput);
             }
 
             //Try to limit query result if available
-            var limitedInput = input as ILimitedResultRequest;
-            if (limitedInput != null)
+            if (input is ILimitedResultRequest limitedInput)
             {
                 return query.Take(limitedInput.MaxResultCount);
             }
@@ -289,7 +286,11 @@ namespace Volo.Abp.Application.Services
                 return;
             }
 
-            entityWithGuidId.Id = GuidGenerator.Create();
+            EntityHelper.TrySetId(
+                entityWithGuidId,
+                () => GuidGenerator.Create(),
+                true
+            );
         }
 
         /// <summary>

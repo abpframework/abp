@@ -1,17 +1,126 @@
-import { __rest, __decorate, __metadata, __awaiter } from 'tslib';
-import { Injectable, ɵɵdefineInjectable, ɵɵinject, Optional, SkipSelf, Component, Directive, ElementRef, Input, ChangeDetectorRef, HostBinding, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, Injector, NgModule } from '@angular/core';
-import { Router, NavigationEnd, RouterModule } from '@angular/router';
-import { Store, Action, Selector, State, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
-import { throwError, noop as noop$1, combineLatest, from, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
-import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { take, catchError, tap, switchMap, takeUntil, debounceTime, filter, finalize, distinctUntilChanged } from 'rxjs/operators';
+import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
+import { __decorate, __metadata, __awaiter, __rest } from 'tslib';
+import { Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
+import { Action, Selector, State, Store, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
+import { noop as noop$1, combineLatest, from, throwError, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
 import snq from 'snq';
+import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { tap, take, catchError, switchMap, takeUntil, debounceTime, filter, finalize, distinctUntilChanged } from 'rxjs/operators';
 import { registerLocaleData, CommonModule } from '@angular/common';
+import compare from 'just-compare';
+import clone from 'just-clone';
 import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { Navigate, NgxsRouterPluginModule } from '@ngxs/router-plugin';
+import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @template T
+ */
+class AbstractNgModelComponent {
+    /**
+     * @param {?} injector
+     */
+    constructor(injector) {
+        this.injector = injector;
+        this.cdRef = injector.get((/** @type {?} */ (ChangeDetectorRef)));
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set value(value) {
+        this._value = value;
+        this.notifyValueChange();
+    }
+    /**
+     * @return {?}
+     */
+    get value() {
+        return this._value;
+    }
+    /**
+     * @return {?}
+     */
+    notifyValueChange() {
+        if (this.onChange) {
+            this.onChange(this.value);
+        }
+    }
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    writeValue(value) {
+        this._value = value;
+        setTimeout((/**
+         * @return {?}
+         */
+        () => this.cdRef.detectChanges()), 0);
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    registerOnChange(fn) {
+        this.onChange = fn;
+    }
+    /**
+     * @param {?} fn
+     * @return {?}
+     */
+    registerOnTouched(fn) {
+        this.onTouched = fn;
+    }
+    /**
+     * @param {?} isDisabled
+     * @return {?}
+     */
+    setDisabledState(isDisabled) {
+        this.disabled = isDisabled;
+    }
+}
+AbstractNgModelComponent.decorators = [
+    { type: Component, args: [{ template: '' }] }
+];
+/** @nocollapse */
+AbstractNgModelComponent.ctorParameters = () => [
+    { type: Injector }
+];
+AbstractNgModelComponent.propDecorators = {
+    disabled: [{ type: Input }],
+    value: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.disabled;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.onChange;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.onTouched;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractNgModelComponent.prototype._value;
+    /**
+     * @type {?}
+     * @protected
+     */
+    AbstractNgModelComponent.prototype.cdRef;
+    /** @type {?} */
+    AbstractNgModelComponent.prototype.injector;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -185,76 +294,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class RestService {
-    /**
-     * @param {?} http
-     * @param {?} store
-     */
-    constructor(http, store) {
-        this.http = http;
-        this.store = store;
-    }
-    /**
-     * @param {?} err
-     * @return {?}
-     */
-    handleError(err) {
-        this.store.dispatch(new RestOccurError(err));
-        console.error(err);
-        return throwError(err);
-    }
-    /**
-     * @template T, R
-     * @param {?} request
-     * @param {?=} config
-     * @param {?=} api
-     * @return {?}
-     */
-    request(request, config = {}, api) {
-        const { observe = "body" /* Body */, skipHandleError } = config;
-        /** @type {?} */
-        const url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
-        const { method } = request, options = __rest(request, ["method"]);
-        return this.http.request(method, url, (/** @type {?} */ (Object.assign({ observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : null, catchError((/**
-         * @param {?} err
-         * @return {?}
-         */
-        err => {
-            if (skipHandleError) {
-                return throwError(err);
-            }
-            return this.handleError(err);
-        })));
-    }
-}
-RestService.decorators = [
-    { type: Injectable, args: [{
-                providedIn: 'root',
-            },] }
-];
-/** @nocollapse */
-RestService.ctorParameters = () => [
-    { type: HttpClient },
-    { type: Store }
-];
-/** @nocollapse */ RestService.ngInjectableDef = ɵɵdefineInjectable({ factory: function RestService_Factory() { return new RestService(ɵɵinject(HttpClient), ɵɵinject(Store)); }, token: RestService, providedIn: "root" });
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    RestService.prototype.http;
-    /**
-     * @type {?}
-     * @private
-     */
-    RestService.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 class ProfileService {
     /**
      * @param {?} rest
@@ -416,47 +455,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class ApplicationConfigurationService {
-    /**
-     * @param {?} rest
-     */
-    constructor(rest) {
-        this.rest = rest;
-    }
-    /**
-     * @return {?}
-     */
-    getConfiguration() {
-        /** @type {?} */
-        const request = {
-            method: 'GET',
-            url: '/api/abp/application-configuration',
-        };
-        return this.rest.request(request);
-    }
-}
-ApplicationConfigurationService.decorators = [
-    { type: Injectable, args: [{
-                providedIn: 'root',
-            },] }
-];
-/** @nocollapse */
-ApplicationConfigurationService.ctorParameters = () => [
-    { type: RestService }
-];
-/** @nocollapse */ ApplicationConfigurationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ApplicationConfigurationService_Factory() { return new ApplicationConfigurationService(ɵɵinject(RestService)); }, token: ApplicationConfigurationService, providedIn: "root" });
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ApplicationConfigurationService.prototype.rest;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 // Different locales from .NET
 // Key is .NET locale, value is Angular locale
 var localesMapping = {
@@ -562,12 +560,14 @@ class LocalizationService {
     /**
      * @param {?} store
      * @param {?} router
+     * @param {?} ngZone
      * @param {?} actions
      * @param {?} otherInstance
      */
-    constructor(store, router, actions, otherInstance) {
+    constructor(store, router, ngZone, actions, otherInstance) {
         this.store = store;
         this.router = router;
+        this.ngZone = ngZone;
         this.actions = actions;
         if (otherInstance)
             throw new Error('LocaleService should have only one instance.');
@@ -600,10 +600,15 @@ class LocalizationService {
         return registerLocale(locale).then((/**
          * @return {?}
          */
-        () => __awaiter(this, void 0, void 0, function* () {
-            yield this.router.navigateByUrl(this.router.url).catch(noop$1);
-            this.setRouteReuse(shouldReuseRoute);
-        })));
+        () => {
+            this.ngZone.run((/**
+             * @return {?}
+             */
+            () => __awaiter(this, void 0, void 0, function* () {
+                yield this.router.navigateByUrl(this.router.url).catch(noop$1);
+                this.setRouteReuse(shouldReuseRoute);
+            })));
+        }));
     }
     /**
      * @param {?} keys
@@ -629,10 +634,11 @@ LocalizationService.decorators = [
 LocalizationService.ctorParameters = () => [
     { type: Store },
     { type: Router },
+    { type: NgZone },
     { type: Actions },
     { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
 ];
-/** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+/** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
 if (false) {
     /**
      * @type {?}
@@ -644,6 +650,11 @@ if (false) {
      * @private
      */
     LocalizationService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.ngZone;
     /**
      * @type {?}
      * @private
@@ -735,6 +746,122 @@ if (false) {
      * @private
      */
     SessionState.prototype.localizationService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class RestService {
+    /**
+     * @param {?} http
+     * @param {?} store
+     */
+    constructor(http, store) {
+        this.http = http;
+        this.store = store;
+    }
+    /**
+     * @param {?} err
+     * @return {?}
+     */
+    handleError(err) {
+        this.store.dispatch(new RestOccurError(err));
+        console.error(err);
+        return throwError(err);
+    }
+    /**
+     * @template T, R
+     * @param {?} request
+     * @param {?=} config
+     * @param {?=} api
+     * @return {?}
+     */
+    request(request, config = {}, api) {
+        const { observe = "body" /* Body */, skipHandleError } = config;
+        /** @type {?} */
+        const url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
+        const { method } = request, options = __rest(request, ["method"]);
+        return this.http.request(method, url, (/** @type {?} */ (Object.assign({ observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : null, catchError((/**
+         * @param {?} err
+         * @return {?}
+         */
+        err => {
+            if (skipHandleError) {
+                return throwError(err);
+            }
+            return this.handleError(err);
+        })));
+    }
+}
+RestService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
+];
+/** @nocollapse */
+RestService.ctorParameters = () => [
+    { type: HttpClient },
+    { type: Store }
+];
+/** @nocollapse */ RestService.ngInjectableDef = ɵɵdefineInjectable({ factory: function RestService_Factory() { return new RestService(ɵɵinject(HttpClient), ɵɵinject(Store)); }, token: RestService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    RestService.prototype.http;
+    /**
+     * @type {?}
+     * @private
+     */
+    RestService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ApplicationConfigurationService {
+    /**
+     * @param {?} rest
+     */
+    constructor(rest) {
+        this.rest = rest;
+    }
+    /**
+     * @return {?}
+     */
+    getConfiguration() {
+        /** @type {?} */
+        const request = {
+            method: 'GET',
+            url: '/api/abp/application-configuration',
+        };
+        return this.rest.request(request);
+    }
+}
+ApplicationConfigurationService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
+];
+/** @nocollapse */
+ApplicationConfigurationService.ctorParameters = () => [
+    { type: RestService }
+];
+/** @nocollapse */ ApplicationConfigurationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ApplicationConfigurationService_Factory() { return new ApplicationConfigurationService(ɵɵinject(RestService)); }, token: ApplicationConfigurationService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplicationConfigurationService.prototype.rest;
 }
 
 /**
@@ -849,7 +976,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
      * @return {?}
      */
     static getApplicationInfo(state) {
-        return state.environment.application || {};
+        return state.environment.application || ((/** @type {?} */ ({})));
     }
     /**
      * @param {?} key
@@ -909,7 +1036,19 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @return {?}
          */
         function (state) {
-            return findRoute(state.routes, path, name);
+            const { flattedRoutes } = state;
+            return ((/** @type {?} */ (flattedRoutes))).find((/**
+             * @param {?} route
+             * @return {?}
+             */
+            route => {
+                if (path && route.path === path) {
+                    return route;
+                }
+                else if (name && route.name === name) {
+                    return route;
+                }
+            }));
         }));
         return selector;
     }
@@ -947,50 +1086,22 @@ let ConfigState = ConfigState_1 = class ConfigState {
         return selector;
     }
     /**
-     * @param {?=} condition
+     * @param {?} key
      * @return {?}
      */
-    static getGrantedPolicy(condition = '') {
-        /** @type {?} */
-        const keys = condition
-            .replace(/\(|\)|\!|\s/g, '')
-            .split(/\|\||&&/)
-            .filter((/**
-         * @param {?} key
-         * @return {?}
-         */
-        key => key));
+    static getGrantedPolicy(key) {
         /** @type {?} */
         const selector = createSelector([ConfigState_1], (/**
          * @param {?} state
          * @return {?}
          */
         function (state) {
-            if (!keys.length)
+            if (!key)
                 return true;
-            /** @type {?} */
-            const getPolicy = (/**
-             * @param {?} key
+            return snq((/**
              * @return {?}
              */
-            key => snq((/**
-             * @return {?}
-             */
-            () => state.auth.grantedPolicies[key]), false));
-            if (keys.length > 1) {
-                keys.forEach((/**
-                 * @param {?} key
-                 * @return {?}
-                 */
-                key => {
-                    /** @type {?} */
-                    const value = getPolicy(key);
-                    condition = condition.replace(key, value);
-                }));
-                // tslint:disable-next-line: no-eval
-                return eval(`!!${condition}`);
-            }
-            return getPolicy(condition);
+            () => state.auth.grantedPolicies[key]), false);
         }));
         return selector;
     }
@@ -1029,7 +1140,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
                 () => defaultResourceName));
             }
             /** @type {?} */
-            let copy = keys.reduce((/**
+            let copy = ((/** @type {?} */ (keys))).reduce((/**
              * @param {?} acc
              * @param {?} val
              * @return {?}
@@ -1122,7 +1233,7 @@ __decorate([
     Selector(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Object)
 ], ConfigState, "getApplicationInfo", null);
 ConfigState = ConfigState_1 = __decorate([
     State({
@@ -1180,71 +1291,6 @@ function patchRouteDeep(routes, name, newValue, parentUrl = null) {
     }
     return organizeRoutes(routes);
 }
-/**
- * @param {?} routes
- * @param {?=} path
- * @param {?=} name
- * @return {?}
- */
-function findRoute(routes, path, name) {
-    /** @type {?} */
-    let foundRoute;
-    routes.forEach((/**
-     * @param {?} route
-     * @return {?}
-     */
-    route => {
-        if (foundRoute)
-            return;
-        if (path && route.path === path) {
-            foundRoute = route;
-        }
-        else if (name && route.name === name) {
-            foundRoute = route;
-            return;
-        }
-        else if (route.children && route.children.length) {
-            foundRoute = findRoute(route.children, path, name);
-            return;
-        }
-    }));
-    return foundRoute;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @return {?}
- */
-function noop() {
-    /** @type {?} */
-    const fn = (/**
-     * @return {?}
-     */
-    function () { });
-    return fn;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?=} a
- * @return {?}
- */
-function uuid(a) {
-    return a
-        ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
-        : ('' + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
-}
 
 /**
  * @fileoverview added by tsickle
@@ -1292,19 +1338,33 @@ const takeUntilDestroy = (/**
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 class DynamicLayoutComponent {
     /**
      * @param {?} router
+     * @param {?} route
      * @param {?} store
      */
-    constructor(router, store) {
+    constructor(router, route, store) {
         this.router = router;
+        this.route = route;
         this.store = store;
+        const { requirements: { layouts }, routes, } = this.store.selectSnapshot(ConfigState.getAll);
+        if ((this.route.snapshot.data || {}).layout) {
+            this.layout = layouts
+                .filter((/**
+             * @param {?} l
+             * @return {?}
+             */
+            l => !!l))
+                .find((/**
+             * @param {?} l
+             * @return {?}
+             */
+            (l) => snq((/**
+             * @return {?}
+             */
+            () => l.type.toLowerCase().indexOf(this.route.snapshot.data.layout)), -1) > -1));
+        }
         this.router.events.pipe(takeUntilDestroy(this)).subscribe((/**
          * @param {?} event
          * @return {?}
@@ -1312,18 +1372,19 @@ class DynamicLayoutComponent {
         event => {
             if (event instanceof NavigationEnd) {
                 const { segments } = this.router.parseUrl(event.url).root.children.primary;
-                const { requirements: { layouts }, routes, } = this.store.selectSnapshot(ConfigState.getAll);
                 /** @type {?} */
-                const layout = findLayout(segments, routes);
-                this.layout = layouts.filter((/**
+                const layout = (this.route.snapshot.data || {}).layout || findLayout(segments, routes);
+                this.layout = layouts
+                    .filter((/**
                  * @param {?} l
                  * @return {?}
                  */
-                l => !!l)).find((/**
+                l => !!l))
+                    .find((/**
                  * @param {?} l
                  * @return {?}
                  */
-                l => snq((/**
+                (l) => snq((/**
                  * @return {?}
                  */
                 () => l.type.toLowerCase().indexOf(layout)), -1) > -1));
@@ -1349,6 +1410,7 @@ DynamicLayoutComponent.decorators = [
 /** @nocollapse */
 DynamicLayoutComponent.ctorParameters = () => [
     { type: Router },
+    { type: ActivatedRoute },
     { type: Store }
 ];
 __decorate([
@@ -1365,6 +1427,11 @@ if (false) {
      * @private
      */
     DynamicLayoutComponent.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    DynamicLayoutComponent.prototype.route;
     /**
      * @type {?}
      * @private
@@ -1565,6 +1632,312 @@ if (false) {
      */
     EllipsisDirective.prototype.elRef;
 }
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class AbpForContext {
+    /**
+     * @param {?} $implicit
+     * @param {?} index
+     * @param {?} count
+     * @param {?} list
+     */
+    constructor($implicit, index, count, list) {
+        this.$implicit = $implicit;
+        this.index = index;
+        this.count = count;
+        this.list = list;
+    }
+}
+if (false) {
+    /** @type {?} */
+    AbpForContext.prototype.$implicit;
+    /** @type {?} */
+    AbpForContext.prototype.index;
+    /** @type {?} */
+    AbpForContext.prototype.count;
+    /** @type {?} */
+    AbpForContext.prototype.list;
+}
+class RecordView {
+    /**
+     * @param {?} record
+     * @param {?} view
+     */
+    constructor(record, view) {
+        this.record = record;
+        this.view = view;
+    }
+}
+if (false) {
+    /** @type {?} */
+    RecordView.prototype.record;
+    /** @type {?} */
+    RecordView.prototype.view;
+}
+class ForDirective {
+    /**
+     * @param {?} tempRef
+     * @param {?} vcRef
+     * @param {?} differs
+     */
+    constructor(tempRef, vcRef, differs) {
+        this.tempRef = tempRef;
+        this.vcRef = vcRef;
+        this.differs = differs;
+    }
+    /**
+     * @return {?}
+     */
+    get compareFn() {
+        return this.compareBy || compare;
+    }
+    /**
+     * @return {?}
+     */
+    get trackByFn() {
+        return this.trackBy || ((/**
+         * @param {?} index
+         * @param {?} item
+         * @return {?}
+         */
+        (index, item) => ((/** @type {?} */ (item))).id || index));
+    }
+    /**
+     * @private
+     * @param {?} changes
+     * @return {?}
+     */
+    iterateOverAppliedOperations(changes) {
+        /** @type {?} */
+        const rw = [];
+        changes.forEachOperation((/**
+         * @param {?} record
+         * @param {?} previousIndex
+         * @param {?} currentIndex
+         * @return {?}
+         */
+        (record, previousIndex, currentIndex) => {
+            if (record.previousIndex == null) {
+                /** @type {?} */
+                const view = this.vcRef.createEmbeddedView(this.tempRef, new AbpForContext(null, -1, -1, this.items), currentIndex);
+                rw.push(new RecordView(record, view));
+            }
+            else if (currentIndex == null) {
+                this.vcRef.remove(previousIndex);
+            }
+            else {
+                /** @type {?} */
+                const view = this.vcRef.get(previousIndex);
+                this.vcRef.move(view, currentIndex);
+                rw.push(new RecordView(record, (/** @type {?} */ (view))));
+            }
+        }));
+        for (let i = 0, l = rw.length; i < l; i++) {
+            rw[i].view.context.$implicit = rw[i].record.item;
+        }
+    }
+    /**
+     * @private
+     * @param {?} changes
+     * @return {?}
+     */
+    iterateOverAttachedViews(changes) {
+        for (let i = 0, l = this.vcRef.length; i < l; i++) {
+            /** @type {?} */
+            const viewRef = (/** @type {?} */ (this.vcRef.get(i)));
+            viewRef.context.index = i;
+            viewRef.context.count = l;
+            viewRef.context.list = this.items;
+        }
+        changes.forEachIdentityChange((/**
+         * @param {?} record
+         * @return {?}
+         */
+        (record) => {
+            /** @type {?} */
+            const viewRef = (/** @type {?} */ (this.vcRef.get(record.currentIndex)));
+            viewRef.context.$implicit = record.item;
+        }));
+    }
+    /**
+     * @private
+     * @param {?} items
+     * @return {?}
+     */
+    projectItems(items) {
+        if (!items.length && this.emptyRef) {
+            this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
+            this.isShowEmptyRef = true;
+            return;
+        }
+        if (this.emptyRef && this.isShowEmptyRef) {
+            this.vcRef.clear();
+            this.isShowEmptyRef = false;
+        }
+        if (!this.differ && items) {
+            this.differ = this.differs.find(items).create(this.trackByFn);
+        }
+        if (this.differ) {
+            /** @type {?} */
+            const changes = this.differ.diff(items);
+            if (changes) {
+                this.iterateOverAppliedOperations(changes);
+                this.iterateOverAttachedViews(changes);
+            }
+        }
+    }
+    /**
+     * @private
+     * @param {?} items
+     * @return {?}
+     */
+    sortItems(items) {
+        if (this.orderBy) {
+            items.sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            (a, b) => (a[this.orderBy] > b[this.orderBy] ? 1 : a[this.orderBy] < b[this.orderBy] ? -1 : 0)));
+        }
+        else {
+            items.sort();
+        }
+    }
+    /**
+     * @return {?}
+     */
+    ngOnChanges() {
+        /** @type {?} */
+        let items = (/** @type {?} */ (clone(this.items)));
+        if (!Array.isArray(items))
+            return;
+        /** @type {?} */
+        const compareFn = this.compareFn;
+        if (typeof this.filterBy !== 'undefined') {
+            items = items.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => compareFn(item[this.filterBy], this.filterVal)));
+        }
+        switch (this.orderDir) {
+            case 'ASC':
+                this.sortItems(items);
+                this.projectItems(items);
+                break;
+            case 'DESC':
+                this.sortItems(items);
+                items.reverse();
+                this.projectItems(items);
+                break;
+            default:
+                this.projectItems(items);
+        }
+    }
+}
+ForDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[abpFor]',
+            },] }
+];
+/** @nocollapse */
+ForDirective.ctorParameters = () => [
+    { type: TemplateRef },
+    { type: ViewContainerRef },
+    { type: IterableDiffers }
+];
+ForDirective.propDecorators = {
+    items: [{ type: Input, args: ['abpForOf',] }],
+    orderBy: [{ type: Input, args: ['abpForOrderBy',] }],
+    orderDir: [{ type: Input, args: ['abpForOrderDir',] }],
+    filterBy: [{ type: Input, args: ['abpForFilterBy',] }],
+    filterVal: [{ type: Input, args: ['abpForFilterVal',] }],
+    trackBy: [{ type: Input, args: ['abpForTrackBy',] }],
+    compareBy: [{ type: Input, args: ['abpForCompareBy',] }],
+    emptyRef: [{ type: Input, args: ['abpForEmptyRef',] }]
+};
+if (false) {
+    /** @type {?} */
+    ForDirective.prototype.items;
+    /** @type {?} */
+    ForDirective.prototype.orderBy;
+    /** @type {?} */
+    ForDirective.prototype.orderDir;
+    /** @type {?} */
+    ForDirective.prototype.filterBy;
+    /** @type {?} */
+    ForDirective.prototype.filterVal;
+    /** @type {?} */
+    ForDirective.prototype.trackBy;
+    /** @type {?} */
+    ForDirective.prototype.compareBy;
+    /** @type {?} */
+    ForDirective.prototype.emptyRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ForDirective.prototype.differ;
+    /**
+     * @type {?}
+     * @private
+     */
+    ForDirective.prototype.isShowEmptyRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ForDirective.prototype.tempRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ForDirective.prototype.vcRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    ForDirective.prototype.differs;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @return {?}
+ */
+function noop() {
+    /** @type {?} */
+    const fn = (/**
+     * @return {?}
+     */
+    function () { });
+    return fn;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?=} a
+ * @return {?}
+ */
+function uuid(a) {
+    return a
+        ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
+        : ('' + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -1785,6 +2158,7 @@ class VisibilityDirective {
     constructor(elRef, renderer) {
         this.elRef = elRef;
         this.renderer = renderer;
+        this.mutationObserverEnabled = true;
         this.completed$ = new Subject();
     }
     /**
@@ -1792,44 +2166,65 @@ class VisibilityDirective {
      */
     ngAfterViewInit() {
         /** @type {?} */
-        const observer = new MutationObserver((/**
-         * @param {?} mutations
-         * @return {?}
-         */
-        mutations => {
-            mutations.forEach((/**
-             * @param {?} mutation
+        let observer;
+        if (this.mutationObserverEnabled) {
+            observer = new MutationObserver((/**
+             * @param {?} mutations
              * @return {?}
              */
-            mutation => {
-                if (!mutation.target)
-                    return;
+            mutations => {
+                mutations.forEach((/**
+                 * @param {?} mutation
+                 * @return {?}
+                 */
+                mutation => {
+                    if (!mutation.target)
+                        return;
+                    /** @type {?} */
+                    const htmlNodes = snq((/**
+                     * @return {?}
+                     */
+                    () => Array.from(mutation.target.childNodes).filter((/**
+                     * @param {?} node
+                     * @return {?}
+                     */
+                    node => node instanceof HTMLElement))), []);
+                    if (!htmlNodes.length) {
+                        this.removeFromDOM();
+                        this.disconnect();
+                    }
+                    else {
+                        setTimeout((/**
+                         * @return {?}
+                         */
+                        () => {
+                            this.disconnect();
+                        }), 0);
+                    }
+                }));
+            }));
+            observer.observe(this.focusedElement, {
+                childList: true,
+            });
+        }
+        else {
+            setTimeout((/**
+             * @return {?}
+             */
+            () => {
                 /** @type {?} */
                 const htmlNodes = snq((/**
                  * @return {?}
                  */
-                () => Array.from(mutation.target.childNodes).filter((/**
+                () => Array.from(this.focusedElement.childNodes).filter((/**
                  * @param {?} node
                  * @return {?}
                  */
                 node => node instanceof HTMLElement))), []);
-                if (!htmlNodes.length) {
-                    this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
-                    this.disconnect();
-                }
-                else {
-                    setTimeout((/**
-                     * @return {?}
-                     */
-                    () => {
-                        this.disconnect();
-                    }), 0);
-                }
-            }));
-        }));
-        observer.observe(this.focusedElement, {
-            childList: true,
-        });
+                if (!htmlNodes.length)
+                    this.removeFromDOM();
+            }), 0);
+        }
         this.completed$.subscribe((/**
          * @return {?}
          */
@@ -1841,6 +2236,12 @@ class VisibilityDirective {
     disconnect() {
         this.completed$.next();
         this.completed$.complete();
+    }
+    /**
+     * @return {?}
+     */
+    removeFromDOM() {
+        this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
     }
 }
 VisibilityDirective.decorators = [
@@ -1854,11 +2255,14 @@ VisibilityDirective.ctorParameters = () => [
     { type: Renderer2 }
 ];
 VisibilityDirective.propDecorators = {
-    focusedElement: [{ type: Input, args: ['abpVisibility',] }]
+    focusedElement: [{ type: Input, args: ['abpVisibility',] }],
+    mutationObserverEnabled: [{ type: Input }]
 };
 if (false) {
     /** @type {?} */
     VisibilityDirective.prototype.focusedElement;
+    /** @type {?} */
+    VisibilityDirective.prototype.mutationObserverEnabled;
     /** @type {?} */
     VisibilityDirective.prototype.completed$;
     /**
@@ -1887,6 +2291,7 @@ const eLayoutType = {
     account: 'account',
     application: 'application',
     empty: 'empty',
+    setting: 'setting',
 };
 
 /**
@@ -1902,10 +2307,12 @@ class AuthGuard {
     /**
      * @param {?} oauthService
      * @param {?} store
+     * @param {?} router
      */
-    constructor(oauthService, store) {
+    constructor(oauthService, store, router) {
         this.oauthService = oauthService;
         this.store = store;
+        this.router = router;
     }
     /**
      * @param {?} _
@@ -1918,8 +2325,7 @@ class AuthGuard {
         if (hasValidAccessToken) {
             return hasValidAccessToken;
         }
-        this.store.dispatch(new Navigate(['/account/login'], null, { state: { redirectUrl: state.url } }));
-        return false;
+        return this.router.createUrlTree(['/account/login'], { state: { redirectUrl: state.url } });
     }
 }
 AuthGuard.decorators = [
@@ -1930,9 +2336,10 @@ AuthGuard.decorators = [
 /** @nocollapse */
 AuthGuard.ctorParameters = () => [
     { type: OAuthService },
-    { type: Store }
+    { type: Store },
+    { type: Router }
 ];
-/** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store)); }, token: AuthGuard, providedIn: "root" });
+/** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
 if (false) {
     /**
      * @type {?}
@@ -1944,6 +2351,11 @@ if (false) {
      * @private
      */
     AuthGuard.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    AuthGuard.prototype.router;
 }
 
 /**
@@ -2276,11 +2688,6 @@ var Config;
     /**
      * @record
      */
-    function State() { }
-    Config.State = State;
-    /**
-     * @record
-     */
     function Environment() { }
     Config.Environment = Environment;
     if (false) {
@@ -2292,6 +2699,8 @@ var Config;
         Environment.prototype.oAuthConfig;
         /** @type {?} */
         Environment.prototype.apis;
+        /** @type {?} */
+        Environment.prototype.localization;
     }
     /**
      * @record
@@ -2463,7 +2872,10 @@ class ConfigPlugin {
         if (isInitAction && !this.initialized) {
             let { routes, wrappers } = transformRoutes(this.router.config);
             routes = organizeRoutes(routes, wrappers);
-            state = setValue(state, 'ConfigState', Object.assign({}, (state.ConfigState && Object.assign({}, state.ConfigState)), this.options, { routes }));
+            /** @type {?} */
+            const flattedRoutes = flatRoutes(clone(routes));
+            state = setValue(state, 'ConfigState', Object.assign({}, (state.ConfigState && Object.assign({}, state.ConfigState)), this.options, { routes,
+                flattedRoutes }));
             this.initialized = true;
         }
         return next(state, event);
@@ -2587,6 +2999,33 @@ function setUrls(routes, parentUrl) {
         route.children.length && {
         children: setUrls(route.children, `/${route.path}`),
     })))));
+}
+/**
+ * @param {?} routes
+ * @return {?}
+ */
+function flatRoutes(routes) {
+    /** @type {?} */
+    const flat = (/**
+     * @param {?} r
+     * @return {?}
+     */
+    (r) => {
+        return r.reduce((/**
+         * @param {?} acc
+         * @param {?} val
+         * @return {?}
+         */
+        (acc, val) => {
+            /** @type {?} */
+            let value = [val];
+            if (val.children) {
+                value = [val, ...flat(val.children)];
+            }
+            return [...acc, ...value];
+        }), []);
+    });
+    return flat(routes);
 }
 
 /**
@@ -2943,6 +3382,31 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class SortPipe {
+    /**
+     * @param {?} value
+     * @param {?} sortOrder
+     * @return {?}
+     */
+    transform(value, sortOrder) {
+        sortOrder = sortOrder.toLowerCase();
+        if (sortOrder === "desc")
+            return value.reverse();
+        else
+            return value;
+    }
+}
+SortPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'abpSort',
+                pure: false
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 class LocaleId extends String {
     /**
      * @param {?} localizationService
@@ -3040,12 +3504,15 @@ CoreModule.decorators = [
                     DynamicLayoutComponent,
                     AutofocusDirective,
                     EllipsisDirective,
+                    ForDirective,
                     FormSubmitDirective,
                     LocalizationPipe,
+                    SortPipe,
                     PermissionDirective,
                     VisibilityDirective,
                     InputEventDebounceDirective,
                     ClickEventStopPropagationDirective,
+                    AbstractNgModelComponent,
                 ],
                 exports: [
                     CommonModule,
@@ -3057,13 +3524,16 @@ CoreModule.decorators = [
                     DynamicLayoutComponent,
                     AutofocusDirective,
                     EllipsisDirective,
+                    ForDirective,
                     FormSubmitDirective,
                     LocalizationPipe,
+                    SortPipe,
                     PermissionDirective,
                     VisibilityDirective,
                     InputEventDebounceDirective,
                     LocalizationPipe,
                     ClickEventStopPropagationDirective,
+                    AbstractNgModelComponent,
                 ],
                 providers: [LocalizationPipe],
                 entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
@@ -3080,5 +3550,5 @@ CoreModule.decorators = [
  * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, ClickEventStopPropagationDirective as ɵba, LocaleId as ɵbb, LocaleProvider as ɵbc, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbd, ConfigPlugin as ɵbe, ApiInterceptor as ɵbf, getInitialData as ɵbg, localeInitializer as ɵbh, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, ConfigState as ɵs, AutofocusDirective as ɵt, EllipsisDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, PermissionDirective as ɵx, VisibilityDirective as ɵy, InputEventDebounceDirective as ɵz };
+export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, InputEventDebounceDirective as ɵba, ClickEventStopPropagationDirective as ɵbb, AbstractNgModelComponent as ɵbc, LocaleId as ɵbd, LocaleProvider as ɵbe, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbf, ConfigPlugin as ɵbg, ApiInterceptor as ɵbh, getInitialData as ɵbi, localeInitializer as ɵbj, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, SortPipe as ɵx, PermissionDirective as ɵy, VisibilityDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

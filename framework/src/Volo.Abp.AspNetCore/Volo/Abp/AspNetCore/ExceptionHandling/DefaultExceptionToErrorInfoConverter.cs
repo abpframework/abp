@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,9 +42,9 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         {
             var errorInfo = CreateErrorInfoWithoutCode(exception);
 
-            if (exception is IHasErrorCode)
+            if (exception is IHasErrorCode hasErrorCodeException)
             {
-                errorInfo.Code = (exception as IHasErrorCode).Code;
+                errorInfo.Code = hasErrorCodeException.Code;
             }
 
             return errorInfo;

@@ -78,11 +78,6 @@ namespace Volo.Docs.Pages.Documents.Project
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
 
-            if (IsDocumentCultureDifferentThanCurrent())
-            {
-                return ReloadPageWithCulture();
-            }
-
             await SetProjectAsync();
 
             if (ShowProjectsCombobox)
@@ -101,6 +96,11 @@ namespace Volo.Docs.Pages.Documents.Project
             if (!CheckLanguage())
             {
                 return RedirectToDefaultLanguage();
+            }
+
+            if (IsDocumentCultureDifferentThanCurrent())
+            {
+                return ReloadPageWithCulture();
             }
 
             await SetDocumentAsync();
@@ -122,7 +122,6 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return false;
             }
-
         }
 
         private bool IsDefaultDocument()
@@ -153,7 +152,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private IActionResult ReloadPageWithCulture()
         {
-            var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" +
+            var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/"
+                            + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" +
                             DocumentName;
 
             return Redirect("/Abp/Languages/Switch?culture=" + LanguageCode + "&uiCulture=" + LanguageCode + "&returnUrl=" + returnUrl);
@@ -164,7 +164,7 @@ namespace Volo.Docs.Pages.Documents.Project
             return RedirectToPage(new
             {
                 projectName = ProjectName,
-                version = Version,
+                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 languageCode = DefaultLanguageCode
             });
         }
@@ -174,7 +174,7 @@ namespace Volo.Docs.Pages.Documents.Project
             return RedirectToPage(new
             {
                 projectName = ProjectName,
-                version = Version,
+                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 documentName = "",
                 languageCode = DefaultLanguageCode
             });
@@ -355,7 +355,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" + DocumentName,
                         language.Code == LanguageCode
                         )
                     );

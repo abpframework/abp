@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,25 +46,7 @@ namespace Volo.Abp.DependencyInjection
                 }
             }
         }
-
-        protected virtual void TriggerServiceExposing(IServiceCollection services, Type type, List<Type> serviceTypes)
-        {
-            var exposeActions = services.GetExposingActionList();
-            if (exposeActions.Any())
-            {
-                var args = new OnServiceExposingContext(type, serviceTypes);
-                foreach (var action in exposeActions)
-                {
-                    action(args);
-                }
-            }
-        }
-
-        protected virtual bool IsConventionalRegistrationDisabled(Type type)
-        {
-            return type.IsDefined(typeof(DisableConventionalRegistrationAttribute), true);
-        }
-
+        
         protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
         {
             return type.GetCustomAttribute<DependencyAttribute>(true);

@@ -9,6 +9,12 @@
     "TenantDeletionConfirmationMessage": "'{0}' isimli müşteri silinecektir. Onaylıyor musunuz?",
     "ConnectionStrings": "Bağlantı cümlesi",
     "DisplayName:DefaultConnectionString": "Varsayılan bağlantı cümlesi",
-    "DisplayName:UseSharedDatabase": "Paylaşılan veritabanını kullan"
+    "DisplayName:UseSharedDatabase": "Paylaşılan veritabanını kullan",
+    "Permission:TenantManagement": "Müşteri yönetimi",
+    "Permission:Create": "Oluşturma",
+    "Permission:Edit": "Düzenleme",
+    "Permission:Delete": "Silme",
+    "Permission:ManageConnectionStrings": "Bağlantı cümlelerini yönet",
+    "Permission:ManageFeatures": "Özellikleri yönet"
   }
 }

@@ -35,9 +35,9 @@ namespace Volo.Abp.EntityFrameworkCore
 
         EntityEntry<TEntity> Add<TEntity>([NotNull] TEntity entity) where TEntity : class;
 
-        Task<EntityEntry> AddAsync([NotNull] object entity, CancellationToken cancellationToken = default);
+        ValueTask<EntityEntry> AddAsync([NotNull] object entity, CancellationToken cancellationToken = default);
 
-        Task<EntityEntry<TEntity>> AddAsync<TEntity>([NotNull] TEntity entity, CancellationToken cancellationToken = default) where TEntity : class;
+        ValueTask<EntityEntry<TEntity>> AddAsync<TEntity>([NotNull] TEntity entity, CancellationToken cancellationToken = default) where TEntity : class;
 
         void AddRange([NotNull] IEnumerable<object> entities);
 
@@ -59,13 +59,13 @@ namespace Volo.Abp.EntityFrameworkCore
 
         TEntity Find<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
 
-        Task<object> FindAsync([NotNull] Type entityType, [NotNull] object[] keyValues, CancellationToken cancellationToken);
+        ValueTask<object> FindAsync([NotNull] Type entityType, [NotNull] object[] keyValues, CancellationToken cancellationToken);
 
-        Task<TEntity> FindAsync<TEntity>([NotNull] object[] keyValues, CancellationToken cancellationToken) where TEntity : class;
+        ValueTask<TEntity> FindAsync<TEntity>([NotNull] object[] keyValues, CancellationToken cancellationToken) where TEntity : class;
 
-        Task<TEntity> FindAsync<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
+        ValueTask<TEntity> FindAsync<TEntity>([NotNull] params object[] keyValues) where TEntity : class;
 
-        Task<object> FindAsync([NotNull] Type entityType, [NotNull] params object[] keyValues);
+        ValueTask<object> FindAsync([NotNull] Type entityType, [NotNull] params object[] keyValues);
 
         EntityEntry<TEntity> Remove<TEntity>([NotNull] TEntity entity) where TEntity : class;
 

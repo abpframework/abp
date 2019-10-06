@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
 
@@ -20,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
             try
             {
                 Log.Information("Starting web host.");
-                BuildWebHostInternal(args).Run();
+                BuildWebHostInternal(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -34,13 +35,20 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
             }
         }
 
-        internal static IWebHost BuildWebHostInternal(string[] args) =>
-            new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
-                .UseSerilog()
-                .Build();
+        //internal static IWebHost BuildWebHostInternal(string[] args) =>
+        //    new WebHostBuilder()
+        //        .UseKestrel()
+        //        .UseContentRoot(Directory.GetCurrentDirectory())
+        //        .UseIISIntegration()
+        //        .UseStartup<Startup>()
+        //        .UseSerilog()
+        //        .Build();
+
+        internal static IHostBuilder BuildWebHostInternal(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

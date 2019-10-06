@@ -1,0 +1,35 @@
+﻿@page
+@model Acme.BookStore.BookManagement.Web.Pages.BookManagement.Books.IndexModel
+@inherits Acme.BookStore.BookManagement.Web.Pages.BookManagementPage
+@section scripts
+{
+    <abp-script src="/Pages/BookManagement/Books/index.js" />
+}
+<abp-card>
+    <abp-card-header>
+        <abp-row>
+            <abp-column size-md="_6">
+                <h2>@L["Books"]</h2>
+            </abp-column>
+            <abp-column size-md="_6" class="text-right">
+                <abp-button id="NewBookButton"
+                            text="@L["NewBook"].Value"
+                            icon="plus"
+                            button-type="Primary" />
+            </abp-column>
+        </abp-row>
+    </abp-card-header>
+    <abp-card-body>
+        <abp-table striped-rows="true" id="BooksTable">
+            <thead>
+                <tr>
+                    <th>@L["Name"]</th>
+                    <th>@L["Type"]</th>
+                    <th>@L["PublishDate"]</th>
+                    <th>@L["Price"]</th>
+                    <th>@L["CreationTime"]</th>
+                </tr>
+            </thead>
+        </abp-table>
+    </abp-card-body>
+</abp-card>

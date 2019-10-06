@@ -11,17 +11,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
-import { RootAccountModule } from '@abp/ng.account';
-import { RootIdentityModule } from '@abp/ng.identity';
-import { RootTenantManagementModule } from '@abp/ng.tenant-management';
+import { AccountConfigModule } from '@abp/ng.account.config';
+import { IdentityConfigModule } from '@abp/ng.identity.config';
+import { TenantManagementConfigModule } from '@abp/ng.tenant-management.config';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    SharedModule,
     ThemeSharedModule.forRoot(),
     CoreModule.forRoot({
       environment,
@@ -29,15 +25,18 @@ import { RootTenantManagementModule } from '@abp/ng.tenant-management';
         layouts: LAYOUTS,
       },
     }),
-    RootAccountModule.forRoot({ redirectUrl: '/' }),
-    RootIdentityModule.forRoot(),
-    RootTenantManagementModule.forRoot(),
-
     OAuthModule.forRoot(),
     NgxsModule.forRoot([]),
+    AccountConfigModule.forRoot({ redirectUrl: '/' }),
+    IdentityConfigModule,
+    TenantManagementConfigModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    SharedModule,
+
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

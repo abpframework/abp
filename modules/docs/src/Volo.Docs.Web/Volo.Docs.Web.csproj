@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Docs.Web</AssemblyName>
     <PackageId>Volo.Docs.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -23,16 +23,10 @@
   
   
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
     <EmbeddedResource Include="Localization\Resources\**\*.json" />
-  </ItemGroup>
-
-  
-  <ItemGroup>
-    <Content Remove="wwwroot\**\*.*" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
@@ -44,8 +38,4 @@
     <None Include="Properties\launchSettings.json" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-  
 </Project>

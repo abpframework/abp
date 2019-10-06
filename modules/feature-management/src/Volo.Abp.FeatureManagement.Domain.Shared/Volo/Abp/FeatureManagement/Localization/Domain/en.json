@@ -1,6 +1,7 @@
 {
   "culture": "en",
   "texts": {
-    "Features": "Features" 
+    "Features": "Features",
+    "NoFeatureFoundMessage": "There is't any available feature."
   }
 }

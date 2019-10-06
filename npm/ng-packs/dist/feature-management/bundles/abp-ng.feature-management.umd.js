@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@ngxs/store'), require('rxjs'), require('rxjs/operators'), require('@angular/forms')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.feature-management', ['exports', '@angular/core', '@abp/ng.core', '@abp/ng.theme.shared', '@ngxs/store', 'rxjs', 'rxjs/operators', '@angular/forms'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['feature-management'] = {}), global.ng.core, global.ng_core, global.ng_theme_shared, global.store, global.rxjs, global.rxjs.operators, global.ng.forms));
-}(this, function (exports, core, ng_core, ng_theme_shared, store, rxjs, operators, forms) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ngxs/store'), require('rxjs'), require('rxjs/operators'), require('@angular/forms')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.feature-management', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ngxs/store', 'rxjs', 'rxjs/operators', '@angular/forms'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['feature-management'] = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.store, global.rxjs, global.rxjs.operators, global.ng.forms));
+}(this, function (exports, ng_core, ng_theme_shared, core, store, rxjs, operators, forms) { 'use strict';
 
     /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
@@ -200,31 +200,6 @@
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
     }
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var RootFeatureManagementModule = /** @class */ (function () {
-        function RootFeatureManagementModule() {
-        }
-        /**
-         * @return {?}
-         */
-        RootFeatureManagementModule.forRoot = /**
-         * @return {?}
-         */
-        function () {
-            return {
-                ngModule: RootFeatureManagementModule,
-                providers: [],
-            };
-        };
-        RootFeatureManagementModule.decorators = [
-            { type: core.NgModule, args: [{},] }
-        ];
-        return RootFeatureManagementModule;
-    }());
 
     /**
      * @fileoverview added by tsickle
@@ -608,7 +583,6 @@
 
     exports.FeatureManagementComponent = FeatureManagementComponent;
     exports.FeatureManagementModule = FeatureManagementModule;
-    exports.RootFeatureManagementModule = RootFeatureManagementModule;
     exports.ɵa = FeatureManagementComponent;
     exports.ɵb = FeatureManagementState;
     exports.ɵc = FeatureManagementState;
