@@ -8,11 +8,15 @@ namespace Volo.Abp.ObjectMapping
 
     public class DefaultObjectMapper : IObjectMapper, ITransientDependency
     {
-        private readonly IServiceProvider _serviceProvider;
+        protected IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
+        protected IServiceProvider ServiceProvider { get; }
 
-        public DefaultObjectMapper(IServiceProvider serviceProvider)
+        public DefaultObjectMapper(
+            IServiceProvider serviceProvider,
+            IAutoObjectMappingProvider autoObjectMappingProvider)
         {
-            _serviceProvider = serviceProvider;
+            AutoObjectMappingProvider = autoObjectMappingProvider;
+            ServiceProvider = serviceProvider;
         }
 
         public virtual TDestination Map<TSource, TDestination>(TSource source)
@@ -22,7 +26,7 @@ namespace Volo.Abp.ObjectMapping
                 return default;
             }
 
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var specificMapper = scope.ServiceProvider.GetService<IObjectMapper<TSource, TDestination>>();
                 if (specificMapper != null)
@@ -61,7 +65,7 @@ namespace Volo.Abp.ObjectMapping
                 return default;
             }
 
-            using (var scope = _serviceProvider.CreateScope())
+            using (var scope = ServiceProvider.CreateScope())
             {
                 var specificMapper = scope.ServiceProvider.GetService<IObjectMapper<TSource, TDestination>>();
                 if (specificMapper != null)
@@ -87,12 +91,12 @@ namespace Volo.Abp.ObjectMapping
 
         protected virtual TDestination AutoMap<TSource, TDestination>(object source)
         {
-            throw new NotImplementedException($"Can not map from given object ({source}) to {typeof(TDestination).AssemblyQualifiedName}.");
+            return AutoObjectMappingProvider.Map<TSource, TDestination>(source);
         }
 
         protected virtual TDestination AutoMap<TSource, TDestination>(TSource source, TDestination destination)
         {
-            throw new NotImplementedException($"Can no map from {typeof(TSource).AssemblyQualifiedName} to {typeof(TDestination).AssemblyQualifiedName}.");
+            return AutoObjectMappingProvider.Map<TSource, TDestination>(source, destination);
         }
     }
 }
