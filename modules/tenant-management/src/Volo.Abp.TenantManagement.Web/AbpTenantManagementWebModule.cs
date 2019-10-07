@@ -42,6 +42,7 @@ namespace Volo.Abp.TenantManagement.Web
                 options.FileSets.AddEmbedded<AbpTenantManagementWebModule>("Volo.Abp.TenantManagement.Web");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpTenantManagementWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementWebAutoMapperProfile>(validate: true);

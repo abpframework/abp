@@ -67,6 +67,8 @@ namespace Volo.Docs.Pages.Documents.Project
             IProjectAppService projectAppService,
             IOptions<DocsUiOptions> options)
         {
+            ObjectMapperContext = typeof(DocsWebModule);
+
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;

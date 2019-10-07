@@ -11,7 +11,7 @@ using Volo.Docs.Documents;
 
 namespace Volo.Docs.Projects
 {
-    public class ProjectAppService : ApplicationService, IProjectAppService
+    public class ProjectAppService : DocsAppServiceBase, IProjectAppService
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;

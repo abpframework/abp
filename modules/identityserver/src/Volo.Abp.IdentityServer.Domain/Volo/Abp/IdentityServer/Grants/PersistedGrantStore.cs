@@ -11,10 +11,11 @@ namespace Volo.Abp.IdentityServer.Grants
     public class PersistedGrantStore : IPersistedGrantStore
     {
         private readonly IPersistentGrantRepository _persistentGrantRepository;
-        private readonly IObjectMapper _objectMapper;
+        private readonly IObjectMapper<AbpIdentityServerDomainModule> _objectMapper;
         private readonly IGuidGenerator _guidGenerator;
 
-        public PersistedGrantStore(IPersistentGrantRepository persistentGrantRepository, IObjectMapper objectMapper, IGuidGenerator guidGenerator)
+        public PersistedGrantStore(IPersistentGrantRepository persistentGrantRepository,
+            IObjectMapper<AbpIdentityServerDomainModule> objectMapper, IGuidGenerator guidGenerator)
         {
             _persistentGrantRepository = persistentGrantRepository;
             _objectMapper = objectMapper;

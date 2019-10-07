@@ -11,12 +11,12 @@ namespace Volo.Abp.TenantManagement
     public class TenantStore : ITenantStore, ITransientDependency
     {
         private readonly ITenantRepository _tenantRepository;
-        private readonly IObjectMapper _objectMapper;
+        private readonly IObjectMapper<AbpTenantManagementDomainModule> _objectMapper;
         private readonly ICurrentTenant _currentTenant;
 
         public TenantStore(
             ITenantRepository tenantRepository, 
-            IObjectMapper objectMapper,
+            IObjectMapper<AbpTenantManagementDomainModule> objectMapper,
             ICurrentTenant currentTenant)
         {
             _tenantRepository = tenantRepository;

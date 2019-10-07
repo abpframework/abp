@@ -50,6 +50,7 @@ namespace Volo.Abp.Account.Web
                 options.Conventions.AuthorizePage("/Account/Manage");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpAccountWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
