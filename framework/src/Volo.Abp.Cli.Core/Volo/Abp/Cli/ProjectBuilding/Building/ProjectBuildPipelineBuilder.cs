@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+﻿using System;
+using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
@@ -12,8 +13,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             pipeline.Steps.Add(new FileEntryListReadStep());
 
             pipeline.Steps.AddRange(context.Template.GetCustomSteps(context));
-
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref"))
+            
+            if (!context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref") ||
+                !string.IsNullOrWhiteSpace(context.BuildArgs.GitHubLocalRepositoryPath))
             {
                 pipeline.Steps.Add(new NugetReferenceReplaceStep());
             }

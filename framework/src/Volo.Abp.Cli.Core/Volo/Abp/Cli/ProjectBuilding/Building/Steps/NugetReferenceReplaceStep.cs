@@ -20,7 +20,9 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             new NugetReferenceReplacer(
                 context.Files,
                 "MyCompanyName.MyProjectName",
-                nugetPackageVersion
+                nugetPackageVersion,
+                context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref"),
+                context.BuildArgs.GitHubLocalRepositoryPath
             ).Run();
         }
 
@@ -48,15 +50,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             private readonly List<FileEntry> _entries;
             private readonly string _companyAndProjectNamePlaceHolder;
             private readonly string _nugetPackageVersion;
+            private readonly bool _localReferences;
+            private readonly string _gitHubLocalRepositoryPath;
 
             public NugetReferenceReplacer(
                 List<FileEntry> entries, 
                 string companyAndProjectNamePlaceHolder, 
-                string nugetPackageVersion)
+                string nugetPackageVersion,
+                bool localReferences = false,
+                string gitHubLocalRepositoryPath = null)
             {
                 _entries = entries;
                 _companyAndProjectNamePlaceHolder = companyAndProjectNamePlaceHolder;
                 _nugetPackageVersion = nugetPackageVersion;
+                _localReferences = localReferences;
+                _gitHubLocalRepositoryPath = gitHubLocalRepositoryPath;
             }
 
             public void Run()
@@ -97,20 +105,54 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                         continue;
                     }
 
-                    var newNode = doc.CreateElement("PackageReference");
+                    XmlNode newNode = null;
 
-                    var includeAttr = doc.CreateAttribute("Include");
-                    includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
-                    newNode.Attributes.Append(includeAttr);
-
-                    var versionAttr = doc.CreateAttribute("Version");
-                    versionAttr.Value = _nugetPackageVersion;
-                    newNode.Attributes.Append(versionAttr);
+                    newNode = _localReferences ?
+                        GetLocalReferenceNode(doc, oldNodeIncludeValue) :
+                        GetNugetReferenceNode(doc, oldNodeIncludeValue);
 
                     oldNode.ParentNode.ReplaceChild(newNode, oldNode);
                 }
 
                 return doc.OuterXml;
+            }
+
+            private XmlElement GetNugetReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
+            {
+                var newNode = doc.CreateElement("PackageReference");
+
+                var includeAttr = doc.CreateAttribute("Include");
+                includeAttr.Value = ConvertToNugetReference(oldNodeIncludeValue);
+                newNode.Attributes.Append(includeAttr);
+
+                var versionAttr = doc.CreateAttribute("Version");
+                versionAttr.Value = _nugetPackageVersion;
+                newNode.Attributes.Append(versionAttr);
+                return newNode;
+            }
+
+            private XmlElement GetLocalReferenceNode(XmlDocument doc, string oldNodeIncludeValue)
+            {
+                var newNode = doc.CreateElement("ProjectReference");
+
+                var includeAttr = doc.CreateAttribute("Include");
+                includeAttr.Value = SetGithubPath(oldNodeIncludeValue);
+                newNode.Attributes.Append(includeAttr);
+
+                return newNode;
+            }
+
+            private string SetGithubPath(string includeValue)
+            {
+                while (includeValue.StartsWith("..\\"))
+                {
+                    includeValue = includeValue.TrimStart('.');
+                    includeValue = includeValue.TrimStart('\\');
+                }
+
+                includeValue = _gitHubLocalRepositoryPath.EnsureEndsWith('\\') + includeValue;
+
+                return includeValue;
             }
 
             private string ConvertToNugetReference(string oldValue)

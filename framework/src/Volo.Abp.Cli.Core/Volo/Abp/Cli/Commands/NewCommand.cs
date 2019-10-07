@@ -64,6 +64,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Short, Options.GitHubLocalRepositoryPath.Long);
+            if (gitHubLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+            }
+
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
             if (outputFolder != null)
             {
@@ -90,6 +96,7 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     databaseProvider,
                     uiFramework,
+                    gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
             );
@@ -217,6 +224,12 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "o";
                 public const string Long = "output-folder";
+            }
+
+            public static class GitHubLocalRepositoryPath
+            {
+                public const string Short = "ap";
+                public const string Long = "abp-path";
             }
 
             public static class Version
