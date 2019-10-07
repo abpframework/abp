@@ -6,14 +6,14 @@ import { Component, Input } from '@angular/core';
     <button [attr.type]="type" [ngClass]="buttonClass" [disabled]="loading || disabled">
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
-  `
+  `,
 })
 export class ButtonComponent {
   @Input()
   buttonClass = 'btn btn-primary';
 
   @Input()
-  type = 'button';
+  buttonType; // TODO: Add initial value.
 
   @Input()
   iconClass: string;
@@ -23,6 +23,11 @@ export class ButtonComponent {
 
   @Input()
   disabled = false;
+
+  /**
+   * @deprecated Use buttonType instead. To be deleted in v1
+   */
+  @Input() type = 'button';
 
   get icon(): string {
     return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
