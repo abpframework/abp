@@ -30,7 +30,9 @@ export class LazyLoadService {
         const key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
 
         if (this.loadedLibraries[key]) {
-          return this.loadedLibraries[key].asObservable();
+          subscriber.next();
+          subscriber.complete();
+          return;
         }
 
         this.loadedLibraries[key] = new ReplaySubject();
