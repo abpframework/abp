@@ -1,14 +1,28 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import clone from 'just-clone';
+
+export type SortOrder = 'asc' | 'desc';
 
 @Pipe({
   name: 'abpSort',
-  // tslint:disable-next-line: no-pipe-impure
-  pure: false
 })
 export class SortPipe implements PipeTransform {
-  transform(value: any[], sortOrder: string): any {
-    sortOrder = sortOrder.toLowerCase();
-    if (sortOrder === 'desc') return value.reverse();
-    else return value;
+  intialValue: any[];
+
+  transform(value: any[], sortOrder: SortOrder = 'asc', sortKey: string): any {
+    sortOrder = sortOrder && (sortOrder.toLowerCase() as any);
+
+    if (!this.intialValue) this.intialValue = clone(value);
+
+    if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc')) return this.intialValue;
+
+    let sorted;
+    if (!sortKey) {
+      sorted = value.sort();
+    } else {
+      sorted = value.sort((a, b) => (a[sortKey] < b[sortKey] ? -1 : a[sortKey] > b[sortKey] ? 1 : 0));
+    }
+
+    return sortOrder === 'asc' ? sorted : sorted.reverse();
   }
 }
