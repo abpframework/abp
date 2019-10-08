@@ -198,6 +198,12 @@ public class AuthorAppService : ApplicationService, IAuthorAppService
 * `GetListAsync` and `GetAsync` will be available to users if they have `Author_Management` permission granted.
 * Other methods require additional permissions.
 
+### Overriding a Permission by a Custom Policy
+
+If you define and register a policy to the ASP.NET Core authorization system with the same name of a permission, your policy will override the existing permission. This is a powerful way to extend authorization for a pre-built module you are using in your application.
+
+See [policy based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) document to learn how to define a custom policy.
+
 ## IAuthorizationService
 
 ASP.NET Core provides the `IAuthorizationService` that can be used to check for authorization. Once you inject, you can use it in your code to conditionally control the authorization.
@@ -236,4 +242,128 @@ public async Task CreateAsync(CreateAuthorDto input)
 
 `CheckAsync` extension method throws `AbpAuthorizationException` if current user/client has not granted for the given permission. There is also `IsGrantedAsync` extension method that returns `true` or `false`.
 
+`IAuthorizationService` has some overloads for the `AuthorizeAsync` method those are already explained in the [ASP.NET Core authorization documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction).
+
 > Tip: Prefer to use the `Authorize` attribute wherever possible, since it is declarative & simple. Use `IAuthorizationService` if you need to conditionally check a permission and run a business code based on the permission check.
+
+### Check a Permission in JavaScript
+
+You may need to check a policy/permission in the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
+
+````js
+abp.auth.isGranted('MyPermissionName');
+````
+
+See [abp.auth](AspNetCore/JavaScript-API/Auth.md) API documentation for details.
+
+## Permission Management
+
+Permission management is normally done by an admin user using the permission management modal:
+
+![authorization-new-permission-ui-localized](images/authorization-new-permission-ui-localized.png)
+
+If you need to manage permissions by code, inject the `IPermissionManager` and use as shown below:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IPermissionManager _permissionManager;
+
+    public MyService(IPermissionManager permissionManager)
+    {
+        _permissionManager = permissionManager;
+    }
+
+    public async Task GrantPermissionForUserAsync(Guid userId, string permissionName)
+    {
+        await _permissionManager.SetForUserAsync(userId, permissionName, true);
+    }
+
+    public async Task ProhibitPermissionForUserAsync(Guid userId, string permissionName)
+    {
+        await _permissionManager.SetForUserAsync(userId, permissionName, false);
+    }
+}
+````
+
+`SetForUserAsync` sets the value (true/false) for a permission of a user. There are more extension methods like `SetForRoleAsync` and `SetForClientAsync`.
+
+`IPermissionManager` is defined by the permission management module. See the [permission management module documentation](Modules/Permission-Management.md) for more information.
+
+## Avdanced Topics
+
+### Permission Value Providers
+
+Permission checking system is extensible. Any class derived from `PermissionValueProvider` (or implements `IPermissionValueProvider`) can contribute to the permission check. There are three pre-defined value providers:
+
+* `UserPermissionValueProvider` checks if current user has granted for the given permission. It gets user id from the current claims. User claim name is defined with the `AbpClaimTypes.UserId` static property.
+* `RolePermissionValueProvider` checks if any of the roles of the current user has granted for the given permission. It gets role names from the current claims. Role claims name is defined with the `AbpClaimTypes.Role` static property.
+* `ClientPermissionValueProvider` checks if current client has granted for the given permission. This is especially useful on a machine to machine interaction where there is no current user. It gets client id from the current claims. Client claim name is defined with the `AbpClaimTypes.ClientId` static property.
+
+You can extend permission check system by defining your own permission value provider.
+
+Example:
+
+````csharp
+public class SystemAdminPermissionValueProvider : PermissionValueProvider
+{
+    public SystemAdminPermissionValueProvider(IPermissionStore permissionStore)
+        : base(permissionStore)
+    {
+    }
+
+    public override string Name => "SystemAdmin";
+
+    public override async Task<PermissionGrantResult> 
+           CheckAsync(PermissionValueCheckContext context)
+    {
+        if (context.Principal?.FindFirst("User_Type")?.Value == "SystemAdmin")
+        {
+            return PermissionGrantResult.Granted;
+        }
+
+        return PermissionGrantResult.Undefined;
+    }
+}
+````
+
+This provider allows for all permissions to a user with a `User_Type` claim that has `SystemAdmin` value. It is common to use current claims and `IPermissionStore` in a permission value provider.
+
+A permission value provider should return one of the following values from the `CheckAsync` method:
+
+* `PermissionGrantResult.Granted` is returned to grant the user for the permission. If any of the providers returns `Granted`, the result will be `Granted` if no other provider returns `Prohibited`.
+* `PermissionGrantResult.Prohibited` is returned to prohibit the user for the permission. If any of the providers returns `Prohibited`, the result will always be `Prohibited`. Doesn't matter what other providers return.
+* `PermissionGrantResult.Undefined` is returned if this value provider could not decide about the permission value. Return this to let other providers to check the permission.
+
+Once a provider is defined, it should be added to the `PermissionOptions` as shown below:
+
+````csharp
+Configure<PermissionOptions>(options =>
+{
+    options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
+});
+````
+
+### Permission Store
+
+`IPermissionStore` is the only interface needs to be implemented to read the value of permissions from a persistence source, generally a database system. Permission management module implements it. See the [permission management module documentation](Modules/Permission-Management.md) for more information
+
+### AlwaysAllowAuthorizationService
+
+`AlwaysAllowAuthorizationService` is a class that is used to bypasses the authorization service. It is generally used in integration tests where you may want to disable the authorization system.
+
+Use `IServiceCollection.AddAlwaysAllowAuthorization()` extension method to register the `AlwaysAllowAuthorizationService` to the [dependency injection](Dependency-Injection.md) system:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    context.Services.AddAlwaysAllowAuthorization();
+}
+````
+
+This is already done for the startup template integration tests.
+
+## See Also
+
+* [Permission Management Module](Modules/Permission-Management.md)
+* [ASP.NET Core MVC / Razor Pages JavaScript Auth API](AspNetCore/JavaScript-API/Auth.md)
