@@ -3,15 +3,12 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Acme.BookStore.BookManagement</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.MongoDB" Version="0.19.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="Volo.Abp.MongoDB" Version="0.21.0" />
     <ProjectReference Include="..\Acme.BookStore.BookManagement.Domain\Acme.BookStore.BookManagement.Domain.csproj" />
   </ItemGroup>
 

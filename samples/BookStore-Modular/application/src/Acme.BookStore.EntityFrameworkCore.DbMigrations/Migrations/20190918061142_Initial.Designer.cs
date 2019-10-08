@@ -5,19 +5,19 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Acme.BookStore.BookManagement.EntityFrameworkCore;
+using Acme.BookStore.EntityFrameworkCore;
 
-namespace Acme.BookStore.BookManagement.Migrations
+namespace Acme.BookStore.Migrations
 {
-    [DbContext(typeof(IdentityServerHostMigrationsDbContext))]
-    [Migration("20190527125607_Initial")]
+    [DbContext(typeof(BookStoreMigrationsDbContext))]
+    [Migration("20190918061142_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -219,6 +219,76 @@ namespace Acme.BookStore.BookManagement.Migrations
                     b.HasIndex("EntityChangeId");
 
                     b.ToTable("AbpEntityPropertyChanges");
+                });
+
+            modelBuilder.Entity("Volo.Abp.BackgroundJobs.BackgroundJobRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsAbandoned")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("JobArgs")
+                        .IsRequired()
+                        .HasMaxLength(1048576);
+
+                    b.Property<string>("JobName")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<DateTime?>("LastTryTime");
+
+                    b.Property<DateTime>("NextTryTime");
+
+                    b.Property<byte>("Priority")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue((byte)15);
+
+                    b.Property<short>("TryCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue((short)0);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsAbandoned", "NextTryTime");
+
+                    b.ToTable("AbpBackgroundJobs");
+                });
+
+            modelBuilder.Entity("Volo.Abp.FeatureManagement.FeatureValue", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("ProviderKey")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ProviderName")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Value")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name", "ProviderName", "ProviderKey");
+
+                    b.ToTable("AbpFeatureValues");
                 });
 
             modelBuilder.Entity("Volo.Abp.Identity.IdentityClaimType", b =>
@@ -566,6 +636,8 @@ namespace Acme.BookStore.BookManagement.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
+                    b.Property<string>("Properties");
+
                     b.HasKey("Id");
 
                     b.ToTable("IdentityServerApiResources");
@@ -706,6 +778,8 @@ namespace Acme.BookStore.BookManagement.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
+                    b.Property<int>("DeviceCodeLifetime");
+
                     b.Property<bool>("EnableLocalLogin");
 
                     b.Property<bool>("Enabled");
@@ -757,10 +831,14 @@ namespace Acme.BookStore.BookManagement.Migrations
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh");
 
+                    b.Property<string>("UserCodeType")
+                        .HasMaxLength(100);
+
+                    b.Property<int?>("UserSsoLifetime");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId")
-                        .IsUnique();
+                    b.HasIndex("ClientId");
 
                     b.ToTable("IdentityServerClients");
                 });
@@ -985,6 +1063,8 @@ namespace Acme.BookStore.BookManagement.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200);
+
+                    b.Property<string>("Properties");
 
                     b.Property<bool>("Required");
 
