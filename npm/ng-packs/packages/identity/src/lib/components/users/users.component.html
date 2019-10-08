@@ -58,26 +58,19 @@
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="usernameSortIcon.sort('userName')">
+          <th pResizableColumn (click)="sortOrderIcon.sort('userName')">
             {{ 'AbpIdentity::UserName' | abpLocalization }}
-            <abp-sort-order-icon
-              #usernameSortIcon
-              key="userName"
-              [(selectedKey)]="sortKey"
-              [(order)]="sortOrder"
-            ></abp-sort-order-icon>
+            <abp-sort-order-icon #sortOrderIcon key="userName" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            </abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="usernameSortIcon.sort('email')">
+          <th pResizableColumn (click)="sortOrderIcon.sort('email')">
             {{ 'AbpIdentity::EmailAddress' | abpLocalization }}
             <abp-sort-order-icon key="email" [(selectedKey)]="sortKey" [(order)]="sortOrder"></abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="usernameSortIcon.sort('phoneNumber')">
+          <th pResizableColumn (click)="sortOrderIcon.sort('phoneNumber')">
             {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
-            <abp-sort-order-icon
-              key="phoneNumber"
-              [(selectedKey)]="sortKey"
-              [(order)]="sortOrder"
-            ></abp-sort-order-icon>
+            <abp-sort-order-icon key="phoneNumber" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            </abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>
@@ -223,8 +216,5 @@
   </ng-template>
 </abp-modal>
 
-<abp-permission-management
-  [(visible)]="visiblePermissions"
-  providerName="User"
-  [providerKey]="providerKey"
-></abp-permission-management>
+<abp-permission-management [(visible)]="visiblePermissions" providerName="User" [providerKey]="providerKey">
+</abp-permission-management>
