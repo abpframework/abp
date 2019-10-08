@@ -10,7 +10,7 @@ import {
   DeleteTenant,
   GetTenants,
   GetTenantById,
-  UpdateTenant
+  UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
@@ -23,7 +23,7 @@ interface SelectedModalContent {
 
 @Component({
   selector: 'abp-tenants',
-  templateUrl: './tenants.component.html'
+  templateUrl: './tenants.component.html',
 })
 export class TenantsComponent {
   @Select(TenantManagementState.get)
@@ -50,15 +50,15 @@ export class TenantsComponent {
 
   _useSharedDatabase: boolean;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'name'
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
   loading = false;
 
   modalBusy = false;
 
-  sortOrder = 'asc';
+  sortOrder = '';
+
+  sortKey = '';
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -78,7 +78,7 @@ export class TenantsComponent {
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,
     private fb: FormBuilder,
-    private store: Store
+    private store: Store,
   ) {}
 
   onSearch(value) {
@@ -88,14 +88,14 @@ export class TenantsComponent {
 
   private createTenantForm() {
     this.tenantForm = this.fb.group({
-      name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]]
+      name: [this.selected.name || '', [Validators.required, Validators.maxLength(256)]],
     });
   }
 
   private createDefaultConnectionStringForm() {
     this.defaultConnectionStringForm = this.fb.group({
       useSharedDatabase: this._useSharedDatabase,
-      defaultConnectionString: [this.defaultConnectionString || '']
+      defaultConnectionString: [this.defaultConnectionString || ''],
     });
   }
 
@@ -103,7 +103,7 @@ export class TenantsComponent {
     this.selectedModalContent = {
       title,
       template,
-      type
+      type,
     };
 
     this.isModalVisible = true;
@@ -117,7 +117,7 @@ export class TenantsComponent {
         switchMap(selected => {
           this.selected = selected;
           return this.tenantService.getDefaultConnectionString(id);
-        })
+        }),
       )
       .subscribe(fetchedConnectionString => {
         this._useSharedDatabase = fetchedConnectionString ? false : true;
@@ -158,7 +158,7 @@ export class TenantsComponent {
         .deleteDefaultConnectionString(this.selected.id)
         .pipe(
           take(1),
-          finalize(() => (this.modalBusy = false))
+          finalize(() => (this.modalBusy = false)),
         )
         .subscribe(() => {
           this.isModalVisible = false;
@@ -168,7 +168,7 @@ export class TenantsComponent {
         .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
         .pipe(
           take(1),
-          finalize(() => (this.modalBusy = false))
+          finalize(() => (this.modalBusy = false)),
         )
         .subscribe(() => {
           this.isModalVisible = false;
@@ -184,7 +184,7 @@ export class TenantsComponent {
       .dispatch(
         this.selected.id
           ? new UpdateTenant({ ...this.tenantForm.value, id: this.selected.id })
-          : new CreateTenant(this.tenantForm.value)
+          : new CreateTenant(this.tenantForm.value),
       )
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
@@ -195,7 +195,7 @@ export class TenantsComponent {
   delete(id: string, name: string) {
     this.confirmationService
       .warn('AbpTenantManagement::TenantDeletionConfirmationMessage', 'AbpTenantManagement::AreYouSure', {
-        messageLocalizationParams: [name]
+        messageLocalizationParams: [name],
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
@@ -217,9 +217,5 @@ export class TenantsComponent {
       .dispatch(new GetTenants(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  changeSortOrder() {
-    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
   }
 }

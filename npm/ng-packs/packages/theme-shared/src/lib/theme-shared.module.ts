@@ -14,6 +14,7 @@ import { LoaderBarComponent } from './components/loader-bar/loader-bar.component
 import { ModalComponent } from './components/modal/modal.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { ToastComponent } from './components/toast/toast.component';
+import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import styles from './contants/styles';
 import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
@@ -54,6 +55,7 @@ export function appendScript(injector: Injector) {
     ProfileComponent,
     TableEmptyMessageComponent,
     ToastComponent,
+    SortOrderIconComponent,
   ],
   exports: [
     BreadcrumbComponent,
@@ -66,6 +68,7 @@ export function appendScript(injector: Injector) {
     ProfileComponent,
     TableEmptyMessageComponent,
     ToastComponent,
+    SortOrderIconComponent,
   ],
   entryComponents: [ErrorComponent],
 })

@@ -8,3 +8,4 @@ export * from './modal/modal.component';
 export * from './profile/profile.component';
 export * from './table-empty-message/table-empty-message.component';
 export * from './toast/toast.component';
+export * from './sort-order-icon/sort-order-icon.component';
