@@ -6,7 +6,6 @@ using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Http.Client;
-using Volo.Abp.Http.Modeling;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.TestApp.Domain;

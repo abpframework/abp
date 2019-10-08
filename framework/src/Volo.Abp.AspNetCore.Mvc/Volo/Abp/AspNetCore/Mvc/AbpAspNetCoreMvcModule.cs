@@ -111,6 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
+            partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
 
             Configure<MvcOptions>(mvcOptions =>
             {
