@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'account',
     loadChildren: () => import('./lazy-libs/account-wrapper.module').then(m => m.AccountWrapperModule),
   },
+  {
+    path: 'my-project-name',
+    loadChildren: () => import('./lazy-libs/my-project-name-wrapper.module').then(m => m.MyProjectNameWrapperModule),
+  },
 ];
 
 @NgModule({

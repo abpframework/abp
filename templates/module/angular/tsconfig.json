@@ -18,6 +18,20 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "my-project-name": [
+        "dist/my-project-name"
+      ],
+      "my-project-name/*": [
+        "dist/my-project-name/*"
+      ],
+      "my-project-name-config": [
+        "dist/my-project-name-config"
+      ],
+      "my-project-name-config/*": [
+        "dist/my-project-name-config/*"
+      ]
+    }
   }
 }

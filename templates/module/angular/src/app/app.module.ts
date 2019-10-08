@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { AccountConfigModule } from '@abp/ng.account.config';
+import { MyProjectNameConfigModule } from '../../projects/my-project-name-config/src/public-api';
 
 @NgModule({
   declarations: [AppComponent],
@@ -26,6 +27,7 @@ import { AccountConfigModule } from '@abp/ng.account.config';
     OAuthModule.forRoot(),
     NgxsModule.forRoot([]),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
+    MyProjectNameConfigModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
