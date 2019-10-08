@@ -48,7 +48,7 @@ namespace Volo.Abp.TestApp.Application
         }
 
         [Authorize]
-        public virtual Task GetWithAuthorized()
+        public Task GetWithAuthorized()
         {
             return Task.CompletedTask;
         }
