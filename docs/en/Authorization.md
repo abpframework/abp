@@ -200,7 +200,7 @@ public class AuthorAppService : ApplicationService, IAuthorAppService
 
 ### Overriding a Permission by a Custom Policy
 
-If you define and register a policy to the ASP.NET Core authorization system with the same name of a permission, your policy will override the existing permission. This is a powerful way to extend authorization for a pre-built module that you are using in your application.
+If you define and register a policy to the ASP.NET Core authorization system with the same name of a permission, your policy will override the existing permission. This is a powerful way to extend the authorization for a pre-built module that you are using in your application.
 
 See [policy based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) document to learn how to define a custom policy.
 
@@ -248,7 +248,7 @@ public async Task CreateAsync(CreateAuthorDto input)
 
 ### Check a Permission in JavaScript
 
-You may need to check a policy/permission in the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
+You may need to check a policy/permission on the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
 
 ````js
 abp.auth.isGranted('MyPermissionName');
@@ -290,7 +290,7 @@ public class MyService : ITransientDependency
 
 `IPermissionManager` is defined by the permission management module. See the [permission management module documentation](Modules/Permission-Management.md) for more information.
 
-## Avdanced Topics
+## Advanced Topics
 
 ### Permission Value Providers
 
@@ -298,9 +298,9 @@ Permission checking system is extensible. Any class derived from `PermissionValu
 
 * `UserPermissionValueProvider` checks if the current user is granted for the given permission. It gets user id from the current claims. User claim name is defined with the `AbpClaimTypes.UserId` static property.
 * `RolePermissionValueProvider` checks if any of the roles of the current user is granted for the given permission. It gets role names from the current claims. Role claims name is defined with the `AbpClaimTypes.Role` static property.
-* `ClientPermissionValueProvider` checks if the current client is granted for the given permission. This is especially useful on a machine to machine interaction where there is no current user. It gets client id from the current claims. Client claim name is defined with the `AbpClaimTypes.ClientId` static property.
+* `ClientPermissionValueProvider` checks if the current client is granted for the given permission. This is especially useful on a machine to machine interaction where there is no current user. It gets the client id from the current claims. Client claim name is defined with the `AbpClaimTypes.ClientId` static property.
 
-You can extend permission checking system by defining your own permission value provider.
+You can extend the permission checking system by defining your own permission value provider.
 
 Example:
 
@@ -331,9 +331,9 @@ This provider allows for all permissions to a user with a `User_Type` claim that
 
 A permission value provider should return one of the following values from the `CheckAsync` method:
 
-* `PermissionGrantResult.Granted` is returned to grant the user for the permission. If any of the providers returns `Granted`, the result will be `Granted`, if no other provider returns `Prohibited`.
-* `PermissionGrantResult.Prohibited` is returned to prohibit the user for the permission. If any of the providers returns `Prohibited`, the result will always be `Prohibited`. Doesn't matter what other providers return.
-* `PermissionGrantResult.Undefined` is returned if this value provider could not decide about the permission value. Return this to let other providers to check the permission.
+* `PermissionGrantResult.Granted` is returned to grant the user for the permission. If any of the providers return `Granted`, the result will be `Granted`, if no other provider returns `Prohibited`.
+* `PermissionGrantResult.Prohibited` is returned to prohibit the user for the permission. If any of the providers return `Prohibited`, the result will always be `Prohibited`. Doesn't matter what other providers return.
+* `PermissionGrantResult.Undefined` is returned if this value provider could not decide about the permission value. Return this to let other providers check the permission.
 
 Once a provider is defined, it should be added to the `PermissionOptions` as shown below:
 
