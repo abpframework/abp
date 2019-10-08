@@ -31,7 +31,7 @@
     </div>
     <p-table
       *ngIf="[130, 200] as columnWidths"
-      [value]="data$ | async | abpSort: sortOrder"
+      [value]="data$ | async | abpSort: sortOrder:sortKey"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
@@ -58,11 +58,9 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="changeSortOrder()">
+          <th pResizableColumn (click)="sortByKey('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
-            <span class="float-right"
-              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
-            ></span>
+            <abp-sort-order-icon key="name" [selectedKey]="sortKey" [order]="sortOrder"></abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>
