@@ -58,9 +58,14 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortByKey('name')">
+          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
-            <abp-sort-order-icon key="name" [selectedKey]="sortKey" [order]="sortOrder"></abp-sort-order-icon>
+            <abp-sort-order-icon
+              #sortOrderIcon
+              key="name"
+              [(selectedKey)]="sortKey"
+              [(order)]="sortOrder"
+            ></abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>

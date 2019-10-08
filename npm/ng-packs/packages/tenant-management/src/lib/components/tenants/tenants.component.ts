@@ -56,9 +56,9 @@ export class TenantsComponent {
 
   modalBusy = false;
 
-  sortOrder: string = '';
+  sortOrder = '';
 
-  sortKey: string = '';
+  sortKey = '';
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -217,23 +217,5 @@ export class TenantsComponent {
       .dispatch(new GetTenants(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  sortByKey(sortKey: string) {
-    this.sortKey = sortKey;
-    switch (this.sortOrder) {
-      case '':
-        this.sortOrder = 'asc';
-        break;
-      case 'asc':
-        this.sortOrder = 'desc';
-        break;
-      case 'desc':
-        this.sortOrder = '';
-        this.sortKey = '';
-        break;
-      default:
-        break;
-    }
   }
 }

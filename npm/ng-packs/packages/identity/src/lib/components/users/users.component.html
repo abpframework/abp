@@ -29,6 +29,7 @@
       /></label>
     </div>
     <p-table
+      abpSort
       *ngIf="[130, 200, 200, 200] as columnWidths"
       [value]="data$ | async | abpSort: sortOrder:sortKey"
       [lazy]="true"
@@ -57,17 +58,26 @@
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortByKey('userName')">
+          <th pResizableColumn (click)="usernameSortIcon.sort('userName')">
             {{ 'AbpIdentity::UserName' | abpLocalization }}
-            <abp-sort-order-icon key="userName" [selectedKey]="sortKey" [order]="sortOrder"></abp-sort-order-icon>
+            <abp-sort-order-icon
+              #usernameSortIcon
+              key="userName"
+              [(selectedKey)]="sortKey"
+              [(order)]="sortOrder"
+            ></abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="sortByKey('email')">
+          <th pResizableColumn (click)="usernameSortIcon.sort('email')">
             {{ 'AbpIdentity::EmailAddress' | abpLocalization }}
-            <abp-sort-order-icon key="email" [selectedKey]="sortKey" [order]="sortOrder"></abp-sort-order-icon>
+            <abp-sort-order-icon key="email" [(selectedKey)]="sortKey" [(order)]="sortOrder"></abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="sortByKey('phoneNumber')">
+          <th pResizableColumn (click)="usernameSortIcon.sort('phoneNumber')">
             {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
-            <abp-sort-order-icon key="phoneNumber" [selectedKey]="sortKey" [order]="sortOrder"></abp-sort-order-icon>
+            <abp-sort-order-icon
+              key="phoneNumber"
+              [(selectedKey)]="sortKey"
+              [(order)]="sortOrder"
+            ></abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>

@@ -50,9 +50,9 @@ export class UsersComponent {
 
   modalBusy = false;
 
-  sortOrder: string = '';
+  sortOrder = '';
 
-  sortKey: string = '';
+  sortKey = '';
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -170,23 +170,5 @@ export class UsersComponent {
       .dispatch(new GetUsers(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  sortByKey(sortKey: string) {
-    this.sortKey = sortKey;
-    switch (this.sortOrder) {
-      case '':
-        this.sortOrder = 'asc';
-        break;
-      case 'asc':
-        this.sortOrder = 'desc';
-        break;
-      case 'desc':
-        this.sortOrder = '';
-        this.sortKey = '';
-        break;
-      default:
-        break;
-    }
   }
 }
