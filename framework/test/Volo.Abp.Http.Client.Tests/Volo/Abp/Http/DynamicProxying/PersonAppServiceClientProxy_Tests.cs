@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Modeling;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.TestApp.Application.Dto;
@@ -101,6 +102,15 @@ namespace Volo.Abp.Http.DynamicProxying
             personInDb.Id.ShouldBe(person.Id);
             personInDb.Name.ShouldBe(person.Name);
             personInDb.Age.ShouldBe(person.Age);
+        }
+
+        [Fact]
+        public async Task GetWithAuthorized()
+        {
+            (await Assert.ThrowsAsync<AbpRemoteCallException>(async () =>
+            {
+                await _peopleAppService.GetWithAuthorized();
+            })).Error.Message.ShouldContain("Authorization");
         }
 
         [Fact]
