@@ -15,8 +15,9 @@
   "dependencies": {
     "@abp/ng.account": "^0.9.0",
     "@abp/ng.identity": "^0.9.0",
-    "@abp/ng.tenant-management": "^0.9.0",
     "@abp/ng.theme.basic": "^0.9.0",
+    "@abp/ng.tenant-management": "^0.9.0",
+    "@abp/ng.setting-management": "^0.9.0",
     "@angular/animations": "~8.2.8",
     "@angular/common": "~8.2.8",
     "@angular/compiler": "~8.2.8",
@@ -26,8 +27,8 @@
     "@angular/platform-browser-dynamic": "~8.2.8",
     "@angular/router": "~8.2.8",
     "@angularclass/hmr": "^2.1.3",
-    "@ngxs/devtools-plugin": "^3.5.0",
     "@ngxs/hmr-plugin": "^3.5.0",
+    "@ngxs/devtools-plugin": "^3.5.0",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

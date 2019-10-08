@@ -230,6 +230,7 @@ export class ConfigState {
           });
         }
 
+        if (typeof localization !== 'string') localization = '';
         return localization || defaultValue || key;
       },
     );
