@@ -7,6 +7,14 @@ namespace Acme.BookStore.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterColumn<string>(
+                name: "Data",
+                table: "IdentityServerPersistedGrants",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)",
+                oldNullable: true);
+
             migrationBuilder.CreateTable(
                 name: "BmBooks",
                 columns: table => new
@@ -33,6 +41,13 @@ namespace Acme.BookStore.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BmBooks");
+
+            migrationBuilder.AlterColumn<string>(
+                name: "Data",
+                table: "IdentityServerPersistedGrants",
+                type: "nvarchar(max)",
+                nullable: true,
+                oldClrType: typeof(string));
         }
     }
 }

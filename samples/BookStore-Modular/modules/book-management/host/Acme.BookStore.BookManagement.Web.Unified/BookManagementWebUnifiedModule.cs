@@ -2,6 +2,7 @@ using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Acme.BookStore.BookManagement.EntityFrameworkCore;
 using Acme.BookStore.BookManagement.MultiTenancy;
 using Acme.BookStore.BookManagement.Web;
@@ -116,21 +117,23 @@ namespace Acme.BookStore.BookManagement
 
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
-
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
-            });
-
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
+
+            //TODO: Enabled when Swagger supports ASP.NET Core 3.x
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            //});
+
             app.UseAbpRequestLocalization();
             app.UseAuditing();
-
             app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())

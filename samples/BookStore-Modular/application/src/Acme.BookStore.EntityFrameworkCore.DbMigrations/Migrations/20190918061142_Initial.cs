@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Acme.BookStore.BookManagement.Migrations
+namespace Acme.BookStore.Migrations
 {
     public partial class Initial : Migration
     {
@@ -40,6 +40,27 @@ namespace Acme.BookStore.BookManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AbpBackgroundJobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    JobName = table.Column<string>(maxLength: 128, nullable: false),
+                    JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
+                    TryCount = table.Column<short>(nullable: false, defaultValue: (short)0),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    NextTryTime = table.Column<DateTime>(nullable: false),
+                    LastTryTime = table.Column<DateTime>(nullable: true),
+                    IsAbandoned = table.Column<bool>(nullable: false, defaultValue: false),
+                    Priority = table.Column<byte>(nullable: false, defaultValue: (byte)15)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
                 {
@@ -57,6 +78,21 @@ namespace Acme.BookStore.BookManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AbpFeatureValues",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    Value = table.Column<string>(maxLength: 128, nullable: false),
+                    ProviderName = table.Column<string>(maxLength: 64, nullable: true),
+                    ProviderKey = table.Column<string>(maxLength: 64, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AbpFeatureValues", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -182,7 +218,8 @@ namespace Acme.BookStore.BookManagement.Migrations
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    Enabled = table.Column<bool>(nullable: false)
+                    Enabled = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -236,7 +273,10 @@ namespace Acme.BookStore.BookManagement.Migrations
                     IncludeJwtId = table.Column<bool>(nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(nullable: false),
                     ClientClaimsPrefix = table.Column<string>(maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true)
+                    PairWiseSubjectSalt = table.Column<string>(maxLength: 200, nullable: true),
+                    UserSsoLifetime = table.Column<int>(nullable: true),
+                    UserCodeType = table.Column<string>(maxLength: 100, nullable: true),
+                    DeviceCodeLifetime = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,7 +303,8 @@ namespace Acme.BookStore.BookManagement.Migrations
                     Enabled = table.Column<bool>(nullable: false),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
-                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
+                    ShowInDiscoveryDocument = table.Column<bool>(nullable: false),
+                    Properties = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -778,6 +819,11 @@ namespace Acme.BookStore.BookManagement.Migrations
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
+                table: "AbpBackgroundJobs",
+                columns: new[] { "IsAbandoned", "NextTryTime" });
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -791,6 +837,11 @@ namespace Acme.BookStore.BookManagement.Migrations
                 name: "IX_AbpEntityPropertyChanges_EntityChangeId",
                 table: "AbpEntityPropertyChanges",
                 column: "EntityChangeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AbpFeatureValues_Name_ProviderName_ProviderKey",
+                table: "AbpFeatureValues",
+                columns: new[] { "Name", "ProviderName", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissionGrants_Name_ProviderName_ProviderKey",
@@ -856,8 +907,7 @@ namespace Acme.BookStore.BookManagement.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
-                column: "ClientId",
-                unique: true);
+                column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerPersistedGrants_SubjectId_ClientId_Type",
@@ -871,10 +921,16 @@ namespace Acme.BookStore.BookManagement.Migrations
                 name: "AbpAuditLogActions");
 
             migrationBuilder.DropTable(
+                name: "AbpBackgroundJobs");
+
+            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityPropertyChanges");
+
+            migrationBuilder.DropTable(
+                name: "AbpFeatureValues");
 
             migrationBuilder.DropTable(
                 name: "AbpPermissionGrants");
