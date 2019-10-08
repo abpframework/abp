@@ -9,7 +9,7 @@ export type SortOrder = 'asc' | 'desc';
 export class SortPipe implements PipeTransform {
   intialValue: any[];
 
-  transform(value: any[], sortOrder: SortOrder = 'asc', sortKey: string): any {
+  transform(value: any[], sortOrder: SortOrder | string = 'asc', sortKey?: string): any {
     sortOrder = sortOrder && (sortOrder.toLowerCase() as any);
 
     if (!this.intialValue) this.intialValue = clone(value);
