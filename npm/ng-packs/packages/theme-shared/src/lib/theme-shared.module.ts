@@ -35,7 +35,7 @@ export function appendScript(injector: Injector) {
         'head',
         'afterbegin',
       ) /* lazyLoadService.load(null, 'script', scripts) */,
-    ).pipe(take(1));
+    ).toPromise();
   };
 
   return fn;

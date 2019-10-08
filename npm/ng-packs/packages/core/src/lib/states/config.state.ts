@@ -1,14 +1,14 @@
-import { State, Selector, createSelector, Action, StateContext, Store } from '@ngxs/store';
-import { Config } from '../models/config';
-import { ABP } from '../models/common';
-import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
-import { ApplicationConfigurationService } from '../services/application-configuration.service';
-import { tap, switchMap } from 'rxjs/operators';
-import snq from 'snq';
-import { SetLanguage } from '../actions/session.actions';
-import { SessionState } from './session.state';
+import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
-import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
+import { switchMap, tap } from 'rxjs/operators';
+import snq from 'snq';
+import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
+import { SetLanguage } from '../actions/session.actions';
+import { ABP } from '../models/common';
+import { Config } from '../models/config';
+import { ApplicationConfigurationService } from '../services/application-configuration.service';
+import { organizeRoutes } from '../utils/route-utils';
+import { SessionState } from './session.state';
 
 @State<Config.State>({
   name: 'ConfigState',
@@ -90,14 +90,31 @@ export class ConfigState {
     return selector;
   }
 
-  static getSetting(key: string) {
+  static getSetting(key: string, findContain?: boolean) {
     const selector = createSelector(
       [ConfigState],
       (state: Config.State) => {
         return snq(() => state.setting.values[key]);
       },
     );
+    return selector;
+  }
 
+  static getSettings(keyword?: string) {
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State) => {
+        if (keyword) {
+          const keys = snq(() => Object.keys(state.setting.values).filter(key => key.indexOf(keyword) > -1), []);
+
+          if (keys.length) {
+            return keys.reduce((acc, key) => ({ ...acc, [key]: state.setting.values[key] }), {});
+          }
+        }
+
+        return snq(() => state.setting.values, {});
+      },
+    );
     return selector;
   }
 
