@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public class ExceptionHttpStatusCodeOptions
     {
