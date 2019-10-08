@@ -12,13 +12,13 @@ import {
   GetUserById,
   GetUserRoles,
   GetUsers,
-  UpdateUser
+  UpdateUser,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
 @Component({
   selector: 'abp-users',
-  templateUrl: './users.component.html'
+  templateUrl: './users.component.html',
 })
 export class UsersComponent {
   @Select(IdentityState.getUsers)
@@ -42,9 +42,7 @@ export class UsersComponent {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'userName'
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
   isModalVisible: boolean;
 
@@ -52,7 +50,9 @@ export class UsersComponent {
 
   modalBusy = false;
 
-  sortOrder = 'asc';
+  sortOrder = '';
+
+  sortKey = '';
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -80,10 +80,10 @@ export class UsersComponent {
       roleNames: this.fb.array(
         this.roles.map(role =>
           this.fb.group({
-            [role.name]: [!!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))]
-          })
-        )
-      )
+            [role.name]: [!!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))],
+          }),
+        ),
+      ),
     });
     if (!this.selected.userName) {
       this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
@@ -107,7 +107,7 @@ export class UsersComponent {
       .pipe(
         switchMap(() => this.store.dispatch(new GetUserRoles(id))),
         pluck('IdentityState'),
-        take(1)
+        take(1),
       )
       .subscribe((state: Identity.State) => {
         this.selected = state.selectedUser;
@@ -123,7 +123,7 @@ export class UsersComponent {
     const { roleNames } = this.form.value;
     const mappedRoleNames = snq(
       () => roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]),
-      []
+      [],
     );
 
     this.store
@@ -132,12 +132,12 @@ export class UsersComponent {
           ? new UpdateUser({
               ...this.form.value,
               id: this.selected.id,
-              roleNames: mappedRoleNames
+              roleNames: mappedRoleNames,
             })
           : new CreateUser({
               ...this.form.value,
-              roleNames: mappedRoleNames
-            })
+              roleNames: mappedRoleNames,
+            }),
       )
       .subscribe(() => {
         this.modalBusy = false;
@@ -148,7 +148,7 @@ export class UsersComponent {
   delete(id: string, userName: string) {
     this.confirmationService
       .warn('AbpIdentity::UserDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
-        messageLocalizationParams: [userName]
+        messageLocalizationParams: [userName],
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
@@ -170,9 +170,5 @@ export class UsersComponent {
       .dispatch(new GetUsers(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  changeSortOrder() {
-    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
   }
 }
