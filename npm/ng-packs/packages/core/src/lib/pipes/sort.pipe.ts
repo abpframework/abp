@@ -1,8 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, Injectable } from '@angular/core';
 import clone from 'just-clone';
 
 export type SortOrder = 'asc' | 'desc';
 
+@Injectable()
 @Pipe({
   name: 'abpSort',
 })

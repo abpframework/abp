@@ -29,9 +29,9 @@
       /></label>
     </div>
     <p-table
-      abpSort
       *ngIf="[130, 200, 200, 200] as columnWidths"
-      [value]="data$ | async | abpSort: sortOrder:sortKey"
+      [value]="data$ | async"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
