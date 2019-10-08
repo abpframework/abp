@@ -82,7 +82,8 @@
           "text": "Validation"
         },
         {
-          "text": "Authorization"
+          "text": "Authorization",
+          "path": "Authorization.md"
         },
         {
           "text": "Caching"
