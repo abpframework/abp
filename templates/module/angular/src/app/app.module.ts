@@ -12,6 +12,9 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { AccountConfigModule } from '@abp/ng.account.config';
+import { IdentityConfigModule } from '@abp/ng.identity.config';
+import { TenantManagementConfigModule } from '@abp/ng.tenant-management.config';
+import { SettingManagementConfigModule } from '@abp/ng.setting-management.config';
 import { MyProjectNameConfigModule } from '../../projects/my-project-name-config/src/public-api';
 
 @NgModule({
@@ -27,6 +30,9 @@ import { MyProjectNameConfigModule } from '../../projects/my-project-name-config
     OAuthModule.forRoot(),
     NgxsModule.forRoot([]),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
+    IdentityConfigModule,
+    TenantManagementConfigModule,
+    SettingManagementConfigModule,
     MyProjectNameConfigModule,
     BrowserModule,
     BrowserAnimationsModule,
