@@ -1,0 +1,26 @@
+{
+  "yarn": true,
+  "packages": [
+    {
+      "libraryFolderPath": "../../../npm/ng-packs/packages/core",
+      "linkFolderPath": "../../../npm/ng-packs/dist/core",
+      "buildCommand": "ng build core",
+      "buildCommandRunPath": "../../../npm/ng-packs/",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "../../../npm/ng-packs/packages/account",
+      "linkFolderPath": "../../../npm/ng-packs/dist/account",
+      "buildCommand": "ng build account",
+      "buildCommandRunPath": "../../../npm/ng-packs/",
+      "exclude": ["node_modules", "dist"]
+    },
+    {
+      "libraryFolderPath": "../../../npm/ng-packs/packages/account-config",
+      "linkFolderPath": "../../../npm/ng-packs/dist/account-config",
+      "buildCommand": "ng build account-config",
+      "buildCommandRunPath": "../../../npm/ng-packs/",
+      "exclude": ["node_modules", "dist"]
+    }
+  ]
+}

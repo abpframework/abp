@@ -8,7 +8,19 @@ import clone from 'just-clone';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
-export let ABP_ROUTES = [] as ABP.FullRoute[];
+let ABP_ROUTES = [] as ABP.FullRoute[];
+
+export function addAbpRoutes(routes: ABP.FullRoute | ABP.FullRoute[]): void {
+  if (!Array.isArray(routes)) {
+    routes = [routes];
+  }
+
+  ABP_ROUTES.push(...routes);
+}
+
+export function getAbpRoutes(): ABP.FullRoute[] {
+  return [];
+}
 
 @Injectable()
 export class ConfigPlugin implements NgxsPlugin {
