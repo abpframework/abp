@@ -2,7 +2,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Http;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public interface IHttpExceptionStatusCodeFinder
     {
