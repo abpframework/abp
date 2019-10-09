@@ -1,10 +1,10 @@
 # Authorization
 
-Authorization is used to check if a user is allowed to perform some specific operation in the application. 
+Authorization is used to check if a user is allowed to perform some specific operations in the application. 
 
-ABP extends [ASP.NET Core's Authorization system](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing authorization system to be usable in the **[application services](Application-Services.md)** too.
+ABP extends [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing authorization system to be usable in the **[application services](Application-Services.md)** too.
 
-So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features added on top of them.
+So, all the ASP.NET Core authorization features and the documentation are valid in an ABP based application. This document focuses on the features that added on top of ASP.NET Core authorization features.
 
 ## Authorize Attribute
 
@@ -45,17 +45,17 @@ namespace Acme.BookStore
 
 ````
 
-* `Authorize` attribute forces user to login to the application in order to use the `AuthorAppService` methods. So, `GetListAsync` method is only available to authenticated users.
-* `AllowAnonymous` suppress the authentication. So, `GetAsync` method is available to everyone including unauthorized users.
+* `Authorize` attribute forces the user to login into the application in order to use the `AuthorAppService` methods. So, `GetListAsync` method is only available to the authenticated users.
+* `AllowAnonymous` suppresses the authentication. So, `GetAsync` method is available to everyone including unauthorized users.
 * `[Authorize("BookStore_Author_Create")]` defines a policy (see [policy based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies)) that is checked to authorize the current user.
 
-"BookStore_Author_Create" is an arbitrary policy name. If you declare an attribute like that, ASP.NET Core authorization system expects a policy defined before.
+"BookStore_Author_Create" is an arbitrary policy name. If you declare an attribute like that, ASP.NET Core authorization system expects a policy to be defined before.
 
-You can of course implement your policies as stated in the ASP.NET Core documentation. But for simple true/false cases (that means a policy was granted a user or not), ABP defines the permission system explained in the next section.
+You can, of course, implement your policies as stated in the ASP.NET Core documentation. But for simple true/false conditions like a policy was granted to a user or not, ABP defines the permission system which will be explained in the next section.
 
 ## Permission System
 
-A permission is a simple policy where it is granted or prohibited for a particular user, role or client.
+A permission is a simple policy that is granted or prohibited for a particular user, role or client.
 
 ### Defining Permissions
 
@@ -78,9 +78,9 @@ namespace Acme.BookStore.Permissions
 }
 ````
 
-> ABP will automatically discover this class. No additional configuration required.
+> ABP automatically discovers this class. No additional configuration required!
 
-In the `Define` method, you first need to add a **permission group** (or get an existing group) then add **permissions** to this group.
+In the `Define` method, you first need to add a **permission group** or get an existing group then add **permissions** to this group.
 
 When you define a permission, it becomes usable in the ASP.NET Core authorization system as a **policy** name. It also becomes visible in the UI. See permissions dialog for a role:
 
@@ -95,7 +95,7 @@ When you save the dialog, it is saved to the database and used in the authorizat
 
 #### Localizing the Permission Name
 
-"BookStore_Author_Create" is not a good permission name on the UI. Fortunately, `AddPermission` and `AddGroup` methods can take `LocalizableString` as second parameters:
+"BookStore_Author_Create" is not a good permission name for the UI. Fortunately, `AddPermission` and `AddGroup` methods can take `LocalizableString` as second parameters:
 
 ````csharp
 var myGroup = context.AddGroup(
@@ -116,9 +116,9 @@ Then you can define texts for "BookStore" and "Permission:BookStore_Author_Creat
 "Permission:BookStore_Author_Create": "Creating a new author"
 ````
 
-> See the [localization document](Localization.md) for more details on the localization system.
+> For more information, see the [localization document](Localization.md) on the localization system.
 
-The localized UI will be like that:
+The localized UI will be as seen below:
 
 ![authorization-new-permission-ui-localized](images/authorization-new-permission-ui-localized.png)
 
@@ -195,12 +195,12 @@ public class AuthorAppService : ApplicationService, IAuthorAppService
 }
 ````
 
-* `GetListAsync` and `GetAsync` will be available to users if they have `Author_Management` permission granted.
+* `GetListAsync` and `GetAsync` will be available to users if they have `Author_Management` permission is granted.
 * Other methods require additional permissions.
 
 ### Overriding a Permission by a Custom Policy
 
-If you define and register a policy to the ASP.NET Core authorization system with the same name of a permission, your policy will override the existing permission. This is a powerful way to extend authorization for a pre-built module you are using in your application.
+If you define and register a policy to the ASP.NET Core authorization system with the same name of a permission, your policy will override the existing permission. This is a powerful way to extend the authorization for a pre-built module that you are using in your application.
 
 See [policy based authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) document to learn how to define a custom policy.
 
@@ -240,15 +240,15 @@ public async Task CreateAsync(CreateAuthorDto input)
 }
 ````
 
-`CheckAsync` extension method throws `AbpAuthorizationException` if current user/client has not granted for the given permission. There is also `IsGrantedAsync` extension method that returns `true` or `false`.
+`CheckAsync` extension method throws `AbpAuthorizationException` if the current user/client is not granted for the given permission. There is also `IsGrantedAsync` extension method that returns `true` or `false`.
 
-`IAuthorizationService` has some overloads for the `AuthorizeAsync` method those are already explained in the [ASP.NET Core authorization documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction).
+`IAuthorizationService` has some overloads for the `AuthorizeAsync` method. These are explained in the [ASP.NET Core authorization documentation](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction).
 
 > Tip: Prefer to use the `Authorize` attribute wherever possible, since it is declarative & simple. Use `IAuthorizationService` if you need to conditionally check a permission and run a business code based on the permission check.
 
 ### Check a Permission in JavaScript
 
-You may need to check a policy/permission in the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
+You may need to check a policy/permission on the client side. For ASP.NET Core MVC / Razor Pages applications, you can use the `abp.auth` API. Example:
 
 ````js
 abp.auth.isGranted('MyPermissionName');
@@ -290,17 +290,17 @@ public class MyService : ITransientDependency
 
 `IPermissionManager` is defined by the permission management module. See the [permission management module documentation](Modules/Permission-Management.md) for more information.
 
-## Avdanced Topics
+## Advanced Topics
 
 ### Permission Value Providers
 
 Permission checking system is extensible. Any class derived from `PermissionValueProvider` (or implements `IPermissionValueProvider`) can contribute to the permission check. There are three pre-defined value providers:
 
-* `UserPermissionValueProvider` checks if current user has granted for the given permission. It gets user id from the current claims. User claim name is defined with the `AbpClaimTypes.UserId` static property.
-* `RolePermissionValueProvider` checks if any of the roles of the current user has granted for the given permission. It gets role names from the current claims. Role claims name is defined with the `AbpClaimTypes.Role` static property.
-* `ClientPermissionValueProvider` checks if current client has granted for the given permission. This is especially useful on a machine to machine interaction where there is no current user. It gets client id from the current claims. Client claim name is defined with the `AbpClaimTypes.ClientId` static property.
+* `UserPermissionValueProvider` checks if the current user is granted for the given permission. It gets user id from the current claims. User claim name is defined with the `AbpClaimTypes.UserId` static property.
+* `RolePermissionValueProvider` checks if any of the roles of the current user is granted for the given permission. It gets role names from the current claims. Role claims name is defined with the `AbpClaimTypes.Role` static property.
+* `ClientPermissionValueProvider` checks if the current client is granted for the given permission. This is especially useful on a machine to machine interaction where there is no current user. It gets the client id from the current claims. Client claim name is defined with the `AbpClaimTypes.ClientId` static property.
 
-You can extend permission check system by defining your own permission value provider.
+You can extend the permission checking system by defining your own permission value provider.
 
 Example:
 
@@ -331,9 +331,9 @@ This provider allows for all permissions to a user with a `User_Type` claim that
 
 A permission value provider should return one of the following values from the `CheckAsync` method:
 
-* `PermissionGrantResult.Granted` is returned to grant the user for the permission. If any of the providers returns `Granted`, the result will be `Granted` if no other provider returns `Prohibited`.
-* `PermissionGrantResult.Prohibited` is returned to prohibit the user for the permission. If any of the providers returns `Prohibited`, the result will always be `Prohibited`. Doesn't matter what other providers return.
-* `PermissionGrantResult.Undefined` is returned if this value provider could not decide about the permission value. Return this to let other providers to check the permission.
+* `PermissionGrantResult.Granted` is returned to grant the user for the permission. If any of the providers return `Granted`, the result will be `Granted`, if no other provider returns `Prohibited`.
+* `PermissionGrantResult.Prohibited` is returned to prohibit the user for the permission. If any of the providers return `Prohibited`, the result will always be `Prohibited`. Doesn't matter what other providers return.
+* `PermissionGrantResult.Undefined` is returned if this value provider could not decide about the permission value. Return this to let other providers check the permission.
 
 Once a provider is defined, it should be added to the `PermissionOptions` as shown below:
 
@@ -346,11 +346,11 @@ Configure<PermissionOptions>(options =>
 
 ### Permission Store
 
-`IPermissionStore` is the only interface needs to be implemented to read the value of permissions from a persistence source, generally a database system. Permission management module implements it. See the [permission management module documentation](Modules/Permission-Management.md) for more information
+`IPermissionStore` is the only interface that needs to be implemented to read the value of permissions from a persistence source, generally a database system. Permission management module implements it. See the [permission management module documentation](Modules/Permission-Management.md) for more information
 
 ### AlwaysAllowAuthorizationService
 
-`AlwaysAllowAuthorizationService` is a class that is used to bypasses the authorization service. It is generally used in integration tests where you may want to disable the authorization system.
+`AlwaysAllowAuthorizationService` is a class that is used to bypass the authorization service. It is generally used in integration tests where you may want to disable the authorization system.
 
 Use `IServiceCollection.AddAlwaysAllowAuthorization()` extension method to register the `AlwaysAllowAuthorizationService` to the [dependency injection](Dependency-Injection.md) system:
 

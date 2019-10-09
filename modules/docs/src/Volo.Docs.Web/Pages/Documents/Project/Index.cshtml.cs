@@ -165,7 +165,8 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 projectName = ProjectName,
                 version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
-                languageCode = DefaultLanguageCode
+                languageCode = DefaultLanguageCode,
+                documentName = DocumentName
             });
         }
 

@@ -17,34 +17,38 @@
 @section scripts {
     <abp-script src="/Pages/Account/Manage.js" />
 }
+<abp-card>
+    <abp-card-body> 
+        <abp-tabs tab-style="PillVertical">
+            <abp-tab title="@L["ChangePassword"].Value">
+                <h4>@L["ChangePassword"].Value</h4><hr />
+                <abp-dynamic-form abp-model="@Model.ChangePasswordInfoModel" id="ChangePasswordForm">
+                    <abp-form-content />
+                    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
+                </abp-dynamic-form>
+            </abp-tab>
+            <abp-tab title="@L["PersonalSettings"].Value">
+                <h4>@L["PersonalSettings"].Value</h4><hr />
+                <form method="post" id="PersonalSettingsForm">
 
-<abp-tabs tab-style="PillVertical">
-    <abp-tab title="@L["ChangePassword"].Value">
-        <abp-dynamic-form abp-model="@Model.ChangePasswordInfoModel" id="ChangePasswordForm">
-            <abp-form-content />
-            <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
-        </abp-dynamic-form>
-    </abp-tab>
-    <abp-tab title="@L["PersonalSettings"].Value">
-        <form method="post" id="PersonalSettingsForm">
+                    <abp-input asp-for="PersonalSettingsInfoModel.UserName" readonly="!isUserNameUpdateEnabled" />
 
-            <abp-input asp-for="PersonalSettingsInfoModel.UserName" readonly="!isUserNameUpdateEnabled" />
+                    <abp-row>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="PersonalSettingsInfoModel.Name" />
+                        </abp-column>
+                        <abp-column size-md="_6">
+                            <abp-input asp-for="PersonalSettingsInfoModel.Surname" />
+                        </abp-column>
+                    </abp-row>
 
-            <abp-row>
-                <abp-column size-md="_6">
-                    <abp-input asp-for="PersonalSettingsInfoModel.Name" />
-                </abp-column>
-                <abp-column size-md="_6">
-                    <abp-input asp-for="PersonalSettingsInfoModel.Surname" />
-                </abp-column>
-            </abp-row>
+                    <abp-input asp-for="PersonalSettingsInfoModel.Email" readonly="!isEmailUpdateEnabled" />
 
-            <abp-input asp-for="PersonalSettingsInfoModel.Email" readonly="!isEmailUpdateEnabled" />
+                    <abp-input asp-for="PersonalSettingsInfoModel.PhoneNumber" />
 
-            <abp-input asp-for="PersonalSettingsInfoModel.PhoneNumber" />
-
-            <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
-        </form>
-    </abp-tab>
-
-</abp-tabs>
+                    <abp-button type="submit" button-type="Primary" text="@L["Submit"].Value" />
+                </form>
+            </abp-tab>
+        </abp-tabs>
+    </abp-card-body>
+</abp-card>

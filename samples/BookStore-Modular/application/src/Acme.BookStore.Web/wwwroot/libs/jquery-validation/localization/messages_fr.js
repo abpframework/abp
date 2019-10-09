@@ -53,7 +53,7 @@ $.extend( $.validator.messages, {
 	creditcardtypes: "Veuillez fournir un numéro de carte de crédit valide.",
 	ipv4: "Veuillez fournir une adresse IP v4 valide.",
 	ipv6: "Veuillez fournir une adresse IP v6 valide.",
-	require_from_group: "Veuillez fournir au moins {0} de ces champs.",
+	require_from_group: $.validator.format( "Veuillez fournir au moins {0} de ces champs." ),
 	nifES: "Veuillez fournir un numéro NIF valide.",
 	nieES: "Veuillez fournir un numéro NIE valide.",
 	cifES: "Veuillez fournir un numéro CIF valide.",

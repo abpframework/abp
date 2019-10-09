@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-
+            
             var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
 
             context.Services
@@ -85,7 +85,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .AddRazorRuntimeCompilation()
                 .AddDataAnnotationsLocalization(options =>
                 {
-
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
                         var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);

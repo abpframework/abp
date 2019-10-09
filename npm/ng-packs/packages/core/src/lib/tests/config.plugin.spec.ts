@@ -4,11 +4,12 @@ import { NGXS_PLUGINS, NgxsModule, InitState, Store } from '@ngxs/store';
 import { environment } from '../../../../../apps/dev-app/src/environments/environment';
 import { LAYOUTS } from '../../../../theme-basic/src/public-api';
 import { ABP } from '../models';
-import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS, addAbpRoutes } from '../plugins';
+import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from '../plugins';
 import { RouterOutletComponent } from '../components';
 import { ConfigState } from '../states';
 import { CoreModule } from '../core.module';
 import { eLayoutType } from '../enums/common';
+import { addAbpRoutes } from '../utils';
 
 addAbpRoutes([
   {

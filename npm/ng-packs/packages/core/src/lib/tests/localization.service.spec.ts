@@ -24,7 +24,7 @@ describe('LocalizationService', () => {
   describe('#currentLang', () => {
     it('should be tr', () => {
       store.selectSnapshot.andCallFake((selector: (state: any, ...states: any[]) => string) => {
-        return selector({ SessionState: { getLanguage: 'tr' } });
+        return selector({ SessionState: { language: 'tr' } });
       });
 
       expect(service.currentLang).toBe('tr');
@@ -33,9 +33,7 @@ describe('LocalizationService', () => {
 
   describe('#get', () => {
     it('should be return an observable localization', async () => {
-      store.select.andCallFake((selector: (state: any, ...states: any[]) => Observable<string>) => {
-        return selector({ ConfigState: { getLocalization: (keys, ...interpolateParams) => of(keys) } });
-      });
+      store.select.andReturn(of('AbpTest'));
 
       const localization = await service.get('AbpTest').toPromise();
 

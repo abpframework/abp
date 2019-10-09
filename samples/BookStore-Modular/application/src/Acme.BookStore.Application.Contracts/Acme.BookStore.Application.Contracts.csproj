@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -12,11 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Application.Contracts" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="0.19.0" />
+    <PackageReference Include="Volo.Abp.Account.Application.Contracts" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.Identity.Application.Contracts" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application.Contracts" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Application.Contracts" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application.Contracts" Version="0.21.0" />
     <ProjectReference Include="..\..\..\modules\book-management\src\Acme.BookStore.BookManagement.Application.Contracts\Acme.BookStore.BookManagement.Application.Contracts.csproj" />
   </ItemGroup>
 

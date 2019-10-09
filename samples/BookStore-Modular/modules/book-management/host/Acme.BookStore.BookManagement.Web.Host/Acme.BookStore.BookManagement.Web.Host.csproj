@@ -3,29 +3,29 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <RootNamespace>Acme.BookStore.BookManagement</RootNamespace>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="2.2.5" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OAuth" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi.Client" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="0.19.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.0.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.Client" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.OAuth" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.Identity.Web" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.Identity.HttpApi.Client" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.Web" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.TenantManagement.HttpApi.Client" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.PermissionManagement.HttpApi.Client" Version="0.21.0" />
   </ItemGroup>
 
   <ItemGroup>
