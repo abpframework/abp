@@ -151,11 +151,12 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 grant.Property(x => x.SubjectId).HasMaxLength(PersistedGrantConsts.SubjectIdMaxLength);
                 grant.Property(x => x.ClientId).HasMaxLength(PersistedGrantConsts.ClientIdMaxLength).IsRequired();
                 grant.Property(x => x.CreationTime).IsRequired();
-                grant.Property(x => x.Data).IsRequired();
+                grant.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLength).IsRequired();
 
                 grant.HasKey(x => x.Key); //TODO: What about Id!!!
 
                 grant.HasIndex(x => new { x.SubjectId, x.ClientId, x.Type });
+                grant.HasIndex(x => x.Expiration);
             });
 
             builder.Entity<IdentityResource>(identityResource =>
