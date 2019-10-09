@@ -64,7 +64,7 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
-            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Short, Options.GitHubLocalRepositoryPath.Long);
+            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
             if (gitHubLocalRepositoryPath != null)
             {
                 Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
@@ -230,7 +230,6 @@ namespace Volo.Abp.Cli.Commands
 
             public static class GitHubLocalRepositoryPath
             {
-                public const string Short = "ap";
                 public const string Long = "abp-path";
             }
 
