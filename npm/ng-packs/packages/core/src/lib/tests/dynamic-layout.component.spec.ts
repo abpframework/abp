@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator';
+import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { NgxsResetPluginModule, StateOverwrite } from 'ngxs-reset-plugin';
 import { LAYOUTS, ThemeBasicModule } from '../../../../theme-basic/src/public-api';
 import { eLayoutType } from '../enums';
 import { ABP } from '../models';
-import { RouterOutletComponent, CoreModule, DynamicLayoutComponent, ConfigState } from '@abp/ng.core';
+import { RouterOutletComponent, CoreModule, DynamicLayoutComponent, ConfigState } from '../../public-api';
 import { ThemeSharedModule } from '../../../../theme-shared/src/public-api';
 import { MessageService } from 'primeng/components/common/messageservice';
 

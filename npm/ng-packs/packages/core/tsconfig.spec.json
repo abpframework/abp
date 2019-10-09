@@ -2,12 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/spec",
-    "types": ["jasmine", "node"],
-    "paths": {
-      "@abp/ng.core": ["packages/core/src/public-api.ts"],
-      "@abp/ng.core/*": ["packages/core/src/lib/*"]
-    }
+    "types": ["node", "jest"],
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true
   },
-  "files": ["src/test.ts"],
+  "files": [],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
