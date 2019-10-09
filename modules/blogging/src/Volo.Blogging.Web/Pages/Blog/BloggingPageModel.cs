@@ -2,7 +2,7 @@
 
 namespace Volo.Blogging.Pages.Blog
 {
-    public class BloggingPageModel : AbpPageModel
+    public abstract class BloggingPageModel : AbpPageModel
     {
         public BloggingPageModel()
         {

@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    public class TenantManagementPageModel : AbpPageModel
+    public abstract class TenantManagementPageModel : AbpPageModel
     {
         public TenantManagementPageModel()
         {

@@ -2,7 +2,7 @@
 
 namespace Volo.Docs.Admin.Pages.Docs.Admin
 {
-    public class DocsAdminPageModel : AbpPageModel
+    public abstract class DocsAdminPageModel : AbpPageModel
     {
         public DocsAdminPageModel()
         {
