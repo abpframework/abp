@@ -24,7 +24,8 @@
     </div>
     <p-table
       *ngIf="[130, 200] as columnWidths"
-      [value]="data$ | async | abpSort: sortOrder:sortKey"
+      [value]="data$ | async"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
@@ -129,8 +130,5 @@
   </ng-template>
 </abp-modal>
 
-<abp-permission-management
-  [(visible)]="visiblePermissions"
-  providerName="Role"
-  [providerKey]="providerKey"
-></abp-permission-management>
+<abp-permission-management [(visible)]="visiblePermissions" providerName="Role" [providerKey]="providerKey">
+</abp-permission-management>
