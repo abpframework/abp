@@ -30,7 +30,7 @@ describe('LocaleProvider', () => {
 
       expect(spectator.get(LOCALE_ID).valueOf()).toBe(localesMapping['en-US'] || 'en-US');
 
-      localizationService.currentLang = 'tr';
+      (localizationService as any).currentLang = 'tr';
       expect(spectator.get(LOCALE_ID).valueOf()).toBe(localesMapping['tr'] || 'tr');
     });
   });
