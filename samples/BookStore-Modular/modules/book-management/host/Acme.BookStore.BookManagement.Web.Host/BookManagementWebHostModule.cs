@@ -7,6 +7,7 @@ using System.IO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Acme.BookStore.BookManagement.Localization;
 using Acme.BookStore.BookManagement.MultiTenancy;
@@ -22,6 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
@@ -72,6 +74,7 @@ namespace Acme.BookStore.BookManagement
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
@@ -79,6 +82,14 @@ namespace Acme.BookStore.BookManagement
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
             ConfigureRedis(context, configuration, hostingEnvironment);
+        }
+        
+        private void ConfigureCache(IConfigurationRoot configuration)
+        {
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "BookManagement:";
+            });
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -106,7 +117,6 @@ namespace Acme.BookStore.BookManagement
                 })
                 .AddCookie("Cookies", options =>
                 {
-                    options.Cookie.Expiration = TimeSpan.FromDays(365);
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -135,16 +145,11 @@ namespace Acme.BookStore.BookManagement
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                /* use `true` for the `validate` parameter if you want to
-                 * validate the profile on application startup.
-                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more
-                 * about configuration validation.
-                 */
-                options.AddProfile<BookManagementWebAutoMapperProfile>();
+                options.AddMaps<BookManagementWebHostModule>();
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
@@ -172,7 +177,7 @@ namespace Acme.BookStore.BookManagement
         private void ConfigureRedis(
             ServiceConfigurationContext context,
             IConfigurationRoot configuration,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
             {
@@ -205,7 +210,9 @@ namespace Acme.BookStore.BookManagement
 
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
@@ -214,11 +221,12 @@ namespace Acme.BookStore.BookManagement
 
             app.UseAbpRequestLocalization();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookManagement API");
-            });
+            //TODO: Enable when Swagger supports ASP.NET Core 3.x
+            //app.UseSwagger();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookManagement API");
+            //});
 
             app.UseAuditing();
 

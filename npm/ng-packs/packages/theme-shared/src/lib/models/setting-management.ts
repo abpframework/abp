@@ -7,4 +7,16 @@ export interface SettingTab {
   requiredPolicy?: string;
 }
 
-export const SETTING_TABS = [] as SettingTab[];
+const SETTING_TABS = [] as SettingTab[];
+
+export function addSettingTab(tab: SettingTab | SettingTab[]): void {
+  if (!Array.isArray(tab)) {
+    tab = [tab];
+  }
+
+  SETTING_TABS.push(...tab);
+}
+
+export function getSettingTabs(): SettingTab[] {
+  return SETTING_TABS;
+}

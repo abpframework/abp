@@ -14,6 +14,7 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { AccountConfigModule } from '@abp/ng.account.config';
 import { IdentityConfigModule } from '@abp/ng.identity.config';
 import { TenantManagementConfigModule } from '@abp/ng.tenant-management.config';
+import { SettingManagementConfigModule } from '@abp/ng.setting-management.config';
 
 @NgModule({
   declarations: [AppComponent],
@@ -30,6 +31,7 @@ import { TenantManagementConfigModule } from '@abp/ng.tenant-management.config';
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
     IdentityConfigModule,
     TenantManagementConfigModule,
+    SettingManagementConfigModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

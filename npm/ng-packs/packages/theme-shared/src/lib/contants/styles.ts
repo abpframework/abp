@@ -38,7 +38,7 @@ export default `
   left: 0 !important;
   width: 100% !important;
   height: 100% !important;
-  background-color: rgba(0, 0, 0, .6) !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
   z-index: 1040 !important;
 }
 

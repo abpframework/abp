@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Toolbars;
@@ -17,6 +18,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
         )]
     public class AbpAspNetCoreMvcUiBasicThemeModule : AbpModule
     {
+        public override void PreConfigureServices(ServiceConfigurationContext context)
+        {
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiBasicThemeModule).Assembly);
+            });
+        }
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<ThemingOptions>(options =>

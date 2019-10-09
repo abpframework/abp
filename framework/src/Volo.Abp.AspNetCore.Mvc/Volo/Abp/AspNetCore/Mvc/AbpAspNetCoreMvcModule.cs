@@ -66,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-
+            
             var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
 
             context.Services
@@ -85,7 +85,6 @@ namespace Volo.Abp.AspNetCore.Mvc
                 .AddRazorRuntimeCompilation()
                 .AddDataAnnotationsLocalization(options =>
                 {
-
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
                         var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
@@ -93,7 +92,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     };
                 })                
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
-
+            
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
             //TODO: AddViewLocalization by default..?
@@ -111,6 +110,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
+            partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
 
             Configure<MvcOptions>(mvcOptions =>
             {

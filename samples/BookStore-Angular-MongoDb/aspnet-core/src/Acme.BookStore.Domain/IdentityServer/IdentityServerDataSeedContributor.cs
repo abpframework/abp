@@ -126,14 +126,14 @@ namespace Acme.BookStore.IdentityServer
             }
 
             //Console Test Client
-            var consoleClientId = configurationSection["BookStore_ConsoleTestApp:ClientId"];
+            var consoleClientId = configurationSection["BookStore_App:ClientId"];
             if (!consoleClientId.IsNullOrWhiteSpace())
             {
                 await CreateClientAsync(
                     consoleClientId,
                     commonScopes,
                     new[] { "password", "client_credentials" },
-                    (configurationSection["BookStore_ConsoleTestApp:ClientSecret"] ?? "1q2w3e*").Sha256()
+                    (configurationSection["BookStore_App:ClientSecret"] ?? "1q2w3e*").Sha256()
                 );
             }
         }
