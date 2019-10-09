@@ -13,13 +13,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
             pipeline.Steps.Add(new FileEntryListReadStep());
 
             pipeline.Steps.AddRange(context.Template.GetCustomSteps(context));
-            
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref") ||
-                !string.IsNullOrWhiteSpace(context.BuildArgs.GitHubLocalRepositoryPath))
-            {
-                pipeline.Steps.Add(new NugetReferenceReplaceStep());
-            }
 
+            pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
             pipeline.Steps.Add(new SolutionRenameStep());
 

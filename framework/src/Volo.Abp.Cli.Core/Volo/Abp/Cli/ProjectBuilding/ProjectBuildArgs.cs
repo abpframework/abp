@@ -20,7 +20,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
         public UiFramework UiFramework { get; set; }
 
         [CanBeNull]
-        public string GitHubLocalRepositoryPath { get; set; }
+        public string AbpGitHubLocalRepositoryPath { get; set; }
 
         [NotNull]
         public Dictionary<string, string> ExtraProperties { get; set; }
@@ -31,7 +31,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             [CanBeNull] string version = null,
             DatabaseProvider databaseProvider = DatabaseProvider.NotSpecified,
             UiFramework uiFramework = UiFramework.NotSpecified,
-            [CanBeNull] string gitHubLocalRepositoryPath = null,
+            [CanBeNull] string abpGitHubLocalRepositoryPath = null,
             Dictionary<string, string> extraProperties = null)
         {
             SolutionName = Check.NotNull(solutionName, nameof(solutionName));
@@ -39,7 +39,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             Version = version;
             DatabaseProvider = databaseProvider;
             UiFramework = uiFramework;
-            GitHubLocalRepositoryPath = gitHubLocalRepositoryPath;
+            AbpGitHubLocalRepositoryPath = abpGitHubLocalRepositoryPath;
             ExtraProperties = extraProperties ?? new Dictionary<string, string>();
         }
     }
