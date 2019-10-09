@@ -7,9 +7,9 @@ namespace Volo.Abp.IdentityServer.Clients
     public class ClientStore : IClientStore
     {
         private readonly IClientRepository _clientRepository;
-        private readonly IObjectMapper _objectMapper;
+        private readonly IObjectMapper<AbpIdentityServerDomainModule> _objectMapper;
 
-        public ClientStore(IClientRepository clientRepository, IObjectMapper objectMapper)
+        public ClientStore(IClientRepository clientRepository, IObjectMapper<AbpIdentityServerDomainModule> objectMapper)
         {
             _clientRepository = clientRepository;
             _objectMapper = objectMapper;

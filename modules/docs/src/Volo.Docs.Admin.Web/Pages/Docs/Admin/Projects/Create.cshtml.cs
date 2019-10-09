@@ -14,7 +14,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 {
-    public class CreateModel : AbpPageModel
+    public class CreateModel : DocsAdminPageModel
     {
         [BindProperty]
         public CreateGithubProjectViewModel GithubProject { get; set; }

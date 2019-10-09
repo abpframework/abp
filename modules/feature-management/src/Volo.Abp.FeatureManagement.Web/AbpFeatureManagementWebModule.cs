@@ -31,6 +31,7 @@ namespace Volo.Abp.FeatureManagement
                 options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>("Volo.Abp.FeatureManagement");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<FeatureManagementWebAutoMapperProfile>(validate: true);

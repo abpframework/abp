@@ -1,4 +1,5 @@
 ﻿using Localization.Resources.AbpUi;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
@@ -40,6 +41,7 @@ namespace Volo.Docs.Admin
                 options.FileSets.AddEmbedded<DocsAdminWebModule>("Volo.Docs.Admin");
             });
 
+            context.Services.AddAutoMapperObjectMapper<DocsAdminWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsAdminWebAutoMapperProfile>(validate: true);

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Entities;
 using Volo.Blogging.Blogs.Dtos;
 
 namespace Volo.Blogging.Blogs
 {
-    public class BlogAppService : ApplicationService, IBlogAppService
+    public class BlogAppService : BloggingAppServiceBase, IBlogAppService
     {
         private readonly IBlogRepository _blogRepository;
 
