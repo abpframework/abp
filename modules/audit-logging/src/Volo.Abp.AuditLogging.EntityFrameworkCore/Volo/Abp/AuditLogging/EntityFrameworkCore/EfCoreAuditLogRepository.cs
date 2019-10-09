@@ -122,6 +122,18 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .WhereIf(minExecutionDuration != null && minExecutionDuration.Value > 0, auditLog => auditLog.ExecutionDuration >= minExecutionDuration);
         }
 
+        public async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
+        {
+            var result = await DbSet.AsNoTracking()
+                .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
+                .OrderBy(t => t.ExecutionTime)
+                .GroupBy(t => new { t.ExecutionTime.Date })
+                .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
+                .ToListAsync();
+
+            return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
+        }
+
         public override IQueryable<AuditLog> WithDetails()
         {
             return GetQueryable().IncludeDetails();
