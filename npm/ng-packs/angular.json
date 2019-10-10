@@ -18,7 +18,9 @@
         },
         "test": {
           "builder": "@angular-builders/jest:run",
-          "options": {}
+          "options": {
+            "coverage": true
+          }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
@@ -44,11 +46,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-shared/src/test.ts",
-            "tsConfig": "packages/theme-shared/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-shared/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {

@@ -1,9 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/spec",
-    "types": ["node", "jest"]
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"],
+    "paths": {
+      "@abp/ng.theme-shared/*": ["packages/theme-shared/src/lib/*"]
+    }
   },
-  "files": [],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

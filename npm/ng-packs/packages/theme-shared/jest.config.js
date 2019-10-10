@@ -4,7 +4,7 @@ const jestConfig = require('../../jest.config');
 
 module.exports = {
   ...jestConfig,
-  name: 'core',
+  name: 'theme-shared',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
   'ts-jest': { allowSyntheticDefaultImports: true },
 };
