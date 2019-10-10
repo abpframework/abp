@@ -1,22 +1,15 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Volo.Abp;
 
 namespace MyCompanyName.MyProjectName
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<MyProjectNameHttpApiHostModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<MyProjectNameHttpApiHostModule>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
