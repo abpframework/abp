@@ -19,7 +19,8 @@ export class RestService {
     return throwError(err);
   }
 
-  request<T, R>(request: HttpRequest<T> | Rest.Request<T>, config: Rest.Config = {}, api?: string): Observable<R> {
+  request<T, R>(request: HttpRequest<T> | Rest.Request<T>, config?: Rest.Config, api?: string): Observable<R> {
+    config = config || ({} as Rest.Config);
     const { observe = Rest.Observe.Body, skipHandleError } = config;
     const url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
     const { method, ...options } = request;
