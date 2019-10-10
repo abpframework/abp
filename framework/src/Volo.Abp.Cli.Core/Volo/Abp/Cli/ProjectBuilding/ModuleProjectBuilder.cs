@@ -90,7 +90,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 Tool = Options.ToolName,
                 Command = args.ExtraProperties.ContainsKey(CliConsts.Command) ? args.ExtraProperties[CliConsts.Command] : "",
                 DatabaseProvider = null,
-                IsTiered = false,
+                IsTiered = null,
                 UiFramework = null,
                 Options = JsonSerializer.Serialize(options),
                 ProjectName = null,
