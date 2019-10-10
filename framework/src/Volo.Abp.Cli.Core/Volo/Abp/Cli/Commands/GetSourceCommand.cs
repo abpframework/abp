@@ -61,6 +61,12 @@ namespace Volo.Abp.Cli.Commands
 
             Logger.LogInformation("Output folder: " + outputFolder);
 
+            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
+            if (gitHubLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+            }
+
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
             var result = await ModuleProjectBuilder.BuildAsync(
@@ -70,6 +76,7 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     DatabaseProvider.NotSpecified,
                     UiFramework.NotSpecified,
+                    gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
             );
@@ -145,6 +152,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "o";
                 public const string Long = "output-folder";
+            }
+
+            public static class GitHubLocalRepositoryPath
+            {
+                public const string Long = "abp-path";
             }
 
             public static class Version
