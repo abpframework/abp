@@ -1,4 +1,4 @@
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { ButtonComponent } from '../components';
 
 describe('ButtonComponent', () => {

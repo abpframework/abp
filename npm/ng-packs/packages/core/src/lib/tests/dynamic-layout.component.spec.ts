@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator';
+import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { NgxsResetPluginModule, StateOverwrite } from 'ngxs-reset-plugin';
