@@ -3,14 +3,14 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>Acme.BookStore</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.TestBase" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.19.0" />
-    <PackageReference Include="Volo.Abp.Authorization" Version="0.19.0" />
+    <PackageReference Include="Volo.Abp.TestBase" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.21.0" />
+    <PackageReference Include="Volo.Abp.Authorization" Version="0.21.0" />
     <ProjectReference Include="..\..\src\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
   </ItemGroup>
 

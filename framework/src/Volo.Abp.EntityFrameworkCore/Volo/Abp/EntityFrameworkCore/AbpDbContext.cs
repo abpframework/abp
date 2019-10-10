@@ -30,9 +30,9 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
-        protected virtual bool IsMultiTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
+        protected virtual bool IsMultiTenantFilterEnabled => DataFilter?.IsEnabled<IMultiTenant>() ?? false;
 
-        protected virtual bool IsSoftDeleteFilterEnabled => DataFilter.IsEnabled<ISoftDelete>();
+        protected virtual bool IsSoftDeleteFilterEnabled => DataFilter?.IsEnabled<ISoftDelete>() ?? false;
 
         public ICurrentTenant CurrentTenant { get; set; }
 
@@ -316,17 +316,17 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void SetCreationAuditProperties(EntityEntry entry)
         {
-            AuditPropertySetter.SetCreationProperties(entry.Entity);
+            AuditPropertySetter?.SetCreationProperties(entry.Entity);
         }
 
         protected virtual void SetModificationAuditProperties(EntityEntry entry)
         {
-            AuditPropertySetter.SetModificationProperties(entry.Entity);
+            AuditPropertySetter?.SetModificationProperties(entry.Entity);
         }
 
         protected virtual void SetDeletionAuditProperties(EntityEntry entry)
         {
-            AuditPropertySetter.SetDeletionProperties(entry.Entity);
+            AuditPropertySetter?.SetDeletionProperties(entry.Entity);
         }
 
         protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)

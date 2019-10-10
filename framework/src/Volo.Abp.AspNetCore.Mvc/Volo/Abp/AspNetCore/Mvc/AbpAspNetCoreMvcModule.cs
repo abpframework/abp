@@ -15,6 +15,7 @@ using System.Reflection;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc.Json;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
@@ -65,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-
+            
             var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
 
             context.Services
@@ -76,10 +77,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 );
 
             var mvcBuilder = context.Services.AddMvc()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver =
+                        new AbpMvcJsonContractResolver(context.Services);
+                })
                 .AddRazorRuntimeCompilation()
                 .AddDataAnnotationsLocalization(options =>
                 {
-
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
                         var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
@@ -87,7 +92,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                     };
                 })                
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
-
+            
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
             //TODO: AddViewLocalization by default..?
@@ -105,16 +110,12 @@ namespace Volo.Abp.AspNetCore.Mvc
             var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
+            partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
 
             Configure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.AddAbp(context.Services);
             });
-
-            //Configure<MvcJsonOptions>(jsonOptions => @3.0.0!
-            //{
-            //    jsonOptions.SerializerSettings.ContractResolver = new AbpMvcJsonContractResolver(context.Services);
-            //});
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)

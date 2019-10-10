@@ -28,19 +28,19 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     NgxValidateCoreModule.forRoot({
       targetSelector: '.form-group',
       blueprints: {
-        email: `AbpAccount::ThisFieldIsNotAValidEmailAddress.`,
-        max: `AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]`,
-        maxlength: `AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]`,
-        min: `AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]`,
-        minlength: `AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]`,
-        required: `AbpAccount::ThisFieldIsRequired.`,
-        passwordMismatch: `AbpIdentity::Identity.PasswordConfirmationFailed`,
+        email: 'AbpAccount::ThisFieldIsNotAValidEmailAddress.',
+        max: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+        maxlength: 'AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]',
+        min: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+        minlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]',
+        required: 'AbpAccount::ThisFieldIsRequired.',
+        passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed'
       },
-      errorTemplate: ValidationErrorComponent,
-    }),
+      errorTemplate: ValidationErrorComponent
+    })
   ],
   exports: [...LAYOUTS],
-  entryComponents: [...LAYOUTS, ValidationErrorComponent],
+  entryComponents: [...LAYOUTS, ValidationErrorComponent]
 })
 export class ThemeBasicModule {
   constructor(private initialService: InitialService) {}

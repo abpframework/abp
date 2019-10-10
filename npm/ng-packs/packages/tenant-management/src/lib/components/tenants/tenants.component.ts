@@ -15,11 +15,11 @@ import {
 import { TenantManagementService } from '../../services/tenant-management.service';
 import { TenantManagementState } from '../../states/tenant-management.state';
 
-type SelectedModalContent = {
+interface SelectedModalContent {
   type: string;
   title: string;
   template: TemplateRef<any>;
-};
+}
 
 @Component({
   selector: 'abp-tenants',
@@ -44,21 +44,21 @@ export class TenantsComponent {
 
   selectedModalContent = {} as SelectedModalContent;
 
-  visibleFeatures: boolean = false;
+  visibleFeatures = false;
 
   providerKey: string;
 
   _useSharedDatabase: boolean;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'name',
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
-  loading: boolean = false;
+  loading = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
-  sortOrder: string = 'asc';
+  sortOrder = '';
+
+  sortKey = '';
 
   get useSharedDatabase(): boolean {
     return this.defaultConnectionStringForm.get('useSharedDatabase').value;
@@ -186,7 +186,7 @@ export class TenantsComponent {
           ? new UpdateTenant({ ...this.tenantForm.value, id: this.selected.id })
           : new CreateTenant(this.tenantForm.value),
       )
-      .pipe(finalize(()=> (this.modalBusy = false)))
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
       });
@@ -217,9 +217,5 @@ export class TenantsComponent {
       .dispatch(new GetTenants(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  changeSortOrder() {
-    this.sortOrder = this.sortOrder.toLowerCase() === "asc" ? "desc" : "asc";
   }
 }

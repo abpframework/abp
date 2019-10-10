@@ -38,21 +38,21 @@ export class UsersComponent {
 
   roles: Identity.RoleItem[];
 
-  visiblePermissions: boolean = false;
+  visiblePermissions = false;
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'userName',
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
   isModalVisible: boolean;
 
-  loading: boolean = false;
+  loading = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
-  sortOrder: string = 'asc';
+  sortOrder = '';
+
+  sortKey = '';
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
@@ -170,9 +170,5 @@ export class UsersComponent {
       .dispatch(new GetUsers(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  changeSortOrder() {
-    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
   }
 }

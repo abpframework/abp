@@ -26,19 +26,19 @@ export class RolesComponent {
 
   isModalVisible: boolean;
 
-  visiblePermissions: boolean = false;
+  visiblePermissions = false;
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'name',
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
-  loading: boolean = false;
+  loading = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
-  sortOrder: string = 'asc';
+  sortOrder = '';
+
+  sortKey = '';
 
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;
@@ -122,9 +122,5 @@ export class RolesComponent {
       .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
-  }
-
-  changeSortOrder() {
-    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
   }
 }

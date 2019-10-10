@@ -1,5 +1,5 @@
 import { Component, TrackByFunction, OnInit } from '@angular/core';
-import { SettingTab, SETTING_TABS } from '@abp/ng.theme.shared';
+import { SettingTab, getSettingTabs } from '@abp/ng.theme.shared';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { ConfigState } from '@abp/ng.core';
@@ -18,10 +18,10 @@ export class SettingManagementComponent implements OnInit {
   constructor(private router: Router, private store: Store) {}
 
   ngOnInit() {
+    this.settings = getSettingTabs()
+      .filter(setting => this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)))
+      .sort((a, b) => a.order - b.order);
     if (this.settings.length) {
-      this.settings = SETTING_TABS.filter(setting =>
-        this.store.selectSnapshot(ConfigState.getGrantedPolicy(setting.requiredPolicy)),
-      ).sort((a, b) => a.order - b.order);
       this.selected = this.settings[0];
     }
   }

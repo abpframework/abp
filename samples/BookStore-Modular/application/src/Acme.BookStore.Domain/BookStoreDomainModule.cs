@@ -1,4 +1,5 @@
-﻿using Acme.BookStore.MultiTenancy;
+﻿using Acme.BookStore.BookManagement;
+using Acme.BookStore.MultiTenancy;
 using Volo.Abp.AuditLogging;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.FeatureManagement;
@@ -10,7 +11,6 @@ using Volo.Abp.PermissionManagement.Identity;
 using Volo.Abp.PermissionManagement.IdentityServer;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
-using Acme.BookStore.BookManagement;
 
 namespace Acme.BookStore
 {

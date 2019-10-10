@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Guids
 {
@@ -32,7 +31,7 @@ namespace Volo.Abp.Guids
         {
             // We start with 16 bytes of cryptographically strong random data.
             var randomBytes = new byte[10];
-            RandomNumberGenerator.Locking(r => r.GetBytes(randomBytes));
+            RandomNumberGenerator.GetBytes(randomBytes);
 
             // An alternate method: use a normally-created GUID to get our initial
             // random data:

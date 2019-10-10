@@ -64,6 +64,12 @@ namespace Volo.Abp.Cli.Commands
                 Logger.LogInformation("UI Framework: " + uiFramework);
             }
 
+            var gitHubLocalRepositoryPath = commandLineArgs.Options.GetOrNull(Options.GitHubLocalRepositoryPath.Long);
+            if (gitHubLocalRepositoryPath != null)
+            {
+                Logger.LogInformation("GitHub Local Repository Path: " + gitHubLocalRepositoryPath);
+            }
+
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
             if (outputFolder != null)
             {
@@ -90,6 +96,7 @@ namespace Volo.Abp.Cli.Commands
                     version,
                     databaseProvider,
                     uiFramework,
+                    gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
             );
@@ -149,6 +156,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("--tiered                                    (if supported by the template)");
             sb.AppendLine("--no-ui                                     (if supported by the template)");
             sb.AppendLine("--separate-identity-server                  (if supported by the template)");
+            sb.AppendLine("--local-framework-ref --abp-path <your-local-abp-repo-path>  (keeps local references to projects instead of replacing with NuGet package references)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
@@ -160,6 +168,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
             sb.AppendLine("  abp new Acme.BookStore -t module no-ui");
+            sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
 
@@ -217,6 +226,11 @@ namespace Volo.Abp.Cli.Commands
             {
                 public const string Short = "o";
                 public const string Long = "output-folder";
+            }
+
+            public static class GitHubLocalRepositoryPath
+            {
+                public const string Long = "abp-path";
             }
 
             public static class Version

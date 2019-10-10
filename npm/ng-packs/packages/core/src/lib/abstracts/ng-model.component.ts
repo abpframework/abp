@@ -1,13 +1,11 @@
 import { ControlValueAccessor } from '@angular/forms';
 import { ChangeDetectorRef, Component, Injector, Input, Type } from '@angular/core';
 
-@Component({ template: '' })
+@Component({ selector: 'abp-abstract-ng-model', template: '' })
 export class AbstractNgModelComponent<T = any> implements ControlValueAccessor {
-  @Input()
-  disabled: boolean;
+  @Input() disabled: boolean;
 
-  @Input()
-  set value(value: T) {
+  @Input() set value(value: T) {
     this._value = value;
     this.notifyValueChange();
   }

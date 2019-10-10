@@ -13,6 +13,7 @@ namespace Volo.Abp.BackgroundJobs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<BackgroundJobsDomainModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BackgroundJobsDomainAutoMapperProfile>(validate: true);

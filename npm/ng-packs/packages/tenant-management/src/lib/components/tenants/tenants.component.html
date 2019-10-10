@@ -31,7 +31,8 @@
     </div>
     <p-table
       *ngIf="[130, 200] as columnWidths"
-      [value]="data$ | async | abpSort: sortOrder"
+      [value]="data$ | async"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
@@ -58,11 +59,10 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="changeSortOrder()">
+          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
-            <span class="float-right"
-              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
-            ></span>
+            <abp-sort-order-icon #sortOrderIcon key="name" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            </abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>
@@ -177,8 +177,5 @@
   </form>
 </ng-template>
 
-<abp-feature-management
-  [(visible)]="visibleFeatures"
-  providerName="Tenant"
-  [providerKey]="providerKey"
-></abp-feature-management>
+<abp-feature-management [(visible)]="visibleFeatures" providerName="Tenant" [providerKey]="providerKey">
+</abp-feature-management>

@@ -6,10 +6,11 @@ using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blog;
 
 namespace Volo.Blogging.Pages.Admin.Blogs
 {
-    public class CreateModel : AbpPageModel
+    public class CreateModel : BloggingPageModel
     {
         private readonly IBlogAppService _blogAppService;
         private readonly IAuthorizationService _authorization;

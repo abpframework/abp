@@ -26,6 +26,11 @@ namespace Volo.Abp.Account.Web
             {
                 options.AddAssemblyResource(typeof(AccountResource), typeof(AbpAccountWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -50,6 +55,7 @@ namespace Volo.Abp.Account.Web
                 options.Conventions.AuthorizePage("/Account/Manage");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpAccountWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpAccountWebAutoMapperProfile>(validate: true);
