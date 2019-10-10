@@ -1,6 +1,8 @@
 import { Directive, Input, Optional, Self, SimpleChanges, OnChanges } from '@angular/core';
 import { Table } from 'primeng/table';
 import { SortPipe, SortOrder } from '../pipes/sort.pipe';
+import { timer } from 'rxjs';
+import clone from 'just-clone';
 
 export interface TableSortOptions {
   key: string;
@@ -23,7 +25,7 @@ export class TableSortDirective implements OnChanges {
   ngOnChanges({ value, abpTableSort }: SimpleChanges) {
     if (value || abpTableSort) {
       this.abpTableSort = this.abpTableSort || ({} as TableSortOptions);
-      this.table.value = this.sortPipe.transform(this.value, this.abpTableSort.order, this.abpTableSort.key);
+      this.table.value = this.sortPipe.transform(clone(this.value), this.abpTableSort.order, this.abpTableSort.key);
     }
   }
 }
