@@ -24,7 +24,7 @@ describe('LocaleProvider', () => {
   });
 
   describe('#LOCALE_ID', () => {
-    it('should equal to localizationService.currentLang', async () => {
+    test('should equal to currentLang', async () => {
       spectator = createComponent();
       const localizationService = spectator.get(LocalizationService);
 

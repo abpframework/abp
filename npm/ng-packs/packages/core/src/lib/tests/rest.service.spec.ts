@@ -15,7 +15,7 @@ describe('HttpClient testing', () => {
     store.selectSnapshot.andReturn(api);
   });
 
-  it('should send a GET request with params', () => {
+  test('should send a GET request with params', () => {
     spectator.service.request({ method: HttpMethod.GET, url: '/test', params: { id: 1 } }).subscribe();
     spectator.expectOne(api + '/test?id=1', HttpMethod.GET);
   });
