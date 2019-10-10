@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
+using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.Http;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error

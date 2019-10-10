@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
+﻿using System;
+using Volo.Abp.Cli.ProjectBuilding.Building.Steps;
 using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
@@ -13,11 +14,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             pipeline.Steps.AddRange(context.Template.GetCustomSteps(context));
 
-            if (!context.BuildArgs.ExtraProperties.ContainsKey("local-framework-ref"))
-            {
-                pipeline.Steps.Add(new NugetReferenceReplaceStep());
-            }
-
+            pipeline.Steps.Add(new ProjectReferenceReplaceStep());
             pipeline.Steps.Add(new TemplateCodeDeleteStep());
             pipeline.Steps.Add(new SolutionRenameStep());
 

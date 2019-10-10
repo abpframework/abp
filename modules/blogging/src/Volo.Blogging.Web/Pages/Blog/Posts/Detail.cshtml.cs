@@ -12,7 +12,7 @@ using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class DetailModel : AbpPageModel
+    public class DetailModel : BloggingPageModel
     {
         private const int TwitterLinkLength = 23;
         private readonly IPostAppService _postAppService;

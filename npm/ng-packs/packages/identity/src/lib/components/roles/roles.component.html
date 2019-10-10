@@ -25,6 +25,7 @@
     <p-table
       *ngIf="[130, 200] as columnWidths"
       [value]="data$ | async"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
@@ -51,11 +52,14 @@
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="changeSortOrder()">
+          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
             {{ 'AbpIdentity::RoleName' | abpLocalization }}
-            <span class="float-right"
-              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
-            ></span>
+            <abp-sort-order-icon
+              #sortOrderIcon
+              key="name"
+              [(selectedKey)]="sortKey"
+              [(order)]="sortOrder"
+            ></abp-sort-order-icon>
           </th>
         </tr>
       </ng-template>
@@ -126,8 +130,5 @@
   </ng-template>
 </abp-modal>
 
-<abp-permission-management
-  [(visible)]="visiblePermissions"
-  providerName="Role"
-  [providerKey]="providerKey"
-></abp-permission-management>
+<abp-permission-management [(visible)]="visiblePermissions" providerName="Role" [providerKey]="providerKey">
+</abp-permission-management>

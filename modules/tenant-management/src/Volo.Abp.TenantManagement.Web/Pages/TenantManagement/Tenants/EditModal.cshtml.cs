@@ -6,7 +6,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    public class EditModalModel : AbpPageModel
+    public class EditModalModel : TenantManagementPageModel
     {
         [BindProperty]
         public TenantInfoModel Tenant { get; set; }

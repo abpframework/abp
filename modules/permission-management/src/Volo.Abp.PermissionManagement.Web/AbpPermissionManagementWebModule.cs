@@ -32,6 +32,7 @@ namespace Volo.Abp.PermissionManagement.Web
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpPermissionManagementWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);

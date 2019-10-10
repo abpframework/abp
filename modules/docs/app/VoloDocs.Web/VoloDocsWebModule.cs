@@ -29,6 +29,7 @@ using Volo.Docs.Admin;
 using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 
 namespace VoloDocs.Web
@@ -152,6 +153,11 @@ namespace VoloDocs.Web
             app.UseAbpRequestLocalization();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
+            //https://github.com/aspnet/AspNetCore/issues/13715#issuecomment-528929683
+            app.Use((context, next) => {
+                context.SetEndpoint(null);
+                return next();
+            });
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseMvc(routes =>

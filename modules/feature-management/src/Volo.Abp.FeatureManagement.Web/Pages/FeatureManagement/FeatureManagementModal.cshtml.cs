@@ -29,6 +29,8 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
 
         public FeatureManagementModal(IFeatureAppService featureAppService)
         {
+            ObjectMapperContext = typeof(AbpFeatureManagementWebModule);
+
             _featureAppService = featureAppService;
         }
 

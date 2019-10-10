@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Acme.BookStore.EntityFrameworkCore;
 using Acme.BookStore.Localization;
 using Acme.BookStore.MultiTenancy;
@@ -18,10 +19,12 @@ using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
+using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -75,7 +78,9 @@ namespace Acme.BookStore.Web
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
-            ConfigureSwaggerServices(context.Services);
+
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //ConfigureSwaggerServices(context.Services);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -101,16 +106,12 @@ namespace Acme.BookStore.Web
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                /* use `true` for the `validate` parameter if you want to
-                 * validate the profile on application startup.
-                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more
-                 * about configuration validation.
-                 */
-                options.AddProfile<BookStoreWebAutoMapperProfile>();
+                options.AddMaps<BookStoreWebModule>();
+
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
@@ -181,6 +182,8 @@ namespace Acme.BookStore.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.UseCorrelationId();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -191,7 +194,9 @@ namespace Acme.BookStore.Web
             }
 
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -201,11 +206,15 @@ namespace Acme.BookStore.Web
 
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
+
+            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
             });
+            */
+
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

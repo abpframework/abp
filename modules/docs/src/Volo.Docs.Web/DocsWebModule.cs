@@ -52,6 +52,7 @@ namespace Volo.Docs
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
             });
 
+            context.Services.AddAutoMapperObjectMapper<DocsWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsWebAutoMapperProfile>(validate: true);
