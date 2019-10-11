@@ -49,16 +49,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
             public void Run()
             {
-                if (_companyNamePlaceHolder != null && _companyName != null)
+                if (_companyNamePlaceHolder != null)
                 {
-                    RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
-                }
-                else if (_companyNamePlaceHolder != null)
-                {
-                    RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
+                    if (_companyName != null)
+                    {
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder, _companyName);
+                    }
+                    else
+                    {
+                        RenameHelper.RenameAll(_entries, _companyNamePlaceHolder + "." + _projectNamePlaceHolder, _projectNamePlaceHolder);
+                    }
                 }
 
                 RenameHelper.RenameAll(_entries, _projectNamePlaceHolder, _projectName);
+                RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToCamelCase(), _projectName.ToCamelCase());
+                RenameHelper.RenameAll(_entries, _projectNamePlaceHolder.ToKebabCase(), _projectName.ToKebabCase());
             }
         }
     }
