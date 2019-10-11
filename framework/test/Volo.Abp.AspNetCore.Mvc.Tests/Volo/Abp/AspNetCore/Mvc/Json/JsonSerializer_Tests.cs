@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Shouldly;
 using Volo.Abp.Json;
 using Xunit;
@@ -16,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Json
             _jsonSerializer = ServiceProvider.GetRequiredService<IJsonSerializer>();
         }
 
-        protected override void ConfigureServices(WebHostBuilderContext context, IServiceCollection services)
+        protected override void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
             services.Configure<AbpJsonOptions>(options =>
             {
