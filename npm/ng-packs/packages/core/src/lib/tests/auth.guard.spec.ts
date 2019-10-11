@@ -1,4 +1,4 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { AuthGuard } from '../guards/auth.guard';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { RouterModule, UrlTree, Router } from '@angular/router';
