@@ -62,7 +62,7 @@ describe('HttpClient testing', () => {
   });
 
   test('should handle the error', () => {
-    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(throwError('An error'));
+    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(throwError('Testing error'));
     const spy = jest.spyOn(store, 'dispatch');
 
     spectator.service
@@ -78,7 +78,7 @@ describe('HttpClient testing', () => {
   });
 
   test('should not handle the error when skipHandleError is true', () => {
-    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(throwError('An error'));
+    jest.spyOn(spectator.httpClient, 'request').mockReturnValue(throwError('Testing error'));
     const spy = jest.spyOn(store, 'dispatch');
 
     spectator.service
