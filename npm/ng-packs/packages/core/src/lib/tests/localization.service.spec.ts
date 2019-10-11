@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { LocalizationService } from '../services/localization.service';

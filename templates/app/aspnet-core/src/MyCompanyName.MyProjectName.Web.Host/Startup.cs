@@ -1,21 +1,14 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Volo.Abp;
 
 namespace MyCompanyName.MyProjectName.Web
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<MyProjectNameWebModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<MyProjectNameWebModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
