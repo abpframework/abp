@@ -1,4 +1,4 @@
-import { SpectatorDirective, createDirectiveFactory, SpyObject } from '@ngneat/spectator/jest';
+import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/jest';
 import { TableSortDirective } from '../directives/table-sort.directive';
 import { TableModule, Table } from 'primeng/table';
 

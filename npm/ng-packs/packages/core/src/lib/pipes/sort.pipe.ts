@@ -1,29 +1,27 @@
-import { Pipe, PipeTransform, Injectable } from '@angular/core';
-import clone from 'just-clone';
-
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 export type SortOrder = 'asc' | 'desc';
-
 @Injectable()
 @Pipe({
   name: 'abpSort',
 })
 export class SortPipe implements PipeTransform {
-  intialValue: any[];
-
   transform(value: any[], sortOrder: SortOrder | string = 'asc', sortKey?: string): any {
     sortOrder = sortOrder && (sortOrder.toLowerCase() as any);
-
-    if (!this.intialValue) this.intialValue = clone(value);
-
-    if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc')) return this.intialValue;
-
+    if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc')) return value;
     let sorted;
     if (!sortKey) {
-      sorted = value.sort();
+      const numberArray = [];
+      const stringArray = [];
+      value.forEach(item => (typeof item === 'number' ? numberArray.push(item) : stringArray.push(item)));
+      sorted = numberArray.sort().concat(stringArray.sort());
     } else {
-      sorted = value.sort((a, b) => (a[sortKey] < b[sortKey] ? -1 : a[sortKey] > b[sortKey] ? 1 : 0));
+      sorted = value.sort((a, b) => {
+        return (
+          Number(typeof b[sortKey] === 'number') - Number(typeof a[sortKey] === 'number') ||
+          (a[sortKey] < b[sortKey] ? -1 : 1)
+        );
+      });
     }
-
     return sortOrder === 'asc' ? sorted : sorted.reverse();
   }
 }
