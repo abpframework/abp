@@ -143,7 +143,10 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
         {
-            base.Delete(predicate, autoSave);
+            foreach (var entity in GetQueryable().AsNoTracking().Where(predicate).ToList())
+            {
+                Delete(entity, autoSave);
+            }
 
             if (autoSave)
             {
@@ -153,7 +156,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entities = await GetQueryable()
+            var entities = await GetQueryable().AsNoTracking()
                 .Where(predicate)
                 .ToListAsync(GetCancellationToken(cancellationToken));
 
