@@ -24,13 +24,18 @@ namespace Volo.Abp.Internal
             var assemblyFinder = new AssemblyFinder(abpApplication);
             var typeFinder = new TypeFinder(assemblyFinder);
 
-            services.TryAddSingleton<IConfigurationAccessor>(
-                new DefaultConfigurationAccessor(
-                    ConfigurationHelper.BuildConfiguration(
-                        applicationCreationOptions.Configuration
-                    )
+            var configurationAccessor = new DefaultConfigurationAccessor(
+                ConfigurationHelper.BuildConfiguration(
+                    applicationCreationOptions.Configuration
                 )
             );
+
+            services.TryAddSingleton<IConfigurationAccessor>(configurationAccessor);
+
+            if (!services.IsAdded<IConfiguration>())
+            {
+                services.AddSingleton<IConfiguration>(configurationAccessor.Configuration);
+            }
 
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
             services.TryAddSingleton<IAssemblyFinder>(assemblyFinder);
