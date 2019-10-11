@@ -10,15 +10,20 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class ModuleInfoProvider: IModuleInfoProvider, ITransientDependency
+    public class ModuleInfoProvider : IModuleInfoProvider, ITransientDependency
     {
         public IJsonSerializer JsonSerializer { get; }
         public ICancellationTokenProvider CancellationTokenProvider { get; }
+        public IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
-        public ModuleInfoProvider(IJsonSerializer jsonSerializer, ICancellationTokenProvider cancellationTokenProvider)
+        public ModuleInfoProvider(
+            IJsonSerializer jsonSerializer,
+            ICancellationTokenProvider cancellationTokenProvider,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
             JsonSerializer = jsonSerializer;
             CancellationTokenProvider = cancellationTokenProvider;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
         }
 
         public async Task<ModuleInfo> GetAsync(string name)
@@ -44,11 +49,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     CancellationTokenProvider.Token
                 );
 
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception("Remote server returns error! HTTP status code: " + responseMessage.StatusCode);
-                }
-
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
                 var result = await responseMessage.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<ModuleInfo>>(result);
             }

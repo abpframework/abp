@@ -2,7 +2,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,14 +25,18 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         protected IJsonSerializer JsonSerializer { get; }
 
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public AbpIoSourceCodeStore(
             IOptions<CliOptions> options,
             IJsonSerializer jsonSerializer,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             JsonSerializer = jsonSerializer;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             CancellationTokenProvider = cancellationTokenProvider;
             Options = options.Value;
 
@@ -42,6 +48,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string type,
             string version = null)
         {
+
             var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
             if (version == null)
             {
@@ -74,26 +81,29 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
 
             return new TemplateFile(fileContent, version, latestVersion);
+
         }
 
         private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
         {
-            var postData = JsonSerializer.Serialize(new GetLatestSourceCodeVersionDto { Name = name });
-
             using (var client = new CliHttpClient())
             {
-                var responseMessage = await client.PostAsync(
+                var response = await client.PostAsync(
                     $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/",
-                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
+                    new StringContent(
+                        JsonSerializer.Serialize(
+                            new GetLatestSourceCodeVersionDto { Name = name }
+                        ),
+                        Encoding.UTF8,
+                        MimeTypes.Application.Json
+                    ),
                     CancellationTokenProvider.Token
                 );
 
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception("Remote server returns error! HTTP status code: " + responseMessage.StatusCode);
-                }
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
 
-                var result = await responseMessage.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsStringAsync();
+
                 return JsonSerializer.Deserialize<GetLatestSourceCodeVersionResultDto>(result).Version;
             }
         }
@@ -110,10 +120,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     CancellationTokenProvider.Token
                 );
 
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception("Remote server returns error! HTTP status code: " + responseMessage.StatusCode);
-                }
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 return await responseMessage.Content.ReadAsByteArrayAsync();
             }
