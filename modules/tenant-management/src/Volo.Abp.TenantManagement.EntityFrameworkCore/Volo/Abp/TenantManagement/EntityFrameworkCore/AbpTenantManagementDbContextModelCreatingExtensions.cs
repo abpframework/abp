@@ -1,3 +1,4 @@
+using System;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -8,19 +9,20 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
     {
         public static void ConfigureTenantManagement(
             this ModelBuilder builder,
-            [CanBeNull] string tablePrefix = AbpTenantManagementConsts.DefaultDbTablePrefix,
-            [CanBeNull] string schema = AbpTenantManagementConsts.DefaultDbSchema)
+            [CanBeNull] Action<AbpTenantManagementModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            if (tablePrefix == null)
-            {
-                tablePrefix = "";
-            }
+            var options = new AbpTenantManagementModelBuilderConfigurationOptions(
+                AbpTenantManagementDbProperties.DbTablePrefix,
+                AbpTenantManagementDbProperties.DbSchema
+            );
+
+            optionsAction?.Invoke(options);
 
             builder.Entity<Tenant>(b =>
             {
-                b.ToTable(tablePrefix + "Tenants", schema);
+                b.ToTable(options.TablePrefix + "Tenants", options.Schema);
 
                 b.ConfigureFullAuditedAggregateRoot();
 
@@ -33,7 +35,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
             builder.Entity<TenantConnectionString>(b =>
             {
-                b.ToTable(tablePrefix + "TenantConnectionStrings", schema);
+                b.ToTable(options.TablePrefix + "TenantConnectionStrings", options.Schema);
 
                 b.HasKey(x => new { x.TenantId, x.Name });
 
