@@ -8,11 +8,9 @@ using IdentityResource = Volo.Abp.IdentityServer.IdentityResources.IdentityResou
 
 namespace Volo.Abp.IdentityServer.MongoDB
 {
-    [ConnectionStringName(AbpIdentityServerConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public class AbpIdentityServerMongoDbContext : AbpMongoDbContext, IAbpIdentityServerMongoDbContext
     {
-        public static string CollectionPrefix { get; set; } = AbpIdentityServerConsts.DefaultDbTablePrefix;
-
         public IMongoCollection<ApiResource> ApiResources => Collection<ApiResource>();
 
         public IMongoCollection<Client> Clients => Collection<Client>();
@@ -25,10 +23,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureIdentityServer(options =>
-            {
-                options.CollectionPrefix = CollectionPrefix;
-            });
+            modelBuilder.ConfigureIdentityServer();
         }
     }
 }
