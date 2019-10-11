@@ -5,12 +5,12 @@
         /// <summary>
         /// Default value: "Blg".
         /// </summary>
-        public static string DbTablePrefix { get; } = "Blg";
+        public static string DbTablePrefix { get; set; } = "Blg";
 
         /// <summary>
         /// Default value: "null".
         /// </summary>
-        public static string DbSchema { get; } = null;
+        public static string DbSchema { get; set; } = null;
 
         /// <summary>
         /// "Blogging".

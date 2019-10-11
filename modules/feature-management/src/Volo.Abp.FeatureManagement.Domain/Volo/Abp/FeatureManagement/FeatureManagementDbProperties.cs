@@ -4,9 +4,9 @@ namespace Volo.Abp.FeatureManagement
 {
     public static class FeatureManagementDbProperties
     {
-        public static string DbTablePrefix { get; } = AbpCommonDbProperties.DbTablePrefix;
+        public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 
-        public static string DbSchema { get; } = AbpCommonDbProperties.DbSchema;
+        public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpFeatureManagement";
     }

@@ -8,11 +8,11 @@
         /// 
         /// Default value: "Abp".
         /// </summary>
-        public static string DbTablePrefix { get; } = "Abp";
+        public static string DbTablePrefix { get; set; } = "Abp";
 
         /// <summary>
         /// Default value: null.
         /// </summary>
-        public static string DbSchema { get; } = null;
+        public static string DbSchema { get; set; } = null;
     }
 }

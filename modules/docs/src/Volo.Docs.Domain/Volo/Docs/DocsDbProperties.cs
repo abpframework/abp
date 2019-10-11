@@ -2,9 +2,9 @@
 {
     public static class DocsDbProperties
     {
-        public static string DbTablePrefix { get; } = "Docs";
+        public static string DbTablePrefix { get; set; } = "Docs";
 
-        public static string DbSchema { get; } = null;
+        public static string DbSchema { get; set; } = null;
 
         public const string ConnectionStringName = "Docs";
     }

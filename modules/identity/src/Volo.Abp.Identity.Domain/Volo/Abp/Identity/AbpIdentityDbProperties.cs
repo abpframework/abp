@@ -4,9 +4,9 @@ namespace Volo.Abp.Identity
 {
     public static class AbpIdentityDbProperties
     {
-        public static string DbTablePrefix { get; } = AbpCommonDbProperties.DbTablePrefix;
+        public static string DbTablePrefix { get; set; } = AbpCommonDbProperties.DbTablePrefix;
 
-        public static string DbSchema { get; } = AbpCommonDbProperties.DbSchema;
+        public static string DbSchema { get; set; } = AbpCommonDbProperties.DbSchema;
 
         public const string ConnectionStringName = "AbpIdentity";
     }
