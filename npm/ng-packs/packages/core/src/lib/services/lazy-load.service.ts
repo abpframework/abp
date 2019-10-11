@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, ReplaySubject, throwError } from 'rxjs';
 import { uuid } from '../utils';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class LazyLoadService {
     position: InsertPosition = 'afterend',
   ): Observable<void> {
     if (!urlOrUrls && !content) {
-      return;
+      return throwError('Should pass url or content');
     } else if (!urlOrUrls && content) {
       urlOrUrls = [null];
     }
