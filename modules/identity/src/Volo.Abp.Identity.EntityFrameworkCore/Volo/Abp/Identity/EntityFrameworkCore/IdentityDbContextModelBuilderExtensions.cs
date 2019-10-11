@@ -10,7 +10,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     {
         public static void ConfigureIdentity(
             [NotNull] this ModelBuilder builder,
-            Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+            [CanBeNull] Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
