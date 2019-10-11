@@ -14,7 +14,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityModelBuilderConfigurationOptions();
+            var options = new IdentityModelBuilderConfigurationOptions(
+                AbpIdentityDbProperties.DbTablePrefix,
+                AbpIdentityDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 
