@@ -10,6 +10,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building
 
             pipeline.Steps.Add(new FileEntryListReadStep());
             pipeline.Steps.Add(new ProjectReferenceReplaceStep());
+            pipeline.Steps.Add(new ReplaceCommonPropsStep());
             pipeline.Steps.Add(new CreateProjectResultZipStep());
 
             return pipeline;

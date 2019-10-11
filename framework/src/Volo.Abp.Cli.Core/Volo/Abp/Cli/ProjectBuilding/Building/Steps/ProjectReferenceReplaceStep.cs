@@ -22,7 +22,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
                     context.Files,
-                    context.Module.Namespace,
+                    context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                     localAbpRepoPath
                 ).Run();
             }
@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 new ProjectReferenceReplacer.NugetReferenceReplacer(
                     context.Files,
-                    "MyCompanyName.MyProjectName",
+                    context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                     nugetPackageVersion
                 ).Run();
             }
@@ -108,7 +108,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains($"{_projectName}"))
+                    if (oldNodeIncludeValue.Contains(_projectName))
                     {
                         continue;
                     }
