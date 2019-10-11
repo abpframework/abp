@@ -22,7 +22,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 new ProjectReferenceReplacer.LocalProjectPathReferenceReplacer(
                     context.Files,
-                    "MyCompanyName.MyProjectName",
+                    context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                     localAbpRepoPath
                 ).Run();
             }
@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
                 new ProjectReferenceReplacer.NugetReferenceReplacer(
                     context.Files,
-                    "MyCompanyName.MyProjectName",
+                    context.Module?.Namespace ?? "MyCompanyName.MyProjectName",
                     nugetPackageVersion
                 ).Run();
             }
@@ -65,14 +65,14 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
         private abstract class ProjectReferenceReplacer
         {
             private readonly List<FileEntry> _entries;
-            private readonly string _companyAndProjectNamePlaceHolder;
+            private readonly string _projectName;
 
             protected ProjectReferenceReplacer(
                 List<FileEntry> entries,
-                string companyAndProjectNamePlaceHolder)
+                string projectName)
             {
                 _entries = entries;
-                _companyAndProjectNamePlaceHolder = companyAndProjectNamePlaceHolder;
+                _projectName = projectName;
             }
 
             public void Run()
@@ -108,7 +108,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
                     var oldNodeIncludeValue = oldNode.Attributes["Include"].Value;
 
                     // ReSharper disable once PossibleNullReferenceException : Can not be null because nodes are selected with include attribute filter in previous method
-                    if (oldNodeIncludeValue.Contains($"{_companyAndProjectNamePlaceHolder}"))
+                    if (oldNodeIncludeValue.Contains(_projectName))
                     {
                         continue;
                     }
@@ -140,8 +140,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 private readonly string _nugetPackageVersion;
 
-                public NugetReferenceReplacer(List<FileEntry> entries, string companyAndProjectNamePlaceHolder, string nugetPackageVersion)
-                    : base(entries, companyAndProjectNamePlaceHolder)
+                public NugetReferenceReplacer(List<FileEntry> entries, string projectName, string nugetPackageVersion)
+                    : base(entries, projectName)
                 {
                     _nugetPackageVersion = nugetPackageVersion;
                 }
@@ -177,8 +177,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
             {
                 private readonly string _gitHubLocalRepositoryPath;
 
-                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string companyAndProjectNamePlaceHolder, string gitHubLocalRepositoryPath)
-                    : base(entries, companyAndProjectNamePlaceHolder)
+                public LocalProjectPathReferenceReplacer(List<FileEntry> entries, string projectName, string gitHubLocalRepositoryPath)
+                    : base(entries, projectName)
                 {
                     _gitHubLocalRepositoryPath = gitHubLocalRepositoryPath;
                 }

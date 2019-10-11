@@ -2,7 +2,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,33 +17,39 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public class AbpIoTemplateStore : ITemplateStore, ITransientDependency
+    public class AbpIoSourceCodeStore : ISourceCodeStore, ITransientDependency
     {
-        public ILogger<AbpIoTemplateStore> Logger { get; set; }
+        public ILogger<AbpIoSourceCodeStore> Logger { get; set; }
 
         protected CliOptions Options { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
 
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
-        public AbpIoTemplateStore(
+        public AbpIoSourceCodeStore(
             IOptions<CliOptions> options,
             IJsonSerializer jsonSerializer,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             JsonSerializer = jsonSerializer;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             CancellationTokenProvider = cancellationTokenProvider;
             Options = options.Value;
 
-            Logger = NullLogger<AbpIoTemplateStore>.Instance;
+            Logger = NullLogger<AbpIoSourceCodeStore>.Instance;
         }
 
         public async Task<TemplateFile> GetAsync(
             string name,
+            string type,
             string version = null)
         {
-            var latestVersion = await GetLatestTemplateVersionAsync(name);
+
+            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
             if (version == null)
             {
                 version = latestVersion;
@@ -52,16 +60,17 @@ namespace Volo.Abp.Cli.ProjectBuilding
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
             if (Options.CacheTemplates && File.Exists(localCacheFile))
             {
-                Logger.LogInformation("Using cached template: " + name + ", version: " + version);
+                Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
                 return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion);
             }
 
-            Logger.LogInformation("Downloading template: " + name + ", version: " + version);
+            Logger.LogInformation("Downloading " + type + ": " + name + ", version: " + version);
 
-            var fileContent = await DownloadTemplateFileContentAsync(
-                new TemplateDownloadInputDto
+            var fileContent = await DownloadSourceCodeContentAsync(
+                new SourceCodeDownloadInputDto
                 {
                     Name = name,
+                    Type = type,
                     Version = version
                 }
             );
@@ -72,64 +81,66 @@ namespace Volo.Abp.Cli.ProjectBuilding
             }
 
             return new TemplateFile(fileContent, version, latestVersion);
+
         }
 
-        private async Task<string> GetLatestTemplateVersionAsync(string name)
+        private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
         {
-            var postData = JsonSerializer.Serialize(new GetLatestTemplateVersionDto { Name = name });
-
             using (var client = new CliHttpClient())
             {
-                var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/template/get-version/",
-                    new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
+                var response = await client.PostAsync(
+                    $"{CliUrls.WwwAbpIo}api/download/{type}/get-version/",
+                    new StringContent(
+                        JsonSerializer.Serialize(
+                            new GetLatestSourceCodeVersionDto { Name = name }
+                        ),
+                        Encoding.UTF8,
+                        MimeTypes.Application.Json
+                    ),
                     CancellationTokenProvider.Token
                 );
 
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception("Remote server returns error! HTTP status code: " + responseMessage.StatusCode);
-                }
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
 
-                var result = await responseMessage.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<GetLatestTemplateVersionResultDto>(result).Version;
+                var result = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<GetLatestSourceCodeVersionResultDto>(result).Version;
             }
         }
 
-        private async Task<byte[]> DownloadTemplateFileContentAsync(TemplateDownloadInputDto input)
+        private async Task<byte[]> DownloadSourceCodeContentAsync(SourceCodeDownloadInputDto input)
         {
             var postData = JsonSerializer.Serialize(input);
 
             using (var client = new CliHttpClient(TimeSpan.FromMinutes(10)))
             {
                 var responseMessage = await client.PostAsync(
-                    $"{CliUrls.WwwAbpIo}api/download/template/",
+                    $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     CancellationTokenProvider.Token
                 );
 
-                if (!responseMessage.IsSuccessStatusCode)
-                {
-                    throw new Exception("Remote server returns error! HTTP status code: " + responseMessage.StatusCode);
-                }
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
                 return await responseMessage.Content.ReadAsByteArrayAsync();
             }
         }
 
-        public class TemplateDownloadInputDto
+        public class SourceCodeDownloadInputDto
         {
             public string Name { get; set; }
 
             public string Version { get; set; }
+
+            public string Type { get; set; }
         }
 
-        public class GetLatestTemplateVersionDto
+        public class GetLatestSourceCodeVersionDto
         {
             public string Name { get; set; }
         }
 
-        public class GetLatestTemplateVersionResultDto
+        public class GetLatestSourceCodeVersionResultDto
         {
             public string Version { get; set; }
         }
