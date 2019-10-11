@@ -12,7 +12,10 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new MyProjectNameModelBuilderConfigurationOptions();
+            var options = new MyProjectNameModelBuilderConfigurationOptions(
+                MyProjectNameDbProperties.DbTablePrefix,
+                MyProjectNameDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 

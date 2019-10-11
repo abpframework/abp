@@ -4,13 +4,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
-    [ConnectionStringName("MyProjectName")]
+    [ConnectionStringName(MyProjectNameDbProperties.ConnectionStringName)]
     public class MyProjectNameDbContext : AbpDbContext<MyProjectNameDbContext>, IMyProjectNameDbContext
     {
-        public static string TablePrefix { get; set; } = MyProjectNameConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = MyProjectNameConsts.DefaultDbSchema;
-
         /* Add DbSet for each Aggregate Root here. Example:
          * public DbSet<Question> Questions { get; set; }
          */
@@ -25,11 +21,7 @@ namespace MyCompanyName.MyProjectName.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureMyProjectName(options =>
-            {
-                options.TablePrefix = TablePrefix;
-                options.Schema = Schema;
-            });
+            builder.ConfigureMyProjectName();
         }
     }
 }
