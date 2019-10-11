@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.Docs.Projects;
@@ -14,7 +13,9 @@ namespace Volo.Docs.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new DocsMongoModelBuilderConfigurationOptions();
+            var options = new DocsMongoModelBuilderConfigurationOptions(
+                DocsDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 
