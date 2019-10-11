@@ -1,4 +1,4 @@
-import { createServiceFactory, SpectatorService } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { SortPipe } from '../pipes/sort.pipe';
 
 describe('SortPipe', () => {
@@ -24,7 +24,7 @@ describe('SortPipe', () => {
   });
 
   test('should require an array as value', () => {
-    expect(pipe.transform(null, 'asc')).toBeFalsy();
+    expect(pipe.transform(null)).toBeFalsy();
     expect(pipe.transform(undefined, 'desc')).toBeFalsy();
   });
 });
