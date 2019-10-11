@@ -17,11 +17,11 @@ namespace Volo.Abp.Cli.Commands
     {
         public ILogger<NewCommand> Logger { get; set; }
 
-        protected ProjectBuilder ProjectBuilder { get; }
+        protected TemplateProjectBuilder TemplateProjectBuilder { get; }
 
-        public NewCommand(ProjectBuilder projectBuilder)
+        public NewCommand(TemplateProjectBuilder templateProjectBuilder)
         {
-            ProjectBuilder = projectBuilder;
+            TemplateProjectBuilder = templateProjectBuilder;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -89,7 +89,7 @@ namespace Volo.Abp.Cli.Commands
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
-            var result = await ProjectBuilder.BuildAsync(
+            var result = await TemplateProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
                     SolutionName.Parse(commandLineArgs.Target),
                     template,
