@@ -86,7 +86,8 @@
           "path": "Authorization.md"
         },
         {
-          "text": "Caching"
+          "text": "Caching",
+          "path": "Caching.md"
         },
         {
           "text": "Auditing"
