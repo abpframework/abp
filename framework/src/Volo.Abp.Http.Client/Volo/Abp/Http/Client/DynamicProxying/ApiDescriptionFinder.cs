@@ -92,7 +92,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new AbpException("Remote service returns error!");
+                    throw new AbpException("Remote service returns error! StatusCode = " + response.StatusCode);
                 }
 
                 var content = await response.Content.ReadAsStringAsync();

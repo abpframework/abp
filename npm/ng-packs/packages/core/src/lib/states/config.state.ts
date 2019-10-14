@@ -1,13 +1,14 @@
-import { State, Selector, createSelector, Action, StateContext, Store } from '@ngxs/store';
-import { Config, ABP } from '../models';
-import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
-import { ApplicationConfigurationService } from '../services/application-configuration.service';
-import { tap, switchMap } from 'rxjs/operators';
-import snq from 'snq';
-import { SetLanguage } from '../actions';
-import { SessionState } from './session.state';
+import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
-import { setChildRoute, sortRoutes, organizeRoutes } from '../utils/route-utils';
+import { switchMap, tap } from 'rxjs/operators';
+import snq from 'snq';
+import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
+import { SetLanguage } from '../actions/session.actions';
+import { ABP } from '../models/common';
+import { Config } from '../models/config';
+import { ApplicationConfigurationService } from '../services/application-configuration.service';
+import { organizeRoutes } from '../utils/route-utils';
+import { SessionState } from './session.state';
 
 @State<Config.State>({
   name: 'ConfigState',
@@ -20,14 +21,14 @@ export class ConfigState {
   }
 
   @Selector()
-  static getApplicationInfo(state: Config.State) {
-    return state.environment.application || {};
+  static getApplicationInfo(state: Config.State): Config.Application {
+    return state.environment.application || ({} as Config.Application);
   }
 
   static getOne(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return state[key];
       },
     );
@@ -46,7 +47,7 @@ export class ConfigState {
 
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return (keys as string[]).reduce((acc, val) => {
           if (acc) {
             return acc[val];
@@ -63,8 +64,15 @@ export class ConfigState {
   static getRoute(path?: string, name?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
-        return findRoute(state.routes, path, name);
+      (state: Config.State) => {
+        const { flattedRoutes } = state;
+        return (flattedRoutes as ABP.FullRoute[]).find(route => {
+          if (path && route.path === path) {
+            return route;
+          } else if (name && route.name === name) {
+            return route;
+          }
+        });
       },
     );
 
@@ -74,7 +82,7 @@ export class ConfigState {
   static getApiUrl(key?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State): string {
+      (state: Config.State): string => {
         return state.environment.apis[key || 'default'].url;
       },
     );
@@ -85,57 +93,61 @@ export class ConfigState {
   static getSetting(key: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         return snq(() => state.setting.values[key]);
       },
     );
-
     return selector;
   }
 
-  static getGrantedPolicy(condition: string = '') {
-    const keys = condition
-      .replace(/\(|\)|\!|\s/g, '')
-      .split(/\|\||&&/)
-      .filter(key => key);
-
+  static getSettings(keyword?: string) {
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State): boolean {
-        if (!keys.length) return true;
+      (state: Config.State) => {
+        if (keyword) {
+          const keys = snq(() => Object.keys(state.setting.values).filter(key => key.indexOf(keyword) > -1), []);
 
-        const getPolicy = key => snq(() => state.auth.grantedPolicies[key], false);
-        if (keys.length > 1) {
-          keys.forEach(key => {
-            const value = getPolicy(key);
-            condition = condition.replace(key, value);
-          });
-
-          // tslint:disable-next-line: no-eval
-          return eval(`!!${condition}`);
+          if (keys.length) {
+            return keys.reduce((acc, key) => ({ ...acc, [key]: state.setting.values[key] }), {});
+          }
         }
 
-        return getPolicy(condition);
+        return snq(() => state.setting.values, {});
+      },
+    );
+    return selector;
+  }
+
+  static getGrantedPolicy(key: string) {
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State): boolean => {
+        if (!key) return true;
+        return snq(() => state.auth.grantedPolicies[key], false);
       },
     );
 
     return selector;
   }
 
+  /**
+   *
+   * @deprecated, Use getLocalization instead. To be delete in v1
+   */
   static getCopy(key: string, ...interpolateParams: string[]) {
     if (!key) key = '';
 
     const keys = key.split('::') as string[];
     const selector = createSelector(
       [ConfigState],
-      function(state: Config.State) {
+      (state: Config.State) => {
         if (!state.localization) return key;
 
         const { defaultResourceName } = state.environment.localization;
         if (keys[0] === '') {
           if (!defaultResourceName) {
             throw new Error(
-              `Please check your environment. May you forget set defaultResourceName? 
+              `Please check your environment. May you forget set defaultResourceName?
               Here is the example:
                { production: false,
                  localization: {
@@ -148,7 +160,7 @@ export class ConfigState {
           keys[0] = snq(() => defaultResourceName);
         }
 
-        let copy = keys.reduce((acc, val) => {
+        let copy = (keys as any).reduce((acc, val) => {
           if (acc) {
             return acc[val];
           }
@@ -164,6 +176,62 @@ export class ConfigState {
         }
 
         return copy || key;
+      },
+    );
+
+    return selector;
+  }
+
+  static getLocalization(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]) {
+    let defaultValue: string;
+
+    if (typeof key !== 'string') {
+      defaultValue = key.defaultValue;
+      key = key.key;
+    }
+
+    if (!key) key = '';
+
+    const keys = key.split('::') as string[];
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State) => {
+        if (!state.localization) return defaultValue || key;
+
+        const { defaultResourceName } = state.environment.localization;
+        if (keys[0] === '') {
+          if (!defaultResourceName) {
+            throw new Error(
+              `Please check your environment. May you forget set defaultResourceName?
+              Here is the example:
+               { production: false,
+                 localization: {
+                   defaultResourceName: 'MyProjectName'
+                  }
+               }`,
+            );
+          }
+
+          keys[0] = snq(() => defaultResourceName);
+        }
+
+        let localization = (keys as any).reduce((acc, val) => {
+          if (acc) {
+            return acc[val];
+          }
+
+          return undefined;
+        }, state.localization.values);
+
+        interpolateParams = interpolateParams.filter(params => params != null);
+        if (localization && interpolateParams && interpolateParams.length) {
+          interpolateParams.forEach(param => {
+            localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
+          });
+        }
+
+        if (typeof localization !== 'string') localization = '';
+        return localization || defaultValue || key;
       },
     );
 
@@ -239,23 +307,4 @@ function patchRouteDeep(
   }
 
   return organizeRoutes(routes);
-}
-
-function findRoute(routes: ABP.FullRoute[], path?: string, name?: string) {
-  let foundRoute;
-  routes.forEach(route => {
-    if (foundRoute) return;
-
-    if (path && route.path === path) {
-      foundRoute = route;
-    } else if (name && route.name === name) {
-      foundRoute = route;
-      return;
-    } else if (route.children && route.children.length) {
-      foundRoute = findRoute(route.children, path, name);
-      return;
-    }
-  });
-
-  return foundRoute;
 }

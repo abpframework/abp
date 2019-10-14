@@ -258,14 +258,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
             return includeDetails
-                ? WithDetails().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
+                ? WithDetails().FirstOrDefault(e => e.Id.Equals(id))
                 : DbSet.Find(id);
         }
 
         public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? await WithDetails().FirstOrDefaultAsync(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id), GetCancellationToken(cancellationToken))
+                ? await WithDetails().FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
                 : await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
         }
 

@@ -26,17 +26,19 @@ export class RolesComponent {
 
   isModalVisible: boolean;
 
-  visiblePermissions: boolean = false;
+  visiblePermissions = false;
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'name',
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
-  loading: boolean = false;
+  loading = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
+
+  sortOrder = '';
+
+  sortKey = '';
 
   @ViewChild('modalContent', { static: false })
   modalContent: TemplateRef<any>;

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -24,6 +25,7 @@ namespace Volo.Abp.Cli.ProjectModification
         protected DerivedClassFinder DerivedClassFinder { get; }
         protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -32,7 +34,8 @@ namespace Volo.Abp.Cli.ProjectModification
             EfCoreMigrationAdder efCoreMigrationAdder,
             DerivedClassFinder derivedClassFinder,
             ProjectNpmPackageAdder projectNpmPackageAdder,
-            NpmGlobalPackagesChecker npmGlobalPackagesChecker)
+            NpmGlobalPackagesChecker npmGlobalPackagesChecker, 
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
@@ -41,6 +44,7 @@ namespace Volo.Abp.Cli.ProjectModification
             DerivedClassFinder = derivedClassFinder;
             ProjectNpmPackageAdder = projectNpmPackageAdder;
             NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
@@ -142,7 +146,7 @@ namespace Volo.Abp.Cli.ProjectModification
                         throw new CliUsageException($"ERROR: '{moduleName}' module could not be found!");
                     }
 
-                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();

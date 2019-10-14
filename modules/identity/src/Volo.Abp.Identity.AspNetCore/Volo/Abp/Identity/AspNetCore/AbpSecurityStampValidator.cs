@@ -2,21 +2,24 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Uow;
 
-namespace Volo.Abp.Identity
+namespace Volo.Abp.Identity.AspNetCore
 {
     public class AbpSecurityStampValidator : SecurityStampValidator<IdentityUser>
     {
         public AbpSecurityStampValidator(
             IOptions<SecurityStampValidatorOptions> options,
             SignInManager<IdentityUser> signInManager,
-            ISystemClock systemClock)
+            ISystemClock systemClock,
+            ILoggerFactory loggerFactory)
             : base(
                 options, 
                 signInManager,
-                systemClock)
+                systemClock,
+                loggerFactory)
         {
         }
 

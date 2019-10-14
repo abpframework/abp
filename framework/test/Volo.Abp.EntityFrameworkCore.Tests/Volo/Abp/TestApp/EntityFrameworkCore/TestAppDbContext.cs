@@ -13,6 +13,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
+        public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
+        
         public TestAppDbContext(DbContextOptions<TestAppDbContext> options) 
             : base(options)
         {

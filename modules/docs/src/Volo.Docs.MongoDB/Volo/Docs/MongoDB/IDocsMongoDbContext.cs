@@ -5,7 +5,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.MongoDB
 {
-    [ConnectionStringName(DocsConsts.ConnectionStringName)]
+    [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public interface IDocsMongoDbContext : IAbpMongoDbContext
     {
 

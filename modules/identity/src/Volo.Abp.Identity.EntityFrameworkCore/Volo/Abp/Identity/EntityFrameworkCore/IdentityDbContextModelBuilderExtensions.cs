@@ -10,11 +10,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     {
         public static void ConfigureIdentity(
             [NotNull] this ModelBuilder builder,
-            Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+            [CanBeNull] Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityModelBuilderConfigurationOptions();
+            var options = new IdentityModelBuilderConfigurationOptions(
+                AbpIdentityDbProperties.DbTablePrefix,
+                AbpIdentityDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 
@@ -48,6 +51,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             {
                 b.ToTable(options.TablePrefix + "UserClaims", options.Schema);
 
+                b.Property(x => x.Id).ValueGeneratedNever();
+                
                 b.Property(uc => uc.ClaimType).HasMaxLength(IdentityUserClaimConsts.MaxClaimTypeLength).IsRequired();
                 b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityUserClaimConsts.MaxClaimValueLength);
 
@@ -111,6 +116,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             builder.Entity<IdentityRoleClaim>(b =>
             {
                 b.ToTable(options.TablePrefix + "RoleClaims", options.Schema);
+
+                b.Property(x => x.Id).ValueGeneratedNever();
 
                 b.Property(uc => uc.ClaimType).HasMaxLength(IdentityRoleClaimConsts.MaxClaimTypeLength).IsRequired();
                 b.Property(uc => uc.ClaimValue).HasMaxLength(IdentityRoleClaimConsts.MaxClaimValueLength);

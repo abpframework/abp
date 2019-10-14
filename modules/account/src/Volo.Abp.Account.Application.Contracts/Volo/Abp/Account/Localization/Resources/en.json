@@ -16,6 +16,23 @@
     "Register": "Register",
     "InvalidLoginRequest": "Invalid login request",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client.",
-    "LogInUsingYourProviderAccount": "Log in using your {0} account"
+    "LogInUsingYourProviderAccount": "Log in using your {0} account",
+    "DisplayName:CurrentPassword": "Current password",
+    "DisplayName:NewPassword": "New password",
+    "DisplayName:NewPasswordConfirm": "Confirm new password",
+    "PasswordChangedMessage": "Your password has been changed successfully.",
+    "DisplayName:UserName": "User name",
+    "DisplayName:Email": "Email",
+    "DisplayName:Name": "Name",
+    "DisplayName:Surname": "Surname",
+    "DisplayName:Password": "Password",
+    "DisplayName:EmailAddress": "Email address",
+    "DisplayName:PhoneNumber": "Phone number",
+    "PersonalSettings": "Personal settings",
+    "PersonalSettingsSaved": "Personal settings saved",
+    "PasswordChanged": "Password changed",
+    "NewPasswordConfirmFailed": "Please confirm the new password.",
+    "Manage": "Manage",
+    "ManageYourProfile": "Manage your profile"
   }
 }

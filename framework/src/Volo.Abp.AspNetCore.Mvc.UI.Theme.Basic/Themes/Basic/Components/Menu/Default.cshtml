@@ -37,7 +37,7 @@
                     }
                     @menuItem.DisplayName
                 </a>
-                <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
+                <div class="dropdown-menu border-0 shadow-sm" aria-labelledby="Menu_@(menuItem.Name)">
                     @foreach (var childMenuItem in menuItem.Items)
                     {
                         @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)

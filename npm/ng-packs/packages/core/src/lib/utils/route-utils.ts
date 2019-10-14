@@ -60,3 +60,17 @@ export function sortRoutes(routes: ABP.FullRoute[] = []): ABP.FullRoute[] {
       return route;
     });
 }
+
+const ABP_ROUTES = [] as ABP.FullRoute[];
+
+export function addAbpRoutes(routes: ABP.FullRoute | ABP.FullRoute[]): void {
+  if (!Array.isArray(routes)) {
+    routes = [routes];
+  }
+
+  ABP_ROUTES.push(...routes);
+}
+
+export function getAbpRoutes(): ABP.FullRoute[] {
+  return ABP_ROUTES;
+}

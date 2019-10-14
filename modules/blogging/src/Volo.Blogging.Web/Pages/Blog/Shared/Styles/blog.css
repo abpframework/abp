@@ -16,9 +16,9 @@
     font-weight: 700; }
   div.vs-blog h1 {
     font-size: 2.25em;
-    margin: 1.5rem 0 .75rem; }
+    margin: 1rem 0 1.5rem; }
   div.vs-blog h2, div.vs-blog .tab-title {
-    font-size: 1.75em;
+    font-size: 1.5em;
     margin: 1.5rem 0 .75rem; }
   div.vs-blog h3 {
     font-size: 1.5em;
@@ -90,60 +90,26 @@
     div.vs-blog .hero-section .hero-articles {
       position: relative;
       overflow: hidden; }
-      div.vs-blog .hero-section .hero-articles .hero-content {
-        position: absolute;
-        left: 12%;
-        right: 12%;
-        bottom: 80px;
-        z-index: 4;
-        text-align: center; }
-        div.vs-blog .hero-section .hero-articles .hero-content h2 {
-          margin-top: 0;
-          font-size: 2.5em;
-          font-weight: bold; }
-        div.vs-blog .hero-section .hero-articles .hero-content a {
-          color: white;
-          text-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5); }
-        div.vs-blog .hero-section .hero-articles .hero-content p {
-          color: white; }
+      div.vs-blog .hero-section .hero-articles .hero-content h2 {
+        margin-top: .5rem;
+        font-size: 2em;
+        font-weight: bold; }
       div.vs-blog .hero-section .hero-articles .tags .tag {
         background: rgba(208, 208, 208, 0.3);
         color: #fff !important; }
         div.vs-blog .hero-section .hero-articles .tags .tag:hover {
           background: white;
           color: black !important; }
-      div.vs-blog .hero-section .hero-articles .article-owner {
-        text-align: center;
-        position: relative;
-        z-index: 12; }
-        div.vs-blog .hero-section .hero-articles .article-owner .article-infos {
-          color: black; }
-          div.vs-blog .hero-section .hero-articles .article-owner .article-infos a {
-            color: black; }
-          div.vs-blog .hero-section .hero-articles .article-owner .article-infos .seperator {
-            margin: 0 4px;
-            color: rgba(255, 255, 255, 0.2); }
-          div.vs-blog .hero-section .hero-articles .article-owner .article-infos img.article-avatar {
-            width: 64px;
-            margin: -25px 10px 0px 0;
-            border: 3px solid #fff;
-            display: inline-block;
-            border-radius: 50%; }
-      div.vs-blog .hero-section .hero-articles .img-container {
-        min-height: 320px; }
-        div.vs-blog .hero-section .hero-articles .img-container img {
-          filter: grayscale(10%); }
-        div.vs-blog .hero-section .hero-articles .img-container::after {
-          content: "";
-          display: block;
-          position: absolute;
-          z-index: 1;
-          bottom: 0px;
-          width: 100%;
-          top: 1% !important;
-          background: linear-gradient(to bottom, transparent 0, rgba(0, 0, 0, 0.75) 89%, rgba(0, 0, 0, 0.78) 93%) !important;
-          transition: .2s all ease-in-out;
-          opacity: .9; }
+      div.vs-blog .hero-section .hero-articles .article-owner .article-infos {
+        color: black; }
+        div.vs-blog .hero-section .hero-articles .article-owner .article-infos .seperator {
+          margin: 0 4px;
+          color: rgba(255, 255, 255, 0.2); }
+        div.vs-blog .hero-section .hero-articles .article-owner .article-infos img.article-avatar {
+          display: inline-block;
+          border-radius: 50%; }
+      div.vs-blog .hero-section .hero-articles .img-container img {
+        width: 100%; }
       div.vs-blog .hero-section .hero-articles:hover .img-container::after {
         opacity: 1; }
   div.vs-blog .article-owner .article-infos {
@@ -154,10 +120,14 @@
       margin: 0 4px;
       color: rgba(0, 0, 0, 0.2); }
     div.vs-blog .article-owner .article-infos img.article-avatar {
-      width: 30px;
+      width: 48px;
       margin: -1px 4px 0 0;
       display: inline-block;
       border-radius: 50%; }
+  div.vs-blog .user-card h5 span {
+    font-weight: 300;
+    opacity: .5;
+    padding: 0 5px; }
   div.vs-blog .card-articles .card-content {
     padding: 10px 0px 10px; }
     div.vs-blog .card-articles .card-content h3 {
@@ -192,19 +162,30 @@
       font-size: 1.25em; }
       div.vs-blog .user-link-icons a:hover {
         color: #fff; }
-  div.vs-blog .tags .tag {
-    display: inline-block;
-    padding: 2px 8px;
-    background: rgba(208, 208, 208, 0.3);
-    border-radius: 30px;
-    margin: 0 1px 3px 0;
-    color: #b1b1b1 !important;
-    font-size: .7em;
-    line-height: 1.6em;
-    text-transform: uppercase; }
-    div.vs-blog .tags .tag:hover {
-      background: black;
-      color: white !important; }
+  div.vs-blog .tags {
+    margin: 2rem 0;
+    padding: 0 0 1.25rem 0; }
+    div.vs-blog .tags .tag {
+      display: inline-block;
+      padding: 4px 12px;
+      background: rgba(208, 208, 208, 0.3);
+      border-radius: 4px;
+      margin: 0 2px 3px 0;
+      color: #b1b1b1 !important;
+      font-size: .85em;
+      line-height: 1.6em;
+      text-transform: uppercase;
+      transition: .25s;
+      text-decoration: none; }
+      div.vs-blog .tags .tag:hover {
+        background: black;
+        color: white !important; }
+  div.vs-blog .hero-section .tags {
+    margin: 1rem 0;
+    padding: 0 0 .5rem 0; }
+  div.vs-blog .list-group-item .tags {
+    margin: 1rem 0 0;
+    padding: 0 0; }
   div.vs-blog .popular-tags a {
     display: block;
     font-size: .9em; }
@@ -248,63 +229,55 @@
     div.vs-blog .post-detail .post-content .lead {
       font-size: 1.125em;
       color: #111; }
-  div.vs-blog .comment-avatar {
-    max-width: 64px; }
-  div.vs-blog .answer-avatar {
-    max-width: 48px; }
   div.vs-blog .media {
     font-size: .95em; }
     div.vs-blog .media .media {
       font-size: .95em; }
-  div.vs-blog .comment-area .comment-owner {
-    margin-bottom: 2px; }
-    div.vs-blog .comment-area .comment-owner span {
-      font-weight: 300;
-      color: #999;
-      font-size: .8em; }
-  div.vs-blog .comment-area > .media {
-    padding: 30px 0;
-    border-bottom: 1px solid #f1f1f1; }
-    div.vs-blog .comment-area > .media .media {
-      padding: 20px 0; }
-  div.vs-blog .comment-area .comment-buttons {
-    padding: 4px 8px; }
-    div.vs-blog .comment-area .comment-buttons .seperator {
-      color: #ddd;
-      margin: 0 8px; }
-    div.vs-blog .comment-area .comment-buttons .count {
-      color: #fff;
-      background: #ddd;
-      margin-left: 5px;
-      padding: 1px 3px;
-      font-size: 10px;
-      border-radius: 3px; }
-      div.vs-blog .comment-area .comment-buttons .count.count-up {
-        background: #999; }
-    div.vs-blog .comment-area .comment-buttons a {
-      opacity: .5; }
-      div.vs-blog .comment-area .comment-buttons a:hover {
-        opacity: .75; }
-  div.vs-blog .comment-area p {
-    margin-bottom: 6px; }
-  div.vs-blog .comment-area .comment-avatar {
-    width: 64px; }
-  div.vs-blog .comment-area .answer-avatar {
-    width: 48px; }
-  @media (min-width: 767px) {
-    div.vs-blog .box-articles .img-container {
-      position: relative;
-      overflow: hidden; }
-    div.vs-blog .box-articles .img-container img {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      height: 100%;
-      width: auto;
-      -webkit-transform: translate(-50%, -50%);
-      -ms-transform: translate(-50%, -50%);
-      transform: translate(-50%, -50%);
-      max-width: initial; }
-    div.vs-blog .box-articles .img-container img.portrait {
-      width: 100%;
-      height: auto; } }
+  div.vs-blog .comment-area {
+    background: #f5f5f5;
+    margin: 1.5rem 0;
+    padding: 10px; }
+    div.vs-blog .comment-area .comment-owner {
+      margin-bottom: 4px;
+      margin-top: 8px; }
+      div.vs-blog .comment-area .comment-owner span {
+        font-weight: 300;
+        opacity: .5;
+        padding: 0 5px; }
+    div.vs-blog .comment-area .media {
+      background: #fff;
+      margin: 1px;
+      border-radius: 4px; }
+    div.vs-blog .comment-area > .media {
+      padding: 30px;
+      border-bottom: 1px solid #f1f1f1; }
+      div.vs-blog .comment-area > .media .media {
+        padding: 20px 0px 0px; }
+    div.vs-blog .comment-area .comment-buttons {
+      padding: 4px 0;
+      font-size: .96em; }
+      div.vs-blog .comment-area .comment-buttons .seperator {
+        color: #ddd;
+        margin: 0 8px; }
+      div.vs-blog .comment-area .comment-buttons .count {
+        color: #fff;
+        background: #ddd;
+        margin-left: 5px;
+        padding: 1px 3px;
+        font-size: 10px;
+        border-radius: 3px; }
+        div.vs-blog .comment-area .comment-buttons .count.count-up {
+          background: #999; }
+      div.vs-blog .comment-area .comment-buttons a {
+        opacity: .65;
+        margin-right: 10px; }
+        div.vs-blog .comment-area .comment-buttons a:hover {
+          opacity: 1; }
+    div.vs-blog .comment-area p {
+      margin-bottom: 6px; }
+    div.vs-blog .comment-area .comment-avatar {
+      width: 64px; }
+    div.vs-blog .comment-area .answer-avatar {
+      width: 64px; }
+  div.vs-blog > .form-group {
+    margin: 0 !important; }

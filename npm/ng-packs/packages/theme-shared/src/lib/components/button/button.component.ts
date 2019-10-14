@@ -10,21 +10,26 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input()
-  buttonClass: string = 'btn btn-primary';
+  buttonClass = 'btn btn-primary';
 
   @Input()
-  type: string = 'button';
+  buttonType; // TODO: Add initial value.
 
   @Input()
   iconClass: string;
 
   @Input()
-  loading: boolean = false;
+  loading = false;
 
   @Input()
-  disabled: boolean = false;
+  disabled = false;
+
+  /**
+   * @deprecated Use buttonType instead. To be deleted in v1
+   */
+  @Input() type = 'button';
 
   get icon(): string {
-    return `${this.loading ? 'fa fa-spin fa-spinner' : this.iconClass || 'd-none'}`;
+    return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
   }
 }

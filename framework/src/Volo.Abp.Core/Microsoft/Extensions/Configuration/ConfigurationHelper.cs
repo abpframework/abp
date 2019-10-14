@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.Configuration
                 builder = builder.AddJsonFile($"{options.FileName}.{options.EnvironmentName}.json", optional: true, reloadOnChange: true);
             }
             
-            builder = builder.AddEnvironmentVariables();
+            builder = builder.AddEnvironmentVariables(options.EnvironmentVariablesPrefix);
 
             if (options.EnvironmentName == "Development")
             {

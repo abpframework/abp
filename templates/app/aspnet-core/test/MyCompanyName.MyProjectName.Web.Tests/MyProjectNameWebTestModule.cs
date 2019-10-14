@@ -76,7 +76,9 @@ namespace MyCompanyName.MyProjectName
             //app.UseErrorPage();
 
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 

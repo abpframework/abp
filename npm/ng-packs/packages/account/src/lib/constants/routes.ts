@@ -1,5 +1,9 @@
 import { ABP, eLayoutType } from '@abp/ng.core';
 
+/**
+ *
+ * @deprecated since version 0.9
+ */
 export const ACCOUNT_ROUTES = {
   routes: [
     {
@@ -10,5 +14,4 @@ export const ACCOUNT_ROUTES = {
       children: [{ path: 'login', name: 'Login', order: 1 }, { path: 'register', name: 'Register', order: 2 }],
     },
   ] as ABP.FullRoute[],
-  settings: [],
 };

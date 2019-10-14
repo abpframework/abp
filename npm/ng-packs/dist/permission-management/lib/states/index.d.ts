@@ -1,1 +1,1 @@
-export * from "./permission-management.state";
+export * from './permission-management.state';

@@ -27,6 +27,7 @@ namespace Volo.Abp.Cli
             {
                 options.Commands["help"] = typeof(HelpCommand);
                 options.Commands["new"] = typeof(NewCommand);
+                options.Commands["get-source"] = typeof(GetSourceCommand);
                 options.Commands["update"] = typeof(UpdateCommand);
                 options.Commands["add-package"] = typeof(AddPackageCommand);
                 options.Commands["add-module"] = typeof(AddModuleCommand);

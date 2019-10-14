@@ -19,13 +19,11 @@
 
 <div id="SettingManagementWrapper">
     <abp-card>
-        <abp-card-body>
-
+        <abp-card-body> 
             <abp-tabs tab-style="PillVertical" vertical-header-size="_3">
                 @foreach (var group in Model.SettingPageCreationContext.Groups)
                 {
-                    <abp-tab title="@group.DisplayName">
-
+                    <abp-tab title="@group.DisplayName"> 
                         <h2>@group.DisplayName</h2>
                         <hr class="my-4" />
                         @await Component.InvokeAsync(group.ComponentType)

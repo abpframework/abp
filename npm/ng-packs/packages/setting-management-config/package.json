@@ -1,0 +1,7 @@
+{
+  "name": "@abp/ng.setting-management.config",
+  "version": "0.9.1",
+  "publishConfig": {
+    "access": "public"
+  }
+}

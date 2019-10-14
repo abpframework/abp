@@ -202,7 +202,7 @@
       "items": [
         {
           "text": "API",
-          "items": [            
+          "items": [
             {
               "text": "Automatické API řadiče",
               "path": "AspNetCore/Auto-API-Controllers.md"
@@ -245,11 +245,21 @@
       "items": [
         {
           "text": "Entity Framework Core integrace",
-          "path": "Entity-Framework-Core.md"
+          "path": "Entity-Framework-Core.md",
+          "items": [
+            {
+              "text": "PostgreSQL integrace",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
         },
         {
           "text": "MongoDB integrace",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper integrace",
+          "path": "Dapper.md"
         }
       ]
     },

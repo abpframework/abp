@@ -18,12 +18,16 @@ import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
+import { SortPipe } from './pipes/sort.pipe';
 import { LocaleProvider } from './providers/locale.provider';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
+import { ForDirective } from './directives/for.directive';
+import { AbstractNgModelComponent } from './abstracts/ng-model.component';
+import { TableSortDirective } from './directives/table-sort.directive';
 
 @NgModule({
   imports: [
@@ -41,12 +45,16 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
+    ForDirective,
     FormSubmitDirective,
+    TableSortDirective,
     LocalizationPipe,
+    SortPipe,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
     ClickEventStopPropagationDirective,
+    AbstractNgModelComponent,
   ],
   exports: [
     CommonModule,
@@ -58,13 +66,17 @@ import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/confi
     DynamicLayoutComponent,
     AutofocusDirective,
     EllipsisDirective,
+    ForDirective,
     FormSubmitDirective,
     LocalizationPipe,
+    SortPipe,
+    TableSortDirective,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
     LocalizationPipe,
     ClickEventStopPropagationDirective,
+    AbstractNgModelComponent,
   ],
   providers: [LocalizationPipe],
   entryComponents: [RouterOutletComponent, DynamicLayoutComponent],

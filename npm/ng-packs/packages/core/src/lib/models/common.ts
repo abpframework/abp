@@ -1,5 +1,5 @@
 import { Config } from './config';
-import { eLayoutType } from '../enums';
+import { eLayoutType } from '../enums/common';
 
 export namespace ABP {
   export interface Root {
@@ -42,5 +42,9 @@ export namespace ABP {
   export interface BasicItem {
     id: string;
     name: string;
+  }
+
+  export interface Dictionary<T = any> {
+    [key: string]: T;
   }
 }

@@ -38,19 +38,21 @@ export class UsersComponent {
 
   roles: Identity.RoleItem[];
 
-  visiblePermissions: boolean = false;
+  visiblePermissions = false;
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'userName',
-  };
+  pageQuery: ABP.PageQueryParams = {};
 
   isModalVisible: boolean;
 
-  loading: boolean = false;
+  loading = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
+
+  sortOrder = '';
+
+  sortKey = '';
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 

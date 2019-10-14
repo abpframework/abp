@@ -27,18 +27,6 @@ namespace Volo.Abp.FeatureManagement
                 options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpFeatureManagementDomainModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<AbpFeatureManagementResource>()
-                    .AddVirtualJson("/Volo/Abp/FeatureManagement/Localization/Domain");
-            });
-
             Configure<ExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));

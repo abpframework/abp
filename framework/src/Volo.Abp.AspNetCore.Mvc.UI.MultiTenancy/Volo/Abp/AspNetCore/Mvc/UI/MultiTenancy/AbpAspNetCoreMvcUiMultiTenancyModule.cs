@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.MultiTenancy;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization;
@@ -24,6 +25,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
                     typeof(AbpUiMultiTenancyResource),
                     typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly
                 );
+            });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly);
             });
         }
 

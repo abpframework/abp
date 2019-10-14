@@ -3,13 +3,14 @@ import { Router, Routes } from '@angular/router';
 import { actionMatcher, InitState, NgxsNextPluginFn, NgxsPlugin, setValue, UpdateState } from '@ngxs/store';
 import snq from 'snq';
 import { ABP } from '../../models';
-import { organizeRoutes } from '../../utils/route-utils';
+import { organizeRoutes, getAbpRoutes } from '../../utils/route-utils';
+import clone from 'just-clone';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
 
 @Injectable()
 export class ConfigPlugin implements NgxsPlugin {
-  private initialized: boolean = false;
+  private initialized = false;
 
   constructor(@Inject(NGXS_CONFIG_PLUGIN_OPTIONS) private options: ABP.Root, private router: Router) {}
 
@@ -17,15 +18,18 @@ export class ConfigPlugin implements NgxsPlugin {
     const matches = actionMatcher(event);
     const isInitAction = matches(InitState) || matches(UpdateState);
 
-    // const layouts = snq(() => this.options.requirements.layouts.filter(layout => layout instanceof Type), []);
     if (isInitAction && !this.initialized) {
-      let { routes, wrappers } = transformRoutes(this.router.config);
-      routes = organizeRoutes(routes, wrappers);
+      const transformedRoutes = transformRoutes(this.router.config);
+      let { routes } = transformedRoutes;
+      const { wrappers } = transformedRoutes;
 
+      routes = organizeRoutes(routes, wrappers);
+      const flattedRoutes = flatRoutes(clone(routes));
       state = setValue(state, 'ConfigState', {
         ...(state.ConfigState && { ...state.ConfigState }),
         ...this.options,
         routes,
+        flattedRoutes,
       });
 
       this.initialized = true;
@@ -36,27 +40,29 @@ export class ConfigPlugin implements NgxsPlugin {
 }
 
 function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): any {
-  const abpRoutes: ABP.FullRoute[] = routes
+  // TODO: remove in v1
+  const oldAbpRoutes: ABP.FullRoute[] = routes
     .filter(route => {
       return snq(() => route.data.routes.routes.find(r => r.path === route.path), false);
     })
     .reduce((acc, val) => [...acc, ...val.data.routes.routes], []);
+  // tslint:disable-next-line: deprecation
+  const abpRoutes = [...getAbpRoutes(), ...oldAbpRoutes];
 
   wrappers = abpRoutes.filter(ar => ar.wrapper);
   const transformed = [] as ABP.FullRoute[];
   routes
-    .filter(route => (route.data || {}).routes && (route.component || route.loadChildren))
+    .filter(route => route.component || route.loadChildren)
     .forEach(route => {
-      const abpPackage = abpRoutes.find(
-        abp => abp.path.toLowerCase() === route.path.toLowerCase() && snq(() => route.data.routes.routes.length, false),
-      );
+      const abpPackage = abpRoutes.find(abp => abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper);
+
       const { length } = transformed;
 
       if (abpPackage) {
         transformed.push(abpPackage);
       }
 
-      if (transformed.length === length) {
+      if (transformed.length === length && (route.data || {}).routes) {
         transformed.push({
           ...route.data.routes,
           path: route.path,
@@ -91,4 +97,19 @@ function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
         children: setUrls(route.children, `/${route.path}`),
       }),
   }));
+}
+
+function flatRoutes(routes: ABP.FullRoute[]): ABP.FullRoute[] {
+  const flat = (r: ABP.FullRoute[]) => {
+    return r.reduce((acc, val) => {
+      let value: ABP.FullRoute[] = [val];
+      if (val.children) {
+        value = [val, ...flat(val.children)];
+      }
+
+      return [...acc, ...value];
+    }, []);
+  };
+
+  return flat(routes);
 }

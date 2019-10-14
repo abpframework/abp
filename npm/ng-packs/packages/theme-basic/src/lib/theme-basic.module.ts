@@ -10,11 +10,13 @@ import { ApplicationLayoutComponent } from './components/application-layout/appl
 import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { LayoutState } from './states/layout.state';
+import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
+import { InitialService } from './services/initial.service';
 
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
-  declarations: [...LAYOUTS, LayoutComponent],
+  declarations: [...LAYOUTS, LayoutComponent, ValidationErrorComponent],
   imports: [
     CoreModule,
     ThemeSharedModule,
@@ -23,8 +25,23 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
     ToastModule,
     NgxValidateCoreModule,
     NgxsModule.forFeature([LayoutState]),
+    NgxValidateCoreModule.forRoot({
+      targetSelector: '.form-group',
+      blueprints: {
+        email: 'AbpAccount::ThisFieldIsNotAValidEmailAddress.',
+        max: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+        maxlength: 'AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]',
+        min: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
+        minlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]',
+        required: 'AbpAccount::ThisFieldIsRequired.',
+        passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed'
+      },
+      errorTemplate: ValidationErrorComponent
+    })
   ],
   exports: [...LAYOUTS],
-  entryComponents: [...LAYOUTS],
+  entryComponents: [...LAYOUTS, ValidationErrorComponent]
 })
-export class ThemeBasicModule {}
+export class ThemeBasicModule {
+  constructor(private initialService: InitialService) {}
+}

@@ -1,5 +1,9 @@
 import { eLayoutType, ABP } from '@abp/ng.core';
 
+/**
+ *
+ * @deprecated
+ */
 export const IDENTITY_ROUTES = {
   routes: [
     {
@@ -21,5 +25,4 @@ export const IDENTITY_ROUTES = {
       ],
     },
   ] as ABP.FullRoute[],
-  settings: [],
 };

@@ -11,9 +11,6 @@
 
   <ItemGroup>
     <content Remove="Volo\Blogging\Localization\Resources\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Volo\Blogging\Localization\Resources\*.json" />
   </ItemGroup>
 

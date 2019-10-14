@@ -38,7 +38,7 @@ namespace Volo.Abp.Cli.Commands
             if (password.IsNullOrWhiteSpace())
             {
                 throw new CliUsageException(
-                    "Password name is missing!" +
+                    "Password is missing!" +
                     Environment.NewLine + Environment.NewLine +
                     GetUsageInfo()
                 );

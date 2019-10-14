@@ -405,7 +405,7 @@ namespace Volo.Abp.Caching
 
         protected virtual string NormalizeKey(string key)
         {
-            var normalizedKey = "c:" + CacheName + ",k:" + key;
+            var normalizedKey = "c:" + CacheName + ",k:" + _cacheOption.KeyPrefix + key;
 
             if (!IgnoreMultiTenancy && CurrentTenant.Id.HasValue)
             {

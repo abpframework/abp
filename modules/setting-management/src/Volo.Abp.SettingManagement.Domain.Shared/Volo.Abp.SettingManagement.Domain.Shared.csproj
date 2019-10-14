@@ -14,11 +14,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
+    <Content Remove="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
   </ItemGroup>
 
   <ItemGroup>

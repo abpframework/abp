@@ -7,7 +7,10 @@ namespace MyCompanyName.MyProjectName.Controllers
     {
         public ActionResult Index()
         {
-            return Redirect("/swagger");
+            //TODO: Enable when Swagger supports ASP.NET Core 3.x
+            //return Redirect("/swagger");
+
+            return Content("OK: MyCompanyName.MyProjectName.HttpApi.Host is running...");
         }
     }
 }

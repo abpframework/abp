@@ -11,7 +11,9 @@ namespace Volo.Abp.FeatureManagement.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new FeatureManagementMongoModelBuilderConfigurationOptions();
+            var options = new FeatureManagementMongoModelBuilderConfigurationOptions(
+                FeatureManagementDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

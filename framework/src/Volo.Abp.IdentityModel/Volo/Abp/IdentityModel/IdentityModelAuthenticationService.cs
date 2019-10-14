@@ -92,7 +92,7 @@ namespace Volo.Abp.IdentityModel
                    ClientOptions.IdentityClients.Default;
         }
 
-        protected virtual async Task<DiscoveryResponse> GetDiscoveryResponse(
+        protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
             using (var httpClient = new HttpClient())
@@ -109,7 +109,7 @@ namespace Volo.Abp.IdentityModel
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
-            DiscoveryResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse, 
             IdentityClientConfiguration configuration)
         {
             using (var httpClient = new HttpClient())
@@ -132,7 +132,7 @@ namespace Volo.Abp.IdentityModel
             }
         }
 
-        protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryResponse discoveryResponse, IdentityClientConfiguration configuration)
+        protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
         {
             var request =  new PasswordTokenRequest
             {
@@ -150,7 +150,7 @@ namespace Volo.Abp.IdentityModel
         }
 
         protected virtual Task<ClientCredentialsTokenRequest>  CreateClientCredentialsTokenRequestAsync(
-            DiscoveryResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse, 
             IdentityClientConfiguration configuration)
         {
             var request =  new ClientCredentialsTokenRequest
@@ -166,7 +166,7 @@ namespace Volo.Abp.IdentityModel
             return Task.FromResult(request);
         }
 
-        protected virtual Task AddParametersToRequestAsync(IdentityClientConfiguration configuration, Request request)
+        protected virtual Task AddParametersToRequestAsync(IdentityClientConfiguration configuration, ProtocolRequest request)
         {
             foreach (var pair in configuration.Where(p => p.Key.StartsWith("[o]", StringComparison.OrdinalIgnoreCase)))
             {

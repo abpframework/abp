@@ -23,6 +23,11 @@ namespace MyCompanyName.MyProjectName.Web
             {
                 options.AddAssemblyResource(typeof(MyProjectNameResource), typeof(MyProjectNameWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(MyProjectNameWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -39,11 +44,7 @@ namespace MyCompanyName.MyProjectName.Web
 
             Configure<AbpAutoMapperOptions>(options =>
             {
-                /* Using `true` for the `validate` parameter to
-                 * validate the profile on application startup.
-                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more info
-                 * about the configuration validation. */
-                options.AddProfile<MyProjectNameWebAutoMapperProfile>(validate: true);
+                options.AddMaps<MyProjectNameWebModule>(validate: true);
             });
 
             Configure<RazorPagesOptions>(options =>

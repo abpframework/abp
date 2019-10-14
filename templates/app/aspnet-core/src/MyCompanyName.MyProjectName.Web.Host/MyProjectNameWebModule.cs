@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
@@ -22,6 +23,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity.Web;
@@ -68,13 +70,25 @@ namespace MyCompanyName.MyProjectName.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureNavigationServices();
+            ConfigureNavigationServices(configuration);
             ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
+
+            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
+            //ConfigureSwaggerServices(context.Services);
+        }
+
+        private void ConfigureCache(IConfigurationRoot configuration)
+        {
+            Configure<CacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -102,7 +116,6 @@ namespace MyCompanyName.MyProjectName.Web
                 })
                 .AddCookie("Cookies", options =>
                 {
-                    options.Cookie.Expiration = TimeSpan.FromDays(365);
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -130,16 +143,11 @@ namespace MyCompanyName.MyProjectName.Web
         {
             Configure<AbpAutoMapperOptions>(options =>
             {
-                /* use `true` for the `validate` parameter if you want to
-                 * validate the profile on application startup.
-                 * See http://docs.automapper.org/en/stable/Configuration-validation.html for more
-                 * about configuration validation.
-                 */
-                options.AddProfile<MyProjectNameWebAutoMapperProfile>();
+                options.AddMaps<MyProjectNameWebModule>();
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
@@ -161,11 +169,11 @@ namespace MyCompanyName.MyProjectName.Web
             }
         }
 
-        private void ConfigureNavigationServices()
+        private void ConfigureNavigationServices(IConfigurationRoot configuration)
         {
             Configure<NavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
         }
 
@@ -184,7 +192,7 @@ namespace MyCompanyName.MyProjectName.Web
         private void ConfigureRedis(
             ServiceConfigurationContext context,
             IConfigurationRoot configuration,
-            IHostingEnvironment hostingEnvironment)
+            IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
             {
@@ -205,6 +213,8 @@ namespace MyCompanyName.MyProjectName.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.UseCorrelationId();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -215,7 +225,9 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {
@@ -224,11 +236,13 @@ namespace MyCompanyName.MyProjectName.Web
 
             app.UseAbpRequestLocalization();
 
+            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
+            */
 
             app.UseAuditing();
 
