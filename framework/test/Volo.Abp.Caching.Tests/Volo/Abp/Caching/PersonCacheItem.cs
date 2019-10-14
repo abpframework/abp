@@ -17,7 +17,14 @@ namespace Volo.Abp.Caching
             Name = name;
         }
     }
+
+    public class DummyObjectAsCacheKey
+    {
+        public string DummyData { get; set; }
+        public int DummyInt { get; set; }
+    }
 }
+
 namespace Sail.Testing.Caching
 {
     [Serializable]
