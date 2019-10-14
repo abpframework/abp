@@ -5,7 +5,8 @@ namespace Volo.Abp.PermissionManagement.MongoDB
 {
     public class PermissionManagementMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
     {
-        public PermissionManagementMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = AbpPermissionManagementConsts.DefaultDbTablePrefix)
+        public PermissionManagementMongoModelBuilderConfigurationOptions(
+            [NotNull] string tablePrefix = "")
             : base(tablePrefix)
         {
         }

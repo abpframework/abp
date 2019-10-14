@@ -5,8 +5,9 @@ namespace Volo.Abp.AuditLogging.MongoDB
 {
     public class AuditLoggingMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
     {
-        public AuditLoggingMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = AbpAuditLoggingConsts.DefaultDbTablePrefix)
-            : base(tablePrefix)
+        public AuditLoggingMongoModelBuilderConfigurationOptions(
+            [NotNull] string collectionPrefix = "")
+            : base(collectionPrefix)
         {
         }
     }

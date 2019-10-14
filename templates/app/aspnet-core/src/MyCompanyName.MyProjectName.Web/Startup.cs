@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace MyCompanyName.MyProjectName.Web
 {
@@ -11,7 +10,7 @@ namespace MyCompanyName.MyProjectName.Web
             services.AddApplication<MyProjectNameWebModule>();
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
             app.InitializeApplication();
         }

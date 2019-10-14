@@ -1,11 +1,14 @@
-﻿using Volo.Abp.EntityFrameworkCore.Modeling;
+﻿using JetBrains.Annotations;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Docs.EntityFrameworkCore
 {
     public class DocsModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
     {
-        public DocsModelBuilderConfigurationOptions()
-            : base(DocsConsts.DefaultDbTablePrefix, DocsConsts.DefaultDbSchema)
+        public DocsModelBuilderConfigurationOptions(
+            [NotNull] string tablePrefix,
+            [CanBeNull] string schema)
+            : base(tablePrefix, schema)
         {
         }
     }

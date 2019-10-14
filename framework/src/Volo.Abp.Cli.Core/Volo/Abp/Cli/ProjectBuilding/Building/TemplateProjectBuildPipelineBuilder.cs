@@ -4,7 +4,7 @@ using Volo.Abp.Cli.ProjectBuilding.Templates.App;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building
 {
-    public static class ProjectBuildPipelineBuilder
+    public static class TemplateProjectBuildPipelineBuilder
     {
         public static ProjectBuildPipeline Build(ProjectBuildContext context)
         {

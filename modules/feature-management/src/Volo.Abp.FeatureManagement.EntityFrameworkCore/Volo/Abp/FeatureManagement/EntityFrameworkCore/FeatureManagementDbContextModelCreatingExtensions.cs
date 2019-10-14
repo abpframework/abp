@@ -11,7 +11,10 @@ namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new FeatureManagementModelBuilderConfigurationOptions();
+            var options = new FeatureManagementModelBuilderConfigurationOptions(
+                FeatureManagementDbProperties.DbTablePrefix,
+                FeatureManagementDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 

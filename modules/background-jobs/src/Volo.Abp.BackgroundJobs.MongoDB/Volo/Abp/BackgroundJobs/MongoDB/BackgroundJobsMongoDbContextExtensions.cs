@@ -11,7 +11,9 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BackgroundJobsMongoModelBuilderConfigurationOptions();
+            var options = new BackgroundJobsMongoModelBuilderConfigurationOptions(
+                BackgroundJobsDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 
