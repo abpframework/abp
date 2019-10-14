@@ -46,7 +46,7 @@ namespace Volo.Abp.Cli.Commands
 
             var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
 
-            if (updateNpm || both)
+            if (updateNuget || both)
             {
                 await UpdateNugetPackages(commandLineArgs);
             }
