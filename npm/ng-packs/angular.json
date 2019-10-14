@@ -17,11 +17,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/core/src/test.ts",
-            "tsConfig": "packages/core/tsconfig.spec.json",
-            "karmaConfig": "packages/core/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -48,11 +46,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-shared/src/test.ts",
-            "tsConfig": "packages/theme-shared/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-shared/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -532,24 +528,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/dev-app/tsconfig.app.json",
-              "apps/dev-app/tsconfig.spec.json",
-              "apps/dev-app/e2e/tsconfig.json"
-            ],
+            "tsConfig": ["apps/dev-app/tsconfig.app.json", "apps/dev-app/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "apps/dev-app/e2e/protractor.conf.js",
-            "devServerTarget": "dev-app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "dev-app:serve:production"
-            }
           }
         }
       }

@@ -28,6 +28,11 @@ namespace Volo.Docs
             {
                 options.AddAssemblyResource(typeof(DocsResource), typeof(DocsWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(DocsWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

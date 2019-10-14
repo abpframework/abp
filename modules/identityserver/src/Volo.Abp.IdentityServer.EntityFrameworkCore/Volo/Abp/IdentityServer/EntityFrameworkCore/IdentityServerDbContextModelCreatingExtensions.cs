@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using JetBrains.Annotations;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -13,20 +13,21 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
     public static class IdentityServerDbContextModelCreatingExtensions
     {
         public static void ConfigureIdentityServer(
-            this ModelBuilder builder, 
-            [CanBeNull] string tablePrefix = AbpIdentityServerConsts.DefaultDbTablePrefix, 
-            [CanBeNull] string schema = AbpIdentityServerConsts.DefaultDbSchema)
+            this ModelBuilder builder,
+            Action<IdentityServerModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            if (tablePrefix == null)
-            {
-                tablePrefix = "";
-            }
+            var options = new IdentityServerModelBuilderConfigurationOptions(
+                AbpIdentityServerDbProperties.DbTablePrefix,
+                AbpIdentityServerDbProperties.DbSchema
+            );
+
+            optionsAction?.Invoke(options);
 
             builder.Entity<Client>(client =>
             {
-                client.ToTable(tablePrefix + "Clients", schema);
+                client.ToTable(options.TablePrefix + "Clients", options.Schema);
 
                 client.ConfigureFullAuditedAggregateRoot();
 
@@ -57,7 +58,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientGrantType>(grantType =>
             {
-                grantType.ToTable(tablePrefix + "ClientGrantTypes", schema);
+                grantType.ToTable(options.TablePrefix + "ClientGrantTypes", options.Schema);
 
                 grantType.HasKey(x => new { x.ClientId, x.GrantType });
 
@@ -66,7 +67,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientRedirectUri>(redirectUri =>
             {
-                redirectUri.ToTable(tablePrefix + "ClientRedirectUris", schema);
+                redirectUri.ToTable(options.TablePrefix + "ClientRedirectUris", options.Schema);
 
                 redirectUri.HasKey(x => new { x.ClientId, x.RedirectUri });
 
@@ -75,7 +76,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientPostLogoutRedirectUri>(postLogoutRedirectUri =>
             {
-                postLogoutRedirectUri.ToTable(tablePrefix + "ClientPostLogoutRedirectUris", schema);
+                postLogoutRedirectUri.ToTable(options.TablePrefix + "ClientPostLogoutRedirectUris", options.Schema);
 
                 postLogoutRedirectUri.HasKey(x => new { x.ClientId, x.PostLogoutRedirectUri });
 
@@ -84,7 +85,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientScope>(scope =>
             {
-                scope.ToTable(tablePrefix + "ClientScopes", schema);
+                scope.ToTable(options.TablePrefix + "ClientScopes", options.Schema);
 
                 scope.HasKey(x => new { x.ClientId, x.Scope });
 
@@ -93,7 +94,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientSecret>(secret =>
             {
-                secret.ToTable(tablePrefix + "ClientSecrets", schema);
+                secret.ToTable(options.TablePrefix + "ClientSecrets", options.Schema);
 
                 secret.HasKey(x => new { x.ClientId, x.Type, x.Value });
 
@@ -104,7 +105,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientClaim>(claim =>
             {
-                claim.ToTable(tablePrefix + "ClientClaims", schema);
+                claim.ToTable(options.TablePrefix + "ClientClaims", options.Schema);
 
                 claim.HasKey(x => new { x.ClientId, x.Type, x.Value });
 
@@ -114,7 +115,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientIdPRestriction>(idPRestriction =>
             {
-                idPRestriction.ToTable(tablePrefix + "ClientIdPRestrictions", schema);
+                idPRestriction.ToTable(options.TablePrefix + "ClientIdPRestrictions", options.Schema);
 
                 idPRestriction.HasKey(x => new { x.ClientId, x.Provider });
 
@@ -123,7 +124,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientCorsOrigin>(corsOrigin =>
             {
-                corsOrigin.ToTable(tablePrefix + "ClientCorsOrigins", schema);
+                corsOrigin.ToTable(options.TablePrefix + "ClientCorsOrigins", options.Schema);
 
                 corsOrigin.HasKey(x => new { x.ClientId, x.Origin });
 
@@ -132,7 +133,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ClientProperty>(property =>
             {
-                property.ToTable(tablePrefix + "ClientProperties", schema);
+                property.ToTable(options.TablePrefix + "ClientProperties", options.Schema);
 
                 property.HasKey(x => new { x.ClientId, x.Key });
 
@@ -142,7 +143,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<PersistedGrant>(grant =>
             {
-                grant.ToTable(tablePrefix + "PersistedGrants", schema);
+                grant.ToTable(options.TablePrefix + "PersistedGrants", options.Schema);
 
                 grant.ConfigureExtraProperties();
 
@@ -161,7 +162,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<IdentityResource>(identityResource =>
             {
-                identityResource.ToTable(tablePrefix + "IdentityResources", schema);
+                identityResource.ToTable(options.TablePrefix + "IdentityResources", options.Schema);
 
                 identityResource.ConfigureFullAuditedAggregateRoot();
 
@@ -179,7 +180,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<IdentityClaim>(claim =>
             {
-                claim.ToTable(tablePrefix + "IdentityClaims", schema);
+                claim.ToTable(options.TablePrefix + "IdentityClaims", options.Schema);
 
                 claim.HasKey(x => new { x.IdentityResourceId, x.Type });
 
@@ -188,7 +189,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiResource>(apiResource =>
             {
-                apiResource.ToTable(tablePrefix + "ApiResources", schema);
+                apiResource.ToTable(options.TablePrefix + "ApiResources", options.Schema);
 
                 apiResource.ConfigureFullAuditedAggregateRoot();
 
@@ -208,7 +209,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiSecret>(apiSecret =>
             {
-                apiSecret.ToTable(tablePrefix + "ApiSecrets", schema);
+                apiSecret.ToTable(options.TablePrefix + "ApiSecrets", options.Schema);
 
                 apiSecret.HasKey(x => new { x.ApiResourceId, x.Type, x.Value });
 
@@ -219,7 +220,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiResourceClaim>(apiClaim =>
             {
-                apiClaim.ToTable(tablePrefix + "ApiClaims", schema);
+                apiClaim.ToTable(options.TablePrefix + "ApiClaims", options.Schema);
 
                 apiClaim.HasKey(x => new { x.ApiResourceId, x.Type });
 
@@ -228,7 +229,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiScope>(apiScope =>
             {
-                apiScope.ToTable(tablePrefix + "ApiScopes", schema);
+                apiScope.ToTable(options.TablePrefix + "ApiScopes", options.Schema);
 
                 apiScope.HasKey(x => new { x.ApiResourceId, x.Name });
 
@@ -241,7 +242,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
             builder.Entity<ApiScopeClaim>(apiScopeClaim =>
             {
-                apiScopeClaim.ToTable(tablePrefix + "ApiScopeClaims", schema);
+                apiScopeClaim.ToTable(options.TablePrefix + "ApiScopeClaims", options.Schema);
 
                 apiScopeClaim.HasKey(x => new { x.ApiResourceId, x.Name, x.Type });
 

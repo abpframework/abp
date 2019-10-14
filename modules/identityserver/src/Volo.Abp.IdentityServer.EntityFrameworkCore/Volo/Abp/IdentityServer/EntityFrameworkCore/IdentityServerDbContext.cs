@@ -8,13 +8,9 @@ using Volo.Abp.IdentityServer.IdentityResources;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    [ConnectionStringName(AbpIdentityServerConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpIdentityServerDbProperties.ConnectionStringName)]
     public class IdentityServerDbContext : AbpDbContext<IdentityServerDbContext>, IIdentityServerDbContext
     {
-        public static string TablePrefix { get; set; } = AbpIdentityServerConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = AbpIdentityServerConsts.DefaultDbSchema;
-
         public DbSet<ApiResource> ApiResources { get; set; }
 
         public DbSet<ApiSecret> ApiSecrets { get; set; }
@@ -60,7 +56,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            builder.ConfigureIdentityServer(TablePrefix, Schema);
+            builder.ConfigureIdentityServer();
         }
     }
 }

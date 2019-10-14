@@ -4,7 +4,7 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    [ConnectionStringName(AbpSettingManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpSettingManagementDbProperties.ConnectionStringName)]
     public interface ISettingManagementDbContext : IEfCoreDbContext
     {
         DbSet<Setting> Settings { get; set; }

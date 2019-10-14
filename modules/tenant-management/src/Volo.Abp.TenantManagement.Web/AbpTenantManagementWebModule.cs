@@ -28,6 +28,11 @@ namespace Volo.Abp.TenantManagement.Web
             {
                 options.AddAssemblyResource(typeof(AbpTenantManagementResource), typeof(AbpTenantManagementWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpTenantManagementWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

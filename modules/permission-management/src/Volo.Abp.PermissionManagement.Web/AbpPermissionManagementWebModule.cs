@@ -23,6 +23,11 @@ namespace Volo.Abp.PermissionManagement.Web
             {
                 options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

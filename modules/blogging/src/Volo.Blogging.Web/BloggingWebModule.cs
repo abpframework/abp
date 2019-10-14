@@ -26,6 +26,11 @@ namespace Volo.Blogging
             {
                 options.AddAssemblyResource(typeof(BloggingResource), typeof(BloggingWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(BloggingWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)

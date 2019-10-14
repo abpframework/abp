@@ -12,7 +12,9 @@ namespace MyCompanyName.MyProjectName.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new MyProjectNameMongoModelBuilderConfigurationOptions();
+            var options = new MyProjectNameMongoModelBuilderConfigurationOptions(
+                MyProjectNameDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
         }
