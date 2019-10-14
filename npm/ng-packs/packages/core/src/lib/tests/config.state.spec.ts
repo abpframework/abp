@@ -221,4 +221,10 @@ describe('ConfigService', () => {
       }
     });
   });
+
+  describe('#GetAppConfiguration', () => {
+    it('should call the getConfiguration of ApplicationConfigurationService and patch the state', () => {
+      // state.addData()
+    });
+  });
 });

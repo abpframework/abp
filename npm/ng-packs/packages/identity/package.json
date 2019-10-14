@@ -4,7 +4,7 @@
   "dependencies": {
     "@abp/ng.theme.shared": "^0.9.0",
     "@abp/ng.permission-management": "^0.9.0",
-    "@abp/ng.identity.config": "0.0.1"
+    "@abp/ng.identity.config": "0.9.0"
   },
   "publishConfig": {
     "access": "public"

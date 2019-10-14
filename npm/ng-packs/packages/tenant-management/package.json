@@ -4,7 +4,7 @@
   "dependencies": {
     "@abp/ng.theme.shared": "^0.9.0",
     "@abp/ng.feature-management": "^0.9.0",
-    "@abp/ng.tenant-management.config": "^0.0.1"
+    "@abp/ng.tenant-management.config": "^0.9.0"
   },
   "publishConfig": {
     "access": "public"
