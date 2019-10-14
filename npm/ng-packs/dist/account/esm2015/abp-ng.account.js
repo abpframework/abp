@@ -1,11 +1,19 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Generated bundle index. Do not edit.
  */
-export { AccountProviders, AccountModule, LoginComponent, RegisterComponent, ACCOUNT_ROUTES, optionsFactory, ACCOUNT_OPTIONS } from './public-api';
+export {
+  AccountProviders,
+  AccountModule,
+  LoginComponent,
+  RegisterComponent,
+  ACCOUNT_ROUTES,
+  optionsFactory,
+  ACCOUNT_OPTIONS,
+} from './public-api';
 export { AccountRoutingModule as ɵf } from './lib/account-routing.module';
 export { LoginComponent as ɵa } from './lib/components/login/login.component';
 export { RegisterComponent as ɵc } from './lib/components/register/register.component';

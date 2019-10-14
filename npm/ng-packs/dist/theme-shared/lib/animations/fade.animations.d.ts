@@ -1,3 +1,10 @@
-export declare const fade: import("@angular/animations").AnimationTriggerMetadata;
-export declare const fadeWithStates: import("@angular/animations").AnimationTriggerMetadata;
-export declare const fadeIn: import("@angular/animations").AnimationTriggerMetadata;
+export declare const fadeIn: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeOut: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeInDown: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeInUp: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeInLeft: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeInRight: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeOutDown: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeOutUp: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeOutLeft: import('@angular/animations').AnimationReferenceMetadata;
+export declare const fadeOutRight: import('@angular/animations').AnimationReferenceMetadata;
