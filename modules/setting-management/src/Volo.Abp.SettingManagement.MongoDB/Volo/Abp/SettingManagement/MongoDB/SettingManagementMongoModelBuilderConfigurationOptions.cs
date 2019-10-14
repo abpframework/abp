@@ -5,7 +5,8 @@ namespace Volo.Abp.SettingManagement.MongoDB
 {
     public class SettingManagementMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
     {
-        public SettingManagementMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = AbpSettingManagementConsts.DefaultDbTablePrefix)
+        public SettingManagementMongoModelBuilderConfigurationOptions(
+            [NotNull] string tablePrefix = "")
             : base(tablePrefix)
         {
         }

@@ -1,26 +1,29 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.Identity.EntityFrameworkCore;
 
 namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 {
-    public static class AbpAuditLoggingtDbContextModelBuilderExtensions
+    public static class AbpAuditLoggingDbContextModelBuilderExtensions
     {
         public static void ConfigureAuditLogging(
             [NotNull] this ModelBuilder builder,
-            [CanBeNull] string tablePrefix = AbpAuditLoggingConsts.DefaultDbTablePrefix,
-            [CanBeNull] string schema = AbpAuditLoggingConsts.DefaultDbSchema)
+            Action<AbpAuditLoggingModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            if (tablePrefix == null)
-            {
-                tablePrefix = "";
-            }
+            var options = new AbpAuditLoggingModelBuilderConfigurationOptions(
+                AbpAuditLoggingDbProperties.DbTablePrefix,
+                AbpAuditLoggingDbProperties.DbSchema
+            );
+
+            optionsAction?.Invoke(options);
 
             builder.Entity<AuditLog>(b =>
             {
-                b.ToTable(tablePrefix + "AuditLogs", schema);
+                b.ToTable(options.TablePrefix + "AuditLogs", options.Schema);
 
                 b.ConfigureExtraProperties();
 
@@ -51,7 +54,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             builder.Entity<AuditLogAction>(b =>
             {
-                b.ToTable(tablePrefix + "AuditLogActions", schema);
+                b.ToTable(options.TablePrefix + "AuditLogActions", options.Schema);
 
                 b.ConfigureExtraProperties();
 
@@ -68,7 +71,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             builder.Entity<EntityChange>(b =>
             {
-                b.ToTable(tablePrefix + "EntityChanges", schema);
+                b.ToTable(options.TablePrefix + "EntityChanges", options.Schema);
 
                 b.ConfigureExtraProperties();
 
@@ -87,7 +90,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             builder.Entity<EntityPropertyChange>(b =>
             {
-                b.ToTable(tablePrefix + "EntityPropertyChanges", schema);
+                b.ToTable(options.TablePrefix + "EntityPropertyChanges", options.Schema);
 
                 b.Property(x => x.NewValue).HasMaxLength(EntityPropertyChangeConsts.MaxNewValueLength).HasColumnName(nameof(EntityPropertyChange.NewValue));
                 b.Property(x => x.PropertyName).HasMaxLength(EntityPropertyChangeConsts.MaxPropertyNameLength).IsRequired().HasColumnName(nameof(EntityPropertyChange.PropertyName));

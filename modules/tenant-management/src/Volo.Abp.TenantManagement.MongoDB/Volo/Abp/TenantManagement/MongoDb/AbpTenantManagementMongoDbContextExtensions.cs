@@ -11,7 +11,9 @@ namespace Volo.Abp.TenantManagement.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new TenantManagementMongoModelBuilderConfigurationOptions();
+            var options = new TenantManagementMongoModelBuilderConfigurationOptions(
+                AbpTenantManagementDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

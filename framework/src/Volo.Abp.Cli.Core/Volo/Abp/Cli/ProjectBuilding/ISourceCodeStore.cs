@@ -3,10 +3,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Cli.ProjectBuilding
 {
-    public interface ITemplateStore
+    public interface ISourceCodeStore
     {
         Task<TemplateFile> GetAsync(
             string name,
+            string type,
             [CanBeNull] string version = null
         );
     }
