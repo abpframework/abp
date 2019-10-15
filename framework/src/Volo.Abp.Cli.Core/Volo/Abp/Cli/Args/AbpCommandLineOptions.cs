@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Cli.Args
 {
-    public class CommandLineOptions : Dictionary<string, string>
+    public class AbpCommandLineOptions : Dictionary<string, string>
     {
         [CanBeNull]
         public string GetOrNull([NotNull] string name, params string[] alternativeNames)
