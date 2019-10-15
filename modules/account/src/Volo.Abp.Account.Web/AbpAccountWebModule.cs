@@ -45,7 +45,7 @@ namespace Volo.Abp.Account.Web
                 options.MenuContributors.Add(new AbpAccountUserMenuContributor());
             });
 
-            Configure<ToolbarOptions>(options =>
+            Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new AccountModuleToolbarContributor());
             });
