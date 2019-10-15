@@ -7,13 +7,13 @@ using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc.Conventions
 {
-    public class ConventionalControllerOptions
+    public class AbpConventionalControllerOptions
     {
         public ConventionalControllerSettingList ConventionalControllerSettings { get; }
 
         public List<Type> FormBodyBindingIgnoredTypes { get; }
         
-        public ConventionalControllerOptions()
+        public AbpConventionalControllerOptions()
         {
             ConventionalControllerSettings = new ConventionalControllerSettingList();
 
@@ -23,7 +23,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
             };
         }
 
-        public ConventionalControllerOptions Create(Assembly assembly, [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
+        public AbpConventionalControllerOptions Create(Assembly assembly, [CanBeNull] Action<ConventionalControllerSetting> optionsAction = null)
         {
             var setting = new ConventionalControllerSetting(assembly, ModuleApiDescriptionModel.DefaultRootPath);
             optionsAction?.Invoke(setting);
