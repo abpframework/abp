@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ProductManagement;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
@@ -77,7 +78,7 @@ namespace BackendAdminApp.Host
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "Backend Admin Application API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend Admin Application API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
@@ -100,11 +101,11 @@ namespace BackendAdminApp.Host
             app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization();
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend Admin Application API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Backend Admin Application API");
+            });
             app.UseMvcWithDefaultRouteAndArea();
         }
     }
