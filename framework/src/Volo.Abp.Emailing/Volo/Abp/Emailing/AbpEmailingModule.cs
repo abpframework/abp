@@ -49,7 +49,7 @@ namespace Volo.Abp.Emailing
                 }
             });
 
-            services.Configure<EmailTemplateOptions>(options =>
+            services.Configure<AbpEmailTemplateOptions>(options =>
             {
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });

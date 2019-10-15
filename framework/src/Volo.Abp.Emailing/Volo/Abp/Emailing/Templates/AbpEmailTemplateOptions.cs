@@ -2,13 +2,13 @@
 
 namespace Volo.Abp.Emailing.Templates
 {
-    public class EmailTemplateOptions
+    public class AbpEmailTemplateOptions
     {
         public string DefaultLayout { get; set; }
 
         public ITypeList<IEmailTemplateDefinitionProvider> DefinitionProviders { get; }
 
-        public EmailTemplateOptions()
+        public AbpEmailTemplateOptions()
         {
             DefaultLayout = StandardEmailTemplates.DefaultLayout;
 
