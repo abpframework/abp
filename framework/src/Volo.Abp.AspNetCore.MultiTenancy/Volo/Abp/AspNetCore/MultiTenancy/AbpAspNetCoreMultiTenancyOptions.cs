@@ -2,14 +2,14 @@
 
 namespace Volo.Abp.AspNetCore.MultiTenancy
 {
-    public class AspNetCoreMultiTenancyOptions
+    public class AbpAspNetCoreMultiTenancyOptions
     {
         /// <summary>
         /// Default: <see cref="TenantResolverConsts.DefaultTenantKey"/>.
         /// </summary>
         public string TenantKey { get; set; }
 
-        public AspNetCoreMultiTenancyOptions()
+        public AbpAspNetCoreMultiTenancyOptions()
         {
             TenantKey = TenantResolverConsts.DefaultTenantKey;
         }

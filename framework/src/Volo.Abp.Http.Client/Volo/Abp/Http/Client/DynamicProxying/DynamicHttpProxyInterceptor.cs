@@ -220,7 +220,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             //TenantId
             if (CurrentTenant.Id.HasValue)
             {
-                //TODO: Use AspNetCoreMultiTenancyOptions to get the key
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
                 requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
             }
 
