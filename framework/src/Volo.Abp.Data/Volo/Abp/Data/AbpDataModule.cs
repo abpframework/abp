@@ -37,7 +37,7 @@ namespace Volo.Abp.Data
                 }
             });
 
-            services.Configure<DataSeedOptions>(options =>
+            services.Configure<AbpDataSeedOptions>(options =>
             {
                 options.Contributors.AddIfNotContains(contributors);
             });
