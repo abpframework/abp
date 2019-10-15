@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Ldap
 {
-    public class LdapOptions
+    public class AbpLdapOptions
     {
         public string ServerHost { get; set; }
 
@@ -16,7 +16,7 @@
 
         public LdapCredentials Credentials { get; set; }
 
-        public LdapOptions()
+        public AbpLdapOptions()
         {
             Credentials = new LdapCredentials();
         }

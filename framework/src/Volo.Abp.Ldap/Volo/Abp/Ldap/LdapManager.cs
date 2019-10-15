@@ -12,7 +12,7 @@ namespace Volo.Abp.Ldap
     public class LdapManager : ILdapManager, ITransientDependency
     {
         private readonly string _searchBase;
-        private readonly LdapOptions _ldapOptions;
+        private readonly AbpLdapOptions _ldapOptions;
 
         private readonly string[] _attributes =
         {
@@ -21,7 +21,7 @@ namespace Volo.Abp.Ldap
             "sAMAccountName", "userPrincipalName", "telephoneNumber", "mail"
         };
 
-        public LdapManager(IOptions<LdapOptions> ldapSettingsOptions)
+        public LdapManager(IOptions<AbpLdapOptions> ldapSettingsOptions)
         {
             _ldapOptions = ldapSettingsOptions.Value;
             _searchBase = _ldapOptions.SearchBase;
