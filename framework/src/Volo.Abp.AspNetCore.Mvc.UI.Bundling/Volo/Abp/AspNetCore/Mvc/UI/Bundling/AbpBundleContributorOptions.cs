@@ -4,11 +4,11 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public class BundleContributorOptions
+    public class AbpBundleContributorOptions
     {
         public ConcurrentDictionary<Type, BundleContributorCollection> AllExtensions { get; }
 
-        public BundleContributorOptions()
+        public AbpBundleContributorOptions()
         {
             AllExtensions = new ConcurrentDictionary<Type, BundleContributorCollection>();
         }
