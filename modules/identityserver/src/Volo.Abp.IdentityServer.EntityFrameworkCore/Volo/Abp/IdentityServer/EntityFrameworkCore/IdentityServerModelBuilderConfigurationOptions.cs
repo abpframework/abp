@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 {
-    public class IdentityServerModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class IdentityServerModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public IdentityServerModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix,

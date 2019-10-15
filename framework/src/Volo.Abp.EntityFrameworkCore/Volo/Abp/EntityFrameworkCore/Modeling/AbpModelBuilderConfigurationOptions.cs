@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
 {
-    public class ModelBuilderConfigurationOptions
+    public class AbpModelBuilderConfigurationOptions
     {
         [NotNull]
         public string TablePrefix
@@ -19,7 +19,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
         [CanBeNull]
         public string Schema { get; set; }
 
-        public ModelBuilderConfigurationOptions(
+        public AbpModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix = "",
             [CanBeNull] string schema = null)
         {

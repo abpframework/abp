@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    public class AbpTenantManagementModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class AbpTenantManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public AbpTenantManagementModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix,
