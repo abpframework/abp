@@ -31,7 +31,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
         protected ICurrentTenant CurrentTenant { get; }
-        protected CorrelationIdOptions CorrelationIdOptions { get; }
+        protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
         protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
         protected IApiDescriptionFinder ApiDescriptionFinder { get; }
         protected RemoteServiceOptions RemoteServiceOptions { get; }
@@ -57,13 +57,13 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider, 
-            IOptions<CorrelationIdOptions> correlationIdOptions,
+            IOptions<AbpCorrelationIdOptions> correlationIdOptions,
             ICurrentTenant currentTenant)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
             CurrentTenant = currentTenant;
-            CorrelationIdOptions = correlationIdOptions.Value;
+            AbpCorrelationIdOptions = correlationIdOptions.Value;
             HttpClientFactory = httpClientFactory;
             ApiDescriptionFinder = apiDescriptionFinder;
             JsonSerializer = jsonSerializer;
@@ -215,7 +215,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             //CorrelationId
-            requestMessage.Headers.Add(CorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
 
             //TenantId
             if (CurrentTenant.Id.HasValue)
