@@ -3,11 +3,11 @@ using System.Net;
 
 namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
-    public class ExceptionHttpStatusCodeOptions
+    public class AbpExceptionHttpStatusCodeOptions
     {
         public IDictionary<string, HttpStatusCode> ErrorCodeToHttpStatusCodeMappings { get; }
 
-        public ExceptionHttpStatusCodeOptions()
+        public AbpExceptionHttpStatusCodeOptions()
         {
             ErrorCodeToHttpStatusCodeMappings = new Dictionary<string, HttpStatusCode>();
         }
