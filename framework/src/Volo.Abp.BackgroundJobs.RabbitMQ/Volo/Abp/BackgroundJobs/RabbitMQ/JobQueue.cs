@@ -24,7 +24,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         
         public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
-        protected BackgroundJobOptions BackgroundJobOptions { get; }
+        protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
         protected RabbitMqBackgroundJobOptions RabbitMqBackgroundJobOptions { get; }
         protected IChannelPool ChannelPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
@@ -35,21 +35,21 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         protected bool IsDiposed { get; private set; }
 
         public JobQueue(
-            IOptions<BackgroundJobOptions> backgroundJobOptions,
-            IOptions<RabbitMqBackgroundJobOptions> rabbitMqBackgroundJobOptions,
+            IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
+            IOptions<RabbitMqBackgroundJobOptions> rabbitMqAbpBackgroundJobOptions,
             IChannelPool channelPool,
             IRabbitMqSerializer serializer,
             IBackgroundJobExecuter jobExecuter,
             IServiceScopeFactory serviceScopeFactory)
         {
-            BackgroundJobOptions = backgroundJobOptions.Value;
-            RabbitMqBackgroundJobOptions = rabbitMqBackgroundJobOptions.Value;
+            AbpBackgroundJobOptions = backgroundJobOptions.Value;
+            RabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
             Serializer = serializer;
             JobExecuter = jobExecuter;
             ServiceScopeFactory = serviceScopeFactory;
             ChannelPool = channelPool;
 
-            JobConfiguration = BackgroundJobOptions.GetJob(typeof(TArgs));
+            JobConfiguration = AbpBackgroundJobOptions.GetJob(typeof(TArgs));
             QueueConfiguration = GetOrCreateJobQueueConfiguration();
 
             Logger = NullLogger<JobQueue<TArgs>>.Instance;
@@ -85,7 +85,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         {
             CheckDisposed();
 
-            if (!BackgroundJobOptions.IsJobExecutionEnabled)
+            if (!AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
                 return;
             }
@@ -129,7 +129,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             var result = QueueConfiguration.Declare(ChannelAccessor.Channel);
             Logger.LogDebug($"RabbitMQ Queue '{QueueConfiguration.QueueName}' has {result.MessageCount} messages and {result.ConsumerCount} consumers.");
 
-            if (BackgroundJobOptions.IsJobExecutionEnabled)
+            if (AbpBackgroundJobOptions.IsJobExecutionEnabled)
             {
                 Consumer = new EventingBasicConsumer(ChannelAccessor.Channel);
                 Consumer.Received += MessageReceived;

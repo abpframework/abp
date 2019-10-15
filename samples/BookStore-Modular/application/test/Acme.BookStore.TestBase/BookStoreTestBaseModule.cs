@@ -19,7 +19,7 @@ namespace Acme.BookStore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<BackgroundJobOptions>(options =>
+            Configure<AbpBackgroundJobOptions>(options =>
             {
                 options.IsJobExecutionEnabled = false;
             });

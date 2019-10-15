@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobOptions
+    public class AbpBackgroundJobOptions
     {
         private readonly Dictionary<Type, BackgroundJobConfiguration> _jobConfigurationsByArgsType;
         private readonly Dictionary<string, BackgroundJobConfiguration> _jobConfigurationsByName;
@@ -15,7 +15,7 @@ namespace Volo.Abp.BackgroundJobs
         /// </summary>
         public bool IsJobExecutionEnabled { get; set; } = true;
 
-        public BackgroundJobOptions()
+        public AbpBackgroundJobOptions()
         {
             _jobConfigurationsByArgsType = new Dictionary<Type, BackgroundJobConfiguration>();
             _jobConfigurationsByName = new Dictionary<string, BackgroundJobConfiguration>();

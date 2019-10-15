@@ -30,7 +30,7 @@ namespace Volo.Abp.Emailing
                 options.FileSets.AddEmbedded<AbpEmailingModule>();
             });
 
-            Configure<BackgroundJobOptions>(options =>
+            Configure<AbpBackgroundJobOptions>(options =>
             {
                 options.AddJob<BackgroundEmailSendingJob>();
             });

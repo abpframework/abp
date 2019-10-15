@@ -89,7 +89,7 @@ namespace MyCompanyName.MyProjectName
                 options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
 
-            Configure<BackgroundJobOptions>(options =>
+            Configure<AbpBackgroundJobOptions>(options =>
             {
                 options.IsJobExecutionEnabled = false;
             });
