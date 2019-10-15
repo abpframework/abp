@@ -2,13 +2,13 @@
 
 namespace Volo.Abp.Authorization.Permissions
 {
-    public class PermissionOptions
+    public class AbpPermissionOptions
     {
         public ITypeList<IPermissionDefinitionProvider> DefinitionProviders { get; }
 
         public ITypeList<IPermissionValueProvider> ValueProviders { get; }
 
-        public PermissionOptions()
+        public AbpPermissionOptions()
         {
             DefinitionProviders = new TypeList<IPermissionDefinitionProvider>();
             ValueProviders = new TypeList<IPermissionValueProvider>();
