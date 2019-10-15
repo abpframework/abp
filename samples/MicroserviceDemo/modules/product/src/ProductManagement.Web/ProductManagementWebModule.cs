@@ -28,7 +28,7 @@ namespace ProductManagement
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new ProductManagementMenuContributor());
             });

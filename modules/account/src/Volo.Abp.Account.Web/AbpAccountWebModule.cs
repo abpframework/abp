@@ -40,7 +40,7 @@ namespace Volo.Abp.Account.Web
                 options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
             });
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpAccountUserMenuContributor());
             });

@@ -23,7 +23,7 @@ namespace Volo.Abp.UI.Navigation
                     .AddVirtualJson("/Volo/Abp/Ui/Navigation/Localization/Resource");
             });
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DefaultMenuContributor());
             });

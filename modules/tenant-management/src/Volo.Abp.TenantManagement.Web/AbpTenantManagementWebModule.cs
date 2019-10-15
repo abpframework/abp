@@ -37,7 +37,7 @@ namespace Volo.Abp.TenantManagement.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpTenantManagementWebMainMenuContributor());
             });

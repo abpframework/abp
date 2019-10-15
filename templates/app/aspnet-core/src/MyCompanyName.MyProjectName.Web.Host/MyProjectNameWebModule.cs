@@ -171,7 +171,7 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureNavigationServices(IConfigurationRoot configuration)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });

@@ -3,12 +3,12 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.UI.Navigation
 {
-    public class NavigationOptions
+    public class AbpNavigationOptions
     {
         [NotNull]
         public List<IMenuContributor> MenuContributors { get; }
 
-        public NavigationOptions()
+        public AbpNavigationOptions()
         {
             MenuContributors = new List<IMenuContributor>();
         }
