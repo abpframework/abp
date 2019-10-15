@@ -25,7 +25,7 @@ namespace Volo.Abp.Data.MultiTenancy
 
         protected override void BeforeAddApplication(IServiceCollection services)
         {
-            services.Configure<DbConnectionOptions>(options =>
+            services.Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = "default-value";
                 options.ConnectionStrings["db1"] = "db1-default-value";

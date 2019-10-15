@@ -68,7 +68,7 @@ namespace VoloDocs.Web
                 options.RoutePrefix = null;
             });
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration["ConnectionString"];
             });

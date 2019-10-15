@@ -66,7 +66,7 @@ namespace Volo.BloggingTestApp
                 options.RoutePrefix = null;
             });
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
 #if MONGODB
                 const string connStringName = "MongoDb";

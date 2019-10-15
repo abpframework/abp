@@ -1,10 +1,10 @@
 ﻿namespace Volo.Abp.Data
 {
-    public class DbConnectionOptions
+    public class AbpDbConnectionOptions
     {
         public ConnectionStrings ConnectionStrings { get; set; }
 
-        public DbConnectionOptions()
+        public AbpDbConnectionOptions()
         {
             ConnectionStrings = new ConnectionStrings();
         }
