@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Caching
 {
-    public class CacheOptions
+    public class AbpCacheOptions
     {
         /// <summary>
         /// Cache key prefix.
@@ -22,7 +22,7 @@ namespace Volo.Abp.Caching
         /// </summary>
         public List<Func<string, DistributedCacheEntryOptions>> CacheConfigurators { get; set; } //TODO  list item use a configurator interface instead?
 
-        public CacheOptions()
+        public AbpCacheOptions()
         {
             CacheConfigurators = new List<Func<string, DistributedCacheEntryOptions>>();
             GlobalCacheEntryOptions = new DistributedCacheEntryOptions();

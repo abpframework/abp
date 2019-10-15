@@ -87,7 +87,7 @@ namespace MyCompanyName.MyProjectName
                     options.ApiName = "MyProjectName";
                 });
 
-            Configure<CacheOptions>(options =>
+            Configure<AbpCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });

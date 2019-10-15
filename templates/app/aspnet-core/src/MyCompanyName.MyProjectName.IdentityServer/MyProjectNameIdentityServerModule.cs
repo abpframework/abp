@@ -94,7 +94,7 @@ namespace MyCompanyName.MyProjectName
                 options.IsJobExecutionEnabled = false;
             });
 
-            Configure<CacheOptions>(options =>
+            Configure<AbpCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });

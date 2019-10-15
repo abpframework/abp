@@ -88,7 +88,7 @@ namespace Acme.BookStore.BookManagement
                     options.ApiName = "BookManagement";
                 });
 
-            Configure<CacheOptions>(options =>
+            Configure<AbpCacheOptions>(options =>
             {
                 options.KeyPrefix = "BookManagement:";
             });

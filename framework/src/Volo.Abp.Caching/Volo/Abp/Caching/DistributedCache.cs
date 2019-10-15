@@ -36,12 +36,12 @@ namespace Volo.Abp.Caching
 
         protected DistributedCacheEntryOptions DefaultCacheOptions;
 
-        private readonly CacheOptions _cacheOption;
+        private readonly AbpCacheOptions _cacheOption;
 
         private readonly DistributedCacheOptions _distributedCacheOption;
 
         public DistributedCache(
-            IOptions<CacheOptions> cacheOption,
+            IOptions<AbpCacheOptions> cacheOption,
             IOptions<DistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,

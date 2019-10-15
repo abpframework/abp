@@ -86,7 +86,7 @@ namespace MyCompanyName.MyProjectName
         
         private void ConfigureCache(IConfigurationRoot configuration)
         {
-            Configure<CacheOptions>(options =>
+            Configure<AbpCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });
