@@ -17,7 +17,7 @@ namespace Volo.Abp.MultiTenancy
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            Configure<DefaultTenantStoreOptions>(configuration);
+            Configure<AbpDefaultTenantStoreOptions>(configuration);
         }
     }
 }
