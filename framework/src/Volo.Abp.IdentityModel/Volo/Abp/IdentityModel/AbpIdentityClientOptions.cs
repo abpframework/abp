@@ -1,10 +1,10 @@
 ﻿namespace Volo.Abp.IdentityModel
 {
-    public class IdentityClientOptions
+    public class AbpIdentityClientOptions
     {
         public IdentityClientConfigurationDictionary IdentityClients { get; set; }
 
-        public IdentityClientOptions()
+        public AbpIdentityClientOptions()
         {
             IdentityClients = new IdentityClientConfigurationDictionary();
         }
