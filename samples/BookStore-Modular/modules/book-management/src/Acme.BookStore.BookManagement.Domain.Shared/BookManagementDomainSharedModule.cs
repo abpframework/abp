@@ -27,7 +27,7 @@ namespace Acme.BookStore.BookManagement
                     .AddVirtualJson("/Localization/BookManagement");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("BookManagement", typeof(BookManagementResource));
             });

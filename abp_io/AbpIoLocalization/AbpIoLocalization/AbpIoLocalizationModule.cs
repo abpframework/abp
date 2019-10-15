@@ -24,7 +24,7 @@ namespace AbpIoLocalization
                 options.FileSets.AddEmbedded<AbpIoLocalizationModule>("AbpIoLocalization");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Volo.AbpIo.Commercial", typeof(AbpIoCommercialResource));
                 options.MapCodeNamespace("Volo.AbpIo.Domain", typeof(AbpIoBaseResource));

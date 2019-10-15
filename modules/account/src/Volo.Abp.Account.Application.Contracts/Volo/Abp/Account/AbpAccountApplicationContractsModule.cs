@@ -28,7 +28,7 @@ namespace Volo.Abp.Account
                     .AddVirtualJson("/Volo/Abp/Account/Localization/Resources");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Volo.Account", typeof(AccountResource));
             });

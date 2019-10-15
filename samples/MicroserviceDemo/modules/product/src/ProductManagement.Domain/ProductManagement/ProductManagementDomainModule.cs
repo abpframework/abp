@@ -28,7 +28,7 @@ namespace ProductManagement
                 options.Resources.Get<ProductManagementResource>().AddVirtualJson("/ProductManagement/Localization/Domain");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("ProductManagement", typeof(ProductManagementResource));
             });

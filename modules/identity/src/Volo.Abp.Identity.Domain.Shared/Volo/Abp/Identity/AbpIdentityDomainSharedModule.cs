@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity
                     ).AddVirtualJson("/Volo/Abp/Identity/Localization");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Volo.Abp.Identity", typeof(IdentityResource));
             });

@@ -27,7 +27,7 @@ namespace MyCompanyName.MyProjectName
                     .AddVirtualJson("/Localization/MyProjectName");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("MyProjectName", typeof(MyProjectNameResource));
             });
