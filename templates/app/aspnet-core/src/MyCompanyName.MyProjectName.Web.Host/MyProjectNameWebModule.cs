@@ -101,7 +101,7 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureMultiTenancy()
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });

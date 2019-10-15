@@ -46,7 +46,7 @@ namespace MyCompanyName.MyProjectName
                 options.UseSqlServer();
             });
 
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });

@@ -102,7 +102,7 @@ namespace Acme.BookStore.BookManagement
 
         private void ConfigureMultiTenancy()
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });

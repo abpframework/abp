@@ -47,7 +47,7 @@ namespace Acme.BookStore.BookManagement
                 options.UseSqlServer();
             });
 
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });

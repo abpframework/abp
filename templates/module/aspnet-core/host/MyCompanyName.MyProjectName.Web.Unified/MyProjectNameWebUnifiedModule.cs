@@ -94,7 +94,7 @@ namespace MyCompanyName.MyProjectName
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "Chinese"));
             });
 
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });

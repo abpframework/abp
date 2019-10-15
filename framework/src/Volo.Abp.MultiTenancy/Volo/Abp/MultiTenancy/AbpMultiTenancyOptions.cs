@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.MultiTenancy
 {
-    public class MultiTenancyOptions
+    public class AbpMultiTenancyOptions
     {
         /// <summary>
         /// A central point to enable/disable multi-tenancy.
