@@ -2,7 +2,7 @@
 
 namespace Microsoft.Extensions.Configuration
 {
-    public class ConfigurationBuilderOptions
+    public class AbpConfigurationBuilderOptions
     {
         /// <summary>
         /// Used to set assembly which is used to get the user secret id for the application.

@@ -5,9 +5,9 @@ namespace Microsoft.Extensions.Configuration
 {
     public static class ConfigurationHelper
     {
-        public static IConfigurationRoot BuildConfiguration(ConfigurationBuilderOptions options = null)
+        public static IConfigurationRoot BuildConfiguration(AbpConfigurationBuilderOptions options = null)
         {
-            options = options ?? new ConfigurationBuilderOptions();
+            options = options ?? new AbpConfigurationBuilderOptions();
 
             if (options.BasePath.IsNullOrEmpty())
             {

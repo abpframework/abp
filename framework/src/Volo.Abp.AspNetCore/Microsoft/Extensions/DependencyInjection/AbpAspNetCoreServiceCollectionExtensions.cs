@@ -12,13 +12,13 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         [Obsolete]
-        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)
+        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, AbpConfigurationBuilderOptions options = null)
         {
             return services.GetHostingEnvironment().BuildConfiguration(options);
         }
 
         [Obsolete]
-        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)
+        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, AbpConfigurationBuilderOptions options = null)
         {
             var configuration = services.BuildConfiguration(options);
             services.SetConfiguration(configuration);
