@@ -8,7 +8,7 @@ namespace Volo.Abp.Uow
     /// <summary>
     /// Global (default) unit of work options
     /// </summary>
-    public class UnitOfWorkDefaultOptions
+    public class AbpUnitOfWorkDefaultOptions
     {
         public UnitOfWorkTransactionBehavior TransactionBehavior { get; set; }
 

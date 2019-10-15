@@ -13,9 +13,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
     public class AbpUowActionFilter : IAsyncActionFilter, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly UnitOfWorkDefaultOptions _defaultOptions;
+        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
-        public AbpUowActionFilter(IUnitOfWorkManager unitOfWorkManager, IOptions<UnitOfWorkDefaultOptions> options)
+        public AbpUowActionFilter(IUnitOfWorkManager unitOfWorkManager, IOptions<AbpUnitOfWorkDefaultOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _defaultOptions = options.Value;

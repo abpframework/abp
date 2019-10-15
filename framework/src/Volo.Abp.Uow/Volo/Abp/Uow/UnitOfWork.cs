@@ -34,13 +34,13 @@ namespace Volo.Abp.Uow
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
-        private readonly UnitOfWorkDefaultOptions _defaultOptions;
+        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
         private Exception _exception;
         private bool _isCompleting;
         private bool _isRolledback;
 
-        public UnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options)
+        public UnitOfWork(IServiceProvider serviceProvider, IOptions<AbpUnitOfWorkDefaultOptions> options)
         {
             ServiceProvider = serviceProvider;
             _defaultOptions = options.Value;
