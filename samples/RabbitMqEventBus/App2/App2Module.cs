@@ -12,7 +12,7 @@ namespace App2
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<RabbitMqEventBusOptions>(options =>
+            Configure<AbpRabbitMqEventBusOptions>(options =>
             {
                 options.ClientName = "TestApp2";
                 options.ExchangeName = "TestMessages";
