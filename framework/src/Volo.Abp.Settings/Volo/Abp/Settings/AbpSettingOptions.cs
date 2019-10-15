@@ -2,13 +2,13 @@
 
 namespace Volo.Abp.Settings
 {
-    public class SettingOptions
+    public class AbpSettingOptions
     {
         public ITypeList<ISettingDefinitionProvider> DefinitionProviders { get; }
 
         public ITypeList<ISettingValueProvider> ValueProviders { get; }
 
-        public SettingOptions()
+        public AbpSettingOptions()
         {
             DefinitionProviders = new TypeList<ISettingDefinitionProvider>();
             ValueProviders = new TypeList<ISettingValueProvider>();
