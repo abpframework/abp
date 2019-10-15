@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobWorkerOptions
+    public class AbpBackgroundJobWorkerOptions
     {
         /// <summary>
         /// Interval between polling jobs from <see cref="IBackgroundJobStore"/>.
@@ -33,7 +33,7 @@
         /// </summary>
         public double DefaultWaitFactor { get; set; }
 
-        public BackgroundJobWorkerOptions()
+        public AbpBackgroundJobWorkerOptions()
         {
             MaxJobFetchCount = 1000;
             JobPollPeriod = 5000;
