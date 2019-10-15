@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.Caching
 {
-    public class DistributedCacheOptions
+    public class AbpDistributedCacheOptions
     {
         /// <summary>
         /// Throw or hide exceptions for the distributed cache.
