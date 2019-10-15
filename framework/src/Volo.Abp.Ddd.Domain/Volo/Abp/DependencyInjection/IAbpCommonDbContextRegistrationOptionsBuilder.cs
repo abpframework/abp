@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Volo.Abp.DependencyInjection
 {
-    public interface ICommonDbContextRegistrationOptionsBuilder
+    public interface IAbpCommonDbContextRegistrationOptionsBuilder
     {
         IServiceCollection Services { get; }
 
@@ -15,7 +15,7 @@ namespace Volo.Abp.DependencyInjection
         /// Registers repositories only for aggregate root entities by default.
         /// set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
-        ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false);
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false);
 
         /// <summary>
         /// Registers default repositories for this DbContext.
@@ -26,7 +26,7 @@ namespace Volo.Abp.DependencyInjection
         /// Registers repositories only for aggregate root entities by default.
         /// set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
-        ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false);
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false);
 
         /// <summary>
         /// Registers default repositories for this DbContext.
@@ -37,7 +37,7 @@ namespace Volo.Abp.DependencyInjection
         /// Registers repositories only for aggregate root entities by default.
         /// set <see cref="includeAllEntities"/> to true to include all entities.
         /// </param>
-        ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false);
+        IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false);
 
         /// <summary>
         /// Registers custom repository for a specific entity.
@@ -45,7 +45,7 @@ namespace Volo.Abp.DependencyInjection
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
         /// <typeparam name="TRepository">Repository type</typeparam>
-        ICommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>();
+        IAbpCommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>();
 
         /// <summary>
         /// Uses given class(es) for default repositories.
@@ -53,18 +53,18 @@ namespace Volo.Abp.DependencyInjection
         /// <param name="repositoryImplementationType">Repository implementation type</param>
         /// <param name="repositoryImplementationTypeWithoutKey">Repository implementation type (without primary key)</param>
         /// <returns></returns>
-        ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithoutKey);
+        IAbpCommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses([NotNull] Type repositoryImplementationType, [NotNull] Type repositoryImplementationTypeWithoutKey);
 
         /// <summary>
         /// Replaces given DbContext type with this DbContext type.
         /// </summary>
         /// <typeparam name="TOtherDbContext">The DbContext type to be replaced</typeparam>
-        ICommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>();
+        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>();
 
         /// <summary>
         /// Replaces given DbContext type with this DbContext type.
         /// </summary>
         /// <param name="otherDbContextType">The DbContext type to be replaced</param>
-        ICommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType);
+        IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType);
     }
 }

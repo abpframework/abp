@@ -6,7 +6,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    public class AbpDbContextRegistrationOptions : CommonDbContextRegistrationOptions, IAbpDbContextRegistrationOptionsBuilder
+    public class AbpDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions, IAbpDbContextRegistrationOptionsBuilder
     {
         public Dictionary<Type, object> EntityOptions { get; }
 

@@ -9,7 +9,7 @@ namespace Volo.Abp.DependencyInjection
     /// <summary>
     /// This is a base class for dbcoUse derived
     /// </summary>
-    public abstract class CommonDbContextRegistrationOptions : ICommonDbContextRegistrationOptionsBuilder
+    public abstract class AbpCommonDbContextRegistrationOptions : IAbpCommonDbContextRegistrationOptionsBuilder
     {
         public Type OriginalDbContextType { get; }
 
@@ -31,7 +31,7 @@ namespace Volo.Abp.DependencyInjection
 
         public bool SpecifiedDefaultRepositoryTypes => DefaultRepositoryImplementationType != null && DefaultRepositoryImplementationTypeWithoutKey != null;
 
-        protected CommonDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
+        protected AbpCommonDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
         {
             OriginalDbContextType = originalDbContextType;
             Services = services;
@@ -40,12 +40,12 @@ namespace Volo.Abp.DependencyInjection
             ReplacedDbContextTypes = new List<Type>();
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>()
+        public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext<TOtherDbContext>()
         {
             return ReplaceDbContext(typeof(TOtherDbContext));
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType)
+        public IAbpCommonDbContextRegistrationOptionsBuilder ReplaceDbContext(Type otherDbContextType)
         {
             if (!otherDbContextType.IsAssignableFrom(OriginalDbContextType))
             {
@@ -57,7 +57,7 @@ namespace Volo.Abp.DependencyInjection
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false)
+        public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(bool includeAllEntities = false)
         {
             RegisterDefaultRepositories = true;
             IncludeAllEntitiesForDefaultRepositories = includeAllEntities;
@@ -65,7 +65,7 @@ namespace Volo.Abp.DependencyInjection
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false)
+        public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories(Type defaultRepositoryDbContextType, bool includeAllEntities = false)
         {
             if (!defaultRepositoryDbContextType.IsAssignableFrom(OriginalDbContextType))
             {
@@ -77,19 +77,19 @@ namespace Volo.Abp.DependencyInjection
             return AddDefaultRepositories(includeAllEntities);
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false)
+        public IAbpCommonDbContextRegistrationOptionsBuilder AddDefaultRepositories<TDefaultRepositoryDbContext>(bool includeAllEntities = false)
         {
             return AddDefaultRepositories(typeof(TDefaultRepositoryDbContext), includeAllEntities);
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>()
+        public IAbpCommonDbContextRegistrationOptionsBuilder AddRepository<TEntity, TRepository>()
         {
             AddCustomRepository(typeof(TEntity), typeof(TRepository));
 
             return this;
         }
 
-        public ICommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses(
+        public IAbpCommonDbContextRegistrationOptionsBuilder SetDefaultRepositoryClasses(
             Type repositoryImplementationType,
             Type repositoryImplementationTypeWithoutKey
             )
