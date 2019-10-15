@@ -267,5 +267,47 @@ namespace Volo.Abp.Caching
             cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
         }
+
+        [Fact]
+        public async Task Should_Set_Get_And_Remove_Cache_Items_For_Same_Object_Type_With_Different_CacheKeys()
+        {
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem, DummyObjectAsCacheKey>>();
+
+            var cache1Key = new DummyObjectAsCacheKey { DummyData = "DummyData", DummyInt = 42 };
+            var cache2Key = new DummyObjectAsCacheKey { DummyData = "DummyData2", DummyInt = 24 };
+            const string personName = "john nash";
+
+            //Get (not exists yet)
+            var cacheItem1 = await personCache.GetAsync(cache1Key);
+            var cacheItem2 = await personCache.GetAsync(cache2Key);
+            cacheItem1.ShouldBeNull();
+            cacheItem2.ShouldBeNull();
+
+            //Set
+            cacheItem1 = new PersonCacheItem(personName);
+            cacheItem2 = new PersonCacheItem(personName);
+            await personCache.SetAsync(cache1Key, cacheItem1);
+            await personCache.SetAsync(cache2Key, cacheItem2);
+
+            //Get (it should be available now
+            cacheItem1 = await personCache.GetAsync(cache1Key);
+            cacheItem1.ShouldNotBeNull();
+            cacheItem1.Name.ShouldBe(personName);
+
+            cacheItem2 = await personCache.GetAsync(cache2Key);
+            cacheItem2.ShouldNotBeNull();
+            cacheItem2.Name.ShouldBe(personName);
+
+            //Remove 
+            await personCache.RemoveAsync(cache1Key);
+            await personCache.RemoveAsync(cache2Key);
+
+            //Get (not exists since removed)
+            cacheItem1 = await personCache.GetAsync(cache1Key);
+            cacheItem1.ShouldBeNull();
+            cacheItem2 = await personCache.GetAsync(cache2Key);
+            cacheItem2.ShouldBeNull();
+        }
+
     }
 }
