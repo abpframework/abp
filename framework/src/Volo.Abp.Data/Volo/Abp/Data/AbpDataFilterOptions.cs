@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Data
 {
-    public class DataFilterOptions
+    public class AbpDataFilterOptions
     {
         public Dictionary<Type, DataFilterState> DefaultStates { get; }
 
-        public DataFilterOptions()
+        public AbpDataFilterOptions()
         {
             DefaultStates = new Dictionary<Type, DataFilterState>();
         }
