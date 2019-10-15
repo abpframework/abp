@@ -1,6 +1,6 @@
 ﻿namespace Volo.Abp.BackgroundWorkers
 {
-    public class BackgroundWorkerOptions
+    public class AbpBackgroundWorkerOptions
     {
         /// <summary>
         /// Default: true.
