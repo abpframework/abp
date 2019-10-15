@@ -25,7 +25,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         public ILogger<JobQueue<TArgs>> Logger { get; set; }
 
         protected AbpBackgroundJobOptions AbpBackgroundJobOptions { get; }
-        protected RabbitMqBackgroundJobOptions RabbitMqBackgroundJobOptions { get; }
+        protected AbpRabbitMqBackgroundJobOptions AbpRabbitMqBackgroundJobOptions { get; }
         protected IChannelPool ChannelPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
@@ -36,14 +36,14 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         public JobQueue(
             IOptions<AbpBackgroundJobOptions> backgroundJobOptions,
-            IOptions<RabbitMqBackgroundJobOptions> rabbitMqAbpBackgroundJobOptions,
+            IOptions<AbpRabbitMqBackgroundJobOptions> rabbitMqAbpBackgroundJobOptions,
             IChannelPool channelPool,
             IRabbitMqSerializer serializer,
             IBackgroundJobExecuter jobExecuter,
             IServiceScopeFactory serviceScopeFactory)
         {
             AbpBackgroundJobOptions = backgroundJobOptions.Value;
-            RabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
+            AbpRabbitMqBackgroundJobOptions = rabbitMqAbpBackgroundJobOptions.Value;
             Serializer = serializer;
             JobExecuter = jobExecuter;
             ServiceScopeFactory = serviceScopeFactory;
@@ -57,10 +57,10 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         protected virtual JobQueueConfiguration GetOrCreateJobQueueConfiguration()
         {
-            return RabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
+            return AbpRabbitMqBackgroundJobOptions.JobQueues.GetOrDefault(typeof(TArgs)) ??
                    new JobQueueConfiguration(
                        typeof(TArgs),
-                       RabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
+                       AbpRabbitMqBackgroundJobOptions.DefaultQueueNamePrefix + JobConfiguration.JobName
                    );
         }
 

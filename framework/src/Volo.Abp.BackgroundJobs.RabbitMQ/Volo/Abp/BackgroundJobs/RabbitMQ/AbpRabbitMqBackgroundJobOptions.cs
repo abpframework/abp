@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
-    public class RabbitMqBackgroundJobOptions
+    public class AbpRabbitMqBackgroundJobOptions
     {
         /// <summary>
         /// Key: Job Args Type
@@ -15,7 +15,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         /// </summary>
         public string DefaultQueueNamePrefix { get; set; }
 
-        public RabbitMqBackgroundJobOptions()
+        public AbpRabbitMqBackgroundJobOptions()
         {
             JobQueues = new Dictionary<Type, JobQueueConfiguration>();
             DefaultQueueNamePrefix = "AbpBackgroundJobs.";
