@@ -1,11 +1,10 @@
-import { Router } from '@angular/router';
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
-import { Store, NgxsModule } from '@ngxs/store';
-import { Observable, of } from 'rxjs';
-import { ConfigService, ApplicationConfigurationService, RestService } from '../services';
-import { ConfigState } from '../states';
-import { HttpClient } from '@angular/common/http';
+import { Store } from '@ngxs/store';
+import { ReplaySubject, timer, Subject, of } from 'rxjs';
 import { Config } from '../models/config';
+import { ApplicationConfigurationService, ConfigService } from '../services';
+import { ConfigState } from '../states';
+import { SetLanguage, PatchRouteByName } from '../actions';
 
 export const CONFIG_STATE_DATA = {
   environment: {
@@ -115,6 +114,7 @@ describe('ConfigService', () => {
   let store: SpyObject<Store>;
   let service: ConfigService;
   let state: ConfigState;
+  let appConfigService: SpyObject<ApplicationConfigurationService>;
 
   const createService = createServiceFactory({
     service: ConfigService,
@@ -125,6 +125,7 @@ describe('ConfigService', () => {
     spectator = createService();
     store = spectator.get(Store);
     service = spectator.service;
+    appConfigService = spectator.get(ApplicationConfigurationService);
     state = new ConfigState(spectator.get(ApplicationConfigurationService), store);
   });
 
@@ -223,8 +224,79 @@ describe('ConfigService', () => {
   });
 
   describe('#GetAppConfiguration', () => {
-    it('should call the getConfiguration of ApplicationConfigurationService and patch the state', () => {
-      // state.addData()
+    it('should call the getConfiguration of ApplicationConfigurationService and patch the state', done => {
+      let patchStateArg;
+      let dispatchArg;
+
+      const configuration = {
+        setting: { values: { 'Abp.Localization.DefaultLanguage': 'tr;TR' } },
+      };
+
+      const res$ = new ReplaySubject(1);
+      res$.next(configuration);
+
+      const patchState = jest.fn(s => (patchStateArg = s));
+      const dispatch = jest.fn(a => {
+        dispatchArg = a;
+        return of(a);
+      });
+      appConfigService.getConfiguration.andReturn(res$);
+
+      state.addData({ patchState, dispatch } as any).subscribe();
+
+      timer(0).subscribe(() => {
+        expect(patchStateArg).toEqual(configuration);
+        expect(dispatchArg instanceof SetLanguage).toBeTruthy();
+        expect(dispatchArg).toEqual({ payload: 'tr' });
+        done();
+      });
+    });
+  });
+
+  describe('#PatchRouteByName', () => {
+    it('should should patch the route', () => {
+      let patchStateArg;
+
+      const patchState = jest.fn(s => (patchStateArg = s));
+      const getState = jest.fn(() => CONFIG_STATE_DATA);
+
+      state.patchRoute(
+        { patchState, getState } as any,
+        new PatchRouteByName('::Menu:Home', {
+          name: 'Home',
+          path: 'home',
+          children: [{ path: 'dashboard', name: 'Dashboard' }],
+        }),
+      );
+
+      expect(patchStateArg.routes[0]).toEqual({
+        name: 'Home',
+        path: 'home',
+        url: '/home',
+        children: [{ path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' }],
+      });
+    });
+
+    it('should should patch the route without path', () => {
+      let patchStateArg;
+
+      const patchState = jest.fn(s => (patchStateArg = s));
+      const getState = jest.fn(() => CONFIG_STATE_DATA);
+
+      state.patchRoute(
+        { patchState, getState } as any,
+        new PatchRouteByName('::Menu:Home', {
+          name: 'Main',
+          children: [{ path: 'dashboard', name: 'Dashboard' }],
+        }),
+      );
+
+      expect(patchStateArg.routes[0]).toEqual({
+        name: 'Main',
+        path: '',
+        url: '/',
+        children: [{ path: 'dashboard', name: 'Dashboard', url: '/dashboard' }],
+      });
     });
   });
 });
