@@ -23,7 +23,7 @@ namespace Volo.Abp.EventBus.RabbitMq
     public class RabbitMqDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
     {
         protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
-        protected DistributedEventBusOptions DistributedEventBusOptions { get; }
+        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
         
@@ -38,14 +38,14 @@ namespace Volo.Abp.EventBus.RabbitMq
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
             IServiceScopeFactory serviceScopeFactory, 
-            IOptions<DistributedEventBusOptions> distributedEventBusOptions,
+            IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory)
             : base(serviceScopeFactory)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             MessageConsumerFactory = messageConsumerFactory;
-            DistributedEventBusOptions = distributedEventBusOptions.Value;
+            AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             AbpRabbitMqEventBusOptions = options.Value;
             
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
@@ -71,7 +71,7 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             Consumer.OnMessageReceived(ProcessEventAsync);
 
-            SubscribeHandlers(DistributedEventBusOptions.Handlers);
+            SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
         }
 
         private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)

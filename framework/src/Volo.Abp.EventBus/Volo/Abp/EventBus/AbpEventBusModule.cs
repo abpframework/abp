@@ -37,7 +37,7 @@ namespace Volo.Abp.EventBus
                 options.Handlers.AddIfNotContains(localHandlers);
             });
 
-            services.Configure<DistributedEventBusOptions>(options =>
+            services.Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.Handlers.AddIfNotContains(distributedHandlers);
             });
