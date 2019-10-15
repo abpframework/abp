@@ -1,11 +1,9 @@
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Observable } from 'rxjs';
 export declare class AuthGuard implements CanActivate {
-    private oauthService;
-    private store;
-    private router;
-    constructor(oauthService: OAuthService, store: Store, router: Router);
-    canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean | UrlTree;
+  private oauthService;
+  private router;
+  constructor(oauthService: OAuthService, router: Router);
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean | UrlTree;
 }

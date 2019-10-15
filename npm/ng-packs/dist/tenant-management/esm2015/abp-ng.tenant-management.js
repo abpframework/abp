@@ -1,12 +1,31 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Generated bundle index. Do not edit.
  */
-export { TenantManagementProviders, TenantManagementModule, GetTenants, GetTenantById, CreateTenant, UpdateTenant, DeleteTenant, TenantsComponent, TENANT_MANAGEMENT_ROUTES, TenantsResolver, TenantManagementService, TenantManagementState } from './public-api';
-export { CreateTenant as ɵf, DeleteTenant as ɵh, GetTenantById as ɵe, GetTenants as ɵd, UpdateTenant as ɵg } from './lib/actions/tenant-management.actions';
+export {
+  TenantManagementProviders,
+  TenantManagementModule,
+  GetTenants,
+  GetTenantById,
+  CreateTenant,
+  UpdateTenant,
+  DeleteTenant,
+  TenantsComponent,
+  TENANT_MANAGEMENT_ROUTES,
+  TenantsResolver,
+  TenantManagementService,
+  TenantManagementState,
+} from './public-api';
+export {
+  CreateTenant as ɵf,
+  DeleteTenant as ɵh,
+  GetTenantById as ɵe,
+  GetTenants as ɵd,
+  UpdateTenant as ɵg,
+} from './lib/actions/tenant-management.actions';
 export { TenantsComponent as ɵa } from './lib/components/tenants/tenants.component';
 export { TenantsResolver as ɵk } from './lib/resolvers/tenants.resolver';
 export { TenantManagementService as ɵc } from './lib/services/tenant-management.service';

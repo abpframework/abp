@@ -90,7 +90,7 @@ export class ConfigState {
     return selector;
   }
 
-  static getSetting(key: string, findContain?: boolean) {
+  static getSetting(key: string) {
     const selector = createSelector(
       [ConfigState],
       (state: Config.State) => {

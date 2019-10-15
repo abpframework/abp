@@ -1,7 +1,5 @@
-﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
 
 namespace BasicAspNetCoreApplication
 {

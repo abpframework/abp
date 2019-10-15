@@ -4,7 +4,7 @@ import fse from 'fs-extra';
 
 (async () => {
   const { projects } = await fse.readJSON('../angular.json');
-  const projectNames = Object.keys(projects);
+  const projectNames = Object.keys(projects).filter(project => project !== 'dev-app');
 
   const packageJson = await fse.readJSON('../package.json');
 

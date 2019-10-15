@@ -1,22 +1,22 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-import * as tslib_1 from "tslib";
+import * as tslib_1 from 'tslib';
 import { InjectionToken } from '@angular/core';
 /**
  * @param {?} environment
  * @return {?}
  */
 export function environmentFactory(environment) {
-    return tslib_1.__assign({}, environment);
+  return tslib_1.__assign({}, environment);
 }
 /**
  * @param {?} config
  * @return {?}
  */
 export function configFactory(config) {
-    return tslib_1.__assign({}, config);
+  return tslib_1.__assign({}, config);
 }
 /** @type {?} */
 export var ENVIRONMENT = new InjectionToken('ENVIRONMENT');
