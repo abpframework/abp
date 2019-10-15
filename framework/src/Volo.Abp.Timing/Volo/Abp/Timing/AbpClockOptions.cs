@@ -2,14 +2,14 @@ using System;
 
 namespace Volo.Abp.Timing
 {
-    public class ClockOptions
+    public class AbpClockOptions
     {
         /// <summary>
         /// Default: <see cref="DateTimeKind.Unspecified"/>
         /// </summary>
         public DateTimeKind Kind { get; set; }
 
-        public ClockOptions()
+        public AbpClockOptions()
         {
             Kind = DateTimeKind.Unspecified;
         }
