@@ -31,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiThemeSharedModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared");
             });
 
-            Configure<BundlingOptions>(options =>
+            Configure<AbpBundlingOptions>(options =>
             {
                 options
                     .StyleBundles

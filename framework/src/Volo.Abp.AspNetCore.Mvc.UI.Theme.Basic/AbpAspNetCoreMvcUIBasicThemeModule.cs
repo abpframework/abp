@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
             });
 
-            Configure<BundlingOptions>(options =>
+            Configure<AbpBundlingOptions>(options =>
             {
                 options
                     .StyleBundles

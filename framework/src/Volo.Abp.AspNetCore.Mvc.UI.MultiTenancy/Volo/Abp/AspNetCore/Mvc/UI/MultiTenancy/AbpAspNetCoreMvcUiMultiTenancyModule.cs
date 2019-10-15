@@ -47,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
                     .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/UI/MultiTenancy/Localization");
             });
 
-            Configure<BundlingOptions>(options =>
+            Configure<AbpBundlingOptions>(options =>
             {
                 options.ScriptBundles
                     .Get(StandardBundles.Scripts.Global)
