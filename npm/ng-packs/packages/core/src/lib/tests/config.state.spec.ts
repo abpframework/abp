@@ -109,7 +109,7 @@ export const CONFIG_STATE_DATA = {
   },
 } as Config.State;
 
-describe('ConfigService', () => {
+describe('ConfigState', () => {
   let spectator: SpectatorService<ConfigService>;
   let store: SpyObject<Store>;
   let service: ConfigService;
