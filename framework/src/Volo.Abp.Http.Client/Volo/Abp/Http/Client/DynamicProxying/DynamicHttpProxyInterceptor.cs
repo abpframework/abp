@@ -34,7 +34,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
         protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
         protected IApiDescriptionFinder ApiDescriptionFinder { get; }
-        protected RemoteServiceOptions RemoteServiceOptions { get; }
+        protected AbpRemoteServiceOptions AbpRemoteServiceOptions { get; }
         protected AbpHttpClientOptions ClientOptions { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
@@ -51,7 +51,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory,
             IOptions<AbpHttpClientOptions> clientOptions,
-            IOptionsSnapshot<RemoteServiceOptions> remoteServiceOptions,
+            IOptionsSnapshot<AbpRemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
@@ -69,7 +69,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             JsonSerializer = jsonSerializer;
             ClientAuthenticator = clientAuthenticator;
             ClientOptions = clientOptions.Value;
-            RemoteServiceOptions = remoteServiceOptions.Value;
+            AbpRemoteServiceOptions = remoteServiceOptions.Value;
 
             Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
@@ -129,7 +129,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         private async Task<string> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
-            var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+            var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
 
             var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
 
@@ -241,8 +241,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return RemoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
-                   ?? RemoteServiceOptions.RemoteServices.Default?.Version;
+            return AbpRemoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
+                   ?? AbpRemoteServiceOptions.RemoteServices.Default?.Version;
         }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
