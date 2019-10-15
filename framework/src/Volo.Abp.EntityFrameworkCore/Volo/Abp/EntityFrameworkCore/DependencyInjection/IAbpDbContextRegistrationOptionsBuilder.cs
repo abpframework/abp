@@ -7,7 +7,7 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
     public interface IAbpDbContextRegistrationOptionsBuilder : IAbpCommonDbContextRegistrationOptionsBuilder
     {
-        void Entity<TEntity>([NotNull] Action<EntityOptions<TEntity>> optionsAction)
+        void Entity<TEntity>([NotNull] Action<AbpEntityOptions<TEntity>> optionsAction)
             where TEntity : IEntity;
     }
 }

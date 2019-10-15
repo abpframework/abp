@@ -6,30 +6,30 @@ using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
 {
-    public class EntityOptions<TEntity>
+    public class AbpEntityOptions<TEntity>
         where TEntity : IEntity
     {
-        public static EntityOptions<TEntity> Empty { get; } = new EntityOptions<TEntity>();
+        public static AbpEntityOptions<TEntity> Empty { get; } = new AbpEntityOptions<TEntity>();
 
         public Func<IQueryable<TEntity>, IQueryable<TEntity>> DefaultWithDetailsFunc { get; set; }
     }
 
-    public class EntityOptions
+    public class AbpEntityOptions
     {
         private readonly IDictionary<Type, object> _options;
 
-        public EntityOptions()
+        public AbpEntityOptions()
         {
             _options = new Dictionary<Type, object>();
         }
 
-        public EntityOptions<TEntity> GetOrNull<TEntity>()
+        public AbpEntityOptions<TEntity> GetOrNull<TEntity>()
             where TEntity : IEntity
         {
-            return _options.GetOrDefault(typeof(TEntity)) as EntityOptions<TEntity>;
+            return _options.GetOrDefault(typeof(TEntity)) as AbpEntityOptions<TEntity>;
         }
 
-        public void Entity<TEntity>([NotNull] Action<EntityOptions<TEntity>> optionsAction)
+        public void Entity<TEntity>([NotNull] Action<AbpEntityOptions<TEntity>> optionsAction)
             where TEntity : IEntity
         {
             Check.NotNull(optionsAction, nameof(optionsAction));
@@ -37,8 +37,8 @@ namespace Volo.Abp.EntityFrameworkCore.DependencyInjection
             optionsAction(
                 _options.GetOrAdd(
                     typeof(TEntity),
-                    () => new EntityOptions<TEntity>()
-                ) as EntityOptions<TEntity>
+                    () => new AbpEntityOptions<TEntity>()
+                ) as AbpEntityOptions<TEntity>
             );
         }
     }
