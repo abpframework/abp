@@ -20,14 +20,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected ISourceCodeStore SourceCodeStore { get; }
         protected ITemplateInfoProvider TemplateInfoProvider { get; }
         protected ICliAnalyticsCollect CliAnalyticsCollect { get; }
-        protected CliOptions Options { get; }
+        protected AbpCliOptions Options { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IApiKeyService ApiKeyService { get; }
 
         public TemplateProjectBuilder(ISourceCodeStore sourceCodeStore, 
             ITemplateInfoProvider templateInfoProvider,
             ICliAnalyticsCollect cliAnalyticsCollect, 
-            IOptions<CliOptions> options,
+            IOptions<AbpCliOptions> options,
             IJsonSerializer jsonSerializer, 
             IApiKeyService apiKeyService)
         {

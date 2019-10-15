@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.Cli
 {
-    public class CliOptions
+    public class AbpCliOptions
     {
         public Dictionary<string, Type> Commands { get; }
 
@@ -17,7 +17,7 @@ namespace Volo.Abp.Cli
         /// </summary>
         public string ToolName { get; set; } = "CLI";
 
-        public CliOptions()
+        public AbpCliOptions()
         {
             Commands = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
         }
