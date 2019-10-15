@@ -3,12 +3,12 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.MultiTenancy
 {
-    public class TenantResolveOptions
+    public class AbpTenantResolveOptions
     {
         [NotNull]
         public List<ITenantResolveContributor> TenantResolvers { get; }
 
-        public TenantResolveOptions()
+        public AbpTenantResolveOptions()
         {
             TenantResolvers = new List<ITenantResolveContributor>
             {

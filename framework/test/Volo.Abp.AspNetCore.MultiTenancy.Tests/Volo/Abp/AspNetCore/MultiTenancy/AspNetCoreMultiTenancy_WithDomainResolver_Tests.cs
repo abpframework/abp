@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                     };
                 });
 
-                services.Configure<TenantResolveOptions>(options =>
+                services.Configure<AbpTenantResolveOptions>(options =>
                 {
                     options.AddDomainTenantResolver("{0}.abp.io");
                 });
