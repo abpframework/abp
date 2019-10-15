@@ -2,7 +2,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.MongoDB
 {
-    public class MongoModelBuilderConfigurationOptions
+    public class AbpMongoModelBuilderConfigurationOptions
     {
         [NotNull]
         public string CollectionPrefix
@@ -16,7 +16,7 @@ namespace Volo.Abp.MongoDB
         }
         private string _collectionPrefix;
 
-        public MongoModelBuilderConfigurationOptions([NotNull] string collectionPrefix = "")
+        public AbpMongoModelBuilderConfigurationOptions([NotNull] string collectionPrefix = "")
         {
             Check.NotNull(collectionPrefix, nameof(collectionPrefix));
 
