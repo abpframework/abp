@@ -2,12 +2,12 @@
 
 namespace Volo.Abp.AspNetCore.VirtualFileSystem
 {
-    public class AspNetCoreContentOptions
+    public class AbpAspNetCoreContentOptions
     {
         public List<string> AllowedExtraWebContentFolders { get; }
         public List<string> AllowedExtraWebContentFileExtensions { get; }
 
-        public AspNetCoreContentOptions()
+        public AbpAspNetCoreContentOptions()
         {
             AllowedExtraWebContentFolders = new List<string>
             {
