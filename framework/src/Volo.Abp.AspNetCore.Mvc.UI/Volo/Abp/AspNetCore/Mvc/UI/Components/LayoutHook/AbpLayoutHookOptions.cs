@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 {
-    public class LayoutHookOptions
+    public class AbpLayoutHookOptions
     {
         public IDictionary<string, List<LayoutHookInfo>> Hooks { get; }
 
-        public LayoutHookOptions()
+        public AbpLayoutHookOptions()
         {
             Hooks = new Dictionary<string, List<LayoutHookInfo>>();
         }
 
-        public LayoutHookOptions Add(string name, Type componentType, string layout = null)
+        public AbpLayoutHookOptions Add(string name, Type componentType, string layout = null)
         {
             Hooks
                 .GetOrAdd(name, () => new List<LayoutHookInfo>())
