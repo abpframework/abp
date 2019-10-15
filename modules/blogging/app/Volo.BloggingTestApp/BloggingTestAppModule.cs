@@ -119,7 +119,7 @@ namespace Volo.BloggingTestApp
                 options.SupportedUICultures = cultures;
             });
 
-            Configure<ThemingOptions>(options =>
+            Configure<AbpThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });

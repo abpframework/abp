@@ -124,7 +124,7 @@ namespace VoloDocs.Web
                     .AddVirtualJson("/Localization/Resources/VoloDocs/Web");
             });
 
-            Configure<ThemingOptions>(options =>
+            Configure<AbpThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });

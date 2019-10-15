@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ThemingOptions>(options =>
+            Configure<AbpThemingOptions>(options =>
             {
                 options.Themes.Add<BasicTheme>();
 
