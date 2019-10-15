@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         {
             context.Services.AddTransient<DefaultViewComponentHelper>();
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiWidgetsModule>();
             });

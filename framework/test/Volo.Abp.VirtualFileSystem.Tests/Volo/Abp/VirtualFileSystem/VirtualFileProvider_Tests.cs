@@ -51,7 +51,7 @@ namespace Volo.Abp.VirtualFileSystem
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<TestModule>("Volo.Abp.VirtualFileSystem.MyResources");
                 });

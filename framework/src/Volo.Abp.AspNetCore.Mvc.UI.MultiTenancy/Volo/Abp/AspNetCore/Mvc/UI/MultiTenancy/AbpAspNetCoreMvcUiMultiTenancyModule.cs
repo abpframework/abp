@@ -35,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiMultiTenancyModule>();
             });

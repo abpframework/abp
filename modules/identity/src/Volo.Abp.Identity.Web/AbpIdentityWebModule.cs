@@ -40,7 +40,7 @@ namespace Volo.Abp.Identity.Web
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });

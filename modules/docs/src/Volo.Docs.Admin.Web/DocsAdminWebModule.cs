@@ -41,7 +41,7 @@ namespace Volo.Docs.Admin
                 options.MenuContributors.Add(new DocsMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsAdminWebModule>("Volo.Docs.Admin");
             });

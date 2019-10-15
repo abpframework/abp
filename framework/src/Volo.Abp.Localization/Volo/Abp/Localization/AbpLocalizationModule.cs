@@ -16,7 +16,7 @@ namespace Volo.Abp.Localization
         {
             AbpStringLocalizerFactory.Replace(context.Services);
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpLocalizationModule>("Volo.Abp", "Volo/Abp");
             });

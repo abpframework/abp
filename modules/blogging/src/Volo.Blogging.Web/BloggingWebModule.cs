@@ -40,7 +40,7 @@ namespace Volo.Blogging
                 options.MenuContributors.Add(new BloggingMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingWebModule>("Volo.Blogging");
             });
