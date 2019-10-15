@@ -5,7 +5,7 @@ namespace Volo.Abp.Security.Encryption
     /// <summary>
     /// Options used by <see cref="IStringEncryptionService"/>.
     /// </summary>
-    public class StringEncryptionOptions
+    public class AbpStringEncryptionOptions
     {
         /// <summary>
         /// This constant is used to determine the keysize of the encryption algorithm.
@@ -33,7 +33,7 @@ namespace Volo.Abp.Security.Encryption
         /// </summary>
         public byte[] DefaultSalt { get; set; }
 
-        public StringEncryptionOptions()
+        public AbpStringEncryptionOptions()
         {
             Keysize = 256;
             DefaultPassPhrase = "gsKnGZ041HLL4IM8";
