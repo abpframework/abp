@@ -43,7 +43,7 @@ namespace Volo.Abp.Internal
 
             services.AddAssemblyOf<IAbpApplication>();
 
-            services.Configure<ModuleLifecycleOptions>(options =>
+            services.Configure<AbpModuleLifecycleOptions>(options =>
             {
                 options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();
                 options.Contributors.Add<OnApplicationInitializationModuleLifecycleContributor>();

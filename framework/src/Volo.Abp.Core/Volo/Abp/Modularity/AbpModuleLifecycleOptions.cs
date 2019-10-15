@@ -2,11 +2,11 @@
 
 namespace Volo.Abp.Modularity
 {
-    public class ModuleLifecycleOptions
+    public class AbpModuleLifecycleOptions
     {
         public ITypeList<IModuleLifecycleContributor> Contributors { get; }
 
-        public ModuleLifecycleOptions()
+        public AbpModuleLifecycleOptions()
         {
             Contributors = new TypeList<IModuleLifecycleContributor>();
         }
