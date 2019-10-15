@@ -5,11 +5,11 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Http.Modeling
 {
-    public class ApiDescriptionModelOptions
+    public class AbpApiDescriptionModelOptions
     {
         public HashSet<Type> IgnoredInterfaces { get; }
 
-        public ApiDescriptionModelOptions()
+        public AbpApiDescriptionModelOptions()
         {
             IgnoredInterfaces = new HashSet<Type>
             {
