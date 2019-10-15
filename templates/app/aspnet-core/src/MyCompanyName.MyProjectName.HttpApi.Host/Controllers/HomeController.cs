@@ -9,7 +9,7 @@ namespace MyCompanyName.MyProjectName.Controllers
         {
             //TODO: Enabled once Swagger supports ASP.NET Core 3.x
             //return Redirect("/swagger");
-            return Content("OK: Acme.BookStore.HttpApi.Host is running...");
+            return Content("OK: MyCompanyName.MyProjectName.HttpApi.Host is running...");
         }
     }
 }
