@@ -28,7 +28,7 @@ namespace Volo.Abp.SettingManagement.Web
                 options.MenuContributors.Add(new SettingManagementMainMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpSettingManagementWebModule>("Volo.Abp.SettingManagement.Web");
             });

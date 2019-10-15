@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Volo.Abp.Uow
 {
-    public interface IUnitOfWorkOptions
+    public interface IAbpUnitOfWorkOptions
     {
         bool IsTransactional { get; }
 

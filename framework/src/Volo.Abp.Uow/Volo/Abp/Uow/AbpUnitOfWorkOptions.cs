@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Volo.Abp.Uow
 {
-    public class UnitOfWorkOptions : IUnitOfWorkOptions
+    public class AbpUnitOfWorkOptions : IAbpUnitOfWorkOptions
     {
         /// <summary>
         /// Default: false.
@@ -14,9 +14,9 @@ namespace Volo.Abp.Uow
 
         public TimeSpan? Timeout { get; set; }
 
-        public UnitOfWorkOptions Clone()
+        public AbpUnitOfWorkOptions Clone()
         {
-            return new UnitOfWorkOptions
+            return new AbpUnitOfWorkOptions
             {
                 IsTransactional = IsTransactional,
                 IsolationLevel = IsolationLevel,

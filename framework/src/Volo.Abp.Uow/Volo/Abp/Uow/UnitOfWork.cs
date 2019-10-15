@@ -13,7 +13,7 @@ namespace Volo.Abp.Uow
     {
         public Guid Id { get; } = Guid.NewGuid();
 
-        public IUnitOfWorkOptions Options { get; private set; }
+        public IAbpUnitOfWorkOptions Options { get; private set; }
 
         public IUnitOfWork Outer { get; private set; }
 
@@ -49,7 +49,7 @@ namespace Volo.Abp.Uow
             _transactionApis = new Dictionary<string, ITransactionApi>();
         }
 
-        public virtual void Initialize(UnitOfWorkOptions options)
+        public virtual void Initialize(AbpUnitOfWorkOptions options)
         {
             Check.NotNull(options, nameof(options));
 

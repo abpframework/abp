@@ -68,9 +68,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             }
         }
 
-        private UnitOfWorkOptions CreateOptions(ActionExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
+        private AbpUnitOfWorkOptions CreateOptions(ActionExecutingContext context, UnitOfWorkAttribute unitOfWorkAttribute)
         {
-            var options = new UnitOfWorkOptions();
+            var options = new AbpUnitOfWorkOptions();
 
             unitOfWorkAttribute?.SetOptions(options);
 

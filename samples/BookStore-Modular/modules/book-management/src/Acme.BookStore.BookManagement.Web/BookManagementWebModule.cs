@@ -32,7 +32,7 @@ namespace Acme.BookStore.BookManagement.Web
                 options.MenuContributors.Add(new BookManagementMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BookManagementWebModule>("Acme.BookStore.BookManagement.Web");
             });

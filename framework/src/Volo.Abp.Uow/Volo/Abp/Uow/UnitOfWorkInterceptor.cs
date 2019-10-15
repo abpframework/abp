@@ -48,9 +48,9 @@ namespace Volo.Abp.Uow
             }
         }
 
-        private UnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
+        private AbpUnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
         {
-            var options = new UnitOfWorkOptions();
+            var options = new AbpUnitOfWorkOptions();
 
             unitOfWorkAttribute?.SetOptions(options);
 

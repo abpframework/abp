@@ -16,7 +16,7 @@ namespace Volo.Abp.Uow
 
         public TimeSpan? Timeout { get; set; }
 
-        internal UnitOfWorkOptions Normalize(UnitOfWorkOptions options)
+        internal AbpUnitOfWorkOptions Normalize(AbpUnitOfWorkOptions options)
         {
             if (options.IsolationLevel == null)
             {

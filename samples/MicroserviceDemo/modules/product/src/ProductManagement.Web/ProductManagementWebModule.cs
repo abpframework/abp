@@ -33,7 +33,7 @@ namespace ProductManagement
                 options.MenuContributors.Add(new ProductManagementMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<ProductManagementWebModule>("ProductManagement");
             });

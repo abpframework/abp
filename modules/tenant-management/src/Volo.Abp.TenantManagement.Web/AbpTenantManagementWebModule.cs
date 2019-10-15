@@ -42,7 +42,7 @@ namespace Volo.Abp.TenantManagement.Web
                 options.MenuContributors.Add(new AbpTenantManagementWebMainMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpTenantManagementWebModule>("Volo.Abp.TenantManagement.Web");
             });

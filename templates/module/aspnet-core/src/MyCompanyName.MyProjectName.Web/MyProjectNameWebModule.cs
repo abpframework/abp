@@ -37,7 +37,7 @@ namespace MyCompanyName.MyProjectName.Web
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName.Web");
             });
