@@ -35,7 +35,7 @@ export class SessionState {
   }
 
   @Action(SetTenant)
-  setTenantId({ patchState }: StateContext<Session.State>, { payload }: SetTenant) {
+  setTenant({ patchState }: StateContext<Session.State>, { payload }: SetTenant) {
     patchState({
       tenant: payload,
     });
