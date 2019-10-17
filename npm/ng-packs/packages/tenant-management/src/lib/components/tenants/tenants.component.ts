@@ -1,15 +1,15 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { debounceTime, finalize, pluck, switchMap, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   CreateTenant,
   DeleteTenant,
-  GetTenants,
   GetTenantById,
+  GetTenants,
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
@@ -25,7 +25,7 @@ interface SelectedModalContent {
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
 })
-export class TenantsComponent {
+export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
   data$: Observable<ABP.BasicItem[]>;
 
@@ -80,6 +80,10 @@ export class TenantsComponent {
     private fb: FormBuilder,
     private store: Store,
   ) {}
+
+  ngOnInit() {
+    this.get();
+  }
 
   onSearch(value) {
     this.pageQuery.filter = value;

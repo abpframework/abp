@@ -3,7 +3,7 @@ import { Subject } from 'rxjs';
 import snq from 'snq';
 
 @Directive({
-  selector: '[abpVisibility]'
+  selector: '[abpVisibility]',
 })
 export class VisibilityDirective implements AfterViewInit {
   @Input('abpVisibility')
@@ -17,6 +17,10 @@ export class VisibilityDirective implements AfterViewInit {
   constructor(@Optional() private elRef: ElementRef, private renderer: Renderer2) {}
 
   ngAfterViewInit() {
+    if (!this.focusedElement && this.elRef) {
+      this.focusedElement = this.elRef.nativeElement;
+    }
+
     let observer: MutationObserver;
     if (this.mutationObserverEnabled) {
       observer = new MutationObserver(mutations => {
@@ -25,7 +29,7 @@ export class VisibilityDirective implements AfterViewInit {
 
           const htmlNodes = snq(
             () => Array.from(mutation.target.childNodes).filter(node => node instanceof HTMLElement),
-            []
+            [],
           );
 
           if (!htmlNodes.length) {
@@ -40,13 +44,13 @@ export class VisibilityDirective implements AfterViewInit {
       });
 
       observer.observe(this.focusedElement, {
-        childList: true
+        childList: true,
       });
     } else {
       setTimeout(() => {
         const htmlNodes = snq(
           () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
-          []
+          [],
         );
 
         if (!htmlNodes.length) this.removeFromDOM();

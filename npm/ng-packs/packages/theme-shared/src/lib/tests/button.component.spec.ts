@@ -2,46 +2,55 @@ import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { ButtonComponent } from '../components';
 
 describe('ButtonComponent', () => {
-  let host: SpectatorHost<ButtonComponent>;
+  let spectator: SpectatorHost<ButtonComponent>;
 
   const createHost = createHostFactory(ButtonComponent);
 
-  beforeEach(() => (host = createHost('<abp-button iconClass="fa fa-check">Button</abp-button>')));
+  beforeEach(
+    () =>
+      (spectator = createHost('<abp-button iconClass="fa fa-check" [attributes]="attributes">Button</abp-button>', {
+        hostProps: { attributes: { autofocus: '', name: 'abp-button' } },
+      })),
+  );
 
   it('should display the button', () => {
-    expect(host.query('button')).toBeTruthy();
+    expect(spectator.query('button')).toBeTruthy();
   });
 
   it('should equal the default classes to btn btn-primary', () => {
-    expect(host.query('button')).toHaveClass('btn btn-primary');
+    expect(spectator.query('button')).toHaveClass('btn btn-primary');
   });
 
   it('should equal the default type to button', () => {
-    expect(host.query('button')).toHaveAttribute('type', 'button');
+    expect(spectator.query('button')).toHaveAttribute('type', 'button');
   });
 
   it('should enabled', () => {
-    expect(host.query('[disabled]')).toBeFalsy();
+    expect(spectator.query('[disabled]')).toBeFalsy();
   });
 
   it('should have the text content', () => {
-    expect(host.query('button')).toHaveText('Button');
+    expect(spectator.query('button')).toHaveText('Button');
   });
 
   it('should display the icon', () => {
-    expect(host.query('i.d-none')).toBeFalsy();
-    expect(host.query('i')).toHaveClass('fa');
+    expect(spectator.query('i.d-none')).toBeFalsy();
+    expect(spectator.query('i')).toHaveClass('fa');
   });
 
   it('should display the spinner icon', () => {
-    host.component.loading = true;
-    host.detectComponentChanges();
-    expect(host.query('i')).toHaveClass('fa-spinner');
+    spectator.component.loading = true;
+    spectator.detectComponentChanges();
+    expect(spectator.query('i')).toHaveClass('fa-spinner');
   });
 
   it('should disabled when the loading input is true', () => {
-    host.component.loading = true;
-    host.detectComponentChanges();
-    expect(host.query('[disabled]')).toBeDefined();
+    spectator.component.loading = true;
+    spectator.detectComponentChanges();
+    expect(spectator.query('[disabled]')).toBeTruthy();
+  });
+
+  it('should disabled when the loading input is true', () => {
+    expect(spectator.query('[autofocus][name="abp-button"]')).toBeTruthy();
   });
 });

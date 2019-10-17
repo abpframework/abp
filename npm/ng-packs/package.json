@@ -92,6 +92,7 @@
       "prettier --write",
       "tslint --fix",
       "git add"
-    ]
+    ],
+    "dist/*": []
   }
 }
