@@ -125,7 +125,7 @@ public class AppModule : AbpModule
 }
 ````
 
-3. Update `Program.cs` to use AutoMapper:
+3. Update `Program.cs` to use Autofac:
 
 ````csharp
 using Microsoft.AspNetCore.Hosting;
