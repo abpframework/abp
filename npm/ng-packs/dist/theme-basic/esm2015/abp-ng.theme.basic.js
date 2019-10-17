@@ -1,11 +1,21 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Generated bundle index. Do not edit.
  */
-export { LAYOUTS, ThemeBasicModule, AddNavigationElement, RemoveNavigationElementByName, AccountLayoutComponent, ApplicationLayoutComponent, EmptyLayoutComponent, ValidationErrorComponent, LayoutState } from './public-api';
+export {
+  LAYOUTS,
+  ThemeBasicModule,
+  AddNavigationElement,
+  RemoveNavigationElementByName,
+  AccountLayoutComponent,
+  ApplicationLayoutComponent,
+  EmptyLayoutComponent,
+  ValidationErrorComponent,
+  LayoutState,
+} from './public-api';
 export { AddNavigationElement as ɵh, RemoveNavigationElementByName as ɵi } from './lib/actions/layout.actions';
 export { AccountLayoutComponent as ɵc } from './lib/components/account-layout/account-layout.component';
 export { ApplicationLayoutComponent as ɵa } from './lib/components/application-layout/application-layout.component';

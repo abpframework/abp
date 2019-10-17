@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.identity.config",
-  "version": "0.0.1",
+  "version": "0.9.1",
   "publishConfig": {
     "access": "public"
   }

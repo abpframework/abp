@@ -21,7 +21,7 @@ export class AccountService {
   register(body: RegisterRequest): Observable<RegisterResponse> {
     const request: Rest.Request<RegisterRequest> = {
       method: 'POST',
-      url: `/api/account/register`,
+      url: '/api/account/register',
       body,
     };
 

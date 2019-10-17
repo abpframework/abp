@@ -17,6 +17,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiWidgetsModule).Assembly);
+            });
+
             AutoAddWidgets(context.Services);
         }
 

@@ -109,8 +109,8 @@ namespace Volo.Abp.AuditLogging.MongoDB
             return GetMongoQueryable()
                 .WhereIf(startTime.HasValue, auditLog => auditLog.ExecutionTime >= startTime)
                 .WhereIf(endTime.HasValue, auditLog => auditLog.ExecutionTime <= endTime)
-                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null)
-                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null)
+                .WhereIf(hasException.HasValue && hasException.Value, auditLog => auditLog.Exceptions != null && auditLog.Exceptions != "")
+                .WhereIf(hasException.HasValue && !hasException.Value, auditLog => auditLog.Exceptions == null || auditLog.Exceptions == "")
                 .WhereIf(httpMethod != null, auditLog => auditLog.HttpMethod == httpMethod)
                 .WhereIf(url != null, auditLog => auditLog.Url != null && auditLog.Url.Contains(url))
                 .WhereIf(userName != null, auditLog => auditLog.UserName == userName)
@@ -119,6 +119,19 @@ namespace Volo.Abp.AuditLogging.MongoDB
                 .WhereIf(httpStatusCode != null && httpStatusCode > 0, auditLog => auditLog.HttpStatusCode == (int?)httpStatusCode)
                 .WhereIf(maxDuration != null && maxDuration > 0, auditLog => auditLog.ExecutionDuration <= maxDuration)
                 .WhereIf(minDuration != null && minDuration > 0, auditLog => auditLog.ExecutionDuration >= minDuration);
+        }
+
+
+        public async Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(DateTime startDate, DateTime endDate)
+        {
+            var result = await GetMongoQueryable()
+                .Where(a => a.ExecutionTime < endDate.AddDays(1) && a.ExecutionTime > startDate)
+                .OrderBy(t => t.ExecutionTime)
+                .GroupBy(t => new { t.ExecutionTime.Date })
+                .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
+                .ToListAsync();
+
+            return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }
     }
 }

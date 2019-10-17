@@ -4,6 +4,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Authorization;
@@ -31,10 +32,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             IServiceProvider serviceProvider,
             IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
             IAuthorizationService authorizationService,
-            ICurrentUser currentUser, 
-            ISettingProvider settingProvider, 
-            SettingDefinitionManager settingDefinitionManager, 
-            IFeatureDefinitionManager featureDefinitionManager, 
+            ICurrentUser currentUser,
+            ISettingProvider settingProvider,
+            SettingDefinitionManager settingDefinitionManager,
+            IFeatureDefinitionManager featureDefinitionManager,
             ILanguageProvider languageProvider)
         {
             _serviceProvider = serviceProvider;
@@ -112,7 +113,34 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                 localizationConfig.Values[resource.ResourceName] = dictionary;
             }
 
+            localizationConfig.CurrentCulture = GetCurrentCultureInfo();
+
             return localizationConfig;
+        }
+
+        private static CurrentCultureDto GetCurrentCultureInfo()
+        {
+           return new CurrentCultureDto
+            {
+                Name = CultureInfo.CurrentUICulture.Name,
+                DisplayName = CultureInfo.CurrentUICulture.DisplayName,
+                EnglishName = CultureInfo.CurrentUICulture.EnglishName,
+                NativeName = CultureInfo.CurrentUICulture.NativeName,
+                IsRightToLeft = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft,
+                CultureName = CultureInfo.CurrentUICulture.TextInfo.CultureName,
+                TwoLetterIsoLanguageName = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName,
+                ThreeLetterIsoLanguageName = CultureInfo.CurrentUICulture.ThreeLetterISOLanguageName,
+                DateTimeFormat = new DateTimeFormatDto
+                {
+                    CalendarAlgorithmType = CultureInfo.CurrentUICulture.DateTimeFormat.Calendar.AlgorithmType.ToString(),
+                    DateTimeFormatLong = CultureInfo.CurrentUICulture.DateTimeFormat.LongDatePattern,
+                    ShortDatePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortDatePattern,
+                    FullDateTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.FullDateTimePattern,
+                    DateSeparator = CultureInfo.CurrentUICulture.DateTimeFormat.DateSeparator,
+                    ShortTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.ShortTimePattern,
+                    LongTimePattern = CultureInfo.CurrentUICulture.DateTimeFormat.LongTimePattern,
+                }
+            };
         }
 
         private async Task<ApplicationSettingConfigurationDto> GetSettingConfigAsync()

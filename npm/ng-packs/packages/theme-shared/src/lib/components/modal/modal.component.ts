@@ -11,19 +11,19 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { fromEvent, Subject, timer } from 'rxjs';
-import { filter, take, takeUntil, debounceTime } from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { Toaster } from '../../models/toaster';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
+import { backdropAnimation, dialogAnimation } from './modal.animations';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
-
-const ANIMATION_TIMEOUT = 200;
 
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
+  animations: [backdropAnimation, dialogAnimation],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -33,26 +33,17 @@ export class ModalComponent implements OnDestroy {
   set visible(value: boolean) {
     if (typeof value !== 'boolean') return;
 
-    if (!this.modalContent) {
-      if (value) {
-        setTimeout(() => {
-          this.showModal = value;
-          this.visible = value;
-        }, 0);
-      }
-      return;
-    }
+    this.isModalOpen = value;
+    this._visible = value;
+    this.visibleChange.emit(value);
 
     if (value) {
-      this.setVisible(value);
-      this.listen();
+      setTimeout(() => this.listen(), 0);
+      this.renderer.addClass(document.body, 'modal-open');
+      this.appear.emit();
     } else {
-      this.closable = false;
-      this.renderer.addClass(this.modalContent.nativeElement, 'fade-out-top');
-      setTimeout(() => {
-        this.setVisible(value);
-        this.ngOnDestroy();
-      }, ANIMATION_TIMEOUT - 10);
+      this.renderer.removeClass(document.body, 'modal-open');
+      this.disappear.emit();
     }
   }
 
@@ -68,19 +59,14 @@ export class ModalComponent implements OnDestroy {
     this._busy = value;
   }
 
-  @Input() centered: boolean = false;
+  @Input() centered = false;
 
-  @Input() modalClass: string = '';
+  @Input() modalClass = '';
 
   @Input() size: ModalSize = 'lg';
 
-  @Input() height: number;
-
-  @Input() minHeight: number;
-
-  @Output() visibleChange = new EventEmitter<boolean>();
-
-  @Output() init = new EventEmitter<void>();
+  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
+  abpSubmit: ButtonComponent;
 
   @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
 
@@ -88,29 +74,28 @@ export class ModalComponent implements OnDestroy {
 
   @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
 
-  @ContentChild('abpClose', { static: false, read: ElementRef }) abpClose: ElementRef<any>;
-
-  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent }) abpSubmit: ButtonComponent;
+  @ContentChild('abpClose', { static: false, read: ElementRef })
+  abpClose: ElementRef<any>;
 
   @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
 
   @ViewChildren('abp-button') abpButtons;
 
-  @Output()
-  show = new EventEmitter();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-  @Output()
-  hide = new EventEmitter();
+  @Output() readonly init = new EventEmitter<void>();
 
-  _visible: boolean = false;
+  @Output() readonly appear = new EventEmitter();
 
-  _busy: boolean = false;
+  @Output() readonly disappear = new EventEmitter();
 
-  showModal: boolean = false;
+  _visible = false;
 
-  isOpenConfirmation: boolean = false;
+  _busy = false;
 
-  closable: boolean = false;
+  isModalOpen = false;
+
+  isConfirmationOpen = false;
 
   destroy$ = new Subject<void>();
 
@@ -120,22 +105,27 @@ export class ModalComponent implements OnDestroy {
     this.destroy$.next();
   }
 
-  setVisible(value: boolean) {
-    this._visible = value;
-    this.visibleChange.emit(value);
-    this.showModal = value;
+  close() {
+    if (this.busy) return;
 
-    if (value) {
-      timer(ANIMATION_TIMEOUT + 100)
-        .pipe(take(1))
-        .subscribe(_ => (this.closable = true));
+    const nodes = getFlatNodes(
+      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
+    );
 
-      this.renderer.addClass(document.body, 'modal-open');
-      this.show.emit();
+    if (hasNgDirty(nodes)) {
+      if (this.isConfirmationOpen) return;
+
+      this.isConfirmationOpen = true;
+      this.confirmationService
+        .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
+        .subscribe((status: Toaster.Status) => {
+          this.isConfirmationOpen = false;
+          if (status === Toaster.Status.confirm) {
+            this.visible = false;
+          }
+        });
     } else {
-      this.closable = false;
-      this.renderer.removeClass(document.body, 'modal-open');
-      this.hide.emit();
+      this.visible = false;
     }
   }
 
@@ -144,7 +134,7 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape' && this.closable),
+        filter((key: KeyboardEvent) => key && key.code === 'Escape'),
       )
       .subscribe(_ => {
         this.close();
@@ -155,39 +145,12 @@ export class ModalComponent implements OnDestroy {
       fromEvent(this.abpClose.nativeElement, 'click')
         .pipe(
           takeUntil(this.destroy$),
-          filter(() => !!(this.closable && this.modalContent)),
+          filter(() => !!this.modalContent),
         )
         .subscribe(() => this.close());
     }, 0);
 
     this.init.emit();
-  }
-
-  close() {
-    if (!this.closable || this.busy) return;
-
-    const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
-    );
-
-    if (hasNgDirty(nodes)) {
-      if (this.isOpenConfirmation) return;
-
-      this.isOpenConfirmation = true;
-      this.confirmationService
-        .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
-        .subscribe((status: Toaster.Status) => {
-          timer(ANIMATION_TIMEOUT).subscribe(() => {
-            this.isOpenConfirmation = false;
-          });
-
-          if (status === Toaster.Status.confirm) {
-            this.visible = false;
-          }
-        });
-    } else {
-      this.visible = false;
-    }
   }
 }
 

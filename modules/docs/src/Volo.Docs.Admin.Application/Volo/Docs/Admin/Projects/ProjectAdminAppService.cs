@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Guids;
+using Volo.Docs.Localization;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Projects
@@ -18,6 +19,9 @@ namespace Volo.Docs.Admin.Projects
         public ProjectAdminAppService(
             IProjectRepository projectRepository, IGuidGenerator guidGenerator)
         {
+            ObjectMapperContext = typeof(DocsAdminApplicationModule);
+            LocalizationResource = typeof(DocsResource);
+
             _projectRepository = projectRepository;
             _guidGenerator = guidGenerator;
         }

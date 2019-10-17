@@ -14,6 +14,7 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
 
         public DbSet<Book> Books { get; set; }
 
+
         public BookManagementDbContext(DbContextOptions<BookManagementDbContext> options) 
             : base(options)
         {

@@ -10,13 +10,17 @@ export class VisibilityDirective implements AfterViewInit {
   focusedElement: HTMLElement;
 
   @Input()
-  mutationObserverEnabled: boolean = true;
+  mutationObserverEnabled = true;
 
   completed$ = new Subject<boolean>();
 
   constructor(@Optional() private elRef: ElementRef, private renderer: Renderer2) {}
 
   ngAfterViewInit() {
+    if (!this.focusedElement && this.elRef) {
+      this.focusedElement = this.elRef.nativeElement;
+    }
+
     let observer: MutationObserver;
     if (this.mutationObserverEnabled) {
       observer = new MutationObserver(mutations => {

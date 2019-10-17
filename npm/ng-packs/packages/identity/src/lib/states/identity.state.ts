@@ -23,22 +23,22 @@ import { IdentityService } from '../services/identity.service';
 export class IdentityState {
   @Selector()
   static getRoles({ roles }: Identity.State): Identity.RoleItem[] {
-    return roles.items;
+    return roles.items || [];
   }
 
   @Selector()
   static getRolesTotalCount({ roles }: Identity.State): number {
-    return roles.totalCount;
+    return roles.totalCount || 0;
   }
 
   @Selector()
   static getUsers({ users }: Identity.State): Identity.UserItem[] {
-    return users.items;
+    return users.items || [];
   }
 
   @Selector()
   static getUsersTotalCount({ users }: Identity.State): number {
-    return users.totalCount;
+    return users.totalCount || 0;
   }
 
   constructor(private identityService: IdentityService) {}

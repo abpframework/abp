@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import { InjectionToken } from '@angular/core';
 /**
@@ -8,7 +8,7 @@ import { InjectionToken } from '@angular/core';
  * @return {?}
  */
 export function optionsFactory(options) {
-    return Object.assign({ redirectUrl: '/' }, options);
+  return Object.assign({ redirectUrl: '/' }, options);
 }
 /** @type {?} */
 export const ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');

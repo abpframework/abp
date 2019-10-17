@@ -7,11 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
+using Volo.Blogging.Pages.Blog;
 using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Admin.Blogs
 {
-    public class EditModel : AbpPageModel
+    public class EditModel : BloggingPageModel
     {
         private readonly IBlogAppService _blogAppService;
         private readonly IAuthorizationService _authorization;

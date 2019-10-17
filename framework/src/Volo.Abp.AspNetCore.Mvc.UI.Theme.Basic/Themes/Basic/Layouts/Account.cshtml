@@ -45,32 +45,42 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
-<body class="abp-account-layout">
+<body class="abp-account-layout bg-light">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
         <abp-row>
-            <abp-column size-md="_4" offset-md="_4">
-                @if (MultiTenancyOptions.Value.IsEnabled &&
-                  (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
-                {
-                    <div class="tenant-switch-box" style="background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;">
-                        <span style="color: #666;">@MultiTenancyStringLocalizer["Tenant"]: </span>
-                        <strong>
-                            @if (CurrentTenant.Id == null)
-                            {
-                                <i>@MultiTenancyStringLocalizer["NotSelected"]</i>
-                            }
-                            else
-                            {
-                                @(CurrentTenant.Name ?? CurrentTenant.Id.Value.ToString())
-                            }
-                        </strong>
-                        (<a id="AbpTenantSwitchLink" style="color: #333; cursor: pointer">@MultiTenancyStringLocalizer["Switch"]</a>)
-                    </div>
-                }
+            <abp-column size-md="_5" class="mx-auto">
+                <div class="card shadow-sm rounded mb-3">
+                    <div class="card-body px-5">
+                        <div class="row">
+                            <div class="col">
+                                <span style="font-size: .8em;" class="text-uppercase text-muted">@MultiTenancyStringLocalizer["Tenant"]</span><br />
+                                <h6 class="m-0 d-inline-block">
+                                    @if (CurrentTenant.Id == null)
+                                    {
+                                        <span>
+                                            @MultiTenancyStringLocalizer["NotSelected"]
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <strong>@(CurrentTenant.Name ?? CurrentTenant.Id.Value.ToString())</strong>
+                                    }
+                                </h6>
+                            </div>
+                            <div class="col-auto">
+                                @if (MultiTenancyOptions.Value.IsEnabled &&
+                           (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
+                                { 
+                                    <a id="AbpTenantSwitchLink" href="javascript:;" class="btn btn-sm mt-3 btn-outline-primary">@MultiTenancyStringLocalizer["Switch"]</a> 
+                                }
+                            </div>
+                        </div>
+                    </div> 
+                </div>
                 @(await Component.InvokeAsync<PageAlertsViewComponent>())
                 @RenderBody()
             </abp-column>

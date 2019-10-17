@@ -13,7 +13,7 @@ using Volo.Abp.Features;
 namespace Volo.Abp.FeatureManagement
 {
     [Authorize]
-    public class FeatureAppService : ApplicationService, IFeatureAppService
+    public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppService
     {
         protected FeatureManagementOptions Options { get; }
 

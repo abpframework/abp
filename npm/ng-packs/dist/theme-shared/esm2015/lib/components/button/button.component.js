@@ -1,49 +1,63 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import { Component, Input } from '@angular/core';
 export class ButtonComponent {
-    constructor() {
-        this.buttonClass = 'btn btn-primary';
-        this.type = 'button';
-        this.loading = false;
-        this.disabled = false;
-    }
+  constructor() {
+    this.buttonClass = 'btn btn-primary';
+    this.loading = false;
+    this.disabled = false;
     /**
-     * @return {?}
+     * @deprecated Use buttonType instead. To be deleted in v1
      */
-    get icon() {
-        return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
-    }
+    this.type = 'button';
+  }
+  /**
+   * @return {?}
+   */
+  get icon() {
+    return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
+  }
 }
 ButtonComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'abp-button',
-                template: `
+  {
+    type: Component,
+    args: [
+      {
+        selector: 'abp-button',
+        template: `
     <button [attr.type]="type" [ngClass]="buttonClass" [disabled]="loading || disabled">
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
-  `
-            }] }
+  `,
+      },
+    ],
+  },
 ];
 ButtonComponent.propDecorators = {
-    buttonClass: [{ type: Input }],
-    type: [{ type: Input }],
-    iconClass: [{ type: Input }],
-    loading: [{ type: Input }],
-    disabled: [{ type: Input }]
+  buttonClass: [{ type: Input }],
+  buttonType: [{ type: Input }],
+  iconClass: [{ type: Input }],
+  loading: [{ type: Input }],
+  disabled: [{ type: Input }],
+  type: [{ type: Input }],
 };
 if (false) {
-    /** @type {?} */
-    ButtonComponent.prototype.buttonClass;
-    /** @type {?} */
-    ButtonComponent.prototype.type;
-    /** @type {?} */
-    ButtonComponent.prototype.iconClass;
-    /** @type {?} */
-    ButtonComponent.prototype.loading;
-    /** @type {?} */
-    ButtonComponent.prototype.disabled;
+  /** @type {?} */
+  ButtonComponent.prototype.buttonClass;
+  /** @type {?} */
+  ButtonComponent.prototype.buttonType;
+  /** @type {?} */
+  ButtonComponent.prototype.iconClass;
+  /** @type {?} */
+  ButtonComponent.prototype.loading;
+  /** @type {?} */
+  ButtonComponent.prototype.disabled;
+  /**
+   * @deprecated Use buttonType instead. To be deleted in v1
+   * @type {?}
+   */
+  ButtonComponent.prototype.type;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYnV0dG9uLmNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGhlbWUuc2hhcmVkLyIsInNvdXJjZXMiOlsibGliL2NvbXBvbmVudHMvYnV0dG9uL2J1dHRvbi5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLE9BQU8sRUFBRSxTQUFTLEVBQUUsS0FBSyxFQUFFLE1BQU0sZUFBZSxDQUFDO0FBVWpELE1BQU0sT0FBTyxlQUFlO0lBUjVCO1FBVUUsZ0JBQVcsR0FBVyxpQkFBaUIsQ0FBQztRQUd4QyxTQUFJLEdBQVcsUUFBUSxDQUFDO1FBTXhCLFlBQU8sR0FBWSxLQUFLLENBQUM7UUFHekIsYUFBUSxHQUFZLEtBQUssQ0FBQztJQUs1QixDQUFDOzs7O0lBSEMsSUFBSSxJQUFJO1FBQ04sT0FBTyxHQUFHLElBQUksQ0FBQyxPQUFPLENBQUMsQ0FBQyxDQUFDLHdCQUF3QixDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsU0FBUyxJQUFJLFFBQVEsRUFBRSxDQUFDO0lBQ25GLENBQUM7OztZQTFCRixTQUFTLFNBQUM7Z0JBQ1QsUUFBUSxFQUFFLFlBQVk7Z0JBQ3RCLFFBQVEsRUFBRTs7OztHQUlUO2FBQ0Y7OzswQkFFRSxLQUFLO21CQUdMLEtBQUs7d0JBR0wsS0FBSztzQkFHTCxLQUFLO3VCQUdMLEtBQUs7Ozs7SUFaTixzQ0FDd0M7O0lBRXhDLCtCQUN3Qjs7SUFFeEIsb0NBQ2tCOztJQUVsQixrQ0FDeUI7O0lBRXpCLG1DQUMwQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IENvbXBvbmVudCwgSW5wdXQgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuQENvbXBvbmVudCh7XG4gIHNlbGVjdG9yOiAnYWJwLWJ1dHRvbicsXG4gIHRlbXBsYXRlOiBgXG4gICAgPGJ1dHRvbiBbYXR0ci50eXBlXT1cInR5cGVcIiBbbmdDbGFzc109XCJidXR0b25DbGFzc1wiIFtkaXNhYmxlZF09XCJsb2FkaW5nIHx8IGRpc2FibGVkXCI+XG4gICAgICA8aSBbbmdDbGFzc109XCJpY29uXCIgY2xhc3M9XCJtci0xXCI+PC9pPjxuZy1jb250ZW50PjwvbmctY29udGVudD5cbiAgICA8L2J1dHRvbj5cbiAgYCxcbn0pXG5leHBvcnQgY2xhc3MgQnV0dG9uQ29tcG9uZW50IHtcbiAgQElucHV0KClcbiAgYnV0dG9uQ2xhc3M6IHN0cmluZyA9ICdidG4gYnRuLXByaW1hcnknO1xuXG4gIEBJbnB1dCgpXG4gIHR5cGU6IHN0cmluZyA9ICdidXR0b24nO1xuXG4gIEBJbnB1dCgpXG4gIGljb25DbGFzczogc3RyaW5nO1xuXG4gIEBJbnB1dCgpXG4gIGxvYWRpbmc6IGJvb2xlYW4gPSBmYWxzZTtcblxuICBASW5wdXQoKVxuICBkaXNhYmxlZDogYm9vbGVhbiA9IGZhbHNlO1xuXG4gIGdldCBpY29uKCk6IHN0cmluZyB7XG4gICAgcmV0dXJuIGAke3RoaXMubG9hZGluZyA/ICdmYSBmYS1wdWxzZSBmYS1zcGlubmVyJyA6IHRoaXMuaWNvbkNsYXNzIHx8ICdkLW5vbmUnfWA7XG4gIH1cbn1cbiJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYnV0dG9uLmNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGhlbWUuc2hhcmVkLyIsInNvdXJjZXMiOlsibGliL2NvbXBvbmVudHMvYnV0dG9uL2J1dHRvbi5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLE9BQU8sRUFBRSxTQUFTLEVBQUUsS0FBSyxFQUFFLE1BQU0sZUFBZSxDQUFDO0FBVWpELE1BQU0sT0FBTyxlQUFlO0lBUjVCO1FBVUUsZ0JBQVcsR0FBRyxpQkFBaUIsQ0FBQztRQVNoQyxZQUFPLEdBQUcsS0FBSyxDQUFDO1FBR2hCLGFBQVEsR0FBRyxLQUFLLENBQUM7Ozs7UUFLUixTQUFJLEdBQUcsUUFBUSxDQUFDO0lBSzNCLENBQUM7Ozs7SUFIQyxJQUFJLElBQUk7UUFDTixPQUFPLEdBQUcsSUFBSSxDQUFDLE9BQU8sQ0FBQyxDQUFDLENBQUMsd0JBQXdCLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxTQUFTLElBQUksUUFBUSxFQUFFLENBQUM7SUFDbkYsQ0FBQzs7O1lBL0JGLFNBQVMsU0FBQztnQkFDVCxRQUFRLEVBQUUsWUFBWTtnQkFDdEIsUUFBUSxFQUFFOzs7O0dBSVQ7YUFDRjs7OzBCQUVFLEtBQUs7eUJBR0wsS0FBSzt3QkFHTCxLQUFLO3NCQUdMLEtBQUs7dUJBR0wsS0FBSzttQkFNTCxLQUFLOzs7O0lBbEJOLHNDQUNnQzs7SUFFaEMscUNBQ1c7O0lBRVgsb0NBQ2tCOztJQUVsQixrQ0FDZ0I7O0lBRWhCLG1DQUNpQjs7Ozs7SUFLakIsK0JBQXlCIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgQ29tcG9uZW50LCBJbnB1dCB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuXG5AQ29tcG9uZW50KHtcbiAgc2VsZWN0b3I6ICdhYnAtYnV0dG9uJyxcbiAgdGVtcGxhdGU6IGBcbiAgICA8YnV0dG9uIFthdHRyLnR5cGVdPVwidHlwZVwiIFtuZ0NsYXNzXT1cImJ1dHRvbkNsYXNzXCIgW2Rpc2FibGVkXT1cImxvYWRpbmcgfHwgZGlzYWJsZWRcIj5cbiAgICAgIDxpIFtuZ0NsYXNzXT1cImljb25cIiBjbGFzcz1cIm1yLTFcIj48L2k+PG5nLWNvbnRlbnQ+PC9uZy1jb250ZW50PlxuICAgIDwvYnV0dG9uPlxuICBgLFxufSlcbmV4cG9ydCBjbGFzcyBCdXR0b25Db21wb25lbnQge1xuICBASW5wdXQoKVxuICBidXR0b25DbGFzcyA9ICdidG4gYnRuLXByaW1hcnknO1xuXG4gIEBJbnB1dCgpXG4gIGJ1dHRvblR5cGU7IC8vIFRPRE86IEFkZCBpbml0aWFsIHZhbHVlLlxuXG4gIEBJbnB1dCgpXG4gIGljb25DbGFzczogc3RyaW5nO1xuXG4gIEBJbnB1dCgpXG4gIGxvYWRpbmcgPSBmYWxzZTtcblxuICBASW5wdXQoKVxuICBkaXNhYmxlZCA9IGZhbHNlO1xuXG4gIC8qKlxuICAgKiBAZGVwcmVjYXRlZCBVc2UgYnV0dG9uVHlwZSBpbnN0ZWFkLiBUbyBiZSBkZWxldGVkIGluIHYxXG4gICAqL1xuICBASW5wdXQoKSB0eXBlID0gJ2J1dHRvbic7XG5cbiAgZ2V0IGljb24oKTogc3RyaW5nIHtcbiAgICByZXR1cm4gYCR7dGhpcy5sb2FkaW5nID8gJ2ZhIGZhLXB1bHNlIGZhLXNwaW5uZXInIDogdGhpcy5pY29uQ2xhc3MgfHwgJ2Qtbm9uZSd9YDtcbiAgfVxufVxuIl19

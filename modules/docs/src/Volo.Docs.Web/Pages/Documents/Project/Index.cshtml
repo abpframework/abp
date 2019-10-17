@@ -87,7 +87,7 @@
                                         </label>
                                     </div>
 
-                                    <select asp-items="Model.ProjectSelectItems" class="form-control" onchange="window.location.replace(this.value)"></select>
+                                    <select asp-items="Model.ProjectSelectItems" class="form-control" onchange="window.location.pathname = this.value"></select>
                                 </div>
                             </div>
                         </div>

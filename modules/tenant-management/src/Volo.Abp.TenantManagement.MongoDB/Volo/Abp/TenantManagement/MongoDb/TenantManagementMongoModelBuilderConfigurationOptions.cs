@@ -5,7 +5,8 @@ namespace Volo.Abp.TenantManagement.MongoDB
 {
     public class TenantManagementMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
     {
-        public TenantManagementMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = AbpTenantManagementConsts.DefaultDbTablePrefix)
+        public TenantManagementMongoModelBuilderConfigurationOptions(
+            [NotNull] string tablePrefix = "")
             : base(tablePrefix)
         {
         }
