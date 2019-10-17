@@ -1,6 +1,6 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
+import { Component, TemplateRef, TrackByFunction, ViewChild, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -13,6 +13,7 @@ import {
   GetUserRoles,
   GetUsers,
   UpdateUser,
+  GetRoles,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
@@ -20,7 +21,7 @@ import { IdentityState } from '../../states/identity.state';
   selector: 'abp-users',
   templateUrl: './users.component.html',
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsers)
   data$: Observable<Identity.UserItem[]>;
 
@@ -62,32 +63,39 @@ export class UsersComponent {
 
   constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
+  ngOnInit() {
+    this.get();
+  }
+
   onSearch(value) {
     this.pageQuery.filter = value;
     this.get();
   }
 
   buildForm() {
-    this.roles = this.store.selectSnapshot(IdentityState.getRoles);
-    this.form = this.fb.group({
-      userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
-      email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
-      name: [this.selected.name || '', [Validators.maxLength(64)]],
-      surname: [this.selected.surname || '', [Validators.maxLength(64)]],
-      phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
-      lockoutEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
-      twoFactorEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
-      roleNames: this.fb.array(
-        this.roles.map(role =>
-          this.fb.group({
-            [role.name]: [!!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))],
-          }),
+    this.store.dispatch(new GetRoles()).subscribe(() => {
+      this.roles = this.store.selectSnapshot(IdentityState.getRoles);
+      this.form = this.fb.group({
+        userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
+        email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
+        name: [this.selected.name || '', [Validators.maxLength(64)]],
+        surname: [this.selected.surname || '', [Validators.maxLength(64)]],
+        phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
+        lockoutEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
+        twoFactorEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
+        roleNames: this.fb.array(
+          this.roles.map(role =>
+            this.fb.group({
+              [role.name]: [!!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))],
+            }),
+          ),
         ),
-      ),
+      });
+
+      if (!this.selected.userName) {
+        this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
+      }
     });
-    if (!this.selected.userName) {
-      this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
-    }
   }
 
   openModal() {

@@ -2,7 +2,7 @@
 
 ABP framework extends ASP.NET Core's distributed caching system.
 
-## IDistributedCache Interface
+## `IDistributedCache` Interface
 
 ASP.NET Core defines the `IDistributedCache` interface to get/set cache values. But it has some difficulties:
 
@@ -17,7 +17,7 @@ ASP.NET Core defines the `IDistributedCache` interface to get/set cache values. 
 
 See [ASP.NET Core's distributed caching document](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed) for more information.
 
-## IDistributedCache<TCacheItem> Interface
+## `IDistributedCache<TCacheItem>` Interface
 
 ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object stored in the cache.
 

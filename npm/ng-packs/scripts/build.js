@@ -37,7 +37,7 @@ import fse from 'fs-extra';
   });
 
   await execa('git', ['add', '../dist/*', '../package.json'], { stdout: 'inherit' });
-  await execa('git', ['commit', '-m', 'Build ng packages'], { stdout: 'inherit' });
+  await execa('git', ['commit', '--no-verify', '-m', 'Build ng packages'], { stdout: 'inherit' });
 
   process.exit(0);
 })();
