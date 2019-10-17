@@ -11,7 +11,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
-    public class DocumentAppService : ApplicationService, IDocumentAppService
+    public class DocumentAppService : DocsAppServiceBase, IDocumentAppService
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentStoreFactory _documentStoreFactory;

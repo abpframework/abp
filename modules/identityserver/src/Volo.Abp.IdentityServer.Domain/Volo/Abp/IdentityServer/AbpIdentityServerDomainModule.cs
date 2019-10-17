@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Services;
+﻿using System.Security.Cryptography.X509Certificates;
+using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AutoMapper;
@@ -7,6 +8,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -15,12 +17,15 @@ namespace Volo.Abp.IdentityServer
         typeof(AbpAutoMapperModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpSecurityModule),
-        typeof(AbpCachingModule)
+        typeof(AbpCachingModule),
+        typeof(AbpValidationModule)
         )]
     public class AbpIdentityServerDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<AbpIdentityServerDomainModule>();
+
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<ClientAutoMapperProfile>(validate: true);
@@ -42,9 +47,12 @@ namespace Volo.Abp.IdentityServer
                 options.Events.RaiseSuccessEvents = true;
             });
 
-            identityServerBuilder
-                .AddDeveloperSigningCredential() //TODO: Should be able to change this!
-                .AddAbpIdentityServer(builderOptions);
+            if (builderOptions.AddDeveloperSigningCredential)
+            {
+                identityServerBuilder = identityServerBuilder.AddDeveloperSigningCredential();
+            }
+
+            identityServerBuilder.AddAbpIdentityServer(builderOptions);
 
             services.ExecutePreConfiguredActions(identityServerBuilder);
 

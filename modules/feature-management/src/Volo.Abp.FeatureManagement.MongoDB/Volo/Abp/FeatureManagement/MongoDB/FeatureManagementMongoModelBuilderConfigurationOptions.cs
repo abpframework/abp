@@ -6,8 +6,8 @@ namespace Volo.Abp.FeatureManagement.MongoDB
     public class FeatureManagementMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
     {
         public FeatureManagementMongoModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix = FeatureManagementConsts.DefaultDbTablePrefix)
-            : base(tablePrefix)
+            [NotNull] string collectionPrefix = "")
+            : base(collectionPrefix)
         {
 
         }

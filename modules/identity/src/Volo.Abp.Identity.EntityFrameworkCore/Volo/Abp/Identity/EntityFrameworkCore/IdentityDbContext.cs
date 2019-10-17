@@ -7,13 +7,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     /// <summary>
     /// Base class for the Entity Framework database context used for identity.
     /// </summary>
-    [ConnectionStringName(AbpIdentityConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpIdentityDbProperties.ConnectionStringName)]
     public class IdentityDbContext : AbpDbContext<IdentityDbContext>, IIdentityDbContext
     {
-        public static string TablePrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
-
         public DbSet<IdentityUser> Users { get; set; }
 
         public DbSet<IdentityRole> Roles { get; set; }
@@ -30,11 +26,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureIdentity(options =>
-            {
-                options.TablePrefix = TablePrefix;
-                options.Schema = Schema;
-            });
+            builder.ConfigureIdentity();
         }
     }
 }

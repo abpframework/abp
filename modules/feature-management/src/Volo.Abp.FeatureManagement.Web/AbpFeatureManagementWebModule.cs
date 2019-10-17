@@ -22,6 +22,11 @@ namespace Volo.Abp.FeatureManagement
             {
                 options.AddAssemblyResource(typeof(AbpFeatureManagementResource), typeof(AbpFeatureManagementWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpFeatureManagementWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -31,6 +36,7 @@ namespace Volo.Abp.FeatureManagement
                 options.FileSets.AddEmbedded<AbpFeatureManagementWebModule>("Volo.Abp.FeatureManagement");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpFeatureManagementWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<FeatureManagementWebAutoMapperProfile>(validate: true);

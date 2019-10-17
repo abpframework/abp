@@ -1,10 +1,12 @@
+import { ABP } from './common';
+
 export namespace ApplicationConfiguration {
   export interface Response {
     localization: Localization;
     auth: Auth;
-    setting: Setting;
+    setting: Value;
     currentUser: CurrentUser;
-    features: Features;
+    features: Value;
   }
 
   export interface Localization {
@@ -32,8 +34,8 @@ export namespace ApplicationConfiguration {
     [key: string]: boolean;
   }
 
-  export interface Setting {
-    values: { [key: string]: 'Abp.Localization.DefaultLanguage' };
+  export interface Value {
+    values: ABP.Dictionary<string>;
   }
 
   export interface CurrentUser {
@@ -41,9 +43,5 @@ export namespace ApplicationConfiguration {
     id: string;
     tenantId: string;
     userName: string;
-  }
-
-  export interface Features {
-    values: Setting;
   }
 }

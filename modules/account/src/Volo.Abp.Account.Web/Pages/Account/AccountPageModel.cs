@@ -18,6 +18,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         protected AccountPageModel()
         {
             LocalizationResourceType = typeof(AccountResource);
+            ObjectMapperContext = typeof(AbpAccountWebModule);
         }
 
         protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)

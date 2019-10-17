@@ -4,12 +4,13 @@ import { debounceTime } from 'rxjs/operators';
 import { takeUntilDestroy } from '@ngx-validate/core';
 
 @Directive({
-  selector: '[input.debounce]',
+  // tslint:disable-next-line: directive-selector
+  selector: '[input.debounce]'
 })
 export class InputEventDebounceDirective implements OnInit {
-  @Input() debounce: number = 300;
+  @Input() debounce = 300;
 
-  @Output('input.debounce') debounceEvent = new EventEmitter<Event>();
+  @Output('input.debounce') readonly debounceEvent = new EventEmitter<Event>();
 
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
@@ -17,7 +18,7 @@ export class InputEventDebounceDirective implements OnInit {
     fromEvent(this.el.nativeElement, 'input')
       .pipe(
         debounceTime(this.debounce),
-        takeUntilDestroy(this),
+        takeUntilDestroy(this)
       )
       .subscribe((event: Event) => {
         this.debounceEvent.emit(event);

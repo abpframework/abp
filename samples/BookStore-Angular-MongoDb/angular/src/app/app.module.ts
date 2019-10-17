@@ -11,15 +11,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
+import { AccountProviders } from '@abp/ng.account';
+import { IdentityProviders } from '@abp/ng.identity';
+import { TenantManagementProviders } from '@abp/ng.tenant-management';
 import { BooksState } from './store/states/books.state';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppRoutingModule,
-    SharedModule,
     ThemeSharedModule.forRoot(),
     CoreModule.forRoot({
       environment,
@@ -28,10 +27,15 @@ import { BooksState } from './store/states/books.state';
       },
     }),
     OAuthModule.forRoot(),
+    NgxsModule.forRoot([]),
+    BrowserModule,
+    BrowserAnimationsModule,
+    AppRoutingModule,
+    SharedModule,
     NgxsModule.forRoot([BooksState, ]),
     NgxsReduxDevtoolsPluginModule.forRoot({ disabled: environment.production }),
   ],
-  providers: [],
+  providers: [...AccountProviders({ redirectUrl: '/' }), ...IdentityProviders(), ...TenantManagementProviders()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

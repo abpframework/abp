@@ -4,11 +4,9 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
 {
-    [ConnectionStringName(AbpIdentityConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpIdentityDbProperties.ConnectionStringName)]
     public class AbpIdentityMongoDbContext : AbpMongoDbContext, IAbpIdentityMongoDbContext
     {
-        public static string CollectionPrefix { get; set; } = AbpIdentityConsts.DefaultDbTablePrefix;
-
         public IMongoCollection<IdentityUser> Users => Collection<IdentityUser>();
 
         public IMongoCollection<IdentityRole> Roles => Collection<IdentityRole>();
@@ -19,10 +17,7 @@ namespace Volo.Abp.Identity.MongoDB
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureIdentity(options =>
-            {
-                options.CollectionPrefix = CollectionPrefix;
-            });
+            modelBuilder.ConfigureIdentity();
         }
     }
 }

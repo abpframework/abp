@@ -5,21 +5,16 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Docs.MongoDB
 {
-    [ConnectionStringName(DocsConsts.ConnectionStringName)]
+    [ConnectionStringName(DocsDbProperties.ConnectionStringName)]
     public class DocsMongoDbContext : AbpMongoDbContext, IDocsMongoDbContext
     {
-        public static string CollectionPrefix { get; set; } = DocsConsts.DefaultDbTablePrefix;
-
         public IMongoCollection<Project> Projects => Collection<Project>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {
             base.CreateModel(modelBuilder);
 
-            modelBuilder.ConfigureDocs(options =>
-            {
-                options.CollectionPrefix = CollectionPrefix;
-            });
+            modelBuilder.ConfigureDocs();
         }
     }
 }

@@ -3,11 +3,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 {
-    public class CreateModalModel : AbpPageModel
+    public class CreateModalModel : IdentityPageModel
     {
         [BindProperty]
         public UserInfoViewModel UserInfo { get; set; }

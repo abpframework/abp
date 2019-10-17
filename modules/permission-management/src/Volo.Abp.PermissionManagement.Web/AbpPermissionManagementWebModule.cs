@@ -23,6 +23,11 @@ namespace Volo.Abp.PermissionManagement.Web
             {
                 options.AddAssemblyResource(typeof(AbpPermissionManagementResource));
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpPermissionManagementWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
@@ -32,6 +37,7 @@ namespace Volo.Abp.PermissionManagement.Web
                 options.FileSets.AddEmbedded<AbpPermissionManagementWebModule>("Volo.Abp.PermissionManagement.Web");
             });
 
+            context.Services.AddAutoMapperObjectMapper<AbpPermissionManagementWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpPermissionManagementWebAutoMapperProfile>(validate: true);

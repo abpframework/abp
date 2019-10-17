@@ -224,12 +224,16 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
             }
 
+            //Culture
             //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
             var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
             if (!currentCulture.IsNullOrEmpty())
             {
                 requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
             }
+
+            //X-Requested-With
+            requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
         private string GetConfiguredApiVersion()

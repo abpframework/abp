@@ -23,7 +23,11 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public IServiceProvider ServiceProvider { get; set; }
         protected readonly object ServiceProviderLock = new object();
+
         protected TService LazyGetRequiredService<TService>(ref TService reference)
+            => LazyGetRequiredService(typeof(TService), ref reference);
+
+        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
         {
             if (reference == null)
             {
@@ -31,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 {
                     if (reference == null)
                     {
-                        reference = ServiceProvider.GetRequiredService<TService>();
+                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
                     }
                 }
             }
@@ -42,7 +46,27 @@ namespace Volo.Abp.AspNetCore.Mvc
         public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
 
-        public IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
+        protected Type ObjectMapperContext { get; set; }
+        public IObjectMapper ObjectMapper
+        {
+            get
+            {
+                if (_objectMapper != null)
+                {
+                    return _objectMapper;
+                }
+
+                if (ObjectMapperContext == null)
+                {
+                    return LazyGetRequiredService(ref _objectMapper);
+                }
+
+                return LazyGetRequiredService(
+                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
+                    ref _objectMapper
+                );
+            }
+        }
         private IObjectMapper _objectMapper;
 
         public IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);

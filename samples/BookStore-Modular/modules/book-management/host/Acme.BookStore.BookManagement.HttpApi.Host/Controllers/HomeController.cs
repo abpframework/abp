@@ -7,7 +7,10 @@ namespace Acme.BookStore.BookManagement.Controllers
     {
         public ActionResult Index()
         {
-            return Redirect("/swagger");
+            //TODO: Enable when Swagger supports ASP.NET Core 3.x
+            //return Redirect("/swagger");
+
+            return Content("OK: Acme.BookStore.BookManagement.HttpApi.Host is running...");
         }
     }
 }

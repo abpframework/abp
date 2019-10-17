@@ -85,13 +85,13 @@ Open the **Package Manager Console**, select `.EntityFrameworkCore.DbMigrations`
 
 This will create a new database based on the configured connection string.
 
-> Using the `.Migrator` tool is the suggested way, because it also seeds the initial data to be able to properly run the web application.
+> Using the `.DbMigrator` tool is the suggested way, because it also seeds the initial data to be able to properly run the web application.
 
 ### Running the Application
 
 #### Run the API Host (Server Side)
 
-Ensure that the `.HttpApi.Host` project is the startup project and un the application which will open a Swagger UI:
+Ensure that the `.HttpApi.Host` project is the startup project and run the application which will open a Swagger UI:
 
 ![bookstore-homepage](images/bookstore-swagger-ui-host.png)
 

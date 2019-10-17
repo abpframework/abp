@@ -7,7 +7,7 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  TrackByFunction,
+  TrackByFunction
 } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { from, Observable } from 'rxjs';
@@ -16,11 +16,13 @@ import { GetPermissions, UpdatePermissions } from '../actions/permission-managem
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
 
-type PermissionWithMargin = PermissionManagement.Permission & { margin: number };
+type PermissionWithMargin = PermissionManagement.Permission & {
+  margin: number;
+};
 
 @Component({
   selector: 'abp-permission-management',
-  templateUrl: './permission-management.component.html',
+  templateUrl: './permission-management.component.html'
 })
 export class PermissionManagementComponent implements OnInit, OnChanges {
   @Input()
@@ -47,8 +49,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     }
   }
 
-  @Output()
-  visibleChange = new EventEmitter<boolean>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @Select(PermissionManagementState.getPermissionGroups)
   groups$: Observable<PermissionManagement.Group[]>;
@@ -60,18 +61,18 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
   permissions: PermissionManagement.Permission[] = [];
 
-  selectThisTab: boolean = false;
+  selectThisTab = false;
 
-  selectAllTab: boolean = false;
+  selectAllTab = false;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
   trackByFn: TrackByFunction<PermissionManagement.Group> = (_, item) => item.name;
 
   get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
     return this.groups$.pipe(
       map(groups =>
-        this.selectedGroup ? groups.find(group => group.name === this.selectedGroup.name).permissions : [],
+        this.selectedGroup ? groups.find(group => group.name === this.selectedGroup.name).permissions : []
       ),
       map<PermissionManagement.Permission[], PermissionWithMargin[]>(permissions =>
         permissions.map(
@@ -79,10 +80,10 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
             (({
               ...permission,
               margin: findMargin(permissions, permission),
-              isGranted: this.permissions.find(per => per.name === permission.name).isGranted,
-            } as any) as PermissionWithMargin),
-        ),
-      ),
+              isGranted: this.permissions.find(per => per.name === permission.name).isGranted
+            } as any) as PermissionWithMargin)
+        )
+      )
     );
   }
 
@@ -164,7 +165,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
         this.permissions = [
           ...this.permissions.slice(0, index),
           { ...this.permissions[index], isGranted: !this.selectThisTab },
-          ...this.permissions.slice(index + 1),
+          ...this.permissions.slice(index + 1)
         ];
       });
     });
@@ -173,7 +174,10 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 
   onClickSelectAll() {
-    this.permissions = this.permissions.map(permission => ({ ...permission, isGranted: !this.selectAllTab }));
+    this.permissions = this.permissions.map(permission => ({
+      ...permission,
+      isGranted: !this.selectAllTab
+    }));
 
     this.selectThisTab = !this.selectAllTab;
   }
@@ -186,12 +190,12 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   submit() {
     this.modalBusy = true;
     const unchangedPermissions = getPermissions(
-      this.store.selectSnapshot(PermissionManagementState.getPermissionGroups),
+      this.store.selectSnapshot(PermissionManagementState.getPermissionGroups)
     );
 
     const changedPermissions: PermissionManagement.MinimumPermission[] = this.permissions
       .filter(per =>
-        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted === per.isGranted ? false : true,
+        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted === per.isGranted ? false : true
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
@@ -201,8 +205,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
           new UpdatePermissions({
             providerKey: this.providerKey,
             providerName: this.providerName,
-            permissions: changedPermissions,
-          }),
+            permissions: changedPermissions
+          })
         )
         .subscribe(() => {
           this.modalBusy = false;
@@ -220,7 +224,12 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     }
 
     this.store
-      .dispatch(new GetPermissions({ providerKey: this.providerKey, providerName: this.providerName }))
+      .dispatch(
+        new GetPermissions({
+          providerKey: this.providerKey,
+          providerName: this.providerName
+        })
+      )
       .pipe(pluck('PermissionManagementState', 'permissionRes'))
       .subscribe((permissionRes: PermissionManagement.Response) => {
         this.selectedGroup = permissionRes.groups[0];

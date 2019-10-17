@@ -77,7 +77,8 @@
           "text": "授权"
         },
         {
-          "text": "缓存"
+          "text": "缓存",
+          "path": "Caching.md"
         },
         {
           "text": "审计"

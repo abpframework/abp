@@ -220,10 +220,25 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         {
             foreach (var selector in action.Selectors)
             {
-                var httpMethod = selector.ActionConstraints.OfType<HttpMethodActionConstraint>().FirstOrDefault()?.HttpMethods?.FirstOrDefault();
+                var httpMethod = selector.ActionConstraints
+                    .OfType<HttpMethodActionConstraint>()
+                    .FirstOrDefault()?
+                    .HttpMethods?
+                    .FirstOrDefault();
+
+                if (httpMethod == null)
+                {
+                    httpMethod = SelectHttpMethod(action, configuration);
+                }
+
                 if (selector.AttributeRouteModel == null)
                 {
                     selector.AttributeRouteModel = CreateAbpServiceAttributeRouteModel(rootPath, controllerName, action, httpMethod, configuration);
+                }
+
+                if (!selector.ActionConstraints.OfType<HttpMethodActionConstraint>().Any())
+                {
+                    selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] {httpMethod}));
                 }
             }
         }
@@ -336,7 +351,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
 
         protected virtual bool IsEmptySelector(SelectorModel selector)
         {
-            return selector.AttributeRouteModel == null && selector.ActionConstraints.IsNullOrEmpty();
+            return selector.AttributeRouteModel == null 
+                   && selector.ActionConstraints.IsNullOrEmpty()
+                   && selector.EndpointMetadata.IsNullOrEmpty();
         }
 
         protected virtual bool ImplementsRemoteServiceInterface(Type controllerType)

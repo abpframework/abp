@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.Domain.Repositories;
@@ -44,6 +45,12 @@ namespace Volo.Abp.TestApp.Application
             var person = await GetEntityByIdAsync(id);
             person.Phones.RemoveAll(p => p.Number == number);
             Repository.Update(person);
+        }
+
+        [Authorize]
+        public Task GetWithAuthorized()
+        {
+            return Task.CompletedTask;
         }
 
         public Task<GetWithComplexTypeInput> GetWithComplexType(GetWithComplexTypeInput input)

@@ -16,12 +16,16 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
         private readonly IJsonSerializer _jsonSerializer;
         private readonly ILogger<CliAnalyticsCollect> _logger;
+        private readonly IRemoteServiceExceptionHandler _remoteServiceExceptionHandler;
 
-        public CliAnalyticsCollect(ICancellationTokenProvider cancellationTokenProvider,
-            IJsonSerializer jsonSerializer)
+        public CliAnalyticsCollect(
+            ICancellationTokenProvider cancellationTokenProvider,
+            IJsonSerializer jsonSerializer,
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
             _cancellationTokenProvider = cancellationTokenProvider;
             _jsonSerializer = jsonSerializer;
+            _remoteServiceExceptionHandler = remoteServiceExceptionHandler;
             _logger = NullLogger<CliAnalyticsCollect>.Instance;
         }
 
@@ -38,8 +42,15 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
 
                 if (!responseMessage.IsSuccessStatusCode)
                 {
-                    _logger.LogInformation("Remote server returns error! HTTP status code: " +
-                                           responseMessage.StatusCode);
+                    var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
+                    var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+
+                    if (remoteServiceErrorMessage != null)
+                    {
+                        exceptionMessage += remoteServiceErrorMessage;
+                    }
+
+                    _logger.LogInformation(exceptionMessage);
                 }
             }
         }

@@ -82,10 +82,12 @@
           "text": "Validation"
         },
         {
-          "text": "Authorization"
+          "text": "Authorization",
+          "path": "Authorization.md"
         },
         {
-          "text": "Caching"
+          "text": "Caching",
+          "path": "Caching.md"
         },
         {
           "text": "Auditing"
@@ -114,6 +116,10 @@
     {
       "text": "Services",
       "items": [
+        {
+          "text": "Object to object mapping",
+          "path": "Object-To-Object-Mapping.md"
+        },
         {
           "text": "Object Serialization"
         },

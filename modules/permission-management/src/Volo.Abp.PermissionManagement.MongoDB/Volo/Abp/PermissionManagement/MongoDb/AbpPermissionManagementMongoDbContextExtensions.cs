@@ -11,7 +11,9 @@ namespace Volo.Abp.PermissionManagement.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new PermissionManagementMongoModelBuilderConfigurationOptions();
+            var options = new PermissionManagementMongoModelBuilderConfigurationOptions(
+                AbpPermissionManagementDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

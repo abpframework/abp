@@ -31,6 +31,7 @@
     <p-table
       *ngIf="[130, 200, 200, 200] as columnWidths"
       [value]="data$ | async"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
@@ -57,14 +58,20 @@
       <ng-template pTemplate="header">
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="changeSortOrder()">
+          <th pResizableColumn (click)="sortOrderIcon.sort('userName')">
             {{ 'AbpIdentity::UserName' | abpLocalization }}
-            <span class="float-right"
-              ><i [ngClass]="['fa', sortOrder === 'desc' ? 'fa-sort-desc' : 'fa-sort-asc']"></i
-            ></span>
+            <abp-sort-order-icon #sortOrderIcon key="userName" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            </abp-sort-order-icon>
           </th>
-          <th pResizableColumn>{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</th>
-          <th pResizableColumn>{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</th>
+          <th pResizableColumn (click)="sortOrderIcon.sort('email')">
+            {{ 'AbpIdentity::EmailAddress' | abpLocalization }}
+            <abp-sort-order-icon key="email" [(selectedKey)]="sortKey" [(order)]="sortOrder"></abp-sort-order-icon>
+          </th>
+          <th pResizableColumn (click)="sortOrderIcon.sort('phoneNumber')">
+            {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
+            <abp-sort-order-icon key="phoneNumber" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            </abp-sort-order-icon>
+          </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-data>
@@ -105,7 +112,11 @@
   </ng-template>
 
   <ng-template #abpBody>
-    <form [formGroup]="form" (ngSubmit)="save()">
+    <ng-template #loaderRef
+      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
+    ></ng-template>
+
+    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
       <ngb-tabset>
         <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
           <ng-template ngbTabContent>
@@ -203,14 +214,11 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form.invalid">{{
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form?.invalid">{{
       'AbpIdentity::Save' | abpLocalization
     }}</abp-button>
   </ng-template>
 </abp-modal>
 
-<abp-permission-management
-  [(visible)]="visiblePermissions"
-  providerName="User"
-  [providerKey]="providerKey"
-></abp-permission-management>
+<abp-permission-management [(visible)]="visiblePermissions" providerName="User" [providerKey]="providerKey">
+</abp-permission-management>

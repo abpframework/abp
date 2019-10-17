@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AutoMapper;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Data;
 using Volo.Abp.Domain;
 using Volo.Abp.Modularity;
@@ -17,6 +18,7 @@ namespace Volo.Abp.TenantManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<AbpTenantManagementDomainModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<AbpTenantManagementDomainMappingProfile>(validate: true);

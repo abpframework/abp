@@ -6,8 +6,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     public class IdentityModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
     {
         public IdentityModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix = AbpIdentityConsts.DefaultDbTablePrefix,
-            [CanBeNull] string schema = AbpIdentityConsts.DefaultDbSchema)
+            [NotNull] string tablePrefix,
+            [CanBeNull] string schema)
             : base(
                 tablePrefix, 
                 schema)

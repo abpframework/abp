@@ -4,13 +4,9 @@ using Volo.Abp.EntityFrameworkCore;
 
 namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 {
-    [ConnectionStringName(AbpTenantManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(AbpTenantManagementDbProperties.ConnectionStringName)]
     public class TenantManagementDbContext : AbpDbContext<TenantManagementDbContext>, ITenantManagementDbContext
     {
-        public static string TablePrefix { get; set; } = AbpTenantManagementConsts.DefaultDbTablePrefix;
-
-        public static string Schema { get; set; } = AbpTenantManagementConsts.DefaultDbSchema;
-
         public DbSet<Tenant> Tenants { get; set; }
 
         public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
@@ -24,7 +20,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             base.OnModelCreating(builder);
 
-            builder.ConfigureTenantManagement(TablePrefix, Schema);
+            builder.ConfigureTenantManagement();
         }
     }
 }
