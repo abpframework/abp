@@ -2,7 +2,7 @@
 
 ABP框架扩展了ASP.NET Core的分布式缓存系统.
 
-## IDistributedCache 接口
+## `IDistributedCache` 接口
 
 ASP.NET Core 定义了 `IDistributedCache` 接口用于 get/set 缓存值 . 但是会有以下问题:
 
@@ -17,7 +17,7 @@ ASP.NET Core 定义了 `IDistributedCache` 接口用于 get/set 缓存值 . 但�
 
 有关更多信息, 参见 [ASP.NET Core 分布式缓存文档](https://docs.microsoft.com/zh-cn/aspnet/core/performance/caching/distributed).
 
-## IDistributedCache<TCacheItem> 接口
+## `IDistributedCache<TCacheItem>` 接口
 
 ABP框架在[Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/)包定义了通用的泛型 `IDistributedCache<TCacheItem>` 接口. `TCacheItem` 是存储在缓存中的对象类型.
 
