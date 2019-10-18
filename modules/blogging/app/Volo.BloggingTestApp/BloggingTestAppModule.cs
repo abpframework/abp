@@ -60,7 +60,7 @@ namespace Volo.BloggingTestApp
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
             Configure<BloggingUrlOptions>(options =>
             {

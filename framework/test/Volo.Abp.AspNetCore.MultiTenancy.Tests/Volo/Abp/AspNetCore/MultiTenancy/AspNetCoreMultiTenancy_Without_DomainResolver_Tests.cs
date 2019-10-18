@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Shouldly;
@@ -24,9 +25,9 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             _options = ServiceProvider.GetRequiredService<IOptions<AspNetCoreMultiTenancyOptions>>().Value;
         }
 
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
-            return base.CreateWebHostBuilder().ConfigureServices(services =>
+            return base.CreateHostBuilder().ConfigureServices(services =>
             {
                 services.Configure<DefaultTenantStoreOptions>(options =>
                 {

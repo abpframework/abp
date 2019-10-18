@@ -13,7 +13,7 @@ namespace MyCompanyName.MyProjectName
             services.AddApplication<MyProjectNameHttpApiHostModule>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.InitializeApplication();
         }

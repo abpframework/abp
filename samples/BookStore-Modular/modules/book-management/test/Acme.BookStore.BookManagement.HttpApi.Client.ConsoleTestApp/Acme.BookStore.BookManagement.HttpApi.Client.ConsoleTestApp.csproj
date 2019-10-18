@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Http.Client.IdentityModel" Version="0.21.0" />
+    <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel\Volo.Abp.Http.Client.IdentityModel.csproj" />
     <ProjectReference Include="..\..\src\Acme.BookStore.BookManagement.HttpApi.Client\Acme.BookStore.BookManagement.HttpApi.Client.csproj" />
   </ItemGroup>
 
