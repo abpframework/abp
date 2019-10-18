@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { SessionState } from '../states';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SessionStateService {
   constructor(private store: Store) {}
 
