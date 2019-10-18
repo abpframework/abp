@@ -20,7 +20,7 @@ namespace Volo.Docs.MongoDB
                                    "Db_" +
                                     Guid.NewGuid().ToString("N");
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = connectionString;
             });

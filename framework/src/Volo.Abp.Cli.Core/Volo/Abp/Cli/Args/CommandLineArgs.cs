@@ -14,13 +14,13 @@ namespace Volo.Abp.Cli.Args
         public string Target { get; }
 
         [NotNull]
-        public CommandLineOptions Options { get; }
+        public AbpCommandLineOptions Options { get; }
 
         public CommandLineArgs([CanBeNull] string command = null, [CanBeNull] string target = null)
         {
             Command = command;
             Target = target;
-            Options = new CommandLineOptions();
+            Options = new AbpCommandLineOptions();
         }
 
         public static CommandLineArgs Empty()

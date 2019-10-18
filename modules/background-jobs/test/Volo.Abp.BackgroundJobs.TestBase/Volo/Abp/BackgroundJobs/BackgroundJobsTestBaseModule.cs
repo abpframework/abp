@@ -13,7 +13,7 @@ namespace Volo.Abp.BackgroundJobs
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<BackgroundJobOptions>(options =>
+            Configure<AbpBackgroundJobOptions>(options =>
             {
                 options.IsJobExecutionEnabled = false;
             });

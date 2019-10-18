@@ -21,7 +21,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
     {
         public ILogger<AbpIoSourceCodeStore> Logger { get; set; }
 
-        protected CliOptions Options { get; }
+        protected AbpCliOptions Options { get; }
 
         protected IJsonSerializer JsonSerializer { get; }
 
@@ -30,7 +30,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public AbpIoSourceCodeStore(
-            IOptions<CliOptions> options,
+            IOptions<AbpCliOptions> options,
             IJsonSerializer jsonSerializer,
             IRemoteServiceExceptionHandler remoteServiceExceptionHandler,
             ICancellationTokenProvider cancellationTokenProvider)

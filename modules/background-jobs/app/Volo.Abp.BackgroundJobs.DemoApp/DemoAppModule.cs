@@ -27,7 +27,7 @@ namespace Volo.Abp.BackgroundJobs.DemoApp
                 });
             });
 
-            Configure<BackgroundJobWorkerOptions>(options =>
+            Configure<AbpBackgroundJobWorkerOptions>(options =>
             {
                 //Configure for fast running
                 options.JobPollPeriod = 1000;

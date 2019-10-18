@@ -28,7 +28,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ThemingOptions>(options =>
+            Configure<AbpThemingOptions>(options =>
             {
                 options.Themes.Add<BasicTheme>();
 
@@ -38,17 +38,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic
                 }
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiBasicThemeModule>("Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic");
             });
 
-            Configure<ToolbarOptions>(options =>
+            Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new BasicThemeMainTopToolbarContributor());
             });
 
-            Configure<BundlingOptions>(options =>
+            Configure<AbpBundlingOptions>(options =>
             {
                 options
                     .StyleBundles

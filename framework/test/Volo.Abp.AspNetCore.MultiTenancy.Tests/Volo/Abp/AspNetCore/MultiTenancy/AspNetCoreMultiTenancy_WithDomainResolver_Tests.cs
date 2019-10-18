@@ -17,18 +17,18 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         private readonly Guid _testTenantId = Guid.NewGuid();
         private readonly string _testTenantName = "acme";
 
-        private readonly AspNetCoreMultiTenancyOptions _options;
+        private readonly AbpAspNetCoreMultiTenancyOptions _options;
 
         public AspNetCoreMultiTenancy_WithDomainResolver_Tests()
         {
-            _options = ServiceProvider.GetRequiredService<IOptions<AspNetCoreMultiTenancyOptions>>().Value;
+            _options = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
         }
 
         protected override IHostBuilder CreateHostBuilder()
         {
             return base.CreateHostBuilder().ConfigureServices(services =>
             {
-                services.Configure<DefaultTenantStoreOptions>(options =>
+                services.Configure<AbpDefaultTenantStoreOptions>(options =>
                 {
                     options.Tenants = new[]
                     {
@@ -36,7 +36,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                     };
                 });
 
-                services.Configure<TenantResolveOptions>(options =>
+                services.Configure<AbpTenantResolveOptions>(options =>
                 {
                     options.AddDomainTenantResolver("{0}.abp.io");
                 });

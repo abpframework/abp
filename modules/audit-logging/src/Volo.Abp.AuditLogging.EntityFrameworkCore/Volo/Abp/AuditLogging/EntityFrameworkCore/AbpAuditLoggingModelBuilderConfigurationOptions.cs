@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
-    public class AbpAuditLoggingModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class AbpAuditLoggingModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public AbpAuditLoggingModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix,

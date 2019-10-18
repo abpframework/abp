@@ -187,9 +187,9 @@ namespace Volo.Abp.Domain.Repositories
             services.ShouldContainTransient(typeof(IRepository<MyTestEntityWithInt32Pk, int>), typeof(MyTestCustomBaseRepository<MyTestEntityWithInt32Pk, int>));
         }
 
-        public class MyTestRepositoryRegistrar : RepositoryRegistrarBase<CommonDbContextRegistrationOptions>
+        public class MyTestRepositoryRegistrar : RepositoryRegistrarBase<AbpCommonDbContextRegistrationOptions>
         {
-            public MyTestRepositoryRegistrar(CommonDbContextRegistrationOptions options)
+            public MyTestRepositoryRegistrar(AbpCommonDbContextRegistrationOptions options)
                 : base(options)
             {
             }
@@ -331,7 +331,7 @@ namespace Volo.Abp.Domain.Repositories
 
         }
 
-        public class TestDbContextRegistrationOptions : CommonDbContextRegistrationOptions
+        public class TestDbContextRegistrationOptions : AbpCommonDbContextRegistrationOptions
         {
             public TestDbContextRegistrationOptions(Type originalDbContextType, IServiceCollection services)
                 : base(originalDbContextType, services)

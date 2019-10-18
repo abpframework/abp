@@ -9,7 +9,7 @@ namespace Volo.Abp.Caching
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<CacheOptions>(option =>
+            Configure<AbpCacheOptions>(option =>
             {
                 option.CacheConfigurators.Add(cacheName =>
                 {

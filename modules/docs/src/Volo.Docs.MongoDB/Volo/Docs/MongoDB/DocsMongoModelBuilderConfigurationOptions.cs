@@ -3,7 +3,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Docs.MongoDB
 {
-    public class DocsMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
+    public class DocsMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
         public DocsMongoModelBuilderConfigurationOptions(
             [NotNull] string collectionPrefix)

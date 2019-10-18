@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 )
             );
 
-            Configure<ApiDescriptionModelOptions>(options =>
+            Configure<AbpApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));

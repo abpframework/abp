@@ -14,13 +14,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
     [Dependency(ReplaceServices = true)]
     public class AbpViewComponentHelper : IViewComponentHelper, IViewContextAware, ITransientDependency
     {
-        protected WidgetOptions Options { get; }
+        protected AbpWidgetOptions Options { get; }
         protected IPageWidgetManager PageWidgetManager { get; }
         protected DefaultViewComponentHelper DefaultViewComponentHelper { get; }
 
         public AbpViewComponentHelper(
             DefaultViewComponentHelper defaultViewComponentHelper,
-            IOptions<WidgetOptions> widgetOptions,
+            IOptions<AbpWidgetOptions> widgetOptions,
             IPageWidgetManager pageWidgetManager)
         {
             DefaultViewComponentHelper = defaultViewComponentHelper;

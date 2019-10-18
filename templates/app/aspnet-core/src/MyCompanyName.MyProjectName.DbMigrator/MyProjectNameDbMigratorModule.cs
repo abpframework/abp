@@ -14,7 +14,7 @@ namespace MyCompanyName.MyProjectName.DbMigrator
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<BackgroundJobOptions>(options => options.IsJobExecutionEnabled = false);
+            Configure<AbpBackgroundJobOptions>(options => options.IsJobExecutionEnabled = false);
         }
     }
 }

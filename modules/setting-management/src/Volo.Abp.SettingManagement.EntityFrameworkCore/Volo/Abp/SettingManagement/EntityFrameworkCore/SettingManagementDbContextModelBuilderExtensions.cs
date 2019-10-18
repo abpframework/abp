@@ -5,7 +5,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.SettingManagement.EntityFrameworkCore
 {
-    public class SettingManagementModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class SettingManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public SettingManagementModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix,
