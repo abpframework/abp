@@ -77,7 +77,6 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices(configuration);
-            ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
             ConfigureSwaggerServices(context.Services);
         }
