@@ -5,15 +5,15 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BackgroundJobs
 {
     [DependsOn(
-        typeof(BackgroundJobsDomainSharedModule),
+        typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpBackgroundJobsModule),
         typeof(AbpAutoMapperModule)
         )]
-    public class BackgroundJobsDomainModule : AbpModule //TODO: Rename to AbpBackgroundJobsDomainModule
+    public class AbpBackgroundJobsDomainModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAutoMapperObjectMapper<BackgroundJobsDomainModule>();
+            context.Services.AddAutoMapperObjectMapper<AbpBackgroundJobsDomainModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BackgroundJobsDomainAutoMapperProfile>(validate: true);
