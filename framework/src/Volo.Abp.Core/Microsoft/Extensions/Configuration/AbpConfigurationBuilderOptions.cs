@@ -35,5 +35,10 @@ namespace Microsoft.Extensions.Configuration
         /// Prefix for the environment variables.
         /// </summary>
         public string EnvironmentVariablesPrefix { get; set; }
+
+        /// <summary>
+        /// Command line arguments.
+        /// </summary>
+        public string[] CommandLineArgs { get; set; }
     }
 }
