@@ -12,15 +12,15 @@ export class ConfigStateService {
     return this.store.selectSnapshot(ConfigState.getAll);
   }
 
-  getOne(key: string) {
-    return this.store.selectSnapshot(ConfigState.getOne(key));
+  getOne(...args: Parameters<typeof ConfigState.getOne>) {
+    return this.store.selectSnapshot(ConfigState.getOne(...args));
   }
 
-  getDeep(keys: string[] | string) {
-    return this.store.selectSnapshot(ConfigState.getDeep(keys));
+  getDeep(...args: Parameters<typeof ConfigState.getDeep>) {
+    return this.store.selectSnapshot(ConfigState.getDeep(...args));
   }
 
-  getSetting(key: string) {
-    return this.store.selectSnapshot(ConfigState.getSetting(key));
+  getSetting(...args: Parameters<typeof ConfigState.getSetting>) {
+    return this.store.selectSnapshot(ConfigState.getSetting(...args));
   }
 }
