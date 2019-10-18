@@ -12,7 +12,7 @@ namespace MyCompanyName.MyProjectName
             services.AddApplication<MyProjectNameWebUnifiedModule>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             app.InitializeApplication();
         }

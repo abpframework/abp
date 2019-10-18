@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Volo.Abp.AspNetCore.TestBase
 {
@@ -20,29 +22,34 @@ namespace Volo.Abp.AspNetCore.TestBase
 
         protected AbpAspNetCoreIntegratedTestBase()
         {
-            var builder = CreateWebHostBuilder();
-            Server = CreateTestServer(builder);
-            Client = Server.CreateClient();
-            ServiceProvider = Server.Host.Services;
+            var builder = CreateHostBuilder();
+
+            var host = builder.Build();
+            host.Start();
+
+            Server = host.GetTestServer();
+            Client = host.GetTestClient();
+
+            ServiceProvider = Server.Services;
 
             ServiceProvider.GetRequiredService<ITestServerAccessor>().Server = Server;
         }
 
-        protected virtual IWebHostBuilder CreateWebHostBuilder()
+        protected virtual IHostBuilder CreateHostBuilder()
         {
-            return new WebHostBuilder()
-                .UseStartup<TStartup>()
+            return Host.CreateDefaultBuilder()
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<TStartup>();
+                    webBuilder.UseTestServer();
+                })
+                .UseAutofac()
                 .ConfigureServices(ConfigureServices);
         }
 
-        protected virtual void ConfigureServices(WebHostBuilderContext context, IServiceCollection services)
+        protected virtual void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
             
-        }
-
-        protected virtual TestServer CreateTestServer(IWebHostBuilder builder)
-        {
-            return new TestServer(builder);
         }
 
         #region GetUrl

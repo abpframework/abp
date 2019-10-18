@@ -2,6 +2,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using Microsoft.AspNetCore.Authentication;
@@ -176,7 +177,7 @@ namespace MyCompanyName.MyProjectName
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -230,12 +231,11 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
 
-            //TODO: Enable when Swagger supports ASP.NET Core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            });
 
             app.UseAuditing();
 

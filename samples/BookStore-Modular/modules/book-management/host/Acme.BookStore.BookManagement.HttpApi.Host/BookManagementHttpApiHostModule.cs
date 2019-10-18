@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Acme.BookStore.BookManagement.EntityFrameworkCore;
 using Acme.BookStore.BookManagement.MultiTenancy;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -40,7 +41,7 @@ namespace Acme.BookStore.BookManagement
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -66,7 +67,7 @@ namespace Acme.BookStore.BookManagement
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "BookManagement API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookManagement API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
@@ -131,13 +132,12 @@ namespace Acme.BookStore.BookManagement
             {
                 app.UseMultiTenancy();
             }
-            app.UseAbpRequestLocalization();
-            //TODO: Enable when Swagger supports ASP.NET Core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
-            //});
+            app.UseAbpRequestLocalization();     
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

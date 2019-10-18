@@ -8,14 +8,9 @@ namespace Acme.BookStore.BookManagement
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<BookManagementWebHostModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<BookManagementWebHostModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

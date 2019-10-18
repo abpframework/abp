@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Configuration;
 using Volo.Abp.Data;
@@ -21,7 +22,7 @@ namespace Acme.BookStore.IdentityServer
         private readonly IIdentityResourceDataSeeder _identityResourceDataSeeder;
         private readonly IGuidGenerator _guidGenerator;
         private readonly IPermissionDataSeeder _permissionDataSeeder;
-        private readonly IConfigurationAccessor _configurationAccessor;
+        private readonly IConfiguration _configuration;
 
         public IdentityServerDataSeedContributor(
             IClientRepository clientRepository,
@@ -29,14 +30,14 @@ namespace Acme.BookStore.IdentityServer
             IIdentityResourceDataSeeder identityResourceDataSeeder,
             IGuidGenerator guidGenerator,
             IPermissionDataSeeder permissionDataSeeder,
-            IConfigurationAccessor configurationAccessor)
+            IConfiguration configuration)
         {
             _clientRepository = clientRepository;
             _apiResourceRepository = apiResourceRepository;
             _identityResourceDataSeeder = identityResourceDataSeeder;
             _guidGenerator = guidGenerator;
             _permissionDataSeeder = permissionDataSeeder;
-            _configurationAccessor = configurationAccessor;
+            _configuration = configuration;
         }
 
         [UnitOfWork]
@@ -103,7 +104,7 @@ namespace Acme.BookStore.IdentityServer
                 "BookStore"
             };
 
-            var configurationSection = _configurationAccessor.Configuration.GetSection("IdentityServer:Clients");
+            var configurationSection = _configuration.GetSection("IdentityServer:Clients");
 
             //Web Client
             var webClientId = configurationSection["BookStore_Web:ClientId"];

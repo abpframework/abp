@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -64,7 +65,7 @@ namespace MyCompanyName.MyProjectName
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -74,7 +75,7 @@ namespace MyCompanyName.MyProjectName
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
@@ -147,12 +148,11 @@ namespace MyCompanyName.MyProjectName
             }
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
-            //TODO: Enable when Swagger supports ASP.NET Core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
 
