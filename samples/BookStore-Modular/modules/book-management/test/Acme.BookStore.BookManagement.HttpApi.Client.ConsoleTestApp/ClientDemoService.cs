@@ -6,7 +6,6 @@ using Acme.BookStore.BookManagement.Books;
 using Acme.BookStore.BookManagement.Samples;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityModel;
 
