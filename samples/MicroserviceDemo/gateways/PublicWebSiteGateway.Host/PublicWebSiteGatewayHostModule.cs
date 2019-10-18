@@ -5,6 +5,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using ProductManagement;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Autofac;
@@ -50,7 +51,7 @@ namespace PublicWebSiteGateway.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "PublicWebSite Gateway API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "PublicWebSite Gateway API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -80,12 +81,11 @@ namespace PublicWebSiteGateway.Host
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            //TODO: Enable swagger UI once it supports asp.net core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "PublicWebSite Gateway API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "PublicWebSite Gateway API");
+            });
 
             app.MapWhen(
                 ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||

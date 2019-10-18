@@ -11,6 +11,7 @@ using Acme.BookStore.EntityFrameworkCore;
 using Acme.BookStore.Localization;
 using Acme.BookStore.MultiTenancy;
 using Acme.BookStore.Web.Menus;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -78,9 +79,7 @@ namespace Acme.BookStore.Web
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
-
-            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
-            //ConfigureSwaggerServices(context.Services);
+            ConfigureSwaggerServices(context.Services);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -170,7 +169,7 @@ namespace Acme.BookStore.Web
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "BookStore API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -207,13 +206,11 @@ namespace Acme.BookStore.Web
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
 
-            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "BookStore API");
             });
-            */
 
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();

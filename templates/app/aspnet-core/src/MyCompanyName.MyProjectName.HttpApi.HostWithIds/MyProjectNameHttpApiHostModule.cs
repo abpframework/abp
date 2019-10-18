@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -50,9 +51,7 @@ namespace MyCompanyName.MyProjectName
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
             ConfigureCors(context, configuration);
-
-            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
-            //ConfigureSwaggerServices(context);
+            ConfigureSwaggerServices(context);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -107,7 +106,7 @@ namespace MyCompanyName.MyProjectName
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info {Title = "MyProjectName API", Version = "v1"});
+                    options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProjectName API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
                 });
         }
@@ -166,13 +165,11 @@ namespace MyCompanyName.MyProjectName
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
 
-            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-            */
 
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();

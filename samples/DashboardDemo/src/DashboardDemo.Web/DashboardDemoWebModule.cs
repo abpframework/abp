@@ -9,6 +9,7 @@ using DashboardDemo.EntityFrameworkCore;
 using DashboardDemo.Localization;
 using DashboardDemo.MultiTenancy;
 using DashboardDemo.Web.Menus;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -165,7 +166,7 @@ namespace DashboardDemo.Web
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "DashboardDemo API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "DashboardDemo API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -198,12 +199,11 @@ namespace DashboardDemo.Web
 
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
-            //Swagger does not support ASP.NET Core 3.0 yet
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "DashboardDemo API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "DashboardDemo API");
+            });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

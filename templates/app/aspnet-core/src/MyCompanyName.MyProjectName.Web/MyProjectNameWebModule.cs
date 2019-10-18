@@ -11,6 +11,7 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -78,9 +79,7 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureLocalizationServices();
             ConfigureNavigationServices();
             ConfigureAutoApiControllers();
-
-            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
-            //ConfigureSwaggerServices(context.Services);
+            ConfigureSwaggerServices(context.Services);
         }
 
         private void ConfigureUrls(IConfigurationRoot configuration)
@@ -178,7 +177,7 @@ namespace MyCompanyName.MyProjectName.Web
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -215,13 +214,11 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
 
-            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-            */
 
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();

@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Acme.BookStore.BookManagement.EntityFrameworkCore;
 using Acme.BookStore.BookManagement.MultiTenancy;
 using Acme.BookStore.BookManagement.Web;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -81,7 +82,7 @@ namespace Acme.BookStore.BookManagement
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "BookManagement API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookManagement API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
@@ -125,12 +126,11 @@ namespace Acme.BookStore.BookManagement
                 app.UseMultiTenancy();
             }
 
-            //TODO: Enabled when Swagger supports ASP.NET Core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+            });
 
             app.UseAbpRequestLocalization();
             app.UseAuditing();
