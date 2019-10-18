@@ -42,7 +42,7 @@ describe('ProfileState', () => {
       const spy = jest.spyOn(profileService, 'get');
       spy.mockReturnValue(of(mockData as any));
 
-      state.profileGet({ patchState } as any).subscribe();
+      state.getProfile({ patchState } as any).subscribe();
 
       expect(patchedData).toEqual({ profile: mockData });
     });
@@ -54,7 +54,7 @@ describe('ProfileState', () => {
       const spy = jest.spyOn(profileService, 'update');
       spy.mockReturnValue(of(mockData as any));
 
-      state.profileUpdate({ patchState } as any, { payload: mockData as any }).subscribe();
+      state.updateProfile({ patchState } as any, { payload: mockData as any }).subscribe();
 
       expect(patchedData).toEqual({ profile: mockData });
     });

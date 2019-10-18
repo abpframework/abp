@@ -22,7 +22,7 @@ namespace Volo.Abp.Caching
 
             context.Services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
 
-            context.Services.Configure<AbpCacheOptions>(cacheOptions =>
+            context.Services.Configure<AbpDistributedCacheOptions>(cacheOptions =>
             {
                 cacheOptions.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromMinutes(20);
             });
