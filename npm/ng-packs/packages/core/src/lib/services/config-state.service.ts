@@ -5,7 +5,7 @@ import { ConfigState } from '../states';
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigService {
+export class ConfigStateService {
   constructor(private store: Store) {}
 
   getAll() {
