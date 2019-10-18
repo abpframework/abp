@@ -2,7 +2,7 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { Store } from '@ngxs/store';
 import { ReplaySubject, timer, Subject, of } from 'rxjs';
 import { Config } from '../models/config';
-import { ApplicationConfigurationService, ConfigService } from '../services';
+import { ApplicationConfigurationService, ConfigStateService } from '../services';
 import { ConfigState } from '../states';
 import { SetLanguage, PatchRouteByName } from '../actions';
 
@@ -110,14 +110,14 @@ export const CONFIG_STATE_DATA = {
 } as Config.State;
 
 describe('ConfigState', () => {
-  let spectator: SpectatorService<ConfigService>;
+  let spectator: SpectatorService<ConfigStateService>;
   let store: SpyObject<Store>;
-  let service: ConfigService;
+  let service: ConfigStateService;
   let state: ConfigState;
   let appConfigService: SpyObject<ApplicationConfigurationService>;
 
   const createService = createServiceFactory({
-    service: ConfigService,
+    service: ConfigStateService,
     mocks: [ApplicationConfigurationService, Store],
   });
 
