@@ -17,7 +17,8 @@
     "@abp/select2": "^0.9.0",
     "@abp/sweetalert": "^0.9.0",
     "@abp/timeago": "^0.9.0",
-    "@abp/toastr": "^0.9.0"
+    "@abp/toastr": "^0.9.0",
+    "@abp/bootstrap-datepicker": "^0.9.0"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
 }
