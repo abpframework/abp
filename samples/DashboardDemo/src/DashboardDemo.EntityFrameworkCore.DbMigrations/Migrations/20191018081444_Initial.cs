@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Acme.BookStore.Migrations
+namespace DashboardDemo.Migrations
 {
     public partial class Initial : Migration
     {
@@ -243,8 +243,8 @@ namespace Acme.BookStore.Migrations
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
                     ClientName = table.Column<string>(maxLength: 200, nullable: true),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
-                    ClientUri = table.Column<string>(maxLength: 300, nullable: true),
-                    LogoUri = table.Column<string>(maxLength: 300, nullable: true),
+                    ClientUri = table.Column<string>(maxLength: 2000, nullable: true),
+                    LogoUri = table.Column<string>(maxLength: 2000, nullable: true),
                     Enabled = table.Column<bool>(nullable: false),
                     ProtocolType = table.Column<string>(maxLength: 200, nullable: false),
                     RequireClientSecret = table.Column<bool>(nullable: false),
@@ -254,9 +254,9 @@ namespace Acme.BookStore.Migrations
                     RequirePkce = table.Column<bool>(nullable: false),
                     AllowPlainTextPkce = table.Column<bool>(nullable: false),
                     AllowAccessTokensViaBrowser = table.Column<bool>(nullable: false),
-                    FrontChannelLogoutUri = table.Column<string>(maxLength: 300, nullable: true),
+                    FrontChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
                     FrontChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
-                    BackChannelLogoutUri = table.Column<string>(maxLength: 300, nullable: true),
+                    BackChannelLogoutUri = table.Column<string>(maxLength: 2000, nullable: true),
                     BackChannelLogoutSessionRequired = table.Column<bool>(nullable: false),
                     AllowOfflineAccess = table.Column<bool>(nullable: false),
                     IdentityTokenLifetime = table.Column<int>(nullable: false),
@@ -324,7 +324,7 @@ namespace Acme.BookStore.Migrations
                     ClientId = table.Column<string>(maxLength: 200, nullable: false),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     Expiration = table.Column<DateTime>(nullable: true),
-                    Data = table.Column<string>(nullable: false)
+                    Data = table.Column<string>(maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -513,7 +513,7 @@ namespace Acme.BookStore.Migrations
                 name: "IdentityServerApiClaims",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -532,9 +532,9 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 196, nullable: false),
-                    DisplayName = table.Column<string>(maxLength: 128, nullable: true),
-                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    Name = table.Column<string>(maxLength: 200, nullable: false),
+                    DisplayName = table.Column<string>(maxLength: 200, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(nullable: false),
                     Emphasize = table.Column<bool>(nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(nullable: false)
@@ -554,10 +554,10 @@ namespace Acme.BookStore.Migrations
                 name: "IdentityServerApiSecrets",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 32, nullable: false),
-                    Value = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -613,7 +613,7 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    GrantType = table.Column<string>(maxLength: 196, nullable: false)
+                    GrantType = table.Column<string>(maxLength: 250, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -631,7 +631,7 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    Provider = table.Column<string>(maxLength: 64, nullable: false)
+                    Provider = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -649,7 +649,7 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    PostLogoutRedirectUri = table.Column<string>(maxLength: 200, nullable: false)
+                    PostLogoutRedirectUri = table.Column<string>(maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -667,8 +667,8 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    Key = table.Column<string>(maxLength: 64, nullable: false),
-                    Value = table.Column<string>(maxLength: 128, nullable: false)
+                    Key = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -686,7 +686,7 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    RedirectUri = table.Column<string>(maxLength: 200, nullable: false)
+                    RedirectUri = table.Column<string>(maxLength: 2000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -704,7 +704,7 @@ namespace Acme.BookStore.Migrations
                 columns: table => new
                 {
                     ClientId = table.Column<Guid>(nullable: false),
-                    Scope = table.Column<string>(maxLength: 196, nullable: false)
+                    Scope = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -721,10 +721,10 @@ namespace Acme.BookStore.Migrations
                 name: "IdentityServerClientSecrets",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 32, nullable: false),
-                    Value = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 250, nullable: false),
+                    Value = table.Column<string>(maxLength: 4000, nullable: false),
                     ClientId = table.Column<Guid>(nullable: false),
-                    Description = table.Column<string>(maxLength: 256, nullable: true),
+                    Description = table.Column<string>(maxLength: 2000, nullable: true),
                     Expiration = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
@@ -742,7 +742,7 @@ namespace Acme.BookStore.Migrations
                 name: "IdentityServerIdentityClaims",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     IdentityResourceId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
@@ -783,9 +783,9 @@ namespace Acme.BookStore.Migrations
                 name: "IdentityServerApiScopeClaims",
                 columns: table => new
                 {
-                    Type = table.Column<string>(maxLength: 196, nullable: false),
+                    Type = table.Column<string>(maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 196, nullable: false)
+                    Name = table.Column<string>(maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -908,6 +908,11 @@ namespace Acme.BookStore.Migrations
                 name: "IX_IdentityServerClients_ClientId",
                 table: "IdentityServerClients",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerPersistedGrants_Expiration",
+                table: "IdentityServerPersistedGrants",
+                column: "Expiration");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerPersistedGrants_SubjectId_ClientId_Type",
