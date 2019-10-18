@@ -10,9 +10,9 @@
   // Simplified Chinese
   jQuery.timeago.settings.strings = {
     prefixAgo: null,
-    prefixFromNow: null,
+    prefixFromNow: "从现在开始",
     suffixAgo: "之前",
-    suffixFromNow: "之后",
+    suffixFromNow: null,
     seconds: "不到1分钟",
     minute: "大约1分钟",
     minutes: "%d分钟",
