@@ -85,15 +85,15 @@ namespace MyCompanyName.MyProjectName
             ConfigureRedis(context, configuration, hostingEnvironment);
         }
         
-        private void ConfigureCache(IConfigurationRoot configuration)
+        private void ConfigureCache(IConfiguration configuration)
         {
-            Configure<AbpCacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -109,7 +109,7 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication(options =>
                 {
@@ -186,7 +186,7 @@ namespace MyCompanyName.MyProjectName
 
         private void ConfigureRedis(
             ServiceConfigurationContext context,
-            IConfigurationRoot configuration,
+            IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>

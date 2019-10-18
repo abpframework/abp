@@ -81,7 +81,7 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -89,7 +89,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication()
                 .AddIdentityServerAuthentication(options =>

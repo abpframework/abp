@@ -108,7 +108,7 @@ namespace MyCompanyName.MyProjectName
                     options.ApiName = configuration["AuthServer:ApiName"];
                 });
 
-            Configure<AbpCacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });

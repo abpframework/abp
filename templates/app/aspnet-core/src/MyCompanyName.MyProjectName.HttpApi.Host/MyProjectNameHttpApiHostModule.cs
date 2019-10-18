@@ -52,9 +52,9 @@ namespace MyCompanyName.MyProjectName
             ConfigureSwaggerServices(context);
         }
 
-        private void ConfigureCache(IConfigurationRoot configuration)
+        private void ConfigureCache(IConfiguration configuration)
         {
-            Configure<AbpCacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });
@@ -84,7 +84,7 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication("Bearer")
                 .AddIdentityServerAuthentication(options =>
@@ -119,7 +119,7 @@ namespace MyCompanyName.MyProjectName
 
         private void ConfigureRedis(
             ServiceConfigurationContext context,
-            IConfigurationRoot configuration,
+            IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
@@ -136,7 +136,7 @@ namespace MyCompanyName.MyProjectName
             }
         }
 
-        private void ConfigureCors(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddCors(options =>
             {
