@@ -7,7 +7,7 @@ namespace Volo.Abp.PermissionManagement.MongoDB
     {
         public static void ConfigurePermissionManagement(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 

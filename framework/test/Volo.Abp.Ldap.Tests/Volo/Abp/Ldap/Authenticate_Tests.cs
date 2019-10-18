@@ -57,7 +57,7 @@ namespace Volo.Abp.Ldap
                 //     "ServerPort": 636,
                 //     "UseSSL": true
                 // }
-                Configure<LdapOptions>(settings =>
+                Configure<AbpLdapOptions>(settings =>
                 {
                     settings.ServerHost = "192.168.101.54";
                     settings.ServerPort = 636;

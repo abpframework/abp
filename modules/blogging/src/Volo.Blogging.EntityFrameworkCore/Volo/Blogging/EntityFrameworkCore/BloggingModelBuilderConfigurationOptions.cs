@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
-    public class BloggingModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class BloggingModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public BloggingModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix = "",

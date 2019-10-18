@@ -29,7 +29,7 @@ namespace Volo.Abp.Application
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<ApiDescriptionModelOptions>(options =>
+            Configure<AbpApiDescriptionModelOptions>(options =>
             {
                 //TODO: Should we move related items to their own projects?
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IRemoteService));

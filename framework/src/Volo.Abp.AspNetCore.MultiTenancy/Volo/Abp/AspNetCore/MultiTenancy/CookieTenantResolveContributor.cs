@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
         protected override string GetTenantIdOrNameFromHttpContextOrNull(ITenantResolveContext context, HttpContext httpContext)
         {
-            return httpContext.Request?.Cookies[context.GetAspNetCoreMultiTenancyOptions().TenantKey];
+            return httpContext.Request?.Cookies[context.GetAbpAspNetCoreMultiTenancyOptions().TenantKey];
         }
     }
 }

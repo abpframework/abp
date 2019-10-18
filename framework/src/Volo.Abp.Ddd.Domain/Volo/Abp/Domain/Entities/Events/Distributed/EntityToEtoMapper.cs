@@ -11,10 +11,10 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
     public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
     {
         protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
-        protected DistributedEventBusOptions Options { get; }
+        protected AbpDistributedEventBusOptions Options { get; }
 
         public EntityToEtoMapper(
-            IOptions<DistributedEventBusOptions> options,
+            IOptions<AbpDistributedEventBusOptions> options,
             IHybridServiceScopeFactory hybridServiceScopeFactory)
         {
             HybridServiceScopeFactory = hybridServiceScopeFactory;

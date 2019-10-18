@@ -23,20 +23,20 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         protected virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
 
-        protected virtual EntityOptions<TEntity> EntityOptions => _entityOptionsLazy.Value;
+        protected virtual AbpEntityOptions<TEntity> AbpEntityOptions => _entityOptionsLazy.Value;
 
         private readonly IDbContextProvider<TDbContext> _dbContextProvider;
-        private readonly Lazy<EntityOptions<TEntity>> _entityOptionsLazy;
+        private readonly Lazy<AbpEntityOptions<TEntity>> _entityOptionsLazy;
 
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
 
-            _entityOptionsLazy = new Lazy<EntityOptions<TEntity>>(
+            _entityOptionsLazy = new Lazy<AbpEntityOptions<TEntity>>(
                 () => ServiceProvider
-                          .GetRequiredService<IOptions<EntityOptions>>()
+                          .GetRequiredService<IOptions<AbpEntityOptions>>()
                           .Value
-                          .GetOrNull<TEntity>() ?? EntityOptions<TEntity>.Empty
+                          .GetOrNull<TEntity>() ?? AbpEntityOptions<TEntity>.Empty
             );
         }
         
@@ -194,12 +194,12 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override IQueryable<TEntity> WithDetails()
         {
-            if (EntityOptions.DefaultWithDetailsFunc == null)
+            if (AbpEntityOptions.DefaultWithDetailsFunc == null)
             {
                 return base.WithDetails();
             }
 
-            return EntityOptions.DefaultWithDetailsFunc(GetQueryable());
+            return AbpEntityOptions.DefaultWithDetailsFunc(GetQueryable());
         }
 
         public override IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)

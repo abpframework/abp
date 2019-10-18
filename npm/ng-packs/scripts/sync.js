@@ -4,12 +4,13 @@ import execa from 'execa';
 
 (async () => {
   const { projects } = await fse.readJSON('../angular.json');
-  const projectNames = Object.keys(projects);
+  const projectNames = Object.keys(projects).filter(project => project !== 'dev-app');
 
-  projectNames.forEach(async project => {
-    const { dependencies: distDependencies, version } = await fse.readJSON(`../dist/${project}/package.json`);
+  for (let i = 0; i < projectNames.length; i++) {
+    const project = projectNames[i];
+    const { dependencies: distDependencies, version } = await fse.readJson(`../dist/${project}/package.json`);
     const srcPackagePath = `../packages/${project}/package.json`;
-    const srcPackage = await fse.readJSON(srcPackagePath);
+    const srcPackage = await fse.readJson(srcPackagePath);
 
     if (distDependencies) {
       for (const key in srcPackage.dependencies) {
@@ -19,11 +20,15 @@ import execa from 'execa';
       }
     }
 
-    await fse.writeJSON(srcPackagePath, { ...srcPackage, version }, { spaces: 2 });
-  });
+    await fse.writeJson(srcPackagePath, { ...srcPackage, version }, { spaces: 2 });
+  }
 
-  await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
-  await execa('git', ['commit', '-m', 'Update source packages versions'], { stdout: 'inherit' });
+  try {
+    await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
+    await execa('git', ['commit', '-m', '--no-verify', 'Update source packages versions'], { stdout: 'inherit' });
+  } catch (error) {
+    console.error(error.stderr);
+  }
 
   process.exit(0);
 })();

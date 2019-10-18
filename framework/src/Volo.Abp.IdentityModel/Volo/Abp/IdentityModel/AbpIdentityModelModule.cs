@@ -13,7 +13,7 @@ namespace Volo.Abp.IdentityModel
         {
             var configuration = context.Services.GetConfiguration();
 
-            Configure<IdentityClientOptions>(configuration);
+            Configure<AbpIdentityClientOptions>(configuration);
         }
     }
 }

@@ -36,12 +36,12 @@ namespace Volo.Docs.Admin
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DocsMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsAdminWebModule>("Volo.Docs.Admin");
             });

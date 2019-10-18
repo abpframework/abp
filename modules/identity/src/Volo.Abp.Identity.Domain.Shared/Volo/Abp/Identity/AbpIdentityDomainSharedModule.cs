@@ -14,7 +14,7 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityDomainSharedModule>();
             });
@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity
                     ).AddVirtualJson("/Volo/Abp/Identity/Localization");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Volo.Abp.Identity", typeof(IdentityResource));
             });

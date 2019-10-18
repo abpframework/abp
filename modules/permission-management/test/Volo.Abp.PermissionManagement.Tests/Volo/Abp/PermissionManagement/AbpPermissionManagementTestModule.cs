@@ -27,7 +27,7 @@ namespace Volo.Abp.PermissionManagement
                 });
             });
 
-            Configure<UnitOfWorkDefaultOptions>(options =>
+            Configure<AbpUnitOfWorkDefaultOptions>(options =>
             {
                 options.TransactionBehavior = UnitOfWorkTransactionBehavior.Disabled; //EF in-memory database does not support transactions
             });

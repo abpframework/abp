@@ -3,7 +3,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.AuditLogging.MongoDB
 {
-    public class AuditLoggingMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
+    public class AuditLoggingMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
         public AuditLoggingMongoModelBuilderConfigurationOptions(
             [NotNull] string collectionPrefix = "")

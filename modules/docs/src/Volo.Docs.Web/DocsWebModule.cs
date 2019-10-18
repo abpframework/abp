@@ -37,7 +37,7 @@ namespace Volo.Docs
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
             });
@@ -68,7 +68,7 @@ namespace Volo.Docs
                 options.Converters[MarkdownDocumentToHtmlConverter.Type] = typeof(MarkdownDocumentToHtmlConverter);
             });
 
-            Configure<BundleContributorOptions>(options =>
+            Configure<AbpBundleContributorOptions>(options =>
             {
                 options
                     .Extensions<PrismjsStyleBundleContributor>()

@@ -7,7 +7,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.FontAwesome
     {
         public override void ConfigureBundle(BundleConfigurationContext context)
         {
-            context.Files.AddIfNotContains("/libs/font-awesome/css/font-awesome.css");
+            context.Files.AddIfNotContains("/libs/@fortawesome/fontawesome-free/css/all.css");
+            context.Files.AddIfNotContains("/libs/@fortawesome/fontawesome-free/css/v4-shims.css");
         }
     }
 }

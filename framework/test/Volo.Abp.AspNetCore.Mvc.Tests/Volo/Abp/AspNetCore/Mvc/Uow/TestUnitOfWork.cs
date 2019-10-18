@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
     {
         private readonly TestUnitOfWorkConfig _config;
 
-        public TestUnitOfWork(IServiceProvider serviceProvider, IOptions<UnitOfWorkDefaultOptions> options, TestUnitOfWorkConfig config) 
+        public TestUnitOfWork(IServiceProvider serviceProvider, IOptions<AbpUnitOfWorkDefaultOptions> options, TestUnitOfWorkConfig config) 
             : base(serviceProvider, options)
         {
             _config = config;
