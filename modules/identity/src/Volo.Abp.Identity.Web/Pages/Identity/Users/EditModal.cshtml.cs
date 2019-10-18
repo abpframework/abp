@@ -72,6 +72,10 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [StringLength(IdentityUserConsts.MaxSurnameLength)]
             public string Surname { get; set; }
 
+            [StringLength(IdentityUserConsts.MaxPasswordLength)]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+
             [Required]
             [EmailAddress]
             [StringLength(IdentityUserConsts.MaxEmailLength)]
