@@ -8,14 +8,9 @@ namespace DashboardDemo
 {
     public class DashboardDemoWebTestStartup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<DashboardDemoWebTestModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<DashboardDemoWebTestModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

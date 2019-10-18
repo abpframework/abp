@@ -14,7 +14,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public AbpTagHelperStyleService(
             IBundleManager bundleManager,
             IWebContentFileProvider webContentFileProvider,
-            IOptions<BundlingOptions> options,
+            IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment
             ) : base(
                 bundleManager,

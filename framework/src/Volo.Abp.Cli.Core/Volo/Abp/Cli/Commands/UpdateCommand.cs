@@ -21,14 +21,14 @@ namespace Volo.Abp.Cli.Commands
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
         private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
-        private readonly CliOptions _options;
+        private readonly AbpCliOptions _options;
         private readonly IJsonSerializer _jsonSerializer;
 
         public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
             NpmPackagesUpdater npmPackagesUpdater,
             ICliAnalyticsCollect cliAnalyticsCollect, 
             IJsonSerializer jsonSerializer, 
-            IOptions<CliOptions> options)
+            IOptions<AbpCliOptions> options)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;

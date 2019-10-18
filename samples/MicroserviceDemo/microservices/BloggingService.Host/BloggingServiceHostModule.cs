@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Auditing;
@@ -68,7 +69,7 @@ namespace BloggingService.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "Blogging Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Blogging Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -113,12 +114,11 @@ namespace BloggingService.Host
             app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization(); //TODO: localization?
-            //TODO: Enable swagger UI once it supports asp.net core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Blogging Service API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Blogging Service API");
+            });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
 

@@ -27,7 +27,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(ToastrScriptBundleContributor),
         typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
         typeof(LuxonScriptContributor),
-        typeof(TimeagoScriptContributor)
+        typeof(TimeagoScriptContributor),
+        typeof(BootstrapDatepickerScriptContributor)
         )]
     public class SharedThemeGlobalScriptContributor : BundleContributor
     {

@@ -8,14 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Identity.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.IdentityServer.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.BackgroundJobs.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.AuditLogging.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.TenantManagement.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.FeatureManagement.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.PermissionManagement.Domain.Shared" Version="0.21.0" />
-    <PackageReference Include="Volo.Abp.SettingManagement.Domain.Shared" Version="0.21.0" />
+    <ProjectReference Include="..\..\..\..\..\modules\identity\src\Volo.Abp.Identity.Domain.Shared\Volo.Abp.Identity.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\identityserver\src\Volo.Abp.IdentityServer.Domain.Shared\Volo.Abp.IdentityServer.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\background-jobs\src\Volo.Abp.BackgroundJobs.Domain.Shared\Volo.Abp.BackgroundJobs.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\audit-logging\src\Volo.Abp.AuditLogging.Domain.Shared\Volo.Abp.AuditLogging.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\tenant-management\src\Volo.Abp.TenantManagement.Domain.Shared\Volo.Abp.TenantManagement.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\feature-management\src\Volo.Abp.FeatureManagement.Domain.Shared\Volo.Abp.FeatureManagement.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.Domain.Shared\Volo.Abp.PermissionManagement.Domain.Shared.csproj" />
+    <ProjectReference Include="..\..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.Domain.Shared\Volo.Abp.SettingManagement.Domain.Shared.csproj" />
     <ProjectReference Include="..\..\..\modules\book-management\src\Acme.BookStore.BookManagement.Domain.Shared\Acme.BookStore.BookManagement.Domain.Shared.csproj" />
   </ItemGroup>
 

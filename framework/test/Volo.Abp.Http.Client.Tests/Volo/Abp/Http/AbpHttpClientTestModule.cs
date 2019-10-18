@@ -18,7 +18,7 @@ namespace Volo.Abp.Http
             context.Services.AddHttpClientProxies(typeof(TestAppModule).Assembly);
             context.Services.AddHttpClientProxy<IRegularTestController>();
 
-            Configure<RemoteServiceOptions>(options =>
+            Configure<AbpRemoteServiceOptions>(options =>
             {
                 options.RemoteServices.Default = new RemoteServiceConfiguration("/");
             });

@@ -19,11 +19,11 @@ namespace Volo.Abp.IdentityModel
     public class IdentityModelAuthenticationService : IIdentityModelAuthenticationService, ITransientDependency
     {
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
-        protected IdentityClientOptions ClientOptions { get; }
+        protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityModelAuthenticationService(
-            IOptions<IdentityClientOptions> options,
+            IOptions<AbpIdentityClientOptions> options,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             CancellationTokenProvider = cancellationTokenProvider;

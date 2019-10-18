@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Acme.BookStore.BookManagement.Books;
 using Acme.BookStore.BookManagement.Samples;
+using Microsoft.Extensions.Configuration;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityModel;
 
@@ -15,18 +15,18 @@ namespace Acme.BookStore.BookManagement
     {
         private readonly ISampleAppService _sampleAppService;
         private readonly IIdentityModelAuthenticationService _authenticationService;
-        private readonly IConfigurationAccessor _configurationAccessor;
+        private readonly IConfiguration _configuration;
         private readonly IBookAppService _bookAppService;
 
         public ClientDemoService(
             ISampleAppService sampleAppService, 
             IIdentityModelAuthenticationService authenticationService, 
-            IConfigurationAccessor configurationAccessor,
+            IConfiguration configuration,
             IBookAppService bookAppService)
         {
             _sampleAppService = sampleAppService;
             _authenticationService = authenticationService;
-            _configurationAccessor = configurationAccessor;
+            _configuration = configuration;
             _bookAppService = bookAppService;
         }
 
@@ -71,13 +71,13 @@ namespace Acme.BookStore.BookManagement
 
             var accessToken = await _authenticationService.GetAccessTokenAsync(
                 new IdentityClientConfiguration(
-                    _configurationAccessor.Configuration["IdentityClients:Default:Authority"],
-                    _configurationAccessor.Configuration["IdentityClients:Default:Scope"],
-                    _configurationAccessor.Configuration["IdentityClients:Default:ClientId"],
-                    _configurationAccessor.Configuration["IdentityClients:Default:ClientSecret"],
-                    _configurationAccessor.Configuration["IdentityClients:Default:GrantType"],
-                    _configurationAccessor.Configuration["IdentityClients:Default:UserName"],
-                    _configurationAccessor.Configuration["IdentityClients:Default:UserPassword"]
+                    _configuration["IdentityClients:Default:Authority"],
+                    _configuration["IdentityClients:Default:Scope"],
+                    _configuration["IdentityClients:Default:ClientId"],
+                    _configuration["IdentityClients:Default:ClientSecret"],
+                    _configuration["IdentityClients:Default:GrantType"],
+                    _configuration["IdentityClients:Default:UserName"],
+                    _configuration["IdentityClients:Default:UserPassword"]
                 )
             );
 
@@ -87,7 +87,7 @@ namespace Acme.BookStore.BookManagement
             {
                 httpClient.SetBearerToken(accessToken);
 
-                var url = _configurationAccessor.Configuration["RemoteServices:BookManagement:BaseUrl"] +
+                var url = _configuration["RemoteServices:BookManagement:BaseUrl"] +
                           "api/BookManagement/sample/authorized";
 
                 var responseMessage = await httpClient.GetAsync(url);
@@ -116,7 +116,7 @@ namespace Acme.BookStore.BookManagement
 
             // discover endpoints from metadata
             var client = new HttpClient();
-            var disco = await client.GetDiscoveryDocumentAsync(_configurationAccessor.Configuration["IdentityClients:Default:Authority"]);
+            var disco = await client.GetDiscoveryDocumentAsync(_configuration["IdentityClients:Default:Authority"]);
             if (disco.IsError)
             {
                 Console.WriteLine(disco.Error);
@@ -127,11 +127,11 @@ namespace Acme.BookStore.BookManagement
             var tokenResponse = await client.RequestPasswordTokenAsync(new PasswordTokenRequest
             {
                 Address = disco.TokenEndpoint,
-                ClientId = _configurationAccessor.Configuration["IdentityClients:Default:ClientId"],
-                ClientSecret = _configurationAccessor.Configuration["IdentityClients:Default:ClientSecret"],
-                UserName = _configurationAccessor.Configuration["IdentityClients:Default:UserName"],
-                Password = _configurationAccessor.Configuration["IdentityClients:Default:UserPassword"],
-                Scope = _configurationAccessor.Configuration["IdentityClients:Default:Scope"]
+                ClientId = _configuration["IdentityClients:Default:ClientId"],
+                ClientSecret = _configuration["IdentityClients:Default:ClientSecret"],
+                UserName = _configuration["IdentityClients:Default:UserName"],
+                Password = _configuration["IdentityClients:Default:UserPassword"],
+                Scope = _configuration["IdentityClients:Default:Scope"]
             });
 
             if (tokenResponse.IsError)
@@ -148,7 +148,7 @@ namespace Acme.BookStore.BookManagement
             {
                 httpClient.SetBearerToken(tokenResponse.AccessToken);
 
-                var url = _configurationAccessor.Configuration["RemoteServices:BookManagement:BaseUrl"] +
+                var url = _configuration["RemoteServices:BookManagement:BaseUrl"] +
                           "api/BookManagement/sample/authorized";
 
                 var responseMessage = await httpClient.GetAsync(url);

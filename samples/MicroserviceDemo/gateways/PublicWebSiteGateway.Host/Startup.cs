@@ -9,18 +9,12 @@ namespace PublicWebSiteGateway.Host
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<PublicWebSiteGatewayHostModule>(options =>
-            {
-                options.UseAutofac();
-                options.Configuration.UserSecretsAssembly = typeof(Startup).Assembly;
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<PublicWebSiteGatewayHostModule>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
            app.InitializeApplication();
         }

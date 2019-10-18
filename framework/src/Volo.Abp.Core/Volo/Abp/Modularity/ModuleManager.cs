@@ -17,7 +17,7 @@ namespace Volo.Abp.Modularity
         public ModuleManager(
             IModuleContainer moduleContainer,
             ILogger<ModuleManager> logger,
-            IOptions<ModuleLifecycleOptions> options,
+            IOptions<AbpModuleLifecycleOptions> options,
             IServiceProvider serviceProvider)
         {
             _moduleContainer = moduleContainer;

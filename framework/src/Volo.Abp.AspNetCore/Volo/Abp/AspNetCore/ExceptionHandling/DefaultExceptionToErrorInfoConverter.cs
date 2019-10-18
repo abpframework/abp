@@ -21,13 +21,13 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
     {
         public bool SendAllExceptionsToClients { get; set; } = false;
 
-        protected ExceptionLocalizationOptions LocalizationOptions { get; }
+        protected AbpExceptionLocalizationOptions LocalizationOptions { get; }
         protected IStringLocalizerFactory StringLocalizerFactory { get; }
         protected IStringLocalizer<AbpUiResource> L { get; }
         protected IServiceProvider ServiceProvider { get; }
 
         public DefaultExceptionToErrorInfoConverter(
-            IOptions<ExceptionLocalizationOptions> localizationOptions,
+            IOptions<AbpExceptionLocalizationOptions> localizationOptions,
             IStringLocalizerFactory stringLocalizerFactory,
             IStringLocalizer<AbpUiResource> abpUiStringLocalizer,
             IServiceProvider serviceProvider)

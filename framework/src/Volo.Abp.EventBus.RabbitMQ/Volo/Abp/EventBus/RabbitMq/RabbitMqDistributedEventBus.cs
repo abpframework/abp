@@ -22,8 +22,8 @@ namespace Volo.Abp.EventBus.RabbitMq
     [ExposeServices(typeof(IDistributedEventBus), typeof(RabbitMqDistributedEventBus))]
     public class RabbitMqDistributedEventBus : EventBusBase, IDistributedEventBus, ISingletonDependency
     {
-        protected RabbitMqEventBusOptions RabbitMqEventBusOptions { get; }
-        protected DistributedEventBusOptions DistributedEventBusOptions { get; }
+        protected AbpRabbitMqEventBusOptions AbpRabbitMqEventBusOptions { get; }
+        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
         protected IConnectionPool ConnectionPool { get; }
         protected IRabbitMqSerializer Serializer { get; }
         
@@ -34,19 +34,19 @@ namespace Volo.Abp.EventBus.RabbitMq
         protected IRabbitMqMessageConsumer Consumer { get; private set; }
 
         public RabbitMqDistributedEventBus(
-            IOptions<RabbitMqEventBusOptions> options,
+            IOptions<AbpRabbitMqEventBusOptions> options,
             IConnectionPool connectionPool,
             IRabbitMqSerializer serializer,
             IServiceScopeFactory serviceScopeFactory, 
-            IOptions<DistributedEventBusOptions> distributedEventBusOptions,
+            IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions,
             IRabbitMqMessageConsumerFactory messageConsumerFactory)
             : base(serviceScopeFactory)
         {
             ConnectionPool = connectionPool;
             Serializer = serializer;
             MessageConsumerFactory = messageConsumerFactory;
-            DistributedEventBusOptions = distributedEventBusOptions.Value;
-            RabbitMqEventBusOptions = options.Value;
+            AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
+            AbpRabbitMqEventBusOptions = options.Value;
             
             HandlerFactories = new ConcurrentDictionary<Type, List<IEventHandlerFactory>>();
             EventTypes = new ConcurrentDictionary<string, Type>();
@@ -56,22 +56,22 @@ namespace Volo.Abp.EventBus.RabbitMq
         {
             Consumer = MessageConsumerFactory.Create(
                 new ExchangeDeclareConfiguration(
-                    RabbitMqEventBusOptions.ExchangeName,
+                    AbpRabbitMqEventBusOptions.ExchangeName,
                     type: "direct",
                     durable: true
                 ),
                 new QueueDeclareConfiguration(
-                    RabbitMqEventBusOptions.ClientName,
+                    AbpRabbitMqEventBusOptions.ClientName,
                     durable: true,
                     exclusive: false,
                     autoDelete: false
                 ),
-                RabbitMqEventBusOptions.ConnectionName
+                AbpRabbitMqEventBusOptions.ConnectionName
             );
 
             Consumer.OnMessageReceived(ProcessEventAsync);
 
-            SubscribeHandlers(DistributedEventBusOptions.Handlers);
+            SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
         }
 
         private async Task ProcessEventAsync(IModel channel, BasicDeliverEventArgs ea)
@@ -171,10 +171,10 @@ namespace Volo.Abp.EventBus.RabbitMq
             var eventName = EventNameAttribute.GetNameOrDefault(eventType);
             var body = Serializer.Serialize(eventData);
 
-            using (var channel = ConnectionPool.Get(RabbitMqEventBusOptions.ConnectionName).CreateModel())
+            using (var channel = ConnectionPool.Get(AbpRabbitMqEventBusOptions.ConnectionName).CreateModel())
             {
                 channel.ExchangeDeclare(
-                    RabbitMqEventBusOptions.ExchangeName,
+                    AbpRabbitMqEventBusOptions.ExchangeName,
                     "direct",
                     durable: true
                 );
@@ -183,7 +183,7 @@ namespace Volo.Abp.EventBus.RabbitMq
                 properties.DeliveryMode = RabbitMqConsts.DeliveryModes.Persistent;
 
                 channel.BasicPublish(
-                   exchange: RabbitMqEventBusOptions.ExchangeName,
+                   exchange: AbpRabbitMqEventBusOptions.ExchangeName,
                     routingKey: eventName,
                     mandatory: true,
                     basicProperties: properties,

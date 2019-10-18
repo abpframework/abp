@@ -42,7 +42,7 @@ namespace Volo.Abp.Data
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                Configure<DbConnectionOptions>(options =>
+                Configure<AbpDbConnectionOptions>(options =>
                 {
                     options.ConnectionStrings.Default = DefaultConnString;
                     options.ConnectionStrings[Database1Name] = Database1ConnString;

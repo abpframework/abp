@@ -39,7 +39,7 @@ namespace Volo.Abp.UI.Navigation
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                Configure<NavigationOptions>(options =>
+                Configure<AbpNavigationOptions>(options =>
                 {
                     options.MenuContributors.Add(new TestMenuContributor1());
                     options.MenuContributors.Add(new TestMenuContributor2());

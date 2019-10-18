@@ -841,8 +841,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.HasKey("ApiResourceId", "Type");
 
@@ -855,16 +855,16 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize")
                         .HasColumnType("bit");
@@ -886,12 +886,12 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.HasKey("ApiResourceId", "Name", "Type");
 
@@ -904,16 +904,16 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -963,8 +963,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<string>("ClientClaimsPrefix")
                         .HasColumnType("nvarchar(200)")
@@ -980,8 +980,8 @@ namespace Acme.BookStore.Migrations
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -1028,8 +1028,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<int>("IdentityTokenLifetime")
                         .HasColumnType("int");
@@ -1052,8 +1052,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LogoUri")
-                        .HasColumnType("nvarchar(300)")
-                        .HasMaxLength(300);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<string>("PairWiseSubjectSalt")
                         .HasColumnType("nvarchar(200)")
@@ -1137,8 +1137,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("GrantType")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.HasKey("ClientId", "GrantType");
 
@@ -1151,8 +1151,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Provider")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "Provider");
 
@@ -1165,8 +1165,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PostLogoutRedirectUri")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.HasKey("ClientId", "PostLogoutRedirectUri");
 
@@ -1179,13 +1179,13 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("nvarchar(128)")
-                        .HasMaxLength(128);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.HasKey("ClientId", "Key");
 
@@ -1198,8 +1198,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("RedirectUri")
-                        .HasColumnType("nvarchar(200)")
-                        .HasMaxLength(200);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.HasKey("ClientId", "RedirectUri");
 
@@ -1212,8 +1212,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Scope")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.HasKey("ClientId", "Scope");
 
@@ -1226,16 +1226,16 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(32)")
-                        .HasMaxLength(32);
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(4000)")
+                        .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasColumnType("nvarchar(2000)")
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -1264,7 +1264,8 @@ namespace Acme.BookStore.Migrations
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasMaxLength(50000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");
@@ -1287,6 +1288,8 @@ namespace Acme.BookStore.Migrations
 
                     b.HasKey("Key");
 
+                    b.HasIndex("Expiration");
+
                     b.HasIndex("SubjectId", "ClientId", "Type");
 
                     b.ToTable("IdentityServerPersistedGrants");
@@ -1298,8 +1301,8 @@ namespace Acme.BookStore.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Type")
-                        .HasColumnType("nvarchar(196)")
-                        .HasMaxLength(196);
+                        .HasColumnType("nvarchar(200)")
+                        .HasMaxLength(200);
 
                     b.HasKey("IdentityResourceId", "Type");
 

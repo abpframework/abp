@@ -17,7 +17,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(ToastrStyleBundleContributor),
         typeof(Select2StyleContributor),
         typeof(MalihuCustomScrollbarPluginStyleBundleContributor),
-        typeof(DatatablesNetBs4StyleContributor)
+        typeof(DatatablesNetBs4StyleContributor),
+        typeof(BootstrapDatepickerStyleContributor)
     )]
     public class SharedThemeGlobalStyleContributor : BundleContributor
     {

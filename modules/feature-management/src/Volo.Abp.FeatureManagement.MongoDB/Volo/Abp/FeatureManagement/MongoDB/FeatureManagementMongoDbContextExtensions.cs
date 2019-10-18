@@ -7,7 +7,7 @@ namespace Volo.Abp.FeatureManagement.MongoDB
     {
         public static void ConfigureFeatureManagement(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 

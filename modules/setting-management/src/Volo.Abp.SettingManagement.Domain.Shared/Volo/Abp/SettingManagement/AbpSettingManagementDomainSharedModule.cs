@@ -10,7 +10,7 @@ namespace Volo.Abp.SettingManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpSettingManagementDomainSharedModule>();
             });
