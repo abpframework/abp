@@ -176,7 +176,15 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 grant.Property(x => x.SubjectId).HasMaxLength(PersistedGrantConsts.SubjectIdMaxLength);
                 grant.Property(x => x.ClientId).HasMaxLength(PersistedGrantConsts.ClientIdMaxLength).IsRequired();
                 grant.Property(x => x.CreationTime).IsRequired();
-                grant.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLength).IsRequired();
+
+                if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
+                {
+                    grant.Property(x => x.Data).HasMaxLength(10000).IsRequired();
+                }
+                else
+                {
+                    grant.Property(x => x.Data).HasMaxLength(PersistedGrantConsts.DataMaxLength).IsRequired();
+                }
 
                 grant.HasKey(x => x.Key); //TODO: What about Id!!!
 
