@@ -137,9 +137,9 @@
                 <input type="text" id="surname" class="form-control" formControlName="surname" />
               </div>
 
-              <div *ngIf="!selected.userName" class="form-group">
+              <div class="form-group">
                 <label for="password">{{ 'AbpIdentity::Password' | abpLocalization }}</label
-                ><span> * </span>
+                ><span *ngIf="!selected.userName"> * </span>
                 <input
                   type="password"
                   id="password"
