@@ -10,11 +10,11 @@ namespace Volo.Abp.BackgroundJobs
     {
         protected IBackgroundJobRepository BackgroundJobRepository { get; }
 
-        protected IObjectMapper<BackgroundJobsDomainModule> ObjectMapper { get; }
+        protected IObjectMapper<AbpBackgroundJobsDomainModule> ObjectMapper { get; }
 
         public BackgroundJobStore(
             IBackgroundJobRepository backgroundJobRepository,
-            IObjectMapper<BackgroundJobsDomainModule> objectMapper)
+            IObjectMapper<AbpBackgroundJobsDomainModule> objectMapper)
         {
             ObjectMapper = objectMapper;
             BackgroundJobRepository = backgroundJobRepository;

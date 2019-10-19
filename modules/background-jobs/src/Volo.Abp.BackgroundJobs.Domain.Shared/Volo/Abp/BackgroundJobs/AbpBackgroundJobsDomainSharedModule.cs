@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.BackgroundJobs
 {
-    public class BackgroundJobsDomainSharedModule : AbpModule
+    public class AbpBackgroundJobsDomainSharedModule : AbpModule
     {
         
     }

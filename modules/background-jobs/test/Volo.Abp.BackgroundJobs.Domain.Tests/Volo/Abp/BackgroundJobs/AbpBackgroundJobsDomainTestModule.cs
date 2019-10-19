@@ -4,9 +4,9 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BackgroundJobs
 {
     [DependsOn(
-        typeof(BackgroundJobsEntityFrameworkCoreTestModule)
+        typeof(AbpBackgroundJobsEntityFrameworkCoreTestModule)
         )]
-    public class BackgroundJobsDomainTestModule : AbpModule
+    public class AbpBackgroundJobsDomainTestModule : AbpModule
     {
         
     }

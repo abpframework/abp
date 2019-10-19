@@ -7,10 +7,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
     [DependsOn(
-        typeof(BackgroundJobsTestBaseModule),
-        typeof(BackgroundJobsMongoDbModule)
+        typeof(AbpBackgroundJobsTestBaseModule),
+        typeof(AbpBackgroundJobsMongoDbModule)
         )]
-    public class BackgroundJobsMongoDbTestModule : AbpModule
+    public class AbpBackgroundJobsMongoDbTestModule : AbpModule
     {
         private static readonly MongoDbRunner MongoDbRunner = MongoDbRunner.Start();
 

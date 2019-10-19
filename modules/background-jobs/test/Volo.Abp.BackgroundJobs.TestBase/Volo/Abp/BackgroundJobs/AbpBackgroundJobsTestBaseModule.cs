@@ -7,9 +7,9 @@ namespace Volo.Abp.BackgroundJobs
     [DependsOn(
         typeof(AbpAutofacModule),
         typeof(AbpTestBaseModule),
-        typeof(BackgroundJobsDomainModule)
+        typeof(AbpBackgroundJobsDomainModule)
         )]
-    public class BackgroundJobsTestBaseModule : AbpModule
+    public class AbpBackgroundJobsTestBaseModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {

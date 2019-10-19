@@ -5,10 +5,10 @@ using Volo.Abp.MongoDB;
 namespace Volo.Abp.BackgroundJobs.MongoDB
 {
     [DependsOn(
-        typeof(BackgroundJobsDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpMongoDbModule)
         )]
-    public class BackgroundJobsMongoDbModule : AbpModule
+    public class AbpBackgroundJobsMongoDbModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
