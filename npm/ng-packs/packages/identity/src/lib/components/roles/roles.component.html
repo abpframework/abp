@@ -45,7 +45,7 @@
         <tr
           abp-table-empty-message
           [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentityServer"
+          localizationResource="AbpIdentity"
           localizationProp="NoDataAvailableInDatatable"
         ></tr>
       </ng-template>
@@ -130,5 +130,5 @@
   </ng-template>
 </abp-modal>
 
-<abp-permission-management [(visible)]="visiblePermissions" providerName="Role" [providerKey]="providerKey">
+<abp-permission-management [(visible)]="visiblePermissions" providerName="R" [providerKey]="providerKey">
 </abp-permission-management>

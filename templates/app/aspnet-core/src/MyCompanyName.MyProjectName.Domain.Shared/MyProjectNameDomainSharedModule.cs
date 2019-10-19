@@ -16,7 +16,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(AbpAuditLoggingDomainSharedModule),
-        typeof(BackgroundJobsDomainSharedModule),
+        typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
         typeof(AbpIdentityServerDomainSharedModule),

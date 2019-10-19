@@ -9,10 +9,10 @@ using Volo.Abp.Modularity;
 namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
 {
     [DependsOn(
-        typeof(BackgroundJobsTestBaseModule),
-        typeof(BackgroundJobsEntityFrameworkCoreModule)
+        typeof(AbpBackgroundJobsTestBaseModule),
+        typeof(AbpBackgroundJobsEntityFrameworkCoreModule)
         )]
-    public class BackgroundJobsEntityFrameworkCoreTestModule : AbpModule
+    public class AbpBackgroundJobsEntityFrameworkCoreTestModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
