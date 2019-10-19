@@ -242,9 +242,9 @@ namespace Volo.Abp.Caching
         [Fact]
         public async Task Should_Set_Get_And_Remove_Cache_Items_With_Object_Type_CacheKey()
         {
-            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem, DummyObjectAsCacheKey>>();
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem, ComplexObjectAsCacheKey>>();
 
-            var cacheKey = new DummyObjectAsCacheKey { DummyData = "DummyData", DummyInt = 42 };
+            var cacheKey = new ComplexObjectAsCacheKey { Name = "DummyData", Age = 42 };
             const string personName = "john nash";
 
             //Get (not exists yet)
@@ -271,10 +271,10 @@ namespace Volo.Abp.Caching
         [Fact]
         public async Task Should_Set_Get_And_Remove_Cache_Items_For_Same_Object_Type_With_Different_CacheKeys()
         {
-            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem, DummyObjectAsCacheKey>>();
+            var personCache = GetRequiredService<IDistributedCache<PersonCacheItem, ComplexObjectAsCacheKey>>();
 
-            var cache1Key = new DummyObjectAsCacheKey { DummyData = "DummyData", DummyInt = 42 };
-            var cache2Key = new DummyObjectAsCacheKey { DummyData = "DummyData2", DummyInt = 24 };
+            var cache1Key = new ComplexObjectAsCacheKey { Name = "John", Age = 42 };
+            var cache2Key = new ComplexObjectAsCacheKey { Name = "Jenny", Age = 24 };
             const string personName = "john nash";
 
             //Get (not exists yet)
