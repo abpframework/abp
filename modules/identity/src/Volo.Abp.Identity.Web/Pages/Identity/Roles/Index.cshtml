@@ -1,4 +1,5 @@
 ﻿@page
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.Identity.Localization
@@ -6,6 +7,7 @@
 @using Volo.Abp.Identity.Web.Pages.Identity.Roles
 @model IndexModel
 @inject IHtmlLocalizer<IdentityResource> L
+@inject IAuthorizationService Authorization
 @inject IPageLayout PageLayout
 @{
     PageLayout.Content.Title = L["Roles"].Value;
@@ -30,7 +32,10 @@
                 <abp-card-title>@L["Roles"]</abp-card-title>
             </abp-column>
             <abp-column size-md="_6" class="text-right">
-                <abp-button button-type="Primary" name="CreateRole" text="@L["NewRole"].Value" icon="plus" />
+                @if (await Authorization.IsGrantedAsync(IdentityPermissions.Roles.Create))
+                {
+                    <abp-button button-type="Primary" name="CreateRole" text="@L["NewRole"].Value" icon="plus" />
+                }
             </abp-column>
         </abp-row>
     </abp-card-header>
