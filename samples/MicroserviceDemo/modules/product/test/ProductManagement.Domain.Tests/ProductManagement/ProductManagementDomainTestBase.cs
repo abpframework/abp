@@ -11,10 +11,10 @@ namespace ProductManagement
 
         protected virtual void WithUnitOfWork(Action action)
         {
-            WithUnitOfWork(new UnitOfWorkOptions(), action);
+            WithUnitOfWork(new AbpUnitOfWorkOptions(), action);
         }
 
-        protected virtual void WithUnitOfWork(UnitOfWorkOptions options, Action action)
+        protected virtual void WithUnitOfWork(AbpUnitOfWorkOptions options, Action action)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
@@ -31,10 +31,10 @@ namespace ProductManagement
 
         protected virtual Task WithUnitOfWorkAsync(Func<Task> func)
         {
-            return WithUnitOfWorkAsync(new UnitOfWorkOptions(), func);
+            return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
         }
 
-        protected virtual async Task WithUnitOfWorkAsync(UnitOfWorkOptions options, Func<Task> action)
+        protected virtual async Task WithUnitOfWorkAsync(AbpUnitOfWorkOptions options, Func<Task> action)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
@@ -51,10 +51,10 @@ namespace ProductManagement
 
         protected virtual TResult WithUnitOfWork<TResult>(Func<TResult> func)
         {
-            return WithUnitOfWork(new UnitOfWorkOptions(), func);
+            return WithUnitOfWork(new AbpUnitOfWorkOptions(), func);
         }
 
-        protected virtual TResult WithUnitOfWork<TResult>(UnitOfWorkOptions options, Func<TResult> func)
+        protected virtual TResult WithUnitOfWork<TResult>(AbpUnitOfWorkOptions options, Func<TResult> func)
         {
             using (var scope = ServiceProvider.CreateScope())
             {
@@ -71,10 +71,10 @@ namespace ProductManagement
 
         protected virtual Task<TResult> WithUnitOfWorkAsync<TResult>(Func<Task<TResult>> func)
         {
-            return WithUnitOfWorkAsync(new UnitOfWorkOptions(), func);
+            return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
         }
 
-        protected virtual async Task<TResult> WithUnitOfWorkAsync<TResult>(UnitOfWorkOptions options, Func<Task<TResult>> func)
+        protected virtual async Task<TResult> WithUnitOfWorkAsync<TResult>(AbpUnitOfWorkOptions options, Func<Task<TResult>> func)
         {
             using (var scope = ServiceProvider.CreateScope())
             {

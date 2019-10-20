@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Volo.Abp.Configuration;
 using Volo.Abp.Modularity;
 using Volo.Abp.Reflection;
 
@@ -24,17 +23,13 @@ namespace Volo.Abp.Internal
             var assemblyFinder = new AssemblyFinder(abpApplication);
             var typeFinder = new TypeFinder(assemblyFinder);
 
-            var configurationAccessor = new DefaultConfigurationAccessor(
-                ConfigurationHelper.BuildConfiguration(
-                    applicationCreationOptions.Configuration
-                )
-            );
-
-            services.TryAddSingleton<IConfigurationAccessor>(configurationAccessor);
-
             if (!services.IsAdded<IConfiguration>())
             {
-                services.AddSingleton<IConfiguration>(configurationAccessor.Configuration);
+                services.ReplaceConfiguration(
+                    ConfigurationHelper.BuildConfiguration(
+                        applicationCreationOptions.Configuration
+                    )
+                );
             }
 
             services.TryAddSingleton<IModuleLoader>(moduleLoader);
@@ -43,7 +38,7 @@ namespace Volo.Abp.Internal
 
             services.AddAssemblyOf<IAbpApplication>();
 
-            services.Configure<ModuleLifecycleOptions>(options =>
+            services.Configure<AbpModuleLifecycleOptions>(options =>
             {
                 options.Contributors.Add<OnPreApplicationInitializationModuleLifecycleContributor>();
                 options.Contributors.Add<OnApplicationInitializationModuleLifecycleContributor>();

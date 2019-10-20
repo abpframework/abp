@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
@@ -8,16 +10,31 @@ namespace SimpleConsoleDemo
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             using (var application = AbpApplicationFactory.Create<MyConsoleModule>(options =>
             {
-                
+                options.Configuration.CommandLineArgs = args;
+                options.UseAutofac();
             }))
             {
+                Console.WriteLine("Initializing the application...");
                 application.Initialize();
+                Console.WriteLine("Initializing the application... OK");
 
-                Console.WriteLine("ABP initialized... Press ENTER to exit!");
+                Console.WriteLine("Checking configuration...");
+
+                var configuration = application.ServiceProvider.GetRequiredService<IConfiguration>();
+                if (configuration["AppSettingKey1"] != "AppSettingValue1")
+                {
+                    Console.WriteLine("ERROR: Could not read the configuration!");
+                    Console.WriteLine("Press ENTER to exit!");
+                    Console.ReadLine();
+                    return;
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("Checking configuration... OK");
 
                 var writers = application.ServiceProvider.GetServices<IMessageWriter>();
                 foreach (var writer in writers)
@@ -25,6 +42,9 @@ namespace SimpleConsoleDemo
                     writer.Write();
                 }
 
+
+                Console.WriteLine();
+                Console.WriteLine("Press ENTER to exit!");
                 Console.ReadLine();
             }
         }

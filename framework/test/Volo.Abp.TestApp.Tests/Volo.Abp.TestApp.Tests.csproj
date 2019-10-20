@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.MemoryDb.Tests\Volo.Abp.MemoryDb.Tests.csproj" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
   </ItemGroup>
 
 </Project>

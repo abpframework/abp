@@ -35,17 +35,17 @@ namespace Volo.Abp.Account.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountWebModule>("Volo.Abp.Account.Web");
             });
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpAccountUserMenuContributor());
             });
 
-            Configure<ToolbarOptions>(options =>
+            Configure<AbpToolbarOptions>(options =>
             {
                 options.Contributors.Add(new AccountModuleToolbarContributor());
             });

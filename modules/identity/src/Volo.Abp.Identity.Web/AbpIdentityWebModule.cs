@@ -35,12 +35,12 @@ namespace Volo.Abp.Identity.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new AbpIdentityWebMainMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpIdentityWebModule>("Volo.Abp.Identity.Web");
             });

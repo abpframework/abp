@@ -21,8 +21,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
     {
         public ILogger<BundleManager> Logger { get; set; }
 
-        protected readonly BundlingOptions Options;
-        protected readonly BundleContributorOptions ContributorOptions;
+        protected readonly AbpBundlingOptions Options;
+        protected readonly AbpBundleContributorOptions ContributorOptions;
         protected readonly IWebContentFileProvider WebContentFileProvider;
         protected readonly IWebHostEnvironment HostingEnvironment;
         protected readonly IScriptBundler ScriptBundler;
@@ -33,8 +33,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         protected readonly IWebRequestResources RequestResources;
 
         public BundleManager(
-            IOptions<BundlingOptions> options,
-            IOptions<BundleContributorOptions> contributorOptions,
+            IOptions<AbpBundlingOptions> options,
+            IOptions<AbpBundleContributorOptions> contributorOptions,
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
             IWebHostEnvironment hostingEnvironment,

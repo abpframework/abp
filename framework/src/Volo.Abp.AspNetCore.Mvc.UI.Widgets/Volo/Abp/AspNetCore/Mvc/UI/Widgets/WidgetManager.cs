@@ -9,12 +9,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
     public class WidgetManager : IWidgetManager
     {
-        protected WidgetOptions Options { get; }
+        protected AbpWidgetOptions Options { get; }
         protected IAuthorizationService AuthorizationService { get; }
         protected ICurrentUser CurrentUser { get; }
 
         public WidgetManager(
-            IOptions<WidgetOptions> widgetOptions,
+            IOptions<AbpWidgetOptions> widgetOptions,
             IAuthorizationService authorizationService,
             ICurrentUser currentUser)
         {

@@ -30,7 +30,7 @@
       /></label>
     </div>
     <p-table
-      *ngIf="[130, 200] as columnWidths"
+      *ngIf="[150, 0] as columnWidths"
       [value]="data$ | async"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
@@ -45,7 +45,7 @@
     >
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width }" />
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
@@ -68,7 +68,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>
+          <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
@@ -177,5 +177,5 @@
   </form>
 </ng-template>
 
-<abp-feature-management [(visible)]="visibleFeatures" providerName="Tenant" [providerKey]="providerKey">
+<abp-feature-management [(visible)]="visibleFeatures" providerName="T" [providerKey]="providerKey">
 </abp-feature-management>

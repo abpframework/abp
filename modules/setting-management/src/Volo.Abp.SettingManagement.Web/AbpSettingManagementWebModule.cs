@@ -23,12 +23,12 @@ namespace Volo.Abp.SettingManagement.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new SettingManagementMainMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpSettingManagementWebModule>("Volo.Abp.SettingManagement.Web");
             });

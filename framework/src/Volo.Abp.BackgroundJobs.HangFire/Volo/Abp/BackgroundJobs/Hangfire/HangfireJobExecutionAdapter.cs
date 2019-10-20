@@ -5,12 +5,12 @@ namespace Volo.Abp.BackgroundJobs.Hangfire
 {
     public class HangfireJobExecutionAdapter<TArgs>
     {
-        protected BackgroundJobOptions Options { get; }
+        protected AbpBackgroundJobOptions Options { get; }
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected IBackgroundJobExecuter JobExecuter { get; }
 
         public HangfireJobExecutionAdapter(
-            IOptions<BackgroundJobOptions> options, 
+            IOptions<AbpBackgroundJobOptions> options, 
             IBackgroundJobExecuter jobExecuter, 
             IServiceScopeFactory serviceScopeFactory)
         {

@@ -6,9 +6,9 @@ namespace Volo.Abp.Timing
 {
     public class Clock : IClock, ITransientDependency
     {
-        protected ClockOptions Options { get; }
+        protected AbpClockOptions Options { get; }
 
-        public Clock(IOptions<ClockOptions> options)
+        public Clock(IOptions<AbpClockOptions> options)
         {
             Options = options.Value;
         }

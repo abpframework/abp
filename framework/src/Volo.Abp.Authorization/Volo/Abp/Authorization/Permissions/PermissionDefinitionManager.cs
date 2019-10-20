@@ -16,12 +16,12 @@ namespace Volo.Abp.Authorization.Permissions
         protected IDictionary<string, PermissionDefinition> PermissionDefinitions => _lazyPermissionDefinitions.Value;
         private readonly Lazy<Dictionary<string, PermissionDefinition>> _lazyPermissionDefinitions;
 
-        protected PermissionOptions Options { get; }
+        protected AbpPermissionOptions Options { get; }
 
         private readonly IServiceProvider _serviceProvider;
 
         public PermissionDefinitionManager(
-            IOptions<PermissionOptions> options,
+            IOptions<AbpPermissionOptions> options,
             IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;

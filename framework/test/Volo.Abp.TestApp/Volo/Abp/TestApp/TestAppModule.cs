@@ -44,7 +44,7 @@ namespace Volo.Abp.TestApp
 
         private void ConfigureDistributedEventBus()
         {
-           Configure<DistributedEventBusOptions>(options =>
+           Configure<AbpDistributedEventBusOptions>(options =>
            {
                options.EtoMappings.Add<Person, PersonEto>();
            });

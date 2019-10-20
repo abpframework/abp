@@ -10,10 +10,10 @@ namespace Volo.Abp.Data
     public class DataSeeder : IDataSeeder, ITransientDependency
     {
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-        protected DataSeedOptions Options { get; }
+        protected AbpDataSeedOptions Options { get; }
 
         public DataSeeder(
-            IOptions<DataSeedOptions> options,
+            IOptions<AbpDataSeedOptions> options,
             IHybridServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;

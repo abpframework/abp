@@ -32,12 +32,12 @@ namespace MyCompanyName.MyProjectName.Web
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName.Web");
             });

@@ -2,7 +2,7 @@ using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.OpenApi.Models;
 using System.IO;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.DataProtection;
@@ -24,6 +24,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
@@ -52,6 +53,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpIdentityHttpApiClientModule),
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementHttpApiClientModule),
+        typeof(AbpFeatureManagementHttpApiClientModule),
         typeof(AbpPermissionManagementHttpApiClientModule)
         )]
     public class MyProjectNameWebHostModule : AbpModule
@@ -84,15 +86,15 @@ namespace MyCompanyName.MyProjectName
             ConfigureRedis(context, configuration, hostingEnvironment);
         }
         
-        private void ConfigureCache(IConfigurationRoot configuration)
+        private void ConfigureCache(IConfiguration configuration)
         {
-            Configure<CacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -102,13 +104,13 @@ namespace MyCompanyName.MyProjectName
 
         private void ConfigureMultiTenancy()
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication(options =>
                 {
@@ -153,7 +155,7 @@ namespace MyCompanyName.MyProjectName
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
@@ -176,7 +178,7 @@ namespace MyCompanyName.MyProjectName
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -185,7 +187,7 @@ namespace MyCompanyName.MyProjectName
 
         private void ConfigureRedis(
             ServiceConfigurationContext context,
-            IConfigurationRoot configuration,
+            IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
@@ -230,12 +232,11 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
 
-            //TODO: Enable when Swagger supports ASP.NET Core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
+            });
 
             app.UseAuditing();
 

@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 {
-    public class AbpPermissionManagementModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class AbpPermissionManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public AbpPermissionManagementModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix,

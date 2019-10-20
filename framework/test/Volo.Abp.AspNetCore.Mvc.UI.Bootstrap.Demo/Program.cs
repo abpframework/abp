@@ -21,7 +21,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
             try
             {
                 Log.Information("Starting web host.");
-                BuildWebHostInternal(args).Build().Run();
+                CreateHostBuilder(args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -35,20 +35,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
             }
         }
 
-        //internal static IWebHost BuildWebHostInternal(string[] args) =>
-        //    new WebHostBuilder()
-        //        .UseKestrel()
-        //        .UseContentRoot(Directory.GetCurrentDirectory())
-        //        .UseIISIntegration()
-        //        .UseStartup<Startup>()
-        //        .UseSerilog()
-        //        .Build();
 
-        internal static IHostBuilder BuildWebHostInternal(string[] args) =>
+        internal static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseAutofac()
+                .UseSerilog();
     }
 }

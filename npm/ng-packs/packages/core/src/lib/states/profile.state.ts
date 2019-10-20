@@ -17,7 +17,7 @@ export class ProfileState {
   constructor(private profileService: ProfileService) {}
 
   @Action(GetProfile)
-  profileGet({ patchState }: StateContext<Profile.State>) {
+  getProfile({ patchState }: StateContext<Profile.State>) {
     return this.profileService.get().pipe(
       tap(profile =>
         patchState({
@@ -28,7 +28,7 @@ export class ProfileState {
   }
 
   @Action(UpdateProfile)
-  profileUpdate({ patchState }: StateContext<Profile.State>, { payload }: UpdateProfile) {
+  updateProfile({ patchState }: StateContext<Profile.State>, { payload }: UpdateProfile) {
     return this.profileService.update(payload).pipe(
       tap(profile =>
         patchState({

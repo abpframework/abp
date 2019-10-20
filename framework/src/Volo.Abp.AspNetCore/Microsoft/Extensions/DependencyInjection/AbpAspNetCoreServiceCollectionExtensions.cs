@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -9,20 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IWebHostEnvironment GetHostingEnvironment(this IServiceCollection services)
         {
             return services.GetSingletonInstance<IWebHostEnvironment>();
-        }
-
-        [Obsolete]
-        public static IConfigurationRoot BuildConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)
-        {
-            return services.GetHostingEnvironment().BuildConfiguration(options);
-        }
-
-        [Obsolete]
-        public static IConfigurationRoot AddConfiguration(this IServiceCollection services, ConfigurationBuilderOptions options = null)
-        {
-            var configuration = services.BuildConfiguration(options);
-            services.SetConfiguration(configuration);
-            return configuration;
         }
     }
 }
