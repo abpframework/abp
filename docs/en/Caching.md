@@ -19,7 +19,7 @@ See [ASP.NET Core's distributed caching document](https://docs.microsoft.com/en-
 
 ## `IDistributedCache<TCacheItem>` Interface
 
-ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object stored in the cache.
+ABP framework defines the generic `IDistributedCache<TCacheItem>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object stored in the cache. 
 
 `IDistributedCache<TCacheItem>` solves the difficulties explained above;
 
@@ -79,6 +79,111 @@ public class BookService : ITransientDependency
 * `GetOrAddAsync` optionally gets a `DistributedCacheEntryOptions` which can be used to set the lifetime of the cached item.
 
 Other methods of the `IDistributedCache<BookCacheItem>` are same as ASP.NET Core's `IDistributedCache` interface, so you can refer [it's documentation](https://docs.microsoft.com/en-us/aspnet/core/performance/caching/distributed).
+
+## IDistributedCache<TCacheItem, TCacheKey> Interface
+
+ABP framework also defines the generic `IDistributedCache<TCacheItem, TCacheKey>` interface in the [Volo.Abp.Caching](https://www.nuget.org/packages/Volo.Abp.Caching/) package. `TCacheItem` is the type of the object and `TCacheKey` as the type of the key  stored in the cache. `IDistributedCache<TCacheItem>` interface is a type of `IDistributedCache<TCacheItem, string>` for simplified usage.
+
+### Usage
+
+An example class to store an item in the cache:
+
+````csharp
+public class BookCacheItem
+{
+    public string Name { get; set; }
+
+    public float Price { get; set; }
+}
+````
+
+Example usage:
+
+````csharp
+public class BookService : ITransientDependency
+{
+    private readonly IDistributedCache<BookCacheItem, Guid> _cache;
+
+    public BookService(IDistributedCache<BookCacheItem, Guid> cache)
+    {
+        _cache = cache;
+    }
+
+    public async Task<BookCacheItem> GetAsync(Guid bookId)
+    {
+        return await _cache.GetOrAddAsync(
+            bookId, //Guid type used as Cache key
+            async () => await GetBookFromDatabaseAsync(bookId),
+            () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(1)
+            }
+        );
+    }
+    private Task<BookCacheItem> GetBookFromDatabaseAsync(Guid bookId)
+    {
+        //TODO: get from database
+    }
+}
+````
+
+* This sample service uses the `GetOrAddAsync()` method to get a book item from the cache.
+* Since cache explicitly implemented as using  `Guid` as cache key, `Guid` value passed to  `_cache_GetOrAddAsync()` method.
+
+In some cases may also want to use a complex object as cache key. 
+
+An example class to store an item in the cache and using itself as the cache key:
+
+````csharp
+public class BookCacheItem
+{
+    public Guid Id { get; set; }
+    
+    public string Name { get; set; }
+    
+    public float Price { get; set; }
+    
+    public override string ToString()
+    {
+        return $"{Id}_{Name}_{Price}"; //Return selective fields joined with underscore
+    }
+}
+````
+
+Example usage:
+
+````csharp
+public class BookService : ITransientDependency
+{
+    private readonly IDistributedCache<BookCacheItem, BookCacheItem> _cache;
+
+    public BookService(IDistributedCache<BookCacheItem, BookCacheItem> cache)
+    {
+        _cache = cache;
+    }
+
+    public async Task<BookCacheItem> GetAsync(BookCacheItem bookItem)
+    {
+        return await _cache.GetOrAddAsync(
+            bookItem, //Object itself used as Cache key
+            async () => await GetBookFromDatabaseAsync(bookItem.Id),
+            () => new DistributedCacheEntryOptions
+            {
+                AbsoluteExpiration = DateTimeOffset.Now.AddHours(1)
+            }
+        );
+    }
+    private Task<BookCacheItem> GetBookFromDatabaseAsync(Guid bookId)
+    {
+        //TODO: get from database
+    }
+}
+````
+
+* This sample service uses the `GetOrAddAsync()` method using complex object as a cache key to cache the same object.
+* **Important note to use complex object as cache key** is to override the `ToString` method of your object since default `ToString` method returns the class name and will be same for all the objects.
+* Since cache explicitly implemented as using complex  `BookCacheItem` as cache key, `BookCacheItem`  type value passed to  `_cache_GetOrAddAsync()` method.
+* Any class can be used as cache key while keeping on mind to override the `ToString` method of the class to produce a unique string.
 
 ### DistributedCacheOptions
 
