@@ -1,6 +1,6 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 export { TenantManagementProviders, TenantManagementModule } from './lib/tenant-management.module';
 export { GetTenants, GetTenantById, CreateTenant, UpdateTenant, DeleteTenant } from './lib/actions';

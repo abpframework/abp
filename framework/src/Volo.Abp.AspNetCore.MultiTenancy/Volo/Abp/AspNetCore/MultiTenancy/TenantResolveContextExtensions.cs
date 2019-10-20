@@ -6,9 +6,9 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 {
     public static class TenantResolveContextExtensions
     {
-        public static AspNetCoreMultiTenancyOptions GetAspNetCoreMultiTenancyOptions(this ITenantResolveContext context)
+        public static AbpAspNetCoreMultiTenancyOptions GetAbpAspNetCoreMultiTenancyOptions(this ITenantResolveContext context)
         {
-            return context.ServiceProvider.GetRequiredService<IOptionsSnapshot<AspNetCoreMultiTenancyOptions>>().Value;
+            return context.ServiceProvider.GetRequiredService<IOptionsSnapshot<AbpAspNetCoreMultiTenancyOptions>>().Value;
         }
     }
 }

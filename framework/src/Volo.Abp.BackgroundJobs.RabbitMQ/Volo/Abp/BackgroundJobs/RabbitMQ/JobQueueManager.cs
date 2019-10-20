@@ -15,10 +15,10 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         protected IServiceProvider ServiceProvider { get; }
 
-        protected BackgroundJobOptions Options { get; }
+        protected AbpBackgroundJobOptions Options { get; }
 
         public JobQueueManager(
-            IOptions<BackgroundJobOptions> options,
+            IOptions<AbpBackgroundJobOptions> options,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;

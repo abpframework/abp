@@ -128,9 +128,22 @@ namespace Volo.Abp.Cli.ProjectModification
 
         protected virtual List<JProperty> GetAbpPackagesFromPackageJson(JObject fileObject)
         {
-            var dependencies = (JObject)fileObject["dependencies"];
-            var properties = dependencies.Properties().ToList();
-            var abpPackages = properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList();
+            var dependencyList = new [] { "dependencies", "devDependencies", "peerDependencies" };
+            var abpPackages = new List<JProperty>();
+
+            foreach (var dependencyListName in dependencyList)
+            {
+                var dependencies = (JObject)fileObject[dependencyListName];
+
+                if (dependencies == null)
+                {
+                    continue;
+                }
+
+                var properties = dependencies.Properties().ToList();
+                abpPackages.AddRange(properties.Where(p => p.Name.StartsWith("@abp/") || p.Name.StartsWith("@volo/")).ToList());
+            }
+
             return abpPackages;
         }
 

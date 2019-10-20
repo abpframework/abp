@@ -1,12 +1,24 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /*
  * Public API Surface of identity
  */
 export { IdentityProviders, IdentityModule } from './lib/identity.module';
-export { GetRoles, GetRoleById, DeleteRole, CreateRole, UpdateRole, GetUsers, GetUserById, DeleteUser, CreateUser, UpdateUser, GetUserRoles } from './lib/actions/identity.actions';
+export {
+  GetRoles,
+  GetRoleById,
+  DeleteRole,
+  CreateRole,
+  UpdateRole,
+  GetUsers,
+  GetUserById,
+  DeleteUser,
+  CreateUser,
+  UpdateUser,
+  GetUserRoles,
+} from './lib/actions/identity.actions';
 export { RolesComponent } from './lib/components/roles/roles.component';
 export { IDENTITY_ROUTES } from './lib/constants/routes';
 export {} from './lib/models/identity';

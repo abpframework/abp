@@ -30,7 +30,7 @@ namespace Volo.Abp.Configuration
             using (var application = AbpApplicationFactory.Create<IndependentEmptyModule>())
             {
                 var myConfiguration = new ConfigurationBuilder().Build();
-                application.Services.SetConfiguration(myConfiguration);
+                application.Services.ReplaceConfiguration(myConfiguration);
                 application.Services.GetConfiguration().ShouldBe(myConfiguration);
 
                 application.Initialize();
@@ -41,12 +41,11 @@ namespace Volo.Abp.Configuration
             }
         }
 
-        private static IConfigurationRoot ResolveConfiguration(IAbpApplication application)
+        private static IConfiguration ResolveConfiguration(IAbpApplication application)
         {
             return application
                 .ServiceProvider
-                .GetRequiredService<IConfigurationAccessor>()
-                .Configuration;
+                .GetRequiredService<IConfiguration>();
         }
     }
 }

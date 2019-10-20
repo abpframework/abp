@@ -90,7 +90,7 @@ export class ConfigState {
     return selector;
   }
 
-  static getSetting(key: string, findContain?: boolean) {
+  static getSetting(key: string) {
     const selector = createSelector(
       [ConfigState],
       (state: Config.State) => {
@@ -278,18 +278,16 @@ function patchRouteDeep(
   routes: ABP.FullRoute[],
   name: string,
   newValue: Partial<ABP.FullRoute>,
-  parentUrl: string = null,
+  parentUrl: string = '',
 ): ABP.FullRoute[] {
   routes = routes.map(route => {
     if (route.name === name) {
-      if (newValue.path) {
-        newValue.url = `${parentUrl}/${newValue.path}`;
-      }
+      newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === '' ? route.path : newValue.path) || ''}`;
 
       if (newValue.children && newValue.children.length) {
         newValue.children = newValue.children.map(child => ({
           ...child,
-          url: `${parentUrl}/${route.path}/${child.path}`,
+          url: `${newValue.url}/${child.path}`.replace('//', '/'),
         }));
       }
 

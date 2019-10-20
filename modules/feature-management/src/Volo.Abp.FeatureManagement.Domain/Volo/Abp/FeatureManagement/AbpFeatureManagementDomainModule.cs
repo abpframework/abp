@@ -27,7 +27,7 @@ namespace Volo.Abp.FeatureManagement
                 options.ProviderPolicies[TenantFeatureValueProvider.ProviderName] = "AbpTenantManagement.Tenants.ManageFeatures";
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("AbpFeatureManagement", typeof(AbpFeatureManagementResource));
             });

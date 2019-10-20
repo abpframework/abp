@@ -29,6 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
             {
                 return Redirect(GetRedirectUrl(returnUrl));
             }
+
             return Redirect("/");
         }
 

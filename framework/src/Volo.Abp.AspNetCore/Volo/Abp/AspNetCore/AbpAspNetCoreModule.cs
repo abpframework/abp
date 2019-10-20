@@ -29,11 +29,6 @@ namespace Volo.Abp.AspNetCore
         )]
     public class AbpAspNetCoreModule : AbpModule
     {
-        public override void PreConfigureServices(ServiceConfigurationContext context)
-        {
-            context.Services.AddConfiguration();
-        }
-
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             Configure<AbpAuditingOptions>(options =>

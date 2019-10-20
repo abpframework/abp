@@ -4,15 +4,17 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 ## Create A New Project
 
-1. Create a new empty AspNet Core Web Application from Visual Studio:
+1. Create a new AspNet Core Web Application from Visual Studio 2019 (16.3.0+):
 
-![](images/create-new-aspnet-core-application.png)
+![](images/create-new-aspnet-core-application-v2.png)
 
-2. Select Empty Template
+2. Configure your new project:
 
-![](images/select-empty-web-application.png)
+![](images/select-empty-web-application-v2.png)
 
-You could select another template, but I want to show it from a clear project.
+3. Press to the create button:
+
+![create-aspnet-core-application](D:\Github\abp\docs\en\images\create-aspnet-core-application.png)
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 
@@ -28,10 +30,8 @@ ABP is a modular framework and it requires a **startup (root) module** class der
 
 ````C#
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp;
-using Volo.Abp.AspNetCore.Modularity;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
 
@@ -40,7 +40,8 @@ namespace BasicAspNetCoreApplication
     [DependsOn(typeof(AbpAspNetCoreMvcModule))]
     public class AppModule : AbpModule
     {
-        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        public override void OnApplicationInitialization(
+            ApplicationInitializationContext context)
         {
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
@@ -49,8 +50,14 @@ namespace BasicAspNetCoreApplication
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+            }
 
-            app.UseMvcWithDefaultRoute();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseMvcWithDefaultRouteAndArea();
         }
     }
 }
@@ -58,16 +65,15 @@ namespace BasicAspNetCoreApplication
 
 ``AppModule`` is a good name for the startup module for an application.
 
-ABP packages define module classes and a module can depend on another module. In the code above, our ``AppModule`` depends on ``AbpAspNetCoreMvcModule`` (defined by Volo.Abp.AspNetCore.Mvc package). It's common to add a ``DependsOn`` attribute after installing a new ABP nuget package.
+ABP packages define module classes and a module can depend on another. In the code above, the ``AppModule`` depends on the ``AbpAspNetCoreMvcModule`` (defined by [Volo.Abp.AspNetCore.Mvc](https://www.nuget.org/packages/Volo.Abp.AspNetCore.Mvc) package). It's common to add a ``DependsOn`` attribute after installing a new ABP nuget package.
 
-Instead of Startup class, we are configuring ASP.NET Core pipeline in this module class.
+Instead of the Startup class, we are configuring ASP.NET Core pipeline in this module class.
 
 ## The Startup Class
 
 Next step is to modify Startup class to integrate to ABP module system:
 
 ````C#
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -75,11 +81,9 @@ namespace BasicAspNetCoreApplication
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             services.AddApplication<AppModule>();
-
-            return services.BuildServiceProviderFromFactory();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -88,41 +92,19 @@ namespace BasicAspNetCoreApplication
         }
     }
 }
-
 ````
 
-Changed ``ConfigureServices`` method to return ``IServiceProvider`` instead of ``void``. This change allows us to replace AspNet Core's Dependency Injection with another framework (see Autofac integration section below). ``services.AddApplication<AppModule>()`` adds all services defined in all modules beginning from the ``AppModule``.
+``services.AddApplication<AppModule>()`` adds all services defined in all modules starting from the ``AppModule``.
 
-``app.InitializeApplication()`` call in ``Configure`` method initializes and starts the application.
+``app.InitializeApplication()`` in ``Configure`` method initializes and starts the application.
 
-## Hello World!
+## Run the Application!
 
-The application above does nothing. Let's create an MVC controller does something:
-
-````C#
-using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc;
-
-namespace BasicAspNetCoreApplication.Controllers
-{
-    public class HomeController : AbpController
-    {
-        public IActionResult Index()
-        {
-            return Content("Hello World!");
-        }
-    }
-}
-
-````
-
-If you run the application, you will see a "Hello World!" message on the page.
-
-Derived ``HomeController`` from ``AbpController`` instead of standard ``Controller`` class. This is not required, but ``AbpController`` class has useful base properties and methods to make your development easier.
+That's all! Run the application, it will just work as expected.
 
 ## Using Autofac as the Dependency Injection Framework
 
-While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, Autofac provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
+While AspNet Core's Dependency Injection (DI) system is fine for basic requirements, [Autofac](https://autofac.org/) provides advanced features like Property Injection and Method Interception which are required by ABP to perform advanced application framework features.
 
 Replacing AspNet Core's DI system by Autofac and integrating to ABP is pretty easy.
 
@@ -143,40 +125,29 @@ public class AppModule : AbpModule
 }
 ````
 
-3. Change ``services.AddApplication<AppModule>();`` line in the ``Startup`` class as shown below:
-
-````C#
-services.AddApplication<AppModule>(options =>
-{
-    options.UseAutofac(); //Integrate to Autofac
-});
-````
-
-4. Update `Program.cs` to not use the `WebHost.CreateDefaultBuilder()` method since it uses the default DI container:
+3. Update `Program.cs` to use Autofac:
 
 ````csharp
-public class Program
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+
+namespace BasicAspNetCoreApplication
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        /*
-            https://github.com/aspnet/AspNetCore/issues/4206#issuecomment-445612167
-            CurrentDirectoryHelpers exists in: \framework\src\Volo.Abp.AspNetCore.Mvc\Microsoft\AspNetCore\InProcess\CurrentDirectoryHelpers.cs
-            Will remove CurrentDirectoryHelpers.cs when upgrade to ASP.NET Core 3.0.
-        */
-        CurrentDirectoryHelpers.SetCurrentDirectory();
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-        BuildWebHostInternal(args).Run();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .UseAutofac(); //Add this line
     }
-
-    public static IWebHost BuildWebHostInternal(string[] args) =>
-        new WebHostBuilder()
-            .UseKestrel()
-            .UseContentRoot(Directory.GetCurrentDirectory())
-            .UseIIS()
-            .UseIISIntegration()
-            .UseStartup<Startup>()
-            .Build();
 }
 ````
 

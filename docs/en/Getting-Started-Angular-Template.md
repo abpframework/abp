@@ -75,7 +75,7 @@ Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown be
 
 #### Using EF Core Update-Database Command
 
-Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations. Right click to the `.Web` project and select **Set as StartUp Project**:
+Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations. Right click to the `.HttpApi.Host` project and select **Set as StartUp Project**:
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 

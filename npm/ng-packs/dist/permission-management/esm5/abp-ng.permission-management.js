@@ -1,11 +1,18 @@
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * Generated bundle index. Do not edit.
  */
-export { PermissionManagementModule, GetPermissions, UpdatePermissions, PermissionManagementComponent, PermissionManagementService, PermissionManagementState } from './public-api';
+export {
+  PermissionManagementModule,
+  GetPermissions,
+  UpdatePermissions,
+  PermissionManagementComponent,
+  PermissionManagementService,
+  PermissionManagementState,
+} from './public-api';
 export { GetPermissions as ɵd, UpdatePermissions as ɵe } from './lib/actions/permission-management.actions';
 export { PermissionManagementComponent as ɵa } from './lib/components/permission-management.component';
 export { PermissionManagementService as ɵc } from './lib/services/permission-management.service';

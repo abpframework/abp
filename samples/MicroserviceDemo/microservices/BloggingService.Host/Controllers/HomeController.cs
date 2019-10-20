@@ -7,10 +7,7 @@ namespace BloggingService.Host.Controllers
     {
         public ActionResult Index()
         {
-            //TODO: Enable swagger UI once it supports asp.net core 3.x
-            //return Redirect("/swagger");
-
-            return Content("OK: BloggingService.Host is working...");
+            return Redirect("/swagger");
         }
     }
 }

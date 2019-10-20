@@ -29,7 +29,7 @@
       /></label>
     </div>
     <p-table
-      *ngIf="[130, 200, 200, 200] as columnWidths"
+      *ngIf="[150, 250, 250, 250] as columnWidths"
       [value]="data$ | async"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
@@ -44,14 +44,14 @@
     >
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width }" />
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
         <tr
           abp-table-empty-message
           [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentityServer"
+          localizationResource="AbpIdentity"
           localizationProp="NoDataAvailableInDatatable"
         ></tr>
       </ng-template>
@@ -76,7 +76,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>
+          <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
@@ -112,7 +112,11 @@
   </ng-template>
 
   <ng-template #abpBody>
-    <form [formGroup]="form" (ngSubmit)="save()">
+    <ng-template #loaderRef
+      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
+    ></ng-template>
+
+    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
       <ngb-tabset>
         <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
           <ng-template ngbTabContent>
@@ -210,11 +214,11 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form.invalid">{{
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form?.invalid">{{
       'AbpIdentity::Save' | abpLocalization
     }}</abp-button>
   </ng-template>
 </abp-modal>
 
-<abp-permission-management [(visible)]="visiblePermissions" providerName="User" [providerKey]="providerKey">
+<abp-permission-management [(visible)]="visiblePermissions" providerName="U" [providerKey]="providerKey">
 </abp-permission-management>

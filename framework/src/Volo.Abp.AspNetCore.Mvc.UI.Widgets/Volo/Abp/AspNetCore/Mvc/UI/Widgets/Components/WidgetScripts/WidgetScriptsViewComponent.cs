@@ -7,11 +7,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
     public class WidgetScriptsViewComponent : AbpViewComponent
     {
         protected IPageWidgetManager PageWidgetManager { get; }
-        protected WidgetOptions Options { get; }
+        protected AbpWidgetOptions Options { get; }
 
         public WidgetScriptsViewComponent(
             IPageWidgetManager pageWidgetManager,
-            IOptions<WidgetOptions> options)
+            IOptions<AbpWidgetOptions> options)
         {
             PageWidgetManager = pageWidgetManager;
             Options = options.Value;

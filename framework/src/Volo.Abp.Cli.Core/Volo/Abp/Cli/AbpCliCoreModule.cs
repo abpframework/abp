@@ -23,7 +23,7 @@ namespace Volo.Abp.Cli
             // a permanent fix will probably be published with the release of .net core 3.0: https://github.com/dotnet/corefx/issues/36553
             AppContext.SetSwitch("System.Net.Http.UseSocketsHttpHandler", false);
 
-            Configure<CliOptions>(options =>
+            Configure<AbpCliOptions>(options =>
             {
                 options.Commands["help"] = typeof(HelpCommand);
                 options.Commands["new"] = typeof(NewCommand);

@@ -7,7 +7,7 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
     {
         public static void ConfigureBackgroundJobs(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 

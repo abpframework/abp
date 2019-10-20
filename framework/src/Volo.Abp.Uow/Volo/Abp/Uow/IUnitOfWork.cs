@@ -14,7 +14,7 @@ namespace Volo.Abp.Uow
 
         event EventHandler<UnitOfWorkEventArgs> Disposed;
 
-        IUnitOfWorkOptions Options { get; }
+        IAbpUnitOfWorkOptions Options { get; }
 
         IUnitOfWork Outer { get; }
 
@@ -28,7 +28,7 @@ namespace Volo.Abp.Uow
 
         void SetOuter([CanBeNull] IUnitOfWork outer);
 
-        void Initialize([NotNull] UnitOfWorkOptions options);
+        void Initialize([NotNull] AbpUnitOfWorkOptions options);
 
         void Reserve([NotNull] string reservationName);
 

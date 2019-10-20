@@ -12,7 +12,7 @@ namespace Volo.Abp.BackgroundWorkers
     {
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundWorkerOptions>>().Value;
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
             if (options.IsEnabled)
             {
                 AsyncHelper.RunSync(
@@ -25,7 +25,7 @@ namespace Volo.Abp.BackgroundWorkers
 
         public override void OnApplicationShutdown(ApplicationShutdownContext context)
         {
-            var options = context.ServiceProvider.GetRequiredService<IOptions<BackgroundWorkerOptions>>().Value;
+            var options = context.ServiceProvider.GetRequiredService<IOptions<AbpBackgroundWorkerOptions>>().Value;
             if (options.IsEnabled)
             {
                 AsyncHelper.RunSync(

@@ -45,7 +45,7 @@ namespace Volo.Abp.SettingManagement
                     _guidGenerator.Create(),
                     "MySetting2",
                     "user1-store-value",
-                    "User",
+                    UserSettingValueProvider.ProviderName,
                     _testData.User1Id.ToString()
                 )
             );
@@ -55,7 +55,7 @@ namespace Volo.Abp.SettingManagement
                     _guidGenerator.Create(),
                     "MySetting2",
                     "user2-store-value",
-                    "User",
+                    UserSettingValueProvider.ProviderName,
                     _testData.User2Id.ToString()
                 )
             );
@@ -74,7 +74,7 @@ namespace Volo.Abp.SettingManagement
                     _guidGenerator.Create(),
                     "MySettingWithoutInherit",
                     "user1-store-value",
-                    "User",
+                    UserSettingValueProvider.ProviderName,
                     _testData.User1Id.ToString()
                 )
             );

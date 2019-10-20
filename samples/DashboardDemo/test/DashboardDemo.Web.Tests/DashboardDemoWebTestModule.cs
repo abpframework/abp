@@ -62,7 +62,7 @@ namespace DashboardDemo
 
         private static void ConfigureNavigationServices(IServiceCollection services)
         {
-            services.Configure<NavigationOptions>(options =>
+            services.Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DashboardDemoMenuContributor());
             });

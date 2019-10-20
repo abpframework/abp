@@ -9,15 +9,15 @@ namespace Volo.Abp.Guids
 
     /// <summary>
     /// Implements <see cref="IGuidGenerator"/> by creating sequential Guids.
-    /// Use <see cref="SequentialGuidGeneratorOptions"/> to configure.
+    /// Use <see cref="AbpSequentialGuidGeneratorOptions"/> to configure.
     /// </summary>
     public class SequentialGuidGenerator : IGuidGenerator, ITransientDependency
     {
-        public SequentialGuidGeneratorOptions Options { get; }
+        public AbpSequentialGuidGeneratorOptions Options { get; }
 
         private static readonly RandomNumberGenerator RandomNumberGenerator = RandomNumberGenerator.Create();
 
-        public SequentialGuidGenerator(IOptions<SequentialGuidGeneratorOptions> options)
+        public SequentialGuidGenerator(IOptions<AbpSequentialGuidGeneratorOptions> options)
         {
             Options = options.Value;
         }

@@ -56,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 });
             });
 
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcTestModule>();
             });
