@@ -42,7 +42,7 @@ namespace MyCompanyName.MyProjectName.Users
 
         /* Add your own properties here. Example:
          *
-         * public virtual string MyProperty { get; set; }
+         * public virtual string MyProperty { get; protected set; }
          */
 
         private AppUser()
