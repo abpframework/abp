@@ -87,11 +87,25 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem (click)="onEdit(data.id)">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>
-                <button ngbDropdownItem (click)="providerKey = data.id; visiblePermissions = true">
+                <button
+                  [abpPermission]="'AbpIdentity.Users.Update'"
+                  ngbDropdownItem
+                  (click)="onEdit(data.id)"
+                >
+                  {{ 'AbpIdentity::Edit' | abpLocalization }}
+                </button>
+                <button
+                  [abpPermission]="'AbpIdentity.Users.ManagePermissions'"
+                  ngbDropdownItem
+                  (click)="providerKey = data.id; visiblePermissions = true"
+                >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
-                <button ngbDropdownItem (click)="delete(data.id, data.userName)">
+                <button
+                  [abpPermission]="'AbpIdentity.Users.Delete'"
+                  ngbDropdownItem
+                  (click)="delete(data.id, data.userName)"
+                >
                   {{ 'AbpIdentity::Delete' | abpLocalization }}
                 </button>
               </div>
