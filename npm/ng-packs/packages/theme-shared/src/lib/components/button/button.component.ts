@@ -55,7 +55,7 @@ export class ButtonComponent implements OnInit {
   @Input() type = 'button';
 
   get icon(): string {
-    return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
+    return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
   }
 
   constructor(private renderer: Renderer2) {}
