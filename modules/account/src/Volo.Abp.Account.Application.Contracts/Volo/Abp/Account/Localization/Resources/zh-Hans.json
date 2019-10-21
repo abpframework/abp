@@ -14,6 +14,8 @@
     "Login": "登录",
     "Cancel": "取消",
     "Register": "注册",
+    "AreYouANewUser": "你是新用户吗?",
+    "AlreadyRegistered": "已经注册过了?",
     "InvalidLoginRequest": "登录请求无效",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "没有为此客户端配置登录方案.",
     "LogInUsingYourProviderAccount": "使用你的{0}帐户登录"

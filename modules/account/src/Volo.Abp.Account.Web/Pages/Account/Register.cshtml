@@ -6,7 +6,7 @@
         <div class="card-body p-5">
             <h4>@L["Register"]</h4>
             <strong>
-                Already registered?
+                @L["AlreadyRegistered"]
                 <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
             </strong>
             <form method="post" class="mt-4">
