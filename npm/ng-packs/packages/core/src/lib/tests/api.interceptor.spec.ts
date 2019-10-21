@@ -35,7 +35,7 @@ describe('ApiInterceptor', () => {
     const handler = {
       handle: (req: HttpRequest<any>) => {
         expect(req.headers.get('Authorization')).toEqual('Bearer ey892mkwa8^2jk');
-        expect(req.headers.get('Accept-Language')).toEqual({ id: 'test' });
+        expect(req.headers.get('Accept-Language')).toEqual({ id: 'test' } as any);
         expect(req.headers.get('__tenant')).toEqual('test');
         done();
         return handleRes$;
