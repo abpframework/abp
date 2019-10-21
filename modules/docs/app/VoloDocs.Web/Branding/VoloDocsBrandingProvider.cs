@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components;
-using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.Localization;
 

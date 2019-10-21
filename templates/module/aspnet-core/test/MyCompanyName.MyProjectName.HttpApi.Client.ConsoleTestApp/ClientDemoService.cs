@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.Extensions.Configuration;
 using MyCompanyName.MyProjectName.Samples;
-using Volo.Abp.Configuration;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.IdentityModel;
 

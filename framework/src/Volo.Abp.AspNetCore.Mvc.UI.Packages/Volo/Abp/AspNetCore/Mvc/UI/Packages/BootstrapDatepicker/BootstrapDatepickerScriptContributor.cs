@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Packages.Timeago
 
         protected virtual bool TryAddCultureFile(BundleConfigurationContext context, string cultureName)
         {
-            var filePath = $"/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{cultureName}.js";
+            var filePath = $"/libs/bootstrap-datepicker/locales/bootstrap-datepicker.{cultureName}.min.js";
 
             if (!context.FileProvider.GetFileInfo(filePath).Exists)
             {

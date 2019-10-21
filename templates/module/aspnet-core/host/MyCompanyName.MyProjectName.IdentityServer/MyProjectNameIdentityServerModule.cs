@@ -20,6 +20,7 @@ using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.SqlServer;
+using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.EntityFrameworkCore;
@@ -54,6 +55,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpPermissionManagementApplicationModule),
         typeof(AbpPermissionManagementHttpApiModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
+        typeof(AbpFeatureManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementHttpApiModule),
@@ -108,7 +110,7 @@ namespace MyCompanyName.MyProjectName
                     options.ApiName = configuration["AuthServer:ApiName"];
                 });
 
-            Configure<AbpCacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });

@@ -6,7 +6,7 @@ namespace Volo.Abp.Features
 {
     public class EditionFeatureValueProvider : FeatureValueProvider
     {
-        public const string ProviderName = "Edition";
+        public const string ProviderName = "E";
 
         public override string Name => ProviderName;
 

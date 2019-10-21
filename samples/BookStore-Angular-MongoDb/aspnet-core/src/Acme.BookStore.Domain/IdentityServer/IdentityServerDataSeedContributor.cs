@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using IdentityServer4.Models;
 using Microsoft.Extensions.Configuration;
 using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.Configuration;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;

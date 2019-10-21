@@ -9,9 +9,7 @@ namespace Volo.Abp.Aspects
         //TODO: Move these constants to their own assemblies!
 
         public const string Auditing = "AbpAuditing";
-        public const string Validation = "AbpValidation";
         public const string UnitOfWork = "AbpUnitOfWork";
-        public const string Authorization = "AbpAuthorization";
         public const string FeatureChecking = "AbpFeatureChecking";
 
         public static void AddApplied(object obj, params string[] concerns)
