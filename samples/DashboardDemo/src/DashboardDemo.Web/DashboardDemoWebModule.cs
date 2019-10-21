@@ -189,7 +189,7 @@ namespace DashboardDemo.Web
 
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAuthentication();
+            app.UseIdentityServer();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -197,7 +197,6 @@ namespace DashboardDemo.Web
                 app.UseMultiTenancy();
             }
 
-            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

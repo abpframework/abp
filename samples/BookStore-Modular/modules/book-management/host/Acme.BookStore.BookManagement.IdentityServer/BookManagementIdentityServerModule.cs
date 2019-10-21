@@ -139,14 +139,13 @@ namespace Acme.BookStore.BookManagement
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseIdentityServer();
             app.UseJwtTokenMiddleware();
+            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
-            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

@@ -153,8 +153,7 @@ namespace Acme.BookStore
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseIdentityServer();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -162,7 +161,7 @@ namespace Acme.BookStore
                 app.UseMultiTenancy();
             }
 
-            app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();

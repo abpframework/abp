@@ -140,13 +140,12 @@ namespace MyCompanyName.MyProjectName
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
-            app.UseAuthentication();
+            app.UseIdentityServer();
             app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
-            app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
