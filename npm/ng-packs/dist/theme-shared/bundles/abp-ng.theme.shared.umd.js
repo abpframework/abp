@@ -337,7 +337,7 @@
             { type: core.Component, args: [{
                         selector: 'abp-button',
                         // tslint:disable-next-line: component-max-inline-declarations
-                        template: "\n    <button\n      #button\n      [attr.type]=\"type\"\n      [ngClass]=\"buttonClass\"\n      [disabled]=\"loading || disabled\"\n      (click)=\"click.emit($event)\"\n      (focus)=\"focus.emit($event)\"\n      (blur)=\"blur.emit($event)\"\n    >\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
+                        template: "\n    <button\n      #button\n      [attr.type]=\"buttonType || type\"\n      [ngClass]=\"buttonClass\"\n      [disabled]=\"loading || disabled\"\n      (click)=\"click.emit($event)\"\n      (focus)=\"focus.emit($event)\"\n      (blur)=\"blur.emit($event)\"\n    >\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
                     }] }
         ];
         /** @nocollapse */
@@ -1400,7 +1400,7 @@
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     /** @type {?} */
-    var backdropAnimation = animations.trigger('backdrop', [
+    var fadeAnimation = animations.trigger('fade', [
         animations.transition(':enter', animations.useAnimation(fadeIn)),
         animations.transition(':leave', animations.useAnimation(fadeOut)),
     ]);
@@ -1569,8 +1569,8 @@
         ModalComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-modal',
-                        template: "<ng-container *ngIf=\"visible\">\n  <div class=\"modal show {{ modalClass }}\" tabindex=\"-1\" role=\"dialog\">\n    <div class=\"modal-backdrop\" [@backdrop]=\"isModalOpen\" (click)=\"close()\"></div>\n    <div\n      id=\"abp-modal-dialog\"\n      class=\"modal-dialog modal-{{ size }}\"\n      role=\"document\"\n      [@dialog]=\"isModalOpen\"\n      #abpModalContent\n    >\n      <div id=\"abp-modal-content\" class=\"modal-content\">\n        <div id=\"abp-modal-header\" class=\"modal-header\">\n          <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n          \u200B\n          <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\n            <span aria-hidden=\"true\">&times;</span>\n          </button>\n        </div>\n        <div id=\"abp-modal-body\" class=\"modal-body\">\n          <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n        </div>\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n",
-                        animations: [backdropAnimation, dialogAnimation]
+                        template: "<ng-container *ngIf=\"visible\">\n  <div class=\"modal show {{ modalClass }}\" tabindex=\"-1\" role=\"dialog\">\n    <div class=\"modal-backdrop\" [@fade]=\"isModalOpen\" (click)=\"close()\"></div>\n    <div\n      id=\"abp-modal-dialog\"\n      class=\"modal-dialog modal-{{ size }}\"\n      role=\"document\"\n      [@dialog]=\"isModalOpen\"\n      #abpModalContent\n    >\n      <div id=\"abp-modal-content\" class=\"modal-content\">\n        <div id=\"abp-modal-header\" class=\"modal-header\">\n          <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n          \u200B\n          <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\n            <span aria-hidden=\"true\">&times;</span>\n          </button>\n        </div>\n        <div id=\"abp-modal-body\" class=\"modal-body\">\n          <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n        </div>\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n",
+                        animations: [fadeAnimation, dialogAnimation]
                     }] }
         ];
         /** @nocollapse */
@@ -2346,6 +2346,27 @@
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     /** @type {?} */
+    var bounceIn = animations.animation([
+        animations.style({ opacity: '0', display: '{{ display }}' }),
+        animations.animate('{{ time}} {{ easing }}', animations.keyframes([
+            animations.style({ opacity: '0', transform: '{{ transform }} scale(0.0)', offset: 0 }),
+            animations.style({ opacity: '0', transform: '{{ transform }} scale(0.8)', offset: 0.5 }),
+            animations.style({ opacity: '1', transform: '{{ transform }} scale(1.0)', offset: 1 })
+        ]))
+    ], {
+        params: {
+            time: '350ms',
+            easing: 'cubic-bezier(.7,.31,.72,1.47)',
+            display: 'block',
+            transform: 'translate(-50%, -50%)'
+        }
+    });
+
+    /**
+     * @fileoverview added by tsickle
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    /** @type {?} */
     var collapseY = animations.animation([
         animations.style({ height: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
         animations.animate('{{ time }} {{ easing }}', animations.style({ height: '0', padding: '0px' }))
@@ -2384,27 +2405,6 @@
             animations.animate('0.2s ease-out', animations.style({ opacity: '1', 'margin-top': '0px' })),
         ]),
     ]);
-
-    /**
-     * @fileoverview added by tsickle
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    /** @type {?} */
-    var bounceIn = animations.animation([
-        animations.style({ opacity: '0', display: '{{ display }}' }),
-        animations.animate('{{ time}} {{ easing }}', animations.keyframes([
-            animations.style({ opacity: '0', transform: '{{ transform }} scale(0.0)', offset: 0 }),
-            animations.style({ opacity: '0', transform: '{{ transform }} scale(0.8)', offset: 0.5 }),
-            animations.style({ opacity: '1', transform: '{{ transform }} scale(1.0)', offset: 1 })
-        ]))
-    ], {
-        params: {
-            time: '350ms',
-            easing: 'cubic-bezier(.7,.31,.72,1.47)',
-            display: 'block',
-            transform: 'translate(-50%, -50%)'
-        }
-    });
 
     /**
      * @fileoverview added by tsickle
@@ -2559,8 +2559,10 @@
     exports.collapse = collapse;
     exports.collapseX = collapseX;
     exports.collapseY = collapseY;
+    exports.dialogAnimation = dialogAnimation;
     exports.expandX = expandX;
     exports.expandY = expandY;
+    exports.fadeAnimation = fadeAnimation;
     exports.fadeIn = fadeIn;
     exports.fadeInDown = fadeInDown;
     exports.fadeInLeft = fadeInLeft;
@@ -2585,7 +2587,7 @@
     exports.ɵi = ErrorComponent;
     exports.ɵj = LoaderBarComponent;
     exports.ɵk = ModalComponent;
-    exports.ɵl = backdropAnimation;
+    exports.ɵl = fadeAnimation;
     exports.ɵm = dialogAnimation;
     exports.ɵn = fadeIn;
     exports.ɵo = fadeOut;

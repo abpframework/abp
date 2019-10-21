@@ -20,6 +20,7 @@ var AccountConfigService = /** @class */ (function () {
             children: [
                 { path: 'login', name: 'AbpAccount::Login', order: 1 },
                 { path: 'register', name: 'AbpAccount::Register', order: 2 },
+                { path: 'manage-profile', name: 'AbpAccount::ManageYourProfile', order: 3 },
             ],
         });
     }
