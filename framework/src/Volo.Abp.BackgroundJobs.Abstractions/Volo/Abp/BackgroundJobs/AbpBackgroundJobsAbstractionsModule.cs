@@ -29,7 +29,7 @@ namespace Volo.Abp.BackgroundJobs
                 }
             });
 
-            services.Configure<BackgroundJobOptions>(options =>
+            services.Configure<AbpBackgroundJobOptions>(options =>
             {
                 foreach (var jobType in jobTypes)
                 {

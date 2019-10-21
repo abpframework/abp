@@ -10,6 +10,12 @@ namespace Volo.Abp.Auditing
         //TODO: Consider to add an option to disable auditing for application service methods?
 
         /// <summary>
+        /// If this value is true, auditing will not throw an exceptions and it will log it when an error occurred while saving AuditLog.
+        /// Default: true.
+        /// </summary>
+        public bool HideErrors { get; set; }
+
+        /// <summary>
         /// Default: true.
         /// </summary>
         public bool IsEnabled { get; set; }
@@ -36,11 +42,12 @@ namespace Volo.Abp.Auditing
         /// Default: false.
         /// </summary>
         public bool IsEnabledForGetRequests { get; set; }
-        
+
         public AbpAuditingOptions()
         {
             IsEnabled = true;
             IsEnabledForAnonymousUsers = true;
+            HideErrors = true;
 
             Contributors = new List<AuditLogContributor>();
 

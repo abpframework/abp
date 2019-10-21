@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Volo.Abp.UI.Navigation;
 
-namespace Volo.Abp.Ui.Navigation
+namespace Volo.Abp.UI.Navigation
 {
     public class ApplicationMenuItemList : List<ApplicationMenuItem>
     {

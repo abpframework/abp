@@ -10,7 +10,6 @@ using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MongoDB;
 using System.Linq.Dynamic.Core;
 
-
 namespace Volo.Abp.IdentityServer.MongoDB
 {
     public class MongoIdentityResourceRepository : MongoDbRepository<IAbpIdentityServerMongoDbContext, IdentityResource, Guid>, IIdentityResourceRepository
@@ -49,6 +48,11 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public virtual async Task<long> GetTotalCountAsync()
         {
             return await GetCountAsync();
+        }
+
+        public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken);
         }
     }
 }

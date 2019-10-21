@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Mongo2Go;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
@@ -11,23 +12,20 @@ namespace Volo.Abp.Users.MongoDB
         )]
     public class AbpUsersMongoDbTestModule : AbpModule
     {
-        private MongoDbRunner _mongoDbRunner;
+        private static readonly MongoDbRunner MongoDbRunner = MongoDbRunner.Start();
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            _mongoDbRunner = MongoDbRunner.Start();
+            var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
+                                   "Db_" +
+                                    Guid.NewGuid().ToString("N");
 
-            services.Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
-                options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
+                options.ConnectionStrings.Default = connectionString;
             });
 
             services.AddAssemblyOf<AbpUsersMongoDbTestModule>();
-        }
-
-        public override void OnApplicationShutdown(ApplicationShutdownContext context)
-        {
-            _mongoDbRunner.Dispose();
         }
     }
 }

@@ -22,14 +22,14 @@ The benefit of a **standard package** is:
 
 Depending on a standard package is easy. Just add it to your **package.json** file like you normally do. Example:
 
-
-    {
-      ...
-      "dependencies": {
-        "@abp/bootstrap": "^1.0.0"
-      }
-    }
-
+````
+{
+  ...
+  "dependencies": {
+    "@abp/bootstrap": "^1.0.0"
+  }
+}
+````
 
 It's suggested to depend on a standard package instead of directly depending on a third-party package.
 
@@ -93,7 +93,8 @@ An example mapping configuration is shown below:
 ````js
 mappings: {
     "@node_modules/bootstrap/dist/css/bootstrap.css": "@libs/bootstrap/css/",
-    "@node_modules/bootstrap/dist/js/bootstrap.bundle.js": "@libs/bootstrap/js/"
+    "@node_modules/bootstrap/dist/js/bootstrap.bundle.js": "@libs/bootstrap/js/",
+    "@node_modules/bootstrap-datepicker/dist/locales/*.*": "@libs/bootstrap-datepicker/locales/"
 }
 ````
 

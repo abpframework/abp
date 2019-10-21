@@ -1,0 +1,30 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "OrganizationManagement": "Gerenciamento da organização",
+    "OrganizationList": "Lista de organização",
+    "Volo.AbpIo.Commercial:010003": "Você não é proprietário desta organização!",
+    "OrganizationNotFoundMessage": "Nenhuma organização encontrada!",
+    "DeveloperCount": "Número de desenvolvedores",
+    "Owners": "Proprietários",
+    "AddMember": "Adicionar membro",
+    "AddOwner": "Adicionar proprietário",
+    "AddDeveloper": "Adicionar desenvolvedor",
+    "UserName": "Nome de usuário",
+    "Name": "Nome",
+    "EmailAddress": "Endereço de email",
+    "Developers": "Desenvolvedores",
+    "LicenseType": "Tipo de licença",
+    "Manage": "Gerenciar",
+    "StartDate": "Data de início",
+    "EndDate": "Data final",
+    "Modules": "Módulos",
+    "LicenseExtendMessage": "A data de término da sua licença foi estendida para {0}",
+    "LicenseUpgradeMessage": "Sua licença foi atualizada para {0}",
+    "LicenseAddDeveloperMessage": "{0} desenvolvedores adicionados à sua licença",
+    "Volo.AbpIo.Commercial:010004": "Não foi possível encontrar o usuário especificado! O usuário já deve ter se registrado.",
+    "MyOrganizations": "Minhas organizações",
+    "ApiKey": "Chave da API",
+    "UserNameNotFound": "Não há usuário com nome de usuário {0}"
+  }
+}

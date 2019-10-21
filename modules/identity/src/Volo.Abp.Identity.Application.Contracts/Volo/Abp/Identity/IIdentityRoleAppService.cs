@@ -1,13 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
-    public interface IIdentityRoleAppService : IAsyncCrudAppService<IdentityRoleDto, Guid, GetIdentityRolesInput, IdentityRoleCreateDto, IdentityRoleUpdateDto>
+    public interface IIdentityRoleAppService : IApplicationService
     {
-        //TODO: remove after a better design
-        Task<List<IdentityRoleDto>> GetAllListAsync();
+        Task<ListResultDto<IdentityRoleDto>> GetListAsync();
+
+        Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input);
+
+        Task<IdentityRoleDto> GetAsync(Guid id);
+
+        Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input);
+
+        Task DeleteAsync(Guid id);
     }
 }

@@ -5,7 +5,7 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public class UserPermissionValueProvider : PermissionValueProvider
     {
-        public const string ProviderName = "User";
+        public const string ProviderName = "U";
 
         public override string Name => ProviderName;
 

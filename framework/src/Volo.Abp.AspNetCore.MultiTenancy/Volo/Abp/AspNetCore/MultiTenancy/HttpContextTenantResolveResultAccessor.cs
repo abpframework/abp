@@ -7,17 +7,11 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
     [Dependency(ReplaceServices = true)]
     public class HttpContextTenantResolveResultAccessor : ITenantResolveResultAccessor, ITransientDependency
     {
+        public const string HttpContextItemName = "__AbpTenantResolveResult";
+
         public TenantResolveResult Result
         {
-            get
-            {
-                if (_httpContextAccessor.HttpContext == null)
-                {
-                    return null;
-                }
-
-                return _httpContextAccessor.HttpContext.Items[""] as TenantResolveResult;
-            }
+            get => _httpContextAccessor.HttpContext?.Items[HttpContextItemName] as TenantResolveResult;
             set
             {
                 if (_httpContextAccessor.HttpContext == null)
@@ -25,7 +19,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
                     return;
                 }
 
-                _httpContextAccessor.HttpContext.Items[""] = value;
+                _httpContextAccessor.HttpContext.Items[HttpContextItemName] = value;
             }
         }
 

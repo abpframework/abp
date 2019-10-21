@@ -74,11 +74,23 @@ namespace System
         }
 
         [Fact]
+        public void ToKebabCase_Test()
+        {
+            (null as string).ToKebabCase().ShouldBe(null);
+            "helloMoon".ToKebabCase().ShouldBe("hello-moon");
+            "HelloWorld".ToKebabCase().ShouldBe("hello-world");
+            "HelloIsparta".ToKebabCase().ShouldBe("hello-isparta");
+            "ThisIsSampleText".ToKebabCase().ShouldBe("this-is-sample-text");
+        }
+
+        [Fact]
         public void ToSentenceCase_Test()
         {
             (null as string).ToSentenceCase().ShouldBe(null);
             "HelloWorld".ToSentenceCase().ShouldBe("Hello world");
             "HelloIsparta".ToSentenceCase().ShouldBe("Hello isparta");
+            "ThisIsSampleSentence".ToSentenceCase().ShouldBe("This is sample sentence");
+            "thisIsSampleSentence".ToSentenceCase().ShouldBe("this is sample sentence");
         }
 
         [Fact]

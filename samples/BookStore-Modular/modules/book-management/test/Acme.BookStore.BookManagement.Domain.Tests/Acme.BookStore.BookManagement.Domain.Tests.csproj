@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Acme.BookStore.BookManagement</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <ProjectReference Include="..\Acme.BookStore.BookManagement.EntityFrameworkCore.Tests\Acme.BookStore.BookManagement.EntityFrameworkCore.Tests.csproj" />
+  </ItemGroup>
+
+</Project>

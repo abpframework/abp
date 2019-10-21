@@ -15,11 +15,11 @@ namespace Volo.Abp.IdentityServer
     {
         private readonly IIdentityResourceRepository _identityResourceRepository;
         private readonly IApiResourceRepository _apiResourceRepository;
-        private readonly IObjectMapper _objectMapper;
+        private readonly IObjectMapper<AbpIdentityServerDomainModule> _objectMapper;
 
         public ResourceStore(
             IIdentityResourceRepository identityResourceRepository, 
-            IObjectMapper objectMapper, 
+            IObjectMapper<AbpIdentityServerDomainModule> objectMapper, 
             IApiResourceRepository apiResourceRepository)
         {
             _identityResourceRepository = identityResourceRepository;

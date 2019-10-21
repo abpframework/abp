@@ -9,7 +9,7 @@ namespace Volo.Abp.Identity
     [RemoteService]
     [Area("identity")]
     [ControllerName("UserLookup")]
-    [Route("api/identity/user-lookup")]
+    [Route("api/identity/users/lookup")]
     public class IdentityUserLookupController : AbpController, IIdentityUserLookupAppService
     {
         protected IIdentityUserLookupAppService LookupAppService { get; }

@@ -38,11 +38,10 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync(new GetIdentityRolesInput());
+            var result = await _roleAppService.GetListAsync();
 
             //Assert
 
-            result.TotalCount.ShouldBeGreaterThan(0);
             result.Items.Count.ShouldBeGreaterThan(0);
         }
 

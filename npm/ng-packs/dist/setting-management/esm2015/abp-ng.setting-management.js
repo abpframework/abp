@@ -1,0 +1,10 @@
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Generated bundle index. Do not edit.
+ */
+export { SettingManagementModule, SettingManagementComponent } from './public-api';
+export { SettingManagementRoutingModule as ɵa } from './lib/setting-management-routing.module';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYWJwLW5nLnNldHRpbmctbWFuYWdlbWVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuc2V0dGluZy1tYW5hZ2VtZW50LyIsInNvdXJjZXMiOlsiYWJwLW5nLnNldHRpbmctbWFuYWdlbWVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7O0FBSUEsb0VBQWMsY0FBYyxDQUFDO0FBRTdCLE9BQU8sRUFBQyw4QkFBOEIsSUFBSSxFQUFFLEVBQUMsTUFBTSx5Q0FBeUMsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogR2VuZXJhdGVkIGJ1bmRsZSBpbmRleC4gRG8gbm90IGVkaXQuXG4gKi9cblxuZXhwb3J0ICogZnJvbSAnLi9wdWJsaWMtYXBpJztcblxuZXhwb3J0IHtTZXR0aW5nTWFuYWdlbWVudFJvdXRpbmdNb2R1bGUgYXMgybVhfSBmcm9tICcuL2xpYi9zZXR0aW5nLW1hbmFnZW1lbnQtcm91dGluZy5tb2R1bGUnOyJdfQ==

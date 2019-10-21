@@ -29,9 +29,17 @@ You may want to translate the complete [documentation](https://abp.io/documents/
 * Get the ["en" folder](https://github.com/abpframework/abp/tree/master/docs/en) as a reference for the file names and folder structure. Keep the same naming if you are translating the same documentation.
 * Send a pull request (PR) once you translate any document. Please translate documents & send PRs one by one. Don't wait to finish translations for all documents.
 
+There are some fundamental documents need to be translated before publishing a language on the [ABP documentation web site](https://docs.abp.io):
+
+* Getting Started documents
+* Tutorials
+* CLI
+
+A new language is published after these minimum translations have been completed.
+
 ### Resource Localization
 
-ABP framework has a flexible [localization system](https://abp.io/documents/abp/latest/Localization). You can create localized user interfaces for your own application.
+ABP framework has a flexible [localization system](../Localization.md). You can create localized user interfaces for your own application.
 
 In addition to that, the framework and pre-build modules have already localized texts. As an example, see [the localization texts for the Volo.Abp.UI package](https://github.com/abpframework/abp/blob/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi/en.json). You can create a new file in the [same folder](https://github.com/abpframework/abp/tree/master/framework/src/Volo.Abp.UI/Localization/Resources/AbpUi) to translate it.
 

@@ -6,7 +6,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    public class ConnectionStringsModal : AbpPageModel
+    public class ConnectionStringsModal : TenantManagementPageModel
     {
         [BindProperty]
         public TenantInfoModel Tenant { get; set; }
@@ -52,7 +52,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 
             public bool UseSharedDatabase { get; set; }
 
-            [StringLength(TenantConnectionStringConsts.MaxNameLength)]
+            [StringLength(TenantConnectionStringConsts.MaxValueLength)]
             public string DefaultConnectionString { get; set; }
         }
     }

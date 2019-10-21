@@ -64,7 +64,7 @@ public class Issue : FullAuditedAggregateRoot<Guid> //使用Guid作为键/标识
     protected Issue()
     {
         /* 此构造函数是提供给ORM用来从数据库中获取实体.
-         * - 无需初始化Lanels集合
+         * - 无需初始化Labels集合
              因为它会被来自数据库的值覆盖.
            - It's protected since proxying and deserialization tools
              可能不适用于私有构造函数.

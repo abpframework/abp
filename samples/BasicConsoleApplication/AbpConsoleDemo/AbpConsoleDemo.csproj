@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.15.0" />
+    <PackageReference Include="Volo.Abp.Autofac" Version="0.20.0" />
   </ItemGroup>
 
 </Project>

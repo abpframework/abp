@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 {
-    public class CreateModalModel : AbpPageModel
+    public class CreateModalModel : IdentityPageModel
     {
         [BindProperty]
         public RoleInfoModel Role { get; set; }

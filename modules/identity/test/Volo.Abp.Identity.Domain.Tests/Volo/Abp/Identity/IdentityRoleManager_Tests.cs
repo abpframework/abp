@@ -37,7 +37,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetRoleNameAsync()
         {
-            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize("moderator"));
+            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator"));
             role.ShouldNotBeNull();
 
             (await _identityRoleManager.SetRoleNameAsync(role, "teacher")).Succeeded.ShouldBeTrue();
@@ -48,12 +48,12 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task DeleteAsync()
         {
-            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize("moderator"));
+            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator"));
             role.ShouldNotBeNull();
 
             await _identityRoleManager.DeleteAsync(role);
 
-            (await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.Normalize("moderator"))).ShouldBeNull();
+            (await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator"))).ShouldBeNull();
         }
 
     }

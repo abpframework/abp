@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 
-namespace Acme.BookStore
+namespace Acme.BookStore.Web
 {
     public class BookStoreWebAutoMapperProfile : Profile
     {
         public BookStoreWebAutoMapperProfile()
         {
-            //Configure your AutoMapper mapping configuration here...
+            CreateMap<BookDto, CreateUpdateBookDto>();
         }
     }
 }

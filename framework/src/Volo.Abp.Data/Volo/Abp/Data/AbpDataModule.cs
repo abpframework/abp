@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Data
 {
+    [DependsOn(
+        typeof(AbpUnitOfWorkModule)
+        )]
     public class AbpDataModule : AbpModule
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
@@ -16,7 +20,7 @@ namespace Volo.Abp.Data
         {
             var configuration = context.Services.GetConfiguration();
 
-            Configure<DbConnectionOptions>(configuration);
+            Configure<AbpDbConnectionOptions>(configuration);
 
             context.Services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
         }
@@ -33,7 +37,7 @@ namespace Volo.Abp.Data
                 }
             });
 
-            services.Configure<DataSeedOptions>(options =>
+            services.Configure<AbpDataSeedOptions>(options =>
             {
                 options.Contributors.AddIfNotContains(contributors);
             });

@@ -20,7 +20,7 @@ namespace VoloDocs.EntityFrameworkCore
         private static IConfigurationRoot BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
-                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../VoloDocs/"))
+                .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../VoloDocs.Web/"))
                 .AddJsonFile("appsettings.json", optional: false);
 
             return builder.Build();

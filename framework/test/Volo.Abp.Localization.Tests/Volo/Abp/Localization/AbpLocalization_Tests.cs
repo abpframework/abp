@@ -225,7 +225,7 @@ namespace Volo.Abp.Localization
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<TestModule>();
                 });

@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
+using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using UserLoginInfo = Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 {
@@ -33,6 +34,8 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         {
             ValidateLoginInfo(login);
 
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
+
             return GetAbpLoginResult(await _signInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
@@ -54,6 +57,28 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             }
 
             return GetAbpLoginResult(await _signInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
+        }
+
+        protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
+        {
+            if (!ValidationHandler.IsValidEmailAddress(login.UserNameOrEmailAddress))
+            {
+                return;
+            }
+
+            var userByUsername = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
+            if (userByUsername != null)
+            {
+                return;
+            }
+
+            var userByEmail = await _userManager.FindByEmailAsync(login.UserNameOrEmailAddress);
+            if (userByEmail == null)
+            {
+                return;
+            }
+
+            login.UserNameOrEmailAddress = userByEmail.UserName;
         }
 
         private static AbpLoginResult GetAbpLoginResult(SignInResult result)

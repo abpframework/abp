@@ -5,9 +5,10 @@ namespace Microsoft.Extensions.Configuration
 {
     public static class ConfigurationHelper
     {
-        public static IConfigurationRoot BuildConfiguration(ConfigurationBuilderOptions options = null)
+        public static IConfigurationRoot BuildConfiguration(
+            AbpConfigurationBuilderOptions options = null)
         {
-            options = options ?? new ConfigurationBuilderOptions();
+            options = options ?? new AbpConfigurationBuilderOptions();
 
             if (options.BasePath.IsNullOrEmpty())
             {
@@ -22,8 +23,6 @@ namespace Microsoft.Extensions.Configuration
             {
                 builder = builder.AddJsonFile($"{options.FileName}.{options.EnvironmentName}.json", optional: true, reloadOnChange: true);
             }
-            
-            builder = builder.AddEnvironmentVariables();
 
             if (options.EnvironmentName == "Development")
             {
@@ -35,6 +34,13 @@ namespace Microsoft.Extensions.Configuration
                 {
                     builder.AddUserSecrets(options.UserSecretsAssembly, true);
                 }
+            }
+
+            builder = builder.AddEnvironmentVariables(options.EnvironmentVariablesPrefix);
+
+            if (options.CommandLineArgs != null)
+            {
+                builder = builder.AddCommandLine(options.CommandLineArgs);
             }
 
             return builder.Build();

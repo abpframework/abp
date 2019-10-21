@@ -1,0 +1,20 @@
+{
+  "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+  "dest": "../../dist/theme-shared",
+  "lib": {
+    "entryFile": "src/public-api.ts"
+  },
+  "whitelistedNonPeerDependencies": [
+    "@abp/ng.core",
+    "@angular/cdk",
+    "@fortawesome/fontawesome-free",
+    "@ng-bootstrap/ng-bootstrap",
+    "@ngx-validate/core",
+    "bootstrap",
+    "font-awesome",
+    "ngx-perfect-scrollbar",
+    "primeicons",
+    "primeng",
+    "chart.js"
+  ]
+}

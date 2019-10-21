@@ -17,19 +17,15 @@ namespace Microsoft.AspNetCore.Builder
         /// <returns>A reference to this instance after the operation has completed.</returns>
         public static IApplicationBuilder UseMvcWithDefaultRouteAndArea(
             this IApplicationBuilder app, 
-            Action<IRouteBuilder> additionalConfigurationAction = null)
+            Action<IEndpointRouteBuilder> additionalConfigurationAction = null)
         {
-            return app.UseMvc(routes =>
+            return app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "defaultWithArea",
-                    template: "{area}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("defaultWithArea", "{area}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-                additionalConfigurationAction?.Invoke(routes);
+                additionalConfigurationAction?.Invoke(endpoints);
             });
         }
     }

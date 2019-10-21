@@ -14,6 +14,9 @@
 
         var _dataTable = _$table.DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
+            searching:false,
+            paging:false,
+            info:false,
             ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
             columnDefs: [
                 {
@@ -22,9 +25,7 @@
                             [
                                 {
                                     text: l('Edit'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Roles.Update'),
                                     action: function (data) {
                                         _editModal.open({
                                             id: data.record.id
@@ -33,12 +34,10 @@
                                 },
                                 {
                                     text: l('Permissions'),
-                                    visible: function () {
-                                        return true; //TODO: Check permission
-                                    },
+                                    visible: abp.auth.isGranted('AbpIdentity.Roles.ManagePermissions'),
                                     action: function (data) {
                                         _permissionsModal.open({
-                                            providerName: 'Role',
+                                            providerName: 'R',
                                             providerKey: data.record.name
                                         });
                                     }
@@ -46,7 +45,7 @@
                                 {
                                     text: l('Delete'),
                                     visible: function (data) {
-                                        return !data.isStatic; //TODO: Check permission
+                                        return !data.isStatic && abp.auth.isGranted('AbpIdentity.Roles.Delete'); //TODO: Check permission
                                     },
                                     confirmMessage: function (data) { return l('RoleDeletionConfirmationMessage', data.record.name)},
                                     action: function (data) {
@@ -61,7 +60,17 @@
                     }
                 },
                 {
-                    data: "name"
+                    data: "name",
+                    render: function (data, type, row) {
+                        var name = '<span>' + data + '</span>';
+                        if (row.isDefault) {
+                            name += '<span class="badge badge-pill badge-success ml-1">' + l('DisplayName:IsDefault') + '</span>';
+                        }
+                        if (row.isPublic) {
+                            name += '<span class="badge badge-pill badge-info ml-1">' + l('DisplayName:IsPublic') + '</span>';
+                        }
+                        return name;
+                    }
                 }
             ]
         }));

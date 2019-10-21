@@ -7,12 +7,14 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.AuditLogging
 {
-    public interface IAuditLogRepository : IBasicRepository<AuditLog, Guid>
+    public interface IAuditLogRepository : IRepository<AuditLog, Guid>
     {
         Task<List<AuditLog>> GetListAsync(
             string sorting = null,
             int maxResultCount = 50,
             int skipCount = 0,
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -26,6 +28,8 @@ namespace Volo.Abp.AuditLogging
             CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
+            DateTime? startTime = null,
+            DateTime? endTime = null,
             string httpMethod = null,
             string url = null,
             string userName = null,
@@ -36,5 +40,9 @@ namespace Volo.Abp.AuditLogging
             bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default);
+
+        Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
+            DateTime startDate,
+            DateTime endDate);
     }
 }

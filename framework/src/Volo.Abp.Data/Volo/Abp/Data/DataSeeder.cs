@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Data
 {
@@ -9,17 +10,18 @@ namespace Volo.Abp.Data
     public class DataSeeder : IDataSeeder, ITransientDependency
     {
         protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-        protected DataSeedOptions Options { get; }
+        protected AbpDataSeedOptions Options { get; }
 
         public DataSeeder(
-            IOptions<DataSeedOptions> options,
+            IOptions<AbpDataSeedOptions> options,
             IHybridServiceScopeFactory serviceScopeFactory)
         {
             ServiceScopeFactory = serviceScopeFactory;
             Options = options.Value;
         }
 
-        public async Task SeedAsync(DataSeedContext context)
+        [UnitOfWork]
+        public virtual async Task SeedAsync(DataSeedContext context)
         {
             using (var scope = ServiceScopeFactory.CreateScope())
             {

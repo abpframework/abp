@@ -11,7 +11,9 @@ namespace Volo.Abp.Identity.MongoDB
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityMongoModelBuilderConfigurationOptions();
+            var options = new IdentityMongoModelBuilderConfigurationOptions(
+                AbpIdentityDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

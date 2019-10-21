@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class EditModel : AbpPageModel
+    public class EditModel : BloggingPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
@@ -61,7 +62,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
             var blog = await _blogAppService.GetAsync(editedPost.BlogId);
 
-            return Redirect(Url.Content($"~/blog/{blog.ShortName}/{editedPost.Url}"));
+           // return Redirect(Url.Content($"~/blog/{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(editedPost.Url)}"));
+            return RedirectToPage("/Blog/Posts/Detail", new { blogShortName = blog.ShortName, postUrl = editedPost.Url });
         }
     }
 

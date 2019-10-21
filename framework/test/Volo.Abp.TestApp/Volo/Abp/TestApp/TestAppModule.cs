@@ -37,12 +37,14 @@ namespace Volo.Abp.TestApp
                     ctx.MapperConfiguration.CreateMap<Person, PersonDto>().ReverseMap();
                     ctx.MapperConfiguration.CreateMap<Phone, PhoneDto>().ReverseMap();
                 });
+
+                options.AddMaps<TestAppModule>();
             });
         }
 
         private void ConfigureDistributedEventBus()
         {
-           Configure<DistributedEventBusOptions>(options =>
+           Configure<AbpDistributedEventBusOptions>(options =>
            {
                options.EtoMappings.Add<Person, PersonEto>();
            });

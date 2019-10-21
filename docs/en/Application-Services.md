@@ -146,7 +146,7 @@ public interface IBookAppService : IApplicationService
 `BookDto` is a simple [DTO](Data-Transfer-Objects.md) class defined as below:
 
 ````csharp
-[AutoMapFrom(typeof(Book))] //Defines the mapping
+[AbpAutoMapFrom(typeof(Book))] //Defines the mapping
 public class BookDto
 {
     public Guid Id { get; set; }
@@ -159,7 +159,7 @@ public class BookDto
 }
 ````
 
-* `BookDto` defines `[AutoMapFrom(typeof(Book))]` attribute to create the object mapping from `Book` to `BookDto`.
+* `BookDto` defines `[AbpAutoMapFrom(typeof(Book))]` attribute to create the object mapping from `Book` to `BookDto`.
 
 Then you can implement the `GetAsync` method as shown below:
 
@@ -248,7 +248,7 @@ public interface IAsyncCrudAppService<
 DTO classes used in this example are `BookDto` and `CreateUpdateBookDto`:
 
 ````csharp
-[AutoMapFrom(typeof(Book))]
+[AbpAutoMapFrom(typeof(Book))]
 public class BookDto : AuditedEntityDto<Guid>
 {
     public string Name { get; set; }
@@ -258,7 +258,7 @@ public class BookDto : AuditedEntityDto<Guid>
     public float Price { get; set; }
 }
 
-[AutoMapTo(typeof(Book))]
+[AbpAutoMapTo(typeof(Book))]
 public class CreateUpdateBookDto
 {
     [Required]

@@ -10,8 +10,7 @@ namespace Volo.Abp.BackgroundJobs
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Type of the job.
-        /// It's AssemblyQualifiedName of job type.
+        /// Name of the job.
         /// </summary>
         public virtual string JobName { get; set; }
 
@@ -42,7 +41,7 @@ namespace Volo.Abp.BackgroundJobs
         public virtual DateTime? LastTryTime { get; set; }
 
         /// <summary>
-        /// This is true if this job is continously failed and will not be executed again.
+        /// This is true if this job is continuously failed and will not be executed again.
         /// </summary>
         public virtual bool IsAbandoned { get; set; }
 

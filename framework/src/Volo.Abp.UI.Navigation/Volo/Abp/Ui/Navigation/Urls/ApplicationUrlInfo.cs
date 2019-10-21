@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Volo.Abp.Ui.Navigation.Urls
+namespace Volo.Abp.UI.Navigation.Urls
 {
     public class ApplicationUrlInfo
     {

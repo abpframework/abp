@@ -13,13 +13,5 @@ namespace Volo.Abp.FluentValidation
         {
             context.Services.AddConventionalRegistrar(new AbpFluentValidationConventionalRegistrar());
         }
-
-        public override void ConfigureServices(ServiceConfigurationContext context)
-        {
-            Configure<AbpValidationOptions>(options =>
-            {
-                options.MethodValidationContributors.Add<FluentMethodInvocationValidator>();
-            });
-        }
     }
 }

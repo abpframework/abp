@@ -17,9 +17,16 @@ namespace Volo.Abp.AutoMapper
         }
 
         [Fact]
-        public void Should_Replace_ObjectMapper()
+        public void Should_Replace_IAutoObjectMappingProvider()
         {
-            Assert.True(_objectMapper is AutoMapperObjectMapper);
+            Assert.True(ServiceProvider.GetRequiredService<IAutoObjectMappingProvider>() is AutoMapperAutoObjectMappingProvider);
+        }
+
+        [Fact]
+        public void Should_Get_Internal_Mapper()
+        {
+            _objectMapper.GetMapper().ShouldNotBeNull();
+            _objectMapper.AutoObjectMappingProvider.GetMapper().ShouldNotBeNull();
         }
 
         [Fact]

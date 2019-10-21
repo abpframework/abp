@@ -23,7 +23,7 @@ bld/
 [Ll]og/
 
 # Visual Studio 2015 cache/options directory
-.vs/
+**/.vs/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -255,7 +255,6 @@ paket-files/
 build/outputs
 !framework/src/Volo.Abp.AspNetCore.Mvc.UI.Packages/Volo/Abp/AspNetCore/Mvc/UI/Packages/*
 nupkg/push.ps1
-abp_io/src/Volo.AbpWebSite.Web/Logs/*.*
 framework/src/AbpDesk/AbpDesk.Web.Mvc/Logs
 framework/src/AbpDesk/Web_PlugIns/AbpDesk.MongoBlog.dll
 framework/src/MicroserviceDemo/MicroserviceDemo.AuthServer/Logs/*.*
@@ -268,18 +267,14 @@ modules/blog/app/Volo.BlogTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/Logs/*.*
 modules/blogging/app/Volo.BloggingTestApp/wwwroot/files/*.*
 modules/docs/app/VoloDocs.Web/Logs/*.*
-samples/BookStore/src/Acme.BookStore.Web/Logs/*.*
 templates/module/app/MyCompanyName.MyProjectName.DemoApp/Logs/*.*
 templates/mvc/src/MyCompanyName.MyProjectName.Web/Logs/*.*
 
 
 # macOS
 .DS_Store
-abp_io/src/Volo.AbpWebSite.Web/Logs/*
-abp_io/src/Volo.AbpWebSite.Web/wwwroot/files/*
 templates/service/host/MyCompanyName.MyProjectName.Host/Logs/logs.txt
 templates/service/host/IdentityServerHost/Logs/logs.txt
-abp_io/src/Volo.AbpWebSite.Web/TemplateFiles/*.zip
 framework/test/Volo\.Abp\.AspNetCore\.Mvc\.UI\.Bootstrap\.Demo/package-lock\.json
 
 modules/blogging/app/Volo\.BloggingTestApp/package-lock\.json

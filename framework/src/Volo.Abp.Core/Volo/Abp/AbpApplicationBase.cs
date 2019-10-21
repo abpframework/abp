@@ -56,7 +56,7 @@ namespace Volo.Abp
 
         public virtual void Dispose()
         {
-
+            //TODO: Shutdown if not done before?
         }
         
         protected virtual void SetServiceProvider(IServiceProvider serviceProvider)

@@ -1,0 +1,22 @@
+{
+  "search.exclude": {
+    "**/dist": true
+  },
+  "tslint.rulesDirectory": "../node_modules/codelyzer",
+  "typescript.tsdk": "../node_modules/typescript/lib",
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#90164b",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#0e1c04",
+    "activityBarBadge.foreground": "#e7e7e7",
+    "titleBar.activeBackground": "#640f34",
+    "titleBar.inactiveBackground": "#640f3499",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveForeground": "#e7e7e799",
+    "statusBar.background": "#640f34",
+    "statusBarItem.hoverBackground": "#90164b",
+    "statusBar.foreground": "#e7e7e7"
+  },
+  "peacock.color": "#640f34"
+}

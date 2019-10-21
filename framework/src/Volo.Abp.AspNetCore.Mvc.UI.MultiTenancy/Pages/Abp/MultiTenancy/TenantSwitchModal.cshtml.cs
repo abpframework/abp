@@ -17,11 +17,11 @@ namespace Pages.Abp.MultiTenancy
         public TenantInfoModel Input { get; set; }
 
         protected ITenantStore TenantStore { get; }
-        protected AspNetCoreMultiTenancyOptions Options { get; }
+        protected AbpAspNetCoreMultiTenancyOptions Options { get; }
 
         public TenantSwitchModalModel(
             ITenantStore tenantStore, 
-            IOptions<AspNetCoreMultiTenancyOptions> options)
+            IOptions<AbpAspNetCoreMultiTenancyOptions> options)
         {
             TenantStore = tenantStore;
             Options = options.Value;

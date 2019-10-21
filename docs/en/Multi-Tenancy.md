@@ -56,7 +56,7 @@ namespace MyCompany.MyProject
 }
 ````
 
-IMultiTenant requires to define a **TenantId** property in the implementing entity (See entity documentation (TODO: link) for more about entities).
+IMultiTenant requires to define a **TenantId** property in the implementing entity (See [entity documentation](Entities.md) for more about entities).
 
 #### Obtain Current Tenant's Id
 
@@ -90,32 +90,6 @@ namespace MyCompany.MyProject
 
 TODO: ...
 
-### Volo.Abp.MultiTenancy Package
-
-Volo.Abp.MultiTenancy is the actual package that makes your application multi-tenant. Install it into your project using PMC:
-
-````
-Install-Package Volo.Abp.MultiTenancy
-````
-
-Then you can add **AbpMultiTenancyModule** dependency to your module:
-
-````C#
-using Volo.Abp.Modularity;
-using Volo.Abp.MultiTenancy;
-
-namespace MyCompany.MyProject
-{
-    [DependsOn(typeof(AbpMultiTenancyModule))]
-    public class MyModule : AbpModule
-    {
-        //...
-    }
-}
-````
-
-> If you add AbpMultiTenancyModule dependency to your module, then you don't need to add AbpMultiTenancyModule dependency separately since AbpMultiTenancyModule already depends on it.
-
 #### Determining Current Tenant
 
 The first thing for a multi-tenant application is to determine the current tenant on the runtime. Volo.Abp.MultiTenancy package only provides abstractions (named as tenant resolver) for determining the current tenant, however it does not have any implementation out of the box.
@@ -140,7 +114,7 @@ namespace MyCompany.MyProject
         {
             Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new MyCustomTenantResolver());
+                options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
 
             //...
@@ -149,14 +123,14 @@ namespace MyCompany.MyProject
 }
 ````
 
-MyCustomTenantResolver must implement **ITenantResolver** as shown below:
+`MyCustomTenantResolveContributor` must implement **ITenantResolveContributor** as shown below:
 
 ````C#
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    public class MyCustomTenantResolver : ITenantResolver
+    public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
         public void Resolve(ITenantResolveContext context)
         {
@@ -332,6 +306,11 @@ Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to dete
 * **RouteTenantResolver**: Tries to find current tenant id from route (URL path). Variable name is "__tenant" by default. So, if you defined a route with this variable, then it can determine the current tenant from the route.
 * **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
 * **CookieTenantResolver**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
+
+> If you use nginx as a reverse proxy server, please note that if `TenantKey` contains an underscore or other special characters, there may be a problem, please refer to: 
+http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
+http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
+
 
 "__tenant" parameter name can be changed using AspNetCoreMultiTenancyOptions. Example:
 

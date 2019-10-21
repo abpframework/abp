@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 using Volo.Abp.EventBus.Distributed;
@@ -10,14 +10,14 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
 {
     public class EntityToEtoMapper : IEntityToEtoMapper, ITransientDependency
     {
-        protected IObjectMapper ObjectMapper { get; }
-        protected DistributedEventBusOptions Options { get; }
+        protected IHybridServiceScopeFactory HybridServiceScopeFactory { get; }
+        protected AbpDistributedEventBusOptions Options { get; }
 
         public EntityToEtoMapper(
-            IOptions<DistributedEventBusOptions> options,
-            IObjectMapper objectMapper)
+            IOptions<AbpDistributedEventBusOptions> options,
+            IHybridServiceScopeFactory hybridServiceScopeFactory)
         {
-            ObjectMapper = objectMapper;
+            HybridServiceScopeFactory = hybridServiceScopeFactory;
             Options = options.Value;
         }
 
@@ -28,19 +28,27 @@ namespace Volo.Abp.Domain.Entities.Events.Distributed
             var entity = entityObj as IEntity;
             if (entity == null)
             {
-                throw new ArgumentException($"{nameof(entityObj)} should be an entity and implement the '{typeof(IEntity).AssemblyQualifiedName}' interface!");
+                return null;
             }
 
             var entityType = ProxyHelper.UnProxy(entity).GetType();
-            var etoType = Options.EtoMappings.GetOrDefault(entityType);
-            if (etoType == null)
+            var etoMappingItem = Options.EtoMappings.GetOrDefault(entityType);
+            if (etoMappingItem == null)
             {
                 var keys = entity.GetKeys().JoinAsString(",");
-                return new EntityEto(keys);
+                return new EntityEto(entityType.FullName, keys);
             }
 
-            //TODO: Also add KeysAsString property to resulting json for compability with the EntityEto!
-            return ObjectMapper.Map(entityType, etoType, entityObj);
+            using (var scope = HybridServiceScopeFactory.CreateScope())
+            {
+                var objectMapperType = etoMappingItem.ObjectMappingContextType == null
+                    ? typeof(IObjectMapper)
+                    : typeof(IObjectMapper<>).MakeGenericType(etoMappingItem.ObjectMappingContextType);
+
+                var objectMapper = (IObjectMapper) scope.ServiceProvider.GetRequiredService(objectMapperType);
+
+                return objectMapper.Map(entityType, etoMappingItem.EtoType, entityObj);
+            }
         }
     }
 }

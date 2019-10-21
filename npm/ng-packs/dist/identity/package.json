@@ -1,0 +1,23 @@
+{
+  "name": "@abp/ng.identity",
+  "version": "0.9.2",
+  "dependencies": {
+    "@abp/ng.identity.config": "^0.9.2",
+    "@abp/ng.permission-management": "^0.9.2",
+    "@abp/ng.theme.shared": "^0.9.2",
+    "tslib": "^1.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "bundles/abp-ng.identity.umd.js",
+  "module": "fesm5/abp-ng.identity.js",
+  "es2015": "fesm2015/abp-ng.identity.js",
+  "esm5": "esm5/abp-ng.identity.js",
+  "esm2015": "esm2015/abp-ng.identity.js",
+  "fesm5": "fesm5/abp-ng.identity.js",
+  "fesm2015": "fesm2015/abp-ng.identity.js",
+  "typings": "abp-ng.identity.d.ts",
+  "metadata": "abp-ng.identity.metadata.json",
+  "sideEffects": false
+}

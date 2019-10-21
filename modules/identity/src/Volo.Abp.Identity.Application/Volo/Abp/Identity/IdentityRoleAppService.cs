@@ -4,14 +4,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
-using Volo.Abp.Authorization.Permissions;
-using Volo.Abp.PermissionManagement;
 
 namespace Volo.Abp.Identity
 {
     [Authorize(IdentityPermissions.Roles.Default)]
-    public class IdentityRoleAppService : ApplicationService, IIdentityRoleAppService
+    public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
     {
         private readonly IdentityRoleManager _roleManager;
         private readonly IIdentityRoleRepository _roleRepository;
@@ -31,22 +28,11 @@ namespace Volo.Abp.Identity
             );
         }
 
-        public async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(GetIdentityRolesInput input) //TODO: Remove this method since it's not used
-        {
-            var count = (int) await _roleRepository.GetCountAsync();
-            var list = await _roleRepository.GetListAsync();
-
-            return new PagedResultDto<IdentityRoleDto>(
-                count,
-                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list)
-            );
-        }
-
-        public async Task<List<IdentityRoleDto>> GetAllListAsync() //TODO: Rename to GetList (however it's not possible because of the design of the IAsyncCrudAppService)
+        public async Task<ListResultDto<IdentityRoleDto>> GetListAsync()
         {
             var list = await _roleRepository.GetListAsync();
 
-            return ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list);
+            return new ListResultDto<IdentityRoleDto>(ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
         }
 
         [Authorize(IdentityPermissions.Roles.Create)]
