@@ -141,12 +141,12 @@ namespace MyCompanyName.MyProjectName
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-            app.UseAuthorization();
             if (MultiTenancyConsts.IsEnabled)
             {
                 app.UseMultiTenancy();
             }
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
