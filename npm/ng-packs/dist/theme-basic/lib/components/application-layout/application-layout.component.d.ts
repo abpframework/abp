@@ -16,8 +16,6 @@ export declare class ApplicationLayoutComponent implements AfterViewInit, OnDest
     currentUserRef: TemplateRef<any>;
     languageRef: TemplateRef<any>;
     navbarRootDropdowns: QueryList<NgbDropdown>;
-    isOpenChangePassword: boolean;
-    isOpenProfile: boolean;
     isDropdownChildDynamic: boolean;
     readonly visibleRoutes$: Observable<ABP.FullRoute[]>;
     readonly defaultLanguage$: Observable<string>;
