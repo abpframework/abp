@@ -58,6 +58,7 @@
     "ng-packagr": "^5.5.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "ngxs-reset-plugin": "^1.2.0",
+    "ngxs-schematic": "^1.1.9",
     "prettier": "^1.18.2",
     "primeicons": "^2.0.0",
     "primeng": "^8.0.3",
