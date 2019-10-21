@@ -115,15 +115,10 @@
       {{ (currentUser$ | async)?.userName }}
     </a>
     <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">
-      <a class="dropdown-item pointer" (click)="isOpenChangePassword = true">{{
-        'AbpUi::ChangePassword' | abpLocalization
+      <a class="dropdown-item pointer" routerLink="/account/manage-profile">{{
+        'AbpAccount::ManageYourProfile' | abpLocalization
       }}</a>
-      <a class="dropdown-item pointer" (click)="isOpenProfile = true">{{ 'AbpUi::PersonalInfo' | abpLocalization }}</a>
       <a class="dropdown-item pointer" (click)="logout()">{{ 'AbpUi::Logout' | abpLocalization }}</a>
     </div>
   </li>
-
-  <abp-change-password [(visible)]="isOpenChangePassword"></abp-change-password>
-
-  <abp-profile [(visible)]="isOpenProfile"></abp-profile>
 </ng-template>

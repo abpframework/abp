@@ -7,7 +7,7 @@ import { ABP } from '@abp/ng.core';
   template: `
     <button
       #button
-      [attr.type]="type"
+      [attr.type]="buttonType || type"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
       (click)="click.emit($event)"
