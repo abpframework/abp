@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.theme.shared",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "dependencies": {
-    "@abp/ng.core": "^1.0.0",
+    "@abp/ng.core": "^1.0.1",
     "@angular/cdk": "^8.0.1",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
