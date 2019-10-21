@@ -1,9 +1,9 @@
 {
   "name": "@abp/ng.account",
-  "version": "0.9.2",
+  "version": "1.0.0",
   "dependencies": {
-    "@abp/ng.theme.shared": "^0.9.2",
-    "@abp/ng.account.config": "^0.9.2"
+    "@abp/ng.theme.shared": "^1.0.0",
+    "@abp/ng.account.config": "^1.0.0"
   },
   "publishConfig": {
     "access": "public"
