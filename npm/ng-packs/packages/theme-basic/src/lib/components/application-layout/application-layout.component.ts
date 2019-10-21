@@ -6,7 +6,7 @@ import {
   eLayoutType,
   SetLanguage,
   SessionState,
-  takeUntilDestroy
+  takeUntilDestroy,
 } from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -16,7 +16,7 @@ import {
   TemplateRef,
   TrackByFunction,
   ViewChild,
-  ViewChildren
+  ViewChildren,
 } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
@@ -32,7 +32,7 @@ import { LayoutState } from '../../states';
 
 @Component({
   selector: 'abp-layout-application',
-  templateUrl: './application-layout.component.html'
+  templateUrl: './application-layout.component.html',
 })
 export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   // required for dynamic component
@@ -59,10 +59,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('navbarRootDropdown', { read: NgbDropdown })
   navbarRootDropdowns: QueryList<NgbDropdown>;
 
-  isOpenChangePassword = false;
-
-  isOpenProfile = false;
-
   isDropdownChildDynamic: boolean;
 
   get visibleRoutes$(): Observable<ABP.FullRoute[]> {
@@ -71,13 +67,16 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   get defaultLanguage$(): Observable<string> {
     return this.languages$.pipe(
-      map(languages => snq(() => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName), '')
+      map(
+        languages => snq(() => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName),
+        '',
+      ),
     );
   }
 
   get dropdownLanguages$(): Observable<ApplicationConfiguration.Language[]> {
     return this.languages$.pipe(
-      map(languages => snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)), [])
+      map(languages => snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)), []),
     );
   }
 
@@ -113,8 +112,8 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
       this.store.dispatch(
         new AddNavigationElement([
           { element: this.languageRef, order: 4, name: 'LanguageRef' },
-          { element: this.currentUserRef, order: 5, name: 'CurrentUserRef' }
-        ])
+          { element: this.currentUserRef, order: 5, name: 'CurrentUserRef' },
+        ]),
       );
     }
 
@@ -122,7 +121,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
       .pipe(
         map(elements => elements.map(({ element }) => element)),
         filter(elements => !compare(elements, this.rightPartElements)),
-        takeUntilDestroy(this)
+        takeUntilDestroy(this),
       )
       .subscribe(elements => {
         setTimeout(() => (this.rightPartElements = elements), 0);
@@ -133,7 +132,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
     fromEvent(window, 'resize')
       .pipe(
         takeUntilDestroy(this),
-        debounceTime(250)
+        debounceTime(250),
       )
       .subscribe(() => {
         this.checkWindowWidth();
@@ -150,8 +149,8 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
     this.oauthService.logOut();
     this.store.dispatch(
       new Navigate(['/'], null, {
-        state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url }
-      })
+        state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
+      }),
     );
     this.store.dispatch(new GetAppConfiguration());
   }
