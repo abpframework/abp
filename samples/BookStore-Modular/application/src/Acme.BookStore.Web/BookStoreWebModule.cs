@@ -195,7 +195,6 @@ namespace Acme.BookStore.Web
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -204,6 +203,7 @@ namespace Acme.BookStore.Web
             }
 
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();
