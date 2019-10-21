@@ -11,7 +11,7 @@
             @if (string.Equals(await SettingProvider.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
             {
                 <strong>
-                    Are you new user?
+                    @L["AreYouANewUser"]
                     <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
                 </strong>
             }

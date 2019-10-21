@@ -1129,7 +1129,7 @@ namespace AuthServer.Host.Migrations
                     b.Property<string>("Data")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasMaxLength(5000);
+                        .HasMaxLength(50000);
 
                     b.Property<DateTime?>("Expiration")
                         .HasColumnType("datetime2");

@@ -94,6 +94,8 @@ export class UsersComponent implements OnInit {
 
       if (!this.selected.userName) {
         this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
+      } else {
+        this.form.addControl('password', new FormControl('', [Validators.maxLength(32)]));
       }
     });
   }

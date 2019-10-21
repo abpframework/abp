@@ -30,7 +30,7 @@ namespace Volo.Abp.SettingManagement
 
             (await SettingRepository.FindAsync(
                 "MySetting2",
-                "User",
+                UserSettingValueProvider.ProviderName,
                 TestData.User1Id.ToString()
             )).Value.ShouldBe("user1-store-value");
 

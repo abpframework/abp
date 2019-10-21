@@ -29,9 +29,14 @@
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               {
-                "input": "node_modules/font-awesome/css/font-awesome.min.css",
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                 "lazy": true,
-                "bundleName": "font-awesome.min"
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "lazy": true,
+                "bundleName": "fontawesome-v4-shims.min"
               },
               {
                 "input": "node_modules/primeng/resources/themes/nova-light/theme.css",
