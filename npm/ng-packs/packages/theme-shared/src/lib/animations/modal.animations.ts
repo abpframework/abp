@@ -1,7 +1,7 @@
 import { transition, trigger, useAnimation } from '@angular/animations';
-import { fadeIn, fadeInDown, fadeOut } from '../../animations/fade.animations';
+import { fadeIn, fadeInDown, fadeOut } from './fade.animations';
 
-export const backdropAnimation = trigger('backdrop', [
+export const fadeAnimation = trigger('fade', [
   transition(':enter', useAnimation(fadeIn)),
   transition(':leave', useAnimation(fadeOut)),
 ]);

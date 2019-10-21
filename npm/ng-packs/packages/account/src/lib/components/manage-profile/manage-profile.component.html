@@ -21,13 +21,13 @@
       </ul>
     </div>
     <div class="col-9">
-      <div class="tab-content" *ngIf="selectedTab === 0">
-        <div class="tab-pane fade show active" role="tabpanel">
+      <div class="tab-content" *ngIf="selectedTab === 0" [@fadeIn]>
+        <div class="tab-pane active" role="tabpanel">
           <abp-change-password-form></abp-change-password-form>
         </div>
       </div>
-      <div class="tab-content" *ngIf="selectedTab === 1">
-        <div class="tab-pane fade show active" role="tabpanel">
+      <div class="tab-content" *ngIf="selectedTab === 1" [@fadeIn]>
+        <div class="tab-pane active" role="tabpanel">
           <abp-personal-settings-form></abp-personal-settings-form>
         </div>
       </div>
