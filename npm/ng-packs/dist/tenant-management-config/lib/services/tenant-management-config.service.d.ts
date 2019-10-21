@@ -1,3 +1,3 @@
 export declare class TenantManagementConfigService {
-  constructor();
+    constructor();
 }

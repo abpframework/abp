@@ -8,14 +8,14 @@ import { InjectionToken } from '@angular/core';
  * @return {?}
  */
 export function environmentFactory(environment) {
-  return Object.assign({}, environment);
+    return Object.assign({}, environment);
 }
 /**
  * @param {?} config
  * @return {?}
  */
 export function configFactory(config) {
-  return Object.assign({}, config);
+    return Object.assign({}, config);
 }
 /** @type {?} */
 export const ENVIRONMENT = new InjectionToken('ENVIRONMENT');

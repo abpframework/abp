@@ -8,7 +8,7 @@ import { InjectionToken } from '@angular/core';
  * @return {?}
  */
 export function optionsFactory(options) {
-  return Object.assign({ redirectUrl: '/' }, options);
+    return Object.assign({ redirectUrl: '/' }, options);
 }
 /** @type {?} */
 export const ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');

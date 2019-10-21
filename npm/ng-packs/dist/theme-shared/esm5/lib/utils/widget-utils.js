@@ -8,18 +8,18 @@ import { ReplaySubject } from 'rxjs';
  * @return {?}
  */
 export function getRandomBackgroundColor(count) {
-  /** @type {?} */
-  var colors = [];
-  for (var i = 0; i < count; i++) {
     /** @type {?} */
-    var r = ((i + 5) * (i + 5) * 474) % 255;
-    /** @type {?} */
-    var g = ((i + 5) * (i + 5) * 1600) % 255;
-    /** @type {?} */
-    var b = ((i + 5) * (i + 5) * 84065) % 255;
-    colors.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.7)');
-  }
-  return colors;
+    var colors = [];
+    for (var i = 0; i < count; i++) {
+        /** @type {?} */
+        var r = ((i + 5) * (i + 5) * 474) % 255;
+        /** @type {?} */
+        var g = ((i + 5) * (i + 5) * 1600) % 255;
+        /** @type {?} */
+        var b = ((i + 5) * (i + 5) * 84065) % 255;
+        colors.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.7)');
+    }
+    return colors;
 }
 /** @type {?} */
 export var chartJsLoaded$ = new ReplaySubject(1);

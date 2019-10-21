@@ -5,15 +5,7 @@
 /**
  * Generated bundle index. Do not edit.
  */
-export {
-  AccountProviders,
-  AccountModule,
-  LoginComponent,
-  RegisterComponent,
-  ACCOUNT_ROUTES,
-  optionsFactory,
-  ACCOUNT_OPTIONS,
-} from './public-api';
+export { AccountProviders, AccountModule, LoginComponent, RegisterComponent, ACCOUNT_ROUTES, optionsFactory, ACCOUNT_OPTIONS } from './public-api';
 export { AccountRoutingModule as ɵf } from './lib/account-routing.module';
 export { LoginComponent as ɵa } from './lib/components/login/login.component';
 export { RegisterComponent as ɵc } from './lib/components/register/register.component';
