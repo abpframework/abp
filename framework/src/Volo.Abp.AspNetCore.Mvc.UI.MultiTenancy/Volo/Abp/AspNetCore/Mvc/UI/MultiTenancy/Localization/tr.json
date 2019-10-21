@@ -6,6 +6,7 @@
     "Switch": "değiştir",
     "Name": "İsim",
     "SwitchTenantHint": "Host tarafına geçmek için isim alanını boş bırakın.",
+    "SwitchTenant": "Müşteri değiştir",
     "NotSelected": "Seçili değil"
   }
 }
