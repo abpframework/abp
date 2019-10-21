@@ -4,7 +4,13 @@
   </div>
   <div class="col">
     <div class="text-lg-right pt-2" id="AbpContentToolbar">
-      <button id="create-role" class="btn btn-primary" type="button" (click)="onAdd()">
+      <button
+        [abpPermission]="'AbpIdentity.Roles.Create'"
+        id="create-role"
+        class="btn btn-primary"
+        type="button"
+        (click)="onAdd()"
+      >
         <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>
       </button>
     </div>
@@ -76,11 +82,24 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem (click)="onEdit(data.id)">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>
-                <button ngbDropdownItem (click)="providerKey = data.name; visiblePermissions = true">
+                <button
+                  [abpPermission]="'AbpIdentity.Roles.Update'"
+                  ngbDropdownItem
+                  (click)="onEdit(data.id)"
+                >
+                  {{ 'AbpIdentity::Edit' | abpLocalization }}
+                </button>
+                <button
+                  [abpPermission]="'AbpIdentity.Roles.ManagePermissions'"
+                  ngbDropdownItem
+                  (click)="providerKey = data.name; visiblePermissions = true"
+                >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
-                <button ngbDropdownItem (click)="delete(data.id, data.name)">
+                <button
+                  [abpPermission]="'AbpIdentity.Roles.Delete'"
+                  ngbDropdownItem (click)="delete(data.id, data.name)"
+                >
                   {{ 'AbpIdentity::Delete' | abpLocalization }}
                 </button>
               </div>
