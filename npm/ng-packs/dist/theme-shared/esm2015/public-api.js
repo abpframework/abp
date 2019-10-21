@@ -6,38 +6,8 @@
  * Public API Surface of theme-shared
  */
 export { appendScript, ThemeSharedModule } from './lib/theme-shared.module';
-export {
-  collapseY,
-  collapseX,
-  expandY,
-  expandX,
-  collapse,
-  fadeIn,
-  fadeOut,
-  fadeInDown,
-  fadeInUp,
-  fadeInLeft,
-  fadeInRight,
-  fadeOutDown,
-  fadeOutUp,
-  fadeOutLeft,
-  fadeOutRight,
-  slideFromBottom,
-  bounceIn,
-} from './lib/animations';
-export {
-  BreadcrumbComponent,
-  ButtonComponent,
-  ChangePasswordComponent,
-  ChartComponent,
-  ConfirmationComponent,
-  LoaderBarComponent,
-  ModalComponent,
-  ProfileComponent,
-  TableEmptyMessageComponent,
-  ToastComponent,
-  SortOrderIconComponent,
-} from './lib/components';
+export { collapseY, collapseX, expandY, expandX, collapse, fadeIn, fadeOut, fadeInDown, fadeInUp, fadeInLeft, fadeInRight, fadeOutDown, fadeOutUp, fadeOutLeft, fadeOutRight, slideFromBottom, bounceIn } from './lib/animations';
+export { BreadcrumbComponent, ButtonComponent, ChangePasswordComponent, ChartComponent, ConfirmationComponent, LoaderBarComponent, ModalComponent, ProfileComponent, TableEmptyMessageComponent, ToastComponent, SortOrderIconComponent } from './lib/components';
 export { addSettingTab, getSettingTabs, Toaster } from './lib/models';
 export { ConfirmationService, ToasterService } from './lib/services';
 export { getRandomBackgroundColor, chartJsLoaded$ } from './lib/utils';

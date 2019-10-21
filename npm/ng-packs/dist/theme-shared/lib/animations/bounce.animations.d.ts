@@ -1,1 +1,1 @@
-export declare const bounceIn: import('@angular/animations').AnimationReferenceMetadata;
+export declare const bounceIn: import("@angular/animations").AnimationReferenceMetadata;

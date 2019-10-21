@@ -1,1 +1,2 @@
-export declare class SettingManagementConfigModule {}
+export declare class SettingManagementConfigModule {
+}
