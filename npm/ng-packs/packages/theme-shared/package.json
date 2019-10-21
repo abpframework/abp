@@ -4,7 +4,7 @@
   "dependencies": {
     "@abp/ng.core": "^1.0.0",
     "@angular/cdk": "^8.0.1",
-    "@fortawesome/fontawesome-free": "5.10.1",
+    "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "@ngx-validate/core": "^0.0.7",
     "bootstrap": "^4.3.1",
@@ -12,7 +12,7 @@
     "font-awesome": "^4.7.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "primeicons": "^2.0.0",
-    "primeng": "^8.0.3"
+    "primeng": "^8.0.4"
   },
   "publishConfig": {
     "access": "public"
