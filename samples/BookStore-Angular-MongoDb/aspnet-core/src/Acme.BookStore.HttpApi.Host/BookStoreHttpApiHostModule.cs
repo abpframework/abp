@@ -154,7 +154,6 @@ namespace Acme.BookStore
             app.UseRouting();
             app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)

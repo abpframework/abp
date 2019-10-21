@@ -188,7 +188,6 @@ namespace Acme.BookStore.Web
             app.UseRouting();
 
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
