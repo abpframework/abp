@@ -5,3 +5,6 @@
 & yarn lerna publish --no-push
 & cd ng-packs\scripts
 & npm run sync
+& cd ../../
+& yarn update
+& yarn update:templates
