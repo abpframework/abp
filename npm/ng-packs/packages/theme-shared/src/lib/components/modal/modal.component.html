@@ -1,6 +1,6 @@
 <ng-container *ngIf="visible">
   <div class="modal show {{ modalClass }}" tabindex="-1" role="dialog">
-    <div class="modal-backdrop" [@backdrop]="isModalOpen" (click)="close()"></div>
+    <div class="modal-backdrop" [@fade]="isModalOpen" (click)="close()"></div>
     <div
       id="abp-modal-dialog"
       class="modal-dialog modal-{{ size }}"
