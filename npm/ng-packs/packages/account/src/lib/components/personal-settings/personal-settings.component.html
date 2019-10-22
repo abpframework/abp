@@ -25,7 +25,12 @@
     <label for="phone-number">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label
     ><input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />
   </div>
-  <abp-button buttonType="submit" iconClass="fa fa-check" buttonClass="btn btn-primary color-white">
+  <abp-button
+    buttonType="submit"
+    iconClass="fa fa-check"
+    buttonClass="btn btn-primary color-white"
+    [loading]="inProgress"
+  >
     {{ 'AbpIdentity::Save' | abpLocalization }}</abp-button
   >
 </form>

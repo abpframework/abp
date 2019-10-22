@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { take, withLatestFrom } from 'rxjs/operators';
+import { take, withLatestFrom, finalize } from 'rxjs/operators';
 import { ToasterService } from '@abp/ng.theme.shared';
 
 const { maxLength, required, email } = Validators;
@@ -18,7 +18,13 @@ export class PersonalSettingsComponent implements OnInit {
 
   form: FormGroup;
 
+  inProgress: boolean;
+
   constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
+
+  ngOnInit() {
+    this.buildForm();
+  }
 
   buildForm() {
     this.store
@@ -40,13 +46,12 @@ export class PersonalSettingsComponent implements OnInit {
 
   submit() {
     if (this.form.invalid) return;
-
-    this.store.dispatch(new UpdateProfile(this.form.value)).subscribe(() => {
-      this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
-    });
-  }
-
-  ngOnInit() {
-    this.buildForm();
+    this.inProgress = true;
+    this.store
+      .dispatch(new UpdateProfile(this.form.value))
+      .pipe(finalize(() => (this.inProgress = false)))
+      .subscribe(() => {
+        this.toasterService.success('AbpAccount::PersonalSettingsSaved', 'Success', { life: 5000 });
+      });
   }
 }

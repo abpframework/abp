@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { comparePasswords, Validation } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import snq from 'snq';
+import { finalize } from 'rxjs/operators';
 
 const { minLength, required } = Validators;
 
@@ -17,11 +18,13 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 export class ChangePasswordComponent implements OnInit {
   form: FormGroup;
 
+  inProgress: boolean;
+
   mapErrorsFn: Validation.MapErrorsFn = (errors, groupErrors, control) => {
     if (PASSWORD_FIELDS.indexOf(control.name) < 0) return errors;
 
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
-  }
+  };
 
   constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
 
@@ -40,7 +43,7 @@ export class ChangePasswordComponent implements OnInit {
 
   onSubmit() {
     if (this.form.invalid) return;
-
+    this.inProgress = true;
     this.store
       .dispatch(
         new ChangePassword({
@@ -48,6 +51,7 @@ export class ChangePasswordComponent implements OnInit {
           newPassword: this.form.get('newPassword').value,
         }),
       )
+      .pipe(finalize(() => (this.inProgress = false)))
       .subscribe({
         next: () => {
           this.form.reset();
