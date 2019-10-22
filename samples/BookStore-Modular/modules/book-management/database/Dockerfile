@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.2-sdk-alpine AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 COPY . .
 
 WORKDIR /templates/service/host/IdentityServerHost
