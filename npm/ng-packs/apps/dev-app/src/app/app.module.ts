@@ -3,7 +3,7 @@ import { LAYOUTS } from '@abp/ng.theme.basic';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { environment } from '../environments/environment';
@@ -16,6 +16,8 @@ import { IdentityConfigModule } from '@abp/ng.identity.config';
 import { TenantManagementConfigModule } from '@abp/ng.tenant-management.config';
 import { SettingManagementConfigModule } from '@abp/ng.setting-management.config';
 
+const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -26,6 +28,8 @@ import { SettingManagementConfigModule } from '@abp/ng.setting-management.config
       },
     }),
     ThemeSharedModule.forRoot(),
+    OAuthModule.forRoot(),
+    NgxsModule.forRoot([]),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
     IdentityConfigModule,
     TenantManagementConfigModule,
@@ -35,10 +39,7 @@ import { SettingManagementConfigModule } from '@abp/ng.setting-management.config
     AppRoutingModule,
     SharedModule,
 
-    OAuthModule.forRoot(),
-    NgxsModule.forRoot([]),
-
-    NgxsReduxDevtoolsPluginModule.forRoot(),
+    ...(environment.production ? [] : LOGGERS),
   ],
   bootstrap: [AppComponent],
 })
