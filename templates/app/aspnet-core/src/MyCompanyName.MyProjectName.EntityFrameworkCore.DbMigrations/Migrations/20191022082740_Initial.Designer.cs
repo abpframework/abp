@@ -10,8 +10,8 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(MyProjectNameMigrationsDbContext))]
-    [Migration("20191021114822_Remove_UniqueIndex_From_TenantName")]
-    partial class Remove_UniqueIndex_From_TenantName
+    [Migration("20191022082740_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
