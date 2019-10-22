@@ -7,6 +7,7 @@ import {
   SetLanguage,
   SessionState,
   takeUntilDestroy,
+  Config,
 } from '@abp/ng.core';
 import {
   AfterViewInit,
@@ -17,6 +18,7 @@ import {
   TrackByFunction,
   ViewChild,
   ViewChildren,
+  Renderer2,
 } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
@@ -29,10 +31,12 @@ import snq from 'snq';
 import { AddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
 import { LayoutState } from '../../states';
+import { slideFromBottom } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'abp-layout-application',
   templateUrl: './application-layout.component.html',
+  animations: [slideFromBottom],
 })
 export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   // required for dynamic component
@@ -60,6 +64,12 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   navbarRootDropdowns: QueryList<NgbDropdown>;
 
   isDropdownChildDynamic: boolean;
+
+  isCollapsed = true;
+
+  get appInfo(): Config.Application {
+    return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+  }
 
   get visibleRoutes$(): Observable<ABP.FullRoute[]> {
     return this.routes$.pipe(map(routes => getVisibleRoutes(routes)));
@@ -90,7 +100,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   trackElementByFn: TrackByFunction<ABP.FullRoute> = (_, element) => element;
 
-  constructor(private store: Store, private oauthService: OAuthService) {}
+  constructor(private store: Store, private oauthService: OAuthService, private renderer: Renderer2) {}
 
   private checkWindowWidth() {
     setTimeout(() => {
@@ -153,6 +163,17 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
       }),
     );
     this.store.dispatch(new GetAppConfiguration());
+  }
+
+  openChange(event: boolean, childrenContainer: HTMLDivElement) {
+    if (!event) {
+      Object.keys(childrenContainer.style)
+        .filter(key => Number.isInteger(+key))
+        .forEach(key => {
+          this.renderer.removeStyle(childrenContainer, childrenContainer.style[key]);
+        });
+      this.renderer.removeStyle(childrenContainer, 'left');
+    }
   }
 }
 

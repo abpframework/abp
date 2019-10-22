@@ -13,9 +13,11 @@ import { RegisterComponent } from './components/register/register.component';
 import { TenantBoxComponent } from './components/tenant-box/tenant-box.component';
 import { Options } from './models/options';
 import { ACCOUNT_OPTIONS, optionsFactory } from './tokens/options.token';
+import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.component';
 
 @NgModule({
   declarations: [
+    AuthWrapperComponent,
     LoginComponent,
     RegisterComponent,
     TenantBoxComponent,

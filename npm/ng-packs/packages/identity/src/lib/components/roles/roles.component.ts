@@ -49,11 +49,6 @@ export class RolesComponent implements OnInit {
     this.get();
   }
 
-  onSearch(value) {
-    this.pageQuery.filter = value;
-    this.get();
-  }
-
   createForm() {
     this.form = this.fb.group({
       name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
