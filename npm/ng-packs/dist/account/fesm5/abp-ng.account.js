@@ -1,5 +1,5 @@
 import { ConfigState, GetAppConfiguration, RestService, DynamicLayoutComponent, ChangePassword, GetProfile, UpdateProfile, ProfileState, SessionState, SetTenant, CoreModule } from '@abp/ng.core';
-import { ToasterService, ThemeSharedModule } from '@abp/ng.theme.shared';
+import { ToasterService, fadeIn, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject, NgModule, InjectionToken } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { comparePasswords, NgxValidateCoreModule } from '@ngx-validate/core';
@@ -12,6 +12,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { from, throwError, Observable } from 'rxjs';
 import { switchMap, tap, catchError, finalize, take, withLatestFrom } from 'rxjs/operators';
 import snq from 'snq';
+import { trigger, transition, useAnimation } from '@angular/animations';
 import { __read, __decorate, __metadata, __assign } from 'tslib';
 
 /**
@@ -136,21 +137,13 @@ var ManageProfileComponent = /** @class */ (function () {
     function ManageProfileComponent() {
         this.selectedTab = 0;
     }
-    /**
-     * @return {?}
-     */
-    ManageProfileComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () { };
     ManageProfileComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-manage-profile',
-                    template: "<div class=\"row entry-row\">\n  <div class=\"col-auto\"></div>\n  <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\"></div>\n  <div class=\"col\"></div>\n</div>\n\n<div id=\"ManageProfileWrapper\">\n  <div class=\"row\">\n    <div class=\"col-3\">\n      <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\n        <li class=\"nav-item pointer\" (click)=\"selectedTab = 0\">\n          <a class=\"nav-link\" [ngClass]=\"{ active: selectedTab === 0 }\" role=\"tab\">{{\n            'AbpUi::ChangePassword' | abpLocalization\n          }}</a>\n        </li>\n        <li class=\"nav-item pointer\" (click)=\"selectedTab = 1\">\n          <a class=\"nav-link\" [ngClass]=\"{ active: selectedTab === 1 }\" role=\"tab\">{{\n            'AbpAccount::PersonalSettings' | abpLocalization\n          }}</a>\n        </li>\n      </ul>\n    </div>\n    <div class=\"col-9\">\n      <div class=\"tab-content\" *ngIf=\"selectedTab === 0\">\n        <div class=\"tab-pane fade show active\" role=\"tabpanel\">\n          <abp-change-password-form></abp-change-password-form>\n        </div>\n      </div>\n      <div class=\"tab-content\" *ngIf=\"selectedTab === 1\">\n        <div class=\"tab-pane fade show active\" role=\"tabpanel\">\n          <abp-personal-settings-form></abp-personal-settings-form>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n"
+                    template: "<div class=\"row entry-row\">\n  <div class=\"col-auto\"></div>\n  <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\"></div>\n  <div class=\"col\"></div>\n</div>\n\n<div id=\"ManageProfileWrapper\">\n  <div class=\"row\">\n    <div class=\"col-3\">\n      <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\n        <li class=\"nav-item pointer\" (click)=\"selectedTab = 0\">\n          <a class=\"nav-link\" [ngClass]=\"{ active: selectedTab === 0 }\" role=\"tab\">{{\n            'AbpUi::ChangePassword' | abpLocalization\n          }}</a>\n        </li>\n        <li class=\"nav-item pointer\" (click)=\"selectedTab = 1\">\n          <a class=\"nav-link\" [ngClass]=\"{ active: selectedTab === 1 }\" role=\"tab\">{{\n            'AbpAccount::PersonalSettings' | abpLocalization\n          }}</a>\n        </li>\n      </ul>\n    </div>\n    <div class=\"col-9\">\n      <div class=\"tab-content\" *ngIf=\"selectedTab === 0\" [@fadeIn]>\n        <div class=\"tab-pane active\" role=\"tabpanel\">\n          <abp-change-password-form></abp-change-password-form>\n        </div>\n      </div>\n      <div class=\"tab-content\" *ngIf=\"selectedTab === 1\" [@fadeIn]>\n        <div class=\"tab-pane active\" role=\"tabpanel\">\n          <abp-personal-settings-form></abp-personal-settings-form>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n",
+                    animations: [trigger('fadeIn', [transition(':enter', useAnimation(fadeIn))])]
                 }] }
     ];
-    /** @nocollapse */
-    ManageProfileComponent.ctorParameters = function () { return []; };
     return ManageProfileComponent;
 }());
 if (false) {
@@ -454,7 +447,7 @@ var ChangePasswordComponent = /** @class */ (function () {
     ChangePasswordComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-change-password-form',
-                    template: "<form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" [mapErrorsFn]=\"mapErrorsFn\">\n  <div class=\"form-group\">\n    <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n    ><span> * </span\n    ><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" autofocus />\n  </div>\n  <div class=\"form-group\">\n    <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n    ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n  </div>\n  <div class=\"form-group\">\n    <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n    ><span> * </span\n    ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n  </div>\n  <abp-button iconClass=\"fa fa-check\" buttonClass=\"btn btn-primary color-white\" (click)=\"onSubmit()\">{{\n    'AbpIdentity::Save' | abpLocalization\n  }}</abp-button>\n</form>\n"
+                    template: "<form [formGroup]=\"form\" (ngSubmit)=\"onSubmit()\" [mapErrorsFn]=\"mapErrorsFn\">\n  <div class=\"form-group\">\n    <label for=\"current-password\">{{ 'AbpIdentity::DisplayName:CurrentPassword' | abpLocalization }}</label\n    ><span> * </span\n    ><input type=\"password\" id=\"current-password\" class=\"form-control\" formControlName=\"password\" autofocus />\n  </div>\n  <div class=\"form-group\">\n    <label for=\"new-password\">{{ 'AbpIdentity::DisplayName:NewPassword' | abpLocalization }}</label\n    ><span> * </span><input type=\"password\" id=\"new-password\" class=\"form-control\" formControlName=\"newPassword\" />\n  </div>\n  <div class=\"form-group\">\n    <label for=\"confirm-new-password\">{{ 'AbpIdentity::DisplayName:NewPasswordConfirm' | abpLocalization }}</label\n    ><span> * </span\n    ><input type=\"password\" id=\"confirm-new-password\" class=\"form-control\" formControlName=\"repeatNewPassword\" />\n  </div>\n  <abp-button iconClass=\"fa fa-check\" buttonClass=\"btn btn-primary color-white\" buttonType=\"submit\">{{\n    'AbpIdentity::Save' | abpLocalization\n  }}</abp-button>\n</form>\n"
                 }] }
     ];
     /** @nocollapse */
@@ -553,7 +546,7 @@ var PersonalSettingsComponent = /** @class */ (function () {
     PersonalSettingsComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-personal-settings-form',
-                    template: "<form novalidate *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n    ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" autofocus />\n  </div>\n  <div class=\"row\">\n    <div class=\"col col-md-6\">\n      <div class=\"form-group\">\n        <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n        ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n      </div>\n    </div>\n    <div class=\"col col-md-6\">\n      <div class=\"form-group\">\n        <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n        ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n      </div>\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n    ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n  </div>\n  <div class=\"form-group\">\n    <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n    ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n  </div>\n  <abp-button iconClass=\"fa fa-check\" buttonClass=\"btn btn-primary color-white\" (click)=\"submit()\">\n    {{ 'AbpIdentity::Save' | abpLocalization }}</abp-button\n  >\n</form>\n"
+                    template: "<form novalidate *ngIf=\"form\" [formGroup]=\"form\" (ngSubmit)=\"submit()\">\n  <div class=\"form-group\">\n    <label for=\"username\">{{ 'AbpIdentity::DisplayName:UserName' | abpLocalization }}</label\n    ><span> * </span><input type=\"text\" id=\"username\" class=\"form-control\" formControlName=\"userName\" autofocus />\n  </div>\n  <div class=\"row\">\n    <div class=\"col col-md-6\">\n      <div class=\"form-group\">\n        <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label\n        ><input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\n      </div>\n    </div>\n    <div class=\"col col-md-6\">\n      <div class=\"form-group\">\n        <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label\n        ><input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\n      </div>\n    </div>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"email-address\">{{ 'AbpIdentity::DisplayName:Email' | abpLocalization }}</label\n    ><span> * </span><input type=\"text\" id=\"email-address\" class=\"form-control\" formControlName=\"email\" />\n  </div>\n  <div class=\"form-group\">\n    <label for=\"phone-number\">{{ 'AbpIdentity::DisplayName:PhoneNumber' | abpLocalization }}</label\n    ><input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\n  </div>\n  <abp-button buttonType=\"submit\" iconClass=\"fa fa-check\" buttonClass=\"btn btn-primary color-white\">\n    {{ 'AbpIdentity::Save' | abpLocalization }}</abp-button\n  >\n</form>\n"
                 }] }
     ];
     /** @nocollapse */
