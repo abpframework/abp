@@ -1,9 +1,10 @@
 & cd ng-packs\scripts
 & npm install
-& npm run build
+& yarn build
 & cd ../../
+& yarn
 & yarn lerna publish --no-push
 & cd ng-packs\scripts
-& npm run sync
+& yarn sync
 & cd ../../
 & yarn update:templates
