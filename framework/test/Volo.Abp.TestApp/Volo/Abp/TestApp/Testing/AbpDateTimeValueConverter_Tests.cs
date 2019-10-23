@@ -20,11 +20,6 @@ namespace Volo.Abp.TestApp.Testing
             _personRepository = GetRequiredService<IBasicRepository<Person, Guid>>();
         }
 
-        protected override void AfterAddApplication(IServiceCollection services)
-        {
-            services.Configure<AbpClockOptions>(options => options.Kind = DateTimeKind.Utc);
-        }
-
         [Fact]
         public async Task DateTime_Kind_Should_Be_Normalized_To_UTC_Test()
         {

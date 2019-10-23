@@ -511,7 +511,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
                 !mutableEntityType.IsOwned())
             {
-                if (Clock == null)
+                if (Clock == null || !Clock.SupportsMultipleTimezone)
                 {
                     return;
                 }
