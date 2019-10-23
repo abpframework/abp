@@ -28,6 +28,18 @@ export default `
   min-width: 215px;
 }
 
+.ui-table-scrollable-body::-webkit-scrollbar {
+  height: 5px !important;
+}
+
+.ui-table-scrollable-body::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+.ui-table-scrollable-body::-webkit-scrollbar-thumb {
+  background: #8a8686;
+}
+
 .modal.show {
   display: block !important;
 }
