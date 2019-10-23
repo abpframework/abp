@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -511,6 +511,11 @@ namespace Volo.Abp.EntityFrameworkCore
                 !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
                 !mutableEntityType.IsOwned())
             {
+                if (Clock == null)
+                {
+                    return;
+                }
+
                 var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
 
                 var dateTimePropertyInfos = typeof(TEntity).GetProperties()
