@@ -94,7 +94,10 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
-                    _$modal.find('input:not([type=hidden]):first').focus();
+                    //focuses first typeable element. 
+                    _$modal
+                    .find('input[type=text]:not(.datepicker),input[type=password],input[type=email],input[type=number],input[type=search],input[type=tel],input[type=url]:first')
+                    .focus();
                 });
 
                 var modalClass = abp.modals[options.modalClass];
