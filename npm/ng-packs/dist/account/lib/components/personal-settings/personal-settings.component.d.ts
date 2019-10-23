@@ -5,13 +5,14 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { ToasterService } from '@abp/ng.theme.shared';
 export declare class PersonalSettingsComponent implements OnInit {
-    private fb;
-    private store;
-    private toasterService;
-    profile$: Observable<Profile.Response>;
-    form: FormGroup;
-    constructor(fb: FormBuilder, store: Store, toasterService: ToasterService);
-    buildForm(): void;
-    submit(): void;
-    ngOnInit(): void;
+  private fb;
+  private store;
+  private toasterService;
+  profile$: Observable<Profile.Response>;
+  form: FormGroup;
+  inProgress: boolean;
+  constructor(fb: FormBuilder, store: Store, toasterService: ToasterService);
+  ngOnInit(): void;
+  buildForm(): void;
+  submit(): void;
 }

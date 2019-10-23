@@ -56,6 +56,18 @@ export const collapse = trigger('collapse', [
 export const collapseWithMargin = trigger('collapseWithMargin', [
   state('collapsed', style({ 'margin-top': '-100%' })),
   state('expanded', style({ 'margin-top': '0' })),
-  transition('expanded => collapsed', useAnimation(collapseYWithMargin)),
+  transition('expanded => collapsed', useAnimation(collapseYWithMargin), {
+    params: { time: '400ms', easing: 'linear' },
+  }),
   transition('collapsed => expanded', useAnimation(expandYWithMargin)),
+]);
+
+export const collapseLinearWithMargin = trigger('collapseLinearWithMargin', [
+  state('collapsed', style({ 'margin-top': '-100%' })),
+  state('expanded', style({ 'margin-top': '0' })),
+  transition(
+    'expanded => collapsed',
+    useAnimation(collapseYWithMargin, { params: { time: '200ms', easing: 'linear' } }),
+  ),
+  transition('collapsed => expanded', useAnimation(expandYWithMargin, { params: { time: '250ms', easing: 'linear' } })),
 ]);
