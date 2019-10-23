@@ -20,6 +20,7 @@ import {
   TrackByFunction,
   ViewChild,
   ViewChildren,
+  ElementRef,
 } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
@@ -59,9 +60,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('language', { static: false, read: TemplateRef })
   languageRef: TemplateRef<any>;
-
-  @ViewChildren('navbarRootDropdown', { read: NgbDropdown })
-  navbarRootDropdowns: QueryList<NgbDropdown>;
 
   isDropdownChildDynamic: boolean;
 
@@ -105,9 +103,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   constructor(private store: Store, private oauthService: OAuthService, private renderer: Renderer2) {}
 
   private checkWindowWidth() {
-    this.navbarRootDropdowns.forEach(item => {
-      item.close();
-    });
     setTimeout(() => {
       if (window.innerWidth < 768) {
         this.isDropdownChildDynamic = false;

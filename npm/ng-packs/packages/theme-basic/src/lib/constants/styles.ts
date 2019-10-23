@@ -65,4 +65,8 @@ export default `
     font-size: 0.8em;
 }
 
+
+.abp-main-nav-dropdown {
+  margin-top: -50%;
+}
 `;

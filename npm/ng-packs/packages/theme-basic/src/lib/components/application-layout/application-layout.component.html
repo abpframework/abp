@@ -40,16 +40,16 @@
           <ng-template #dropdownLink let-route>
             <li
               #navbarRootDropdown
-              ngbDropdown
               [abpPermission]="route.requiredPolicy"
               [abpVisibility]="routeContainer"
-              class="nav-item"
+              class="nav-item dropdown"
               display="static"
-              (click)="$event.preventDefault(); $event.stopPropagation()"
+              (click)="
+                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)
+              "
             >
               <a
-                ngbDropdownToggle
-                class="nav-link"
+                class="nav-link dropdown-toggle"
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
@@ -57,14 +57,25 @@
               >
                 <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}
               </a>
-              <div #routeContainer ngbDropdownMenu class="dropdown-menu border-0 shadow-sm">
-                <ng-template
-                  #forTemplate
-                  ngFor
-                  [ngForOf]="route.children"
-                  [ngForTrackBy]="trackByFn"
-                  [ngForTemplate]="childWrapper"
-                ></ng-template>
+              <div
+                #routeContainer
+                class="dropdown-menu border-0 shadow-sm"
+                [class.d-block]="smallScreen"
+                [class.overflow-hidden]="smallScreen"
+                (click)="$event.preventDefault(); $event.stopPropagation()"
+              >
+                <div
+                  class="abp-collapsed abp-main-nav-dropdown"
+                  [class.expanded]="smallScreen ? navbarRootDropdown.expand : true"
+                >
+                  <ng-template
+                    #forTemplate
+                    ngFor
+                    [ngForOf]="route.children"
+                    [ngForTrackBy]="trackByFn"
+                    [ngForTemplate]="childWrapper"
+                  ></ng-template>
+                </div>
               </div>
             </li>
           </ng-template>
@@ -90,6 +101,7 @@
               [abpVisibility]="childrenContainer"
               class="dropdown-submenu"
               ngbDropdown
+              #dropdownSubmenu="ngbDropdown"
               [display]="isDropdownChildDynamic ? 'dynamic' : 'static'"
               placement="right-top"
               [autoClose]="true"
@@ -107,13 +119,23 @@
                   {{ child.name | abpLocalization }}
                 </a>
               </div>
-              <div #childrenContainer ngbDropdownMenu class="dropdown-menu border-0 shadow-sm">
-                <ng-template
-                  ngFor
-                  [ngForOf]="child.children"
-                  [ngForTrackBy]="trackByFn"
-                  [ngForTemplate]="childWrapper"
-                ></ng-template>
+              <div
+                #childrenContainer
+                class="dropdown-menu border-0 shadow-sm"
+                [class.d-block]="smallScreen"
+                [class.overflow-hidden]="smallScreen"
+              >
+                <div
+                  class="abp-collapsed abp-main-nav-dropdown"
+                  [class.expanded]="smallScreen ? dropdownSubmenu.isOpen() : true"
+                >
+                  <ng-template
+                    ngFor
+                    [ngForOf]="child.children"
+                    [ngForTrackBy]="trackByFn"
+                    [ngForTemplate]="childWrapper"
+                  ></ng-template>
+                </div>
               </div>
             </div>
           </ng-template>
@@ -162,7 +184,10 @@
         [class.d-block]="smallScreen"
         [class.overflow-hidden]="smallScreen"
       >
-        <div class="abp-collapsed" [class.expanded]="smallScreen ? languageDropdown.isOpen() : true">
+        <div
+          class="abp-collapsed abp-main-nav-dropdown"
+          [class.expanded]="smallScreen ? languageDropdown.isOpen() : true"
+        >
           <a
             *ngFor="let lang of dropdownLanguages$ | async"
             href="javascript:void(0)"
@@ -178,7 +203,7 @@
 
 <ng-template #currentUser>
   <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item">
-    <div ngbDropdown #currentUserDropdown="ngbDropdown" display="static">
+    <div ngbDropdown class="dropdown" #currentUserDropdown="ngbDropdown" display="static">
       <a
         ngbDropdownToggle
         class="nav-link"
@@ -197,7 +222,10 @@
         [class.overflow-hidden]="smallScreen"
         [class.d-block]="smallScreen"
       >
-        <div class="abp-collapsed" [class.expanded]="smallScreen ? currentUserDropdown.isOpen() : true">
+        <div
+          class="abp-collapsed abp-main-nav-dropdown"
+          [class.expanded]="smallScreen ? currentUserDropdown.isOpen() : true"
+        >
           <a class="dropdown-item" routerLink="/account/manage-profile">{{
             'AbpAccount::ManageYourProfile' | abpLocalization
           }}</a>
