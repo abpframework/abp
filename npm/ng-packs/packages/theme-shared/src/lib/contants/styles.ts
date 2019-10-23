@@ -194,17 +194,34 @@ export default `
   animation: fadeOutTop 0.2s ease-in-out;
 }
 
-.abp-collapsed {
-  -moz-transition: margin ease-in-out 0.5s;
-  -ms-transition: margin ease-in-out 0.5s;
-  -o-transition: margin ease-in-out 0.5s;
-  -webkit-transition: margin ease-in-out 0.5s;
-  transition: margin ease-in-out 0.5s;
-  margin-top: -100%;
+.abp-collapsed-height {
+  -moz-transition: max-height linear 0.35s;
+  -ms-transition: max-height linear 0.35s;
+  -o-transition: max-height linear 0.35s;
+  -webkit-transition: max-height linear 0.35s;
+  overflow:hidden;
+  transition:max-height 0.35s linear;
+  height:auto;
+  max-height: 0;
 }
 
-.abp-collapsed.expanded {
-  margin-top: 0 !important;
+.abp-mh-25 {
+  max-height: 25vh;
+}
+
+.abp-mh-50 {
+  transition:max-height 0.65s linear;
+  max-height: 50vh;
+}
+
+.abp-mh-75 {
+  transition:max-height 0.85s linear;
+  max-height: 75vh;
+}
+
+.abp-mh-100 {
+  transition:max-height 1s linear;
+  max-height: 100vh;
 }
 
 @keyframes fadeInTop {
