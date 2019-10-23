@@ -175,7 +175,7 @@
 
 <ng-template #currentUser>
   <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item">
-    <div ngbDropdown display="static">
+    <div ngbDropdown #currentUserDropdown="ngbDropdown" display="static">
       <a
         ngbDropdownToggle
         class="nav-link"
@@ -192,13 +192,22 @@
         ngbDropdownMenu
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
+        [class.overflow-hidden]="smallScreen"
+        [class.d-block]="smallScreen"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile">{{
-          'AbpAccount::ManageYourProfile' | abpLocalization
-        }}</a>
-        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{
-          'AbpUi::Logout' | abpLocalization
-        }}</a>
+        <ng-container *ngTemplateOutlet="!smallScreen ? currentUserElements : null"></ng-container>
+        <ng-template #currentUserElements>
+          <a class="dropdown-item" routerLink="/account/manage-profile">{{
+            'AbpAccount::ManageYourProfile' | abpLocalization
+          }}</a>
+          <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{
+            'AbpUi::Logout' | abpLocalization
+          }}</a>
+        </ng-template>
+
+        <div *ngIf="smallScreen" [@collapseWithMargin]="currentUserDropdown.isOpen() ? 'expanded' : 'collapsed'">
+          <ng-container *ngTemplateOutlet="currentUserElements"></ng-container>
+        </div>
       </div>
     </div>
   </li>
