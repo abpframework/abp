@@ -60,22 +60,18 @@
               <div
                 #routeContainer
                 class="dropdown-menu border-0 shadow-sm"
-                [class.d-block]="smallScreen"
-                [class.overflow-hidden]="smallScreen"
                 (click)="$event.preventDefault(); $event.stopPropagation()"
+                [class.abp-collapsed-height]="smallScreen"
+                [class.d-block]="smallScreen"
+                [class.abp-mh-25]="smallScreen && navbarRootDropdown.expand"
               >
-                <div
-                  class="abp-collapsed abp-main-nav-dropdown"
-                  [class.expanded]="smallScreen ? navbarRootDropdown.expand : true"
-                >
-                  <ng-template
-                    #forTemplate
-                    ngFor
-                    [ngForOf]="route.children"
-                    [ngForTrackBy]="trackByFn"
-                    [ngForTemplate]="childWrapper"
-                  ></ng-template>
-                </div>
+                <ng-template
+                  #forTemplate
+                  ngFor
+                  [ngForOf]="route.children"
+                  [ngForTrackBy]="trackByFn"
+                  [ngForTemplate]="childWrapper"
+                ></ng-template>
               </div>
             </li>
           </ng-template>
@@ -122,20 +118,16 @@
               <div
                 #childrenContainer
                 class="dropdown-menu border-0 shadow-sm"
+                [class.abp-collapsed-height]="smallScreen"
                 [class.d-block]="smallScreen"
-                [class.overflow-hidden]="smallScreen"
+                [class.abp-mh-25]="smallScreen && dropdownSubmenu.isOpen()"
               >
-                <div
-                  class="abp-collapsed abp-main-nav-dropdown"
-                  [class.expanded]="smallScreen ? dropdownSubmenu.isOpen() : true"
-                >
-                  <ng-template
-                    ngFor
-                    [ngForOf]="child.children"
-                    [ngForTrackBy]="trackByFn"
-                    [ngForTemplate]="childWrapper"
-                  ></ng-template>
-                </div>
+                <ng-template
+                  ngFor
+                  [ngForOf]="child.children"
+                  [ngForTrackBy]="trackByFn"
+                  [ngForTemplate]="childWrapper"
+                ></ng-template>
               </div>
             </div>
           </ng-template>
@@ -181,21 +173,17 @@
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
+        [class.abp-collapsed-height]="smallScreen"
         [class.d-block]="smallScreen"
-        [class.overflow-hidden]="smallScreen"
+        [class.abp-mh-25]="smallScreen && languageDropdown.isOpen()"
       >
-        <div
-          class="abp-collapsed abp-main-nav-dropdown"
-          [class.expanded]="smallScreen ? languageDropdown.isOpen() : true"
+        <a
+          *ngFor="let lang of dropdownLanguages$ | async"
+          href="javascript:void(0)"
+          class="dropdown-item"
+          (click)="onChangeLang(lang.cultureName)"
+          >{{ lang?.displayName }}</a
         >
-          <a
-            *ngFor="let lang of dropdownLanguages$ | async"
-            href="javascript:void(0)"
-            class="dropdown-item"
-            (click)="onChangeLang(lang.cultureName)"
-            >{{ lang?.displayName }}</a
-          >
-        </div>
       </div>
     </div>
   </li>
@@ -219,20 +207,16 @@
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
-        [class.overflow-hidden]="smallScreen"
+        [class.abp-collapsed-height]="smallScreen"
         [class.d-block]="smallScreen"
+        [class.abp-mh-25]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <div
-          class="abp-collapsed abp-main-nav-dropdown"
-          [class.expanded]="smallScreen ? currentUserDropdown.isOpen() : true"
-        >
-          <a class="dropdown-item" routerLink="/account/manage-profile">{{
-            'AbpAccount::ManageYourProfile' | abpLocalization
-          }}</a>
-          <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{
-            'AbpUi::Logout' | abpLocalization
-          }}</a>
-        </div>
+        <a class="dropdown-item" routerLink="/account/manage-profile">{{
+          'AbpAccount::ManageYourProfile' | abpLocalization
+        }}</a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{
+          'AbpUi::Logout' | abpLocalization
+        }}</a>
       </div>
     </div>
   </li>
