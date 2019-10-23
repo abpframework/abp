@@ -25,7 +25,7 @@ import execa from 'execa';
 
   try {
     await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
-    await execa('git', ['commit', '-m', '--no-verify', 'Update source packages versions'], { stdout: 'inherit' });
+    await execa('git', ['commit', '-m', 'Update source packages versions', '--no-verify'], { stdout: 'inherit' });
   } catch (error) {
     console.error(error.stderr);
   }
