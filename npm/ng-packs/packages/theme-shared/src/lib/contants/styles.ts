@@ -182,6 +182,18 @@ export default `
   animation: fadeOutTop 0.2s ease-in-out;
 }
 
+.abp-collapsed {
+  -moz-transition: margin ease-in-out 0.5s;
+  -ms-transition: margin ease-in-out 0.5s;
+  -o-transition: margin ease-in-out 0.5s;
+  -webkit-transition: margin ease-in-out 0.5s;
+  transition: margin ease-in-out 0.5s;
+  margin-top: -100%;
+}
+
+.abp-collapsed.expanded {
+  margin-top: 0 !important;
+}
 
 @keyframes fadeInTop {
   from {

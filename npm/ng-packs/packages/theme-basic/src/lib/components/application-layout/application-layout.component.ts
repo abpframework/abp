@@ -108,19 +108,21 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
     this.navbarRootDropdowns.forEach(item => {
       item.close();
     });
-    if (window.innerWidth < 768) {
-      this.isDropdownChildDynamic = false;
-      if (this.smallScreen === false) {
-        this.isCollapsed = false;
-        setTimeout(() => {
-          this.isCollapsed = true;
-        }, 100);
+    setTimeout(() => {
+      if (window.innerWidth < 768) {
+        this.isDropdownChildDynamic = false;
+        if (this.smallScreen === false) {
+          this.isCollapsed = false;
+          setTimeout(() => {
+            this.isCollapsed = true;
+          }, 100);
+        }
+        this.smallScreen = true;
+      } else {
+        this.isDropdownChildDynamic = true;
+        this.smallScreen = false;
       }
-      this.smallScreen = true;
-    } else {
-      this.isDropdownChildDynamic = true;
-      this.smallScreen = false;
-    }
+    }, 0);
   }
 
   ngAfterViewInit() {

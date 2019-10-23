@@ -143,7 +143,7 @@
 
 <ng-template #language>
   <li class="nav-item">
-    <div ngbDropdown display="static">
+    <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">
       <a
         ngbDropdownToggle
         class="nav-link"
@@ -157,17 +157,20 @@
         {{ defaultLanguage$ | async }}
       </a>
       <div
-        ngbDropdownMenu
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
+        [class.d-block]="smallScreen"
+        [class.overflow-hidden]="smallScreen"
       >
-        <a
-          *ngFor="let lang of dropdownLanguages$ | async"
-          href="javascript:void(0)"
-          class="dropdown-item"
-          (click)="onChangeLang(lang.cultureName)"
-          >{{ lang?.displayName }}</a
-        >
+        <div class="abp-collapsed" [class.expanded]="smallScreen ? languageDropdown.isOpen() : true">
+          <a
+            *ngFor="let lang of dropdownLanguages$ | async"
+            href="javascript:void(0)"
+            class="dropdown-item"
+            (click)="onChangeLang(lang.cultureName)"
+            >{{ lang?.displayName }}</a
+          >
+        </div>
       </div>
     </div>
   </li>
@@ -189,24 +192,18 @@
         {{ (currentUser$ | async)?.userName }}
       </a>
       <div
-        ngbDropdownMenu
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
         [class.overflow-hidden]="smallScreen"
         [class.d-block]="smallScreen"
       >
-        <ng-container *ngTemplateOutlet="!smallScreen ? currentUserElements : null"></ng-container>
-        <ng-template #currentUserElements>
+        <div class="abp-collapsed" [class.expanded]="smallScreen ? currentUserDropdown.isOpen() : true">
           <a class="dropdown-item" routerLink="/account/manage-profile">{{
             'AbpAccount::ManageYourProfile' | abpLocalization
           }}</a>
           <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{
             'AbpUi::Logout' | abpLocalization
           }}</a>
-        </ng-template>
-
-        <div *ngIf="smallScreen" [@collapseWithMargin]="currentUserDropdown.isOpen() ? 'expanded' : 'collapsed'">
-          <ng-container *ngTemplateOutlet="currentUserElements"></ng-container>
         </div>
       </div>
     </div>
