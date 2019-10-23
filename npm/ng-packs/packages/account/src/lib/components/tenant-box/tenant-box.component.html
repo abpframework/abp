@@ -1,15 +1,28 @@
-<div
-  class="tenant-switch-box"
-  style="background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;"
->
-  <span style="color: #666;">{{ 'AbpUiMultiTenancy::Tenant' | abpLocalization }}: </span>
-  <strong>
-    <i>{{ tenantName || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}</i>
-  </strong>
-  (<a id="abp-tenant-switch-link" style="color: #333; cursor: pointer" (click)="onSwitch()">{{
-    'AbpUiMultiTenancy::Switch' | abpLocalization
-  }}</a
-  >)
+<div class="card shadow-sm rounded mb-3">
+  <div class="card-body px-5">
+    <div class="row">
+      <div class="col">
+        <span style="font-size: 0.8em;" class="text-uppercase text-muted">{{
+          'AbpUiMultiTenancy::Tenant' | abpLocalization
+        }}</span
+        ><br />
+        <h6 class="m-0 d-inline-block">
+          <span>
+            {{ tenantName || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}
+          </span>
+        </h6>
+      </div>
+      <div class="col-auto">
+        <a
+          id="AbpTenantSwitchLink"
+          href="javascript:void(0);"
+          class="btn btn-sm mt-3 btn-outline-primary"
+          (click)="onSwitch()"
+          >{{ 'AbpUiMultiTenancy::Switch' | abpLocalization }}</a
+        >
+      </div>
+    </div>
+  </div>
 </div>
 
 <abp-modal [(visible)]="isModalVisible" size="md">

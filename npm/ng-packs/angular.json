@@ -418,7 +418,7 @@
       },
       "root": "apps/dev-app",
       "sourceRoot": "apps/dev-app/src",
-      "prefix": "app",
+      "prefix": "abp",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
