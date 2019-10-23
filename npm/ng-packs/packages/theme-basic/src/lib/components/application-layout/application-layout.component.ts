@@ -1,24 +1,25 @@
 import {
   ABP,
   ApplicationConfiguration,
-  GetAppConfiguration,
+  Config,
   ConfigState,
   eLayoutType,
-  SetLanguage,
+  GetAppConfiguration,
   SessionState,
+  SetLanguage,
   takeUntilDestroy,
-  Config,
 } from '@abp/ng.core';
+import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
 import {
   AfterViewInit,
   Component,
   OnDestroy,
   QueryList,
+  Renderer2,
   TemplateRef,
   TrackByFunction,
   ViewChild,
   ViewChildren,
-  Renderer2,
 } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
@@ -31,12 +32,11 @@ import snq from 'snq';
 import { AddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
 import { LayoutState } from '../../states';
-import { slideFromBottom } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'abp-layout-application',
   templateUrl: './application-layout.component.html',
-  animations: [slideFromBottom],
+  animations: [slideFromBottom, collapseWithMargin],
 })
 export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   // required for dynamic component
@@ -66,6 +66,8 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   isDropdownChildDynamic: boolean;
 
   isCollapsed = true;
+
+  smallScreen: boolean; // do not set true or false
 
   get appInfo(): Config.Application {
     return this.store.selectSnapshot(ConfigState.getApplicationInfo);
@@ -103,16 +105,22 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   constructor(private store: Store, private oauthService: OAuthService, private renderer: Renderer2) {}
 
   private checkWindowWidth() {
-    setTimeout(() => {
-      this.navbarRootDropdowns.forEach(item => {
-        item.close();
-      });
-      if (window.innerWidth < 768) {
-        this.isDropdownChildDynamic = false;
-      } else {
-        this.isDropdownChildDynamic = true;
+    this.navbarRootDropdowns.forEach(item => {
+      item.close();
+    });
+    if (window.innerWidth < 768) {
+      this.isDropdownChildDynamic = false;
+      if (this.smallScreen === false) {
+        this.isCollapsed = false;
+        setTimeout(() => {
+          this.isCollapsed = true;
+        }, 100);
       }
-    }, 0);
+      this.smallScreen = true;
+    } else {
+      this.isDropdownChildDynamic = true;
+      this.smallScreen = false;
+    }
   }
 
   ngAfterViewInit() {
@@ -142,7 +150,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
     fromEvent(window, 'resize')
       .pipe(
         takeUntilDestroy(this),
-        debounceTime(250),
+        debounceTime(150),
       )
       .subscribe(() => {
         this.checkWindowWidth();
