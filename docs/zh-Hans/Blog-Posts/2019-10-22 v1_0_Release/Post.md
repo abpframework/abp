@@ -4,7 +4,7 @@
 
 ![contribution-graph](contribution-graph.png)
 
-立即开始使用新的ABP框架: [abp.io/get-started](https://abp.io/get-started)
+立即开始使用新的ABP框架:[abp.io/get-started](https://abp.io/get-started)
 
 ## 统计
 
