@@ -24,7 +24,7 @@ import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
-import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
+import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
 import { ForDirective } from './directives/for.directive';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { TableSortDirective } from './directives/table-sort.directive';

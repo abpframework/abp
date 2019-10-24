@@ -2,8 +2,8 @@ import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Router, Routes } from '@angular/router';
 import { actionMatcher, InitState, NgxsNextPluginFn, NgxsPlugin, setValue, UpdateState } from '@ngxs/store';
 import snq from 'snq';
-import { ABP } from '../../models';
-import { organizeRoutes, getAbpRoutes } from '../../utils/route-utils';
+import { ABP } from '../models';
+import { organizeRoutes, getAbpRoutes } from '../utils/route-utils';
 import clone from 'just-clone';
 
 export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
