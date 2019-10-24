@@ -1,5 +1,5 @@
 {
-    "culture": "zh-Hans",
+  "culture": "zh-Hans",
   "texts": {
     "'{0}' and '{1}' do not match.": "'{0}'与'{1}'不匹配.",
     "The {0} field is not a valid credit card number.": "字段{0}不是有效的信用卡号码.",
@@ -31,4 +31,4 @@
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "字段{0}不是有效的完全限定的http,https或ftp URL.",
     "ThisFieldIsInvalid.": "字段是无效值."
   }
-  }
+}
