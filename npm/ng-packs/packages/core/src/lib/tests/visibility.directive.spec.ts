@@ -8,9 +8,9 @@ describe('VisibilityDirective', () => {
     directive: VisibilityDirective,
   });
 
-  describe('without mutation observer and without content', () => {
+  describe('without content', () => {
     beforeEach(() => {
-      spectator = createDirective('<div [abpVisibility] [mutationObserverEnabled]="false"></div>');
+      spectator = createDirective('<div [abpVisibility]></div>');
       directive = spectator.directive;
     });
 
@@ -28,9 +28,7 @@ describe('VisibilityDirective', () => {
 
   describe('without mutation observer and with content', () => {
     beforeEach(() => {
-      spectator = createDirective(
-        '<div [abpVisibility] [mutationObserverEnabled]="false"><p id="content">Content</p></div>',
-      );
+      spectator = createDirective('<div [abpVisibility]><p id="content">Content</p></div>');
       directive = spectator.directive;
     });
 
@@ -45,7 +43,7 @@ describe('VisibilityDirective', () => {
   describe('without mutation observer and with focused element', () => {
     beforeEach(() => {
       spectator = createDirective(
-        '<div id="main" [abpVisibility]="container" [mutationObserverEnabled]="false"></div><div #container><p id="content">Content</p></div>',
+        '<div id="main" [abpVisibility]="container"></div><div #container><p id="content">Content</p></div>',
       );
       directive = spectator.directive;
     });
@@ -60,9 +58,7 @@ describe('VisibilityDirective', () => {
 
   describe('without content and with focused element', () => {
     beforeEach(() => {
-      spectator = createDirective(
-        '<div id="main" [abpVisibility]="container" [mutationObserverEnabled]="false"></div><div #container></div>',
-      );
+      spectator = createDirective('<div id="main" [abpVisibility]="container"></div><div #container></div>');
       directive = spectator.directive;
     });
 

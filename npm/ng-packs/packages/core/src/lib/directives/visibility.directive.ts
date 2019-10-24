@@ -9,9 +9,6 @@ export class VisibilityDirective implements AfterViewInit {
   @Input('abpVisibility')
   focusedElement: HTMLElement;
 
-  @Input()
-  mutationObserverEnabled = true;
-
   completed$ = new Subject<boolean>();
 
   constructor(@Optional() private elRef: ElementRef, private renderer: Renderer2) {}
@@ -22,40 +19,33 @@ export class VisibilityDirective implements AfterViewInit {
     }
 
     let observer: MutationObserver;
-    if (this.mutationObserverEnabled) {
-      observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-          if (!mutation.target) return;
+    observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if (!mutation.target) return;
 
-          const htmlNodes = snq(
-            () => Array.from(mutation.target.childNodes).filter(node => node instanceof HTMLElement),
-            [],
-          );
-
-          if (!htmlNodes.length) {
-            this.removeFromDOM();
-            this.disconnect();
-          } else {
-            setTimeout(() => {
-              this.disconnect();
-            }, 0);
-          }
-        });
-      });
-
-      observer.observe(this.focusedElement, {
-        childList: true,
-      });
-    } else {
-      setTimeout(() => {
         const htmlNodes = snq(
-          () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
+          () => Array.from(mutation.target.childNodes).filter(node => node instanceof HTMLElement),
           [],
         );
 
-        if (!htmlNodes.length) this.removeFromDOM();
-      }, 0);
-    }
+        if (!htmlNodes.length) {
+          this.removeFromDOM();
+        }
+      });
+    });
+
+    observer.observe(this.focusedElement, {
+      childList: true,
+    });
+
+    setTimeout(() => {
+      const htmlNodes = snq(
+        () => Array.from(this.focusedElement.childNodes).filter(node => node instanceof HTMLElement),
+        [],
+      );
+
+      if (!htmlNodes.length) this.removeFromDOM();
+    }, 0);
 
     this.completed$.subscribe(() => observer.disconnect());
   }
@@ -66,6 +56,9 @@ export class VisibilityDirective implements AfterViewInit {
   }
 
   removeFromDOM() {
+    if (!this.elRef.nativeElement) return;
+
     this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
+    this.disconnect();
   }
 }
