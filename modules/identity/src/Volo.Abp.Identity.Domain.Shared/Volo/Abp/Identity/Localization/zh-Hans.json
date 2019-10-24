@@ -1,5 +1,5 @@
 {
-    "culture": "zh-Hans",
+  "culture": "zh-Hans",
   "texts": {
     "Menu:IdentityManagement": "身份认证管理",
     "Users": "用户",
@@ -73,4 +73,4 @@
     "Permission:UserManagement": "用户管理",
     "Permission:UserLookup": "用户查询"
   }
-  }
+}
