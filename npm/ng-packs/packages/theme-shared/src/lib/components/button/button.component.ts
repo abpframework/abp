@@ -10,9 +10,9 @@ import { ABP } from '@abp/ng.core';
       [attr.type]="buttonType || type"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
-      (click)="click.emit($event)"
-      (focus)="focus.emit($event)"
-      (blur)="blur.emit($event)"
+      (click)="onClick($event)"
+      (focus)="onFocus($event)"
+      (blur)="onBlur($event)"
     >
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
@@ -66,5 +66,20 @@ export class ButtonComponent implements OnInit {
         this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
       });
     }
+  }
+
+  onClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.click.next(event);
+  }
+
+  onFocus(event: FocusEvent) {
+    event.stopPropagation();
+    this.focus.next(event);
+  }
+
+  onBlur(event: FocusEvent) {
+    event.stopPropagation();
+    this.blur.next(event);
   }
 }
