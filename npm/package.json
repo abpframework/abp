@@ -1,8 +1,8 @@
 {
   "scripts": {
     "lerna": "lerna",
-    "gulp:app": "node abp-run-gulp-script.js ../templates/app/aspnet-core",
-    "gulp:module": "node abp-run-gulp-script.js ../templates/module/aspnet-core",
+    "gulp:app": "node run-gulp-script.js ../templates/app/aspnet-core",
+    "gulp:module": "node run-gulp-script.js ../templates/module/aspnet-core",
     "ncu": "ncu",
     "update:templates": "node abp-package-update-script.js ../templates"
   },
