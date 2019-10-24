@@ -1,5 +1,13 @@
 {
   "culture": "zh-Hans",
   "texts": {
+    "Account": "账户",
+    "Welcome": "欢迎",
+    "UseOneOfTheFollowingLinksToContinue": "使用下面的链接继续",
+    "FrameworkHomePage": "框架首页",
+    "FrameworkDocumentation": "框架文档",
+    "OfficialBlog": "官方博客",
+    "CommercialHomePage": "商业版首页",
+    "CommercialSupportWebSite": "商业版支持网站"
   }
 }
