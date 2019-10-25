@@ -6,13 +6,11 @@ import { forkJoin } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
-import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
 import { ErrorComponent } from './components/error/error.component';
 import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
 import { ModalComponent } from './components/modal/modal.component';
-import { ProfileComponent } from './components/profile/profile.component';
 import { ToastComponent } from './components/toast/toast.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import styles from './contants/styles';
@@ -46,13 +44,11 @@ export function appendScript(injector: Injector) {
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,
-    ChangePasswordComponent,
     ChartComponent,
     ConfirmationComponent,
     ErrorComponent,
     LoaderBarComponent,
     ModalComponent,
-    ProfileComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     SortOrderIconComponent,
@@ -60,12 +56,10 @@ export function appendScript(injector: Injector) {
   exports: [
     BreadcrumbComponent,
     ButtonComponent,
-    ChangePasswordComponent,
     ChartComponent,
     ConfirmationComponent,
     LoaderBarComponent,
     ModalComponent,
-    ProfileComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     SortOrderIconComponent,

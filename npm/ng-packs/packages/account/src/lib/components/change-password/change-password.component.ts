@@ -1,8 +1,8 @@
-import { ChangePassword } from '@abp/ng.core';
+import { ChangePassword, ConfigState, ABP } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { comparePasswords, Validation } from '@ngx-validate/core';
+import { comparePasswords, Validation, PasswordRules, validatePassword } from '@ngx-validate/core';
 import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { finalize } from 'rxjs/operators';
@@ -29,11 +29,45 @@ export class ChangePasswordComponent implements OnInit {
   constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
 
   ngOnInit(): void {
+    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
+      ConfigState.getSettings('Identity.Password'),
+    );
+    const passwordRulesArr = [] as PasswordRules;
+    let requiredLength = 1;
+
+    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
+      passwordRulesArr.push('number');
+    }
+
+    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
+      passwordRulesArr.push('small');
+    }
+
+    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
+      passwordRulesArr.push('capital');
+    }
+
+    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+      passwordRulesArr.push('special');
+    }
+
+    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
+      requiredLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
+    }
+
     this.form = this.fb.group(
       {
         password: ['', required],
-        newPassword: ['', required],
-        repeatNewPassword: ['', required],
+        newPassword: [
+          '',
+          {
+            validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength)],
+          },
+        ],
+        repeatNewPassword: [
+          '',
+          { validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength)] },
+        ],
       },
       {
         validators: [comparePasswords(PASSWORD_FIELDS)],

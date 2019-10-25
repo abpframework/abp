@@ -29,9 +29,9 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       blueprints: {
         email: 'AbpAccount::ThisFieldIsNotAValidEmailAddress.',
         max: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
-        maxlength: 'AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]',
+        maxlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}[{{ requiredLength }}]',
         min: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
-        minlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]',
+        minlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
         required: 'AbpAccount::ThisFieldIsRequired.',
         passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed',
       },

@@ -16,7 +16,7 @@ namespace DashboardDemo
     [DependsOn(
         typeof(DashboardDemoDomainSharedModule),
         typeof(AbpAuditLoggingDomainModule),
-        typeof(BackgroundJobsDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
