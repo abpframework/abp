@@ -15,7 +15,7 @@ export class PermissionManagementState {
   }
 
   @Selector()
-  static getEntitiyDisplayName({ permissionRes }: PermissionManagement.State): string {
+  static getEntityDisplayName({ permissionRes }: PermissionManagement.State): string {
     return permissionRes.entityDisplayName;
   }
 
