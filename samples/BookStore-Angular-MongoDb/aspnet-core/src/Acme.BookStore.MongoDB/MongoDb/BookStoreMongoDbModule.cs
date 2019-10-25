@@ -17,7 +17,7 @@ namespace Acme.BookStore.MongoDB
         typeof(AbpSettingManagementMongoDbModule),
         typeof(AbpIdentityMongoDbModule),
         typeof(AbpIdentityServerMongoDbModule),
-        typeof(BackgroundJobsMongoDbModule),
+        typeof(AbpBackgroundJobsMongoDbModule),
         typeof(AbpAuditLoggingMongoDbModule),
         typeof(AbpTenantManagementMongoDbModule),
         typeof(AbpFeatureManagementMongoDbModule)

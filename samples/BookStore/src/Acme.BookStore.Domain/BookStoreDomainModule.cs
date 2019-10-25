@@ -16,7 +16,7 @@ namespace Acme.BookStore
     [DependsOn(
         typeof(BookStoreDomainSharedModule),
         typeof(AbpAuditLoggingDomainModule),
-        typeof(BackgroundJobsDomainModule),
+        typeof(AbpBackgroundJobsDomainModule),
         typeof(AbpFeatureManagementDomainModule),
         typeof(AbpIdentityDomainModule),
         typeof(AbpPermissionManagementDomainIdentityModule),
