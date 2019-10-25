@@ -19,7 +19,7 @@ namespace DashboardDemo.EntityFrameworkCore
             return new DashboardDemoMigrationsDbContext(builder.Options);
         }
 
-        private static IConfigurationRoot BuildConfiguration()
+        private static IConfiguration BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

@@ -108,7 +108,7 @@ namespace Acme.BookStore.BookManagement
                     options.ApiName = configuration["AuthServer:ApiName"];
                 });
 
-            Configure<AbpCacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "BookManagement:";
             });

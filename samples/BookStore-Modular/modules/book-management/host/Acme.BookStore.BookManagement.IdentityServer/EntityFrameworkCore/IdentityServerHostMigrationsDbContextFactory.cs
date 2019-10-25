@@ -17,7 +17,7 @@ namespace Acme.BookStore.BookManagement.EntityFrameworkCore
             return new IdentityServerHostMigrationsDbContext(builder.Options);
         }
 
-        private static IConfigurationRoot BuildConfiguration()
+        private static IConfiguration BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
