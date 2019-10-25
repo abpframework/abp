@@ -42,11 +42,11 @@
     "BootstrapTagHelpersDynamicFormsExplanation": "内置的后台作业系统可以集成到Hangfire,RabbitMQ或您喜欢的任何工具中.", //TODO explanation doesn't match.
     "HTTPAPIsDynamicProxies": "HTTP APIs和动态代理",
     "HTTPAPIsDynamicProxiesExplanation": "自动将应用程序服务公开为REST样式的HTTP API,并与动态JavaScript和C#代理一起使用.",
-    "CompleteArchitectureInfo": "现代构架用来创建可维护的软件解决方案.",
+    "CompleteArchitectureInfo": "现代架构用来创建可维护的软件解决方案.",
     "DomainDrivenDesignBasedLayeringModelExplanation": "帮助你实现基于DDD的分层架构并构建可维护的代码库.",
     "DomainDrivenDesignBasedLayeringModelExplanationCont": "提供启动模板,抽象,基类,服务,文档和指南以帮助你开发基于DDD模式和准则的应用程序.",
     "MicroserviceCompatibleModelExplanation": "核心框架和预构建模块在设计时就考虑了微服务架构.",
-    "MicroserviceCompatibleModelExplanationCont": "提供基础结构,集成,示例和文档,以更轻松地实现微服务解决方案,而如果你要使用整体应用程序,则不会带来额外的复杂性.",
+    "MicroserviceCompatibleModelExplanationCont": "提供基础结构,集成,示例和文档,以更轻松地实现微服务解决方案,而如果你要使用整体应用程序,也不会带来额外的复杂性.",
     "ModularInfo": "ABP提供了完整的模块化系统,使你能够开发可重复使用的应用程序模块.",
     "PreBuiltModulesThemes": "预构建模块和主题",
     "PreBuiltModulesThemesExplanation": "开源和商业模块和主题已准备好在你的业务应用程序中使用.",
@@ -125,7 +125,7 @@
     "DatabaseConnectionTransactionManagement": "数据库连接和事务管理",
     "CorrelationIdTracking": "关联ID跟踪",
     "BundlingMinificationExplanation": "ABP提供了一个简单,动态,功能强大,模块化的内置Bundling & Minification系统.",
-    "VirtualFileSystemnExplanation": "虚拟文件系统使管理文件系统(磁盘)上不存在的文件成为可能.它主要用于将(js，css，image，cshtml...)文件嵌入到程序集中,并在运行时像物理文件一样使用它们.",
+    "VirtualFileSystemnExplanation": "虚拟文件系统使管理文件系统(磁盘)上不存在的文件成为可能.它主要用于将(js,css,image,cshtml...)文件嵌入到程序集中,并在运行时像物理文件一样使用它们.",
     "ThemingExplanation": "主题系统允许通过基于最新的Bootstrap框架定义一组通用基础库和布局来独立开发应用程序和模块主题.",
     "DomainDrivenDesignInfrastructureExplanation": "基于域驱动设计模式和准则构建分层应用程序的完整基础设施;",
     "Specification": "规范",
@@ -154,7 +154,7 @@
     "Result": "结果",
     "SeeTheDocumentForMoreInformation": "查看<a href=\"{1}\">{0} 文档</a>获得更多信息",
     "IndexPageHeroSection": "<span class=\"third-line shine2\"><strong>asp.net core的</strong></span><span class=\"first-line shine\"><strong>开源</strong></span><span class=\"second-line text-uppercase\">Web应用程序<br />框架 </span>",
-    "UiFramework": "UI构架",
+    "UiFramework": "UI框架",
     "EmailAddress": "电子邮件地址"
   }
 }
