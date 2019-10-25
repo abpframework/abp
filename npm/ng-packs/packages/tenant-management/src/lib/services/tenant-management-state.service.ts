@@ -8,7 +8,7 @@ import { TenantManagementState } from '../states/tenant-management.state';
 export class TenantManagementStateService {
   constructor(private store: Store) {}
 
-  getTenants() {
+  get() {
     return this.store.selectSnapshot(TenantManagementState.get);
   }
 
