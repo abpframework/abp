@@ -19,13 +19,11 @@ namespace Volo.Abp.Caching
         where TCacheItem : class
     {
         public DistributedCache(
-            IOptions<CacheOptions> cacheOption,
-            IOptions<DistributedCacheOptions> distributedCacheOption,
+            IOptions<AbpDistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
             IDistributedCacheSerializer serializer,
             ICurrentTenant currentTenant) : base(
-                cacheOption: cacheOption,
                 distributedCacheOption: distributedCacheOption,
                 cache: cache,
                 cancellationTokenProvider: cancellationTokenProvider,
@@ -62,12 +60,9 @@ namespace Volo.Abp.Caching
 
         protected DistributedCacheEntryOptions DefaultCacheOptions;
 
-        private readonly AbpDistributedCacheOptions _cacheOption;
-
         private readonly AbpDistributedCacheOptions _distributedCacheOption;
 
         public DistributedCache(
-            IOptions<AbpDistributedCacheOptions> cacheOption,
             IOptions<AbpDistributedCacheOptions> distributedCacheOption,
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
@@ -75,7 +70,6 @@ namespace Volo.Abp.Caching
             ICurrentTenant currentTenant)
         {
             _distributedCacheOption = distributedCacheOption.Value;
-            _cacheOption = cacheOption.Value;
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
             Logger = NullLogger<DistributedCache<TCacheItem, TCacheKey>>.Instance;
@@ -88,7 +82,7 @@ namespace Volo.Abp.Caching
         }
         protected virtual string NormalizeKey(TCacheKey key)
         {
-            var normalizedKey = "c:" + CacheName + ",k:" + _cacheOption.KeyPrefix + key.ToString();
+            var normalizedKey = "c:" + CacheName + ",k:" + _distributedCacheOption.KeyPrefix + key.ToString();
 
             if (!IgnoreMultiTenancy && CurrentTenant.Id.HasValue)
             {
@@ -100,7 +94,7 @@ namespace Volo.Abp.Caching
 
         protected virtual DistributedCacheEntryOptions GetDefaultCacheEntryOptions()
         {
-            foreach (var configure in _cacheOption.CacheConfigurators)
+            foreach (var configure in _distributedCacheOption.CacheConfigurators)
             {
                 var options = configure.Invoke(CacheName);
                 if (options != null)
@@ -108,7 +102,7 @@ namespace Volo.Abp.Caching
                     return options;
                 }
             }
-            return _cacheOption.GlobalCacheEntryOptions;
+            return _distributedCacheOption.GlobalCacheEntryOptions;
         }
 
         protected virtual void SetDefaultOptions()

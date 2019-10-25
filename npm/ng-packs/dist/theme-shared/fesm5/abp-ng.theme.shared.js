@@ -12,16 +12,16 @@ import {
 } from '@abp/ng.core';
 import {
   Component,
+  EventEmitter,
+  Renderer2,
   Input,
+  Output,
+  ViewChild,
   Injectable,
   ɵɵdefineInjectable,
   ɵɵinject,
-  EventEmitter,
-  Output,
-  ViewChild,
   ElementRef,
   ChangeDetectorRef,
-  Renderer2,
   ContentChild,
   ViewChildren,
   NgZone,
@@ -43,7 +43,7 @@ import { Validators, FormBuilder } from '@angular/forms';
 import { comparePasswords, takeUntilDestroy, NgxValidateCoreModule } from '@ngx-validate/core';
 import snq from 'snq';
 import { finalize, takeUntil, debounceTime, filter, withLatestFrom, take } from 'rxjs/operators';
-import { animation, style, animate, trigger, transition, useAnimation, state, keyframes } from '@angular/animations';
+import { animation, style, animate, trigger, transition, useAnimation, keyframes, state } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
 
 /**
@@ -150,10 +150,17 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ButtonComponent = /** @class */ (function() {
-  function ButtonComponent() {
+  function ButtonComponent(renderer) {
+    this.renderer = renderer;
     this.buttonClass = 'btn btn-primary';
     this.loading = false;
     this.disabled = false;
+    // tslint:disable-next-line: no-output-native
+    this.click = new EventEmitter();
+    // tslint:disable-next-line: no-output-native
+    this.focus = new EventEmitter();
+    // tslint:disable-next-line: no-output-native
+    this.blur = new EventEmitter();
     /**
      * @deprecated Use buttonType instead. To be deleted in v1
      */
@@ -164,29 +171,59 @@ var ButtonComponent = /** @class */ (function() {
      * @return {?}
      */
     get: function() {
-      return '' + (this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none');
+      return '' + (this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none');
     },
     enumerable: true,
     configurable: true,
   });
+  /**
+   * @return {?}
+   */
+  ButtonComponent.prototype.ngOnInit
+  /**
+   * @return {?}
+   */ = function() {
+    var _this = this;
+    if (this.attributes) {
+      Object.keys(this.attributes).forEach(
+        /**
+         * @param {?} key
+         * @return {?}
+         */
+        function(key) {
+          _this.renderer.setAttribute(_this.buttonRef.nativeElement, key, _this.attributes[key]);
+        },
+      );
+    }
+  };
   ButtonComponent.decorators = [
     {
       type: Component,
       args: [
         {
           selector: 'abp-button',
+          // tslint:disable-next-line: component-max-inline-declarations
           template:
-            '\n    <button [attr.type]="type" [ngClass]="buttonClass" [disabled]="loading || disabled">\n      <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>\n    </button>\n  ',
+            '\n    <button\n      #button\n      [attr.type]="buttonType || type"\n      [ngClass]="buttonClass"\n      [disabled]="loading || disabled"\n      (click)="click.emit($event)"\n      (focus)="focus.emit($event)"\n      (blur)="blur.emit($event)"\n    >\n      <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>\n    </button>\n  ',
         },
       ],
     },
   ];
+  /** @nocollapse */
+  ButtonComponent.ctorParameters = function() {
+    return [{ type: Renderer2 }];
+  };
   ButtonComponent.propDecorators = {
     buttonClass: [{ type: Input }],
     buttonType: [{ type: Input }],
     iconClass: [{ type: Input }],
     loading: [{ type: Input }],
     disabled: [{ type: Input }],
+    attributes: [{ type: Input }],
+    click: [{ type: Output }],
+    focus: [{ type: Output }],
+    blur: [{ type: Output }],
+    buttonRef: [{ type: ViewChild, args: ['button', { static: true }] }],
     type: [{ type: Input }],
   };
   return ButtonComponent;
@@ -202,11 +239,26 @@ if (false) {
   ButtonComponent.prototype.loading;
   /** @type {?} */
   ButtonComponent.prototype.disabled;
+  /** @type {?} */
+  ButtonComponent.prototype.attributes;
+  /** @type {?} */
+  ButtonComponent.prototype.click;
+  /** @type {?} */
+  ButtonComponent.prototype.focus;
+  /** @type {?} */
+  ButtonComponent.prototype.blur;
+  /** @type {?} */
+  ButtonComponent.prototype.buttonRef;
   /**
    * @deprecated Use buttonType instead. To be deleted in v1
    * @type {?}
    */
   ButtonComponent.prototype.type;
+  /**
+   * @type {?}
+   * @private
+   */
+  ButtonComponent.prototype.renderer;
 }
 
 /**
@@ -1337,7 +1389,7 @@ var fadeOutRight = animation(
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var backdropAnimation = trigger('backdrop', [
+var fadeAnimation = trigger('fade', [
   transition(':enter', useAnimation(fadeIn)),
   transition(':leave', useAnimation(fadeOut)),
 ]);
@@ -1537,8 +1589,8 @@ var ModalComponent = /** @class */ (function() {
         {
           selector: 'abp-modal',
           template:
-            '<ng-container *ngIf="visible">\n  <div class="modal show {{ modalClass }}" tabindex="-1" role="dialog">\n    <div class="modal-backdrop" [@backdrop]="isModalOpen" (click)="close()"></div>\n    <div\n      id="abp-modal-dialog"\n      class="modal-dialog modal-{{ size }}"\n      role="document"\n      [@dialog]="isModalOpen"\n      #abpModalContent\n    >\n      <div id="abp-modal-content" class="modal-content">\n        <div id="abp-modal-header" class="modal-header">\n          <ng-container *ngTemplateOutlet="abpHeader"></ng-container>\n          \u200B\n          <button id="abp-modal-close-button" type="button" class="close" aria-label="Close" (click)="close()">\n            <span aria-hidden="true">&times;</span>\n          </button>\n        </div>\n        <div id="abp-modal-body" class="modal-body">\n          <ng-container *ngTemplateOutlet="abpBody"></ng-container>\n        </div>\n        <div id="abp-modal-footer" class="modal-footer">\n          <ng-container *ngTemplateOutlet="abpFooter"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n',
-          animations: [backdropAnimation, dialogAnimation],
+            '<ng-container *ngIf="visible">\n  <div class="modal show {{ modalClass }}" tabindex="-1" role="dialog">\n    <div class="modal-backdrop" [@fade]="isModalOpen" (click)="close()"></div>\n    <div\n      id="abp-modal-dialog"\n      class="modal-dialog modal-{{ size }}"\n      role="document"\n      [@dialog]="isModalOpen"\n      #abpModalContent\n    >\n      <div id="abp-modal-content" class="modal-content">\n        <div id="abp-modal-header" class="modal-header">\n          <ng-container *ngTemplateOutlet="abpHeader"></ng-container>\n          \u200B\n          <button id="abp-modal-close-button" type="button" class="close" aria-label="Close" (click)="close()">\n            <span aria-hidden="true">&times;</span>\n          </button>\n        </div>\n        <div id="abp-modal-body" class="modal-body">\n          <ng-container *ngTemplateOutlet="abpBody"></ng-container>\n        </div>\n        <div id="abp-modal-footer" class="modal-footer">\n          <ng-container *ngTemplateOutlet="abpFooter"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n',
+          animations: [fadeAnimation, dialogAnimation],
         },
       ],
     },
@@ -1968,7 +2020,7 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var styles =
-  '\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.modal.show {\n  display: block !important;\n}\n\n.modal-backdrop {\n  position: absolute !important;\n  top: 0 !important;\n  left: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  background-color: rgba(0, 0, 0, 0.6) !important;\n  z-index: 1040 !important;\n}\n\n.modal-dialog {\n  z-index: 1050 !important;\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-toast .ui-toast-message {\n  box-sizing: border-box !important;\n  border: 2px solid transparent !important;\n  border-radius: 4px !important;\n  background-color: #f4f4f7 !important;\n  color: #1b1d29 !important;\n}\n\n.abp-toast .ui-toast-message-content {\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-message-content .ui-toast-icon {\n  top: 0 !important;\n  left: 0 !important;\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-summary {\n  margin: 0 !important;\n  font-weight: 700 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error {\n  border-color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error .ui-toast-message-content .ui-toast-icon {\n  color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning {\n  border-color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning .ui-toast-message-content .ui-toast-icon {\n  color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success {\n  border-color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success .ui-toast-message-content .ui-toast-icon {\n  color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info {\n  border-color: #fccb31 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info .ui-toast-message-content .ui-toast-icon {\n  color: #fccb31 !important;\n}\n\n.abp-confirm .ui-toast-message {\n  box-sizing: border-box !important;\n  padding: 0px !important;\n  border:0 none !important;\n  border-radius: 4px !important;\n  background-color: #fff !important;\n  color: rgba(0, 0, 0, .65) !important;\n  font-family: "Poppins", sans-serif;\n  text-align: center !important;\n}\n\n.abp-confirm .ui-toast-message-content {\n  padding: 0px !important;\n}\n\n.abp-confirm .abp-confirm-icon {\n  margin: 32px 50px 5px !important;\n  color: #f8bb86 !important;\n  font-size: 52px !important;\n}\n\n.abp-confirm .ui-toast-close-icon {\n  display: none !important;\n}\n\n.abp-confirm .abp-confirm-summary {\n  display: block !important;\n  margin-bottom: 13px !important;\n  padding: 13px 16px 0px !important;\n  font-weight: 600 !important;\n  font-size: 18px !important;\n}\n\n.abp-confirm .abp-confirm-body {\n  display: inline-block !important;\n  padding: 0px 10px !important;\n}\n\n.abp-confirm .abp-confirm-footer {\n  display: block !important;\n  margin-top: 30px !important;\n  padding: 16px !important;\n  background-color: #f4f4f7 !important;\n  text-align: right !important;\n}\n\n.abp-confirm .abp-confirm-footer .btn {\n  margin-left: 10px !important;\n}\n\n.ui-widget-overlay {\n  z-index: 1000;\n}\n\n.color-white {\n  color: #FFF !important;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(0px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n';
+  '\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar {\n  height: 5px !important;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar-track {\n  background: #ddd;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar-thumb {\n  background: #8a8686;\n}\n\n.modal.show {\n  display: block !important;\n}\n\n.modal-backdrop {\n  position: absolute !important;\n  top: 0 !important;\n  left: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  background-color: rgba(0, 0, 0, 0.6) !important;\n  z-index: 1040 !important;\n}\n\n.modal-dialog {\n  z-index: 1050 !important;\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-toast .ui-toast-message {\n  box-sizing: border-box !important;\n  border: 2px solid transparent !important;\n  border-radius: 4px !important;\n  background-color: #f4f4f7 !important;\n  color: #1b1d29 !important;\n}\n\n.abp-toast .ui-toast-message-content {\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-message-content .ui-toast-icon {\n  top: 0 !important;\n  left: 0 !important;\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-summary {\n  margin: 0 !important;\n  font-weight: 700 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error {\n  border-color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error .ui-toast-message-content .ui-toast-icon {\n  color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning {\n  border-color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning .ui-toast-message-content .ui-toast-icon {\n  color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success {\n  border-color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success .ui-toast-message-content .ui-toast-icon {\n  color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info {\n  border-color: #fccb31 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info .ui-toast-message-content .ui-toast-icon {\n  color: #fccb31 !important;\n}\n\n.abp-confirm .ui-toast-message {\n  box-sizing: border-box !important;\n  padding: 0px !important;\n  border:0 none !important;\n  border-radius: 4px !important;\n  background-color: #fff !important;\n  color: rgba(0, 0, 0, .65) !important;\n  font-family: "Poppins", sans-serif;\n  text-align: center !important;\n}\n\n.abp-confirm .ui-toast-message-content {\n  padding: 0px !important;\n}\n\n.abp-confirm .abp-confirm-icon {\n  margin: 32px 50px 5px !important;\n  color: #f8bb86 !important;\n  font-size: 52px !important;\n}\n\n.abp-confirm .ui-toast-close-icon {\n  display: none !important;\n}\n\n.abp-confirm .abp-confirm-summary {\n  display: block !important;\n  margin-bottom: 13px !important;\n  padding: 13px 16px 0px !important;\n  font-weight: 600 !important;\n  font-size: 18px !important;\n}\n\n.abp-confirm .abp-confirm-body {\n  display: inline-block !important;\n  padding: 0px 10px !important;\n}\n\n.abp-confirm .abp-confirm-footer {\n  display: block !important;\n  margin-top: 30px !important;\n  padding: 16px !important;\n  background-color: #f4f4f7 !important;\n  text-align: right !important;\n}\n\n.abp-confirm .abp-confirm-footer .btn {\n  margin-left: 10px !important;\n}\n\n.ui-widget-overlay {\n  z-index: 1000;\n}\n\n.color-white {\n  color: #FFF !important;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n.abp-collapsed {\n  -moz-transition: margin ease-in-out 0.5s;\n  -ms-transition: margin ease-in-out 0.5s;\n  -o-transition: margin ease-in-out 0.5s;\n  -webkit-transition: margin ease-in-out 0.5s;\n  transition: margin ease-in-out 0.5s;\n  margin-top: -100%;\n}\n\n.abp-collapsed.expanded {\n  margin-top: 0 !important;\n}\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(0px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n';
 
 /**
  * @fileoverview added by tsickle
@@ -2405,62 +2457,6 @@ var ThemeSharedModule = /** @class */ (function() {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var collapseY = animation(
-  [
-    style({ height: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ height: '0', padding: '0px' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-var collapseX = animation(
-  [
-    style({ width: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ width: '0', padding: '0px' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-var expandY = animation(
-  [
-    style({ height: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ height: '*', padding: '*' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-var expandX = animation(
-  [
-    style({ width: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ width: '*', padding: '*' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-var collapse = trigger('collapse', [
-  state('collapsed', style({ height: '0', overflow: 'hidden' })),
-  state('expanded', style({ height: '*', overflow: 'hidden' })),
-  transition('expanded => collapsed', useAnimation(collapseY)),
-  transition('collapsed => expanded', useAnimation(expandY)),
-]);
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/** @type {?} */
-var slideFromBottom = trigger('slideFromBottom', [
-  transition('* <=> *', [
-    style({ 'margin-top': '20px', opacity: '0' }),
-    animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' })),
-  ]),
-]);
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/** @type {?} */
 var bounceIn = animation(
   [
     style({ opacity: '0', display: '{{ display }}' }),
@@ -2482,6 +2478,95 @@ var bounceIn = animation(
     },
   },
 );
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var collapseY = animation(
+  [
+    style({ height: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ height: '0', padding: '0px' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+var collapseYWithMargin = animation(
+  [style({ 'margin-top': '0' }), animate('{{ time }} {{ easing }}', style({ 'margin-top': '-100%' }))],
+  {
+    params: { time: '500ms', easing: 'ease' },
+  },
+);
+/** @type {?} */
+var collapseX = animation(
+  [
+    style({ width: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ width: '0', padding: '0px' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+var expandY = animation(
+  [
+    style({ height: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ height: '*', padding: '*' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+var expandYWithMargin = animation(
+  [style({ 'margin-top': '-100%' }), animate('{{ time }} {{ easing }}', style({ 'margin-top': '0' }))],
+  {
+    params: { time: '500ms', easing: 'ease' },
+  },
+);
+/** @type {?} */
+var expandX = animation(
+  [
+    style({ width: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ width: '*', padding: '*' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+var collapse = trigger('collapse', [
+  state('collapsed', style({ height: '0', overflow: 'hidden' })),
+  state('expanded', style({ height: '*', overflow: 'hidden' })),
+  transition('expanded => collapsed', useAnimation(collapseY)),
+  transition('collapsed => expanded', useAnimation(expandY)),
+]);
+/** @type {?} */
+var collapseWithMargin = trigger('collapseWithMargin', [
+  state('collapsed', style({ 'margin-top': '-100%' })),
+  state('expanded', style({ 'margin-top': '0' })),
+  transition('expanded => collapsed', useAnimation(collapseYWithMargin), {
+    params: { time: '400ms', easing: 'linear' },
+  }),
+  transition('collapsed => expanded', useAnimation(expandYWithMargin)),
+]);
+/** @type {?} */
+var collapseLinearWithMargin = trigger('collapseLinearWithMargin', [
+  state('collapsed', style({ 'margin-top': '-100%' })),
+  state('expanded', style({ 'margin-top': '0' })),
+  transition(
+    'expanded => collapsed',
+    useAnimation(collapseYWithMargin, { params: { time: '200ms', easing: 'linear' } }),
+  ),
+  transition('collapsed => expanded', useAnimation(expandYWithMargin, { params: { time: '250ms', easing: 'linear' } })),
+]);
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+var slideFromBottom = trigger('slideFromBottom', [
+  transition('* <=> *', [
+    style({ 'margin-top': '20px', opacity: '0' }),
+    animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' })),
+  ]),
+]);
 
 /**
  * @fileoverview added by tsickle
@@ -2661,10 +2746,16 @@ export {
   bounceIn,
   chartJsLoaded$,
   collapse,
+  collapseLinearWithMargin,
+  collapseWithMargin,
   collapseX,
   collapseY,
+  collapseYWithMargin,
+  dialogAnimation,
   expandX,
   expandY,
+  expandYWithMargin,
+  fadeAnimation,
   fadeIn,
   fadeInDown,
   fadeInLeft,
@@ -2689,7 +2780,7 @@ export {
   ErrorComponent as ɵi,
   LoaderBarComponent as ɵj,
   ModalComponent as ɵk,
-  backdropAnimation as ɵl,
+  fadeAnimation as ɵl,
   dialogAnimation as ɵm,
   fadeIn as ɵn,
   fadeOut as ɵo,

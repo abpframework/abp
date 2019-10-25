@@ -202,7 +202,6 @@ namespace MyCompanyName.MyProjectName.Web
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
             app.UseJwtTokenMiddleware();
 
             if (MultiTenancyConsts.IsEnabled)
@@ -211,6 +210,7 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
 
             app.UseSwagger();

@@ -16,14 +16,14 @@ import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { Toaster } from '../../models/toaster';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
-import { backdropAnimation, dialogAnimation } from './modal.animations';
+import { fadeAnimation, dialogAnimation } from '../../animations/modal.animations';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
-  animations: [backdropAnimation, dialogAnimation],
+  animations: [fadeAnimation, dialogAnimation],
 })
 export class ModalComponent implements OnDestroy {
   @Input()

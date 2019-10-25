@@ -20,6 +20,7 @@ class IdentityConfigService {
         path: '',
         order: 1,
         wrapper: true,
+        iconClass: 'fa fa-wrench',
       },
       {
         name: 'AbpIdentity::Menu:IdentityManagement',
@@ -29,8 +30,8 @@ class IdentityConfigService {
         layout: 'application' /* application */,
         iconClass: 'fa fa-id-card-o',
         children: [
-          { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
-          { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
+          { path: 'roles', name: 'AbpIdentity::Roles', order: 1, requiredPolicy: 'AbpIdentity.Roles' },
+          { path: 'users', name: 'AbpIdentity::Users', order: 2, requiredPolicy: 'AbpIdentity.Users' },
         ],
       },
     ]);

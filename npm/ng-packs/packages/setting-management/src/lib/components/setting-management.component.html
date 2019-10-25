@@ -14,7 +14,7 @@
   <div class="card">
     <div class="card-body">
       <div class="row">
-        <div class="col-3">
+        <div class="col-12 col-md-3">
           <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">
             <li
               *abpFor="let setting of settings; trackBy: trackByFn"
@@ -32,7 +32,7 @@
             </li>
           </ul>
         </div>
-        <div class="col-9">
+        <div class="col-12 col-md-9">
           <div *ngIf="settings.length" class="tab-content">
             <div class="tab-pane fade show active" [id]="selected.name + '-tab'" role="tabpanel">
               <ng-container *ngComponentOutlet="selected.component"></ng-container>

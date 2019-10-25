@@ -8,55 +8,48 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AccountConfigService {
-  /**
-   * @param {?} router
-   * @param {?} restService
-   */
-  constructor(router, restService) {
-    this.router = router;
-    this.restService = restService;
-    addAbpRoutes({
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application' /* application */,
-      children: [
-        { path: 'login', name: 'AbpAccount::Login', order: 1 },
-        { path: 'register', name: 'AbpAccount::Register', order: 2 },
-      ],
-    });
-  }
+    /**
+     * @param {?} router
+     * @param {?} restService
+     */
+    constructor(router, restService) {
+        this.router = router;
+        this.restService = restService;
+        addAbpRoutes({
+            name: 'AbpAccount::Menu:Account',
+            path: 'account',
+            invisible: true,
+            layout: "application" /* application */,
+            children: [
+                { path: 'login', name: 'AbpAccount::Login', order: 1 },
+                { path: 'register', name: 'AbpAccount::Register', order: 2 },
+                { path: 'manage-profile', name: 'AbpAccount::ManageYourProfile', order: 3 },
+            ],
+        });
+    }
 }
 AccountConfigService.decorators = [
-  {
-    type: Injectable,
-    args: [
-      {
-        providedIn: 'root',
-      },
-    ],
-  },
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
 ];
 /** @nocollapse */
-AccountConfigService.ctorParameters = () => [{ type: Router }, { type: RestService }];
-/** @nocollapse */ AccountConfigService.ngInjectableDef = ɵɵdefineInjectable({
-  factory: function AccountConfigService_Factory() {
-    return new AccountConfigService(ɵɵinject(Router), ɵɵinject(RestService));
-  },
-  token: AccountConfigService,
-  providedIn: 'root',
-});
+AccountConfigService.ctorParameters = () => [
+    { type: Router },
+    { type: RestService }
+];
+/** @nocollapse */ AccountConfigService.ngInjectableDef = ɵɵdefineInjectable({ factory: function AccountConfigService_Factory() { return new AccountConfigService(ɵɵinject(Router), ɵɵinject(RestService)); }, token: AccountConfigService, providedIn: "root" });
 if (false) {
-  /**
-   * @type {?}
-   * @private
-   */
-  AccountConfigService.prototype.router;
-  /**
-   * @type {?}
-   * @private
-   */
-  AccountConfigService.prototype.restService;
+    /**
+     * @type {?}
+     * @private
+     */
+    AccountConfigService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    AccountConfigService.prototype.restService;
 }
 
 /**
@@ -66,50 +59,45 @@ if (false) {
 /**
  * @record
  */
-function AccountConfigOptions() {}
+function AccountConfigOptions() { }
 if (false) {
-  /** @type {?|undefined} */
-  AccountConfigOptions.prototype.redirectUrl;
+    /** @type {?|undefined} */
+    AccountConfigOptions.prototype.redirectUrl;
 }
 /**
  * @param {?} options
  * @return {?}
  */
 function accountOptionsFactory(options) {
-  return Object.assign({ redirectUrl: '/' }, options);
+    return Object.assign({ redirectUrl: '/' }, options);
 }
 /** @type {?} */
 const ACCOUNT_OPTIONS = new InjectionToken('ACCOUNT_OPTIONS');
 const ɵ0 = noop;
 class AccountConfigModule {
-  /**
-   * @param {?=} options
-   * @return {?}
-   */
-  static forRoot(options = /** @type {?} */ ({})) {
-    return {
-      ngModule: AccountConfigModule,
-      providers: [
-        { provide: ACCOUNT_OPTIONS, useValue: options },
-        {
-          provide: 'ACCOUNT_OPTIONS',
-          useFactory: accountOptionsFactory,
-          deps: [ACCOUNT_OPTIONS],
-        },
-      ],
-    };
-  }
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    static forRoot(options = (/** @type {?} */ ({}))) {
+        return {
+            ngModule: AccountConfigModule,
+            providers: [
+                { provide: ACCOUNT_OPTIONS, useValue: options },
+                {
+                    provide: 'ACCOUNT_OPTIONS',
+                    useFactory: accountOptionsFactory,
+                    deps: [ACCOUNT_OPTIONS],
+                },
+            ],
+        };
+    }
 }
 AccountConfigModule.decorators = [
-  {
-    type: NgModule,
-    args: [
-      {
-        imports: [CoreModule, ThemeSharedModule],
-        providers: [{ provide: APP_INITIALIZER, multi: true, deps: [AccountConfigService], useFactory: ɵ0 }],
-      },
-    ],
-  },
+    { type: NgModule, args: [{
+                imports: [CoreModule, ThemeSharedModule],
+                providers: [{ provide: APP_INITIALIZER, multi: true, deps: [AccountConfigService], useFactory: ɵ0 }],
+            },] }
 ];
 
 /**

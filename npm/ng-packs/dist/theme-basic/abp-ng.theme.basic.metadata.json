@@ -22,57 +22,56 @@
             "__symbolic": "reference",
             "module": "@angular/core",
             "name": "NgModule",
-            "line": 17,
+            "line": 16,
             "character": 1
           },
           "arguments": [
             {
               "declarations": [
                 { "__symbolic": "spread", "expression": { "__symbolic": "reference", "name": "LAYOUTS" } },
-                { "__symbolic": "reference", "name": "ɵe" },
-                { "__symbolic": "reference", "name": "ɵf" }
+                { "__symbolic": "reference", "name": "ɵe" }
               ],
               "imports": [
                 {
                   "__symbolic": "reference",
                   "module": "@abp/ng.core",
                   "name": "CoreModule",
-                  "line": 20,
+                  "line": 19,
                   "character": 4
                 },
                 {
                   "__symbolic": "reference",
                   "module": "@abp/ng.theme.shared",
                   "name": "ThemeSharedModule",
-                  "line": 21,
+                  "line": 20,
                   "character": 4
                 },
                 {
                   "__symbolic": "reference",
                   "module": "@ng-bootstrap/ng-bootstrap",
                   "name": "NgbCollapseModule",
-                  "line": 22,
+                  "line": 21,
                   "character": 4
                 },
                 {
                   "__symbolic": "reference",
                   "module": "@ng-bootstrap/ng-bootstrap",
                   "name": "NgbDropdownModule",
-                  "line": 23,
+                  "line": 22,
                   "character": 4
                 },
                 {
                   "__symbolic": "reference",
                   "module": "primeng/toast",
                   "name": "ToastModule",
-                  "line": 24,
+                  "line": 23,
                   "character": 4
                 },
                 {
                   "__symbolic": "reference",
                   "module": "@ngx-validate/core",
                   "name": "NgxValidateCoreModule",
-                  "line": 25,
+                  "line": 24,
                   "character": 4
                 },
                 {
@@ -83,12 +82,12 @@
                       "__symbolic": "reference",
                       "module": "@ngxs/store",
                       "name": "NgxsModule",
-                      "line": 26,
+                      "line": 25,
                       "character": 4
                     },
                     "member": "forFeature"
                   },
-                  "arguments": [[{ "__symbolic": "reference", "name": "ɵg" }]]
+                  "arguments": [[{ "__symbolic": "reference", "name": "ɵf" }]]
                 },
                 {
                   "__symbolic": "call",
@@ -98,7 +97,7 @@
                       "__symbolic": "reference",
                       "module": "@ngx-validate/core",
                       "name": "NgxValidateCoreModule",
-                      "line": 27,
+                      "line": 26,
                       "character": 4
                     },
                     "member": "forRoot"
@@ -115,7 +114,7 @@
                         "required": "AbpAccount::ThisFieldIsRequired.",
                         "passwordMismatch": "AbpIdentity::Identity.PasswordConfirmationFailed"
                       },
-                      "errorTemplate": { "__symbolic": "reference", "name": "ɵf" }
+                      "errorTemplate": { "__symbolic": "reference", "name": "ɵe" }
                     }
                   ]
                 }
@@ -123,14 +122,14 @@
               "exports": [{ "__symbolic": "spread", "expression": { "__symbolic": "reference", "name": "LAYOUTS" } }],
               "entryComponents": [
                 { "__symbolic": "spread", "expression": { "__symbolic": "reference", "name": "LAYOUTS" } },
-                { "__symbolic": "reference", "name": "ɵf" }
+                { "__symbolic": "reference", "name": "ɵe" }
               ]
             }
           ]
         }
       ],
       "members": {
-        "__ctor__": [{ "__symbolic": "constructor", "parameters": [{ "__symbolic": "reference", "name": "ɵk" }] }]
+        "__ctor__": [{ "__symbolic": "constructor", "parameters": [{ "__symbolic": "reference", "name": "ɵj" }] }]
       }
     },
     "ɵa": {
@@ -142,13 +141,29 @@
             "__symbolic": "reference",
             "module": "@angular/core",
             "name": "Component",
-            "line": 32,
+            "line": 36,
             "character": 1
           },
           "arguments": [
             {
               "selector": "abp-layout-application",
-              "template": "<abp-layout>\n  <ul class=\"navbar-nav mr-auto\">\n    <ng-container\n      *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n      [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n      [ngTemplateOutletContext]=\"{ $implicit: route }\"\n    >\n    </ng-container>\n\n    <ng-template #defaultLink let-route>\n      <li class=\"nav-item\" [abpPermission]=\"route.requiredPolicy\">\n        <a class=\"nav-link\" [routerLink]=\"[route.url]\">{{ route.name | abpLocalization }}</a>\n      </li>\n    </ng-template>\n\n    <ng-template #dropdownLink let-route>\n      <li\n        #navbarRootDropdown\n        ngbDropdown\n        [abpPermission]=\"route.requiredPolicy\"\n        [abpVisibility]=\"routeContainer\"\n        class=\"nav-item dropdown pointer\"\n        display=\"static\"\n      >\n        <a ngbDropdownToggle class=\"nav-link dropdown-toggle pointer\" data-toggle=\"dropdown\">\n          {{ route.name | abpLocalization }}\n        </a>\n        <div #routeContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            #forTemplate\n            ngFor\n            [ngForOf]=\"route.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </li>\n    </ng-template>\n\n    <ng-template #childWrapper let-child>\n      <ng-template\n        [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n        [ngTemplateOutletContext]=\"{ $implicit: child }\"\n      ></ng-template>\n    </ng-template>\n\n    <ng-template #defaultChild let-child>\n      <div class=\"dropdown-submenu\" [abpPermission]=\"child.requiredPolicy\">\n        <a class=\"dropdown-item py-2 px-2\" [routerLink]=\"[child.url]\">\n          <i *ngIf=\"child.iconClass\" [ngClass]=\"child.iconClass\"></i>\n          {{ child.name | abpLocalization }}</a\n        >\n      </div>\n    </ng-template>\n\n    <ng-template #dropdownChild let-child>\n      <div\n        [abpVisibility]=\"childrenContainer\"\n        class=\"dropdown-submenu pointer\"\n        ngbDropdown\n        [display]=\"isDropdownChildDynamic ? 'dynamic' : 'static'\"\n        placement=\"right-top\"\n        [abpPermission]=\"child.requiredPolicy\"\n      >\n        <div ngbDropdownToggle [class.dropdown-toggle]=\"false\" class=\"pointer\">\n          <a\n            abpEllipsis=\"210px\"\n            [abpEllipsisEnabled]=\"isDropdownChildDynamic\"\n            role=\"button\"\n            class=\"btn d-block text-left py-2 px-2 dropdown-toggle\"\n          >\n            <i *ngIf=\"child.iconClass\" [ngClass]=\"child.iconClass\"></i>\n            {{ child.name | abpLocalization }}\n          </a>\n        </div>\n        <div #childrenContainer ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n          <ng-template\n            ngFor\n            [ngForOf]=\"child.children\"\n            [ngForTrackBy]=\"trackByFn\"\n            [ngForTemplate]=\"childWrapper\"\n          ></ng-template>\n        </div>\n      </div>\n    </ng-template>\n  </ul>\n\n  <ul class=\"navbar-nav ml-auto\">\n    <ng-container\n      *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n      [ngTemplateOutlet]=\"element\"\n    ></ng-container>\n  </ul>\n</abp-layout>\n\n<ng-template #language>\n  <li class=\"nav-item dropdown pointer\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle text-white pointer\" data-toggle=\"dropdown\">\n      {{ defaultLanguage$ | async }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a\n        *ngFor=\"let lang of dropdownLanguages$ | async\"\n        class=\"dropdown-item\"\n        (click)=\"onChangeLang(lang.cultureName)\"\n        >{{ lang?.displayName }}</a\n      >\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item dropdown pointer\" ngbDropdown>\n    <a ngbDropdownToggle class=\"nav-link dropdown-toggle text-white pointer\" data-toggle=\"dropdown\">\n      {{ (currentUser$ | async)?.userName }}\n    </a>\n    <div ngbDropdownMenu class=\"dropdown-menu dropdown-menu-right\">\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenChangePassword = true\">{{\n        'AbpUi::ChangePassword' | abpLocalization\n      }}</a>\n      <a class=\"dropdown-item pointer\" (click)=\"isOpenProfile = true\">{{ 'AbpUi::PersonalInfo' | abpLocalization }}</a>\n      <a class=\"dropdown-item pointer\" (click)=\"logout()\">{{ 'AbpUi::Logout' | abpLocalization }}</a>\n    </div>\n  </li>\n\n  <abp-change-password [(visible)]=\"isOpenChangePassword\"></abp-change-password>\n\n  <abp-profile [(visible)]=\"isOpenProfile\"></abp-profile>\n</ng-template>\n"
+              "animations": [
+                {
+                  "__symbolic": "reference",
+                  "module": "@abp/ng.theme.shared",
+                  "name": "slideFromBottom",
+                  "line": 39,
+                  "character": 15
+                },
+                {
+                  "__symbolic": "reference",
+                  "module": "@abp/ng.theme.shared",
+                  "name": "collapseWithMargin",
+                  "line": 39,
+                  "character": 32
+                }
+              ],
+              "template": "<nav\n  class=\"navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4\"\n  id=\"main-navbar\"\n  style=\"min-height: 4rem;\"\n>\n  <div class=\"container \">\n    <a class=\"navbar-brand\" routerLink=\"/\">\n      <img *ngIf=\"appInfo.logoUrl; else appName\" [src]=\"appInfo.logoUrl\" [alt]=\"appInfo.name\" />\n    </a>\n    <button\n      class=\"navbar-toggler\"\n      type=\"button\"\n      [attr.aria-expanded]=\"!isCollapsed\"\n      (click)=\"isCollapsed = !isCollapsed\"\n    >\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div class=\"navbar-collapse\" id=\"main-navbar-collapse\">\n      <ng-container *ngTemplateOutlet=\"!smallScreen ? navigations : null\"></ng-container>\n\n      <div *ngIf=\"smallScreen\" class=\"overflow-hidden\" [@collapseWithMargin]=\"isCollapsed ? 'collapsed' : 'expanded'\">\n        <ng-container *ngTemplateOutlet=\"navigations\"></ng-container>\n      </div>\n\n      <ng-template #navigations>\n        <ul class=\"navbar-nav mx-auto\">\n          <ng-container\n            *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n            [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n            [ngTemplateOutletContext]=\"{ $implicit: route }\"\n          >\n          </ng-container>\n\n          <ng-template #defaultLink let-route>\n            <li class=\"nav-item\" [abpPermission]=\"route.requiredPolicy\">\n              <a class=\"nav-link\" [routerLink]=\"[route.url]\">{{ route.name | abpLocalization }}</a>\n            </li>\n          </ng-template>\n\n          <ng-template #dropdownLink let-route>\n            <li\n              #navbarRootDropdown\n              [abpPermission]=\"route.requiredPolicy\"\n              [abpVisibility]=\"routeContainer\"\n              class=\"nav-item dropdown\"\n              display=\"static\"\n              (click)=\"\n                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)\n              \"\n            >\n              <a\n                class=\"nav-link dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                aria-expanded=\"false\"\n                href=\"javascript:void(0)\"\n              >\n                <i *ngIf=\"route.iconClass\" [ngClass]=\"route.iconClass\"></i> {{ route.name | abpLocalization }}\n              </a>\n              <div\n                #routeContainer\n                class=\"dropdown-menu border-0 shadow-sm\"\n                [class.d-block]=\"smallScreen\"\n                [class.overflow-hidden]=\"smallScreen\"\n                (click)=\"$event.preventDefault(); $event.stopPropagation()\"\n              >\n                <div\n                  class=\"abp-collapsed abp-main-nav-dropdown\"\n                  [class.expanded]=\"smallScreen ? navbarRootDropdown.expand : true\"\n                >\n                  <ng-template\n                    #forTemplate\n                    ngFor\n                    [ngForOf]=\"route.children\"\n                    [ngForTrackBy]=\"trackByFn\"\n                    [ngForTemplate]=\"childWrapper\"\n                  ></ng-template>\n                </div>\n              </div>\n            </li>\n          </ng-template>\n\n          <ng-template #childWrapper let-child>\n            <ng-template\n              [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n              [ngTemplateOutletContext]=\"{ $implicit: child }\"\n            ></ng-template>\n          </ng-template>\n\n          <ng-template #defaultChild let-child>\n            <div class=\"dropdown-submenu\" [abpPermission]=\"child.requiredPolicy\">\n              <a class=\"dropdown-item\" [routerLink]=\"[child.url]\">\n                <i *ngIf=\"child.iconClass\" [ngClass]=\"child.iconClass\"></i>\n                {{ child.name | abpLocalization }}</a\n              >\n            </div>\n          </ng-template>\n\n          <ng-template #dropdownChild let-child>\n            <div\n              [abpVisibility]=\"childrenContainer\"\n              class=\"dropdown-submenu\"\n              ngbDropdown\n              #dropdownSubmenu=\"ngbDropdown\"\n              [display]=\"isDropdownChildDynamic ? 'dynamic' : 'static'\"\n              placement=\"right-top\"\n              [autoClose]=\"true\"\n              [abpPermission]=\"child.requiredPolicy\"\n              (openChange)=\"openChange($event, childrenContainer)\"\n            >\n              <div ngbDropdownToggle [class.dropdown-toggle]=\"false\">\n                <a\n                  abpEllipsis=\"210px\"\n                  [abpEllipsisEnabled]=\"isDropdownChildDynamic\"\n                  role=\"button\"\n                  class=\"btn d-block text-left dropdown-toggle\"\n                >\n                  <i *ngIf=\"child.iconClass\" [ngClass]=\"child.iconClass\"></i>\n                  {{ child.name | abpLocalization }}\n                </a>\n              </div>\n              <div\n                #childrenContainer\n                class=\"dropdown-menu border-0 shadow-sm\"\n                [class.d-block]=\"smallScreen\"\n                [class.overflow-hidden]=\"smallScreen\"\n              >\n                <div\n                  class=\"abp-collapsed abp-main-nav-dropdown\"\n                  [class.expanded]=\"smallScreen ? dropdownSubmenu.isOpen() : true\"\n                >\n                  <ng-template\n                    ngFor\n                    [ngForOf]=\"child.children\"\n                    [ngForTrackBy]=\"trackByFn\"\n                    [ngForTemplate]=\"childWrapper\"\n                  ></ng-template>\n                </div>\n              </div>\n            </div>\n          </ng-template>\n        </ul>\n\n        <ul class=\"navbar-nav\">\n          <ng-container\n            *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n            [ngTemplateOutlet]=\"element\"\n          ></ng-container>\n        </ul>\n      </ng-template>\n    </div>\n  </div>\n</nav>\n\n<div [@slideFromBottom]=\"outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path\" class=\"container\">\n  <router-outlet #outlet=\"outlet\"></router-outlet>\n</div>\n\n<abp-confirmation></abp-confirmation>\n<abp-toast></abp-toast>\n\n<ng-template #appName>\n  {{ appInfo.name }}\n</ng-template>\n\n<ng-template #language>\n  <li class=\"nav-item\">\n    <div class=\"dropdown\" ngbDropdown #languageDropdown=\"ngbDropdown\" display=\"static\">\n      <a\n        ngbDropdownToggle\n        class=\"nav-link\"\n        href=\"javascript:void(0)\"\n        role=\"button\"\n        id=\"dropdownMenuLink\"\n        data-toggle=\"dropdown\"\n        aria-haspopup=\"true\"\n        aria-expanded=\"false\"\n      >\n        {{ defaultLanguage$ | async }}\n      </a>\n      <div\n        class=\"dropdown-menu dropdown-menu-right border-0 shadow-sm\"\n        aria-labelledby=\"dropdownMenuLink\"\n        [class.d-block]=\"smallScreen\"\n        [class.overflow-hidden]=\"smallScreen\"\n      >\n        <div\n          class=\"abp-collapsed abp-main-nav-dropdown\"\n          [class.expanded]=\"smallScreen ? languageDropdown.isOpen() : true\"\n        >\n          <a\n            *ngFor=\"let lang of dropdownLanguages$ | async\"\n            href=\"javascript:void(0)\"\n            class=\"dropdown-item\"\n            (click)=\"onChangeLang(lang.cultureName)\"\n            >{{ lang?.displayName }}</a\n          >\n        </div>\n      </div>\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item\">\n    <div ngbDropdown class=\"dropdown\" #currentUserDropdown=\"ngbDropdown\" display=\"static\">\n      <a\n        ngbDropdownToggle\n        class=\"nav-link\"\n        href=\"javascript:void(0)\"\n        role=\"button\"\n        id=\"dropdownMenuLink\"\n        data-toggle=\"dropdown\"\n        aria-haspopup=\"true\"\n        aria-expanded=\"false\"\n      >\n        {{ (currentUser$ | async)?.userName }}\n      </a>\n      <div\n        class=\"dropdown-menu dropdown-menu-right border-0 shadow-sm\"\n        aria-labelledby=\"dropdownMenuLink\"\n        [class.overflow-hidden]=\"smallScreen\"\n        [class.d-block]=\"smallScreen\"\n      >\n        <div\n          class=\"abp-collapsed abp-main-nav-dropdown\"\n          [class.expanded]=\"smallScreen ? currentUserDropdown.isOpen() : true\"\n        >\n          <a class=\"dropdown-item\" routerLink=\"/account/manage-profile\">{{\n            'AbpAccount::ManageYourProfile' | abpLocalization\n          }}</a>\n          <a class=\"dropdown-item\" href=\"javascript:void(0)\" (click)=\"logout()\">{{\n            'AbpUi::Logout' | abpLocalization\n          }}</a>\n        </div>\n      </div>\n    </div>\n  </li>\n</ng-template>\n"
             }
           ]
         }
@@ -164,7 +179,7 @@
                   "__symbolic": "reference",
                   "module": "@ngxs/store",
                   "name": "Select",
-                  "line": 40,
+                  "line": 45,
                   "character": 3
                 },
                 "arguments": [
@@ -176,7 +191,7 @@
                         "__symbolic": "reference",
                         "module": "@abp/ng.core",
                         "name": "ConfigState",
-                        "line": 40,
+                        "line": 45,
                         "character": 10
                       },
                       "member": "getOne"
@@ -198,7 +213,7 @@
                   "__symbolic": "reference",
                   "module": "@ngxs/store",
                   "name": "Select",
-                  "line": 43,
+                  "line": 48,
                   "character": 3
                 },
                 "arguments": [
@@ -210,7 +225,7 @@
                         "__symbolic": "reference",
                         "module": "@abp/ng.core",
                         "name": "ConfigState",
-                        "line": 43,
+                        "line": 48,
                         "character": 10
                       },
                       "member": "getOne"
@@ -232,7 +247,7 @@
                   "__symbolic": "reference",
                   "module": "@ngxs/store",
                   "name": "Select",
-                  "line": 46,
+                  "line": 51,
                   "character": 3
                 },
                 "arguments": [
@@ -244,7 +259,7 @@
                         "__symbolic": "reference",
                         "module": "@abp/ng.core",
                         "name": "ConfigState",
-                        "line": 46,
+                        "line": 51,
                         "character": 10
                       },
                       "member": "getDeep"
@@ -266,7 +281,7 @@
                   "__symbolic": "reference",
                   "module": "@ngxs/store",
                   "name": "Select",
-                  "line": 49,
+                  "line": 54,
                   "character": 3
                 },
                 "arguments": [
@@ -290,7 +305,7 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "ViewChild",
-                  "line": 52,
+                  "line": 57,
                   "character": 3
                 },
                 "arguments": [
@@ -301,7 +316,7 @@
                       "__symbolic": "reference",
                       "module": "@angular/core",
                       "name": "TemplateRef",
-                      "line": 52,
+                      "line": 57,
                       "character": 51
                     }
                   }
@@ -320,7 +335,7 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "ViewChild",
-                  "line": 55,
+                  "line": 60,
                   "character": 3
                 },
                 "arguments": [
@@ -331,37 +346,8 @@
                       "__symbolic": "reference",
                       "module": "@angular/core",
                       "name": "TemplateRef",
-                      "line": 55,
+                      "line": 60,
                       "character": 48
-                    }
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "navbarRootDropdowns": [
-          {
-            "__symbolic": "property",
-            "decorators": [
-              {
-                "__symbolic": "call",
-                "expression": {
-                  "__symbolic": "reference",
-                  "module": "@angular/core",
-                  "name": "ViewChildren",
-                  "line": 58,
-                  "character": 3
-                },
-                "arguments": [
-                  "navbarRootDropdown",
-                  {
-                    "read": {
-                      "__symbolic": "reference",
-                      "module": "@ng-bootstrap/ng-bootstrap",
-                      "name": "NgbDropdown",
-                      "line": 58,
-                      "character": 46
                     }
                   }
                 ]
@@ -373,13 +359,20 @@
           {
             "__symbolic": "constructor",
             "parameters": [
-              { "__symbolic": "reference", "module": "@ngxs/store", "name": "Store", "line": 93, "character": 29 },
+              { "__symbolic": "reference", "module": "@ngxs/store", "name": "Store", "line": 102, "character": 29 },
               {
                 "__symbolic": "reference",
                 "module": "angular-oauth2-oidc",
                 "name": "OAuthService",
-                "line": 93,
+                "line": 102,
                 "character": 58
+              },
+              {
+                "__symbolic": "reference",
+                "module": "@angular/core",
+                "name": "Renderer2",
+                "line": 102,
+                "character": 90
               }
             ]
           }
@@ -388,7 +381,8 @@
         "ngAfterViewInit": [{ "__symbolic": "method" }],
         "ngOnDestroy": [{ "__symbolic": "method" }],
         "onChangeLang": [{ "__symbolic": "method" }],
-        "logout": [{ "__symbolic": "method" }]
+        "logout": [{ "__symbolic": "method" }],
+        "openChange": [{ "__symbolic": "method" }]
       },
       "statics": {
         "type": {
@@ -397,7 +391,7 @@
             "__symbolic": "reference",
             "module": "@abp/ng.core",
             "name": "eLayoutType",
-            "line": 38,
+            "line": 43,
             "character": 16
           },
           "member": "application"
@@ -416,7 +410,12 @@
             "line": 3,
             "character": 1
           },
-          "arguments": [{ "selector": "abp-layout-account", "template": "<router-outlet></router-outlet>\n" }]
+          "arguments": [
+            {
+              "selector": "abp-layout-account",
+              "template": "\n    <router-outlet></router-outlet>\n    <abp-confirmation></abp-confirmation>\n    <abp-toast></abp-toast>\n  "
+            }
+          ]
         }
       ],
       "members": {},
@@ -427,7 +426,7 @@
             "__symbolic": "reference",
             "module": "@abp/ng.core",
             "name": "eLayoutType",
-            "line": 9,
+            "line": 13,
             "character": 16
           },
           "member": "account"
@@ -449,7 +448,7 @@
           "arguments": [
             {
               "selector": "abp-layout-empty",
-              "template": "\n    Layout-empty\n    <router-outlet></router-outlet>\n  "
+              "template": "\n    <router-outlet></router-outlet>\n    <abp-confirmation></abp-confirmation>\n    <abp-toast></abp-toast>\n  "
             }
           ]
         }
@@ -462,7 +461,7 @@
             "__symbolic": "reference",
             "module": "@abp/ng.core",
             "name": "eLayoutType",
-            "line": 11,
+            "line": 12,
             "character": 16
           },
           "member": "empty"
@@ -470,46 +469,6 @@
       }
     },
     "ɵe": {
-      "__symbolic": "class",
-      "decorators": [
-        {
-          "__symbolic": "call",
-          "expression": {
-            "__symbolic": "reference",
-            "module": "@angular/core",
-            "name": "Component",
-            "line": 5,
-            "character": 1
-          },
-          "arguments": [
-            {
-              "selector": " abp-layout",
-              "animations": [
-                {
-                  "__symbolic": "reference",
-                  "module": "@abp/ng.theme.shared",
-                  "name": "slideFromBottom",
-                  "line": 8,
-                  "character": 15
-                }
-              ],
-              "template": "<nav class=\"navbar navbar-expand-md navbar-dark bg-dark fixed-top\" id=\"main-navbar\">\n  <a class=\"navbar-brand\" routerLink=\"/\">\n    <img *ngIf=\"appInfo.logoUrl; else appName\" [src]=\"appInfo.logoUrl\" [alt]=\"appInfo.name\" />\n  </a>\n  <button class=\"navbar-toggler\" type=\"button\" [attr.aria-expanded]=\"!isCollapsed\" (click)=\"isCollapsed = !isCollapsed\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n  <div class=\"collapse navbar-collapse\" id=\"main-navbar-collapse\" [ngbCollapse]=\"isCollapsed\">\n    <ng-content></ng-content>\n  </div>\n</nav>\n\n<div\n  [@slideFromBottom]=\"outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path\"\n  style=\"padding-top: 5rem;\"\n  class=\"container\"\n>\n  <router-outlet #outlet=\"outlet\"></router-outlet>\n</div>\n\n<abp-confirmation></abp-confirmation>\n<abp-toast></abp-toast>\n\n<ng-template #appName>\n  {{ appInfo.name }}\n</ng-template>\n"
-            }
-          ]
-        }
-      ],
-      "members": {
-        "__ctor__": [
-          {
-            "__symbolic": "constructor",
-            "parameters": [
-              { "__symbolic": "reference", "module": "@ngxs/store", "name": "Store", "line": 17, "character": 29 }
-            ]
-          }
-        ]
-      }
-    },
-    "ɵf": {
       "__symbolic": "class",
       "extends": {
         "__symbolic": "reference",
@@ -560,7 +519,7 @@
       ],
       "members": {}
     },
-    "ɵg": {
+    "ɵf": {
       "__symbolic": "class",
       "decorators": [
         {
@@ -589,7 +548,7 @@
                   "line": 16,
                   "character": 3
                 },
-                "arguments": [{ "__symbolic": "reference", "name": "ɵh" }]
+                "arguments": [{ "__symbolic": "reference", "name": "ɵg" }]
               }
             ]
           }
@@ -607,7 +566,7 @@
                   "line": 45,
                   "character": 3
                 },
-                "arguments": [{ "__symbolic": "reference", "name": "ɵi" }]
+                "arguments": [{ "__symbolic": "reference", "name": "ɵh" }]
               }
             ]
           }
@@ -621,7 +580,7 @@
         }
       }
     },
-    "ɵh": {
+    "ɵg": {
       "__symbolic": "class",
       "members": {
         "__ctor__": [
@@ -630,7 +589,7 @@
             "parameters": [
               {
                 "__symbolic": "select",
-                "expression": { "__symbolic": "reference", "name": "ɵj" },
+                "expression": { "__symbolic": "reference", "name": "ɵi" },
                 "member": "NavigationElement"
               }
             ]
@@ -639,14 +598,14 @@
       },
       "statics": { "type": "[Layout] Add Navigation Element" }
     },
-    "ɵi": {
+    "ɵh": {
       "__symbolic": "class",
       "members": {
         "__ctor__": [{ "__symbolic": "constructor", "parameters": [{ "__symbolic": "reference", "name": "string" }] }]
       },
       "statics": { "type": "[Layout] Remove Navigation ElementByName" }
     },
-    "ɵk": {
+    "ɵj": {
       "__symbolic": "class",
       "decorators": [
         {
@@ -688,13 +647,12 @@
     "ɵb": "./lib/states",
     "ɵc": "./lib/components/account-layout/account-layout.component",
     "ɵd": "./lib/components/empty-layout/empty-layout.component",
-    "ɵe": "./lib/components/layout/layout.component",
-    "ɵf": "./lib/components/validation-error/validation-error.component",
-    "ɵg": "./lib/states/layout.state",
+    "ɵe": "./lib/components/validation-error/validation-error.component",
+    "ɵf": "./lib/states/layout.state",
+    "ɵg": "./lib/actions/layout.actions",
     "ɵh": "./lib/actions/layout.actions",
-    "ɵi": "./lib/actions/layout.actions",
-    "ɵj": "./lib/models/layout",
-    "ɵk": "./lib/services/initial.service"
+    "ɵi": "./lib/models/layout",
+    "ɵj": "./lib/services/initial.service"
   },
   "importAs": "@abp/ng.theme.basic"
 }

@@ -842,6 +842,57 @@ var PermissionManagement;
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+class PermissionManagementStateService {
+  /**
+   * @param {?} store
+   */
+  constructor(store) {
+    this.store = store;
+  }
+  /**
+   * @return {?}
+   */
+  getPermissionGroups() {
+    return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+  }
+  /**
+   * @return {?}
+   */
+  getEntityDisplayName() {
+    return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+  }
+}
+PermissionManagementStateService.decorators = [
+  {
+    type: Injectable,
+    args: [
+      {
+        providedIn: 'root',
+      },
+    ],
+  },
+];
+/** @nocollapse */
+PermissionManagementStateService.ctorParameters = () => [{ type: Store }];
+/** @nocollapse */ PermissionManagementStateService.ngInjectableDef = ɵɵdefineInjectable({
+  factory: function PermissionManagementStateService_Factory() {
+    return new PermissionManagementStateService(ɵɵinject(Store));
+  },
+  token: PermissionManagementStateService,
+  providedIn: 'root',
+});
+if (false) {
+  /**
+   * @type {?}
+   * @private
+   */
+  PermissionManagementStateService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -864,6 +915,7 @@ export {
   PermissionManagementModule,
   PermissionManagementService,
   PermissionManagementState,
+  PermissionManagementStateService,
   UpdatePermissions,
   PermissionManagementComponent as ɵa,
   PermissionManagementState as ɵb,

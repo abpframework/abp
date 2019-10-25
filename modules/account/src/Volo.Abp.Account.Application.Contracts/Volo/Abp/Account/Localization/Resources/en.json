@@ -14,6 +14,8 @@
     "Login": "Login",
     "Cancel": "Cancel",
     "Register": "Register",
+    "AreYouANewUser": "Are you a new user?",
+    "AlreadyRegistered": "Already registered?",
     "InvalidLoginRequest": "Invalid login request",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "There are no login schemes configured for this client.",
     "LogInUsingYourProviderAccount": "Log in using your {0} account",

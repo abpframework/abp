@@ -412,7 +412,7 @@ var IdentityState = /** @class */ (function() {
    * @return {?}
    */ = function(_a) {
     var roles = _a.roles;
-    return roles.items;
+    return roles.items || [];
   };
   /**
    * @param {?} __0
@@ -424,7 +424,7 @@ var IdentityState = /** @class */ (function() {
    * @return {?}
    */ = function(_a) {
     var roles = _a.roles;
-    return roles.totalCount;
+    return roles.totalCount || 0;
   };
   /**
    * @param {?} __0
@@ -436,7 +436,7 @@ var IdentityState = /** @class */ (function() {
    * @return {?}
    */ = function(_a) {
     var users = _a.users;
-    return users.items;
+    return users.items || [];
   };
   /**
    * @param {?} __0
@@ -448,7 +448,7 @@ var IdentityState = /** @class */ (function() {
    * @return {?}
    */ = function(_a) {
     var users = _a.users;
-    return users.totalCount;
+    return users.totalCount || 0;
   };
   /**
    * @param {?} __0
@@ -955,15 +955,12 @@ var RolesComponent = /** @class */ (function() {
     this.sortKey = '';
   }
   /**
-   * @param {?} value
    * @return {?}
    */
-  RolesComponent.prototype.onSearch
+  RolesComponent.prototype.ngOnInit
   /**
-   * @param {?} value
    * @return {?}
-   */ = function(value) {
-    this.pageQuery.filter = value;
+   */ = function() {
     this.get();
   };
   /**
@@ -1123,7 +1120,7 @@ var RolesComponent = /** @class */ (function() {
         {
           selector: 'abp-roles',
           template:
-            '<div class="row entry-row">\n  <div class="col-auto">\n    <h1 class="content-header-title">{{ \'AbpIdentity::Roles\' | abpLocalization }}</h1>\n  </div>\n  <div class="col">\n    <div class="text-lg-right pt-2" id="AbpContentToolbar">\n      <button id="create-role" class="btn btn-primary" type="button" (click)="onAdd()">\n        <i class="fa fa-plus mr-1"></i> <span>{{ \'AbpIdentity::NewRole\' | abpLocalization }}</span>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div id="identity-roles-wrapper" class="card">\n  <div class="card-body">\n    <div id="data-tables-table-filter" class="data-tables-filter">\n      <label\n        ><input\n          type="search"\n          class="form-control form-control-sm"\n          [placeholder]="\'AbpUi::PagerSearch\' | abpLocalization"\n          (input.debounce)="onSearch($event.target.value)"\n      /></label>\n    </div>\n    <p-table\n      *ngIf="[130, 200] as columnWidths"\n      [value]="data$ | async"\n      [abpTableSort]="{ key: sortKey, order: sortOrder }"\n      [lazy]="true"\n      [lazyLoadOnInit]="false"\n      [paginator]="true"\n      [rows]="10"\n      [totalRecords]="totalCount$ | async"\n      [loading]="loading"\n      [resizableColumns]="true"\n      [scrollable]="true"\n      (onLazyLoad)="onPageChange($event)"\n    >\n      <ng-template pTemplate="colgroup">\n        <colgroup>\n          <col *ngFor="let width of columnWidths" [ngStyle]="{ \'width.px\': width }" />\n        </colgroup>\n      </ng-template>\n      <ng-template pTemplate="emptymessage" let-columns>\n        <tr\n          abp-table-empty-message\n          [attr.colspan]="columnWidths.length"\n          localizationResource="AbpIdentityServer"\n          localizationProp="NoDataAvailableInDatatable"\n        ></tr>\n      </ng-template>\n      <ng-template pTemplate="header" let-columns>\n        <tr>\n          <th>{{ \'AbpIdentity::Actions\' | abpLocalization }}</th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'name\')">\n            {{ \'AbpIdentity::RoleName\' | abpLocalization }}\n            <abp-sort-order-icon\n              #sortOrderIcon\n              key="name"\n              [(selectedKey)]="sortKey"\n              [(order)]="sortOrder"\n            ></abp-sort-order-icon>\n          </th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate="body" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown container="body" class="d-inline-block">\n              <button\n                class="btn btn-primary btn-sm dropdown-toggle"\n                data-toggle="dropdown"\n                aria-haspopup="true"\n                ngbDropdownToggle\n              >\n                <i class="fa fa-cog mr-1"></i>{{ \'AbpIdentity::Actions\' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button ngbDropdownItem (click)="onEdit(data.id)">{{ \'AbpIdentity::Edit\' | abpLocalization }}</button>\n                <button ngbDropdownItem (click)="providerKey = data.name; visiblePermissions = true">\n                  {{ \'AbpIdentity::Permissions\' | abpLocalization }}\n                </button>\n                <button ngbDropdownItem (click)="delete(data.id, data.name)">\n                  {{ \'AbpIdentity::Delete\' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? \'AbpIdentity::Edit\' : \'AbpIdentity::NewRole\') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <form [formGroup]="form" (ngSubmit)="save()">\n      <div class="form-group">\n        <label for="role-name">{{ \'AbpIdentity::RoleName\' | abpLocalization }}</label\n        ><span> * </span>\n        <input autofocus type="text" id="role-name" class="form-control" formControlName="name" />\n      </div>\n\n      <div class="custom-checkbox custom-control mb-2">\n        <input type="checkbox" id="role-is-default" class="custom-control-input" formControlName="isDefault" />\n        <label class="custom-control-label" for="role-is-default">{{\n          \'AbpIdentity::DisplayName:IsDefault\' | abpLocalization\n        }}</label>\n      </div>\n\n      <div class="custom-checkbox custom-control mb-2">\n        <input type="checkbox" id="role-is-public" class="custom-control-input" formControlName="isPublic" />\n        <label class="custom-control-label" for="role-is-public">{{\n          \'AbpIdentity::DisplayName:IsPublic\' | abpLocalization\n        }}</label>\n      </div>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type="button" class="btn btn-secondary" #abpClose>\n      {{ \'AbpIdentity::Cancel\' | abpLocalization }}\n    </button>\n    <abp-button iconClass="fa fa-check" (click)="save()">{{ \'AbpIdentity::Save\' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management [(visible)]="visiblePermissions" providerName="Role" [providerKey]="providerKey">\n</abp-permission-management>\n',
+            '<div class="row entry-row">\n  <div class="col-auto">\n    <h1 class="content-header-title">{{ \'AbpIdentity::Roles\' | abpLocalization }}</h1>\n  </div>\n  <div class="col">\n    <div class="text-lg-right pt-2" id="AbpContentToolbar">\n      <button\n        [abpPermission]="\'AbpIdentity.Roles.Create\'"\n        id="create-role"\n        class="btn btn-primary"\n        type="button"\n        (click)="onAdd()"\n      >\n        <i class="fa fa-plus mr-1"></i> <span>{{ \'AbpIdentity::NewRole\' | abpLocalization }}</span>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div id="identity-roles-wrapper" class="card">\n  <div class="card-body">\n    <p-table\n      *ngIf="[150, 0] as columnWidths"\n      [value]="data$ | async"\n      [abpTableSort]="{ key: sortKey, order: sortOrder }"\n      [lazy]="true"\n      [lazyLoadOnInit]="false"\n      [paginator]="true"\n      [rows]="10"\n      [totalRecords]="totalCount$ | async"\n      [loading]="loading"\n      [resizableColumns]="true"\n      [scrollable]="true"\n      (onLazyLoad)="onPageChange($event)"\n    >\n      <ng-template pTemplate="colgroup">\n        <colgroup>\n          <col *ngFor="let width of columnWidths" [ngStyle]="{ \'width.px\': width || undefined }" />\n        </colgroup>\n      </ng-template>\n      <ng-template pTemplate="emptymessage" let-columns>\n        <tr\n          abp-table-empty-message\n          [attr.colspan]="columnWidths.length"\n          localizationResource="AbpIdentity"\n          localizationProp="NoDataAvailableInDatatable"\n        ></tr>\n      </ng-template>\n      <ng-template pTemplate="header" let-columns>\n        <tr>\n          <th>{{ \'AbpIdentity::Actions\' | abpLocalization }}</th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'name\')">\n            {{ \'AbpIdentity::RoleName\' | abpLocalization }}\n            <abp-sort-order-icon\n              #sortOrderIcon\n              key="name"\n              [(selectedKey)]="sortKey"\n              [(order)]="sortOrder"\n            ></abp-sort-order-icon>\n          </th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate="body" let-data>\n        <tr>\n          <td class="text-center">\n            <div ngbDropdown container="body" class="d-inline-block">\n              <button\n                class="btn btn-primary btn-sm dropdown-toggle"\n                data-toggle="dropdown"\n                aria-haspopup="true"\n                ngbDropdownToggle\n              >\n                <i class="fa fa-cog mr-1"></i>{{ \'AbpIdentity::Actions\' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button [abpPermission]="\'AbpIdentity.Roles.Update\'" ngbDropdownItem (click)="onEdit(data.id)">\n                  {{ \'AbpIdentity::Edit\' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]="\'AbpIdentity.Roles.ManagePermissions\'"\n                  ngbDropdownItem\n                  (click)="providerKey = data.name; visiblePermissions = true"\n                >\n                  {{ \'AbpIdentity::Permissions\' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]="\'AbpIdentity.Roles.Delete\'"\n                  ngbDropdownItem\n                  (click)="delete(data.id, data.name)"\n                >\n                  {{ \'AbpIdentity::Delete\' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.name }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? \'AbpIdentity::Edit\' : \'AbpIdentity::NewRole\') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <form [formGroup]="form" (ngSubmit)="save()">\n      <div class="form-group">\n        <label for="role-name">{{ \'AbpIdentity::RoleName\' | abpLocalization }}</label\n        ><span> * </span>\n        <input autofocus type="text" id="role-name" class="form-control" formControlName="name" />\n      </div>\n\n      <div class="custom-checkbox custom-control mb-2">\n        <input type="checkbox" id="role-is-default" class="custom-control-input" formControlName="isDefault" />\n        <label class="custom-control-label" for="role-is-default">{{\n          \'AbpIdentity::DisplayName:IsDefault\' | abpLocalization\n        }}</label>\n      </div>\n\n      <div class="custom-checkbox custom-control mb-2">\n        <input type="checkbox" id="role-is-public" class="custom-control-input" formControlName="isPublic" />\n        <label class="custom-control-label" for="role-is-public">{{\n          \'AbpIdentity::DisplayName:IsPublic\' | abpLocalization\n        }}</label>\n      </div>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type="button" class="btn btn-secondary" #abpClose>\n      {{ \'AbpIdentity::Cancel\' | abpLocalization }}\n    </button>\n    <abp-button iconClass="fa fa-check" (click)="save()">{{ \'AbpIdentity::Save\' | abpLocalization }}</abp-button>\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management [(visible)]="visiblePermissions" providerName="R" [providerKey]="providerKey">\n</abp-permission-management>\n',
         },
       ],
     },
@@ -1197,40 +1194,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var RoleResolver = /** @class */ (function() {
-  function RoleResolver(store) {
-    this.store = store;
-  }
-  /**
-   * @return {?}
-   */
-  RoleResolver.prototype.resolve
-  /**
-   * @return {?}
-   */ = function() {
-    /** @type {?} */
-    var roles = this.store.selectSnapshot(IdentityState.getRoles);
-    return roles && roles.length ? null : this.store.dispatch(new GetRoles());
-  };
-  RoleResolver.decorators = [{ type: Injectable }];
-  /** @nocollapse */
-  RoleResolver.ctorParameters = function() {
-    return [{ type: Store }];
-  };
-  return RoleResolver;
-})();
-if (false) {
-  /**
-   * @type {?}
-   * @private
-   */
-  RoleResolver.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 var UsersComponent = /** @class */ (function() {
   function UsersComponent(confirmationService, fb, store) {
     this.confirmationService = confirmationService;
@@ -1271,6 +1234,15 @@ var UsersComponent = /** @class */ (function() {
     configurable: true,
   });
   /**
+   * @return {?}
+   */
+  UsersComponent.prototype.ngOnInit
+  /**
+   * @return {?}
+   */ = function() {
+    this.get();
+  };
+  /**
    * @param {?} value
    * @return {?}
    */
@@ -1290,52 +1262,61 @@ var UsersComponent = /** @class */ (function() {
    * @return {?}
    */ = function() {
     var _this = this;
-    this.roles = this.store.selectSnapshot(IdentityState.getRoles);
-    this.form = this.fb.group({
-      userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
-      email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
-      name: [this.selected.name || '', [Validators.maxLength(64)]],
-      surname: [this.selected.surname || '', [Validators.maxLength(64)]],
-      phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
-      lockoutEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
-      twoFactorEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
-      roleNames: this.fb.array(
-        this.roles.map(
-          /**
-           * @param {?} role
-           * @return {?}
-           */
-          function(role) {
-            var _a;
-            return _this.fb.group(
-              ((_a = {}),
-              (_a[role.name] = [
-                !!snq(
-                  /**
-                   * @return {?}
-                   */
-                  function() {
-                    return _this.selectedUserRoles.find(
+    this.store.dispatch(new GetRoles()).subscribe(
+      /**
+       * @return {?}
+       */
+      function() {
+        _this.roles = _this.store.selectSnapshot(IdentityState.getRoles);
+        _this.form = _this.fb.group({
+          userName: [_this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
+          email: [_this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
+          name: [_this.selected.name || '', [Validators.maxLength(64)]],
+          surname: [_this.selected.surname || '', [Validators.maxLength(64)]],
+          phoneNumber: [_this.selected.phoneNumber || '', [Validators.maxLength(16)]],
+          lockoutEnabled: [_this.selected.twoFactorEnabled || (_this.selected.id ? false : true)],
+          twoFactorEnabled: [_this.selected.twoFactorEnabled || (_this.selected.id ? false : true)],
+          roleNames: _this.fb.array(
+            _this.roles.map(
+              /**
+               * @param {?} role
+               * @return {?}
+               */
+              function(role) {
+                var _a;
+                return _this.fb.group(
+                  ((_a = {}),
+                  (_a[role.name] = [
+                    !!snq(
                       /**
-                       * @param {?} userRole
                        * @return {?}
                        */
-                      function(userRole) {
-                        return userRole.id === role.id;
+                      function() {
+                        return _this.selectedUserRoles.find(
+                          /**
+                           * @param {?} userRole
+                           * @return {?}
+                           */
+                          function(userRole) {
+                            return userRole.id === role.id;
+                          },
+                        );
                       },
-                    );
-                  },
-                ),
-              ]),
-              _a),
-            );
-          },
-        ),
-      ),
-    });
-    if (!this.selected.userName) {
-      this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
-    }
+                    ),
+                  ]),
+                  _a),
+                );
+              },
+            ),
+          ),
+        });
+        if (!_this.selected.userName) {
+          _this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
+        } else {
+          _this.form.addControl('password', new FormControl('', [Validators.maxLength(32)]));
+        }
+      },
+    );
   };
   /**
    * @return {?}
@@ -1520,7 +1501,7 @@ var UsersComponent = /** @class */ (function() {
         {
           selector: 'abp-users',
           template:
-            '<div class="row entry-row">\n  <div class="col-auto">\n    <h1 class="content-header-title">{{ \'AbpIdentity::Users\' | abpLocalization }}</h1>\n  </div>\n  <div class="col">\n    <div class="text-lg-right pt-2" id="AbpContentToolbar">\n      <button\n        [abpPermission]="\'AbpIdentity.Users.Create\'"\n        id="create-role"\n        class="btn btn-primary"\n        type="button"\n        (click)="onAdd()"\n      >\n        <i class="fa fa-plus mr-1"></i> <span>{{ \'AbpIdentity::NewUser\' | abpLocalization }}</span>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div id="identity-roles-wrapper" class="card">\n  <div class="card-body">\n    <div id="data-tables-table-filter" class="data-tables-filter">\n      <label\n        ><input\n          type="search"\n          class="form-control form-control-sm"\n          [placeholder]="\'AbpUi::PagerSearch\' | abpLocalization"\n          (input.debounce)="onSearch($event.target.value)"\n      /></label>\n    </div>\n    <p-table\n      *ngIf="[130, 200, 200, 200] as columnWidths"\n      [value]="data$ | async"\n      [abpTableSort]="{ key: sortKey, order: sortOrder }"\n      [lazy]="true"\n      [lazyLoadOnInit]="false"\n      [paginator]="true"\n      [rows]="10"\n      [totalRecords]="totalCount$ | async"\n      [loading]="loading"\n      [resizableColumns]="true"\n      [scrollable]="true"\n      (onLazyLoad)="onPageChange($event)"\n    >\n      <ng-template pTemplate="colgroup">\n        <colgroup>\n          <col *ngFor="let width of columnWidths" [ngStyle]="{ \'width.px\': width }" />\n        </colgroup>\n      </ng-template>\n      <ng-template pTemplate="emptymessage" let-columns>\n        <tr\n          abp-table-empty-message\n          [attr.colspan]="columnWidths.length"\n          localizationResource="AbpIdentityServer"\n          localizationProp="NoDataAvailableInDatatable"\n        ></tr>\n      </ng-template>\n      <ng-template pTemplate="header">\n        <tr>\n          <th>{{ \'AbpIdentity::Actions\' | abpLocalization }}</th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'userName\')">\n            {{ \'AbpIdentity::UserName\' | abpLocalization }}\n            <abp-sort-order-icon #sortOrderIcon key="userName" [(selectedKey)]="sortKey" [(order)]="sortOrder">\n            </abp-sort-order-icon>\n          </th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'email\')">\n            {{ \'AbpIdentity::EmailAddress\' | abpLocalization }}\n            <abp-sort-order-icon key="email" [(selectedKey)]="sortKey" [(order)]="sortOrder"></abp-sort-order-icon>\n          </th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'phoneNumber\')">\n            {{ \'AbpIdentity::PhoneNumber\' | abpLocalization }}\n            <abp-sort-order-icon key="phoneNumber" [(selectedKey)]="sortKey" [(order)]="sortOrder">\n            </abp-sort-order-icon>\n          </th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate="body" let-data>\n        <tr>\n          <td>\n            <div ngbDropdown container="body" class="d-inline-block">\n              <button\n                class="btn btn-primary btn-sm dropdown-toggle"\n                data-toggle="dropdown"\n                aria-haspopup="true"\n                ngbDropdownToggle\n              >\n                <i class="fa fa-cog mr-1"></i>{{ \'AbpIdentity::Actions\' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button ngbDropdownItem (click)="onEdit(data.id)">{{ \'AbpIdentity::Edit\' | abpLocalization }}</button>\n                <button ngbDropdownItem (click)="providerKey = data.id; visiblePermissions = true">\n                  {{ \'AbpIdentity::Permissions\' | abpLocalization }}\n                </button>\n                <button ngbDropdownItem (click)="delete(data.id, data.userName)">\n                  {{ \'AbpIdentity::Delete\' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.userName }}</td>\n          <td>{{ data.email }}</td>\n          <td>{{ data.phoneNumber }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? \'AbpIdentity::Edit\' : \'AbpIdentity::NewUser\') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <form [formGroup]="form" (ngSubmit)="save()">\n      <ngb-tabset>\n        <ngb-tab [title]="\'AbpIdentity::UserInformations\' | abpLocalization">\n          <ng-template ngbTabContent>\n            <div class="mt-2 fade-in-top">\n              <div class="form-group">\n                <label for="user-name">{{ \'AbpIdentity::UserName\' | abpLocalization }}</label\n                ><span> * </span>\n                <input type="text" id="user-name" class="form-control" formControlName="userName" autofocus />\n              </div>\n\n              <div class="form-group">\n                <label for="name">{{ \'AbpIdentity::DisplayName:Name\' | abpLocalization }}</label>\n                <input type="text" id="name" class="form-control" formControlName="name" />\n              </div>\n\n              <div class="form-group">\n                <label for="surname">{{ \'AbpIdentity::DisplayName:Surname\' | abpLocalization }}</label>\n                <input type="text" id="surname" class="form-control" formControlName="surname" />\n              </div>\n\n              <div *ngIf="!selected.userName" class="form-group">\n                <label for="password">{{ \'AbpIdentity::Password\' | abpLocalization }}</label\n                ><span> * </span>\n                <input\n                  type="password"\n                  id="password"\n                  autocomplete="new-password"\n                  class="form-control"\n                  formControlName="password"\n                />\n              </div>\n\n              <div class="form-group">\n                <label for="email">{{ \'AbpIdentity::EmailAddress\' | abpLocalization }}</label\n                ><span> * </span>\n                <input type="text" id="email" class="form-control" formControlName="email" />\n              </div>\n\n              <div class="form-group">\n                <label for="phone-number">{{ \'AbpIdentity::PhoneNumber\' | abpLocalization }}</label>\n                <input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />\n              </div>\n\n              <div class="custom-checkbox custom-control mb-2">\n                <input\n                  type="checkbox"\n                  id="lockout-checkbox"\n                  class="custom-control-input"\n                  formControlName="lockoutEnabled"\n                />\n                <label class="custom-control-label" for="lockout-checkbox">{{\n                  \'AbpIdentity::DisplayName:LockoutEnabled\' | abpLocalization\n                }}</label>\n              </div>\n\n              <div class="custom-checkbox custom-control mb-2">\n                <input\n                  type="checkbox"\n                  id="two-factor-checkbox"\n                  class="custom-control-input"\n                  formControlName="twoFactorEnabled"\n                />\n                <label class="custom-control-label" for="two-factor-checkbox">{{\n                  \'AbpIdentity::DisplayName:TwoFactorEnabled\' | abpLocalization\n                }}</label>\n              </div>\n            </div>\n          </ng-template>\n        </ngb-tab>\n        <ngb-tab [title]="\'AbpIdentity::Roles\' | abpLocalization">\n          <ng-template ngbTabContent>\n            <div class="mt-2 fade-in-top">\n              <div\n                *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"\n                class="custom-checkbox custom-control mb-2"\n              >\n                <input\n                  type="checkbox"\n                  name="Roles[0].IsAssigned"\n                  value="true"\n                  class="custom-control-input"\n                  [attr.id]="\'roles-\' + i"\n                  [formControl]="roleGroup.controls[roles[i].name]"\n                />\n                <label class="custom-control-label" [attr.for]="\'roles-\' + i">{{ roles[i].name }}</label>\n              </div>\n            </div>\n          </ng-template>\n        </ngb-tab>\n      </ngb-tabset>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type="button" class="btn btn-secondary" #abpClose>\n      {{ \'AbpIdentity::Cancel\' | abpLocalization }}\n    </button>\n    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form.invalid">{{\n      \'AbpIdentity::Save\' | abpLocalization\n    }}</abp-button>\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management [(visible)]="visiblePermissions" providerName="User" [providerKey]="providerKey">\n</abp-permission-management>\n',
+            '<div class="row entry-row">\n  <div class="col-auto">\n    <h1 class="content-header-title">{{ \'AbpIdentity::Users\' | abpLocalization }}</h1>\n  </div>\n  <div class="col">\n    <div class="text-lg-right pt-2" id="AbpContentToolbar">\n      <button\n        [abpPermission]="\'AbpIdentity.Users.Create\'"\n        id="create-role"\n        class="btn btn-primary"\n        type="button"\n        (click)="onAdd()"\n      >\n        <i class="fa fa-plus mr-1"></i> <span>{{ \'AbpIdentity::NewUser\' | abpLocalization }}</span>\n      </button>\n    </div>\n  </div>\n</div>\n\n<div id="identity-roles-wrapper" class="card">\n  <div class="card-body">\n    <div id="data-tables-table-filter" class="data-tables-filter">\n      <label\n        ><input\n          type="search"\n          class="form-control form-control-sm"\n          [placeholder]="\'AbpUi::PagerSearch\' | abpLocalization"\n          (input.debounce)="onSearch($event.target.value)"\n      /></label>\n    </div>\n    <p-table\n      *ngIf="[150, 250, 250, 250] as columnWidths"\n      [value]="data$ | async"\n      [abpTableSort]="{ key: sortKey, order: sortOrder }"\n      [lazy]="true"\n      [lazyLoadOnInit]="false"\n      [paginator]="true"\n      [rows]="10"\n      [totalRecords]="totalCount$ | async"\n      [loading]="loading"\n      [resizableColumns]="true"\n      [scrollable]="true"\n      (onLazyLoad)="onPageChange($event)"\n    >\n      <ng-template pTemplate="colgroup">\n        <colgroup>\n          <col *ngFor="let width of columnWidths" [ngStyle]="{ \'width.px\': width || undefined }" />\n        </colgroup>\n      </ng-template>\n      <ng-template pTemplate="emptymessage" let-columns>\n        <tr\n          abp-table-empty-message\n          [attr.colspan]="columnWidths.length"\n          localizationResource="AbpIdentity"\n          localizationProp="NoDataAvailableInDatatable"\n        ></tr>\n      </ng-template>\n      <ng-template pTemplate="header">\n        <tr>\n          <th>{{ \'AbpIdentity::Actions\' | abpLocalization }}</th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'userName\')">\n            {{ \'AbpIdentity::UserName\' | abpLocalization }}\n            <abp-sort-order-icon #sortOrderIcon key="userName" [(selectedKey)]="sortKey" [(order)]="sortOrder">\n            </abp-sort-order-icon>\n          </th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'email\')">\n            {{ \'AbpIdentity::EmailAddress\' | abpLocalization }}\n            <abp-sort-order-icon key="email" [(selectedKey)]="sortKey" [(order)]="sortOrder"></abp-sort-order-icon>\n          </th>\n          <th pResizableColumn (click)="sortOrderIcon.sort(\'phoneNumber\')">\n            {{ \'AbpIdentity::PhoneNumber\' | abpLocalization }}\n            <abp-sort-order-icon key="phoneNumber" [(selectedKey)]="sortKey" [(order)]="sortOrder">\n            </abp-sort-order-icon>\n          </th>\n        </tr>\n      </ng-template>\n      <ng-template pTemplate="body" let-data>\n        <tr>\n          <td class="text-center">\n            <div ngbDropdown container="body" class="d-inline-block">\n              <button\n                class="btn btn-primary btn-sm dropdown-toggle"\n                data-toggle="dropdown"\n                aria-haspopup="true"\n                ngbDropdownToggle\n              >\n                <i class="fa fa-cog mr-1"></i>{{ \'AbpIdentity::Actions\' | abpLocalization }}\n              </button>\n              <div ngbDropdownMenu>\n                <button\n                  [abpPermission]="\'AbpIdentity.Users.Update\'"\n                  ngbDropdownItem\n                  (click)="onEdit(data.id)"\n                >\n                  {{ \'AbpIdentity::Edit\' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]="\'AbpIdentity.Users.ManagePermissions\'"\n                  ngbDropdownItem\n                  (click)="providerKey = data.id; visiblePermissions = true"\n                >\n                  {{ \'AbpIdentity::Permissions\' | abpLocalization }}\n                </button>\n                <button\n                  [abpPermission]="\'AbpIdentity.Users.Delete\'"\n                  ngbDropdownItem\n                  (click)="delete(data.id, data.userName)"\n                >\n                  {{ \'AbpIdentity::Delete\' | abpLocalization }}\n                </button>\n              </div>\n            </div>\n          </td>\n          <td>{{ data.userName }}</td>\n          <td>{{ data.email }}</td>\n          <td>{{ data.phoneNumber }}</td>\n        </tr>\n      </ng-template>\n    </p-table>\n  </div>\n</div>\n\n<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">\n  <ng-template #abpHeader>\n    <h3>{{ (selected?.id ? \'AbpIdentity::Edit\' : \'AbpIdentity::NewUser\') | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <ng-template #loaderRef\n      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div\n    ></ng-template>\n\n    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">\n      <ngb-tabset>\n        <ngb-tab [title]="\'AbpIdentity::UserInformations\' | abpLocalization">\n          <ng-template ngbTabContent>\n            <div class="mt-2 fade-in-top">\n              <div class="form-group">\n                <label for="user-name">{{ \'AbpIdentity::UserName\' | abpLocalization }}</label\n                ><span> * </span>\n                <input type="text" id="user-name" class="form-control" formControlName="userName" autofocus />\n              </div>\n\n              <div class="form-group">\n                <label for="name">{{ \'AbpIdentity::DisplayName:Name\' | abpLocalization }}</label>\n                <input type="text" id="name" class="form-control" formControlName="name" />\n              </div>\n\n              <div class="form-group">\n                <label for="surname">{{ \'AbpIdentity::DisplayName:Surname\' | abpLocalization }}</label>\n                <input type="text" id="surname" class="form-control" formControlName="surname" />\n              </div>\n\n              <div class="form-group">\n                <label for="password">{{ \'AbpIdentity::Password\' | abpLocalization }}</label\n                ><span *ngIf="!selected.userName"> * </span>\n                <input\n                  type="password"\n                  id="password"\n                  autocomplete="new-password"\n                  class="form-control"\n                  formControlName="password"\n                />\n              </div>\n\n              <div class="form-group">\n                <label for="email">{{ \'AbpIdentity::EmailAddress\' | abpLocalization }}</label\n                ><span> * </span>\n                <input type="text" id="email" class="form-control" formControlName="email" />\n              </div>\n\n              <div class="form-group">\n                <label for="phone-number">{{ \'AbpIdentity::PhoneNumber\' | abpLocalization }}</label>\n                <input type="text" id="phone-number" class="form-control" formControlName="phoneNumber" />\n              </div>\n\n              <div class="custom-checkbox custom-control mb-2">\n                <input\n                  type="checkbox"\n                  id="lockout-checkbox"\n                  class="custom-control-input"\n                  formControlName="lockoutEnabled"\n                />\n                <label class="custom-control-label" for="lockout-checkbox">{{\n                  \'AbpIdentity::DisplayName:LockoutEnabled\' | abpLocalization\n                }}</label>\n              </div>\n\n              <div class="custom-checkbox custom-control mb-2">\n                <input\n                  type="checkbox"\n                  id="two-factor-checkbox"\n                  class="custom-control-input"\n                  formControlName="twoFactorEnabled"\n                />\n                <label class="custom-control-label" for="two-factor-checkbox">{{\n                  \'AbpIdentity::DisplayName:TwoFactorEnabled\' | abpLocalization\n                }}</label>\n              </div>\n            </div>\n          </ng-template>\n        </ngb-tab>\n        <ngb-tab [title]="\'AbpIdentity::Roles\' | abpLocalization">\n          <ng-template ngbTabContent>\n            <div class="mt-2 fade-in-top">\n              <div\n                *ngFor="let roleGroup of roleGroups; let i = index; trackBy: trackByFn"\n                class="custom-checkbox custom-control mb-2"\n              >\n                <input\n                  type="checkbox"\n                  name="Roles[0].IsAssigned"\n                  value="true"\n                  class="custom-control-input"\n                  [attr.id]="\'roles-\' + i"\n                  [formControl]="roleGroup.controls[roles[i].name]"\n                />\n                <label class="custom-control-label" [attr.for]="\'roles-\' + i">{{ roles[i].name }}</label>\n              </div>\n            </div>\n          </ng-template>\n        </ngb-tab>\n      </ngb-tabset>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button type="button" class="btn btn-secondary" #abpClose>\n      {{ \'AbpIdentity::Cancel\' | abpLocalization }}\n    </button>\n    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form?.invalid">{{\n      \'AbpIdentity::Save\' | abpLocalization\n    }}</abp-button>\n  </ng-template>\n</abp-modal>\n\n<abp-permission-management [(visible)]="visiblePermissions" providerName="U" [providerKey]="providerKey">\n</abp-permission-management>\n',
         },
       ],
     },
@@ -1600,40 +1581,6 @@ if (false) {
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var UserResolver = /** @class */ (function() {
-  function UserResolver(store) {
-    this.store = store;
-  }
-  /**
-   * @return {?}
-   */
-  UserResolver.prototype.resolve
-  /**
-   * @return {?}
-   */ = function() {
-    /** @type {?} */
-    var users = this.store.selectSnapshot(IdentityState.getUsers);
-    return users && users.length ? null : this.store.dispatch(new GetUsers());
-  };
-  UserResolver.decorators = [{ type: Injectable }];
-  /** @nocollapse */
-  UserResolver.ctorParameters = function() {
-    return [{ type: Store }];
-  };
-  return UserResolver;
-})();
-if (false) {
-  /**
-   * @type {?}
-   * @private
-   */
-  UserResolver.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
 var ɵ0 = { requiredPolicy: 'AbpIdentity.Roles' },
   ɵ1 = { requiredPolicy: 'AbpIdentity.Users' };
 /** @type {?} */
@@ -1647,14 +1594,12 @@ var routes = [
       {
         path: 'roles',
         component: RolesComponent,
-        resolve: [RoleResolver],
         data: ɵ0,
       },
       {
         path: 'users',
         component: UsersComponent,
         data: ɵ1,
-        resolve: [RoleResolver, UserResolver],
       },
     ],
   },
@@ -1668,7 +1613,6 @@ var IdentityRoutingModule = /** @class */ (function() {
         {
           imports: [RouterModule.forChild(routes)],
           exports: [RouterModule],
-          providers: [RoleResolver, UserResolver],
         },
       ],
     },
@@ -1873,12 +1817,10 @@ export {
   IdentityProviders,
   IdentityService,
   IdentityState,
-  RoleResolver,
   RolesComponent,
   UpdateRole,
   UpdateUser,
   UsersComponent as ɵb,
   IdentityRoutingModule as ɵc,
-  UserResolver as ɵd,
 };
 //# sourceMappingURL=abp-ng.identity.js.map

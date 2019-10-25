@@ -1,1 +1,2 @@
-export declare class TenantManagementConfigModule {}
+export declare class TenantManagementConfigModule {
+}

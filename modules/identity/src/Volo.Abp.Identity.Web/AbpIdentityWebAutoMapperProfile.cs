@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Web.Pages.Identity.Roles;
 using CreateUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel;
 using EditUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel;
@@ -16,7 +17,8 @@ namespace Volo.Abp.Identity.Web
         private void CreateUserMappings()
         {
             //List
-            CreateMap<IdentityUserDto, EditUserModalModel.UserInfoViewModel>();
+            CreateMap<IdentityUserDto, EditUserModalModel.UserInfoViewModel>()
+                .Ignore(x => x.Password);
 
             //CreateModal
             CreateMap<CreateUserModalModel.UserInfoViewModel, IdentityUserCreateDto>()

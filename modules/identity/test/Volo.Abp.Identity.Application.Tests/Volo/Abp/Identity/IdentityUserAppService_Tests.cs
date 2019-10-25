@@ -100,6 +100,7 @@ namespace Volo.Abp.Identity
                 LockoutEnabled = true,
                 TwoFactorEnabled = true,
                 PhoneNumber = CreateRandomPhoneNumber(),
+                Password = "123qwe4R*",
                 Email = CreateRandomEmail(),
                 RoleNames = new[] { "admin", "moderator" },
                 ConcurrencyStamp = johnNash.ConcurrencyStamp,
