@@ -8,3 +8,4 @@ module.exports = {
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths /*, { prefix: '<rootDir>/' } */),
   'ts-jest': { allowSyntheticDefaultImports: true },
 };
+z;
