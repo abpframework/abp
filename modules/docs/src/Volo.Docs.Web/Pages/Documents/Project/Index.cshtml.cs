@@ -233,6 +233,13 @@ namespace Volo.Docs.Pages.Documents.Project
                     }
                 }
             }
+            else
+            {
+                LatestVersionInfo = new VersionInfoViewModel(
+                    $"{DocsAppConsts.Latest}",
+                    DocsAppConsts.Latest,
+                    true);
+            }
 
             VersionSelectItems = versions.Select(v => new SelectListItem
             {
