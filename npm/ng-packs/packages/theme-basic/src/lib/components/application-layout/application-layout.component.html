@@ -15,10 +15,10 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="navbar-collapse" id="main-navbar-collapse">
+    <div class="navbar-collapse" [class.overflow-hidden]="smallScreen" id="main-navbar-collapse">
       <ng-container *ngTemplateOutlet="!smallScreen ? navigations : null"></ng-container>
 
-      <div *ngIf="smallScreen" class="overflow-hidden" [@collapseWithMargin]="isCollapsed ? 'collapsed' : 'expanded'">
+      <div *ngIf="smallScreen" [@collapseWithMargin]="isCollapsed ? 'collapsed' : 'expanded'">
         <ng-container *ngTemplateOutlet="navigations"></ng-container>
       </div>
 

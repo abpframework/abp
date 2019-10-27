@@ -20,7 +20,7 @@ namespace DashboardDemo.EntityFrameworkCore
         typeof(AbpPermissionManagementEntityFrameworkCoreModule),
         typeof(AbpSettingManagementEntityFrameworkCoreModule),
         typeof(AbpEntityFrameworkCoreSqlServerModule),
-        typeof(BackgroundJobsEntityFrameworkCoreModule),
+        typeof(AbpBackgroundJobsEntityFrameworkCoreModule),
         typeof(AbpAuditLoggingEntityFrameworkCoreModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpFeatureManagementEntityFrameworkCoreModule)

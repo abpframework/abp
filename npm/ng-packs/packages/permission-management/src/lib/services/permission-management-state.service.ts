@@ -12,6 +12,6 @@ export class PermissionManagementStateService {
     return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
   }
   getEntityDisplayName() {
-    return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+    return this.store.selectSnapshot(PermissionManagementState.getEntityDisplayName);
   }
 }
