@@ -330,7 +330,7 @@ update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Boo
 
 #### CreateUpdateBook Action
 
-Open the `books.actins.ts` and add `id` parameter to the `CreateUpdateBook` action:
+Open the `books.actions.ts` and add `id` parameter to the `CreateUpdateBook` action:
 
 ```js
 export class CreateUpdateBook {
