@@ -131,13 +131,13 @@ export class TenantsComponent implements OnInit {
       });
   }
 
-  onAddTenant() {
+  addTenant() {
     this.selected = {} as ABP.BasicItem;
     this.createTenantForm();
     this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
   }
 
-  onEditTenant(id: string) {
+  editTenant(id: string) {
     this.store
       .dispatch(new GetTenantById(id))
       .pipe(pluck('TenantManagementState', 'selectedItem'))

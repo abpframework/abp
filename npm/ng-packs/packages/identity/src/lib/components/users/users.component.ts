@@ -105,13 +105,13 @@ export class UsersComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.UserItem;
     this.selectedUserRoles = [] as Identity.RoleItem[];
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetUserById(id))
       .pipe(

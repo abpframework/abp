@@ -65,12 +65,12 @@ export class RolesComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.RoleItem;
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
