@@ -35,7 +35,7 @@
     "@angular/router": "~8.1.2",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
-    "@ngneat/spectator": "^4.4.0",
+    "@ngneat/spectator": "^4.5.0",
     "@ngx-validate/core": "^0.0.7",
     "@ngxs/devtools-plugin": "^3.5.1",
     "@ngxs/logger-plugin": "^3.5.1",
