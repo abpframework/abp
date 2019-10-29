@@ -94,7 +94,11 @@ namespace InternalGateway.Host
                     ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                     ctx.Request.Path.ToString().StartsWith("/Abp/") ||
                     ctx.Request.Path.ToString().StartsWith("/Test/"),
-                app2 => { app2.UseMvcWithDefaultRouteAndArea(); }
+                app2 =>
+                {
+                    app2.UseRouting();
+                    app2.UseMvcWithDefaultRouteAndArea();
+                }
             );
 
             app.UseOcelot().Wait();
