@@ -43,7 +43,7 @@ namespace Microsoft.Extensions.DependencyInjection
 		    foreach (var service in services)
 		    {
 			    var factoryInterface = service.ServiceType;
-			    if (factoryInterface==null || !factoryInterface.IsGenericType  ||
+			    if (factoryInterface == null || !factoryInterface.IsGenericType  ||
 			        factoryInterface.GetTypeInfo().GetGenericTypeDefinition() != typeof(IServiceProviderFactory<>))
 			    {
 				    continue;
