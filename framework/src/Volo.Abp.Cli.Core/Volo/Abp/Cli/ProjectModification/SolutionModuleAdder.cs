@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -21,8 +22,10 @@ namespace Volo.Abp.Cli.ProjectModification
         protected ProjectNugetPackageAdder ProjectNugetPackageAdder { get; }
         protected DbContextFileBuilderConfigureAdder DbContextFileBuilderConfigureAdder { get; }
         protected EfCoreMigrationAdder EfCoreMigrationAdder { get; }
-        protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
         protected DerivedClassFinder DerivedClassFinder { get; }
+        protected ProjectNpmPackageAdder ProjectNpmPackageAdder { get; }
+        protected NpmGlobalPackagesChecker NpmGlobalPackagesChecker { get; }
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
 
         public SolutionModuleAdder(
             IJsonSerializer jsonSerializer,
@@ -30,20 +33,25 @@ namespace Volo.Abp.Cli.ProjectModification
             DbContextFileBuilderConfigureAdder dbContextFileBuilderConfigureAdder,
             EfCoreMigrationAdder efCoreMigrationAdder,
             DerivedClassFinder derivedClassFinder,
-            ProjectNpmPackageAdder projectNpmPackageAdder)
+            ProjectNpmPackageAdder projectNpmPackageAdder,
+            NpmGlobalPackagesChecker npmGlobalPackagesChecker, 
+            IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
-            EfCoreMigrationAdder = efCoreMigrationAdder;
-            DerivedClassFinder = derivedClassFinder;
             JsonSerializer = jsonSerializer;
             ProjectNugetPackageAdder = projectNugetPackageAdder;
             DbContextFileBuilderConfigureAdder = dbContextFileBuilderConfigureAdder;
+            EfCoreMigrationAdder = efCoreMigrationAdder;
+            DerivedClassFinder = derivedClassFinder;
             ProjectNpmPackageAdder = projectNpmPackageAdder;
+            NpmGlobalPackagesChecker = npmGlobalPackagesChecker;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
             Logger = NullLogger<SolutionModuleAdder>.Instance;
         }
 
         public virtual async Task AddAsync(
             [NotNull] string solutionFile,
             [NotNull] string moduleName,
+            string startupProject,
             bool skipDbMigrations = false)
         {
             Check.NotNull(solutionFile, nameof(solutionFile));
@@ -72,6 +80,8 @@ namespace Volo.Abp.Cli.ProjectModification
                 var targetProjects = ProjectFinder.FindNpmTargetProjectFile(projectFiles);
                 if (targetProjects.Any())
                 {
+                    NpmGlobalPackagesChecker.Check();
+
                     foreach (var targetProject in targetProjects)
                     {
                         foreach (var npmPackage in module.NpmPackages.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc)))
@@ -86,10 +96,10 @@ namespace Volo.Abp.Cli.ProjectModification
                 }
             }
 
-            ModifyDbContext(projectFiles, module, skipDbMigrations);
+            ModifyDbContext(projectFiles, module, startupProject, skipDbMigrations);
         }
 
-        protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, bool skipDbMigrations = false)
+        protected void ModifyDbContext(string[] projectFiles, ModuleInfo module, string startupProject, bool skipDbMigrations = false)
         {
             if (string.IsNullOrWhiteSpace(module.EfCoreConfigureMethodName))
             {
@@ -117,13 +127,13 @@ namespace Volo.Abp.Cli.ProjectModification
 
             if (!skipDbMigrations)
             {
-                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name); 
+                EfCoreMigrationAdder.AddMigration(dbMigrationsProject, module.Name, startupProject); 
             }
         }
 
         protected virtual async Task<ModuleInfo> FindModuleInfoAsync(string moduleName)
         {
-            using (var client = new HttpClient())
+            using (var client = new CliHttpClient())
             {
                 var url = $"{CliUrls.WwwAbpIo}api/app/module/byName/?name=" + moduleName;
 
@@ -136,7 +146,7 @@ namespace Volo.Abp.Cli.ProjectModification
                         throw new CliUsageException($"ERROR: '{moduleName}' module could not be found!");
                     }
 
-                    throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 }
 
                 var responseContent = await response.Content.ReadAsStringAsync();

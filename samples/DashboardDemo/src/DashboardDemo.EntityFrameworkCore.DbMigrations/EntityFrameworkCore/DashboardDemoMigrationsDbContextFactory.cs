@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 
 namespace DashboardDemo.EntityFrameworkCore
 {
+    /* This class is needed for EF Core console commands
+     * (like Add-Migration and Update-Database commands) */
     public class DashboardDemoMigrationsDbContextFactory : IDesignTimeDbContextFactory<DashboardDemoMigrationsDbContext>
     {
         public DashboardDemoMigrationsDbContext CreateDbContext(string[] args)
@@ -17,7 +19,7 @@ namespace DashboardDemo.EntityFrameworkCore
             return new DashboardDemoMigrationsDbContext(builder.Options);
         }
 
-        private static IConfigurationRoot BuildConfiguration()
+        private static IConfiguration BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

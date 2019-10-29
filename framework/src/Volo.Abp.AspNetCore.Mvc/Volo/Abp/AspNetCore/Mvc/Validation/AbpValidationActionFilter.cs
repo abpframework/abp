@@ -26,11 +26,8 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
                 return;
             }
 
-            using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Validation))
-            {
-                _validator.Validate(context.ModelState);
-                await next();
-            }
+            _validator.Validate(context.ModelState);
+            await next();
         }
     }
 }

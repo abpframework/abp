@@ -1,32 +1,28 @@
-using System.Linq;
-using DashboardDemo.Dashboards;
-using Microsoft.Extensions.Options;
-using Volo.Abp.AspNetCore.Mvc.UI.Dashboards;
-using Volo.Abp.AspNetCore.Mvc.UI.Widgets;
+using System;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace DashboardDemo.Pages
+namespace DashboardDemo.Web.Pages
 {
-    public class MyDashboardModel : DashboardDemoPageModelBase
+    public class MyDashboardModel : PageModel
     {
-        public DashboardDefinition Dashboard { get; set; }
+        [BindProperty(SupportsGet = true)]
+        public DateTime? StartDate { get; set; }
 
-        public readonly DashboardOptions _dashboardOptions;
-        public readonly WidgetOptions _widgetOptions;
-
-        public MyDashboardModel(IOptions<DashboardOptions> dashboardOptions, IOptions<WidgetOptions> widgetOptions)
-        {
-            _dashboardOptions = dashboardOptions.Value;
-            _widgetOptions = widgetOptions.Value;
-        }
+        [BindProperty(SupportsGet = true)]
+        public DateTime? EndDate { get; set; }
 
         public void OnGet()
         {
-            Dashboard = _dashboardOptions.Dashboards.Single(d => d.Name.Equals(DashboardNames.MyDashboard));
-        }
+            if (StartDate == null)
+            {
+                StartDate = DateTime.Now.Subtract(TimeSpan.FromDays(6)).ClearTime();
+            }
 
-        public WidgetDefinition GetWidget(string name)
-        {
-            return _widgetOptions.Widgets.Single(d => d.Name.Equals(name));
+            if (EndDate == null)
+            {
+                EndDate = DateTime.Now.AddDays(1).ClearTime();
+            }
         }
     }
 }

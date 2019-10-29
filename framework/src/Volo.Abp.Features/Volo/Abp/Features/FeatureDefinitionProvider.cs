@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Features
 {
-    public abstract class FeatureDefinitionProvider : IFeatureDefinitionProvider, ISingletonDependency
+    public abstract class FeatureDefinitionProvider : IFeatureDefinitionProvider, ITransientDependency
     {
         public abstract void Define(IFeatureDefinitionContext context);
     }

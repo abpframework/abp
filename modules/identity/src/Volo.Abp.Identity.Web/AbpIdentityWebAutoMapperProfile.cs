@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Volo.Abp.AutoMapper;
 using Volo.Abp.Identity.Web.Pages.Identity.Roles;
-using Volo.Abp.Identity.Web.Pages.Identity.Shared;
 using CreateUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.CreateModalModel;
 using EditUserModalModel = Volo.Abp.Identity.Web.Pages.Identity.Users.EditModalModel;
 
@@ -12,13 +12,13 @@ namespace Volo.Abp.Identity.Web
         {
             CreateUserMappings();
             CreateRoleMappings();
-            CreateProfileMappings();
         }
 
         private void CreateUserMappings()
         {
             //List
-            CreateMap<IdentityUserDto, EditUserModalModel.UserInfoViewModel>();
+            CreateMap<IdentityUserDto, EditUserModalModel.UserInfoViewModel>()
+                .Ignore(x => x.Password);
 
             //CreateModal
             CreateMap<CreateUserModalModel.UserInfoViewModel, IdentityUserCreateDto>()
@@ -33,10 +33,6 @@ namespace Volo.Abp.Identity.Web
 
             CreateMap<IdentityRoleDto, EditUserModalModel.AssignedRoleViewModel>()
                 .ForMember(dest => dest.IsAssigned, opt => opt.Ignore());
-
-            CreateMap<ProfileDto, PersonalSettingsInfoModel>();
-
-            CreateMap<PersonalSettingsInfoModel, UpdateProfileDto>();
         }
 
         private void CreateRoleMappings()
@@ -49,12 +45,6 @@ namespace Volo.Abp.Identity.Web
 
             //EditModal
             CreateMap<EditModalModel.RoleInfoModel, IdentityRoleUpdateDto>();
-        }
-
-        private void CreateProfileMappings()
-        {
-            CreateMap<ProfileDto, PersonalSettingsInfoModel>();
-            CreateMap<PersonalSettingsInfoModel, UpdateProfileDto>();
         }
     }
 }

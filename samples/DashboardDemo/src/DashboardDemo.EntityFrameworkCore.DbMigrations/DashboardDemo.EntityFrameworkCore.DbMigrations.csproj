@@ -3,16 +3,16 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <RootNamespace>DashboardDemo</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20190320072839_Initial.cs" />
+    <ProjectReference Include="..\DashboardDemo.EntityFrameworkCore\DashboardDemo.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DashboardDemo.EntityFrameworkCore\DashboardDemo.EntityFrameworkCore.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0" />
   </ItemGroup>
 
 </Project>

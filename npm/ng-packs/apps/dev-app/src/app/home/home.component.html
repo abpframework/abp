@@ -1,0 +1,19 @@
+<div id="AbpContentToolbar"></div>
+<div class="jumbotron text-center">
+  <h1>{{ '::Welcome' | abpLocalization }}</h1>
+  <div class="row">
+    <div class="col-md-6 mx-auto">
+      <p>{{ '::LongWelcomeMessage' | abpLocalization }}</p>
+      <hr class="my-4" />
+    </div>
+  </div>
+  <a href="https://abp.io?ref=tmpl" target="_blank" class="btn btn-primary px-4">abp.io</a>
+  <a
+    *ngIf="!hasLoggedIn"
+    routerLink="/account/login"
+    [state]="{ redirectUrl: '/' }"
+    class="px-4 btn btn-primary ml-1"
+    role="button"
+    ><i class="fa fa-sign-in"></i> {{ 'AbpIdentity::Login' | abpLocalization }}</a
+  >
+</div>

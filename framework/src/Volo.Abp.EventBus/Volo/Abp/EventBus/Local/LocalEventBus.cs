@@ -6,6 +6,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -22,13 +23,13 @@ namespace Volo.Abp.EventBus.Local
         /// </summary>
         public ILogger<LocalEventBus> Logger { get; set; }
 
-        protected LocalEventBusOptions Options { get; }
+        protected AbpLocalEventBusOptions Options { get; }
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
         public LocalEventBus(
-            IOptions<LocalEventBusOptions> options,
-            IHybridServiceScopeFactory serviceScopeFactory)
+            IOptions<AbpLocalEventBusOptions> options,
+            IServiceScopeFactory serviceScopeFactory)
             : base(serviceScopeFactory)
         {
             Options = options.Value;
@@ -49,7 +50,12 @@ namespace Volo.Abp.EventBus.Local
         {
             GetOrCreateHandlerFactories(eventType)
                 .Locking(factories =>
-                    factories.Add(factory)
+                    {
+                        if (!factory.IsInFactories(factories))
+                        {
+                            factories.Add(factory);
+                        }
+                    }
                 );
 
             return new EventHandlerFactoryUnregistrar(this, eventType, factory);

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
 using Shouldly;
@@ -24,8 +23,8 @@ namespace Volo.Abp.VirtualFileSystem
 
             _dynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    fileContent.GetBytes(),
                     "/my-files/test.txt",
+                    fileContent.GetBytes(),
                     "test.txt"
                 )
             );
@@ -42,8 +41,8 @@ namespace Volo.Abp.VirtualFileSystem
 
             _dynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    "Hello World".GetBytes(),
                     "/my-files/test.txt",
+                    "Hello World".GetBytes(),
                     "test.txt"
                 )
             );
@@ -60,8 +59,8 @@ namespace Volo.Abp.VirtualFileSystem
 
             _dynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    "Hello World UPDATED".GetBytes(),
                     "/my-files/test.txt",
+                    "Hello World UPDATED".GetBytes(),
                     "test.txt"
                 )
             );
@@ -74,8 +73,8 @@ namespace Volo.Abp.VirtualFileSystem
 
             _dynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    "Hello World UPDATED 2".GetBytes(),
                     "/my-files/test.txt",
+                    "Hello World UPDATED 2".GetBytes(),
                     "test.txt"
                 )
             );
@@ -88,7 +87,7 @@ namespace Volo.Abp.VirtualFileSystem
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                
+
             }
         }
     }

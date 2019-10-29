@@ -4,17 +4,13 @@ using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
-using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using DashboardDemo.Localization.DashboardDemo;
-using DashboardDemo.Menus;
+using DashboardDemo.Localization;
+using DashboardDemo.Web;
+using DashboardDemo.Web.Menus;
 using Volo.Abp;
-using Volo.Abp.Account.Web;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AspNetCore.TestBase;
-using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
@@ -24,10 +20,8 @@ namespace DashboardDemo
 {
     [DependsOn(
         typeof(AbpAspNetCoreTestBaseModule),
-        typeof(DashboardDemoApplicationTestModule),
-        typeof(AbpIdentityWebModule),
-        typeof(AbpAccountWebModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(DashboardDemoWebModule),
+        typeof(DashboardDemoApplicationTestModule)
     )]
     public class DashboardDemoWebTestModule : AbpModule
     {
@@ -68,7 +62,7 @@ namespace DashboardDemo
 
         private static void ConfigureNavigationServices(IServiceCollection services)
         {
-            services.Configure<NavigationOptions>(options =>
+            services.Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DashboardDemoMenuContributor());
             });

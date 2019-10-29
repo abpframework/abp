@@ -12,17 +12,22 @@ namespace Volo.Abp.Emailing.Templates
     {
         protected IEmailTemplateDefinitionManager EmailTemplateDefinitionManager;
         protected ITemplateLocalizer TemplateLocalizer { get; }
-        protected EmailTemplateOptions Options { get; }
+        protected AbpEmailTemplateOptions Options { get; }
         protected IStringLocalizerFactory StringLocalizerFactory;
 
         public EmailTemplateProvider(IEmailTemplateDefinitionManager emailTemplateDefinitionManager,
             ITemplateLocalizer templateLocalizer, IStringLocalizerFactory stringLocalizerFactory,
-            IOptions<EmailTemplateOptions> options)
+            IOptions<AbpEmailTemplateOptions> options)
         {
             EmailTemplateDefinitionManager = emailTemplateDefinitionManager;
             TemplateLocalizer = templateLocalizer;
             StringLocalizerFactory = stringLocalizerFactory;
             Options = options.Value;
+        }
+
+        public async Task<EmailTemplate> GetAsync(string name)
+        {
+            return await GetAsync(name, CultureInfo.CurrentUICulture.Name);
         }
 
         public async Task<EmailTemplate> GetAsync(string name, string cultureName)

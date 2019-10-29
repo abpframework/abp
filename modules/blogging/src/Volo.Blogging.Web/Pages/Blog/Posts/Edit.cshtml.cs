@@ -11,7 +11,7 @@ using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class EditModel : AbpPageModel
+    public class EditModel : BloggingPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
@@ -62,7 +62,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
             var editedPost = await _postAppService.UpdateAsync(Post.Id, post);
             var blog = await _blogAppService.GetAsync(editedPost.BlogId);
 
-            return Redirect(Url.Content($"~/blog/{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(editedPost.Url)}"));
+           // return Redirect(Url.Content($"~/blog/{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(editedPost.Url)}"));
+            return RedirectToPage("/Blog/Posts/Detail", new { blogShortName = blog.ShortName, postUrl = editedPost.Url });
         }
     }
 

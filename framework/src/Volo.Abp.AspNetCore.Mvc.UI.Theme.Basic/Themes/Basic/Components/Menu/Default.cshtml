@@ -27,8 +27,17 @@
     {
         <li class="nav-item">
             <div class="dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@menuItem.DisplayName</a>
-                <div class="dropdown-menu" aria-labelledby="Menu_@(menuItem.Name)">
+                <a class="nav-link dropdown-toggle" href="#" id="Menu_@(menuItem.Name)" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @if (menuItem.Icon != null)
+                    {
+                        if (menuItem.Icon.StartsWith("fa"))
+                        {
+                            <i class="@menuItem.Icon"></i>
+                        }
+                    }
+                    @menuItem.DisplayName
+                </a>
+                <div class="dropdown-menu border-0 shadow-sm" aria-labelledby="Menu_@(menuItem.Name)">
                     @foreach (var childMenuItem in menuItem.Items)
                     {
                         @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)

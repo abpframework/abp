@@ -83,8 +83,11 @@ namespace Volo.Abp.Cli.ProjectModification
 
         public static string[] GetProjectFiles(string solutionFile)
         {
-            var baseProjectFolder = GetBaseProjectFolder(solutionFile);
-            return Directory.GetFiles(baseProjectFolder, "*.csproj", SearchOption.AllDirectories);
+            return GetBaseProjectFolders(solutionFile)
+                .Select(baseProjectFolder =>
+                    Directory.GetFiles(baseProjectFolder, "*.csproj", SearchOption.AllDirectories))
+                .SelectMany(files => files)
+                .ToArray();
         }
 
         public static string[] GetAssemblyNames(string[] projectFiles)
@@ -118,16 +121,33 @@ namespace Volo.Abp.Cli.ProjectModification
             return null;
         }
 
-        private static string GetBaseProjectFolder(string solutionFile)
+        private static string[] GetBaseProjectFolders(string solutionFile)
         {
+            var projectFolders = new List<string>();
             var baseFolder = Path.GetDirectoryName(solutionFile);
+            if (baseFolder == null)
+            {
+                return projectFolders.ToArray();
+            }
+
             var srcFolder = Path.Combine(baseFolder, "src");
             if (Directory.Exists(srcFolder))
             {
-                baseFolder = srcFolder;
+                projectFolders.Add(srcFolder);
             }
 
-            return baseFolder;
+            var testFolder = Path.Combine(baseFolder, "test");
+            if (Directory.Exists(testFolder))
+            {
+                projectFolders.Add(testFolder);
+            }
+
+            if (!projectFolders.Any())
+            {
+                projectFolders.Add(baseFolder);
+            }
+
+            return projectFolders.ToArray();
         }
     }
 }

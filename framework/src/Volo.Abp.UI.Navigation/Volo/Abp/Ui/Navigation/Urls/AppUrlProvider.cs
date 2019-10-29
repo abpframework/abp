@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Ui.Navigation.Urls
+namespace Volo.Abp.UI.Navigation.Urls
 {
     public class AppUrlProvider : IAppUrlProvider, ITransientDependency
     {

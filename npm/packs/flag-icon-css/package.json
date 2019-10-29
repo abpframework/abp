@@ -1,10 +1,11 @@
 {
-  "version": "0.5.2",
+  "version": "1.0.2",
   "name": "@abp/flag-icon-css",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "flag-icon-css": "^3.3.0"
-  }
+    "flag-icon-css": "^3.4.2"
+  },
+  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
 }

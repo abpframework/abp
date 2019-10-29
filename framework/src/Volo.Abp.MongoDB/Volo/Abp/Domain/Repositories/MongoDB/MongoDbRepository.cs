@@ -15,6 +15,7 @@ using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
@@ -88,11 +89,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
             {
                 SetDeletionAuditProperties(entity);
-                AsyncHelper.RunSync(() => TriggerEntityDeleteEvents(entity));
+                AsyncHelper.RunSync(() => TriggerEntityDeleteEventsAsync(entity));
             }
             else
             {
-                AsyncHelper.RunSync(() => TriggerEntityUpdateEvents(entity));
+                AsyncHelper.RunSync(() => TriggerEntityUpdateEventsAsync(entity));
             }
 
             AsyncHelper.RunSync(() => TriggerDomainEventsAsync(entity));
@@ -122,11 +123,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             if (entity is ISoftDelete softDeleteEntity && softDeleteEntity.IsDeleted)
             {
                 SetDeletionAuditProperties(entity);
-                await TriggerEntityDeleteEvents(entity);
+                await TriggerEntityDeleteEventsAsync(entity);
             }
             else
             {
-                await TriggerEntityUpdateEvents(entity);
+                await TriggerEntityUpdateEventsAsync(entity);
             }
 
             await TriggerDomainEventsAsync(entity);
@@ -294,7 +295,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await EntityChangeEventHelper.TriggerEntityCreatingEventAsync(entity);
         }
 
-        protected virtual async Task TriggerEntityUpdateEvents(TEntity entity)
+        protected virtual async Task TriggerEntityUpdateEventsAsync(TEntity entity)
         {
             await EntityChangeEventHelper.TriggerEntityUpdatedEventOnUowCompletedAsync(entity);
             await EntityChangeEventHelper.TriggerEntityUpdatingEventAsync(entity);
@@ -303,11 +304,11 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         protected virtual async Task ApplyAbpConceptsForDeletedEntityAsync(TEntity entity)
         {
             SetDeletionAuditProperties(entity);
-            await TriggerEntityDeleteEvents(entity);
+            await TriggerEntityDeleteEventsAsync(entity);
             await TriggerDomainEventsAsync(entity);
         }
 
-        protected virtual async Task TriggerEntityDeleteEvents(TEntity entity)
+        protected virtual async Task TriggerEntityDeleteEventsAsync(TEntity entity)
         {
             await EntityChangeEventHelper.TriggerEntityDeletedEventOnUowCompletedAsync(entity);
             await EntityChangeEventHelper.TriggerEntityDeletingEventAsync(entity);
@@ -315,10 +316,24 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
 
         protected virtual void CheckAndSetId(TEntity entity)
         {
-            if (entity is IEntity<Guid> entityWithGuidId && entityWithGuidId.Id == default)
+            if (entity is IEntity<Guid> entityWithGuidId)
             {
-                entityWithGuidId.Id = GuidGenerator.Create();
+                TrySetGuidId(entityWithGuidId);
             }
+        }
+
+        protected virtual void TrySetGuidId(IEntity<Guid> entity)
+        {
+            if (entity.Id != default)
+            {
+                return;
+            }
+
+            EntityHelper.TrySetId(
+                entity,
+                () => GuidGenerator.Create(),
+                true
+            );
         }
 
         protected virtual void SetCreationAuditProperties(TEntity entity)

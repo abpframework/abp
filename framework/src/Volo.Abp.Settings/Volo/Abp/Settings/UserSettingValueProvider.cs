@@ -5,7 +5,7 @@ namespace Volo.Abp.Settings
 {
     public class UserSettingValueProvider : SettingValueProvider
     {
-        public const string ProviderName = "User";
+        public const string ProviderName = "U";
 
         public override string Name => ProviderName;
 

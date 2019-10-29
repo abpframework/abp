@@ -10,11 +10,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Toolbars
     public class ToolbarManager : IToolbarManager, ITransientDependency
     {
         protected IThemeManager ThemeManager { get; }
-        protected ToolbarOptions Options { get; }
+        protected AbpToolbarOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
 
         public ToolbarManager(
-            IOptions<ToolbarOptions> options, 
+            IOptions<AbpToolbarOptions> options, 
             IServiceProvider serviceProvider,
             IThemeManager themeManager)
         {

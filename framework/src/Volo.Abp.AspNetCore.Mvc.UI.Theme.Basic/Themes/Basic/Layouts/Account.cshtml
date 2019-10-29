@@ -2,15 +2,19 @@
 @using Microsoft.Extensions.Options
 @using Volo.Abp.AspNetCore.MultiTenancy
 @using Volo.Abp.AspNetCore.Mvc.AntiForgery
+@using Volo.Abp.AspNetCore.Mvc.UI.Components.LayoutHook
 @using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Bundling
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.MainNavbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic.Themes.Basic.Components.PageAlerts
 @using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Components
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetScripts
+@using Volo.Abp.AspNetCore.Mvc.UI.Widgets.Components.WidgetStyles
 @using Volo.Abp.MultiTenancy
 @inject IAbpAntiForgeryManager AbpAntiForgeryManager
 @inject IBrandingProvider BrandingProvider
-@inject IOptions<MultiTenancyOptions> MultiTenancyOptions
+@inject IOptions<AbpMultiTenancyOptions> MultiTenancyOptions
 @inject ICurrentTenant CurrentTenant
 @inject IStringLocalizer<AbpUiMultiTenancyResource> MultiTenancyStringLocalizer
 @inject ITenantResolveResultAccessor TenantResolveResultAccessor
@@ -23,8 +27,10 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="@CultureInfo.CurrentCulture.Name">
 <head>
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.First, StandardLayouts.Account)
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -34,32 +40,47 @@
     <abp-style-bundle name="@BasicThemeBundles.Styles.Global" />
 
     @await RenderSectionAsync("styles", false)
+
+    @await Component.InvokeAsync(typeof(WidgetStylesViewComponent))
+
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Account)
 </head>
-<body class="abp-account-layout">
+<body class="abp-account-layout bg-light">
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Account)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
         <abp-row>
-            <abp-column size-md="_4" offset-md="_4">
-                @if (MultiTenancyOptions.Value.IsEnabled && 
-                     (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
-                {
-                    <div class="tenant-switch-box" style="background-color: #eee; margin-bottom: 20px; color: #000; padding: 10px; text-align: center;">
-                        <span style="color: #666;">@MultiTenancyStringLocalizer["Tenant"]: </span>
-                        <strong>
-                            @if (CurrentTenant.Id == null)
-                            {
-                                <i>@MultiTenancyStringLocalizer["NotSelected"]</i>
-                            }
-                            else
-                            {
-                                @(CurrentTenant.Name ?? CurrentTenant.Id.Value.ToString())
-                            }
-                        </strong>
-                        (<a id="AbpTenantSwitchLink" style="color: #333; cursor: pointer">@MultiTenancyStringLocalizer["Switch"]</a>)
-                    </div>
-                }
+            <abp-column size-md="_5" class="mx-auto">
+                <div class="card shadow-sm rounded mb-3">
+                    <div class="card-body px-5">
+                        <div class="row">
+                            <div class="col">
+                                <span style="font-size: .8em;" class="text-uppercase text-muted">@MultiTenancyStringLocalizer["Tenant"]</span><br />
+                                <h6 class="m-0 d-inline-block">
+                                    @if (CurrentTenant.Id == null)
+                                    {
+                                        <span>
+                                            @MultiTenancyStringLocalizer["NotSelected"]
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <strong>@(CurrentTenant.Name ?? CurrentTenant.Id.Value.ToString())</strong>
+                                    }
+                                </h6>
+                            </div>
+                            <div class="col-auto">
+                                @if (MultiTenancyOptions.Value.IsEnabled &&
+                           (TenantResolveResultAccessor.Result?.AppliedResolvers?.Contains(CookieTenantResolveContributor.ContributorName) == true))
+                                { 
+                                    <a id="AbpTenantSwitchLink" href="javascript:;" class="btn btn-sm mt-3 btn-outline-primary">@MultiTenancyStringLocalizer["Switch"]</a> 
+                                }
+                            </div>
+                        </div>
+                    </div> 
+                </div>
                 @(await Component.InvokeAsync<PageAlertsViewComponent>())
                 @RenderBody()
             </abp-column>
@@ -68,10 +89,13 @@
 
     <abp-script-bundle name="@BasicThemeBundles.Scripts.Global" />
 
-    <script type="text/javascript" src="~/Abp/ApplicationConfigurationScript"></script>
-    <script type="text/javascript" src="~/Abp/ServiceProxyScript"></script>
+    <script src="~/Abp/ApplicationConfigurationScript"></script>
+    <script src="~/Abp/ServiceProxyScript"></script>
 
     @await RenderSectionAsync("scripts", false)
 
+    @await Component.InvokeAsync(typeof(WidgetScriptsViewComponent))
+
+    @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.Last, StandardLayouts.Account)
 </body>
 </html>

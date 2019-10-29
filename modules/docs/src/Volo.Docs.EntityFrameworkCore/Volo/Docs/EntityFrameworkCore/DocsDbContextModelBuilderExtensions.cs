@@ -15,7 +15,11 @@ namespace Volo.Docs.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new DocsModelBuilderConfigurationOptions();
+            var options = new DocsModelBuilderConfigurationOptions(
+                DocsDbProperties.DbTablePrefix,
+                DocsDbProperties.DbSchema
+            );
+
             optionsAction?.Invoke(options);
 
             builder.Entity<Project>(b =>

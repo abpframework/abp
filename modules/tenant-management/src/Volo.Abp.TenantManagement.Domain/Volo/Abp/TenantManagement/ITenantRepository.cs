@@ -13,12 +13,21 @@ namespace Volo.Abp.TenantManagement
             bool includeDetails = true, 
             CancellationToken cancellationToken = default);
 
+        Tenant FindByName(
+            string name,
+            bool includeDetails = true
+        );
+
         Task<List<Tenant>> GetListAsync(
             string sorting = null, 
             int maxResultCount = int.MaxValue, 
             int skipCount = 0, 
             string filter = null, 
             bool includeDetails = false,
+            CancellationToken cancellationToken = default);
+
+        Task<long> GetCountAsync(
+            string filter = null, 
             CancellationToken cancellationToken = default);
     }
 }

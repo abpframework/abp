@@ -5,7 +5,7 @@ namespace Volo.Abp.Features
 {
     public class TenantFeatureValueProvider : FeatureValueProvider
     {
-        public const string ProviderName = "Tenant";
+        public const string ProviderName = "T";
 
         public override string Name => ProviderName;
 

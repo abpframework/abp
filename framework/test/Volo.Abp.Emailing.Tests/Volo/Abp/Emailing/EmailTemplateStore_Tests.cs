@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Emailing.Templates;
 using Xunit;
@@ -38,7 +39,7 @@ namespace Volo.Abp.Emailing
         {
             var template = await _emailTemplateProvider.GetAsync("template2", "en");
 
-            template.Content.ShouldContain("<body>\r\n    " + "Please confirm your email address by clicking the link below.");
+            template.Content.ShouldContain($"<body>{Environment.NewLine}    " + "Please confirm your email address by clicking the link below.");
         }
 
 

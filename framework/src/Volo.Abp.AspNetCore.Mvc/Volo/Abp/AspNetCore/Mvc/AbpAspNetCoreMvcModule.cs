@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,8 +44,8 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             //Configure Razor
             context.Services.Insert(0,
-                ServiceDescriptor.Singleton<IConfigureOptions<RazorViewEngineOptions>>(
-                    new ConfigureOptions<RazorViewEngineOptions>(options =>
+                ServiceDescriptor.Singleton<IConfigureOptions<MvcRazorRuntimeCompilationOptions>>(
+                    new ConfigureOptions<MvcRazorRuntimeCompilationOptions>(options =>
                         {
                             options.FileProviders.Add(
                                 new RazorViewEngineVirtualFileProvider(
@@ -58,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 )
             );
 
-            Configure<ApiDescriptionModelOptions>(options =>
+            Configure<AbpApiDescriptionModelOptions>(options =>
             {
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
@@ -67,7 +66,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
             var mvcCoreBuilder = context.Services.AddMvcCore();
             context.Services.ExecutePreConfiguredActions(mvcCoreBuilder);
-
+            
             var abpMvcDataAnnotationsLocalizationOptions = context.Services.ExecutePreConfiguredActions(new AbpMvcDataAnnotationsLocalizationOptions());
 
             context.Services
@@ -78,17 +77,22 @@ namespace Volo.Abp.AspNetCore.Mvc
                 );
 
             var mvcBuilder = context.Services.AddMvc()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ContractResolver =
+                        new AbpMvcJsonContractResolver(context.Services);
+                })
+                .AddRazorRuntimeCompilation()
                 .AddDataAnnotationsLocalization(options =>
                 {
-
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                     {
                         var resourceType = abpMvcDataAnnotationsLocalizationOptions.AssemblyResources.GetOrDefault(type.Assembly);
                         return factory.Create(resourceType ?? type);
                     };
-                })
+                })                
                 .AddViewLocalization(); //TODO: How to configure from the application? Also, consider to move to a UI module since APIs does not care about it.
-
+            
             context.Services.ExecutePreConfiguredActions(mvcBuilder);
 
             //TODO: AddViewLocalization by default..?
@@ -106,15 +110,11 @@ namespace Volo.Abp.AspNetCore.Mvc
             var application = context.Services.GetSingletonInstance<IAbpApplication>();
 
             partManager.FeatureProviders.Add(new AbpConventionalControllerFeatureProvider(application));
+            partManager.ApplicationParts.Add(new AssemblyPart(typeof(AbpAspNetCoreMvcModule).Assembly));
 
             Configure<MvcOptions>(mvcOptions =>
             {
                 mvcOptions.AddAbp(context.Services);
-            });
-
-            Configure<MvcJsonOptions>(jsonOptions =>
-            {
-                jsonOptions.SerializerSettings.ContractResolver = new AbpMvcJsonContractResolver(context.Services);
             });
         }
 

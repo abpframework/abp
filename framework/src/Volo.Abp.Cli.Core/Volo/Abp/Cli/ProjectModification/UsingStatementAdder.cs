@@ -7,7 +7,7 @@ namespace Volo.Abp.Cli.ProjectModification
     {
         public string Add(string fileContent, string nameSpace)
         {
-            if (fileContent.Contains(nameSpace))
+            if (fileContent.Contains($" {nameSpace};"))
             {
                 return fileContent;
             }
@@ -24,7 +24,7 @@ namespace Volo.Abp.Cli.ProjectModification
             return fileContent.Insert(index, usingStatement);
         }
 
-        protected string GetUsingStatement(string nameSpace)
+        protected virtual string GetUsingStatement(string nameSpace)
         {
             return Environment.NewLine + "using " + nameSpace + ";";
         }

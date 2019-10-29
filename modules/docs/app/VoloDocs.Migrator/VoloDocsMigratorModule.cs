@@ -15,7 +15,7 @@ namespace VoloDocs.Migrator
 
             context.Services.AddAbpDbContext<VoloDocsDbContext>();
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration["ConnectionString"];
             });

@@ -4,13 +4,12 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Validation;
 using Volo.Blogging.Areas.Blog.Helpers;
 
 namespace Volo.Blogging.Files
 {
-    public class FileAppService : ApplicationService, IFileAppService
+    public class FileAppService : BloggingAppServiceBase, IFileAppService
     {
         public BlogFileOptions Options { get; }
 

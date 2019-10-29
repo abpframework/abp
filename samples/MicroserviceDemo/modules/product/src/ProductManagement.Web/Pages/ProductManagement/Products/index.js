@@ -20,9 +20,7 @@
                         [
                             {
                                 text: l('Edit'),
-                                visible: function () {
-                                    return true; //TODO: Check permission
-                                },
+                                visible: abp.auth.isGranted('ProductManagement.Product.Update'),
                                 action: function (data) {
                                     _editModal.open({
                                         productId: data.record.id
@@ -31,9 +29,7 @@
                             },
                             {
                                 text: l('Delete'),
-                                visible: function () {
-                                    return true; //TODO: Check permission
-                                },
+                                visible: abp.auth.isGranted('ProductManagement.Product.Delete'),
                                 confirmMessage: function (data) { return l('ProductDeletionWarningMessage'); },
                                 action: function (data) {
                                     productManagement.products

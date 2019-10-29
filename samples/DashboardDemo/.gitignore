@@ -252,4 +252,7 @@ paket-files/
 *.sln.iml
 
 # DashboardDemo
-src/DashboardDemo.Web/Logs/logs.txt
+src/DashboardDemo.Web/Logs/*
+src/DashboardDemo.Web.Host/Logs/*
+src/DashboardDemo.IdentityServer/Logs/*
+src/DashboardDemo.HttpApi.Host/Logs/*

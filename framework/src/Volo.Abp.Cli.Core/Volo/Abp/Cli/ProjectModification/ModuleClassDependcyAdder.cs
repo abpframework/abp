@@ -55,11 +55,6 @@ namespace Volo.Abp.Cli.ProjectModification
             return "[DependsOn(typeof(" + moduleName + "))]" + Environment.NewLine + "    ";
         }
 
-        protected virtual string GetUsingStatement(string nameSpace)
-        {
-            return "using " + nameSpace + ";";
-        }
-
         protected virtual void ParseModuleNameAndNameSpace(string module, out string nameSpace, out string moduleName)
         {
             var words = module?.Split('.');

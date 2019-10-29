@@ -1,19 +1,44 @@
 ﻿@page
-@using DashboardDemo.Dashboards
-@using Microsoft.Extensions.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
-@using Volo.Abp.AspNetCore.Mvc.UI.Widgets
-@inject IWidgetRenderer WidgetRenderer
-@inject IDashboardRenderer DashboardRenderer
-@inject IStringLocalizerFactory localizer
-@model DashboardDemo.Pages.MyDashboardModel
-@{
-}
-@section styles {
-    <abp-style-bundle name="@DashboardNames.MyDashboard" />
-}
+@model DashboardDemo.Web.Pages.MyDashboardModel
+
 @section scripts {
-    <abp-script-bundle name="@DashboardNames.MyDashboard" />
+    <abp-script src="/Pages/MyDashboard.js" />
 }
 
-@await DashboardRenderer.RenderAsync(Component, new { dashboardName = DashboardNames.MyDashboard })
+@section styles {
+    <abp-style src="/Pages/MyDashboard.css" />
+}
+
+<form method="get" id="MyDashboardFilterForm">
+    <abp-row class="mb-3">
+        <abp-column size-md="_5">
+            <abp-input asp-for="StartDate" />
+        </abp-column>
+        <abp-column size-md="_5"> 
+            <abp-input asp-for="EndDate" />
+        </abp-column>
+        <abp-column size-md="_2">
+            <abp-button button-type="Primary" icon="refresh" size="Block_Large" type="Submit" text="Refresh" />
+        </abp-column>
+    </abp-row>
+</form>
+
+<div id="MyDashboardWidgetsArea" data-widget-filter="#MyDashboardFilterForm">
+    <abp-row>
+        <abp-column>
+            @await Component.InvokeAsync("CountersWidget", new
+            {
+                startDate = @Model.StartDate,
+                endDate = @Model.EndDate
+            })
+        </abp-column>
+    </abp-row>
+    <abp-row class="mt-5">
+        <abp-column size="_6">
+            @await Component.InvokeAsync("NewUserStatisticWidget")
+        </abp-column>
+        <abp-column size="_6">
+            @await Component.InvokeAsync("LicenseStatisticWidget")
+        </abp-column>
+    </abp-row>
+</div>

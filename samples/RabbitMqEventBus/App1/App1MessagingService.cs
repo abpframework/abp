@@ -1,7 +1,7 @@
-﻿using System;
-using SharedModule;
+﻿using SharedModule;
+using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.EventBus;
 using Volo.Abp.EventBus.Distributed;
 
 namespace App1
@@ -15,7 +15,7 @@ namespace App1
             _distributedEventBus = distributedEventBus;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             Console.WriteLine("*** Started the APPLICATION 1 ***");
             Console.WriteLine("Write a message and press ENTER to send to the App2.");
@@ -30,11 +30,11 @@ namespace App1
 
                 if (!message.IsNullOrEmpty())
                 {
-                    _distributedEventBus.Publish(new App1ToApp2TextEventData(message));
+                    await _distributedEventBus.PublishAsync(new App1ToApp2TextEventData(message));
                 }
                 else
                 {
-                    _distributedEventBus.Publish(new App1ToApp2TextEventData("App1 is exiting. Bye bye...!"));
+                    await _distributedEventBus.PublishAsync(new App1ToApp2TextEventData("App1 is exiting. Bye bye...!"));
                 }
 
             } while (!message.IsNullOrEmpty());

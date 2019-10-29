@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.Ui.Navigation;
+using Volo.Abp.UI.Navigation;
 using Xunit;
 
 namespace Volo.Abp.UI.Navigation
@@ -39,7 +39,7 @@ namespace Volo.Abp.UI.Navigation
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                Configure<NavigationOptions>(options =>
+                Configure<AbpNavigationOptions>(options =>
                 {
                     options.MenuContributors.Add(new TestMenuContributor1());
                     options.MenuContributors.Add(new TestMenuContributor2());

@@ -1,0 +1,10 @@
+{
+  "culture": "vi",
+  "texts": {
+    "Permissions": "Quyền",
+    "OnlyProviderPermissons": "Chỉ nhà cung cấp này",
+    "All": "Tất cả",
+    "SelectAllInAllTabs": "Cấp tất cả các quyền",
+    "SelectAllInThisTab": "Chọn tất cả"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "culture": "cs",
+  "texts": {
+    "Permissions": "Oprávnění",
+    "OnlyProviderPermissons": "Pouze tento poskytovatel",
+    "All": "Všechna",
+    "SelectAllInAllTabs": "Dát veškerá oprávnění",
+    "SelectAllInThisTab": "Vybrat vše"
+  }
+}

@@ -19,18 +19,18 @@ using Volo.Abp.Http.Modeling;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
-    public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvider, ISingletonDependency
+    public class AspNetCoreApiDescriptionModelProvider : IApiDescriptionModelProvider, ITransientDependency
     {
         public ILogger<AspNetCoreApiDescriptionModelProvider> Logger { get; set; }
 
         private readonly IApiDescriptionGroupCollectionProvider _descriptionProvider;
         private readonly AbpAspNetCoreMvcOptions _options;
-        private readonly ApiDescriptionModelOptions _modelOptions;
+        private readonly AbpApiDescriptionModelOptions _modelOptions;
 
         public AspNetCoreApiDescriptionModelProvider(
             IApiDescriptionGroupCollectionProvider descriptionProvider,
             IOptions<AbpAspNetCoreMvcOptions> options,
-            IOptions<ApiDescriptionModelOptions> modelOptions)
+            IOptions<AbpApiDescriptionModelOptions> modelOptions)
         {
             _descriptionProvider = descriptionProvider;
             _options = options.Value;

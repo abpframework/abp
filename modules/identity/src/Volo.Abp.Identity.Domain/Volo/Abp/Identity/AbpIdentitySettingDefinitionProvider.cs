@@ -8,24 +8,22 @@ namespace Volo.Abp.Identity
         public override void Define(ISettingDefinitionContext context)
         {
             context.Add(
+                new SettingDefinition(IdentitySettingNames.Password.RequiredLength, 6.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Password.RequiredUniqueChars, 1.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Password.RequireNonAlphanumeric, true.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Password.RequireLowercase, true.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Password.RequireUppercase, true.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Password.RequireDigit, true.ToString(), null, null, true),
 
-                new SettingDefinition(IdentitySettingNames.Password.RequiredLength),
-                new SettingDefinition(IdentitySettingNames.Password.RequiredUniqueChars),
-                new SettingDefinition(IdentitySettingNames.Password.RequireNonAlphanumeric),
-                new SettingDefinition(IdentitySettingNames.Password.RequireLowercase),
-                new SettingDefinition(IdentitySettingNames.Password.RequireUppercase),
-                new SettingDefinition(IdentitySettingNames.Password.RequireDigit),
+                new SettingDefinition(IdentitySettingNames.Lockout.AllowedForNewUsers, true.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Lockout.LockoutDuration, (5*60).ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.Lockout.MaxFailedAccessAttempts, 5.ToString(), null, null, true),
 
-                new SettingDefinition(IdentitySettingNames.Lockout.AllowedForNewUsers),
-                new SettingDefinition(IdentitySettingNames.Lockout.LockoutDuration),
-                new SettingDefinition(IdentitySettingNames.Lockout.MaxFailedAccessAttempts),
+                new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedEmail, false.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, false.ToString(), null, null, true),
 
-                new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedEmail),
-                new SettingDefinition(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber),
-
-                new SettingDefinition(IdentitySettingNames.User.IsUserNameUpdateEnabled, "true"),
-                new SettingDefinition(IdentitySettingNames.User.IsEmailUpdateEnabled, "true")
-
+                new SettingDefinition(IdentitySettingNames.User.IsUserNameUpdateEnabled, true.ToString(), null, null, true),
+                new SettingDefinition(IdentitySettingNames.User.IsEmailUpdateEnabled, true.ToString(), null, null, true)
             );
         }
     }

@@ -4,18 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Volo.Abp;
 
-namespace DashboardDemo
+namespace DashboardDemo.Web
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<DashboardDemoWebModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<DashboardDemoWebModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

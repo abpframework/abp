@@ -72,6 +72,13 @@ namespace Volo.Abp.Identity
             (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
             await UpdateUserByInput(user, input);
             (await _userManager.UpdateAsync(user)).CheckErrors();
+
+            if (!input.Password.IsNullOrEmpty())
+            {
+                (await _userManager.RemovePasswordAsync(user)).CheckErrors();
+                (await _userManager.AddPasswordAsync(user, input.Password)).CheckErrors();
+            }
+
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);

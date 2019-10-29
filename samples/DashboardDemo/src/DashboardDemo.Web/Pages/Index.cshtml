@@ -1,30 +1,31 @@
 ﻿@page
-@inject IOptions<DashboardOptions> OptionsDashboadOptions
-@inject IStringLocalizerFactory localizer
-@using Microsoft.Extensions.Options
-@using Volo.Abp.AspNetCore.Mvc.UI.Dashboards
-@using DashboardDemo.Pages
-@using DashboardDemo.Pages.widgets
-@using DashboardDemo.Widgets
-@using Microsoft.Extensions.Localization
+@inherits DashboardDemo.Web.Pages.DashboardDemoPage
 @using Volo.Abp.AspNetCore.Mvc.UI.Widgets
-@inherits DashboardDemoPageBase
-@inject IWidgetRenderer WidgetRenderer
-@model IndexModel
+@model DashboardDemo.Web.Pages.IndexModel
 @section styles {
-    <link href="~/pages/index.css" rel="stylesheet" />
-    <abp-style-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+    <abp-style-bundle>
+        <abp-style src="/Pages/Index.css" />
+    </abp-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle name="@UserCountWidgetViewComponent.WidgetName" />
+    <abp-script-bundle>
+        <abp-script src="/Pages/Index.js" />
+    </abp-script-bundle>
 }
 <abp-card>
     <abp-card-header>@L["Welcome"]</abp-card-header>
     <abp-card-body>
-        @await WidgetRenderer.RenderAsync(Component, UserCountWidgetViewComponent.WidgetName)
+        <h2>Demo Pages</h2>
+        <ul>
+            <li><a asp-page="./MyWidgets">Widgets Demo</a></li>
+            <li><a asp-page="./MyDashboard">Dashboard Demo</a></li>
+        </ul>
+        <hr />
+        @if (!CurrentUser.IsAuthenticated)
+        {
+            <p><a abp-button="Primary" href="/Account/Login"><i class="fa fa-sign-in"></i> @L["Login"]</a></p>
+        }
+        <hr />
+        <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
     </abp-card-body>
 </abp-card>
-@foreach (var dashboard in OptionsDashboadOptions.Value.Dashboards)
-{
-    <a href="/@dashboard.Name">Go to @dashboard.DisplayName.Localize(localizer)</a>
-}

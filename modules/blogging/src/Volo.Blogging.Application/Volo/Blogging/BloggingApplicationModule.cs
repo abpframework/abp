@@ -17,12 +17,11 @@ namespace Volo.Blogging
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
+            context.Services.AddAutoMapperObjectMapper<BloggingApplicationModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<BloggingApplicationAutoMapperProfile>(validate: true);
             });
-
-
 
             Configure<AuthorizationOptions>(options =>
             {

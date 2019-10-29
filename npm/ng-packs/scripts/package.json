@@ -1,0 +1,21 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "description": "Abp publish helper scripts",
+  "main": "index.js",
+  "modules": "[build.js, sync.js]",
+  "scripts": {
+    "build": "node -r esm build.js",
+    "sync": "node -r esm sync.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-node6": "^11.0.0",
+    "esm": "^3.2.25",
+    "execa": "^2.0.3",
+    "fs-extra": "^8.1.0",
+    "prompt-confirm": "^2.0.4"
+  }
+}
