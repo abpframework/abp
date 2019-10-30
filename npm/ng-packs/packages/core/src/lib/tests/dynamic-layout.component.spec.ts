@@ -1,15 +1,43 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, NgModule } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { createRoutingFactory, SpectatorRouting, SpyObject } from '@ngneat/spectator/jest';
-import { NgxsModule, Store } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
-import { NgxsResetPluginModule, StateOverwrite } from 'ngxs-reset-plugin';
-import { LAYOUTS, ThemeBasicModule } from '../../../../theme-basic/src/public-api';
+import { Store } from '@ngxs/store';
 import { eLayoutType } from '../enums';
 import { ABP } from '../models';
-import { RouterOutletComponent, CoreModule, DynamicLayoutComponent, ConfigState } from '@abp/ng.core';
-import { ThemeSharedModule } from '../../../../theme-shared/src/public-api';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { DynamicLayoutComponent, RouterOutletComponent } from '../components';
+
+@Component({
+  selector: 'abp-layout-application',
+  template: '<router-outlet></router-outlet>',
+})
+class DummyApplicationLayoutComponent {
+  static type = eLayoutType.application;
+}
+
+@Component({
+  selector: 'abp-layout-account',
+  template: '<router-outlet></router-outlet>',
+})
+class DummyAccountLayoutComponent {
+  static type = eLayoutType.account;
+}
+
+@Component({
+  selector: 'abp-layout-empty',
+  template: '<router-outlet></router-outlet>',
+})
+class DummyEmptyLayoutComponent {
+  static type = eLayoutType.empty;
+}
+
+const LAYOUTS = [DummyApplicationLayoutComponent, DummyAccountLayoutComponent, DummyEmptyLayoutComponent];
+
+@NgModule({
+  imports: [RouterModule],
+  declarations: [...LAYOUTS],
+  entryComponents: [...LAYOUTS],
+})
+class DummyLayoutModule {}
 
 @Component({
   selector: 'abp-dummy',
@@ -22,18 +50,10 @@ class DummyComponent {
 describe('DynamicLayoutComponent', () => {
   const createComponent = createRoutingFactory({
     component: RouterOutletComponent,
-    declareComponent: false,
-    imports: [
-      CoreModule,
-      NgxsModule.forRoot([ConfigState]),
-      NgxsResetPluginModule.forRoot(),
-      ThemeSharedModule,
-      ThemeBasicModule,
-    ],
-    declarations: [DummyComponent],
-    entryComponents: [],
     stubsEnabled: false,
-    providers: [MessageService, { provide: OAuthService, useValue: { getAccessToken: () => true } }],
+    mocks: [Store],
+    declarations: [DummyComponent, DynamicLayoutComponent],
+    imports: [RouterModule, DummyLayoutModule],
     routes: [
       { path: '', component: RouterOutletComponent },
       {
@@ -81,34 +101,32 @@ describe('DynamicLayoutComponent', () => {
 
   let spectator: SpectatorRouting<RouterOutletComponent>;
   let store: SpyObject<Store>;
+  const mockStoreData = {
+    requirements: { layouts: LAYOUTS },
+    routes: [
+      {
+        path: '',
+        wrapper: true,
+        children: [
+          {
+            path: 'parentWithLayout',
+            layout: eLayoutType.application,
+            children: [{ path: 'childWithoutLayout' }, { path: 'childWithLayout', layout: eLayoutType.account }],
+          },
+        ],
+      },
+      { path: 'withData', layout: eLayoutType.application },
+      ,
+    ] as ABP.FullRoute[],
+    environment: { application: {} },
+  };
+  let storeSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     spectator = createComponent();
     store = spectator.get(Store);
-    store.dispatch(
-      new StateOverwrite([
-        ConfigState,
-        {
-          requirements: { layouts: LAYOUTS },
-          routes: [
-            {
-              path: '',
-              wrapper: true,
-              children: [
-                {
-                  path: 'parentWithLayout',
-                  layout: eLayoutType.application,
-                  children: [{ path: 'childWithoutLayout' }, { path: 'childWithLayout', layout: eLayoutType.account }],
-                },
-              ],
-            },
-            { path: 'withData', layout: eLayoutType.application },
-            ,
-          ] as ABP.FullRoute[],
-          environment: { application: {} },
-        },
-      ]),
-    );
+    storeSpy = jest.spyOn(store, 'selectSnapshot');
+    storeSpy.mockReturnValue(mockStoreData);
   });
 
   it('should handle application layout from parent abp route and display it', async () => {
@@ -141,9 +159,7 @@ describe('DynamicLayoutComponent', () => {
   });
 
   it('should not display any layout when layouts are empty', async () => {
-    store.dispatch(
-      new StateOverwrite([ConfigState, { ...store.selectSnapshot(ConfigState), requirements: { layouts: [] } }]),
-    );
+    storeSpy.mockReturnValue({ ...mockStoreData, requirements: { layouts: [] } });
 
     spectator.detectChanges();
 
