@@ -5,7 +5,7 @@
     "test": "ng test",
     "symlink": "symlink",
     "abpng": "abpng",
-    "commit": "git-cz && node scripts/push.js",
+    "commit": "git-cz",
     "lint": "ng lint --fix",
     "scripts:build": "cd scripts && npm install && npm run build"
   },
