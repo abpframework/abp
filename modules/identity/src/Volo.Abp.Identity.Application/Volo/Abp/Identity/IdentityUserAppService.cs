@@ -22,7 +22,7 @@ namespace Volo.Abp.Identity
 
         //TODO: [Authorize(IdentityPermissions.Users.Default)] should go the IdentityUserAppService class.
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<IdentityUserDto> GetAsync(Guid id)
+        public virtual async Task<IdentityUserDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
                 await _userManager.GetByIdAsync(id)
@@ -30,7 +30,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
+        public virtual async Task<PagedResultDto<IdentityUserDto>> GetListAsync(GetIdentityUsersInput input)
         {
             var count = await _userRepository.GetCountAsync(input.Filter);
             var list = await _userRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
@@ -42,7 +42,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
+        public virtual async Task<ListResultDto<IdentityRoleDto>> GetRolesAsync(Guid id)
         {
             var roles = await _userRepository.GetRolesAsync(id);
             return new ListResultDto<IdentityRoleDto>(
@@ -51,7 +51,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Create)]
-        public async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
+        public virtual async Task<IdentityUserDto> CreateAsync(IdentityUserCreateDto input)
         {
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.Email, CurrentTenant.Id);
 
@@ -64,7 +64,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
-        public async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
+        public virtual async Task<IdentityUserDto> UpdateAsync(Guid id, IdentityUserUpdateDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
             user.ConcurrencyStamp = input.ConcurrencyStamp;
@@ -85,7 +85,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             if (CurrentUser.Id == id)
             {
@@ -102,7 +102,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Update)]
-        public async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
+        public virtual async Task UpdateRolesAsync(Guid id, IdentityUserUpdateRolesDto input)
         {
             var user = await _userManager.GetByIdAsync(id);
             (await _userManager.SetRolesAsync(user, input.RoleNames)).CheckErrors();
@@ -110,7 +110,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<IdentityUserDto> FindByUsernameAsync(string username)
+        public virtual async Task<IdentityUserDto> FindByUsernameAsync(string username)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
                 await _userManager.FindByNameAsync(username)
@@ -118,7 +118,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Users.Default)]
-        public async Task<IdentityUserDto> FindByEmailAsync(string email)
+        public virtual async Task<IdentityUserDto> FindByEmailAsync(string email)
         {
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(
                 await _userManager.FindByEmailAsync(email)
