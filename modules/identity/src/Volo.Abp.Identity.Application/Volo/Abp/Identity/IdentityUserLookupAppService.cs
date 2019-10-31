@@ -16,7 +16,7 @@ namespace Volo.Abp.Identity
             UserLookupServiceProvider = userLookupServiceProvider;
         }
 
-        public virtual async Task<UserData> FindByIdAsync(Guid id)
+        public virtual virtual async Task<UserData> FindByIdAsync(Guid id)
         {
             var userData = await UserLookupServiceProvider.FindByIdAsync(id);
             if (userData == null)
@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity
             return new UserData(userData);
         }
 
-        public virtual async Task<UserData> FindByUserNameAsync(string userName)
+        public virtual virtual async Task<UserData> FindByUserNameAsync(string userName)
         {
             var userData = await UserLookupServiceProvider.FindByUserNameAsync(userName);
             if (userData == null)
