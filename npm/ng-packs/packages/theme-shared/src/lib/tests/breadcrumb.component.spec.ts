@@ -24,7 +24,14 @@ describe('BreadcrumbComponent', () => {
   it('should display the breadcrumb', () => {
     const router = spectator.get(Router);
     (router as any).url = '/identity/users';
-    store.selectSnapshot.andReturn({ name: 'Identity', children: [{ name: 'Users', path: 'users' }] } as ABP.FullRoute);
+    store.selectSnapshot.andReturn({
+      name: 'Identity',
+      children: [{ name: 'Users', path: 'users' }],
+    });
+    spectator.component.show = true;
     spectator.detectChanges();
+    spectator.detectComponentChanges();
+    expect(spectator.component.segments).toEqual(['Identity', 'Users']);
+    // expect(spectator.queryAll('li')).toHaveLength(3);
   });
 });
