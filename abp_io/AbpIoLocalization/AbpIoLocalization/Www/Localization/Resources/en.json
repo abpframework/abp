@@ -100,7 +100,6 @@
     "DistributedEventBus": "Distributed Event Bus",
     "DistributedEventBusWithRabbitMQIntegration": "Distributed Event Bus with RabbitMQ Integration",
     "TestInfrastructure": "Test Infrastructure",
-    "AuditLogging": "Audit Logging",
     "AuditLoggingEntityHistories": "Audit Logging & Entity Histories",
     "ObjectToObjectMapping": "Object to Object Mapping",
     "EmailSMSAbstractions": "Email & SMS Abstractions",
