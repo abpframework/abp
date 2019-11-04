@@ -1,11 +1,13 @@
 import { Directive, Input, Optional, Self, SimpleChanges, OnChanges } from '@angular/core';
 import { Table } from 'primeng/table';
-import { SortPipe, SortOrder } from '../pipes/sort.pipe';
 import clone from 'just-clone';
+import { SortPipe, SortOrder } from '@abp/ng.core';
+
 export interface TableSortOptions {
   key: string;
   order: SortOrder;
 }
+
 @Directive({
   selector: '[abpTableSort]',
   providers: [SortPipe],
