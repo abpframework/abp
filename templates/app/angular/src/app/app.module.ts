@@ -19,7 +19,6 @@ import { SettingManagementConfigModule } from '@abp/ng.setting-management.config
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
 @NgModule({
-  declarations: [AppComponent],
   imports: [
     CoreModule.forRoot({
       environment,
@@ -28,19 +27,19 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
       },
     }),
     ThemeSharedModule.forRoot(),
-    OAuthModule.forRoot(),
-    NgxsModule.forRoot([]),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
     IdentityConfigModule,
     TenantManagementConfigModule,
     SettingManagementConfigModule,
+    OAuthModule.forRoot(),
+    NgxsModule.forRoot([]),
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
-
     ...(environment.production ? [] : LOGGERS),
   ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
