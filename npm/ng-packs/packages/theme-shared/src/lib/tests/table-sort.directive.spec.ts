@@ -1,6 +1,6 @@
 import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/jest';
-import { TableSortDirective } from '../directives/table-sort.directive';
 import { TableModule, Table } from 'primeng/table';
+import { TableSortDirective } from '../directives/table-sort.directive';
 
 describe('TableSortDirective', () => {
   let spectator: SpectatorDirective<TableSortDirective>;
