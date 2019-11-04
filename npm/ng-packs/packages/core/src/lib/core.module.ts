@@ -27,7 +27,6 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
 import { ForDirective } from './directives/for.directive';
 import { AbstractNgModelComponent } from './abstracts/ng-model.component';
-import { TableSortDirective } from './directives/table-sort.directive';
 
 @NgModule({
   imports: [
@@ -47,7 +46,6 @@ import { TableSortDirective } from './directives/table-sort.directive';
     EllipsisDirective,
     ForDirective,
     FormSubmitDirective,
-    TableSortDirective,
     LocalizationPipe,
     SortPipe,
     PermissionDirective,
@@ -70,7 +68,6 @@ import { TableSortDirective } from './directives/table-sort.directive';
     FormSubmitDirective,
     LocalizationPipe,
     SortPipe,
-    TableSortDirective,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
