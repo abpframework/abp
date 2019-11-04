@@ -16,7 +16,7 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
     <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
-    <PackageReference Include="Ocelot" Version="13.5.2" />
+    <PackageReference Include="Ocelot" Version="13.8.0" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="3.0.0" />
