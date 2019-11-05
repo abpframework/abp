@@ -95,15 +95,15 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
     return (this.permissions.find(per => per.name === name) || { isGranted: false }).isGranted;
   }
 
-  isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean {
+  isGrantedByOtherProviderName(grantedProviders: PermissionManagement.GrantedProvider[]): boolean {
     if (grantedProviders.length) {
-      return grantedProviders.findIndex(p => p.providerName === 'Role') > -1;
+      return grantedProviders.findIndex(p => p.providerName !== this.providerName) > -1;
     }
     return false;
   }
 
   onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
-    if (clickedPermission.isGranted && this.isGrantedByRole(clickedPermission.grantedProviders)) return;
+    if (clickedPermission.isGranted && this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)) return;
 
     setTimeout(() => {
       this.permissions = this.permissions.map(per => {
@@ -158,7 +158,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
-        if (permission.isGranted && this.isGrantedByRole(permission.grantedProviders)) return;
+        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders)) return;
 
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
@@ -176,7 +176,7 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectAll() {
     this.permissions = this.permissions.map(permission => ({
       ...permission,
-      isGranted: !this.selectAllTab,
+      isGranted: this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
     }));
 
     this.selectThisTab = !this.selectAllTab;

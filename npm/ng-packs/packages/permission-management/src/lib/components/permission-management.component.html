@@ -62,7 +62,7 @@
                 [value]="getChecked(permission.name)"
                 [attr.id]="permission.name"
                 class="custom-control-input"
-                [disabled]="isGrantedByRole(permission.grantedProviders)"
+                [disabled]="isGrantedByOtherProviderName(permission.grantedProviders)"
               />
               <label
                 class="custom-control-label"
