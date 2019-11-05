@@ -176,6 +176,7 @@ export class UsersComponent implements OnInit {
       .dispatch(
         this.selected.id
           ? new UpdateUser({
+              ...this.selected,
               ...this.form.value,
               id: this.selected.id,
               roleNames: mappedRoleNames,
