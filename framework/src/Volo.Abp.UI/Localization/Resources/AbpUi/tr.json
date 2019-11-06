@@ -51,6 +51,8 @@
     "401Message": "Yetkisiz",
     "403Message": "Yasak",
     "404Message": "Sayfa bulunamadı",
-    "500Message": "Sunucu tarafında hata"
+    "500Message": "Sunucu tarafında hata",
+    "GoHomePage": "Ana sayfaya git",
+    "GoBack": "Geri dön"
   }
 }

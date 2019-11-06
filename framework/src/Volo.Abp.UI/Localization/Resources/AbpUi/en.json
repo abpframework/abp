@@ -51,6 +51,8 @@
     "401Message": "Unauthorized",
     "403Message": "Forbidden",
     "404Message": "Page not found",
-    "500Message": "Internal Server Error"
+    "500Message": "Internal Server Error",
+    "GoHomePage": "Go to the homepage",
+    "GoBack": "Go back"
   }
 }
