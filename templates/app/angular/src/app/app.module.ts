@@ -32,7 +32,7 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     TenantManagementConfigModule,
     SettingManagementConfigModule,
     OAuthModule.forRoot(),
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

@@ -29,7 +29,7 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
     }),
     ThemeSharedModule.forRoot(),
     OAuthModule.forRoot(),
-    NgxsModule.forRoot([]),
+    NgxsModule.forRoot(),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
     IdentityConfigModule,
     TenantManagementConfigModule,
