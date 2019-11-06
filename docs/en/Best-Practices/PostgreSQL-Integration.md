@@ -9,6 +9,11 @@
   - Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
   - Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
 - In other projects update the PostgreSQL connection string in necessary `appsettings.json` files
+  - more info of [PostgreSQL connection strings](https://www.connectionstrings.com/postgresql/),You need to pay attention to `Npgsql` in this document
+
+###  EntityFrameworkCore.DbMigrations Project Update
+- Update to use PostgreSQL in `XXXMigrationsDbContextFactory`
+  - Replace the `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseSqlServer()` with the `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseNpgsql()`
 
 #### Delete Existing Migrations
 
