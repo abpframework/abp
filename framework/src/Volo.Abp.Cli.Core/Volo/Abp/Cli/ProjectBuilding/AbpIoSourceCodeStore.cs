@@ -58,7 +58,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             DirectoryHelper.CreateIfNotExists(CliPaths.TemplateCache);
 
             var localCacheFile = Path.Combine(CliPaths.TemplateCache, name + "-" + version + ".zip");
-            if (Options.CacheTemplates && File.Exists(localCacheFile))
+            if (!IsBranchName(version) && Options.CacheTemplates && File.Exists(localCacheFile))
             {
                 Logger.LogInformation("Using cached " + type + ": " + name + ", version: " + version);
                 return new TemplateFile(File.ReadAllBytes(localCacheFile), version, latestVersion);
@@ -75,13 +75,17 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 }
             );
 
-            if (Options.CacheTemplates)
+            if (!IsBranchName(version) && Options.CacheTemplates)
             {
                 File.WriteAllBytes(localCacheFile, fileContent);
             }
 
             return new TemplateFile(fileContent, version, latestVersion);
+        }
 
+        private static bool IsBranchName(string version)
+        {
+            return version.Equals("dev") || version.Equals("master");
         }
 
         private async Task<string> GetLatestSourceCodeVersionAsync(string name, string type)
