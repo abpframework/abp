@@ -9,6 +9,7 @@ pre[class*="language-"] {
 	color: black;
 	background: none;
 	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
 	text-align: left;
 	white-space: pre;
 	word-spacing: normal;
@@ -52,7 +53,7 @@ code[class*="language"] {
 	overflow: auto;
 }
 
-/* Margin bottom to accomodate shadow */
+/* Margin bottom to accommodate shadow */
 :not(pre) > code[class*="language-"],
 pre[class*="language-"] {
 	background-color: #fdfdfd;
