@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { OAuthModule } from 'angular-oauth2-oidc';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +18,6 @@ import { SettingManagementConfigModule } from '@abp/ng.setting-management.config
 const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
 
 @NgModule({
-  declarations: [AppComponent],
   imports: [
     CoreModule.forRoot({
       environment,
@@ -28,19 +26,18 @@ const LOGGERS = [NgxsLoggerPluginModule.forRoot({ disabled: false })];
       },
     }),
     ThemeSharedModule.forRoot(),
-    OAuthModule.forRoot(),
-    NgxsModule.forRoot([]),
     AccountConfigModule.forRoot({ redirectUrl: '/' }),
     IdentityConfigModule,
     TenantManagementConfigModule,
     SettingManagementConfigModule,
+    NgxsModule.forRoot(),
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     SharedModule,
-
     ...(environment.production ? [] : LOGGERS),
   ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
