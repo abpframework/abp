@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error;
@@ -12,14 +14,18 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
     {
         private readonly IExceptionToErrorInfoConverter _errorInfoConverter;
         private readonly IHttpExceptionStatusCodeFinder _statusCodeFinder;
+        private readonly IStringLocalizer<AbpUiResource> _localizer;
         private readonly AbpErrorPageOptions _abpErrorPageOptions;
 
         public ErrorController(
             IExceptionToErrorInfoConverter exceptionToErrorInfoConverter,
-            IHttpExceptionStatusCodeFinder httpExceptionStatusCodeFinder, IOptions<AbpErrorPageOptions> abpErrorPageOptions)
+            IHttpExceptionStatusCodeFinder httpExceptionStatusCodeFinder,
+            IOptions<AbpErrorPageOptions> abpErrorPageOptions,
+            IStringLocalizer<AbpUiResource> localizer)
         {
             _errorInfoConverter = exceptionToErrorInfoConverter;
             _statusCodeFinder = httpExceptionStatusCodeFinder;
+            _localizer = localizer;
             _abpErrorPageOptions = abpErrorPageOptions.Value;
         }
 
@@ -29,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 
             var exception = exHandlerFeature != null
                 ? exHandlerFeature.Error
-                : new Exception("Unhandled exception!"); //TODO: Localize?
+                : new Exception(_localizer["UnhandledException"]);
 
             var errorInfo = _errorInfoConverter.Convert(exception);
 

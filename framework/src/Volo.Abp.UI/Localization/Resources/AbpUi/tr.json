@@ -47,6 +47,7 @@
     "ChangePassword": "Şifre değiştir",
     "PersonalInfo": "Profilim",
     "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var.",
+    "UnhandledException": "Yakalanmamış hata!",
     "401Message": "Yetkisiz",
     "403Message": "Yasak",
     "404Message": "Sayfa bulunamadı",
