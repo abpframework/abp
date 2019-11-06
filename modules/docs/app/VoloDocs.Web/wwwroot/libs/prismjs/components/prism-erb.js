@@ -9,7 +9,7 @@
 	});
 
 	Prism.hooks.add('before-tokenize', function(env) {
-		var erbPattern = /<%=?[\s\S]+?%>/g;
+		var erbPattern = /<%=?(?:[^\r\n]|[\r\n](?!=begin)|[\r\n]=begin\s[\s\S]*?^=end)+?%>/gm;
 		Prism.languages['markup-templating'].buildPlaceholders(env, 'erb', erbPattern);
 	});
 

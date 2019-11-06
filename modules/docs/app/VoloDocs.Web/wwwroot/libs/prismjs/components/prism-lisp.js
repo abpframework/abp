@@ -3,11 +3,11 @@
 	// simple form
 	// e.g. (interactive ... or (interactive)
 	function simple_form(name) {
-		return new RegExp('(\\()' + name + '(?=[\\s\\)])');
+		return RegExp('(\\()' + name + '(?=[\\s\\)])');
 	}
 	// booleans and numbers
 	function primitive(pattern) {
-		return new RegExp('([\\s([])' + pattern + '(?=[\\s)])');
+		return RegExp('([\\s([])' + pattern + '(?=[\\s)])');
 	}
 
 	// Patterns in regular expressions
@@ -32,28 +32,28 @@
 		},
 		comment: /;.*/,
 		string: {
-			pattern: /"(?:[^"\\]*|\\.)*"/,
+			pattern: /"(?:[^"\\]|\\.)*"/,
 			greedy: true,
 			inside: {
 				argument: /[-A-Z]+(?=[.,\s])/,
-				symbol: new RegExp('`' + symbol + "'")
+				symbol: RegExp('`' + symbol + "'")
 			}
 		},
 		'quoted-symbol': {
-			pattern: new RegExp("#?'" + symbol),
+			pattern: RegExp("#?'" + symbol),
 			alias: ['variable', 'symbol']
 		},
 		'lisp-property': {
-			pattern: new RegExp(':' + symbol),
+			pattern: RegExp(':' + symbol),
 			alias: 'property'
 		},
 		splice: {
-			pattern: new RegExp(',@?' + symbol),
+			pattern: RegExp(',@?' + symbol),
 			alias: ['symbol', 'variable']
 		},
 		keyword: [
 			{
-				pattern: new RegExp(
+				pattern: RegExp(
 					par +
 						'(?:(?:lexical-)?let\\*?|(?:cl-)?letf|if|when|while|unless|cons|cl-loop|and|or|not|cond|setq|error|message|null|require|provide|use-package)' +
 						space
@@ -61,7 +61,7 @@
 				lookbehind: true
 			},
 			{
-				pattern: new RegExp(
+				pattern: RegExp(
 					par + '(?:for|do|collect|return|finally|append|concat|in|by)' + space
 				),
 				lookbehind: true
@@ -86,15 +86,15 @@
 			lookbehind: true
 		},
 		defvar: {
-			pattern: new RegExp(par + 'def(?:var|const|custom|group)\\s+' + symbol),
+			pattern: RegExp(par + 'def(?:var|const|custom|group)\\s+' + symbol),
 			lookbehind: true,
 			inside: {
 				keyword: /^def[a-z]+/,
-				variable: new RegExp(symbol)
+				variable: RegExp(symbol)
 			}
 		},
 		defun: {
-			pattern: new RegExp(
+			pattern: RegExp(
 				par +
 					'(?:cl-)?(?:defun\\*?|defmacro)\\s+' +
 					symbol +
@@ -107,14 +107,14 @@
 				// reference the language object.
 				arguments: null,
 				function: {
-					pattern: new RegExp('(^\\s)' + symbol),
+					pattern: RegExp('(^\\s)' + symbol),
 					lookbehind: true
 				},
 				punctuation: /[()]/
 			}
 		},
 		lambda: {
-			pattern: new RegExp(par + 'lambda\\s+\\((?:&?' + symbol + '\\s*)*\\)'),
+			pattern: RegExp(par + 'lambda\\s+\\((?:&?' + symbol + '\\s*)*\\)'),
 			lookbehind: true,
 			inside: {
 				keyword: /^lambda/,
@@ -125,7 +125,7 @@
 			}
 		},
 		car: {
-			pattern: new RegExp(par + symbol),
+			pattern: RegExp(par + symbol),
 			lookbehind: true
 		},
 		punctuation: [
@@ -140,14 +140,14 @@
 	};
 
 	var arg = {
-		'lisp-marker': new RegExp(marker),
+		'lisp-marker': RegExp(marker),
 		rest: {
 			argument: {
-				pattern: new RegExp(symbol),
+				pattern: RegExp(symbol),
 				alias: 'variable'
 			},
 			varform: {
-				pattern: new RegExp(par + symbol + '\\s+\\S[\\s\\S]*' + endpar),
+				pattern: RegExp(par + symbol + '\\s+\\S[\\s\\S]*' + endpar),
 				lookbehind: true,
 				inside: {
 					string: language.string,
@@ -163,23 +163,23 @@
 	var forms = '\\S+(?:\\s+\\S+)*';
 
 	var arglist = {
-		pattern: new RegExp(par + '[\\s\\S]*' + endpar),
+		pattern: RegExp(par + '[\\s\\S]*' + endpar),
 		lookbehind: true,
 		inside: {
 			'rest-vars': {
-				pattern: new RegExp('&(?:rest|body)\\s+' + forms),
+				pattern: RegExp('&(?:rest|body)\\s+' + forms),
 				inside: arg
 			},
 			'other-marker-vars': {
-				pattern: new RegExp('&(?:optional|aux)\\s+' + forms),
+				pattern: RegExp('&(?:optional|aux)\\s+' + forms),
 				inside: arg
 			},
 			keys: {
-				pattern: new RegExp('&key\\s+' + forms + '(?:\\s+&allow-other-keys)?'),
+				pattern: RegExp('&key\\s+' + forms + '(?:\\s+&allow-other-keys)?'),
 				inside: arg
 			},
 			argument: {
-				pattern: new RegExp(symbol),
+				pattern: RegExp(symbol),
 				alias: 'variable'
 			},
 			punctuation: /[()]/

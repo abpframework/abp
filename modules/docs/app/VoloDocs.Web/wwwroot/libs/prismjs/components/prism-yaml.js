@@ -31,7 +31,7 @@ Prism.languages.yaml = {
 		alias: 'important'
 	},
 	'string': {
-		pattern: /([:\-,[{]\s*(?:![^\s]+)?[ \t]*)("|')(?:(?!\2)[^\\\r\n]|\\.)*\2(?=[ \t]*(?:$|,|]|}))/m,
+		pattern: /([:\-,[{]\s*(?:![^\s]+)?[ \t]*)("|')(?:(?!\2)[^\\\r\n]|\\.)*\2(?=[ \t]*(?:$|,|]|}|\s*#))/m,
 		lookbehind: true,
 		greedy: true
 	},
@@ -43,3 +43,5 @@ Prism.languages.yaml = {
 	'important': /[&*][\w]+/,
 	'punctuation': /---|[:[\]{}\-,|>?]|\.\.\./
 };
+
+Prism.languages.yml = Prism.languages.yaml;
