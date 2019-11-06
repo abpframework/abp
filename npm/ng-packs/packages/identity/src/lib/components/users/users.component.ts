@@ -149,8 +149,8 @@ export class UsersComponent implements OnInit {
               roleNames: mappedRoleNames,
             }),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }

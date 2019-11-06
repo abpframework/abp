@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { Select, Store } from '@ngxs/store';
 import { from, Observable } from 'rxjs';
-import { map, pluck, take } from 'rxjs/operators';
+import { map, pluck, take, finalize } from 'rxjs/operators';
 import { GetPermissions, UpdatePermissions } from '../actions/permission-management.actions';
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementState } from '../states/permission-management.state';
@@ -208,8 +208,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
             permissions: changedPermissions
           })
         )
+        .pipe(finalize(() => (this.modalBusy = false)))
         .subscribe(() => {
-          this.modalBusy = false;
           this.visible = false;
         });
     } else {

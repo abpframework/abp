@@ -95,8 +95,8 @@ export class RolesComponent implements OnInit {
           ? new UpdateRole({ ...this.form.value, id: this.selected.id })
           : new CreateRole(this.form.value),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
