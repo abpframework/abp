@@ -107,7 +107,19 @@ builder.Entity<Book>(b =>
 
 #### Add New Migration & Update the Database
 
-The Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
+The Startup template uses [EF Core Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/) to create and maintain the database schema. 
+
+You should also add a `DbSet` property to the `BookStoreMigrationsDbContext` class in the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project, as shown below:
+
+````C#
+    public class PersonPasswordHoldMigrationsDbContext : AbpDbContext<PersonPasswordHoldMigrationsDbContext>
+    {
+        public DbSet<Book> Books { get; set; }
+		...
+    }
+````
+
+Open the **Package Manager Console (PMC)** (under the *Tools/Nuget Package Manager* menu), select the `Acme.BookStore.EntityFrameworkCore.DbMigrations` as the **default project** and execute the following command:
 
 ![bookstore-pmc-add-book-migration](images/bookstore-pmc-add-book-migration-v2.png)
 
