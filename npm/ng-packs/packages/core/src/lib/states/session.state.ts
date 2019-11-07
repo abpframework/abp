@@ -1,10 +1,10 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { GetAppConfiguration } from '../actions/config.actions';
 import { SetLanguage, SetTenant } from '../actions/session.actions';
 import { ABP, Session } from '../models';
-import { GetAppConfiguration } from '../actions/config.actions';
 import { LocalizationService } from '../services/localization.service';
-import { from, combineLatest } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
 
 @State<Session.State>({
   name: 'SessionState',
@@ -35,7 +35,7 @@ export class SessionState {
   }
 
   @Action(SetTenant)
-  setTenantId({ patchState }: StateContext<Session.State>, { payload }: SetTenant) {
+  setTenant({ patchState }: StateContext<Session.State>, { payload }: SetTenant) {
     patchState({
       tenant: payload,
     });

@@ -1,15 +1,16 @@
-import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
-import { __decorate, __metadata, __awaiter, __rest } from 'tslib';
+import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, Pipe, InjectionToken, Inject, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
+import { __rest, __awaiter, __decorate, __metadata } from 'tslib';
 import { Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
-import { Action, Selector, State, Store, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
-import { noop as noop$1, combineLatest, from, throwError, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
+import { Store, Action, Selector, State, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
+import { throwError, noop as noop$1, from, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
 import snq from 'snq';
+import { take, tap, catchError, switchMap, takeUntil, debounceTime, filter, finalize } from 'rxjs/operators';
 import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { tap, take, catchError, switchMap, takeUntil, debounceTime, filter, finalize, distinctUntilChanged } from 'rxjs/operators';
 import { registerLocaleData, CommonModule } from '@angular/common';
 import compare from 'just-compare';
 import clone from 'just-clone';
 import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Table } from 'primeng/table';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -17,7 +18,7 @@ import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @template T
@@ -86,7 +87,7 @@ class AbstractNgModelComponent {
     }
 }
 AbstractNgModelComponent.decorators = [
-    { type: Component, args: [{ template: '' }] }
+    { type: Component, args: [{ selector: 'abp-abstract-ng-model', template: '' }] }
 ];
 /** @nocollapse */
 AbstractNgModelComponent.ctorParameters = () => [
@@ -119,12 +120,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class PatchRouteByName {
     /**
@@ -155,7 +156,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class StartLoader {
     /**
@@ -190,7 +191,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class GetProfile {
 }
@@ -232,7 +233,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class RestOccurError {
     /**
@@ -252,7 +253,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class SetLanguage {
     /**
@@ -287,475 +288,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class ProfileService {
-    /**
-     * @param {?} rest
-     */
-    constructor(rest) {
-        this.rest = rest;
-    }
-    /**
-     * @return {?}
-     */
-    get() {
-        /** @type {?} */
-        const request = {
-            method: 'GET',
-            url: '/api/identity/my-profile',
-        };
-        return this.rest.request(request);
-    }
-    /**
-     * @param {?} body
-     * @return {?}
-     */
-    update(body) {
-        /** @type {?} */
-        const request = {
-            method: 'PUT',
-            url: '/api/identity/my-profile',
-            body,
-        };
-        return this.rest.request(request);
-    }
-    /**
-     * @param {?} body
-     * @param {?=} skipHandleError
-     * @return {?}
-     */
-    changePassword(body, skipHandleError = false) {
-        /** @type {?} */
-        const request = {
-            method: 'POST',
-            url: '/api/identity/my-profile/change-password',
-            body,
-        };
-        return this.rest.request(request, { skipHandleError });
-    }
-}
-ProfileService.decorators = [
-    { type: Injectable, args: [{
-                providedIn: 'root',
-            },] }
-];
-/** @nocollapse */
-ProfileService.ctorParameters = () => [
-    { type: RestService }
-];
-/** @nocollapse */ ProfileService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileService_Factory() { return new ProfileService(ɵɵinject(RestService)); }, token: ProfileService, providedIn: "root" });
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ProfileService.prototype.rest;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-let ProfileState = class ProfileState {
-    /**
-     * @param {?} profileService
-     */
-    constructor(profileService) {
-        this.profileService = profileService;
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    static getProfile({ profile }) {
-        return profile;
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    profileGet({ patchState }) {
-        return this.profileService.get().pipe(tap((/**
-         * @param {?} profile
-         * @return {?}
-         */
-        profile => patchState({
-            profile,
-        }))));
-    }
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    profileUpdate({ patchState }, { payload }) {
-        return this.profileService.update(payload).pipe(tap((/**
-         * @param {?} profile
-         * @return {?}
-         */
-        profile => patchState({
-            profile,
-        }))));
-    }
-    /**
-     * @param {?} _
-     * @param {?} __1
-     * @return {?}
-     */
-    changePassword(_, { payload }) {
-        return this.profileService.changePassword(payload, true);
-    }
-};
-__decorate([
-    Action(GetProfile),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], ProfileState.prototype, "profileGet", null);
-__decorate([
-    Action(UpdateProfile),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, UpdateProfile]),
-    __metadata("design:returntype", void 0)
-], ProfileState.prototype, "profileUpdate", null);
-__decorate([
-    Action(ChangePassword),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, ChangePassword]),
-    __metadata("design:returntype", void 0)
-], ProfileState.prototype, "changePassword", null);
-__decorate([
-    Selector(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Object)
-], ProfileState, "getProfile", null);
-ProfileState = __decorate([
-    State({
-        name: 'ProfileState',
-        defaults: (/** @type {?} */ ({})),
-    }),
-    __metadata("design:paramtypes", [ProfileService])
-], ProfileState);
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ProfileState.prototype.profileService;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-// Different locales from .NET
-// Key is .NET locale, value is Angular locale
-var localesMapping = {
-    'ar-sa': 'ar-SA',
-    'ca-ES-valencia': 'ca-ES-VALENCIA',
-    'de-de': 'de',
-    'es-ES': 'es',
-    'en-US': 'en',
-    'fil-Latn': 'en',
-    'ku-Arab': 'en',
-    'ky-Cyrl': 'en',
-    'mi-Latn': 'en',
-    'prs-Arab': 'en',
-    'qut-Latn': 'en',
-    nso: 'en',
-    quz: 'en',
-    'fr-FR': 'fr',
-    'gd-Latn': 'gd',
-    'ha-Latn': 'ha',
-    'ig-Latn': 'ig',
-    'it-it': 'it',
-    'mn-Cyrl': 'mn',
-    'pt-BR': 'pt',
-    'sd-Arab': 'pa-Arab',
-    'sr-Cyrl-RS': 'sr-Cyrl',
-    'sr-Latn-RS': 'sr-Latn',
-    'tg-Cyrl': 'tg',
-    'tk-Latn': 'tk',
-    'tt-Cyrl': 'tt',
-    'ug-Arab': 'ug',
-    'yo-Latn': 'yo',
-};
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} injector
- * @return {?}
- */
-function getInitialData(injector) {
-    /** @type {?} */
-    const fn = (/**
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        const store = injector.get(Store);
-        return store.dispatch(new GetAppConfiguration()).toPromise();
-    });
-    return fn;
-}
-/**
- * @param {?} injector
- * @return {?}
- */
-function localeInitializer(injector) {
-    /** @type {?} */
-    const fn = (/**
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        const store = injector.get(Store);
-        /** @type {?} */
-        const lang = store.selectSnapshot(SessionState.getLanguage) || 'en';
-        return new Promise((/**
-         * @param {?} resolve
-         * @param {?} reject
-         * @return {?}
-         */
-        (resolve, reject) => {
-            registerLocale(lang).then((/**
-             * @return {?}
-             */
-            () => resolve()), reject);
-        }));
-    });
-    return fn;
-}
-/**
- * @param {?} locale
- * @return {?}
- */
-function registerLocale(locale) {
-    return import(
-    /* webpackInclude: /(af|am|ar-SA|as|az-Latn|be|bg|bn-BD|bn-IN|bs|ca|ca-ES-VALENCIA|cs|cy|da|de|de|el|en-GB|en|es|en|es-US|es-MX|et|eu|fa|fi|en|fr|fr|fr-CA|ga|gd|gl|gu|ha|he|hi|hr|hu|hy|id|ig|is|it|it|ja|ka|kk|km|kn|ko|kok|en|en|lb|lt|lv|en|mk|ml|mn|mr|ms|mt|nb|ne|nl|nl-BE|nn|en|or|pa|pa-Arab|pl|en|pt|pt-PT|en|en|ro|ru|rw|pa-Arab|si|sk|sl|sq|sr-Cyrl-BA|sr-Cyrl|sr-Latn|sv|sw|ta|te|tg|th|ti|tk|tn|tr|tt|ug|uk|ur|uz-Latn|vi|wo|xh|yo|zh-Hans|zh-Hant|zu)\.js$/ */
-    `@angular/common/locales/${localesMapping[locale] || locale}.js`).then((/**
-     * @param {?} module
-     * @return {?}
-     */
-    module => {
-        registerLocaleData(module.default);
-    }));
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class LocalizationService {
-    /**
-     * @param {?} store
-     * @param {?} router
-     * @param {?} ngZone
-     * @param {?} actions
-     * @param {?} otherInstance
-     */
-    constructor(store, router, ngZone, actions, otherInstance) {
-        this.store = store;
-        this.router = router;
-        this.ngZone = ngZone;
-        this.actions = actions;
-        if (otherInstance)
-            throw new Error('LocaleService should have only one instance.');
-    }
-    /**
-     * @return {?}
-     */
-    get currentLang() {
-        return this.store.selectSnapshot(SessionState.getLanguage);
-    }
-    /**
-     * @private
-     * @param {?} reuse
-     * @return {?}
-     */
-    setRouteReuse(reuse) {
-        this.router.routeReuseStrategy.shouldReuseRoute = reuse;
-    }
-    /**
-     * @param {?} locale
-     * @return {?}
-     */
-    registerLocale(locale) {
-        const { shouldReuseRoute } = this.router.routeReuseStrategy;
-        this.setRouteReuse((/**
-         * @return {?}
-         */
-        () => false));
-        this.router.navigated = false;
-        return registerLocale(locale).then((/**
-         * @return {?}
-         */
-        () => {
-            this.ngZone.run((/**
-             * @return {?}
-             */
-            () => __awaiter(this, void 0, void 0, function* () {
-                yield this.router.navigateByUrl(this.router.url).catch(noop$1);
-                this.setRouteReuse(shouldReuseRoute);
-            })));
-        }));
-    }
-    /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    get(keys, ...interpolateParams) {
-        return this.store.select(ConfigState.getCopy(keys, ...interpolateParams));
-    }
-    /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    instant(keys, ...interpolateParams) {
-        return this.store.selectSnapshot(ConfigState.getCopy(keys, ...interpolateParams));
-    }
-}
-LocalizationService.decorators = [
-    { type: Injectable, args: [{ providedIn: 'root' },] }
-];
-/** @nocollapse */
-LocalizationService.ctorParameters = () => [
-    { type: Store },
-    { type: Router },
-    { type: NgZone },
-    { type: Actions },
-    { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
-];
-/** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.store;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.router;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.ngZone;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.actions;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-let SessionState = class SessionState {
-    /**
-     * @param {?} localizationService
-     */
-    constructor(localizationService) {
-        this.localizationService = localizationService;
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    static getLanguage({ language }) {
-        return language;
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    static getTenant({ tenant }) {
-        return tenant;
-    }
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    setLanguage({ patchState, dispatch }, { payload }) {
-        patchState({
-            language: payload,
-        });
-        return combineLatest([dispatch(new GetAppConfiguration()), from(this.localizationService.registerLocale(payload))]);
-    }
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    setTenantId({ patchState }, { payload }) {
-        patchState({
-            tenant: payload,
-        });
-    }
-};
-__decorate([
-    Action(SetLanguage),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, SetLanguage]),
-    __metadata("design:returntype", void 0)
-], SessionState.prototype, "setLanguage", null);
-__decorate([
-    Action(SetTenant),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, SetTenant]),
-    __metadata("design:returntype", void 0)
-], SessionState.prototype, "setTenantId", null);
-__decorate([
-    Selector(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", String)
-], SessionState, "getLanguage", null);
-__decorate([
-    Selector(),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Object)
-], SessionState, "getTenant", null);
-SessionState = __decorate([
-    State({
-        name: 'SessionState',
-        defaults: (/** @type {?} */ ({})),
-    }),
-    __metadata("design:paramtypes", [LocalizationService])
-], SessionState);
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    SessionState.prototype.localizationService;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class RestService {
     /**
@@ -782,12 +320,13 @@ class RestService {
      * @param {?=} api
      * @return {?}
      */
-    request(request, config = {}, api) {
+    request(request, config, api) {
+        config = config || ((/** @type {?} */ ({})));
         const { observe = "body" /* Body */, skipHandleError } = config;
         /** @type {?} */
-        const url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
+        const url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
         const { method } = request, options = __rest(request, ["method"]);
-        return this.http.request(method, url, (/** @type {?} */ (Object.assign({ observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : null, catchError((/**
+        return this.http.request(method, url, (/** @type {?} */ (Object.assign({ observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
          * @param {?} err
          * @return {?}
          */
@@ -825,7 +364,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ApplicationConfigurationService {
     /**
@@ -866,7 +405,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} routes
@@ -953,6 +492,326 @@ function sortRoutes(routes = []) {
         return route;
     }));
 }
+/** @type {?} */
+const ABP_ROUTES = (/** @type {?} */ ([]));
+/**
+ * @param {?} routes
+ * @return {?}
+ */
+function addAbpRoutes(routes) {
+    if (!Array.isArray(routes)) {
+        routes = [routes];
+    }
+    ABP_ROUTES.push(...routes);
+}
+/**
+ * @return {?}
+ */
+function getAbpRoutes() {
+    return ABP_ROUTES;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+// Different locales from .NET
+// Key is .NET locale, value is Angular locale
+var localesMapping = {
+    'ar-sa': 'ar-SA',
+    'ca-ES-valencia': 'ca-ES-VALENCIA',
+    'de-de': 'de',
+    'es-ES': 'es',
+    'en-US': 'en',
+    'fil-Latn': 'en',
+    'ku-Arab': 'en',
+    'ky-Cyrl': 'en',
+    'mi-Latn': 'en',
+    'prs-Arab': 'en',
+    'qut-Latn': 'en',
+    nso: 'en',
+    quz: 'en',
+    'fr-FR': 'fr',
+    'gd-Latn': 'gd',
+    'ha-Latn': 'ha',
+    'ig-Latn': 'ig',
+    'it-it': 'it',
+    'mn-Cyrl': 'mn',
+    'pt-BR': 'pt',
+    'sd-Arab': 'pa-Arab',
+    'sr-Cyrl-RS': 'sr-Cyrl',
+    'sr-Latn-RS': 'sr-Latn',
+    'tg-Cyrl': 'tg',
+    'tk-Latn': 'tk',
+    'tt-Cyrl': 'tt',
+    'ug-Arab': 'ug',
+    'yo-Latn': 'yo',
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function getInitialData(injector) {
+    /** @type {?} */
+    const fn = (/**
+     * @return {?}
+     */
+    () => {
+        /** @type {?} */
+        const store = injector.get(Store);
+        return store.dispatch(new GetAppConfiguration()).toPromise();
+    });
+    return fn;
+}
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function localeInitializer(injector) {
+    /** @type {?} */
+    const fn = (/**
+     * @return {?}
+     */
+    () => {
+        /** @type {?} */
+        const store = injector.get(Store);
+        /** @type {?} */
+        const lang = store.selectSnapshot((/**
+         * @param {?} state
+         * @return {?}
+         */
+        state => state.SessionState.language)) || 'en';
+        return new Promise((/**
+         * @param {?} resolve
+         * @param {?} reject
+         * @return {?}
+         */
+        (resolve, reject) => {
+            registerLocale(lang).then((/**
+             * @return {?}
+             */
+            () => resolve()), reject);
+        }));
+    });
+    return fn;
+}
+/**
+ * @param {?} locale
+ * @return {?}
+ */
+function registerLocale(locale) {
+    return import(
+    /* webpackInclude: /(af|am|ar-SA|as|az-Latn|be|bg|bn-BD|bn-IN|bs|ca|ca-ES-VALENCIA|cs|cy|da|de|de|el|en-GB|en|es|en|es-US|es-MX|et|eu|fa|fi|en|fr|fr|fr-CA|ga|gd|gl|gu|ha|he|hi|hr|hu|hy|id|ig|is|it|it|ja|ka|kk|km|kn|ko|kok|en|en|lb|lt|lv|en|mk|ml|mn|mr|ms|mt|nb|ne|nl|nl-BE|nn|en|or|pa|pa-Arab|pl|en|pt|pt-PT|en|en|ro|ru|rw|pa-Arab|si|sk|sl|sq|sr-Cyrl-BA|sr-Cyrl|sr-Latn|sv|sw|ta|te|tg|th|ti|tk|tn|tr|tt|ug|uk|ur|uz-Latn|vi|wo|xh|yo|zh-Hans|zh-Hant|zu)\.js$/ */
+    `@angular/common/locales/${localesMapping[locale] || locale}.js`).then((/**
+     * @param {?} module
+     * @return {?}
+     */
+    module => {
+        registerLocaleData(module.default);
+    }));
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class LocalizationService {
+    /**
+     * @param {?} store
+     * @param {?} router
+     * @param {?} ngZone
+     * @param {?} otherInstance
+     */
+    constructor(store, router, ngZone, otherInstance) {
+        this.store = store;
+        this.router = router;
+        this.ngZone = ngZone;
+        if (otherInstance)
+            throw new Error('LocaleService should have only one instance.');
+    }
+    /**
+     * @return {?}
+     */
+    get currentLang() {
+        return this.store.selectSnapshot((/**
+         * @param {?} state
+         * @return {?}
+         */
+        state => state.SessionState.language));
+    }
+    /**
+     * @param {?} reuse
+     * @return {?}
+     */
+    setRouteReuse(reuse) {
+        this.router.routeReuseStrategy.shouldReuseRoute = reuse;
+    }
+    /**
+     * @param {?} locale
+     * @return {?}
+     */
+    registerLocale(locale) {
+        const { shouldReuseRoute } = this.router.routeReuseStrategy;
+        this.setRouteReuse((/**
+         * @return {?}
+         */
+        () => false));
+        this.router.navigated = false;
+        return registerLocale(locale).then((/**
+         * @return {?}
+         */
+        () => {
+            this.ngZone.run((/**
+             * @return {?}
+             */
+            () => __awaiter(this, void 0, void 0, function* () {
+                yield this.router.navigateByUrl(this.router.url).catch(noop$1);
+                this.setRouteReuse(shouldReuseRoute);
+            })));
+        }));
+    }
+    /**
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    get(key, ...interpolateParams) {
+        return this.store.select(ConfigState.getLocalization(key, ...interpolateParams));
+    }
+    /**
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    instant(key, ...interpolateParams) {
+        return this.store.selectSnapshot(ConfigState.getLocalization(key, ...interpolateParams));
+    }
+}
+LocalizationService.decorators = [
+    { type: Injectable, args: [{ providedIn: 'root' },] }
+];
+/** @nocollapse */
+LocalizationService.ctorParameters = () => [
+    { type: Store },
+    { type: Router },
+    { type: NgZone },
+    { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
+];
+/** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.ngZone;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+let SessionState = class SessionState {
+    /**
+     * @param {?} localizationService
+     */
+    constructor(localizationService) {
+        this.localizationService = localizationService;
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    static getLanguage({ language }) {
+        return language;
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    static getTenant({ tenant }) {
+        return tenant;
+    }
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    setLanguage({ patchState, dispatch }, { payload }) {
+        patchState({
+            language: payload,
+        });
+        return dispatch(new GetAppConfiguration()).pipe(switchMap((/**
+         * @return {?}
+         */
+        () => from(this.localizationService.registerLocale(payload)))));
+    }
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    setTenant({ patchState }, { payload }) {
+        patchState({
+            tenant: payload,
+        });
+    }
+};
+SessionState.ctorParameters = () => [
+    { type: LocalizationService }
+];
+__decorate([
+    Action(SetLanguage),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, SetLanguage]),
+    __metadata("design:returntype", void 0)
+], SessionState.prototype, "setLanguage", null);
+__decorate([
+    Action(SetTenant),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, SetTenant]),
+    __metadata("design:returntype", void 0)
+], SessionState.prototype, "setTenant", null);
+__decorate([
+    Selector(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", String)
+], SessionState, "getLanguage", null);
+__decorate([
+    Selector(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], SessionState, "getTenant", null);
+SessionState = __decorate([
+    State({
+        name: 'SessionState',
+        defaults: (/** @type {?} */ ({})),
+    }),
+    __metadata("design:paramtypes", [LocalizationService])
+], SessionState);
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionState.prototype.localizationService;
+}
 
 var ConfigState_1;
 let ConfigState = ConfigState_1 = class ConfigState {
@@ -988,7 +847,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             return state[key];
         }));
         return selector;
@@ -1009,7 +868,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             return ((/** @type {?} */ (keys))).reduce((/**
              * @param {?} acc
              * @param {?} val
@@ -1035,7 +894,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             const { flattedRoutes } = state;
             return ((/** @type {?} */ (flattedRoutes))).find((/**
              * @param {?} route
@@ -1062,7 +921,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             return state.environment.apis[key || 'default'].url;
         }));
         return selector;
@@ -1077,11 +936,48 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             return snq((/**
              * @return {?}
              */
             () => state.setting.values[key]));
+        }));
+        return selector;
+    }
+    /**
+     * @param {?=} keyword
+     * @return {?}
+     */
+    static getSettings(keyword) {
+        /** @type {?} */
+        const selector = createSelector([ConfigState_1], (/**
+         * @param {?} state
+         * @return {?}
+         */
+        (state) => {
+            if (keyword) {
+                /** @type {?} */
+                const keys = snq((/**
+                 * @return {?}
+                 */
+                () => Object.keys(state.setting.values).filter((/**
+                 * @param {?} key
+                 * @return {?}
+                 */
+                key => key.indexOf(keyword) > -1))), []);
+                if (keys.length) {
+                    return keys.reduce((/**
+                     * @param {?} acc
+                     * @param {?} key
+                     * @return {?}
+                     */
+                    (acc, key) => (Object.assign({}, acc, { [key]: state.setting.values[key] }))), {});
+                }
+            }
+            return snq((/**
+             * @return {?}
+             */
+            () => state.setting.values), {});
         }));
         return selector;
     }
@@ -1095,7 +991,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             if (!key)
                 return true;
             return snq((/**
@@ -1110,7 +1006,13 @@ let ConfigState = ConfigState_1 = class ConfigState {
      * @param {...?} interpolateParams
      * @return {?}
      */
-    static getCopy(key, ...interpolateParams) {
+    static getLocalization(key, ...interpolateParams) {
+        /** @type {?} */
+        let defaultValue;
+        if (typeof key !== 'string') {
+            defaultValue = key.defaultValue;
+            key = key.key;
+        }
         if (!key)
             key = '';
         /** @type {?} */
@@ -1120,13 +1022,13 @@ let ConfigState = ConfigState_1 = class ConfigState {
          * @param {?} state
          * @return {?}
          */
-        function (state) {
+        (state) => {
             if (!state.localization)
-                return key;
+                return defaultValue || key;
             const { defaultResourceName } = state.environment.localization;
             if (keys[0] === '') {
                 if (!defaultResourceName) {
-                    throw new Error(`Please check your environment. May you forget set defaultResourceName? 
+                    throw new Error(`Please check your environment. May you forget set defaultResourceName?
               Here is the example:
                { production: false,
                  localization: {
@@ -1140,7 +1042,7 @@ let ConfigState = ConfigState_1 = class ConfigState {
                 () => defaultResourceName));
             }
             /** @type {?} */
-            let copy = ((/** @type {?} */ (keys))).reduce((/**
+            let localization = ((/** @type {?} */ (keys))).reduce((/**
              * @param {?} acc
              * @param {?} val
              * @return {?}
@@ -1156,16 +1058,18 @@ let ConfigState = ConfigState_1 = class ConfigState {
              * @return {?}
              */
             params => params != null));
-            if (copy && interpolateParams && interpolateParams.length) {
+            if (localization && interpolateParams && interpolateParams.length) {
                 interpolateParams.forEach((/**
                  * @param {?} param
                  * @return {?}
                  */
                 param => {
-                    copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
+                    localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
                 }));
             }
-            return copy || key;
+            if (typeof localization !== 'string')
+                localization = '';
+            return localization || defaultValue || key;
         }));
         return selector;
     }
@@ -1211,6 +1115,10 @@ let ConfigState = ConfigState_1 = class ConfigState {
         });
     }
 };
+ConfigState.ctorParameters = () => [
+    { type: ApplicationConfigurationService },
+    { type: Store }
+];
 __decorate([
     Action(GetAppConfiguration),
     __metadata("design:type", Function),
@@ -1261,22 +1169,20 @@ if (false) {
  * @param {?=} parentUrl
  * @return {?}
  */
-function patchRouteDeep(routes, name, newValue, parentUrl = null) {
+function patchRouteDeep(routes, name, newValue, parentUrl = '') {
     routes = routes.map((/**
      * @param {?} route
      * @return {?}
      */
     route => {
         if (route.name === name) {
-            if (newValue.path) {
-                newValue.url = `${parentUrl}/${newValue.path}`;
-            }
+            newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === '' ? route.path : newValue.path) || ''}`;
             if (newValue.children && newValue.children.length) {
                 newValue.children = newValue.children.map((/**
                  * @param {?} child
                  * @return {?}
                  */
-                child => (Object.assign({}, child, { url: `${parentUrl}/${route.path}/${child.path}` }))));
+                child => (Object.assign({}, child, { url: `${newValue.url}/${child.path}`.replace('//', '/') }))));
             }
             return Object.assign({}, route, newValue);
         }
@@ -1294,7 +1200,7 @@ function patchRouteDeep(routes, name, newValue, parentUrl = null) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} value
@@ -1326,6 +1232,7 @@ const takeUntilDestroy = (/**
          * @return {?}
          */
         function () {
+            // tslint:disable-next-line: no-unused-expression
             isFunction(originalDestroy) && originalDestroy.apply(this, arguments);
             componentInstance['__takeUntilDestroy'].next(true);
             componentInstance['__takeUntilDestroy'].complete();
@@ -1336,7 +1243,7 @@ const takeUntilDestroy = (/**
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class DynamicLayoutComponent {
     /**
@@ -1348,7 +1255,7 @@ class DynamicLayoutComponent {
         this.router = router;
         this.route = route;
         this.store = store;
-        const { requirements: { layouts }, routes, } = this.store.selectSnapshot(ConfigState.getAll);
+        const { requirements: { layouts }, routes } = this.store.selectSnapshot(ConfigState.getAll);
         if ((this.route.snapshot.data || {}).layout) {
             this.layout = layouts
                 .filter((/**
@@ -1401,7 +1308,6 @@ DynamicLayoutComponent.decorators = [
                 selector: 'abp-dynamic-layout',
                 template: `
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
-
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
     <ng-template #componentOutlet><ng-container *ngComponentOutlet="layout"></ng-container></ng-template>
   `
@@ -1480,7 +1386,7 @@ function findLayout(segments, routes) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class RouterOutletComponent {
 }
@@ -1495,17 +1401,17 @@ RouterOutletComponent.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AutofocusDirective {
     /**
@@ -1527,7 +1433,8 @@ class AutofocusDirective {
 }
 AutofocusDirective.decorators = [
     { type: Directive, args: [{
-                selector: '[autofocus]',
+                // tslint:disable-next-line: directive-selector
+                selector: '[autofocus]'
             },] }
 ];
 /** @nocollapse */
@@ -1549,7 +1456,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class EllipsisDirective {
     /**
@@ -1635,7 +1542,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AbpForContext {
     /**
@@ -1769,8 +1676,11 @@ class ForDirective {
      */
     projectItems(items) {
         if (!items.length && this.emptyRef) {
+            this.vcRef.clear();
+            // tslint:disable-next-line: no-unused-expression
             this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
             this.isShowEmptyRef = true;
+            this.differ = null;
             return;
         }
         if (this.emptyRef && this.isShowEmptyRef) {
@@ -1817,7 +1727,7 @@ class ForDirective {
             return;
         /** @type {?} */
         const compareFn = this.compareFn;
-        if (typeof this.filterBy !== 'undefined') {
+        if (typeof this.filterBy !== 'undefined' && this.filterVal) {
             items = items.filter((/**
              * @param {?} item
              * @return {?}
@@ -1906,12 +1816,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @return {?}
  */
 function noop() {
+    // tslint:disable-next-line: only-arrow-functions
     /** @type {?} */
     const fn = (/**
      * @return {?}
@@ -1922,7 +1833,7 @@ function noop() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?=} a
@@ -1930,18 +1841,19 @@ function noop() {
  */
 function uuid(a) {
     return a
-        ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
+        ? // tslint:disable-next-line: no-bitwise
+            (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
         : ('' + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class FormSubmitDirective {
     /**
@@ -2012,7 +1924,8 @@ class FormSubmitDirective {
 }
 FormSubmitDirective.decorators = [
     { type: Directive, args: [{
-                selector: 'form[ngSubmit][formGroup]',
+                // tslint:disable-next-line: directive-selector
+                selector: 'form[ngSubmit][formGroup]'
             },] }
 ];
 /** @nocollapse */
@@ -2075,7 +1988,176 @@ function setDirty(controls) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ProfileService {
+    /**
+     * @param {?} rest
+     */
+    constructor(rest) {
+        this.rest = rest;
+    }
+    /**
+     * @return {?}
+     */
+    get() {
+        /** @type {?} */
+        const request = {
+            method: 'GET',
+            url: '/api/identity/my-profile',
+        };
+        return this.rest.request(request);
+    }
+    /**
+     * @param {?} body
+     * @return {?}
+     */
+    update(body) {
+        /** @type {?} */
+        const request = {
+            method: 'PUT',
+            url: '/api/identity/my-profile',
+            body,
+        };
+        return this.rest.request(request);
+    }
+    /**
+     * @param {?} body
+     * @param {?=} skipHandleError
+     * @return {?}
+     */
+    changePassword(body, skipHandleError = false) {
+        /** @type {?} */
+        const request = {
+            method: 'POST',
+            url: '/api/identity/my-profile/change-password',
+            body,
+        };
+        return this.rest.request(request, { skipHandleError });
+    }
+}
+ProfileService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
+];
+/** @nocollapse */
+ProfileService.ctorParameters = () => [
+    { type: RestService }
+];
+/** @nocollapse */ ProfileService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileService_Factory() { return new ProfileService(ɵɵinject(RestService)); }, token: ProfileService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileService.prototype.rest;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+let ProfileState = class ProfileState {
+    /**
+     * @param {?} profileService
+     */
+    constructor(profileService) {
+        this.profileService = profileService;
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    static getProfile({ profile }) {
+        return profile;
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    getProfile({ patchState }) {
+        return this.profileService.get().pipe(tap((/**
+         * @param {?} profile
+         * @return {?}
+         */
+        profile => patchState({
+            profile,
+        }))));
+    }
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    updateProfile({ patchState }, { payload }) {
+        return this.profileService.update(payload).pipe(tap((/**
+         * @param {?} profile
+         * @return {?}
+         */
+        profile => patchState({
+            profile,
+        }))));
+    }
+    /**
+     * @param {?} _
+     * @param {?} __1
+     * @return {?}
+     */
+    changePassword(_, { payload }) {
+        return this.profileService.changePassword(payload, true);
+    }
+};
+ProfileState.ctorParameters = () => [
+    { type: ProfileService }
+];
+__decorate([
+    Action(GetProfile),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], ProfileState.prototype, "getProfile", null);
+__decorate([
+    Action(UpdateProfile),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, UpdateProfile]),
+    __metadata("design:returntype", void 0)
+], ProfileState.prototype, "updateProfile", null);
+__decorate([
+    Action(ChangePassword),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, ChangePassword]),
+    __metadata("design:returntype", void 0)
+], ProfileState.prototype, "changePassword", null);
+__decorate([
+    Selector(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Object)
+], ProfileState, "getProfile", null);
+ProfileState = __decorate([
+    State({
+        name: 'ProfileState',
+        defaults: (/** @type {?} */ ({})),
+    }),
+    __metadata("design:paramtypes", [ProfileService])
+], ProfileState);
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileState.prototype.profileService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class PermissionDirective {
     /**
@@ -2148,7 +2230,148 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class SortPipe {
+    /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */
+    transform(value, sortOrder = 'asc', sortKey) {
+        sortOrder = sortOrder && ((/** @type {?} */ (sortOrder.toLowerCase())));
+        if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc'))
+            return value;
+        /** @type {?} */
+        let numberArray = [];
+        /** @type {?} */
+        let stringArray = [];
+        if (!sortKey) {
+            numberArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => typeof item === 'number')).sort();
+            stringArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => typeof item === 'string')).sort();
+        }
+        else {
+            numberArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => typeof item[sortKey] === 'number')).sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            (a, b) => a[sortKey] - b[sortKey]));
+            stringArray = value
+                .filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => typeof item[sortKey] === 'string'))
+                .sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            (a, b) => {
+                if (a[sortKey] < b[sortKey])
+                    return -1;
+                else if (a[sortKey] > b[sortKey])
+                    return 1;
+                else
+                    return 0;
+            }));
+        }
+        /** @type {?} */
+        const sorted = numberArray.concat(stringArray);
+        return sortOrder === 'asc' ? sorted : sorted.reverse();
+    }
+}
+SortPipe.decorators = [
+    { type: Injectable },
+    { type: Pipe, args: [{
+                name: 'abpSort',
+            },] }
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function TableSortOptions() { }
+if (false) {
+    /** @type {?} */
+    TableSortOptions.prototype.key;
+    /** @type {?} */
+    TableSortOptions.prototype.order;
+}
+class TableSortDirective {
+    /**
+     * @param {?} table
+     * @param {?} sortPipe
+     */
+    constructor(table, sortPipe) {
+        this.table = table;
+        this.sortPipe = sortPipe;
+        this.value = [];
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    ngOnChanges({ value, abpTableSort }) {
+        if (value || abpTableSort) {
+            this.abpTableSort = this.abpTableSort || ((/** @type {?} */ ({})));
+            this.table.value = this.sortPipe.transform(clone(this.value), this.abpTableSort.order, this.abpTableSort.key);
+        }
+    }
+}
+TableSortDirective.decorators = [
+    { type: Directive, args: [{
+                selector: '[abpTableSort]',
+                providers: [SortPipe],
+            },] }
+];
+/** @nocollapse */
+TableSortDirective.ctorParameters = () => [
+    { type: Table, decorators: [{ type: Optional }, { type: Self }] },
+    { type: SortPipe }
+];
+TableSortDirective.propDecorators = {
+    abpTableSort: [{ type: Input }],
+    value: [{ type: Input }]
+};
+if (false) {
+    /** @type {?} */
+    TableSortDirective.prototype.abpTableSort;
+    /** @type {?} */
+    TableSortDirective.prototype.value;
+    /**
+     * @type {?}
+     * @private
+     */
+    TableSortDirective.prototype.table;
+    /**
+     * @type {?}
+     * @private
+     */
+    TableSortDirective.prototype.sortPipe;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class VisibilityDirective {
     /**
@@ -2165,6 +2388,9 @@ class VisibilityDirective {
      * @return {?}
      */
     ngAfterViewInit() {
+        if (!this.focusedElement && this.elRef) {
+            this.focusedElement = this.elRef.nativeElement;
+        }
         /** @type {?} */
         let observer;
         if (this.mutationObserverEnabled) {
@@ -2279,39 +2505,40 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @enum {string} */
 const eLayoutType = {
     account: 'account',
     application: 'application',
     empty: 'empty',
+    /**
+     * @deprecated since version 0.9.0
+     */
     setting: 'setting',
 };
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AuthGuard {
     /**
      * @param {?} oauthService
-     * @param {?} store
      * @param {?} router
      */
-    constructor(oauthService, store, router) {
+    constructor(oauthService, router) {
         this.oauthService = oauthService;
-        this.store = store;
         this.router = router;
     }
     /**
@@ -2336,10 +2563,9 @@ AuthGuard.decorators = [
 /** @nocollapse */
 AuthGuard.ctorParameters = () => [
     { type: OAuthService },
-    { type: Store },
     { type: Router }
 ];
-/** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
+/** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
 if (false) {
     /**
      * @type {?}
@@ -2350,17 +2576,12 @@ if (false) {
      * @type {?}
      * @private
      */
-    AuthGuard.prototype.store;
-    /**
-     * @type {?}
-     * @private
-     */
     AuthGuard.prototype.router;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class PermissionGuard {
     /**
@@ -2407,12 +2628,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ApiInterceptor {
     /**
@@ -2480,12 +2701,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApplicationConfiguration;
 (function (ApplicationConfiguration) {
@@ -2556,11 +2777,11 @@ var ApplicationConfiguration;
     /**
      * @record
      */
-    function Setting() { }
-    ApplicationConfiguration.Setting = Setting;
+    function Value() { }
+    ApplicationConfiguration.Value = Value;
     if (false) {
         /** @type {?} */
-        Setting.prototype.values;
+        Value.prototype.values;
     }
     /**
      * @record
@@ -2577,20 +2798,11 @@ var ApplicationConfiguration;
         /** @type {?} */
         CurrentUser.prototype.userName;
     }
-    /**
-     * @record
-     */
-    function Features() { }
-    ApplicationConfiguration.Features = Features;
-    if (false) {
-        /** @type {?} */
-        Features.prototype.values;
-    }
 })(ApplicationConfiguration || (ApplicationConfiguration = {}));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ABP;
 (function (ABP) {
@@ -2677,11 +2889,17 @@ var ABP;
         /** @type {?} */
         BasicItem.prototype.name;
     }
+    /**
+     * @record
+     * @template T
+     */
+    function Dictionary() { }
+    ABP.Dictionary = Dictionary;
 })(ABP || (ABP = {}));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Config;
 (function (Config) {
@@ -2727,11 +2945,22 @@ var Config;
         /** @type {?} */
         Requirements.prototype.layouts;
     }
+    /**
+     * @record
+     */
+    function LocalizationWithDefault() { }
+    Config.LocalizationWithDefault = LocalizationWithDefault;
+    if (false) {
+        /** @type {?} */
+        LocalizationWithDefault.prototype.key;
+        /** @type {?} */
+        LocalizationWithDefault.prototype.defaultValue;
+    }
 })(Config || (Config = {}));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Rest;
 (function (Rest) {
@@ -2774,7 +3003,7 @@ var Rest;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Session;
 (function (Session) {
@@ -2793,7 +3022,7 @@ var Session;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Profile;
 (function (Profile) {
@@ -2838,12 +3067,59 @@ var Profile;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class LocalizationPipe {
+    /**
+     * @param {?} store
+     */
+    constructor(store) {
+        this.store = store;
+    }
+    /**
+     * @param {?=} value
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    transform(value = '', ...interpolateParams) {
+        return this.store.selectSnapshot(ConfigState.getLocalization(value, ...interpolateParams.reduce((/**
+         * @param {?} acc
+         * @param {?} val
+         * @return {?}
+         */
+        (acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val])), [])));
+    }
+}
+LocalizationPipe.decorators = [
+    { type: Pipe, args: [{
+                name: 'abpLocalization',
+            },] }
+];
+/** @nocollapse */
+LocalizationPipe.ctorParameters = () => [
+    { type: Store }
+];
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationPipe.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
@@ -2868,9 +3144,11 @@ class ConfigPlugin {
         const matches = actionMatcher(event);
         /** @type {?} */
         const isInitAction = matches(InitState) || matches(UpdateState);
-        // const layouts = snq(() => this.options.requirements.layouts.filter(layout => layout instanceof Type), []);
         if (isInitAction && !this.initialized) {
-            let { routes, wrappers } = transformRoutes(this.router.config);
+            /** @type {?} */
+            const transformedRoutes = transformRoutes(this.router.config);
+            let { routes } = transformedRoutes;
+            const { wrappers } = transformedRoutes;
             routes = organizeRoutes(routes, wrappers);
             /** @type {?} */
             const flattedRoutes = flatRoutes(clone(routes));
@@ -2912,8 +3190,9 @@ if (false) {
  * @return {?}
  */
 function transformRoutes(routes = [], wrappers = []) {
+    // TODO: remove in v1
     /** @type {?} */
-    const abpRoutes = routes
+    const oldAbpRoutes = routes
         .filter((/**
      * @param {?} route
      * @return {?}
@@ -2934,6 +3213,9 @@ function transformRoutes(routes = [], wrappers = []) {
      * @return {?}
      */
     (acc, val) => [...acc, ...val.data.routes.routes]), []);
+    // tslint:disable-next-line: deprecation
+    /** @type {?} */
+    const abpRoutes = [...getAbpRoutes(), ...oldAbpRoutes];
     wrappers = abpRoutes.filter((/**
      * @param {?} ar
      * @return {?}
@@ -2946,7 +3228,7 @@ function transformRoutes(routes = [], wrappers = []) {
      * @param {?} route
      * @return {?}
      */
-    route => (route.data || {}).routes && (route.component || route.loadChildren)))
+    route => route.component || route.loadChildren))
         .forEach((/**
      * @param {?} route
      * @return {?}
@@ -2957,15 +3239,12 @@ function transformRoutes(routes = [], wrappers = []) {
          * @param {?} abp
          * @return {?}
          */
-        abp => abp.path.toLowerCase() === route.path.toLowerCase() && snq((/**
-         * @return {?}
-         */
-        () => route.data.routes.routes.length), false)));
+        abp => abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper));
         const { length } = transformed;
         if (abpPackage) {
             transformed.push(abpPackage);
         }
-        if (transformed.length === length) {
+        if (transformed.length === length && (route.data || {}).routes) {
             transformed.push((/** @type {?} */ (Object.assign({}, route.data.routes, { path: route.path, name: snq((/**
                  * @return {?}
                  */
@@ -3030,14 +3309,14 @@ function flatRoutes(routes) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-class ConfigService {
+class ConfigStateService {
     /**
      * @param {?} store
      */
@@ -3051,101 +3330,167 @@ class ConfigService {
         return this.store.selectSnapshot(ConfigState.getAll);
     }
     /**
-     * @param {?} key
      * @return {?}
      */
-    getOne(key) {
-        return this.store.selectSnapshot(ConfigState.getOne(key));
+    getApplicationInfo() {
+        return this.store.selectSnapshot(ConfigState.getApplicationInfo);
     }
     /**
-     * @param {?} keys
+     * @param {...?} args
      * @return {?}
      */
-    getDeep(keys) {
-        return this.store.selectSnapshot(ConfigState.getDeep(keys));
+    getOne(...args) {
+        return this.store.selectSnapshot(ConfigState.getOne(...args));
     }
     /**
-     * @param {?} key
+     * @param {...?} args
      * @return {?}
      */
-    getSetting(key) {
-        return this.store.selectSnapshot(ConfigState.getSetting(key));
+    getDeep(...args) {
+        return this.store.selectSnapshot(ConfigState.getDeep(...args));
+    }
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    getRoute(...args) {
+        return this.store.selectSnapshot(ConfigState.getRoute(...args));
+    }
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    getApiUrl(...args) {
+        return this.store.selectSnapshot(ConfigState.getApiUrl(...args));
+    }
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    getSetting(...args) {
+        return this.store.selectSnapshot(ConfigState.getSetting(...args));
+    }
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    getSettings(...args) {
+        return this.store.selectSnapshot(ConfigState.getSettings(...args));
+    }
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    getGrantedPolicy(...args) {
+        return this.store.selectSnapshot(ConfigState.getGrantedPolicy(...args));
+    }
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    getLocalization(...args) {
+        return this.store.selectSnapshot(ConfigState.getLocalization(...args));
     }
 }
-ConfigService.decorators = [
+ConfigStateService.decorators = [
     { type: Injectable, args: [{
                 providedIn: 'root',
             },] }
 ];
 /** @nocollapse */
-ConfigService.ctorParameters = () => [
+ConfigStateService.ctorParameters = () => [
     { type: Store }
 ];
-/** @nocollapse */ ConfigService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfigService_Factory() { return new ConfigService(ɵɵinject(Store)); }, token: ConfigService, providedIn: "root" });
+/** @nocollapse */ ConfigStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfigStateService_Factory() { return new ConfigStateService(ɵɵinject(Store)); }, token: ConfigStateService, providedIn: "root" });
 if (false) {
     /**
      * @type {?}
      * @private
      */
-    ConfigService.prototype.store;
+    ConfigStateService.prototype.store;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LazyLoadService {
     constructor() {
         this.loadedLibraries = {};
     }
     /**
-     * @param {?} url
+     * @param {?} urlOrUrls
      * @param {?} type
      * @param {?=} content
      * @param {?=} targetQuery
      * @param {?=} position
      * @return {?}
      */
-    load(url, type, content = '', targetQuery = 'body', position = 'afterend') {
-        if (!url && !content)
-            return;
-        /** @type {?} */
-        const key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
-        if (this.loadedLibraries[key]) {
-            return this.loadedLibraries[key].asObservable();
+    load(urlOrUrls, type, content = '', targetQuery = 'body', position = 'afterend') {
+        if (!urlOrUrls && !content) {
+            return throwError('Should pass url or content');
         }
-        this.loadedLibraries[key] = new ReplaySubject();
-        /** @type {?} */
-        let library;
-        if (type === 'script') {
-            library = document.createElement('script');
-            library.type = 'text/javascript';
-            if (url) {
-                ((/** @type {?} */ (library))).src = url;
-            }
-            ((/** @type {?} */ (library))).text = content;
+        else if (!urlOrUrls && content) {
+            urlOrUrls = [null];
         }
-        else if (url) {
-            library = document.createElement('link');
-            library.type = 'text/css';
-            ((/** @type {?} */ (library))).rel = 'stylesheet';
-            if (url) {
-                ((/** @type {?} */ (library))).href = url;
-            }
+        if (!Array.isArray(urlOrUrls)) {
+            urlOrUrls = [urlOrUrls];
         }
-        else {
-            library = document.createElement('style');
-            ((/** @type {?} */ (library))).textContent = content;
-        }
-        library.onload = (/**
+        return new Observable((/**
+         * @param {?} subscriber
          * @return {?}
          */
-        () => {
-            this.loadedLibraries[key].next();
-            this.loadedLibraries[key].complete();
-        });
-        document.querySelector(targetQuery).insertAdjacentElement(position, library);
-        return this.loadedLibraries[key].asObservable();
+        subscriber => {
+            ((/** @type {?} */ (urlOrUrls))).forEach((/**
+             * @param {?} url
+             * @param {?} index
+             * @return {?}
+             */
+            (url, index) => {
+                /** @type {?} */
+                const key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
+                if (this.loadedLibraries[key]) {
+                    subscriber.next();
+                    subscriber.complete();
+                    return;
+                }
+                this.loadedLibraries[key] = new ReplaySubject();
+                /** @type {?} */
+                let library;
+                if (type === 'script') {
+                    library = document.createElement('script');
+                    library.type = 'text/javascript';
+                    if (url) {
+                        ((/** @type {?} */ (library))).src = url;
+                    }
+                    ((/** @type {?} */ (library))).text = content;
+                }
+                else if (url) {
+                    library = document.createElement('link');
+                    library.type = 'text/css';
+                    ((/** @type {?} */ (library))).rel = 'stylesheet';
+                    if (url) {
+                        ((/** @type {?} */ (library))).href = url;
+                    }
+                }
+                else {
+                    library = document.createElement('style');
+                    ((/** @type {?} */ (library))).textContent = content;
+                }
+                library.onload = (/**
+                 * @return {?}
+                 */
+                () => {
+                    this.loadedLibraries[key].next();
+                    this.loadedLibraries[key].complete();
+                    if (index === urlOrUrls.length - 1) {
+                        subscriber.next();
+                        subscriber.complete();
+                    }
+                });
+                document.querySelector(targetQuery).insertAdjacentElement(position, library);
+            }));
+        }));
     }
 }
 LazyLoadService.decorators = [
@@ -3161,12 +3506,90 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class ProfileStateService {
+    /**
+     * @param {?} store
+     */
+    constructor(store) {
+        this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    getProfile() {
+        return this.store.selectSnapshot(ProfileState.getProfile);
+    }
+}
+ProfileStateService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
+];
+/** @nocollapse */
+ProfileStateService.ctorParameters = () => [
+    { type: Store }
+];
+/** @nocollapse */ ProfileStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileStateService_Factory() { return new ProfileStateService(ɵɵinject(Store)); }, token: ProfileStateService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileStateService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class SessionStateService {
+    /**
+     * @param {?} store
+     */
+    constructor(store) {
+        this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    getLanguage() {
+        return this.store.selectSnapshot(SessionState.getLanguage);
+    }
+    /**
+     * @return {?}
+     */
+    getTenant() {
+        return this.store.selectSnapshot(SessionState.getTenant);
+    }
+}
+SessionStateService.decorators = [
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
+];
+/** @nocollapse */
+SessionStateService.ctorParameters = () => [
+    { type: Store }
+];
+/** @nocollapse */ SessionStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function SessionStateService_Factory() { return new SessionStateService(ɵɵinject(Store)); }, token: SessionStateService, providedIn: "root" });
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionStateService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} environment
@@ -3189,12 +3612,12 @@ const CONFIG = new InjectionToken('CONFIG');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class InputEventDebounceDirective {
     /**
@@ -3224,7 +3647,8 @@ class InputEventDebounceDirective {
 }
 InputEventDebounceDirective.decorators = [
     { type: Directive, args: [{
-                selector: '[input.debounce]',
+                // tslint:disable-next-line: directive-selector
+                selector: '[input.debounce]'
             },] }
 ];
 /** @nocollapse */
@@ -3255,7 +3679,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ClickEventStopPropagationDirective {
     /**
@@ -3285,7 +3709,8 @@ class ClickEventStopPropagationDirective {
 }
 ClickEventStopPropagationDirective.decorators = [
     { type: Directive, args: [{
-                selector: '[click.stop]',
+                // tslint:disable-next-line: directive-selector
+                selector: '[click.stop]'
             },] }
 ];
 /** @nocollapse */
@@ -3313,99 +3738,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class LocalizationPipe {
-    /**
-     * @param {?} store
-     */
-    constructor(store) {
-        this.store = store;
-        this.initialValue = '';
-        this.destroy$ = new Subject();
-    }
-    /**
-     * @param {?=} value
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    transform(value = '', ...interpolateParams) {
-        if (this.initialValue !== value) {
-            this.initialValue = value;
-            this.destroy$.next();
-            this.store
-                .select(ConfigState.getCopy(value, ...interpolateParams.reduce((/**
-             * @param {?} acc
-             * @param {?} val
-             * @return {?}
-             */
-            (acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val])), [])))
-                .pipe(takeUntil(this.destroy$), takeUntilDestroy(this), distinctUntilChanged())
-                .subscribe((/**
-             * @param {?} copy
-             * @return {?}
-             */
-            copy => (this.value = copy)));
-        }
-        return this.value;
-    }
-    /**
-     * @return {?}
-     */
-    ngOnDestroy() { }
-}
-LocalizationPipe.decorators = [
-    { type: Pipe, args: [{
-                name: 'abpLocalization',
-                pure: false,
-            },] }
-];
-/** @nocollapse */
-LocalizationPipe.ctorParameters = () => [
-    { type: Store }
-];
-if (false) {
-    /** @type {?} */
-    LocalizationPipe.prototype.initialValue;
-    /** @type {?} */
-    LocalizationPipe.prototype.value;
-    /** @type {?} */
-    LocalizationPipe.prototype.destroy$;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationPipe.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-class SortPipe {
-    /**
-     * @param {?} value
-     * @param {?} sortOrder
-     * @return {?}
-     */
-    transform(value, sortOrder) {
-        sortOrder = sortOrder.toLowerCase();
-        if (sortOrder === "desc")
-            return value.reverse();
-        else
-            return value;
-    }
-}
-SortPipe.decorators = [
-    { type: Pipe, args: [{
-                name: 'abpSort',
-                pure: false
-            },] }
-];
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class LocaleId extends String {
     /**
@@ -3445,7 +3778,7 @@ const LocaleProvider = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class CoreModule {
     /**
@@ -3506,6 +3839,7 @@ CoreModule.decorators = [
                     EllipsisDirective,
                     ForDirective,
                     FormSubmitDirective,
+                    TableSortDirective,
                     LocalizationPipe,
                     SortPipe,
                     PermissionDirective,
@@ -3528,6 +3862,7 @@ CoreModule.decorators = [
                     FormSubmitDirective,
                     LocalizationPipe,
                     SortPipe,
+                    TableSortDirective,
                     PermissionDirective,
                     VisibilityDirective,
                     InputEventDebounceDirective,
@@ -3542,13 +3877,13 @@ CoreModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, InputEventDebounceDirective as ɵba, ClickEventStopPropagationDirective as ɵbb, AbstractNgModelComponent as ɵbc, LocaleId as ɵbd, LocaleProvider as ɵbe, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbf, ConfigPlugin as ɵbg, ApiInterceptor as ɵbh, getInitialData as ɵbi, localeInitializer as ɵbj, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, SortPipe as ɵx, PermissionDirective as ɵy, VisibilityDirective as ɵz };
+export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigState, ConfigStateService, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationPipe, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, ProfileStateService, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SessionStateService, SetLanguage, SetTenant, SortPipe, StartLoader, StopLoader, TableSortDirective, UpdateProfile, VisibilityDirective, addAbpRoutes, configFactory, environmentFactory, getAbpRoutes, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, VisibilityDirective as ɵba, InputEventDebounceDirective as ɵbb, ClickEventStopPropagationDirective as ɵbc, AbstractNgModelComponent as ɵbd, LocaleId as ɵbe, LocaleProvider as ɵbf, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbg, ConfigPlugin as ɵbh, ApiInterceptor as ɵbi, getInitialData as ɵbj, localeInitializer as ɵbk, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, TableSortDirective as ɵw, SortPipe as ɵx, LocalizationPipe as ɵy, PermissionDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

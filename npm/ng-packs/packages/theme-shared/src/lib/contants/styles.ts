@@ -28,6 +28,18 @@ export default `
   min-width: 215px;
 }
 
+.ui-table-scrollable-body::-webkit-scrollbar {
+  height: 5px !important;
+}
+
+.ui-table-scrollable-body::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+.ui-table-scrollable-body::-webkit-scrollbar-thumb {
+  background: #8a8686;
+}
+
 .modal.show {
   display: block !important;
 }
@@ -182,6 +194,35 @@ export default `
   animation: fadeOutTop 0.2s ease-in-out;
 }
 
+.abp-collapsed-height {
+  -moz-transition: max-height linear 0.35s;
+  -ms-transition: max-height linear 0.35s;
+  -o-transition: max-height linear 0.35s;
+  -webkit-transition: max-height linear 0.35s;
+  overflow:hidden;
+  transition:max-height 0.35s linear;
+  height:auto;
+  max-height: 0;
+}
+
+.abp-mh-25 {
+  max-height: 25vh;
+}
+
+.abp-mh-50 {
+  transition:max-height 0.65s linear;
+  max-height: 50vh;
+}
+
+.abp-mh-75 {
+  transition:max-height 0.85s linear;
+  max-height: 75vh;
+}
+
+.abp-mh-100 {
+  transition:max-height 1s linear;
+  max-height: 100vh;
+}
 
 @keyframes fadeInTop {
   from {

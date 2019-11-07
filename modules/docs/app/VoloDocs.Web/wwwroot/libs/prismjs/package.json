@@ -1,11 +1,16 @@
 {
   "name": "prismjs",
-  "version": "1.15.0",
+  "version": "1.17.1",
   "description": "Lightweight, robust, elegant syntax highlighting. A spin-off project from Dabblet.",
   "main": "prism.js",
   "style": "themes/prism.css",
   "scripts": {
-    "test": "mocha tests/testrunner-tests.js && mocha tests/run.js"
+    "test:aliases": "mocha tests/aliases-test.js",
+    "test:languages": "mocha tests/run.js",
+    "test:plugins": "mocha tests/plugins/**/*.js",
+    "test:regex": "mocha tests/regex-tests.js",
+    "test:runner": "mocha tests/testrunner-tests.js",
+    "test": "npm run test:runner && npm run test:languages && npm run test:plugins && npm run test:aliases && npm run test:regex"
   },
   "repository": {
     "type": "git",
@@ -22,15 +27,18 @@
     "clipboard": "^2.0.0"
   },
   "devDependencies": {
-    "chai": "^2.3.0",
-    "gulp": "^3.8.6",
+    "chai": "^4.2.0",
+    "gulp": "^4.0.0",
     "gulp-concat": "^2.3.4",
-    "gulp-header": "^1.0.5",
+    "gulp-header": "^2.0.7",
     "gulp-rename": "^1.2.0",
-    "gulp-uglify": "^0.3.1",
-    "gulp-replace": "^0.5.4",
-    "mocha": "^2.2.5",
-    "yargs": "^3.26.0"
+    "gulp-replace": "^1.0.0",
+    "gulp-uglify": "^3.0.1",
+    "jsdom": "^13.0.0",
+    "mocha": "^6.0.0",
+    "pump": "^3.0.0",
+    "simple-git": "^1.107.0",
+    "yargs": "^13.2.2"
   },
   "jspm": {
     "main": "prism",

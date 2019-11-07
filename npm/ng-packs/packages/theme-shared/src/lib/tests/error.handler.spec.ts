@@ -2,7 +2,7 @@ import { CoreModule, RestOccurError, RouterOutletComponent } from '@abp/ng.core'
 import { Location } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator';
+import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
 import { DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ThemeSharedModule } from '../theme-shared.module';
@@ -35,7 +35,9 @@ describe('ErrorHandler', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 500 })));
     spectator.detectChanges();
     expect(document.querySelector('.error-template')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError500.title);
-    expect(document.querySelector('.error-details')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultError500.details);
+    expect(document.querySelector('.error-details')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultError500.details.defaultValue,
+    );
   });
 
   it('should display the error component when authorize error occurs', () => {
@@ -49,7 +51,9 @@ describe('ErrorHandler', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 0, statusText: 'Unknown Error' })));
     spectator.detectChanges();
     expect(document.querySelector('.error-template')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultErrorUnknown.title);
-    expect(document.querySelector('.error-details')).toHaveText(DEFAULT_ERROR_MESSAGES.defaultErrorUnknown.details);
+    expect(document.querySelector('.error-details')).toHaveText(
+      DEFAULT_ERROR_MESSAGES.defaultErrorUnknown.details.defaultValue,
+    );
   });
 
   it('should display the confirmation when not found error occurs', () => {

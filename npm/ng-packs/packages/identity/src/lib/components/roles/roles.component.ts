@@ -1,6 +1,6 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, TemplateRef, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -13,7 +13,7 @@ import { IdentityState } from '../../states/identity.state';
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
 })
-export class RolesComponent {
+export class RolesComponent implements OnInit {
   @Select(IdentityState.getRoles)
   data$: Observable<Identity.RoleItem[]>;
 
@@ -45,8 +45,7 @@ export class RolesComponent {
 
   constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
-  onSearch(value) {
-    this.pageQuery.filter = value;
+  ngOnInit() {
     this.get();
   }
 
@@ -66,12 +65,12 @@ export class RolesComponent {
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.RoleItem;
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
@@ -88,11 +87,11 @@ export class RolesComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
+          ? new UpdateRole({ ...this.selected, ...this.form.value, id: this.selected.id })
           : new CreateRole(this.form.value),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }

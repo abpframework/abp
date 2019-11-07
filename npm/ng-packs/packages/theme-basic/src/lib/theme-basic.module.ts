@@ -8,7 +8,6 @@ import { ToastModule } from 'primeng/toast';
 import { AccountLayoutComponent } from './components/account-layout/account-layout.component';
 import { ApplicationLayoutComponent } from './components/application-layout/application-layout.component';
 import { EmptyLayoutComponent } from './components/empty-layout/empty-layout.component';
-import { LayoutComponent } from './components/layout/layout.component';
 import { LayoutState } from './states/layout.state';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
 import { InitialService } from './services/initial.service';
@@ -16,7 +15,7 @@ import { InitialService } from './services/initial.service';
 export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, EmptyLayoutComponent];
 
 @NgModule({
-  declarations: [...LAYOUTS, LayoutComponent, ValidationErrorComponent],
+  declarations: [...LAYOUTS, ValidationErrorComponent],
   imports: [
     CoreModule,
     ThemeSharedModule,
@@ -30,17 +29,17 @@ export const LAYOUTS = [ApplicationLayoutComponent, AccountLayoutComponent, Empt
       blueprints: {
         email: 'AbpAccount::ThisFieldIsNotAValidEmailAddress.',
         max: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
-        maxlength: 'AbpAccount::ThisFieldMustBeAStringWithAMaximumLengthOf{1}[{{ requiredLength }}]',
+        maxlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}[{{ requiredLength }}]',
         min: 'AbpAccount::ThisFieldMustBeBetween{0}And{1}[{{ min }},{{ max }}]',
-        minlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf[{{ min }},{{ max }}]',
+        minlength: 'AbpAccount::ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}[{{ requiredLength }}]',
         required: 'AbpAccount::ThisFieldIsRequired.',
-        passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed'
+        passwordMismatch: 'AbpIdentity::Identity.PasswordConfirmationFailed',
       },
-      errorTemplate: ValidationErrorComponent
-    })
+      errorTemplate: ValidationErrorComponent,
+    }),
   ],
   exports: [...LAYOUTS],
-  entryComponents: [...LAYOUTS, ValidationErrorComponent]
+  entryComponents: [...LAYOUTS, ValidationErrorComponent],
 })
 export class ThemeBasicModule {
   constructor(private initialService: InitialService) {}

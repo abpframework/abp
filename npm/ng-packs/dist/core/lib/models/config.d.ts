@@ -30,4 +30,8 @@ export declare namespace Config {
     interface Requirements {
         layouts: Type<any>[];
     }
+    interface LocalizationWithDefault {
+        key: string;
+        defaultValue: string;
+    }
 }

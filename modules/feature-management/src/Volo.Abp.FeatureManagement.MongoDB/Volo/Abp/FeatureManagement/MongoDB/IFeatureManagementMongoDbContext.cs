@@ -4,7 +4,7 @@ using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.FeatureManagement.MongoDB
 {
-    [ConnectionStringName(FeatureManagementConsts.ConnectionStringName)]
+    [ConnectionStringName(FeatureManagementDbProperties.ConnectionStringName)]
     public interface IFeatureManagementMongoDbContext : IAbpMongoDbContext
     {
         IMongoCollection<FeatureValue> FeatureValues { get; }

@@ -12,7 +12,7 @@ namespace Volo.Abp.Settings
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<SettingOptions>(options =>
+            Configure<AbpSettingOptions>(options =>
             {
                 options.ValueProviders.Add<TestSettingValueProvider>();
             });

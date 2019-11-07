@@ -3,3 +3,5 @@ Prism.languages.objectivec = Prism.languages.extend('c', {
 	'string': /("|')(?:\\(?:\r\n|[\s\S])|(?!\1)[^\\\r\n])*\1|@"(?:\\(?:\r\n|[\s\S])|[^"\\\r\n])*"/,
 	'operator': /-[->]?|\+\+?|!=?|<<?=?|>>?=?|==?|&&?|\|\|?|[~^%?*\/@]/
 });
+
+delete Prism.languages.objectivec['class-name'];

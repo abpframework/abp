@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Builder;
@@ -62,7 +63,7 @@ namespace MyCompanyName.MyProjectName
 
         private static void ConfigureNavigationServices(IServiceCollection services)
         {
-            services.Configure<NavigationOptions>(options =>
+            services.Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor());
             });
@@ -73,14 +74,38 @@ namespace MyCompanyName.MyProjectName
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
-            //app.UseErrorPage();
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            });
 
             app.UseVirtualFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseRequestLocalization(app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+            app.UseAbpRequestLocalization();
+
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    await next();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+            });
 
             app.UseMvcWithDefaultRouteAndArea();
         }

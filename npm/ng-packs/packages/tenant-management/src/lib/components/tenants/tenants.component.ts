@@ -1,15 +1,15 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { debounceTime, finalize, pluck, switchMap, take } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   CreateTenant,
   DeleteTenant,
-  GetTenants,
   GetTenantById,
+  GetTenants,
   UpdateTenant,
 } from '../../actions/tenant-management.actions';
 import { TenantManagementService } from '../../services/tenant-management.service';
@@ -25,7 +25,7 @@ interface SelectedModalContent {
   selector: 'abp-tenants',
   templateUrl: './tenants.component.html',
 })
-export class TenantsComponent {
+export class TenantsComponent implements OnInit {
   @Select(TenantManagementState.get)
   data$: Observable<ABP.BasicItem[]>;
 
@@ -81,6 +81,10 @@ export class TenantsComponent {
     private store: Store,
   ) {}
 
+  ngOnInit() {
+    this.get();
+  }
+
   onSearch(value) {
     this.pageQuery.filter = value;
     this.get();
@@ -127,13 +131,13 @@ export class TenantsComponent {
       });
   }
 
-  onAddTenant() {
+  addTenant() {
     this.selected = {} as ABP.BasicItem;
     this.createTenantForm();
     this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
   }
 
-  onEditTenant(id: string) {
+  editTenant(id: string) {
     this.store
       .dispatch(new GetTenantById(id))
       .pipe(pluck('TenantManagementState', 'selectedItem'))
@@ -152,6 +156,8 @@ export class TenantsComponent {
   }
 
   saveConnectionString() {
+    if (this.modalBusy) return;
+
     this.modalBusy = true;
     if (this.useSharedDatabase || (!this.useSharedDatabase && !this.connectionString)) {
       this.tenantService
@@ -177,13 +183,13 @@ export class TenantsComponent {
   }
 
   saveTenant() {
-    if (!this.tenantForm.valid) return;
+    if (!this.tenantForm.valid || this.modalBusy) return;
     this.modalBusy = true;
 
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateTenant({ ...this.tenantForm.value, id: this.selected.id })
+          ? new UpdateTenant({ ...this.selected, ...this.tenantForm.value, id: this.selected.id })
           : new CreateTenant(this.tenantForm.value),
       )
       .pipe(finalize(() => (this.modalBusy = false)))

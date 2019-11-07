@@ -17,11 +17,11 @@ namespace Volo.Abp.Cli.Commands
     {
         public ILogger<NewCommand> Logger { get; set; }
 
-        protected ProjectBuilder ProjectBuilder { get; }
+        protected TemplateProjectBuilder TemplateProjectBuilder { get; }
 
-        public NewCommand(ProjectBuilder projectBuilder)
+        public NewCommand(TemplateProjectBuilder templateProjectBuilder)
         {
-            ProjectBuilder = projectBuilder;
+            TemplateProjectBuilder = templateProjectBuilder;
 
             Logger = NullLogger<NewCommand>.Instance;
         }
@@ -71,25 +71,20 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
-            if (outputFolder != null)
-            {
-                if (!Directory.Exists(outputFolder))
-                {
-                    Directory.CreateDirectory(outputFolder);
-                }
 
-                outputFolder = Path.GetFullPath(outputFolder);
-            }
-            else
+            outputFolder = Path.Combine(outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory(),
+                    SolutionName.Parse(commandLineArgs.Target).FullName);
+
+            if (!Directory.Exists(outputFolder))
             {
-                outputFolder = Directory.GetCurrentDirectory();
+                Directory.CreateDirectory(outputFolder);
             }
 
             Logger.LogInformation("Output folder: " + outputFolder);
 
             commandLineArgs.Options.Add(CliConsts.Command, commandLineArgs.Command);
 
-            var result = await ProjectBuilder.BuildAsync(
+            var result = await TemplateProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
                     SolutionName.Parse(commandLineArgs.Target),
                     template,

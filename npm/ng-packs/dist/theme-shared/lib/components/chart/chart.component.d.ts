@@ -9,8 +9,8 @@ export declare class ChartComponent implements AfterViewInit, OnDestroy {
     width: string;
     height: string;
     responsive: boolean;
-    onDataSelect: EventEmitter<any>;
-    initialized: BehaviorSubject<this>;
+    readonly onDataSelect: EventEmitter<any>;
+    readonly initialized: BehaviorSubject<this>;
     private _initialized;
     _data: any;
     chart: any;

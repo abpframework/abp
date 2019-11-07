@@ -24,7 +24,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="assembly">The assembly containing the service interfaces</param>
         /// <param name="remoteServiceConfigurationName">
         /// The name of the remote service configuration to be used by the HTTP Client proxies.
-        /// See <see cref="RemoteServiceOptions"/>.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
         /// </param>
         /// <param name="asDefaultServices">
         /// True, to register the HTTP client proxy as the default implementation for the services.
@@ -63,7 +63,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="services">Service collection</param>
         /// <param name="remoteServiceConfigurationName">
         /// The name of the remote service configuration to be used by the HTTP Client proxy.
-        /// See <see cref="RemoteServiceOptions"/>.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
         /// </param>
         /// <param name="asDefaultService">
         /// True, to register the HTTP client proxy as the default implementation for the service <typeparamref name="T"/>.
@@ -87,7 +87,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="type">Type of the service</param>
         /// <param name="remoteServiceConfigurationName">
         /// The name of the remote service configuration to be used by the HTTP Client proxy.
-        /// See <see cref="RemoteServiceOptions"/>.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
         /// </param>
         /// <param name="asDefaultService">
         /// True, to register the HTTP client proxy as the default implementation for the service <paramref name="type"/>.

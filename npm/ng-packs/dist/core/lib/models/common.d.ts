@@ -36,4 +36,7 @@ export declare namespace ABP {
         id: string;
         name: string;
     }
+    interface Dictionary<T = any> {
+        [key: string]: T;
+    }
 }

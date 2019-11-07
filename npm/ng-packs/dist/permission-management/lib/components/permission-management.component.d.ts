@@ -12,7 +12,7 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     providerKey: string;
     protected _visible: any;
     visible: boolean;
-    visibleChange: EventEmitter<boolean>;
+    readonly visibleChange: EventEmitter<boolean>;
     groups$: Observable<PermissionManagement.Group[]>;
     entityName$: Observable<string>;
     selectedGroup: PermissionManagement.Group;

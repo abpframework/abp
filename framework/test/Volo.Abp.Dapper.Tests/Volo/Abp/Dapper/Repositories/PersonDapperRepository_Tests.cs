@@ -36,7 +36,7 @@ namespace Volo.Abp.Dapper.Repositories
             var unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
             var personDapperRepository = GetRequiredService<PersonDapperRepository>();
 
-            using (var uow = unitOfWorkManager.Begin(new UnitOfWorkOptions
+            using (var uow = unitOfWorkManager.Begin(new AbpUnitOfWorkOptions
             {
                 IsTransactional = true
             }))

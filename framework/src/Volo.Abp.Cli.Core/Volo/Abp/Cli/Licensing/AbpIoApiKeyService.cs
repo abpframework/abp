@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Http;
+using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
@@ -8,12 +9,15 @@ namespace Volo.Abp.Cli.Licensing
 {
     public class AbpIoApiKeyService : IApiKeyService, ITransientDependency
     {
-        public AbpIoApiKeyService(IJsonSerializer jsonSerializer)
+        protected IJsonSerializer JsonSerializer { get; }
+
+        protected IRemoteServiceExceptionHandler RemoteServiceExceptionHandler { get; }
+
+        public AbpIoApiKeyService(IJsonSerializer jsonSerializer, IRemoteServiceExceptionHandler remoteServiceExceptionHandler)
         {
             JsonSerializer = jsonSerializer;
+            RemoteServiceExceptionHandler = remoteServiceExceptionHandler;
         }
-
-        protected IJsonSerializer JsonSerializer { get; }
 
         public async Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync()
         {
@@ -27,6 +31,8 @@ namespace Volo.Abp.Cli.Licensing
                 {
                     throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
                 }
+
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);

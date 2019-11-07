@@ -90,7 +90,7 @@ export class ConfigState {
     return selector;
   }
 
-  static getSetting(key: string, findContain?: boolean) {
+  static getSetting(key: string) {
     const selector = createSelector(
       [ConfigState],
       (state: Config.State) => {
@@ -124,58 +124,6 @@ export class ConfigState {
       (state: Config.State): boolean => {
         if (!key) return true;
         return snq(() => state.auth.grantedPolicies[key], false);
-      },
-    );
-
-    return selector;
-  }
-
-  /**
-   *
-   * @deprecated, Use getLocalization instead. To be delete in v1
-   */
-  static getCopy(key: string, ...interpolateParams: string[]) {
-    if (!key) key = '';
-
-    const keys = key.split('::') as string[];
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State) => {
-        if (!state.localization) return key;
-
-        const { defaultResourceName } = state.environment.localization;
-        if (keys[0] === '') {
-          if (!defaultResourceName) {
-            throw new Error(
-              `Please check your environment. May you forget set defaultResourceName?
-              Here is the example:
-               { production: false,
-                 localization: {
-                   defaultResourceName: 'MyProjectName'
-                  }
-               }`,
-            );
-          }
-
-          keys[0] = snq(() => defaultResourceName);
-        }
-
-        let copy = (keys as any).reduce((acc, val) => {
-          if (acc) {
-            return acc[val];
-          }
-
-          return undefined;
-        }, state.localization.values);
-
-        interpolateParams = interpolateParams.filter(params => params != null);
-        if (copy && interpolateParams && interpolateParams.length) {
-          interpolateParams.forEach(param => {
-            copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
-          });
-        }
-
-        return copy || key;
       },
     );
 
@@ -278,18 +226,16 @@ function patchRouteDeep(
   routes: ABP.FullRoute[],
   name: string,
   newValue: Partial<ABP.FullRoute>,
-  parentUrl: string = null,
+  parentUrl: string = '',
 ): ABP.FullRoute[] {
   routes = routes.map(route => {
     if (route.name === name) {
-      if (newValue.path) {
-        newValue.url = `${parentUrl}/${newValue.path}`;
-      }
+      newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === '' ? route.path : newValue.path) || ''}`;
 
       if (newValue.children && newValue.children.length) {
         newValue.children = newValue.children.map(child => ({
           ...child,
-          url: `${parentUrl}/${route.path}/${child.path}`,
+          url: `${newValue.url}/${child.path}`.replace('//', '/'),
         }));
       }
 

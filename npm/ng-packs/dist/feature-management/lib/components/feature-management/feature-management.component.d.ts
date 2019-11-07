@@ -9,7 +9,7 @@ export declare class FeatureManagementComponent {
     providerName: string;
     protected _visible: any;
     visible: boolean;
-    visibleChange: EventEmitter<boolean>;
+    readonly visibleChange: EventEmitter<boolean>;
     features$: Observable<FeatureManagement.Feature[]>;
     modalBusy: boolean;
     form: FormGroup;

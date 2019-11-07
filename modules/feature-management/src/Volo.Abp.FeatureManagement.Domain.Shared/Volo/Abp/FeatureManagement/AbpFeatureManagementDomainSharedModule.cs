@@ -13,7 +13,7 @@ namespace Volo.Abp.FeatureManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpFeatureManagementDomainSharedModule>();
             });
@@ -24,7 +24,7 @@ namespace Volo.Abp.FeatureManagement
                     .Add<AbpFeatureManagementResource>("en")
                     .AddBaseTypes(
                         typeof(AbpValidationResource)
-                    ).AddVirtualJson("Volo/Abp/FeatureManagement/Localization/Resources/Domain");
+                    ).AddVirtualJson("Volo/Abp/FeatureManagement/Localization/Domain");
             });
         }
     }

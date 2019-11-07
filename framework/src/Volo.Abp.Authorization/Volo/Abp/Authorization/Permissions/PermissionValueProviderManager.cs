@@ -12,11 +12,11 @@ namespace Volo.Abp.Authorization.Permissions
         public IReadOnlyList<IPermissionValueProvider> ValueProviders => _lazyProviders.Value;
         private readonly Lazy<List<IPermissionValueProvider>> _lazyProviders;
 
-        protected PermissionOptions Options { get; }
+        protected AbpPermissionOptions Options { get; }
 
         public PermissionValueProviderManager(
             IServiceProvider serviceProvider,
-            IOptions<PermissionOptions> options)
+            IOptions<AbpPermissionOptions> options)
         {
             Options = options.Value;
 

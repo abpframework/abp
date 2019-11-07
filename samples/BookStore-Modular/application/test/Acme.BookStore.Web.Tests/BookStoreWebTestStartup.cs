@@ -8,14 +8,9 @@ namespace Acme.BookStore
 {
     public class BookStoreWebTestStartup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<BookStoreWebTestModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<BookStoreWebTestModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

@@ -7,6 +7,6 @@ export declare class SessionState {
     static getLanguage({ language }: Session.State): string;
     static getTenant({ tenant }: Session.State): ABP.BasicItem;
     constructor(localizationService: LocalizationService);
-    setLanguage({ patchState, dispatch }: StateContext<Session.State>, { payload }: SetLanguage): import("rxjs").Observable<[void, void]>;
-    setTenantId({ patchState }: StateContext<Session.State>, { payload }: SetTenant): void;
+    setLanguage({ patchState, dispatch }: StateContext<Session.State>, { payload }: SetLanguage): import("rxjs").Observable<void>;
+    setTenant({ patchState }: StateContext<Session.State>, { payload }: SetTenant): void;
 }

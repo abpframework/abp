@@ -15,7 +15,7 @@ namespace Volo.Abp.Account
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountApplicationContractsModule>();
             });
@@ -28,7 +28,7 @@ namespace Volo.Abp.Account
                     .AddVirtualJson("/Volo/Abp/Account/Localization/Resources");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Volo.Account", typeof(AccountResource));
             });

@@ -7,10 +7,10 @@ if (
 	return;
 }
 
-var url = /\b([a-z]{3,7}:\/\/|tel:)[\w\-+%~/.:=&]+(?:\?[\w\-+%~/.:#=?&!$'()*,;]*)?(?:#[\w\-+%~/.:#=?&!$'()*,;]*)?/,
+var url = /\b([a-z]{3,7}:\/\/|tel:)[\w\-+%~/.:=&@]+(?:\?[\w\-+%~/.:=?&!$'()*,;@]*)?(?:#[\w\-+%~/.:#=?&!$'()*,;@]*)?/,
     email = /\b\S+@[\w.]+[a-z]{2}/,
     linkMd = /\[([^\]]+)]\(([^)]+)\)/,
-    
+
 	// Tokens that may contain URLs and emails
     candidates = ['comment', 'url', 'attr-value', 'string'];
 
@@ -21,7 +21,7 @@ Prism.plugins.autolinker = {
 			return;
 		}
 		Prism.languages.DFS(grammar, function (key, def, type) {
-			if (candidates.indexOf(type) > -1 && Prism.util.type(def) !== 'Array') {
+			if (candidates.indexOf(type) > -1 && !Array.isArray(def)) {
 				if (!def.pattern) {
 					def = this[key] = {
 						pattern: def
@@ -55,27 +55,27 @@ Prism.hooks.add('before-highlight', function(env) {
 Prism.hooks.add('wrap', function(env) {
 	if (/-link$/.test(env.type)) {
 		env.tag = 'a';
-		
+
 		var href = env.content;
-		
+
 		if (env.type == 'email-link' && href.indexOf('mailto:') != 0) {
 			href = 'mailto:' + href;
 		}
 		else if (env.type == 'md-link') {
 			// Markdown
 			var match = env.content.match(linkMd);
-			
+
 			href = match[2];
 			env.content = match[1];
 		}
-		
-		env.attributes.href = href;
-	}
 
-	// Silently catch any error thrown by decodeURIComponent (#1186)
-	try {
-		env.content = decodeURIComponent(env.content);
-	} catch(e) {}
+		env.attributes.href = href;
+
+		// Silently catch any error thrown by decodeURIComponent (#1186)
+		try {
+			env.content = decodeURIComponent(env.content);
+		} catch(e) {}
+	}
 });
 
 })();

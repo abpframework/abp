@@ -8,7 +8,7 @@ export declare class ProfileComponent implements OnChanges {
     private store;
     protected _visible: any;
     visible: boolean;
-    visibleChange: EventEmitter<boolean>;
+    readonly visibleChange: EventEmitter<boolean>;
     profile$: Observable<Profile.Response>;
     form: FormGroup;
     modalBusy: boolean;

@@ -1,10 +1,11 @@
+import { ABP } from './common';
 export declare namespace ApplicationConfiguration {
     interface Response {
         localization: Localization;
         auth: Auth;
-        setting: Setting;
+        setting: Value;
         currentUser: CurrentUser;
-        features: Features;
+        features: Value;
     }
     interface Localization {
         values: LocalizationValue;
@@ -28,18 +29,13 @@ export declare namespace ApplicationConfiguration {
     interface Policy {
         [key: string]: boolean;
     }
-    interface Setting {
-        values: {
-            [key: string]: 'Abp.Localization.DefaultLanguage';
-        };
+    interface Value {
+        values: ABP.Dictionary<string>;
     }
     interface CurrentUser {
         isAuthenticated: boolean;
         id: string;
         tenantId: string;
         userName: string;
-    }
-    interface Features {
-        values: Setting;
     }
 }

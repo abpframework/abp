@@ -17,7 +17,7 @@ namespace Acme.BookStore
 {
     [DependsOn(
         typeof(AbpAuditLoggingDomainSharedModule),
-        typeof(BackgroundJobsDomainSharedModule),
+        typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
         typeof(AbpIdentityServerDomainSharedModule),
@@ -30,7 +30,7 @@ namespace Acme.BookStore
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BookStoreDomainSharedModule>("Acme.BookStore");
             });

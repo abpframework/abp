@@ -1,23 +1,22 @@
-<div class="row entry-row">
-  <div class="col-auto">
-    <h1 class="content-header-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h1>
-  </div>
-  <div class="col">
-    <div class="text-lg-right pt-2" id="AbpContentToolbar">
-      <button
-        [abpPermission]="'AbpIdentity.Users.Create'"
-        id="create-role"
-        class="btn btn-primary"
-        type="button"
-        (click)="onAdd()"
-      >
-        <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
-      </button>
+<div id="identity-roles-wrapper" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>
+      </div>
+      <div class="text-right col col-md-6">
+        <button
+          [abpPermission]="'AbpIdentity.Users.Create'"
+          id="create-role"
+          class="btn btn-primary"
+          type="button"
+          (click)="add()"
+        >
+          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
+        </button>
+      </div>
     </div>
   </div>
-</div>
-
-<div id="identity-roles-wrapper" class="card">
   <div class="card-body">
     <div id="data-tables-table-filter" class="data-tables-filter">
       <label
@@ -29,7 +28,7 @@
       /></label>
     </div>
     <p-table
-      *ngIf="[130, 200, 200, 200] as columnWidths"
+      *ngIf="[150, 250, 250, 250] as columnWidths"
       [value]="data$ | async"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
@@ -44,14 +43,14 @@
     >
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width }" />
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
         <tr
           abp-table-empty-message
           [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentityServer"
+          localizationResource="AbpIdentity"
           localizationProp="NoDataAvailableInDatatable"
         ></tr>
       </ng-template>
@@ -76,7 +75,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>
+          <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
@@ -87,11 +86,21 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem (click)="onEdit(data.id)">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>
-                <button ngbDropdownItem (click)="providerKey = data.id; visiblePermissions = true">
+                <button [abpPermission]="'AbpIdentity.Users.Update'" ngbDropdownItem (click)="edit(data.id)">
+                  {{ 'AbpIdentity::Edit' | abpLocalization }}
+                </button>
+                <button
+                  [abpPermission]="'AbpIdentity.Users.ManagePermissions'"
+                  ngbDropdownItem
+                  (click)="providerKey = data.id; visiblePermissions = true"
+                >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
-                <button ngbDropdownItem (click)="delete(data.id, data.userName)">
+                <button
+                  [abpPermission]="'AbpIdentity.Users.Delete'"
+                  ngbDropdownItem
+                  (click)="delete(data.id, data.userName)"
+                >
                   {{ 'AbpIdentity::Delete' | abpLocalization }}
                 </button>
               </div>
@@ -106,13 +115,17 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy" (disappear)="form = null">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
-    <form [formGroup]="form" (ngSubmit)="save()">
+    <ng-template #loaderRef
+      ><div class="text-center"><i class="fa fa-pulse fa-spinner"></i></div
+    ></ng-template>
+
+    <form *ngIf="form; else loaderRef" [formGroup]="form" (ngSubmit)="save()">
       <ngb-tabset>
         <ngb-tab [title]="'AbpIdentity::UserInformations' | abpLocalization">
           <ng-template ngbTabContent>
@@ -133,9 +146,9 @@
                 <input type="text" id="surname" class="form-control" formControlName="surname" />
               </div>
 
-              <div *ngIf="!selected.userName" class="form-group">
+              <div class="form-group">
                 <label for="password">{{ 'AbpIdentity::Password' | abpLocalization }}</label
-                ><span> * </span>
+                ><span *ngIf="!selected.userName"> * </span>
                 <input
                   type="password"
                   id="password"
@@ -210,11 +223,11 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form.invalid">{{
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="form?.invalid">{{
       'AbpIdentity::Save' | abpLocalization
     }}</abp-button>
   </ng-template>
 </abp-modal>
 
-<abp-permission-management [(visible)]="visiblePermissions" providerName="User" [providerKey]="providerKey">
+<abp-permission-management [(visible)]="visiblePermissions" providerName="U" [providerKey]="providerKey">
 </abp-permission-management>

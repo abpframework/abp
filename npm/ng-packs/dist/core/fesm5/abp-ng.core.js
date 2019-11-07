@@ -1,15 +1,16 @@
-import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, InjectionToken, Inject, Pipe, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
-import { __decorate, __metadata, __awaiter, __generator, __spread, __rest, __assign, __extends } from 'tslib';
+import { ChangeDetectorRef, Component, Injector, Input, Injectable, ɵɵdefineInjectable, ɵɵinject, NgZone, Optional, SkipSelf, Directive, ElementRef, HostBinding, TemplateRef, ViewContainerRef, IterableDiffers, EventEmitter, Self, Output, Renderer2, Pipe, InjectionToken, Inject, LOCALE_ID, APP_INITIALIZER, NgModule } from '@angular/core';
+import { __rest, __assign, __spread, __awaiter, __generator, __decorate, __metadata, __extends } from 'tslib';
 import { Router, NavigationEnd, ActivatedRoute, RouterModule } from '@angular/router';
-import { Action, Selector, State, Store, Actions, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
-import { noop as noop$1, combineLatest, from, throwError, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
+import { Store, Action, Selector, State, createSelector, Select, actionMatcher, InitState, UpdateState, setValue, NGXS_PLUGINS, NgxsModule } from '@ngxs/store';
+import { throwError, noop as noop$1, from, of, Subject, Observable, fromEvent, ReplaySubject } from 'rxjs';
 import snq from 'snq';
+import { take, tap, catchError, switchMap, takeUntil, debounceTime, filter, finalize } from 'rxjs/operators';
 import { HttpClient, HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { tap, take, catchError, switchMap, takeUntil, debounceTime, filter, finalize, distinctUntilChanged } from 'rxjs/operators';
 import { registerLocaleData, CommonModule } from '@angular/common';
 import compare from 'just-compare';
 import clone from 'just-clone';
 import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Table } from 'primeng/table';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
@@ -17,7 +18,7 @@ import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @template T
@@ -106,7 +107,7 @@ var AbstractNgModelComponent = /** @class */ (function () {
         this.disabled = isDisabled;
     };
     AbstractNgModelComponent.decorators = [
-        { type: Component, args: [{ template: '' }] }
+        { type: Component, args: [{ selector: 'abp-abstract-ng-model', template: '' }] }
     ];
     /** @nocollapse */
     AbstractNgModelComponent.ctorParameters = function () { return [
@@ -141,12 +142,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PatchRouteByName = /** @class */ (function () {
     function PatchRouteByName(name, newValue) {
@@ -177,7 +178,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var StartLoader = /** @class */ (function () {
     function StartLoader(payload) {
@@ -208,7 +209,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var GetProfile = /** @class */ (function () {
     function GetProfile() {
@@ -249,7 +250,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var RestOccurError = /** @class */ (function () {
     function RestOccurError(payload) {
@@ -267,7 +268,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var SetLanguage = /** @class */ (function () {
     function SetLanguage(payload) {
@@ -298,566 +299,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var ProfileService = /** @class */ (function () {
-    function ProfileService(rest) {
-        this.rest = rest;
-    }
-    /**
-     * @return {?}
-     */
-    ProfileService.prototype.get = /**
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        var request = {
-            method: 'GET',
-            url: '/api/identity/my-profile',
-        };
-        return this.rest.request(request);
-    };
-    /**
-     * @param {?} body
-     * @return {?}
-     */
-    ProfileService.prototype.update = /**
-     * @param {?} body
-     * @return {?}
-     */
-    function (body) {
-        /** @type {?} */
-        var request = {
-            method: 'PUT',
-            url: '/api/identity/my-profile',
-            body: body,
-        };
-        return this.rest.request(request);
-    };
-    /**
-     * @param {?} body
-     * @param {?=} skipHandleError
-     * @return {?}
-     */
-    ProfileService.prototype.changePassword = /**
-     * @param {?} body
-     * @param {?=} skipHandleError
-     * @return {?}
-     */
-    function (body, skipHandleError) {
-        if (skipHandleError === void 0) { skipHandleError = false; }
-        /** @type {?} */
-        var request = {
-            method: 'POST',
-            url: '/api/identity/my-profile/change-password',
-            body: body,
-        };
-        return this.rest.request(request, { skipHandleError: skipHandleError });
-    };
-    ProfileService.decorators = [
-        { type: Injectable, args: [{
-                    providedIn: 'root',
-                },] }
-    ];
-    /** @nocollapse */
-    ProfileService.ctorParameters = function () { return [
-        { type: RestService }
-    ]; };
-    /** @nocollapse */ ProfileService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileService_Factory() { return new ProfileService(ɵɵinject(RestService)); }, token: ProfileService, providedIn: "root" });
-    return ProfileService;
-}());
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ProfileService.prototype.rest;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var ProfileState = /** @class */ (function () {
-    function ProfileState(profileService) {
-        this.profileService = profileService;
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    ProfileState.getProfile = /**
-     * @param {?} __0
-     * @return {?}
-     */
-    function (_a) {
-        var profile = _a.profile;
-        return profile;
-    };
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    ProfileState.prototype.profileGet = /**
-     * @param {?} __0
-     * @return {?}
-     */
-    function (_a) {
-        var patchState = _a.patchState;
-        return this.profileService.get().pipe(tap((/**
-         * @param {?} profile
-         * @return {?}
-         */
-        function (profile) {
-            return patchState({
-                profile: profile,
-            });
-        })));
-    };
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    ProfileState.prototype.profileUpdate = /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    function (_a, _b) {
-        var patchState = _a.patchState;
-        var payload = _b.payload;
-        return this.profileService.update(payload).pipe(tap((/**
-         * @param {?} profile
-         * @return {?}
-         */
-        function (profile) {
-            return patchState({
-                profile: profile,
-            });
-        })));
-    };
-    /**
-     * @param {?} _
-     * @param {?} __1
-     * @return {?}
-     */
-    ProfileState.prototype.changePassword = /**
-     * @param {?} _
-     * @param {?} __1
-     * @return {?}
-     */
-    function (_, _a) {
-        var payload = _a.payload;
-        return this.profileService.changePassword(payload, true);
-    };
-    __decorate([
-        Action(GetProfile),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], ProfileState.prototype, "profileGet", null);
-    __decorate([
-        Action(UpdateProfile),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, UpdateProfile]),
-        __metadata("design:returntype", void 0)
-    ], ProfileState.prototype, "profileUpdate", null);
-    __decorate([
-        Action(ChangePassword),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, ChangePassword]),
-        __metadata("design:returntype", void 0)
-    ], ProfileState.prototype, "changePassword", null);
-    __decorate([
-        Selector(),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", Object)
-    ], ProfileState, "getProfile", null);
-    ProfileState = __decorate([
-        State({
-            name: 'ProfileState',
-            defaults: (/** @type {?} */ ({})),
-        }),
-        __metadata("design:paramtypes", [ProfileService])
-    ], ProfileState);
-    return ProfileState;
-}());
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ProfileState.prototype.profileService;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-// Different locales from .NET
-// Key is .NET locale, value is Angular locale
-var localesMapping = {
-    'ar-sa': 'ar-SA',
-    'ca-ES-valencia': 'ca-ES-VALENCIA',
-    'de-de': 'de',
-    'es-ES': 'es',
-    'en-US': 'en',
-    'fil-Latn': 'en',
-    'ku-Arab': 'en',
-    'ky-Cyrl': 'en',
-    'mi-Latn': 'en',
-    'prs-Arab': 'en',
-    'qut-Latn': 'en',
-    nso: 'en',
-    quz: 'en',
-    'fr-FR': 'fr',
-    'gd-Latn': 'gd',
-    'ha-Latn': 'ha',
-    'ig-Latn': 'ig',
-    'it-it': 'it',
-    'mn-Cyrl': 'mn',
-    'pt-BR': 'pt',
-    'sd-Arab': 'pa-Arab',
-    'sr-Cyrl-RS': 'sr-Cyrl',
-    'sr-Latn-RS': 'sr-Latn',
-    'tg-Cyrl': 'tg',
-    'tk-Latn': 'tk',
-    'tt-Cyrl': 'tt',
-    'ug-Arab': 'ug',
-    'yo-Latn': 'yo',
-};
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} injector
- * @return {?}
- */
-function getInitialData(injector) {
-    /** @type {?} */
-    var fn = (/**
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        var store = injector.get(Store);
-        return store.dispatch(new GetAppConfiguration()).toPromise();
-    });
-    return fn;
-}
-/**
- * @param {?} injector
- * @return {?}
- */
-function localeInitializer(injector) {
-    /** @type {?} */
-    var fn = (/**
-     * @return {?}
-     */
-    function () {
-        /** @type {?} */
-        var store = injector.get(Store);
-        /** @type {?} */
-        var lang = store.selectSnapshot(SessionState.getLanguage) || 'en';
-        return new Promise((/**
-         * @param {?} resolve
-         * @param {?} reject
-         * @return {?}
-         */
-        function (resolve, reject) {
-            registerLocale(lang).then((/**
-             * @return {?}
-             */
-            function () { return resolve(); }), reject);
-        }));
-    });
-    return fn;
-}
-/**
- * @param {?} locale
- * @return {?}
- */
-function registerLocale(locale) {
-    return import(
-    /* webpackInclude: /(af|am|ar-SA|as|az-Latn|be|bg|bn-BD|bn-IN|bs|ca|ca-ES-VALENCIA|cs|cy|da|de|de|el|en-GB|en|es|en|es-US|es-MX|et|eu|fa|fi|en|fr|fr|fr-CA|ga|gd|gl|gu|ha|he|hi|hr|hu|hy|id|ig|is|it|it|ja|ka|kk|km|kn|ko|kok|en|en|lb|lt|lv|en|mk|ml|mn|mr|ms|mt|nb|ne|nl|nl-BE|nn|en|or|pa|pa-Arab|pl|en|pt|pt-PT|en|en|ro|ru|rw|pa-Arab|si|sk|sl|sq|sr-Cyrl-BA|sr-Cyrl|sr-Latn|sv|sw|ta|te|tg|th|ti|tk|tn|tr|tt|ug|uk|ur|uz-Latn|vi|wo|xh|yo|zh-Hans|zh-Hant|zu)\.js$/ */
-    "@angular/common/locales/" + (localesMapping[locale] || locale) + ".js").then((/**
-     * @param {?} module
-     * @return {?}
-     */
-    function (module) {
-        registerLocaleData(module.default);
-    }));
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var LocalizationService = /** @class */ (function () {
-    function LocalizationService(store, router, ngZone, actions, otherInstance) {
-        this.store = store;
-        this.router = router;
-        this.ngZone = ngZone;
-        this.actions = actions;
-        if (otherInstance)
-            throw new Error('LocaleService should have only one instance.');
-    }
-    Object.defineProperty(LocalizationService.prototype, "currentLang", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            return this.store.selectSnapshot(SessionState.getLanguage);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * @private
-     * @param {?} reuse
-     * @return {?}
-     */
-    LocalizationService.prototype.setRouteReuse = /**
-     * @private
-     * @param {?} reuse
-     * @return {?}
-     */
-    function (reuse) {
-        this.router.routeReuseStrategy.shouldReuseRoute = reuse;
-    };
-    /**
-     * @param {?} locale
-     * @return {?}
-     */
-    LocalizationService.prototype.registerLocale = /**
-     * @param {?} locale
-     * @return {?}
-     */
-    function (locale) {
-        var _this = this;
-        var shouldReuseRoute = this.router.routeReuseStrategy.shouldReuseRoute;
-        this.setRouteReuse((/**
-         * @return {?}
-         */
-        function () { return false; }));
-        this.router.navigated = false;
-        return registerLocale(locale).then((/**
-         * @return {?}
-         */
-        function () {
-            _this.ngZone.run((/**
-             * @return {?}
-             */
-            function () { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    switch (_a.label) {
-                        case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(noop$1)];
-                        case 1:
-                            _a.sent();
-                            this.setRouteReuse(shouldReuseRoute);
-                            return [2 /*return*/];
-                    }
-                });
-            }); }));
-        }));
-    };
-    /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    LocalizationService.prototype.get = /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    function (keys) {
-        var interpolateParams = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            interpolateParams[_i - 1] = arguments[_i];
-        }
-        return this.store.select(ConfigState.getCopy.apply(ConfigState, __spread([keys], interpolateParams)));
-    };
-    /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    LocalizationService.prototype.instant = /**
-     * @param {?} keys
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    function (keys) {
-        var interpolateParams = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            interpolateParams[_i - 1] = arguments[_i];
-        }
-        return this.store.selectSnapshot(ConfigState.getCopy.apply(ConfigState, __spread([keys], interpolateParams)));
-    };
-    LocalizationService.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    LocalizationService.ctorParameters = function () { return [
-        { type: Store },
-        { type: Router },
-        { type: NgZone },
-        { type: Actions },
-        { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
-    ]; };
-    /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(Actions), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
-    return LocalizationService;
-}());
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.store;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.router;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.ngZone;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationService.prototype.actions;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var SessionState = /** @class */ (function () {
-    function SessionState(localizationService) {
-        this.localizationService = localizationService;
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    SessionState.getLanguage = /**
-     * @param {?} __0
-     * @return {?}
-     */
-    function (_a) {
-        var language = _a.language;
-        return language;
-    };
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    SessionState.getTenant = /**
-     * @param {?} __0
-     * @return {?}
-     */
-    function (_a) {
-        var tenant = _a.tenant;
-        return tenant;
-    };
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    SessionState.prototype.setLanguage = /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    function (_a, _b) {
-        var patchState = _a.patchState, dispatch = _a.dispatch;
-        var payload = _b.payload;
-        patchState({
-            language: payload,
-        });
-        return combineLatest([dispatch(new GetAppConfiguration()), from(this.localizationService.registerLocale(payload))]);
-    };
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    SessionState.prototype.setTenantId = /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */
-    function (_a, _b) {
-        var patchState = _a.patchState;
-        var payload = _b.payload;
-        patchState({
-            tenant: payload,
-        });
-    };
-    __decorate([
-        Action(SetLanguage),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, SetLanguage]),
-        __metadata("design:returntype", void 0)
-    ], SessionState.prototype, "setLanguage", null);
-    __decorate([
-        Action(SetTenant),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, SetTenant]),
-        __metadata("design:returntype", void 0)
-    ], SessionState.prototype, "setTenantId", null);
-    __decorate([
-        Selector(),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", String)
-    ], SessionState, "getLanguage", null);
-    __decorate([
-        Selector(),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", Object)
-    ], SessionState, "getTenant", null);
-    SessionState = __decorate([
-        State({
-            name: 'SessionState',
-            defaults: (/** @type {?} */ ({})),
-        }),
-        __metadata("design:paramtypes", [LocalizationService])
-    ], SessionState);
-    return SessionState;
-}());
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    SessionState.prototype.localizationService;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var RestService = /** @class */ (function () {
     function RestService(http, store) {
@@ -893,12 +340,12 @@ var RestService = /** @class */ (function () {
      */
     function (request, config, api) {
         var _this = this;
-        if (config === void 0) { config = {}; }
+        config = config || ((/** @type {?} */ ({})));
         var _a = config.observe, observe = _a === void 0 ? "body" /* Body */ : _a, skipHandleError = config.skipHandleError;
         /** @type {?} */
-        var url = api || this.store.selectSnapshot(ConfigState.getApiUrl()) + request.url;
+        var url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
         var method = request.method, options = __rest(request, ["method"]);
-        return this.http.request(method, url, (/** @type {?} */ (__assign({ observe: observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : null, catchError((/**
+        return this.http.request(method, url, (/** @type {?} */ (__assign({ observe: observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
          * @param {?} err
          * @return {?}
          */
@@ -937,7 +384,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApplicationConfigurationService = /** @class */ (function () {
     function ApplicationConfigurationService(rest) {
@@ -979,7 +426,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} routes
@@ -1070,10 +517,386 @@ function sortRoutes(routes) {
         return route;
     }));
 }
+/** @type {?} */
+var ABP_ROUTES = (/** @type {?} */ ([]));
+/**
+ * @param {?} routes
+ * @return {?}
+ */
+function addAbpRoutes(routes) {
+    if (!Array.isArray(routes)) {
+        routes = [routes];
+    }
+    ABP_ROUTES.push.apply(ABP_ROUTES, __spread(routes));
+}
+/**
+ * @return {?}
+ */
+function getAbpRoutes() {
+    return ABP_ROUTES;
+}
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+// Different locales from .NET
+// Key is .NET locale, value is Angular locale
+var localesMapping = {
+    'ar-sa': 'ar-SA',
+    'ca-ES-valencia': 'ca-ES-VALENCIA',
+    'de-de': 'de',
+    'es-ES': 'es',
+    'en-US': 'en',
+    'fil-Latn': 'en',
+    'ku-Arab': 'en',
+    'ky-Cyrl': 'en',
+    'mi-Latn': 'en',
+    'prs-Arab': 'en',
+    'qut-Latn': 'en',
+    nso: 'en',
+    quz: 'en',
+    'fr-FR': 'fr',
+    'gd-Latn': 'gd',
+    'ha-Latn': 'ha',
+    'ig-Latn': 'ig',
+    'it-it': 'it',
+    'mn-Cyrl': 'mn',
+    'pt-BR': 'pt',
+    'sd-Arab': 'pa-Arab',
+    'sr-Cyrl-RS': 'sr-Cyrl',
+    'sr-Latn-RS': 'sr-Latn',
+    'tg-Cyrl': 'tg',
+    'tk-Latn': 'tk',
+    'tt-Cyrl': 'tt',
+    'ug-Arab': 'ug',
+    'yo-Latn': 'yo',
+};
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function getInitialData(injector) {
+    /** @type {?} */
+    var fn = (/**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var store = injector.get(Store);
+        return store.dispatch(new GetAppConfiguration()).toPromise();
+    });
+    return fn;
+}
+/**
+ * @param {?} injector
+ * @return {?}
+ */
+function localeInitializer(injector) {
+    /** @type {?} */
+    var fn = (/**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var store = injector.get(Store);
+        /** @type {?} */
+        var lang = store.selectSnapshot((/**
+         * @param {?} state
+         * @return {?}
+         */
+        function (state) { return state.SessionState.language; })) || 'en';
+        return new Promise((/**
+         * @param {?} resolve
+         * @param {?} reject
+         * @return {?}
+         */
+        function (resolve, reject) {
+            registerLocale(lang).then((/**
+             * @return {?}
+             */
+            function () { return resolve(); }), reject);
+        }));
+    });
+    return fn;
+}
+/**
+ * @param {?} locale
+ * @return {?}
+ */
+function registerLocale(locale) {
+    return import(
+    /* webpackInclude: /(af|am|ar-SA|as|az-Latn|be|bg|bn-BD|bn-IN|bs|ca|ca-ES-VALENCIA|cs|cy|da|de|de|el|en-GB|en|es|en|es-US|es-MX|et|eu|fa|fi|en|fr|fr|fr-CA|ga|gd|gl|gu|ha|he|hi|hr|hu|hy|id|ig|is|it|it|ja|ka|kk|km|kn|ko|kok|en|en|lb|lt|lv|en|mk|ml|mn|mr|ms|mt|nb|ne|nl|nl-BE|nn|en|or|pa|pa-Arab|pl|en|pt|pt-PT|en|en|ro|ru|rw|pa-Arab|si|sk|sl|sq|sr-Cyrl-BA|sr-Cyrl|sr-Latn|sv|sw|ta|te|tg|th|ti|tk|tn|tr|tt|ug|uk|ur|uz-Latn|vi|wo|xh|yo|zh-Hans|zh-Hant|zu)\.js$/ */
+    "@angular/common/locales/" + (localesMapping[locale] || locale) + ".js").then((/**
+     * @param {?} module
+     * @return {?}
+     */
+    function (module) {
+        registerLocaleData(module.default);
+    }));
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var LocalizationService = /** @class */ (function () {
+    function LocalizationService(store, router, ngZone, otherInstance) {
+        this.store = store;
+        this.router = router;
+        this.ngZone = ngZone;
+        if (otherInstance)
+            throw new Error('LocaleService should have only one instance.');
+    }
+    Object.defineProperty(LocalizationService.prototype, "currentLang", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.store.selectSnapshot((/**
+             * @param {?} state
+             * @return {?}
+             */
+            function (state) { return state.SessionState.language; }));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @param {?} reuse
+     * @return {?}
+     */
+    LocalizationService.prototype.setRouteReuse = /**
+     * @param {?} reuse
+     * @return {?}
+     */
+    function (reuse) {
+        this.router.routeReuseStrategy.shouldReuseRoute = reuse;
+    };
+    /**
+     * @param {?} locale
+     * @return {?}
+     */
+    LocalizationService.prototype.registerLocale = /**
+     * @param {?} locale
+     * @return {?}
+     */
+    function (locale) {
+        var _this = this;
+        var shouldReuseRoute = this.router.routeReuseStrategy.shouldReuseRoute;
+        this.setRouteReuse((/**
+         * @return {?}
+         */
+        function () { return false; }));
+        this.router.navigated = false;
+        return registerLocale(locale).then((/**
+         * @return {?}
+         */
+        function () {
+            _this.ngZone.run((/**
+             * @return {?}
+             */
+            function () { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4 /*yield*/, this.router.navigateByUrl(this.router.url).catch(noop$1)];
+                        case 1:
+                            _a.sent();
+                            this.setRouteReuse(shouldReuseRoute);
+                            return [2 /*return*/];
+                    }
+                });
+            }); }));
+        }));
+    };
+    /**
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    LocalizationService.prototype.get = /**
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    function (key) {
+        var interpolateParams = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            interpolateParams[_i - 1] = arguments[_i];
+        }
+        return this.store.select(ConfigState.getLocalization.apply(ConfigState, __spread([key], interpolateParams)));
+    };
+    /**
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    LocalizationService.prototype.instant = /**
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    function (key) {
+        var interpolateParams = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            interpolateParams[_i - 1] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getLocalization.apply(ConfigState, __spread([key], interpolateParams)));
+    };
+    LocalizationService.decorators = [
+        { type: Injectable, args: [{ providedIn: 'root' },] }
+    ];
+    /** @nocollapse */
+    LocalizationService.ctorParameters = function () { return [
+        { type: Store },
+        { type: Router },
+        { type: NgZone },
+        { type: LocalizationService, decorators: [{ type: Optional }, { type: SkipSelf }] }
+    ]; };
+    /** @nocollapse */ LocalizationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function LocalizationService_Factory() { return new LocalizationService(ɵɵinject(Store), ɵɵinject(Router), ɵɵinject(NgZone), ɵɵinject(LocalizationService, 12)); }, token: LocalizationService, providedIn: "root" });
+    return LocalizationService;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationService.prototype.ngZone;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SessionState = /** @class */ (function () {
+    function SessionState(localizationService) {
+        this.localizationService = localizationService;
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    SessionState.getLanguage = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var language = _a.language;
+        return language;
+    };
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    SessionState.getTenant = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var tenant = _a.tenant;
+        return tenant;
+    };
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    SessionState.prototype.setLanguage = /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    function (_a, _b) {
+        var _this = this;
+        var patchState = _a.patchState, dispatch = _a.dispatch;
+        var payload = _b.payload;
+        patchState({
+            language: payload,
+        });
+        return dispatch(new GetAppConfiguration()).pipe(switchMap((/**
+         * @return {?}
+         */
+        function () { return from(_this.localizationService.registerLocale(payload)); })));
+    };
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    SessionState.prototype.setTenant = /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    function (_a, _b) {
+        var patchState = _a.patchState;
+        var payload = _b.payload;
+        patchState({
+            tenant: payload,
+        });
+    };
+    SessionState.ctorParameters = function () { return [
+        { type: LocalizationService }
+    ]; };
+    __decorate([
+        Action(SetLanguage),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, SetLanguage]),
+        __metadata("design:returntype", void 0)
+    ], SessionState.prototype, "setLanguage", null);
+    __decorate([
+        Action(SetTenant),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, SetTenant]),
+        __metadata("design:returntype", void 0)
+    ], SessionState.prototype, "setTenant", null);
+    __decorate([
+        Selector(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", String)
+    ], SessionState, "getLanguage", null);
+    __decorate([
+        Selector(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", Object)
+    ], SessionState, "getTenant", null);
+    SessionState = __decorate([
+        State({
+            name: 'SessionState',
+            defaults: (/** @type {?} */ ({})),
+        }),
+        __metadata("design:paramtypes", [LocalizationService])
+    ], SessionState);
+    return SessionState;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionState.prototype.localizationService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ConfigState = /** @class */ (function () {
     function ConfigState(appConfigurationService, store) {
@@ -1232,6 +1055,50 @@ var ConfigState = /** @class */ (function () {
         return selector;
     };
     /**
+     * @param {?=} keyword
+     * @return {?}
+     */
+    ConfigState.getSettings = /**
+     * @param {?=} keyword
+     * @return {?}
+     */
+    function (keyword) {
+        /** @type {?} */
+        var selector = createSelector([ConfigState_1], (/**
+         * @param {?} state
+         * @return {?}
+         */
+        function (state) {
+            if (keyword) {
+                /** @type {?} */
+                var keys = snq((/**
+                 * @return {?}
+                 */
+                function () { return Object.keys(state.setting.values).filter((/**
+                 * @param {?} key
+                 * @return {?}
+                 */
+                function (key) { return key.indexOf(keyword) > -1; })); }), []);
+                if (keys.length) {
+                    return keys.reduce((/**
+                     * @param {?} acc
+                     * @param {?} key
+                     * @return {?}
+                     */
+                    function (acc, key) {
+                        var _a;
+                        return (__assign({}, acc, (_a = {}, _a[key] = state.setting.values[key], _a)));
+                    }), {});
+                }
+            }
+            return snq((/**
+             * @return {?}
+             */
+            function () { return state.setting.values; }), {});
+        }));
+        return selector;
+    };
+    /**
      * @param {?} key
      * @return {?}
      */
@@ -1260,7 +1127,7 @@ var ConfigState = /** @class */ (function () {
      * @param {...?} interpolateParams
      * @return {?}
      */
-    ConfigState.getCopy = /**
+    ConfigState.getLocalization = /**
      * @param {?} key
      * @param {...?} interpolateParams
      * @return {?}
@@ -1269,6 +1136,12 @@ var ConfigState = /** @class */ (function () {
         var interpolateParams = [];
         for (var _i = 1; _i < arguments.length; _i++) {
             interpolateParams[_i - 1] = arguments[_i];
+        }
+        /** @type {?} */
+        var defaultValue;
+        if (typeof key !== 'string') {
+            defaultValue = key.defaultValue;
+            key = key.key;
         }
         if (!key)
             key = '';
@@ -1281,11 +1154,11 @@ var ConfigState = /** @class */ (function () {
          */
         function (state) {
             if (!state.localization)
-                return key;
+                return defaultValue || key;
             var defaultResourceName = state.environment.localization.defaultResourceName;
             if (keys[0] === '') {
                 if (!defaultResourceName) {
-                    throw new Error("Please check your environment. May you forget set defaultResourceName? \n              Here is the example:\n               { production: false,\n                 localization: {\n                   defaultResourceName: 'MyProjectName'\n                  }\n               }");
+                    throw new Error("Please check your environment. May you forget set defaultResourceName?\n              Here is the example:\n               { production: false,\n                 localization: {\n                   defaultResourceName: 'MyProjectName'\n                  }\n               }");
                 }
                 keys[0] = snq((/**
                  * @return {?}
@@ -1293,7 +1166,7 @@ var ConfigState = /** @class */ (function () {
                 function () { return defaultResourceName; }));
             }
             /** @type {?} */
-            var copy = ((/** @type {?} */ (keys))).reduce((/**
+            var localization = ((/** @type {?} */ (keys))).reduce((/**
              * @param {?} acc
              * @param {?} val
              * @return {?}
@@ -1309,16 +1182,18 @@ var ConfigState = /** @class */ (function () {
              * @return {?}
              */
             function (params) { return params != null; }));
-            if (copy && interpolateParams && interpolateParams.length) {
+            if (localization && interpolateParams && interpolateParams.length) {
                 interpolateParams.forEach((/**
                  * @param {?} param
                  * @return {?}
                  */
                 function (param) {
-                    copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
+                    localization = localization.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
                 }));
             }
-            return copy || key;
+            if (typeof localization !== 'string')
+                localization = '';
+            return localization || defaultValue || key;
         }));
         return selector;
     };
@@ -1379,6 +1254,10 @@ var ConfigState = /** @class */ (function () {
         });
     };
     var ConfigState_1;
+    ConfigState.ctorParameters = function () { return [
+        { type: ApplicationConfigurationService },
+        { type: Store }
+    ]; };
     __decorate([
         Action(GetAppConfiguration),
         __metadata("design:type", Function),
@@ -1432,22 +1311,20 @@ if (false) {
  * @return {?}
  */
 function patchRouteDeep(routes, name, newValue, parentUrl) {
-    if (parentUrl === void 0) { parentUrl = null; }
+    if (parentUrl === void 0) { parentUrl = ''; }
     routes = routes.map((/**
      * @param {?} route
      * @return {?}
      */
     function (route) {
         if (route.name === name) {
-            if (newValue.path) {
-                newValue.url = parentUrl + "/" + newValue.path;
-            }
+            newValue.url = parentUrl + "/" + ((!newValue.path && newValue.path === '' ? route.path : newValue.path) || '');
             if (newValue.children && newValue.children.length) {
                 newValue.children = newValue.children.map((/**
                  * @param {?} child
                  * @return {?}
                  */
-                function (child) { return (__assign({}, child, { url: parentUrl + "/" + route.path + "/" + child.path })); }));
+                function (child) { return (__assign({}, child, { url: (newValue.url + "/" + child.path).replace('//', '/') })); }));
             }
             return __assign({}, route, newValue);
         }
@@ -1465,7 +1342,7 @@ function patchRouteDeep(routes, name, newValue, parentUrl) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} value
@@ -1499,6 +1376,7 @@ function (componentInstance, destroyMethodName) {
              * @return {?}
              */
             function () {
+                // tslint:disable-next-line: no-unused-expression
                 isFunction(originalDestroy) && originalDestroy.apply(this, arguments);
                 componentInstance['__takeUntilDestroy'].next(true);
                 componentInstance['__takeUntilDestroy'].complete();
@@ -1510,7 +1388,7 @@ function (componentInstance, destroyMethodName) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var DynamicLayoutComponent = /** @class */ (function () {
     function DynamicLayoutComponent(router, route, store) {
@@ -1571,7 +1449,7 @@ var DynamicLayoutComponent = /** @class */ (function () {
     DynamicLayoutComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-dynamic-layout',
-                    template: "\n    <ng-container *ngTemplateOutlet=\"layout ? componentOutlet : routerOutlet\"></ng-container>\n\n    <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>\n    <ng-template #componentOutlet><ng-container *ngComponentOutlet=\"layout\"></ng-container></ng-template>\n  "
+                    template: "\n    <ng-container *ngTemplateOutlet=\"layout ? componentOutlet : routerOutlet\"></ng-container>\n    <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>\n    <ng-template #componentOutlet><ng-container *ngComponentOutlet=\"layout\"></ng-container></ng-template>\n  "
                 }] }
     ];
     /** @nocollapse */
@@ -1649,7 +1527,7 @@ function findLayout(segments, routes) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var RouterOutletComponent = /** @class */ (function () {
     function RouterOutletComponent() {
@@ -1665,17 +1543,17 @@ var RouterOutletComponent = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AutofocusDirective = /** @class */ (function () {
     function AutofocusDirective(elRef) {
@@ -1697,7 +1575,8 @@ var AutofocusDirective = /** @class */ (function () {
     };
     AutofocusDirective.decorators = [
         { type: Directive, args: [{
-                    selector: '[autofocus]',
+                    // tslint:disable-next-line: directive-selector
+                    selector: '[autofocus]'
                 },] }
     ];
     /** @nocollapse */
@@ -1721,7 +1600,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var EllipsisDirective = /** @class */ (function () {
     function EllipsisDirective(cdRef, elRef) {
@@ -1820,7 +1699,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AbpForContext = /** @class */ (function () {
     function AbpForContext($implicit, index, count, list) {
@@ -1966,8 +1845,11 @@ var ForDirective = /** @class */ (function () {
      */
     function (items) {
         if (!items.length && this.emptyRef) {
+            this.vcRef.clear();
+            // tslint:disable-next-line: no-unused-expression
             this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
             this.isShowEmptyRef = true;
+            this.differ = null;
             return;
         }
         if (this.emptyRef && this.isShowEmptyRef) {
@@ -2024,7 +1906,7 @@ var ForDirective = /** @class */ (function () {
             return;
         /** @type {?} */
         var compareFn = this.compareFn;
-        if (typeof this.filterBy !== 'undefined') {
+        if (typeof this.filterBy !== 'undefined' && this.filterVal) {
             items = items.filter((/**
              * @param {?} item
              * @return {?}
@@ -2114,12 +1996,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @return {?}
  */
 function noop() {
+    // tslint:disable-next-line: only-arrow-functions
     /** @type {?} */
     var fn = (/**
      * @return {?}
@@ -2130,7 +2013,7 @@ function noop() {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?=} a
@@ -2138,18 +2021,19 @@ function noop() {
  */
 function uuid(a) {
     return a
-        ? (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
+        ? // tslint:disable-next-line: no-bitwise
+            (a ^ ((Math.random() * 16) >> (a / 4))).toString(16)
         : ('' + 1e7 + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, uuid);
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var FormSubmitDirective = /** @class */ (function () {
     function FormSubmitDirective(formGroupDirective, host, cdRef) {
@@ -2224,7 +2108,8 @@ var FormSubmitDirective = /** @class */ (function () {
     };
     FormSubmitDirective.decorators = [
         { type: Directive, args: [{
-                    selector: 'form[ngSubmit][formGroup]',
+                    // tslint:disable-next-line: directive-selector
+                    selector: 'form[ngSubmit][formGroup]'
                 },] }
     ];
     /** @nocollapse */
@@ -2289,7 +2174,212 @@ function setDirty(controls) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ProfileService = /** @class */ (function () {
+    function ProfileService(rest) {
+        this.rest = rest;
+    }
+    /**
+     * @return {?}
+     */
+    ProfileService.prototype.get = /**
+     * @return {?}
+     */
+    function () {
+        /** @type {?} */
+        var request = {
+            method: 'GET',
+            url: '/api/identity/my-profile',
+        };
+        return this.rest.request(request);
+    };
+    /**
+     * @param {?} body
+     * @return {?}
+     */
+    ProfileService.prototype.update = /**
+     * @param {?} body
+     * @return {?}
+     */
+    function (body) {
+        /** @type {?} */
+        var request = {
+            method: 'PUT',
+            url: '/api/identity/my-profile',
+            body: body,
+        };
+        return this.rest.request(request);
+    };
+    /**
+     * @param {?} body
+     * @param {?=} skipHandleError
+     * @return {?}
+     */
+    ProfileService.prototype.changePassword = /**
+     * @param {?} body
+     * @param {?=} skipHandleError
+     * @return {?}
+     */
+    function (body, skipHandleError) {
+        if (skipHandleError === void 0) { skipHandleError = false; }
+        /** @type {?} */
+        var request = {
+            method: 'POST',
+            url: '/api/identity/my-profile/change-password',
+            body: body,
+        };
+        return this.rest.request(request, { skipHandleError: skipHandleError });
+    };
+    ProfileService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    ProfileService.ctorParameters = function () { return [
+        { type: RestService }
+    ]; };
+    /** @nocollapse */ ProfileService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileService_Factory() { return new ProfileService(ɵɵinject(RestService)); }, token: ProfileService, providedIn: "root" });
+    return ProfileService;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileService.prototype.rest;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ProfileState = /** @class */ (function () {
+    function ProfileState(profileService) {
+        this.profileService = profileService;
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    ProfileState.getProfile = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var profile = _a.profile;
+        return profile;
+    };
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    ProfileState.prototype.getProfile = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var patchState = _a.patchState;
+        return this.profileService.get().pipe(tap((/**
+         * @param {?} profile
+         * @return {?}
+         */
+        function (profile) {
+            return patchState({
+                profile: profile,
+            });
+        })));
+    };
+    /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    ProfileState.prototype.updateProfile = /**
+     * @param {?} __0
+     * @param {?} __1
+     * @return {?}
+     */
+    function (_a, _b) {
+        var patchState = _a.patchState;
+        var payload = _b.payload;
+        return this.profileService.update(payload).pipe(tap((/**
+         * @param {?} profile
+         * @return {?}
+         */
+        function (profile) {
+            return patchState({
+                profile: profile,
+            });
+        })));
+    };
+    /**
+     * @param {?} _
+     * @param {?} __1
+     * @return {?}
+     */
+    ProfileState.prototype.changePassword = /**
+     * @param {?} _
+     * @param {?} __1
+     * @return {?}
+     */
+    function (_, _a) {
+        var payload = _a.payload;
+        return this.profileService.changePassword(payload, true);
+    };
+    ProfileState.ctorParameters = function () { return [
+        { type: ProfileService }
+    ]; };
+    __decorate([
+        Action(GetProfile),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], ProfileState.prototype, "getProfile", null);
+    __decorate([
+        Action(UpdateProfile),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, UpdateProfile]),
+        __metadata("design:returntype", void 0)
+    ], ProfileState.prototype, "updateProfile", null);
+    __decorate([
+        Action(ChangePassword),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, ChangePassword]),
+        __metadata("design:returntype", void 0)
+    ], ProfileState.prototype, "changePassword", null);
+    __decorate([
+        Selector(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", Object)
+    ], ProfileState, "getProfile", null);
+    ProfileState = __decorate([
+        State({
+            name: 'ProfileState',
+            defaults: (/** @type {?} */ ({})),
+        }),
+        __metadata("design:paramtypes", [ProfileService])
+    ], ProfileState);
+    return ProfileState;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileState.prototype.profileService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PermissionDirective = /** @class */ (function () {
     function PermissionDirective(elRef, renderer, store) {
@@ -2365,7 +2455,160 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SortPipe = /** @class */ (function () {
+    function SortPipe() {
+    }
+    /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */
+    SortPipe.prototype.transform = /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */
+    function (value, sortOrder, sortKey) {
+        if (sortOrder === void 0) { sortOrder = 'asc'; }
+        sortOrder = sortOrder && ((/** @type {?} */ (sortOrder.toLowerCase())));
+        if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc'))
+            return value;
+        /** @type {?} */
+        var numberArray = [];
+        /** @type {?} */
+        var stringArray = [];
+        if (!sortKey) {
+            numberArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item === 'number'; })).sort();
+            stringArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item === 'string'; })).sort();
+        }
+        else {
+            numberArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item[sortKey] === 'number'; })).sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function (a, b) { return a[sortKey] - b[sortKey]; }));
+            stringArray = value
+                .filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item[sortKey] === 'string'; }))
+                .sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function (a, b) {
+                if (a[sortKey] < b[sortKey])
+                    return -1;
+                else if (a[sortKey] > b[sortKey])
+                    return 1;
+                else
+                    return 0;
+            }));
+        }
+        /** @type {?} */
+        var sorted = numberArray.concat(stringArray);
+        return sortOrder === 'asc' ? sorted : sorted.reverse();
+    };
+    SortPipe.decorators = [
+        { type: Injectable },
+        { type: Pipe, args: [{
+                    name: 'abpSort',
+                },] }
+    ];
+    return SortPipe;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @record
+ */
+function TableSortOptions() { }
+if (false) {
+    /** @type {?} */
+    TableSortOptions.prototype.key;
+    /** @type {?} */
+    TableSortOptions.prototype.order;
+}
+var TableSortDirective = /** @class */ (function () {
+    function TableSortDirective(table, sortPipe) {
+        this.table = table;
+        this.sortPipe = sortPipe;
+        this.value = [];
+    }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    TableSortDirective.prototype.ngOnChanges = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var value = _a.value, abpTableSort = _a.abpTableSort;
+        if (value || abpTableSort) {
+            this.abpTableSort = this.abpTableSort || ((/** @type {?} */ ({})));
+            this.table.value = this.sortPipe.transform(clone(this.value), this.abpTableSort.order, this.abpTableSort.key);
+        }
+    };
+    TableSortDirective.decorators = [
+        { type: Directive, args: [{
+                    selector: '[abpTableSort]',
+                    providers: [SortPipe],
+                },] }
+    ];
+    /** @nocollapse */
+    TableSortDirective.ctorParameters = function () { return [
+        { type: Table, decorators: [{ type: Optional }, { type: Self }] },
+        { type: SortPipe }
+    ]; };
+    TableSortDirective.propDecorators = {
+        abpTableSort: [{ type: Input }],
+        value: [{ type: Input }]
+    };
+    return TableSortDirective;
+}());
+if (false) {
+    /** @type {?} */
+    TableSortDirective.prototype.abpTableSort;
+    /** @type {?} */
+    TableSortDirective.prototype.value;
+    /**
+     * @type {?}
+     * @private
+     */
+    TableSortDirective.prototype.table;
+    /**
+     * @type {?}
+     * @private
+     */
+    TableSortDirective.prototype.sortPipe;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var VisibilityDirective = /** @class */ (function () {
     function VisibilityDirective(elRef, renderer) {
@@ -2382,6 +2625,9 @@ var VisibilityDirective = /** @class */ (function () {
      */
     function () {
         var _this = this;
+        if (!this.focusedElement && this.elRef) {
+            this.focusedElement = this.elRef.nativeElement;
+        }
         /** @type {?} */
         var observer;
         if (this.mutationObserverEnabled) {
@@ -2503,34 +2749,36 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @enum {string} */
 var eLayoutType = {
     account: 'account',
     application: 'application',
     empty: 'empty',
+    /**
+     * @deprecated since version 0.9.0
+     */
     setting: 'setting',
 };
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AuthGuard = /** @class */ (function () {
-    function AuthGuard(oauthService, store, router) {
+    function AuthGuard(oauthService, router) {
         this.oauthService = oauthService;
-        this.store = store;
         this.router = router;
     }
     /**
@@ -2559,10 +2807,9 @@ var AuthGuard = /** @class */ (function () {
     /** @nocollapse */
     AuthGuard.ctorParameters = function () { return [
         { type: OAuthService },
-        { type: Store },
         { type: Router }
     ]; };
-    /** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Store), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
+    /** @nocollapse */ AuthGuard.ngInjectableDef = ɵɵdefineInjectable({ factory: function AuthGuard_Factory() { return new AuthGuard(ɵɵinject(OAuthService), ɵɵinject(Router)); }, token: AuthGuard, providedIn: "root" });
     return AuthGuard;
 }());
 if (false) {
@@ -2575,17 +2822,12 @@ if (false) {
      * @type {?}
      * @private
      */
-    AuthGuard.prototype.store;
-    /**
-     * @type {?}
-     * @private
-     */
     AuthGuard.prototype.router;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PermissionGuard = /** @class */ (function () {
     function PermissionGuard(store) {
@@ -2636,12 +2878,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApiInterceptor = /** @class */ (function () {
     function ApiInterceptor(oAuthService, store) {
@@ -2712,12 +2954,12 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApplicationConfiguration;
 (function (ApplicationConfiguration) {
@@ -2788,11 +3030,11 @@ var ApplicationConfiguration;
     /**
      * @record
      */
-    function Setting() { }
-    ApplicationConfiguration.Setting = Setting;
+    function Value() { }
+    ApplicationConfiguration.Value = Value;
     if (false) {
         /** @type {?} */
-        Setting.prototype.values;
+        Value.prototype.values;
     }
     /**
      * @record
@@ -2809,20 +3051,11 @@ var ApplicationConfiguration;
         /** @type {?} */
         CurrentUser.prototype.userName;
     }
-    /**
-     * @record
-     */
-    function Features() { }
-    ApplicationConfiguration.Features = Features;
-    if (false) {
-        /** @type {?} */
-        Features.prototype.values;
-    }
 })(ApplicationConfiguration || (ApplicationConfiguration = {}));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ABP;
 (function (ABP) {
@@ -2909,11 +3142,17 @@ var ABP;
         /** @type {?} */
         BasicItem.prototype.name;
     }
+    /**
+     * @record
+     * @template T
+     */
+    function Dictionary() { }
+    ABP.Dictionary = Dictionary;
 })(ABP || (ABP = {}));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Config;
 (function (Config) {
@@ -2959,11 +3198,22 @@ var Config;
         /** @type {?} */
         Requirements.prototype.layouts;
     }
+    /**
+     * @record
+     */
+    function LocalizationWithDefault() { }
+    Config.LocalizationWithDefault = LocalizationWithDefault;
+    if (false) {
+        /** @type {?} */
+        LocalizationWithDefault.prototype.key;
+        /** @type {?} */
+        LocalizationWithDefault.prototype.defaultValue;
+    }
 })(Config || (Config = {}));
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Rest;
 (function (Rest) {
@@ -3006,7 +3256,7 @@ var Rest;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Session;
 (function (Session) {
@@ -3025,7 +3275,7 @@ var Session;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Profile;
 (function (Profile) {
@@ -3070,12 +3320,67 @@ var Profile;
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var LocalizationPipe = /** @class */ (function () {
+    function LocalizationPipe(store) {
+        this.store = store;
+    }
+    /**
+     * @param {?=} value
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    LocalizationPipe.prototype.transform = /**
+     * @param {?=} value
+     * @param {...?} interpolateParams
+     * @return {?}
+     */
+    function (value) {
+        if (value === void 0) { value = ''; }
+        var interpolateParams = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            interpolateParams[_i - 1] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getLocalization.apply(ConfigState, __spread([value], interpolateParams.reduce((/**
+         * @param {?} acc
+         * @param {?} val
+         * @return {?}
+         */
+        function (acc, val) { return (Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val])); }), []))));
+    };
+    LocalizationPipe.decorators = [
+        { type: Pipe, args: [{
+                    name: 'abpLocalization',
+                },] }
+    ];
+    /** @nocollapse */
+    LocalizationPipe.ctorParameters = function () { return [
+        { type: Store }
+    ]; };
+    return LocalizationPipe;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocalizationPipe.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN_OPTIONS');
@@ -3102,9 +3407,11 @@ var ConfigPlugin = /** @class */ (function () {
         var matches = actionMatcher(event);
         /** @type {?} */
         var isInitAction = matches(InitState) || matches(UpdateState);
-        // const layouts = snq(() => this.options.requirements.layouts.filter(layout => layout instanceof Type), []);
         if (isInitAction && !this.initialized) {
-            var _a = transformRoutes(this.router.config), routes = _a.routes, wrappers = _a.wrappers;
+            /** @type {?} */
+            var transformedRoutes = transformRoutes(this.router.config);
+            var routes = transformedRoutes.routes;
+            var wrappers = transformedRoutes.wrappers;
             routes = organizeRoutes(routes, wrappers);
             /** @type {?} */
             var flattedRoutes = flatRoutes(clone(routes));
@@ -3149,8 +3456,9 @@ if (false) {
 function transformRoutes(routes, wrappers) {
     if (routes === void 0) { routes = []; }
     if (wrappers === void 0) { wrappers = []; }
+    // TODO: remove in v1
     /** @type {?} */
-    var abpRoutes = routes
+    var oldAbpRoutes = routes
         .filter((/**
      * @param {?} route
      * @return {?}
@@ -3171,6 +3479,9 @@ function transformRoutes(routes, wrappers) {
      * @return {?}
      */
     function (acc, val) { return __spread(acc, val.data.routes.routes); }), []);
+    // tslint:disable-next-line: deprecation
+    /** @type {?} */
+    var abpRoutes = __spread(getAbpRoutes(), oldAbpRoutes);
     wrappers = abpRoutes.filter((/**
      * @param {?} ar
      * @return {?}
@@ -3183,7 +3494,7 @@ function transformRoutes(routes, wrappers) {
      * @param {?} route
      * @return {?}
      */
-    function (route) { return (route.data || {}).routes && (route.component || route.loadChildren); }))
+    function (route) { return route.component || route.loadChildren; }))
         .forEach((/**
      * @param {?} route
      * @return {?}
@@ -3194,15 +3505,12 @@ function transformRoutes(routes, wrappers) {
          * @param {?} abp
          * @return {?}
          */
-        function (abp) { return abp.path.toLowerCase() === route.path.toLowerCase() && snq((/**
-         * @return {?}
-         */
-        function () { return route.data.routes.routes.length; }), false); }));
+        function (abp) { return abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper; }));
         var length = transformed.length;
         if (abpPackage) {
             transformed.push(abpPackage);
         }
-        if (transformed.length === length) {
+        if (transformed.length === length && (route.data || {}).routes) {
             transformed.push((/** @type {?} */ (__assign({}, route.data.routes, { path: route.path, name: snq((/**
                  * @return {?}
                  */
@@ -3267,89 +3575,185 @@ function flatRoutes(routes) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var ConfigService = /** @class */ (function () {
-    function ConfigService(store) {
+var ConfigStateService = /** @class */ (function () {
+    function ConfigStateService(store) {
         this.store = store;
     }
     /**
      * @return {?}
      */
-    ConfigService.prototype.getAll = /**
+    ConfigStateService.prototype.getAll = /**
      * @return {?}
      */
     function () {
         return this.store.selectSnapshot(ConfigState.getAll);
     };
     /**
-     * @param {?} key
      * @return {?}
      */
-    ConfigService.prototype.getOne = /**
-     * @param {?} key
+    ConfigStateService.prototype.getApplicationInfo = /**
      * @return {?}
      */
-    function (key) {
-        return this.store.selectSnapshot(ConfigState.getOne(key));
+    function () {
+        return this.store.selectSnapshot(ConfigState.getApplicationInfo);
     };
     /**
-     * @param {?} keys
+     * @param {...?} args
      * @return {?}
      */
-    ConfigService.prototype.getDeep = /**
-     * @param {?} keys
+    ConfigStateService.prototype.getOne = /**
+     * @param {...?} args
      * @return {?}
      */
-    function (keys) {
-        return this.store.selectSnapshot(ConfigState.getDeep(keys));
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getOne.apply(ConfigState, __spread(args)));
     };
     /**
-     * @param {?} key
+     * @param {...?} args
      * @return {?}
      */
-    ConfigService.prototype.getSetting = /**
-     * @param {?} key
+    ConfigStateService.prototype.getDeep = /**
+     * @param {...?} args
      * @return {?}
      */
-    function (key) {
-        return this.store.selectSnapshot(ConfigState.getSetting(key));
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getDeep.apply(ConfigState, __spread(args)));
     };
-    ConfigService.decorators = [
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getRoute = /**
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getRoute.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getApiUrl = /**
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getApiUrl.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getSetting = /**
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getSetting.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getSettings = /**
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getSettings.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getGrantedPolicy = /**
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getGrantedPolicy.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getLocalization = /**
+     * @param {...?} args
+     * @return {?}
+     */
+    function () {
+        var args = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            args[_i] = arguments[_i];
+        }
+        return this.store.selectSnapshot(ConfigState.getLocalization.apply(ConfigState, __spread(args)));
+    };
+    ConfigStateService.decorators = [
         { type: Injectable, args: [{
                     providedIn: 'root',
                 },] }
     ];
     /** @nocollapse */
-    ConfigService.ctorParameters = function () { return [
+    ConfigStateService.ctorParameters = function () { return [
         { type: Store }
     ]; };
-    /** @nocollapse */ ConfigService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfigService_Factory() { return new ConfigService(ɵɵinject(Store)); }, token: ConfigService, providedIn: "root" });
-    return ConfigService;
+    /** @nocollapse */ ConfigStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfigStateService_Factory() { return new ConfigStateService(ɵɵinject(Store)); }, token: ConfigStateService, providedIn: "root" });
+    return ConfigStateService;
 }());
 if (false) {
     /**
      * @type {?}
      * @private
      */
-    ConfigService.prototype.store;
+    ConfigStateService.prototype.store;
 }
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LazyLoadService = /** @class */ (function () {
     function LazyLoadService() {
         this.loadedLibraries = {};
     }
     /**
-     * @param {?} url
+     * @param {?} urlOrUrls
      * @param {?} type
      * @param {?=} content
      * @param {?=} targetQuery
@@ -3357,57 +3761,82 @@ var LazyLoadService = /** @class */ (function () {
      * @return {?}
      */
     LazyLoadService.prototype.load = /**
-     * @param {?} url
+     * @param {?} urlOrUrls
      * @param {?} type
      * @param {?=} content
      * @param {?=} targetQuery
      * @param {?=} position
      * @return {?}
      */
-    function (url, type, content, targetQuery, position) {
+    function (urlOrUrls, type, content, targetQuery, position) {
         var _this = this;
         if (content === void 0) { content = ''; }
         if (targetQuery === void 0) { targetQuery = 'body'; }
         if (position === void 0) { position = 'afterend'; }
-        if (!url && !content)
-            return;
-        /** @type {?} */
-        var key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
-        if (this.loadedLibraries[key]) {
-            return this.loadedLibraries[key].asObservable();
+        if (!urlOrUrls && !content) {
+            return throwError('Should pass url or content');
         }
-        this.loadedLibraries[key] = new ReplaySubject();
-        /** @type {?} */
-        var library;
-        if (type === 'script') {
-            library = document.createElement('script');
-            library.type = 'text/javascript';
-            if (url) {
-                ((/** @type {?} */ (library))).src = url;
-            }
-            ((/** @type {?} */ (library))).text = content;
+        else if (!urlOrUrls && content) {
+            urlOrUrls = [null];
         }
-        else if (url) {
-            library = document.createElement('link');
-            library.type = 'text/css';
-            ((/** @type {?} */ (library))).rel = 'stylesheet';
-            if (url) {
-                ((/** @type {?} */ (library))).href = url;
-            }
+        if (!Array.isArray(urlOrUrls)) {
+            urlOrUrls = [urlOrUrls];
         }
-        else {
-            library = document.createElement('style');
-            ((/** @type {?} */ (library))).textContent = content;
-        }
-        library.onload = (/**
+        return new Observable((/**
+         * @param {?} subscriber
          * @return {?}
          */
-        function () {
-            _this.loadedLibraries[key].next();
-            _this.loadedLibraries[key].complete();
-        });
-        document.querySelector(targetQuery).insertAdjacentElement(position, library);
-        return this.loadedLibraries[key].asObservable();
+        function (subscriber) {
+            ((/** @type {?} */ (urlOrUrls))).forEach((/**
+             * @param {?} url
+             * @param {?} index
+             * @return {?}
+             */
+            function (url, index) {
+                /** @type {?} */
+                var key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
+                if (_this.loadedLibraries[key]) {
+                    subscriber.next();
+                    subscriber.complete();
+                    return;
+                }
+                _this.loadedLibraries[key] = new ReplaySubject();
+                /** @type {?} */
+                var library;
+                if (type === 'script') {
+                    library = document.createElement('script');
+                    library.type = 'text/javascript';
+                    if (url) {
+                        ((/** @type {?} */ (library))).src = url;
+                    }
+                    ((/** @type {?} */ (library))).text = content;
+                }
+                else if (url) {
+                    library = document.createElement('link');
+                    library.type = 'text/css';
+                    ((/** @type {?} */ (library))).rel = 'stylesheet';
+                    if (url) {
+                        ((/** @type {?} */ (library))).href = url;
+                    }
+                }
+                else {
+                    library = document.createElement('style');
+                    ((/** @type {?} */ (library))).textContent = content;
+                }
+                library.onload = (/**
+                 * @return {?}
+                 */
+                function () {
+                    _this.loadedLibraries[key].next();
+                    _this.loadedLibraries[key].complete();
+                    if (index === urlOrUrls.length - 1) {
+                        subscriber.next();
+                        subscriber.complete();
+                    }
+                });
+                document.querySelector(targetQuery).insertAdjacentElement(position, library);
+            }));
+        }));
     };
     LazyLoadService.decorators = [
         { type: Injectable, args: [{
@@ -3424,12 +3853,95 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ProfileStateService = /** @class */ (function () {
+    function ProfileStateService(store) {
+        this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    ProfileStateService.prototype.getProfile = /**
+     * @return {?}
+     */
+    function () {
+        return this.store.selectSnapshot(ProfileState.getProfile);
+    };
+    ProfileStateService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    ProfileStateService.ctorParameters = function () { return [
+        { type: Store }
+    ]; };
+    /** @nocollapse */ ProfileStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ProfileStateService_Factory() { return new ProfileStateService(ɵɵinject(Store)); }, token: ProfileStateService, providedIn: "root" });
+    return ProfileStateService;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileStateService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SessionStateService = /** @class */ (function () {
+    function SessionStateService(store) {
+        this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    SessionStateService.prototype.getLanguage = /**
+     * @return {?}
+     */
+    function () {
+        return this.store.selectSnapshot(SessionState.getLanguage);
+    };
+    /**
+     * @return {?}
+     */
+    SessionStateService.prototype.getTenant = /**
+     * @return {?}
+     */
+    function () {
+        return this.store.selectSnapshot(SessionState.getTenant);
+    };
+    SessionStateService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    SessionStateService.ctorParameters = function () { return [
+        { type: Store }
+    ]; };
+    /** @nocollapse */ SessionStateService.ngInjectableDef = ɵɵdefineInjectable({ factory: function SessionStateService_Factory() { return new SessionStateService(ɵɵinject(Store)); }, token: SessionStateService, providedIn: "root" });
+    return SessionStateService;
+}());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionStateService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @param {?} environment
@@ -3452,12 +3964,12 @@ var CONFIG = new InjectionToken('CONFIG');
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var InputEventDebounceDirective = /** @class */ (function () {
     function InputEventDebounceDirective(renderer, el) {
@@ -3486,7 +3998,8 @@ var InputEventDebounceDirective = /** @class */ (function () {
     };
     InputEventDebounceDirective.decorators = [
         { type: Directive, args: [{
-                    selector: '[input.debounce]',
+                    // tslint:disable-next-line: directive-selector
+                    selector: '[input.debounce]'
                 },] }
     ];
     /** @nocollapse */
@@ -3519,7 +4032,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ClickEventStopPropagationDirective = /** @class */ (function () {
     function ClickEventStopPropagationDirective(renderer, el) {
@@ -3548,7 +4061,8 @@ var ClickEventStopPropagationDirective = /** @class */ (function () {
     };
     ClickEventStopPropagationDirective.decorators = [
         { type: Directive, args: [{
-                    selector: '[click.stop]',
+                    // tslint:disable-next-line: directive-selector
+                    selector: '[click.stop]'
                 },] }
     ];
     /** @nocollapse */
@@ -3578,119 +4092,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var LocalizationPipe = /** @class */ (function () {
-    function LocalizationPipe(store) {
-        this.store = store;
-        this.initialValue = '';
-        this.destroy$ = new Subject();
-    }
-    /**
-     * @param {?=} value
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    LocalizationPipe.prototype.transform = /**
-     * @param {?=} value
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    function (value) {
-        var _this = this;
-        if (value === void 0) { value = ''; }
-        var interpolateParams = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            interpolateParams[_i - 1] = arguments[_i];
-        }
-        if (this.initialValue !== value) {
-            this.initialValue = value;
-            this.destroy$.next();
-            this.store
-                .select(ConfigState.getCopy.apply(ConfigState, __spread([value], interpolateParams.reduce((/**
-             * @param {?} acc
-             * @param {?} val
-             * @return {?}
-             */
-            function (acc, val) { return (Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val])); }), []))))
-                .pipe(takeUntil(this.destroy$), takeUntilDestroy(this), distinctUntilChanged())
-                .subscribe((/**
-             * @param {?} copy
-             * @return {?}
-             */
-            function (copy) { return (_this.value = copy); }));
-        }
-        return this.value;
-    };
-    /**
-     * @return {?}
-     */
-    LocalizationPipe.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () { };
-    LocalizationPipe.decorators = [
-        { type: Pipe, args: [{
-                    name: 'abpLocalization',
-                    pure: false,
-                },] }
-    ];
-    /** @nocollapse */
-    LocalizationPipe.ctorParameters = function () { return [
-        { type: Store }
-    ]; };
-    return LocalizationPipe;
-}());
-if (false) {
-    /** @type {?} */
-    LocalizationPipe.prototype.initialValue;
-    /** @type {?} */
-    LocalizationPipe.prototype.value;
-    /** @type {?} */
-    LocalizationPipe.prototype.destroy$;
-    /**
-     * @type {?}
-     * @private
-     */
-    LocalizationPipe.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var SortPipe = /** @class */ (function () {
-    function SortPipe() {
-    }
-    /**
-     * @param {?} value
-     * @param {?} sortOrder
-     * @return {?}
-     */
-    SortPipe.prototype.transform = /**
-     * @param {?} value
-     * @param {?} sortOrder
-     * @return {?}
-     */
-    function (value, sortOrder) {
-        sortOrder = sortOrder.toLowerCase();
-        if (sortOrder === "desc")
-            return value.reverse();
-        else
-            return value;
-    };
-    SortPipe.decorators = [
-        { type: Pipe, args: [{
-                    name: 'abpSort',
-                    pure: false
-                },] }
-    ];
-    return SortPipe;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LocaleId = /** @class */ (function (_super) {
     __extends(LocaleId, _super);
@@ -3736,7 +4138,7 @@ var LocaleProvider = {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CoreModule = /** @class */ (function () {
     function CoreModule() {
@@ -3803,6 +4205,7 @@ var CoreModule = /** @class */ (function () {
                         EllipsisDirective,
                         ForDirective,
                         FormSubmitDirective,
+                        TableSortDirective,
                         LocalizationPipe,
                         SortPipe,
                         PermissionDirective,
@@ -3825,6 +4228,7 @@ var CoreModule = /** @class */ (function () {
                         FormSubmitDirective,
                         LocalizationPipe,
                         SortPipe,
+                        TableSortDirective,
                         PermissionDirective,
                         VisibilityDirective,
                         InputEventDebounceDirective,
@@ -3841,13 +4245,13 @@ var CoreModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigService, ConfigState, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SetLanguage, SetTenant, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, configFactory, environmentFactory, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, InputEventDebounceDirective as ɵba, ClickEventStopPropagationDirective as ɵbb, AbstractNgModelComponent as ɵbc, LocaleId as ɵbd, LocaleProvider as ɵbe, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbf, ConfigPlugin as ɵbg, ApiInterceptor as ɵbh, getInitialData as ɵbi, localeInitializer as ɵbj, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, SortPipe as ɵx, PermissionDirective as ɵy, VisibilityDirective as ɵz };
+export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigState, ConfigStateService, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationPipe, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, ProfileStateService, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SessionStateService, SetLanguage, SetTenant, SortPipe, StartLoader, StopLoader, TableSortDirective, UpdateProfile, VisibilityDirective, addAbpRoutes, configFactory, environmentFactory, getAbpRoutes, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, VisibilityDirective as ɵba, InputEventDebounceDirective as ɵbb, ClickEventStopPropagationDirective as ɵbc, AbstractNgModelComponent as ɵbd, LocaleId as ɵbe, LocaleProvider as ɵbf, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbg, ConfigPlugin as ɵbh, ApiInterceptor as ɵbi, getInitialData as ɵbj, localeInitializer as ɵbk, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, TableSortDirective as ɵw, SortPipe as ɵx, LocalizationPipe as ɵy, PermissionDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

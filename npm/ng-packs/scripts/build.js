@@ -4,7 +4,7 @@ import fse from 'fs-extra';
 
 (async () => {
   const { projects } = await fse.readJSON('../angular.json');
-  const projectNames = Object.keys(projects);
+  const projectNames = Object.keys(projects).filter(project => project !== 'dev-app');
 
   const packageJson = await fse.readJSON('../package.json');
 
@@ -37,7 +37,7 @@ import fse from 'fs-extra';
   });
 
   await execa('git', ['add', '../dist/*', '../package.json'], { stdout: 'inherit' });
-  await execa('git', ['commit', '-m', 'Build ng packages'], { stdout: 'inherit' });
+  await execa('git', ['commit', '-m', 'Build ng packages', '--no-verify'], { stdout: 'inherit' });
 
   process.exit(0);
 })();

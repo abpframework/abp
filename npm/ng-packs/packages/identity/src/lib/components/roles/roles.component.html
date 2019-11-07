@@ -1,29 +1,26 @@
-<div class="row entry-row">
-  <div class="col-auto">
-    <h1 class="content-header-title">{{ 'AbpIdentity::Roles' | abpLocalization }}</h1>
-  </div>
-  <div class="col">
-    <div class="text-lg-right pt-2" id="AbpContentToolbar">
-      <button id="create-role" class="btn btn-primary" type="button" (click)="onAdd()">
-        <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>
-      </button>
-    </div>
-  </div>
-</div>
-
 <div id="identity-roles-wrapper" class="card">
-  <div class="card-body">
-    <div id="data-tables-table-filter" class="data-tables-filter">
-      <label
-        ><input
-          type="search"
-          class="form-control form-control-sm"
-          [placeholder]="'AbpUi::PagerSearch' | abpLocalization"
-          (input.debounce)="onSearch($event.target.value)"
-      /></label>
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>
+      </div>
+      <div class="text-right col col-md-6">
+        <button
+          [abpPermission]="'AbpIdentity.Roles.Create'"
+          id="create-role"
+          class="btn btn-primary"
+          type="button"
+          (click)="add()"
+        >
+          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>
+        </button>
+      </div>
     </div>
+  </div>
+
+  <div class="card-body">
     <p-table
-      *ngIf="[130, 200] as columnWidths"
+      *ngIf="[150, 0] as columnWidths"
       [value]="data$ | async"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
@@ -38,14 +35,14 @@
     >
       <ng-template pTemplate="colgroup">
         <colgroup>
-          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width }" />
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
       <ng-template pTemplate="emptymessage" let-columns>
         <tr
           abp-table-empty-message
           [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentityServer"
+          localizationResource="AbpIdentity"
           localizationProp="NoDataAvailableInDatatable"
         ></tr>
       </ng-template>
@@ -65,7 +62,7 @@
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>
+          <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
@@ -76,11 +73,21 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button ngbDropdownItem (click)="onEdit(data.id)">{{ 'AbpIdentity::Edit' | abpLocalization }}</button>
-                <button ngbDropdownItem (click)="providerKey = data.name; visiblePermissions = true">
+                <button [abpPermission]="'AbpIdentity.Roles.Update'" ngbDropdownItem (click)="edit(data.id)">
+                  {{ 'AbpIdentity::Edit' | abpLocalization }}
+                </button>
+                <button
+                  [abpPermission]="'AbpIdentity.Roles.ManagePermissions'"
+                  ngbDropdownItem
+                  (click)="providerKey = data.name; visiblePermissions = true"
+                >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
-                <button ngbDropdownItem (click)="delete(data.id, data.name)">
+                <button
+                  [abpPermission]="'AbpIdentity.Roles.Delete'"
+                  ngbDropdownItem
+                  (click)="delete(data.id, data.name)"
+                >
                   {{ 'AbpIdentity::Delete' | abpLocalization }}
                 </button>
               </div>
@@ -130,5 +137,5 @@
   </ng-template>
 </abp-modal>
 
-<abp-permission-management [(visible)]="visiblePermissions" providerName="Role" [providerKey]="providerKey">
+<abp-permission-management [(visible)]="visiblePermissions" providerName="R" [providerKey]="providerKey">
 </abp-permission-management>

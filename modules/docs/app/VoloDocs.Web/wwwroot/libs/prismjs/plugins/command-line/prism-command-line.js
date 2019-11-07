@@ -4,14 +4,14 @@ if (typeof self === 'undefined' || !self.Prism || !self.document) {
 	return;
 }
 
-var clsReg = /\s*\bcommand-line\b\s*/;
+var clsReg = /(?:^|\s)command-line(?:\s|$)/;
 
 Prism.hooks.add('before-highlight', function (env) {
-	env.vars = env.vars || {};
-	env.vars['command-line'] = env.vars['command-line'] || {};
+	var vars = env.vars = env.vars || {};
+	var commandLine = vars['command-line'] = vars['command-line'] || {};
 
-	if (env.vars['command-line'].complete || !env.code) {
-		env.vars['command-line'].complete = true;
+	if (commandLine.complete || !env.code) {
+		commandLine.complete = true;
 		return;
 	}
 
@@ -19,18 +19,18 @@ Prism.hooks.add('before-highlight', function (env) {
 	var pre = env.element.parentNode;
 	if (!pre || !/pre/i.test(pre.nodeName) || // Abort only if neither the <pre> nor the <code> have the class
 		(!clsReg.test(pre.className) && !clsReg.test(env.element.className))) {
-		env.vars['command-line'].complete = true;
+		commandLine.complete = true;
 		return;
 	}
 
 	if (env.element.querySelector('.command-line-prompt')) { // Abort if prompt already exists.
-		env.vars['command-line'].complete = true;
+		commandLine.complete = true;
 		return;
 	}
 
 	var codeLines = env.code.split('\n');
-	env.vars['command-line'].numberOfLines = codeLines.length;
-	env.vars['command-line'].outputLines = [];
+	commandLine.numberOfLines = codeLines.length;
+	var outputLines = commandLine.outputLines = [];
 
 	var outputSections = pre.getAttribute('data-output');
 	var outputFilter = pre.getAttribute('data-filter-output');
@@ -53,7 +53,7 @@ Prism.hooks.add('before-highlight', function (env) {
 				outputEnd--;
 				// Save the output line in an array and clear it in the code so it's not highlighted. -- cwells
 				for (var j = outputStart; j <= outputEnd; j++) {
-					env.vars['command-line'].outputLines[j] = codeLines[j];
+					outputLines[j] = codeLines[j];
 					codeLines[j] = '';
 				}
 			}
@@ -61,7 +61,7 @@ Prism.hooks.add('before-highlight', function (env) {
 	} else if (outputFilter) { // Treat lines beginning with this string as output. -- cwells
 		for (var i = 0; i < codeLines.length; i++) {
 			if (codeLines[i].indexOf(outputFilter) === 0) { // This line is output. -- cwells
-				env.vars['command-line'].outputLines[i] = codeLines[i].slice(outputFilter.length);
+				outputLines[i] = codeLines[i].slice(outputFilter.length);
 				codeLines[i] = '';
 			}
 		}
@@ -71,26 +71,26 @@ Prism.hooks.add('before-highlight', function (env) {
 });
 
 Prism.hooks.add('before-insert', function (env) {
-	env.vars = env.vars || {};
-	env.vars['command-line'] = env.vars['command-line'] || {};
-	if (env.vars['command-line'].complete) {
+	var vars = env.vars = env.vars || {};
+	var commandLine = vars['command-line'] = vars['command-line'] || {};
+	if (commandLine.complete) {
 		return;
 	}
 
 	// Reinsert the output lines into the highlighted code. -- cwells
 	var codeLines = env.highlightedCode.split('\n');
-	for (var i = 0; i < env.vars['command-line'].outputLines.length; i++) {
-		if (env.vars['command-line'].outputLines.hasOwnProperty(i)) {
-			codeLines[i] = env.vars['command-line'].outputLines[i];
+	for (var i = 0, l = (commandLine.outputLines || []).length; i < l; i++) {
+		if (commandLine.outputLines.hasOwnProperty(i)) {
+			codeLines[i] = commandLine.outputLines[i];
 		}
 	}
 	env.highlightedCode = codeLines.join('\n');
 });
 
 Prism.hooks.add('complete', function (env) {
-	env.vars = env.vars || {};
-	env.vars['command-line'] = env.vars['command-line'] || {};
-	if (env.vars['command-line'].complete) {
+	var vars = env.vars = env.vars || {};
+	var commandLine = vars['command-line'] = vars['command-line'] || {};
+	if (commandLine.complete) {
 		return;
 	}
 
@@ -107,7 +107,7 @@ Prism.hooks.add('complete', function (env) {
 	};
 
 	// Create the "rows" that will become the command-line prompts. -- cwells
-	var promptLines = new Array(env.vars['command-line'].numberOfLines + 1);
+	var promptLines = new Array((commandLine.numberOfLines || 0) + 1);
 	var promptText = getAttribute('data-prompt', '');
 	if (promptText !== '') {
 		promptLines = promptLines.join('<span data-prompt="' + promptText + '"></span>');
@@ -123,8 +123,8 @@ Prism.hooks.add('complete', function (env) {
 	prompt.innerHTML = promptLines;
 
 	// Remove the prompt from the output lines. -- cwells
-	for (var i = 0; i < env.vars['command-line'].outputLines.length; i++) {
-		if (env.vars['command-line'].outputLines.hasOwnProperty(i)) {
+	for (var i = 0, l = (commandLine.outputLines || []).length; i < l; i++) {
+		if (commandLine.outputLines.hasOwnProperty(i)) {
 			var node = prompt.children[i];
 			node.removeAttribute('data-user');
 			node.removeAttribute('data-host');
@@ -133,7 +133,7 @@ Prism.hooks.add('complete', function (env) {
 	}
 
 	env.element.insertBefore(prompt, env.element.firstChild);
-	env.vars['command-line'].complete = true;
+	commandLine.complete = true;
 });
 
 }());

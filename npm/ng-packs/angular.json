@@ -17,11 +17,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/core/src/test.ts",
-            "tsConfig": "packages/core/tsconfig.spec.json",
-            "karmaConfig": "packages/core/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -48,11 +46,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-shared/src/test.ts",
-            "tsConfig": "packages/theme-shared/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-shared/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -79,11 +75,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-basic/src/test.ts",
-            "tsConfig": "packages/theme-basic/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-basic/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -139,11 +133,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/permission-management/src/test.ts",
-            "tsConfig": "packages/permission-management/tsconfig.spec.json",
-            "karmaConfig": "packages/permission-management/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -172,11 +164,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/identity/src/test.ts",
-            "tsConfig": "packages/identity/tsconfig.spec.json",
-            "karmaConfig": "packages/identity/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -202,11 +192,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/feature-management/src/test.ts",
-            "tsConfig": "packages/feature-management/tsconfig.spec.json",
-            "karmaConfig": "packages/feature-management/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -235,11 +223,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/tenant-management/src/test.ts",
-            "tsConfig": "packages/tenant-management/tsconfig.spec.json",
-            "karmaConfig": "packages/tenant-management/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -422,7 +408,7 @@
       },
       "root": "apps/dev-app",
       "sourceRoot": "apps/dev-app/src",
-      "prefix": "app",
+      "prefix": "abp",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -439,9 +425,14 @@
               "apps/dev-app/src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               {
-                "input": "node_modules/font-awesome/css/font-awesome.min.css",
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
                 "lazy": true,
-                "bundleName": "font-awesome.min"
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "lazy": true,
+                "bundleName": "fontawesome-v4-shims.min"
               },
               {
                 "input": "node_modules/primeng/resources/themes/nova-light/theme.css",
@@ -532,24 +523,8 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "apps/dev-app/tsconfig.app.json",
-              "apps/dev-app/tsconfig.spec.json",
-              "apps/dev-app/e2e/tsconfig.json"
-            ],
+            "tsConfig": ["apps/dev-app/tsconfig.app.json", "apps/dev-app/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
-          }
-        },
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "apps/dev-app/e2e/protractor.conf.js",
-            "devServerTarget": "dev-app:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "dev-app:serve:production"
-            }
           }
         }
       }

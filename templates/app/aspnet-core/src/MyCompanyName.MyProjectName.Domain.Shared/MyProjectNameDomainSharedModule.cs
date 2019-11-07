@@ -16,7 +16,7 @@ namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
         typeof(AbpAuditLoggingDomainSharedModule),
-        typeof(BackgroundJobsDomainSharedModule),
+        typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
         typeof(AbpIdentityServerDomainSharedModule),
@@ -28,7 +28,7 @@ namespace MyCompanyName.MyProjectName
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<MyProjectNameDomainSharedModule>("MyCompanyName.MyProjectName");
             });

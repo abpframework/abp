@@ -96,7 +96,13 @@ namespace Volo.Abp.Validation
                              parameterInfo.IsOut ||
                              TypeHelper.IsPrimitiveExtended(parameterInfo.ParameterType, includeEnums: true);
 
-            context.Errors.AddRange(_objectValidator.GetErrors(parameterValue, parameterInfo.Name, allowNulls));
+            context.Errors.AddRange(
+                _objectValidator.GetErrors(
+                    parameterValue,
+                    parameterInfo.Name,
+                    allowNulls
+                )
+            );
         }
     }
 }

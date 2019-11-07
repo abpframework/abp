@@ -1,16 +1,16 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService } from '@abp/ng.theme.shared';
-import { TemplateRef } from '@angular/core';
+import { OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { TenantManagementService } from '../../services/tenant-management.service';
-declare type SelectedModalContent = {
+interface SelectedModalContent {
     type: string;
     title: string;
     template: TemplateRef<any>;
-};
-export declare class TenantsComponent {
+}
+export declare class TenantsComponent implements OnInit {
     private confirmationService;
     private tenantService;
     private fb;
@@ -30,11 +30,13 @@ export declare class TenantsComponent {
     loading: boolean;
     modalBusy: boolean;
     sortOrder: string;
+    sortKey: string;
     readonly useSharedDatabase: boolean;
     readonly connectionString: string;
     tenantModalTemplate: TemplateRef<any>;
     connectionStringModalTemplate: TemplateRef<any>;
     constructor(confirmationService: ConfirmationService, tenantService: TenantManagementService, fb: FormBuilder, store: Store);
+    ngOnInit(): void;
     onSearch(value: any): void;
     private createTenantForm;
     private createDefaultConnectionStringForm;
@@ -48,6 +50,5 @@ export declare class TenantsComponent {
     delete(id: string, name: string): void;
     onPageChange(data: any): void;
     get(): void;
-    changeSortOrder(): void;
 }
 export {};

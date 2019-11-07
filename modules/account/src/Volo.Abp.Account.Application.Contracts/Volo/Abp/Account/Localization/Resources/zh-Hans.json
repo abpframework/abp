@@ -14,8 +14,27 @@
     "Login": "登录",
     "Cancel": "取消",
     "Register": "注册",
+    "AreYouANewUser": "你是新用户吗?",
+    "AlreadyRegistered": "已经注册过了?",
     "InvalidLoginRequest": "登录请求无效",
     "ThereAreNoLoginSchemesConfiguredForThisClient": "没有为此客户端配置登录方案.",
-    "LogInUsingYourProviderAccount": "使用你的{0}帐户登录"
+    "LogInUsingYourProviderAccount": "使用你的{0}帐户登录",
+    "DisplayName:CurrentPassword": "当前密码",
+    "DisplayName:NewPassword": "新密码",
+    "DisplayName:NewPasswordConfirm": "确认新密码",
+    "PasswordChangedMessage": "你的密码已修改成功.",
+    "DisplayName:UserName": "用户名",
+    "DisplayName:Email": "电子邮件",
+    "DisplayName:Name": "名字",
+    "DisplayName:Surname": "姓",
+    "DisplayName:Password": "密码",
+    "DisplayName:EmailAddress": "电子邮件地址",
+    "DisplayName:PhoneNumber": "电话号码",
+    "PersonalSettings": "个人设置",
+    "PersonalSettingsSaved": "个人设置已保存",
+    "PasswordChanged": "修改密码",
+    "NewPasswordConfirmFailed": "请确认新密码",
+    "Manage": "管理",
+    "ManageYourProfile": "管理你的个人资料"
   }
 }

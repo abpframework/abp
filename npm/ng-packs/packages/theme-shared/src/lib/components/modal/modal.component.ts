@@ -13,17 +13,17 @@ import {
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { dialogAnimation, fadeAnimation } from '../../animations/modal.animations';
 import { Toaster } from '../../models/toaster';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
-import { backdropAnimation, dialogAnimation } from './modal.animations';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
-  animations: [backdropAnimation, dialogAnimation],
+  animations: [fadeAnimation, dialogAnimation],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -134,9 +134,9 @@ export class ModalComponent implements OnDestroy {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape'),
+        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
       )
-      .subscribe(_ => {
+      .subscribe(() => {
         this.close();
       });
 

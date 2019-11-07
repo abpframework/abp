@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Shouldly;
@@ -11,10 +12,10 @@ namespace DashboardDemo
 {
     public abstract class DashboardDemoWebTestBase : AbpAspNetCoreIntegratedTestBase<DashboardDemoWebTestStartup>
     {
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
             return base
-                .CreateWebHostBuilder()
+                .CreateHostBuilder()
                 .UseContentRoot(WebContentDirectoryFinder.CalculateContentRootFolder());
         }
 

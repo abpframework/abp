@@ -1,11 +1,11 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService } from '@abp/ng.theme.shared';
-import { TemplateRef, TrackByFunction } from '@angular/core';
+import { TemplateRef, TrackByFunction, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Identity } from '../../models/identity';
-export declare class UsersComponent {
+export declare class UsersComponent implements OnInit {
     private confirmationService;
     private fb;
     private store;
@@ -23,9 +23,11 @@ export declare class UsersComponent {
     loading: boolean;
     modalBusy: boolean;
     sortOrder: string;
+    sortKey: string;
     trackByFn: TrackByFunction<AbstractControl>;
     readonly roleGroups: FormGroup[];
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
+    ngOnInit(): void;
     onSearch(value: any): void;
     buildForm(): void;
     openModal(): void;
@@ -35,5 +37,4 @@ export declare class UsersComponent {
     delete(id: string, userName: string): void;
     onPageChange(data: any): void;
     get(): void;
-    changeSortOrder(): void;
 }

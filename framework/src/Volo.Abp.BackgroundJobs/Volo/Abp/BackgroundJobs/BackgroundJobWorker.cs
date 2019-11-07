@@ -11,16 +11,16 @@ namespace Volo.Abp.BackgroundJobs
 {
     public class BackgroundJobWorker : PeriodicBackgroundWorkerBase, IBackgroundJobWorker
     {
-        protected BackgroundJobOptions JobOptions { get; }
+        protected AbpBackgroundJobOptions JobOptions { get; }
 
-        protected BackgroundJobWorkerOptions WorkerOptions { get; }
+        protected AbpBackgroundJobWorkerOptions WorkerOptions { get; }
 
         protected IServiceScopeFactory ServiceScopeFactory { get; }
 
         public BackgroundJobWorker(
             AbpTimer timer,
-            IOptions<BackgroundJobOptions> jobOptions,
-            IOptions<BackgroundJobWorkerOptions> workerOptions,
+            IOptions<AbpBackgroundJobOptions> jobOptions,
+            IOptions<AbpBackgroundJobWorkerOptions> workerOptions,
             IServiceScopeFactory serviceScopeFactory)
             : base(timer)
         {

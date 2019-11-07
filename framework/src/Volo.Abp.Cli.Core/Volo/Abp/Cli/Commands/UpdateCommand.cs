@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,13 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -24,14 +21,14 @@ namespace Volo.Abp.Cli.Commands
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
         private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
-        private readonly CliOptions _options;
+        private readonly AbpCliOptions _options;
         private readonly IJsonSerializer _jsonSerializer;
 
         public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
             NpmPackagesUpdater npmPackagesUpdater,
             ICliAnalyticsCollect cliAnalyticsCollect, 
             IJsonSerializer jsonSerializer, 
-            IOptions<CliOptions> options)
+            IOptions<AbpCliOptions> options)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;
@@ -49,7 +46,7 @@ namespace Volo.Abp.Cli.Commands
 
             var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
 
-            if (updateNpm || both)
+            if (updateNuget || both)
             {
                 await UpdateNugetPackages(commandLineArgs);
             }

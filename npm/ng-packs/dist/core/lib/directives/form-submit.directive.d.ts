@@ -5,7 +5,7 @@ export declare class FormSubmitDirective implements OnInit, OnDestroy {
     private host;
     private cdRef;
     notValidateOnSubmit: string | boolean;
-    ngSubmit: EventEmitter<unknown>;
+    readonly ngSubmit: EventEmitter<unknown>;
     executedNgSubmit: boolean;
     constructor(formGroupDirective: FormGroupDirective, host: ElementRef<HTMLFormElement>, cdRef: ChangeDetectorRef);
     ngOnInit(): void;

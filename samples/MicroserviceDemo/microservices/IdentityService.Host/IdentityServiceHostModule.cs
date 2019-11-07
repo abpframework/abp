@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Auditing;
@@ -55,7 +56,7 @@ namespace IdentityService.Host
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "Identity Service API", Version = "v1"});
+                options.SwaggerDoc("v1", new OpenApiInfo {Title = "Identity Service API", Version = "v1"});
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -95,12 +96,11 @@ namespace IdentityService.Host
             app.UseRouting();
             app.UseAuthentication();
             app.UseAbpRequestLocalization(); //TODO: localization?
-            //TODO: Enable swagger UI once it supports asp.net core 3.x
-            //app.UseSwagger();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Service API");
-            //});
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Identity Service API");
+            });
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }
