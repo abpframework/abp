@@ -71,3 +71,5 @@ This will create a new database based on the configured connection string.
 ![postgresql-update-database](images/postgresql-update-database.png)
 
 > Using the `.DbMigrator` tool is the suggested way, because it also seeds the initial data to be able to properly run the web application.
+
+> If you want to add your Aggregate Roots / Entities, you should add the `DbSet` Property both into `XXXDbContex.cs` in `.EntityFrameworkCore` project and `XXXMigrationsDbContext.cs` in `.EntityFrameworkCore.DbMigrations` project. One for runtime and the other one for database migrations , then you can do the `Regenerate Initial Migration` and `Update the Database` step to update database.
