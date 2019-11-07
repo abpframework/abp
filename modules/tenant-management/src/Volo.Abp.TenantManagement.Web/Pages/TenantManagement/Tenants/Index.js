@@ -17,6 +17,9 @@
 
         var _dataTable = _$wrapper.find('table').DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
+            processing: true,
+            paging: true,
+            serverSide: true,
             ajax: abp.libs.datatables.createAjax(_tenantAppService.getList),
             columnDefs: [
                 {
