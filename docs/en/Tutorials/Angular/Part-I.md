@@ -401,7 +401,7 @@ import { BookListComponent } from './book-list/book-list.component';
 const routes: Routes = [
   {
     path: '',
-    component: BooksComponent,
+    component: ApplicationLayoutComponent,
     children: [{ path: '', component: BookListComponent }],
   },
 ];
