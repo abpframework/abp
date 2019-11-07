@@ -1,7 +1,7 @@
 import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { fromEvent } from 'rxjs';
-import { debounceTime, tap } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 
 @Directive({
   // tslint:disable-next-line: directive-selector

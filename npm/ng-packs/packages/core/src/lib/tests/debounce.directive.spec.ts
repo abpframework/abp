@@ -18,6 +18,7 @@ describe('InputEventDebounceDirective', () => {
     });
     directive = spectator.directive;
     input = spectator.query('input');
+    inputEventFn.mockClear();
   });
 
   test('should be created', () => {
