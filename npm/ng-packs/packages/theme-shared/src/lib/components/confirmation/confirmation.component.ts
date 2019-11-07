@@ -41,7 +41,7 @@ import { Toaster } from '../../models/toaster';
             (click)="close(confirm)"
             autofocus
           >
-            <span>{{ message.yesText || 'AbpIdentity::Yes' | abpLocalization }}</span>
+            <span>{{ message.yesText || message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>
           </button>
         </div>
       </ng-template>
