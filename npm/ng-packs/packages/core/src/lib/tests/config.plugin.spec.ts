@@ -347,7 +347,5 @@ describe('ConfigPlugin', () => {
     const store = spectator.get(Store);
     const state = store.selectSnapshot(ConfigState);
     expect(state).toEqual(expectedState);
-
-    // console.log(JSON.stringify(state));
   });
 });
