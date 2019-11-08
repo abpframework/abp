@@ -122,10 +122,12 @@ export class ModalComponent implements OnDestroy {
           this.isConfirmationOpen = false;
           if (status === Toaster.Status.confirm) {
             this.visible = false;
+            this.destroy$.next();
           }
         });
     } else {
       this.visible = false;
+      this.destroy$.next();
     }
   }
 
