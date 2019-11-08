@@ -40,7 +40,9 @@ ABP automatically discovers this class and registers the setting definitions.
 * **Providers**: Can be used to restrict providers available for a particular setting (see the setting value providers section for more).
 * **Properties**: A name/value collection to set custom properties about this setting those can be used later in the application code.
 
-## ISettingProvider
+## Reading Setting Values
+
+### ISettingProvider
 
 `ISettingProvider` is used to get the value of a setting or get the values of all the settings. Example usages:
 
@@ -57,7 +59,7 @@ public class MyService
 
     public async Task FooAsync()
     {
-        //Get a string value.
+        //Get a value as string.
         string userName = await _settingProvider.GetOrNullAsync("Smtp.UserName");
 
         //Get a bool value and fallback to the default value (false) if not set.
@@ -80,6 +82,23 @@ public class MyService
 ````
 
 > `ISettingProvider` is a very common service and some base classes (like `IApplicationService`) already property-inject it. You can directly use the `SettingProvider` in such cases.
+
+### Reading Setting Values on the Client Side
+
+If a setting is allowed to be visible on the client side, current value of the setting can also be read from the JavaScript code. Examples:
+
+````js
+//Gets a value as string.
+var language = abp.setting.get('Abp.Localization.DefaultLanguage');
+
+//Gets an integer value.
+var requiredLength = abp.setting.getInt('Abp.Identity.Password.RequiredLength');
+
+//Gets a boolean value.
+var requireDigit = abp.setting.getBoolean('Abp.Identity.Password.RequireDigit');
+````
+
+In addition, use `abp.setting.values` to get a dictionary of all the setting values.
 
 ## Setting Value Providers
 
