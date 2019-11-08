@@ -112,7 +112,7 @@ The Startup template uses [EF Core Code First Migrations](https://docs.microsoft
 You should also add a `DbSet` property to the `BookStoreMigrationsDbContext` class in the `Acme.BookStore.EntityFrameworkCore.DbMigrations` project, as shown below:
 
 ````C#
-    public class PersonPasswordHoldMigrationsDbContext : AbpDbContext<PersonPasswordHoldMigrationsDbContext>
+    public class BookStoreMigrationsDbContext : AbpDbContext<BookStoreMigrationsDbContext>
     {
         public DbSet<Book> Books { get; set; }
 		...
