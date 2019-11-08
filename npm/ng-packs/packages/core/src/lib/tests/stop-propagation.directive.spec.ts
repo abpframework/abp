@@ -25,11 +25,10 @@ describe('ClickEventStopPropagationDirective', () => {
   });
 
   test('should be created', () => {
-    spectator.click('a');
     expect(directive).toBeTruthy();
   });
 
-  test("should not call click event of parent when child element's click event is triggered", done => {
+  test('should not call click event of parent when child element is clicked', done => {
     spectator.setHostInput({ parentClickEventFn, childClickEventFn });
     spectator.click('a');
     spectator.detectChanges();
