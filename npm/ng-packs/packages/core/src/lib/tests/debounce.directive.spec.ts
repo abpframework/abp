@@ -25,7 +25,7 @@ describe('InputEventDebounceDirective', () => {
     expect(directive).toBeTruthy();
   });
 
-  test('should have 1ms debounce time', () => {
+  test('should have 20ms debounce time', () => {
     expect(directive.debounce).toBe(20);
   });
 
