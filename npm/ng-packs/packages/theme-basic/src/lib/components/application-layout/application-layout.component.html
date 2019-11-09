@@ -33,7 +33,9 @@
 
           <ng-template #defaultLink let-route>
             <li class="nav-item" [abpPermission]="route.requiredPolicy">
-              <a class="nav-link" [routerLink]="[route.url]">{{ route.name | abpLocalization }}</a>
+              <a class="nav-link" [routerLink]="[route.url]"
+                ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}</a
+              >
             </li>
           </ng-template>
 

@@ -9,23 +9,24 @@
 .token.cr:before,
 .token.lf:before,
 .token.space:before {
-	color: hsl(24, 20%, 85%);
+	color: #808080;
+	opacity: 0.6;
 	position: absolute;
 }
 
 .token.tab:not(:empty):before {
-    content: '\21E5';
+	content: '\21E5';
 }
 
 .token.cr:before {
-    content: '\240D';
+	content: '\240D';
 }
 
 .token.crlf:before {
-    content: '\240D\240A';
+	content: '\240D\240A';
 }
 .token.lf:before {
-    content: '\240A';
+	content: '\240A';
 }
 
 .token.space:before {

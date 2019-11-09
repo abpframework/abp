@@ -137,7 +137,7 @@ createBook() {
 Add a `form` variable and inject a `FormBuilder` service to the `book-list.component.ts` as shown below (remember add the import statement).
 
 ```js
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 form: FormGroup;
 
@@ -295,6 +295,9 @@ This adds a save button to the bottom area of the modal:
 Then define a `save` method in the `BookListComponent`:
 
 ```js
+//...
+import { ..., CreateUpdateBook } from '../../store/actions';
+//...
 save() {
   if (this.form.invalid) {
     return;
@@ -332,7 +335,7 @@ update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Boo
 
 #### CreateUpdateBook Action
 
-Open the `books.actins.ts` and add `id` parameter to the `CreateUpdateBook` action:
+Open the `books.actions.ts` and add `id` parameter to the `CreateUpdateBook` action:
 
 ```js
 export class CreateUpdateBook {

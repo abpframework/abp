@@ -9,6 +9,7 @@ const routes: Routes = [
     data: {
       routes: {
         name: '::Menu:Home',
+        order: 1,
       } as ABP.Route,
     },
   },

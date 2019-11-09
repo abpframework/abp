@@ -9,7 +9,7 @@
 		'comment': [
 			/#.*/,
 			{
-				pattern: /^=begin(?:\r?\n|\r)(?:.*(?:\r?\n|\r))*?=end/m,
+				pattern: /^=begin\s[\s\S]*?^=end/m,
 				greedy: true
 			}
 		],
@@ -26,6 +26,8 @@
 			rest: Prism.languages.ruby
 		}
 	};
+
+	delete Prism.languages.ruby.function;
 
 	Prism.languages.insertBefore('ruby', 'keyword', {
 		'regex': [
@@ -75,6 +77,14 @@
 		'symbol': {
 			pattern: /(^|[^:]):[a-zA-Z_]\w*(?:[?!]|\b)/,
 			lookbehind: true
+		},
+		'method-definition': {
+			pattern: /(\bdef\s+)[\w.]+/,
+			lookbehind: true,
+			inside: {
+				'function': /\w+$/,
+				rest: Prism.languages.ruby
+			}
 		}
 	});
 
@@ -128,4 +138,6 @@
 			}
 		}
 	];
+
+	Prism.languages.rb = Prism.languages.ruby;
 }(Prism));

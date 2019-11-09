@@ -1,24 +1,23 @@
-<div class="row entry-row">
-  <div class="col-auto">
-    <h1 class="content-header-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h1>
-  </div>
-  <div class="col">
-    <div class="text-lg-right pt-2" id="AbpContentToolbar">
-      <button
-        [abpPermission]="'AbpTenantManagement.Tenants.Create'"
-        id="create-tenants"
-        class="btn btn-primary"
-        type="button"
-        (click)="onAddTenant()"
-      >
-        <i class="fa fa-plus mr-1"></i>
-        <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
-      </button>
+<div id="wrapper" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h5>
+      </div>
+      <div class="text-right col col-md-6">
+        <button
+          [abpPermission]="'AbpTenantManagement.Tenants.Create'"
+          id="create-tenants"
+          class="btn btn-primary"
+          type="button"
+          (click)="addTenant()"
+        >
+          <i class="fa fa-plus mr-1"></i>
+          <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
+        </button>
+      </div>
     </div>
   </div>
-</div>
-
-<div id="wrapper" class="card">
   <div class="card-body">
     <div id="data-tables-table-filter" class="data-tables-filter">
       <label
@@ -82,7 +81,7 @@
                 <button
                   [abpPermission]="'AbpTenantManagement.Tenants.Update'"
                   ngbDropdownItem
-                  (click)="onEditTenant(data.id)"
+                  (click)="editTenant(data.id)"
                 >
                   {{ 'AbpTenantManagement::Edit' | abpLocalization }}
                 </button>

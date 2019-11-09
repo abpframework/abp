@@ -1,7 +1,8 @@
 import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { createHostFactory, SpectatorHost } from '@ngneat/spectator';
+import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { AbstractNgModelComponent } from '../abstracts';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'abp-test',
@@ -9,6 +10,7 @@ import { AbstractNgModelComponent } from '../abstracts';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
+      // tslint:disable-next-line: no-forward-ref
       useExisting: forwardRef(() => TestComponent),
       multi: true,
     },
@@ -27,51 +29,36 @@ export class TestComponent extends AbstractNgModelComponent implements OnInit {
 }
 
 describe('AbstractNgModelComponent', () => {
+  let spectator: SpectatorHost<TestComponent, { val: any; override: boolean }>;
+
   const createHost = createHostFactory({
     component: TestComponent,
     declarations: [AbstractNgModelComponent],
     imports: [FormsModule],
   });
 
-  it('should pass the value with ngModel', done => {
-    const spectator = createHost('<abp-test [(ngModel)]="val"></abp-test>', {
+  beforeEach(() => {
+    spectator = createHost('<abp-test [(ngModel)]="val" [override]="override"></abp-test>', {
       hostProps: {
         val: '1',
+        override: false,
       },
     });
+  });
 
-    setTimeout(() => {
+  test('should pass the value with ngModel', done => {
+    timer(0).subscribe(() => {
       expect(spectator.component.value).toBe('1');
       done();
-    }, 0);
+    });
   });
 
-  it('should set the value with ngModel', done => {
-    const spectator = createHost('<abp-test [(ngModel)]="val" [override]="override"></abp-test>', {
-      hostProps: {
-        val: '2',
-        override: true,
-      },
-    });
+  test('should set the value with ngModel', done => {
+    spectator.setHostInput({ val: '2', override: true });
 
-    setTimeout(() => {
-      expect(spectator.hostComponent['val']).toBe('test');
+    timer(0).subscribe(() => {
+      expect(spectator.hostComponent.val).toBe('test');
       done();
-    }, 0);
-  });
-
-  it('should not change value when disable is true', done => {
-    const spectator = createHost('<abp-test [(ngModel)]="val" [disabled]="true"></abp-test>', {
-      hostProps: {
-        val: '2',
-      },
     });
-
-    spectator.component['val'] = '3';
-
-    setTimeout(() => {
-      expect(spectator.hostComponent['val']).toBe('2');
-      done();
-    }, 0);
   });
 });

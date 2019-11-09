@@ -155,7 +155,7 @@
 		'punctuation': /[.\-!=|]+/
 	};
 
-	var filter_pattern = '(^([\\t ]*)):{{filter_name}}(?:(?:\\r?\\n|\\r(?!\\n))(?:\\2[\\t ]+.+|\\s*?(?=\\r?\\n|\\r)))+';
+	var filter_pattern = /(^([\t ]*)):{{filter_name}}(?:(?:\r?\n|\r(?!\n))(?:\2[\t ]+.+|\s*?(?=\r?\n|\r)))+/.source;
 
 	// Non exhaustive list of available filters and associated languages
 	var filters = [
@@ -163,16 +163,11 @@
 		{filter:'coffee',language:'coffeescript'},
 		'ejs',
 		'handlebars',
-		'hogan',
 		'less',
 		'livescript',
 		'markdown',
-		'mustache',
-		'plates',
 		{filter:'sass',language:'scss'},
-		'stylus',
-		'swig'
-
+		'stylus'
 	];
 	var all_filters = {};
 	for (var i = 0, l = filters.length; i < l; i++) {

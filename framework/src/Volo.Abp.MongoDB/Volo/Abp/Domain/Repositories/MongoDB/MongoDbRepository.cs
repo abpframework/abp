@@ -359,8 +359,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 return;
             }
 
-            var localEvents = generatesDomainEventsEntity.GetLocalEvents().ToArray();
-            if (localEvents.Any())
+            var localEvents = generatesDomainEventsEntity.GetLocalEvents()?.ToArray();
+            if (localEvents != null && localEvents.Any())
             {
                 foreach (var localEvent in localEvents)
                 {
@@ -370,8 +370,8 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 generatesDomainEventsEntity.ClearLocalEvents();
             }
 
-            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents().ToArray();
-            if (distributedEvents.Any())
+            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents()?.ToArray();
+            if (distributedEvents != null && distributedEvents.Any())
             {
                 foreach (var distributedEvent in distributedEvents)
                 {

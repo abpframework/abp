@@ -117,6 +117,7 @@ namespace AuthServer.Host
                 commonScopes.Union(new[] { "BackendAdminAppGateway", "IdentityService", "ProductService" }),
                 new[] { "hybrid" },
                 commonSecret,
+                permissions: new[] { IdentityPermissions.Users.Default, "ProductManagement.Product" },
                 redirectUri: "http://localhost:51954/signin-oidc",
                 postLogoutRedirectUri: "http://localhost:51954/signout-callback-oidc"
             );

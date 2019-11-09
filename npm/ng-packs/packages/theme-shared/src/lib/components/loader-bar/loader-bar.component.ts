@@ -1,5 +1,5 @@
 import { StartLoader, StopLoader } from '@abp/ng.core';
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
@@ -20,38 +20,9 @@ import { filter } from 'rxjs/operators';
       ></div>
     </div>
   `,
-  styleUrls: ['./loader-bar.component.scss']
+  styleUrls: ['./loader-bar.component.scss'],
 })
-export class LoaderBarComponent implements OnDestroy {
-  get boxShadow(): string {
-    return `0 0 10px rgba(${this.color}, 0.5)`;
-  }
-
-  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {
-    actions
-      .pipe(
-        ofActionSuccessful(StartLoader, StopLoader),
-        filter(this.filter),
-        takeUntilDestroy(this)
-      )
-      .subscribe(action => {
-        if (action instanceof StartLoader) this.startLoading();
-        else this.stopLoading();
-      });
-
-    router.events
-      .pipe(
-        filter(
-          event =>
-            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError
-        ),
-        takeUntilDestroy(this)
-      )
-      .subscribe(event => {
-        if (event instanceof NavigationStart) this.startLoading();
-        else this.stopLoading();
-      });
-  }
+export class LoaderBarComponent implements OnDestroy, OnInit {
   @Input()
   containerClass = 'abp-loader-bar';
 
@@ -67,8 +38,44 @@ export class LoaderBarComponent implements OnDestroy {
 
   timer: Subscription;
 
+  intervalPeriod = 350;
+
+  stopDelay = 820;
+
   @Input()
   filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
+
+  get boxShadow(): string {
+    return `0 0 10px rgba(${this.color}, 0.5)`;
+  }
+
+  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.actions
+      .pipe(
+        ofActionSuccessful(StartLoader, StopLoader),
+        filter(this.filter),
+        takeUntilDestroy(this),
+      )
+      .subscribe(action => {
+        if (action instanceof StartLoader) this.startLoading();
+        else this.stopLoading();
+      });
+
+    this.router.events
+      .pipe(
+        filter(
+          event =>
+            event instanceof NavigationStart || event instanceof NavigationEnd || event instanceof NavigationError,
+        ),
+        takeUntilDestroy(this),
+      )
+      .subscribe(event => {
+        if (event instanceof NavigationStart) this.startLoading();
+        else this.stopLoading();
+      });
+  }
 
   ngOnDestroy() {
     this.interval.unsubscribe();
@@ -78,7 +85,7 @@ export class LoaderBarComponent implements OnDestroy {
     if (this.isLoading || this.progressLevel !== 0) return;
 
     this.isLoading = true;
-    this.interval = interval(350).subscribe(() => {
+    this.interval = interval(this.intervalPeriod).subscribe(() => {
       if (this.progressLevel < 75) {
         this.progressLevel += Math.random() * 10;
       } else if (this.progressLevel < 90) {
@@ -98,7 +105,7 @@ export class LoaderBarComponent implements OnDestroy {
     this.isLoading = false;
     if (this.timer && !this.timer.closed) return;
 
-    this.timer = timer(820).subscribe(() => {
+    this.timer = timer(this.stopDelay).subscribe(() => {
       this.progressLevel = 0;
       this.cdRef.detectChanges();
     });

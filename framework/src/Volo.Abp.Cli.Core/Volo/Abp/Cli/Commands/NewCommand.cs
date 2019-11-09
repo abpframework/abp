@@ -71,18 +71,13 @@ namespace Volo.Abp.Cli.Commands
             }
 
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
-            if (outputFolder != null)
-            {
-                if (!Directory.Exists(outputFolder))
-                {
-                    Directory.CreateDirectory(outputFolder);
-                }
 
-                outputFolder = Path.GetFullPath(outputFolder);
-            }
-            else
+            outputFolder = Path.Combine(outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory(),
+                    SolutionName.Parse(commandLineArgs.Target).FullName);
+
+            if (!Directory.Exists(outputFolder))
             {
-                outputFolder = Directory.GetCurrentDirectory();
+                Directory.CreateDirectory(outputFolder);
             }
 
             Logger.LogInformation("Output folder: " + outputFolder);

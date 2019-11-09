@@ -1,23 +1,22 @@
-<div class="row entry-row">
-  <div class="col-auto">
-    <h1 class="content-header-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h1>
-  </div>
-  <div class="col">
-    <div class="text-lg-right pt-2" id="AbpContentToolbar">
-      <button
-        [abpPermission]="'AbpIdentity.Users.Create'"
-        id="create-role"
-        class="btn btn-primary"
-        type="button"
-        (click)="onAdd()"
-      >
-        <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
-      </button>
+<div id="identity-roles-wrapper" class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col col-md-6">
+        <h5 class="card-title">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>
+      </div>
+      <div class="text-right col col-md-6">
+        <button
+          [abpPermission]="'AbpIdentity.Users.Create'"
+          id="create-role"
+          class="btn btn-primary"
+          type="button"
+          (click)="add()"
+        >
+          <i class="fa fa-plus mr-1"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>
+        </button>
+      </div>
     </div>
   </div>
-</div>
-
-<div id="identity-roles-wrapper" class="card">
   <div class="card-body">
     <div id="data-tables-table-filter" class="data-tables-filter">
       <label
@@ -87,11 +86,7 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button
-                  [abpPermission]="'AbpIdentity.Users.Update'"
-                  ngbDropdownItem
-                  (click)="onEdit(data.id)"
-                >
+                <button [abpPermission]="'AbpIdentity.Users.Update'" ngbDropdownItem (click)="edit(data.id)">
                   {{ 'AbpIdentity::Edit' | abpLocalization }}
                 </button>
                 <button
@@ -120,7 +115,7 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy" (disappear)="form = null">
   <ng-template #abpHeader>
     <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>
   </ng-template>

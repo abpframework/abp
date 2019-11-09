@@ -9,10 +9,6 @@ This project is the next generation of the [ASP.NET Boilerplate](https://aspnetb
 
 See the official [web site (abp.io)](https://abp.io/) for more information.
 
-### Status
-
-This project is in **preview** stage and it's not suggested to use it in production yet.
-
 ### Documentation
 
 See the <a href="https://docs.abp.io/" target="_blank">documentation</a>.

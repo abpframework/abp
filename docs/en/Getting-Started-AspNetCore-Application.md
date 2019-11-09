@@ -14,7 +14,7 @@ This tutorial explains how to start ABP from scratch with minimal dependencies. 
 
 3. Press to the create button:
 
-![create-aspnet-core-application](D:\Github\abp\docs\en\images\create-aspnet-core-application.png)
+![create-aspnet-core-application](images/create-aspnet-core-application.png)
 
 ## Install Volo.Abp.AspNetCore.Mvc Package
 

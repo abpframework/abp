@@ -131,13 +131,13 @@ export class TenantsComponent implements OnInit {
       });
   }
 
-  onAddTenant() {
+  addTenant() {
     this.selected = {} as ABP.BasicItem;
     this.createTenantForm();
     this.openModal('AbpTenantManagement::NewTenant', this.tenantModalTemplate, 'saveTenant');
   }
 
-  onEditTenant(id: string) {
+  editTenant(id: string) {
     this.store
       .dispatch(new GetTenantById(id))
       .pipe(pluck('TenantManagementState', 'selectedItem'))
@@ -156,6 +156,8 @@ export class TenantsComponent implements OnInit {
   }
 
   saveConnectionString() {
+    if (this.modalBusy) return;
+
     this.modalBusy = true;
     if (this.useSharedDatabase || (!this.useSharedDatabase && !this.connectionString)) {
       this.tenantService
@@ -181,13 +183,13 @@ export class TenantsComponent implements OnInit {
   }
 
   saveTenant() {
-    if (!this.tenantForm.valid) return;
+    if (!this.tenantForm.valid || this.modalBusy) return;
     this.modalBusy = true;
 
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateTenant({ ...this.tenantForm.value, id: this.selected.id })
+          ? new UpdateTenant({ ...this.selected, ...this.tenantForm.value, id: this.selected.id })
           : new CreateTenant(this.tenantForm.value),
       )
       .pipe(finalize(() => (this.modalBusy = false)))

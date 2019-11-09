@@ -24,14 +24,14 @@ namespace Volo.Abp.TenantManagement
             TenantManager = tenantManager;
         }
 
-        public async Task<TenantDto> GetAsync(Guid id)
+        public virtual async Task<TenantDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<Tenant, TenantDto>(
                 await TenantRepository.GetAsync(id)
             );
         }
 
-        public async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
+        public virtual async Task<PagedResultDto<TenantDto>> GetListAsync(GetTenantsInput input)
         {
             var count = await TenantRepository.GetCountAsync(input.Filter);
             var list = await TenantRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount, input.Filter);
@@ -43,7 +43,7 @@ namespace Volo.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.Create)]
-        public async Task<TenantDto> CreateAsync(TenantCreateDto input)
+        public virtual async Task<TenantDto> CreateAsync(TenantCreateDto input)
         {
             var tenant = await TenantManager.CreateAsync(input.Name);
             await TenantRepository.InsertAsync(tenant);
@@ -60,7 +60,7 @@ namespace Volo.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.Update)]
-        public async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
+        public virtual async Task<TenantDto> UpdateAsync(Guid id, TenantUpdateDto input)
         {
             var tenant = await TenantRepository.GetAsync(id);
             await TenantManager.ChangeNameAsync(tenant, input.Name);
@@ -69,7 +69,7 @@ namespace Volo.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var tenant = await TenantRepository.FindAsync(id);
             if (tenant == null)
@@ -81,14 +81,14 @@ namespace Volo.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public async Task<string> GetDefaultConnectionStringAsync(Guid id)
+        public virtual async Task<string> GetDefaultConnectionStringAsync(Guid id)
         {
             var tenant = await TenantRepository.GetAsync(id);
             return tenant?.FindDefaultConnectionString();
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public async Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
+        public virtual async Task UpdateDefaultConnectionStringAsync(Guid id, string defaultConnectionString)
         {
             var tenant = await TenantRepository.GetAsync(id);
             tenant.SetDefaultConnectionString(defaultConnectionString);
@@ -96,7 +96,7 @@ namespace Volo.Abp.TenantManagement
         }
 
         [Authorize(TenantManagementPermissions.Tenants.ManageConnectionStrings)]
-        public async Task DeleteDefaultConnectionStringAsync(Guid id)
+        public virtual async Task DeleteDefaultConnectionStringAsync(Guid id)
         {
             var tenant = await TenantRepository.GetAsync(id);
             tenant.RemoveDefaultConnectionString();

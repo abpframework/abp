@@ -65,12 +65,12 @@ export class RolesComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.RoleItem;
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
@@ -87,11 +87,11 @@ export class RolesComponent implements OnInit {
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
+          ? new UpdateRole({ ...this.selected, ...this.form.value, id: this.selected.id })
           : new CreateRole(this.form.value),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.isModalVisible = false;
       });
   }
