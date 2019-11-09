@@ -14,7 +14,7 @@ You can access to the **source code** of the application from the [GitHub reposi
 
 In this section, you will learn how to create a new modal dialog form to create a new book.
 
-#### Type Definition
+#### Type Definitiongit s
 
 Create an interface, named `CreateUpdateBookInput` in the `books.ts` as shown below:
 
@@ -215,6 +215,24 @@ Open `book-list.component.html` and add the form in the body template of the mod
 ```
 
 - This template creates a form with Name, Price, Type and Publish date fields.
+
+Open `books.module.ts` and add `NgbDatepickerModule` to the imports section of the `BooksModule`.
+
+```js
+//...
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+
+@NgModule({
+  declarations: [BooksComponent, BookListComponent],
+  imports: [
+    CommonModule,
+    BooksRoutingModule,
+    SharedModule,
+    NgbDatepickerModule
+  ]
+})
+export class BooksModule { }
+```
 
 > We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
 
