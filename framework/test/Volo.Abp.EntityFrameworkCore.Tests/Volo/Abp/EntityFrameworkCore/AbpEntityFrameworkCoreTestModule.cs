@@ -60,6 +60,9 @@ namespace Volo.Abp.EntityFrameworkCore
             using (var context = new TestMigrationsDbContext(new DbContextOptionsBuilder<TestMigrationsDbContext>().UseSqlite(connection).Options))
             {
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
+                context.Database.ExecuteSqlRaw(
+                    @"CREATE VIEW View_PersonView AS 
+                      SELECT Id, Name, CreationTime, Birthday, LastActive FROM People");
             }
             
             return connection;

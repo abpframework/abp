@@ -13,11 +13,11 @@ namespace Volo.Abp.TestApp.Testing
     public abstract class AbpDateTimeValueConverter_Tests<TStartupModule> : TestAppTestBase<TStartupModule>
         where TStartupModule : IAbpModule
     {
-        private readonly IBasicRepository<Person, Guid> _personRepository;
+        private readonly IPersonRepository _personRepository;
 
         protected AbpDateTimeValueConverter_Tests()
         {
-            _personRepository = GetRequiredService<IBasicRepository<Person, Guid>>();
+            _personRepository = GetRequiredService<IPersonRepository>();
         }
 
         [Fact]
@@ -31,6 +31,31 @@ namespace Volo.Abp.TestApp.Testing
             }, true);
 
             var person = await _personRepository.GetAsync(personId);
+
+            person.ShouldNotBeNull();
+            person.CreationTime.Kind.ShouldBe(DateTimeKind.Utc);
+
+            person.Birthday.ShouldNotBeNull();
+            person.Birthday.Value.Kind.ShouldBe(DateTimeKind.Utc);
+            person.Birthday.Value.ToString("yyy-MM-dd HH:mm:ss").ShouldBe("2020-01-01 00:00:00");
+
+            //LastActive DisableDateTimeNormalization
+            person.LastActive.ShouldNotBeNull();
+            person.LastActive.Value.Kind.ShouldBe(DateTimeKind.Unspecified);
+            person.LastActive.Value.ToString("yyy-MM-dd HH:mm:ss").ShouldBe("2020-01-01 00:00:00");
+        }
+
+        [Fact]
+        public async Task DateTime_Kind_Should_Be_Normalized_To_UTC_View_Test()
+        {
+            var personId = Guid.Parse("7a942bca-c911-4473-93aa-2daf88e18fb9");
+            await _personRepository.InsertAsync(new Person(personId, "bob lee", 18)
+            {
+                Birthday = DateTime.Parse("2020-01-01 00:00:00"),
+                LastActive = DateTime.Parse("2020-01-01 00:00:00"),
+            }, true);
+
+            var person = await _personRepository.GetViewAsync(personId);
 
             person.ShouldNotBeNull();
             person.CreationTime.Kind.ShouldBe(DateTimeKind.Utc);
