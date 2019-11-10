@@ -8,6 +8,6 @@ namespace Volo.Abp.TestApp.Domain
 {
     public interface IPersonRepository : IBasicRepository<Person, Guid>
     {
-        Task<PersonView> GetViewAsync(Guid id);
+        Task<PersonView> GetViewAsync(string name);
     }
 }

@@ -48,14 +48,14 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task DateTime_Kind_Should_Be_Normalized_To_UTC_View_Test()
         {
-            var personId = Guid.Parse("7a942bca-c911-4473-93aa-2daf88e18fb9");
-            await _personRepository.InsertAsync(new Person(personId, "bob lee", 18)
+            var personName = "bob lee";
+            await _personRepository.InsertAsync(new Person(Guid.NewGuid(), personName, 18)
             {
                 Birthday = DateTime.Parse("2020-01-01 00:00:00"),
                 LastActive = DateTime.Parse("2020-01-01 00:00:00"),
             }, true);
 
-            var person = await _personRepository.GetViewAsync(personId);
+            var person = await _personRepository.GetViewAsync(personName);
 
             person.ShouldNotBeNull();
             person.CreationTime.Kind.ShouldBe(DateTimeKind.Utc);

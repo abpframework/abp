@@ -62,7 +62,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 context.GetService<IRelationalDatabaseCreator>().CreateTables();
                 context.Database.ExecuteSqlRaw(
                     @"CREATE VIEW View_PersonView AS 
-                      SELECT Id, Name, CreationTime, Birthday, LastActive FROM People");
+                      SELECT Name, CreationTime, Birthday, LastActive FROM People");
             }
             
             return connection;

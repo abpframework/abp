@@ -5,8 +5,6 @@ namespace Volo.Abp.TestApp.Domain
 {
     public class PersonView
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; }
 
         public DateTime CreationTime { get; set; }
