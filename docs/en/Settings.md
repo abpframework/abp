@@ -165,6 +165,12 @@ This example adds it as the last item, so it will be the first value provider us
 
 While a setting value provider is free to use any source to get the setting value, the`ISettingStore` service is the default source of the setting values. Global, Tenant and User setting value providers use it.
 
+## ISettingEncryptionService
+
+`ISettingEncryptionService` is used to encrypt/decrypt setting values when `IsEncrypted` property of a setting definition was set to `true`.
+
+You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `IStringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](String-Encryption.md) for more).
+
 ## Setting Management Module
 
 The core setting system is pretty independent and doesn't make any assumption about how you manage (change) the setting values. Even the default `ISettingStore` implementation is the `NullSettingStore` which returns null for all setting values.
