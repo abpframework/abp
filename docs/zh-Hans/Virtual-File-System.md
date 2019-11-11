@@ -45,7 +45,7 @@ namespace MyCompany.MyProject
 
 此配置以递归方式添加项目的 **MyResources** 文件夹下的所有文件(包括将来新添加的文件).
 
-然后需要使用 `VirtualFileSystemOptions` 来配置模块, 以便将嵌入式文件注册到虚拟文件系统.  例如:
+然后需要使用 `AbpVirtualFileSystemOptions` 来配置模块, 以便将嵌入式文件注册到虚拟文件系统.  例如:
 
 ````C#
 using Microsoft.Extensions.DependencyInjection;
@@ -59,10 +59,10 @@ namespace MyCompany.MyProject
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 //Register all embedded files of this assembly to the virtual file system
-                options.FileSets.AddEmbedded<MyModule>();
+                options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
             });
 
             //...
@@ -74,8 +74,10 @@ namespace MyCompany.MyProject
 `AddEmbedded` 扩展方法需要一个类, 从给定类的程序集中查找所有嵌入文件, 并将它们注册到虚拟文件系统. 它还有更简洁的写法:
 
 ````C#
-options.FileSets.Add(new EmbeddedFileSet(typeof(MyModule).Assembly));
+options.FileSets.Add(new EmbeddedFileSet(typeof(MyModule).Assembly), "YourRootNameSpace");
 ````
+
+> "YourRootNameSpace" 是项目的根命名空间名字. 如果你的项目的根命名空间名字为空,则无需传递此参数.
 
 #### 获取虚拟文件: IVirtualFileProvider
 
@@ -123,7 +125,7 @@ public class MyWebAppModule : AbpModule
 
         if (hostingEnvironment.IsDevelopment()) //only for development time
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 //ReplaceEmbeddedByPhysical gets the root folder of the MyModule project
                 options.FileSets.ReplaceEmbeddedByPhysical<MyModule>(

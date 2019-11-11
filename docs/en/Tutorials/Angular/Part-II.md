@@ -137,7 +137,7 @@ createBook() {
 Add a `form` variable and inject a `FormBuilder` service to the `book-list.component.ts` as shown below (remember add the import statement).
 
 ```js
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 form: FormGroup;
 
@@ -222,12 +222,13 @@ Open the `book-list.component.ts` and then create an array, named `bookTypeArr`:
 
 ```js
 //...
-form: FormGroup;
+booksType = Books.BookType;
 
 bookTypeArr = Object.keys(Books.BookType).filter(
     bookType => typeof this.booksType[bookType] === 'number'
 );
 ```
+> It use the `booksType` field,please put the `bookTypeArr` defined below that line
 
 The `bookTypeArr` contains the fields of the `BookType` enum. Resulting array is shown below:
 
@@ -293,6 +294,9 @@ This adds a save button to the bottom area of the modal:
 Then define a `save` method in the `BookListComponent`:
 
 ```js
+//...
+import { ..., CreateUpdateBook } from '../../store/actions';
+//...
 save() {
   if (this.form.invalid) {
     return;

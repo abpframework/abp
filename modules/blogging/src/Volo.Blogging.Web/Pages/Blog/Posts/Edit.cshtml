@@ -7,7 +7,7 @@
     ViewBag.PageTitle = "Blog";
 }
 @section styles {
-    <abp-style-bundle @*name="@typeof(EditModel).FullName" *@>
+    <abp-style-bundle name="@typeof(EditModel).FullName">
         <abp-style type="@typeof(TuiEditorStyleContributor)" />
         <abp-style src="/Pages/Blog/Posts/new.css" />
     </abp-style-bundle>
