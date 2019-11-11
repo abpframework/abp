@@ -44,6 +44,7 @@ export class ModalComponent implements OnDestroy {
     } else {
       this.renderer.removeClass(document.body, 'modal-open');
       this.disappear.emit();
+      this.destroy$.next();
     }
   }
 
