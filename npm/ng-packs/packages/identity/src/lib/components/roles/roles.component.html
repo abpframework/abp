@@ -133,7 +133,7 @@
     <button type="button" class="btn btn-secondary" #abpClose>
       {{ 'AbpIdentity::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="onClickSaveButton()">{{
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid" (click)="onClickSaveButton()">{{
       'AbpIdentity::Save' | abpLocalization
     }}</abp-button>
   </ng-template>
