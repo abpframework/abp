@@ -1,6 +1,6 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild, OnInit } from '@angular/core';
+import { Component, TemplateRef, ViewChild, OnInit, ContentChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -40,8 +40,8 @@ export class RolesComponent implements OnInit {
 
   sortKey = '';
 
-  @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
+  @ViewChild('formRef', { static: false, read: ElementRef })
+  formRef: ElementRef<HTMLFormElement>;
 
   constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
@@ -121,5 +121,9 @@ export class RolesComponent implements OnInit {
       .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
+  }
+
+  onClickSaveButton() {
+    this.formRef.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   }
 }
