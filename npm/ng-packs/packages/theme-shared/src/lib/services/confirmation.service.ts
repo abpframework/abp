@@ -25,7 +25,6 @@ export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
     options?: Confirmation.Options,
   ): Observable<Toaster.Status> {
     this.listenToEscape();
-
     return super.show(message, title, severity, options);
   }
 
