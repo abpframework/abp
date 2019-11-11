@@ -41,6 +41,7 @@ export class ErrorComponent implements AfterViewInit, OnDestroy {
     if (this.customComponent) {
       const customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(null);
       customComponentRef.instance.errorStatus = this.status;
+      customComponentRef.instance.destroy$ = this.destroy$;
       this.containerRef.nativeElement.appendChild((customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
       customComponentRef.changeDetectorRef.detectChanges();
     }

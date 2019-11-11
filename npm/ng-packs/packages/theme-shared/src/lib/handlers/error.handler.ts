@@ -39,7 +39,7 @@ export const DEFAULT_ERROR_MESSAGES = {
     details: 'The resource requested could not found on the server.',
   },
   defaultError500: {
-    title: '500',
+    title: 'Internal server error',
     details: 'Error detail not sent by server.',
   },
 };
@@ -106,11 +106,11 @@ export class ErrorHandler {
                 : this.showError(
                     {
                       key: 'AbpAccount::DefaultErrorMessage404',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
                     },
                     {
                       key: 'AbpAccount::DefaultErrorMessage404Detail',
-                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.details,
+                      defaultValue: DEFAULT_ERROR_MESSAGES.defaultError404.title,
                     },
                   );
               break;
