@@ -1,4 +1,4 @@
-name: "Angular build and test action"
+name: "Angular build and test"
 on:
   pull_request:
     paths:
