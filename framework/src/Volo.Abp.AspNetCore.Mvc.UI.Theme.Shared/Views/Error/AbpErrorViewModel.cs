@@ -1,6 +1,6 @@
 ﻿using Volo.Abp.Http;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error
+namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error
 {
     public class AbpErrorPageModel
     {

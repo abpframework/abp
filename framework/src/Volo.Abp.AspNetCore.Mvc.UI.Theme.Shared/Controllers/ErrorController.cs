@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.ExceptionHandling;
-using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 {
@@ -57,7 +57,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 
         private string GetErrorPageUrl(int statusCode)
         {
-            var page = _abpErrorPageOptions.ErrorPageUrls.GetOrDefault(statusCode.ToString());
+            var page = _abpErrorPageOptions.ErrorViewUrls.GetOrDefault(statusCode.ToString());
 
             if (string.IsNullOrWhiteSpace(page))
             {

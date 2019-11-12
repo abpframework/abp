@@ -4,11 +4,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared
 {
     public class AbpErrorPageOptions
     {
-        public readonly IDictionary<string, string> ErrorPageUrls;
+        public readonly IDictionary<string, string> ErrorViewUrls;
 
         public AbpErrorPageOptions()
         {
-            ErrorPageUrls = new Dictionary<string, string>();
+            ErrorViewUrls = new Dictionary<string, string>();
         }
     }
 }
