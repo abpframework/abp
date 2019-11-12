@@ -6,6 +6,9 @@ on:
   push:
     paths:
     - 'npm/ng-packs/**'
+    branches:
+      - master
+      - dev
 jobs:
   build:
     runs-on: ubuntu-18.04
