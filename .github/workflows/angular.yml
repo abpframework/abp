@@ -4,11 +4,12 @@ on:
     paths:
     - 'npm/ng-packs/**'
 jobs:
-  triage:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: '10.x'
       - run: cd npm/ng-packs && npm install
+      - run: pwd
