@@ -1,63 +1,53 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/tenant-management-state.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { TenantManagementState } from '../states/tenant-management.state';
-import * as i0 from '@angular/core';
-import * as i1 from '@ngxs/store';
-var TenantManagementStateService = /** @class */ (function() {
-  function TenantManagementStateService(store) {
-    this.store = store;
-  }
-  /**
-   * @return {?}
-   */
-  TenantManagementStateService.prototype.getTenants
-  /**
-   * @return {?}
-   */ = function() {
-    return this.store.selectSnapshot(TenantManagementState.get);
-  };
-  /**
-   * @return {?}
-   */
-  TenantManagementStateService.prototype.getTenantsTotalCount
-  /**
-   * @return {?}
-   */ = function() {
-    return this.store.selectSnapshot(TenantManagementState.getTenantsTotalCount);
-  };
-  TenantManagementStateService.decorators = [
-    {
-      type: Injectable,
-      args: [
-        {
-          providedIn: 'root',
-        },
-      ],
-    },
-  ];
-  /** @nocollapse */
-  TenantManagementStateService.ctorParameters = function() {
-    return [{ type: Store }];
-  };
-  /** @nocollapse */ TenantManagementStateService.ngInjectableDef = i0.ɵɵdefineInjectable({
-    factory: function TenantManagementStateService_Factory() {
-      return new TenantManagementStateService(i0.ɵɵinject(i1.Store));
-    },
-    token: TenantManagementStateService,
-    providedIn: 'root',
-  });
-  return TenantManagementStateService;
-})();
+import * as i0 from "@angular/core";
+import * as i1 from "@ngxs/store";
+var TenantManagementStateService = /** @class */ (function () {
+    function TenantManagementStateService(store) {
+        this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    TenantManagementStateService.prototype.get = /**
+     * @return {?}
+     */
+    function () {
+        return this.store.selectSnapshot(TenantManagementState.get);
+    };
+    /**
+     * @return {?}
+     */
+    TenantManagementStateService.prototype.getTenantsTotalCount = /**
+     * @return {?}
+     */
+    function () {
+        return this.store.selectSnapshot(TenantManagementState.getTenantsTotalCount);
+    };
+    TenantManagementStateService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    TenantManagementStateService.ctorParameters = function () { return [
+        { type: Store }
+    ]; };
+    /** @nocollapse */ TenantManagementStateService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function TenantManagementStateService_Factory() { return new TenantManagementStateService(i0.ɵɵinject(i1.Store)); }, token: TenantManagementStateService, providedIn: "root" });
+    return TenantManagementStateService;
+}());
 export { TenantManagementStateService };
 if (false) {
-  /**
-   * @type {?}
-   * @private
-   */
-  TenantManagementStateService.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    TenantManagementStateService.prototype.store;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LW1hbmFnZW1lbnQtc3RhdGUuc2VydmljZS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGVuYW50LW1hbmFnZW1lbnQvIiwic291cmNlcyI6WyJsaWIvc2VydmljZXMvdGVuYW50LW1hbmFnZW1lbnQtc3RhdGUuc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLFVBQVUsRUFBRSxNQUFNLGVBQWUsQ0FBQztBQUMzQyxPQUFPLEVBQUUsS0FBSyxFQUFFLE1BQU0sYUFBYSxDQUFDO0FBQ3BDLE9BQU8sRUFBRSxxQkFBcUIsRUFBRSxNQUFNLG1DQUFtQyxDQUFDOzs7QUFFMUU7SUFJRSxzQ0FBb0IsS0FBWTtRQUFaLFVBQUssR0FBTCxLQUFLLENBQU87SUFBRyxDQUFDOzs7O0lBRXBDLGlEQUFVOzs7SUFBVjtRQUNFLE9BQU8sSUFBSSxDQUFDLEtBQUssQ0FBQyxjQUFjLENBQUMscUJBQXFCLENBQUMsR0FBRyxDQUFDLENBQUM7SUFDOUQsQ0FBQzs7OztJQUVELDJEQUFvQjs7O0lBQXBCO1FBQ0UsT0FBTyxJQUFJLENBQUMsS0FBSyxDQUFDLGNBQWMsQ0FBQyxxQkFBcUIsQ0FBQyxvQkFBb0IsQ0FBQyxDQUFDO0lBQy9FLENBQUM7O2dCQVpGLFVBQVUsU0FBQztvQkFDVixVQUFVLEVBQUUsTUFBTTtpQkFDbkI7Ozs7Z0JBTFEsS0FBSzs7O3VDQURkO0NBaUJDLEFBYkQsSUFhQztTQVZZLDRCQUE0Qjs7Ozs7O0lBQzNCLDZDQUFvQiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEluamVjdGFibGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7IFN0b3JlIH0gZnJvbSAnQG5neHMvc3RvcmUnO1xuaW1wb3J0IHsgVGVuYW50TWFuYWdlbWVudFN0YXRlIH0gZnJvbSAnLi4vc3RhdGVzL3RlbmFudC1tYW5hZ2VtZW50LnN0YXRlJztcblxuQEluamVjdGFibGUoe1xuICBwcm92aWRlZEluOiAncm9vdCcsXG59KVxuZXhwb3J0IGNsYXNzIFRlbmFudE1hbmFnZW1lbnRTdGF0ZVNlcnZpY2Uge1xuICBjb25zdHJ1Y3Rvcihwcml2YXRlIHN0b3JlOiBTdG9yZSkge31cblxuICBnZXRUZW5hbnRzKCkge1xuICAgIHJldHVybiB0aGlzLnN0b3JlLnNlbGVjdFNuYXBzaG90KFRlbmFudE1hbmFnZW1lbnRTdGF0ZS5nZXQpO1xuICB9XG5cbiAgZ2V0VGVuYW50c1RvdGFsQ291bnQoKSB7XG4gICAgcmV0dXJuIHRoaXMuc3RvcmUuc2VsZWN0U25hcHNob3QoVGVuYW50TWFuYWdlbWVudFN0YXRlLmdldFRlbmFudHNUb3RhbENvdW50KTtcbiAgfVxufVxuIl19
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LW1hbmFnZW1lbnQtc3RhdGUuc2VydmljZS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGVuYW50LW1hbmFnZW1lbnQvIiwic291cmNlcyI6WyJsaWIvc2VydmljZXMvdGVuYW50LW1hbmFnZW1lbnQtc3RhdGUuc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxVQUFVLEVBQUUsTUFBTSxlQUFlLENBQUM7QUFDM0MsT0FBTyxFQUFFLEtBQUssRUFBRSxNQUFNLGFBQWEsQ0FBQztBQUNwQyxPQUFPLEVBQUUscUJBQXFCLEVBQUUsTUFBTSxtQ0FBbUMsQ0FBQzs7O0FBRTFFO0lBSUUsc0NBQW9CLEtBQVk7UUFBWixVQUFLLEdBQUwsS0FBSyxDQUFPO0lBQUcsQ0FBQzs7OztJQUVwQywwQ0FBRzs7O0lBQUg7UUFDRSxPQUFPLElBQUksQ0FBQyxLQUFLLENBQUMsY0FBYyxDQUFDLHFCQUFxQixDQUFDLEdBQUcsQ0FBQyxDQUFDO0lBQzlELENBQUM7Ozs7SUFFRCwyREFBb0I7OztJQUFwQjtRQUNFLE9BQU8sSUFBSSxDQUFDLEtBQUssQ0FBQyxjQUFjLENBQUMscUJBQXFCLENBQUMsb0JBQW9CLENBQUMsQ0FBQztJQUMvRSxDQUFDOztnQkFaRixVQUFVLFNBQUM7b0JBQ1YsVUFBVSxFQUFFLE1BQU07aUJBQ25COzs7O2dCQUxRLEtBQUs7Ozt1Q0FEZDtDQWlCQyxBQWJELElBYUM7U0FWWSw0QkFBNEI7Ozs7OztJQUMzQiw2Q0FBb0IiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBJbmplY3RhYmxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XHJcbmltcG9ydCB7IFN0b3JlIH0gZnJvbSAnQG5neHMvc3RvcmUnO1xyXG5pbXBvcnQgeyBUZW5hbnRNYW5hZ2VtZW50U3RhdGUgfSBmcm9tICcuLi9zdGF0ZXMvdGVuYW50LW1hbmFnZW1lbnQuc3RhdGUnO1xyXG5cclxuQEluamVjdGFibGUoe1xyXG4gIHByb3ZpZGVkSW46ICdyb290JyxcclxufSlcclxuZXhwb3J0IGNsYXNzIFRlbmFudE1hbmFnZW1lbnRTdGF0ZVNlcnZpY2Uge1xyXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgc3RvcmU6IFN0b3JlKSB7fVxyXG5cclxuICBnZXQoKSB7XHJcbiAgICByZXR1cm4gdGhpcy5zdG9yZS5zZWxlY3RTbmFwc2hvdChUZW5hbnRNYW5hZ2VtZW50U3RhdGUuZ2V0KTtcclxuICB9XHJcblxyXG4gIGdldFRlbmFudHNUb3RhbENvdW50KCkge1xyXG4gICAgcmV0dXJuIHRoaXMuc3RvcmUuc2VsZWN0U25hcHNob3QoVGVuYW50TWFuYWdlbWVudFN0YXRlLmdldFRlbmFudHNUb3RhbENvdW50KTtcclxuICB9XHJcbn1cclxuIl19

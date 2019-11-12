@@ -1,50 +1,38 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/tenant-management-config.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import { Injectable } from '@angular/core';
 import { addAbpRoutes } from '@abp/ng.core';
-import * as i0 from '@angular/core';
-var TenantManagementConfigService = /** @class */ (function() {
-  function TenantManagementConfigService() {
-    addAbpRoutes({
-      name: 'AbpTenantManagement::Menu:TenantManagement',
-      path: 'tenant-management',
-      parentName: 'AbpUiNavigation::Menu:Administration',
-      layout: 'application' /* application */,
-      iconClass: 'fa fa-users',
-      children: [
-        {
-          path: 'tenants',
-          name: 'AbpTenantManagement::Tenants',
-          order: 1,
-          requiredPolicy: 'AbpTenantManagement.Tenants',
-        },
-      ],
-    });
-  }
-  TenantManagementConfigService.decorators = [
-    {
-      type: Injectable,
-      args: [
-        {
-          providedIn: 'root',
-        },
-      ],
-    },
-  ];
-  /** @nocollapse */
-  TenantManagementConfigService.ctorParameters = function() {
-    return [];
-  };
-  /** @nocollapse */ TenantManagementConfigService.ngInjectableDef = i0.ɵɵdefineInjectable({
-    factory: function TenantManagementConfigService_Factory() {
-      return new TenantManagementConfigService();
-    },
-    token: TenantManagementConfigService,
-    providedIn: 'root',
-  });
-  return TenantManagementConfigService;
-})();
+import * as i0 from "@angular/core";
+var TenantManagementConfigService = /** @class */ (function () {
+    function TenantManagementConfigService() {
+        addAbpRoutes({
+            name: 'AbpTenantManagement::Menu:TenantManagement',
+            path: 'tenant-management',
+            parentName: 'AbpUiNavigation::Menu:Administration',
+            layout: "application" /* application */,
+            iconClass: 'fa fa-users',
+            children: [
+                {
+                    path: 'tenants',
+                    name: 'AbpTenantManagement::Tenants',
+                    order: 1,
+                    requiredPolicy: 'AbpTenantManagement.Tenants',
+                },
+            ],
+        });
+    }
+    TenantManagementConfigService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    TenantManagementConfigService.ctorParameters = function () { return []; };
+    /** @nocollapse */ TenantManagementConfigService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function TenantManagementConfigService_Factory() { return new TenantManagementConfigService(); }, token: TenantManagementConfigService, providedIn: "root" });
+    return TenantManagementConfigService;
+}());
 export { TenantManagementConfigService };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LW1hbmFnZW1lbnQtY29uZmlnLnNlcnZpY2UuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AYWJwL25nLnRlbmFudC1tYW5hZ2VtZW50LmNvbmZpZy8iLCJzb3VyY2VzIjpbImxpYi9zZXJ2aWNlcy90ZW5hbnQtbWFuYWdlbWVudC1jb25maWcuc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLFVBQVUsRUFBRSxNQUFNLGVBQWUsQ0FBQztBQUMzQyxPQUFPLEVBQUUsWUFBWSxFQUFlLE1BQU0sY0FBYyxDQUFDOztBQUV6RDtJQUlFO1FBQ0UsWUFBWSxDQUFDO1lBQ1gsSUFBSSxFQUFFLDRDQUE0QztZQUNsRCxJQUFJLEVBQUUsbUJBQW1CO1lBQ3pCLFVBQVUsRUFBRSxzQ0FBc0M7WUFDbEQsTUFBTSxpQ0FBeUI7WUFDL0IsU0FBUyxFQUFFLGFBQWE7WUFDeEIsUUFBUSxFQUFFO2dCQUNSO29CQUNFLElBQUksRUFBRSxTQUFTO29CQUNmLElBQUksRUFBRSw4QkFBOEI7b0JBQ3BDLEtBQUssRUFBRSxDQUFDO29CQUNSLGNBQWMsRUFBRSw2QkFBNkI7aUJBQzlDO2FBQ0Y7U0FDRixDQUFDLENBQUM7SUFDTCxDQUFDOztnQkFwQkYsVUFBVSxTQUFDO29CQUNWLFVBQVUsRUFBRSxNQUFNO2lCQUNuQjs7Ozs7d0NBTEQ7Q0F3QkMsQUFyQkQsSUFxQkM7U0FsQlksNkJBQTZCIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgSW5qZWN0YWJsZSB9IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuaW1wb3J0IHsgYWRkQWJwUm91dGVzLCBlTGF5b3V0VHlwZSB9IGZyb20gJ0BhYnAvbmcuY29yZSc7XG5cbkBJbmplY3RhYmxlKHtcbiAgcHJvdmlkZWRJbjogJ3Jvb3QnLFxufSlcbmV4cG9ydCBjbGFzcyBUZW5hbnRNYW5hZ2VtZW50Q29uZmlnU2VydmljZSB7XG4gIGNvbnN0cnVjdG9yKCkge1xuICAgIGFkZEFicFJvdXRlcyh7XG4gICAgICBuYW1lOiAnQWJwVGVuYW50TWFuYWdlbWVudDo6TWVudTpUZW5hbnRNYW5hZ2VtZW50JyxcbiAgICAgIHBhdGg6ICd0ZW5hbnQtbWFuYWdlbWVudCcsXG4gICAgICBwYXJlbnROYW1lOiAnQWJwVWlOYXZpZ2F0aW9uOjpNZW51OkFkbWluaXN0cmF0aW9uJyxcbiAgICAgIGxheW91dDogZUxheW91dFR5cGUuYXBwbGljYXRpb24sXG4gICAgICBpY29uQ2xhc3M6ICdmYSBmYS11c2VycycsXG4gICAgICBjaGlsZHJlbjogW1xuICAgICAgICB7XG4gICAgICAgICAgcGF0aDogJ3RlbmFudHMnLFxuICAgICAgICAgIG5hbWU6ICdBYnBUZW5hbnRNYW5hZ2VtZW50OjpUZW5hbnRzJyxcbiAgICAgICAgICBvcmRlcjogMSxcbiAgICAgICAgICByZXF1aXJlZFBvbGljeTogJ0FicFRlbmFudE1hbmFnZW1lbnQuVGVuYW50cycsXG4gICAgICAgIH0sXG4gICAgICBdLFxuICAgIH0pO1xuICB9XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LW1hbmFnZW1lbnQtY29uZmlnLnNlcnZpY2UuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AYWJwL25nLnRlbmFudC1tYW5hZ2VtZW50LmNvbmZpZy8iLCJzb3VyY2VzIjpbImxpYi9zZXJ2aWNlcy90ZW5hbnQtbWFuYWdlbWVudC1jb25maWcuc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxVQUFVLEVBQUUsTUFBTSxlQUFlLENBQUM7QUFDM0MsT0FBTyxFQUFFLFlBQVksRUFBZSxNQUFNLGNBQWMsQ0FBQzs7QUFFekQ7SUFJRTtRQUNFLFlBQVksQ0FBQztZQUNYLElBQUksRUFBRSw0Q0FBNEM7WUFDbEQsSUFBSSxFQUFFLG1CQUFtQjtZQUN6QixVQUFVLEVBQUUsc0NBQXNDO1lBQ2xELE1BQU0saUNBQXlCO1lBQy9CLFNBQVMsRUFBRSxhQUFhO1lBQ3hCLFFBQVEsRUFBRTtnQkFDUjtvQkFDRSxJQUFJLEVBQUUsU0FBUztvQkFDZixJQUFJLEVBQUUsOEJBQThCO29CQUNwQyxLQUFLLEVBQUUsQ0FBQztvQkFDUixjQUFjLEVBQUUsNkJBQTZCO2lCQUM5QzthQUNGO1NBQ0YsQ0FBQyxDQUFDO0lBQ0wsQ0FBQzs7Z0JBcEJGLFVBQVUsU0FBQztvQkFDVixVQUFVLEVBQUUsTUFBTTtpQkFDbkI7Ozs7O3dDQUxEO0NBd0JDLEFBckJELElBcUJDO1NBbEJZLDZCQUE2QiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEluamVjdGFibGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcclxuaW1wb3J0IHsgYWRkQWJwUm91dGVzLCBlTGF5b3V0VHlwZSB9IGZyb20gJ0BhYnAvbmcuY29yZSc7XHJcblxyXG5ASW5qZWN0YWJsZSh7XHJcbiAgcHJvdmlkZWRJbjogJ3Jvb3QnLFxyXG59KVxyXG5leHBvcnQgY2xhc3MgVGVuYW50TWFuYWdlbWVudENvbmZpZ1NlcnZpY2Uge1xyXG4gIGNvbnN0cnVjdG9yKCkge1xyXG4gICAgYWRkQWJwUm91dGVzKHtcclxuICAgICAgbmFtZTogJ0FicFRlbmFudE1hbmFnZW1lbnQ6Ok1lbnU6VGVuYW50TWFuYWdlbWVudCcsXHJcbiAgICAgIHBhdGg6ICd0ZW5hbnQtbWFuYWdlbWVudCcsXHJcbiAgICAgIHBhcmVudE5hbWU6ICdBYnBVaU5hdmlnYXRpb246Ok1lbnU6QWRtaW5pc3RyYXRpb24nLFxyXG4gICAgICBsYXlvdXQ6IGVMYXlvdXRUeXBlLmFwcGxpY2F0aW9uLFxyXG4gICAgICBpY29uQ2xhc3M6ICdmYSBmYS11c2VycycsXHJcbiAgICAgIGNoaWxkcmVuOiBbXHJcbiAgICAgICAge1xyXG4gICAgICAgICAgcGF0aDogJ3RlbmFudHMnLFxyXG4gICAgICAgICAgbmFtZTogJ0FicFRlbmFudE1hbmFnZW1lbnQ6OlRlbmFudHMnLFxyXG4gICAgICAgICAgb3JkZXI6IDEsXHJcbiAgICAgICAgICByZXF1aXJlZFBvbGljeTogJ0FicFRlbmFudE1hbmFnZW1lbnQuVGVuYW50cycsXHJcbiAgICAgICAgfSxcclxuICAgICAgXSxcclxuICAgIH0pO1xyXG4gIH1cclxufVxyXG4iXX0=
