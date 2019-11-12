@@ -1,11 +1,6 @@
 name: "Angular build and test action"
 on:
   pull_request:
-    paths:
-    - 'npm/ng-packs/**'
-    branches:
-      - master
-      - dev
   push:
     paths:
     - 'npm/ng-packs/**'
