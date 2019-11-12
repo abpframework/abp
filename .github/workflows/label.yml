@@ -2,7 +2,7 @@ name: "Pull Request Labeler"
 on:
   pull_request:
     paths:
-    - '/npm/ng-packs/**.md'
+    - 'npm/ng-packs/**'
 
 jobs:
   triage:
