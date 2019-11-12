@@ -64,10 +64,21 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
                 }
                 else
                 {
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
-                    steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
-                    steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44303"));
+                    if (context.BuildArgs.ExtraProperties.ContainsKey("no-ui"))
+                    {
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.HttpApi.Client.ConsoleTestApp"));
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                    }
+                    else
+                    {
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                        steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                        steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44303"));
+                    }
                 }
 
                 steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
