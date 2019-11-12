@@ -7,7 +7,7 @@
     "update:templates": "node abp-package-update-script.js ../templates"
   },
   "devDependencies": {
-    "lerna": "^2.11.0",
+    "lerna": "^3.18.4",
     "npm-check-updates": "^3.1.25",
     "glob": "^7.1.5"
   }
