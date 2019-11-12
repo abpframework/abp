@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 
             var page = GetErrorPageUrl(httpStatusCode);
 
-            return View(page, new AbpErrorPageModel
+            return View(page, new AbpErrorViewModel
             {
                 ErrorInfo = errorInfo,
                 HttpStatusCode = httpStatusCode
