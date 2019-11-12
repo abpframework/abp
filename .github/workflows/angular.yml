@@ -1,7 +1,14 @@
-steps:
-- uses: actions/checkout@v1
-- uses: actions/setup-node@v1
-  with:
-    node-version: '10.x'
-- run: npm install
-- run: npm test
+name: "Angular build and test action"
+on:
+  pull_request:
+    paths:
+    - 'npm/ng-packs/**'
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: cd npm/ng-packs && npm install
