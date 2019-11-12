@@ -21,6 +21,7 @@ jobs:
         with:
           node-version: '10.x'
       - run: |
+          node -v
           yarn
           yarn global add symlink
         working-directory: npm/ng-packs
