@@ -7,6 +7,7 @@ import { ABP } from '@abp/ng.core';
   template: `
     <button
       #button
+      [id]="buttonId"
       [attr.type]="buttonType"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
@@ -19,6 +20,9 @@ import { ABP } from '@abp/ng.core';
   `,
 })
 export class ButtonComponent implements OnInit {
+  @Input()
+  buttonId = '';
+
   @Input()
   buttonClass = 'btn btn-primary';
 
