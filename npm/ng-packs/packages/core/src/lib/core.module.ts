@@ -6,11 +6,14 @@ import { RouterModule } from '@angular/router';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { NgxsModule, NGXS_PLUGINS } from '@ngxs/store';
+import { OAuthModule } from 'angular-oauth2-oidc';
+import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 import { DynamicLayoutComponent } from './components/dynamic-layout.component';
 import { RouterOutletComponent } from './components/router-outlet.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { InputEventDebounceDirective } from './directives/debounce.directive';
 import { EllipsisDirective } from './directives/ellipsis.directive';
+import { ForDirective } from './directives/for.directive';
 import { FormSubmitDirective } from './directives/form-submit.directive';
 import { PermissionDirective } from './directives/permission.directive';
 import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
@@ -19,20 +22,19 @@ import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
 import { LocalizationPipe } from './pipes/localization.pipe';
 import { SortPipe } from './pipes/sort.pipe';
+import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config.plugin';
 import { LocaleProvider } from './providers/locale.provider';
 import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
-import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from './plugins/config/config.plugin';
-import { ForDirective } from './directives/for.directive';
-import { AbstractNgModelComponent } from './abstracts/ng-model.component';
 
 @NgModule({
   imports: [
     NgxsModule.forFeature([ProfileState, SessionState, ConfigState]),
-    NgxsStoragePluginModule.forRoot({ key: 'SessionState' }),
     NgxsRouterPluginModule.forRoot(),
+    NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
+    OAuthModule.forRoot(),
     CommonModule,
     HttpClientModule,
     FormsModule,

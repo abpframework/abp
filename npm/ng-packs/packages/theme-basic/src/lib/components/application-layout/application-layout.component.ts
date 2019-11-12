@@ -1,22 +1,26 @@
 import {
   ABP,
   ApplicationConfiguration,
-  GetAppConfiguration,
+  Config,
   ConfigState,
   eLayoutType,
-  SetLanguage,
+  GetAppConfiguration,
   SessionState,
+  SetLanguage,
   takeUntilDestroy,
 } from '@abp/ng.core';
+import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
 import {
   AfterViewInit,
   Component,
   OnDestroy,
   QueryList,
+  Renderer2,
   TemplateRef,
   TrackByFunction,
   ViewChild,
   ViewChildren,
+  ElementRef,
 } from '@angular/core';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
@@ -33,6 +37,7 @@ import { LayoutState } from '../../states';
 @Component({
   selector: 'abp-layout-application',
   templateUrl: './application-layout.component.html',
+  animations: [slideFromBottom, collapseWithMargin],
 })
 export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   // required for dynamic component
@@ -56,10 +61,15 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   @ViewChild('language', { static: false, read: TemplateRef })
   languageRef: TemplateRef<any>;
 
-  @ViewChildren('navbarRootDropdown', { read: NgbDropdown })
-  navbarRootDropdowns: QueryList<NgbDropdown>;
-
   isDropdownChildDynamic: boolean;
+
+  isCollapsed = true;
+
+  smallScreen: boolean; // do not set true or false
+
+  get appInfo(): Config.Application {
+    return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+  }
 
   get visibleRoutes$(): Observable<ABP.FullRoute[]> {
     return this.routes$.pipe(map(routes => getVisibleRoutes(routes)));
@@ -90,17 +100,22 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   trackElementByFn: TrackByFunction<ABP.FullRoute> = (_, element) => element;
 
-  constructor(private store: Store, private oauthService: OAuthService) {}
+  constructor(private store: Store, private oauthService: OAuthService, private renderer: Renderer2) {}
 
   private checkWindowWidth() {
     setTimeout(() => {
-      this.navbarRootDropdowns.forEach(item => {
-        item.close();
-      });
       if (window.innerWidth < 768) {
         this.isDropdownChildDynamic = false;
+        if (this.smallScreen === false) {
+          this.isCollapsed = false;
+          setTimeout(() => {
+            this.isCollapsed = true;
+          }, 100);
+        }
+        this.smallScreen = true;
       } else {
         this.isDropdownChildDynamic = true;
+        this.smallScreen = false;
       }
     }, 0);
   }
@@ -132,7 +147,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
     fromEvent(window, 'resize')
       .pipe(
         takeUntilDestroy(this),
-        debounceTime(250),
+        debounceTime(150),
       )
       .subscribe(() => {
         this.checkWindowWidth();
@@ -153,6 +168,17 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
       }),
     );
     this.store.dispatch(new GetAppConfiguration());
+  }
+
+  openChange(event: boolean, childrenContainer: HTMLDivElement) {
+    if (!event) {
+      Object.keys(childrenContainer.style)
+        .filter(key => Number.isInteger(+key))
+        .forEach(key => {
+          this.renderer.removeStyle(childrenContainer, childrenContainer.style[key]);
+        });
+      this.renderer.removeStyle(childrenContainer, 'left');
+    }
   }
 }
 

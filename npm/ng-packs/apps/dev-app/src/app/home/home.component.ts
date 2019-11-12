@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
-  selector: 'app-home',
+  selector: 'abp-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {

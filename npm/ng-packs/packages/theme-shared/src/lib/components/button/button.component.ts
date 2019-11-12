@@ -7,7 +7,8 @@ import { ABP } from '@abp/ng.core';
   template: `
     <button
       #button
-      [attr.type]="buttonType || type"
+      [id]="buttonId"
+      [attr.type]="buttonType"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
       (click)="onClick($event)"
@@ -20,10 +21,13 @@ import { ABP } from '@abp/ng.core';
 })
 export class ButtonComponent implements OnInit {
   @Input()
+  buttonId = '';
+
+  @Input()
   buttonClass = 'btn btn-primary';
 
   @Input()
-  buttonType; // TODO: Add initial value.
+  buttonType = 'button';
 
   @Input()
   iconClass: string;
@@ -48,11 +52,6 @@ export class ButtonComponent implements OnInit {
 
   @ViewChild('button', { static: true })
   buttonRef: ElementRef<HTMLButtonElement>;
-
-  /**
-   * @deprecated Use buttonType instead. To be deleted in v1
-   */
-  @Input() type = 'button';
 
   get icon(): string {
     return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;

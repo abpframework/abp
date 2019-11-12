@@ -1,6 +1,6 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild, OnInit } from '@angular/core';
+import { Component, TemplateRef, ViewChild, OnInit, ContentChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -40,17 +40,12 @@ export class RolesComponent implements OnInit {
 
   sortKey = '';
 
-  @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
+  @ViewChild('formRef', { static: false, read: ElementRef })
+  formRef: ElementRef<HTMLFormElement>;
 
   constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
 
   ngOnInit() {
-    this.get();
-  }
-
-  onSearch(value) {
-    this.pageQuery.filter = value;
     this.get();
   }
 
@@ -70,12 +65,12 @@ export class RolesComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.RoleItem;
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
@@ -92,7 +87,7 @@ export class RolesComponent implements OnInit {
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
+          ? new UpdateRole({ ...this.selected, ...this.form.value, id: this.selected.id })
           : new CreateRole(this.form.value),
       )
       .pipe(finalize(() => (this.modalBusy = false)))
@@ -126,5 +121,9 @@ export class RolesComponent implements OnInit {
       .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
+  }
+
+  onClickSaveButton() {
+    this.formRef.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
   }
 }

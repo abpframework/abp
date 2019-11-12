@@ -1,4 +1,4 @@
-import { ABP } from '@abp/ng.core';
+import { ABP, ConfigState } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, TrackByFunction, ViewChild, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -17,6 +17,7 @@ import {
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
+import { PasswordRules, validatePassword } from '@ngx-validate/core';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -55,6 +56,10 @@ export class UsersComponent implements OnInit {
 
   sortKey = '';
 
+  passwordRulesArr = [] as PasswordRules;
+
+  requiredPasswordLength = 1;
+
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
   get roleGroups(): FormGroup[] {
@@ -65,6 +70,30 @@ export class UsersComponent implements OnInit {
 
   ngOnInit() {
     this.get();
+
+    const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
+      ConfigState.getSettings('Identity.Password'),
+    );
+
+    if ((passwordRules['Abp.Identity.Password.RequireDigit'] || '').toLowerCase() === 'true') {
+      this.passwordRulesArr.push('number');
+    }
+
+    if ((passwordRules['Abp.Identity.Password.RequireLowercase'] || '').toLowerCase() === 'true') {
+      this.passwordRulesArr.push('small');
+    }
+
+    if ((passwordRules['Abp.Identity.Password.RequireUppercase'] || '').toLowerCase() === 'true') {
+      this.passwordRulesArr.push('capital');
+    }
+
+    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+      this.passwordRulesArr.push('special');
+    }
+
+    if (Number.isInteger(+passwordRules['Abp.Identity.Password.RequiredLength'])) {
+      this.requiredPasswordLength = +passwordRules['Abp.Identity.Password.RequiredLength'];
+    }
   }
 
   onSearch(value) {
@@ -92,10 +121,17 @@ export class UsersComponent implements OnInit {
         ),
       });
 
+      const passwordValidators = [
+        validatePassword(this.passwordRulesArr),
+        Validators.minLength(this.requiredPasswordLength),
+        Validators.maxLength(32),
+      ];
+
+      this.form.addControl('password', new FormControl('', [...passwordValidators]));
+
       if (!this.selected.userName) {
-        this.form.addControl('password', new FormControl('', [Validators.required, Validators.maxLength(32)]));
-      } else {
-        this.form.addControl('password', new FormControl('', [Validators.maxLength(32)]));
+        this.form.get('password').setValidators([...passwordValidators, Validators.required]);
+        this.form.get('password').updateValueAndValidity();
       }
     });
   }
@@ -105,13 +141,13 @@ export class UsersComponent implements OnInit {
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.UserItem;
     this.selectedUserRoles = [] as Identity.RoleItem[];
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetUserById(id))
       .pipe(
@@ -127,7 +163,7 @@ export class UsersComponent implements OnInit {
   }
 
   save() {
-    if (!this.form.valid) return;
+    if (!this.form.valid || this.modalBusy) return;
     this.modalBusy = true;
 
     const { roleNames } = this.form.value;
@@ -140,6 +176,7 @@ export class UsersComponent implements OnInit {
       .dispatch(
         this.selected.id
           ? new UpdateUser({
+              ...this.selected,
               ...this.form.value,
               id: this.selected.id,
               roleNames: mappedRoleNames,
