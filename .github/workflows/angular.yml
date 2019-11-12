@@ -20,8 +20,5 @@ jobs:
       - uses: borales/actions-yarn@v2.0.0
         with:
           node-version: '10.x'
-      - run: | 
-          pwd
-          yarn
-        working-directory: npm/ng-packs
+      - run: pwd
       - run: pwd
