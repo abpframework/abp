@@ -18,6 +18,7 @@ namespace Volo.Abp.SettingManagement
             Configure<SettingManagementOptions>(options =>
             {
                 options.Providers.Add<DefaultValueSettingManagementProvider>();
+                options.Providers.Add<ConfigurationSettingManagementProvider>();
                 options.Providers.Add<GlobalSettingManagementProvider>();
                 options.Providers.Add<TenantSettingManagementProvider>();
                 options.Providers.Add<UserSettingManagementProvider>();
