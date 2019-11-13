@@ -23,7 +23,6 @@ jobs:
       - run: |
           node -v
           npm install
-          npm install -g symlink
         working-directory: npm/ng-packs
   build:
     needs: [install]
@@ -34,5 +33,5 @@ jobs:
         with:
           node-version: '10.x'
       - run: |
-          symlink copy --angular --packages @abp/ng.core --sync-build
+          yarn symlink copy --angular --packages @abp/ng.core --sync-build
         working-directory: npm/ng-packs
