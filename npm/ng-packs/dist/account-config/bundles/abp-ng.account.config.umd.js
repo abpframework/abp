@@ -1,35 +1,10 @@
-(function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined'
-    ? factory(
-        exports,
-        require('@abp/ng.core'),
-        require('@angular/core'),
-        require('@angular/router'),
-        require('@abp/ng.theme.shared'),
-      )
-    : typeof define === 'function' && define.amd
-    ? define('@abp/ng.account.config', [
-        'exports',
-        '@abp/ng.core',
-        '@angular/core',
-        '@angular/router',
-        '@abp/ng.theme.shared',
-      ], factory)
-    : ((global = global || self),
-      factory(
-        ((global.abp = global.abp || {}),
-        (global.abp.ng = global.abp.ng || {}),
-        (global.abp.ng.account = global.abp.ng.account || {}),
-        (global.abp.ng.account.config = {})),
-        global.ng_core,
-        global.ng.core,
-        global.ng.router,
-        global.ng_theme_shared,
-      ));
-})(this, function(exports, ng_core, core, router, ng_theme_shared) {
-  'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@angular/core'), require('@angular/router'), require('@abp/ng.theme.shared')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.account.config', ['exports', '@abp/ng.core', '@angular/core', '@angular/router', '@abp/ng.theme.shared'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = global.abp.ng.account || {}, global.abp.ng.account.config = {}), global.ng_core, global.ng.core, global.ng.router, global.ng_theme_shared));
+}(this, (function (exports, ng_core, core, router, ng_theme_shared) { 'use strict';
 
-  /*! *****************************************************************************
+    /*! *****************************************************************************
     Copyright (c) Microsoft Corporation. All rights reserved.
     Licensed under the Apache License, Version 2.0 (the "License"); you may not use
     this file except in compliance with the License. You may obtain a copy of the
@@ -447,13 +422,15 @@
   })();
   if (false) {
     /**
-     * @type {?}
-     * @private
+     * @fileoverview added by tsickle
+     * Generated from: lib/services/account-config.service.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     AccountConfigService.prototype.router;
     /**
-     * @type {?}
-     * @private
+     * @fileoverview added by tsickle
+     * Generated from: lib/account-config.module.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     AccountConfigService.prototype.restService;
   }
@@ -490,41 +467,53 @@
     /**
      * @param {?=} options
      * @return {?}
-     */ = function(options) {
-      if (options === void 0) {
-        options = /** @type {?} */ ({});
-      }
-      return {
-        ngModule: AccountConfigModule,
-        providers: [
-          { provide: ACCOUNT_OPTIONS, useValue: options },
-          {
-            provide: 'ACCOUNT_OPTIONS',
-            useFactory: accountOptionsFactory,
-            deps: [ACCOUNT_OPTIONS],
-          },
-        ],
-      };
-    };
-    AccountConfigModule.decorators = [
-      {
-        type: core.NgModule,
-        args: [
-          {
-            imports: [ng_core.CoreModule, ng_theme_shared.ThemeSharedModule],
-            providers: [{ provide: core.APP_INITIALIZER, multi: true, deps: [AccountConfigService], useFactory: ɵ0 }],
-          },
-        ],
-      },
-    ];
-    return AccountConfigModule;
-  })();
+     */
+    function accountOptionsFactory(options) {
+        return __assign({ redirectUrl: '/' }, options);
+    }
+    /** @type {?} */
+    var ACCOUNT_OPTIONS = new core.InjectionToken('ACCOUNT_OPTIONS');
+    var ɵ0 = ng_core.noop;
+    var AccountConfigModule = /** @class */ (function () {
+        function AccountConfigModule() {
+        }
+        /**
+         * @param {?=} options
+         * @return {?}
+         */
+        AccountConfigModule.forRoot = /**
+         * @param {?=} options
+         * @return {?}
+         */
+        function (options) {
+            if (options === void 0) { options = (/** @type {?} */ ({})); }
+            return {
+                ngModule: AccountConfigModule,
+                providers: [
+                    { provide: ACCOUNT_OPTIONS, useValue: options },
+                    {
+                        provide: 'ACCOUNT_OPTIONS',
+                        useFactory: accountOptionsFactory,
+                        deps: [ACCOUNT_OPTIONS],
+                    },
+                ],
+            };
+        };
+        AccountConfigModule.decorators = [
+            { type: core.NgModule, args: [{
+                        imports: [ng_core.CoreModule, ng_theme_shared.ThemeSharedModule],
+                        providers: [{ provide: core.APP_INITIALIZER, multi: true, deps: [AccountConfigService], useFactory: ɵ0 }],
+                    },] }
+        ];
+        return AccountConfigModule;
+    }());
 
-  exports.ACCOUNT_OPTIONS = ACCOUNT_OPTIONS;
-  exports.AccountConfigModule = AccountConfigModule;
-  exports.AccountConfigService = AccountConfigService;
-  exports.accountOptionsFactory = accountOptionsFactory;
+    exports.ACCOUNT_OPTIONS = ACCOUNT_OPTIONS;
+    exports.AccountConfigModule = AccountConfigModule;
+    exports.AccountConfigService = AccountConfigService;
+    exports.accountOptionsFactory = accountOptionsFactory;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-});
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
 //# sourceMappingURL=abp-ng.account.config.umd.js.map

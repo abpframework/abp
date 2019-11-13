@@ -7,10 +7,11 @@ export declare class TenantBoxComponent implements OnInit {
     private store;
     private toasterService;
     private accountService;
-    constructor(store: Store, toasterService: ToasterService, accountService: AccountService);
     tenant: ABP.BasicItem;
     tenantName: string;
     isModalVisible: boolean;
+    inProgress: boolean;
+    constructor(store: Store, toasterService: ToasterService, accountService: AccountService);
     ngOnInit(): void;
     onSwitch(): void;
     save(): void;

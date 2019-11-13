@@ -6,7 +6,7 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { TenantManagementService } from '../../services/tenant-management.service';
 interface SelectedModalContent {
-    type: string;
+    type: 'saveConnStr' | 'saveTenant';
     title: string;
     template: TemplateRef<any>;
 }
@@ -35,20 +35,22 @@ export declare class TenantsComponent implements OnInit {
     readonly connectionString: string;
     tenantModalTemplate: TemplateRef<any>;
     connectionStringModalTemplate: TemplateRef<any>;
+    readonly isDisabledSaveButton: boolean;
     constructor(confirmationService: ConfirmationService, tenantService: TenantManagementService, fb: FormBuilder, store: Store);
     ngOnInit(): void;
     onSearch(value: any): void;
     private createTenantForm;
     private createDefaultConnectionStringForm;
-    openModal(title: string, template: TemplateRef<any>, type: string): void;
+    openModal(title: string, template: TemplateRef<any>, type: 'saveConnStr' | 'saveTenant'): void;
     onEditConnectionString(id: string): void;
-    onAddTenant(): void;
-    onEditTenant(id: string): void;
+    addTenant(): void;
+    editTenant(id: string): void;
     save(): void;
     saveConnectionString(): void;
     saveTenant(): void;
     delete(id: string, name: string): void;
     onPageChange(data: any): void;
     get(): void;
+    onSharedDatabaseChange(value: boolean): void;
 }
 export {};
