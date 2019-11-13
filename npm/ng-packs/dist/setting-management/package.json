@@ -1,14 +1,9 @@
 {
   "name": "@abp/ng.setting-management",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
-    "@abp/ng.theme.shared": "^1.0.2",
-    "@abp/ng.setting-management.config": "^1.0.2",
-    "tslib": "^1.9.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
+    "@abp/ng.setting-management.config": "^1.0.3",
+    "@abp/ng.theme.shared": "^1.0.3",
   "main": "bundles/abp-ng.setting-management.umd.js",
   "module": "fesm5/abp-ng.setting-management.js",
   "es2015": "fesm2015/abp-ng.setting-management.js",

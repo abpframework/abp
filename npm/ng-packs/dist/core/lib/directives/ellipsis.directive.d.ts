@@ -1,5 +1,5 @@
-import { AfterContentInit, ChangeDetectorRef, ElementRef } from '@angular/core';
-export declare class EllipsisDirective implements AfterContentInit {
+import { AfterViewInit, ChangeDetectorRef, ElementRef } from '@angular/core';
+export declare class EllipsisDirective implements AfterViewInit {
     private cdRef;
     private elRef;
     width: string;
@@ -9,5 +9,5 @@ export declare class EllipsisDirective implements AfterContentInit {
     readonly class: boolean;
     readonly maxWidth: string;
     constructor(cdRef: ChangeDetectorRef, elRef: ElementRef);
-    ngAfterContentInit(): void;
+    ngAfterViewInit(): void;
 }
