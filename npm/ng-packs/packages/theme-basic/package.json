@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.theme.basic",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dependencies": {
-    "@abp/ng.theme.shared": "^1.0.3"
+    "@abp/ng.theme.shared": "^1.0.4"
   },
   "publishConfig": {
     "access": "public"
