@@ -1,4 +1,4 @@
-import { ConfigState, GetAppConfiguration, RestService, DynamicLayoutComponent, ChangePassword, GetProfile, UpdateProfile, ProfileState, SessionState, SetTenant, CoreModule } from '@abp/ng.core';
+import { ConfigState, SessionState, GetAppConfiguration, RestService, DynamicLayoutComponent, ChangePassword, GetProfile, UpdateProfile, ProfileState, SetTenant, CoreModule } from '@abp/ng.core';
 import { ToasterService, fadeIn, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject, NgModule, InjectionToken, Input } from '@angular/core';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
@@ -12,6 +12,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
 import { from, throwError, Observable } from 'rxjs';
 import { switchMap, tap, catchError, finalize, take, withLatestFrom } from 'rxjs/operators';
 import snq from 'snq';
+import { HttpHeaders } from '@angular/common/http';
 import { trigger, transition, useAnimation } from '@angular/animations';
 import { __decorate, __metadata } from 'tslib';
 
@@ -51,7 +52,9 @@ class LoginComponent {
             return;
         // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
         this.inProgress = true;
-        from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value))
+        /** @type {?} */
+        const tenant = this.store.selectSnapshot(SessionState.getTenant);
+        from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value, new HttpHeaders(Object.assign({}, (tenant && tenant.id && { __tenant: tenant.id })))))
             .pipe(switchMap((/**
          * @return {?}
          */
