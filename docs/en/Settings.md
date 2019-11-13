@@ -171,7 +171,7 @@ While a setting value provider is free to use any source to get the setting valu
 
 `ISettingEncryptionService` is used to encrypt/decrypt setting values when `IsEncrypted` property of a setting definition was set to `true`.
 
-You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `IStringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](String-Encryption.md) for more).
+You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `StringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](String-Encryption.md) for more).
 
 ## Setting Management Module
 
