@@ -177,13 +177,13 @@
             "__symbolic": "reference",
             "module": "@angular/core",
             "name": "Component",
-            "line": 2,
+            "line": 3,
             "character": 1
           },
           "arguments": [
             {
               "selector": "abp-button",
-              "template": "\n    <button [attr.type]=\"type\" [ngClass]=\"buttonClass\" [disabled]=\"loading || disabled\">\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
+              "template": "\n    <button\n      #button\n      [attr.type]=\"buttonType || type\"\n      [ngClass]=\"buttonClass\"\n      [disabled]=\"loading || disabled\"\n      (click)=\"click.emit($event)\"\n      (focus)=\"focus.emit($event)\"\n      (blur)=\"blur.emit($event)\"\n    >\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
             }
           ]
         }
@@ -199,7 +199,7 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "Input",
-                  "line": 11,
+                  "line": 21,
                   "character": 3
                 }
               }
@@ -216,7 +216,7 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "Input",
-                  "line": 14,
+                  "line": 24,
                   "character": 3
                 }
               }
@@ -233,7 +233,7 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "Input",
-                  "line": 17,
+                  "line": 27,
                   "character": 3
                 }
               }
@@ -250,7 +250,7 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "Input",
-                  "line": 20,
+                  "line": 30,
                   "character": 3
                 }
               }
@@ -267,9 +267,95 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "Input",
-                  "line": 23,
+                  "line": 33,
                   "character": 3
                 }
+              }
+            ]
+          }
+        ],
+        "attributes": [
+          {
+            "__symbolic": "property",
+            "decorators": [
+              {
+                "__symbolic": "call",
+                "expression": {
+                  "__symbolic": "reference",
+                  "module": "@angular/core",
+                  "name": "Input",
+                  "line": 36,
+                  "character": 3
+                }
+              }
+            ]
+          }
+        ],
+        "click": [
+          {
+            "__symbolic": "property",
+            "decorators": [
+              {
+                "__symbolic": "call",
+                "expression": {
+                  "__symbolic": "reference",
+                  "module": "@angular/core",
+                  "name": "Output",
+                  "line": 40,
+                  "character": 3
+                }
+              }
+            ]
+          }
+        ],
+        "focus": [
+          {
+            "__symbolic": "property",
+            "decorators": [
+              {
+                "__symbolic": "call",
+                "expression": {
+                  "__symbolic": "reference",
+                  "module": "@angular/core",
+                  "name": "Output",
+                  "line": 43,
+                  "character": 3
+                }
+              }
+            ]
+          }
+        ],
+        "blur": [
+          {
+            "__symbolic": "property",
+            "decorators": [
+              {
+                "__symbolic": "call",
+                "expression": {
+                  "__symbolic": "reference",
+                  "module": "@angular/core",
+                  "name": "Output",
+                  "line": 46,
+                  "character": 3
+                }
+              }
+            ]
+          }
+        ],
+        "buttonRef": [
+          {
+            "__symbolic": "property",
+            "decorators": [
+              {
+                "__symbolic": "call",
+                "expression": {
+                  "__symbolic": "reference",
+                  "module": "@angular/core",
+                  "name": "ViewChild",
+                  "line": 48,
+                  "character": 3
+                },
+                "arguments": ["button", { "static": true }]
               }
             ]
           }
@@ -284,13 +370,22 @@
                   "__symbolic": "reference",
                   "module": "@angular/core",
                   "name": "Input",
-                  "line": 29,
+                  "line": 54,
                   "character": 3
                 }
               }
             ]
           }
-        ]
+        ],
+        "__ctor__": [
+          {
+            "__symbolic": "constructor",
+            "parameters": [
+              { "__symbolic": "reference", "module": "@angular/core", "name": "Renderer2", "line": 60, "character": 32 }
+            ]
+          }
+        ],
+        "ngOnInit": [{ "__symbolic": "method" }]
       }
     },
     "ɵc": {
@@ -848,7 +943,7 @@
             {
               "selector": "abp-modal",
               "animations": [{ "__symbolic": "reference", "name": "ɵl" }, { "__symbolic": "reference", "name": "ɵm" }],
-              "template": "<ng-container *ngIf=\"visible\">\n  <div class=\"modal show {{ modalClass }}\" tabindex=\"-1\" role=\"dialog\">\n    <div class=\"modal-backdrop\" [@backdrop]=\"isModalOpen\" (click)=\"close()\"></div>\n    <div\n      id=\"abp-modal-dialog\"\n      class=\"modal-dialog modal-{{ size }}\"\n      role=\"document\"\n      [@dialog]=\"isModalOpen\"\n      #abpModalContent\n    >\n      <div id=\"abp-modal-content\" class=\"modal-content\">\n        <div id=\"abp-modal-header\" class=\"modal-header\">\n          <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n          ​\n          <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\n            <span aria-hidden=\"true\">&times;</span>\n          </button>\n        </div>\n        <div id=\"abp-modal-body\" class=\"modal-body\">\n          <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n        </div>\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n"
+              "template": "<ng-container *ngIf=\"visible\">\n  <div class=\"modal show {{ modalClass }}\" tabindex=\"-1\" role=\"dialog\">\n    <div class=\"modal-backdrop\" [@fade]=\"isModalOpen\" (click)=\"close()\"></div>\n    <div\n      id=\"abp-modal-dialog\"\n      class=\"modal-dialog modal-{{ size }}\"\n      role=\"document\"\n      [@dialog]=\"isModalOpen\"\n      #abpModalContent\n    >\n      <div id=\"abp-modal-content\" class=\"modal-content\">\n        <div id=\"abp-modal-header\" class=\"modal-header\">\n          <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n          ​\n          <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\n            <span aria-hidden=\"true\">&times;</span>\n          </button>\n        </div>\n        <div id=\"abp-modal-body\" class=\"modal-body\">\n          <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n        </div>\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n"
             }
           ]
         }
@@ -1175,10 +1270,10 @@
         "module": "@angular/animations",
         "name": "trigger",
         "line": 3,
-        "character": 33
+        "character": 29
       },
       "arguments": [
-        "backdrop",
+        "fade",
         [
           {
             "__symbolic": "call",
@@ -1860,8 +1955,8 @@
     "ɵi": "./lib/components/error/error.component",
     "ɵj": "./lib/components/loader-bar/loader-bar.component",
     "ɵk": "./lib/components/modal/modal.component",
-    "ɵl": "./lib/components/modal/modal.animations",
-    "ɵm": "./lib/components/modal/modal.animations",
+    "ɵl": "./lib/animations/modal.animations",
+    "ɵm": "./lib/animations/modal.animations",
     "ɵn": "./lib/animations/fade.animations",
     "ɵo": "./lib/animations/fade.animations",
     "ɵp": "./lib/animations/fade.animations",

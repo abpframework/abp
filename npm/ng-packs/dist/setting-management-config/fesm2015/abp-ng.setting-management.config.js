@@ -8,62 +8,49 @@ import { Store } from '@ngxs/store';
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class SettingManagementConfigService {
-  /**
-   * @param {?} store
-   */
-  constructor(store) {
-    this.store = store;
-    /** @type {?} */
-    const route = /** @type {?} */ ({
-      name: 'AbpSettingManagement::Settings',
-      path: 'setting-management',
-      parentName: 'AbpUiNavigation::Menu:Administration',
-      layout: 'application' /* application */,
-      order: 6,
-      iconClass: 'fa fa-cog',
-    });
-    addAbpRoutes(route);
-    setTimeout(
-      /**
-       * @return {?}
-       */
-      () => {
+    /**
+     * @param {?} store
+     */
+    constructor(store) {
+        this.store = store;
         /** @type {?} */
-        const tabs = getSettingTabs();
-        if (!tabs || !tabs.length) {
-          this.store.dispatch(
-            new PatchRouteByName('AbpSettingManagement::Settings', Object.assign({}, route, { invisible: true })),
-          );
-        }
-      },
-    );
-  }
+        const route = (/** @type {?} */ ({
+            name: 'AbpSettingManagement::Settings',
+            path: 'setting-management',
+            parentName: 'AbpUiNavigation::Menu:Administration',
+            layout: "application" /* application */,
+            order: 6,
+            iconClass: 'fa fa-cog',
+        }));
+        addAbpRoutes(route);
+        setTimeout((/**
+         * @return {?}
+         */
+        () => {
+            /** @type {?} */
+            const tabs = getSettingTabs();
+            if (!tabs || !tabs.length) {
+                this.store.dispatch(new PatchRouteByName('AbpSettingManagement::Settings', Object.assign({}, route, { invisible: true })));
+            }
+        }));
+    }
 }
 SettingManagementConfigService.decorators = [
-  {
-    type: Injectable,
-    args: [
-      {
-        providedIn: 'root',
-      },
-    ],
-  },
+    { type: Injectable, args: [{
+                providedIn: 'root',
+            },] }
 ];
 /** @nocollapse */
-SettingManagementConfigService.ctorParameters = () => [{ type: Store }];
-/** @nocollapse */ SettingManagementConfigService.ngInjectableDef = ɵɵdefineInjectable({
-  factory: function SettingManagementConfigService_Factory() {
-    return new SettingManagementConfigService(ɵɵinject(Store));
-  },
-  token: SettingManagementConfigService,
-  providedIn: 'root',
-});
+SettingManagementConfigService.ctorParameters = () => [
+    { type: Store }
+];
+/** @nocollapse */ SettingManagementConfigService.ngInjectableDef = ɵɵdefineInjectable({ factory: function SettingManagementConfigService_Factory() { return new SettingManagementConfigService(ɵɵinject(Store)); }, token: SettingManagementConfigService, providedIn: "root" });
 if (false) {
-  /**
-   * @type {?}
-   * @private
-   */
-  SettingManagementConfigService.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    SettingManagementConfigService.prototype.store;
 }
 
 /**
@@ -71,16 +58,12 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 const ɵ0 = noop;
-class SettingManagementConfigModule {}
+class SettingManagementConfigModule {
+}
 SettingManagementConfigModule.decorators = [
-  {
-    type: NgModule,
-    args: [
-      {
-        providers: [{ provide: APP_INITIALIZER, deps: [SettingManagementConfigService], useFactory: ɵ0, multi: true }],
-      },
-    ],
-  },
+    { type: NgModule, args: [{
+                providers: [{ provide: APP_INITIALIZER, deps: [SettingManagementConfigService], useFactory: ɵ0, multi: true }],
+            },] }
 ];
 
 /**

@@ -1377,7 +1377,7 @@
      * @param {?} __1
      * @return {?}
      */
-    SessionState.prototype.setTenantId
+    SessionState.prototype.setTenant
     /**
      * @param {?} __0
      * @param {?} __1
@@ -1411,7 +1411,7 @@
         __metadata('design:returntype', void 0),
       ],
       SessionState.prototype,
-      'setTenantId',
+      'setTenant',
       null,
     );
     __decorate(
@@ -1735,97 +1735,6 @@
       return selector;
     };
     /**
-     *
-     * @deprecated, Use getLocalization instead. To be delete in v1
-     */
-    /**
-     *
-     * \@deprecated, Use getLocalization instead. To be delete in v1
-     * @param {?} key
-     * @param {...?} interpolateParams
-     * @return {?}
-     */
-    ConfigState.getCopy
-    /**
-     *
-     * \@deprecated, Use getLocalization instead. To be delete in v1
-     * @param {?} key
-     * @param {...?} interpolateParams
-     * @return {?}
-     */ = function(key) {
-      var interpolateParams = [];
-      for (var _i = 1; _i < arguments.length; _i++) {
-        interpolateParams[_i - 1] = arguments[_i];
-      }
-      if (!key) key = '';
-      /** @type {?} */
-      var keys = /** @type {?} */ (key.split('::'));
-      /** @type {?} */
-      var selector = store.createSelector(
-        [ConfigState_1]
-        /**
-         * @param {?} state
-         * @return {?}
-         */,
-        (function(state) {
-          if (!state.localization) return key;
-          var defaultResourceName = state.environment.localization.defaultResourceName;
-          if (keys[0] === '') {
-            if (!defaultResourceName) {
-              throw new Error(
-                "Please check your environment. May you forget set defaultResourceName?\n              Here is the example:\n               { production: false,\n                 localization: {\n                   defaultResourceName: 'MyProjectName'\n                  }\n               }",
-              );
-            }
-            keys[0] = snq(
-              /**
-               * @return {?}
-               */
-              function() {
-                return defaultResourceName;
-              },
-            );
-          }
-          /** @type {?} */
-          var copy = /** @type {?} */ (keys).reduce(
-            /**
-             * @param {?} acc
-             * @param {?} val
-             * @return {?}
-             */
-            (function(acc, val) {
-              if (acc) {
-                return acc[val];
-              }
-              return undefined;
-            }),
-            state.localization.values,
-          );
-          interpolateParams = interpolateParams.filter(
-            /**
-             * @param {?} params
-             * @return {?}
-             */
-            function(params) {
-              return params != null;
-            },
-          );
-          if (copy && interpolateParams && interpolateParams.length) {
-            interpolateParams.forEach(
-              /**
-               * @param {?} param
-               * @return {?}
-               */
-              function(param) {
-                copy = copy.replace(/[\'\"]?\{[\d]+\}[\'\"]?/, param);
-              },
-            );
-          }
-          return copy || key;
-        }),
-      );
-      return selector;
-    };
-    /**
      * @param {?} key
      * @param {...?} interpolateParams
      * @return {?}
@@ -2068,7 +1977,7 @@
    */
   function patchRouteDeep(routes, name, newValue, parentUrl) {
     if (parentUrl === void 0) {
-      parentUrl = null;
+      parentUrl = '';
     }
     routes = routes.map(
       /**
@@ -2077,9 +1986,8 @@
        */
       function(route) {
         if (route.name === name) {
-          if (newValue.path) {
-            newValue.url = parentUrl + '/' + newValue.path;
-          }
+          newValue.url =
+            parentUrl + '/' + ((!newValue.path && newValue.path === '' ? route.path : newValue.path) || '');
           if (newValue.children && newValue.children.length) {
             newValue.children = newValue.children.map(
               /**
@@ -2087,7 +1995,7 @@
                * @return {?}
                */
               function(child) {
-                return __assign({}, child, { url: parentUrl + '/' + route.path + '/' + child.path });
+                return __assign({}, child, { url: (newValue.url + '/' + child.path).replace('//', '/') });
               },
             );
           }
@@ -2764,7 +2672,7 @@
       if (!Array.isArray(items)) return;
       /** @type {?} */
       var compareFn = this.compareFn;
-      if (typeof this.filterBy !== 'undefined') {
+      if (typeof this.filterBy !== 'undefined' && this.filterVal) {
         items = items.filter(
           /**
            * @param {?} item
@@ -3187,7 +3095,7 @@
      * @param {?} __0
      * @return {?}
      */
-    ProfileState.prototype.profileGet
+    ProfileState.prototype.getProfile
     /**
      * @param {?} __0
      * @return {?}
@@ -3212,7 +3120,7 @@
      * @param {?} __1
      * @return {?}
      */
-    ProfileState.prototype.profileUpdate
+    ProfileState.prototype.updateProfile
     /**
      * @param {?} __0
      * @param {?} __1
@@ -3259,7 +3167,7 @@
         __metadata('design:returntype', void 0),
       ],
       ProfileState.prototype,
-      'profileGet',
+      'getProfile',
       null,
     );
     __decorate(
@@ -3270,7 +3178,7 @@
         __metadata('design:returntype', void 0),
       ],
       ProfileState.prototype,
-      'profileUpdate',
+      'updateProfile',
       null,
     );
     __decorate(
@@ -3614,6 +3522,9 @@
      * @return {?}
      */ = function() {
       var _this = this;
+      if (!this.focusedElement && this.elRef) {
+        this.focusedElement = this.elRef.nativeElement;
+      }
       /** @type {?} */
       var observer;
       if (this.mutationObserverEnabled) {
@@ -4720,53 +4631,149 @@
    * @fileoverview added by tsickle
    * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
    */
-  var ConfigService = /** @class */ (function() {
-    function ConfigService(store) {
+  var ConfigStateService = /** @class */ (function() {
+    function ConfigStateService(store) {
       this.store = store;
     }
     /**
      * @return {?}
      */
-    ConfigService.prototype.getAll
+    ConfigStateService.prototype.getAll
     /**
      * @return {?}
      */ = function() {
       return this.store.selectSnapshot(ConfigState.getAll);
     };
     /**
-     * @param {?} key
      * @return {?}
      */
-    ConfigService.prototype.getOne
+    ConfigStateService.prototype.getApplicationInfo
     /**
-     * @param {?} key
      * @return {?}
-     */ = function(key) {
-      return this.store.selectSnapshot(ConfigState.getOne(key));
+     */ = function() {
+      return this.store.selectSnapshot(ConfigState.getApplicationInfo);
     };
     /**
-     * @param {?} keys
+     * @param {...?} args
      * @return {?}
      */
-    ConfigService.prototype.getDeep
+    ConfigStateService.prototype.getOne
     /**
-     * @param {?} keys
+     * @param {...?} args
      * @return {?}
-     */ = function(keys) {
-      return this.store.selectSnapshot(ConfigState.getDeep(keys));
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getOne.apply(ConfigState, __spread(args)));
     };
     /**
-     * @param {?} key
+     * @param {...?} args
      * @return {?}
      */
-    ConfigService.prototype.getSetting
+    ConfigStateService.prototype.getDeep
     /**
-     * @param {?} key
+     * @param {...?} args
      * @return {?}
-     */ = function(key) {
-      return this.store.selectSnapshot(ConfigState.getSetting(key));
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getDeep.apply(ConfigState, __spread(args)));
     };
-    ConfigService.decorators = [
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getRoute
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getRoute.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getApiUrl
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getApiUrl.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getSetting
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getSetting.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getSettings
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getSettings.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getGrantedPolicy
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getGrantedPolicy.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getLocalization
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getLocalization.apply(ConfigState, __spread(args)));
+    };
+    ConfigStateService.decorators = [
       {
         type: core.Injectable,
         args: [
@@ -4777,24 +4784,24 @@
       },
     ];
     /** @nocollapse */
-    ConfigService.ctorParameters = function() {
+    ConfigStateService.ctorParameters = function() {
       return [{ type: store.Store }];
     };
-    /** @nocollapse */ ConfigService.ngInjectableDef = core.ɵɵdefineInjectable({
-      factory: function ConfigService_Factory() {
-        return new ConfigService(core.ɵɵinject(store.Store));
+    /** @nocollapse */ ConfigStateService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function ConfigStateService_Factory() {
+        return new ConfigStateService(core.ɵɵinject(store.Store));
       },
-      token: ConfigService,
+      token: ConfigStateService,
       providedIn: 'root',
     });
-    return ConfigService;
+    return ConfigStateService;
   })();
   if (false) {
     /**
      * @type {?}
      * @private
      */
-    ConfigService.prototype.store;
+    ConfigStateService.prototype.store;
   }
 
   /**
@@ -4918,6 +4925,111 @@
   if (false) {
     /** @type {?} */
     LazyLoadService.prototype.loadedLibraries;
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var ProfileStateService = /** @class */ (function() {
+    function ProfileStateService(store) {
+      this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    ProfileStateService.prototype.getProfile
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(ProfileState.getProfile);
+    };
+    ProfileStateService.decorators = [
+      {
+        type: core.Injectable,
+        args: [
+          {
+            providedIn: 'root',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    ProfileStateService.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    /** @nocollapse */ ProfileStateService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function ProfileStateService_Factory() {
+        return new ProfileStateService(core.ɵɵinject(store.Store));
+      },
+      token: ProfileStateService,
+      providedIn: 'root',
+    });
+    return ProfileStateService;
+  })();
+  if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ProfileStateService.prototype.store;
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var SessionStateService = /** @class */ (function() {
+    function SessionStateService(store) {
+      this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    SessionStateService.prototype.getLanguage
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(SessionState.getLanguage);
+    };
+    /**
+     * @return {?}
+     */
+    SessionStateService.prototype.getTenant
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(SessionState.getTenant);
+    };
+    SessionStateService.decorators = [
+      {
+        type: core.Injectable,
+        args: [
+          {
+            providedIn: 'root',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    SessionStateService.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    /** @nocollapse */ SessionStateService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function SessionStateService_Factory() {
+        return new SessionStateService(core.ɵɵinject(store.Store));
+      },
+      token: SessionStateService,
+      providedIn: 'root',
+    });
+    return SessionStateService;
+  })();
+  if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    SessionStateService.prototype.store;
   }
 
   /**
@@ -5260,8 +5372,8 @@
   exports.CONFIG = CONFIG;
   exports.ChangePassword = ChangePassword;
   exports.ConfigPlugin = ConfigPlugin;
-  exports.ConfigService = ConfigService;
   exports.ConfigState = ConfigState;
+  exports.ConfigStateService = ConfigStateService;
   exports.CoreModule = CoreModule;
   exports.DynamicLayoutComponent = DynamicLayoutComponent;
   exports.ENVIRONMENT = ENVIRONMENT;
@@ -5279,10 +5391,12 @@
   exports.PermissionGuard = PermissionGuard;
   exports.ProfileService = ProfileService;
   exports.ProfileState = ProfileState;
+  exports.ProfileStateService = ProfileStateService;
   exports.RestOccurError = RestOccurError;
   exports.RestService = RestService;
   exports.RouterOutletComponent = RouterOutletComponent;
   exports.SessionState = SessionState;
+  exports.SessionStateService = SessionStateService;
   exports.SetLanguage = SetLanguage;
   exports.SetTenant = SetTenant;
   exports.SortPipe = SortPipe;

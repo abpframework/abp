@@ -2,7 +2,83 @@ import { ConfigState, DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
 import { getSettingTabs, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Action, Selector, State, Store, NgxsModule } from '@ngxs/store';
+import { __decorate, __metadata } from 'tslib';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class SetSelectedSettingTab {
+  /**
+   * @param {?} payload
+   */
+  constructor(payload) {
+    this.payload = payload;
+  }
+}
+SetSelectedSettingTab.type = '[SettingManagement] Set Selected Tab';
+if (false) {
+  /** @type {?} */
+  SetSelectedSettingTab.type;
+  /** @type {?} */
+  SetSelectedSettingTab.prototype.payload;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+let SettingManagementState = class SettingManagementState {
+  /**
+   * @param {?} __0
+   * @return {?}
+   */
+  static getSelectedTab({ selectedTab }) {
+    return selectedTab;
+  }
+  /**
+   * @param {?} __0
+   * @param {?} __1
+   * @return {?}
+   */
+  settingManagementAction({ patchState }, { payload }) {
+    patchState({
+      selectedTab: payload,
+    });
+  }
+};
+__decorate(
+  [
+    Action(SetSelectedSettingTab),
+    __metadata('design:type', Function),
+    __metadata('design:paramtypes', [Object, SetSelectedSettingTab]),
+    __metadata('design:returntype', void 0),
+  ],
+  SettingManagementState.prototype,
+  'settingManagementAction',
+  null,
+);
+__decorate(
+  [
+    Selector(),
+    __metadata('design:type', Function),
+    __metadata('design:paramtypes', [Object]),
+    __metadata('design:returntype', void 0),
+  ],
+  SettingManagementState,
+  'getSelectedTab',
+  null,
+);
+SettingManagementState = __decorate(
+  [
+    State({
+      name: 'SettingManagementState',
+      defaults: /** @type {?} */ ({ selectedTab: {} }),
+    }),
+  ],
+  SettingManagementState,
+);
 
 /**
  * @fileoverview added by tsickle
@@ -17,13 +93,30 @@ class SettingManagementComponent {
     this.router = router;
     this.store = store;
     this.settings = [];
-    this.selected = /** @type {?} */ ({});
     this.trackByFn
     /**
      * @param {?} _
      * @param {?} item
      * @return {?}
      */ = (_, item) => item.name;
+  }
+  /**
+   * @param {?} value
+   * @return {?}
+   */
+  set selected(value) {
+    this.store.dispatch(new SetSelectedSettingTab(value));
+  }
+  /**
+   * @return {?}
+   */
+  get selected() {
+    /** @type {?} */
+    const value = this.store.selectSnapshot(SettingManagementState.getSelectedTab);
+    if ((!value || !value.component) && this.settings.length) {
+      return this.settings[0];
+    }
+    return value;
   }
   /**
    * @return {?}
@@ -45,7 +138,7 @@ class SettingManagementComponent {
          */
         (a, b) => a.order - b.order,
       );
-    if (this.settings.length) {
+    if (!this.selected && this.settings.length) {
       this.selected = this.settings[0];
     }
   }
@@ -67,8 +160,6 @@ SettingManagementComponent.ctorParameters = () => [{ type: Router }, { type: Sto
 if (false) {
   /** @type {?} */
   SettingManagementComponent.prototype.settings;
-  /** @type {?} */
-  SettingManagementComponent.prototype.selected;
   /** @type {?} */
   SettingManagementComponent.prototype.trackByFn;
   /**
@@ -119,7 +210,12 @@ SettingManagementModule.decorators = [
     args: [
       {
         declarations: [SettingManagementComponent],
-        imports: [SettingManagementRoutingModule, CoreModule, ThemeSharedModule],
+        imports: [
+          SettingManagementRoutingModule,
+          CoreModule,
+          ThemeSharedModule,
+          NgxsModule.forFeature([SettingManagementState]),
+        ],
       },
     ],
   },
@@ -135,5 +231,11 @@ SettingManagementModule.decorators = [
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { SettingManagementComponent, SettingManagementModule, SettingManagementRoutingModule as ɵa };
+export {
+  SettingManagementComponent,
+  SettingManagementModule,
+  SettingManagementRoutingModule as ɵa,
+  SettingManagementState as ɵb,
+  SetSelectedSettingTab as ɵc,
+};
 //# sourceMappingURL=abp-ng.setting-management.js.map

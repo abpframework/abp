@@ -12,16 +12,16 @@ import {
 } from '@abp/ng.core';
 import {
   Component,
+  EventEmitter,
+  Renderer2,
   Input,
+  Output,
+  ViewChild,
   Injectable,
   ɵɵdefineInjectable,
   ɵɵinject,
-  EventEmitter,
-  Output,
-  ViewChild,
   ElementRef,
   ChangeDetectorRef,
-  Renderer2,
   ContentChild,
   ViewChildren,
   NgZone,
@@ -42,7 +42,7 @@ import { Validators, FormBuilder } from '@angular/forms';
 import { comparePasswords, takeUntilDestroy, NgxValidateCoreModule } from '@ngx-validate/core';
 import snq from 'snq';
 import { finalize, takeUntil, debounceTime, filter, withLatestFrom, take } from 'rxjs/operators';
-import { animation, style, animate, trigger, transition, useAnimation, state, keyframes } from '@angular/animations';
+import { animation, style, animate, trigger, transition, useAnimation, keyframes, state } from '@angular/animations';
 import { __decorate, __metadata } from 'tslib';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -137,10 +137,20 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class ButtonComponent {
-  constructor() {
+  /**
+   * @param {?} renderer
+   */
+  constructor(renderer) {
+    this.renderer = renderer;
     this.buttonClass = 'btn btn-primary';
     this.loading = false;
     this.disabled = false;
+    // tslint:disable-next-line: no-output-native
+    this.click = new EventEmitter();
+    // tslint:disable-next-line: no-output-native
+    this.focus = new EventEmitter();
+    // tslint:disable-next-line: no-output-native
+    this.blur = new EventEmitter();
     /**
      * @deprecated Use buttonType instead. To be deleted in v1
      */
@@ -150,7 +160,23 @@ class ButtonComponent {
    * @return {?}
    */
   get icon() {
-    return `${this.loading ? 'fa fa-pulse fa-spinner' : this.iconClass || 'd-none'}`;
+    return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
+  }
+  /**
+   * @return {?}
+   */
+  ngOnInit() {
+    if (this.attributes) {
+      Object.keys(this.attributes).forEach(
+        /**
+         * @param {?} key
+         * @return {?}
+         */
+        key => {
+          this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
+        },
+      );
+    }
   }
 }
 ButtonComponent.decorators = [
@@ -159,8 +185,17 @@ ButtonComponent.decorators = [
     args: [
       {
         selector: 'abp-button',
+        // tslint:disable-next-line: component-max-inline-declarations
         template: `
-    <button [attr.type]="type" [ngClass]="buttonClass" [disabled]="loading || disabled">
+    <button
+      #button
+      [attr.type]="buttonType || type"
+      [ngClass]="buttonClass"
+      [disabled]="loading || disabled"
+      (click)="click.emit($event)"
+      (focus)="focus.emit($event)"
+      (blur)="blur.emit($event)"
+    >
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
   `,
@@ -168,12 +203,19 @@ ButtonComponent.decorators = [
     ],
   },
 ];
+/** @nocollapse */
+ButtonComponent.ctorParameters = () => [{ type: Renderer2 }];
 ButtonComponent.propDecorators = {
   buttonClass: [{ type: Input }],
   buttonType: [{ type: Input }],
   iconClass: [{ type: Input }],
   loading: [{ type: Input }],
   disabled: [{ type: Input }],
+  attributes: [{ type: Input }],
+  click: [{ type: Output }],
+  focus: [{ type: Output }],
+  blur: [{ type: Output }],
+  buttonRef: [{ type: ViewChild, args: ['button', { static: true }] }],
   type: [{ type: Input }],
 };
 if (false) {
@@ -187,11 +229,26 @@ if (false) {
   ButtonComponent.prototype.loading;
   /** @type {?} */
   ButtonComponent.prototype.disabled;
+  /** @type {?} */
+  ButtonComponent.prototype.attributes;
+  /** @type {?} */
+  ButtonComponent.prototype.click;
+  /** @type {?} */
+  ButtonComponent.prototype.focus;
+  /** @type {?} */
+  ButtonComponent.prototype.blur;
+  /** @type {?} */
+  ButtonComponent.prototype.buttonRef;
   /**
    * @deprecated Use buttonType instead. To be deleted in v1
    * @type {?}
    */
   ButtonComponent.prototype.type;
+  /**
+   * @type {?}
+   * @private
+   */
+  ButtonComponent.prototype.renderer;
 }
 
 /**
@@ -1234,7 +1291,7 @@ const fadeOutRight = animation(
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-const backdropAnimation = trigger('backdrop', [
+const fadeAnimation = trigger('fade', [
   transition(':enter', useAnimation(fadeIn)),
   transition(':leave', useAnimation(fadeOut)),
 ]);
@@ -1411,8 +1468,8 @@ ModalComponent.decorators = [
       {
         selector: 'abp-modal',
         template:
-          '<ng-container *ngIf="visible">\n  <div class="modal show {{ modalClass }}" tabindex="-1" role="dialog">\n    <div class="modal-backdrop" [@backdrop]="isModalOpen" (click)="close()"></div>\n    <div\n      id="abp-modal-dialog"\n      class="modal-dialog modal-{{ size }}"\n      role="document"\n      [@dialog]="isModalOpen"\n      #abpModalContent\n    >\n      <div id="abp-modal-content" class="modal-content">\n        <div id="abp-modal-header" class="modal-header">\n          <ng-container *ngTemplateOutlet="abpHeader"></ng-container>\n          \u200B\n          <button id="abp-modal-close-button" type="button" class="close" aria-label="Close" (click)="close()">\n            <span aria-hidden="true">&times;</span>\n          </button>\n        </div>\n        <div id="abp-modal-body" class="modal-body">\n          <ng-container *ngTemplateOutlet="abpBody"></ng-container>\n        </div>\n        <div id="abp-modal-footer" class="modal-footer">\n          <ng-container *ngTemplateOutlet="abpFooter"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n',
-        animations: [backdropAnimation, dialogAnimation],
+          '<ng-container *ngIf="visible">\n  <div class="modal show {{ modalClass }}" tabindex="-1" role="dialog">\n    <div class="modal-backdrop" [@fade]="isModalOpen" (click)="close()"></div>\n    <div\n      id="abp-modal-dialog"\n      class="modal-dialog modal-{{ size }}"\n      role="document"\n      [@dialog]="isModalOpen"\n      #abpModalContent\n    >\n      <div id="abp-modal-content" class="modal-content">\n        <div id="abp-modal-header" class="modal-header">\n          <ng-container *ngTemplateOutlet="abpHeader"></ng-container>\n          \u200B\n          <button id="abp-modal-close-button" type="button" class="close" aria-label="Close" (click)="close()">\n            <span aria-hidden="true">&times;</span>\n          </button>\n        </div>\n        <div id="abp-modal-body" class="modal-body">\n          <ng-container *ngTemplateOutlet="abpBody"></ng-container>\n        </div>\n        <div id="abp-modal-footer" class="modal-footer">\n          <ng-container *ngTemplateOutlet="abpFooter"></ng-container>\n        </div>\n      </div>\n    </div>\n    <ng-content></ng-content>\n  </div>\n</ng-container>\n',
+        animations: [fadeAnimation, dialogAnimation],
       },
     ],
   },
@@ -1837,6 +1894,18 @@ var styles = `
   min-width: 215px;
 }
 
+.ui-table-scrollable-body::-webkit-scrollbar {
+  height: 5px !important;
+}
+
+.ui-table-scrollable-body::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+.ui-table-scrollable-body::-webkit-scrollbar-thumb {
+  background: #8a8686;
+}
+
 .modal.show {
   display: block !important;
 }
@@ -1991,6 +2060,18 @@ var styles = `
   animation: fadeOutTop 0.2s ease-in-out;
 }
 
+.abp-collapsed {
+  -moz-transition: margin ease-in-out 0.5s;
+  -ms-transition: margin ease-in-out 0.5s;
+  -o-transition: margin ease-in-out 0.5s;
+  -webkit-transition: margin ease-in-out 0.5s;
+  transition: margin ease-in-out 0.5s;
+  margin-top: -100%;
+}
+
+.abp-collapsed.expanded {
+  margin-top: 0 !important;
+}
 
 @keyframes fadeInTop {
   from {
@@ -2428,62 +2509,6 @@ ThemeSharedModule.decorators = [
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-const collapseY = animation(
-  [
-    style({ height: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ height: '0', padding: '0px' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-const collapseX = animation(
-  [
-    style({ width: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ width: '0', padding: '0px' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-const expandY = animation(
-  [
-    style({ height: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ height: '*', padding: '*' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-const expandX = animation(
-  [
-    style({ width: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
-    animate('{{ time }} {{ easing }}', style({ width: '*', padding: '*' })),
-  ],
-  { params: { time: '350ms', easing: 'ease' } },
-);
-/** @type {?} */
-const collapse = trigger('collapse', [
-  state('collapsed', style({ height: '0', overflow: 'hidden' })),
-  state('expanded', style({ height: '*', overflow: 'hidden' })),
-  transition('expanded => collapsed', useAnimation(collapseY)),
-  transition('collapsed => expanded', useAnimation(expandY)),
-]);
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/** @type {?} */
-const slideFromBottom = trigger('slideFromBottom', [
-  transition('* <=> *', [
-    style({ 'margin-top': '20px', opacity: '0' }),
-    animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' })),
-  ]),
-]);
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/** @type {?} */
 const bounceIn = animation(
   [
     style({ opacity: '0', display: '{{ display }}' }),
@@ -2505,6 +2530,95 @@ const bounceIn = animation(
     },
   },
 );
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+const collapseY = animation(
+  [
+    style({ height: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ height: '0', padding: '0px' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+const collapseYWithMargin = animation(
+  [style({ 'margin-top': '0' }), animate('{{ time }} {{ easing }}', style({ 'margin-top': '-100%' }))],
+  {
+    params: { time: '500ms', easing: 'ease' },
+  },
+);
+/** @type {?} */
+const collapseX = animation(
+  [
+    style({ width: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ width: '0', padding: '0px' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+const expandY = animation(
+  [
+    style({ height: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ height: '*', padding: '*' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+const expandYWithMargin = animation(
+  [style({ 'margin-top': '-100%' }), animate('{{ time }} {{ easing }}', style({ 'margin-top': '0' }))],
+  {
+    params: { time: '500ms', easing: 'ease' },
+  },
+);
+/** @type {?} */
+const expandX = animation(
+  [
+    style({ width: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
+    animate('{{ time }} {{ easing }}', style({ width: '*', padding: '*' })),
+  ],
+  { params: { time: '350ms', easing: 'ease' } },
+);
+/** @type {?} */
+const collapse = trigger('collapse', [
+  state('collapsed', style({ height: '0', overflow: 'hidden' })),
+  state('expanded', style({ height: '*', overflow: 'hidden' })),
+  transition('expanded => collapsed', useAnimation(collapseY)),
+  transition('collapsed => expanded', useAnimation(expandY)),
+]);
+/** @type {?} */
+const collapseWithMargin = trigger('collapseWithMargin', [
+  state('collapsed', style({ 'margin-top': '-100%' })),
+  state('expanded', style({ 'margin-top': '0' })),
+  transition('expanded => collapsed', useAnimation(collapseYWithMargin), {
+    params: { time: '400ms', easing: 'linear' },
+  }),
+  transition('collapsed => expanded', useAnimation(expandYWithMargin)),
+]);
+/** @type {?} */
+const collapseLinearWithMargin = trigger('collapseLinearWithMargin', [
+  state('collapsed', style({ 'margin-top': '-100%' })),
+  state('expanded', style({ 'margin-top': '0' })),
+  transition(
+    'expanded => collapsed',
+    useAnimation(collapseYWithMargin, { params: { time: '200ms', easing: 'linear' } }),
+  ),
+  transition('collapsed => expanded', useAnimation(expandYWithMargin, { params: { time: '250ms', easing: 'linear' } })),
+]);
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/** @type {?} */
+const slideFromBottom = trigger('slideFromBottom', [
+  transition('* <=> *', [
+    style({ 'margin-top': '20px', opacity: '0' }),
+    animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' })),
+  ]),
+]);
 
 /**
  * @fileoverview added by tsickle
@@ -2684,10 +2798,16 @@ export {
   bounceIn,
   chartJsLoaded$,
   collapse,
+  collapseLinearWithMargin,
+  collapseWithMargin,
   collapseX,
   collapseY,
+  collapseYWithMargin,
+  dialogAnimation,
   expandX,
   expandY,
+  expandYWithMargin,
+  fadeAnimation,
   fadeIn,
   fadeInDown,
   fadeInLeft,
@@ -2712,7 +2832,7 @@ export {
   ErrorComponent as ɵi,
   LoaderBarComponent as ɵj,
   ModalComponent as ɵk,
-  backdropAnimation as ɵl,
+  fadeAnimation as ɵl,
   dialogAnimation as ɵm,
   fadeIn as ɵn,
   fadeOut as ɵo,

@@ -30,7 +30,7 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
 
                 b.HasMany(u => u.ConnectionStrings).WithOne().HasForeignKey(uc => uc.TenantId).IsRequired();
 
-                b.HasIndex(u => u.Name).IsUnique();
+                b.HasIndex(u => u.Name);
             });
 
             builder.Entity<TenantConnectionString>(b =>

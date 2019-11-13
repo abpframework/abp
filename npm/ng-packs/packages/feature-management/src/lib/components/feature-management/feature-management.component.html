@@ -4,7 +4,7 @@
   </ng-template>
 
   <ng-template #abpBody>
-    <form *ngIf="form" (ngSubmit)="save()" [formGroup]="form">
+    <form *ngIf="form" (ngSubmit)="save()" [formGroup]="form" validateOnSubmit>
       <div
         class="row my-3"
         *ngFor="let feature of features$ | async; let i = index"
@@ -25,7 +25,7 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()">
+    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid || modalBusy" (click)="save()">
       {{ 'AbpFeatureManagement::Save' | abpLocalization }}
     </abp-button>
   </ng-template>

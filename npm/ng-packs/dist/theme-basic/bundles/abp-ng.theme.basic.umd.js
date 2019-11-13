@@ -461,7 +461,8 @@
         args: [
           {
             selector: 'abp-layout-account',
-            template: '<router-outlet></router-outlet>\n',
+            template:
+              '\n    <router-outlet></router-outlet>\n    <abp-confirmation></abp-confirmation>\n    <abp-toast></abp-toast>\n  ',
           },
         ],
       },
@@ -688,11 +689,11 @@
    * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
    */
   var ApplicationLayoutComponent = /** @class */ (function() {
-    function ApplicationLayoutComponent(store, oauthService) {
+    function ApplicationLayoutComponent(store, oauthService, renderer) {
       this.store = store;
       this.oauthService = oauthService;
-      this.isOpenChangePassword = false;
-      this.isOpenProfile = false;
+      this.renderer = renderer;
+      this.isCollapsed = true;
       this.rightPartElements = [];
       this.trackByFn
       /**
@@ -711,6 +712,18 @@
         return element;
       };
     }
+    Object.defineProperty(ApplicationLayoutComponent.prototype, 'appInfo', {
+      get:
+        // do not set true or false
+        /**
+         * @return {?}
+         */
+        function() {
+          return this.store.selectSnapshot(ng_core.ConfigState.getApplicationInfo);
+        },
+      enumerable: true,
+      configurable: true,
+    });
     Object.defineProperty(ApplicationLayoutComponent.prototype, 'visibleRoutes$', {
       /**
        * @return {?}
@@ -830,19 +843,24 @@
          * @return {?}
          */
         function() {
-          _this.navbarRootDropdowns.forEach(
-            /**
-             * @param {?} item
-             * @return {?}
-             */
-            function(item) {
-              item.close();
-            },
-          );
           if (window.innerWidth < 768) {
             _this.isDropdownChildDynamic = false;
+            if (_this.smallScreen === false) {
+              _this.isCollapsed = false;
+              setTimeout(
+                /**
+                 * @return {?}
+                 */
+                function() {
+                  _this.isCollapsed = true;
+                },
+                100,
+              );
+            }
+            _this.smallScreen = true;
           } else {
             _this.isDropdownChildDynamic = true;
+            _this.smallScreen = false;
           }
         },
         0,
@@ -928,7 +946,7 @@
         .fromEvent(window, 'resize')
         .pipe(
           ng_core.takeUntilDestroy(this),
-          operators.debounceTime(250),
+          operators.debounceTime(150),
         )
         .subscribe(
           /**
@@ -972,6 +990,41 @@
       );
       this.store.dispatch(new ng_core.GetAppConfiguration());
     };
+    /**
+     * @param {?} event
+     * @param {?} childrenContainer
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.openChange
+    /**
+     * @param {?} event
+     * @param {?} childrenContainer
+     * @return {?}
+     */ = function(event, childrenContainer) {
+      var _this = this;
+      if (!event) {
+        Object.keys(childrenContainer.style)
+          .filter(
+            /**
+             * @param {?} key
+             * @return {?}
+             */
+            function(key) {
+              return Number.isInteger(+key);
+            },
+          )
+          .forEach(
+            /**
+             * @param {?} key
+             * @return {?}
+             */
+            function(key) {
+              _this.renderer.removeStyle(childrenContainer, childrenContainer.style[key]);
+            },
+          );
+        this.renderer.removeStyle(childrenContainer, 'left');
+      }
+    };
     // required for dynamic component
     ApplicationLayoutComponent.type = 'application' /* application */;
     ApplicationLayoutComponent.decorators = [
@@ -981,21 +1034,19 @@
           {
             selector: 'abp-layout-application',
             template:
-              '<abp-layout>\n  <ul class="navbar-nav mr-auto">\n    <ng-container\n      *ngFor="let route of visibleRoutes$ | async; trackBy: trackByFn"\n      [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"\n      [ngTemplateOutletContext]="{ $implicit: route }"\n    >\n    </ng-container>\n\n    <ng-template #defaultLink let-route>\n      <li class="nav-item" [abpPermission]="route.requiredPolicy">\n        <a class="nav-link" [routerLink]="[route.url]">{{ route.name | abpLocalization }}</a>\n      </li>\n    </ng-template>\n\n    <ng-template #dropdownLink let-route>\n      <li\n        #navbarRootDropdown\n        ngbDropdown\n        [abpPermission]="route.requiredPolicy"\n        [abpVisibility]="routeContainer"\n        class="nav-item dropdown pointer"\n        display="static"\n      >\n        <a ngbDropdownToggle class="nav-link dropdown-toggle pointer" data-toggle="dropdown">\n          {{ route.name | abpLocalization }}\n        </a>\n        <div #routeContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">\n          <ng-template\n            #forTemplate\n            ngFor\n            [ngForOf]="route.children"\n            [ngForTrackBy]="trackByFn"\n            [ngForTemplate]="childWrapper"\n          ></ng-template>\n        </div>\n      </li>\n    </ng-template>\n\n    <ng-template #childWrapper let-child>\n      <ng-template\n        [ngTemplateOutlet]="child?.children?.length ? dropdownChild : defaultChild"\n        [ngTemplateOutletContext]="{ $implicit: child }"\n      ></ng-template>\n    </ng-template>\n\n    <ng-template #defaultChild let-child>\n      <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">\n        <a class="dropdown-item py-2 px-2" [routerLink]="[child.url]">\n          <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>\n          {{ child.name | abpLocalization }}</a\n        >\n      </div>\n    </ng-template>\n\n    <ng-template #dropdownChild let-child>\n      <div\n        [abpVisibility]="childrenContainer"\n        class="dropdown-submenu pointer"\n        ngbDropdown\n        [display]="isDropdownChildDynamic ? \'dynamic\' : \'static\'"\n        placement="right-top"\n        [abpPermission]="child.requiredPolicy"\n      >\n        <div ngbDropdownToggle [class.dropdown-toggle]="false" class="pointer">\n          <a\n            abpEllipsis="210px"\n            [abpEllipsisEnabled]="isDropdownChildDynamic"\n            role="button"\n            class="btn d-block text-left py-2 px-2 dropdown-toggle"\n          >\n            <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>\n            {{ child.name | abpLocalization }}\n          </a>\n        </div>\n        <div #childrenContainer ngbDropdownMenu class="dropdown-menu dropdown-menu-right">\n          <ng-template\n            ngFor\n            [ngForOf]="child.children"\n            [ngForTrackBy]="trackByFn"\n            [ngForTemplate]="childWrapper"\n          ></ng-template>\n        </div>\n      </div>\n    </ng-template>\n  </ul>\n\n  <ul class="navbar-nav ml-auto">\n    <ng-container\n      *ngFor="let element of rightPartElements; trackBy: trackElementByFn"\n      [ngTemplateOutlet]="element"\n    ></ng-container>\n  </ul>\n</abp-layout>\n\n<ng-template #language>\n  <li class="nav-item dropdown pointer" ngbDropdown>\n    <a ngbDropdownToggle class="nav-link dropdown-toggle text-white pointer" data-toggle="dropdown">\n      {{ defaultLanguage$ | async }}\n    </a>\n    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">\n      <a\n        *ngFor="let lang of dropdownLanguages$ | async"\n        class="dropdown-item"\n        (click)="onChangeLang(lang.cultureName)"\n        >{{ lang?.displayName }}</a\n      >\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item dropdown pointer" ngbDropdown>\n    <a ngbDropdownToggle class="nav-link dropdown-toggle text-white pointer" data-toggle="dropdown">\n      {{ (currentUser$ | async)?.userName }}\n    </a>\n    <div ngbDropdownMenu class="dropdown-menu dropdown-menu-right">\n      <a class="dropdown-item pointer" (click)="isOpenChangePassword = true">{{\n        \'AbpUi::ChangePassword\' | abpLocalization\n      }}</a>\n      <a class="dropdown-item pointer" (click)="isOpenProfile = true">{{ \'AbpUi::PersonalInfo\' | abpLocalization }}</a>\n      <a class="dropdown-item pointer" (click)="logout()">{{ \'AbpUi::Logout\' | abpLocalization }}</a>\n    </div>\n  </li>\n\n  <abp-change-password [(visible)]="isOpenChangePassword"></abp-change-password>\n\n  <abp-profile [(visible)]="isOpenProfile"></abp-profile>\n</ng-template>\n',
+              '<nav\n  class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"\n  id="main-navbar"\n  style="min-height: 4rem;"\n>\n  <div class="container ">\n    <a class="navbar-brand" routerLink="/">\n      <img *ngIf="appInfo.logoUrl; else appName" [src]="appInfo.logoUrl" [alt]="appInfo.name" />\n    </a>\n    <button\n      class="navbar-toggler"\n      type="button"\n      [attr.aria-expanded]="!isCollapsed"\n      (click)="isCollapsed = !isCollapsed"\n    >\n      <span class="navbar-toggler-icon"></span>\n    </button>\n    <div class="navbar-collapse" id="main-navbar-collapse">\n      <ng-container *ngTemplateOutlet="!smallScreen ? navigations : null"></ng-container>\n\n      <div *ngIf="smallScreen" class="overflow-hidden" [@collapseWithMargin]="isCollapsed ? \'collapsed\' : \'expanded\'">\n        <ng-container *ngTemplateOutlet="navigations"></ng-container>\n      </div>\n\n      <ng-template #navigations>\n        <ul class="navbar-nav mx-auto">\n          <ng-container\n            *ngFor="let route of visibleRoutes$ | async; trackBy: trackByFn"\n            [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"\n            [ngTemplateOutletContext]="{ $implicit: route }"\n          >\n          </ng-container>\n\n          <ng-template #defaultLink let-route>\n            <li class="nav-item" [abpPermission]="route.requiredPolicy">\n              <a class="nav-link" [routerLink]="[route.url]">{{ route.name | abpLocalization }}</a>\n            </li>\n          </ng-template>\n\n          <ng-template #dropdownLink let-route>\n            <li\n              #navbarRootDropdown\n              [abpPermission]="route.requiredPolicy"\n              [abpVisibility]="routeContainer"\n              class="nav-item dropdown"\n              display="static"\n              (click)="\n                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)\n              "\n            >\n              <a\n                class="nav-link dropdown-toggle"\n                data-toggle="dropdown"\n                aria-haspopup="true"\n                aria-expanded="false"\n                href="javascript:void(0)"\n              >\n                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}\n              </a>\n              <div\n                #routeContainer\n                class="dropdown-menu border-0 shadow-sm"\n                [class.d-block]="smallScreen"\n                [class.overflow-hidden]="smallScreen"\n                (click)="$event.preventDefault(); $event.stopPropagation()"\n              >\n                <div\n                  class="abp-collapsed abp-main-nav-dropdown"\n                  [class.expanded]="smallScreen ? navbarRootDropdown.expand : true"\n                >\n                  <ng-template\n                    #forTemplate\n                    ngFor\n                    [ngForOf]="route.children"\n                    [ngForTrackBy]="trackByFn"\n                    [ngForTemplate]="childWrapper"\n                  ></ng-template>\n                </div>\n              </div>\n            </li>\n          </ng-template>\n\n          <ng-template #childWrapper let-child>\n            <ng-template\n              [ngTemplateOutlet]="child?.children?.length ? dropdownChild : defaultChild"\n              [ngTemplateOutletContext]="{ $implicit: child }"\n            ></ng-template>\n          </ng-template>\n\n          <ng-template #defaultChild let-child>\n            <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">\n              <a class="dropdown-item" [routerLink]="[child.url]">\n                <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>\n                {{ child.name | abpLocalization }}</a\n              >\n            </div>\n          </ng-template>\n\n          <ng-template #dropdownChild let-child>\n            <div\n              [abpVisibility]="childrenContainer"\n              class="dropdown-submenu"\n              ngbDropdown\n              #dropdownSubmenu="ngbDropdown"\n              [display]="isDropdownChildDynamic ? \'dynamic\' : \'static\'"\n              placement="right-top"\n              [autoClose]="true"\n              [abpPermission]="child.requiredPolicy"\n              (openChange)="openChange($event, childrenContainer)"\n            >\n              <div ngbDropdownToggle [class.dropdown-toggle]="false">\n                <a\n                  abpEllipsis="210px"\n                  [abpEllipsisEnabled]="isDropdownChildDynamic"\n                  role="button"\n                  class="btn d-block text-left dropdown-toggle"\n                >\n                  <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>\n                  {{ child.name | abpLocalization }}\n                </a>\n              </div>\n              <div\n                #childrenContainer\n                class="dropdown-menu border-0 shadow-sm"\n                [class.d-block]="smallScreen"\n                [class.overflow-hidden]="smallScreen"\n              >\n                <div\n                  class="abp-collapsed abp-main-nav-dropdown"\n                  [class.expanded]="smallScreen ? dropdownSubmenu.isOpen() : true"\n                >\n                  <ng-template\n                    ngFor\n                    [ngForOf]="child.children"\n                    [ngForTrackBy]="trackByFn"\n                    [ngForTemplate]="childWrapper"\n                  ></ng-template>\n                </div>\n              </div>\n            </div>\n          </ng-template>\n        </ul>\n\n        <ul class="navbar-nav">\n          <ng-container\n            *ngFor="let element of rightPartElements; trackBy: trackElementByFn"\n            [ngTemplateOutlet]="element"\n          ></ng-container>\n        </ul>\n      </ng-template>\n    </div>\n  </div>\n</nav>\n\n<div [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path" class="container">\n  <router-outlet #outlet="outlet"></router-outlet>\n</div>\n\n<abp-confirmation></abp-confirmation>\n<abp-toast></abp-toast>\n\n<ng-template #appName>\n  {{ appInfo.name }}\n</ng-template>\n\n<ng-template #language>\n  <li class="nav-item">\n    <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">\n      <a\n        ngbDropdownToggle\n        class="nav-link"\n        href="javascript:void(0)"\n        role="button"\n        id="dropdownMenuLink"\n        data-toggle="dropdown"\n        aria-haspopup="true"\n        aria-expanded="false"\n      >\n        {{ defaultLanguage$ | async }}\n      </a>\n      <div\n        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"\n        aria-labelledby="dropdownMenuLink"\n        [class.d-block]="smallScreen"\n        [class.overflow-hidden]="smallScreen"\n      >\n        <div\n          class="abp-collapsed abp-main-nav-dropdown"\n          [class.expanded]="smallScreen ? languageDropdown.isOpen() : true"\n        >\n          <a\n            *ngFor="let lang of dropdownLanguages$ | async"\n            href="javascript:void(0)"\n            class="dropdown-item"\n            (click)="onChangeLang(lang.cultureName)"\n            >{{ lang?.displayName }}</a\n          >\n        </div>\n      </div>\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item">\n    <div ngbDropdown class="dropdown" #currentUserDropdown="ngbDropdown" display="static">\n      <a\n        ngbDropdownToggle\n        class="nav-link"\n        href="javascript:void(0)"\n        role="button"\n        id="dropdownMenuLink"\n        data-toggle="dropdown"\n        aria-haspopup="true"\n        aria-expanded="false"\n      >\n        {{ (currentUser$ | async)?.userName }}\n      </a>\n      <div\n        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"\n        aria-labelledby="dropdownMenuLink"\n        [class.overflow-hidden]="smallScreen"\n        [class.d-block]="smallScreen"\n      >\n        <div\n          class="abp-collapsed abp-main-nav-dropdown"\n          [class.expanded]="smallScreen ? currentUserDropdown.isOpen() : true"\n        >\n          <a class="dropdown-item" routerLink="/account/manage-profile">{{\n            \'AbpAccount::ManageYourProfile\' | abpLocalization\n          }}</a>\n          <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{\n            \'AbpUi::Logout\' | abpLocalization\n          }}</a>\n        </div>\n      </div>\n    </div>\n  </li>\n</ng-template>\n',
+            animations: [ng_theme_shared.slideFromBottom, ng_theme_shared.collapseWithMargin],
           },
         ],
       },
     ];
     /** @nocollapse */
     ApplicationLayoutComponent.ctorParameters = function() {
-      return [{ type: store.Store }, { type: angularOauth2Oidc.OAuthService }];
+      return [{ type: store.Store }, { type: angularOauth2Oidc.OAuthService }, { type: core.Renderer2 }];
     };
     ApplicationLayoutComponent.propDecorators = {
       currentUserRef: [{ type: core.ViewChild, args: ['currentUser', { static: false, read: core.TemplateRef }] }],
       languageRef: [{ type: core.ViewChild, args: ['language', { static: false, read: core.TemplateRef }] }],
-      navbarRootDropdowns: [
-        { type: core.ViewChildren, args: ['navbarRootDropdown', { read: ngBootstrap.NgbDropdown }] },
-      ],
     };
     __decorate(
       [store.Select(ng_core.ConfigState.getOne('routes')), __metadata('design:type', rxjs.Observable)],
@@ -1039,13 +1090,11 @@
     /** @type {?} */
     ApplicationLayoutComponent.prototype.languageRef;
     /** @type {?} */
-    ApplicationLayoutComponent.prototype.navbarRootDropdowns;
-    /** @type {?} */
-    ApplicationLayoutComponent.prototype.isOpenChangePassword;
-    /** @type {?} */
-    ApplicationLayoutComponent.prototype.isOpenProfile;
-    /** @type {?} */
     ApplicationLayoutComponent.prototype.isDropdownChildDynamic;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.isCollapsed;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.smallScreen;
     /** @type {?} */
     ApplicationLayoutComponent.prototype.rightPartElements;
     /** @type {?} */
@@ -1062,6 +1111,11 @@
      * @private
      */
     ApplicationLayoutComponent.prototype.oauthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplicationLayoutComponent.prototype.renderer;
   }
   /**
    * @param {?} routes
@@ -1098,7 +1152,8 @@
         args: [
           {
             selector: 'abp-layout-empty',
-            template: '\n    Layout-empty\n    <router-outlet></router-outlet>\n  ',
+            template:
+              '\n    <router-outlet></router-outlet>\n    <abp-confirmation></abp-confirmation>\n    <abp-toast></abp-toast>\n  ',
           },
         ],
       },
@@ -1108,54 +1163,6 @@
   if (false) {
     /** @type {?} */
     EmptyLayoutComponent.type;
-  }
-
-  /**
-   * @fileoverview added by tsickle
-   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-   */
-  var LayoutComponent = /** @class */ (function() {
-    function LayoutComponent(store) {
-      this.store = store;
-      this.isCollapsed = true;
-    }
-    Object.defineProperty(LayoutComponent.prototype, 'appInfo', {
-      /**
-       * @return {?}
-       */
-      get: function() {
-        return this.store.selectSnapshot(ng_core.ConfigState.getApplicationInfo);
-      },
-      enumerable: true,
-      configurable: true,
-    });
-    LayoutComponent.decorators = [
-      {
-        type: core.Component,
-        args: [
-          {
-            selector: ' abp-layout',
-            template:
-              '<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" id="main-navbar">\n  <a class="navbar-brand" routerLink="/">\n    <img *ngIf="appInfo.logoUrl; else appName" [src]="appInfo.logoUrl" [alt]="appInfo.name" />\n  </a>\n  <button class="navbar-toggler" type="button" [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed">\n    <span class="navbar-toggler-icon"></span>\n  </button>\n  <div class="collapse navbar-collapse" id="main-navbar-collapse" [ngbCollapse]="isCollapsed">\n    <ng-content></ng-content>\n  </div>\n</nav>\n\n<div\n  [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path"\n  style="padding-top: 5rem;"\n  class="container"\n>\n  <router-outlet #outlet="outlet"></router-outlet>\n</div>\n\n<abp-confirmation></abp-confirmation>\n<abp-toast></abp-toast>\n\n<ng-template #appName>\n  {{ appInfo.name }}\n</ng-template>\n',
-            animations: [ng_theme_shared.slideFromBottom],
-          },
-        ],
-      },
-    ];
-    /** @nocollapse */
-    LayoutComponent.ctorParameters = function() {
-      return [{ type: store.Store }];
-    };
-    return LayoutComponent;
-  })();
-  if (false) {
-    /** @type {?} */
-    LayoutComponent.prototype.isCollapsed;
-    /**
-     * @type {?}
-     * @private
-     */
-    LayoutComponent.prototype.store;
   }
 
   /**
@@ -1216,7 +1223,8 @@
    * @fileoverview added by tsickle
    * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
    */
-  var styles = '\n.content-header-title {\n    font-size: 24px;\n}\n\n.entry-row {\n    margin-bottom: 15px;\n}\n';
+  var styles =
+    '\n.content-header-title {\n    font-size: 24px;\n}\n\n.entry-row {\n    margin-bottom: 15px;\n}\n\n#main-navbar-tools a.dropdown-toggle {\n    text-decoration: none;\n    color: #fff;\n}\n\n.navbar .dropdown-submenu {\n    position: relative;\n}\n.navbar .dropdown-menu {\n    margin: 0;\n    padding: 0;\n}\n    .navbar .dropdown-menu a {\n        font-size: .9em;\n        padding: 10px 15px;\n        display: block;\n        min-width: 210px;\n        text-align: left;\n        border-radius: 0.25rem;\n        min-height: 44px;\n    }\n.navbar .dropdown-submenu a::after {\n    transform: rotate(-90deg);\n    position: absolute;\n    right: 16px;\n    top: 18px;\n}\n.navbar .dropdown-submenu .dropdown-menu {\n    top: 0;\n    left: 100%;\n}\n\n.card-header .btn {\n    padding: 2px 6px;\n}\n.card-header h5 {\n    margin: 0;\n}\n.container > .card {\n    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;\n}\n\n@media screen and (min-width: 768px) {\n    .navbar .dropdown:hover > .dropdown-menu {\n        display: block;\n    }\n\n    .navbar .dropdown-submenu:hover > .dropdown-menu {\n        display: block;\n    }\n}\n.input-validation-error {\n    border-color: #dc3545;\n}\n.field-validation-error {\n    font-size: 0.8em;\n}\n\n\n.abp-main-nav-dropdown {\n  margin-top: -50%;\n}\n';
 
   /**
    * @fileoverview added by tsickle
@@ -1273,7 +1281,7 @@
         type: core.NgModule,
         args: [
           {
-            declarations: __spread(LAYOUTS, [LayoutComponent, ValidationErrorComponent]),
+            declarations: __spread(LAYOUTS, [ValidationErrorComponent]),
             imports: [
               ng_core.CoreModule,
               ng_theme_shared.ThemeSharedModule,
@@ -1364,12 +1372,11 @@
   exports.ɵb = LayoutState;
   exports.ɵc = AccountLayoutComponent;
   exports.ɵd = EmptyLayoutComponent;
-  exports.ɵe = LayoutComponent;
-  exports.ɵf = ValidationErrorComponent;
-  exports.ɵg = LayoutState;
-  exports.ɵh = AddNavigationElement;
-  exports.ɵi = RemoveNavigationElementByName;
-  exports.ɵk = InitialService;
+  exports.ɵe = ValidationErrorComponent;
+  exports.ɵf = LayoutState;
+  exports.ɵg = AddNavigationElement;
+  exports.ɵh = RemoveNavigationElementByName;
+  exports.ɵj = InitialService;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 });

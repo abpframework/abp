@@ -7,7 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: DynamicLayoutComponent,
-    children: [{ path: '', component: SettingManagementComponent }],
+    children: [
+      { path: '', component: SettingManagementComponent, data: { requiredPolicy: 'AbpAccount.SettingManagement' } },
+    ],
   },
 ];
 

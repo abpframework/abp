@@ -1,5 +1,6 @@
 import { Provider } from '@angular/core';
-export declare class TenantManagementModule {}
+export declare class TenantManagementModule {
+}
 /**
  *
  * @deprecated since version 0.9.0

@@ -1354,11 +1354,74 @@
     }
   })(PermissionManagement || (PermissionManagement = {}));
 
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var PermissionManagementStateService = /** @class */ (function() {
+    function PermissionManagementStateService(store) {
+      this.store = store;
+    }
+    /**
+     * @return {?}
+     */
+    PermissionManagementStateService.prototype.getPermissionGroups
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+    };
+    /**
+     * @return {?}
+     */
+    PermissionManagementStateService.prototype.getEntityDisplayName
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+    };
+    PermissionManagementStateService.decorators = [
+      {
+        type: core.Injectable,
+        args: [
+          {
+            providedIn: 'root',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    PermissionManagementStateService.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    /** @nocollapse */ PermissionManagementStateService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function PermissionManagementStateService_Factory() {
+        return new PermissionManagementStateService(core.ɵɵinject(store.Store));
+      },
+      token: PermissionManagementStateService,
+      providedIn: 'root',
+    });
+    return PermissionManagementStateService;
+  })();
+  if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionManagementStateService.prototype.store;
+  }
+
   exports.GetPermissions = GetPermissions;
   exports.PermissionManagementComponent = PermissionManagementComponent;
   exports.PermissionManagementModule = PermissionManagementModule;
   exports.PermissionManagementService = PermissionManagementService;
   exports.PermissionManagementState = PermissionManagementState;
+  exports.PermissionManagementStateService = PermissionManagementStateService;
   exports.UpdatePermissions = UpdatePermissions;
   exports.ɵa = PermissionManagementComponent;
   exports.ɵb = PermissionManagementState;

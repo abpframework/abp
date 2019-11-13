@@ -9,8 +9,8 @@
 }(function (jQuery) {
   // Portuguese
   jQuery.timeago.settings.strings = {
-     suffixAgo: "atrás",
-     suffixFromNow: "a partir de agora",
+     prefixAgo: "há",
+     prefixFromNow: "daqui a",
      seconds: "menos de um minuto",
      minute: "cerca de um minuto",
      minutes: "%d minutos",

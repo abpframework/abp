@@ -1,1 +1,2 @@
-export declare class IdentityConfigModule {}
+export declare class IdentityConfigModule {
+}

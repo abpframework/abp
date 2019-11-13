@@ -9,10 +9,10 @@ import { Component } from '@angular/core';
         <span
           class="ui-toast-icon pi"
           [ngClass]="{
-            'pi-info-circle': message.severity == 'info',
-            'pi-exclamation-triangle': message.severity == 'warn',
-            'pi-times': message.severity == 'error',
-            'pi-check': message.severity == 'success'
+            'pi-info-circle': message.severity === 'info',
+            'pi-exclamation-triangle': message.severity === 'warn',
+            'pi-times': message.severity === 'error',
+            'pi-check': message.severity === 'success'
           }"
         ></span>
         <div class="ui-toast-message-text-content">
@@ -21,6 +21,6 @@ import { Component } from '@angular/core';
         </div>
       </ng-template>
     </p-toast>
-  `
+  `,
 })
 export class ToastComponent {}

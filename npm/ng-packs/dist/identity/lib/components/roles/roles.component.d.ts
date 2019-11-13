@@ -1,11 +1,11 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService } from '@abp/ng.theme.shared';
-import { TemplateRef } from '@angular/core';
+import { TemplateRef, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { Identity } from '../../models/identity';
-export declare class RolesComponent {
+export declare class RolesComponent implements OnInit {
   private confirmationService;
   private fb;
   private store;
@@ -23,7 +23,7 @@ export declare class RolesComponent {
   sortKey: string;
   modalContent: TemplateRef<any>;
   constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
-  onSearch(value: any): void;
+  ngOnInit(): void;
   createForm(): void;
   openModal(): void;
   onAdd(): void;

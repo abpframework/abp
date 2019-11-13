@@ -11,7 +11,7 @@
             "__symbolic": "reference",
             "module": "@angular/core",
             "name": "NgModule",
-            "line": 6,
+            "line": 8,
             "character": 1
           },
           "arguments": [
@@ -23,15 +23,30 @@
                   "__symbolic": "reference",
                   "module": "@abp/ng.core",
                   "name": "CoreModule",
-                  "line": 8,
-                  "character": 44
+                  "line": 12,
+                  "character": 4
                 },
                 {
                   "__symbolic": "reference",
                   "module": "@abp/ng.theme.shared",
                   "name": "ThemeSharedModule",
-                  "line": 8,
-                  "character": 56
+                  "line": 13,
+                  "character": 4
+                },
+                {
+                  "__symbolic": "call",
+                  "expression": {
+                    "__symbolic": "select",
+                    "expression": {
+                      "__symbolic": "reference",
+                      "module": "@ngxs/store",
+                      "name": "NgxsModule",
+                      "line": 14,
+                      "character": 4
+                    },
+                    "member": "forFeature"
+                  },
+                  "arguments": [[{ "__symbolic": "reference", "name": "ɵb" }]]
                 }
               ]
             }
@@ -49,7 +64,7 @@
             "__symbolic": "reference",
             "module": "@angular/core",
             "name": "Component",
-            "line": 6,
+            "line": 9,
             "character": 1
           },
           "arguments": [
@@ -65,8 +80,8 @@
           {
             "__symbolic": "constructor",
             "parameters": [
-              { "__symbolic": "reference", "module": "@angular/router", "name": "Router", "line": 17, "character": 30 },
-              { "__symbolic": "reference", "module": "@ngxs/store", "name": "Store", "line": 17, "character": 53 }
+              { "__symbolic": "reference", "module": "@angular/router", "name": "Router", "line": 31, "character": 30 },
+              { "__symbolic": "reference", "module": "@ngxs/store", "name": "Store", "line": 31, "character": 53 }
             ]
           }
         ],
@@ -137,12 +152,77 @@
         }
       ],
       "members": {}
+    },
+    "ɵb": {
+      "__symbolic": "class",
+      "decorators": [
+        {
+          "__symbolic": "call",
+          "expression": {
+            "__symbolic": "reference",
+            "module": "@ngxs/store",
+            "name": "State",
+            "line": 4,
+            "character": 1
+          },
+          "arguments": [{ "name": "SettingManagementState", "defaults": { "selectedTab": {} } }]
+        }
+      ],
+      "members": {
+        "settingManagementAction": [
+          {
+            "__symbolic": "method",
+            "decorators": [
+              {
+                "__symbolic": "call",
+                "expression": {
+                  "__symbolic": "reference",
+                  "module": "@ngxs/store",
+                  "name": "Action",
+                  "line": 14,
+                  "character": 3
+                },
+                "arguments": [{ "__symbolic": "reference", "name": "ɵc" }]
+              }
+            ]
+          }
+        ]
+      },
+      "statics": {
+        "getSelectedTab": {
+          "__symbolic": "function",
+          "parameters": ["selectedTab"],
+          "value": { "__symbolic": "reference", "name": "selectedTab" }
+        }
+      }
+    },
+    "ɵc": {
+      "__symbolic": "class",
+      "members": {
+        "__ctor__": [
+          {
+            "__symbolic": "constructor",
+            "parameters": [
+              {
+                "__symbolic": "reference",
+                "module": "@abp/ng.theme.shared",
+                "name": "SettingTab",
+                "line": 4,
+                "character": 30
+              }
+            ]
+          }
+        ]
+      },
+      "statics": { "type": "[SettingManagement] Set Selected Tab" }
     }
   },
   "origins": {
     "SettingManagementModule": "./lib/setting-management.module",
     "SettingManagementComponent": "./lib/components/setting-management.component",
-    "ɵa": "./lib/setting-management-routing.module"
+    "ɵa": "./lib/setting-management-routing.module",
+    "ɵb": "./lib/states/setting-management.state",
+    "ɵc": "./lib/actions/setting-management.actions"
   },
   "importAs": "@abp/ng.setting-management"
 }

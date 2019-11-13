@@ -2,7 +2,95 @@ import { ConfigState, DynamicLayoutComponent, CoreModule } from '@abp/ng.core';
 import { getSettingTabs, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Component, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Action, Selector, State, Store, NgxsModule } from '@ngxs/store';
+import { __decorate, __metadata } from 'tslib';
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SetSelectedSettingTab = /** @class */ (function() {
+  function SetSelectedSettingTab(payload) {
+    this.payload = payload;
+  }
+  SetSelectedSettingTab.type = '[SettingManagement] Set Selected Tab';
+  return SetSelectedSettingTab;
+})();
+if (false) {
+  /** @type {?} */
+  SetSelectedSettingTab.type;
+  /** @type {?} */
+  SetSelectedSettingTab.prototype.payload;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SettingManagementState = /** @class */ (function() {
+  function SettingManagementState() {}
+  /**
+   * @param {?} __0
+   * @return {?}
+   */
+  SettingManagementState.getSelectedTab
+  /**
+   * @param {?} __0
+   * @return {?}
+   */ = function(_a) {
+    var selectedTab = _a.selectedTab;
+    return selectedTab;
+  };
+  /**
+   * @param {?} __0
+   * @param {?} __1
+   * @return {?}
+   */
+  SettingManagementState.prototype.settingManagementAction
+  /**
+   * @param {?} __0
+   * @param {?} __1
+   * @return {?}
+   */ = function(_a, _b) {
+    var patchState = _a.patchState;
+    var payload = _b.payload;
+    patchState({
+      selectedTab: payload,
+    });
+  };
+  __decorate(
+    [
+      Action(SetSelectedSettingTab),
+      __metadata('design:type', Function),
+      __metadata('design:paramtypes', [Object, SetSelectedSettingTab]),
+      __metadata('design:returntype', void 0),
+    ],
+    SettingManagementState.prototype,
+    'settingManagementAction',
+    null,
+  );
+  __decorate(
+    [
+      Selector(),
+      __metadata('design:type', Function),
+      __metadata('design:paramtypes', [Object]),
+      __metadata('design:returntype', void 0),
+    ],
+    SettingManagementState,
+    'getSelectedTab',
+    null,
+  );
+  SettingManagementState = __decorate(
+    [
+      State({
+        name: 'SettingManagementState',
+        defaults: /** @type {?} */ ({ selectedTab: {} }),
+      }),
+    ],
+    SettingManagementState,
+  );
+  return SettingManagementState;
+})();
 
 /**
  * @fileoverview added by tsickle
@@ -13,7 +101,6 @@ var SettingManagementComponent = /** @class */ (function() {
     this.router = router;
     this.store = store;
     this.settings = [];
-    this.selected = /** @type {?} */ ({});
     this.trackByFn
     /**
      * @param {?} _
@@ -23,6 +110,28 @@ var SettingManagementComponent = /** @class */ (function() {
       return item.name;
     };
   }
+  Object.defineProperty(SettingManagementComponent.prototype, 'selected', {
+    /**
+     * @return {?}
+     */
+    get: function() {
+      /** @type {?} */
+      var value = this.store.selectSnapshot(SettingManagementState.getSelectedTab);
+      if ((!value || !value.component) && this.settings.length) {
+        return this.settings[0];
+      }
+      return value;
+    },
+    /**
+     * @param {?} value
+     * @return {?}
+     */
+    set: function(value) {
+      this.store.dispatch(new SetSelectedSettingTab(value));
+    },
+    enumerable: true,
+    configurable: true,
+  });
   /**
    * @return {?}
    */
@@ -51,7 +160,7 @@ var SettingManagementComponent = /** @class */ (function() {
           return a.order - b.order;
         },
       );
-    if (this.settings.length) {
+    if (!this.selected && this.settings.length) {
       this.selected = this.settings[0];
     }
   };
@@ -76,8 +185,6 @@ var SettingManagementComponent = /** @class */ (function() {
 if (false) {
   /** @type {?} */
   SettingManagementComponent.prototype.settings;
-  /** @type {?} */
-  SettingManagementComponent.prototype.selected;
   /** @type {?} */
   SettingManagementComponent.prototype.trackByFn;
   /**
@@ -132,7 +239,12 @@ var SettingManagementModule = /** @class */ (function() {
       args: [
         {
           declarations: [SettingManagementComponent],
-          imports: [SettingManagementRoutingModule, CoreModule, ThemeSharedModule],
+          imports: [
+            SettingManagementRoutingModule,
+            CoreModule,
+            ThemeSharedModule,
+            NgxsModule.forFeature([SettingManagementState]),
+          ],
         },
       ],
     },
@@ -150,5 +262,11 @@ var SettingManagementModule = /** @class */ (function() {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { SettingManagementComponent, SettingManagementModule, SettingManagementRoutingModule as ɵa };
+export {
+  SettingManagementComponent,
+  SettingManagementModule,
+  SettingManagementRoutingModule as ɵa,
+  SettingManagementState as ɵb,
+  SetSelectedSettingTab as ɵc,
+};
 //# sourceMappingURL=abp-ng.setting-management.js.map

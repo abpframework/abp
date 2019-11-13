@@ -7,12 +7,13 @@ import { ABP } from '@abp/ng.core';
   template: `
     <button
       #button
-      [attr.type]="type"
+      [id]="buttonId"
+      [attr.type]="buttonType"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
-      (click)="click.emit($event)"
-      (focus)="focus.emit($event)"
-      (blur)="blur.emit($event)"
+      (click)="onClick($event)"
+      (focus)="onFocus($event)"
+      (blur)="onBlur($event)"
     >
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
@@ -20,10 +21,13 @@ import { ABP } from '@abp/ng.core';
 })
 export class ButtonComponent implements OnInit {
   @Input()
+  buttonId = '';
+
+  @Input()
   buttonClass = 'btn btn-primary';
 
   @Input()
-  buttonType; // TODO: Add initial value.
+  buttonType = 'button';
 
   @Input()
   iconClass: string;
@@ -49,11 +53,6 @@ export class ButtonComponent implements OnInit {
   @ViewChild('button', { static: true })
   buttonRef: ElementRef<HTMLButtonElement>;
 
-  /**
-   * @deprecated Use buttonType instead. To be deleted in v1
-   */
-  @Input() type = 'button';
-
   get icon(): string {
     return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
   }
@@ -66,5 +65,20 @@ export class ButtonComponent implements OnInit {
         this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
       });
     }
+  }
+
+  onClick(event: MouseEvent) {
+    event.stopPropagation();
+    this.click.next(event);
+  }
+
+  onFocus(event: FocusEvent) {
+    event.stopPropagation();
+    this.focus.next(event);
+  }
+
+  onBlur(event: FocusEvent) {
+    event.stopPropagation();
+    this.blur.next(event);
   }
 }

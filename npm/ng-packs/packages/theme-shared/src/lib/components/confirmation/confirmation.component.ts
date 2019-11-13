@@ -31,7 +31,7 @@ import { Toaster } from '../../models/toaster';
             class="btn btn-sm btn-primary"
             (click)="close(reject)"
           >
-            {{ message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
+            {{ message.cancelText || message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
           </button>
           <button
             *ngIf="!message.hideYesBtn"
@@ -41,12 +41,12 @@ import { Toaster } from '../../models/toaster';
             (click)="close(confirm)"
             autofocus
           >
-            <span>{{ message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>
+            <span>{{ message.yesText || message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>
           </button>
         </div>
       </ng-template>
     </p-toast>
-  `
+  `,
 })
 export class ConfirmationComponent {
   confirm = Toaster.Status.confirm;

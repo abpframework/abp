@@ -1,7 +1,7 @@
 {
   "__symbolic": "module",
   "version": 4,
-  "exports": [{ "from": "./lib/permission-management.state" }],
+  "exports": [{ "from": "./lib/permission-management.state" }, { "from": "./lib/permission-management-state.service" }],
   "metadata": {
     "PermissionManagementModule": {
       "__symbolic": "class",

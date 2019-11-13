@@ -75,11 +75,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-basic/src/test.ts",
-            "tsConfig": "packages/theme-basic/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-basic/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -135,11 +133,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/permission-management/src/test.ts",
-            "tsConfig": "packages/permission-management/tsconfig.spec.json",
-            "karmaConfig": "packages/permission-management/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -168,11 +164,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/identity/src/test.ts",
-            "tsConfig": "packages/identity/tsconfig.spec.json",
-            "karmaConfig": "packages/identity/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -198,11 +192,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/feature-management/src/test.ts",
-            "tsConfig": "packages/feature-management/tsconfig.spec.json",
-            "karmaConfig": "packages/feature-management/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -231,11 +223,9 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/tenant-management/src/test.ts",
-            "tsConfig": "packages/tenant-management/tsconfig.spec.json",
-            "karmaConfig": "packages/tenant-management/karma.conf.js"
+            "coverage": true
           }
         },
         "lint": {
@@ -418,7 +408,7 @@
       },
       "root": "apps/dev-app",
       "sourceRoot": "apps/dev-app/src",
-      "prefix": "app",
+      "prefix": "abp",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

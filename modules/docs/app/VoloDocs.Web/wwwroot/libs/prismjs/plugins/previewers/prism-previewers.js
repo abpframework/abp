@@ -470,30 +470,23 @@
 	/**
 	 * Returns the absolute X, Y offsets for an element
 	 * @param {HTMLElement} element
-	 * @returns {{top: number, right: number, bottom: number, left: number}}
+	 * @returns {{top: number, right: number, bottom: number, left: number, width: number, height: number}}
 	 */
 	var getOffset = function (element) {
-		var left = 0, top = 0, el = element;
-
-		if (el.parentNode) {
-			do {
-				left += el.offsetLeft;
-				top += el.offsetTop;
-			} while ((el = el.offsetParent) && el.nodeType < 9);
-
-			el = element;
-
-			do {
-				left -= el.scrollLeft;
-				top -= el.scrollTop;
-			} while ((el = el.parentNode) && !/body/i.test(el.nodeName));
-		}
+		var elementBounds = element.getBoundingClientRect();
+		var left = elementBounds.left;
+		var top = elementBounds.top;
+		var documentBounds = document.documentElement.getBoundingClientRect();
+		left -= documentBounds.left;
+		top -= documentBounds.top;
 
 		return {
 			top: top,
-			right: innerWidth - left - element.offsetWidth,
-			bottom: innerHeight - top - element.offsetHeight,
-			left: left
+			right: innerWidth - left - elementBounds.width,
+			bottom: innerHeight - top - elementBounds.height,
+			left: left,
+			width: elementBounds.width,
+			height: elementBounds.height
 		};
 	};
 
@@ -523,7 +516,7 @@
 		if (!supportedLanguages) {
 			supportedLanguages = ['*'];
 		}
-		if (Prism.util.type(supportedLanguages) !== 'Array') {
+		if (!Array.isArray(supportedLanguages)) {
 			supportedLanguages = [supportedLanguages];
 		}
 		supportedLanguages.forEach(function (lang) {
@@ -621,7 +614,7 @@
 				this._elt.style.top = '';
 			}
 
-			this._elt.style.left = offset.left + Math.min(200, this._token.offsetWidth / 2) + 'px';
+			this._elt.style.left = offset.left + Math.min(200, offset.width / 2) + 'px';
 		} else {
 			this.hide();
 		}
@@ -673,7 +666,7 @@
 			var languages = previewers[previewer].languages;
 			if (env.language && languages[env.language] && !languages[env.language].initialized) {
 				var lang = languages[env.language];
-				if (Prism.util.type(lang) !== 'Array') {
+				if (!Array.isArray(lang)) {
 					lang = [lang];
 				}
 				lang.forEach(function (lang) {

@@ -966,6 +966,63 @@ var PermissionManagement;
  * @fileoverview added by tsickle
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
+var PermissionManagementStateService = /** @class */ (function() {
+  function PermissionManagementStateService(store) {
+    this.store = store;
+  }
+  /**
+   * @return {?}
+   */
+  PermissionManagementStateService.prototype.getPermissionGroups
+  /**
+   * @return {?}
+   */ = function() {
+    return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+  };
+  /**
+   * @return {?}
+   */
+  PermissionManagementStateService.prototype.getEntityDisplayName
+  /**
+   * @return {?}
+   */ = function() {
+    return this.store.selectSnapshot(PermissionManagementState.getPermissionGroups);
+  };
+  PermissionManagementStateService.decorators = [
+    {
+      type: Injectable,
+      args: [
+        {
+          providedIn: 'root',
+        },
+      ],
+    },
+  ];
+  /** @nocollapse */
+  PermissionManagementStateService.ctorParameters = function() {
+    return [{ type: Store }];
+  };
+  /** @nocollapse */ PermissionManagementStateService.ngInjectableDef = ɵɵdefineInjectable({
+    factory: function PermissionManagementStateService_Factory() {
+      return new PermissionManagementStateService(ɵɵinject(Store));
+    },
+    token: PermissionManagementStateService,
+    providedIn: 'root',
+  });
+  return PermissionManagementStateService;
+})();
+if (false) {
+  /**
+   * @type {?}
+   * @private
+   */
+  PermissionManagementStateService.prototype.store;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
 
 /**
  * @fileoverview added by tsickle
@@ -988,6 +1045,7 @@ export {
   PermissionManagementModule,
   PermissionManagementService,
   PermissionManagementState,
+  PermissionManagementStateService,
   UpdatePermissions,
   PermissionManagementComponent as ɵa,
   PermissionManagementState as ɵb,
