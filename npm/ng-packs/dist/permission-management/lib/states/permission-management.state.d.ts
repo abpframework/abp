@@ -5,7 +5,7 @@ import { PermissionManagementService } from '../services/permission-management.s
 export declare class PermissionManagementState {
     private permissionManagementService;
     static getPermissionGroups({ permissionRes }: PermissionManagement.State): PermissionManagement.Group[];
-    static getEntitiyDisplayName({ permissionRes }: PermissionManagement.State): string;
+    static getEntityDisplayName({ permissionRes }: PermissionManagement.State): string;
     constructor(permissionManagementService: PermissionManagementService);
     permissionManagementGet({ patchState }: StateContext<PermissionManagement.State>, { payload }: GetPermissions): import("rxjs").Observable<PermissionManagement.Response>;
     permissionManagementUpdate(_: any, { payload }: UpdatePermissions): import("rxjs").Observable<null>;

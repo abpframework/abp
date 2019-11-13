@@ -194,6 +194,8 @@ namespace Volo.Abp.Cli.Commands
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
             {
+                case "none":
+                    return UiFramework.None;
                 case "mvc":
                     return UiFramework.Mvc;
                 case "angular":

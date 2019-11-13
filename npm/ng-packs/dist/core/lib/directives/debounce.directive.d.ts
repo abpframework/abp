@@ -1,9 +1,9 @@
-import { Renderer2, ElementRef, OnInit, EventEmitter } from '@angular/core';
-export declare class InputEventDebounceDirective implements OnInit {
-    private renderer;
+import { ElementRef, EventEmitter, OnDestroy, OnInit } from '@angular/core';
+export declare class InputEventDebounceDirective implements OnInit, OnDestroy {
     private el;
     debounce: number;
     readonly debounceEvent: EventEmitter<Event>;
-    constructor(renderer: Renderer2, el: ElementRef);
+    constructor(el: ElementRef);
     ngOnInit(): void;
+    ngOnDestroy(): void;
 }

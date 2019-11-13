@@ -24,6 +24,8 @@ export declare class UsersComponent implements OnInit {
     modalBusy: boolean;
     sortOrder: string;
     sortKey: string;
+    passwordRulesArr: ("number" | "small" | "capital" | "special")[];
+    requiredPasswordLength: number;
     trackByFn: TrackByFunction<AbstractControl>;
     readonly roleGroups: FormGroup[];
     constructor(confirmationService: ConfirmationService, fb: FormBuilder, store: Store);
@@ -31,8 +33,8 @@ export declare class UsersComponent implements OnInit {
     onSearch(value: any): void;
     buildForm(): void;
     openModal(): void;
-    onAdd(): void;
-    onEdit(id: string): void;
+    add(): void;
+    edit(id: string): void;
     save(): void;
     delete(id: string, userName: string): void;
     onPageChange(data: any): void;

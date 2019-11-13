@@ -1,14 +1,9 @@
 {
   "name": "@abp/ng.account",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "dependencies": {
-    "@abp/ng.theme.shared": "^1.0.2",
-    "@abp/ng.account.config": "^1.0.2",
-    "tslib": "^1.9.0"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
+    "@abp/ng.account.config": "^1.0.3",
+    "@abp/ng.theme.shared": "^1.0.3",
   "main": "bundles/abp-ng.account.umd.js",
   "module": "fesm5/abp-ng.account.js",
   "es2015": "fesm2015/abp-ng.account.js",
