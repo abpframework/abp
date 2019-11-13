@@ -212,6 +212,8 @@ export class ErrorHandler {
 
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
+      this.componentRef.instance.appRef = this.appRef;
+      this.componentRef.instance.injector = this.injector;
       this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
     }
 
