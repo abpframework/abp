@@ -20,6 +20,9 @@ import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
 import { RootParams } from './models/common';
 import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { DateParserFormatter } from './utils/date-parser-formatter';
+import { DatePipe } from '@angular/common';
 
 export function appendScript(injector: Injector) {
   const fn = () => {
@@ -68,6 +71,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     TableSortDirective,
   ],
+  providers: [DatePipe],
   entryComponents: [ErrorComponent],
 })
 export class ThemeSharedModule {
@@ -88,6 +92,7 @@ export class ThemeSharedModule {
           useFactory: httpErrorConfigFactory,
           deps: [HTTP_ERROR_CONFIG],
         },
+        { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
       ],
     };
   }
