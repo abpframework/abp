@@ -145,6 +145,7 @@ public class CustomSettingValueProvider : SettingValueProvider
 Every provider should have a unique Name (which is "Custom" here). Built-in providers use the given names:
 
 * `DefaultValueSettingValueProvider`: "**D**".
+* `ConfigurationSettingValueProvider`: "**C**".
 * `GlobalSettingValueProvider`: "**G**".
 * `TenantSettingValueProvider`: "**T**".
 * `UserSettingValueProvider`: "**U**".
