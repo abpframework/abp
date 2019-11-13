@@ -36,6 +36,8 @@ export class ErrorComponent implements AfterViewInit, OnDestroy {
 
   destroy$: Subject<void>;
 
+  hideCloseIcon = false;
+
   @ViewChild('container', { static: false })
   containerRef: ElementRef<HTMLDivElement>;
 

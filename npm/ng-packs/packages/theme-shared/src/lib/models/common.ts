@@ -14,5 +14,6 @@ export interface HttpErrorConfig {
       | [ErrorScreenErrorCodes, ErrorScreenErrorCodes]
       | [ErrorScreenErrorCodes, ErrorScreenErrorCodes, ErrorScreenErrorCodes]
       | [ErrorScreenErrorCodes, ErrorScreenErrorCodes, ErrorScreenErrorCodes, ErrorScreenErrorCodes];
+    hideCloseIcon?: boolean;
   };
 }

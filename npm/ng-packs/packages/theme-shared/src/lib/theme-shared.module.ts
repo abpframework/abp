@@ -19,7 +19,7 @@ import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
 import { RootParams } from './models/common';
-import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/error-pages.token';
+import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
 
 export function appendScript(injector: Injector) {
   const fn = () => {
