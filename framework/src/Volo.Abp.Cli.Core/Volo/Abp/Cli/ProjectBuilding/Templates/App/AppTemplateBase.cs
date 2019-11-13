@@ -58,12 +58,16 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             switch (context.BuildArgs.UiFramework)
             {
                 case UiFramework.None:
-                case UiFramework.Angular:
-                    ConfigureHosts(context, steps);
+                    ConfigureWithoutUi(context, steps);
                     break;
+
+                case UiFramework.Angular:
+                    ConfigureWithAngularUi(context, steps);
+                    break;
+
                 case UiFramework.Mvc:
                 case UiFramework.NotSpecified:
-                    ConfigureMvcUi(context, steps);
+                    ConfigureWithMvcUi(context, steps);
                     break;
             }
 
@@ -73,7 +77,26 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             }
         }
 
-        private static void ConfigureMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        private static void ConfigureWithoutUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        {
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
+            steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Tests", projectFolderPath: "/aspnet-core/test/MyCompanyName.MyProjectName.Web.Tests"));
+
+            if (context.BuildArgs.ExtraProperties.ContainsKey("separate-identity-server"))
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
+            }
+            else
+            {
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.IdentityServer"));
+                steps.Add(new AppTemplateProjectRenameStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds", "MyCompanyName.MyProjectName.HttpApi.Host"));
+                steps.Add(new AppTemplateChangeConsoleTestClientPortSettingsStep("44305"));
+            }
+        }
+
+        private static void ConfigureWithMvcUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             if (context.BuildArgs.ExtraProperties.ContainsKey("tiered"))
             {
@@ -92,7 +115,7 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.HttpApi.HostWithIds"));
         }
 
-        private static void ConfigureHosts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
+        private static void ConfigureWithAngularUi(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
         {
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web"));
             steps.Add(new RemoveProjectFromSolutionStep("MyCompanyName.MyProjectName.Web.Host"));
