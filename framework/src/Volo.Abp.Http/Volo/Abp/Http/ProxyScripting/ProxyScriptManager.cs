@@ -7,6 +7,7 @@ using Volo.Abp.Http.Modeling;
 using Volo.Abp.Http.ProxyScripting.Configuration;
 using Volo.Abp.Http.ProxyScripting.Generators;
 using Volo.Abp.Json;
+using Volo.Abp.Minify.Scripts;
 
 namespace Volo.Abp.Http.ProxyScripting
 {
@@ -17,18 +18,21 @@ namespace Volo.Abp.Http.ProxyScripting
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IProxyScriptManagerCache _cache;
         private readonly AbpApiProxyScriptingOptions _options;
+        private readonly IJavascriptMinifier _javascriptMinifier;
 
         public ProxyScriptManager(
             IApiDescriptionModelProvider modelProvider, 
             IServiceProvider serviceProvider,
             IJsonSerializer jsonSerializer,
             IProxyScriptManagerCache cache,
-            IOptions<AbpApiProxyScriptingOptions> options)
+            IOptions<AbpApiProxyScriptingOptions> options, 
+            IJavascriptMinifier javascriptMinifier)
         {
             _modelProvider = modelProvider;
             _serviceProvider = serviceProvider;
             _jsonSerializer = jsonSerializer;
             _cache = cache;
+            _javascriptMinifier = javascriptMinifier;
             _options = options.Value;
         }
 
@@ -63,7 +67,8 @@ namespace Volo.Abp.Http.ProxyScripting
 
             using (var scope = _serviceProvider.CreateScope())
             {
-                return scope.ServiceProvider.GetRequiredService(generatorType).As<IProxyScriptGenerator>().CreateScript(apiModel);
+                var script = scope.ServiceProvider.GetRequiredService(generatorType).As<IProxyScriptGenerator>().CreateScript(apiModel);
+                return scriptingModel.Minify ? _javascriptMinifier.Minify(script) : script;
             }
         }
 
