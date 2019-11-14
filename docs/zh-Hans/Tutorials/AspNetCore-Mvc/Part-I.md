@@ -61,7 +61,7 @@ namespace Acme.BookStore
 
 #### BookType枚举
 
-上面所用到的`BookType`枚举定义如下:
+上面所用到的`BookType`枚举定义如下(需要在`Acme.BookStore.Domain.Shared`中定义):
 
 ````C#
 namespace Acme.BookStore
@@ -225,7 +225,7 @@ using Volo.Abp.Application.Services;
 namespace Acme.BookStore
 {
     public interface IBookAppService : 
-        IAsyncCrudAppService< //定义了CRUD方法
+        ICrudAppService< //定义了CRUD方法
             BookDto, //用来展示书籍
             Guid, //Book实体的主键
             PagedAndSortedResultRequestDto, //获取书籍的时候用于分页和排序
