@@ -34,6 +34,6 @@ jobs:
           node-version: '10.x'
       - run: |
           pwd
-          yarn ng
-          yarn symlink copy --angular --packages @abp/ng.core --sync-build
+          npm run ng
+          npm run symlink copy --angular --packages @abp/ng.core --sync-build
         working-directory: npm/ng-packs
