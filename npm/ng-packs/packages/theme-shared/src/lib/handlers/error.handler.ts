@@ -191,7 +191,6 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    console.warn(this.store.selectSnapshot(RouterState.url));
     this.store.dispatch(
       new Navigate(['/account/login'], null, { state: { redirectUrl: this.store.selectSnapshot(RouterState.url) } }),
     );
@@ -208,7 +207,6 @@ export class ErrorHandler {
         this.componentRef.instance[key] = instance[key];
       }
     }
-    console.warn(this.httpErrorConfig.errorScreen);
     this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
