@@ -1,4 +1,4 @@
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification.Styles
+namespace Volo.Abp.Minify.Styles
 {
     public interface ICssMinifier : IMinifier
     {

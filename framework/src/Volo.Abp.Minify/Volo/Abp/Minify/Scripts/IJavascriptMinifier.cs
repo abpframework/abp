@@ -1,4 +1,4 @@
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification.Scripts
+namespace Volo.Abp.Minify.Scripts
 {
     public interface IJavascriptMinifier : IMinifier
     {

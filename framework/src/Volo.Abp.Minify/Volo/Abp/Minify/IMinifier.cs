@@ -1,4 +1,4 @@
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification
+namespace Volo.Abp.Minify
 {
     public interface IMinifier
     {
