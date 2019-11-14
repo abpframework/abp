@@ -17,9 +17,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          node-version: '10.x'
+      - uses: nuxt/actions-yarn@node-10
       - run: |
           node -v
           yarn
