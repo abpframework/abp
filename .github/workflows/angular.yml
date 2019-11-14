@@ -22,5 +22,5 @@ jobs:
           node-version: '10.x'
       - run: |
           npm install
-          npm run symlink copy --angular --packages @abp/ng.core --sync-build
+          npm run symlink copy --angular --packages @abp/ng.core --sync-build --no-watch
         working-directory: npm/ng-packs
