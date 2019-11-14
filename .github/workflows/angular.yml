@@ -1,25 +1,24 @@
-name: "Angular build and test"
+name: 'Angular'
 on:
   pull_request:
     paths:
       - 'npm/ng-packs/**'
     branches:
-      - master
+      #- master
       - dev
   push:
     paths:
       - 'npm/ng-packs/**'
     branches:
-      - master
+      #- master
       - dev
 jobs:
-  install_build_test:
+  build-test-lint:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: nuxt/actions-yarn@node-10
-      - run: |
-          node -v
-          yarn
-          yarn symlink copy --angular --packages @abp/ng.core --sync-build --no-watch
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: yarn && yarn ci
         working-directory: npm/ng-packs
