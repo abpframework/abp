@@ -17,10 +17,11 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - uses: borales/actions-yarn@v2.0.0
         with:
           node-version: '10.x'
       - run: |
-          npm install
-          npm run symlink copy --angular --packages @abp/ng.core --sync-build --no-watch
+          node -v
+          yarn
+          yarn symlink copy --angular --packages @abp/ng.core --sync-build --no-watch
         working-directory: npm/ng-packs
