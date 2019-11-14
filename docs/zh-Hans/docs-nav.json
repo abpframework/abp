@@ -49,6 +49,10 @@
       "text": "基础知识",
       "items": [
         {
+          "text": "配置",
+          "path": "Configuration.md"
+        },
+        {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
           "items": [
@@ -82,9 +86,10 @@
         },
         {
           "text": "审计"
-        },
+        }, 
         {
-          "text": "设置管理"
+          "text": "设置管理",
+          "path": "Settings.md"
         }
       ]
     },
@@ -107,6 +112,10 @@
     {
       "text": "服务",
       "items": [
+        {
+          "text": "当前用户",
+          "path": "CurrentUser.md"
+        },
         {
           "text": "对象序列化"
         },

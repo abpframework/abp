@@ -106,9 +106,10 @@ Setting system is extensible, you can extend it by defining setting value provid
 
 `ISettingProvider` uses the setting value providers to obtain a setting value. It fallbacks to the next value provider if a value provider can not get the setting value.
 
-There are four pre-built setting value providers registered by the order below:
+There are 5 pre-built setting value providers registered by the order below:
 
 * `DefaultValueSettingValueProvider`: Gets the value from the default value of the setting definition, if set (see the SettingDefinition section above).
+* `ConfigurationSettingValueProvider`: Gets the value from the [IConfiguration service](Configuration.md).
 * `GlobalSettingValueProvider`: Gets the global (system-wide) value for a setting, if set.
 * `TenantSettingValueProvider`: Gets the setting value for the current tenant, if set (see the [multi-tenancy](Multi-Tenancy.md) document).
 * `UserSettingValueProvider`: Gets the setting value for the current user, if set (see the [current user](CurrentUser.md) document).
@@ -144,6 +145,7 @@ public class CustomSettingValueProvider : SettingValueProvider
 Every provider should have a unique Name (which is "Custom" here). Built-in providers use the given names:
 
 * `DefaultValueSettingValueProvider`: "**D**".
+* `ConfigurationSettingValueProvider`: "**C**".
 * `GlobalSettingValueProvider`: "**G**".
 * `TenantSettingValueProvider`: "**T**".
 * `UserSettingValueProvider`: "**U**".
@@ -169,7 +171,7 @@ While a setting value provider is free to use any source to get the setting valu
 
 `ISettingEncryptionService` is used to encrypt/decrypt setting values when `IsEncrypted` property of a setting definition was set to `true`.
 
-You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `IStringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](String-Encryption.md) for more).
+You can replace this service in the dependency injection system to customize the encryption/decryption process. Default implementation uses the `StringEncryptionService` which is implemented with the AES algorithm by default (see string [encryption document](String-Encryption.md) for more).
 
 ## Setting Management Module
 

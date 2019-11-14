@@ -5,6 +5,7 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/account-config.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class AccountConfigService {
@@ -54,6 +55,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/account-config.module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -102,11 +104,13 @@ AccountConfigModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: abp-ng.account.config.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

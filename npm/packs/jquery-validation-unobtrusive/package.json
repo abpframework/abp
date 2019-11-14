@@ -1,11 +1,11 @@
 {
-  "version": "1.0.2",
+  "version": "1.0.3",
   "name": "@abp/jquery-validation-unobtrusive",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery-validation": "^1.0.2",
+    "@abp/jquery-validation": "^1.0.3",
     "jquery-validation-unobtrusive": "^3.2.11"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
