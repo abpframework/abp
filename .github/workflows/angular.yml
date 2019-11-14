@@ -21,19 +21,6 @@ jobs:
         with:
           node-version: '10.x'
       - run: |
-          node -v
           npm install
-        working-directory: npm/ng-packs
-  build:
-    needs: [install]
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
-      - run: |
-          pwd
-          npm run ng
           npm run symlink copy --angular --packages @abp/ng.core --sync-build
         working-directory: npm/ng-packs
