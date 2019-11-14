@@ -8,6 +8,8 @@ import {
   OnDestroy,
   Type,
   ViewChild,
+  ApplicationRef,
+  Injector,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
@@ -18,7 +20,11 @@ import { debounceTime, filter } from 'rxjs/operators';
   styleUrls: ['error.component.scss'],
 })
 export class ErrorComponent implements AfterViewInit, OnDestroy {
+  appRef: ApplicationRef;
+
   cfRes: ComponentFactoryResolver;
+
+  injector: Injector;
 
   status = 0;
 
@@ -30,6 +36,8 @@ export class ErrorComponent implements AfterViewInit, OnDestroy {
 
   destroy$: Subject<void>;
 
+  hideCloseIcon = false;
+
   @ViewChild('container', { static: false })
   containerRef: ElementRef<HTMLDivElement>;
 
@@ -39,9 +47,10 @@ export class ErrorComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     if (this.customComponent) {
-      const customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(null);
+      const customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(this.injector);
       customComponentRef.instance.errorStatus = this.status;
       customComponentRef.instance.destroy$ = this.destroy$;
+      this.appRef.attachView(customComponentRef.hostView);
       this.containerRef.nativeElement.appendChild((customComponentRef.hostView as EmbeddedViewRef<any>).rootNodes[0]);
       customComponentRef.changeDetectorRef.detectChanges();
     }

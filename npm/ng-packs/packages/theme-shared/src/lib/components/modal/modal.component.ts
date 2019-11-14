@@ -109,8 +109,13 @@ export class ModalComponent implements OnDestroy {
   close() {
     if (this.busy) return;
 
+    let node: HTMLDivElement;
+    if (!this.modalContent) {
+      node = document.getElementById('modal-container') as HTMLDivElement;
+    }
+
     const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
+      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement).childNodes,
     );
 
     if (hasNgDirty(nodes)) {

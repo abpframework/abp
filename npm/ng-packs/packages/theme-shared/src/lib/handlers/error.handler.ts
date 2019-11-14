@@ -19,7 +19,6 @@ import { ErrorComponent } from '../components/error/error.component';
 import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
-import { HTTP_ERROR_CONFIG } from '../tokens/error-pages.token';
 
 export const DEFAULT_ERROR_MESSAGES = {
   defaultError: {
@@ -56,7 +55,7 @@ export class ErrorHandler {
     private cfRes: ComponentFactoryResolver,
     private rendererFactory: RendererFactory2,
     private injector: Injector,
-    @Inject(HTTP_ERROR_CONFIG) private httpErrorConfig: HttpErrorConfig,
+    @Inject('HTTP_ERROR_CONFIG') private httpErrorConfig: HttpErrorConfig,
   ) {
     this.actions.pipe(ofActionSuccessful(RestOccurError, RouterError, RouterDataResolved)).subscribe(res => {
       if (res instanceof RestOccurError) {
@@ -192,7 +191,6 @@ export class ErrorHandler {
   }
 
   private navigateToLogin() {
-    console.warn(this.store.selectSnapshot(RouterState.url));
     this.store.dispatch(
       new Navigate(['/account/login'], null, { state: { redirectUrl: this.store.selectSnapshot(RouterState.url) } }),
     );
@@ -209,9 +207,11 @@ export class ErrorHandler {
         this.componentRef.instance[key] = instance[key];
       }
     }
-
+    this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
     if (this.canCreateCustomError(instance.status as ErrorScreenErrorCodes)) {
       this.componentRef.instance.cfRes = this.cfRes;
+      this.componentRef.instance.appRef = this.appRef;
+      this.componentRef.instance.injector = this.injector;
       this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
     }
 

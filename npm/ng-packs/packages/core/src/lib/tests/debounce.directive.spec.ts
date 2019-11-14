@@ -6,7 +6,7 @@ describe('InputEventDebounceDirective', () => {
   let spectator: SpectatorDirective<InputEventDebounceDirective>;
   let directive: InputEventDebounceDirective;
   let input: HTMLInputElement;
-  let inputEventFn = jest.fn(() => {});
+  const inputEventFn = jest.fn(() => {});
 
   const createDirective = createDirectiveFactory({
     directive: InputEventDebounceDirective,

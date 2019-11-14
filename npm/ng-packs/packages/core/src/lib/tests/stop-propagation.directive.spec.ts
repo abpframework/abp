@@ -5,8 +5,8 @@ describe('ClickEventStopPropagationDirective', () => {
   let spectator: SpectatorDirective<ClickEventStopPropagationDirective>;
   let directive: ClickEventStopPropagationDirective;
   let link: HTMLAnchorElement;
-  let childClickEventFn = jest.fn(() => null);
-  let parentClickEventFn = jest.fn(() => null);
+  const childClickEventFn = jest.fn(() => null);
+  const parentClickEventFn = jest.fn(() => null);
   const createDirective = createDirectiveFactory({
     directive: ClickEventStopPropagationDirective,
   });
