@@ -56,7 +56,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             _accountOptions = accountOptions.Value;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
@@ -80,6 +80,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 //return await ExternalLogin(vm.ExternalLoginScheme, returnUrl);
                 throw new NotImplementedException();
             }
+
+            return Page();
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter

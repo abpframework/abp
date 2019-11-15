@@ -1,4 +1,4 @@
-﻿using IdentityModel;
+using IdentityModel;
 using IdentityServer4.Events;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
@@ -40,7 +40,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             IdentityServerEvents = identityServerEvents;
         }
 
-        public override async Task OnGetAsync()
+        public override async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
@@ -63,7 +63,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             {
                 LoginInput.UserNameOrEmailAddress = context.LoginHint;
                 ExternalProviders = new[] { new ExternalProviderModel { AuthenticationScheme = context.IdP } };
-                return;
+                return Page();
             }
 
             var schemes = await _schemeProvider.GetAllSchemesAsync();
@@ -96,9 +96,10 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             if (IsExternalLoginOnly)
             {
-                //return await ExternalLogin(vm.ExternalLoginScheme, returnUrl);
-                throw new NotImplementedException();
+                return await base.OnPostExternalLogin(providers.First().AuthenticationScheme);
             }
+
+            return Page();
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
