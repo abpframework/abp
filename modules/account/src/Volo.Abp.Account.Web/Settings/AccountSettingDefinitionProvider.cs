@@ -9,6 +9,10 @@ namespace Volo.Abp.Account.Web.Settings
             context.Add(
                 new SettingDefinition(AccountSettingNames.IsSelfRegistrationEnabled, "true")
             );
+
+            context.Add(
+                new SettingDefinition(AccountSettingNames.EnableLocalLogin, "true")
+            );
         }
     }
 }

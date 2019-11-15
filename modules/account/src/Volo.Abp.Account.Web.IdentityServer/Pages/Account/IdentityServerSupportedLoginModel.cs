@@ -12,8 +12,10 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using Volo.Abp.Account.Web.Settings;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Account.Web.Pages.Account
@@ -77,7 +79,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 })
                 .ToList();
 
-            EnableLocalLogin = true; //TODO: We can get default from a setting?
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
             if (context?.ClientId != null)
             {
                 var client = await ClientStore.FindEnabledClientByIdAsync(context.ClientId);
@@ -105,7 +107,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = true; //TODO: We can get default from a setting?
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             if (action == "Cancel")
             {
