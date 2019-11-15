@@ -117,7 +117,9 @@
           "path": "CurrentUser.md"
         },
         {
-          "text": "对象序列化"
+          "text": "对象到对象映射",
+          "path": "Object-To-Object-Mapping.md"
+
         },
         {
           "text": "JSON序列化"
