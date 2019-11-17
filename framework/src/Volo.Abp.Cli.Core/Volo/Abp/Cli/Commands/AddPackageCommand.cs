@@ -27,13 +27,50 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target == null)
             {
-                throw new CliUsageException("Package name is missing!" + Environment.NewLine + Environment.NewLine + GetUsageInfo());
+                throw new CliUsageException(
+                    "Package name is missing!" +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
             }
 
             await ProjectNugetPackageAdder.AddAsync(
                 GetProjectFile(commandLineArgs),
                 commandLineArgs.Target
             );
+        }
+
+        public string GetUsageInfo()
+        {
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("'add-package' command is used to add an ABP package to a project.");
+            sb.AppendLine("It should be used in a folder containing a .csproj file.");
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("");
+            sb.AppendLine("  abp add-package <package-name> [options]");
+            sb.AppendLine("");
+            sb.AppendLine("Options:");
+            sb.AppendLine("");
+            sb.AppendLine("  -p|--project <project-file>    Specify the project file explicitly.");
+            sb.AppendLine("");
+            sb.AppendLine("Examples:");
+            sb.AppendLine("");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the package to the current project.");
+            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+
+            return sb.ToString();
+        }
+
+        public string GetShortDescription()
+        {
+            return "Adds a new ABP package to a project by adding related nuget package" +
+                   " as a dependency to the project and adding [DependsOn(...)] attribute to" +
+                   " the module class in the project.";
         }
 
         protected virtual string GetProjectFile(CommandLineArgs commandLineArgs)
@@ -76,27 +113,6 @@ namespace Volo.Abp.Cli.Commands
             throw new CliUsageException(sb.ToString());
         }
 
-        protected virtual string GetUsageInfo()
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("");
-            sb.AppendLine("'add-package' command is used to add an ABP package to a project.");
-            sb.AppendLine("It should be used in a folder containing a .csproj file.");
-            sb.AppendLine("");
-            sb.AppendLine("Usage:");
-            sb.AppendLine("  abp add-package <package-name> [-p|--project]");
-            sb.AppendLine("");
-            sb.AppendLine("Options:");
-            sb.AppendLine("  -p|--project <project-file>    Specify the project file explicitly.");
-            sb.AppendLine("");
-            sb.AppendLine("Examples:");
-            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation                                  Adds the package to the current project.");
-            sb.AppendLine("  abp add-package Volo.Abp.FluentValidation -p Acme.BookStore.Application    Adds the package to the given project.");
-            sb.AppendLine("");
-
-            return sb.ToString();
-        }
 
         public static class Options
         {

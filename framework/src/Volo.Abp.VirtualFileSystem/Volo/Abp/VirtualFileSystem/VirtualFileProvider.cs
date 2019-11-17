@@ -11,9 +11,11 @@ namespace Volo.Abp.VirtualFileSystem
     public class VirtualFileProvider : IVirtualFileProvider, ISingletonDependency
     {
         private readonly IFileProvider _hybridFileProvider;
-        private readonly VirtualFileSystemOptions _options;
+        private readonly AbpVirtualFileSystemOptions _options;
 
-        public VirtualFileProvider(IOptions<VirtualFileSystemOptions> options, IDynamicFileProvider dynamicFileProvider)
+        public VirtualFileProvider(
+            IOptions<AbpVirtualFileSystemOptions> options,
+            IDynamicFileProvider dynamicFileProvider)
         {
             _options = options.Value;
             _hybridFileProvider = CreateHybridProvider(dynamicFileProvider);
@@ -58,10 +60,10 @@ namespace Volo.Abp.VirtualFileSystem
         {
             protected override IDictionary<string, IFileInfo> Files => _files.Value;
 
-            private readonly VirtualFileSystemOptions _options;
+            private readonly AbpVirtualFileSystemOptions _options;
             private readonly Lazy<Dictionary<string, IFileInfo>> _files;
 
-            public InternalVirtualFileProvider(VirtualFileSystemOptions options)
+            public InternalVirtualFileProvider(AbpVirtualFileSystemOptions options)
             {
                 _options = options;
                 _files = new Lazy<Dictionary<string, IFileInfo>>(
@@ -69,7 +71,7 @@ namespace Volo.Abp.VirtualFileSystem
                     true
                 );
             }
-            
+
             private Dictionary<string, IFileInfo> CreateFiles()
             {
                 var files = new Dictionary<string, IFileInfo>(StringComparer.OrdinalIgnoreCase);

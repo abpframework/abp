@@ -4,11 +4,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain;
 using Volo.Abp.EventBus.Distributed;
-using Volo.Abp.Identity.Localization;
-using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
-using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity
 {
@@ -21,19 +18,7 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
-            {
-                options.FileSets.AddEmbedded<AbpIdentityDomainModule>();
-            });
-
-            Configure<AbpLocalizationOptions>(options =>
-            {
-                options.Resources
-                    .Get<IdentityResource>()
-                    .AddVirtualJson("/Volo/Abp/Identity/Localization/Domain");
-            });
-
-            Configure<DistributedEventBusOptions>(options =>
+            Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();
             });

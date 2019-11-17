@@ -16,10 +16,11 @@ namespace Volo.Abp.BackgroundJobs.DemoApp.RabbitMq
     {
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
         {
-            context
-                .ServiceProvider
-                .GetRequiredService<ILoggerFactory>()
-                .AddConsole(LogLevel.Debug);
+            //TODO: Configure console logging
+            //context
+            //    .ServiceProvider
+            //    .GetRequiredService<ILoggerFactory>()
+            //    .AddConsole(LogLevel.Debug);
         }
     }
 }

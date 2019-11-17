@@ -25,7 +25,14 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .FirstOrDefaultAsync(t => t.Name == name, cancellationToken);
+                .FirstOrDefaultAsync(t => t.Name == name, GetCancellationToken(cancellationToken));
+        }
+
+        public Tenant FindByName(string name, bool includeDetails = true)
+        {
+            return DbSet
+                .IncludeDetails(includeDetails)
+                .FirstOrDefault(t => t.Name == name);
         }
 
         public virtual async Task<List<Tenant>> GetListAsync(
@@ -45,7 +52,17 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 )
                 .OrderBy(sorting ?? nameof(Tenant.Name))
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(cancellationToken);
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public async Task<long> GetCountAsync(string filter = null, CancellationToken cancellationToken = default)
+        {
+            return await this
+                .WhereIf(
+                    !filter.IsNullOrWhiteSpace(),
+                    u =>
+                        u.Name.Contains(filter)
+                ).CountAsync(cancellationToken: cancellationToken);
         }
 
         public override IQueryable<Tenant> WithDetails()

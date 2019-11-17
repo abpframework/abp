@@ -1,5 +1,14 @@
 {
-	"devDependencies": {
-		"lerna": "^2.11.0"
-	}
+  "scripts": {
+    "lerna": "lerna",
+    "gulp:app": "node abp-run-gulp-script.js ../templates/app/aspnet-core",
+    "gulp:module": "node abp-run-gulp-script.js ../templates/module/aspnet-core",
+    "ncu": "ncu",
+    "update:templates": "node abp-package-update-script.js ../templates"
+  },
+  "devDependencies": {
+    "lerna": "^3.18.4",
+    "npm-check-updates": "^3.1.25",
+    "glob": "^7.1.5"
+  }
 }

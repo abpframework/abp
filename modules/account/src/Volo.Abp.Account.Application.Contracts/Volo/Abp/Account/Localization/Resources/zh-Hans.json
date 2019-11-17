@@ -1,0 +1,23 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "UserName": "用户名称",
+    "EmailAddress": "邮箱地址",
+    "UserNameOrEmailAddress": "用户名称或邮箱地址",
+    "Password": "密码",
+    "RememberMe": "记住我",
+    "UseAnotherServiceToLogin": "使用另一个服务登录",
+    "UserLockedOutMessage": "登录失败,用户账户已被锁定.请稍后再试.",
+    "InvalidUserNameOrPassword": "用户名或密码错误!",
+    "LoginIsNotAllowed": "无法登录!你需要验证邮箱地址/手机号.",
+    "SelfRegistrationDisabledMessage": "应用程序未开放注册,请联系管理员添加新用户.",
+    "Login": "登录",
+    "Cancel": "取消",
+    "Register": "注册",
+    "AreYouANewUser": "你是新用户吗?",
+    "AlreadyRegistered": "已经注册过了?",
+    "InvalidLoginRequest": "登录请求无效",
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "没有为此客户端配置登录方案.",
+    "LogInUsingYourProviderAccount": "使用你的{0}帐户登录"
+  }
+}

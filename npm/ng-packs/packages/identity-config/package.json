@@ -1,0 +1,7 @@
+{
+  "name": "@abp/ng.identity.config",
+  "version": "1.0.3",
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -42,6 +42,10 @@
       ]
     },
     {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
       "text": "基础知识",
       "items": [
         {
@@ -73,7 +77,8 @@
           "text": "授权"
         },
         {
-          "text": "缓存"
+          "text": "缓存",
+          "path": "Caching.md"
         },
         {
           "text": "审计"
@@ -161,8 +166,7 @@
               "path": "Repositories.md"
             },
             {
-              "text": "领域服务",
-              "path": "Domain-Services.md"
+              "text": "领域服务"
             },
             {
               "text": "规约"
@@ -191,16 +195,16 @@
       "items": [
         {
           "text": "API",
-           "items": [
-             {
-               "text": "自动API控制器",
-               "path": "AspNetCore/Auto-API-Controllers.md"
-             },
-             {
+          "items": [
+            {
+              "text": "自动API控制器",
+              "path": "AspNetCore/Auto-API-Controllers.md"
+            },
+            {
               "text": "动态C# API客户端",
               "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
             }
-           ]
+          ]
         },
         {
           "text": "用户界面",
@@ -215,7 +219,11 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "Tag-Helpers.md"
+              "path": "AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "仪表板和小部件(Widget)系统",
+              "path": "AspNetCore/Widgets.md"
             },
             {
               "text": "主题化",
@@ -230,11 +238,21 @@
       "items": [
         {
           "text": "Entity Framework Core 集成",
-          "path": "Entity-Framework-Core.md"
+          "path": "Entity-Framework-Core.md",
+          "items": [            
+            {
+              "text": "PostgreSQL 集成",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
         },
         {
           "text": "MongoDB 集成",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper 集成",
+          "path": "Dapper.md"
         }
       ]
     },

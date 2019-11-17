@@ -4,7 +4,7 @@ namespace Volo.Abp.Security.Encryption
 {
     /// <summary>
     /// Can be used to simply encrypt/decrypt texts.
-    /// Use <see cref="StringEncryptionOptions"/> to configure default values.
+    /// Use <see cref="AbpStringEncryptionOptions"/> to configure default values.
     /// </summary>
     public interface IStringEncryptionService
     {

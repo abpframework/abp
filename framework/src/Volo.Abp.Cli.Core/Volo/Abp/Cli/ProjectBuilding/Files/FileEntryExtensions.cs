@@ -4,6 +4,13 @@ namespace Volo.Abp.Cli.ProjectBuilding.Files
 {
     public static class FileEntryExtensions
     {
+        public static FileEntry ReplaceText(this FileEntry file, string oldText, string newText)
+        {
+            file.NormalizeLineEndings();
+            file.SetContent(file.Content.Replace(oldText, newText));
+            return file;
+        }
+
         public static void RemoveTemplateCode(this FileEntry file)
         {
             RemoveMarkedTemplateCode(file, "<TEMPLATE-REMOVE>");

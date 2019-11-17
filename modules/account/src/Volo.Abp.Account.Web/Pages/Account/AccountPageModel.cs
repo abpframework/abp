@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using Volo.Abp.Account.Web.Localization;
+using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Identity;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -14,7 +14,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
     {
         public SignInManager<IdentityUser> SignInManager { get; set; }
         public IdentityUserManager UserManager { get; set; }
-        public IStringLocalizer<AccountResource> L { get; set; }
+
+        protected AccountPageModel()
+        {
+            LocalizationResourceType = typeof(AccountResource);
+            ObjectMapperContext = typeof(AbpAccountWebModule);
+        }
 
         protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
         {

@@ -13,6 +13,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers
 
         void Init(TagHelperContext context);
 
+        void Process(TagHelperContext context, TagHelperOutput output);
+
         Task ProcessAsync(TagHelperContext context, TagHelperOutput output);
     }
 }

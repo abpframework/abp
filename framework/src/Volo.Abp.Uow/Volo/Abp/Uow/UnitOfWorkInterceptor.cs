@@ -10,9 +10,9 @@ namespace Volo.Abp.Uow
     public class UnitOfWorkInterceptor : AbpInterceptor, ITransientDependency
     {
         private readonly IUnitOfWorkManager _unitOfWorkManager;
-        private readonly UnitOfWorkDefaultOptions _defaultOptions;
+        private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
 
-        public UnitOfWorkInterceptor(IUnitOfWorkManager unitOfWorkManager, IOptions<UnitOfWorkDefaultOptions> options)
+        public UnitOfWorkInterceptor(IUnitOfWorkManager unitOfWorkManager, IOptions<AbpUnitOfWorkDefaultOptions> options)
         {
             _unitOfWorkManager = unitOfWorkManager;
             _defaultOptions = options.Value;
@@ -48,9 +48,9 @@ namespace Volo.Abp.Uow
             }
         }
 
-        private UnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
+        private AbpUnitOfWorkOptions CreateOptions(IAbpMethodInvocation invocation, [CanBeNull] UnitOfWorkAttribute unitOfWorkAttribute)
         {
-            var options = new UnitOfWorkOptions();
+            var options = new AbpUnitOfWorkOptions();
 
             unitOfWorkAttribute?.SetOptions(options);
 

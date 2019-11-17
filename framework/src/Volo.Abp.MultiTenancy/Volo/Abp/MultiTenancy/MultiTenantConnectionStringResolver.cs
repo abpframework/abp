@@ -4,7 +4,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.MultiTenancy
 {
@@ -15,7 +14,7 @@ namespace Volo.Abp.MultiTenancy
         private readonly IServiceProvider _serviceProvider;
 
         public MultiTenantConnectionStringResolver(
-            IOptionsSnapshot<DbConnectionOptions> options,
+            IOptionsSnapshot<AbpDbConnectionOptions> options,
             ICurrentTenant currentTenant,
             IServiceProvider serviceProvider)
             : base(options)
@@ -38,7 +37,7 @@ namespace Volo.Abp.MultiTenancy
                     .ServiceProvider
                     .GetRequiredService<ITenantStore>();
 
-                var tenant = AsyncHelper.RunSync(() => tenantStore.FindAsync(_currentTenant.Id.Value)); //TODO: Can we avoid from RunSync?
+                var tenant = tenantStore.Find(_currentTenant.Id.Value);
 
                 if (tenant?.ConnectionStrings == null)
                 {

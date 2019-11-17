@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
@@ -26,23 +28,36 @@ namespace Volo.Docs
             {
                 options.AddAssemblyResource(typeof(DocsResource), typeof(DocsWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(DocsWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
             });
 
+            var configuration = context.Services.GetConfiguration();
+
             Configure<RazorPagesOptions>(options =>
             {
-                //TODO: Make configurable!
-                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}");
+                var docsOptions = context.Services
+                    .GetRequiredServiceLazy<IOptions<DocsUiOptions>>()
+                    .Value.Value;
 
-                options.Conventions.AddPageRoute("/Documents/Project/Index", "documents/{projectName}/{version}/{*documentName}");
+                var routePrefix = docsOptions.RoutePrefix;
+
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}");
+                options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
             });
 
+            context.Services.AddAutoMapperObjectMapper<DocsWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsWebAutoMapperProfile>(validate: true);
@@ -53,7 +68,7 @@ namespace Volo.Docs
                 options.Converters[MarkdownDocumentToHtmlConverter.Type] = typeof(MarkdownDocumentToHtmlConverter);
             });
 
-            Configure<BundleContributorOptions>(options =>
+            Configure<AbpBundleContributorOptions>(options =>
             {
                 options
                     .Extensions<PrismjsStyleBundleContributor>()

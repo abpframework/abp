@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity
 
         private void AddUserPermissions()
         {
-            var david = _userRepository.FindByNormalizedUserName(_lookupNormalizer.Normalize("david"));
+            var david = _userRepository.FindByNormalizedUserName(_lookupNormalizer.NormalizeName("david"));
             AddPermission(TestPermissionNames.MyPermission1, UserPermissionValueProvider.ProviderName, david.Id.ToString());
         }
 

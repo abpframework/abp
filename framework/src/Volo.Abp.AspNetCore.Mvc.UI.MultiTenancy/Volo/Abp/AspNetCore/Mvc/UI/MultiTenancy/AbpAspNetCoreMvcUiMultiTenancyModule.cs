@@ -1,4 +1,5 @@
-﻿using Volo.Abp.AspNetCore.MultiTenancy;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy.Localization;
@@ -25,11 +26,16 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
                     typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly
                 );
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAspNetCoreMvcUiMultiTenancyModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAspNetCoreMvcUiMultiTenancyModule>();
             });
@@ -41,7 +47,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy
                     .AddVirtualJson("/Volo/Abp/AspNetCore/Mvc/UI/MultiTenancy/Localization");
             });
 
-            Configure<BundlingOptions>(options =>
+            Configure<AbpBundlingOptions>(options =>
             {
                 options.ScriptBundles
                     .Get(StandardBundles.Scripts.Global)

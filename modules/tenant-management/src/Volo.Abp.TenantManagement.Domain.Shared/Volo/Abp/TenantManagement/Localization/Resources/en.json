@@ -1,0 +1,20 @@
+{
+  "culture": "en",
+  "texts": {
+    "Menu:TenantManagement": "Tenant management",
+    "Tenants": "Tenants",
+    "NewTenant": "New tenant",
+    "TenantName": "Tenant name",
+    "DisplayName:TenantName": "Tenant name",
+    "TenantDeletionConfirmationMessage": "Tenant '{0}' will be deleted. Do you confirm that?",
+    "ConnectionStrings": "Connection Strings",
+    "DisplayName:DefaultConnectionString": "Default Connection String",
+    "DisplayName:UseSharedDatabase": "Use the Shared Database",
+    "Permission:TenantManagement": "Tenant management",
+    "Permission:Create": "Create",
+    "Permission:Edit": "Edit",
+    "Permission:Delete": "Delete",
+    "Permission:ManageConnectionStrings": "Manage connection strings",
+    "Permission:ManageFeatures": "Manage features"
+  }
+}

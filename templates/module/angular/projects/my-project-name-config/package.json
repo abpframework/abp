@@ -1,0 +1,7 @@
+{
+  "name": "my-project-name.config",
+  "version": "0.0.1",
+  "peerDependencies": {
+    "@abp/ng.core": ">=1.0.4"
+  }
+}

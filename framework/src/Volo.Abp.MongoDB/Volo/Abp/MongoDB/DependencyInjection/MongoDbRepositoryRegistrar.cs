@@ -5,9 +5,9 @@ using Volo.Abp.Domain.Repositories.MongoDB;
 
 namespace Volo.Abp.MongoDB.DependencyInjection
 {
-    public class MongoDbRepositoryRegistrar : RepositoryRegistrarBase<MongoDbContextRegistrationOptions>
+    public class MongoDbRepositoryRegistrar : RepositoryRegistrarBase<AbpMongoDbContextRegistrationOptions>
     {
-        public MongoDbRepositoryRegistrar(MongoDbContextRegistrationOptions options)
+        public MongoDbRepositoryRegistrar(AbpMongoDbContextRegistrationOptions options)
             : base(options)
         {
 
@@ -20,7 +20,7 @@ namespace Volo.Abp.MongoDB.DependencyInjection
 
         protected override Type GetRepositoryType(Type dbContextType, Type entityType)
         {
-            return typeof(MongoDbRepository<,,>).MakeGenericType(dbContextType, entityType);
+            return typeof(MongoDbRepository<,>).MakeGenericType(dbContextType, entityType);
         }
 
         protected override Type GetRepositoryType(Type dbContextType, Type entityType, Type primaryKeyType)

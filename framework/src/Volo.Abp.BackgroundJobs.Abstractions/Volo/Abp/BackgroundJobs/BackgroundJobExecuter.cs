@@ -10,9 +10,9 @@ namespace Volo.Abp.BackgroundJobs
     {
         public ILogger<BackgroundJobExecuter> Logger { protected get; set; }
 
-        protected BackgroundJobOptions Options { get; }
+        protected AbpBackgroundJobOptions Options { get; }
 
-        public BackgroundJobExecuter(IOptions<BackgroundJobOptions> options)
+        public BackgroundJobExecuter(IOptions<AbpBackgroundJobOptions> options)
         {
             Options = options.Value;
 

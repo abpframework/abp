@@ -22,5 +22,10 @@ namespace Volo.Abp.IdentityServer
         /// Default: true.
         /// </summary>
         public bool IntegrateToAspNetIdentity { get; set; } = true;
+
+        /// <summary>
+        /// Set false to suppress AddDeveloperSigningCredential() call on the IIdentityServerBuilder.
+        /// </summary>
+        public bool AddDeveloperSigningCredential { get; set; } = true;
     }
 }

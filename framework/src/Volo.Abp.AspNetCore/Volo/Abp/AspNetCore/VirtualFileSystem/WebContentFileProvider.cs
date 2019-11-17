@@ -14,15 +14,15 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
     {
         private readonly IVirtualFileProvider _virtualFileProvider;
         private readonly IFileProvider _fileProvider;
-        private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private string _rootPath = "/wwwroot"; //TODO: How to handle wwwroot naming?
 
-        protected AspNetCoreContentOptions Options { get; }
+        protected AbpAspNetCoreContentOptions Options { get; }
 
         public WebContentFileProvider(
-            IVirtualFileProvider virtualFileProvider, 
-            IHostingEnvironment hostingEnvironment,
-            IOptions<AspNetCoreContentOptions> options)
+            IVirtualFileProvider virtualFileProvider,
+            IWebHostEnvironment hostingEnvironment,
+            IOptions<AbpAspNetCoreContentOptions> options)
         {
             _virtualFileProvider = virtualFileProvider;
             _hostingEnvironment = hostingEnvironment;

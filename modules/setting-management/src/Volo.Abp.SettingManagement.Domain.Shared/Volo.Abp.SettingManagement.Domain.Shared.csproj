@@ -14,7 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+    <EmbeddedResource Include="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
+    <Content Remove="Volo\Abp\SettingManagement\Localization\Resources\AbpSettingManagement\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>
 
 </Project>

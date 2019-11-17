@@ -33,15 +33,33 @@ namespace Volo.Abp.AuditLogging
             Logger = NullLogger<AuditingStore>.Instance;
         }
 
-        private async Task SaveLogAsync(AuditLogInfo auditInfo)
+        public void Save(AuditLogInfo auditInfo)
         {
-            using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
+            if (!Options.HideErrors)
             {
-                var auditLog = new AuditLog(_guidGenerator, auditInfo);
-                await _auditLogRepository.InsertAsync(auditLog);
-                await uow.SaveChangesAsync();
+                SaveLog(auditInfo);
+                return;
+            }
+
+            try
+            {
+                SaveLog(auditInfo);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogException(ex, LogLevel.Error);
             }
         }
+
+        protected virtual void SaveLog(AuditLogInfo auditInfo)
+        {
+            using (var uow = _unitOfWorkManager.Begin(true))
+            {
+                _auditLogRepository.Insert(new AuditLog(_guidGenerator, auditInfo));
+                uow.SaveChanges();
+            }
+        }
+
         public async Task SaveAsync(AuditLogInfo auditInfo)
         {
             if (!Options.HideErrors)
@@ -57,6 +75,15 @@ namespace Volo.Abp.AuditLogging
             catch (Exception ex)
             {
                 Logger.LogException(ex, LogLevel.Error);
+            }
+        }
+
+        protected virtual async Task SaveLogAsync(AuditLogInfo auditInfo)
+        {
+            using (var uow = _unitOfWorkManager.Begin(true))
+            {
+                await _auditLogRepository.InsertAsync(new AuditLog(_guidGenerator, auditInfo));
+                await uow.SaveChangesAsync();
             }
         }
     }

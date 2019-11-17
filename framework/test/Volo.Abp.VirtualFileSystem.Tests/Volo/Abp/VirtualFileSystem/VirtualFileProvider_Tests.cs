@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -32,12 +33,25 @@ namespace Volo.Abp.VirtualFileSystem
             }
         }
 
+        [Fact]
+        public void Should_Define_And_Get_Embedded_Directory_Contents()
+        {
+            //Act
+            var contents = _virtualFileProvider.GetDirectoryContents("/js");
+
+            //Assert
+            contents.Exists.ShouldNotBeNull();
+
+            var contentList = contents.ToList();
+            contentList.ShouldContain(x => x.Name == "jquery-3-1-1-min.js");
+        }
+
         [DependsOn(typeof(AbpVirtualFileSystemModule))]
         public class TestModule : AbpModule
         {
             public override void ConfigureServices(ServiceConfigurationContext context)
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.AddEmbedded<TestModule>("Volo.Abp.VirtualFileSystem.MyResources");
                 });

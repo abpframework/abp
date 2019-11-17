@@ -17,7 +17,7 @@ namespace Volo.Abp.Http.Client
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var configuration = context.Services.GetConfiguration();
-            Configure<RemoteServiceOptions>(configuration);
+            Configure<AbpRemoteServiceOptions>(configuration);
         }
     }
 }

@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"],
+    "paths": {
+      "@abp/ng.core/*": ["packages/core/src/lib/*"]
+    }
+  },
+  "include": ["**/*.spec.ts", "**/*.d.ts"]
+}

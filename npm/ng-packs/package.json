@@ -1,0 +1,107 @@
+{
+  "scripts": {
+    "start": "ng serve dev-app",
+    "ng": "ng",
+    "test": "ng test",
+    "symlink": "symlink",
+    "abpng": "abpng",
+    "commit": "git-cz",
+    "lint": "ng lint --fix",
+    "scripts:build": "cd scripts && npm install && npm run build"
+  },
+  "devDependencies": {
+    "@abp/ng.account.config": "^1.0.3",
+    "@abp/ng.core": "^1.0.3",
+    "@abp/ng.feature-management": "^1.0.3",
+    "@abp/ng.identity.config": "^1.0.3",
+    "@abp/ng.permission-management": "^1.0.3",
+    "@abp/ng.setting-management.config": "^1.0.3",
+    "@abp/ng.tenant-management.config": "^1.0.3",
+    "@abp/ng.theme.shared": "^1.0.3",
+    "@abp/ng.theme.basic": "^1.0.3",
+    "@abp/ng.account": "^1.0.3",
+    "@abp/ng.identity": "^1.0.3",
+    "@abp/ng.setting-management": "^1.0.3",
+    "@abp/ng.tenant-management": "^1.0.3",
+    "@angular-builders/jest": "^8.2.0",
+    "@angular-devkit/build-angular": "~0.803.18",
+    "@angular-devkit/build-ng-packagr": "~0.803.18",
+    "@angular/animations": "~8.2.13",
+    "@angular/cdk": "^8.2.3",
+    "@angular/cli": "~8.3.18",
+    "@angular/common": "~8.2.13",
+    "@angular/compiler": "~8.2.13",
+    "@angular/compiler-cli": "~8.2.13",
+    "@angular/core": "~8.2.13",
+    "@angular/forms": "~8.2.13",
+    "@angular/language-service": "~8.2.13",
+    "@angular/platform-browser": "~8.2.13",
+    "@angular/platform-browser-dynamic": "~8.2.13",
+    "@angular/router": "~8.2.13",
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "@ngneat/spectator": "^4.5.0",
+    "@ngx-validate/core": "^0.0.7",
+    "@ngxs/devtools-plugin": "^3.5.1",
+    "@ngxs/logger-plugin": "^3.5.1",
+    "@ngxs/router-plugin": "^3.5.1",
+    "@ngxs/storage-plugin": "^3.5.1",
+    "@ngxs/store": "^3.5.1",
+    "@types/jest": "^24.0.18",
+    "@types/node": "~8.9.4",
+    "angular-oauth2-oidc": "^8.0.4",
+    "bootstrap": "^4.3.1",
+    "chart.js": "^2.9.2",
+    "codelyzer": "^5.1.2",
+    "cz-conventional-changelog": "3.0.2",
+    "font-awesome": "^4.7.0",
+    "husky": "^3.0.9",
+    "jest": "^24.9.0",
+    "jest-canvas-mock": "^2.1.2",
+    "jest-preset-angular": "^7.1.1",
+    "just-clone": "3.1.0",
+    "just-compare": "^1.3.0",
+    "lint-staged": "^9.4.2",
+    "ng-packagr": "^5.5.0",
+    "ngx-perfect-scrollbar": "^8.0.0",
+    "ngxs-reset-plugin": "^1.2.0",
+    "ngxs-schematic": "^1.1.9",
+    "prettier": "^1.18.2",
+    "primeicons": "^2.0.0",
+    "primeng": "^8.1.1",
+    "protractor": "~5.4.0",
+    "rxjs": "~6.4.0",
+    "snq": "^1.0.3",
+    "symlink-manager": "^1.3.0",
+    "ts-node": "~7.0.0",
+    "tsickle": "^0.37.0",
+    "tslint": "~5.20.0",
+    "typescript": "~3.5.3",
+    "zone.js": "~0.9.1"
+  },
+  "dependencies": {
+    "tslib": "^1.10.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,html,json,md,yaml,yml}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.ts": [
+      "prettier --write",
+      "tslint --fix",
+      "git add"
+    ],
+    "dist/*": []
+  }
+}

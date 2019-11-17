@@ -31,10 +31,10 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
         protected ICorrelationIdProvider CorrelationIdProvider { get; }
         protected ICurrentTenant CurrentTenant { get; }
-        protected CorrelationIdOptions CorrelationIdOptions { get; }
+        protected AbpCorrelationIdOptions AbpCorrelationIdOptions { get; }
         protected IDynamicProxyHttpClientFactory HttpClientFactory { get; }
         protected IApiDescriptionFinder ApiDescriptionFinder { get; }
-        protected RemoteServiceOptions RemoteServiceOptions { get; }
+        protected AbpRemoteServiceOptions AbpRemoteServiceOptions { get; }
         protected AbpHttpClientOptions ClientOptions { get; }
         protected IJsonSerializer JsonSerializer { get; }
         protected IRemoteServiceHttpClientAuthenticator ClientAuthenticator { get; }
@@ -51,25 +51,25 @@ namespace Volo.Abp.Http.Client.DynamicProxying
         public DynamicHttpProxyInterceptor(
             IDynamicProxyHttpClientFactory httpClientFactory,
             IOptions<AbpHttpClientOptions> clientOptions,
-            IOptionsSnapshot<RemoteServiceOptions> remoteServiceOptions,
+            IOptionsSnapshot<AbpRemoteServiceOptions> remoteServiceOptions,
             IApiDescriptionFinder apiDescriptionFinder,
             IJsonSerializer jsonSerializer,
             IRemoteServiceHttpClientAuthenticator clientAuthenticator,
             ICancellationTokenProvider cancellationTokenProvider,
             ICorrelationIdProvider correlationIdProvider, 
-            IOptions<CorrelationIdOptions> correlationIdOptions,
+            IOptions<AbpCorrelationIdOptions> correlationIdOptions,
             ICurrentTenant currentTenant)
         {
             CancellationTokenProvider = cancellationTokenProvider;
             CorrelationIdProvider = correlationIdProvider;
             CurrentTenant = currentTenant;
-            CorrelationIdOptions = correlationIdOptions.Value;
+            AbpCorrelationIdOptions = correlationIdOptions.Value;
             HttpClientFactory = httpClientFactory;
             ApiDescriptionFinder = apiDescriptionFinder;
             JsonSerializer = jsonSerializer;
             ClientAuthenticator = clientAuthenticator;
             ClientOptions = clientOptions.Value;
-            RemoteServiceOptions = remoteServiceOptions.Value;
+            AbpRemoteServiceOptions = remoteServiceOptions.Value;
 
             Logger = NullLogger<DynamicHttpProxyInterceptor<TService>>.Instance;
         }
@@ -128,41 +128,41 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         private async Task<string> MakeRequestAsync(IAbpMethodInvocation invocation)
         {
-            using (var client = HttpClientFactory.Create())
+            var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
+            var remoteServiceConfig = AbpRemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+
+            var client = HttpClientFactory.Create(clientConfig.RemoteServiceName);
+
+            var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
+            var apiVersion = GetApiVersionInfo(action);
+            var url = remoteServiceConfig.BaseUrl.EnsureEndsWith('/') + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+
+            var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
             {
-                var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService)) ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
-                var remoteServiceConfig = RemoteServiceOptions.RemoteServices.GetConfigurationOrDefault(clientConfig.RemoteServiceName);
+                Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, JsonSerializer, apiVersion)
+            };
 
-                var action = await ApiDescriptionFinder.FindActionAsync(remoteServiceConfig.BaseUrl, typeof(TService), invocation.Method);
-                var apiVersion = GetApiVersionInfo(action);
-                var url = remoteServiceConfig.BaseUrl + UrlBuilder.GenerateUrlWithParameters(action, invocation.ArgumentsDictionary, apiVersion);
+            AddHeaders(invocation, action, requestMessage, apiVersion);
 
-                var requestMessage = new HttpRequestMessage(action.GetHttpMethod(), url)
-                {
-                    Content = RequestPayloadBuilder.BuildContent(action, invocation.ArgumentsDictionary, JsonSerializer, apiVersion)
-                };
+            await ClientAuthenticator.Authenticate(
+                new RemoteServiceHttpClientAuthenticateContext(
+                    client,
+                    requestMessage,
+                    remoteServiceConfig,
+                    clientConfig.RemoteServiceName
+                )
+            );
 
-                AddHeaders(invocation, action, requestMessage, apiVersion);
+            var response = await client.SendAsync(requestMessage, GetCancellationToken());
 
-                await ClientAuthenticator.Authenticate(
-                    new RemoteServiceHttpClientAuthenticateContext(
-                        client,
-                        requestMessage,
-                        remoteServiceConfig,
-                        clientConfig.RemoteServiceName
-                    )
-                );
-
-                var response = await client.SendAsync(requestMessage, GetCancellationToken());
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    await ThrowExceptionForResponseAsync(response);
-                }
-
-                return await response.Content.ReadAsStringAsync();
+            if (!response.IsSuccessStatusCode)
+            {
+                await ThrowExceptionForResponseAsync(response);
             }
-        }
+
+            return await response.Content.ReadAsStringAsync();
+        } 
+        
 
         private ApiVersionInfo GetApiVersionInfo(ActionApiDescriptionModel action)
         {
@@ -215,21 +215,25 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             }
 
             //CorrelationId
-            requestMessage.Headers.Add(CorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
+            requestMessage.Headers.Add(AbpCorrelationIdOptions.HttpHeaderName, CorrelationIdProvider.Get());
 
             //TenantId
             if (CurrentTenant.Id.HasValue)
             {
-                //TODO: Use AspNetCoreMultiTenancyOptions to get the key
+                //TODO: Use AbpAspNetCoreMultiTenancyOptions to get the key
                 requestMessage.Headers.Add(TenantResolverConsts.DefaultTenantKey, CurrentTenant.Id.Value.ToString());
             }
 
+            //Culture
             //TODO: Is that the way we want? Couldn't send the culture (not ui culture)
             var currentCulture = CultureInfo.CurrentUICulture.Name ?? CultureInfo.CurrentCulture.Name;
             if (!currentCulture.IsNullOrEmpty())
             {
                 requestMessage.Headers.AcceptLanguage.Add(new StringWithQualityHeaderValue(currentCulture));
             }
+
+            //X-Requested-With
+            requestMessage.Headers.Add("X-Requested-With", "XMLHttpRequest");
         }
 
         private string GetConfiguredApiVersion()
@@ -237,8 +241,8 @@ namespace Volo.Abp.Http.Client.DynamicProxying
             var clientConfig = ClientOptions.HttpClientProxies.GetOrDefault(typeof(TService))
                                ?? throw new AbpException($"Could not get DynamicHttpClientProxyConfig for {typeof(TService).FullName}.");
 
-            return RemoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
-                   ?? RemoteServiceOptions.RemoteServices.Default?.Version;
+            return AbpRemoteServiceOptions.RemoteServices.GetOrDefault(clientConfig.RemoteServiceName)?.Version
+                   ?? AbpRemoteServiceOptions.RemoteServices.Default?.Version;
         }
 
         private async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)

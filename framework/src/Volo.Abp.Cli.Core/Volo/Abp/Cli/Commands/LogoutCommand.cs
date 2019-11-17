@@ -23,5 +23,15 @@ namespace Volo.Abp.Cli.Commands
         {
             return AuthService.LogoutAsync();
         }
+
+        public string GetUsageInfo()
+        {
+            return string.Empty;
+        }
+
+        public string GetShortDescription()
+        {
+            return string.Empty;
+        }
     }
 }

@@ -1,0 +1,51 @@
+<div class="card shadow-sm rounded mb-3">
+  <div class="card-body px-5">
+    <div class="row">
+      <div class="col">
+        <span style="font-size: 0.8em;" class="text-uppercase text-muted">{{
+          'AbpUiMultiTenancy::Tenant' | abpLocalization
+        }}</span
+        ><br />
+        <h6 class="m-0 d-inline-block">
+          <span>
+            {{ tenantName || ('AbpUiMultiTenancy::NotSelected' | abpLocalization) }}
+          </span>
+        </h6>
+      </div>
+      <div class="col-auto">
+        <a
+          id="AbpTenantSwitchLink"
+          href="javascript:void(0);"
+          class="btn btn-sm mt-3 btn-outline-primary"
+          (click)="onSwitch()"
+          >{{ 'AbpUiMultiTenancy::Switch' | abpLocalization }}</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+
+<abp-modal size="md" [(visible)]="isModalVisible" [busy]="inProgress">
+  <ng-template #abpHeader>
+    <h5>Switch Tenant</h5>
+  </ng-template>
+  <ng-template #abpBody>
+    <form (ngSubmit)="save()">
+      <div class="mt-2">
+        <div class="form-group">
+          <label for="name">{{ 'AbpUiMultiTenancy::Name' | abpLocalization }}</label>
+          <input [(ngModel)]="tenant.name" type="text" id="name" name="tenant" class="form-control" autofocus />
+        </div>
+        <p>{{ 'AbpUiMultiTenancy::SwitchTenantHint' | abpLocalization }}</p>
+      </div>
+    </form>
+  </ng-template>
+  <ng-template #abpFooter>
+    <button #abpClose type="button" class="btn btn-secondary">
+      {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
+    </button>
+    <abp-button buttonType="button" buttonClass="btn btn-primary" (click)="save()">
+      <i class="fa fa-check mr-1"></i> <span>{{ 'AbpTenantManagement::Save' | abpLocalization }}</span>
+    </abp-button>
+  </ng-template>
+</abp-modal>

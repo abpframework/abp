@@ -4,7 +4,7 @@
     "Hello <b>{0}</b>.": "Olá <b>{0}</b>.",
     "Car": "Carro",
     "CarPlural": "Carros",
-    "MaxLenghtErrorMessage": "O comprimento deste campo pode ser no máximo de '{0}' caracteres",
+    "MaxLenghtErrorMessage": "Este campo pode ter no máximo '{0}' caracteres",
     "Universe": "Universo",
     "FortyTwo": "Quarenta e Dois"
   }

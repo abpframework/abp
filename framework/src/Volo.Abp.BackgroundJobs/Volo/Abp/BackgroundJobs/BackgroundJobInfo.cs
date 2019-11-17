@@ -10,8 +10,7 @@ namespace Volo.Abp.BackgroundJobs
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Type of the job.
-        /// It's AssemblyQualifiedName of job type.
+        /// Name of the job.
         /// </summary>
         public virtual string JobName { get; set; }
 

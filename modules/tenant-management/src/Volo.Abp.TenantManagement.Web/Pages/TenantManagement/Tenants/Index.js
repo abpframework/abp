@@ -46,7 +46,7 @@
                                     visible: abp.auth.isGranted('AbpTenantManagement.Tenants.ManageFeatures'),
                                     action: function (data) {
                                         _featuresModal.open({
-                                            providerName: 'Tenant',
+                                            providerName: 'T',
                                             providerKey: data.record.id
                                         });
                                     }

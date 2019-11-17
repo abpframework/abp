@@ -14,14 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Volo\Abp\FeatureManagement\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.FeatureManagement.Domain.Shared\Volo.Abp.FeatureManagement.Domain.Shared.csproj" />
   </ItemGroup>
 

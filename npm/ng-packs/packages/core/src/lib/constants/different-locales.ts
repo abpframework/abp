@@ -1,0 +1,33 @@
+// Different locales from .NET
+// Key is .NET locale, value is Angular locale
+
+export default {
+  'ar-sa': 'ar-SA',
+  'ca-ES-valencia': 'ca-ES-VALENCIA',
+  'de-de': 'de',
+  'es-ES': 'es',
+  'en-US': 'en',
+  'fil-Latn': 'en',
+  'ku-Arab': 'en',
+  'ky-Cyrl': 'en',
+  'mi-Latn': 'en',
+  'prs-Arab': 'en',
+  'qut-Latn': 'en',
+  nso: 'en',
+  quz: 'en',
+  'fr-FR': 'fr',
+  'gd-Latn': 'gd',
+  'ha-Latn': 'ha',
+  'ig-Latn': 'ig',
+  'it-it': 'it',
+  'mn-Cyrl': 'mn',
+  'pt-BR': 'pt',
+  'sd-Arab': 'pa-Arab',
+  'sr-Cyrl-RS': 'sr-Cyrl',
+  'sr-Latn-RS': 'sr-Latn',
+  'tg-Cyrl': 'tg',
+  'tk-Latn': 'tk',
+  'tt-Cyrl': 'tt',
+  'ug-Arab': 'ug',
+  'yo-Latn': 'yo',
+};

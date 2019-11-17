@@ -10,13 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Docs\Admin\Localization\Resources\Docs\ApplicationContracts\en.json" />
-    <None Remove="Volo\Docs\Admin\Localization\Resources\Docs\ApplicationContracts\tr.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Volo\Docs\Admin\Localization\Resources\Docs\ApplicationContracts\en.json" />
-    <EmbeddedResource Include="Volo\Docs\Admin\Localization\Resources\Docs\ApplicationContracts\tr.json" />
+    <EmbeddedResource Include="Volo\Docs\Admin\Localization\Resources\Docs\ApplicationContracts\*.json" />
+    <Content Remove="Volo\Docs\Admin\Localization\Resources\Docs\ApplicationContracts\*.json" />
   </ItemGroup>
 
   <ItemGroup>

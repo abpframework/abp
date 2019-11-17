@@ -12,49 +12,58 @@
 <form method="post" asp-page="/FeatureManagement/FeatureManagementModal" data-script-class="abp.modals.FeatureManagement">
     <abp-modal size="Large">
         <abp-modal-header title="@(L["Features"].Value)"></abp-modal-header>
-        <abp-modal-body class="ml-4">
-            <input asp-for="@Model.ProviderKey" />
-            <input asp-for="@Model.ProviderName" />
-            @for (var i = 0; i < Model.FeatureListDto.Features.Count; i++)
-            {
-                var feature = Model.FeatureListDto.Features[i];
-                <div class="mt-2" style="padding-left: @(feature.Depth * 20)px">
+        @if (Model.FeatureListDto?.Features != null && Model.FeatureListDto.Features.Any())
+        {
+            <abp-modal-body class="ml-4">
+                <input asp-for="@Model.ProviderKey" />
+                <input asp-for="@Model.ProviderName" />
+                @for (var i = 0; i < Model.FeatureListDto.Features.Count; i++)
+                {
+                    var feature = Model.FeatureListDto.Features[i];
+                    <div class="mt-2" style="padding-left: @(feature.Depth * 20)px">
 
-                    <spam class="mr-2">@feature.Name</spam>
+                        <spam class="mr-2">@feature.Name</spam>
 
-                    <input type="text" name="Features[@i].Type" value="@feature.ValueType.Name" hidden />
-                    @if (feature.ValueType is FreeTextStringValueType)
-                    {
-                        <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
-                        <input type="text" name="Features[@i].Value" value="@feature.Value" />
-                    }
-                    @if (feature.ValueType is SelectionStringValueType)
-                    {
-                        <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
-                        <select name="Features[@i].Value">
-                            @foreach (var item in (feature.ValueType as SelectionStringValueType).ItemSource.Items)
-                            {
-                                if (item.Value == feature.Value)
+                        <input type="text" name="Features[@i].Type" value="@feature.ValueType.Name" hidden />
+                        @if (feature.ValueType is FreeTextStringValueType)
+                        {
+                            <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
+                            <input type="text" name="Features[@i].Value" value="@feature.Value" />
+                        }
+                        @if (feature.ValueType is SelectionStringValueType)
+                        {
+                            <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
+                            <select name="Features[@i].Value">
+                                @foreach (var item in (feature.ValueType as SelectionStringValueType).ItemSource.Items)
                                 {
-                                    <option value="@item.Value" selected="selected"> @L.GetString(item.DisplayText.Name) </option>
+                                    if (item.Value == feature.Value)
+                                    {
+                                        <option value="@item.Value" selected="selected"> @L.GetString(item.DisplayText.Name) </option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Value"> @L.GetString(item.DisplayText.Name) </option>
+                                    }
                                 }
-                                else
-                                {
-                                    <option value="@item.Value"> @L.GetString(item.DisplayText.Name) </option>
-                                }
-                            }
-                        </select>
-                    }
-                    @if (feature.ValueType is ToggleStringValueType)
-                    {
-                        <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
-                        <input type="checkbox" class="FeatureValueCheckbox" name="Features[@i].BoolValue" value="@feature.Value"
-                               @Html.Raw(feature.Value == "True" ? "checked" : "") />
-                    }
-                </div>
-            }
-        </abp-modal-body>
-        <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+                            </select>
+                        }
+                        @if (feature.ValueType is ToggleStringValueType)
+                        {
+                            <input type="text" name="Features[@i].Name" value="@feature.Name" hidden />
+                            <input type="checkbox" class="FeatureValueCheckbox" name="Features[@i].BoolValue" value="@feature.Value"
+                                   @Html.Raw(feature.Value == "True" ? "checked" : "") />
+                        }
+                    </div>
+                }
+            </abp-modal-body>
+            <abp-modal-footer buttons="@(AbpModalButtons.Cancel|AbpModalButtons.Save)"></abp-modal-footer>
+        }
+        else
+        {
+            <abp-modal-body class="ml-4">
+                @L["NoFeatureFoundMessage"]
+            </abp-modal-body>
+        }
     </abp-modal>
 </form>
 

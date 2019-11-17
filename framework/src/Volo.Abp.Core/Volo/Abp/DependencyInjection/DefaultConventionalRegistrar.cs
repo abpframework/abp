@@ -24,7 +24,11 @@ namespace Volo.Abp.DependencyInjection
                 return;
             }
 
-            foreach (var serviceType in AutoRegistrationHelper.GetExposedServices(services, type))
+            var serviceTypes = ExposedServiceExplorer.GetExposedServices(type);
+
+            TriggerServiceExposing(services, type, serviceTypes);
+
+            foreach (var serviceType in serviceTypes)
             {
                 var serviceDescriptor = ServiceDescriptor.Describe(serviceType, type, lifeTime.Value);
 
@@ -42,12 +46,7 @@ namespace Volo.Abp.DependencyInjection
                 }
             }
         }
-
-        protected virtual bool IsConventionalRegistrationDisabled(Type type)
-        {
-            return type.IsDefined(typeof(DisableConventionalRegistrationAttribute), true);
-        }
-
+        
         protected virtual DependencyAttribute GetDependencyAttributeOrNull(Type type)
         {
             return type.GetCustomAttribute<DependencyAttribute>(true);

@@ -60,7 +60,7 @@ namespace AuthServer.Host
                 options.Languages.Add(new LanguageInfo("en", "en", "English"));
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -83,6 +83,7 @@ namespace AuthServer.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseIdentityServer();
             app.UseAbpRequestLocalization();
             app.UseAuditing();

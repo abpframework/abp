@@ -1,0 +1,36 @@
+import { ABP, ApplicationConfiguration, Config, eLayoutType } from '@abp/ng.core';
+import { AfterViewInit, OnDestroy, Renderer2, TemplateRef, TrackByFunction } from '@angular/core';
+import { Store } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Observable } from 'rxjs';
+import { Layout } from '../../models/layout';
+export declare class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
+    private store;
+    private oauthService;
+    private renderer;
+    static type: eLayoutType;
+    routes$: Observable<ABP.FullRoute[]>;
+    currentUser$: Observable<ApplicationConfiguration.CurrentUser>;
+    languages$: Observable<ApplicationConfiguration.Language[]>;
+    navElements$: Observable<Layout.NavigationElement[]>;
+    currentUserRef: TemplateRef<any>;
+    languageRef: TemplateRef<any>;
+    isDropdownChildDynamic: boolean;
+    isCollapsed: boolean;
+    smallScreen: boolean;
+    readonly appInfo: Config.Application;
+    readonly visibleRoutes$: Observable<ABP.FullRoute[]>;
+    readonly defaultLanguage$: Observable<string>;
+    readonly dropdownLanguages$: Observable<ApplicationConfiguration.Language[]>;
+    readonly selectedLangCulture: string;
+    rightPartElements: TemplateRef<any>[];
+    trackByFn: TrackByFunction<ABP.FullRoute>;
+    trackElementByFn: TrackByFunction<ABP.FullRoute>;
+    constructor(store: Store, oauthService: OAuthService, renderer: Renderer2);
+    private checkWindowWidth;
+    ngAfterViewInit(): void;
+    ngOnDestroy(): void;
+    onChangeLang(cultureName: string): void;
+    logout(): void;
+    openChange(event: boolean, childrenContainer: HTMLDivElement): void;
+}

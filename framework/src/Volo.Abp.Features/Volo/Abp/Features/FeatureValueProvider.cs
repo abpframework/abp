@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features
 {
-    public abstract class FeatureValueProvider : IFeatureValueProvider, ISingletonDependency //TODO: to transient?
+    public abstract class FeatureValueProvider : IFeatureValueProvider, ITransientDependency
     {
         public abstract string Name { get; }
 

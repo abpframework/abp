@@ -1,0 +1,20 @@
+{
+  "name": "@abp/ng.identity.config",
+  "version": "1.0.3",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "bundles/abp-ng.identity.config.umd.js",
+  "module": "fesm5/abp-ng.identity.config.js",
+  "es2015": "fesm2015/abp-ng.identity.config.js",
+  "esm5": "esm5/abp-ng.identity.config.js",
+  "esm2015": "esm2015/abp-ng.identity.config.js",
+  "fesm5": "fesm5/abp-ng.identity.config.js",
+  "fesm2015": "fesm2015/abp-ng.identity.config.js",
+  "typings": "abp-ng.identity.config.d.ts",
+  "metadata": "abp-ng.identity.config.metadata.json",
+  "sideEffects": false,
+  "dependencies": {
+    "tslib": "^1.9.0"
+  }
+}

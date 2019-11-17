@@ -8,18 +8,20 @@
 
         public const int ClientNameMaxLength = 200;
 
-        public const int ClientUriMaxLength = 300;
+        public const int ClientUriMaxLength = 2000;
 
-        public const int LogoUriMaxLength = 300;
+        public const int LogoUriMaxLength = 2000;
 
         public const int DescriptionMaxLength = 1000;
 
-        public const int FrontChannelLogoutUriMaxLength = 300;
+        public const int FrontChannelLogoutUriMaxLength = 2000;
 
-        public const int BackChannelLogoutUriMaxLength = 300;
+        public const int BackChannelLogoutUriMaxLength = 2000;
 
         public const int ClientClaimsPrefixMaxLength = 200;
 
         public const int PairWiseSubjectSaltMaxLength = 200;
+
+        public const int UserCodeTypeMaxLength = 100;
     }
 }

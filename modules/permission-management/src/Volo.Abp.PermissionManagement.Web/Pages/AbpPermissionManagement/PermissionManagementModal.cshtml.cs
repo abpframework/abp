@@ -33,6 +33,8 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
 
         public PermissionManagementModal(IPermissionAppService permissionAppService)
         {
+            ObjectMapperContext = typeof(AbpPermissionManagementWebModule);
+
             _permissionAppService = permissionAppService;
         }
 

@@ -1,0 +1,8 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: public-api.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+export { TenantManagementConfigService } from './lib/services/tenant-management-config.service';
+export { TenantManagementConfigModule } from './lib/tenant-management-config.module';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGVuYW50LW1hbmFnZW1lbnQuY29uZmlnLyIsInNvdXJjZXMiOlsicHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLDhDQUFjLGlEQUFpRCxDQUFDO0FBQ2hFLDZDQUFjLHVDQUF1QyxDQUFDIiwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0ICogZnJvbSAnLi9saWIvc2VydmljZXMvdGVuYW50LW1hbmFnZW1lbnQtY29uZmlnLnNlcnZpY2UnO1xyXG5leHBvcnQgKiBmcm9tICcuL2xpYi90ZW5hbnQtbWFuYWdlbWVudC1jb25maWcubW9kdWxlJztcclxuIl19

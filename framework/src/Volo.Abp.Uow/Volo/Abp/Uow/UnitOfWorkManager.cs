@@ -8,18 +8,18 @@ namespace Volo.Abp.Uow
     {
         public IUnitOfWork Current => GetCurrentUnitOfWork();
 
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IHybridServiceScopeFactory _serviceScopeFactory;
         private readonly IAmbientUnitOfWork _ambientUnitOfWork;
 
         public UnitOfWorkManager(
-            IServiceProvider serviceProvider, 
-            IAmbientUnitOfWork ambientUnitOfWork)
+            IAmbientUnitOfWork ambientUnitOfWork, 
+            IHybridServiceScopeFactory serviceScopeFactory)
         {
-            _serviceProvider = serviceProvider;
             _ambientUnitOfWork = ambientUnitOfWork;
+            _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public IUnitOfWork Begin(UnitOfWorkOptions options, bool requiresNew = false)
+        public IUnitOfWork Begin(AbpUnitOfWorkOptions options, bool requiresNew = false)
         {
             Check.NotNull(options, nameof(options));
 
@@ -52,7 +52,7 @@ namespace Volo.Abp.Uow
             return unitOfWork;
         }
 
-        public void BeginReserved(string reservationName, UnitOfWorkOptions options)
+        public void BeginReserved(string reservationName, AbpUnitOfWorkOptions options)
         {
             if (!TryBeginReserved(reservationName, options))
             {
@@ -60,7 +60,7 @@ namespace Volo.Abp.Uow
             }
         }
 
-        public bool TryBeginReserved(string reservationName, UnitOfWorkOptions options)
+        public bool TryBeginReserved(string reservationName, AbpUnitOfWorkOptions options)
         {
             Check.NotNull(reservationName, nameof(reservationName));
 
@@ -97,7 +97,7 @@ namespace Volo.Abp.Uow
 
         private IUnitOfWork CreateNewUnitOfWork()
         {
-            var scope = _serviceProvider.CreateScope();
+            var scope = _serviceScopeFactory.CreateScope();
             try
             {
                 var outerUow = _ambientUnitOfWork.UnitOfWork;

@@ -15,6 +15,20 @@
     "The field {0} must be a string with a maximum length of {1}.": "The field {0} must be a string with a maximum length of {1}.",
     "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.": "The field {0} must be a string with a minimum length of {2} and a maximum length of {1}.",
     "The {0} field is not a valid fully-qualified http, https, or ftp URL.": "The {0} field is not a valid fully-qualified http, https, or ftp URL.",
-    "The field {0} is invalid.": "The field {0} is invalid."
+    "The field {0} is invalid.": "The field {0} is invalid.",
+    "ThisFieldIsNotAValidCreditCardNumber.": "This field is not a valid credit card number.",
+    "ThisFieldIsNotValid.": "This field is not valid.",
+    "ThisFieldIsNotAValidEmailAddress.": "This field is not a valid e-mail address.",
+    "ThisFieldOnlyAcceptsFilesWithTheFollowingExtensions:{0}": "This field only accepts files with the following extensions: {0}",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMaximumLengthoOf{0}": "This field must be a string or array type with a maximum length of '{0}'.",
+    "ThisFieldMustBeAStringOrArrayTypeWithAMinimumLengthOf{0}": "This field must be a string or array type with a minimum length of '{0}'.",
+    "ThisFieldIsNotAValidPhoneNumber.": "This field is not a valid phone number.",
+    "ThisFieldMustBeBetween{0}And{1}": "This field must be between {0} and {1}.",
+    "ThisFieldMustMatchTheRegularExpression{0}": "This field must match the regular expression '{0}'.",
+    "ThisFieldIsRequired.": "This field is required.",
+    "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "This field must be a string with a maximum length of {0}.",
+    "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "This field must be a string with a minimum length of {1} and a maximum length of {0}.",
+    "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "This field is not a valid fully-qualified http, https, or ftp URL.",
+    "ThisFieldIsInvalid.": "This field is invalid."
   }
 }

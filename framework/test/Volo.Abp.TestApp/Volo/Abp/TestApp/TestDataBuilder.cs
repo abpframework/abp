@@ -17,19 +17,23 @@ namespace Volo.Abp.TestApp
 
         private readonly IBasicRepository<Person, Guid> _personRepository;
         private readonly ICityRepository _cityRepository;
+        private readonly IRepository<EntityWithIntPk, int> _entityWithIntPksRepository;
 
         public TestDataBuilder(
             IBasicRepository<Person, Guid> personRepository, 
-            ICityRepository cityRepository)
+            ICityRepository cityRepository,
+            IRepository<EntityWithIntPk, int> entityWithIntPksRepository)
         {
             _personRepository = personRepository;
             _cityRepository = cityRepository;
+            _entityWithIntPksRepository = entityWithIntPksRepository;
         }
 
         public void Build()
         {
             AddCities();
             AddPeople();
+            AddEntitiesWithPks();
         }
 
         private void AddCities()
@@ -62,6 +66,11 @@ namespace Volo.Abp.TestApp
 
             _personRepository.Insert(tenant1Person1);
             _personRepository.Insert(tenant1Person2);
+        }
+
+        private void AddEntitiesWithPks()
+        {
+            _entityWithIntPksRepository.Insert(new EntityWithIntPk("Entity1"));
         }
     }
 }

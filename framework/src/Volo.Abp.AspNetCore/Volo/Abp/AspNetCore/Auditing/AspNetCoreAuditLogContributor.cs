@@ -64,14 +64,14 @@ namespace Volo.Abp.AspNetCore.Auditing
 
         protected virtual string GetBrowserInfo(HttpContext httpContext)
         {
-            return httpContext?.Request?.Headers?["User-Agent"];
+            return httpContext.Request?.Headers?["User-Agent"];
         }
 
         protected virtual string GetClientIpAddress(HttpContext httpContext)
         {
             try
             {
-                return httpContext?.Connection?.RemoteIpAddress?.ToString();
+                return httpContext.Connection?.RemoteIpAddress?.ToString();
             }
             catch (Exception ex)
             {

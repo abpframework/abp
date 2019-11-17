@@ -25,11 +25,11 @@ namespace Volo.Abp.Authorization
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddAuthorization();
+            context.Services.AddAuthorizationCore();
 
             context.Services.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
 
-            Configure<PermissionOptions>(options =>
+            Configure<AbpPermissionOptions>(options =>
             {
                 options.ValueProviders.Add<UserPermissionValueProvider>();
                 options.ValueProviders.Add<RolePermissionValueProvider>();
@@ -49,7 +49,7 @@ namespace Volo.Abp.Authorization
                 }
             });
 
-            services.Configure<PermissionOptions>(options =>
+            services.Configure<AbpPermissionOptions>(options =>
             {
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });

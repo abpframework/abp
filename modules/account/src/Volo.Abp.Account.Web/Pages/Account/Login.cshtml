@@ -3,37 +3,44 @@
 @model Volo.Abp.Account.Web.Pages.Account.LoginModel
 @inherits Volo.Abp.Account.Web.Pages.Account.AccountPage
 @inject Volo.Abp.Settings.ISettingProvider SettingProvider
-<h2>@L["Login"]</h2>
 @if (Model.EnableLocalLogin)
 {
-    <form method="post">
-        <input asp-for="ReturnUrl" />
-        <input asp-for="ReturnUrlHash" />
-        <div class="form-group">
-            <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
-            <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
-            <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+    <div class="card mt-3 shadow-sm rounded">
+        <div class="card-body p-5">
+            <h4>@L["Login"]</h4> 
+            @if (string.Equals(await SettingProvider.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
+            {
+                <strong>
+                    @L["AreYouANewUser"]
+                    <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Register"]</a>
+                </strong>
+            }
+            <form method="post" class="mt-4">
+                <input asp-for="ReturnUrl" />
+                <input asp-for="ReturnUrlHash" />
+                <div class="form-group">
+                    <label asp-for="LoginInput.UserNameOrEmailAddress"></label>
+                    <input asp-for="LoginInput.UserNameOrEmailAddress" class="form-control" />
+                    <span asp-validation-for="LoginInput.UserNameOrEmailAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LoginInput.Password"></label>
+                    <input asp-for="LoginInput.Password" class="form-control" />
+                    <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <label asp-for="LoginInput.RememberMe" class="form-check-label">
+                        <input asp-for="LoginInput.RememberMe" class="form-check-input" />
+                        @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
+                    </label>
+                </div>
+                <abp-button type="submit" button-type="Primary" name="Action" value="Login" class="btn-block btn-lg mt-3">@L["Login"]</abp-button>
+            </form>
         </div>
-        <div class="form-group">
-            <label asp-for="LoginInput.Password"></label>
-            <input asp-for="LoginInput.Password" class="form-control" />
-            <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
-        </div>
-        <div class="form-check">
-            <label asp-for="LoginInput.RememberMe" class="form-check-label">
-                <input asp-for="LoginInput.RememberMe" class="form-check-input" />
-                @Html.DisplayNameFor(m => m.LoginInput.RememberMe)
-            </label>
-        </div>
-        <abp-button type="button" button-type="Secondary" name="Action" value="Cancel">@L["Cancel"]</abp-button> @* TODO: Only show if identity server is used *@
-        <abp-button type="submit" button-type="Primary" name="Action" value="Login">@L["Login"]</abp-button>
-    </form>
 
-    <div style="padding-top: 20px">
-        @if (string.Equals(await SettingProvider.GetOrNullAsync(AccountSettingNames.IsSelfRegistrationEnabled), "true", StringComparison.OrdinalIgnoreCase))
-        {
-            <a href="@Url.Page("./Register", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})">@L["Register"]</a>
-        }
+        <div class="card-footer text-center border-0">
+            <abp-button type="button" button-type="Link" name="Action" value="Cancel" class="px-2 py-0">@L["Cancel"]</abp-button> @* TODO: Only show if identity server is used *@
+        </div>
     </div>
 }
 

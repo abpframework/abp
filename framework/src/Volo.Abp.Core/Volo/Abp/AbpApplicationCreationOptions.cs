@@ -14,13 +14,13 @@ namespace Volo.Abp
         public PlugInSourceList PlugInSources { get; }
 
         [NotNull]
-        public ConfigurationBuilderOptions Configuration {get; }
+        public AbpConfigurationBuilderOptions Configuration {get; }
 
         public AbpApplicationCreationOptions([NotNull] IServiceCollection services)
         {
             Services = Check.NotNull(services, nameof(services));
             PlugInSources = new PlugInSourceList();
-            Configuration = new ConfigurationBuilderOptions();
+            Configuration = new AbpConfigurationBuilderOptions();
         }
     }
 }

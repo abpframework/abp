@@ -2,6 +2,6 @@
   "culture": "pt-BR",
   "texts": {
     "ThisFieldIsRequired": "Este campo é obrigatório",
-    "MaxLenghtErrorMessage": "Este campo pode ser no máximo de '{0}' caracteres"
+    "MaxLenghtErrorMessage": "Este campo pode ter no máximo '{0}' caracteres"
   }
 }
