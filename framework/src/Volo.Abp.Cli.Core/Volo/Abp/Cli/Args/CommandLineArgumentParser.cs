@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Args
@@ -40,6 +41,7 @@ namespace Volo.Abp.Cli.Args
 
             if (!argumentList.Any())
             {
+                target = NamespaceHelper.NormalizeNamespace(target);
                 return new CommandLineArgs(command, target);
             }
 
