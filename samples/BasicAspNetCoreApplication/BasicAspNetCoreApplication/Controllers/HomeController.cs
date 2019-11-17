@@ -7,7 +7,7 @@ namespace BasicAspNetCoreApplication.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Hello World!");
+            return Content("Hello My World!");
         }
     }
 }

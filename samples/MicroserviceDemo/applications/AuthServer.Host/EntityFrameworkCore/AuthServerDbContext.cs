@@ -12,8 +12,7 @@ namespace AuthServer.Host.EntityFrameworkCore
     {
         public AuthServerDbContext(DbContextOptions<AuthServerDbContext> options) 
             : base(options)
-        {
-
+        { 
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
