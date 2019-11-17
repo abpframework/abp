@@ -290,3 +290,5 @@ samples/MicroserviceDemo/applications/PublicWebSite.Host/Logs/logs.txt
 samples/MicroserviceDemo/gateways/PublicWebSiteGateway.Host/Logs/logs.txt
 samples/MicroserviceDemo/microservices/BloggingService.Host/Logs/logs.txt
 modules/docs/app/Volo.DocsTestApp/Logs/logs.txt
+test/aspnet-mvc-demo/AbpAspNetMvcDemo/AbpAspNetMvcDemo.csproj
+Abp.sln
