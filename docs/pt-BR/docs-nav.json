@@ -1,0 +1,328 @@
+{
+  "items": [
+    {
+      "text": "Começando",
+      "items": [
+        {
+          "text": "De Modelo de Inicialização",
+          "items": [
+            {
+              "text": "Aplicativo com MVC (Razor Pages) UI",
+              "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            },
+            {
+              "text": "Aplicativo com Angular UI",
+              "path": "Getting-Started-Angular-Template.md"
+            }
+          ]
+        },
+        {
+          "text": "De Projetos Vazios",
+          "items": [
+            {
+              "text": "Com Aplicativo ASP.NET Core Web",
+              "path": "Getting-Started-AspNetCore-Application.md"
+            },
+            {
+              "text": "Com Aplicativo Console",
+              "path": "Getting-Started-Console-Application.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Tutoriais",
+      "items": [
+        {
+          "text": "Desenvolvimento de Aplicações",
+          "items": [
+            {
+              "text": "Com ASP.NET Core MVC UI",
+              "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            },
+            {
+              "text": "Com Angular UI",
+              "path": "Tutorials/Angular/Part-I.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
+      "text": "Fundamentos",
+      "items": [
+        {
+          "text": "Injeção de Dependência",
+          "path": "Dependency-Injection.md",
+          "items": [
+            {
+              "text": "Integração com Autofac",
+              "path": "Autofac-Integration.md"
+            }
+          ]
+        },
+        {
+          "text": "Sistema de Arquivos Virtual",
+          "path": "Virtual-File-System.md"
+        },
+        {
+          "text": "Localização",
+          "path": "Localization.md"
+        },
+        {
+          "text": "Manipulação de Exceção",
+          "path": "Exception-Handling.md"
+        },
+        {
+          "text": "Validação"
+        },
+        {
+          "text": "Autorização"
+        },
+        {
+          "text": "Armazenamento em Cache"
+        },
+        {
+          "text": "Auditoria"
+        },
+        {
+          "text": "Gerenciamento de Configurações"
+        }
+      ]
+    },
+    {
+      "text": "Eventos",
+      "items": [
+        {
+          "text": "Barramento de Eventos (local)"
+        },
+        {
+          "text": "Barramento de Eventos Distribuídos",
+          "items": [
+            {
+              "text": "Integração RabbitMQ"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Serviços",
+      "items": [
+        {
+          "text": "Serialização de Objetos"
+        },
+        {
+          "text": "Serialização JSON"
+        },
+        {
+          "text": "Emailing"
+        },
+        {
+          "text": "GUIDs"
+        },
+        {
+          "text": "Threading"
+        },
+        {
+          "text": "Timing"
+        }
+      ]
+    },
+    {
+      "text": "Múltiplos Inquilinos",
+      "path": "Multi-Tenancy.md"
+    },
+    {
+      "text": "Desenvolvimento de Módulos",
+      "items": [
+        {
+          "text": "Fundamentos",
+          "path": "Module-Development-Basics.md"
+        },
+        {
+          "text": "Módulos de plug-in"
+        },
+        {
+          "text": "Melhores práticas",
+          "path": "Best-Practices/Index.md"
+        }
+      ]
+    },
+    {
+      "text": "Design Orientado a Domínio",
+      "path": "Domain-Driven-Design.md",
+      "items": [
+        {
+          "text": "Camada de Domínio",
+          "items": [
+            {
+              "text": "Entidades & Raízes Agregadas",
+              "path": "Entities.md"
+            },
+            {
+              "text": "Value Objects"
+            },
+            {
+              "text": "Repositórios",
+              "path": "Repositories.md"
+            },
+            {
+              "text": "Serviços de Domínio"
+            },
+            {
+              "text": "Especificações"
+            }
+          ]
+        },
+        {
+          "text": "Camada de Aplicação",
+          "items": [
+            {
+              "text": "Serviços de Aplicação",
+              "path": "Application-Services.md"
+            },
+            {
+              "text": "Objetos de Transferência de Dados"
+            },
+            {
+              "text": "Unidade de Trabalho"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "ASP.NET Core",
+      "items": [
+        {
+          "text": "API",
+          "items": [
+            {
+              "text": "Controladores de API Automática",
+              "path": "AspNetCore/Auto-API-Controllers.md"
+            },
+            {
+              "text": "Clientes da API C # Dinâmica",
+              "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
+            }
+          ]
+        },
+        {
+          "text": "Interface de Usuário",
+          "items": [
+            {
+              "text": "Gerenciamento de Pacotes do Lado do Cliente",
+              "path": "AspNetCore/Client-Side-Package-Management.md"
+            },
+            {
+              "text": "Compactação & Minificação",
+              "path": "AspNetCore/Bundling-Minification.md"
+            },
+            {
+              "text": "Tag Helpers",
+              "path": "AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Widgets",
+              "path": "AspNetCore/Widgets.md"
+            },
+            {
+              "text": "Theming",
+              "path": "AspNetCore/Theming.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Acesso de Dados",
+      "items": [
+        {
+          "text": "Integração do Entity Framework Core",
+          "path": "Entity-Framework-Core.md",
+          "items": [
+            {
+              "text": "Integração do PostgreSQL",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
+        },
+        {
+          "text": "Integração do MongoDB",
+          "path": "MongoDB.md"
+        },
+        {
+          "text": "Integração do Dapper",
+          "path": "Dapper.md"
+        }
+      ]
+    },
+    {
+      "text": "Background",
+      "items": [
+        {
+          "text": "Trabalhos em Segundo Plano",
+          "path": "Background-Jobs.md",
+          "items": [
+            {
+              "text": "Integração do Hangfire",
+              "path": "Background-Jobs-Hangfire.md"
+            },
+            {
+              "text": "Integração do RabbitMQ",
+              "path": "Background-Jobs-RabbitMq.md"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "text": "Modelos de Inicialização",
+      "path": "Startup-Templates/Index.md",
+      "items": [
+        {
+          "text": "Aplicativo",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Módulo",
+          "path": "Startup-Templates/Module.md"
+        }
+      ]
+    },
+    {
+      "text": "Exemplos",
+      "items": [
+        {
+          "text": "Demonstração de Microsserviços",
+          "path": "Samples/Microservice-Demo.md"
+        }
+      ]
+    },
+    {
+      "text": "Módulos de Aplicação",
+      "path": "Modules/Index.md"
+    },
+    {
+      "text": "Arquitetura de Microsserviços",
+      "path": "Microservice-Architecture.md"
+    },
+    {
+      "text": "Testando"
+    },
+    {
+      "text": "Compilações Noturnas",
+      "path": "Nightly-Builds.md"
+    },
+    {
+      "text": "Guia de Contribuição",
+      "path": "Contribution/Index.md"
+    }
+  ]
+}

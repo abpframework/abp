@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.ClientSimulation.Web</AssemblyName>
     <PackageId>Volo.ClientSimulation.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -13,18 +13,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
     <ProjectReference Include="..\Volo.ClientSimulation\Volo.ClientSimulation.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Pages\**\*.css" />
+    <EmbeddedResource Include="Pages\**\*.scss" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />

@@ -3,7 +3,7 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Modularity
 {
-    public interface IModuleLifecycleContributor : ISingletonDependency
+    public interface IModuleLifecycleContributor : ITransientDependency
     {
         void Initialize([NotNull] ApplicationInitializationContext context, [NotNull] IAbpModule module);
 

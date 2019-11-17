@@ -53,6 +53,11 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
+        public async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable().AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
+        }
+
         public virtual async Task<long> GetTotalCount()
         {
             return await GetCountAsync();

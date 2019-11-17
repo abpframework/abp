@@ -3,11 +3,11 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Abp.FeatureManagement.EntityFrameworkCore
 {
-    public class FeatureManagementModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class FeatureManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public FeatureManagementModelBuilderConfigurationOptions(
-            [NotNull] string tablePrefix = FeatureManagementConsts.DefaultDbTablePrefix,
-            [CanBeNull] string schema = FeatureManagementConsts.DefaultDbSchema)
+            [NotNull] string tablePrefix = "",
+            [CanBeNull] string schema = null)
             : base(
                 tablePrefix,
                 schema)

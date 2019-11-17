@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Volo.Docs.MongoDB</AssemblyName>
+    <PackageId>Volo.Docs.MongoDB</PackageId>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Volo.Docs.Domain\Volo.Docs.Domain.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.MongoDB\Volo.Abp.MongoDB.csproj" />
+  </ItemGroup>
+
+</Project>

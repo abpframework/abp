@@ -1,0 +1,22 @@
+<div #container id="abp-error" class="error">
+  <button id="abp-close-button" type="button" class="close mr-3" (click)="destroy()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+
+  <div *ngIf="!customComponent" class="row centered">
+    <div class="col-md-12">
+      <div class="error-template">
+        <h1>{{ statusText }} {{ title | abpLocalization }}</h1>
+        <div class="error-details">
+          {{ details | abpLocalization }}
+        </div>
+        <div class="error-actions">
+          <a (click)="destroy()" routerLink="/" class="btn btn-primary btn-md mt-2"
+            ><span class="glyphicon glyphicon-home"></span>
+            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

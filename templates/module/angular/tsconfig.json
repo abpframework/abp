@@ -1,0 +1,37 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "paths": {
+      "my-project-name": [
+        "dist/my-project-name"
+      ],
+      "my-project-name/*": [
+        "dist/my-project-name/*"
+      ],
+      "my-project-name-config": [
+        "dist/my-project-name-config"
+      ],
+      "my-project-name-config/*": [
+        "dist/my-project-name-config/*"
+      ]
+    }
+  }
+}

@@ -1,10 +1,32 @@
 {
     "culture": "zh-Hans",
-    "texts": {
-      "Permission:DocumentManagement": "文档管理",
-      "Permission:Projects": "项目",
-      "Permission:Edit": "编辑",
-      "Permission:Delete": "删除",
-      "Permission:Create": "创建"
-    }
+  "texts": {
+    "Permission:DocumentManagement": "文档管理",
+    "Permission:Projects": "项目",
+    "Permission:Edit": "编辑",
+    "Permission:Delete": "删除",
+    "Permission:Create": "创建",
+    "Menu:DocumentManagement": "文档",
+    "Menu:ProjectManagement": "项目",
+    "CreateANewProject": "创建新项目",
+    "Edit": "编辑",
+    "Create": "创建",
+    "Projects": "项目",
+    "Name": "名称",
+    "ShortName": "简称",
+    "DocumentStoreType": "文件存储类型",
+    "Format": "格式",
+    "ShortNameInfoText": "将用于唯一的URL.",
+    "DisplayName:Name": "名称",
+    "DisplayName:ShortName": "简称",
+    "DisplayName:Format": "格式",
+    "DisplayName:DefaultDocumentName": "默认文档名称",
+    "DisplayName:NavigationDocumentName": "导航文档名称",
+    "DisplayName:MinimumVersion": "最低版本",
+    "DisplayName:MainWebsiteUrl": "主网站网址",
+    "DisplayName:LatestVersionBranchName": "最新版本的分支名称",
+    "DisplayName:GitHubRootUrl": "GitHub根网址",
+    "DisplayName:GitHubAccessToken": "GitHub访问令牌",
+    "DisplayName:GitHubUserAgent": "GitHub用户代理"
+  }
   }

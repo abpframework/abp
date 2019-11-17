@@ -2,10 +2,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Blogging.Pages.Blog;
 
 namespace Volo.Blogging.Pages.Admin.Blogs
 {
-    public class IndexModel : AbpPageModel
+    public class IndexModel : BloggingPageModel
     {
         private readonly IAuthorizationService _authorization;
 

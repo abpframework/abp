@@ -23,20 +23,20 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         protected virtual TDbContext DbContext => _dbContextProvider.GetDbContext();
 
-        protected virtual EntityOptions<TEntity> EntityOptions => _entityOptionsLazy.Value;
+        protected virtual AbpEntityOptions<TEntity> AbpEntityOptions => _entityOptionsLazy.Value;
 
         private readonly IDbContextProvider<TDbContext> _dbContextProvider;
-        private readonly Lazy<EntityOptions<TEntity>> _entityOptionsLazy;
+        private readonly Lazy<AbpEntityOptions<TEntity>> _entityOptionsLazy;
 
         public EfCoreRepository(IDbContextProvider<TDbContext> dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
 
-            _entityOptionsLazy = new Lazy<EntityOptions<TEntity>>(
+            _entityOptionsLazy = new Lazy<AbpEntityOptions<TEntity>>(
                 () => ServiceProvider
-                          .GetRequiredService<IOptions<EntityOptions>>()
+                          .GetRequiredService<IOptions<AbpEntityOptions>>()
                           .Value
-                          .GetOrNull<TEntity>() ?? EntityOptions<TEntity>.Empty
+                          .GetOrNull<TEntity>() ?? AbpEntityOptions<TEntity>.Empty
             );
         }
         
@@ -194,12 +194,12 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public override IQueryable<TEntity> WithDetails()
         {
-            if (EntityOptions.DefaultWithDetailsFunc == null)
+            if (AbpEntityOptions.DefaultWithDetailsFunc == null)
             {
                 return base.WithDetails();
             }
 
-            return EntityOptions.DefaultWithDetailsFunc(GetQueryable());
+            return AbpEntityOptions.DefaultWithDetailsFunc(GetQueryable());
         }
 
         public override IQueryable<TEntity> WithDetails(params Expression<Func<TEntity, object>>[] propertySelectors)
@@ -258,14 +258,14 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         public virtual TEntity Find(TKey id, bool includeDetails = true)
         {
             return includeDetails
-                ? WithDetails().FirstOrDefault(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id))
+                ? WithDetails().FirstOrDefault(e => e.Id.Equals(id))
                 : DbSet.Find(id);
         }
 
         public virtual async Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return includeDetails
-                ? await WithDetails().FirstOrDefaultAsync(EntityHelper.CreateEqualityExpressionForId<TEntity, TKey>(id), GetCancellationToken(cancellationToken))
+                ? await WithDetails().FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
                 : await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
         }
 

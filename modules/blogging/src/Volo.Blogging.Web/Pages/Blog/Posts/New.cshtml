@@ -1,18 +1,19 @@
 ﻿@page
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.TuiEditor
-@model Volo.Blogging.Pages.Blog.Posts.NewModel
+@using Volo.Blogging.Pages.Blog.Posts
+@model NewModel
 @inherits Volo.Blogging.Pages.Blog.BloggingPage
 @{
     ViewBag.PageTitle = "Blog";
 }
 @section styles {
-    <abp-style-bundle @*name="@typeof(NewModel).FullName" *@>
+    <abp-style-bundle name="@typeof(NewModel).FullName" >
         <abp-style type="@typeof(TuiEditorStyleContributor)" />
         <abp-style src="/Pages/Blog/Posts/new.css" />
     </abp-style-bundle>
 }
 @section scripts {
-    <abp-script-bundle @*name="@typeof(NewModel).FullName" *@>
+    <abp-script-bundle name="@typeof(NewModel).FullName" >
         <abp-script type="@typeof(TuiEditorScriptContributor)" />
         <abp-script src="/Pages/Blog/Posts/new.js" />
     </abp-script-bundle>

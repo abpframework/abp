@@ -1,0 +1,12 @@
+{
+  "name": "@abp/ng.identity",
+  "version": "1.0.4",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^1.0.4",
+    "@abp/ng.permission-management": "^1.0.4",
+    "@abp/ng.identity.config": "^1.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

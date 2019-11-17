@@ -1,0 +1,20 @@
+{
+  "name": "@abp/ng.theme.shared",
+  "version": "1.0.4",
+  "dependencies": {
+    "@abp/ng.core": "^1.0.4",
+    "@angular/cdk": "^8.2.3",
+    "@fortawesome/fontawesome-free": "^5.11.2",
+    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "@ngx-validate/core": "^0.0.7",
+    "bootstrap": "^4.3.1",
+    "chart.js": "^2.9.2",
+    "font-awesome": "^4.7.0",
+    "ngx-perfect-scrollbar": "^8.0.0",
+    "primeicons": "^2.0.0",
+    "primeng": "^8.1.1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -10,7 +10,7 @@ namespace Volo.Abp.BackgroundJobs
     /// Default implementation of <see cref="IBackgroundJobManager"/>.
     /// </summary>
     [Dependency(ReplaceServices = true)]
-    public class DefaultBackgroundJobManager : IBackgroundJobManager, ISingletonDependency
+    public class DefaultBackgroundJobManager : IBackgroundJobManager, ITransientDependency
     {
         protected IClock Clock { get; }
         protected IBackgroundJobSerializer Serializer { get; }

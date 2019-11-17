@@ -7,14 +7,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.Demo
 {
     public class Startup
     {
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication<AbpAspNetCoreMvcUiBootstrapDemoModule>(options =>
-            {
-                options.UseAutofac();
-            });
-
-            return services.BuildServiceProviderFromFactory();
+            services.AddApplication<AbpAspNetCoreMvcUiBootstrapDemoModule>();
         }
 
         public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)

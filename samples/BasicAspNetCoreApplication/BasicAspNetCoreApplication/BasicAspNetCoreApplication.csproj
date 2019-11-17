@@ -1,13 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.App"/>
-    <PackageReference Include="Volo.Abp.AspNetCore.Mvc" Version="0.15.0" />
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.15.0" />
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc\Volo.Abp.AspNetCore.Mvc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 
 </Project>

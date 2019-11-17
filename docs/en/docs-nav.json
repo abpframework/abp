@@ -7,8 +7,12 @@
           "text": "From Startup Templates",
           "items": [
             {
-              "text": "ASP.NET Core MVC",
+              "text": "Application with MVC (Razor Pages) UI",
               "path": "Getting-Started-AspNetCore-MVC-Template.md"
+            },
+            {
+              "text": "Application with Angular UI",
+              "path": "Getting-Started-Angular-Template.md"
             }
           ]
         },
@@ -34,16 +38,28 @@
           "text": "Application Development",
           "items": [
             {
-              "text": "With ASP.NET Core MVC",
+              "text": "With ASP.NET Core MVC UI",
               "path": "Tutorials/AspNetCore-Mvc/Part-I.md"
+            },
+            {
+              "text": "With Angular UI",
+              "path": "Tutorials/Angular/Part-I.md"
             }
           ]
         }
       ]
     },
     {
+      "text": "CLI",
+      "path": "CLI.md"
+    },
+    {
       "text": "Fundamentals",
       "items": [
+        {
+          "text": "Configuration",
+          "path": "Configuration.md"
+        },
         {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
@@ -70,16 +86,19 @@
           "text": "Validation"
         },
         {
-          "text": "Authorization"
+          "text": "Authorization",
+          "path": "Authorization.md"
         },
         {
-          "text": "Caching"
+          "text": "Caching",
+          "path": "Caching.md"
         },
         {
           "text": "Auditing"
         },
         {
-          "text": "Setting Management"
+          "text": "Settings",
+          "path": "Settings.md"
         }
       ]
     },
@@ -102,6 +121,14 @@
     {
       "text": "Services",
       "items": [
+        {
+          "text": "Current User",
+          "path": "CurrentUser.md"
+        },
+        {
+          "text": "Object to object mapping",
+          "path": "Object-To-Object-Mapping.md"
+        },
         {
           "text": "Object Serialization"
         },
@@ -214,7 +241,11 @@
             },
             {
               "text": "Tag Helpers",
-              "path": "Tag-Helpers.md"
+              "path": "AspNetCore/Tag-Helpers/Index.md"
+            },
+            {
+              "text": "Widgets",
+              "path": "AspNetCore/Widgets.md"
             },
             {
               "text": "Theming",
@@ -229,11 +260,21 @@
       "items": [
         {
           "text": "Entity Framework Core Integration",
-          "path": "Entity-Framework-Core.md"
+          "path": "Entity-Framework-Core.md",
+          "items": [            
+            {
+              "text": "PostgreSQL Integration",
+              "path": "Best-Practices/PostgreSQL-Integration.md"
+            }
+          ]
         },
         {
           "text": "MongoDB Integration",
           "path": "MongoDB.md"
+        },
+        {
+          "text": "Dapper Integration",
+          "path": "Dapper.md"
         }
       ]
     },
@@ -253,6 +294,20 @@
               "path": "Background-Jobs-RabbitMq.md"
             }
           ]
+        }
+      ]
+    },
+    {
+      "text": "Startup Templates",
+      "path": "Startup-Templates/Index.md",
+      "items": [
+        {
+          "text": "Application",
+          "path": "Startup-Templates/Application.md"
+        },
+        {
+          "text": "Module",
+          "path": "Startup-Templates/Module.md"
         }
       ]
     },

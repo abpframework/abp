@@ -34,7 +34,11 @@ namespace Volo.Abp.Application.Services
     {
         public IServiceProvider ServiceProvider { get; set; }
         protected readonly object ServiceProviderLock = new object();
+
         protected TService LazyGetRequiredService<TService>(ref TService reference)
+            => LazyGetRequiredService(typeof(TService), ref reference);
+
+        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
         {
             if (reference == null)
             {
@@ -42,7 +46,7 @@ namespace Volo.Abp.Application.Services
                 {
                     if (reference == null)
                     {
-                        reference = ServiceProvider.GetRequiredService<TService>();
+                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
                     }
                 }
             }
@@ -57,7 +61,27 @@ namespace Volo.Abp.Application.Services
         public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
 
-        public IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
+        protected Type ObjectMapperContext { get; set; }
+        public IObjectMapper ObjectMapper
+        {
+            get
+            {
+                if (_objectMapper != null)
+                {
+                    return _objectMapper;
+                }
+
+                if (ObjectMapperContext == null)
+                {
+                    return LazyGetRequiredService(ref _objectMapper);
+                }
+
+                return LazyGetRequiredService(
+                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
+                    ref _objectMapper
+                );
+            }
+        }
         private IObjectMapper _objectMapper;
 
         public IGuidGenerator GuidGenerator { get; set; }
@@ -123,21 +147,6 @@ namespace Volo.Abp.Application.Services
             }
 
             await AuthorizationService.CheckAsync(policyName);
-        }
-
-        /// <summary>
-        /// Checks for given <paramref name="policyName"/>.
-        /// Throws <see cref="AbpAuthorizationException"/> if given policy has not been granted.
-        /// </summary>
-        /// <param name="policyName">The policy name. This method does nothing if given <paramref name="policyName"/> is null or empty.</param>
-        protected virtual void CheckPolicy([CanBeNull] string policyName)
-        {
-            if (string.IsNullOrEmpty(policyName))
-            {
-                return;
-            }
-
-            AuthorizationService.Check(policyName);
         }
     }
 }

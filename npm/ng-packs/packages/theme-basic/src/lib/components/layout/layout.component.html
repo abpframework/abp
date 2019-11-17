@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top" id="main-navbar">
+  <a class="navbar-brand" routerLink="/">
+    <img *ngIf="appInfo.logoUrl; else appName" [src]="appInfo.logoUrl" [alt]="appInfo.name" />
+  </a>
+  <button class="navbar-toggler" type="button" [attr.aria-expanded]="!isCollapsed" (click)="isCollapsed = !isCollapsed">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="main-navbar-collapse" [ngbCollapse]="isCollapsed">
+    <ng-content></ng-content>
+  </div>
+</nav>
+
+<div
+  [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path"
+  style="padding-top: 5rem;"
+  class="container"
+>
+  <router-outlet #outlet="outlet"></router-outlet>
+</div>
+
+<abp-confirmation></abp-confirmation>
+<abp-toast></abp-toast>
+
+<ng-template #appName>
+  {{ appInfo.name }}
+</ng-template>

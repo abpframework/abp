@@ -168,7 +168,7 @@ These are the actual applications those have user interfaces to interact to the 
 
 - **AuthServer.Host**: Host the IdentityServer4 to provide an authentication service to other services and applications. It is a single-sign server and contains the login page.
 - **BackendAdminApp.Host**: This is a backend admin application that host UI for Identity and Product management modules.
-- **PubicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
+- **PublicWebSite.Host**: As public web site that contains a simple product list page and blog module UI.
 - **ConsoleClientDemo**: A simple console application to demonstrate the usage of services from a C# application.
 
 ### Gateways / BFFs (Backend for Frontend)
@@ -902,7 +902,7 @@ It has a dedicated MongoDB database (MsDemo_Blogging) to store blog and posts. I
 ````json
 "ConnectionStrings": {
   "Default": "Server=localhost;Database=MsDemo_Identity;Trusted_Connection=True;MultipleActiveResultSets=true",
-  "Blogging": "mongodb://localhost|MsDemo_Blogging"
+  "Blogging": "mongodb://localhost/MsDemo_Blogging"
 }
 ````
 

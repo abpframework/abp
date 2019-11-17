@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Auth;
@@ -25,35 +26,62 @@ namespace Volo.Abp.Cli.Commands
         {
             if (commandLineArgs.Target.IsNullOrEmpty())
             {
-                Logger.LogInformation("");
-                Logger.LogWarning("Username is missing.");
-                LogHelp();
-                return;
+                throw new CliUsageException(
+                    "Username name is missing!" +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
             }
 
             Console.Write("Password: ");
             var password = ConsoleHelper.ReadSecret();
             if (password.IsNullOrWhiteSpace())
             {
-                Logger.LogInformation("");
-                Logger.LogWarning("Password is missing.");
-                LogHelp();
-                return;
+                throw new CliUsageException(
+                    "Password is missing!" +
+                    Environment.NewLine + Environment.NewLine +
+                    GetUsageInfo()
+                );
             }
 
-            await AuthService.LoginAsync(commandLineArgs.Target, password);
+            await AuthService.LoginAsync(
+                commandLineArgs.Target,
+                password,
+                commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long)
+            );
 
             Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
         }
 
-        private void LogHelp()
+        public string GetUsageInfo()
         {
-            Logger.LogWarning("");
-            Logger.LogWarning("Usage:");
-            Logger.LogWarning("  abp login <username>");
-            Logger.LogWarning("");
-            Logger.LogWarning("Example:");
-            Logger.LogWarning("  abp login john");
+            var sb = new StringBuilder();
+
+            sb.AppendLine("");
+            sb.AppendLine("Usage:");
+            sb.AppendLine("  abp login <username>");
+            sb.AppendLine("");
+            sb.AppendLine("Example:");
+            sb.AppendLine("");
+            sb.AppendLine("  abp login john");
+            sb.AppendLine("");
+            sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
+
+            return sb.ToString();
+        }
+
+        public string GetShortDescription()
+        {
+            return string.Empty;
+        }
+
+        public static class Options
+        {
+            public static class Organization
+            {
+                public const string Short = "o";
+                public const string Long = "organization";
+            }
         }
     }
 }

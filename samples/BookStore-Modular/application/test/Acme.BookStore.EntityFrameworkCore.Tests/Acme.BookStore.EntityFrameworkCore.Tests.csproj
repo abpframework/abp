@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Acme.BookStore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Acme.BookStore.EntityFrameworkCore.DbMigrations\Acme.BookStore.EntityFrameworkCore.DbMigrations.csproj" />
+    <ProjectReference Include="..\Acme.BookStore.TestBase\Acme.BookStore.TestBase.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0" />
+  </ItemGroup>
+
+</Project>

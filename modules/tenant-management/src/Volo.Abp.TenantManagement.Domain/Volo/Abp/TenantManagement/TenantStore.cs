@@ -11,12 +11,12 @@ namespace Volo.Abp.TenantManagement
     public class TenantStore : ITenantStore, ITransientDependency
     {
         private readonly ITenantRepository _tenantRepository;
-        private readonly IObjectMapper _objectMapper;
+        private readonly IObjectMapper<AbpTenantManagementDomainModule> _objectMapper;
         private readonly ICurrentTenant _currentTenant;
 
         public TenantStore(
             ITenantRepository tenantRepository, 
-            IObjectMapper objectMapper,
+            IObjectMapper<AbpTenantManagementDomainModule> objectMapper,
             ICurrentTenant currentTenant)
         {
             _tenantRepository = tenantRepository;
@@ -43,6 +43,34 @@ namespace Volo.Abp.TenantManagement
             using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
             {
                 var tenant = await _tenantRepository.FindAsync(id);
+                if (tenant == null)
+                {
+                    return null;
+                }
+
+                return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
+            }
+        }
+
+        public TenantConfiguration Find(string name)
+        {
+            using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
+            {
+                var tenant = _tenantRepository.FindByName(name);
+                if (tenant == null)
+                {
+                    return null;
+                }
+
+                return _objectMapper.Map<Tenant, TenantConfiguration>(tenant);
+            }
+        }
+
+        public TenantConfiguration Find(Guid id)
+        {
+            using (_currentTenant.Change(null)) //TODO: No need this if we can implement to define host side (or tenant-independent) entities!
+            {
+                var tenant = _tenantRepository.Find(id);
                 if (tenant == null)
                 {
                     return null;

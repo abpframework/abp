@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Blogging.MongoDB
 {
-    public class BloggingMongoModelBuilderConfigurationOptions : MongoModelBuilderConfigurationOptions
+    public class BloggingMongoModelBuilderConfigurationOptions : AbpMongoModelBuilderConfigurationOptions
     {
-        public BloggingMongoModelBuilderConfigurationOptions([NotNull] string tablePrefix = BloggingConsts.DefaultDbTablePrefix)
-            : base(tablePrefix)
+        public BloggingMongoModelBuilderConfigurationOptions(
+            [NotNull] string collectionPrefix = "")
+            : base(collectionPrefix)
         {
         }
     }

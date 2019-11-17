@@ -1,32 +1,29 @@
-﻿using Mongo2Go;
+﻿using System;
+using Mongo2Go;
 using Volo.Abp;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
-using Volo.Blogging.MongoDB;
 
-namespace Volo.Blogging
+namespace Volo.Blogging.MongoDB
 {
     [DependsOn(
         typeof(BloggingTestBaseModule),
         typeof(BloggingMongoDbModule)
     )]
-    public class BloggingMongoDBTestModule : AbpModule
+    public class BloggingMongoDbTestModule : AbpModule
     {
-        private MongoDbRunner _mongoDbRunner;
+        private static readonly MongoDbRunner MongoDbRunner = MongoDbRunner.Start();
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            _mongoDbRunner = MongoDbRunner.Start();
+            var connectionString = MongoDbRunner.ConnectionString.EnsureEndsWith('/') +
+                                   "Db_" +
+                                    Guid.NewGuid().ToString("N");
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
-                options.ConnectionStrings.Default = _mongoDbRunner.ConnectionString;
+                options.ConnectionStrings.Default = connectionString;
             });
-        }
-
-        public override void OnApplicationShutdown(ApplicationShutdownContext context)
-        {
-            _mongoDbRunner.Dispose();
         }
     }
 }

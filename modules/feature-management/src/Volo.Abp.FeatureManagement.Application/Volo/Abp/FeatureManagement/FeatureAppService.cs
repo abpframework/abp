@@ -13,7 +13,7 @@ using Volo.Abp.Features;
 namespace Volo.Abp.FeatureManagement
 {
     [Authorize]
-    public class FeatureAppService : ApplicationService, IFeatureAppService
+    public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppService
     {
         protected FeatureManagementOptions Options { get; }
 
@@ -44,6 +44,7 @@ namespace Volo.Abp.FeatureManagement
                 features.Add(new FeatureDto
                 {
                     Name = featureDefinition.Name,
+                    DisplayName = featureDefinition.DisplayName?.Localize(_stringLocalizerFactory),
                     ValueType = featureDefinition.ValueType,
                     Description = featureDefinition.Description?.Localize(_stringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,

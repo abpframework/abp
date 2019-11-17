@@ -24,6 +24,8 @@ namespace Volo.Abp.IdentityServer.IdentityResources
 
         public virtual List<IdentityClaim> UserClaims { get; set; }
 
+        public virtual Dictionary<string, string> Properties { get; set; }
+
         protected IdentityResource()
         {
 
@@ -51,6 +53,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             ShowInDiscoveryDocument = showInDiscoveryDocument;
             
             UserClaims = new List<IdentityClaim>();
+            Properties = new Dictionary<string, string>();
         }
 
         public IdentityResource(Guid id, IdentityServer4.Models.IdentityResource resource)
@@ -64,6 +67,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             Emphasize = resource.Emphasize;
             ShowInDiscoveryDocument = resource.ShowInDiscoveryDocument;
             UserClaims = resource.UserClaims.Select(claimType => new IdentityClaim(id, claimType)).ToList();
+            Properties = resource.Properties.ToDictionary(x => x.Key, x => x.Value);
         }
 
         public virtual void AddUserClaim([NotNull] string type)

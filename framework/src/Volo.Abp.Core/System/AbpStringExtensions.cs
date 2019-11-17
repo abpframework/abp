@@ -294,6 +294,25 @@ namespace System
         }
 
         /// <summary>
+        /// Converts given PascalCase/camelCase string to kebab-case.
+        /// </summary>
+        /// <param name="str">String to convert.</param>
+        /// <param name="useCurrentCulture">set true to use current culture. Otherwise, invariant culture will be used.</param>
+        public static string ToKebabCase(this string str, bool useCurrentCulture = false)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                return str;
+            }
+
+            str = str.ToCamelCase();
+
+            return useCurrentCulture
+                ? Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + "-" + char.ToLower(m.Value[1]))
+                : Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + "-" + char.ToLowerInvariant(m.Value[1]));
+        }
+
+        /// <summary>
         /// Converts string to enum value.
         /// </summary>
         /// <typeparam name="T">Type of enum</typeparam>

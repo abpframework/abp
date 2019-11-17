@@ -1,38 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Authorization;
-using Volo.Abp.Threading;
 
 namespace Microsoft.AspNetCore.Authorization
 {
-    // TODO: Complete all Sync extension methods!
     public static class AbpAuthorizationServiceExtensions
     {
-        public static AuthorizationResult Authorize(this IAuthorizationService authorizationService, ClaimsPrincipal user, object resource, string policyName)
-        {
-            return AsyncHelper.RunSync(() => authorizationService.AuthorizeAsync(user, resource, policyName));
-        }
-
-        public static AuthorizationResult Authorize(this IAuthorizationService authorizationService, ClaimsPrincipal user, object resource, IEnumerable<IAuthorizationRequirement> requirements)
-        {
-            return AsyncHelper.RunSync(() => authorizationService.AuthorizeAsync(user, resource, requirements));
-        }
-
         public static Task<AuthorizationResult> AuthorizeAsync(this IAuthorizationService authorizationService, string policyName)
         {
             return AuthorizeAsync(
                 authorizationService,
-                authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
-                policyName
-            );
-        }
-
-        public static AuthorizationResult Authorize(this IAuthorizationService authorizationService, string policyName)
-        {
-            return Authorize(
-                authorizationService, 
                 authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
                 policyName
             );
@@ -81,23 +59,9 @@ namespace Microsoft.AspNetCore.Authorization
             );
         }
 
-        public static AuthorizationResult Authorize(this IAuthorizationService authorizationService, object resource, string policyName)
-        {
-            return authorizationService.Authorize(
-                authorizationService.AsAbpAuthorizationService().CurrentPrincipal,
-                resource,
-                policyName
-            );
-        }
-
         public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, string policyName)
         {
             return (await authorizationService.AuthorizeAsync(policyName)).Succeeded;
-        }
-
-        public static bool IsGranted(this IAuthorizationService authorizationService, string policyName)
-        {
-            return authorizationService.Authorize(policyName).Succeeded;
         }
 
         public static async Task<bool> IsGrantedAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)
@@ -131,11 +95,6 @@ namespace Microsoft.AspNetCore.Authorization
             {
                 throw new AbpAuthorizationException("Authorization failed! Given policy has not granted: " + policyName);
             }
-        }
-
-        public static void Check(this IAuthorizationService authorizationService, string policyName)
-        {
-            AsyncHelper.RunSync(() => authorizationService.CheckAsync(policyName));
         }
 
         public static async Task CheckAsync(this IAuthorizationService authorizationService, object resource, IAuthorizationRequirement requirement)

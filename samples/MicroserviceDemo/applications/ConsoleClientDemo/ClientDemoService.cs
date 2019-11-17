@@ -15,13 +15,13 @@ namespace ConsoleClientDemo
         private readonly IIdentityUserAppService _userAppService;
         private readonly IProductAppService _productAppService;
         private readonly IIdentityModelAuthenticationService _authenticator;
-        private readonly RemoteServiceOptions _remoteServiceOptions;
+        private readonly AbpRemoteServiceOptions _remoteServiceOptions;
 
         public ClientDemoService(
             IIdentityUserAppService userAppService,
             IProductAppService productAppService,
             IIdentityModelAuthenticationService authenticator, 
-            IOptions<RemoteServiceOptions> remoteServiceOptions)
+            IOptions<AbpRemoteServiceOptions> remoteServiceOptions)
         {
             _userAppService = userAppService;
             _authenticator = authenticator;

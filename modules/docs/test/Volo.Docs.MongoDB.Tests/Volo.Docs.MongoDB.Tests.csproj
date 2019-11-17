@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Mongo2Go" Version="2.2.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Docs.MongoDB\Volo.Docs.MongoDB.csproj" />
+    <ProjectReference Include="..\Volo.Docs.TestBase\Volo.Docs.TestBase.csproj" />
+  </ItemGroup>
+
+</Project>

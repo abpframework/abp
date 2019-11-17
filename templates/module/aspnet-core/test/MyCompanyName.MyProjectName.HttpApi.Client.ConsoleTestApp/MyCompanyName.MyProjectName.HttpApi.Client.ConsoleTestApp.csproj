@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>MyCompanyName.MyProjectName</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.Http.Client.IdentityModel\Volo.Abp.Http.Client.IdentityModel.csproj" />
+    <ProjectReference Include="..\..\src\MyCompanyName.MyProjectName.HttpApi.Client\MyCompanyName.MyProjectName.HttpApi.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="appsettings.json" />
+    <Content Include="appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

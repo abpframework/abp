@@ -7,11 +7,13 @@ namespace Volo.Abp.FeatureManagement.MongoDB
     {
         public static void ConfigureFeatureManagement(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new FeatureManagementMongoModelBuilderConfigurationOptions();
+            var options = new FeatureManagementMongoModelBuilderConfigurationOptions(
+                FeatureManagementDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

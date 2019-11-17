@@ -27,5 +27,11 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             bool includeDetails = true,
             CancellationToken cancellationToken = default
         );
+
+        Task<bool> CheckNameExistAsync(
+            string name,
+            Guid? expectedId = null,
+            CancellationToken cancellationToken = default
+         );
     }
 }

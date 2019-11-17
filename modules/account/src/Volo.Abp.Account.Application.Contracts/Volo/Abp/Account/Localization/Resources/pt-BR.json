@@ -1,0 +1,21 @@
+{
+  "culture": "pt-BR",
+  "texts": {
+    "UserName": "Usuário",
+    "EmailAddress": "E-mail",
+    "UserNameOrEmailAddress": "Utilize seu nome de usuário ou e-mail",
+    "Password": "Senha",
+    "RememberMe": "Lembrar",
+    "UseAnotherServiceToLogin": "Usar outro serviço para entrar",
+    "UserLockedOutMessage": "Esta conta de usuário está bloqueada devido a muitas tentativas de acesso. Por favor, espero alguns instantes e tente novamente.",
+    "InvalidUserNameOrPassword": "Usuário ou senha estão incorretos!",
+    "LoginIsNotAllowed": "Você não possui permissão para entrar! Você deve confirmar seu e-mail ou número de telefone.",
+    "SelfRegistrationDisabledMessage": "Não é permitido que você crie uma nova conta neste site. Contate um administrador para que ele crie uma conta para você.",
+    "Login": "Entrar",
+    "Cancel": "Cancelar",
+    "Register": "Registrar-se",
+    "InvalidLoginRequest": "Requisição de acesso inválida!",
+    "ThereAreNoLoginSchemesConfiguredForThisClient": "Não existe um esquema de acesso para este usuário",
+    "LogInUsingYourProviderAccount": "Acessse utilizando sua conta {0}"
+  }
+}

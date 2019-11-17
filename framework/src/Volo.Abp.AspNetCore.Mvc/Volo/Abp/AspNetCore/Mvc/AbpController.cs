@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Aspects;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
+using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Timing;
@@ -21,7 +23,11 @@ namespace Volo.Abp.AspNetCore.Mvc
     {
         public IServiceProvider ServiceProvider { get; set; }
         protected readonly object ServiceProviderLock = new object();
+
         protected TService LazyGetRequiredService<TService>(ref TService reference)
+            => LazyGetRequiredService(typeof(TService), ref reference);
+
+        protected TRef LazyGetRequiredService<TRef>(Type serviceType, ref TRef reference)
         {
             if (reference == null)
             {
@@ -29,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc
                 {
                     if (reference == null)
                     {
-                        reference = ServiceProvider.GetRequiredService<TService>();
+                        reference = (TRef)ServiceProvider.GetRequiredService(serviceType);
                     }
                 }
             }
@@ -40,7 +46,27 @@ namespace Volo.Abp.AspNetCore.Mvc
         public IUnitOfWorkManager UnitOfWorkManager => LazyGetRequiredService(ref _unitOfWorkManager);
         private IUnitOfWorkManager _unitOfWorkManager;
 
-        public IObjectMapper ObjectMapper => LazyGetRequiredService(ref _objectMapper);
+        protected Type ObjectMapperContext { get; set; }
+        public IObjectMapper ObjectMapper
+        {
+            get
+            {
+                if (_objectMapper != null)
+                {
+                    return _objectMapper;
+                }
+
+                if (ObjectMapperContext == null)
+                {
+                    return LazyGetRequiredService(ref _objectMapper);
+                }
+
+                return LazyGetRequiredService(
+                    typeof(IObjectMapper<>).MakeGenericType(ObjectMapperContext),
+                    ref _objectMapper
+                );
+            }
+        }
         private IObjectMapper _objectMapper;
 
         public IGuidGenerator GuidGenerator => LazyGetRequiredService(ref _guidGenerator);
@@ -68,6 +94,23 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         public IFeatureChecker FeatureChecker => LazyGetRequiredService(ref _featureChecker);
         private IFeatureChecker _featureChecker;
+
+        public IStringLocalizerFactory StringLocalizerFactory => LazyGetRequiredService(ref _stringLocalizerFactory);
+        private IStringLocalizerFactory _stringLocalizerFactory;
+
+        public IStringLocalizer L => _localizer ?? (_localizer = StringLocalizerFactory.Create(LocalizationResource));
+        private IStringLocalizer _localizer;
+
+        protected Type LocalizationResource
+        {
+            get => _localizationResource;
+            set
+            {
+                _localizationResource = value;
+                _localizer = null;
+            }
+        }
+        private Type _localizationResource = typeof(DefaultResource);
 
         public List<string> AppliedCrossCuttingConcerns { get; } = new List<string>();
 

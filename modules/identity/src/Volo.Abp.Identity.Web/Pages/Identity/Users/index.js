@@ -36,7 +36,7 @@
                                     visible: abp.auth.isGranted('AbpIdentity.Users.ManagePermissions'),
                                     action: function (data) {
                                         _permissionsModal.open({
-                                            providerName: 'User',
+                                            providerName: 'U',
                                             providerKey: data.record.id
                                         });
                                     }

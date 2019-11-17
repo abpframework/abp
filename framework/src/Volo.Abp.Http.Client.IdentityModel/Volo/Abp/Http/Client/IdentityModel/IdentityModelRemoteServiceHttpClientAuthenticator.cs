@@ -1,5 +1,5 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Volo.Abp.DependencyInjection;
@@ -28,7 +28,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
                 var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
                 if (accessToken != null)
                 {
-                    context.Client.SetBearerToken(accessToken);
+                    context.Request.SetBearerToken(accessToken);
                     return;
                 }
             }

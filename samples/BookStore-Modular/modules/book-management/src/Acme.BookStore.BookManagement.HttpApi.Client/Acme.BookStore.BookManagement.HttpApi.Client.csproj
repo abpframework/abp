@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>Acme.BookStore.BookManagement</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\framework\src\Volo.Abp.Http.Client\Volo.Abp.Http.Client.csproj" />
+    <ProjectReference Include="..\Acme.BookStore.BookManagement.Application.Contracts\Acme.BookStore.BookManagement.Application.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

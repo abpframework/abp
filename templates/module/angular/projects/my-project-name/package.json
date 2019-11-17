@@ -1,0 +1,8 @@
+{
+  "name": "my-project-name",
+  "version": "0.0.1",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^1.0.4",
+    "my-project-name.config": "^0.0.1"
+  }
+}

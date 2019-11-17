@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Docs.Admin.Web</AssemblyName>
     <PackageId>Volo.Docs.Admin.Web</PackageId>
     <OutputType>Library</OutputType>
@@ -21,36 +21,18 @@
     <PackageReference Include="CommonMark.NET" Version="0.15.1" />
   </ItemGroup>
 
-
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\**\*.*" />
     <EmbeddedResource Include="Pages\**\*.cshtml" />
     <EmbeddedResource Include="Pages\**\*.css" />
     <EmbeddedResource Include="Pages\**\*.js" />
-    <EmbeddedResource Include="Localization\Resources\**\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="wwwroot\**\*.*" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.css" />
     <Content Remove="Pages\**\*.js" />
-    <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="Properties\launchSettings.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <None Include="compilerconfig.json" />
     <None Include="Properties\launchSettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\Docs\Admin\Projects\Edit.cshtml.cs">
-      <DependentUpon>Edit.cshtml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

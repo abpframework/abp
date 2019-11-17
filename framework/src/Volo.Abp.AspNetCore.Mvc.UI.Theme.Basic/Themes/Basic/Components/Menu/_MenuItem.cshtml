@@ -10,6 +10,13 @@
     if (Model.Url != null)
     {
         <a class="dropdown-item @cssClass @disabled" href="@(Model.Url ?? "#")" @Html.Raw(elementId)>
+            @if (Model.Icon != null)
+            {
+                if (Model.Icon.StartsWith("fa"))
+                {
+                    <i class="@Model.Icon"></i>
+                }
+            }
             @Model.DisplayName
         </a>
     }
@@ -26,7 +33,7 @@ else
                 @Model.DisplayName
             </span>
         </a>
-        <div class="dropdown-menu">
+        <div class="dropdown-menu border-0 shadow-sm">
             @foreach (var childMenuItem in Model.Items)
             {
                 @await Html.PartialAsync("~/Themes/Basic/Components/Menu/_MenuItem.cshtml", childMenuItem)

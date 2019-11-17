@@ -1,0 +1,22 @@
+{
+  "name": "@abp/ng.theme.basic",
+  "version": "1.0.4",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^1.0.4",
+    "tslib": "^1.9.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "bundles/abp-ng.theme.basic.umd.js",
+  "module": "fesm5/abp-ng.theme.basic.js",
+  "es2015": "fesm2015/abp-ng.theme.basic.js",
+  "esm5": "esm5/abp-ng.theme.basic.js",
+  "esm2015": "esm2015/abp-ng.theme.basic.js",
+  "fesm5": "fesm5/abp-ng.theme.basic.js",
+  "fesm2015": "fesm2015/abp-ng.theme.basic.js",
+  "typings": "abp-ng.theme.basic.d.ts",
+  "metadata": "abp-ng.theme.basic.metadata.json",
+  "sideEffects": false,
+  "gitHead": "2f588b67002cd64e8660f43217c2197ccc9fe631"
+}

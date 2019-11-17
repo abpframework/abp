@@ -1,6 +1,6 @@
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {
-    public class BundlingOptions
+    public class AbpBundlingOptions
     {
         public BundleConfigurationCollection StyleBundles { get; set; }
 
@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         /// </summary>
         public BundlingMode Mode { get; set; } = BundlingMode.Auto;
 
-        public BundlingOptions()
+        public AbpBundlingOptions()
         {
             StyleBundles = new BundleConfigurationCollection();
             ScriptBundles = new BundleConfigurationCollection();

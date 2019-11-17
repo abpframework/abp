@@ -9,7 +9,7 @@ namespace Volo.Abp.Features
 {
     public class FeatureChecker : FeatureCheckerBase
     {
-        protected FeatureOptions Options { get; }
+        protected AbpFeatureOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
         protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
         protected List<IFeatureValueProvider> Providers => _providers.Value;
@@ -17,7 +17,7 @@ namespace Volo.Abp.Features
         private readonly Lazy<List<IFeatureValueProvider>> _providers;
 
         public FeatureChecker(
-            IOptions<FeatureOptions> options,
+            IOptions<AbpFeatureOptions> options,
             IServiceProvider serviceProvider,
             IFeatureDefinitionManager featureDefinitionManager)
         {

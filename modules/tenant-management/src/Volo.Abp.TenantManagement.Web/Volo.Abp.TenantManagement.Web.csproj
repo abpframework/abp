@@ -3,7 +3,7 @@
   <Import Project="..\..\..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyName>Volo.Abp.TenantManagement.Web</AssemblyName>
     <PackageId>Volo.Abp.TenantManagement.Web</PackageId>
     <IsPackable>true</IsPackable>
@@ -12,15 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Pages\**\*.*" Exclude="*.cs" />
-    <EmbeddedResource Include="Localization\Resources\AbpTenantManagement\Web\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <EmbeddedResource Include="Pages\**\*.cshtml" />
+    <EmbeddedResource Include="Pages\**\*.js" />
+    <EmbeddedResource Include="Pages\**\*.css" />
     <Content Remove="Pages\**\*.cshtml" />
     <Content Remove="Pages\**\*.js" />
     <Content Remove="Pages\**\*.css" />
-    <Content Remove="Localization\Resources\**\*.json" />
     <Content Remove="compilerconfig.json" />
     <Content Remove="compilerconfig.json.defaults" />
     <Content Remove="Properties\launchSettings.json" />

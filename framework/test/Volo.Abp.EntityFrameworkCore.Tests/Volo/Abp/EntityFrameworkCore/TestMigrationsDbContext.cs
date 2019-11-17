@@ -15,6 +15,8 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public DbSet<BookInSecondDbContext> Books { get; set; }
 
+        public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
+
         public TestMigrationsDbContext(DbContextOptions<TestMigrationsDbContext> options) 
             : base(options)
         {

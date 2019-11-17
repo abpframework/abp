@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Collections;
 using Volo.Abp.DependencyInjection;
@@ -13,17 +14,19 @@ namespace Volo.Abp.EventBus.Distributed
     public class LocalDistributedEventBus : IDistributedEventBus, ISingletonDependency
     {
         private readonly ILocalEventBus _localEventBus;
-        protected IHybridServiceScopeFactory ServiceScopeFactory { get; }
-        protected DistributedEventBusOptions DistributedEventBusOptions { get; }
+
+        protected IServiceScopeFactory ServiceScopeFactory { get; }
+
+        protected AbpDistributedEventBusOptions AbpDistributedEventBusOptions { get; }
 
         public LocalDistributedEventBus(
             ILocalEventBus localEventBus,
-            IHybridServiceScopeFactory serviceScopeFactory,
-            IOptions<DistributedEventBusOptions> distributedEventBusOptions)
+            IServiceScopeFactory serviceScopeFactory,
+            IOptions<AbpDistributedEventBusOptions> distributedEventBusOptions)
         {
             _localEventBus = localEventBus;
             ServiceScopeFactory = serviceScopeFactory;
-            DistributedEventBusOptions = distributedEventBusOptions.Value;
+            AbpDistributedEventBusOptions = distributedEventBusOptions.Value;
             Subscribe(distributedEventBusOptions.Value.Handlers);
         }
 

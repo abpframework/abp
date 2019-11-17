@@ -1,0 +1,11 @@
+{
+  "name": "@abp/ng.account",
+  "version": "1.0.4",
+  "dependencies": {
+    "@abp/ng.theme.shared": "^1.0.4",
+    "@abp/ng.account.config": "^1.0.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Http.Client;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.TestApp.Domain;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
-    public class PersonAppServiceClientProxy_Tests : AbpHttpTestBase
+    public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
     {
         private readonly IPeopleAppService _peopleAppService;
         private readonly IRepository<Person, Guid> _personRepository;
@@ -100,6 +101,15 @@ namespace Volo.Abp.Http.DynamicProxying
             personInDb.Id.ShouldBe(person.Id);
             personInDb.Name.ShouldBe(person.Name);
             personInDb.Age.ShouldBe(person.Age);
+        }
+
+        [Fact]
+        public async Task GetWithAuthorized()
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            {
+                await _peopleAppService.GetWithAuthorized();
+            });
         }
 
         [Fact]

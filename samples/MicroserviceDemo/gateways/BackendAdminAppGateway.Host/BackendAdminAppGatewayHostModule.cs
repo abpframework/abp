@@ -5,6 +5,7 @@ using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 using ProductManagement;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Autofac;
@@ -52,18 +53,18 @@ namespace BackendAdminAppGateway.Host
                     options.ApiName = configuration["AuthServer:ApiName"];
                     options.RequireHttpsMetadata = false;
                     //TODO: Should create an extension method for that (may require to create a new ABP package depending on the IdentityServer4.AccessTokenValidation)
-                    options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
-                    options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
-                    options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
-                    options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
-                    options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
-                    options.InboundJwtClaimTypeMap["phone_number_verified"] = AbpClaimTypes.PhoneNumberVerified;
-                    options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
+                    //options.InboundJwtClaimTypeMap["sub"] = AbpClaimTypes.UserId;
+                    //options.InboundJwtClaimTypeMap["role"] = AbpClaimTypes.Role;
+                    //options.InboundJwtClaimTypeMap["email"] = AbpClaimTypes.Email;
+                    //options.InboundJwtClaimTypeMap["email_verified"] = AbpClaimTypes.EmailVerified;
+                    //options.InboundJwtClaimTypeMap["phone_number"] = AbpClaimTypes.PhoneNumber;
+                    //options.InboundJwtClaimTypeMap["phone_number_verified"] = AbpClaimTypes.PhoneNumberVerified;
+                    //options.InboundJwtClaimTypeMap["name"] = AbpClaimTypes.UserName;
                 });
 
             context.Services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "BackendAdminApp Gateway API", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "BackendAdminApp Gateway API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
             });
@@ -75,7 +76,7 @@ namespace BackendAdminAppGateway.Host
                 options.UseSqlServer();
             });
 
-            context.Services.AddDistributedRedisCache(options =>
+            context.Services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = configuration["Redis:Configuration"];
             });
@@ -91,6 +92,7 @@ namespace BackendAdminAppGateway.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

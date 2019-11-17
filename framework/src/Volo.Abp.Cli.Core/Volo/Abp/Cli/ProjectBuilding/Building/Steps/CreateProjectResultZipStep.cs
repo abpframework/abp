@@ -1,6 +1,6 @@
-﻿using Ionic.Zip;
+﻿using System.IO;
+using ICSharpCode.SharpZipLib.Zip;
 using Volo.Abp.Cli.ProjectBuilding.Files;
-using Volo.Abp.Cli.ProjectBuilding.Zipping;
 
 namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 {
@@ -13,10 +13,27 @@ namespace Volo.Abp.Cli.ProjectBuilding.Building.Steps
 
         private static byte[] CreateZipFileFromEntries(FileEntryList entries)
         {
-            using (var resultZipFile = new ZipFile())
+            using (var memoryStream = new MemoryStream())
             {
-                entries.CopyToZipFile(resultZipFile);
-                return resultZipFile.GetBytes();
+                using (var zipOutputStream = new ZipOutputStream(memoryStream))
+                {
+                    zipOutputStream.SetLevel(3); //0-9, 9 being the highest level of compression
+
+                    foreach (var entry in entries)
+                    {
+                        zipOutputStream.PutNextEntry(new ZipEntry(entry.Name)
+                        {
+                            Size = entry.Bytes.Length
+                        });
+                        zipOutputStream.Write(entry.Bytes, 0, entry.Bytes.Length);
+                    }
+
+                    zipOutputStream.CloseEntry();
+                    zipOutputStream.IsStreamOwner = false;
+                }
+
+                memoryStream.Position = 0;
+                return memoryStream.ToArray();
             }
         }
     }

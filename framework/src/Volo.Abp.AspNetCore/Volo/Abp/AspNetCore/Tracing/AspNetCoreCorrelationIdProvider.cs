@@ -10,11 +10,11 @@ namespace Volo.Abp.AspNetCore.Tracing
     public class AspNetCoreCorrelationIdProvider : ICorrelationIdProvider, ITransientDependency
     {
         protected IHttpContextAccessor HttpContextAccessor { get; }
-        protected CorrelationIdOptions Options { get; }
+        protected AbpCorrelationIdOptions Options { get; }
 
         public AspNetCoreCorrelationIdProvider(
             IHttpContextAccessor httpContextAccessor,
-            IOptions<CorrelationIdOptions> options)
+            IOptions<AbpCorrelationIdOptions> options)
         {
             HttpContextAccessor = httpContextAccessor;
             Options = options.Value;

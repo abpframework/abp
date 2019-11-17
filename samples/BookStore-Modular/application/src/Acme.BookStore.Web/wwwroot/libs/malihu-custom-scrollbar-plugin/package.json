@@ -1,0 +1,65 @@
+{
+  "_from": "malihu-custom-scrollbar-plugin@^3.1.5",
+  "_id": "malihu-custom-scrollbar-plugin@3.1.5",
+  "_inBundle": false,
+  "_integrity": "sha1-MQzsxeWUFaHCnp37XStuAdZqKe8=",
+  "_location": "/malihu-custom-scrollbar-plugin",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "malihu-custom-scrollbar-plugin@^3.1.5",
+    "name": "malihu-custom-scrollbar-plugin",
+    "escapedName": "malihu-custom-scrollbar-plugin",
+    "rawSpec": "^3.1.5",
+    "saveSpec": null,
+    "fetchSpec": "^3.1.5"
+  },
+  "_requiredBy": [
+    "/@abp/malihu-custom-scrollbar-plugin"
+  ],
+  "_resolved": "https://registry.npmjs.org/malihu-custom-scrollbar-plugin/-/malihu-custom-scrollbar-plugin-3.1.5.tgz",
+  "_shasum": "310cecc5e59415a1c29e9dfb5d2b6e01d66a29ef",
+  "_spec": "malihu-custom-scrollbar-plugin@^3.1.5",
+  "_where": "D:\\Github\\abp\\templates\\app\\aspnet-core\\src\\Acme.BookStore.Web\\node_modules\\@abp\\malihu-custom-scrollbar-plugin",
+  "author": {
+    "name": "malihu",
+    "url": "http://manos.malihu.gr"
+  },
+  "bugs": {
+    "url": "https://github.com/malihu/malihu-custom-scrollbar-plugin/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "jquery-mousewheel": ">=3.0.6"
+  },
+  "deprecated": false,
+  "description": "Highly customizable custom scrollbar jQuery plugin, featuring vertical/horizontal scrollbars, scrolling momentum, mouse-wheel, keyboard and touch support user defined callbacks etc.",
+  "files": [
+    "jquery.mCustomScrollbar.js",
+    "jquery.mCustomScrollbar.concat.min.js",
+    "jquery.mCustomScrollbar.css",
+    "mCSB_buttons.png",
+    "readme.md"
+  ],
+  "homepage": "http://manos.malihu.gr/jquery-custom-content-scroller",
+  "jam": {
+    "dependencies": {
+      "jquery": ">=1.6",
+      "jquery-mousewheel": ">=3.0.6"
+    }
+  },
+  "keywords": [
+    "jquery-plugin",
+    "custom-scrollbar",
+    "scrollbar"
+  ],
+  "license": "MIT",
+  "main": "./jquery.mCustomScrollbar.js",
+  "name": "malihu-custom-scrollbar-plugin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/malihu/malihu-custom-scrollbar-plugin.git"
+  },
+  "version": "3.1.5"
+}
