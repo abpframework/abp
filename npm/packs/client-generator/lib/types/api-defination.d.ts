@@ -3,6 +3,12 @@ export declare namespace APIDefination {
         modules: Modules;
     }
     interface Modules {
-        [key: string]: any;
+        [key: string]: Module;
+    }
+    interface Module {
+        rootPath: string;
+        controllers: {
+            [key: string]: any;
+        };
     }
 }

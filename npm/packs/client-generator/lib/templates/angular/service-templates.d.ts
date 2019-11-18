@@ -1,3 +1,3 @@
 export declare namespace ServiceTemplates {
-    function classTemplate(name: string): void;
+    function classTemplate(name: string, content: string[]): string;
 }

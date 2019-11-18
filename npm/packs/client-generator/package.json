@@ -23,11 +23,13 @@
     "clear": "^0.1.0",
     "commander": "^4.0.1",
     "figlet": "^1.2.4",
+    "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
     "ora": "^4.0.3",
     "path": "^0.12.7"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8.0.1",
     "@types/inquirer": "^6.5.0",
     "@types/node": "^12.12.8",
     "nodemon": "^1.19.4",

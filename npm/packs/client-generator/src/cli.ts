@@ -25,7 +25,8 @@ export async function cli(program: any) {
     return selectedModules;
   };
 
-  const modules = await selection(Object.keys(data.modules));
+  // const modules = await selection(Object.keys(data.modules));
+  const modules = ['multi-tenancy'];
 
   switch (program.ui) {
     case 'angular':

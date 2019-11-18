@@ -4,6 +4,11 @@ export namespace APIDefination {
   }
 
   export interface Modules {
-    [key: string]: any;
+    [key: string]: Module;
+  }
+
+  export interface Module {
+    rootPath: string;
+    controllers: { [key: string]: any };
   }
 }

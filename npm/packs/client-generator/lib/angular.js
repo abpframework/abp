@@ -36,11 +36,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var service_templates_1 = require("./templates/angular/service-templates");
 function angular(data, selectedModules) {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             selectedModules.forEach(function (module) {
-                console.log(module);
+                var element = data.modules[module];
+                var contents = [];
+                (Object.keys(element.controllers) || []).forEach(function (key) {
+                    console.warn(element.controllers[key].controllerName);
+                    contents.push('');
+                });
+                var service = service_templates_1.ServiceTemplates.classTemplate(element.rootPath, contents);
+                console.log(service);
             });
             return [2 /*return*/];
         });
