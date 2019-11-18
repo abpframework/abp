@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "chalk": "^3.0.0",
+    "change-case": "^3.1.0",
     "clear": "^0.1.0",
     "commander": "^4.0.1",
     "figlet": "^1.2.4",
@@ -27,8 +28,8 @@
     "path": "^0.12.7"
   },
   "devDependencies": {
-    "@types/node": "^12.12.8",
     "@types/inquirer": "^6.5.0",
+    "@types/node": "^12.12.8",
     "nodemon": "^1.19.4",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2"

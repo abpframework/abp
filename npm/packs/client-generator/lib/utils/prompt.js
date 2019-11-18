@@ -40,13 +40,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var inquirer_1 = __importDefault(require("inquirer"));
-exports.selectingModule = function (modules) { return __awaiter(void 0, void 0, void 0, function () {
+exports.uiSelection = function (uiArray) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0: return [4 /*yield*/, inquirer_1.default.prompt(modules)];
-            case 1:
-                _a.sent();
-                return [2 /*return*/];
-        }
+        return [2 /*return*/, inquirer_1.default
+                .prompt({ type: 'list', name: 'Please select an UI', choices: uiArray })
+                .then(function (res) { return res['Please select an UI']; })];
+    });
+}); };
+exports.moduleSelection = function (modules) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        return [2 /*return*/, inquirer_1.default
+                .prompt({ type: 'checkbox', name: 'Please select module(s)', choices: modules })
+                .then(function (res) { return res['Please select module(s)']; })];
     });
 }); };
