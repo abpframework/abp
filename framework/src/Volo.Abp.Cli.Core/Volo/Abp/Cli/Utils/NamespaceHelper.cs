@@ -12,7 +12,7 @@ namespace Volo.Abp.Cli.Utils
                 return value;
             }
 
-            value = Regex.Replace(value, @"(^\s+|\s+$)", "");
+            value = value.Trim();
             value = Regex.Replace(value, @"(((?<=\.)|^)((?=\d)|\.)|[^\w\.])|(\.$)", "_");
 
             return value;
