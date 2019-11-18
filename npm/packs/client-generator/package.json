@@ -22,6 +22,8 @@
     "clear": "^0.1.0",
     "commander": "^4.0.1",
     "figlet": "^1.2.4",
+    "inquirer": "^7.0.0",
+    "ora": "^4.0.3",
     "path": "^0.12.7"
   },
   "devDependencies": {
