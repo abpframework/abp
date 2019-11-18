@@ -127,8 +127,16 @@ namespace Volo.Abp.Identity
 
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
-            (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
-            (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            if (!input.Email.IsNullOrWhiteSpace() && !string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
+            {
+                (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
+            }
+
+            if (!input.PhoneNumber.IsNullOrWhiteSpace() && !string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+            {
+                (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            }
+
             (await _userManager.SetTwoFactorEnabledAsync(user, input.TwoFactorEnabled)).CheckErrors();
             (await _userManager.SetLockoutEnabledAsync(user, input.LockoutEnabled)).CheckErrors();
 
