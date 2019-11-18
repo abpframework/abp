@@ -46,6 +46,13 @@
     "DatatableActionDropdownDefaultText": "Ações",
     "ChangePassword": "Alterar Senha",
     "PersonalInfo": "Perfil",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Há alterações não salvas."
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Há alterações não salvas.",
+    "UnhandledException": "Exceção não tratada!",
+    "401Message": "Autenticação inválida",
+    "403Message": "Não autorizado",
+    "404Message": "Página não encontrada",
+    "500Message": "Erro interno do servidor",
+    "GoHomePage": "Voltar à página principal",
+    "GoBack": "Voltar"
   }
 }
