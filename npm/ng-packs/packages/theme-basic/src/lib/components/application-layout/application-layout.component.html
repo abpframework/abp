@@ -158,7 +158,7 @@
 </ng-template>
 
 <ng-template #language>
-  <li class="nav-item">
+  <li *ngIf="(dropdownLanguages$ | async)?.length > 1" class="nav-item">
     <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">
       <a
         ngbDropdownToggle
