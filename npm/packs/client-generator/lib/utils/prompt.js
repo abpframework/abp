@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -40,38 +39,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var chalk_1 = __importDefault(require("chalk"));
-var commander_1 = __importDefault(require("commander"));
-var ora_1 = __importDefault(require("ora"));
-var axios_1 = require("./utils/axios");
-var prompt_1 = require("./utils/prompt");
-var clear = require('clear');
-var figlet = require('figlet');
-clear();
-console.log(chalk_1.default.red(figlet.textSync('ABP', { horizontalLayout: 'full' })));
-commander_1.default
-    .version('0.0.1')
-    .description('ABP Client Generator')
-    .option('-u, --ui', 'UI option (Angular)')
-    .parse(process.argv);
-if (!process.argv.slice(2).length) {
-    commander_1.default.outputHelp();
-    process.exit(1);
-}
-var loading = ora_1.default('Waiting for API response... \n');
-loading.start();
-(function () {
-    return __awaiter(this, void 0, void 0, function () {
-        var data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, axios_1.axiosInstance.get('a')];
-                case 1:
-                    data = _a.sent();
-                    loading.stop();
-                    prompt_1.selectingModule(Object.keys(data));
-                    return [2 /*return*/];
-            }
-        });
+var inquirer_1 = __importDefault(require("inquirer"));
+exports.selectingModule = function (modules) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, inquirer_1.default.prompt(modules)];
+            case 1:
+                _a.sent();
+                return [2 /*return*/];
+        }
     });
-})();
+}); };

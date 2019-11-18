@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@types/node": "^12.12.8",
+    "@types/inquirer": "^6.5.0",
     "nodemon": "^1.19.4",
     "ts-node": "^8.5.2",
     "typescript": "^3.7.2"
