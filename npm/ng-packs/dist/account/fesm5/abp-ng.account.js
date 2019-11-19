@@ -1,69 +1,64 @@
-import {
-  ConfigState,
-  GetAppConfiguration,
-  RestService,
-  DynamicLayoutComponent,
-  ChangePassword,
-  GetProfile,
-  UpdateProfile,
-  ProfileState,
-  SessionState,
-  SetTenant,
-  CoreModule,
-} from '@abp/ng.core';
+import { ConfigState, SessionState, GetAppConfiguration, RestService, DynamicLayoutComponent, ChangePassword, GetProfile, UpdateProfile, ProfileState, SetTenant, CoreModule } from '@abp/ng.core';
 import { ToasterService, fadeIn, ThemeSharedModule } from '@abp/ng.theme.shared';
 import { Component, Optional, Inject, Injectable, ɵɵdefineInjectable, ɵɵinject, NgModule, InjectionToken, Input } from '@angular/core';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { validatePassword, comparePasswords, NgxValidateCoreModule } from '@ngx-validate/core';
+import { TableModule } from 'primeng/table';
+import { RouterModule } from '@angular/router';
+import { __assign, __read, __decorate, __metadata } from 'tslib';
+import { Validators, FormBuilder } from '@angular/forms';
+import { Navigate } from '@ngxs/router-plugin';
+import { Store, Select } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { from, throwError, Observable } from 'rxjs';
+import { switchMap, tap, catchError, finalize, take, withLatestFrom } from 'rxjs/operators';
+import snq from 'snq';
+import { HttpHeaders } from '@angular/common/http';
+import { trigger, transition, useAnimation } from '@angular/animations';
+
 /**
  * @fileoverview added by tsickle
  * Generated from: lib/components/login/login.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var maxLength = Validators.maxLength,
-  minLength = Validators.minLength,
-  required = Validators.required;
-var LoginComponent = /** @class */ (function() {
-  function LoginComponent(fb, oauthService, store, toasterService, options) {
-    this.fb = fb;
-    this.oauthService = oauthService;
-    this.store = store;
-    this.toasterService = toasterService;
-    this.options = options;
-    this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
-    this.oauthService.loadDiscoveryDocument();
-    this.form = this.fb.group({
-      username: ['', [required, maxLength(255)]],
-      password: ['', [required, maxLength(32)]],
-      remember: [false],
-    });
-  }
-  /**
-   * @return {?}
-   */
-  LoginComponent.prototype.onSubmit
-  /**
-   * @return {?}
-   */ = function() {
-    var _this = this;
-    if (this.form.invalid) return;
-    // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
-    this.inProgress = true;
-    from(
-      this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value),
-    )
-      .pipe(
-        switchMap(
-          /**
-           * @return {?}
-           */
-          function() {
-            return _this.store.dispatch(new GetAppConfiguration());
-          },
-        ),
-        tap(
-          /**
-           * @return {?}
-           */
-          function() {
+var maxLength = Validators.maxLength, minLength = Validators.minLength, required = Validators.required;
+var LoginComponent = /** @class */ (function () {
+    function LoginComponent(fb, oauthService, store, toasterService, options) {
+        this.fb = fb;
+        this.oauthService = oauthService;
+        this.store = store;
+        this.toasterService = toasterService;
+        this.options = options;
+        this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
+        this.oauthService.loadDiscoveryDocument();
+        this.form = this.fb.group({
+            username: ['', [required, maxLength(255)]],
+            password: ['', [required, maxLength(32)]],
+            remember: [false],
+        });
+    }
+    /**
+     * @return {?}
+     */
+    LoginComponent.prototype.onSubmit = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (this.form.invalid)
+            return;
+        // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
+        this.inProgress = true;
+        /** @type {?} */
+        var tenant = this.store.selectSnapshot(SessionState.getTenant);
+        from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value, new HttpHeaders(__assign({}, (tenant && tenant.id && { __tenant: tenant.id })))))
+            .pipe(switchMap((/**
+         * @return {?}
+         */
+        function () { return _this.store.dispatch(new GetAppConfiguration()); })), tap((/**
+         * @return {?}
+         */
+        function () {
             /** @type {?} */
             var redirectUrl =
               snq(

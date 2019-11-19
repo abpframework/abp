@@ -19,7 +19,7 @@ There are some **free and open source** application modules developed and mainta
 * **Identity**: Used to manage roles, users and their permissions.
 * **Identity Server**: Integrates to IdentityServer4.
 * **Permission Management**: Used to persist permissions.
-* **[Setting Management](Setting-Management.md)**: Used to persist  and manage the [settings](../Settings.md).
+* **[Setting Management](Setting-Management.md)**: Used to persist and manage the [settings](../Settings.md).
 * **Tenant Management**: Used to manage tenants for a [multi-tenant](../Multi-Tenancy.md) application.
 * **Users**: Used to abstract users, so other modules can depend on this instead of the Identity module.
 
