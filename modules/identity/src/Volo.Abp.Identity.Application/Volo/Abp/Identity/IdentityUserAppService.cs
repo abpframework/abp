@@ -127,12 +127,12 @@ namespace Volo.Abp.Identity
 
         private async Task UpdateUserByInput(IdentityUser user, IdentityUserCreateOrUpdateDtoBase input)
         {
-            if (!input.Email.IsNullOrWhiteSpace() && !string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals(user.Email, input.Email, StringComparison.InvariantCultureIgnoreCase))
             {
                 (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
             }
 
-            if (!input.PhoneNumber.IsNullOrWhiteSpace() && !string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
+            if (!string.Equals(user.PhoneNumber, input.PhoneNumber, StringComparison.InvariantCultureIgnoreCase))
             {
                 (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
             }
