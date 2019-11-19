@@ -155,7 +155,7 @@ export class ForDirective implements OnChanges {
 
     const compareFn = this.compareFn;
 
-    if (typeof this.filterBy !== 'undefined' && this.filterVal) {
+    if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
       items = items.filter(item => compareFn(item[this.filterBy], this.filterVal));
     }
 
