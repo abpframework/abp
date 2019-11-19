@@ -7,7 +7,7 @@ describe('FormSubmitDirective', () => {
   let spectator: SpectatorDirective<FormSubmitDirective>;
   let directive: FormSubmitDirective;
 
-  let formGroup = new FormGroup({});
+  const formGroup = new FormGroup({});
   const submitEventFn = jest.fn(() => {});
 
   const createDirective = createDirectiveFactory({
@@ -38,7 +38,7 @@ describe('FormSubmitDirective', () => {
 
   test('should dispatch submit event on keyup event triggered after given debounce time', done => {
     spectator.dispatchKeyboardEvent('form', 'keyup', 'Enter');
-    timer(directive.debounce + 1).subscribe(() => {
+    timer(directive.debounce + 10).subscribe(() => {
       expect(submitEventFn).toHaveBeenCalled();
       done();
     });
