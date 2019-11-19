@@ -1,8 +1,8 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/table'), require('@angular/router'), require('@angular/forms'), require('@ngxs/router-plugin'), require('@ngxs/store'), require('angular-oauth2-oidc'), require('rxjs'), require('rxjs/operators'), require('snq'), require('@angular/animations')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.account', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/table', '@angular/router', '@angular/forms', '@ngxs/router-plugin', '@ngxs/store', 'angular-oauth2-oidc', 'rxjs', 'rxjs/operators', 'snq', '@angular/animations'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.ngBootstrap, global.core$1, global.table, global.ng.router, global.ng.forms, global.routerPlugin, global.store, global.angularOauth2Oidc, global.rxjs, global.rxjs.operators, global.snq, global.ng.animations));
-}(this, (function (exports, ng_core, ng_theme_shared, core, ngBootstrap, core$1, table, router, forms, routerPlugin, store, angularOauth2Oidc, rxjs, operators, snq, animations) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ng-bootstrap/ng-bootstrap'), require('@ngx-validate/core'), require('primeng/table'), require('@angular/router'), require('@angular/forms'), require('@ngxs/router-plugin'), require('@ngxs/store'), require('angular-oauth2-oidc'), require('rxjs'), require('rxjs/operators'), require('snq'), require('@angular/common/http'), require('@angular/animations')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.account', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ng-bootstrap/ng-bootstrap', '@ngx-validate/core', 'primeng/table', '@angular/router', '@angular/forms', '@ngxs/router-plugin', '@ngxs/store', 'angular-oauth2-oidc', 'rxjs', 'rxjs/operators', 'snq', '@angular/common/http', '@angular/animations'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.account = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.ngBootstrap, global.core$1, global.table, global.ng.router, global.ng.forms, global.routerPlugin, global.store, global.angularOauth2Oidc, global.rxjs, global.rxjs.operators, global.snq, global.ng.common.http, global.ng.animations));
+}(this, (function (exports, ng_core, ng_theme_shared, core, ngBootstrap, core$1, table, router, forms, routerPlugin, store, angularOauth2Oidc, rxjs, operators, snq, http, animations) { 'use strict';
 
     snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
 
@@ -334,24 +334,38 @@
      * Generated from: lib/components/login/login.component.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    LoginComponent.prototype.onSubmit
-    /**
-     * @return {?}
-     */ = function() {
-      var _this = this;
-      if (this.form.invalid) return;
-      // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
-      this.inProgress = true;
-      rxjs
-        .from(
-          this.oauthService.fetchTokenUsingPasswordFlow(
-            this.form.get('username').value,
-            this.form.get('password').value,
-          ),
-        )
-        .pipe(
-          operators.switchMap(
-            /**
+    var maxLength = forms.Validators.maxLength, minLength = forms.Validators.minLength, required = forms.Validators.required;
+    var LoginComponent = /** @class */ (function () {
+        function LoginComponent(fb, oauthService, store, toasterService, options) {
+            this.fb = fb;
+            this.oauthService = oauthService;
+            this.store = store;
+            this.toasterService = toasterService;
+            this.options = options;
+            this.oauthService.configure(this.store.selectSnapshot(ng_core.ConfigState.getOne('environment')).oAuthConfig);
+            this.oauthService.loadDiscoveryDocument();
+            this.form = this.fb.group({
+                username: ['', [required, maxLength(255)]],
+                password: ['', [required, maxLength(32)]],
+                remember: [false],
+            });
+        }
+        /**
+         * @return {?}
+         */
+        LoginComponent.prototype.onSubmit = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            if (this.form.invalid)
+                return;
+            // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
+            this.inProgress = true;
+            /** @type {?} */
+            var tenant = this.store.selectSnapshot(ng_core.SessionState.getTenant);
+            rxjs.from(this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value, new http.HttpHeaders(__assign({}, (tenant && tenant.id && { __tenant: tenant.id })))))
+                .pipe(operators.switchMap((/**
              * @return {?}
              */
             function() {

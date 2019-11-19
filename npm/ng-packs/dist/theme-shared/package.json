@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.theme.shared",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "dependencies": {
-    "@abp/ng.core": "^1.0.3",
+    "@abp/ng.core": "^1.0.4",
     "@angular/cdk": "^8.2.3",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
@@ -27,5 +27,6 @@
   "fesm2015": "fesm2015/abp-ng.theme.shared.js",
   "typings": "abp-ng.theme.shared.d.ts",
   "metadata": "abp-ng.theme.shared.metadata.json",
-  "sideEffects": false
+  "sideEffects": false,
+  "gitHead": "2f588b67002cd64e8660f43217c2197ccc9fe631"
 }
