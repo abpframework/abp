@@ -3,15 +3,22 @@ import { axiosInstance } from './utils/axios';
 import ora = require('ora');
 import { angular } from './angular';
 import chalk from 'chalk';
+import { APIDefination } from './types/api-defination';
 
 export async function cli(program: any) {
   if (program.ui !== 'angular') {
     program.ui = ((await uiSelection(['Angular'])) as string).toLowerCase();
   }
-
   const loading = ora('Waiting for the API response... \n');
   loading.start();
-  const data = (await axiosInstance.get('a')) as any;
+  let data = {} as APIDefination.Response;
+  try {
+    data = (await axiosInstance.get('https://localhost:44305/api/abp/api-definition')).data;
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+  console.log(data);
   loading.stop();
 
   const selection = async (modules: string[]): Promise<string[]> => {
@@ -26,7 +33,7 @@ export async function cli(program: any) {
   };
 
   // const modules = await selection(Object.keys(data.modules));
-  const modules = ['multi-tenancy'];
+  const modules = ['saas'];
 
   switch (program.ui) {
     case 'angular':

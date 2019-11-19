@@ -16,9 +16,15 @@ export class ${changeCase.pascalCase(name)}Service {
 }`;
   }
 
-  export function getMethodTemplate(name: string, url: string, params: string[] = [], queryParams?: object) {
+  export function getMethodTemplate(
+    name: string,
+    url: string,
+    args: string = '',
+    params: string[] = [],
+    queryParams?: object,
+  ) {
     return `
-  ${changeCase.camelCase(replacer(name))}(${params.join(', ')}): Observable<any> {
+  ${changeCase.camelCase(replacer(name))}(${args}): Observable<any> {
     return this.restService.request<void, any>({
       method: 'GET',
       url: '/${url}${params.length ? '/' + params.join('/') : ''}',

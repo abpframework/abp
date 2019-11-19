@@ -7,13 +7,15 @@ export async function angular(data: APIDefination.Response, selectedModules: str
   selectedModules.forEach(async module => {
     const element = data.modules[module];
 
-    let contents = [] as string[];
-    const actions = (Object.keys(element.controllers) || []).map(key => element.controllers[key].actions);
+    (Object.keys(element.controllers) || []).forEach(key => {
+      const controller = element.controllers[key];
 
-    actions.forEach(action => {
-      const actionKeys = Object.keys(action);
+      const actions = element.controllers[key].actions;
+
+      const actionKeys = Object.keys(actions);
+      let contents = [] as string[];
       actionKeys.forEach(key => {
-        const element = action[key];
+        const element = actions[key];
         console.log(element);
 
         switch (element.httpMethod) {
@@ -25,9 +27,8 @@ export async function angular(data: APIDefination.Response, selectedModules: str
             break;
         }
       });
+      const service = ServiceTemplates.classTemplate(controller.controllerName, contents.join('\n'));
+      fse.writeFileSync(`dist/${changeCase.kebabCase(controller.controllerName)}.service.ts`, service);
     });
-
-    const service = ServiceTemplates.classTemplate(element.rootPath, contents.join('\n'));
-    await fse.writeFile(`dist/${changeCase.kebabCase(element.rootPath)}.service.ts`, service);
   });
 }
