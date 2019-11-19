@@ -24,7 +24,7 @@ namespace Volo.Docs.Markdown
         }
 
         private const string MdLinkFormat = "[{0}]({1}{2}/{3}/{4}{5}/{6})";
-        private const string MarkdownLinkRegExp = @"\[(.*)\]\((.*\.md)\)";
+        private const string MarkdownLinkRegExp = @"\[(.*?)\]\((.*?\.md)\)";
         private const string AnchorLinkRegExp = @"<a[^>]+href=\""(.*?)\""[^>]*>(.*)?</a>";
          
         public virtual string Convert(ProjectDto project, DocumentWithDetailsDto document, string version,
