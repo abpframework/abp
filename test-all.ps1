@@ -23,12 +23,12 @@ $solutionPaths = (
     "templates/app/aspnet-core"
 )
 
-# Build all solutions
+# Test all solutions
 
 foreach ($solutionPath in $solutionPaths) {    
     $solutionAbsPath = (Join-Path $rootFolder $solutionPath)
     Set-Location $solutionAbsPath
-    dotnet test
+    dotnet test --no-build --no-restore
     if (-Not $?) {
         Write-Host ("Test failed for the solution: " + $solutionPath)
         Set-Location $rootFolder
