@@ -180,7 +180,7 @@ protected override Expression<Func<TEntity, bool>> CreateFilterExpression<TEntit
 
 ABP implements data filters directly in the [repository](Repositories.md) level for the [MongoDB Integration](MongoDB.md). So, it works only if you use the repositories properly. Otherwise, you should manually filter the data.
 
-Currently, the best way to implement a data filter for the MongoDB integration is to override the `AddGlobalFilters` in the repository derived from the `MongoDbRepository` class. Example: 
+Currently, the best way to implement a data filter for the MongoDB integration is to override the `AddGlobalFilters` in the repository derived from the `MongoDbRepository` class. Example:
 
 ````csharp
 public class BookRepository : MongoDbRepository<BookStoreMongoDbContext, Book, Guid>
