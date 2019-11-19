@@ -8,13 +8,26 @@ export async function angular(data: APIDefination.Response, selectedModules: str
     const element = data.modules[module];
 
     let contents = [] as string[];
-    (Object.keys(element.controllers) || []).forEach(key => {
-      console.warn(element.controllers[key].controllerName);
-      contents.push(' ');
+    const actions = (Object.keys(element.controllers) || []).map(key => element.controllers[key].actions);
+
+    actions.forEach(action => {
+      const actionKeys = Object.keys(action);
+      actionKeys.forEach(key => {
+        const element = action[key];
+        console.log(element);
+
+        switch (element.httpMethod) {
+          case 'GET':
+            contents.push(ServiceTemplates.getMethodTemplate(element.name, element.url));
+            break;
+
+          default:
+            break;
+        }
+      });
     });
 
-    const service = ServiceTemplates.classTemplate(element.rootPath, contents);
-    await fse.writeFile(`${changeCase.kebabCase(element.rootPath + '-service')}.ts`, service);
-    console.log(service);
+    const service = ServiceTemplates.classTemplate(element.rootPath, contents.join('\n'));
+    await fse.writeFile(`dist/${changeCase.kebabCase(element.rootPath)}.service.ts`, service);
   });
 }

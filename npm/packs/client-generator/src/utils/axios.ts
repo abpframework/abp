@@ -2105,5 +2105,5 @@ axiosInstance.get = (...ar) => new Promise(resolve => {
         }
       }
     } as any)
-  }, 1000);
+  }, 0);
 })
