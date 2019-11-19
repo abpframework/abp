@@ -22,6 +22,9 @@ type Controls = { [key: string]: FormControl } | FormGroup[];
 })
 export class FormSubmitDirective implements OnInit, OnDestroy {
   @Input()
+  debounce = 200;
+
+  @Input()
   notValidateOnSubmit: string | boolean;
 
   @Output() readonly ngSubmit = new EventEmitter();
@@ -42,7 +45,7 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
 
     fromEvent(this.host.nativeElement as HTMLElement, 'keyup')
       .pipe(
-        debounceTime(200),
+        debounceTime(this.debounce),
         filter((key: KeyboardEvent) => key && key.key === 'Enter'),
         takeUntilDestroy(this),
       )
