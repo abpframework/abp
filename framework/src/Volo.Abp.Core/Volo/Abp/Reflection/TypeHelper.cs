@@ -57,8 +57,14 @@ namespace Volo.Abp.Reflection
             return t;
         }
 
-        public static bool IsEnumerable(Type type, out Type itemType)
+        public static bool IsEnumerable(Type type, out Type itemType, bool includePrimitives = true)
         {
+            if (!includePrimitives && IsPrimitiveExtended(type))
+            {
+                itemType = null;
+                return false;
+            }
+
             var enumerableTypes = ReflectionHelper.GetImplementedGenericTypes(type, typeof(IEnumerable<>));
             if (enumerableTypes.Count == 1)
             {
