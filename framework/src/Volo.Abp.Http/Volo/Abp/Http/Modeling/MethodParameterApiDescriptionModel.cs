@@ -24,7 +24,7 @@ namespace Volo.Abp.Http.Modeling
             return new MethodParameterApiDescriptionModel
             {
                 Name = parameterInfo.Name,
-                TypeAsString = parameterInfo.ParameterType.GetFullNameWithAssemblyName(),
+                TypeAsString = parameterInfo.ParameterType.FullName,
                 IsOptional = parameterInfo.IsOptional,
                 DefaultValue = parameterInfo.HasDefaultValue ? parameterInfo.DefaultValue : null
             };

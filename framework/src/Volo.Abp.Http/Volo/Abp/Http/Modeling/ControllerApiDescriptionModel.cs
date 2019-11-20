@@ -26,7 +26,7 @@ namespace Volo.Abp.Http.Modeling
             return new ControllerApiDescriptionModel
             {
                 ControllerName = controllerName,
-                TypeAsString = type.GetFullNameWithAssemblyName(),
+                TypeAsString = type.FullName,
                 Actions = new Dictionary<string, ActionApiDescriptionModel>(),
                 Interfaces = type
                     .GetInterfaces()
@@ -71,7 +71,7 @@ namespace Volo.Abp.Http.Modeling
 
         public bool Implements(Type interfaceType)
         {
-            return Interfaces.Any(i => i.TypeAsString == interfaceType.GetFullNameWithAssemblyName());
+            return Interfaces.Any(i => i.TypeAsString == interfaceType.FullName);
         }
 
         public override string ToString()

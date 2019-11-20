@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -16,6 +17,8 @@ using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Modeling;
+using Volo.Abp.Reflection;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.AspNetCore.Mvc
 {
@@ -61,12 +64,12 @@ namespace Volo.Abp.AspNetCore.Mvc
             return model;
         }
 
-        private void AddApiDescriptionToModel(ApiDescription apiDescription, ApplicationApiDescriptionModel model)
+        private void AddApiDescriptionToModel(ApiDescription apiDescription, ApplicationApiDescriptionModel applicationModel)
         {
             var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
             var setting = FindSetting(controllerType);
 
-            var moduleModel = model.GetOrAddModule(GetRootPath(controllerType, setting));
+            var moduleModel = applicationModel.GetOrAddModule(GetRootPath(controllerType, setting));
 
             var controllerModel = moduleModel.GetOrAddController(controllerType.FullName, CalculateControllerName(controllerType, setting), controllerType, _modelOptions.IgnoredInterfaces);
 
@@ -80,6 +83,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             Logger.LogDebug($"ActionApiDescriptionModel.Create: {controllerModel.ControllerName}.{uniqueMethodName}");
+
             var actionModel = controllerModel.AddAction(uniqueMethodName, ActionApiDescriptionModel.Create(
                 uniqueMethodName,
                 method,
@@ -87,6 +91,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                 apiDescription.HttpMethod,
                 GetSupportedVersions(controllerType, method, setting)
             ));
+
+            AddCustomTypesToModel(applicationModel, method);
 
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);
         }
@@ -147,6 +153,68 @@ namespace Volo.Abp.AspNetCore.Mvc
             }
 
             return supportedVersions.Select(v => v.ToString()).Distinct().ToList();
+        }
+
+        private void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel, MethodInfo method)
+        {
+            foreach (var parameterInfo in method.GetParameters())
+            {
+                AddCustomTypesToModel(applicationModel, parameterInfo.ParameterType);
+            }
+
+            AddCustomTypesToModel(applicationModel, method.ReturnType);
+        }
+
+        private static void AddCustomTypesToModel(ApplicationApiDescriptionModel applicationModel, [CanBeNull] Type type)
+        {
+            if (type == null)
+            {
+                return;
+            }
+
+            type = AsyncHelper.UnwrapTask(type);
+
+            if (type == typeof(object) ||
+                type == typeof(void) || 
+                type == typeof(Enum) ||
+                type == typeof(ValueType) ||
+                TypeHelper.IsPrimitiveExtended(type))
+            {
+                return;
+            }
+
+            if (TypeHelper.IsEnumerable(type, out var itemType))
+            {
+                AddCustomTypesToModel(applicationModel, itemType);
+                return;
+            }
+
+            if (TypeHelper.IsDictionary(type, out var keyType, out var valueType))
+            {
+                AddCustomTypesToModel(applicationModel, keyType);
+                AddCustomTypesToModel(applicationModel, valueType);
+                return;
+            }
+
+            /* TODO: Add interfaces
+             */
+
+            var typeAsString = type.FullName;
+
+            if (applicationModel.Types.ContainsKey(typeAsString))
+            {
+                return;
+            }
+            
+            var typeModel = TypeApiDescriptionModel.Create(type);
+            applicationModel.Types[typeAsString] = typeModel;
+
+            AddCustomTypesToModel(applicationModel, type.BaseType);
+
+            foreach (var propertyInfo in type.GetProperties())
+            {
+                AddCustomTypesToModel(applicationModel, propertyInfo.PropertyType);
+            }
         }
 
         private void AddParameterDescriptionsToModel(ActionApiDescriptionModel actionModel, MethodInfo method, ApiDescription apiDescription)

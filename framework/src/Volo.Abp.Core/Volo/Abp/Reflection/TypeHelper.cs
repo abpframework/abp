@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 
@@ -52,6 +55,47 @@ namespace Volo.Abp.Reflection
             }
 
             return t;
+        }
+
+        public static bool IsEnumerable(Type type, out Type itemType)
+        {
+            var enumerableTypes = ReflectionHelper.GetImplementedGenericTypes(type, typeof(IEnumerable<>));
+            if (enumerableTypes.Count == 1)
+            {
+                itemType = enumerableTypes[0].GenericTypeArguments[0];
+                return true;
+            }
+
+            if (typeof(IEnumerable).IsAssignableFrom(type))
+            {
+                itemType = typeof(object);
+                return true;
+            }
+
+            itemType = null;
+            return false;
+        }
+
+        public static bool IsDictionary(Type type, out Type keyType, out Type valueType)
+        {
+            var enumerableTypes = ReflectionHelper.GetImplementedGenericTypes(type, typeof(IDictionary<,>));
+            if (enumerableTypes.Count == 1)
+            {
+                keyType = enumerableTypes[0].GenericTypeArguments[0];
+                valueType = enumerableTypes[0].GenericTypeArguments[2];
+                return true;
+            }
+
+            if (typeof(IDictionary).IsAssignableFrom(type))
+            {
+                keyType = typeof(object);
+                valueType = typeof(object);
+                return true;
+            }
+
+            keyType = null;
+            valueType = null;
+            return false;
         }
 
         private static bool IsPrimitiveExtendedInternal(Type type, bool includeEnums)

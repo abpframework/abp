@@ -17,7 +17,7 @@ namespace Volo.Abp.Http.Modeling
         {
             return new ReturnValueApiDescriptionModel
             {
-                TypeAsString = AsyncHelper.UnwrapTask(type).GetFullNameWithAssemblyName()
+                TypeAsString = AsyncHelper.UnwrapTask(type).FullName
             };
         }
     }

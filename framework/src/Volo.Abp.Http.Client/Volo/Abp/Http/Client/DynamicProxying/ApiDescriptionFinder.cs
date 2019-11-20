@@ -57,7 +57,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                             for (int i = 0; i < methodParameters.Length; i++)
                             {
-                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.GetFullNameWithAssemblyName())
+                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.FullName)
                                 {
                                     found = false;
                                     break;
