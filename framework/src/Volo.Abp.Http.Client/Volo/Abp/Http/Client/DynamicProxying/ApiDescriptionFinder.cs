@@ -57,7 +57,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                             for (int i = 0; i < methodParameters.Length; i++)
                             {
-                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.FullName)
+                                if (action.ParametersOnMethod[i].Type != ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(methodParameters[i].ParameterType))
                                 {
                                     found = false;
                                     break;

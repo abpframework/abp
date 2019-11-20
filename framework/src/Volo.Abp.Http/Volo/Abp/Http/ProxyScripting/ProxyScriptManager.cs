@@ -48,7 +48,7 @@ namespace Volo.Abp.Http.ProxyScripting
 
         private string CreateScript(ProxyScriptingModel scriptingModel)
         {
-            var apiModel = _modelProvider.CreateApiModel();
+            var apiModel = _modelProvider.CreateApiModel(new ApplicationApiDescriptionModelRequestDto {IncludeTypes = false});
 
             if (scriptingModel.IsPartialRequest())
             {

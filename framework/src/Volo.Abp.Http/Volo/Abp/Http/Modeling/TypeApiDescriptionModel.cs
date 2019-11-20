@@ -6,7 +6,7 @@ namespace Volo.Abp.Http.Modeling
     [Serializable]
     public class TypeApiDescriptionModel
     {
-        public string BaseTypeAsString { get; set; }
+        public string BaseType { get; set; }
 
         public bool IsEnum { get; set; }
 
@@ -32,7 +32,7 @@ namespace Volo.Abp.Http.Modeling
             var typeModel = new TypeApiDescriptionModel
             {
                 IsEnum = type.IsEnum,
-                BaseTypeAsString = baseType?.FullName
+                BaseType = baseType != null ? ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(baseType) : null
             };
 
             if (typeModel.IsEnum)

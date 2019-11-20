@@ -8,7 +8,9 @@ namespace Volo.Abp.Http.Modeling
     {
         public string Name { get; set; }
 
-        public string TypeAsString { get; set; }
+        public string Type { get; set; }
+
+        public string TypeSimple { get; set; }
 
         //TODO: Validation rules for this property
         public static PropertyApiDescriptionModel Create(PropertyInfo propertyInfo)
@@ -16,7 +18,8 @@ namespace Volo.Abp.Http.Modeling
             return new PropertyApiDescriptionModel
             {
                 Name = propertyInfo.Name,
-                TypeAsString = propertyInfo.PropertyType.FullName
+                Type = ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(propertyInfo.PropertyType),
+                TypeSimple = ModelingTypeHelper.GetSimplifiedName(propertyInfo.PropertyType)
             };
         }
     }

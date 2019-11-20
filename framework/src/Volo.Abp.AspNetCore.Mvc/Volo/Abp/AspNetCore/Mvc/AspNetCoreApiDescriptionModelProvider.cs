@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
+using Volo.Abp.AspNetCore.Mvc.ApiExploring;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.Utils;
 using Volo.Abp.DependencyInjection;
@@ -42,7 +43,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             Logger = NullLogger<AspNetCoreApiDescriptionModelProvider>.Instance;
         }
 
-        public ApplicationApiDescriptionModel CreateApiModel()
+        public ApplicationApiDescriptionModel CreateApiModel(ApplicationApiDescriptionModelRequestDto input)
         {
             //TODO: Can cache the model?
 
@@ -57,14 +58,17 @@ namespace Volo.Abp.AspNetCore.Mvc
                         continue;
                     }
 
-                    AddApiDescriptionToModel(apiDescription, model);
+                    AddApiDescriptionToModel(apiDescription, model, input);
                 }
             }
 
             return model;
         }
 
-        private void AddApiDescriptionToModel(ApiDescription apiDescription, ApplicationApiDescriptionModel applicationModel)
+        private void AddApiDescriptionToModel(
+            ApiDescription apiDescription,
+            ApplicationApiDescriptionModel applicationModel, 
+            ApplicationApiDescriptionModelRequestDto input)
         {
             var controllerType = apiDescription.ActionDescriptor.AsControllerActionDescriptor().ControllerTypeInfo.AsType();
             var setting = FindSetting(controllerType);
@@ -92,7 +96,10 @@ namespace Volo.Abp.AspNetCore.Mvc
                 GetSupportedVersions(controllerType, method, setting)
             ));
 
-            AddCustomTypesToModel(applicationModel, method);
+            if (input.IncludeTypes)
+            {
+                AddCustomTypesToModel(applicationModel, method);
+            }
 
             AddParameterDescriptionsToModel(actionModel, method, apiDescription);
         }
@@ -199,15 +206,15 @@ namespace Volo.Abp.AspNetCore.Mvc
             /* TODO: Add interfaces
              */
 
-            var typeAsString = type.FullName;
+            var typeName = ModelingTypeHelper.GetFullNameHandlingNullableAndGenerics(type);
 
-            if (applicationModel.Types.ContainsKey(typeAsString))
+            if (applicationModel.Types.ContainsKey(typeName))
             {
                 return;
             }
             
             var typeModel = TypeApiDescriptionModel.Create(type);
-            applicationModel.Types[typeAsString] = typeModel;
+            applicationModel.Types[typeName] = typeModel;
 
             AddCustomTypesToModel(applicationModel, type.BaseType);
 
