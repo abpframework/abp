@@ -12,10 +12,11 @@ export async function cli(program: any) {
   const loading = ora('Waiting for the API response... \n');
   loading.start();
   let data = {} as APIDefination.Response;
+  const apiUrl = 'https://localhost:44305/api/abp/api-definition';
   try {
-    data = (await axiosInstance.get('https://localhost:44305/api/abp/api-definition')).data;
+    data = (await axiosInstance.get(apiUrl)).data;
   } catch (error) {
-    console.error(error);
+    console.log(chalk.red('An error occurred when fetching the ' + apiUrl));
     process.exit(1);
   }
   console.log(data);

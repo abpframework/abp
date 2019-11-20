@@ -1,7 +1,8 @@
 import { APIDefination } from './types/api-defination';
 import { ServiceTemplates } from './templates/angular/service-templates';
-import changeCase from 'change-case';
+import changeCase, { param } from 'change-case';
 import fse from 'fs-extra';
+import { generateArgs, parseParameters } from './utils/generators';
 
 export async function angular(data: APIDefination.Response, selectedModules: string[]) {
   selectedModules.forEach(async module => {
@@ -18,9 +19,10 @@ export async function angular(data: APIDefination.Response, selectedModules: str
         const element = actions[key];
         console.log(element);
 
+        const parameters = parseParameters(element.parameters);
         switch (element.httpMethod) {
           case 'GET':
-            contents.push(ServiceTemplates.getMethodTemplate(element.name, element.url));
+            contents.push(ServiceTemplates.getMethodTemplate(element.name, element.url, generateArgs(parameters)));
             break;
 
           default:

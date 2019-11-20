@@ -26,7 +26,8 @@
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
     "ora": "^4.0.3",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "snq": "^1.0.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
