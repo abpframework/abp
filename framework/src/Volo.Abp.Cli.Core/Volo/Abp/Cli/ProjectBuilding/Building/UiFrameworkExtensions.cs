@@ -6,7 +6,6 @@
         {
             switch (uiFramework)
             {
-                case UiFramework.None: return "none";
                 case UiFramework.Mvc: return "mvc";
                 case UiFramework.Angular: return "angular";
                 case UiFramework.NotSpecified: return "NotSpecified";

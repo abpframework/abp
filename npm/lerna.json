@@ -1,9 +1,9 @@
 {
-  "version": "1.0.4",
+  "version": "1.0.2",
   "packages": [
     "ng-packs/dist/*",
     "packs/*"
   ],
   "npmClient": "yarn",
-  "lerna": "3.18.4"
+  "lerna": "2.11.0"
 }

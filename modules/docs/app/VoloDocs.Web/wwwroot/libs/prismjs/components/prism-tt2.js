@@ -1,18 +1,24 @@
 (function(Prism) {
 
 	Prism.languages.tt2 = Prism.languages.extend('clike', {
-		'comment': /#.*|\[%#[\s\S]*?%\]/,
-		'keyword': /\b(?:BLOCK|CALL|CASE|CATCH|CLEAR|DEBUG|DEFAULT|ELSE|ELSIF|END|FILTER|FINAL|FOREACH|GET|IF|IN|INCLUDE|INSERT|LAST|MACRO|META|NEXT|PERL|PROCESS|RAWPERL|RETURN|SET|STOP|TAGS|THROW|TRY|SWITCH|UNLESS|USE|WHILE|WRAPPER)\b/,
-		'punctuation': /[[\]{},()]/
+		comment: {
+			pattern: /#.*|\[%#[\s\S]*?%\]/,
+			lookbehind: true
+		},
+		keyword: /\b(?:BLOCK|CALL|CASE|CATCH|CLEAR|DEBUG|DEFAULT|ELSE|ELSIF|END|FILTER|FINAL|FOREACH|GET|IF|IN|INCLUDE|INSERT|LAST|MACRO|META|NEXT|PERL|PROCESS|RAWPERL|RETURN|SET|STOP|TAGS|THROW|TRY|SWITCH|UNLESS|USE|WHILE|WRAPPER)\b/,
+		punctuation: /[[\]{},()]/
 	});
 
+	delete Prism.languages.tt2['operator'];
+	delete Prism.languages.tt2['variable'];
 	Prism.languages.insertBefore('tt2', 'number', {
-		'operator': /=[>=]?|!=?|<=?|>=?|&&|\|\|?|\b(?:and|or|not)\b/,
-		'variable': {
+		operator: /=[>=]?|!=?|<=?|>=?|&&|\|\|?|\b(?:and|or|not)\b/,
+		variable: {
 			pattern: /[a-z]\w*(?:\s*\.\s*(?:\d+|\$?[a-z]\w*))*/i
 		}
 	});
 
+	delete Prism.languages.tt2['delimiter'];
 	Prism.languages.insertBefore('tt2', 'keyword', {
 		'delimiter': {
 			pattern: /^(?:\[%|%%)-?|-?%]$/,
@@ -31,7 +37,7 @@
 			greedy: true,
 			alias: 'string',
 			inside: {
-				'variable': {
+				variable: {
 					pattern: /\$(?:[a-z]\w*(?:\.(?:\d+|\$?[a-z]\w*))*)/i
 				}
 			}

@@ -62,8 +62,9 @@ export class TenantManagementState {
 
   @Action(UpdateTenant)
   update({ dispatch, getState }: StateContext<TenantManagement.State>, { payload }: UpdateTenant) {
-    return this.tenantManagementService
-      .updateTenant({ ...getState().selectedItem, ...payload })
-      .pipe(switchMap(() => dispatch(new GetTenants())));
+    return dispatch(new GetTenantById(payload.id)).pipe(
+      switchMap(() => this.tenantManagementService.updateTenant({ ...getState().selectedItem, ...payload })),
+      switchMap(() => dispatch(new GetTenants())),
+    );
   }
 }

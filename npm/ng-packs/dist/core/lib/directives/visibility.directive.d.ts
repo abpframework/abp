@@ -4,6 +4,7 @@ export declare class VisibilityDirective implements AfterViewInit {
     private elRef;
     private renderer;
     focusedElement: HTMLElement;
+    mutationObserverEnabled: boolean;
     completed$: Subject<boolean>;
     constructor(elRef: ElementRef, renderer: Renderer2);
     ngAfterViewInit(): void;

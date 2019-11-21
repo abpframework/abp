@@ -1,8 +1,94 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/router'), require('@ngxs/store'), require('rxjs'), require('snq'), require('rxjs/operators'), require('@angular/common/http'), require('@angular/common'), require('just-compare'), require('just-clone'), require('@angular/forms'), require('angular-oauth2-oidc'), require('@ngxs/router-plugin'), require('@ngxs/storage-plugin'), require('@ngx-validate/core')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.core', ['exports', '@angular/core', '@angular/router', '@ngxs/store', 'rxjs', 'snq', 'rxjs/operators', '@angular/common/http', '@angular/common', 'just-compare', 'just-clone', '@angular/forms', 'angular-oauth2-oidc', '@ngxs/router-plugin', '@ngxs/storage-plugin', '@ngx-validate/core'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng.core = {}), global.ng.core, global.ng.router, global.store, global.rxjs, global.snq, global.rxjs.operators, global.ng.common.http, global.ng.common, global.compare, global.clone, global.ng.forms, global.angularOauth2Oidc, global.routerPlugin, global.storagePlugin, global.core$1));
-}(this, (function (exports, core, router, store, rxjs, snq, operators, http, common, compare, clone, forms, angularOauth2Oidc, routerPlugin, storagePlugin, core$1) { 'use strict';
+(function(global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined'
+    ? factory(
+        exports,
+        require('@angular/core'),
+        require('@angular/router'),
+        require('@ngxs/store'),
+        require('rxjs'),
+        require('snq'),
+        require('rxjs/operators'),
+        require('@angular/common/http'),
+        require('@angular/common'),
+        require('just-compare'),
+        require('just-clone'),
+        require('@angular/forms'),
+        require('primeng/table'),
+        require('angular-oauth2-oidc'),
+        require('@ngxs/router-plugin'),
+        require('@ngxs/storage-plugin'),
+        require('@ngx-validate/core'),
+      )
+    : typeof define === 'function' && define.amd
+    ? define('@abp/ng.core', [
+        'exports',
+        '@angular/core',
+        '@angular/router',
+        '@ngxs/store',
+        'rxjs',
+        'snq',
+        'rxjs/operators',
+        '@angular/common/http',
+        '@angular/common',
+        'just-compare',
+        'just-clone',
+        '@angular/forms',
+        'primeng/table',
+        'angular-oauth2-oidc',
+        '@ngxs/router-plugin',
+        '@ngxs/storage-plugin',
+        '@ngx-validate/core',
+      ], factory)
+    : ((global = global || self),
+      factory(
+        ((global.abp = global.abp || {}), (global.abp.ng = global.abp.ng || {}), (global.abp.ng.core = {})),
+        global.ng.core,
+        global.ng.router,
+        global.store,
+        global.rxjs,
+        global.snq,
+        global.rxjs.operators,
+        global.ng.common.http,
+        global.ng.common,
+        global.compare,
+        global.clone,
+        global.ng.forms,
+        global.table,
+        global.angularOauth2Oidc,
+        global.routerPlugin,
+        global.storagePlugin,
+        global.core$1,
+      ));
+})(this, function(
+  exports,
+  core,
+  router,
+  store,
+  rxjs,
+  snq,
+  operators,
+  http,
+  common,
+  compare,
+  clone,
+  forms,
+  table,
+  angularOauth2Oidc,
+  routerPlugin,
+  storagePlugin,
+  core$1,
+) {
+  'use strict';
+
+  snq = snq && snq.hasOwnProperty('default') ? snq['default'] : snq;
+  compare = compare && compare.hasOwnProperty('default') ? compare['default'] : compare;
+  clone = clone && clone.hasOwnProperty('default') ? clone['default'] : clone;
+
+  /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
 
     THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
     KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
@@ -670,9 +756,8 @@
       this.store = store;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/abstracts/ng-model.component.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} err
+     * @return {?}
      */
     RestService.prototype.handleError
     /**
@@ -748,15 +833,13 @@
   })();
   if (false) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/abstracts/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
-
+    RestService.prototype.http;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/config.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     RestService.prototype.store;
   }
@@ -770,9 +853,7 @@
       this.rest = rest;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/loader.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
     ApplicationConfigurationService.prototype.getConfiguration
     /**
@@ -810,9 +891,8 @@
   })();
   if (false) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/profile.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     ApplicationConfigurationService.prototype.rest;
   }
@@ -835,56 +915,32 @@
     if (parentNameArr === void 0) {
       parentNameArr = /** @type {?} */ ([]);
     }
-    var ChangePassword = /** @class */ (function () {
-        function ChangePassword(payload) {
-            this.payload = payload;
-        }
-        ChangePassword.type = '[Profile] Change Password';
-        return ChangePassword;
-    }());
-    if (false) {
-        /** @type {?} */
-        ChangePassword.type;
-        /** @type {?} */
-        ChangePassword.prototype.payload;
+    if (parentName === void 0) {
+      parentName = null;
     }
-
+    /** @type {?} */
+    var filter
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/rest.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var RestOccurError = /** @class */ (function () {
-        function RestOccurError(payload) {
-            this.payload = payload;
-        }
-        RestOccurError.type = '[Rest] Error';
-        return RestOccurError;
-    }());
-    if (false) {
-        /** @type {?} */
-        RestOccurError.type;
-        /** @type {?} */
-        RestOccurError.prototype.payload;
+     * @param {?} route
+     * @return {?}
+     */ = (function(route) {
+      if (route.children && route.children.length) {
+        route.children = organizeRoutes(route.children, wrappers, parentNameArr, route.name);
+      }
+      if (route.parentName && route.parentName !== parentName) {
+        parentNameArr.push(route);
+        return false;
+      }
+      return true;
+    });
+    if (parentName) {
+      // recursive block
+      return routes.filter(filter);
     }
-
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/session.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var SetLanguage = /** @class */ (function () {
-        function SetLanguage(payload) {
-            this.payload = payload;
-        }
-        SetLanguage.type = '[Session] Set Language';
-        return SetLanguage;
-    }());
-    if (false) {
-        /** @type {?} */
-        SetLanguage.type;
-        /** @type {?} */
-        SetLanguage.prototype.payload;
+    /** @type {?} */
+    var filteredRoutes = routes.filter(filter);
+    if (parentNameArr.length) {
+      return sortRoutes(setChildRoute(__spread(filteredRoutes, wrappers), parentNameArr));
     }
     return filteredRoutes;
   }
@@ -904,24 +960,17 @@
           route.children = setChildRoute(route.children, parentNameArr);
         }
         /** @type {?} */
-        SetTenant.prototype.payload;
-    }
-
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/rest.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var RestService = /** @class */ (function () {
-        function RestService(http, store) {
-            this.http = http;
-            this.store = store;
+        var foundedChildren = parentNameArr.filter(
+          /**
+           * @param {?} parent
+           * @return {?}
+           */
+          (function(parent) {
+            return parent.parentName === route.name;
+          }),
+        );
+        if (foundedChildren && foundedChildren.length) {
+          route.children = __spread(route.children || [], foundedChildren);
         }
         return route;
       },
@@ -1127,9 +1176,8 @@
       configurable: true,
     });
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/application-configuration.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} reuse
+     * @return {?}
      */
     LocalizationService.prototype.setRouteReuse
     /**
@@ -1186,9 +1234,9 @@
       );
     };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/utils/route-utils.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} key
+     * @param {...?} interpolateParams
+     * @return {?}
      */
     LocalizationService.prototype.get
     /**
@@ -1275,38 +1323,14 @@
      * @param {?} __0
      * @return {?}
      */
-    function sortRoutes(routes) {
-        if (routes === void 0) { routes = []; }
-        if (!routes.length)
-            return [];
-        return routes
-            .map((/**
-         * @param {?} route
-         * @param {?} index
-         * @return {?}
-         */
-        function (route, index) {
-            return __assign({}, route, { order: typeof route.order === 'undefined' ? index + 1 : route.order });
-        }))
-            .sort((/**
-         * @param {?} a
-         * @param {?} b
-         * @return {?}
-         */
-        function (a, b) { return a.order - b.order; }))
-            .map((/**
-         * @param {?} route
-         * @return {?}
-         */
-        function (route) {
-            if (route.children && route.children.length) {
-                route.children = sortRoutes(route.children);
-            }
-            return route;
-        }));
-    }
-    /** @type {?} */
-    var ABP_ROUTES = (/** @type {?} */ ([]));
+    SessionState.getLanguage
+    /**
+     * @param {?} __0
+     * @return {?}
+     */ = function(_a) {
+      var language = _a.language;
+      return language;
+    };
     /**
      * @param {?} __0
      * @return {?}
@@ -1448,47 +1472,14 @@
      */
     ConfigState.getAll
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/constants/different-locales.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    // Different locales from .NET
-    // Key is .NET locale, value is Angular locale
-    var localesMapping = {
-        'ar-sa': 'ar-SA',
-        'ca-ES-valencia': 'ca-ES-VALENCIA',
-        'de-de': 'de',
-        'es-ES': 'es',
-        'en-US': 'en',
-        'fil-Latn': 'en',
-        'ku-Arab': 'en',
-        'ky-Cyrl': 'en',
-        'mi-Latn': 'en',
-        'prs-Arab': 'en',
-        'qut-Latn': 'en',
-        nso: 'en',
-        quz: 'en',
-        'fr-FR': 'fr',
-        'gd-Latn': 'gd',
-        'ha-Latn': 'ha',
-        'ig-Latn': 'ig',
-        'it-it': 'it',
-        'mn-Cyrl': 'mn',
-        'pt-BR': 'pt',
-        'sd-Arab': 'pa-Arab',
-        'sr-Cyrl-RS': 'sr-Cyrl',
-        'sr-Latn-RS': 'sr-Latn',
-        'tg-Cyrl': 'tg',
-        'tk-Latn': 'tk',
-        'tt-Cyrl': 'tt',
-        'ug-Arab': 'ug',
-        'yo-Latn': 'yo',
+     * @param {?} state
+     * @return {?}
+     */ = function(state) {
+      return state;
     };
-
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/utils/initial-utils.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} state
+     * @return {?}
      */
     ConfigState.getApplicationInfo
     /**
@@ -1585,15 +1576,18 @@
              * @param {?} route
              * @return {?}
              */
-            function (resolve, reject) {
-                registerLocale(lang).then((/**
-                 * @return {?}
-                 */
-                function () { return resolve('resolved'); }), reject);
-            }));
-        });
-        return fn;
-    }
+            function(route) {
+              if (path && route.path === path) {
+                return route;
+              } else if (name && route.name === name) {
+                return route;
+              }
+            },
+          );
+        }),
+      );
+      return selector;
+    };
     /**
      * @param {?=} key
      * @return {?}
@@ -1617,9 +1611,8 @@
       return selector;
     };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/localization.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} key
+     * @return {?}
      */
     ConfigState.getSetting
     /**
@@ -1965,9 +1958,8 @@
   })();
   if (false) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/session.state.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     ConfigState.prototype.appConfigurationService;
     /**
@@ -2011,122 +2003,50 @@
         } else if (route.children && route.children.length) {
           route.children = patchRouteDeep(route.children, name, newValue, (parentUrl || '/') + route.path);
         }
-        /**
-         * @param {?} __0
-         * @return {?}
-         */
-        SessionState.getLanguage = /**
-         * @param {?} __0
-         * @return {?}
-         */
-        function (_a) {
-            var language = _a.language;
-            return language;
-        };
-        /**
-         * @param {?} __0
-         * @return {?}
-         */
-        SessionState.getTenant = /**
-         * @param {?} __0
-         * @return {?}
-         */
-        function (_a) {
-            var tenant = _a.tenant;
-            return tenant;
-        };
-        /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        SessionState.prototype.setLanguage = /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        function (_a, _b) {
-            var _this = this;
-            var patchState = _a.patchState, dispatch = _a.dispatch;
-            var payload = _b.payload;
-            patchState({
-                language: payload,
-            });
-            return dispatch(new GetAppConfiguration()).pipe(operators.switchMap((/**
-             * @return {?}
-             */
-            function () { return rxjs.from(_this.localizationService.registerLocale(payload)); })));
-        };
-        /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        SessionState.prototype.setTenant = /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        function (_a, _b) {
-            var patchState = _a.patchState;
-            var payload = _b.payload;
-            patchState({
-                tenant: payload,
-            });
-        };
-        SessionState.ctorParameters = function () { return [
-            { type: LocalizationService }
-        ]; };
-        __decorate([
-            store.Action(SetLanguage),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, SetLanguage]),
-            __metadata("design:returntype", void 0)
-        ], SessionState.prototype, "setLanguage", null);
-        __decorate([
-            store.Action(SetTenant),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, SetTenant]),
-            __metadata("design:returntype", void 0)
-        ], SessionState.prototype, "setTenant", null);
-        __decorate([
-            store.Selector(),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object]),
-            __metadata("design:returntype", String)
-        ], SessionState, "getLanguage", null);
-        __decorate([
-            store.Selector(),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object]),
-            __metadata("design:returntype", Object)
-        ], SessionState, "getTenant", null);
-        SessionState = __decorate([
-            store.State({
-                name: 'SessionState',
-                defaults: (/** @type {?} */ ({})),
-            }),
-            __metadata("design:paramtypes", [LocalizationService])
-        ], SessionState);
-        return SessionState;
-    }());
-    if (false) {
-        /**
-         * @type {?}
-         * @private
-         */
-        SessionState.prototype.localizationService;
+        return route;
+      },
+    );
+    if (parentUrl) {
+      // recursive block
+      return routes;
     }
+    return organizeRoutes(routes);
+  }
 
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/config.state.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var ConfigState = /** @class */ (function () {
-        function ConfigState(appConfigurationService, store) {
-            this.appConfigurationService = appConfigurationService;
-            this.store = store;
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  /**
+   * @param {?} value
+   * @return {?}
+   */
+  function isFunction(value) {
+    return typeof value === 'function';
+  }
+  /** @type {?} */
+  var takeUntilDestroy
+  /**
+   * @param {?} componentInstance
+   * @param {?=} destroyMethodName
+   * @return {?}
+   */ = (function(componentInstance, destroyMethodName) {
+    if (destroyMethodName === void 0) {
+      destroyMethodName = 'ngOnDestroy';
+    }
+    return (
+      /**
+       * @template T
+       * @param {?} source
+       * @return {?}
+       */
+      function(source) {
+        /** @type {?} */
+        var originalDestroy = componentInstance[destroyMethodName];
+        if (isFunction(originalDestroy) === false) {
+          throw new Error(
+            componentInstance.constructor.name + " is using untilDestroyed but doesn't implement " + destroyMethodName,
+          );
         }
         if (!componentInstance['__takeUntilDestroy']) {
           componentInstance['__takeUntilDestroy'] = new rxjs.Subject();
@@ -2418,9 +2338,8 @@
     /** @type {?} */
     AutofocusDirective.prototype.delay;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/utils/rxjs-utils.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     AutofocusDirective.prototype.elRef;
   }
@@ -2648,87 +2567,18 @@
       }
     };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/components/dynamic-layout.component.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @private
+     * @param {?} changes
+     * @return {?}
      */
-    var DynamicLayoutComponent = /** @class */ (function () {
-        function DynamicLayoutComponent(router$1, route, store) {
-            var _this = this;
-            this.router = router$1;
-            this.route = route;
-            this.store = store;
-            var _a = this.store.selectSnapshot(ConfigState.getAll), layouts = _a.requirements.layouts, routes = _a.routes;
-            if ((this.route.snapshot.data || {}).layout) {
-                this.layout = layouts
-                    .filter((/**
-                 * @param {?} l
-                 * @return {?}
-                 */
-                function (l) { return !!l; }))
-                    .find((/**
-                 * @param {?} l
-                 * @return {?}
-                 */
-                function (l) { return snq((/**
-                 * @return {?}
-                 */
-                function () { return l.type.toLowerCase().indexOf(_this.route.snapshot.data.layout); }), -1) > -1; }));
-            }
-            this.router.events.pipe(takeUntilDestroy(this)).subscribe((/**
-             * @param {?} event
-             * @return {?}
-             */
-            function (event) {
-                if (event instanceof router.NavigationEnd) {
-                    var segments = _this.router.parseUrl(event.url).root.children.primary.segments;
-                    /** @type {?} */
-                    var layout_1 = (_this.route.snapshot.data || {}).layout || findLayout(segments, routes);
-                    _this.layout = layouts
-                        .filter((/**
-                     * @param {?} l
-                     * @return {?}
-                     */
-                    function (l) { return !!l; }))
-                        .find((/**
-                     * @param {?} l
-                     * @return {?}
-                     */
-                    function (l) { return snq((/**
-                     * @return {?}
-                     */
-                    function () { return l.type.toLowerCase().indexOf(layout_1); }), -1) > -1; }));
-                }
-            }));
-        }
-        /**
-         * @return {?}
-         */
-        DynamicLayoutComponent.prototype.ngOnDestroy = /**
-         * @return {?}
-         */
-        function () { };
-        DynamicLayoutComponent.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'abp-dynamic-layout',
-                        template: "\n    <ng-container *ngTemplateOutlet=\"layout ? componentOutlet : routerOutlet\"></ng-container>\n    <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>\n    <ng-template #componentOutlet><ng-container *ngComponentOutlet=\"layout\"></ng-container></ng-template>\n  "
-                    }] }
-        ];
-        /** @nocollapse */
-        DynamicLayoutComponent.ctorParameters = function () { return [
-            { type: router.Router },
-            { type: router.ActivatedRoute },
-            { type: store.Store }
-        ]; };
-        __decorate([
-            store.Select(ConfigState.getOne('requirements')),
-            __metadata("design:type", rxjs.Observable)
-        ], DynamicLayoutComponent.prototype, "requirements$", void 0);
-        return DynamicLayoutComponent;
-    }());
-    if (false) {
-        /** @type {?} */
-        DynamicLayoutComponent.prototype.requirements$;
+    ForDirective.prototype.iterateOverAttachedViews
+    /**
+     * @private
+     * @param {?} changes
+     * @return {?}
+     */ = function(changes) {
+      var _this = this;
+      for (var i = 0, l = this.vcRef.length; i < l; i++) {
         /** @type {?} */
         var viewRef = /** @type {?} */ (this.vcRef.get(i));
         viewRef.context.index = i;
@@ -2783,123 +2633,126 @@
       }
     };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/components/router-outlet.component.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @private
+     * @param {?} items
+     * @return {?}
      */
     ForDirective.prototype.sortItems
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/components/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
+     * @private
+     * @param {?} items
+     * @return {?}
+     */ = function(items) {
+      var _this = this;
+      if (this.orderBy) {
+        items.sort(
+          /**
+           * @param {?} a
+           * @param {?} b
+           * @return {?}
+           */
+          function(a, b) {
+            return a[_this.orderBy] > b[_this.orderBy] ? 1 : a[_this.orderBy] < b[_this.orderBy] ? -1 : 0;
+          },
+        );
+      } else {
+        items.sort();
+      }
+    };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/constants/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
-
+    ForDirective.prototype.ngOnChanges
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/autofocus.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
+     */ = function() {
+      var _this = this;
+      /** @type {?} */
+      var items = /** @type {?} */ (clone(this.items));
+      if (!Array.isArray(items)) return;
+      /** @type {?} */
+      var compareFn = this.compareFn;
+      if (typeof this.filterBy !== 'undefined' && this.filterVal) {
+        items = items.filter(
+          /**
+           * @param {?} item
+           * @return {?}
+           */
+          function(item) {
+            return compareFn(item[_this.filterBy], _this.filterVal);
+          },
+        );
+      }
+      switch (this.orderDir) {
+        case 'ASC':
+          this.sortItems(items);
+          this.projectItems(items);
+          break;
+        case 'DESC':
+          this.sortItems(items);
+          items.reverse();
+          this.projectItems(items);
+          break;
+        default:
+          this.projectItems(items);
+      }
+    };
+    ForDirective.decorators = [
+      {
+        type: core.Directive,
+        args: [
+          {
+            selector: '[abpFor]',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    ForDirective.ctorParameters = function() {
+      return [{ type: core.TemplateRef }, { type: core.ViewContainerRef }, { type: core.IterableDiffers }];
+    };
+    ForDirective.propDecorators = {
+      items: [{ type: core.Input, args: ['abpForOf'] }],
+      orderBy: [{ type: core.Input, args: ['abpForOrderBy'] }],
+      orderDir: [{ type: core.Input, args: ['abpForOrderDir'] }],
+      filterBy: [{ type: core.Input, args: ['abpForFilterBy'] }],
+      filterVal: [{ type: core.Input, args: ['abpForFilterVal'] }],
+      trackBy: [{ type: core.Input, args: ['abpForTrackBy'] }],
+      compareBy: [{ type: core.Input, args: ['abpForCompareBy'] }],
+      emptyRef: [{ type: core.Input, args: ['abpForEmptyRef'] }],
+    };
+    return ForDirective;
+  })();
+  if (false) {
+    /** @type {?} */
+    ForDirective.prototype.items;
+    /** @type {?} */
+    ForDirective.prototype.orderBy;
+    /** @type {?} */
+    ForDirective.prototype.orderDir;
+    /** @type {?} */
+    ForDirective.prototype.filterBy;
+    /** @type {?} */
+    ForDirective.prototype.filterVal;
+    /** @type {?} */
+    ForDirective.prototype.trackBy;
+    /** @type {?} */
+    ForDirective.prototype.compareBy;
+    /** @type {?} */
+    ForDirective.prototype.emptyRef;
+    /**
+     * @type {?}
+     * @private
      */
     ForDirective.prototype.differ;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/ellipsis.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
-    var EllipsisDirective = /** @class */ (function () {
-        function EllipsisDirective(cdRef, elRef) {
-            this.cdRef = cdRef;
-            this.elRef = elRef;
-            this.enabled = true;
-        }
-        Object.defineProperty(EllipsisDirective.prototype, "inlineClass", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this.enabled && this.width;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EllipsisDirective.prototype, "class", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this.enabled && !this.width;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(EllipsisDirective.prototype, "maxWidth", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this.enabled && this.width ? this.width || '170px' : undefined;
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * @return {?}
-         */
-        EllipsisDirective.prototype.ngAfterViewInit = /**
-         * @return {?}
-         */
-        function () {
-            this.title = this.title || ((/** @type {?} */ (this.elRef.nativeElement))).innerText;
-            this.cdRef.detectChanges();
-        };
-        EllipsisDirective.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[abpEllipsis]',
-                    },] }
-        ];
-        /** @nocollapse */
-        EllipsisDirective.ctorParameters = function () { return [
-            { type: core.ChangeDetectorRef },
-            { type: core.ElementRef }
-        ]; };
-        EllipsisDirective.propDecorators = {
-            width: [{ type: core.Input, args: ['abpEllipsis',] }],
-            title: [{ type: core.HostBinding, args: ['title',] }, { type: core.Input }],
-            enabled: [{ type: core.Input, args: ['abpEllipsisEnabled',] }],
-            inlineClass: [{ type: core.HostBinding, args: ['class.abp-ellipsis-inline',] }],
-            class: [{ type: core.HostBinding, args: ['class.abp-ellipsis',] }],
-            maxWidth: [{ type: core.HostBinding, args: ['style.max-width',] }]
-        };
-        return EllipsisDirective;
-    }());
-    if (false) {
-        /** @type {?} */
-        EllipsisDirective.prototype.width;
-        /** @type {?} */
-        EllipsisDirective.prototype.title;
-        /** @type {?} */
-        EllipsisDirective.prototype.enabled;
-        /**
-         * @type {?}
-         * @private
-         */
-        EllipsisDirective.prototype.cdRef;
-        /**
-         * @type {?}
-         * @private
-         */
-        EllipsisDirective.prototype.elRef;
-    }
-
+    ForDirective.prototype.isShowEmptyRef;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/for.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     ForDirective.prototype.tempRef;
     /**
@@ -3031,9 +2884,7 @@
         );
     };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/utils/common-utils.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
     FormSubmitDirective.prototype.ngOnDestroy
     /**
@@ -3094,9 +2945,8 @@
      */
     FormSubmitDirective.prototype.host;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/utils/generator-utils.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     FormSubmitDirective.prototype.cdRef;
   }
@@ -3142,15 +2992,18 @@
      */
     ProfileService.prototype.get
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/utils/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
+     * @return {?}
+     */ = function() {
+      /** @type {?} */
+      var request = {
+        method: 'GET',
+        url: '/api/identity/my-profile',
+      };
+      return this.rest.request(request);
+    };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/form-submit.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} body
+     * @return {?}
      */
     ProfileService.prototype.update
     /**
@@ -3402,72 +3255,199 @@
              * @param {?} isGranted
              * @return {?}
              */
-            function () {
-                if (!_this.executedNgSubmit) {
-                    _this.host.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-                }
-                _this.executedNgSubmit = false;
-            }));
-        };
-        /**
-         * @return {?}
-         */
-        FormSubmitDirective.prototype.ngOnDestroy = /**
-         * @return {?}
-         */
-        function () { };
-        /**
-         * @return {?}
-         */
-        FormSubmitDirective.prototype.markAsDirty = /**
-         * @return {?}
-         */
-        function () {
-            var form = this.formGroupDirective.form;
-            setDirty((/** @type {?} */ (form.controls)));
-            form.markAsDirty();
-            this.cdRef.detectChanges();
-        };
-        FormSubmitDirective.decorators = [
-            { type: core.Directive, args: [{
-                        // tslint:disable-next-line: directive-selector
-                        selector: 'form[ngSubmit][formGroup]',
-                    },] }
-        ];
-        /** @nocollapse */
-        FormSubmitDirective.ctorParameters = function () { return [
-            { type: forms.FormGroupDirective, decorators: [{ type: core.Self }] },
-            { type: core.ElementRef },
-            { type: core.ChangeDetectorRef }
-        ]; };
-        FormSubmitDirective.propDecorators = {
-            notValidateOnSubmit: [{ type: core.Input }],
-            ngSubmit: [{ type: core.Output }]
-        };
-        return FormSubmitDirective;
-    }());
-    if (false) {
-        /** @type {?} */
-        FormSubmitDirective.prototype.notValidateOnSubmit;
-        /** @type {?} */
-        FormSubmitDirective.prototype.ngSubmit;
-        /** @type {?} */
-        FormSubmitDirective.prototype.executedNgSubmit;
-        /**
-         * @type {?}
-         * @private
-         */
-        FormSubmitDirective.prototype.formGroupDirective;
-        /**
-         * @type {?}
-         * @private
-         */
-        FormSubmitDirective.prototype.host;
-        /**
-         * @type {?}
-         * @private
-         */
-        FormSubmitDirective.prototype.cdRef;
+            function(isGranted) {
+              if (!isGranted) {
+                _this.renderer.removeChild(
+                  /** @type {?} */ (_this.elRef.nativeElement).parentElement,
+                  _this.elRef.nativeElement,
+                );
+              }
+            },
+          );
+      }
+    };
+    /**
+     * @return {?}
+     */
+    PermissionDirective.prototype.ngOnDestroy
+    /**
+     * @return {?}
+     */ = function() {};
+    PermissionDirective.decorators = [
+      {
+        type: core.Directive,
+        args: [
+          {
+            selector: '[abpPermission]',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    PermissionDirective.ctorParameters = function() {
+      return [
+        { type: core.ElementRef, decorators: [{ type: core.Optional }] },
+        { type: core.Renderer2 },
+        { type: store.Store },
+      ];
+    };
+    PermissionDirective.propDecorators = {
+      condition: [{ type: core.Input, args: ['abpPermission'] }],
+    };
+    return PermissionDirective;
+  })();
+  if (false) {
+    /** @type {?} */
+    PermissionDirective.prototype.condition;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.elRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.renderer;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.store;
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var SortPipe = /** @class */ (function() {
+    function SortPipe() {}
+    /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */
+    SortPipe.prototype.transform
+    /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */ = function(value, sortOrder, sortKey) {
+      if (sortOrder === void 0) {
+        sortOrder = 'asc';
+      }
+      sortOrder = sortOrder && /** @type {?} */ (sortOrder.toLowerCase());
+      if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc')) return value;
+      /** @type {?} */
+      var numberArray = [];
+      /** @type {?} */
+      var stringArray = [];
+      if (!sortKey) {
+        numberArray = value
+          .filter(
+            /**
+             * @param {?} item
+             * @return {?}
+             */
+            function(item) {
+              return typeof item === 'number';
+            },
+          )
+          .sort();
+        stringArray = value
+          .filter(
+            /**
+             * @param {?} item
+             * @return {?}
+             */
+            function(item) {
+              return typeof item === 'string';
+            },
+          )
+          .sort();
+      } else {
+        numberArray = value
+          .filter(
+            /**
+             * @param {?} item
+             * @return {?}
+             */
+            function(item) {
+              return typeof item[sortKey] === 'number';
+            },
+          )
+          .sort(
+            /**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function(a, b) {
+              return a[sortKey] - b[sortKey];
+            },
+          );
+        stringArray = value
+          .filter(
+            /**
+             * @param {?} item
+             * @return {?}
+             */
+            function(item) {
+              return typeof item[sortKey] === 'string';
+            },
+          )
+          .sort(
+            /**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function(a, b) {
+              if (a[sortKey] < b[sortKey]) return -1;
+              else if (a[sortKey] > b[sortKey]) return 1;
+              else return 0;
+            },
+          );
+      }
+      /** @type {?} */
+      var sorted = numberArray.concat(stringArray);
+      return sortOrder === 'asc' ? sorted : sorted.reverse();
+    };
+    SortPipe.decorators = [
+      { type: core.Injectable },
+      {
+        type: core.Pipe,
+        args: [
+          {
+            name: 'abpSort',
+          },
+        ],
+      },
+    ];
+    return SortPipe;
+  })();
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  /**
+   * @record
+   */
+  function TableSortOptions() {}
+  if (false) {
+    /** @type {?} */
+    TableSortOptions.prototype.key;
+    /** @type {?} */
+    TableSortOptions.prototype.order;
+  }
+  var TableSortDirective = /** @class */ (function() {
+    function TableSortDirective(table, sortPipe) {
+      this.table = table;
+      this.sortPipe = sortPipe;
+      this.value = [];
     }
     /**
      * @param {?} __0
@@ -3475,15 +3455,50 @@
      */
     TableSortDirective.prototype.ngOnChanges
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/profile.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} __0
+     * @return {?}
+     */ = function(_a) {
+      var value = _a.value,
+        abpTableSort = _a.abpTableSort;
+      if (value || abpTableSort) {
+        this.abpTableSort = this.abpTableSort || /** @type {?} */ ({});
+        this.table.value = this.sortPipe.transform(clone(this.value), this.abpTableSort.order, this.abpTableSort.key);
+      }
+    };
+    TableSortDirective.decorators = [
+      {
+        type: core.Directive,
+        args: [
+          {
+            selector: '[abpTableSort]',
+            providers: [SortPipe],
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    TableSortDirective.ctorParameters = function() {
+      return [{ type: table.Table, decorators: [{ type: core.Optional }, { type: core.Self }] }, { type: SortPipe }];
+    };
+    TableSortDirective.propDecorators = {
+      abpTableSort: [{ type: core.Input }],
+      value: [{ type: core.Input }],
+    };
+    return TableSortDirective;
+  })();
+  if (false) {
+    /** @type {?} */
+    TableSortDirective.prototype.abpTableSort;
+    /** @type {?} */
+    TableSortDirective.prototype.value;
+    /**
+     * @type {?}
+     * @private
      */
     TableSortDirective.prototype.table;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/profile.state.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     TableSortDirective.prototype.sortPipe;
   }
@@ -3923,15 +3938,18 @@
       Response.prototype.features;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-
+    function Localization() {}
+    ApplicationConfiguration.Localization = Localization;
+    if (false) {
+      /** @type {?} */
+      Localization.prototype.values;
+      /** @type {?} */
+      Localization.prototype.languages;
+    }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/permission.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function LocalizationValue() {}
     ApplicationConfiguration.LocalizationValue = LocalizationValue;
@@ -3951,165 +3969,91 @@
       Language.prototype.flagIcon;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/visibility.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-    var VisibilityDirective = /** @class */ (function () {
-        function VisibilityDirective(elRef, renderer) {
-            this.elRef = elRef;
-            this.renderer = renderer;
-            this.completed$ = new rxjs.Subject();
-        }
-        /**
-         * @return {?}
-         */
-        VisibilityDirective.prototype.ngAfterViewInit = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            if (!this.focusedElement && this.elRef) {
-                this.focusedElement = this.elRef.nativeElement;
-            }
-            /** @type {?} */
-            var observer;
-            observer = new MutationObserver((/**
-             * @param {?} mutations
-             * @return {?}
-             */
-            function (mutations) {
-                mutations.forEach((/**
-                 * @param {?} mutation
-                 * @return {?}
-                 */
-                function (mutation) {
-                    if (!mutation.target)
-                        return;
-                    /** @type {?} */
-                    var htmlNodes = snq((/**
-                     * @return {?}
-                     */
-                    function () { return Array.from(mutation.target.childNodes).filter((/**
-                     * @param {?} node
-                     * @return {?}
-                     */
-                    function (node) { return node instanceof HTMLElement; })); }), []);
-                    if (!htmlNodes.length) {
-                        _this.removeFromDOM();
-                    }
-                }));
-            }));
-            observer.observe(this.focusedElement, {
-                childList: true,
-            });
-            setTimeout((/**
-             * @return {?}
-             */
-            function () {
-                /** @type {?} */
-                var htmlNodes = snq((/**
-                 * @return {?}
-                 */
-                function () { return Array.from(_this.focusedElement.childNodes).filter((/**
-                 * @param {?} node
-                 * @return {?}
-                 */
-                function (node) { return node instanceof HTMLElement; })); }), []);
-                if (!htmlNodes.length)
-                    _this.removeFromDOM();
-            }), 0);
-            this.completed$.subscribe((/**
-             * @return {?}
-             */
-            function () { return observer.disconnect(); }));
-        };
-        /**
-         * @return {?}
-         */
-        VisibilityDirective.prototype.disconnect = /**
-         * @return {?}
-         */
-        function () {
-            this.completed$.next();
-            this.completed$.complete();
-        };
-        /**
-         * @return {?}
-         */
-        VisibilityDirective.prototype.removeFromDOM = /**
-         * @return {?}
-         */
-        function () {
-            if (!this.elRef.nativeElement)
-                return;
-            this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
-            this.disconnect();
-        };
-        VisibilityDirective.decorators = [
-            { type: core.Directive, args: [{
-                        selector: '[abpVisibility]',
-                    },] }
-        ];
-        /** @nocollapse */
-        VisibilityDirective.ctorParameters = function () { return [
-            { type: core.ElementRef, decorators: [{ type: core.Optional }] },
-            { type: core.Renderer2 }
-        ]; };
-        VisibilityDirective.propDecorators = {
-            focusedElement: [{ type: core.Input, args: ['abpVisibility',] }]
-        };
-        return VisibilityDirective;
-    }());
+    function Auth() {}
+    ApplicationConfiguration.Auth = Auth;
     if (false) {
-        /** @type {?} */
-        VisibilityDirective.prototype.focusedElement;
-        /** @type {?} */
-        VisibilityDirective.prototype.completed$;
-        /**
-         * @type {?}
-         * @private
-         */
-        VisibilityDirective.prototype.elRef;
-        /**
-         * @type {?}
-         * @private
-         */
-        VisibilityDirective.prototype.renderer;
+      /** @type {?} */
+      Auth.prototype.policies;
+      /** @type {?} */
+      Auth.prototype.grantedPolicies;
     }
-
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-
+    function Policy() {}
+    ApplicationConfiguration.Policy = Policy;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/enums/common.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-    /** @enum {string} */
-    var eLayoutType = {
-        account: "account",
-        application: "application",
-        empty: "empty",
-        /**
-         * @deprecated since version 0.9.0
-         */
-        setting: "setting",
-    };
-
+    function Value() {}
+    ApplicationConfiguration.Value = Value;
+    if (false) {
+      /** @type {?} */
+      Value.prototype.values;
+    }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/enums/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
+    function CurrentUser() {}
+    ApplicationConfiguration.CurrentUser = CurrentUser;
+    if (false) {
+      /** @type {?} */
+      CurrentUser.prototype.isAuthenticated;
+      /** @type {?} */
+      CurrentUser.prototype.id;
+      /** @type {?} */
+      CurrentUser.prototype.tenantId;
+      /** @type {?} */
+      CurrentUser.prototype.userName;
+    }
+  })(ApplicationConfiguration || (ApplicationConfiguration = {}));
 
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var ABP;
+  (function(ABP) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/guards/auth.guard.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
+     */
+    function Root() {}
+    ABP.Root = Root;
+    if (false) {
+      /** @type {?} */
+      Root.prototype.environment;
+      /** @type {?} */
+      Root.prototype.requirements;
+    }
+    /**
+     * @record
+     * @template T
+     */
+    function PagedItemsResponse() {}
+    ABP.PagedItemsResponse = PagedItemsResponse;
+    if (false) {
+      /** @type {?} */
+      PagedItemsResponse.prototype.items;
+    }
+    /**
+     * @record
+     */
+    function PageQueryParams() {}
+    ABP.PageQueryParams = PageQueryParams;
+    if (false) {
+      /** @type {?|undefined} */
+      PageQueryParams.prototype.filter;
+      /** @type {?|undefined} */
+      PageQueryParams.prototype.sorting;
+      /** @type {?|undefined} */
+      PageQueryParams.prototype.skipCount;
+      /** @type {?|undefined} */
+      PageQueryParams.prototype.maxResultCount;
+    }
+    /**
+     * @record
      */
     function Route() {}
     ABP.Route = Route;
@@ -4134,30 +4078,18 @@
       Route.prototype.iconClass;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/guards/permission.guard.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function FullRoute() {}
     ABP.FullRoute = FullRoute;
     if (false) {
-        /**
-         * @type {?}
-         * @private
-         */
-        PermissionGuard.prototype.store;
+      /** @type {?|undefined} */
+      FullRoute.prototype.url;
+      /** @type {?|undefined} */
+      FullRoute.prototype.wrapper;
     }
-
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/guards/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/interceptors/api.interceptor.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function BasicItem() {}
     ABP.BasicItem = BasicItem;
@@ -4168,15 +4100,21 @@
       BasicItem.prototype.name;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/interceptors/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
+     * @template T
      */
+    function Dictionary() {}
+    ABP.Dictionary = Dictionary;
+  })(ABP || (ABP = {}));
 
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var Config;
+  (function(Config) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/application-configuration.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function Environment() {}
     Config.Environment = Environment;
@@ -4193,9 +4131,7 @@
       Environment.prototype.localization;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/common.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function Application() {}
     Config.Application = Application;
@@ -4206,16 +4142,12 @@
       Application.prototype.logoUrl;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/config.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function Apis() {}
     Config.Apis = Apis;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/rest.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function Requirements() {}
     Config.Requirements = Requirements;
@@ -4224,9 +4156,7 @@
       Requirements.prototype.layouts;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/session.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function LocalizationWithDefault() {}
     Config.LocalizationWithDefault = LocalizationWithDefault;
@@ -4245,101 +4175,22 @@
 
   (function(Rest) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/profile.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-    var Profile;
-    (function (Profile) {
-        /**
-         * @record
-         */
-        function State() { }
-        Profile.State = State;
-        if (false) {
-            /** @type {?} */
-            State.prototype.profile;
-        }
-        /**
-         * @record
-         */
-        function Response() { }
-        Profile.Response = Response;
-        if (false) {
-            /** @type {?} */
-            Response.prototype.userName;
-            /** @type {?} */
-            Response.prototype.email;
-            /** @type {?} */
-            Response.prototype.name;
-            /** @type {?} */
-            Response.prototype.surname;
-            /** @type {?} */
-            Response.prototype.phoneNumber;
-        }
-        /**
-         * @record
-         */
-        function ChangePasswordRequest() { }
-        Profile.ChangePasswordRequest = ChangePasswordRequest;
-        if (false) {
-            /** @type {?} */
-            ChangePasswordRequest.prototype.currentPassword;
-            /** @type {?} */
-            ChangePasswordRequest.prototype.newPassword;
-        }
-    })(Profile || (Profile = {}));
-
+    function Config() {}
+    Rest.Config = Config;
+    if (false) {
+      /** @type {?|undefined} */
+      Config.prototype.skipHandleError;
+      /** @type {?|undefined} */
+      Config.prototype.observe;
+    }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/models/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
+     * @template T
      */
-
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/pipes/localization.pipe.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var LocalizationPipe = /** @class */ (function () {
-        function LocalizationPipe(store) {
-            this.store = store;
-        }
-        /**
-         * @param {?=} value
-         * @param {...?} interpolateParams
-         * @return {?}
-         */
-        LocalizationPipe.prototype.transform = /**
-         * @param {?=} value
-         * @param {...?} interpolateParams
-         * @return {?}
-         */
-        function (value) {
-            if (value === void 0) { value = ''; }
-            var interpolateParams = [];
-            for (var _i = 1; _i < arguments.length; _i++) {
-                interpolateParams[_i - 1] = arguments[_i];
-            }
-            return this.store.selectSnapshot(ConfigState.getLocalization.apply(ConfigState, __spread([value], interpolateParams.reduce((/**
-             * @param {?} acc
-             * @param {?} val
-             * @return {?}
-             */
-            function (acc, val) { return (Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val])); }), []))));
-        };
-        LocalizationPipe.decorators = [
-            { type: core.Injectable },
-            { type: core.Pipe, args: [{
-                        name: 'abpLocalization',
-                    },] }
-        ];
-        /** @nocollapse */
-        LocalizationPipe.ctorParameters = function () { return [
-            { type: store.Store }
-        ]; };
-        return LocalizationPipe;
-    }());
+    function Request() {}
+    Rest.Request = Request;
     if (false) {
       /** @type {?|undefined} */
       Request.prototype.body;
@@ -4367,100 +4218,26 @@
   var Session;
   (function(Session) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/pipes/sort.pipe.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
-    var SortPipe = /** @class */ (function () {
-        function SortPipe() {
-        }
-        /**
-         * @param {?} value
-         * @param {?=} sortOrder
-         * @param {?=} sortKey
-         * @return {?}
-         */
-        SortPipe.prototype.transform = /**
-         * @param {?} value
-         * @param {?=} sortOrder
-         * @param {?=} sortKey
-         * @return {?}
-         */
-        function (value, sortOrder, sortKey) {
-            if (sortOrder === void 0) { sortOrder = 'asc'; }
-            sortOrder = sortOrder && ((/** @type {?} */ (sortOrder.toLowerCase())));
-            if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc'))
-                return value;
-            /** @type {?} */
-            var numberArray = [];
-            /** @type {?} */
-            var stringArray = [];
-            if (!sortKey) {
-                numberArray = value.filter((/**
-                 * @param {?} item
-                 * @return {?}
-                 */
-                function (item) { return typeof item === 'number'; })).sort();
-                stringArray = value.filter((/**
-                 * @param {?} item
-                 * @return {?}
-                 */
-                function (item) { return typeof item === 'string'; })).sort();
-            }
-            else {
-                numberArray = value.filter((/**
-                 * @param {?} item
-                 * @return {?}
-                 */
-                function (item) { return typeof item[sortKey] === 'number'; })).sort((/**
-                 * @param {?} a
-                 * @param {?} b
-                 * @return {?}
-                 */
-                function (a, b) { return a[sortKey] - b[sortKey]; }));
-                stringArray = value
-                    .filter((/**
-                 * @param {?} item
-                 * @return {?}
-                 */
-                function (item) { return typeof item[sortKey] === 'string'; }))
-                    .sort((/**
-                 * @param {?} a
-                 * @param {?} b
-                 * @return {?}
-                 */
-                function (a, b) {
-                    if (a[sortKey] < b[sortKey])
-                        return -1;
-                    else if (a[sortKey] > b[sortKey])
-                        return 1;
-                    else
-                        return 0;
-                }));
-            }
-            /** @type {?} */
-            var sorted = numberArray.concat(stringArray);
-            return sortOrder === 'asc' ? sorted : sorted.reverse();
-        };
-        SortPipe.decorators = [
-            { type: core.Injectable },
-            { type: core.Pipe, args: [{
-                        name: 'abpSort',
-                    },] }
-        ];
-        return SortPipe;
-    }());
+    function State() {}
+    Session.State = State;
+    if (false) {
+      /** @type {?} */
+      State.prototype.language;
+      /** @type {?} */
+      State.prototype.tenant;
+    }
+  })(Session || (Session = {}));
 
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var Profile;
+  (function(Profile) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/pipes/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/plugins/config.plugin.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @record
      */
     function State() {}
     Profile.State = State;
@@ -4518,15 +4295,57 @@
      */
     LocalizationPipe.prototype.transform
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/plugins/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
+     * @param {?=} value
+     * @param {...?} interpolateParams
+     * @return {?}
+     */ = function(value) {
+      if (value === void 0) {
+        value = '';
+      }
+      var interpolateParams = [];
+      for (var _i = 1; _i < arguments.length; _i++) {
+        interpolateParams[_i - 1] = arguments[_i];
+      }
+      return this.store.selectSnapshot(
+        ConfigState.getLocalization.apply(
+          ConfigState,
+          __spread(
+            [value],
+            interpolateParams.reduce(
+              /**
+               * @param {?} acc
+               * @param {?} val
+               * @return {?}
+               */
+              function(acc, val) {
+                return Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val]);
+              },
+              [],
+            ),
+          ),
+        ),
+      );
+    };
+    LocalizationPipe.decorators = [
+      {
+        type: core.Pipe,
+        args: [
+          {
+            name: 'abpLocalization',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    LocalizationPipe.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    return LocalizationPipe;
+  })();
+  if (false) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/config-state.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     LocalizationPipe.prototype.store;
   }
@@ -4549,9 +4368,10 @@
       this.initialized = false;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/lazy-load.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} state
+     * @param {?} event
+     * @param {?} next
+     * @return {?}
      */
     ConfigPlugin.prototype.handle
     /**
@@ -4596,9 +4416,8 @@
   })();
   if (false) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/profile-state.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     ConfigPlugin.prototype.initialized;
     /**
@@ -4607,9 +4426,8 @@
      */
     ConfigPlugin.prototype.options;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/session-state.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
     ConfigPlugin.prototype.router;
   }
@@ -4781,15 +4599,344 @@
     /** @type {?} */
     var flat
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
+     * @param {?} r
+     * @return {?}
+     */ = (function(r) {
+      return r.reduce(
+        /**
+         * @param {?} acc
+         * @param {?} val
+         * @return {?}
+         */
+        function(acc, val) {
+          /** @type {?} */
+          var value = [val];
+          if (val.children) {
+            value = __spread([val], flat(val.children));
+          }
+          return __spread(acc, value);
+        },
+        [],
+      );
+    });
+    return flat(routes);
+  }
 
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var ConfigStateService = /** @class */ (function() {
+    function ConfigStateService(store) {
+      this.store = store;
+    }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/tokens/common.token.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
+     */
+    ConfigStateService.prototype.getAll
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(ConfigState.getAll);
+    };
+    /**
+     * @return {?}
+     */
+    ConfigStateService.prototype.getApplicationInfo
+    /**
+     * @return {?}
+     */ = function() {
+      return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getOne
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getOne.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getDeep
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getDeep.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getRoute
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getRoute.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getApiUrl
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getApiUrl.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getSetting
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getSetting.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getSettings
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getSettings.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getGrantedPolicy
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getGrantedPolicy.apply(ConfigState, __spread(args)));
+    };
+    /**
+     * @param {...?} args
+     * @return {?}
+     */
+    ConfigStateService.prototype.getLocalization
+    /**
+     * @param {...?} args
+     * @return {?}
+     */ = function() {
+      var args = [];
+      for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i] = arguments[_i];
+      }
+      return this.store.selectSnapshot(ConfigState.getLocalization.apply(ConfigState, __spread(args)));
+    };
+    ConfigStateService.decorators = [
+      {
+        type: core.Injectable,
+        args: [
+          {
+            providedIn: 'root',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    ConfigStateService.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    /** @nocollapse */ ConfigStateService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function ConfigStateService_Factory() {
+        return new ConfigStateService(core.ɵɵinject(store.Store));
+      },
+      token: ConfigStateService,
+      providedIn: 'root',
+    });
+    return ConfigStateService;
+  })();
+  if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    ConfigStateService.prototype.store;
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var LazyLoadService = /** @class */ (function() {
+    function LazyLoadService() {
+      this.loadedLibraries = {};
+    }
+    /**
+     * @param {?} urlOrUrls
+     * @param {?} type
+     * @param {?=} content
+     * @param {?=} targetQuery
+     * @param {?=} position
+     * @return {?}
+     */
+    LazyLoadService.prototype.load
+    /**
+     * @param {?} urlOrUrls
+     * @param {?} type
+     * @param {?=} content
+     * @param {?=} targetQuery
+     * @param {?=} position
+     * @return {?}
+     */ = function(urlOrUrls, type, content, targetQuery, position) {
+      var _this = this;
+      if (content === void 0) {
+        content = '';
+      }
+      if (targetQuery === void 0) {
+        targetQuery = 'body';
+      }
+      if (position === void 0) {
+        position = 'afterend';
+      }
+      if (!urlOrUrls && !content) {
+        return rxjs.throwError('Should pass url or content');
+      } else if (!urlOrUrls && content) {
+        urlOrUrls = [null];
+      }
+      if (!Array.isArray(urlOrUrls)) {
+        urlOrUrls = [urlOrUrls];
+      }
+      return new rxjs.Observable
+      /**
+       * @param {?} subscriber
+       * @return {?}
+       */(function(subscriber) {
+        /** @type {?} */ (urlOrUrls).forEach(
+          /**
+           * @param {?} url
+           * @param {?} index
+           * @return {?}
+           */
+          function(url, index) {
+            /** @type {?} */
+            var key = url ? url.slice(url.lastIndexOf('/') + 1) : uuid();
+            if (_this.loadedLibraries[key]) {
+              subscriber.next();
+              subscriber.complete();
+              return;
+            }
+            _this.loadedLibraries[key] = new rxjs.ReplaySubject();
+            /** @type {?} */
+            var library;
+            if (type === 'script') {
+              library = document.createElement('script');
+              library.type = 'text/javascript';
+              if (url) {
+                /** @type {?} */ (library).src = url;
+              }
+              /** @type {?} */ (library).text = content;
+            } else if (url) {
+              library = document.createElement('link');
+              library.type = 'text/css';
+              /** @type {?} */ (library).rel = 'stylesheet';
+              if (url) {
+                /** @type {?} */ (library).href = url;
+              }
+            } else {
+              library = document.createElement('style');
+              /** @type {?} */ (library).textContent = content;
+            }
+            library.onload
+            /**
+             * @return {?}
+             */ = function() {
+              _this.loadedLibraries[key].next();
+              _this.loadedLibraries[key].complete();
+              if (index === urlOrUrls.length - 1) {
+                subscriber.next();
+                subscriber.complete();
+              }
+            };
+            document.querySelector(targetQuery).insertAdjacentElement(position, library);
+          },
+        );
+      });
+    };
+    LazyLoadService.decorators = [
+      {
+        type: core.Injectable,
+        args: [
+          {
+            providedIn: 'root',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */ LazyLoadService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function LazyLoadService_Factory() {
+        return new LazyLoadService();
+      },
+      token: LazyLoadService,
+      providedIn: 'root',
+    });
+    return LazyLoadService;
+  })();
+  if (false) {
+    /** @type {?} */
+    LazyLoadService.prototype.loadedLibraries;
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var ProfileStateService = /** @class */ (function() {
+    function ProfileStateService(store) {
+      this.store = store;
+    }
+    /**
+     * @return {?}
      */
     ProfileStateService.prototype.getProfile
     /**
@@ -4980,140 +5127,75 @@
     /** @type {?} */
     InputEventDebounceDirective.prototype.debounceEvent;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/tokens/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
-
+    InputEventDebounceDirective.prototype.renderer;
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/debounce.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
-    var InputEventDebounceDirective = /** @class */ (function () {
-        function InputEventDebounceDirective(el) {
-            this.el = el;
-            this.debounce = 300;
-            this.debounceEvent = new core.EventEmitter();
-        }
-        /**
-         * @return {?}
-         */
-        InputEventDebounceDirective.prototype.ngOnInit = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            rxjs.fromEvent(this.el.nativeElement, 'input')
-                .pipe(operators.debounceTime(this.debounce), core$1.takeUntilDestroy(this))
-                .subscribe((/**
-             * @param {?} event
-             * @return {?}
-             */
-            function (event) {
-                _this.debounceEvent.emit(event);
-            }));
-        };
-        /**
-         * @return {?}
-         */
-        InputEventDebounceDirective.prototype.ngOnDestroy = /**
-         * @return {?}
-         */
-        function () { };
-        InputEventDebounceDirective.decorators = [
-            { type: core.Directive, args: [{
-                        // tslint:disable-next-line: directive-selector
-                        selector: '[input.debounce]',
-                    },] }
-        ];
-        /** @nocollapse */
-        InputEventDebounceDirective.ctorParameters = function () { return [
-            { type: core.ElementRef }
-        ]; };
-        InputEventDebounceDirective.propDecorators = {
-            debounce: [{ type: core.Input }],
-            debounceEvent: [{ type: core.Output, args: ['input.debounce',] }]
-        };
-        return InputEventDebounceDirective;
-    }());
-    if (false) {
-        /** @type {?} */
-        InputEventDebounceDirective.prototype.debounce;
-        /** @type {?} */
-        InputEventDebounceDirective.prototype.debounceEvent;
-        /**
-         * @type {?}
-         * @private
-         */
-        InputEventDebounceDirective.prototype.el;
+    InputEventDebounceDirective.prototype.el;
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var ClickEventStopPropagationDirective = /** @class */ (function() {
+    function ClickEventStopPropagationDirective(renderer, el) {
+      this.renderer = renderer;
+      this.el = el;
+      this.stopPropEvent = new core.EventEmitter();
     }
-
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/directives/stop-propagation.directive.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
-    var ClickEventStopPropagationDirective = /** @class */ (function () {
-        function ClickEventStopPropagationDirective(el) {
-            this.el = el;
-            this.stopPropEvent = new core.EventEmitter();
-        }
-        /**
-         * @return {?}
-         */
-        ClickEventStopPropagationDirective.prototype.ngOnInit = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            rxjs.fromEvent(this.el.nativeElement, 'click')
-                .pipe(core$1.takeUntilDestroy(this))
-                .subscribe((/**
-             * @param {?} event
-             * @return {?}
-             */
-            function (event) {
-                event.stopPropagation();
-                _this.stopPropEvent.emit(event);
-            }));
-        };
-        /**
-         * @return {?}
-         */
-        ClickEventStopPropagationDirective.prototype.ngOnDestroy = /**
-         * @return {?}
-         */
-        function () { };
-        ClickEventStopPropagationDirective.decorators = [
-            { type: core.Directive, args: [{
-                        // tslint:disable-next-line: directive-selector
-                        selector: '[click.stop]',
-                    },] }
-        ];
-        /** @nocollapse */
-        ClickEventStopPropagationDirective.ctorParameters = function () { return [
-            { type: core.ElementRef }
-        ]; };
-        ClickEventStopPropagationDirective.propDecorators = {
-            stopPropEvent: [{ type: core.Output, args: ['click.stop',] }]
-        };
-        return ClickEventStopPropagationDirective;
-    }());
-    if (false) {
-        /** @type {?} */
-        ClickEventStopPropagationDirective.prototype.stopPropEvent;
-        /**
-         * @type {?}
-         * @private
-         */
-        ClickEventStopPropagationDirective.prototype.el;
-    }
-
+    ClickEventStopPropagationDirective.prototype.ngOnInit
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/providers/locale.provider.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
+     */ = function() {
+      var _this = this;
+      rxjs
+        .fromEvent(this.el.nativeElement, 'click')
+        .pipe(core$1.takeUntilDestroy(this))
+        .subscribe(
+          /**
+           * @param {?} event
+           * @return {?}
+           */
+          function(event) {
+            event.stopPropagation();
+            _this.stopPropEvent.emit(event);
+          },
+        );
+    };
+    ClickEventStopPropagationDirective.decorators = [
+      {
+        type: core.Directive,
+        args: [
+          {
+            // tslint:disable-next-line: directive-selector
+            selector: '[click.stop]',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    ClickEventStopPropagationDirective.ctorParameters = function() {
+      return [{ type: core.Renderer2 }, { type: core.ElementRef }];
+    };
+    ClickEventStopPropagationDirective.propDecorators = {
+      stopPropEvent: [{ type: core.Output, args: ['click.stop'] }],
+    };
+    return ClickEventStopPropagationDirective;
+  })();
+  if (false) {
+    /** @type {?} */
+    ClickEventStopPropagationDirective.prototype.stopPropEvent;
+    /**
+     * @type {?}
+     * @private
      */
     ClickEventStopPropagationDirective.prototype.renderer;
     /**
@@ -5135,201 +5217,243 @@
       return _this;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/core.module.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
-    var CoreModule = /** @class */ (function () {
-        function CoreModule() {
-        }
-        /**
-         * @param {?=} options
-         * @return {?}
-         */
-        CoreModule.forRoot = /**
-         * @param {?=} options
-         * @return {?}
-         */
-        function (options) {
-            if (options === void 0) { options = (/** @type {?} */ ({})); }
-            return {
-                ngModule: CoreModule,
-                providers: [
-                    LocaleProvider,
-                    {
-                        provide: store.NGXS_PLUGINS,
-                        useClass: ConfigPlugin,
-                        multi: true,
-                    },
-                    {
-                        provide: NGXS_CONFIG_PLUGIN_OPTIONS,
-                        useValue: options,
-                    },
-                    {
-                        provide: http.HTTP_INTERCEPTORS,
-                        useClass: ApiInterceptor,
-                        multi: true,
-                    },
-                    {
-                        provide: core.APP_INITIALIZER,
-                        multi: true,
-                        deps: [core.Injector],
-                        useFactory: getInitialData,
-                    },
-                    {
-                        provide: core.APP_INITIALIZER,
-                        multi: true,
-                        deps: [core.Injector],
-                        useFactory: localeInitializer,
-                    },
-                ],
-            };
-        };
-        CoreModule.decorators = [
-            { type: core.NgModule, args: [{
-                        imports: [
-                            store.NgxsModule.forFeature([ProfileState, SessionState, ConfigState]),
-                            routerPlugin.NgxsRouterPluginModule.forRoot(),
-                            storagePlugin.NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
-                            angularOauth2Oidc.OAuthModule.forRoot(),
-                            common.CommonModule,
-                            http.HttpClientModule,
-                            forms.FormsModule,
-                            forms.ReactiveFormsModule,
-                            router.RouterModule,
-                        ],
-                        declarations: [
-                            RouterOutletComponent,
-                            DynamicLayoutComponent,
-                            AutofocusDirective,
-                            EllipsisDirective,
-                            ForDirective,
-                            FormSubmitDirective,
-                            LocalizationPipe,
-                            SortPipe,
-                            PermissionDirective,
-                            VisibilityDirective,
-                            InputEventDebounceDirective,
-                            ClickEventStopPropagationDirective,
-                            AbstractNgModelComponent,
-                        ],
-                        exports: [
-                            common.CommonModule,
-                            http.HttpClientModule,
-                            forms.FormsModule,
-                            forms.ReactiveFormsModule,
-                            router.RouterModule,
-                            RouterOutletComponent,
-                            DynamicLayoutComponent,
-                            AutofocusDirective,
-                            EllipsisDirective,
-                            ForDirective,
-                            FormSubmitDirective,
-                            LocalizationPipe,
-                            SortPipe,
-                            PermissionDirective,
-                            VisibilityDirective,
-                            InputEventDebounceDirective,
-                            LocalizationPipe,
-                            ClickEventStopPropagationDirective,
-                            AbstractNgModelComponent,
-                        ],
-                        providers: [LocalizationPipe],
-                        entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
-                    },] }
-        ];
-        return CoreModule;
-    }());
+    LocaleId.prototype.toString
+    /**
+     * @return {?}
+     */ = function() {
+      var currentLang = this.localizationService.currentLang;
+      return localesMapping[currentLang] || currentLang;
+    };
+    /**
+     * @return {?}
+     */
+    LocaleId.prototype.valueOf
+    /**
+     * @return {?}
+     */ = function() {
+      return this.toString();
+    };
+    return LocaleId;
+  })(String);
+  if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    LocaleId.prototype.localizationService;
+  }
+  /** @type {?} */
+  var LocaleProvider = {
+    provide: core.LOCALE_ID,
+    useClass: LocaleId,
+    deps: [LocalizationService],
+  };
 
-    exports.AbstractNgModelComponent = AbstractNgModelComponent;
-    exports.ApiInterceptor = ApiInterceptor;
-    exports.ApplicationConfigurationService = ApplicationConfigurationService;
-    exports.AuthGuard = AuthGuard;
-    exports.AutofocusDirective = AutofocusDirective;
-    exports.CONFIG = CONFIG;
-    exports.ChangePassword = ChangePassword;
-    exports.ConfigPlugin = ConfigPlugin;
-    exports.ConfigState = ConfigState;
-    exports.ConfigStateService = ConfigStateService;
-    exports.CoreModule = CoreModule;
-    exports.DynamicLayoutComponent = DynamicLayoutComponent;
-    exports.ENVIRONMENT = ENVIRONMENT;
-    exports.EllipsisDirective = EllipsisDirective;
-    exports.ForDirective = ForDirective;
-    exports.FormSubmitDirective = FormSubmitDirective;
-    exports.GetAppConfiguration = GetAppConfiguration;
-    exports.GetProfile = GetProfile;
-    exports.LazyLoadService = LazyLoadService;
-    exports.LocalizationPipe = LocalizationPipe;
-    exports.LocalizationService = LocalizationService;
-    exports.NGXS_CONFIG_PLUGIN_OPTIONS = NGXS_CONFIG_PLUGIN_OPTIONS;
-    exports.PatchRouteByName = PatchRouteByName;
-    exports.PermissionDirective = PermissionDirective;
-    exports.PermissionGuard = PermissionGuard;
-    exports.ProfileService = ProfileService;
-    exports.ProfileState = ProfileState;
-    exports.ProfileStateService = ProfileStateService;
-    exports.RestOccurError = RestOccurError;
-    exports.RestService = RestService;
-    exports.RouterOutletComponent = RouterOutletComponent;
-    exports.SessionState = SessionState;
-    exports.SessionStateService = SessionStateService;
-    exports.SetLanguage = SetLanguage;
-    exports.SetTenant = SetTenant;
-    exports.SortPipe = SortPipe;
-    exports.StartLoader = StartLoader;
-    exports.StopLoader = StopLoader;
-    exports.UpdateProfile = UpdateProfile;
-    exports.VisibilityDirective = VisibilityDirective;
-    exports.addAbpRoutes = addAbpRoutes;
-    exports.configFactory = configFactory;
-    exports.environmentFactory = environmentFactory;
-    exports.getAbpRoutes = getAbpRoutes;
-    exports.getInitialData = getInitialData;
-    exports.localeInitializer = localeInitializer;
-    exports.noop = noop;
-    exports.organizeRoutes = organizeRoutes;
-    exports.registerLocale = registerLocale;
-    exports.setChildRoute = setChildRoute;
-    exports.sortRoutes = sortRoutes;
-    exports.takeUntilDestroy = takeUntilDestroy;
-    exports.uuid = uuid;
-    exports.ɵa = ProfileState;
-    exports.ɵb = ProfileService;
-    exports.ɵba = InputEventDebounceDirective;
-    exports.ɵbb = ClickEventStopPropagationDirective;
-    exports.ɵbc = AbstractNgModelComponent;
-    exports.ɵbd = LocaleId;
-    exports.ɵbe = LocaleProvider;
-    exports.ɵbf = NGXS_CONFIG_PLUGIN_OPTIONS;
-    exports.ɵbg = ConfigPlugin;
-    exports.ɵbh = ApiInterceptor;
-    exports.ɵbi = getInitialData;
-    exports.ɵbj = localeInitializer;
-    exports.ɵc = RestService;
-    exports.ɵd = GetProfile;
-    exports.ɵe = UpdateProfile;
-    exports.ɵf = ChangePassword;
-    exports.ɵh = SessionState;
-    exports.ɵi = LocalizationService;
-    exports.ɵj = SetLanguage;
-    exports.ɵk = SetTenant;
-    exports.ɵm = ConfigState;
-    exports.ɵn = ApplicationConfigurationService;
-    exports.ɵo = PatchRouteByName;
-    exports.ɵp = GetAppConfiguration;
-    exports.ɵq = RouterOutletComponent;
-    exports.ɵr = DynamicLayoutComponent;
-    exports.ɵs = AutofocusDirective;
-    exports.ɵt = EllipsisDirective;
-    exports.ɵu = ForDirective;
-    exports.ɵv = FormSubmitDirective;
-    exports.ɵw = LocalizationPipe;
-    exports.ɵx = SortPipe;
-    exports.ɵy = PermissionDirective;
-    exports.ɵz = VisibilityDirective;
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var CoreModule = /** @class */ (function() {
+    function CoreModule() {}
+    /**
+     * @param {?=} options
+     * @return {?}
+     */
+    CoreModule.forRoot
+    /**
+     * @param {?=} options
+     * @return {?}
+     */ = function(options) {
+      if (options === void 0) {
+        options = /** @type {?} */ ({});
+      }
+      return {
+        ngModule: CoreModule,
+        providers: [
+          LocaleProvider,
+          {
+            provide: store.NGXS_PLUGINS,
+            useClass: ConfigPlugin,
+            multi: true,
+          },
+          {
+            provide: NGXS_CONFIG_PLUGIN_OPTIONS,
+            useValue: options,
+          },
+          {
+            provide: http.HTTP_INTERCEPTORS,
+            useClass: ApiInterceptor,
+            multi: true,
+          },
+          {
+            provide: core.APP_INITIALIZER,
+            multi: true,
+            deps: [core.Injector],
+            useFactory: getInitialData,
+          },
+          {
+            provide: core.APP_INITIALIZER,
+            multi: true,
+            deps: [core.Injector],
+            useFactory: localeInitializer,
+          },
+        ],
+      };
+    };
+    CoreModule.decorators = [
+      {
+        type: core.NgModule,
+        args: [
+          {
+            imports: [
+              store.NgxsModule.forFeature([ProfileState, SessionState, ConfigState]),
+              storagePlugin.NgxsStoragePluginModule.forRoot({ key: 'SessionState' }),
+              routerPlugin.NgxsRouterPluginModule.forRoot(),
+              common.CommonModule,
+              http.HttpClientModule,
+              forms.FormsModule,
+              forms.ReactiveFormsModule,
+              router.RouterModule,
+            ],
+            declarations: [
+              RouterOutletComponent,
+              DynamicLayoutComponent,
+              AutofocusDirective,
+              EllipsisDirective,
+              ForDirective,
+              FormSubmitDirective,
+              TableSortDirective,
+              LocalizationPipe,
+              SortPipe,
+              PermissionDirective,
+              VisibilityDirective,
+              InputEventDebounceDirective,
+              ClickEventStopPropagationDirective,
+              AbstractNgModelComponent,
+            ],
+            exports: [
+              common.CommonModule,
+              http.HttpClientModule,
+              forms.FormsModule,
+              forms.ReactiveFormsModule,
+              router.RouterModule,
+              RouterOutletComponent,
+              DynamicLayoutComponent,
+              AutofocusDirective,
+              EllipsisDirective,
+              ForDirective,
+              FormSubmitDirective,
+              LocalizationPipe,
+              SortPipe,
+              TableSortDirective,
+              PermissionDirective,
+              VisibilityDirective,
+              InputEventDebounceDirective,
+              LocalizationPipe,
+              ClickEventStopPropagationDirective,
+              AbstractNgModelComponent,
+            ],
+            providers: [LocalizationPipe],
+            entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
+          },
+        ],
+      },
+    ];
+    return CoreModule;
+  })();
 
-    Object.defineProperty(exports, '__esModule', { value: true });
+  exports.AbstractNgModelComponent = AbstractNgModelComponent;
+  exports.ApiInterceptor = ApiInterceptor;
+  exports.ApplicationConfigurationService = ApplicationConfigurationService;
+  exports.AuthGuard = AuthGuard;
+  exports.AutofocusDirective = AutofocusDirective;
+  exports.CONFIG = CONFIG;
+  exports.ChangePassword = ChangePassword;
+  exports.ConfigPlugin = ConfigPlugin;
+  exports.ConfigState = ConfigState;
+  exports.ConfigStateService = ConfigStateService;
+  exports.CoreModule = CoreModule;
+  exports.DynamicLayoutComponent = DynamicLayoutComponent;
+  exports.ENVIRONMENT = ENVIRONMENT;
+  exports.EllipsisDirective = EllipsisDirective;
+  exports.ForDirective = ForDirective;
+  exports.FormSubmitDirective = FormSubmitDirective;
+  exports.GetAppConfiguration = GetAppConfiguration;
+  exports.GetProfile = GetProfile;
+  exports.LazyLoadService = LazyLoadService;
+  exports.LocalizationPipe = LocalizationPipe;
+  exports.LocalizationService = LocalizationService;
+  exports.NGXS_CONFIG_PLUGIN_OPTIONS = NGXS_CONFIG_PLUGIN_OPTIONS;
+  exports.PatchRouteByName = PatchRouteByName;
+  exports.PermissionDirective = PermissionDirective;
+  exports.PermissionGuard = PermissionGuard;
+  exports.ProfileService = ProfileService;
+  exports.ProfileState = ProfileState;
+  exports.ProfileStateService = ProfileStateService;
+  exports.RestOccurError = RestOccurError;
+  exports.RestService = RestService;
+  exports.RouterOutletComponent = RouterOutletComponent;
+  exports.SessionState = SessionState;
+  exports.SessionStateService = SessionStateService;
+  exports.SetLanguage = SetLanguage;
+  exports.SetTenant = SetTenant;
+  exports.SortPipe = SortPipe;
+  exports.StartLoader = StartLoader;
+  exports.StopLoader = StopLoader;
+  exports.TableSortDirective = TableSortDirective;
+  exports.UpdateProfile = UpdateProfile;
+  exports.VisibilityDirective = VisibilityDirective;
+  exports.addAbpRoutes = addAbpRoutes;
+  exports.configFactory = configFactory;
+  exports.environmentFactory = environmentFactory;
+  exports.getAbpRoutes = getAbpRoutes;
+  exports.getInitialData = getInitialData;
+  exports.localeInitializer = localeInitializer;
+  exports.noop = noop;
+  exports.organizeRoutes = organizeRoutes;
+  exports.registerLocale = registerLocale;
+  exports.setChildRoute = setChildRoute;
+  exports.sortRoutes = sortRoutes;
+  exports.takeUntilDestroy = takeUntilDestroy;
+  exports.uuid = uuid;
+  exports.ɵa = ProfileState;
+  exports.ɵb = ProfileService;
+  exports.ɵba = VisibilityDirective;
+  exports.ɵbb = InputEventDebounceDirective;
+  exports.ɵbc = ClickEventStopPropagationDirective;
+  exports.ɵbd = AbstractNgModelComponent;
+  exports.ɵbe = LocaleId;
+  exports.ɵbf = LocaleProvider;
+  exports.ɵbg = NGXS_CONFIG_PLUGIN_OPTIONS;
+  exports.ɵbh = ConfigPlugin;
+  exports.ɵbi = ApiInterceptor;
+  exports.ɵbj = getInitialData;
+  exports.ɵbk = localeInitializer;
+  exports.ɵc = RestService;
+  exports.ɵd = GetProfile;
+  exports.ɵe = UpdateProfile;
+  exports.ɵf = ChangePassword;
+  exports.ɵh = SessionState;
+  exports.ɵi = LocalizationService;
+  exports.ɵj = SetLanguage;
+  exports.ɵk = SetTenant;
+  exports.ɵm = ConfigState;
+  exports.ɵn = ApplicationConfigurationService;
+  exports.ɵo = PatchRouteByName;
+  exports.ɵp = GetAppConfiguration;
+  exports.ɵq = RouterOutletComponent;
+  exports.ɵr = DynamicLayoutComponent;
+  exports.ɵs = AutofocusDirective;
+  exports.ɵt = EllipsisDirective;
+  exports.ɵu = ForDirective;
+  exports.ɵv = FormSubmitDirective;
+  exports.ɵw = TableSortDirective;
+  exports.ɵx = SortPipe;
+  exports.ɵy = LocalizationPipe;
+  exports.ɵz = PermissionDirective;
 
-})));
+  Object.defineProperty(exports, '__esModule', { value: true });
+});
 //# sourceMappingURL=abp-ng.core.umd.js.map

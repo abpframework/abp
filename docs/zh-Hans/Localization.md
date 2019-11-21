@@ -48,8 +48,7 @@ public class MyModule : AbpModule
     {
         Configure<VirtualFileSystemOptions>(options =>
         {
-            // "YourRootNameSpace" 是项目的根命名空间名字. 如果你的项目的根命名空间名字为空,则无需传递此参数.
-            options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
+            options.FileSets.AddEmbedded<MyModule>();
         });
 
         Configure<AbpLocalizationOptions>(options =>

@@ -60,7 +60,7 @@ NormalizeWhitespace.prototype = {
 	},
 	spacesToTabs: function (input, spaces) {
 		spaces = spaces|0 || 4;
-		return input.replace(RegExp(' {' + spaces + '}', 'g'), '\t');
+		return input.replace(new RegExp(' {' + spaces + '}', 'g'), '\t');
 	},
 	removeTrailing: function (input) {
 		return input.replace(/\s*?$/gm, '');
@@ -80,7 +80,7 @@ NormalizeWhitespace.prototype = {
 		if (!indents[0].length)
 			return input;
 
-		return input.replace(RegExp('^' + indents[0], 'gm'), '');
+		return input.replace(new RegExp('^' + indents[0], 'gm'), '');
 	},
 	indent: function (input, tabs) {
 		return input.replace(/^[^\S\n\r]*(?=\S)/gm, new Array(++tabs).join('\t') + '$&');
@@ -148,7 +148,7 @@ Prism.hooks.add('before-sanity-check', function (env) {
 
 	// Normal mode
 	var pre = env.element.parentNode;
-	var clsReg = /(?:^|\s)no-whitespace-normalization(?:\s|$)/;
+	var clsReg = /\bno-whitespace-normalization\b/;
 	if (!env.code || !pre || pre.nodeName.toLowerCase() !== 'pre' ||
 			clsReg.test(pre.className) || clsReg.test(env.element.className))
 		return;

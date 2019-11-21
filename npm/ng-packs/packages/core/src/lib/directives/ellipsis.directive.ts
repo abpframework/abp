@@ -1,9 +1,9 @@
-import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, HostBinding, Input } from '@angular/core';
+import { AfterContentInit, ChangeDetectorRef, Directive, ElementRef, HostBinding, Input } from '@angular/core';
 
 @Directive({
   selector: '[abpEllipsis]',
 })
-export class EllipsisDirective implements AfterViewInit {
+export class EllipsisDirective implements AfterContentInit {
   @Input('abpEllipsis')
   width: string;
 
@@ -31,8 +31,14 @@ export class EllipsisDirective implements AfterViewInit {
 
   constructor(private cdRef: ChangeDetectorRef, private elRef: ElementRef) {}
 
-  ngAfterViewInit() {
-    this.title = this.title || (this.elRef.nativeElement as HTMLElement).innerText;
-    this.cdRef.detectChanges();
+  ngAfterContentInit() {
+    setTimeout(() => {
+      const title = this.title;
+      this.title = title || (this.elRef.nativeElement as HTMLElement).innerText;
+
+      if (this.title !== title) {
+        this.cdRef.detectChanges();
+      }
+    }, 0);
   }
 }

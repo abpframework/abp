@@ -74,26 +74,16 @@ namespace Volo.Abp.BackgroundJobs
 
         public void Update(BackgroundJobInfo jobInfo)
         {
-            var backgroundJobRecord = BackgroundJobRepository.Find(jobInfo.Id);
-            if (backgroundJobRecord == null)
-            {
-                return;
-            }
-
-            ObjectMapper.Map(jobInfo, backgroundJobRecord);
-            BackgroundJobRepository.Update(backgroundJobRecord);
+            BackgroundJobRepository.Update(
+                ObjectMapper.Map<BackgroundJobInfo, BackgroundJobRecord>(jobInfo)
+            );
         }
 
         public virtual async Task UpdateAsync(BackgroundJobInfo jobInfo)
         {
-            var backgroundJobRecord = await BackgroundJobRepository.FindAsync(jobInfo.Id);
-            if (backgroundJobRecord == null)
-            {
-                return;
-            }
-
-            ObjectMapper.Map(jobInfo, backgroundJobRecord);
-            await BackgroundJobRepository.UpdateAsync(backgroundJobRecord);
+            await BackgroundJobRepository.UpdateAsync(
+                ObjectMapper.Map<BackgroundJobInfo, BackgroundJobRecord>(jobInfo)
+            );
         }
     }
 }

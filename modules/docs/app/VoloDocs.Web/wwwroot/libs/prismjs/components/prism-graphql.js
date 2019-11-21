@@ -11,21 +11,14 @@ Prism.languages.graphql = {
 		pattern: /@[a-z_]\w*/i,
 		alias: 'function'
 	},
-	'attr-name': {
-		pattern: /[a-z_]\w*(?=\s*(?:\((?:[^()"]|"(?:\\.|[^\\"\r\n])*")*\))?:)/i,
-		greedy: true
-	},
-	'class-name': {
-		pattern: /(\b(?:enum|implements|interface|on|scalar|type|union)\s+)[a-zA-Z_]\w*/,
-		lookbehind: true
-	},
-	'fragment': {
-		pattern: /(\bfragment\s+|\.{3}\s*(?!on\b))[a-zA-Z_]\w*/,
-		lookbehind: true,
-		alias: 'function'
-	},
-	'keyword': /\b(?:enum|fragment|implements|input|interface|mutation|on|query|scalar|schema|type|union)\b/,
-	'operator': /[!=|]|\.{3}/,
-	'punctuation': /[!(){}\[\]:=,]/,
-	'constant': /\b(?!ID\b)[A-Z][A-Z_\d]*\b/
+	'attr-name': /[a-z_]\w*(?=\s*:)/i,
+	'keyword': [
+		{
+			pattern: /(fragment\s+(?!on)[a-z_]\w*\s+|\.{3}\s*)on\b/,
+			lookbehind: true
+		},
+		/\b(?:query|fragment|mutation)\b/
+	],
+	'operator': /!|=|\.{3}/,
+	'punctuation': /[!(){}\[\]:=,]/
 };

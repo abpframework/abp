@@ -47,7 +47,7 @@
 			}
 
 			Prism.languages.DFS(grammar, function (key, def, type) {
-				if (candidates.indexOf(type) > -1 && !Array.isArray(def)) {
+				if (candidates.indexOf(type) > -1 && Prism.util.type(def) !== 'Array') {
 					if (!def.pattern) {
 						def = this[key] = {
 							pattern: def

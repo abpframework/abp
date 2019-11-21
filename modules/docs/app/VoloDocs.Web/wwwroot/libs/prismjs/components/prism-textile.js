@@ -1,7 +1,7 @@
-(function (Prism) {
+(function(Prism) {
 	// We don't allow for pipes inside parentheses
 	// to not break table pattern |(. foo |). bar |
-	var modifierRegex = /(?:\([^|)]+\)|\[[^\]]+\]|\{[^}]+\})+/.source;
+	var modifierRegex = '(?:\\([^|)]+\\)|\\[[^\\]]+\\]|\\{[^}]+\\})+';
 	var modifierTokens = {
 		'css': {
 			pattern: /\{[^}]+\}/,
@@ -24,7 +24,7 @@
 	};
 
 
-	var textile = Prism.languages.textile = Prism.languages.extend('markup', {
+	Prism.languages.textile = Prism.languages.extend('markup', {
 		'phrase': {
 			pattern: /(^|\r|\n)\S[\s\S]*?(?=$|\r?\n\r?\n|\r\r)/,
 			lookbehind: true,
@@ -220,41 +220,38 @@
 					pattern: /\b\((?:TM|R|C)\)/,
 					alias: 'comment',
 					inside: {
-						'punctuation': /[()]/
+						'punctuation':/[()]/
 					}
 				}
 			}
 		}
 	});
 
-	var phraseInside = textile['phrase'].inside;
 	var nestedPatterns = {
-		'inline': phraseInside['inline'],
-		'link': phraseInside['link'],
-		'image': phraseInside['image'],
-		'footnote': phraseInside['footnote'],
-		'acronym': phraseInside['acronym'],
-		'mark': phraseInside['mark']
+		'inline': Prism.languages.textile['phrase'].inside['inline'],
+		'link': Prism.languages.textile['phrase'].inside['link'],
+		'image': Prism.languages.textile['phrase'].inside['image'],
+		'footnote': Prism.languages.textile['phrase'].inside['footnote'],
+		'acronym': Prism.languages.textile['phrase'].inside['acronym'],
+		'mark': Prism.languages.textile['phrase'].inside['mark']
 	};
 
 	// Only allow alpha-numeric HTML tags, not XML tags
-	textile.tag.pattern = /<\/?(?!\d)[a-z0-9]+(?:\s+[^\s>\/=]+(?:=(?:("|')(?:\\[\s\S]|(?!\1)[^\\])*\1|[^\s'">=]+))?)*\s*\/?>/i;
+	Prism.languages.textile.tag.pattern = /<\/?(?!\d)[a-z0-9]+(?:\s+[^\s>\/=]+(?:=(?:("|')(?:\\[\s\S]|(?!\1)[^\\])*\1|[^\s'">=]+))?)*\s*\/?>/i;
 
 	// Allow some nesting
-	var phraseInlineInside = phraseInside['inline'].inside;
-	phraseInlineInside['bold'].inside = nestedPatterns;
-	phraseInlineInside['italic'].inside = nestedPatterns;
-	phraseInlineInside['inserted'].inside = nestedPatterns;
-	phraseInlineInside['deleted'].inside = nestedPatterns;
-	phraseInlineInside['span'].inside = nestedPatterns;
+	Prism.languages.textile['phrase'].inside['inline'].inside['bold'].inside = nestedPatterns;
+	Prism.languages.textile['phrase'].inside['inline'].inside['italic'].inside = nestedPatterns;
+	Prism.languages.textile['phrase'].inside['inline'].inside['inserted'].inside = nestedPatterns;
+	Prism.languages.textile['phrase'].inside['inline'].inside['deleted'].inside = nestedPatterns;
+	Prism.languages.textile['phrase'].inside['inline'].inside['span'].inside = nestedPatterns;
 
 	// Allow some styles inside table cells
-	var phraseTableInside = phraseInside['table'].inside;
-	phraseTableInside['inline'] = nestedPatterns['inline'];
-	phraseTableInside['link'] = nestedPatterns['link'];
-	phraseTableInside['image'] = nestedPatterns['image'];
-	phraseTableInside['footnote'] = nestedPatterns['footnote'];
-	phraseTableInside['acronym'] = nestedPatterns['acronym'];
-	phraseTableInside['mark'] = nestedPatterns['mark'];
+	Prism.languages.textile['phrase'].inside['table'].inside['inline'] = nestedPatterns['inline'];
+	Prism.languages.textile['phrase'].inside['table'].inside['link'] = nestedPatterns['link'];
+	Prism.languages.textile['phrase'].inside['table'].inside['image'] = nestedPatterns['image'];
+	Prism.languages.textile['phrase'].inside['table'].inside['footnote'] = nestedPatterns['footnote'];
+	Prism.languages.textile['phrase'].inside['table'].inside['acronym'] = nestedPatterns['acronym'];
+	Prism.languages.textile['phrase'].inside['table'].inside['mark'] = nestedPatterns['mark'];
 
 }(Prism));

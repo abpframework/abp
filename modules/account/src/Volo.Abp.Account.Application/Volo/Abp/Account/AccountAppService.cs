@@ -15,7 +15,7 @@ namespace Volo.Abp.Account
             UserManager = userManager;
         }
 
-        public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
+        public async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
         {
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.EmailAddress, CurrentTenant.Id);
 

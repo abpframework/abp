@@ -35,6 +35,4 @@ export namespace Config {
     key: string;
     defaultValue: string;
   }
-
-  export type LocalizationParam = string | LocalizationWithDefault;
 }

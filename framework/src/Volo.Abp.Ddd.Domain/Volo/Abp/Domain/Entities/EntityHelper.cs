@@ -76,8 +76,7 @@ namespace Volo.Abp.Domain.Entities
         {
             var lambdaParam = Expression.Parameter(typeof(TEntity));
             var leftExpression = Expression.PropertyOrField(lambdaParam, "Id");
-            var idValue = Convert.ChangeType(id, typeof(TKey));
-            Expression<Func<object>> closure = () => idValue;
+            Expression<Func<object>> closure = () => id;
             var rightExpression = Expression.Convert(closure.Body, leftExpression.Type);
             var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);

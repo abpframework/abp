@@ -1,19 +1,19 @@
 /*!
  * tui-editor
- * @version 1.4.7
- * @author NHN FE Development Lab <dl_javascript@nhn.com> (https://nhn.github.io/tui.editor/)
+ * @version 1.3.0
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com> (https://nhnent.github.io/tui.editor/)
  * @license MIT
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("jquery"), require("tui-code-snippet"), require("codemirror"), require("to-mark"), require("markdown-it"), require("highlight.js"), require("squire-rte"));
+		module.exports = factory(require("jquery"), require("tui-code-snippet"), require("codemirror"), require("markdown-it"), require("to-mark"), require("highlight.js"), require("squire-rte"));
 	else if(typeof define === 'function' && define.amd)
-		define(["jquery", "tui-code-snippet", "codemirror", "to-mark", "markdown-it", "highlight.js", "squire-rte"], factory);
+		define(["jquery", "tui-code-snippet", "codemirror", "markdown-it", "to-mark", "highlight.js", "squire-rte"], factory);
 	else if(typeof exports === 'object')
-		exports["Editor"] = factory(require("jquery"), require("tui-code-snippet"), require("codemirror"), require("to-mark"), require("markdown-it"), require("highlight.js"), require("squire-rte"));
+		exports["Editor"] = factory(require("jquery"), require("tui-code-snippet"), require("codemirror"), require("markdown-it"), require("to-mark"), require("highlight.js"), require("squire-rte"));
 	else
-		root["tui"] = root["tui"] || {}, root["tui"]["Editor"] = factory(root["$"], (root["tui"] && root["tui"]["util"]), root["CodeMirror"], root["toMark"], root["markdownit"], root["hljs"], root["Squire"]);
-})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_18__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_32__, __WEBPACK_EXTERNAL_MODULE_67__) {
+		root["tui"] = root["tui"] || {}, root["tui"]["Editor"] = factory(root["$"], (root["tui"] && root["tui"]["util"]), root["CodeMirror"], root["markdownit"], root["toMark"], root["hljs"], root["Squire"]);
+})(typeof self !== 'undefined' ? self : this, function(__WEBPACK_EXTERNAL_MODULE_0__, __WEBPACK_EXTERNAL_MODULE_1__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_22__, __WEBPACK_EXTERNAL_MODULE_23__, __WEBPACK_EXTERNAL_MODULE_31__, __WEBPACK_EXTERNAL_MODULE_64__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -76,7 +76,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "dist/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 45);
+/******/ 	return __webpack_require__(__webpack_require__.s = 44);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -104,7 +104,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CommandManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -116,7 +116,7 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _command = __webpack_require__(22);
+var _command = __webpack_require__(21);
 
 var _command2 = _interopRequireDefault(_command);
 
@@ -130,13 +130,14 @@ var KEYMAP_OS_INDEX = _util.isMac ? 1 : 0;
 
 /**
  * Class CommandManager
- * @param {ToastUIEditor} base nedInstance
- * @param {object} [options={}] - option object
- *     @param {boolean} [options.useCommandShortcut=true] - execute command with keyMap
- * @ignore
  */
 
 var CommandManager = function () {
+  /**
+   * @param {ToastUIEditor} base nedInstance
+   * @param {object} [options={}] - option object
+   *  @param {boolean} [options.useCommandShortcut=true] - execute command with keyMap
+   */
   function CommandManager(base) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -176,6 +177,7 @@ var CommandManager = function () {
 
     /**
      * Add command
+     * @memberof CommandManager
      * @param {Command} command Command instance
      * @returns {Command} Command
      */
@@ -218,6 +220,7 @@ var CommandManager = function () {
      * _initEvent
      * Bind event handler to eventManager
      * @private
+     * @memberof CommandManager
      */
 
   }, {
@@ -244,6 +247,7 @@ var CommandManager = function () {
 
     /**
      * Execute command
+     * @memberof CommandManager
      * @param {String} name Command name
      * @param {*} ...args Command argument
      * @returns {*}
@@ -288,10 +292,10 @@ var CommandManager = function () {
 
 /**
  * Create command by given editor type and property object
+ * @memberof CommandManager
  * @param {string} type Command type
  * @param {{name: string, keyMap: Array}} props Property
  * @returns {*}
- * @static
  */
 
 
@@ -319,7 +323,7 @@ exports.I18n = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements i18n
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -340,6 +344,10 @@ var DEFAULT_CODE = 'en_US';
  */
 
 var I18n = function () {
+  /**
+   * Creates an instance of I18n.
+   * @memberof I18n
+   */
   function I18n() {
     _classCallCheck(this, I18n);
 
@@ -450,11 +458,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @fileoverview DOM Utils
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var FIND_ZWB = /\u200B/g;
 
 /**
+ * isTextNode
  * Check if node is text node
  * @param {Node} node node to check
  * @returns {boolean} result
@@ -465,6 +474,7 @@ var isTextNode = function isTextNode(node) {
 };
 
 /**
+ * isElemNode
  * Check if node is element node
  * @param {Node} node node to check
  * @returns {boolean} result
@@ -486,6 +496,7 @@ var isBlockNode = function isBlockNode(node) {
 };
 
 /**
+ * getNodeName
  * Get node name of node
  * @param {Node} node node
  * @returns {string} node name
@@ -500,6 +511,7 @@ var getNodeName = function getNodeName(node) {
 };
 
 /**
+ * getTextLength
  * Get node offset length of node(for Range API)
  * @param {Node} node node
  * @returns {number} length
@@ -518,6 +530,7 @@ var getTextLength = function getTextLength(node) {
 };
 
 /**
+ * getOffsetLength
  * Get node offset length of node(for Range API)
  * @param {Node} node node
  * @returns {number} length
@@ -536,6 +549,7 @@ var getOffsetLength = function getOffsetLength(node) {
 };
 
 /**
+ * getNodeOffsetOfParent
  * get node offset between parent's childnodes
  * @param {Node} node node
  * @returns {number} offset(index)
@@ -558,6 +572,7 @@ var getNodeOffsetOfParent = function getNodeOffsetOfParent(node) {
 };
 
 /**
+ * getChildNodeByOffset
  * get child node by offset
  * @param {Node} node node
  * @param {number} index offset index
@@ -577,6 +592,7 @@ var getChildNodeByOffset = function getChildNodeByOffset(node, index) {
 };
 
 /**
+ * getNodeWithDirectionUntil
  * find next node from passed node
  * @param {strong} direction previous or next
  * @param {Node} node node
@@ -607,6 +623,7 @@ var getNodeWithDirectionUntil = function getNodeWithDirectionUntil(direction, no
 };
 
 /**
+ * getPrevOffsetNodeUntil
  * get prev node of childnode pointed with index
  * @param {Node} node node
  * @param {number} index offset index
@@ -645,6 +662,7 @@ var getParentUntilBy = function getParentUntilBy(node, matchCondition, stopCondi
 };
 
 /**
+ * getParentUntil
  * get parent node until paseed node name
  * @param {Node} node node
  * @param {string|HTMLNode} untilNode node name or node to limit
@@ -668,6 +686,7 @@ var getParentUntil = function getParentUntil(node, untilNode) {
 };
 
 /**
+ * getNodeWithDirectionUnderParent
  * get node on the given direction under given parent
  * @param {strong} direction previous or next
  * @param {Node} node node
@@ -689,6 +708,7 @@ var getNodeWithDirectionUnderParent = function getNodeWithDirectionUnderParent(d
 };
 
 /**
+ * getTopPrevNodeUnder
  * get top previous top level node under given node
  * @param {Node} node node
  * @param {Node} underNode underNode
@@ -700,6 +720,7 @@ var getTopPrevNodeUnder = function getTopPrevNodeUnder(node, underNode) {
 };
 
 /**
+ * getNextTopBlockNode
  * get next top level block node
  * @param {Node} node node
  * @param {Node} underNode underNode
@@ -753,7 +774,6 @@ var getPrevTextNode = function getPrevTextNode(node) {
  * @param {HTMLNode} root - root node
  * @param {HTMLNode} node - node to test
  * @returns {Boolean} true if root contains node
- * @ignore
  */
 var containsNode = function containsNode(root, node) {
   var walker = document.createTreeWalker(root, 4, null, false);
@@ -864,14 +884,19 @@ var getPath = function getPath(node, root) {
  * @ignore
  */
 var getTableCellByDirection = function getTableCellByDirection(node, direction) {
+  var isForward = true;
   var targetElement = null;
 
-  if (!_tuiCodeSnippet2.default.isUndefined(direction) && (direction === 'next' || direction === 'previous')) {
-    if (direction === 'next') {
-      targetElement = node.nextElementSibling;
-    } else {
-      targetElement = node.previousElementSibling;
-    }
+  if (_tuiCodeSnippet2.default.isUndefined(direction) || direction !== 'next' && direction !== 'previous') {
+    return null;
+  } else if (direction === 'previous') {
+    isForward = false;
+  }
+
+  if (isForward) {
+    targetElement = node.nextElementSibling;
+  } else {
+    targetElement = node.previousElementSibling;
   }
 
   return targetElement;
@@ -886,6 +911,7 @@ var getTableCellByDirection = function getTableCellByDirection(node, direction) 
  * @ignore
  */
 var getSiblingRowCellByDirection = function getSiblingRowCellByDirection(node, direction, needEdgeCell) {
+  var isForward = true;
   var tableCellElement = null;
   var $node = void 0,
       index = void 0,
@@ -894,458 +920,45 @@ var getSiblingRowCellByDirection = function getSiblingRowCellByDirection(node, d
       $siblingContainer = void 0,
       isSiblingContainerExists = void 0;
 
-  if (!_tuiCodeSnippet2.default.isUndefined(direction) && (direction === 'next' || direction === 'previous')) {
-    if (node) {
-      $node = (0, _jquery2.default)(node);
-
-      if (direction === 'next') {
-        $targetRowElement = $node.parent().next();
-        $currentContainer = $node.parents('thead');
-        $siblingContainer = $currentContainer[0] && $currentContainer.next();
-        isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'TBODY';
-
-        index = 0;
-      } else {
-        $targetRowElement = $node.parent().prev();
-        $currentContainer = $node.parents('tbody');
-        $siblingContainer = $currentContainer[0] && $currentContainer.prev();
-        isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'THEAD';
-
-        index = node.parentNode.childNodes.length - 1;
-      }
-
-      if (_tuiCodeSnippet2.default.isUndefined(needEdgeCell) || !needEdgeCell) {
-        index = getNodeOffsetOfParent(node);
-      }
-
-      if ($targetRowElement[0]) {
-        tableCellElement = $targetRowElement.children('td,th')[index];
-      } else if ($currentContainer[0] && isSiblingContainerExists) {
-        tableCellElement = $siblingContainer.find('td,th')[index];
-      }
-    }
+  if (_tuiCodeSnippet2.default.isUndefined(direction) || direction !== 'next' && direction !== 'previous') {
+    return null;
+  } else if (direction === 'previous') {
+    isForward = false;
   }
 
-  return tableCellElement;
-};
+  if (node) {
+    $node = (0, _jquery2.default)(node);
 
-/**
- * Check that the inline node is supported by markdown
- * @param {Node} node TD element
- * @returns {boolean}
- * @ignore
- */
-var isMDSupportInlineNode = function isMDSupportInlineNode(node) {
-  return (/^(A|B|BR|CODE|DEL|EM|I|IMG|S|SPAN|STRONG)$/ig.test(node.nodeName)
-  );
-};
+    if (isForward) {
+      $targetRowElement = $node.parent().next();
+      $currentContainer = $node.parents('thead');
+      $siblingContainer = $currentContainer[0] && $currentContainer.next();
+      isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'TBODY';
 
-/**
- * Check that node is styled node.
- * Styled node is a node that has text and decorates text.
- * @param {Node} node TD element
- * @returns {boolean}
- * @ignore
- */
-var isStyledNode = function isStyledNode(node) {
-  return (/^(A|ABBR|ACRONYM|B|BDI|BDO|BIG|CITE|CODE|DEL|DFN|EM|I|INS|KBD|MARK|Q|S|SAMP|SMALL|SPAN|STRONG|SUB|SUP|U|VAR)$/ig.test(node.nodeName)
-  );
-};
-
-/**
- * remove node from 'start' node to 'end-1' node inside parent
- * if 'end' node is null, remove all child nodes after 'start' node.
- * @param {Node} parent - parent node
- * @param {Node} start - start node to remove
- * @param {Node} end - end node to remove
- * @ignore
- */
-var removeChildFromStartToEndNode = function removeChildFromStartToEndNode(parent, start, end) {
-  var child = start;
-
-  if (!child || parent !== child.parentNode) {
-    return;
-  }
-
-  while (child !== end) {
-    var next = child.nextSibling;
-    parent.removeChild(child);
-    child = next;
-  }
-};
-
-/**
- * remove nodes along the direction from the node to reach targetParent node
- * @param {Node} targetParent - stop removing when reach target parent node
- * @param {Node} node - start node
- * @param {boolean} isForward - direction
- * @ignore
- */
-var removeNodesByDirection = function removeNodesByDirection(targetParent, node, isForward) {
-  var parent = node;
-
-  while (parent !== targetParent) {
-    var nextParent = parent.parentNode;
-    var _parent = parent,
-        nextSibling = _parent.nextSibling,
-        previousSibling = _parent.previousSibling;
-
-
-    if (!isForward && nextSibling) {
-      removeChildFromStartToEndNode(nextParent, nextSibling, null);
-    } else if (isForward && previousSibling) {
-      removeChildFromStartToEndNode(nextParent, nextParent.childNodes[0], parent);
-    }
-
-    parent = nextParent;
-  }
-};
-
-var getLeafNode = function getLeafNode(node) {
-  var result = node;
-  while (result.childNodes && result.childNodes.length) {
-    var _result = result,
-        nextLeaf = _result.firstChild;
-
-    // When inline tag have empty text node with other childnodes, ignore empty text node.
-
-    if (isTextNode(nextLeaf) && !getTextLength(nextLeaf)) {
-      result = nextLeaf.nextSibling || nextLeaf;
+      index = 0;
     } else {
-      result = nextLeaf;
-    }
-  }
+      $targetRowElement = $node.parent().prev();
+      $currentContainer = $node.parents('tbody');
+      $siblingContainer = $currentContainer[0] && $currentContainer.prev();
+      isSiblingContainerExists = $siblingContainer && getNodeName($siblingContainer[0]) === 'THEAD';
 
-  return result;
-};
-/**
- * check if a coordinates is inside a task box
- * @param {object} style - computed style of task box
- * @param {number} offsetX - event x offset
- * @param {number} offsetY - event y offset
- * @returns {boolean}
- * @ignore
- */
-var isInsideTaskBox = function isInsideTaskBox(style, offsetX, offsetY) {
-  var rect = {
-    left: parseInt(style.left, 10),
-    top: parseInt(style.top, 10),
-    width: parseInt(style.width, 10),
-    height: parseInt(style.height, 10)
-  };
-
-  return offsetX >= rect.left && offsetX <= rect.left + rect.width && offsetY >= rect.top && offsetY <= rect.top + rect.height;
-};
-
-/**
- * Check whether node is OL or UL
- * @param {node} node - node
- * @returns {boolean} - whether node is OL or UL
- * @ignore
- */
-var isListNode = function isListNode(node) {
-  if (!node) {
-    return false;
-  }
-
-  return node.nodeName === 'UL' || node.nodeName === 'OL';
-};
-
-/**
- * Check whether node is first list item
- * @param {node} node - node
- * @returns {boolean} whether node is first list item
- * @ignore
- */
-var isFirstListItem = function isFirstListItem(node) {
-  var nodeName = node.nodeName,
-      parentNode = node.parentNode;
-
-
-  return nodeName === 'LI' && node === parentNode.firstChild;
-};
-
-/**
- * Check whether node is first level list item
- * @param {node} node - node
- * @returns {boolean} whether node is first level list item
- * @ignore
- */
-var isFirstLevelListItem = function isFirstLevelListItem(node) {
-  var nodeName = node.nodeName,
-      listNode = node.parentNode;
-  var listParentNode = listNode.parentNode;
-
-
-  return nodeName === 'LI' && !isListNode(listParentNode);
-};
-
-/**
- * Merge node to target node and detach node
- * @param {node} node - node
- * @param {node} targetNode - target node
- * @ignore
- */
-var mergeNode = function mergeNode(node, targetNode) {
-  if (node.hasChildNodes()) {
-    _tuiCodeSnippet2.default.forEachArray(node.childNodes, function () {
-      targetNode.appendChild(node.firstChild);
-    });
-
-    targetNode.normalize();
-  }
-
-  if (node.parentNode) {
-    node.parentNode.removeChild(node);
-  }
-};
-
-/**
- * Create hr that is not contenteditable
- * @returns {node} hr is wraped div
- * @ignore
- */
-var createHorizontalRule = function createHorizontalRule() {
-  var div = document.createElement('div');
-  var hr = document.createElement('hr');
-
-  div.setAttribute('contenteditable', false);
-  hr.setAttribute('contenteditable', false);
-
-  div.appendChild(hr);
-
-  return div;
-};
-
-/**
- * Create Empty Line
- * @returns {node} <div><br></div>
- * @private
- */
-var createEmptyLine = function createEmptyLine() {
-  var div = document.createElement('div');
-  div.appendChild(document.createElement('br'));
-
-  return div;
-};
-
-/**
- * Find same tagName child node and change wrapping order.
- * For example, if below node need to optimize 'B' tag.
- * <i><s><b>test</b></s></i>
- * should be changed tag's order.
- * <b><i><s>test</s></i></b>
- * @param {node} node
- * @param {string} tagName
- * @returns {node}
- * @private
- */
-var changeTagOrder = function changeTagOrder(node, tagName) {
-  if (node.nodeName !== 'SPAN') {
-    var parentNode = node.parentNode;
-
-    var tempNode = node;
-
-    while (tempNode.childNodes && tempNode.childNodes.length === 1 && !isTextNode(tempNode.firstChild)) {
-      tempNode = tempNode.firstChild;
-
-      if (tempNode.nodeName === 'SPAN') {
-        break;
-      }
-
-      if (tempNode.nodeName === tagName) {
-        var wrapper = document.createElement(tagName);
-
-        mergeNode(tempNode, tempNode.parentNode);
-        parentNode.replaceChild(wrapper, node);
-        wrapper.appendChild(node);
-
-        return wrapper;
-      }
-    }
-  }
-
-  return node;
-};
-
-/**
- * Find same tagName nodes and merge from startNode to endNode.
- * @param {node} startNode
- * @param {node} endNode
- * @param {string} tagName
- * @returns {node}
- * @private
- */
-var mergeSameNodes = function mergeSameNodes(startNode, endNode, tagName) {
-  var startBlockNode = changeTagOrder(startNode, tagName);
-
-  if (startBlockNode.nodeName === tagName) {
-    var endBlockNode = changeTagOrder(endNode, tagName);
-    var mergeTargetNode = startBlockNode;
-    var nextNode = startBlockNode.nextSibling;
-
-    while (nextNode) {
-      var tempNext = nextNode.nextSibling;
-
-      nextNode = changeTagOrder(nextNode, tagName);
-
-      if (nextNode.nodeName === tagName) {
-        // eslint-disable-next-line max-depth
-        if (mergeTargetNode) {
-          mergeNode(nextNode, mergeTargetNode);
-        } else {
-          mergeTargetNode = nextNode;
-        }
-      } else {
-        mergeTargetNode = null;
-      }
-
-      if (nextNode === endBlockNode) {
-        break;
-      }
-
-      nextNode = tempNext;
-    }
-  }
-};
-
-/**
- * Find same tagName nodes in range and merge nodes.
- * For example range is like this
- * <s><b>AAA</b></s><b>BBB</b>
- * nodes is changed below
- * <b><s>AAA</s>BBB</b>
- * @param {range} range
- * @param {string} tagName
- * @private
- */
-var optimizeRange = function optimizeRange(range, tagName) {
-  var collapsed = range.collapsed,
-      commonAncestorContainer = range.commonAncestorContainer,
-      startContainer = range.startContainer,
-      endContainer = range.endContainer;
-
-
-  if (!collapsed) {
-    var optimizedNode = null;
-
-    if (startContainer !== endContainer) {
-      mergeSameNodes(getParentUntil(startContainer, commonAncestorContainer), getParentUntil(endContainer, commonAncestorContainer), tagName);
-
-      optimizedNode = commonAncestorContainer;
-    } else if (isTextNode(startContainer)) {
-      optimizedNode = startContainer.parentNode;
+      index = node.parentNode.childNodes.length - 1;
     }
 
-    if (optimizedNode && optimizedNode.nodeName === tagName) {
-      var _optimizedNode = optimizedNode,
-          previousSibling = _optimizedNode.previousSibling;
-
-      var tempNode = void 0;
-
-      if (previousSibling) {
-        tempNode = changeTagOrder(previousSibling);
-
-        if (tempNode.nodeName === tagName) {
-          mergeNode(optimizedNode, tempNode);
-        }
-      }
-
-      var _optimizedNode2 = optimizedNode,
-          nextSibling = _optimizedNode2.nextSibling;
-
-
-      if (nextSibling) {
-        tempNode = changeTagOrder(nextSibling);
-
-        if (tempNode.nodeName === tagName) {
-          mergeNode(tempNode, optimizedNode);
-        }
-      }
+    if (_tuiCodeSnippet2.default.isUndefined(needEdgeCell) || !needEdgeCell) {
+      index = getNodeOffsetOfParent(node);
     }
-  }
-};
 
-/**
- * Gets all text node from root element.
- * @param {HTMLElement} root Root element
- * @returns {Array} list of text nodes
- * @ignore
- */
-var getAllTextNode = function getAllTextNode(root) {
-  var walker = document.createTreeWalker(root, 4, null, false);
-  var result = [];
-
-  while (walker.nextNode()) {
-    var node = walker.currentNode;
-
-    if (isTextNode(node)) {
-      result.push(node);
+    if ($targetRowElement[0]) {
+      tableCellElement = $targetRowElement.children('td,th')[index];
+    } else if ($currentContainer[0] && isSiblingContainerExists) {
+      tableCellElement = $siblingContainer.find('td,th')[index];
     }
+
+    return tableCellElement;
   }
 
-  return result;
-};
-
-/**
- * Check whether the node is 'TD' or 'TH'
- * @param {HTMLElement} node - the target node
- * @returns {boolean} - whether the node is 'TD' or 'TH'
- * @ignore
- */
-var isCellNode = function isCellNode(node) {
-  if (!node) {
-    return false;
-  }
-
-  return node.nodeName === 'TD' || node.nodeName === 'TH';
-};
-
-/**
- * Get the last node on the target node by the condition
- * @param {HTMLElement} node - the target node
- * @returns {function} - the condition to find the node
- * @ignore
- */
-var getLastNodeBy = function getLastNodeBy(node, condition) {
-  var lastNode = node && node.lastChild;
-
-  while (lastNode && condition(lastNode)) {
-    lastNode = lastNode.lastChild;
-  }
-
-  return lastNode;
-};
-
-/**
- * Get the parent node on the target node by the condition
- * @param {HTMLElement} node - the target node
- * @returns {function} - the condition to find the node
- * @ignore
- */
-var getParentNodeBy = function getParentNodeBy(node, condition) {
-  while (node && condition(node.parentNode, node)) {
-    node = node.parentNode;
-  }
-
-  return node;
-};
-
-/**
- * Get the sibling node on the target node by the condition
- * @param {HTMLElement} node - the target node
- * @param {string} direction - the direction to find node ('previous', 'next')
- * @returns {function} - the condition to find the node
- * @ignore
- */
-var getSiblingNodeBy = function getSiblingNodeBy(node, direction, condition) {
-  var directionKey = direction + 'Sibling';
-
-  while (node && condition(node[directionKey], node)) {
-    node = node[directionKey];
-  }
-
-  return node;
+  return null;
 };
 
 exports.default = {
@@ -1358,7 +971,6 @@ exports.default = {
   getPrevOffsetNodeUntil: getPrevOffsetNodeUntil,
   getNodeOffsetOfParent: getNodeOffsetOfParent,
   getChildNodeByOffset: getChildNodeByOffset,
-  getNodeWithDirectionUntil: getNodeWithDirectionUntil,
   containsNode: containsNode,
   getTopPrevNodeUnder: getTopPrevNodeUnder,
   getTopNextNodeUnder: getTopNextNodeUnder,
@@ -1370,27 +982,7 @@ exports.default = {
   getPath: getPath,
   getNodeInfo: getNodeInfo,
   getTableCellByDirection: getTableCellByDirection,
-  getSiblingRowCellByDirection: getSiblingRowCellByDirection,
-  isMDSupportInlineNode: isMDSupportInlineNode,
-  isStyledNode: isStyledNode,
-  removeChildFromStartToEndNode: removeChildFromStartToEndNode,
-  removeNodesByDirection: removeNodesByDirection,
-  getLeafNode: getLeafNode,
-  isInsideTaskBox: isInsideTaskBox,
-  isListNode: isListNode,
-  isFirstListItem: isFirstListItem,
-  isFirstLevelListItem: isFirstLevelListItem,
-  mergeNode: mergeNode,
-  createHorizontalRule: createHorizontalRule,
-  createEmptyLine: createEmptyLine,
-  changeTagOrder: changeTagOrder,
-  mergeSameNodes: mergeSameNodes,
-  optimizeRange: optimizeRange,
-  getAllTextNode: getAllTextNode,
-  isCellNode: isCellNode,
-  getLastNodeBy: getLastNodeBy,
-  getParentNodeBy: getParentNodeBy,
-  getSiblingNodeBy: getSiblingNodeBy
+  getSiblingRowCellByDirection: getSiblingRowCellByDirection
 };
 
 /***/ }),
@@ -1426,7 +1018,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements LayerPopup
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -1439,27 +1031,32 @@ var LAYOUT_TEMPLATE_MODAL = '<div class="' + CLASS_PREFIX + 'wrapper">\n        
 
 /**
  * A number, or a string containing a number.
- * @typedef {object} LayerPopupOption
- * @property {string[]} [openerCssQuery] - Css Query list to bind clickevent that open popup
- * @property {string[]} [closerCssQuery] - Css Query list to bind clickevent that close popup
- * @property {jQuery} $el - popup root element
- * @property {jQuery|string} [content] - popup content that html string or jQuery element
- * @property {string} [textContent] - popup text content
- * @property {string} title - popup title
- * @property {boolean} [header] - whether to draw header
- * @property {jQuery} [$target] - element to append popup
- * @property {boolean} modal - true: modal, false: modeless
- * @property {string} [headerButtons] - replace header(close) button
+ * @typedef {Object} LayerPopupOption
+    * @property {string[]} [openerCssQuery] - Css Query list to bind clickevent that open popup
+    * @property {string[]} [closerCssQuery] - Css Query list to bind clickevent that close popup
+    * @property {jQuery} $el - popup root element
+    * @property {jQuery|string} [content] - popup content that html string or jQuery element
+    * @property {string} [textContent] - popup text content
+    * @property {string} title - popup title
+    * @property {boolean} [header] - whether to draw header
+    * @property {jQuery} [$target] - element to append popup
+    * @property {boolean} modal - true: modal, false: modeless
+    * @property {string} [headerButtons] - replace header(close) button
  */
 
 /**
  * Class LayerPopup
- * @param {LayerPopupOption} options - popup option
+ * @extends {UIController}
  */
 
 var LayerPopup = function (_UIController) {
   _inherits(LayerPopup, _UIController);
 
+  /**
+   * Creates an instance of LayerPopup.
+   * @param {LayerPopupOption} options - popup option
+   * @memberof LayerPopup
+   */
   function LayerPopup(options) {
     _classCallCheck(this, LayerPopup);
 
@@ -1486,7 +1083,8 @@ var LayerPopup = function (_UIController) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof LayerPopup
+   * @protected
    */
 
 
@@ -1511,7 +1109,8 @@ var LayerPopup = function (_UIController) {
 
     /**
      * initialize DOM, render popup
-     * @private
+     * @memberof LayerPopup
+     * @protected
      */
 
   }, {
@@ -1542,7 +1141,8 @@ var LayerPopup = function (_UIController) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof LayerPopup
+     * @protected
      */
 
   }, {
@@ -1572,7 +1172,8 @@ var LayerPopup = function (_UIController) {
 
     /**
      * bind editor events
-     * @private
+     * @memberof LayerPopup
+     * @protected
      * @abstract
      */
 
@@ -1605,6 +1206,7 @@ var LayerPopup = function (_UIController) {
     /**
      * set popup content
      * @param {jQuery|HTMLElement|string} $content - content
+     * @memberof LayerPopup
      */
 
   }, {
@@ -1617,6 +1219,7 @@ var LayerPopup = function (_UIController) {
     /**
      * set title
      * @param {string} title - title text
+     * @memberof LayerPopup
      */
 
   }, {
@@ -1630,6 +1233,7 @@ var LayerPopup = function (_UIController) {
 
     /**
      * get title element
+     * @memberof LayerPopup
      * @returns {HTMLElement} - title html element
      */
 
@@ -1641,6 +1245,7 @@ var LayerPopup = function (_UIController) {
 
     /**
      * hide popup
+     * @memberof LayerPopup
      */
 
   }, {
@@ -1653,6 +1258,7 @@ var LayerPopup = function (_UIController) {
 
     /**
      * show popup
+     * @memberof LayerPopup
      */
 
   }, {
@@ -1666,6 +1272,7 @@ var LayerPopup = function (_UIController) {
     /**
      * whether this popup is visible
      * @returns {boolean} - true: shown, false: hidden
+     * @memberof LayerPopup
      */
 
   }, {
@@ -1676,6 +1283,7 @@ var LayerPopup = function (_UIController) {
 
     /**
      * remove popup content
+     * @memberof LayerPopup
      */
 
   }, {
@@ -1697,14 +1305,13 @@ var LayerPopup = function (_UIController) {
       }
 
       this.$el.remove();
-      this.$el = null;
     }
 
     /**
      * make popup size fit to window
      * @param {boolean} fit - true to make popup fit to window
+     * @memberof LayerPopup
      * @protected
-     * @ignore
      */
 
   }, {
@@ -1715,9 +1322,9 @@ var LayerPopup = function (_UIController) {
 
     /**
      * make popup size fit to window
-     * @returns {boolean} - true for fit to window
+     * @memberof LayerPopup
      * @protected
-     * @ignore
+     * @returns {boolean} - true for fit to window
      */
 
   }, {
@@ -1728,9 +1335,9 @@ var LayerPopup = function (_UIController) {
 
     /**
      * toggle size fit to window
-     * @returns {boolean} - true for fit to window
+     * @memberof LayerPopup
      * @protected
-     * @ignore
+     * @returns {boolean} - true for fit to window
      */
 
   }, {
@@ -1768,11 +1375,11 @@ exports.CodeBlockManager = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CodeBlockManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _highlight = __webpack_require__(32);
+var _highlight = __webpack_require__(31);
 
 var _highlight2 = _interopRequireDefault(_highlight);
 
@@ -1784,6 +1391,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Class Code Block Manager
  */
 var CodeBlockManager = function () {
+  /**
+   * Creates an instance of CodeBlockManager.
+   * @memberof CodeBlockManager
+   */
   function CodeBlockManager() {
     _classCallCheck(this, CodeBlockManager);
 
@@ -1807,6 +1418,7 @@ var CodeBlockManager = function () {
      * get replacer for code block
      * @param {string} language - code block type
      * @returns {function} - replacer function
+     * @memberof CodeBlockManager
      */
 
   }, {
@@ -1840,6 +1452,7 @@ var CodeBlockManager = function () {
     /**
      * get supported languages by highlight-js
      * @returns {Array<string>} - supported languages by highlight-js
+     * @static
      */
 
   }], [{
@@ -1881,7 +1494,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements ui controller
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -1912,22 +1525,30 @@ function makeUIInstanceId() {
 
 /**
  * Class UIController
- * @param {Object} [options] - options
- *     @param {jQuery} [options.rootElement] - root element
- *     @param {string} [options.tagName] - tag name
- *     @param {string} [options.className] - class name
  */
 
 var UIController = function () {
 
   /**
+   * Creates an instance of UIController.
+   * @param {Object} [options] - options
+   * @param {jQuery} [options.rootElement] - root element
+   * @param {string} [options.tagName] - tag name
+   * @param {string} [options.className] - class name
+   * @memberof UIController
+   */
+
+
+  /**
    * UI jQuery element
    * @type {Object}
+   * @memberof UIController
    */
 
   /**
    * tag name
    * @type {string}
+   * @memberof UIController
    */
   function UIController() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
@@ -1950,6 +1571,7 @@ var UIController = function () {
   /**
    * @param {string|object} aType - event name and selector string
    * @param {function} aFn - event handler
+   * @memberof UIController
    */
 
 
@@ -1957,12 +1579,14 @@ var UIController = function () {
    * UI Id
    * @type {number}
    * @private
+   * @memberof UIController
    */
 
 
   /**
    * ui controller class name
    * @type {string}
+   * @memberof UIController
    */
 
 
@@ -1984,6 +1608,7 @@ var UIController = function () {
      * bind event
      * @param {string} type - event name and selector
      * @param {function} fn - handler function
+     * @memberof UIController
      * @private
      */
 
@@ -2005,6 +1630,7 @@ var UIController = function () {
      * unbind event handler
      * @param {string} type - event name and selector
      * @param {function} fn - handler function
+     * @memberof UIController
      */
 
   }, {
@@ -2069,6 +1695,7 @@ var UIController = function () {
     /**
      * trigger event
      * @param {...object} args - event name & extra params
+     * @memberof UIController
      */
 
   }, {
@@ -2089,6 +1716,7 @@ var UIController = function () {
 
     /**
      * remove
+     * @memberof UIController
      */
 
   }, {
@@ -2101,6 +1729,7 @@ var UIController = function () {
 
     /**
      * destroy
+     * @memberof UIController
      */
 
   }, {
@@ -2132,150 +1761,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _jquery = __webpack_require__(0);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @fileoverview Implements htmlSanitizer
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
-var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpadding|cellspacing|class|clear|' + 'color|cols|compact|coords|dir|face|headers|height|hreflang|hspace|' + 'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' + 'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' + 'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' + 'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
-
-var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
-
-var ATTR_VALUE_BLACK_LIST_RX = {
-  'href': /^(javascript:).*/g
-};
-
-/**
- * htmlSanitizer
- * @param {string|Node} html html or Node
- * @param {boolean} [needHtmlText] pass true if need html text
- * @returns {string|DocumentFragment} result
- * @ignore
- */
-function htmlSanitizer(html, needHtmlText) {
-  var $html = (0, _jquery2.default)('<div />');
-
-  html = html.replace(/<!--[\s\S]*?-->/g, '');
-
-  $html.append(html);
-
-  removeUnnecessaryTags($html);
-  leaveOnlyWhitelistAttribute($html);
-  removeInvalidAttributeValues($html);
-
-  return finalizeHtml($html, needHtmlText);
-}
-
-/**
- * Remove unnecessary tags
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function removeUnnecessaryTags($html) {
-  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title, embed, object').remove();
-}
-
-/**
- * Leave only white list attributes
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function leaveOnlyWhitelistAttribute($html) {
-  $html.find('*').each(function (index, node) {
-    var attrs = node.attributes;
-    var blacklist = _tuiCodeSnippet2.default.toArray(attrs).filter(function (attr) {
-      var isHTMLAttr = attr.name.match(HTML_ATTR_LIST_RX);
-      var isSVGAttr = attr.name.match(SVG_ATTR_LIST_RX);
-
-      return !isHTMLAttr && !isSVGAttr;
-    });
-
-    _tuiCodeSnippet2.default.forEachArray(blacklist, function (attr) {
-      // Edge svg attribute name returns uppercase bug. error guard.
-      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/5579311/
-      if (attrs.getNamedItem(attr.name)) {
-        attrs.removeNamedItem(attr.name);
-      }
-    });
-  });
-}
-
-/**
- * Remove invalid attribute values
- * @private
- * @param {jQuery} $html jQuery instance
- */
-function removeInvalidAttributeValues($html) {
-  var _loop = function _loop(attr) {
-    if (ATTR_VALUE_BLACK_LIST_RX.hasOwnProperty(attr)) {
-      $html.find('[' + attr + ']').each(function (index, node) {
-        var attrs = node.attributes;
-        var valueBlackListRX = ATTR_VALUE_BLACK_LIST_RX[attr];
-        var attrItem = attrs.getNamedItem(attr);
-        if (valueBlackListRX && attrItem && attrItem.value.toLowerCase().match(valueBlackListRX)) {
-          attrs.removeNamedItem(attr);
-        }
-      });
-    }
-  };
-
-  for (var attr in ATTR_VALUE_BLACK_LIST_RX) {
-    _loop(attr);
-  }
-}
-
-/**
- * Finalize html result
- * @private
- * @param {jQuery} $html jQuery instance
- * @param {boolean} needHtmlText pass true if need html text
- * @returns {string|DocumentFragment} result
- */
-function finalizeHtml($html, needHtmlText) {
-  var returnValue = void 0;
-
-  if (needHtmlText) {
-    returnValue = $html[0].innerHTML;
-  } else {
-    var frag = document.createDocumentFragment();
-    var childNodes = _tuiCodeSnippet2.default.toArray($html[0].childNodes);
-    var length = childNodes.length;
-
-
-    for (var i = 0; i < length; i += 1) {
-      frag.appendChild(childNodes[i]);
-    }
-    returnValue = frag;
-  }
-
-  return returnValue;
-}
-
-exports.default = htmlSanitizer;
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implement Module for managing import external data such as image
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -2291,11 +1779,14 @@ var URLRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/([^\s]*))?$/g;
 
 /**
  * Class ImportManager
- * @param {EventManager} eventManager - eventManager
- * @ignore
  */
 
 var ImportManager = function () {
+  /**
+   * Creates an instance of ImportManager.
+   * @param {EventManager} eventManager - eventManager
+   * @memberof ImportManager
+   */
   function ImportManager(eventManager) {
     _classCallCheck(this, ImportManager);
 
@@ -2309,6 +1800,7 @@ var ImportManager = function () {
    * graceful decode uri component
    * @param {string} originalURI - string to be decoded
    * @returns {string} decoded string
+   * @memberof ImportManager
    * @static
    */
 
@@ -2319,6 +1811,7 @@ var ImportManager = function () {
 
     /**
      * Initialize event handler
+     * @memberof ImportManager
      * @private
      */
     value: function _initEvent() {
@@ -2354,6 +1847,7 @@ var ImportManager = function () {
 
     /**
      * Initialize default image importer
+     * @memberof ImportManager
      * @private
      */
 
@@ -2373,6 +1867,7 @@ var ImportManager = function () {
 
     /**
      * Emit add image blob hook
+     * @memberof ImportManager
      * @param {object} blob - blob or file
      * @param {string} type - type of an event the item belongs to. paste or drop
      * @private
@@ -2425,6 +1920,7 @@ var ImportManager = function () {
 
     /**
      * Get blob or excel data from clipboard
+     * @memberof ImportManager
      * @param {object} evData Clipboard data
      * @private
      */
@@ -2444,6 +1940,7 @@ var ImportManager = function () {
 
     /**
      * Process for blob item
+     * @memberof ImportManager
      * @param {Array.<string>} items Item array
      * @param {object} evData Event data
      * @private
@@ -2494,9 +1991,10 @@ var ImportManager = function () {
 
     /**
      * encode markdown critical characters
+     * @static
      * @param {string} text - string to encode
      * @returns {string} - markdown character encoded string
-     * @static
+     * @memberof ImportManager
      */
 
   }, {
@@ -2507,9 +2005,10 @@ var ImportManager = function () {
 
     /**
      * escape markdown critical characters
+     * @static
      * @param {string} text - string to escape
      * @returns {string} - markdown character escaped string
-     * @static
+     * @memberof ImportManager
      */
 
   }, {
@@ -2546,7 +2045,7 @@ function dataURItoBlob(dataURI) {
 exports.default = ImportManager;
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2574,22 +2073,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements Toolbar Item
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
- * Class ToolbarItem
- * @param {Object} [options={name: 'toolbar-item'}] [description]
+ * Toolbar Item
+ * @extends {UIController}
  */
 var ToolbarItem = function (_UIController) {
   _inherits(ToolbarItem, _UIController);
 
   /**
+   * toolbar item constructor
+   * @memberof ToolbarItem
+   * @param {Object} [options={name: 'toolbar-item'}] [description]
+   */
+
+  /**
    * item name
+   * @memberof ToolbarDivider
    * @type {String}
    * @static
-   * @private
    */
   function ToolbarItem() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
@@ -2608,15 +2113,15 @@ var ToolbarItem = function (_UIController) {
 
   /**
    * get the name of the toolbar item
+   * @memberof ToolbarItem
    * @returns {string} - the name of the toolbar item
    */
 
 
   /**
    * toolbar item class name
+   * @memberof ToolbarItem
    * @type {String}
-   * @static
-   * @private
    */
 
 
@@ -2643,7 +2148,7 @@ Object.defineProperty(ToolbarItem, 'className', {
 exports.default = ToolbarItem;
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2657,7 +2162,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _preview = __webpack_require__(13);
+var _preview = __webpack_require__(12);
 
 var _preview2 = _interopRequireDefault(_preview);
 
@@ -2669,26 +2174,29 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements markdown preview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
  * Class Markdown Preview
- * @param {jQuery} $el - base jQuery element
- * @param {EventManager} eventManager - event manager
- * @param {Convertor} convertor - convertor
- * @param {boolean} isViewer - true for view only mode
- * @param {Number} delayTime - lazyRunner delay time
- * @ignore
+ * @extends {Preview}
  */
 var MarkdownPreview = function (_Preview) {
   _inherits(MarkdownPreview, _Preview);
 
-  function MarkdownPreview($el, eventManager, convertor, isViewer, delayTime) {
+  /**
+   * Creates an instance of MarkdownPreview.
+   * @param {jQuery} $el - base jQuery element
+   * @param {EventManager} eventManager - event manager
+   * @param {Convertor} convertor - convertor
+   * @param {boolean} isViewer - true for view only mode
+   * @memberof MarkdownPreview
+   */
+  function MarkdownPreview($el, eventManager, convertor, isViewer) {
     _classCallCheck(this, MarkdownPreview);
 
-    var _this = _possibleConstructorReturn(this, (MarkdownPreview.__proto__ || Object.getPrototypeOf(MarkdownPreview)).call(this, $el, eventManager, convertor, isViewer, delayTime));
+    var _this = _possibleConstructorReturn(this, (MarkdownPreview.__proto__ || Object.getPrototypeOf(MarkdownPreview)).call(this, $el, eventManager, convertor, isViewer));
 
     _this._initEvent();
     return _this;
@@ -2711,7 +2219,7 @@ var MarkdownPreview = function (_Preview) {
         latestMarkdownValue = markdownEditor.getValue();
 
         if (_this2.isVisible()) {
-          _this2.lazyRunner.run('refresh', latestMarkdownValue);
+          _this2.lazyRunner.run('refresh', latestMarkdownValue.replace(/<br>\n/g, '<br>'));
         }
       });
 
@@ -2730,6 +2238,7 @@ var MarkdownPreview = function (_Preview) {
     /**
      * render
      * @param {string} html - html string to render
+     * @memberof MarkdownPreview
      * @override
      */
 
@@ -2740,12 +2249,6 @@ var MarkdownPreview = function (_Preview) {
 
       this.eventManager.emit('previewRenderAfter', this);
     }
-  }, {
-    key: 'remove',
-    value: function remove() {
-      this.$el.off('scroll');
-      this.$el = null;
-    }
   }]);
 
   return MarkdownPreview;
@@ -2754,7 +2257,7 @@ var MarkdownPreview = function (_Preview) {
 exports.default = MarkdownPreview;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2766,7 +2269,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements preview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -2774,7 +2277,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _lazyRunner = __webpack_require__(21);
+var _lazyRunner = __webpack_require__(20);
 
 var _lazyRunner2 = _interopRequireDefault(_lazyRunner);
 
@@ -2784,17 +2287,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class Preview
- * @param {jQuery} $el Container element for preview
- * @param {EventManager} eventManager Event manager instance
- * @param {Convertor} convertor Convertor instance
- * @param {boolean} isViewer - whether viewer mode or not
- * @param {Number} delayTime - lazyRunner delay time
- * @ignore
- */
+ **/
 var Preview = function () {
+  /**
+   * Creates an instance of Preview.
+   * @param {jQuery} $el Container element for preview
+   * @param {EventManager} eventManager Event manager instance
+   * @param {Convertor} convertor Convertor instance
+   * @param {boolean} isViewer - whether viewer mode or not
+   * @memberof Preview
+   */
   function Preview($el, eventManager, convertor, isViewer) {
-    var delayTime = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 800;
-
     _classCallCheck(this, Preview);
 
     this.eventManager = eventManager;
@@ -2806,7 +2309,7 @@ var Preview = function () {
 
     this.lazyRunner = new _lazyRunner2.default();
 
-    this.lazyRunner.registerLazyRunFunction('refresh', this.refresh, delayTime, this);
+    this.lazyRunner.registerLazyRunFunction('refresh', this.refresh, 800, this);
   }
 
   /**
@@ -2824,6 +2327,7 @@ var Preview = function () {
 
     /**
      * Refresh rendering
+     * @memberof Preview
      * @param {string} markdown Markdown text
      */
 
@@ -2836,6 +2340,7 @@ var Preview = function () {
     /**
      * get html string
      * @returns {string} - html preview string
+     * @memberof Preview
      */
 
   }, {
@@ -2847,6 +2352,7 @@ var Preview = function () {
     /**
      * set html string
      * @param {string} html - html preview string
+     * @memberof Preview
      */
 
   }, {
@@ -2857,7 +2363,9 @@ var Preview = function () {
 
     /**
      * Render HTML on preview
+     * @memberof Preview
      * @param {string} html HTML string
+     * @protected
      */
 
   }, {
@@ -2873,6 +2381,7 @@ var Preview = function () {
 
     /**
      * Set preview height
+     * @memberof Preview
      * @param {number} height - Height for preview container
      */
 
@@ -2885,6 +2394,7 @@ var Preview = function () {
     /**
      * set min height
      * @param {number} minHeight - min height
+     * @memberof Preview
      */
 
   }, {
@@ -2909,6 +2419,118 @@ var Preview = function () {
 }();
 
 exports.default = Preview;
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _jquery = __webpack_require__(0);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _tuiCodeSnippet = __webpack_require__(1);
+
+var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileoverview Implements htmlSanitizer
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+var HTML_ATTR_LIST_RX = new RegExp('^(abbr|align|alt|axis|bgcolor|border|cellpadding|cellspacing|class|clear|' + 'color|cols|compact|coords|dir|face|headers|height|hreflang|hspace|' + 'ismap|lang|language|nohref|nowrap|rel|rev|rows|rules|' + 'scope|scrolling|shape|size|span|start|summary|tabindex|target|title|type|' + 'valign|value|vspace|width|checked|mathvariant|encoding|id|name|' + 'background|cite|href|longdesc|src|usemap|xlink:href|data-+|checked|style)', 'g');
+
+var SVG_ATTR_LIST_RX = new RegExp('^(accent-height|accumulate|additive|alphabetic|arabic-form|ascent|' + 'baseProfile|bbox|begin|by|calcMode|cap-height|class|color|color-rendering|content|' + 'cx|cy|d|dx|dy|descent|display|dur|end|fill|fill-rule|font-family|font-size|font-stretch|' + 'font-style|font-variant|font-weight|from|fx|fy|g1|g2|glyph-name|gradientUnits|hanging|' + 'height|horiz-adv-x|horiz-origin-x|ideographic|k|keyPoints|keySplines|keyTimes|lang|' + 'marker-end|marker-mid|marker-start|markerHeight|markerUnits|markerWidth|mathematical|' + 'max|min|offset|opacity|orient|origin|overline-position|overline-thickness|panose-1|' + 'path|pathLength|points|preserveAspectRatio|r|refX|refY|repeatCount|repeatDur|' + 'requiredExtensions|requiredFeatures|restart|rotate|rx|ry|slope|stemh|stemv|stop-color|' + 'stop-opacity|strikethrough-position|strikethrough-thickness|stroke|stroke-dasharray|' + 'stroke-dashoffset|stroke-linecap|stroke-linejoin|stroke-miterlimit|stroke-opacity|' + 'stroke-width|systemLanguage|target|text-anchor|to|transform|type|u1|u2|underline-position|' + 'underline-thickness|unicode|unicode-range|units-per-em|values|version|viewBox|visibility|' + 'width|widths|x|x-height|x1|x2|xlink:actuate|xlink:arcrole|xlink:role|xlink:show|xlink:title|' + 'xlink:type|xml:base|xml:lang|xml:space|xmlns|xmlns:xlink|y|y1|y2|zoomAndPan)', 'g');
+
+/**
+ * htmlSanitizer
+ * @param {string|Node} html html or Node
+ * @param {boolean} [needHtmlText] pass true if need html text
+ * @returns {string|DocumentFragment} result
+ * @ignore
+ */
+function htmlSanitizer(html, needHtmlText) {
+  var $html = (0, _jquery2.default)('<div />');
+
+  html = html.replace(/<!--[\s\S]*?-->/g, '');
+
+  $html.append(html);
+
+  removeUnnecessaryTags($html);
+  leaveOnlyWhitelistAttribute($html);
+
+  return finalizeHtml($html, needHtmlText);
+}
+
+/**
+ * Remove unnecessary tags
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function removeUnnecessaryTags($html) {
+  $html.find('script, iframe, textarea, form, button, select, meta, style, link, title').remove();
+}
+
+/**
+ * Leave only white list attributes
+ * @private
+ * @param {jQuery} $html jQuery instance
+ */
+function leaveOnlyWhitelistAttribute($html) {
+  $html.find('*').each(function (index, node) {
+    var attrs = node.attributes;
+    var blacklist = _tuiCodeSnippet2.default.toArray(attrs).filter(function (attr) {
+      var isHTMLAttr = attr.name.match(HTML_ATTR_LIST_RX);
+      var isSVGAttr = attr.name.match(SVG_ATTR_LIST_RX);
+
+      return !isHTMLAttr && !isSVGAttr;
+    });
+
+    _tuiCodeSnippet2.default.forEachArray(blacklist, function (attr) {
+      // Edge svg attribute name returns uppercase bug. error guard.
+      // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/5579311/
+      if (attrs.getNamedItem(attr.name)) {
+        attrs.removeNamedItem(attr.name);
+      }
+    });
+  });
+}
+
+/**
+ * Finalize html result
+ * @private
+ * @param {jQuery} $html jQuery instance
+ * @param {boolean} needHtmlText pass true if need html text
+ * @returns {string|DocumentFragment} result
+ */
+function finalizeHtml($html, needHtmlText) {
+  var returnValue = void 0;
+
+  if (needHtmlText) {
+    returnValue = $html[0].innerHTML;
+  } else {
+    var frag = document.createDocumentFragment();
+    var childNodes = _tuiCodeSnippet2.default.toArray($html[0].childNodes);
+    var length = childNodes.length;
+
+
+    for (var i = 0; i < length; i += 1) {
+      frag.appendChild(childNodes[i]);
+    }
+    returnValue = frag;
+  }
+
+  return returnValue;
+}
+
+exports.default = htmlSanitizer;
 
 /***/ }),
 /* 14 */
@@ -2936,7 +2558,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements EventManager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -2952,10 +2574,13 @@ var eventList = ['previewBeforeHook', 'previewRenderAfter', 'previewNeedsRefresh
 
 /**
  * Class EventManager
- * @ignore
  */
 
 var EventManager = function () {
+  /**
+   * Creates an instance of EventManager.
+   * @memberof EventManager
+   */
   function EventManager() {
     _classCallCheck(this, EventManager);
 
@@ -2965,6 +2590,7 @@ var EventManager = function () {
 
   /**
    * Listen event and bind event handler
+   * @memberof EventManager
    * @param {string} typeStr Event type string
    * @param {function} handler Event handler
    */
@@ -2991,6 +2617,7 @@ var EventManager = function () {
 
     /**
      * Emit event
+     * @memberof EventManager
      * @param {string} eventName Event name to emit
      * @returns {Array}
      */
@@ -3023,6 +2650,7 @@ var EventManager = function () {
 
     /**
      * Emit given event and return result
+     * @memberof EventManager
      * @param {string} eventName Event name to emit
      * @param {string} sourceText Source text to change
      * @returns {string}
@@ -3053,6 +2681,7 @@ var EventManager = function () {
 
     /**
      * Get event type and namespace
+     * @memberof EventManager
      * @param {string} typeStr Event type name
      * @returns {{type: string, namespace: string}}
      * @private
@@ -3084,6 +2713,7 @@ var EventManager = function () {
 
     /**
      * Add event type when given event not exists
+     * @memberof EventManager
      * @param {string} type Event type name
      */
 
@@ -3099,6 +2729,7 @@ var EventManager = function () {
 
     /**
      * Remove event handler from given event type
+     * @memberof EventManager
      * @param {string} typeStr Event type name
      * @param {function} [handler] - registered event handler
      */
@@ -3130,6 +2761,7 @@ var EventManager = function () {
      * Remove event handler with event handler
      * @param {string} type - event type name
      * @param {function} handler - event handler
+     * @memberof EventManager
      * @private
      */
 
@@ -3145,6 +2777,7 @@ var EventManager = function () {
 
     /**
      * Remove event handler with event type information
+     * @memberof EventManager
      * @param {string} type Event type name
      * @param {string} namespace Event namespace
      * @private
@@ -3190,7 +2823,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview extension manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -3204,9 +2837,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class ExtManager
- * @ignore
  */
 var ExtManager = function () {
+  /**
+   * Creates an instance of ExtManager.
+   * @memberof ExtManager
+   */
   function ExtManager() {
     _classCallCheck(this, ExtManager);
 
@@ -3214,9 +2850,11 @@ var ExtManager = function () {
   }
 
   /**
+   * defineExtension
    * Defined Extension
+   * @memberof ExtManager
    * @param {string} name extension name
-   * @param {function} ext extension
+   * @param {ExtManager~extension} ext extension
    */
 
 
@@ -3228,6 +2866,7 @@ var ExtManager = function () {
 
     /**
      * Apply extensions
+     * @memberof ExtManager
      * @param {object} context Context
      * @param {Array.<string|object>} options - options or names array
      */
@@ -3273,7 +2912,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Convertor have responsible to convert markdown and html
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -3285,15 +2924,15 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _markdownIt = __webpack_require__(23);
+var _markdownIt = __webpack_require__(22);
 
 var _markdownIt2 = _interopRequireDefault(_markdownIt);
 
-var _toMark = __webpack_require__(18);
+var _toMark = __webpack_require__(23);
 
 var _toMark2 = _interopRequireDefault(_toMark);
 
-var _htmlSanitizer = __webpack_require__(9);
+var _htmlSanitizer = __webpack_require__(13);
 
 var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
 
@@ -3324,8 +2963,6 @@ var _markdownitHtmlBlockRenderer2 = _interopRequireDefault(_markdownitHtmlBlockR
 var _markdownitBackticksRenderer = __webpack_require__(30);
 
 var _markdownitBackticksRenderer2 = _interopRequireDefault(_markdownitBackticksRenderer);
-
-var _markdownitInlinePlugin = __webpack_require__(31);
 
 var _codeBlockManager = __webpack_require__(7);
 
@@ -3366,20 +3003,6 @@ markdownitHighlight.inline.ruler.at('backticks', _markdownitBackticksRenderer2.d
 markdownitHighlight.use(_markdownitTaskPlugin2.default);
 markdownitHighlight.use(_markdownitCodeBlockPlugin2.default);
 
-markdownitHighlight.renderer.rules.softbreak = function (tokens, idx, options) {
-  if (!options.breaks) {
-    return '\n';
-  }
-
-  var prevToken = tokens[idx - 1];
-
-  if (prevToken && prevToken.type === 'html_inline' && prevToken.content === '<br>') {
-    return '';
-  }
-
-  return options.xhtmlOut ? '<br />\n' : '<br>\n';
-};
-
 // markdownit
 markdownit.block.ruler.at('code', _markdownitCodeRenderer2.default);
 markdownit.block.ruler.at('table', _markdownitTableRenderer2.default, {
@@ -3395,24 +3018,15 @@ markdownit.inline.ruler.at('backticks', _markdownitBackticksRenderer2.default);
 markdownit.use(_markdownitTaskPlugin2.default);
 markdownit.use(_markdownitCodeBlockPlugin2.default);
 
-// This regular expression refere markdownIt.
-// https://github.com/markdown-it/markdown-it/blob/master/lib/common/html_re.js
-var attrName = '[a-zA-Z_:][a-zA-Z0-9:._-]*';
-var unquoted = '[^"\'=<>`\\x00-\\x20]+';
-var singleQuoted = "'[^']*'";
-var doubleQuoted = '"[^"]*"';
-var attrValue = '(?:' + unquoted + '|' + singleQuoted + '|' + doubleQuoted + ')';
-var attribute = '(?:\\s+' + attrName + '(?:\\s*=\\s*' + attrValue + ')?)*\\s*';
-var openingTag = '(\\\\<|<)([A-Za-z][A-Za-z0-9\\-]*' + attribute + ')(\\/?>)';
-var HTML_TAG_RX = new RegExp(openingTag, 'g');
-
 /**
  * Class Convertor
- * @param {EventManager} em - EventManager instance
- * @ignore
  */
 
 var Convertor = function () {
+  /**
+   * Convertor constructor
+   * @param {EventManager} em - EventManager instance
+   */
   function Convertor(em) {
     _classCallCheck(this, Convertor);
 
@@ -3422,59 +3036,52 @@ var Convertor = function () {
   /**
    * _markdownToHtmlWithCodeHighlight
    * Convert markdown to html with Codehighlight
-   * @param {string} markdown markdown text
-   * @param {object} env environment sandbox for markdownit
-   * @returns {string} html text
    * @private
+   * @memberof Convertor
+   * @param {string} markdown markdown text
+   * @returns {string} html text
    */
 
 
   _createClass(Convertor, [{
     key: '_markdownToHtmlWithCodeHighlight',
-    value: function _markdownToHtmlWithCodeHighlight(markdown, env) {
-      markdown = this._replaceImgAttrToDataProp(markdown);
+    value: function _markdownToHtmlWithCodeHighlight(markdown) {
+      markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
+      // eslint-disable-next-line
+      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
+      while (onerrorStripeRegex.exec(markdown)) {
+        markdown = markdown.replace(onerrorStripeRegex, '$1$3');
+      }
 
-      return markdownitHighlight.render(markdown, env);
+      var renderedHTML = markdownitHighlight.render(markdown);
+      renderedHTML = this._removeBrToMarkPassAttributeInCode(renderedHTML);
+
+      return renderedHTML;
     }
 
     /**
      * _markdownToHtml
      * Convert markdown to html
-     * @param {string} markdown markdown text
-     * @param {object} env environment sandbox for markdownit
-     * @returns {string} html text
      * @private
+     * @memberof Convertor
+     * @param {string} markdown markdown text
+     * @returns {string} html text
      */
 
   }, {
     key: '_markdownToHtml',
-    value: function _markdownToHtml(markdown, env) {
-      markdown = markdown.replace(HTML_TAG_RX, function (match, $1, $2, $3) {
-        return match[0] !== '\\' ? '' + $1 + $2 + ' data-tomark-pass ' + $3 : match;
-      });
-
-      markdown = this._replaceImgAttrToDataProp(markdown);
-
-      return markdownit.render(markdown, env);
-    }
-
-    /**
-     * Replace 'onerror' attribute of img tag to data property string
-     * @param {string} markdown markdown text
-     * @returns {string} replaced markdown text
-     * @private
-     */
-
-  }, {
-    key: '_replaceImgAttrToDataProp',
-    value: function _replaceImgAttrToDataProp(markdown) {
-      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\\"']?[^\\"']*[\\"']?)(.*)/i;
-
+    value: function _markdownToHtml(markdown) {
+      markdown = markdown.replace(/<br>/ig, '<br data-tomark-pass>');
+      // eslint-disable-next-line
+      var onerrorStripeRegex = /(<img[^>]*)(onerror\s*=\s*[\"']?[^\"']*[\"']?)(.*)/i;
       while (onerrorStripeRegex.exec(markdown)) {
         markdown = markdown.replace(onerrorStripeRegex, '$1$3');
       }
 
-      return markdown;
+      var renderedHTML = markdownit.render(markdown);
+      renderedHTML = this._removeBrToMarkPassAttributeInCode(renderedHTML);
+
+      return renderedHTML;
     }
 
     /**
@@ -3493,7 +3100,7 @@ var Convertor = function () {
 
       $wrapperDiv.find('code, pre').each(function (i, codeOrPre) {
         var $code = (0, _jquery2.default)(codeOrPre);
-        $code.html($code.html().replace(/\sdata-tomark-pass\s(\/?)&gt;/g, '$1&gt;'));
+        $code.html($code.html().replace(/&lt;br data-tomark-pass&gt;/, '&lt;br&gt;'));
       });
 
       renderedHTML = $wrapperDiv.html();
@@ -3505,6 +3112,7 @@ var Convertor = function () {
      * toHTMLWithCodeHightlight
      * Convert markdown to html with Codehighlight
      * emit convertorAfterMarkdownToHtmlConverted
+     * @memberof Convertor
      * @param {string} markdown markdown text
      * @returns {string} html text
      */
@@ -3522,6 +3130,7 @@ var Convertor = function () {
      * toHTML
      * Convert markdown to html
      * emit convertorAfterMarkdownToHtmlConverted
+     * @memberof Convertor
      * @param {string} markdown markdown text
      * @returns {string} html text
      */
@@ -3532,7 +3141,6 @@ var Convertor = function () {
       var html = this._markdownToHtml(markdown);
 
       html = this.eventManager.emitReduce('convertorAfterMarkdownToHtmlConverted', html);
-      html = this._removeBrToMarkPassAttributeInCode(html);
 
       return html;
     }
@@ -3545,29 +3153,10 @@ var Convertor = function () {
     }
 
     /**
-     * set link attribute to markdownitHighlight, markdownit
-     * using linkAttribute of markdownItInlinePlugin
-     * @param {object} attr markdown text
-     */
-
-  }, {
-    key: 'setLinkAttribute',
-    value: function setLinkAttribute(attr) {
-      var keys = Object.keys(attr);
-      var setAttributeToToken = function setAttributeToToken(tokens, idx) {
-        keys.forEach(function (key) {
-          tokens[idx].attrPush([key, attr[key]]);
-        });
-      };
-
-      markdownitHighlight.use(_markdownitInlinePlugin.linkAttribute, setAttributeToToken);
-      markdownit.use(_markdownitInlinePlugin.linkAttribute, setAttributeToToken);
-    }
-
-    /**
      * toMarkdown
      * Convert html to markdown
      * emit convertorAfterHtmlToMarkdownConverted
+     * @memberof Convertor
      * @param {string} html html text
      * @param {object | null} toMarkOptions - toMark library options
      * @returns {string} markdown text
@@ -3583,7 +3172,6 @@ var Convertor = function () {
       var markdown = (0, _toMark2.default)(this._appendAttributeForBrIfNeed(html), toMarkOptions);
 
       markdown = this.eventManager.emitReduce('convertorAfterHtmlToMarkdownConverted', markdown);
-      markdown = this._removeNewlinesBeforeAfterAndBlockElement(markdown);
 
       _tuiCodeSnippet2.default.forEach(markdown.split('\n'), function (line, index) {
         var FIND_TABLE_RX = /^\|[^|]*\|/ig;
@@ -3598,18 +3186,6 @@ var Convertor = function () {
       return resultArray.join('\n');
     }
   }, {
-    key: '_removeNewlinesBeforeAfterAndBlockElement',
-    value: function _removeNewlinesBeforeAfterAndBlockElement(markdown) {
-      // Newlines('\n\n') are created on to-mark.
-      var NEWLINES_BEFORE_BLOCK_RX = /<br>\n\n(#{1,6} .*|```|\||(\*+|-+|\d+\.) .*| *>[^\n]+.*)/g;
-      var NEWLINES_AFTER_BLOCK_RX = /(#{1,6} .*|```|\|)\n\n<br>/g;
-
-      markdown = markdown.replace(NEWLINES_BEFORE_BLOCK_RX, '<br>$1');
-      markdown = markdown.replace(NEWLINES_AFTER_BLOCK_RX, '$1\n<br>');
-
-      return markdown;
-    }
-  }, {
     key: '_appendAttributeForBrIfNeed',
     value: function _appendAttributeForBrIfNeed(html) {
       var FIND_BR_RX = /<br>/ig;
@@ -3618,19 +3194,25 @@ var Convertor = function () {
       var FIRST_TWO_BRS_BEFORE_RX = /([^>]|<\/a>|<\/code>|<\/span>|<\/b>|<\/i>|<\/s>|<img [^>]*>)/;
       var TWO_BRS_RX = /<br data-tomark-pass \/><br data-tomark-pass \/>/;
       var FIND_FIRST_TWO_BRS_RX = new RegExp(FIRST_TWO_BRS_BEFORE_RX.source + TWO_BRS_RX.source, 'g');
-      var FIND_ATTRI_WITH_EMTPY_STR_RX = /<br data-tomark-pass="">/ig;
 
       html = html.replace(FIND_BR_RX, '<br />');
 
       html = html.replace(FIND_DOUBLE_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />');
-      html = html.replace(FIND_ATTRI_WITH_EMTPY_STR_RX, '<br data-tomark-pass />');
+
+      var div = document.createElement('div');
+      var $div = (0, _jquery2.default)(div);
+      $div.html(html);
+      $div.find('pre br,code br').each(function (index, node) {
+        if (node.hasAttribute('data-tomark-pass')) {
+          node.removeAttribute('data-tomark-pass');
+        }
+      });
+
+      html = $div.html().replace(/<br data-tomark-pass="">/ig, '<br data-tomark-pass />');
+      html = html.replace(FIND_BR_RX, '<br />');
 
       html = html.replace(FIND_PASSING_AND_NORMAL_BR_RX, '<br data-tomark-pass /><br data-tomark-pass />$1');
       html = html.replace(FIND_FIRST_TWO_BRS_RX, '$1<br /><br />');
-
-      // Preserve <br> when there is only one empty line before or after a block element.
-      html = html.replace(/(.)<br \/><br \/>(<h[1-6]>|<pre>|<table>|<ul>|<ol>|<blockquote>)/g, '$1<br /><br data-tomark-pass />$2');
-      html = html.replace(/(<\/h[1-6]>|<\/pre>|<\/table>|<\/ul>|<\/ol>|<\/blockquote>)<br \/>(.)/g, '$1<br data-tomark-pass />$2');
 
       return html;
     }
@@ -3638,6 +3220,7 @@ var Convertor = function () {
     /**
      * get markdownit with code highlight
      * @returns {markdownit} - markdownit instance
+     * @memberof Convertor
      * @static
      */
 
@@ -3650,6 +3233,7 @@ var Convertor = function () {
     /**
      * get markdownit
      * @returns {markdownit} - markdownit instance
+     * @memberof Convertor
      * @static
      */
 
@@ -3667,12 +3251,6 @@ exports.default = Convertor;
 
 /***/ }),
 /* 18 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_18__;
-
-/***/ }),
-/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3684,11 +3262,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _toolbarItem = __webpack_require__(11);
+var _toolbarItem = __webpack_require__(10);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
-var _tooltip = __webpack_require__(35);
+var _tooltip = __webpack_require__(34);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
@@ -3700,28 +3278,35 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements UI Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
  * Class Button UI
- * @param {object} options - button options
- *     @param {string} options.className - button class name
- *     @param {string} options.command - command name to execute on click
- *     @param {string} options.event - event name to trigger on click
- *     @param {string} options.text - text on button
- *     @param {string} options.tooltip - text on tooltip
- *     @param {string} options.style - button style
- *     @param {string} options.state - button state
- * @param {jquery} $el - button rootElement
+ * @extends {ToolbarItem}
  * @deprecated
  */
 var Button = function (_ToolbarItem) {
   _inherits(Button, _ToolbarItem);
 
   /**
+   * Creates an instance of Button.
+   * @param {object} options - button options
+   *  @param {jquery} $el - button rootElement
+   *  @param {string} options.className - button class name
+   *  @param {string} options.command - command name to execute on click
+   *  @param {string} options.event - event name to trigger on click
+   *  @param {string} options.text - text on button
+   *  @param {string} options.tooltip - text on tooltip
+   *  @param {string} options.style - button style
+   *  @param {string} options.state - button state
+   * @memberof Button
+   */
+
+  /**
    * item name
+   * @memberof Button
    * @type {String}
    * @static
    */
@@ -3754,12 +3339,14 @@ var Button = function (_ToolbarItem) {
   /**
    * set tooltip text
    * @param {string} text - tooltip text to show
+   * @memberof Button
    */
 
 
   /**
    * ToolbarItem className
    * @type {String}
+   * @memberof Button
    * @static
    */
 
@@ -3821,6 +3408,7 @@ var Button = function (_ToolbarItem) {
 
     /**
      * enable button
+     * @memberof Button
      */
 
   }, {
@@ -3831,6 +3419,7 @@ var Button = function (_ToolbarItem) {
 
     /**
      * disable button
+     * @memberof Button
      */
 
   }, {
@@ -3842,6 +3431,7 @@ var Button = function (_ToolbarItem) {
     /**
      * check whether this button is enabled
      * @returns {Boolean} - true for enabled
+     * @memberof Button
      */
 
   }, {
@@ -3867,7 +3457,7 @@ Object.defineProperty(Button, 'className', {
 exports.default = Button;
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3883,7 +3473,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @fileoverview Implements KeyMapper
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /**
@@ -4153,12 +3743,15 @@ var sharedInstance = void 0;
 
 /**
  * Class KeyMapper
- * @param {object} [options] options
- * @param {string} options.splitter splitter string default is +
- * @ignore
  */
 
 var KeyMapper = function () {
+  /**
+   * Creates an instance of KeyMapper.
+   * @param {object} [options] options
+   *  @param {string} options.splitter splitter string default is +
+   * @memberof KeyMapper
+   */
   function KeyMapper(options) {
     _classCallCheck(this, KeyMapper);
 
@@ -4168,6 +3761,7 @@ var KeyMapper = function () {
   /**
    * Set key splitter
    * @param {object} options Option object
+   * @memberof KeyMapper
    * @private
    */
 
@@ -4181,6 +3775,7 @@ var KeyMapper = function () {
 
     /**
      * Convert event to keyMap
+     * @memberof KeyMapper
      * @param {event} event Event object
      * @returns {string}
      */
@@ -4217,6 +3812,7 @@ var KeyMapper = function () {
 
     /**
      * Get character from key code
+     * @memberof KeyMapper
      * @param {number} keyCode Key code
      * @returns {string}
      * @private
@@ -4232,6 +3828,7 @@ var KeyMapper = function () {
 
     /**
      * Get sharedInstance
+     * @memberof KeyMapper
      * @returns {KeyMapper}
      */
 
@@ -4247,9 +3844,10 @@ var KeyMapper = function () {
 
     /**
      * get key code for a character
+     * @static
      * @param {string} char - a character to be converted
      * @returns {number} key code for the char
-     * @static
+     * @memberof KeyMapper
      */
 
   }, {
@@ -4265,7 +3863,7 @@ var KeyMapper = function () {
 exports.default = KeyMapper;
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4277,7 +3875,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements LazyRunner
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -4291,9 +3889,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class LazyRunner
- * @ignore
  */
 var LazyRunner = function () {
+  /**
+   * Creates an instance of LazyRunner.
+   * @memberof LazyRunner
+   */
   function LazyRunner() {
     _classCallCheck(this, LazyRunner);
 
@@ -4369,7 +3970,7 @@ var LazyRunner = function () {
 exports.default = LazyRunner;
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4381,7 +3982,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements Command
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -4395,12 +3996,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class Command
- * @param {string} name Command name
- * @param {number} type Command type (Command.TYPE)
- * @param {Array.<string>} [keyMap] keyMap
- * @ignore
  */
 var Command = function () {
+  /**
+   * @param {string} name Command name
+   * @param {number} type Command type (Command.TYPE)
+   * @param {Array.<string>} [keyMap] keyMap
+   */
   function Command(name, type, keyMap) {
     _classCallCheck(this, Command);
 
@@ -4411,9 +4013,10 @@ var Command = function () {
       this.setKeyMap(keyMap);
     }
   }
-
   /**
+   * getName
    * returns Name of command
+   * @memberof Command
    * @returns {string} Command Name
    */
 
@@ -4425,7 +4028,9 @@ var Command = function () {
     }
 
     /**
+     * getType
      * returns Type of command
+     * @memberof Command
      * @returns {number} Command Command type number
      */
 
@@ -4436,7 +4041,9 @@ var Command = function () {
     }
 
     /**
+     * isMDType
      * returns whether Command Type is Markdown or not
+     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -4447,7 +4054,9 @@ var Command = function () {
     }
 
     /**
+     * isWWType
      * returns whether Command Type is Wysiwyg or not
+     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -4458,7 +4067,9 @@ var Command = function () {
     }
 
     /**
+     * isGlobalType
      * returns whether Command Type is Global or not
+     * @memberof Command
      * @returns {boolean} result
      */
 
@@ -4469,7 +4080,9 @@ var Command = function () {
     }
 
     /**
+     * setKeyMap
      * Set keymap value for each os
+     * @memberof Command
      * @param {string} win Windows Key(and etc)
      * @param {string} mac Mac osx key
      */
@@ -4486,12 +4099,12 @@ var Command = function () {
 
 /**
  * Command factory method
+ * @memberof Command
  * @param {string} typeStr Editor type name
  * @param {object} props Property
  *     @param {string} props.name Command name
  *     @param {number} props.type Command type number
  * @returns {Command}
- * @static
  */
 
 
@@ -4518,8 +4131,8 @@ Command.factory = function (typeStr, props) {
  * markdown : 0
  * wysiwyg : 1
  * global : 2
+ * @memberof Command
  * @type {object}
- * @private
  */
 Command.TYPE = {
   MD: 0,
@@ -4528,6 +4141,12 @@ Command.TYPE = {
 };
 
 exports.default = Command;
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_22__;
 
 /***/ }),
 /* 23 */
@@ -4547,8 +4166,8 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_23__;
 
 /**
  * @fileoverview Implements markdownitTaskPlugin
- * @modifier Sungho Kim(sungho-kim@nhn.com) FE Development Lab/NHN
- * @modifier Junghwan Park(junghwan.park@nhn.com) FE Development Lab/NHN
+ * @modifier Sungho Kim(sungho-kim@nhnent.com) FE Development Lab/NHN Ent.
+ * @modifier Junghwan Park(junghwan.park@nhnent.com) FE Development Lab/NHN Ent.
  */
 /* eslint-disable */
 
@@ -4655,7 +4274,7 @@ module.exports = MarkdownitTaskRenderer;
 /* eslint-disable */
 /**
  * @fileoverview Implements markdownitCodeBlockPlugin
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /**
@@ -4737,7 +4356,7 @@ module.exports = MarkdownitCodeBlockRenderer;
 // Distributed under an ISC license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements MarkdownItCodeRenderer
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /* eslint-disable */
@@ -4804,7 +4423,7 @@ module.exports = function code(state, startLine, endLine /*, silent*/) {
 // Distributed under MIT license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements markdownitCodeBlockQuoteRenderer
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /* eslint-disable */
@@ -5139,7 +4758,7 @@ module.exports = function blockquote(state, startLine, endLine, silent) {
 
 /**
  * @fileoverview Implements markdownitTableRenderer
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /*eslint-disable */
@@ -5351,7 +4970,7 @@ module.exports = function table(state, startLine, endLine, silent) {
 
 /**
  * @fileoverview Implements markdownitHtmlBlockRenderer
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 /* eslint-disable */
 // HTML block
@@ -5449,7 +5068,7 @@ module.exports = function html_block(state, startLine, endLine, silent) {
 // Distributed under MIT license: https://github.com/markdown-it/markdown-it/
 /**
  * @fileoverview Implements markdownitBackticksRenderer
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 /* eslint-disable */
 
@@ -5494,7 +5113,7 @@ module.exports = function backtick(state, silent) {
         token.content = state.src.slice(pos, matchStart).replace(/[ \n]+/g, ' ').trim();
         // TUI.EDITOR MODIFICATION START
         // store number of backtick in data-backtick
-        // https://github.nhn.com/fe/tui.editor/pull/981
+        // https://github.nhnent.com/fe/tui.editor/pull/981
         token.attrSet('data-backticks', token.markup.length);
         // TUI.EDITOR MODIFICATION END
       }
@@ -5512,60 +5131,12 @@ module.exports = function backtick(state, silent) {
 
 /***/ }),
 /* 31 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// Copyright (c) 2014, Vitaly Puzrin.
-// Distributed under an MIT license: https://github.com/markdown-it/markdown-it-for-inline
-/* eslint-disable */
-
-/**
- * @fileoverview Implements markdownItLinkPlugin
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
- */
-
-function for_inline_plugin(md, ruleName, tokenType, iteartor) {
-
-  function scan(state) {
-    var i, blkIdx, inlineTokens;
-
-    for (blkIdx = state.tokens.length - 1; blkIdx >= 0; blkIdx--) {
-      if (state.tokens[blkIdx].type !== 'inline') {
-        continue;
-      }
-
-      inlineTokens = state.tokens[blkIdx].children;
-
-      for (i = inlineTokens.length - 1; i >= 0; i--) {
-        if (inlineTokens[i].type !== tokenType) {
-          continue;
-        }
-
-        iteartor(inlineTokens, i);
-      }
-    }
-  }
-
-  md.core.ruler.push(ruleName, scan);
-};
-
-var linkAttribute = exports.linkAttribute = function linkAttribute(markdownit, iteartor) {
-  for_inline_plugin(markdownit, 'url_attribute', 'link_open', iteartor);
-};
+module.exports = __WEBPACK_EXTERNAL_MODULE_31__;
 
 /***/ }),
 /* 32 */
-/***/ (function(module, exports) {
-
-module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
-
-/***/ }),
-/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5573,7 +5144,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_32__;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements editor preivew
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -5585,7 +5156,7 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _mdPreview = __webpack_require__(12);
+var _mdPreview = __webpack_require__(11);
 
 var _mdPreview2 = _interopRequireDefault(_mdPreview);
 
@@ -5622,21 +5193,24 @@ var TASK_CHECKED_CLASS_NAME = 'checked';
 
 /**
  * Class ToastUIEditorViewer
- * @param {object} options Option object
- *     @param {HTMLElement} options.el - container element
- *     @param {string} options.initialValue Editor's initial value
- *     @param {object} options.events eventlist Event list
- *         @param {function} options.events.load It would be emitted when editor fully load
- *         @param {function} options.events.change It would be emitted when content changed
- *         @param {function} options.events.stateChange It would be emitted when format change by cursor position
- *         @param {function} options.events.focus It would be emitted when editor get focus
- *         @param {function} options.events.blur It would be emitted when editor loose focus
- *     @param {object} options.hooks Hook list
- *     @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
- *     @param {string[]} [options.exts] - extensions
  */
 
 var ToastUIEditorViewer = function () {
+  /**
+   * Viewer
+   * @param {object} options Option object
+    * @param {HTMLElement} options.el - container element
+    * @param {string} options.initialValue Editor's initial value
+    * @param {object} options.events eventlist Event list
+      * @param {function} options.events.load It would be emitted when editor fully load
+      * @param {function} options.events.change It would be emitted when content changed
+      * @param {function} options.events.stateChange It would be emitted when format change by cursor position
+      * @param {function} options.events.focus It would be emitted when editor get focus
+      * @param {function} options.events.blur It would be emitted when editor loose focus
+    * @param {object} options.hooks Hook list
+      * @param {function} options.hooks.previewBeforeHook Submit preview to hook URL before preview be shown
+    * @param {string[]} [options.exts] - extensions
+    */
   function ToastUIEditorViewer(options) {
     var _this = this;
 
@@ -5656,6 +5230,7 @@ var ToastUIEditorViewer = function () {
     } else {
       this.convertor = new _convertor2.default(this.eventManager);
     }
+    this.toMarkOptions = null;
 
     if (this.options.useDefaultHTMLSanitizer) {
       this.convertor.initHtmlSanitizer();
@@ -5673,24 +5248,13 @@ var ToastUIEditorViewer = function () {
       });
     }
 
-    var _options = this.options,
-        el = _options.el,
-        initialValue = _options.initialValue;
-
-    var existingHTML = el.innerHTML;
-    el.innerHTML = '';
-
-    this.preview = new _mdPreview2.default((0, _jquery2.default)(el), this.eventManager, this.convertor, true);
+    this.preview = new _mdPreview2.default((0, _jquery2.default)(this.options.el), this.eventManager, this.convertor, true);
 
     this.preview.$el.on('mousedown', _jquery2.default.proxy(this._toggleTask, this));
 
     _extManager2.default.applyExtension(this, this.options.exts);
 
-    if (initialValue) {
-      this.setValue(initialValue);
-    } else if (existingHTML) {
-      this.preview.setHTML(existingHTML);
-    }
+    this.setValue(this.options.initialValue);
 
     this.eventManager.emit('load', this);
   }
@@ -5705,9 +5269,9 @@ var ToastUIEditorViewer = function () {
   _createClass(ToastUIEditorViewer, [{
     key: '_toggleTask',
     value: function _toggleTask(ev) {
-      var style = getComputedStyle(ev.target, ':before');
+      var isBeneathTaskBox = ev.offsetX < 18 && ev.offsetY > 18;
 
-      if (ev.target.hasAttribute(TASK_ATTR_NAME) && _domUtils2.default.isInsideTaskBox(style, ev.offsetX, ev.offsetY)) {
+      if (ev.target.hasAttribute(TASK_ATTR_NAME) && !isBeneathTaskBox) {
         (0, _jquery2.default)(ev.target).toggleClass(TASK_CHECKED_CLASS_NAME);
         this.eventManager.emit('change', {
           source: 'viewer',
@@ -5718,6 +5282,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Set content for preview
+     * @memberof ToastUIEditorViewer
      * @param {string} markdown Markdown text
      */
 
@@ -5732,6 +5297,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Set content for preview
+     * @memberof ToastUIEditorViewer
      * @param {string} markdown Markdown text
      * @deprecated
      */
@@ -5744,6 +5310,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Bind eventHandler to event type
+     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -5756,6 +5323,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Unbind eventHandler from event type
+     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      */
 
@@ -5767,6 +5335,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Remove Viewer preview from document
+     * @memberof ToastUIEditorViewer
      */
 
   }, {
@@ -5774,7 +5343,6 @@ var ToastUIEditorViewer = function () {
     value: function remove() {
       this.eventManager.emit('removeEditor');
       this.preview.$el.off('mousedown', _jquery2.default.proxy(this._toggleTask, this));
-      this.preview.remove();
       this.options = null;
       this.eventManager = null;
       this.commandManager = null;
@@ -5784,6 +5352,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Add hook to Viewer preview's event
+     * @memberof ToastUIEditorViewer
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -5797,6 +5366,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return true
+     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -5808,6 +5378,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return false
+     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -5819,6 +5390,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Return false
+     * @memberof ToastUIEditorViewer
      * @returns {boolean}
      */
 
@@ -5830,6 +5402,7 @@ var ToastUIEditorViewer = function () {
 
     /**
      * Define extension
+     * @memberof ToastUIEditorViewer
      * @param {string} name Extension name
      * @param {ExtManager~extension} ext extension
      */
@@ -5855,7 +5428,6 @@ ToastUIEditorViewer.isViewer = true;
 /**
  * domUtil instance
  * @type {DomUtil}
- * @ignore
  */
 ToastUIEditorViewer.domUtils = _domUtils2.default;
 
@@ -5905,7 +5477,7 @@ ToastUIEditorViewer.WwTableSelectionManager = null;
 module.exports = ToastUIEditorViewer;
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5914,157 +5486,13 @@ module.exports = ToastUIEditorViewer;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-/**
- * @fileoverview This file is common logic for italic, bold, strike makrdown commands.
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
-
-/**
- * range expand according to expendSize
- * If can not expand, return null
- * @param {range} range - range
- * @param {number} expendSize - expendSize
- * @returns {object} expanded range or null
- * @ignore
- */
-var getExpandedRange = function getExpandedRange(range, expendSize) {
-  var start = range.start,
-      end = range.end;
-
-  var expendRange = void 0;
-
-  if (start.ch >= expendSize) {
-    var from = {
-      line: start.line,
-      ch: start.ch - expendSize
-    };
-    var to = {
-      line: end.line,
-      ch: end.ch + expendSize
-    };
-
-    expendRange = {
-      from: from,
-      to: to
-    };
-  }
-
-  return expendRange;
-};
-
-/**
- * remove symbol in the front and back of text
- * @param {string} text - text
- * @param {string} symbol - text
- * @returns {string}
- * @ignore
- */
-var removeSyntax = exports.removeSyntax = function removeSyntax(text, symbol) {
-  var symbolLength = symbol.length;
-
-  return text.substr(symbolLength, text.length - symbolLength * 2);
-};
-
-/**
- * append symbol in the front and back of text
- * @param {string} text - text
- * @param {string} symbol - text
- * @returns {string}
- * @ignore
- */
-var appendSyntax = exports.appendSyntax = function appendSyntax(text, symbol) {
-  return '' + symbol + text + symbol;
-};
-
-/**
- * check expanded text and replace text using replacer
- * @param {CodeMirror.doc} doc - doc of codemirror
- * @param {range} range - origin range
- * @param {number} expandSize - expandSize
- * @param {function} checker - sytax check function
- * @param {function} replacer - text replace function
- * @returns {boolean} - if replace text, return true.
- * @ignore
- */
-var expandReplace = exports.expandReplace = function expandReplace(doc, range, expandSize, checker, replacer) {
-  var expendRange = getExpandedRange(range, expandSize);
-  var result = false;
-
-  if (expendRange) {
-    var from = expendRange.from,
-        to = expendRange.to;
-
-    var expendRangeText = doc.getRange(from, to);
-    if (checker(expendRangeText)) {
-      doc.setSelection(from, to);
-      doc.replaceSelection(replacer(expendRangeText), 'around');
-      result = true;
-    }
-  }
-
-  return result;
-};
-
-/**
- * check text and replace text using replacer
- * @param {CodeMirror.doc} doc - doc of codemirror
- * @param {string} text - text
- * @param {function} checker - sytax check function
- * @param {function} replacer - text replace function
- * @returns {boolean} - if replace text, return true.
- * @ignore
- */
-var replace = exports.replace = function replace(doc, text, checker, replacer) {
-  var result = false;
-
-  if (checker(text)) {
-    doc.replaceSelection(replacer(text), 'around');
-    result = true;
-  }
-
-  return result;
-};
-
-var changeSyntax = exports.changeSyntax = function changeSyntax(doc, range, symbol, syntaxRegex, contentRegex) {
-  var _doc$getCursor = doc.getCursor(),
-      line = _doc$getCursor.line,
-      ch = _doc$getCursor.ch;
-
-  var selectionStr = doc.getSelection();
-  var symbolLength = symbol.length;
-  var isSyntax = function isSyntax(t) {
-    return syntaxRegex.test(t);
-  };
-
-  // 1. expand text and check syntax => remove syntax
-  // 2. check text is syntax => remove syntax
-  // 3. If text does not match syntax, remove syntax inside text and then append syntax
-  if (!(expandReplace(doc, range, symbolLength, isSyntax, function (t) {
-    return removeSyntax(t, symbol);
-  }) || replace(doc, selectionStr, isSyntax, function (t) {
-    return removeSyntax(t, symbol);
-  }))) {
-    var removeSyntaxInsideText = selectionStr.replace(contentRegex, '$1');
-    doc.replaceSelection(appendSyntax(removeSyntaxInsideText, symbol), 'around');
-  }
-
-  var afterSelectStr = doc.getSelection();
-  var size = ch;
-
-  if (!selectionStr) {
-    // If text was not selected, after replace text, move cursor
-    // For example **|** => | (move cusor -symbolLenth)
-    if (isSyntax(afterSelectStr)) {
-      size += symbolLength;
-    } else {
-      size -= symbolLength;
-    }
-    doc.setCursor(line, size);
-  }
-};
+var FIND_MD_OL_RX = exports.FIND_MD_OL_RX = /^[ \t]*[\d]+\. .*/;
+var FIND_MD_UL_RX = exports.FIND_MD_UL_RX = /^[ \t]*[-*] .*/;
+var FIND_MD_TASK_RX = exports.FIND_MD_TASK_RX = /^[ \t]*([*-] |[\d]+\. )(\[[ xX]] ).*/;
+var FIND_MD_UL_TASK_RX = exports.FIND_MD_UL_TASK_RX = /^[ \t]*[*-] (\[[ xX]] ).*/;
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6076,7 +5504,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements tooltip
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -6092,10 +5520,13 @@ var TOOLTIP_CONTENT = '<div class="tui-tooltip"><div class="arrow"></div><span c
 
 /**
  * Class Tooltip
- * @ignore
  */
 
 var Tooltip = function () {
+  /**
+   * Creates an instance of Tooltip.
+   * @memberof Tooltip
+   */
   function Tooltip() {
     _classCallCheck(this, Tooltip);
 
@@ -6137,7 +5568,7 @@ var Tooltip = function () {
 exports.default = new Tooltip();
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6149,7 +5580,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements CodeBlockExt
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -6161,6 +5592,8 @@ var _codemirror = __webpack_require__(6);
 
 var _codemirror2 = _interopRequireDefault(_codemirror);
 
+__webpack_require__(47);
+
 __webpack_require__(48);
 
 __webpack_require__(49);
@@ -6171,20 +5604,20 @@ __webpack_require__(51);
 
 __webpack_require__(52);
 
-__webpack_require__(53);
-
-__webpack_require__(54);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
  * Class CodeMirrorExt
- * @param {HTMLElement} el - container jquery element
- * @param {Object} [options={}] - codeMirror options
  */
 var CodeMirrorExt = function () {
+  /**
+   * Creates an instance of CodeMirrorExt.
+   * @param {HTMLElement} el - container jquery element
+   * @param {Object} [options={}] - codeMirror options
+   * @memberof CodeMirrorExt
+   */
   function CodeMirrorExt(el) {
     var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
@@ -6193,9 +5626,9 @@ var CodeMirrorExt = function () {
     this.editorContainerEl = el;
 
     /**
-     * CodeMirror instance
-     * @type {CodeMirror.EditorFromTextArea}
-     * @private
+     * @memberof CodeMirrorExt
+     * @protected
+     * @member
      */
     this.cm = null;
 
@@ -6205,6 +5638,7 @@ var CodeMirrorExt = function () {
   /**
    * init
    * @param {Object} options - codeMirror option
+   * @memberof CodeMirrorExt
    * @private
    */
 
@@ -6235,6 +5669,7 @@ var CodeMirrorExt = function () {
 
     /**
      * getCurrentRange
+     * @memberof CodeMirrorExt
      * @returns {Object} - selection range
      */
 
@@ -6253,6 +5688,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Set focus to current Editor
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6263,6 +5699,7 @@ var CodeMirrorExt = function () {
 
     /**
      * blur focus to current Editor
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6273,6 +5710,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Remove Editor from document
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6283,6 +5721,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Set Editor value
+     * @memberof CodeMirrorExt
      * @param {string} markdown - Markdown syntax text
      * @param {boolean} [cursorToEnd=true] - move cursor to contents end
      */
@@ -6296,12 +5735,12 @@ var CodeMirrorExt = function () {
       if (cursorToEnd) {
         this.moveCursorToEnd();
       }
-      this.cm.doc.clearHistory();
       this.cm.refresh();
     }
 
     /**
      * Get editor value
+     * @memberof CodeMirrorExt
      * @returns {string} - codeMirror text value
      */
 
@@ -6313,6 +5752,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Get CodeMirror instance
+     * @memberof CodeMirrorExt
      * @returns {CodeMirror}
      */
 
@@ -6324,6 +5764,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Reset Editor
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6334,6 +5775,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Get current caret position
+     * @memberof CodeMirrorExt
      * @returns {{from: {line: number, ch: number}, to: {line: number, ch: number}}}
      */
 
@@ -6345,6 +5787,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Add widget
+     * @memberof CodeMirrorExt
      * @param {object} selection - Selection object
      * @param {HTMLElement} node - Widget node
      * @param {string} style - Adding style "over" or "bottom"
@@ -6363,6 +5806,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Replace selection with given replacement content
+     * @memberof CodeMirrorExt
      * @param {string} content - Replacement content text
      * @param {object} selection - Selection object
      */
@@ -6380,6 +5824,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Replace selection with replacement content and offset
+     * @memberof CodeMirrorExt
      * @param {string} content - Replacement content text
      * @param {number} offset - Offset
      * @param {number} overwriteLength - Length to overwrite
@@ -6405,6 +5850,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Set Editor height
+     * @memberof CodeMirrorExt
      * @param {number} height - Editor height
      */
 
@@ -6419,6 +5865,7 @@ var CodeMirrorExt = function () {
     /**
      * set min height
      * @param {number} minHeight - min height
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6430,21 +5877,9 @@ var CodeMirrorExt = function () {
     }
 
     /**
-     * Set the placeholder to CodeMirror
-     * @param {string} placeholder - placeholder to set
-     */
-
-  }, {
-    key: 'setPlaceholder',
-    value: function setPlaceholder(placeholder) {
-      if (placeholder) {
-        this.cm.setOption('placeholder', placeholder);
-      }
-    }
-
-    /**
      * get code mirror wrapper element
      * @returns {HTMLElement} - code mirror wrapper element
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6457,6 +5892,7 @@ var CodeMirrorExt = function () {
      * get code mirror cursor
      * @param {string} [start='head'] - which end of the selection. 'from'|'to'|'head'|'anchor'
      * @returns {Cursor} - code mirror cursor
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6467,6 +5903,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Set cursor position to end
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6480,6 +5917,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Set cursor position to start
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6493,6 +5931,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Scroll Editor content to Top
+     * @memberof CodeMirrorExt
      * @param {number} value - Scroll amount
      * @returns {number} - changed scroll top
      */
@@ -6509,6 +5948,7 @@ var CodeMirrorExt = function () {
 
     /**
      * Get start, end position of current selection
+     * @memberof CodeMirrorExt
      * @returns {{start: {line: *, ch: *}, end: {line: *, ch: *}}}
      */
 
@@ -6534,6 +5974,7 @@ var CodeMirrorExt = function () {
      * add codemirror event handler
      * @param {string} type - event type
      * @param {function} func - handler function
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6546,6 +5987,7 @@ var CodeMirrorExt = function () {
      * remove codemirror event handler
      * @param {string} type - event type
      * @param {function} func - handler function
+     * @memberof CodeMirrorExt
      */
 
   }, {
@@ -6561,7 +6003,7 @@ var CodeMirrorExt = function () {
 exports.default = CodeMirrorExt;
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6577,15 +6019,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @fileoverview Implements ComponentManager
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /**
  * Class ComponentManager
- * @param {MarkdownEditor|WysiwygEditor} editor - Editor instance
- * @ignore
  */
 var ComponentManager = function () {
+  /**
+   * Constructor
+   * @param {MarkdownEditor|WysiwygEditor} editor - Editor instance
+   */
   function ComponentManager(editor) {
     _classCallCheck(this, ComponentManager);
 
@@ -6601,6 +6045,7 @@ var ComponentManager = function () {
   /**
    * addManager
    * Add manager
+   * @memberof ComponentManager
    * @param {string|function} nameOrConstructor Manager name or constructor
    * @param {function} [ManagerConstructor] Constructor
    */
@@ -6622,6 +6067,7 @@ var ComponentManager = function () {
     /**
      * getManager
      * Get manager by manager name
+     * @memberof ComponentManager
      * @param {string} name Manager name
      * @returns {object} manager
      */
@@ -6660,7 +6106,7 @@ var ComponentManager = function () {
 exports.default = ComponentManager;
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6672,7 +6118,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg table manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -6700,11 +6146,14 @@ var TABLE_CELL_SELECTED_CLASS_NAME = 'te-cell-selected';
 
 /**
  * Class WwTableManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 
 var WwTableManager = function () {
+  /**
+   * Creates an instance of WwTableManager.
+   * @param {WysiwygEditor} wwe - WysiwygEditor instance
+   * @memberof WwTableManager
+   */
   function WwTableManager(wwe) {
     _classCallCheck(this, WwTableManager);
 
@@ -6713,15 +6162,19 @@ var WwTableManager = function () {
 
     /**
      * Name property
+     * @memberof WwTableManager#
      * @type {string}
      */
     this.name = 'table';
+
     this._lastCellNode = null;
     this._init();
   }
 
   /**
+   * _init
    * Initialize
+   * @memberof WwTableManager
    * @private
    */
 
@@ -6735,7 +6188,9 @@ var WwTableManager = function () {
     }
 
     /**
+     * _initEvent
      * Initialize event
+     * @memberof WwTableManager
      * @private
      */
 
@@ -6746,7 +6201,7 @@ var WwTableManager = function () {
 
       this.eventManager.listen('wysiwygRangeChangeAfter.table', function () {
         var range = _this.wwe.getEditor().getSelection();
-        var isRangeInTable = _this.wwe.isInTable(range);
+        var isRangeInTable = _this.isInTable(range);
 
         _this._unwrapBlockInTable();
         _this._completeTableIfNeed();
@@ -6786,6 +6241,9 @@ var WwTableManager = function () {
         var $clipboardContainer = _ref.$clipboardContainer;
         return _this.updateTableHtmlOfClipboardIfNeed($clipboardContainer);
       });
+
+      this.onBindedPaste = this._onPaste.bind(this);
+      this.wwe.getEditor().addEventListener('paste', this.onBindedPaste);
     }
 
     /**
@@ -6832,20 +6290,42 @@ var WwTableManager = function () {
     }
 
     /**
-     * Paste clibpard data that contains only table.
-     * @param {Node} clipboardTable - table element of clipboard
+     * Paste clibpard data.
+     * @param {jQuery} $clipboardTable - jQuery table element of clipboard
      */
 
   }, {
-    key: 'pasteTableData',
-    value: function pasteTableData(clipboardTable) {
-      var $clipboardTable = (0, _jquery2.default)(clipboardTable);
+    key: 'pasteClipboardData',
+    value: function pasteClipboardData($clipboardTable) {
+      if (this.wwe.componentManager.getManager('tableSelection').getSelectedCells().length) {
+        return;
+      }
+
       this._expandTableIfNeed($clipboardTable);
       this._pasteDataIntoTable($clipboardTable);
     }
 
     /**
+     * On paste.
+     * @param {MouseEvent} ev - event
+     * @private
+     */
+
+  }, {
+    key: '_onPaste',
+    value: function _onPaste(ev) {
+      var range = this.wwe.getEditor().getSelection();
+      var isNotPastingIntoTextNode = !_domUtils2.default.isTextNode(range.commonAncestorContainer);
+
+      if (this.isInTable(range) && !range.collapsed && isNotPastingIntoTextNode) {
+        ev.preventDefault();
+      }
+    }
+
+    /**
+     * _initKeyHandler
      * Initialize key event handler
+     * @memberof WwTableManager
      * @private
      */
 
@@ -6856,10 +6336,11 @@ var WwTableManager = function () {
 
       this.keyEventHandlers = {
         'DEFAULT': function DEFAULT(ev, range, keymap) {
-          var isRangeInTable = _this3.wwe.isInTable(range);
+          var isRangeInTable = _this3.isInTable(range);
 
-          if (isRangeInTable && !_this3._isModifierKey(keymap)) {
+          if (isRangeInTable && !_this3._isSingleModifierKey(keymap)) {
             _this3._recordUndoStateIfNeed(range);
+            _this3._removeBRIfNeed(range);
             _this3._removeContentsAndChangeSelectionIfNeed(range, keymap, ev);
           } else if (!isRangeInTable && _this3._lastCellNode) {
             _this3._recordUndoStateAndResetCellNode(range);
@@ -6884,25 +6365,7 @@ var WwTableManager = function () {
             ev.preventDefault();
             _this3.wwe.breakToNewDefaultBlock(range, 'before');
             isNeedNext = false;
-          } else if (_this3.wwe.isInTable(range)) {
-            if (!_this3._isInList(range.startContainer) && _this3._isInStyledText(range)) {
-              _this3.wwe.defer(function () {
-                _this3._removeBRinStyleText();
-              });
-            } else if (_this3._isEmptyFirstLevelLI(range)) {
-              _this3.wwe.defer(function () {
-                // Squire make div when LI level is decreased in first level so should replace div to br
-                var afterRange = _this3.wwe.getRange().cloneRange();
-                var div = afterRange.startContainer;
-                var br = document.createElement('br');
-
-                div.parentNode.replaceChild(br, div);
-
-                afterRange.setStartBefore(br);
-                afterRange.collapse(true);
-                _this3.wwe.getEditor().setSelection(afterRange);
-              });
-            }
+          } else if (_this3.isInTable(range)) {
             _this3._appendBrIfTdOrThNotHaveAsLastChild(range);
             isNeedNext = false;
           }
@@ -6935,171 +6398,36 @@ var WwTableManager = function () {
     }
 
     /**
-     * Check whether node is li and empty
-     * @param {node} node node
-     * @returns {boolean} whether node is li and empty
-     * @private
-     */
-
-  }, {
-    key: '_isEmptyListItem',
-    value: function _isEmptyListItem(node) {
-      var childNodes = node.childNodes,
-          nodeName = node.nodeName;
-
-
-      return nodeName === 'LI' && childNodes.length === 1 && childNodes[0].nodeName === 'BR';
-    }
-
-    /**
-     * Check whether range is in empty LI that is first level
-     * @param {range} range range
-     * @returns {boolean} whether range is in empty LI that is first level
-     * @private
-     */
-
-  }, {
-    key: '_isEmptyFirstLevelLI',
-    value: function _isEmptyFirstLevelLI(range) {
-      var collapsed = range.collapsed,
-          startContainer = range.startContainer,
-          startOffset = range.startOffset;
-
-
-      return collapsed && startOffset === 0 && this._isEmptyListItem(startContainer) && _domUtils2.default.isFirstLevelListItem(startContainer);
-    }
-
-    /**
-     * Check whether range is in style tag that is like 'B', 'I', 'S', 'SPAN', 'CODE'
-     * Those tag is supported in Wysiwyg.
+     * isInTable
+     * Check whether passed range is in table or not
      * @param {Range} range range
-     * @returns {Boolean} range is in the style tag
-     * @private
+     * @returns {boolean} result
+     * @memberof WwTableManager
      */
 
   }, {
-    key: '_isInStyledText',
-    value: function _isInStyledText(range) {
-      var startContainer = range.startContainer;
+    key: 'isInTable',
+    value: function isInTable(range) {
+      var target = void 0,
+          result = void 0;
 
-      var node = void 0;
-      if (_domUtils2.default.isTextNode(startContainer)) {
-        node = startContainer.parentNode;
+      if (range.collapsed) {
+        target = range.startContainer;
+        result = !!(0, _jquery2.default)(target).closest('[contenteditable=true] table').length;
       } else {
-        node = startContainer;
+        target = range.commonAncestorContainer;
+        result = !!(0, _jquery2.default)(target).closest('[contenteditable=true] table').length || !!(0, _jquery2.default)(range.cloneContents()).find('table').length;
       }
 
-      return range.collapsed && _domUtils2.default.isStyledNode(node);
+      return result;
     }
 
     /**
-     * When enter key occur in the styled text, 'br' tag insert in the style tag like 'b', 'i' etc.
-     * So in thoes case, 'br' tag would be pulled out in this logic.
-     * @private
-     */
-
-  }, {
-    key: '_removeBRinStyleText',
-    value: function _removeBRinStyleText() {
-      var afterRange = this.wwe.getRange();
-      var startContainer = afterRange.startContainer,
-          startOffset = afterRange.startOffset;
-
-
-      var styleNode = void 0;
-      if (startContainer.nodeName === 'TD') {
-        // This case is <i>TEST<br></i>|<br>
-        styleNode = _domUtils2.default.getChildNodeByOffset(startContainer, startOffset - 1);
-      } else {
-        styleNode = _domUtils2.default.getParentUntil(startContainer, 'TD');
-      }
-
-      var brNode = styleNode.querySelector('br');
-      if (!brNode) {
-        return;
-      }
-
-      var _styleNode = styleNode,
-          tdNode = _styleNode.parentNode,
-          nodeName = _styleNode.nodeName;
-
-      if (nodeName === 'CODE' && !brNode.previousSibling) {
-        // cursor is located in the start of text
-        // Before Enter : <code>|TEST</code>
-        // After Enter  : <code><br>|TEST</code>
-        // TO BE        : <br><code>|TEST</code>
-        tdNode.insertBefore(brNode, styleNode);
-        afterRange.setStart(styleNode, 0);
-      } else if (nodeName === 'CODE' && !brNode.nextSibling) {
-        // cursor is located in the end of text
-        // Before Enter : <code>TEST|</code>
-        // After Enter  : <code>TEST<br>|</code>
-        // TO BE        : <code>TEST</code><br>|
-        tdNode.insertBefore(brNode, styleNode.nextSibling);
-        afterRange.setStart(tdNode, _domUtils2.default.getNodeOffsetOfParent(brNode) + 1);
-      } else {
-        // [Case 1] cursor is located in the middle of text
-        // Before Enter : <i>TE|ST</i>
-        // After Enter  : <i>TE<br>|ST</i>
-        // TO BE        : <i>TE</i><br><i>|ST</i>
-        // [Case 2] cursor is located in the start of text
-        // Before Enter : <i>|TEST</i>
-        // After Enter  : <i><br>|TEST</i>
-        // TO BE        : <i>|</i><br><i>TEST</i>
-        // [Case 3] cursor is located in the end of text
-        // Before Enter : <i>TEST|</i>
-        // After Enter  : <i>TEST<br>|</i>
-        // TO BE        : <i>TEST</i><br><i>|</i>
-        var newNode = this._splitByBR(styleNode, brNode);
-        afterRange.setStart(newNode, 0);
-      }
-
-      afterRange.collapse(true);
-      this.wwe.getEditor().setSelection(afterRange);
-    }
-
-    /**
-     * When container node have br node, split container base on br node and pull out BR.
-     * After Enter  : <i>TE<br>ST</i>
-     * TO BE        : <i>TE</i><br><i>ST</i>
-     * @param {Node} container container
-     * @param {Node} brNode container
-     * @returns {Node} node for positioning of cursor
-     * @private
-     */
-
-  }, {
-    key: '_splitByBR',
-    value: function _splitByBR(container, brNode) {
-      var cloneStyleNode = container.cloneNode(true);
-      var newBR = document.createElement('br');
-      var parentNode = container.parentNode;
-
-      // Origin style node should be removed the back nodes of br node.
-
-      _domUtils2.default.removeNodesByDirection(container, brNode, false);
-      brNode.parentNode.removeChild(brNode);
-
-      // Cloned style node should be removed the front nodes of br node
-      var clonedBR = cloneStyleNode.querySelector('br');
-      _domUtils2.default.removeNodesByDirection(cloneStyleNode, clonedBR, true);
-      clonedBR.parentNode.removeChild(clonedBR);
-
-      parentNode.insertBefore(cloneStyleNode, container.nextSibling);
-      parentNode.insertBefore(newBR, cloneStyleNode);
-
-      var leafNode = _domUtils2.default.getLeafNode(cloneStyleNode);
-      if (!_domUtils2.default.getTextLength(leafNode)) {
-        leafNode.textContent = '\u200B';
-      }
-
-      return leafNode;
-    }
-
-    /**
+     * _isBeforeTable
      * Check whether passed range is right before table or not
      * @param {Range} range range
      * @returns {boolean} result
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7110,9 +6438,11 @@ var WwTableManager = function () {
     }
 
     /**
+     * _isAfterTable
      * Check whether passed range is right after table or not
      * @param {Range} range range
      * @returns {boolean} result
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7142,13 +6472,14 @@ var WwTableManager = function () {
       var isNeedNext = true;
 
       if (range.collapsed) {
-        if (this.wwe.isInTable(range)) {
+        if (this.isInTable(range)) {
           if (isBackspace) {
             this._tableHandlerOnBackspace(range, ev);
           } else {
             this._tableHandlerOnDelete(range, ev);
           }
 
+          this._insertBRIfNeed(range);
           this._removeContentsAndChangeSelectionIfNeed(range, keymap, ev);
           isNeedNext = false;
         } else if (!isBackspace && this._isBeforeTable(range) || isBackspace && this._isAfterTable(range)) {
@@ -7157,7 +6488,7 @@ var WwTableManager = function () {
           this._removeTable(range, _domUtils2.default.getChildNodeByOffset(range.startContainer, startOffset));
           isNeedNext = false;
         }
-      } else if (this.wwe.isInTable(range)) {
+      } else if (this.isInTable(range)) {
         if ($selectedCells.length > 0) {
           var removed = this._removeContentsAndChangeSelectionIfNeed(range, keymap, ev);
           if (removed) {
@@ -7171,226 +6502,72 @@ var WwTableManager = function () {
     }
 
     /**
-     * Move Li node to previous node that is previous node of list node.
-     * @param {node} liNode li node
-     * @param {range} range range
-     * @private
-     */
-
-  }, {
-    key: '_moveListItemToPreviousOfList',
-    value: function _moveListItemToPreviousOfList(liNode, range) {
-      var listNode = liNode.parentNode,
-          firstChild = liNode.firstChild;
-
-      var fragment = document.createDocumentFragment();
-
-      _domUtils2.default.mergeNode(liNode, fragment);
-      listNode.parentNode.insertBefore(fragment, listNode);
-
-      range.setStart(firstChild, 0);
-      range.collapse(true);
-      this.wwe.getEditor().setSelection(range);
-
-      if (!listNode.hasChildNodes()) {
-        listNode.parentNode.removeChild(listNode);
-      }
-    }
-  }, {
-    key: '_isInList',
-    value: function _isInList(targetNode) {
-      return _domUtils2.default.getParentUntilBy(targetNode, function (node) {
-        return node && (_domUtils2.default.isListNode(node) || node.nodeName === 'LI');
-      }, function (node) {
-        return node && (node.nodeName === 'TD' || node.nodeName === 'TH');
-      });
-    }
-
-    /**
-     * Find LI node while search parentNode inside TD
-     * @param {node} startContainer startContainer
-     * @returns {node} liNode or null
-     * @private
-     */
-
-  }, {
-    key: '_findListItem',
-    value: function _findListItem(startContainer) {
-      return _domUtils2.default.getParentUntilBy(startContainer, function (node) {
-        return node && _domUtils2.default.isListNode(node);
-      }, function (node) {
-        return node && (node.nodeName === 'TD' || node.nodeName === 'TH');
-      });
-    }
-
-    /**
+     * _tableHandlerOnBackspace
      * Backspace handler in table
      * @param {Range} range range
      * @param {Event} event event
+     * @memberof WwTableManager
      * @private
      */
 
   }, {
     key: '_tableHandlerOnBackspace',
     value: function _tableHandlerOnBackspace(range, event) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset;
+      var prevNode = _domUtils2.default.getPrevOffsetNodeUntil(range.startContainer, range.startOffset, 'TR'),
+          prevNodeName = _domUtils2.default.getNodeName(prevNode);
 
-      var liNode = this._findListItem(startContainer);
-
-      if (liNode && startOffset === 0 && _domUtils2.default.isFirstListItem(liNode) && _domUtils2.default.isFirstLevelListItem(liNode)) {
-        this.wwe.getEditor().saveUndoState(range);
-        this._moveListItemToPreviousOfList(liNode, range);
+      if (!prevNode || prevNodeName === 'TD' || prevNodeName === 'TH') {
         event.preventDefault();
-      } else {
-        var prevNode = _domUtils2.default.getPrevOffsetNodeUntil(startContainer, startOffset, 'TR');
-        var prevNodeName = _domUtils2.default.getNodeName(prevNode);
-
-        if (prevNodeName === 'BR' && prevNode.parentNode.childNodes.length !== 1) {
-          event.preventDefault();
-          (0, _jquery2.default)(prevNode).remove();
-        }
+      } else if (prevNodeName === 'BR' && prevNode.parentNode.childNodes.length !== 1) {
+        event.preventDefault();
+        (0, _jquery2.default)(prevNode).remove();
       }
     }
-
     /**
-     * Return whether delete br in the br
+     * Return whether delete non text or not
      * @param {Range} range Range object
      * @returns {boolean}
-     * @private
      */
 
   }, {
-    key: '_isDeletingBR',
-    value: function _isDeletingBR(range) {
-      var currentNode = this._getCurrentNodeInCell(range);
-      var nextSibling = currentNode && currentNode.nextSibling;
+    key: 'isNonTextDeleting',
+    value: function isNonTextDeleting(range) {
+      var currentElement = range.startContainer;
+      var nextNode = currentElement.nextSibling;
+      var nextNodeName = _domUtils2.default.getNodeName(nextNode);
+      var currentNodeName = _domUtils2.default.getNodeName(currentElement);
 
-      return _domUtils2.default.getNodeName(currentNode) === 'BR' && !!nextSibling && _domUtils2.default.getNodeName(nextSibling) === 'BR';
+      var isCellDeleting = currentNodeName === nextNodeName && currentNodeName !== 'TEXT';
+      var isEndOfText = (!nextNode || nextNodeName === 'BR' && nextNode.parentNode.lastChild === nextNode) && _domUtils2.default.isTextNode(currentElement) && range.startOffset === currentElement.nodeValue.length;
+      var isLastCellOfRow = !isEndOfText && (0, _jquery2.default)(currentElement).parents('tr').children().last()[0] === currentElement && (currentNodeName === 'TD' || currentNodeName === 'TH');
+
+      return isCellDeleting || isEndOfText || isLastCellOfRow;
     }
-  }, {
-    key: '_getCurrentNodeInCell',
-    value: function _getCurrentNodeInCell(range) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset;
-
-      var currentNode = void 0;
-
-      if (_domUtils2.default.getNodeName(startContainer) === 'TD') {
-        currentNode = _domUtils2.default.getChildNodeByOffset(startContainer, startOffset);
-      } else if (_domUtils2.default.getParentUntil(startContainer, 'TD')) {
-        currentNode = startContainer;
-      }
-
-      return currentNode;
-    }
-
     /**
-     * Check whether range is located in end of the list
-     * @param {Node} liNode liNode
-     * @param {Range} range range
-     * @returns {Boolean} whether range is located in end of the list
-     * @private
-     */
-
-  }, {
-    key: '_isEndOfList',
-    value: function _isEndOfList(liNode, range) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset;
-
-      var result = false;
-
-      if (!liNode.nextSibling) {
-        if (liNode === startContainer) {
-          var liNodeOffset = _domUtils2.default.getOffsetLength(liNode);
-
-          if (liNode.lastChild.nodeName === 'BR') {
-            liNodeOffset -= 1;
-          }
-
-          result = liNodeOffset === startOffset;
-        } else {
-          var parentNode = _domUtils2.default.getParentUntil(startContainer, 'li') || startContainer;
-          var startContainerOffset = _domUtils2.default.getOffsetLength(startContainer);
-          var lastChild = liNode.lastChild;
-
-
-          if (lastChild.nodeName === 'BR') {
-            lastChild = lastChild.previousSibling;
-          }
-
-          result = lastChild === parentNode && startContainerOffset === startOffset;
-        }
-      }
-
-      return result;
-    }
-
-    /**
-     * Get next line nodes from target node
-     * @param {Node} node target node
-     * @returns {DocumentFragment} next line nodes
-     * @private
-     */
-
-  }, {
-    key: '_getNextLineNode',
-    value: function _getNextLineNode(node) {
-      var fragment = document.createDocumentFragment();
-      var parentNode = _domUtils2.default.getParentUntil(node, 'TD');
-      var nextSibling = parentNode.nextSibling;
-
-
-      while (nextSibling) {
-        var _nextSibling = nextSibling,
-            next = _nextSibling.nextSibling;
-
-
-        fragment.appendChild(nextSibling);
-
-        if (nextSibling.nodeName === 'BR') {
-          break;
-        }
-
-        nextSibling = next;
-      }
-
-      return fragment;
-    }
-
-    /**
+     * _tableHandlerOnDelete
      * Delete handler in table
      * @param {Range} range range
      * @param {Event} event event
+     * @memberof WwTableManager
      * @private
      */
 
   }, {
     key: '_tableHandlerOnDelete',
     value: function _tableHandlerOnDelete(range, event) {
-      var liNode = this._findListItem(range.startContainer);
+      var needPreventDefault = this.isNonTextDeleting(range);
 
-      if (liNode && this._isEndOfList(liNode, range)) {
-        this.wwe.getEditor().saveUndoState(range);
-
-        if (liNode.lastChild.nodeName === 'BR') {
-          liNode.removeChild(liNode.lastChild);
-        }
-
-        _domUtils2.default.mergeNode(this._getNextLineNode(liNode), liNode);
+      if (needPreventDefault) {
         event.preventDefault();
-      } else if (this._isDeletingBR(range)) {
-        var currentNode = this._getCurrentNodeInCell(range);
-
-        currentNode.parentNode.removeChild(currentNode.nextSibling);
-        event.preventDefault();
+        range.startContainer.normalize();
       }
     }
 
     /**
+     * _appendBrIfTdOrThNotHaveAsLastChild
      * Append br if td or th doesn't have br as last child
      * @param {Range} range range
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7407,16 +6584,16 @@ var WwTableManager = function () {
         tdOrTh = paths[paths.length - 1];
       }
 
-      var nodeName = _domUtils2.default.getNodeName(tdOrTh.lastChild);
-
-      if (nodeName !== 'BR' && nodeName !== 'DIV' && nodeName !== 'UL' && nodeName !== 'OL' && !isIE10And11) {
+      if (_domUtils2.default.getNodeName(tdOrTh.lastChild) !== 'BR' && _domUtils2.default.getNodeName(tdOrTh.lastChild) !== 'DIV' && !isIE10And11) {
         (0, _jquery2.default)(tdOrTh).append((0, _jquery2.default)('<br />')[0]);
       }
     }
 
     /**
+     * _unwrapBlockInTable
      * Unwrap default block tag in table
      * For Squire default action making abnormal behavior, remove default blocks in Table after setValue() called
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7455,9 +6632,11 @@ var WwTableManager = function () {
     }
 
     /**
+     * _removeTable
      * Remove table
      * @param {Range} range range
      * @param {Node} table table
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7473,8 +6652,10 @@ var WwTableManager = function () {
     }
 
     /**
+     * _recordUndoStateIfNeed
      * record undo state if need
      * @param {Range} range range
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7490,8 +6671,10 @@ var WwTableManager = function () {
     }
 
     /**
+     * _recordUndoStateAndResetCellNode
      * record undo state and reset last cell node
      * @param {Range} range range
+     * @memberof WwTableManager
      * @private
      */
 
@@ -7887,21 +7070,24 @@ var WwTableManager = function () {
     /**
      * Complete passed table
      * @param {HTMLElement} node - Table inner element
+     * @param {?boolean} useHeader - whether use header or not
      * @private
      */
 
   }, {
     key: '_completeIncompleteTable',
-    value: function _completeIncompleteTable(node) {
+    value: function _completeIncompleteTable(node, useHeader) {
       var nodeName = node.tagName;
       var table = void 0,
           completedTableContents = void 0;
 
+      useHeader = _tuiCodeSnippet2.default.isUndefined(useHeader) ? true : useHeader;
+
       if (nodeName === 'TABLE') {
         table = node;
       } else {
-        table = document.createElement('table');
-        node.parentNode.insertBefore(table, node.nextSibling);
+        table = (0, _jquery2.default)('<table></table>');
+        table.insertAfter(node);
 
         if (nodeName === 'TBODY') {
           completedTableContents = this._generateTheadAndTbodyFromTbody(node);
@@ -7911,22 +7097,14 @@ var WwTableManager = function () {
           completedTableContents = this._generateTheadAndTbodyFromTr(node);
         }
 
-        table.appendChild(completedTableContents.thead);
-        table.appendChild(completedTableContents.tbody);
+        if (useHeader) {
+          table.append(completedTableContents.thead);
+        }
+
+        table.append(completedTableContents.tbody);
       }
 
-      this._removeEmptyRows(table);
       this.tableCellAppendAidForTableElement(table);
-    }
-  }, {
-    key: '_removeEmptyRows',
-    value: function _removeEmptyRows(table) {
-      var trs = table.querySelectorAll('tr');
-      _tuiCodeSnippet2.default.forEachArray(trs, function (tr) {
-        if (!tr.cells.length) {
-          tr.parentNode.removeChild(tr);
-        }
-      });
     }
 
     /**
@@ -7946,18 +7124,17 @@ var WwTableManager = function () {
 
         if (!_this4.isTableOrSubTableElement(node.nodeName)) {
           return;
+        } else if (node.nodeName === 'TABLE' && $node.find('thead').length === 0 && $node.find('tbody').length === 0) {
+          $node.remove();
         }
 
-        if (node.nodeName === 'TABLE' && $node.find('tbody').length === 0) {
-          $node.remove();
-        } else {
-          _this4._completeIncompleteTable(node);
-        }
+        _this4._completeIncompleteTable(node);
       });
     }
 
     /**
      * Reset _lastCellNode to null
+     * @memberof WwTableManager
      */
 
   }, {
@@ -7965,10 +7142,10 @@ var WwTableManager = function () {
     value: function resetLastCellNode() {
       this._lastCellNode = null;
     }
-
     /**
      * Set _lastCellNode to given node
      * @param {HTMLElement} node Table cell
+     * @memberof WwTableManager
      */
 
   }, {
@@ -7985,10 +7162,9 @@ var WwTableManager = function () {
      */
 
   }, {
-    key: '_isModifierKey',
-    value: function _isModifierKey(keymap) {
-      return (/((META|SHIFT|ALT|CONTROL)\+?)/g.test(keymap)
-      );
+    key: '_isSingleModifierKey',
+    value: function _isSingleModifierKey(keymap) {
+      return keymap === 'META' || keymap === 'SHIFT' || keymap === 'ALT' || keymap === 'CONTROL';
     }
 
     /**
@@ -8094,6 +7270,30 @@ var WwTableManager = function () {
     }
 
     /**
+     * Get sibling textNode by given direction
+     * @param {HTMLElement} currentTextNode Current text node
+     * @param {boolean} isNext Boolean value whether direction equals 'next'
+     * @returns {boolean|null}
+     * @private
+     */
+
+  }, {
+    key: '_getSiblingTextNodeByDirection',
+    value: function _getSiblingTextNodeByDirection(currentTextNode, isNext) {
+      var isPreviousLineExist = currentTextNode.previousSibling && currentTextNode.previousSibling.nodeName === 'BR' && currentTextNode.previousSibling.previousSibling && currentTextNode.previousSibling.previousSibling.nodeType === 3;
+      var isNextLineExist = currentTextNode.nextSibling && currentTextNode.nextSibling.nodeName === 'BR' && currentTextNode.nextSibling.nextSibling && currentTextNode.nextSibling.nextSibling.nodeType === 3;
+      var target = void 0;
+
+      if (isNext && isNextLineExist) {
+        target = currentTextNode.nextSibling.nextSibling;
+      } else if (!isNext && isPreviousLineExist) {
+        target = currentTextNode.previousSibling.previousSibling;
+      }
+
+      return target;
+    }
+
+    /**
      * Change selection to sibling cell
      * @param {HTMLElement} currentCell current TD or TH
      * @param {Range} range Range object
@@ -8105,11 +7305,26 @@ var WwTableManager = function () {
   }, {
     key: '_changeSelectionToTargetCell',
     value: function _changeSelectionToTargetCell(currentCell, range, direction, scale) {
+      var startContainer = range.startContainer;
+
       var isNext = direction === 'next';
       var isRow = scale === 'row';
-      var target = void 0;
+      var target = void 0,
+          textOffset = void 0;
 
       if (isRow) {
+        if (_domUtils2.default.isTextNode(startContainer)) {
+          target = this._getSiblingTextNodeByDirection(startContainer, isNext);
+          if (target) {
+            textOffset = target.length < range.startOffset ? target.length : range.startOffset;
+
+            range.setStart(target, textOffset);
+            range.collapse(true);
+
+            return;
+          }
+        }
+
         target = _domUtils2.default.getSiblingRowCellByDirection(currentCell, direction, false);
       } else {
         target = _domUtils2.default.getTableCellByDirection(currentCell, direction);
@@ -8119,11 +7334,7 @@ var WwTableManager = function () {
       }
 
       if (target) {
-        if (isRow && !isNext) {
-          this._moveToCursorEndOfCell(target, range);
-        } else {
-          range.setStart(target, 0);
-        }
+        range.setStart(target, 0);
         range.collapse(true);
       } else {
         target = (0, _jquery2.default)(currentCell).parents('table').get(0);
@@ -8137,26 +7348,6 @@ var WwTableManager = function () {
 
         range.collapse(true);
       }
-    }
-  }, {
-    key: '_moveToCursorEndOfCell',
-    value: function _moveToCursorEndOfCell(cell, range) {
-      var lastListItem = void 0;
-
-      if (_domUtils2.default.isListNode(cell.lastChild)) {
-        lastListItem = _domUtils2.default.getLastNodeBy(cell.lastChild, function (lastNode) {
-          return lastNode.nodeName !== 'LI' || lastNode.nextSibling !== null;
-        });
-      }
-
-      var lastText = _domUtils2.default.getLastNodeBy(lastListItem || cell, function (node) {
-        return !_domUtils2.default.isTextNode(node);
-      });
-
-      var lastNode = lastText || lastListItem || cell;
-      var offset = lastText ? lastText.length : lastNode.childNodes.length - 1;
-
-      range.setStart(lastNode, offset);
     }
 
     /**
@@ -8176,68 +7367,20 @@ var WwTableManager = function () {
       var currentCell = (0, _jquery2.default)(range.startContainer).closest('td,th').get(0);
       var isNeedNext = void 0;
 
-      if (range.collapsed && this.wwe.isInTable(range) && currentCell) {
-        if (interval === 'row' && !this._isMovedCursorToRow(range, direction)) {
-          return isNeedNext;
+      if (range.collapsed) {
+        if (this.isInTable(range) && currentCell) {
+          if ((direction === 'previous' || interval === 'row') && !_tuiCodeSnippet2.default.isUndefined(ev)) {
+            ev.preventDefault();
+          }
+
+          this._changeSelectionToTargetCell(currentCell, range, direction, interval);
+          sq.setSelection(range);
+
+          isNeedNext = false;
         }
-
-        if ((direction === 'previous' || interval === 'row') && !_tuiCodeSnippet2.default.isUndefined(ev)) {
-          ev.preventDefault();
-        }
-
-        this._changeSelectionToTargetCell(currentCell, range, direction, interval);
-        sq.setSelection(range);
-
-        isNeedNext = false;
       }
 
       return isNeedNext;
-    }
-  }, {
-    key: '_isMovedCursorToRow',
-    value: function _isMovedCursorToRow(range, direction) {
-      var startContainer = range.startContainer;
-
-
-      if (this._isInList(startContainer)) {
-        return this._isMovedCursorFromListToRow(startContainer, direction);
-      }
-
-      return this._isMovedCursorFromTextToRow(range, direction);
-    }
-  }, {
-    key: '_isMovedCursorFromListToRow',
-    value: function _isMovedCursorFromListToRow(startContainer, direction) {
-      var directionKey = direction + 'Sibling';
-      var listItem = this._findListItem(startContainer);
-
-      var parentOfListItem = _domUtils2.default.getParentNodeBy(listItem, function (parentNode, currentNode) {
-        var firstOrLastItem = currentNode[directionKey] === null && parentNode[directionKey] === null;
-
-        return !_domUtils2.default.isCellNode(parentNode) && firstOrLastItem;
-      });
-
-      var firstOrLastList = _domUtils2.default.isListNode(parentOfListItem) && parentOfListItem[directionKey] === null;
-
-      return _domUtils2.default.isCellNode(parentOfListItem.parentNode) && firstOrLastList;
-    }
-  }, {
-    key: '_isMovedCursorFromTextToRow',
-    value: function _isMovedCursorFromTextToRow(range, direction) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset;
-
-      var text = _domUtils2.default.isCellNode(startContainer) ? startContainer.childNodes[startOffset] : startContainer;
-
-      var parentOfStyledText = _domUtils2.default.getParentNodeBy(text, function (parentNode) {
-        return !_domUtils2.default.isCellNode(parentNode) && !_domUtils2.default.isTextNode(parentNode);
-      });
-
-      var foundSiblingNode = _domUtils2.default.getSiblingNodeBy(parentOfStyledText, direction, function (siblingNode) {
-        return siblingNode !== null && siblingNode.nodeName !== 'BR';
-      });
-
-      return foundSiblingNode && foundSiblingNode[direction + 'Sibling'] === null;
     }
 
     /**
@@ -8278,6 +7421,7 @@ var WwTableManager = function () {
     /**
      * Return new table ID class name string
      * @returns {string}
+     * @memberof WwTableManager
      */
 
   }, {
@@ -8287,6 +7431,44 @@ var WwTableManager = function () {
       this.tableID += 1;
 
       return tableClassName;
+    }
+
+    /**
+     * Remove br when text inputted
+     * @param {Range} range Range object
+     * @private
+     */
+
+  }, {
+    key: '_removeBRIfNeed',
+    value: function _removeBRIfNeed(range) {
+      var isText = _domUtils2.default.isTextNode(range.startContainer);
+      var startContainer = isText ? range.startContainer.parentNode : range.startContainer;
+      var nodeName = _domUtils2.default.getNodeName(startContainer);
+
+      if (/td|th/i.test(nodeName) && range.collapsed && startContainer.textContent.length === 1) {
+        (0, _jquery2.default)(startContainer).find('br').remove();
+      }
+    }
+
+    /**
+     * Insert br when text deleted
+     * @param {Range} range Range object
+     * @private
+     */
+
+  }, {
+    key: '_insertBRIfNeed',
+    value: function _insertBRIfNeed(range) {
+      var isText = _domUtils2.default.isTextNode(range.startContainer);
+      var currentCell = isText ? range.startContainer.parentNode : range.startContainer;
+      var nodeName = _domUtils2.default.getNodeName(currentCell);
+      var $currentCell = (0, _jquery2.default)(currentCell);
+
+      if (/td|th/i.test(nodeName) && range.collapsed && !currentCell.textContent.length && !$currentCell.children().length && !isIE10And11) {
+        currentCell.normalize();
+        $currentCell.append('<br>');
+      }
     }
 
     /**
@@ -8303,6 +7485,7 @@ var WwTableManager = function () {
       this.eventManager.removeEventHandler('wysiwygProcessHTMLText.table');
       this.eventManager.removeEventHandler('cut.table');
       this.eventManager.removeEventHandler('copyBefore.table');
+      this.wwe.getEditor().removeEventListener('paste', this.onBindedPaste);
       _tuiCodeSnippet2.default.forEach(this.keyEventHandlers, function (handler, key) {
         return _this5.wwe.removeKeyEventHandler(key, handler);
       });
@@ -8336,7 +7519,7 @@ function tableCellGenerator(amount, tagName) {
 exports.default = WwTableManager;
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8348,7 +7531,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg table selection manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -8372,11 +7555,14 @@ var TABLE_CELL_SELECTED_CLASS_NAME = 'te-cell-selected';
 
 /**
  * Class WwTableSelectionManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 
 var WwTableSelectionManager = function () {
+  /**
+     * Creates an instance of WwTableSelectionManager.
+     * @param {WysiwygEditor} wwe - WysiwygEditor instance
+     * @memberof WwTableSelectionManager
+     */
   function WwTableSelectionManager(wwe) {
     _classCallCheck(this, WwTableSelectionManager);
 
@@ -8384,16 +7570,19 @@ var WwTableSelectionManager = function () {
     this.eventManager = wwe.eventManager;
 
     /**
-     * Name property
-     * @type {string}
-     */
+         * Name property
+         * @memberof WwTableSelectionManager#
+         * @type {string}
+         */
     this.name = 'tableSelection';
 
     this._init();
   }
 
   /**
+     * _init
      * Initialize
+     * @memberof WwTableSelectionManager
      * @private
      */
 
@@ -8411,7 +7600,9 @@ var WwTableSelectionManager = function () {
     }
 
     /**
+       * _initEvent
        * Initialize event
+       * @memberof WwTableSelectionManager
        * @private
        */
 
@@ -8425,24 +7616,22 @@ var WwTableSelectionManager = function () {
           validSelectionEnd = void 0;
 
       /**
-       * Start table selection timer
-       * @type {object}
-       * @private
-       */
+           * Start table selection timer
+           * @type {object}
+           * @private
+           */
       this._tableSelectionTimer = null;
-
       /**
-       * Remove selection timer for Firefox table selection
-       * @type {object}
-       * @private
-       */
+           * Remove selection timer for Firefox table selection
+           * @type {object}
+           * @private
+           */
       this._removeSelectionTimer = null;
-
       /**
-       * Boolean value for whether selection started
-       * @type {boolean}
-       * @private
-       */
+           * Boolean value for whether selection started
+           * @type {boolean}
+           * @private
+           */
       this._isSelectionStarted = false;
 
       var onMouseover = function onMouseover(ev) {
@@ -8484,7 +7673,7 @@ var WwTableSelectionManager = function () {
         _this._clearTableSelectionTimerIfNeed();
 
         if (_this._isSelectionStarted) {
-          if (isTextSelect || _this._isListSelect(range)) {
+          if (isTextSelect) {
             _this.removeClassAttrbuteFromAllCellsIfNeed();
           } else {
             _this.wwe.componentManager.getManager('table').resetLastCellNode();
@@ -8519,13 +7708,11 @@ var WwTableSelectionManager = function () {
 
         if (!isSelectedCell || isSelectedCell && ev.data.button !== MOUSE_RIGHT_BUTTON) {
           _this.removeClassAttrbuteFromAllCellsIfNeed();
-          if (selectionStart) {
-            _this.setTableSelectionTimerIfNeed(selectionStart);
-            _this.eventManager.listen('mouseover.tableSelection', onMouseover);
-            _this.eventManager.listen('mouseup.tableSelection', onMouseup);
-            if (_this.onDragStart) {
-              _this.onDragStart(selectionStart);
-            }
+          _this.setTableSelectionTimerIfNeed(selectionStart);
+          _this.eventManager.listen('mouseover.tableSelection', onMouseover);
+          _this.eventManager.listen('mouseup.tableSelection', onMouseup);
+          if (_this.onDragStart && selectionStart) {
+            _this.onDragStart(selectionStart);
           }
         } else if (ev.data.button === MOUSE_RIGHT_BUTTON) {
           finishSelection();
@@ -8538,12 +7725,12 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Return whether single cell text selection or not
-     * @param {Range} range Range object
-     * @param {boolean} isSameCell Boolean value for same cell selection
-     * @returns {boolean}
-     * @private
-     */
+       * Return whether single cell text selection or not
+       * @param {Range} range Range object
+       * @param {boolean} isSameCell Boolean value for same cell selection
+       * @returns {boolean}
+       * @private
+       */
 
   }, {
     key: '_isTextSelect',
@@ -8553,23 +7740,9 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Return whether list selection or not
-     * @param {Range} range Range object
-     * @returns {boolean}
-     * @private
-     */
-
-  }, {
-    key: '_isListSelect',
-    value: function _isListSelect(range) {
-      return (/UL|OL|LI/i.test(range.commonAncestorContainer.nodeName)
-      );
-    }
-
-    /**
-     * Set setTimeout and setInterval timer execution if table selecting situation
-     * @param {HTMLElement} selectionStart Start element
-     */
+       * Set setTimeout and setInterval timer execution if table selecting situation
+       * @param {HTMLElement} selectionStart Start element
+       */
 
   }, {
     key: 'setTableSelectionTimerIfNeed',
@@ -8582,9 +7755,9 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Clear setTimeout and setInterval timer execution
-     * @private
-     */
+       * Clear setTimeout and setInterval timer execution
+       * @private
+       */
 
   }, {
     key: '_clearTableSelectionTimerIfNeed',
@@ -8598,12 +7771,12 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Re arrange selection when table does not include both start and end selection element
-     * @param {HTMLElement} selectionStart Start element of selection
-     * @param {HTMLElement} selectionEnd End element of selection
-     * @returns {{startContainer: HTMLElement, endContainer: HTMLElement}}
-     * @private
-     */
+       * Re arrange selection when table does not include both start and end selection element
+       * @param {HTMLElement} selectionStart Start element of selection
+       * @param {HTMLElement} selectionEnd End element of selection
+       * @returns {{startContainer: HTMLElement, endContainer: HTMLElement}}
+       * @private
+       */
 
   }, {
     key: '_reArrangeSelectionIfneed',
@@ -8626,13 +7799,13 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Apply select direction to editor
-     * @param {{startContainer: HTMLElement, endContainer: HTMLElement}} selectionInformation
-     *     Selection start and end element
-     * @param {Range} range Range object
-     * @returns {Range}
-     * @private
-     */
+       * Apply select direction to editor
+       * @param {{startContainer: HTMLElement, endContainer: HTMLElement}} selectionInformation
+       *     Selection start and end element
+       * @param {Range} range Range object
+       * @returns {Range}
+       * @private
+       */
 
   }, {
     key: '_applySelectionDirection',
@@ -8666,11 +7839,12 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Get selection coordinate by current selection
-     * @param {HTMLElement} selectionStart start element
-     * @param {HTMLElement} selectionEnd end element
-     * @returns {{from: {row: number, cell: number}, to: {row: number, cell: number}}}
-     */
+       * Get selection coordinate by current selection
+       * @param {HTMLElement} selectionStart start element
+       * @param {HTMLElement} selectionEnd end element
+       * @returns {{from: {row: number, cell: number}, to: {row: number, cell: number}}}
+       * @memberof WwTableSelectionManager
+       */
 
   }, {
     key: 'getSelectionRangeFromTable',
@@ -8720,10 +7894,10 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Highlight selected table cells
-     * @param {HTMLElement} selectionStart start element
-     * @param {HTMLElement} selectionEnd end element
-     */
+       * Highlight selected table cells
+       * @param {HTMLElement} selectionStart start element
+       * @param {HTMLElement} selectionEnd end element
+       */
 
   }, {
     key: 'highlightTableCellsBy',
@@ -8751,8 +7925,9 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Remove '.te-cell-selected' class from all of table Cell
-     */
+       * Remove '.te-cell-selected' class from all of table Cell
+       * @memberof WwTableSelectionManager
+       */
 
   }, {
     key: 'removeClassAttrbuteFromAllCellsIfNeed',
@@ -8769,9 +7944,10 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * gets selected cells
-     * @returns {jQuery} selected cells
-     */
+       * gets selected cells
+       * @returns {jQuery} selected cells
+       * @memberof WwTableSelectionManager
+       */
 
   }, {
     key: 'getSelectedCells',
@@ -8780,8 +7956,8 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Create selection by selected cells and collapse that selection to end
-     */
+       * Create selection by selected cells and collapse that selection to end
+       */
 
   }, {
     key: 'createRangeBySelectedCells',
@@ -8789,10 +7965,11 @@ var WwTableSelectionManager = function () {
       var sq = this.wwe.getEditor();
       var range = sq.getSelection().cloneRange();
       var $selectedCells = this.getSelectedCells();
+      var tableManager = this.wwe.componentManager.getManager('table');
       var firstSelectedCell = $selectedCells.first().get(0);
       var lastSelectedCell = $selectedCells.last().get(0);
 
-      if ($selectedCells.length && this.wwe.isInTable(range)) {
+      if ($selectedCells.length && tableManager.isInTable(range)) {
         range.setStart(firstSelectedCell, 0);
         range.setEnd(lastSelectedCell, lastSelectedCell.childNodes.length);
         sq.setSelection(range);
@@ -8800,10 +7977,10 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Style to selected cells.
-     * @param {function} onStyle - function for styling
-     * @param {Object} [options] - options to be passed into onStyle
-     */
+       * Style to selected cells.
+       * @param {function} onStyle - function for styling
+       * @param {Object} [options] - options to be passed into onStyle
+       */
 
   }, {
     key: 'styleToSelectedCells',
@@ -8813,8 +7990,8 @@ var WwTableSelectionManager = function () {
     }
 
     /**
-     * Destroy.
-     */
+       * Destroy.
+       */
 
   }, {
     key: 'destroy',
@@ -8833,7 +8010,7 @@ var WwTableSelectionManager = function () {
 exports.default = WwTableSelectionManager;
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8845,7 +8022,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg code block manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -8865,9 +8042,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var isIE10 = _tuiCodeSnippet2.default.browser.msie && _tuiCodeSnippet2.default.browser.version === 10;
-var brString = isIE10 ? '' : '<br>';
-
 var tagEntities = {
   '&': '&amp;',
   '<': '&lt;',
@@ -8879,11 +8053,14 @@ var CODEBLOCK_ATTR_NAME = 'data-te-codeblock';
 
 /**
  * Class WwCodeBlockManager
- * @param {WysiwygEditor} wwe - wysiwygEditor instance
- * @ignore
  */
 
 var WwCodeBlockManager = function () {
+  /**
+   * Creates an instance of WwCodeBlockManager.
+   * @param {WysiwygEditor} wwe - wysiwygEditor instance
+   * @memberof WwCodeBlockManager
+   */
   function WwCodeBlockManager(wwe) {
     _classCallCheck(this, WwCodeBlockManager);
 
@@ -8892,6 +8069,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Name property
+     * @memberof WwCodeBlockManager#
      * @type {string}
      */
     this.name = 'codeblock';
@@ -8900,7 +8078,9 @@ var WwCodeBlockManager = function () {
   }
 
   /**
+   * _init
    * Initialize
+   * @memberof WwCodeBlockManager
    * @private
    */
 
@@ -8913,70 +8093,43 @@ var WwCodeBlockManager = function () {
     }
 
     /**
+     * _initKeyHandler
      * Initialize key event handler
+     * @memberof WwCodeBlockManager
      * @private
      */
 
   }, {
     key: '_initKeyHandler',
     value: function _initKeyHandler() {
-      var _this = this;
-
-      this._keyEventHandlers = {
-        'BACK_SPACE': this._onBackspaceKeyEventHandler.bind(this),
-        'ENTER': function ENTER(ev, range) {
-          if (!_this.wwe.isInTable(range) && _this.wwe.getEditor().hasFormat('CODE')) {
-            _this.wwe.defer(function () {
-              var _wwe$getRange = _this.wwe.getRange(),
-                  startContainer = _wwe$getRange.startContainer;
-
-              var codeNode = _this._getCodeNode(startContainer);
-              if (codeNode && !_domUtils2.default.getTextLength(codeNode)) {
-                codeNode.parentNode.removeChild(codeNode);
-              }
-            });
-          }
-        }
-      };
-
-      _tuiCodeSnippet2.default.forEach(this._keyEventHandlers, function (handler, key) {
-        return _this.wwe.addKeyEventHandler(key, handler);
-      });
-    }
-  }, {
-    key: '_getCodeNode',
-    value: function _getCodeNode(node) {
-      var result = void 0;
-      if (node.nodeName === 'CODE') {
-        result = node;
-      } else if (node.parentNode.nodeName === 'CODE') {
-        result = node.parentNode;
-      }
-
-      return result;
+      this._onKeyEventHandler = this._onBackspaceKeyEventHandler.bind(this);
+      this.wwe.addKeyEventHandler('BACK_SPACE', this._onKeyEventHandler);
     }
 
     /**
+     * _initEvent
      * Initialize eventmanager event
+     * @memberof WwCodeBlockManager
      * @private
      */
 
   }, {
     key: '_initEvent',
     value: function _initEvent() {
-      var _this2 = this;
+      var _this = this;
 
       this.eventManager.listen('wysiwygSetValueAfter.codeblock', function () {
-        _this2.modifyCodeBlockForWysiwyg();
+        _this.modifyCodeBlockForWysiwyg();
       });
 
       this.eventManager.listen('wysiwygProcessHTMLText.codeblock', function (html) {
-        return _this2._changePreToPreCode(html);
+        return _this._changePreToPreCode(html);
       });
     }
 
     /**
      * Prepare nodes for pasting to code block
+     * @memberof WwCodeBlockManager
      * @param {Array.<Node>} nodes Node array
      * @returns {DocumentFragment}
      */
@@ -8994,6 +8147,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Convert nodes to text for pasting to code block
+     * @memberof WwCodeBlockManager
      * @param {Array.<Node>} nodes Node array
      * @returns {string} coverted string
      */
@@ -9013,7 +8167,10 @@ var WwCodeBlockManager = function () {
         } else if (node.nodeName === 'BR') {
           str += '\n';
         } else {
-          str += node.textContent;
+          var _node2 = node,
+              textContent = _node2.textContent;
+
+          str += sanitizeHtmlCode(textContent);
         }
         node = nodes.shift();
       }
@@ -9023,6 +8180,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Copy content with code block style from code block selection
+     * @memberof WwCodeBlockManager
      * @param {HTMLElement} element Copied element
      * @param {Range} range Range object
      * @returns {HTMLElement}
@@ -9047,6 +8205,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Change pre tag to pre and code
+     * @memberof WwCodeBlockManager
      * @param {string} html HTML string
      * @returns {string}
      * @private
@@ -9062,7 +8221,9 @@ var WwCodeBlockManager = function () {
 
     /**
      * Modify Code Block for Wysiwyg
+     * @memberof WwCodeBlockManager
      * @param {HTMLElement} node root node to find pre
+     * @private
      */
 
   }, {
@@ -9089,7 +8250,7 @@ var WwCodeBlockManager = function () {
 
         var resultText = $pre.text().replace(/\s+$/, '');
         $pre.empty();
-        $pre.html(resultText ? sanitizeHtmlCode(resultText) : brString);
+        $pre.html(resultText ? resultText : '<br>');
 
         if (lang) {
           $pre.attr('data-language', lang);
@@ -9104,6 +8265,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Remove codeblock of first line when press backspace in first line
+     * @memberof WwCodeBlockManager
      * @param {Event} ev Event object
      * @param {Range} range Range object
      * @returns {boolean}
@@ -9147,6 +8309,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Check node is empty line
+     * @memberof WwCodeBlockManager
      * @param {Node} node node
      * @returns {boolean}
      * @private
@@ -9158,13 +8321,13 @@ var WwCodeBlockManager = function () {
       var nodeName = node.nodeName,
           childNodes = node.childNodes;
 
-      var isEmpty = isIE10 ? node.textContent === '' : childNodes.length === 1 && childNodes[0].nodeName === 'BR';
 
-      return nodeName === 'DIV' && isEmpty;
+      return nodeName === 'DIV' && childNodes.length === 1 && childNodes[0].nodeName === 'BR';
     }
 
     /**
      * Check whether node is between same codeblocks
+     * @memberof WwCodeBlockManager
      * @param {Node} node Node
      * @returns {boolean}
      * @private
@@ -9189,6 +8352,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Check whether range is first line of code block
+     * @memberof WwCodeBlockManager
      * @param {Range} range Range object
      * @returns {boolean}
      * @private
@@ -9202,6 +8366,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Check whether front block of range is code block
+     * @memberof WwCodeBlockManager
      * @param {Range} range Range object
      * @returns {boolean}
      * @private
@@ -9219,6 +8384,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Remove codeblock first line of codeblock
+     * @memberof WwCodeBlockManager
      * @param {Node} node Pre Node
      * @private
      */
@@ -9235,7 +8401,7 @@ var WwCodeBlockManager = function () {
 
         var firstDiv = document.createElement('div');
         var firstLine = strArray.shift();
-        firstDiv.innerHTML = '' + firstLine + brString;
+        firstDiv.innerHTML = firstLine + '<br>';
         newFrag.appendChild(firstDiv);
 
         if (strArray.length) {
@@ -9250,6 +8416,7 @@ var WwCodeBlockManager = function () {
 
     /**
      * Return boolean value of whether current range is in the code block
+     * @memberof WwCodeBlockManager
      * @param {Range} range Range object
      * @returns {boolean}
      */
@@ -9269,19 +8436,15 @@ var WwCodeBlockManager = function () {
     }
 
     /**
-     * Destroy
+     * Destroy.
      */
 
   }, {
     key: 'destroy',
     value: function destroy() {
-      var _this3 = this;
-
       this.eventManager.removeEventHandler('wysiwygSetValueAfter.codeblock');
       this.eventManager.removeEventHandler('wysiwygProcessHTMLText.codeblock');
-      _tuiCodeSnippet2.default.forEach(this._keyEventHandlers, function (handler, key) {
-        return _this3.wwe.removeKeyEventHandler(key, handler);
-      });
+      this.wwe.removeKeyEventHandler('BACK_SPACE', this._onKeyEventHandler);
     }
   }]);
 
@@ -9305,7 +8468,7 @@ function sanitizeHtmlCode(code) {
 exports.default = WwCodeBlockManager;
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9331,19 +8494,19 @@ var _uicontroller = __webpack_require__(8);
 
 var _uicontroller2 = _interopRequireDefault(_uicontroller);
 
-var _button = __webpack_require__(19);
+var _button = __webpack_require__(18);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _toolbarItem = __webpack_require__(11);
+var _toolbarItem = __webpack_require__(10);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
-var _toolbarDivider = __webpack_require__(42);
+var _toolbarDivider = __webpack_require__(41);
 
 var _toolbarDivider2 = _interopRequireDefault(_toolbarDivider);
 
-var _toolbarItemFactory = __webpack_require__(43);
+var _toolbarItemFactory = __webpack_require__(42);
 
 var _toolbarItemFactory2 = _interopRequireDefault(_toolbarItemFactory);
 
@@ -9355,22 +8518,29 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements toolbar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
  * Class Toolbar
- * @param {EventManager} eventManager - event manager
- * @param {ToolbarItem[]} [items=[]] - toolbar items
+ * @extends {UIController}
  */
 var Toolbar = function (_UIController) {
   _inherits(Toolbar, _UIController);
 
   /**
+   * Creates an instance of Toolbar.
+   * @param {EventManager} eventManager - event manager
+   * @param {ToolbarItem[]} [items=[]] - toolbar items
+   * @memberof Toolbar
+   */
+
+  /**
    * items
-   * @type {Array}
+   * @memberof Toolbar
    * @private
+   * @type {Array}
    */
   function Toolbar(eventManager) {
     var items = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
@@ -9399,15 +8569,14 @@ var Toolbar = function (_UIController) {
   /**
    * init event
    * @param  {EventManager} eventManager - event manager
-   * @private
-   * @override
    */
 
 
   /**
    * event manager
-   * @type {EventManager}
+   * @memberof Toolbar
    * @private
+   * @type {EventManager}
    */
 
 
@@ -9440,6 +8609,7 @@ var Toolbar = function (_UIController) {
 
     /**
      * disable all toolbar button
+     * @memberof Toolbar
      */
 
   }, {
@@ -9454,6 +8624,7 @@ var Toolbar = function (_UIController) {
 
     /**
      * enable all toolbar button
+     * @memberof Toolbar
      */
 
   }, {
@@ -9469,6 +8640,7 @@ var Toolbar = function (_UIController) {
     /**
      * get toolbar items
      * @returns {ToolbarItem[]} - toolbar items
+     * @memberof Toolbar
      */
 
   }, {
@@ -9492,6 +8664,7 @@ var Toolbar = function (_UIController) {
     /**
      * set toolbar items
      * @param {ToolbarItem[]} items - toolbar items
+     * @memberof Toolbar
      */
 
   }, {
@@ -9504,6 +8677,7 @@ var Toolbar = function (_UIController) {
     /**
      * add toolbar item
      * @param {ToolbarItem|string|object} item - toolbar item
+     * @memberof Toolbar
      */
 
   }, {
@@ -9516,6 +8690,7 @@ var Toolbar = function (_UIController) {
      * insert toolbar item
      * @param  {number} index - index at given item inserted
      * @param  {ToolbarItem|string|object} item - toolbar item
+     * @memberof Toolbar
      */
 
   }, {
@@ -9552,6 +8727,7 @@ var Toolbar = function (_UIController) {
      * get index of given item
      * @param  {ToolbarItem} item - toolbar item
      * @returns {number} - index of given toolbar item
+     * @memberof Toolbar
      */
 
   }, {
@@ -9575,6 +8751,7 @@ var Toolbar = function (_UIController) {
      * @param  {ToolbarItem|number} item - an toolbar item or index of the item to remove
      * @param  {boolean} destroy - destroy item or not
      * @returns {ToolbarItem|undefined} - removed item
+     * @memberof Toolbar
      */
 
   }, {
@@ -9609,6 +8786,7 @@ var Toolbar = function (_UIController) {
 
     /**
      * remove all toolbar items
+     * @memberof Toolbar
      */
 
   }, {
@@ -9621,6 +8799,7 @@ var Toolbar = function (_UIController) {
 
     /**
      * destroy instance
+     * @memberof Toolbar
      * @override
      */
 
@@ -9635,6 +8814,7 @@ var Toolbar = function (_UIController) {
      * add button
      * @param {Button} button - button instance
      * @param {Number} [index] - location the button will be placed
+     * @memberof Toolbar
      * @deprecated
      */
 
@@ -9678,6 +8858,7 @@ var Toolbar = function (_UIController) {
     /**
      * add divider
      * @returns {jQuery} - created divider jquery element
+     * @memberof Toolbar
      * @deprecated
      */
 
@@ -9729,7 +8910,7 @@ var Toolbar = function (_UIController) {
 exports.default = Toolbar;
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9739,7 +8920,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _toolbarItem = __webpack_require__(11);
+var _toolbarItem = __webpack_require__(10);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
@@ -9751,19 +8932,21 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements Toolbar Divider
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
-/**
- * Class ToolbarDivider
- * @ignore
- */
 var ToolbarDivider = function (_ToolbarItem) {
   _inherits(ToolbarDivider, _ToolbarItem);
 
   /**
+   * toolbar divider constructor
+   * @memberof ToolbarDivider
+   */
+
+  /**
    * item name
+   * @memberof ToolbarDivider
    * @type {String}
    * @static
    */
@@ -9779,6 +8962,7 @@ var ToolbarDivider = function (_ToolbarItem) {
 
   /**
    * item class name
+   * @memberof ToolbarDivider
    * @type {String}
    * @static
    */
@@ -9800,7 +8984,7 @@ Object.defineProperty(ToolbarDivider, 'className', {
 exports.default = ToolbarDivider;
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9812,18 +8996,18 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements Toolbar Item Factory
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
-var _toolbarItem = __webpack_require__(11);
+var _toolbarItem = __webpack_require__(10);
 
 var _toolbarItem2 = _interopRequireDefault(_toolbarItem);
 
-var _toolbarButton = __webpack_require__(76);
+var _toolbarButton = __webpack_require__(73);
 
 var _toolbarButton2 = _interopRequireDefault(_toolbarButton);
 
-var _toolbarDivider = __webpack_require__(42);
+var _toolbarDivider = __webpack_require__(41);
 
 var _toolbarDivider2 = _interopRequireDefault(_toolbarDivider);
 
@@ -9837,7 +9021,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Toolbar Item Factory
- * @ignore
  */
 var ToolbarItemFactory = function () {
   function ToolbarItemFactory() {
@@ -9849,6 +9032,7 @@ var ToolbarItemFactory = function () {
 
     /**
      * create toolbar item instance
+     * @memberof ToolbarItemFactory
      * @param {string} name - toolbar item name
      * @param {object} [options] - options to the constructor
      * @return {ToolbarItem} - created toolbar item instance
@@ -10017,7 +9201,7 @@ var ToolbarItemFactory = function () {
 exports.default = ToolbarItemFactory;
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10045,7 +9229,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements tab button ui
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -10053,17 +9237,21 @@ var CLASS_TAB_ACTIVE = 'te-tab-active';
 
 /**
  * Class Tab
- * @param {object} options - options
- *     @param {string} [options.initName] - name of the default activated button
- *     @param {string[]} options.items - Button names to be created
- *     @param {DOMElement[]} options.sections - Dom elements for tab
- *     @param {function} [options.onItemClick] - when button is clicked pass button name to function
- * @ignore
+ * @extends {UIController}
  */
 
 var Tab = function (_UIController) {
   _inherits(Tab, _UIController);
 
+  /**
+   * Creates an instance of Tab.
+   * @param {object} options - options
+   *  @param {string} [options.initName] - name of the default activated button
+   *  @param {string[]} options.items - Button names to be created
+   *  @param {DOMElement[]} options.sections - Dom elements for tab
+   *  @param {function} [options.onItemClick] - when button is clicked pass button name to function
+   * @memberof Tab
+   */
   function Tab() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
@@ -10109,6 +9297,7 @@ var Tab = function (_UIController) {
     }
 
     /**
+     * activate
      * Activate Section & Button
      * @param {string} name button name to activate
      */
@@ -10168,7 +9357,7 @@ var Tab = function (_UIController) {
 exports.default = Tab;
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10180,12 +9369,12 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Editor = __webpack_require__(46);
+var Editor = __webpack_require__(45);
 
 // for jquery
 /**
  * @fileoverview entry point for editor
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 _jquery2.default.fn.tuiEditor = function () {
   var options = void 0,
@@ -10221,15 +9410,15 @@ _jquery2.default.fn.tuiEditor = function () {
 module.exports = Editor;
 
 /***/ }),
-/* 46 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implements Editor
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Implemtents Editor
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -10250,23 +9439,23 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _button = __webpack_require__(19);
+var _button = __webpack_require__(18);
 
 var _button2 = _interopRequireDefault(_button);
 
-var _markdownEditor = __webpack_require__(47);
+var _markdownEditor = __webpack_require__(46);
 
 var _markdownEditor2 = _interopRequireDefault(_markdownEditor);
 
-var _mdPreview = __webpack_require__(12);
+var _mdPreview = __webpack_require__(11);
 
 var _mdPreview2 = _interopRequireDefault(_mdPreview);
 
-var _wysiwygEditor = __webpack_require__(57);
+var _wysiwygEditor = __webpack_require__(55);
 
 var _wysiwygEditor2 = _interopRequireDefault(_wysiwygEditor);
 
-var _layout = __webpack_require__(71);
+var _layout = __webpack_require__(68);
 
 var _layout2 = _interopRequireDefault(_layout);
 
@@ -10282,11 +9471,11 @@ var _extManager = __webpack_require__(16);
 
 var _extManager2 = _interopRequireDefault(_extManager);
 
-var _importManager = __webpack_require__(10);
+var _importManager = __webpack_require__(9);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
-var _wwCodeBlockManager = __webpack_require__(40);
+var _wwCodeBlockManager = __webpack_require__(39);
 
 var _wwCodeBlockManager2 = _interopRequireDefault(_wwCodeBlockManager);
 
@@ -10294,7 +9483,7 @@ var _convertor = __webpack_require__(17);
 
 var _convertor2 = _interopRequireDefault(_convertor);
 
-var _viewer = __webpack_require__(33);
+var _viewer = __webpack_require__(32);
 
 var _viewer2 = _interopRequireDefault(_viewer);
 
@@ -10302,7 +9491,7 @@ var _i18n = __webpack_require__(3);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _defaultUI = __webpack_require__(72);
+var _defaultUI = __webpack_require__(69);
 
 var _defaultUI2 = _interopRequireDefault(_defaultUI);
 
@@ -10310,11 +9499,11 @@ var _domUtils = __webpack_require__(4);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _wwTableManager = __webpack_require__(38);
+var _wwTableManager = __webpack_require__(37);
 
 var _wwTableManager2 = _interopRequireDefault(_wwTableManager);
 
-var _wwTableSelectionManager = __webpack_require__(39);
+var _wwTableSelectionManager = __webpack_require__(38);
 
 var _wwTableSelectionManager2 = _interopRequireDefault(_wwTableSelectionManager);
 
@@ -10322,169 +9511,173 @@ var _codeBlockManager = __webpack_require__(7);
 
 var _codeBlockManager2 = _interopRequireDefault(_codeBlockManager);
 
-var _toMarkRenderer = __webpack_require__(90);
-
-var _toMarkRenderer2 = _interopRequireDefault(_toMarkRenderer);
-
-var _bold = __webpack_require__(91);
+var _bold = __webpack_require__(87);
 
 var _bold2 = _interopRequireDefault(_bold);
 
-var _italic = __webpack_require__(92);
+var _italic = __webpack_require__(88);
 
 var _italic2 = _interopRequireDefault(_italic);
 
-var _strike = __webpack_require__(93);
+var _strike = __webpack_require__(89);
 
 var _strike2 = _interopRequireDefault(_strike);
 
-var _blockquote = __webpack_require__(94);
+var _blockquote = __webpack_require__(90);
 
 var _blockquote2 = _interopRequireDefault(_blockquote);
 
-var _heading = __webpack_require__(95);
+var _heading = __webpack_require__(91);
 
 var _heading2 = _interopRequireDefault(_heading);
 
-var _paragraph = __webpack_require__(96);
+var _paragraph = __webpack_require__(92);
 
 var _paragraph2 = _interopRequireDefault(_paragraph);
 
-var _hr = __webpack_require__(97);
+var _hr = __webpack_require__(93);
 
 var _hr2 = _interopRequireDefault(_hr);
 
-var _addLink = __webpack_require__(98);
+var _addLink = __webpack_require__(94);
 
 var _addLink2 = _interopRequireDefault(_addLink);
 
-var _addImage = __webpack_require__(99);
+var _addImage = __webpack_require__(95);
 
 var _addImage2 = _interopRequireDefault(_addImage);
 
-var _ul = __webpack_require__(100);
+var _ul = __webpack_require__(96);
 
 var _ul2 = _interopRequireDefault(_ul);
 
-var _ol = __webpack_require__(101);
+var _ol = __webpack_require__(97);
 
 var _ol2 = _interopRequireDefault(_ol);
 
-var _indent = __webpack_require__(102);
+var _indent = __webpack_require__(98);
 
 var _indent2 = _interopRequireDefault(_indent);
 
-var _outdent = __webpack_require__(103);
+var _outdent = __webpack_require__(99);
 
 var _outdent2 = _interopRequireDefault(_outdent);
 
-var _table = __webpack_require__(104);
+var _table = __webpack_require__(100);
 
 var _table2 = _interopRequireDefault(_table);
 
-var _task = __webpack_require__(105);
+var _task = __webpack_require__(101);
 
 var _task2 = _interopRequireDefault(_task);
 
-var _code = __webpack_require__(106);
+var _code = __webpack_require__(102);
 
 var _code2 = _interopRequireDefault(_code);
 
-var _codeBlock = __webpack_require__(107);
+var _codeBlock = __webpack_require__(103);
 
 var _codeBlock2 = _interopRequireDefault(_codeBlock);
 
-var _bold3 = __webpack_require__(108);
+var _bold3 = __webpack_require__(104);
 
 var _bold4 = _interopRequireDefault(_bold3);
 
-var _italic3 = __webpack_require__(109);
+var _italic3 = __webpack_require__(105);
 
 var _italic4 = _interopRequireDefault(_italic3);
 
-var _strike3 = __webpack_require__(110);
+var _strike3 = __webpack_require__(106);
 
 var _strike4 = _interopRequireDefault(_strike3);
 
-var _blockquote3 = __webpack_require__(111);
+var _blockquote3 = __webpack_require__(107);
 
 var _blockquote4 = _interopRequireDefault(_blockquote3);
 
-var _addImage3 = __webpack_require__(112);
+var _addImage3 = __webpack_require__(108);
 
 var _addImage4 = _interopRequireDefault(_addImage3);
 
-var _addLink3 = __webpack_require__(113);
+var _addLink3 = __webpack_require__(109);
 
 var _addLink4 = _interopRequireDefault(_addLink3);
 
-var _hr3 = __webpack_require__(114);
+var _hr3 = __webpack_require__(110);
 
 var _hr4 = _interopRequireDefault(_hr3);
 
-var _heading3 = __webpack_require__(115);
+var _heading3 = __webpack_require__(111);
 
 var _heading4 = _interopRequireDefault(_heading3);
 
-var _paragraph3 = __webpack_require__(116);
+var _paragraph3 = __webpack_require__(112);
 
 var _paragraph4 = _interopRequireDefault(_paragraph3);
 
-var _ul3 = __webpack_require__(117);
+var _ul3 = __webpack_require__(113);
 
 var _ul4 = _interopRequireDefault(_ul3);
 
-var _ol3 = __webpack_require__(118);
+var _ol3 = __webpack_require__(114);
 
 var _ol4 = _interopRequireDefault(_ol3);
 
-var _table3 = __webpack_require__(119);
+var _table3 = __webpack_require__(115);
 
 var _table4 = _interopRequireDefault(_table3);
 
-var _tableAddRow = __webpack_require__(120);
+var _tableAddRow = __webpack_require__(116);
 
 var _tableAddRow2 = _interopRequireDefault(_tableAddRow);
 
-var _tableAddCol = __webpack_require__(121);
+var _tableAddCol = __webpack_require__(117);
 
 var _tableAddCol2 = _interopRequireDefault(_tableAddCol);
 
-var _tableRemoveRow = __webpack_require__(122);
+var _tableRemoveRow = __webpack_require__(118);
 
 var _tableRemoveRow2 = _interopRequireDefault(_tableRemoveRow);
 
-var _tableRemoveCol = __webpack_require__(123);
+var _tableRemoveCol = __webpack_require__(119);
 
 var _tableRemoveCol2 = _interopRequireDefault(_tableRemoveCol);
 
-var _tableAlignCol = __webpack_require__(124);
+var _tableAlignCol = __webpack_require__(120);
 
 var _tableAlignCol2 = _interopRequireDefault(_tableAlignCol);
 
-var _tableRemove = __webpack_require__(125);
+var _tableRemove = __webpack_require__(121);
 
 var _tableRemove2 = _interopRequireDefault(_tableRemove);
 
-var _indent3 = __webpack_require__(126);
+var _indent3 = __webpack_require__(122);
 
 var _indent4 = _interopRequireDefault(_indent3);
 
-var _outdent3 = __webpack_require__(127);
+var _outdent3 = __webpack_require__(123);
 
 var _outdent4 = _interopRequireDefault(_outdent3);
 
-var _task3 = __webpack_require__(128);
+var _task3 = __webpack_require__(124);
 
 var _task4 = _interopRequireDefault(_task3);
 
-var _code3 = __webpack_require__(129);
+var _code3 = __webpack_require__(125);
 
 var _code4 = _interopRequireDefault(_code3);
 
-var _codeBlock3 = __webpack_require__(130);
+var _codeBlock3 = __webpack_require__(126);
 
 var _codeBlock4 = _interopRequireDefault(_codeBlock3);
+
+__webpack_require__(127);
+
+__webpack_require__(128);
+
+__webpack_require__(129);
+
+__webpack_require__(130);
 
 __webpack_require__(131);
 
@@ -10508,22 +9701,6 @@ __webpack_require__(140);
 
 __webpack_require__(141);
 
-__webpack_require__(142);
-
-__webpack_require__(143);
-
-__webpack_require__(144);
-
-__webpack_require__(145);
-
-__webpack_require__(146);
-
-__webpack_require__(147);
-
-__webpack_require__(148);
-
-__webpack_require__(149);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10531,48 +9708,46 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var __nedInstance = [];
 var gaTrackingId = 'UA-129966929-1';
 
-var availableLinkAttributes = ['rel', 'target', 'contenteditable', 'hreflang', 'type'];
-
 /**
  * @callback addImageBlobHook
- * @param {File|Blob} fileOrBlob - image blob
- * @param {callback} callback - callback function to be called after
- * @param {string} source - source of an event the item belongs to. 'paste', 'drop', 'ui'
+ * @param  {File|Blob} fileOrBlob - image blob
+ * @param  {callback} callback - callback function to be called after
+ * @param  {string} source - source of an event the item belongs to. 'paste', 'drop', 'ui'
  */
 
 /**
- * ToastUI Editor
- * @param {object} options Option object
- *     @param {HTMLElement} options.el - container element
- *     @param {string} [options.height='300px'] - Editor's height style value. Height is applied as border-box ex) '300px', '100%', 'auto'
- *     @param {string} [options.minHeight='200px'] - Editor's min-height style value in pixel ex) '300px'
- *     @param {string} [options.initialValue] - Editor's initial value
- *     @param {string} [options.previewStyle] - Markdown editor's preview style (tab, vertical)
- *     @param {string} [options.initialEditType] - Initial editor type (markdown, wysiwyg)
- *     @param {object[]} [options.events] - eventlist Event list
- *         @param {function} options.events.load - It would be emitted when editor fully load
- *         @param {function} options.events.change - It would be emitted when content changed
- *         @param {function} options.events.stateChange - It would be emitted when format change by cursor position
- *         @param {function} options.events.focus - It would be emitted when editor get focus
- *         @param {function} options.events.blur - It would be emitted when editor loose focus
- *     @param {object[]} [options.hooks] - Hook list
- *         @param {function} options.hooks.previewBeforeHook - Submit preview to hook URL before preview be shown
- *         @param {addImageBlobHook} options.hooks.addImageBlobHook - hook for image upload.
- *     @param {string} [options.language='en_US'] - language
- *     @param {boolean} [options.useCommandShortcut=true] - whether use keyboard shortcuts to perform commands
- *     @param {boolean} [options.useDefaultHTMLSanitizer=true] - use default htmlSanitizer
- *     @param {string[]} [options.codeBlockLanguages] - supported code block languages to be listed. default is what highlight.js supports
- *     @param {boolean} [options.usageStatistics=true] - send hostname to google analytics
- *     @param {string[]} [options.toolbarItems] - toolbar items.
- *     @param {boolean} [options.hideModeSwitch=false] - hide mode switch tab bar
- *     @param {string[]} [options.exts] - extensions
- *     @param {object} [options.customConvertor] - convertor extention
- *     @param {string} [options.placeholder] - The placeholder text of the editable element.
- *     @param {string} [options.previewDelayTime] - the delay time for rendering preview
- *     @param {object} [options.linkAttribute] - Attributes of anchor element that shold be rel, target, contenteditable, hreflang, type
+ * Class ToastUIEditor
  */
 
 var ToastUIEditor = function () {
+  /**
+   * ToastUI Editor
+   * @param {object} options Option object
+    * @param {HTMLElement} options.el - container element
+    * @param {string} [options.height='300px'] - Editor's height style value. Height is applied as border-box ex) '300px', '100%', 'auto'
+    * @param {string} [options.minHeight='200px'] - Editor's min-height style value in pixel ex) '300px'
+    * @param {string} [options.initialValue] - Editor's initial value
+    * @param {string} [options.previewStyle] - Markdown editor's preview style (tab, vertical)
+    * @param {string} [options.initialEditType] - Initial editor type (markdown, wysiwyg)
+    * @param {object[]} [options.events] - eventlist Event list
+      * @param {function} options.events.load - It would be emitted when editor fully load
+      * @param {function} options.events.change - It would be emitted when content changed
+      * @param {function} options.events.stateChange - It would be emitted when format change by cursor position
+      * @param {function} options.events.focus - It would be emitted when editor get focus
+      * @param {function} options.events.blur - It would be emitted when editor loose focus
+    * @param {object[]} [options.hooks] - Hook list
+      * @param {function} options.hooks.previewBeforeHook - Submit preview to hook URL before preview be shown
+      * @param {addImageBlobHook} options.hooks.addImageBlobHook - hook for image upload.
+    * @param {string} [options.language='en_US'] - language
+    * @param {boolean} [options.useCommandShortcut=true] - whether use keyboard shortcuts to perform commands
+    * @param {boolean} [options.useDefaultHTMLSanitizer=true] - use default htmlSanitizer
+    * @param {string[]} [options.codeBlockLanguages] - supported code block languages to be listed. default is what highlight.js supports
+    * @param {boolean} [options.usageStatistics=true] - send hostname to google analytics
+    * @param {string[]} [options.toolbarItems] - toolbar items.
+    * @param {boolean} [options.hideModeSwitch=false] - hide mode switch tab bar
+    * @param {string[]} [options.exts] - extensions
+    * @param {object} [options.customConvertor] - convertor extention
+    */
   function ToastUIEditor(options) {
     var _this = this;
 
@@ -10634,20 +9809,10 @@ var ToastUIEditor = function () {
 
     this.setUI(this.options.UI || new _defaultUI2.default(this));
 
-    this.mdEditor = _markdownEditor2.default.factory(this.layout.getMdEditorContainerEl(), this.eventManager, this.options);
-    this.preview = new _mdPreview2.default(this.layout.getPreviewEl(), this.eventManager, this.convertor, false, this.options.previewDelayTime);
+    this.mdEditor = _markdownEditor2.default.factory(this.layout.getMdEditorContainerEl(), this.eventManager);
+    this.preview = new _mdPreview2.default(this.layout.getPreviewEl(), this.eventManager, this.convertor);
     this.wwEditor = _wysiwygEditor2.default.factory(this.layout.getWwEditorContainerEl(), this.eventManager);
-    this.toMarkOptions = {
-      gfm: true,
-      renderer: _toMarkRenderer2.default
-    };
-
-    if (this.options.linkAttribute) {
-      var attribute = this._sanitizeLinkAttribute(this.options.linkAttribute);
-
-      this.convertor.setLinkAttribute(attribute);
-      this.wwEditor.setLinkAttribute(attribute);
-    }
+    this.toMarkOptions = null;
 
     this.changePreviewStyle(this.options.previewStyle);
 
@@ -10658,10 +9823,6 @@ var ToastUIEditor = function () {
     this.height(this.options.height);
 
     this.setValue(this.options.initialValue, false);
-
-    if (this.options.placeholder) {
-      this.setPlaceholder(this.options.placeholder);
-    }
 
     if (!this.options.initialValue) {
       this.setHtml(this.initialHtml, false);
@@ -10681,33 +9842,13 @@ var ToastUIEditor = function () {
   }
 
   /**
-   * sanitize attribute for link
-   * @param {object} attribute - attribute for link
-   * @returns {object} sanitized attribute
-   * @private
+   * change preview style
+   * @memberof ToastUIEditor
+   * @param {string} style - 'tab'|'vertical'
    */
 
 
   _createClass(ToastUIEditor, [{
-    key: '_sanitizeLinkAttribute',
-    value: function _sanitizeLinkAttribute(attribute) {
-      var linkAttribute = {};
-
-      availableLinkAttributes.forEach(function (key) {
-        if (!_tuiCodeSnippet2.default.isUndefined(attribute[key])) {
-          linkAttribute[key] = attribute[key];
-        }
-      });
-
-      return linkAttribute;
-    }
-
-    /**
-     * change preview style
-     * @param {string} style - 'tab'|'vertical'
-     */
-
-  }, {
     key: 'changePreviewStyle',
     value: function changePreviewStyle(style) {
       this.layout.changePreviewStyle(style);
@@ -10718,6 +9859,7 @@ var ToastUIEditor = function () {
 
     /**
      * call commandManager's exec method
+     * @memberof ToastUIEditor
      * @param {*} ...args Command argument
      */
 
@@ -10731,6 +9873,7 @@ var ToastUIEditor = function () {
 
     /**
      * add default commands
+     * @memberof ToastUIEditor
      * @private
      */
 
@@ -10801,6 +9944,7 @@ var ToastUIEditor = function () {
 
     /**
      * Bind eventHandler to event type
+     * @memberof ToastUIEditor
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -10813,6 +9957,7 @@ var ToastUIEditor = function () {
 
     /**
      * Unbind eventHandler from event type
+     * @memberof ToastUIEditor
      * @param {string} type Event type
      */
 
@@ -10824,6 +9969,7 @@ var ToastUIEditor = function () {
 
     /**
      * Add hook to TUIEditor event
+     * @memberof ToastUIEditor
      * @param {string} type Event type
      * @param {function} handler Event handler
      */
@@ -10837,6 +9983,7 @@ var ToastUIEditor = function () {
 
     /**
      * Remove hook from TUIEditor event
+     * @memberof ToastUIEditor
      * @param {string} type Event type
      */
 
@@ -10848,6 +9995,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get CodeMirror instance
+     * @memberof ToastUIEditor
      * @returns {CodeMirror}
      */
 
@@ -10859,6 +10007,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get SquireExt instance
+     * @memberof ToastUIEditor
      * @returns {SquireExt}
      */
 
@@ -10870,6 +10019,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set focus to current Editor
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -10880,6 +10030,7 @@ var ToastUIEditor = function () {
 
     /**
      * Remove focus of current Editor
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -10890,6 +10041,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set cursor position to end
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -10900,6 +10052,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set cursor position to start
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -10910,6 +10063,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set markdown syntax text.
+     * @memberof ToastUIEditor
      * @param {string} markdown - markdown syntax text.
      * @param {boolean} [cursorToEnd=true] - move cursor to contents end
      */
@@ -10932,6 +10086,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set html value.
+     * @memberof ToastUIEditor
      * @param {string} html - html syntax text
      * @param {boolean} [cursorToEnd=true] - move cursor to contents end
      */
@@ -10953,6 +10108,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set markdown syntax text.
+     * @memberof ToastUIEditor
      * @param {string} value - markdown syntax text
      * @param {boolean} [cursorToEnd=true] - move cursor to contents end
      * @deprecated
@@ -10968,6 +10124,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get markdown syntax text.
+     * @memberof ToastUIEditor
      * @returns {string}
      */
 
@@ -10987,6 +10144,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get html syntax text.
+     * @memberof ToastUIEditor
      * @returns {string}
      */
 
@@ -11002,6 +10160,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get editor value.
+     * @memberof ToastUIEditor
      * @returns {string}
      * @deprecated
      */
@@ -11013,8 +10172,9 @@ var ToastUIEditor = function () {
     }
 
     /**
-     * Insert text
+     * insert text
      * @param {string} text - text string to insert
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -11029,6 +10189,7 @@ var ToastUIEditor = function () {
 
     /**
      * Add widget to selection
+     * @memberof ToastUIEditor
      * @param {Range} selection Current selection
      * @param {Node} node widget node
      * @param {string} style Adding style "over" or "bottom"
@@ -11043,6 +10204,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set and return edithr height
+     * @memberof ToastUIEditor
      * @param {string} height - editor height
      * @returns {string} editor height
      */
@@ -11072,6 +10234,7 @@ var ToastUIEditor = function () {
     /**
      * Set / Get min content height
      * @param {string} minHeight - min content height in pixel
+     * @memberof ToastUIEditor
      * @returns {string} - min height in pixel
      */
 
@@ -11097,7 +10260,8 @@ var ToastUIEditor = function () {
 
     /**
      * Get current editor mode name
-     * @returns {Object} MarkdownEditor or WysiwygEditor
+     * @memberof ToastUIEditor
+     * @returns {Object} mdEditor or wwEditor
      */
 
   }, {
@@ -11116,6 +10280,7 @@ var ToastUIEditor = function () {
 
     /**
      * Return true if current editor mode is Markdown
+     * @memberof ToastUIEditor
      * @returns {boolean}
      */
 
@@ -11127,6 +10292,7 @@ var ToastUIEditor = function () {
 
     /**
      * Return true if current editor mode is WYSIWYG
+     * @memberof ToastUIEditor
      * @returns {boolean}
      */
 
@@ -11138,6 +10304,7 @@ var ToastUIEditor = function () {
 
     /**
      * Return false
+     * @memberof ToastUIEditor
      * @returns {boolean}
      */
 
@@ -11149,6 +10316,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get current Markdown editor's preview style
+     * @memberof ToastUIEditor
      * @returns {string}
      */
 
@@ -11160,6 +10328,7 @@ var ToastUIEditor = function () {
 
     /**
      * Change editor's mode to given mode string
+     * @memberof ToastUIEditor
      * @param {string} mode - Editor mode name of want to change
      * @param {boolean} [isWithoutFocus] - Change mode without focus
      */
@@ -11196,6 +10365,7 @@ var ToastUIEditor = function () {
 
     /**
      * Remove TUIEditor from document
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -11206,7 +10376,6 @@ var ToastUIEditor = function () {
       this.wwEditor.remove();
       this.mdEditor.remove();
       this.layout.remove();
-      this.preview.remove();
 
       if (this.getUI()) {
         this.getUI().remove();
@@ -11227,6 +10396,7 @@ var ToastUIEditor = function () {
 
     /**
      * Hide TUIEditor
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -11237,6 +10407,7 @@ var ToastUIEditor = function () {
 
     /**
      * Show TUIEditor
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -11248,6 +10419,7 @@ var ToastUIEditor = function () {
 
     /**
      * Scroll Editor content to Top
+     * @memberof ToastUIEditor
      * @param {number} value Scroll amount
      * @returns {number}
      */
@@ -11260,6 +10432,7 @@ var ToastUIEditor = function () {
 
     /**
      * Set UI to private UI property
+     * @memberof ToastUIEditor
      * @param {UI} UI UI instance
      */
 
@@ -11271,7 +10444,8 @@ var ToastUIEditor = function () {
 
     /**
      * Get _ui property
-     * @returns {DefaultUI|UI}
+     * @memberof ToastUIEditor
+     * @returns {UI}
      */
 
   }, {
@@ -11282,6 +10456,7 @@ var ToastUIEditor = function () {
 
     /**
      * Reset TUIEditor
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -11293,6 +10468,7 @@ var ToastUIEditor = function () {
 
     /**
      * Get current range
+     * @memberof ToastUIEditor
      * @returns {{start, end}|Range}
      */
 
@@ -11304,8 +10480,9 @@ var ToastUIEditor = function () {
 
     /**
      * Get text object of current range
+     * @memberof ToastUIEditor
      * @param {{start, end}|Range} range Range object of each editor
-     * @returns {MdTextObject|WwTextObject} TextObject class
+     * @returns {object} TextObject class
      */
 
   }, {
@@ -11317,6 +10494,7 @@ var ToastUIEditor = function () {
     /**
      * get selected text
      * @returns {string} - selected text
+     * @memberof ToastUIEditor
      */
 
   }, {
@@ -11329,19 +10507,8 @@ var ToastUIEditor = function () {
     }
 
     /**
-     * Set the placeholder on all editors
-     * @param {string} placeholder - placeholder to set
-     */
-
-  }, {
-    key: 'setPlaceholder',
-    value: function setPlaceholder(placeholder) {
-      this.mdEditor.setPlaceholder(placeholder);
-      this.wwEditor.setPlaceholder(placeholder);
-    }
-
-    /**
      * Get instance of TUIEditor
+     * @memberof ToastUIEditor
      * @returns {Array}
      */
 
@@ -11353,8 +10520,9 @@ var ToastUIEditor = function () {
 
     /**
      * Define extension
+     * @memberof ToastUIEditor
      * @param {string} name Extension name
-     * @param {function} ext extension
+     * @param {ExtManager~extension} ext extension
      */
 
   }, {
@@ -11365,6 +10533,7 @@ var ToastUIEditor = function () {
 
     /**
      * Factory method for Editor
+     * @memberof ToastUIEditor
      * @param {object} options Option for initialize TUIEditor
      * @returns {object} ToastUIEditor or ToastUIEditorViewer
      */
@@ -11404,7 +10573,6 @@ ToastUIEditor.i18n = _i18n2.default;
 /**
  * domUtil instance
  * @type {DomUtil}
- * @ignore
  */
 ToastUIEditor.domUtils = _domUtils2.default;
 
@@ -11424,28 +10592,24 @@ ToastUIEditor.Button = _button2.default;
 /**
  * WwCodeBlockManager class
  * @type {Class.<WwCodeBlockManager>}
- * @ignore
  */
 ToastUIEditor.WwCodeBlockManager = _wwCodeBlockManager2.default;
 
 /**
  * WwTableManager class
  * @type {Class.<WwTableManager>}
- * @ignore
  */
 ToastUIEditor.WwTableManager = _wwTableManager2.default;
 
 /**
  * WwTableManager class
  * @type {Class.<WwTableSelectionManager>}
- * @ignore
  */
 ToastUIEditor.WwTableSelectionManager = _wwTableSelectionManager2.default;
 
 /**
  * CommandManager class
  * @type {Class.<CommandManager>}
- * @ignore
  */
 ToastUIEditor.CommandManager = _commandManager3.default;
 
@@ -11464,7 +10628,7 @@ ToastUIEditor.markdownit = _convertor2.default.getMarkdownitRenderer();
 module.exports = ToastUIEditor;
 
 /***/ }),
-/* 47 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11482,23 +10646,23 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _codeMirrorExt = __webpack_require__(36);
+var _codeMirrorExt = __webpack_require__(35);
 
 var _codeMirrorExt2 = _interopRequireDefault(_codeMirrorExt);
 
-var _keyMapper = __webpack_require__(20);
+var _keyMapper = __webpack_require__(19);
 
 var _keyMapper2 = _interopRequireDefault(_keyMapper);
 
-var _mdListManager = __webpack_require__(55);
+var _mdListManager = __webpack_require__(53);
 
 var _mdListManager2 = _interopRequireDefault(_mdListManager);
 
-var _componentManager = __webpack_require__(37);
+var _componentManager = __webpack_require__(36);
 
 var _componentManager2 = _interopRequireDefault(_componentManager);
 
-var _mdTextObject = __webpack_require__(56);
+var _mdTextObject = __webpack_require__(54);
 
 var _mdTextObject2 = _interopRequireDefault(_mdTextObject);
 
@@ -11510,7 +10674,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements markdown editor
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -11518,15 +10682,18 @@ var keyMapper = _keyMapper2.default.getSharedInstance();
 
 /**
  * Class MarkdownEditor
- * @param {jQuery} $el - container jquery element
- * @param {EventManager} eventManager - event manager
- * @param {Object} options - options of editor
  */
 
 var MarkdownEditor = function (_CodeMirrorExt) {
   _inherits(MarkdownEditor, _CodeMirrorExt);
 
-  function MarkdownEditor($el, eventManager, options) {
+  /**
+   * Creates an instance of MarkdownEditor.
+   * @param {jQuery} $el - container jquery element
+   * @param {EventManager} eventManager - event manager
+   * @memberof MarkdownEditor
+   */
+  function MarkdownEditor($el, eventManager) {
     _classCallCheck(this, MarkdownEditor);
 
     var _this = _possibleConstructorReturn(this, (MarkdownEditor.__proto__ || Object.getPrototypeOf(MarkdownEditor)).call(this, $el.get(0), {
@@ -11537,8 +10704,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
         'Enter': 'newlineAndIndentContinueMarkdownList',
         'Tab': 'indentOrderedList',
         'Shift-Tab': 'indentLessOrderedList'
-      },
-      viewportMargin: options && options.height === 'auto' ? Infinity : 10
+      }
     }));
 
     _this.eventManager = eventManager;
@@ -11559,6 +10725,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
   /**
    * _initEvent
    * Initialize EventManager event handler
+   * @memberof MarkdownEditor
    * @private
    */
 
@@ -11592,6 +10759,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
         _this2.eventManager.emit('focus', {
           source: 'markdown'
         });
+        _this2.getEditor().refresh();
       });
 
       this.cm.on('blur', function () {
@@ -11682,9 +10850,10 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * Set Editor value
+     * @memberof MarkdownEditor
+     * @override
      * @param {string} markdown - Markdown syntax text
      * @param {boolean} [cursorToEnd=true] - move cursor to contents end
-     * @override
      */
 
   }, {
@@ -11696,6 +10865,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * Get text object of current range
+     * @memberof MarkdownEditor
      * @param {{start, end}} range Range object of each editor
      * @returns {MdTextObject}
      */
@@ -11708,6 +10878,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * Emit contentChangedFromMarkdown event
+     * @memberof MarkdownEditor
      * @private
      */
 
@@ -11719,6 +10890,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * Emit changeEvent
+     * @memberof MarkdownEditor
      * @param {event} e - Event object
      * @private
      */
@@ -11738,6 +10910,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * Return whether state changed or not
+     * @memberof MarkdownEditor
      * @param {object} previousState - Previous state
      * @param {object} currentState - Current state
      * @returns {boolean} - changed state
@@ -11760,6 +10933,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * latestState reset
+     * @memberof MarkdownEditor
      */
 
   }, {
@@ -11770,17 +10944,16 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 
     /**
      * MarkdownEditor factory method
+     * @memberof MarkdownEditor
      * @param {jQuery} $el - Container element for editor
      * @param {EventManager} eventManager - EventManager instance
-     * @param {Object} options - options of editor
      * @returns {MarkdownEditor} - MarkdownEditor
-     * @ignore
      */
 
   }], [{
     key: 'factory',
-    value: function factory($el, eventManager, options) {
-      var mde = new MarkdownEditor($el, eventManager, options);
+    value: function factory($el, eventManager) {
+      var mde = new MarkdownEditor($el, eventManager);
 
       return mde;
     }
@@ -11792,7 +10965,7 @@ var MarkdownEditor = function (_CodeMirrorExt) {
 exports.default = MarkdownEditor;
 
 /***/ }),
-/* 48 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11815,7 +10988,7 @@ var listRE = /^(\s*)((\d+)([.)]\s(?:\[(?:x|\s)\]\s)?))(.*)/;
  */
 /**
 * @fileoverview codemirror extension for fix ordered list number
-* @author NHN FE Development Lab <dl_javascript@nhn.com>
+* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
 */
 
 _codemirror2.default.commands.indentLessOrderedList = function (cm) {
@@ -11935,7 +11108,7 @@ function findFirstListItem(lineNumber, cm) {
 }
 
 /***/ }),
-/* 49 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12016,11 +11189,11 @@ _codemirror2.default.overlayMode = function (base, overlay, combine) {
 // or state.overlay.combineTokens was true, in which case the styles are
 // combined.
 /**
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /***/ }),
-/* 50 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12910,7 +12083,7 @@ _codemirror2.default.defineMode("markdown", function (cmCfg, modeCfg) {
 }, "xml"); // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 /**
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 // based on https://github.com/codemirror/CodeMirror/blob/ff04f127ba8a736b97d06c505fb85d976e3f2980/mode/markdown/markdown.js
 
@@ -12920,7 +12093,7 @@ _codemirror2.default.defineMIME("text/markdown", "markdown");
 _codemirror2.default.defineMIME("text/x-markdown", "markdown");
 
 /***/ }),
-/* 51 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -12936,7 +12109,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var urlRE = /^((?:(?:aaas?|about|acap|adiumxtra|af[ps]|aim|apt|attachment|aw|beshare|bitcoin|bolo|callto|cap|chrome(?:-extension)?|cid|coap|com-eventbrite-attendee|content|crid|cvs|data|dav|dict|dlna-(?:playcontainer|playsingle)|dns|doi|dtn|dvb|ed2k|facetime|feed|file|finger|fish|ftp|geo|gg|git|gizmoproject|go|gopher|gtalk|h323|hcp|https?|iax|icap|icon|im|imap|info|ipn|ipp|irc[6s]?|iris(?:\.beep|\.lwz|\.xpc|\.xpcs)?|itms|jar|javascript|jms|keyparc|lastfm|ldaps?|magnet|mailto|maps|market|message|mid|mms|ms-help|msnim|msrps?|mtqp|mumble|mupdate|mvn|news|nfs|nih?|nntp|notes|oid|opaquelocktoken|palm|paparazzi|platform|pop|pres|proxy|psyc|query|res(?:ource)?|rmi|rsync|rtmp|rtsp|secondlife|service|session|sftp|sgn|shttp|sieve|sips?|skype|sm[bs]|snmp|soap\.beeps?|soldat|spotify|ssh|steam|svn|tag|teamspeak|tel(?:net)?|tftp|things|thismessage|tip|tn3270|tv|udp|unreal|urn|ut2004|vemmi|ventrilo|view-source|webcal|wss?|wtai|wyciwyg|xcon(?:-userid)?|xfire|xmlrpc\.beeps?|xmpp|xri|ymsgr|z39\.50[rs]?):(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]|\([^\s()<>]*\))+(?:\([^\s()<>]*\)|[^\s`*!()\[\]{};:'".,<>?«»“”‘’]))/i; // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 /**
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 
@@ -13058,7 +12231,7 @@ _codemirror2.default.defineMode("gfm", function (config, modeConfig) {
 _codemirror2.default.defineMIME("text/x-gfm", "gfm");
 
 /***/ }),
-/* 52 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13076,7 +12249,7 @@ var listRE = /^(\s*)(>[> ]*|[*+-] \[[x ]\]\s|[*+-]\s|(\d+)([.)]))(\s*)/,
     unorderedListRE = /[*+-]\s/; // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 /**
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 
@@ -13103,17 +12276,7 @@ _codemirror2.default.commands.newlineAndIndentContinueMarkdownList = function (c
       replacements = [];
   for (var i = 0; i < ranges.length; i++) {
     var pos = ranges[i].head;
-
-    // If we're not in Markdown mode, fall back to normal newlineAndIndent
     var eolState = cm.getStateAfter(pos.line);
-    var inner = _codemirror2.default.innerMode(cm.getMode(), eolState);
-    if (inner.mode.name !== "markdown") {
-      cm.execCommand("newlineAndIndent");
-      return;
-    } else {
-      eolState = inner.state;
-    }
-
     var inList = eolState.list !== false;
     var inQuote = eolState.quote !== 0;
 
@@ -13186,7 +12349,7 @@ function incrementRemainingMarkdownListNumbers(cm, pos) {
 }
 
 /***/ }),
-/* 53 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13227,7 +12390,7 @@ _codemirror2.default.commands.replaceLineTextToUpper = function (cm) {
 }; // CodeMirror, copyright (c) by Marijn Haverbeke and others
 // Distributed under an MIT license: http://codemirror.net/LICENSE
 /**
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
+ * @modifier NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 
@@ -13339,77 +12502,7 @@ function replaceMultiLine(cm, upper, bottom, lineAdjustment) {
 }
 
 /***/ }),
-/* 54 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _codemirror = __webpack_require__(6);
-
-var _codemirror2 = _interopRequireDefault(_codemirror);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/* eslint-disable */
-_codemirror2.default.defineOption('placeholder', '', function (cm, val, old) {
-  var prev = old && old != _codemirror2.default.Init;
-  if (val && !prev) {
-    cm.on('blur', onBlur);
-    cm.on('change', onChange);
-    cm.on('swapDoc', onChange);
-    onChange(cm);
-  } else if (!val && prev) {
-    cm.off('blur', onBlur);
-    cm.off('change', onChange);
-    cm.off('swapDoc', onChange);
-    clearPlaceholder(cm);
-    var wrapper = cm.getWrapperElement();
-    wrapper.className = wrapper.className.replace(' CodeMirror-empty', '');
-  }
-
-  if (val && !cm.hasFocus()) onBlur(cm);
-}); // CodeMirror, copyright (c) by Marijn Haverbeke and others
-// Distributed under an MIT license: http://codemirror.net/LICENSE
-/**
- * @modifier NHN FE Development Lab <dl_javascript@nhn.com>
- */
-
-
-function clearPlaceholder(cm) {
-  if (cm.state.placeholder) {
-    cm.state.placeholder.parentNode.removeChild(cm.state.placeholder);
-    cm.state.placeholder = null;
-  }
-}
-function setPlaceholder(cm) {
-  clearPlaceholder(cm);
-  var elt = cm.state.placeholder = document.createElement('pre');
-  elt.style.cssText = 'height: 0; overflow: visible';
-  elt.className = 'CodeMirror-placeholder';
-  var placeHolder = cm.getOption('placeholder');
-  if (typeof placeHolder == 'string') placeHolder = document.createTextNode(placeHolder);
-  elt.appendChild(placeHolder);
-  cm.display.lineSpace.insertBefore(elt, cm.display.lineSpace.firstChild);
-}
-
-function onBlur(cm) {
-  if (isEmpty(cm)) setPlaceholder(cm);
-}
-function onChange(cm) {
-  var wrapper = cm.getWrapperElement(),
-      empty = isEmpty(cm);
-  wrapper.className = wrapper.className.replace(' CodeMirror-empty', '') + (empty ? ' CodeMirror-empty' : '');
-
-  if (empty) setPlaceholder(cm);else clearPlaceholder(cm);
-}
-
-function isEmpty(cm) {
-  return cm.lineCount() === 1 && cm.getLine(0) === '';
-}
-
-/***/ }),
-/* 55 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13425,56 +12518,113 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @fileoverview Implements markdown list manager
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
-
-var FIND_LIST_RX = /^[ \t]*([-*]|[\d]+\.)( \[[ xX]])? /;
-var FIND_TASK_LIST_RX = /^[ \t]*([*-] |[\d]+\. )(\[[ xX]] )/;
-
-var FIND_UL_RX = /^[ \t]*[-*] .*/;
-var FIND_OL_TASK_RX = /^[ \t]*[\d]+\. \[[ xX]] .*/;
-
-var LIST_SYNTAX_RX = /([*-] |[\d]+\. )/;
-var TASK_SYNTAX_RX = /([-*] |[\d]+\. )(\[[ xX]] )/;
-var LIST_OR_TASK_SYNTAX_RX = /([-*]|[\d]+\.)( \[[ xX]])? /;
-var UL_TASK_SYNTAX_RX = /([-*])( \[[ xX]]) /;
-var OL_SYNTAX_RX = /([\d])+\.( \[[ xX]])? /;
-
+var FIND_MD_OL_RX = /^[ \t]*[\d]+\. .*/;
+var FIND_MD_UL_RX = /^[ \t]*[-*] .*/;
+var FIND_MD_TASK_RX = /^[ \t]*[-*]( \[[ xX]])? .*/;
 var FIND_TABLE_RX = /^\|([-\s\w\d\t<>?!@#$%^&*()_=+\\/'";: \r[\]]*\|+)+/i;
 var FIND_HEADING_RX = /^#+\s/;
 var FIND_BLOCK_RX = /^ {0,3}(```|\||>)/;
 
 /**
  * Class MdListManager
- * @param {MarkdownEditor} mde - MarkdownEditor instance
- * @ignore
  */
 
 var MdListManager = function () {
+  /**
+   * Creates an instance of MdListManager.
+   * @param {MarkdownEditor} mde - MarkdownEditor instance
+   * @memberof MdListManager
+   */
   function MdListManager(mde) {
     _classCallCheck(this, MdListManager);
 
-    this.cm = mde.getEditor();
-    this.doc = this.cm.getDoc();
+    this.mde = mde;
+    this.eventManager = mde.eventManager;
 
     /**
      * Name property
+     * @memberof MdListManager#
      * @type {string}
      */
     this.name = 'list';
   }
 
   /**
-   * Sort line number of selection descending
-   * @param {{from, to}} range start, end CodeMirror range information
-   * @returns {{start: {number}, end: {number}}}
-   * @private
+   * Return whether passed line is list or paragraph or not
+   * @param {string} line line text
+   * @returns {boolean}
    */
 
 
   _createClass(MdListManager, [{
-    key: '_createSortedLineRange',
-    value: function _createSortedLineRange(range) {
+    key: 'isListOrParagraph',
+    value: function isListOrParagraph(line) {
+      return !FIND_BLOCK_RX.test(line) && !FIND_TABLE_RX.test(line) && !FIND_HEADING_RX.test(line);
+    }
+
+    /**
+     * Append blank line at list top or bottom if needed
+     * @param {CodeMirror} cm CodeMirror instance
+     * @param {number} index index number
+     * @param {number} endLineNumber end line index number
+     * @param {number} startLineNumber start line index number
+     */
+
+  }, {
+    key: 'appendBlankLineIfNeed',
+    value: function appendBlankLineIfNeed(cm, index, endLineNumber, startLineNumber) {
+      var doc = cm.getDoc();
+      var cursorPositionFactor = 0;
+      var isMultiLineSelection = startLineNumber !== endLineNumber;
+      var nextLineOfLastIndex = doc.getLine(this._getEndLineNumberOfList(doc, endLineNumber) + 1);
+      var previousLineOfFirstIndex = doc.getLine(this._getStartLineNumberOfList(doc, startLineNumber) - 1);
+
+      var nextLine = doc.getLine(index + 1);
+      if (isMultiLineSelection && this._isNeedAppendBlankLine(nextLineOfLastIndex) || !isMultiLineSelection && this._isNeedAppendBlankLine(nextLine)) {
+        doc.replaceRange('\n', {
+          line: index,
+          ch: doc.getLine(index).length
+        });
+      }
+
+      var previousLine = doc.getLine(index - 1);
+      if (isMultiLineSelection && this._isNeedAppendBlankLine(previousLineOfFirstIndex) || !isMultiLineSelection && this._isNeedAppendBlankLine(previousLine)) {
+        doc.replaceRange('\n', {
+          line: startLineNumber,
+          ch: 0
+        });
+        cursorPositionFactor += 1;
+      }
+      if (!isMultiLineSelection) {
+        var currentLineNumber = index + cursorPositionFactor;
+        cm.setCursor(currentLineNumber, doc.getLine(currentLineNumber).length);
+      }
+    }
+
+    /**
+     * Return whether need to append blank line or not
+     * @param {string} line Line text
+     * @returns {boolean}
+     * @private
+     */
+
+  }, {
+    key: '_isNeedAppendBlankLine',
+    value: function _isNeedAppendBlankLine(line) {
+      return line && line.length !== 0 && !this._isAList(line);
+    }
+
+    /**
+     * Sort line number of selection descending
+     * @param {{from, to}} range start, end CodeMirror range information
+     * @returns {{start: {number}, end: {number}}}
+     */
+
+  }, {
+    key: 'createSortedLineRange',
+    value: function createSortedLineRange(range) {
       var isReversed = range.from.line > range.to.line;
       var rangeStart = {
         line: isReversed ? range.to.line : range.from.line,
@@ -13492,232 +12642,50 @@ var MdListManager = function () {
     }
 
     /**
-     * For odering the ol list, search preivous lines and
-     * calculate ordinal number when find ol list
-     * @param {number} lineNumber lineNumber
-     * @returns {number}
-     * @private
+     * Expand line range if need
+     * @param {object} doc doc instance
+     * @param {{from, to}} range CodeMirror range information
+     * @param {function} comparator comparator function
+     * @returns {{start: number, end: number}}
      */
 
   }, {
-    key: '_calculateOrdinalNumber',
-    value: function _calculateOrdinalNumber(lineNumber) {
-      var ordinalNumber = 1;
+    key: 'expandLineRangeIfNeed',
+    value: function expandLineRangeIfNeed(doc, range, comparator) {
+      var lineRange = this.createSortedLineRange(range);
+      var start = lineRange.start,
+          end = lineRange.end;
 
-      for (var i = lineNumber - 1; i >= 0; i -= 1) {
-        var depth = this._getListDepth(i);
 
-        if (depth === 1 && OL_SYNTAX_RX.exec(this.doc.getLine(i))) {
-          ordinalNumber = parseInt(RegExp.$1, 10) + 1;
-          break;
-        } else if (depth === 0) {
-          break;
-        }
+      var isRangeStartInUlOrTask = this._isDifferentListType(comparator, doc.getLine(start));
+      var isRangeEndInUlOrTask = this._isDifferentListType(comparator, doc.getLine(end));
+
+      if (isRangeStartInUlOrTask) {
+        start = this._getStartLineNumberOfList(doc, start);
       }
 
-      return ordinalNumber;
-    }
-  }, {
-    key: '_isListLine',
-    value: function _isListLine(lineNumber) {
-      return !!FIND_LIST_RX.exec(this.doc.getLine(lineNumber));
-    }
-
-    /**
-     * If text already have sytax for heading, table and code block,
-     * can not change to list.
-     * @param {number} lineNumber lineNumber
-     * @returns {boolean}
-     * @private
-     */
-
-  }, {
-    key: '_isCanBeList',
-    value: function _isCanBeList(lineNumber) {
-      var line = this.doc.getLine(lineNumber);
-
-      return !FIND_BLOCK_RX.test(line) && !FIND_TABLE_RX.test(line) && !FIND_HEADING_RX.test(line);
-    }
-
-    /**
-     * Return a function for change according to type
-     * @param {string} type ol, ul, task
-     * @returns {Function}
-     * @private
-     */
-
-  }, {
-    key: '_getChangeFn',
-    value: function _getChangeFn(type) {
-      var _this = this;
-
-      var fn = void 0;
-
-      switch (type) {
-        case 'ol':
-        case 'ul':
-          fn = function fn(lineNumber) {
-            return _this._changeToList(lineNumber, type);
-          };
-          break;
-        case 'task':
-          fn = function fn(lineNumber) {
-            return _this._changeToTask(lineNumber);
-          };
-          break;
-        default:
-          break;
+      if (isRangeEndInUlOrTask) {
+        end = this._getEndLineNumberOfList(doc, end);
       }
 
-      return fn;
+      return {
+        start: start,
+        end: end
+      };
     }
 
     /**
-     * Change syntax by traversing each line selected.
-     * @param {{from, to}} range start, end CodeMirror range information
-     * @param {string} type ol, ul, task
-     */
-
-  }, {
-    key: 'changeSyntax',
-    value: function changeSyntax(range, type) {
-      var newListLine = [];
-      var lineRange = this._createSortedLineRange(range);
-      var startLineNumber = lineRange.start,
-          endLineNumber = lineRange.end;
-
-
-      var changeFn = this._getChangeFn(type);
-
-      for (var lineNumber = startLineNumber; lineNumber <= endLineNumber; lineNumber += 1) {
-        if (!this._isCanBeList(lineNumber)) {
-          break;
-        }
-
-        // If text of lineNumber is not list, cache for inserting blank line
-        if (!this._isListLine(lineNumber)) {
-          newListLine.push(lineNumber);
-        }
-
-        changeFn(lineNumber);
-      }
-
-      // Should insert blank line before and after new list
-      this._insertBlankLineForNewList(newListLine);
-
-      this.cm.focus();
-    }
-  }, {
-    key: '_replaceLineText',
-    value: function _replaceLineText(text, lineNumber) {
-      this.doc.replaceRange(text, {
-        line: lineNumber,
-        ch: 0
-      });
-    }
-
-    /**
-     * change to list according to the type.
-     * @param {number} lineNumber line number
-     * @param {string} type ol, ul
-     * @private
-     */
-
-  }, {
-    key: '_changeToList',
-    value: function _changeToList(lineNumber, type) {
-      var _this2 = this;
-
-      if (this._isListLine(lineNumber)) {
-        // If type is ol, need ordinal number.
-        this._changeSameDepthList(lineNumber, type === 'ol' ? function (lineNum, ordinalNumber) {
-          _this2._replaceListTypeToOL(lineNum, ordinalNumber);
-        } : function (lineNum) {
-          _this2._replaceListTypeToUL(lineNum);
-        });
-      } else {
-        this._replaceLineText(type === 'ol' ? this._calculateOrdinalNumber(lineNumber) + '. ' : '* ', lineNumber);
-      }
-    }
-
-    /**
-     * change to task list according
-     * @param {number} lineNumber line number
-     * @private
-     */
-
-  }, {
-    key: '_changeToTask',
-    value: function _changeToTask(lineNumber) {
-      if (FIND_TASK_LIST_RX.exec(this.doc.getLine(lineNumber))) {
-        this._replaceLineTextByRegexp(lineNumber, TASK_SYNTAX_RX, '$1');
-      } else if (this._isListLine(lineNumber)) {
-        this._replaceLineTextByRegexp(lineNumber, LIST_SYNTAX_RX, '$1[ ] ');
-      } else {
-        this._replaceLineText('* [ ] ', lineNumber);
-      }
-    }
-  }, {
-    key: '_getListDepth',
-    value: function _getListDepth(lineNumber) {
-      return this.doc.getLine(lineNumber) ? this.doc.cm.getStateAfter(lineNumber).base.listStack.length : 0;
-    }
-  }, {
-    key: '_findSameDepthList',
-    value: function _findSameDepthList(listNumber, depth, isIncrease) {
-      var lineCount = this.doc.lineCount();
-      var result = [];
-      var i = listNumber;
-      var currentLineDepth = void 0;
-
-      while (isIncrease ? i < lineCount - 1 : i > 0) {
-        i = isIncrease ? i + 1 : i - 1;
-        currentLineDepth = this._getListDepth(i);
-
-        if (currentLineDepth === depth) {
-          result.push(i);
-        } else if (currentLineDepth < depth) {
-          break;
-        }
-      }
-
-      return result;
-    }
-
-    /**
-     * Find Sampe depth list before and after the line number,
-     * and then same depth lines change using replacer function
-     * @param {number} lineNumber line number
-     * @param {Function} replacer The function should be called with line numbers and ordinal number as arguments.
-     * @private
-     */
-
-  }, {
-    key: '_changeSameDepthList',
-    value: function _changeSameDepthList(lineNumber, replacer) {
-      var depth = this._getListDepth(lineNumber);
-
-      var backwardList = this._findSameDepthList(lineNumber, depth, false).reverse();
-      var forwardList = this._findSameDepthList(lineNumber, depth, true);
-      var sameDepthList = backwardList.concat([lineNumber]).concat(forwardList);
-
-      sameDepthList.forEach(function (lineNum, i) {
-        replacer(lineNum, i + 1);
-      });
-    }
-
-    /**
-     * Replace text using regular expression
+     * Replace list syntax
+     * @param {object} doc CodeMirror doc instance
      * @param {number} lineNumber Line number
      * @param {RegExp} regexp Regexp for find list syntax
      * @param {string} replacePattern Replacement string
-     * @private
      */
 
   }, {
-    key: '_replaceLineTextByRegexp',
-    value: function _replaceLineTextByRegexp(lineNumber, regexp, replacePattern) {
-      var line = this.doc.getLine(lineNumber);
+    key: 'replaceLineText',
+    value: function replaceLineText(doc, lineNumber, regexp, replacePattern) {
+      var line = doc.getLine(lineNumber);
       var currentLineStart = {
         line: lineNumber,
         ch: 0
@@ -13729,68 +12697,94 @@ var MdListManager = function () {
 
       line = line.replace(regexp, replacePattern);
 
-      this.doc.replaceRange(line, currentLineStart, currentLineEnd);
-    }
-  }, {
-    key: '_replaceListTypeToUL',
-    value: function _replaceListTypeToUL(lineNumber) {
-      var lineText = this.doc.getLine(lineNumber);
-
-      if (UL_TASK_SYNTAX_RX.exec(lineText)) {
-        this._replaceLineTextByRegexp(lineNumber, UL_TASK_SYNTAX_RX, '$1 ');
-      } else if (OL_SYNTAX_RX.exec(lineText)) {
-        this._replaceLineTextByRegexp(lineNumber, OL_SYNTAX_RX, '* ');
-      }
-    }
-  }, {
-    key: '_replaceListTypeToOL',
-    value: function _replaceListTypeToOL(lineNumber, ordinalNumber) {
-      var lineText = this.doc.getLine(lineNumber);
-
-      if (FIND_UL_RX.exec(lineText) || FIND_OL_TASK_RX.exec(lineText)) {
-        this._replaceLineTextByRegexp(lineNumber, LIST_OR_TASK_SYNTAX_RX, ordinalNumber + '. ');
-      } else if (OL_SYNTAX_RX.exec(lineText)) {
-        if (parseInt(RegExp.$1, 10) !== ordinalNumber) {
-          this._replaceLineTextByRegexp(lineNumber, OL_SYNTAX_RX, ordinalNumber + '. ');
-        }
-      }
+      doc.replaceRange(line, currentLineStart, currentLineEnd);
     }
 
     /**
-     * The new list must have a blank line before and after.
-     * @param {Array} newListLines lines that changed to list
+     * Return whether is a different list type or not
+     * @param {function} comparator comparator function
+     * @param {string} line line string
+     * @returns {boolean}
      * @private
      */
 
   }, {
-    key: '_insertBlankLineForNewList',
-    value: function _insertBlankLineForNewList(newListLines) {
-      var length = newListLines.length;
+    key: '_isDifferentListType',
+    value: function _isDifferentListType(comparator, line) {
+      return line && line.length !== 0 && comparator.call(this, line);
+    }
 
+    /**
+     * Return whether is a list or not
+     * @param {string} line line string
+     * @returns {boolean}
+     * @private
+     */
 
-      if (length) {
-        var startLineNumber = newListLines[0];
-        var endLineNumber = newListLines[length - 1];
+  }, {
+    key: '_isAList',
+    value: function _isAList(line) {
+      return line && line.length !== 0 && this._isListLine(line);
+    }
 
-        if (this._isNotBlankNotListLine(endLineNumber + 1)) {
-          this.doc.replaceRange('\n', {
-            line: endLineNumber,
-            ch: this.doc.getLine(endLineNumber).length
-          });
-        }
+    /**
+     * Return whether passed line is list or not
+     * @param {string} line Line text
+     * @returns {Boolean}
+     * @private
+     */
 
-        if (startLineNumber > 0 && this._isNotBlankNotListLine(startLineNumber - 1)) {
-          this.doc.replaceRange('\n', {
-            line: startLineNumber,
-            ch: 0
-          });
+  }, {
+    key: '_isListLine',
+    value: function _isListLine(line) {
+      return !!(line.match(FIND_MD_TASK_RX) || line.match(FIND_MD_UL_RX) || line.match(FIND_MD_OL_RX));
+    }
+
+    /**
+     * Get start line number of current list
+     * @param {object} doc CodeMirror doc instance
+     * @param {number} startLineNumber start line number of selection
+     * @returns {number|undefined}
+     * @private
+     */
+
+  }, {
+    key: '_getStartLineNumberOfList',
+    value: function _getStartLineNumberOfList(doc, startLineNumber) {
+      var lineNumber = void 0;
+
+      for (lineNumber = startLineNumber; lineNumber > 0; lineNumber -= 1) {
+        var previousLine = doc.getLine(lineNumber - 1);
+        if (!previousLine || !this._isListLine(previousLine)) {
+          break;
         }
       }
+
+      return lineNumber;
     }
+
+    /**
+     * Get end line number of current list
+     * @param {object} doc CodeMirror doc instance
+     * @param {number} endLineNumber end line number of selection
+     * @returns {number|undefined}
+     * @private
+     */
+
   }, {
-    key: '_isNotBlankNotListLine',
-    value: function _isNotBlankNotListLine(lineNumber) {
-      return !!this.doc.getLine(lineNumber) && !this._isListLine(lineNumber);
+    key: '_getEndLineNumberOfList',
+    value: function _getEndLineNumberOfList(doc, endLineNumber) {
+      var lineCount = doc.lineCount();
+      var lineNumber = void 0;
+
+      for (lineNumber = endLineNumber; lineNumber < lineCount; lineNumber += 1) {
+        var nextLine = doc.getLine(lineNumber + 1);
+        if (!nextLine || !this._isListLine(nextLine)) {
+          break;
+        }
+      }
+
+      return lineNumber;
     }
   }]);
 
@@ -13800,7 +12794,7 @@ var MdListManager = function () {
 exports.default = MdListManager;
 
 /***/ }),
-/* 56 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13816,17 +12810,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @fileoverview Implements markdown textObject
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 /**
  * Class Markdown textObject
- * @param {MarkdownEditor} mde - MarkdownEditor instance
- * @param {object} range - range
  */
-var MdTextObject = function () {
-  function MdTextObject(mde, range) {
-    _classCallCheck(this, MdTextObject);
+var mdTextObject = function () {
+  /**
+   * Creates an instance of mdTextObject.
+   * @param {MarkdownEditor} mde - MarkdownEditor instance
+   * @param {object} range - range
+   * @memberof mdTextObject
+   */
+  function mdTextObject(mde, range) {
+    _classCallCheck(this, mdTextObject);
 
     this._mde = mde;
 
@@ -13835,12 +12833,13 @@ var MdTextObject = function () {
 
   /**
    * Set start
+   * @memberof mdTextObject
    * @param {object} rangeStart Start of range
    * @private
    */
 
 
-  _createClass(MdTextObject, [{
+  _createClass(mdTextObject, [{
     key: '_setStart',
     value: function _setStart(rangeStart) {
       this._start = rangeStart;
@@ -13848,6 +12847,8 @@ var MdTextObject = function () {
 
     /**
      * Set end
+     * @private
+     * @memberof mdTextObject
      * @param {object} rangeEnd End of range
      * @private
      */
@@ -13860,6 +12861,8 @@ var MdTextObject = function () {
 
     /**
      * Set range to given range
+     * @private
+     * @memberof mdTextObject
      * @param {object} range Range object
      */
 
@@ -13872,6 +12875,8 @@ var MdTextObject = function () {
 
     /**
      * Set start to end
+     * @private
+     * @memberof mdTextObject
      * @param {object} range Range object
      */
 
@@ -13883,6 +12888,8 @@ var MdTextObject = function () {
 
     /**
      * Expand startOffset by 1
+     * @private
+     * @memberof mdTextObject
      */
 
   }, {
@@ -13897,6 +12904,8 @@ var MdTextObject = function () {
 
     /**
      * Expand endOffset by 1
+     * @private
+     * @memberof mdTextObject
      */
 
   }, {
@@ -13911,6 +12920,8 @@ var MdTextObject = function () {
 
     /**
      * Get current selection's text content
+     * @private
+     * @memberof mdTextObject
      * @returns {{start: {line: number, ch: number}, end: {line: number, ch: number}}}
      */
 
@@ -13922,6 +12933,8 @@ var MdTextObject = function () {
 
     /**
      * Replace current selection's content with given text content
+     * @private
+     * @memberof mdTextObject
      * @param {string} content Replacement content
      */
 
@@ -13933,6 +12946,8 @@ var MdTextObject = function () {
 
     /**
      * Delete current selection's content
+     * @private
+     * @memberof mdTextObject
      */
 
   }, {
@@ -13943,6 +12958,8 @@ var MdTextObject = function () {
 
     /**
      * peek StartBeforeOffset
+     * @private
+     * @memberof mdTextObject
      * @param {number} offset Offset
      * @returns {{start: {line: number, ch: number}, end: {line: number, ch: number}}}
      */
@@ -13959,13 +12976,13 @@ var MdTextObject = function () {
     }
   }]);
 
-  return MdTextObject;
+  return mdTextObject;
 }();
 
-exports.default = MdTextObject;
+exports.default = mdTextObject;
 
 /***/ }),
-/* 57 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13977,7 +12994,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implments wysiwygEditor
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -13993,59 +13010,59 @@ var _domUtils = __webpack_require__(4);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _wwClipboardManager = __webpack_require__(58);
+var _wwClipboardManager = __webpack_require__(56);
 
 var _wwClipboardManager2 = _interopRequireDefault(_wwClipboardManager);
 
-var _wwListManager = __webpack_require__(61);
+var _wwListManager = __webpack_require__(58);
 
 var _wwListManager2 = _interopRequireDefault(_wwListManager);
 
-var _wwTaskManager = __webpack_require__(62);
+var _wwTaskManager = __webpack_require__(59);
 
 var _wwTaskManager2 = _interopRequireDefault(_wwTaskManager);
 
-var _wwTableManager = __webpack_require__(38);
+var _wwTableManager = __webpack_require__(37);
 
 var _wwTableManager2 = _interopRequireDefault(_wwTableManager);
 
-var _wwTableSelectionManager = __webpack_require__(39);
+var _wwTableSelectionManager = __webpack_require__(38);
 
 var _wwTableSelectionManager2 = _interopRequireDefault(_wwTableSelectionManager);
 
-var _wwHrManager = __webpack_require__(63);
+var _wwHrManager = __webpack_require__(60);
 
 var _wwHrManager2 = _interopRequireDefault(_wwHrManager);
 
-var _wwPManager = __webpack_require__(64);
+var _wwPManager = __webpack_require__(61);
 
 var _wwPManager2 = _interopRequireDefault(_wwPManager);
 
-var _wwHeadingManager = __webpack_require__(65);
+var _wwHeadingManager = __webpack_require__(62);
 
 var _wwHeadingManager2 = _interopRequireDefault(_wwHeadingManager);
 
-var _wwCodeBlockManager = __webpack_require__(40);
+var _wwCodeBlockManager = __webpack_require__(39);
 
 var _wwCodeBlockManager2 = _interopRequireDefault(_wwCodeBlockManager);
 
-var _squireExt = __webpack_require__(66);
+var _squireExt = __webpack_require__(63);
 
 var _squireExt2 = _interopRequireDefault(_squireExt);
 
-var _keyMapper = __webpack_require__(20);
+var _keyMapper = __webpack_require__(19);
 
 var _keyMapper2 = _interopRequireDefault(_keyMapper);
 
-var _wwTextObject = __webpack_require__(68);
+var _wwTextObject = __webpack_require__(65);
 
 var _wwTextObject2 = _interopRequireDefault(_wwTextObject);
 
-var _componentManager = __webpack_require__(37);
+var _componentManager = __webpack_require__(36);
 
 var _componentManager2 = _interopRequireDefault(_componentManager);
 
-var _codeBlockGadget = __webpack_require__(69);
+var _codeBlockGadget = __webpack_require__(66);
 
 var _codeBlockGadget2 = _interopRequireDefault(_codeBlockGadget);
 
@@ -14055,25 +13072,25 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var keyMapper = _keyMapper2.default.getSharedInstance();
 
-var FIND_EMPTY_LINE = /<([a-z]+|h\d)>(<br>|<br \/>)<\/\1>/gi;
-var FIND_UNNECESSARY_BR = /(?:<br>|<br \/>)<\/(.+?)>/gi;
-var FIND_BLOCK_TAGNAME_RX = /\b(H[\d]|LI|P|BLOCKQUOTE|TD|PRE)\b/;
-var FIND_OPENING_SPAN_WITH_SPACE = /<span([^>]*)>[\u0020]/g;
-var FIND_CLOSING_SPAN_WITH_SPACE = /[\u0020]<\/span>/g;
-var FIND_TABLE_AND_HEADING_RX = /^(TABLE|H[1-6])$/;
+var FIND_EMPTY_LINE = /<([a-z]+|h\d)>(<br>|<br \/>)<\/\1>/gi,
+    FIND_UNNECESSARY_BR = /(?:<br>|<br \/>)<\/(.+?)>/gi,
+    FIND_BLOCK_TAGNAME_RX = /\b(H[\d]|LI|P|BLOCKQUOTE|TD|PRE)\b/;
 
 var EDITOR_CONTENT_CSS_CLASSNAME = 'tui-editor-contents';
-var PLACEHOLDER_CSS_CLASSNAME = 'tui-editor-contents-placeholder';
 
 var canObserveMutations = typeof MutationObserver !== 'undefined';
 
 /**
  * Class WysiwygEditor
- * @param {jQuery} $el element to insert editor
- * @param {EventManager} eventManager EventManager instance
  */
 
 var WysiwygEditor = function () {
+  /**
+   * Creates an instance of WysiwygEditor.
+   * @param {jQuery} $el element to insert editor
+   * @param {EventManager} eventManager EventManager instance
+   * @memberof WysiwygEditor
+   */
   function WysiwygEditor($el, eventManager) {
     var _this = this;
 
@@ -14089,7 +13106,6 @@ var WysiwygEditor = function () {
 
     this._keyEventHandlers = {};
     this._managers = {};
-    this._linkAttribute = {};
 
     this._initEvent();
     this._initDefaultKeyEventHandler();
@@ -14101,6 +13117,7 @@ var WysiwygEditor = function () {
 
   /**
    * init
+   * @memberof WysiwygEditor
    */
 
 
@@ -14125,7 +13142,6 @@ var WysiwygEditor = function () {
 
       this.get$Body().addClass(EDITOR_CONTENT_CSS_CLASSNAME);
       this.$editorContainerEl.css('position', 'relative');
-      this._togglePlaceholder();
 
       this.codeBlockGadget = new _codeBlockGadget2.default({
         eventManager: this.eventManager,
@@ -14135,7 +13151,24 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _preprocessForInlineElement
+     * Seperate anchor tags with \u200B and replace blank space between <br> and <img to <br>$1
+     * @param {string} html Inner html of content editable
+     * @returns {string}
+     * @memberof WysiwygEditor
+     * @private
+     */
+
+  }, {
+    key: '_preprocessForInlineElement',
+    value: function _preprocessForInlineElement(html) {
+      return html.replace(/<br>( *)<img/g, '<br><br>$1<img');
+    }
+
+    /**
+     * _initEvent
      * Initialize EventManager event handler
+     * @memberof WysiwygEditor
      * @private
      */
 
@@ -14144,19 +13177,21 @@ var WysiwygEditor = function () {
     value: function _initEvent() {
       var _this2 = this;
 
+      this.eventManager.listen('wysiwygSetValueBefore', function (html) {
+        return _this2._preprocessForInlineElement(html);
+      });
       this.eventManager.listen('wysiwygKeyEvent', function (ev) {
         return _this2._runKeyEventHandlers(ev.data, ev.keyMap);
       });
       this.eventManager.listen('wysiwygRangeChangeAfter', function () {
         return _this2.scrollIntoCursor();
       });
-      this.eventManager.listen('contentChangedFromWysiwyg', function () {
-        _this2._togglePlaceholder();
-      });
     }
 
     /**
+     * addKeyEventHandler
      * Add key event handler
+     * @memberof WysiwygEditor
      * @param {string|Array.<string>} keyMap - keyMap string or array of string
      * @param {function} handler handler
      */
@@ -14184,7 +13219,7 @@ var WysiwygEditor = function () {
     }
 
     /**
-     * Remove key event handler.
+     * REmove key event handler.
      * @param {string} keyMap keyMap string
      * @param {function} handler handler
      */
@@ -14207,6 +13242,7 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _runKeyEventHandlers
      * Run key event handler
      * @param {Event} event event object
      * @param {string} keyMap keyMapString
@@ -14240,6 +13276,7 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _initSquireEvent
      * Initialize squire event
      * @private
      */
@@ -14490,19 +13527,6 @@ var WysiwygEditor = function () {
         }
       });
     }
-  }, {
-    key: '_togglePlaceholder',
-    value: function _togglePlaceholder() {
-      var squire = this.getEditor();
-      squire.modifyDocument(function () {
-        var root = squire.getRoot();
-        if (root.textContent || root.childNodes.length > 1) {
-          root.classList.remove(PLACEHOLDER_CSS_CLASSNAME);
-        } else {
-          root.classList.add(PLACEHOLDER_CSS_CLASSNAME);
-        }
-      });
-    }
 
     /**
      * Return last matched list item path string matched index to end
@@ -14555,6 +13579,7 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _initDefaultKeyEventHandler
      * Initialize default event handler
      * @private
      */
@@ -14593,51 +13618,6 @@ var WysiwygEditor = function () {
 
         return true;
       });
-
-      this.addKeyEventHandler('BACK_SPACE', function (ev, range, keymap) {
-        return _this5._handleRemoveKeyEvent(ev, range, keymap);
-      });
-      this.addKeyEventHandler('DELETE', function (ev, range, keymap) {
-        return _this5._handleRemoveKeyEvent(ev, range, keymap);
-      });
-    }
-  }, {
-    key: '_handleRemoveKeyEvent',
-    value: function _handleRemoveKeyEvent(ev, range, keyMap) {
-      var sq = this.getEditor();
-
-      if (this._isStartHeadingOrTableAndContainsThem(range)) {
-        var keyStr = keyMap === 'BACK_SPACE' ? 'backspace' : 'delete';
-
-        sq.removeAllFormatting();
-        sq._keyHandlers[keyStr](sq, ev, sq.getSelection());
-        sq.removeLastUndoStack();
-
-        return false;
-      }
-
-      return true;
-    }
-  }, {
-    key: '_isStartHeadingOrTableAndContainsThem',
-    value: function _isStartHeadingOrTableAndContainsThem(range) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset,
-          commonAncestorContainer = range.commonAncestorContainer,
-          collapsed = range.collapsed;
-
-      var root = this.getEditor().getRoot();
-      var result = false;
-
-      if (!collapsed && commonAncestorContainer === root) {
-        if (startContainer === root) {
-          result = FIND_TABLE_AND_HEADING_RX.test(_domUtils2.default.getChildNodeByOffset(startContainer, startOffset).nodeName);
-        } else if (startOffset === 0) {
-          result = FIND_TABLE_AND_HEADING_RX.test(_domUtils2.default.getParentUntil(startContainer, root).nodeName);
-        }
-      }
-
-      return result;
     }
   }, {
     key: '_wrapDefaultBlockToOrphanTexts',
@@ -14654,6 +13634,7 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _isInOrphanText
      * check if range is orphan text
      * @param {Range} range range
      * @returns {boolean} result
@@ -14667,6 +13648,7 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _wrapDefaultBlockTo
      * Wrap default block to passed range
      * @param {Range} range range
      * @private
@@ -14709,6 +13691,7 @@ var WysiwygEditor = function () {
 
     /**
      * findTextNodeFilter
+     * @this Node
      * @returns {boolean} true or not
      */
 
@@ -14719,6 +13702,7 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _joinSplitedTextNodes
      * Join spliated text nodes
      * @private
      */
@@ -14746,7 +13730,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * saveSelection
      * Save current selection before modification
+     * @memberof WysiwygEditor
      * @param {Range} range Range object
      */
 
@@ -14767,6 +13753,7 @@ var WysiwygEditor = function () {
      * @param {HTMLNode} endContainer - end container
      * @param {Number} endOffset - end offset
      * @returns {Range} - range instance
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14782,7 +13769,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * restoreSavedSelection
      * Restore saved selection
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14792,7 +13781,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * reset
      * Reset wysiwyg editor
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14802,7 +13793,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * changeBlockFormatTo
      * Change current range block format to passed tag
+     * @memberof WysiwygEditor
      * @param {string} targetTagName Target element tag name
      */
 
@@ -14814,7 +13807,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * makeEmptyBlockCurrentSelection
      * Make empty block to current selection
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14832,7 +13827,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * focus
      * Focus to editor
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14850,7 +13847,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * blur
      * Remove focus of editor
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14860,21 +13859,25 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * remove
      * Remove wysiwyg editor
+     * @memberof WysiwygEditor
      */
 
   }, {
     key: 'remove',
     value: function remove() {
-      this.$editorContainerEl.off('scroll');
       this.getEditor().destroy();
+
       this.editor = null;
       this.$body = null;
       this.eventManager = null;
     }
 
     /**
+     * setHeight
      * Set editor height
+     * @memberof WysiwygEditor
      * @param {number|string} height pixel of height or "auto"
      */
 
@@ -14893,8 +13896,9 @@ var WysiwygEditor = function () {
     }
 
     /**
-     * Set min height
+     * set min height
      * @param {number} minHeight - min height in px
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14905,42 +13909,9 @@ var WysiwygEditor = function () {
     }
 
     /**
-     * Set the placeholder to wysiwyg editor
-     * @param {string} placeholder - placeholder to set
-     */
-
-  }, {
-    key: 'setPlaceholder',
-    value: function setPlaceholder(placeholder) {
-      if (placeholder) {
-        this.getEditor().getRoot().setAttribute('data-placeholder', placeholder);
-      }
-    }
-
-    /**
-     * Set attribute of link for wysiwyg
-     * @param {object} attribute - attribute of anchor tag
-     */
-
-  }, {
-    key: 'setLinkAttribute',
-    value: function setLinkAttribute(attribute) {
-      this._linkAttribute = attribute;
-    }
-
-    /**
-     * Get attribute of link for wysiwyg
-     * @returns {object} attribute - attribute of anchor tag
-     */
-
-  }, {
-    key: 'getLinkAttribute',
-    value: function getLinkAttribute() {
-      return this._linkAttribute;
-    }
-
-    /**
+     * setValue
      * Set value to wysiwyg editor
+     * @memberof WysiwygEditor
      * @param {string} html - HTML text
      * @param {boolean} [cursorToEnd=true] - move cursor to contents end
      */
@@ -14968,8 +13939,9 @@ var WysiwygEditor = function () {
     }
 
     /**
-     * Insert given text to cursor position or selected area
+     * insert given text to cursor position or selected area
      * @param {string} text - text string to insert
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -14979,7 +13951,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * getValue
      * Get value of wysiwyg editor
+     * @memberof WysiwygEditor
      * @returns {string} html
      */
 
@@ -15007,10 +13981,6 @@ var WysiwygEditor = function () {
         return result;
       });
 
-      // replace a space of the first and end in sapn tag to &nbsp;.
-      html = html.replace(FIND_OPENING_SPAN_WITH_SPACE, '<span$1>&nbsp;');
-      html = html.replace(FIND_CLOSING_SPAN_WITH_SPACE, '&nbsp;</span>');
-
       // remove unnecessary brs
       html = html.replace(FIND_UNNECESSARY_BR, '</$1>');
 
@@ -15024,7 +13994,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _prepareGetHTML
      * Prepare before get html
+     * @memberof WysiwygEditor
      * @private
      */
 
@@ -15041,6 +14013,7 @@ var WysiwygEditor = function () {
 
     /**
      * postProcessForChange
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -15058,7 +14031,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * readySilentChange
      * Ready to silent change
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -15070,7 +14045,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * getEditor
      * Get squire
+     * @memberof WysiwygEditor
      * @returns {SquireExt} squire
      */
 
@@ -15081,7 +14058,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * replaceSelection
      * Replace text of passed range
+     * @memberof WysiwygEditor
      * @param {string} content Content for change current selection
      * @param {Range} range range
      */
@@ -15093,7 +14072,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * replaceRelativeOffset
      * Replace content by relative offset
+     * @memberof WysiwygEditor
      * @param {string} content Content for change current selection
      * @param {number} offset Offset of current range
      * @param {number} overwriteLength Length to overwrite content
@@ -15106,7 +14087,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * addWidget
      * Add widget to selection
+     * @memberof WysiwygEditor
      * @param {Range} range Range object
      * @param {Node} node Widget node
      * @param {string} style Adding style "over" or "bottom"
@@ -15129,7 +14112,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * get$Body
      * Get jQuery wrapped body container of Squire
+     * @memberof WysiwygEditor
      * @returns {JQuery} jquery body
      */
 
@@ -15140,7 +14125,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * hasFormatWithRx
      * Check with given regexp whether current path has some format or not
+     * @memberof WysiwygEditor
      * @param {RegExp} rx Regexp
      * @returns {boolean} Match result
      */
@@ -15152,7 +14139,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * breakToNewDefaultBlock
      * Break line to new default block from passed range
+     * @memberof WysiwygEditor
      * @param {Range} range Range object
      * @param {string} [where] "before" or not
      */
@@ -15176,7 +14165,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * replaceContentText
      * Replace textContet of node
+     * @memberof WysiwygEditor
      * @param {Node} container Container node
      * @param {string} from Target text to change
      * @param {string} to Replacement text
@@ -15190,7 +14181,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * unwrapBlockTag
      * Unwrap Block tag of current range
+     * @memberof WysiwygEditor
      * @param {function} [condition] iterate with tagName
      */
 
@@ -15212,6 +14205,7 @@ var WysiwygEditor = function () {
      * scrollIntoView browser function may cause scrolling on document.
      * this function aims to replace scrollIntoView function to prevent that.
      * it will move the scroll of squire only.
+     * @memberof SquireExt
      */
 
   }, {
@@ -15233,12 +14227,13 @@ var WysiwygEditor = function () {
       if (cursorAboveEditor < 0) {
         this.scrollTop(scrollTop + cursorAboveEditor);
       } else if (cursorBelowEditor > 0) {
-        this.scrollTop(Math.ceil(scrollTop + cursorBelowEditor));
+        this.scrollTop(scrollTop + cursorBelowEditor);
       }
     }
 
     /**
      * Set cursor position to end
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -15251,6 +14246,7 @@ var WysiwygEditor = function () {
 
     /**
      * Set cursor position to start
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -15262,6 +14258,7 @@ var WysiwygEditor = function () {
 
     /**
      * Set cursor position to start
+     * @memberof WysiwygEditor
      * @param {number} value Scroll amount
      * @returns {boolean}
      */
@@ -15277,7 +14274,9 @@ var WysiwygEditor = function () {
     }
 
     /**
+     * _correctRangeAfterMoveCursor
      * For arrange Range after moveCursorToEnd api invocation. Squire has bug in Firefox, IE.
+     * @memberof WysiwygEditor
      * @param {string} direction Direction of cursor move
      * @private
      */
@@ -15312,6 +14311,7 @@ var WysiwygEditor = function () {
 
     /**
      * Get current Range object
+     * @memberof WysiwygEditor
      * @returns {Range}
      */
 
@@ -15325,6 +14325,7 @@ var WysiwygEditor = function () {
      * get IME range
      * cjk composition causes wrong caret position.
      * it returns fixed IME composition range
+     * @memberof WysiwygEditor
      * @returns {Range}
      */
 
@@ -15345,6 +14346,7 @@ var WysiwygEditor = function () {
      * get IME range
      * cjk composition causes wrong caret position.
      * it sets fixed IME composition range
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -15361,6 +14363,7 @@ var WysiwygEditor = function () {
     /**
      * set range
      * @param {Range} range - range to set
+     * @memberof WysiwygEditor
      */
 
   }, {
@@ -15370,21 +14373,8 @@ var WysiwygEditor = function () {
     }
 
     /**
-     * Check whether passed range is in table or not
-     * @param {Range} range range
-     * @returns {boolean} result
-     */
-
-  }, {
-    key: 'isInTable',
-    value: function isInTable(range) {
-      var target = range.collapsed ? range.startContainer : range.commonAncestorContainer;
-
-      return !!(0, _jquery2.default)(target).closest('[contenteditable=true] table').length;
-    }
-
-    /**
      * Get text object of current range
+     * @memberof WysiwygEditor
      * @param {Range} range Range object
      * @returns {WwTextObject}
      */
@@ -15420,12 +14410,12 @@ var WysiwygEditor = function () {
 
     /**
      * WysiwygEditor factory method
+     * @memberof WysiwygEditor
      * @param {jQuery} $el Container element for editor
      * @param {EventManager} eventManager EventManager instance
      * @param {object} [options={}] - option object
-     *     @param {boolean} [options.useCommandShortcut=true] - whether to use squire command shortcuts
+     *  @param {boolean} [options.useCommandShortcut=true] - whether to use squire command shortcuts
      * @returns {WysiwygEditor} wysiwygEditor
-     * @ignore
      */
 
   }], [{
@@ -15454,7 +14444,7 @@ var WysiwygEditor = function () {
 exports.default = WysiwygEditor;
 
 /***/ }),
-/* 58 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15466,7 +14456,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg editor clipboard manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -15482,13 +14472,13 @@ var _domUtils = __webpack_require__(4);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _wwPasteContentHelper = __webpack_require__(59);
+var _wwPasteContentHelper = __webpack_require__(57);
 
 var _wwPasteContentHelper2 = _interopRequireDefault(_wwPasteContentHelper);
 
-var _wwTablePasteHelper = __webpack_require__(60);
+var _i18n = __webpack_require__(3);
 
-var _wwTablePasteHelper2 = _interopRequireDefault(_wwTablePasteHelper);
+var _i18n2 = _interopRequireDefault(_i18n);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -15499,23 +14489,27 @@ var PASTE_TABLE_CELL_BOOKMARK = 'tui-paste-table-cell-bookmark';
 
 /**
  * Class WwClipboardManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 
 var WwClipboardManager = function () {
+  /**
+   * Creates an instance of WwClipboardManager.
+   * @param {WysiwygEditor} wwe - WysiwygEditor instance
+   * @memberof WwClipboardManager
+   */
   function WwClipboardManager(wwe) {
     _classCallCheck(this, WwClipboardManager);
 
     this.wwe = wwe;
     this._pch = new _wwPasteContentHelper2.default(this.wwe);
-    this._tablePasteHelper = new _wwTablePasteHelper2.default(this.wwe);
     this._selectedSellCount = 0;
     this._$clipboardArea = null;
   }
 
   /**
+   * init
    * initialize
+   * @memberof WwClipboardManager
    */
 
 
@@ -15525,30 +14519,12 @@ var WwClipboardManager = function () {
       var _this = this;
 
       this.wwe.eventManager.listen('willPaste', function (ev) {
-        return _this._executeHandler(_this._onWillPaste.bind(_this), ev);
+        return _this._onWillPaste(ev.data);
       });
-      this.wwe.eventManager.listen('copy', function (ev) {
-        return _this._executeHandler(_this._onCopyCut.bind(_this), ev);
-      });
-      this.wwe.eventManager.listen('copyAfter', function (ev) {
-        return _this._executeHandler(_this._onCopyAfter.bind(_this), ev);
-      });
-      this.wwe.eventManager.listen('cut', function (ev) {
-        return _this._executeHandler(_this._onCopyCut.bind(_this), ev);
-      });
-      this.wwe.eventManager.listen('cutAfter', function (ev) {
-        return _this._executeHandler(_this._onCutAfter.bind(_this), ev);
-      });
-      this.wwe.eventManager.listen('paste', function (ev) {
-        return _this._executeHandler(_this._onPasteIntoTable.bind(_this), ev);
-      });
-    }
-  }, {
-    key: '_executeHandler',
-    value: function _executeHandler(handler, event) {
-      if (event.source === 'wysiwyg') {
-        handler(event);
-      }
+      this.wwe.eventManager.listen('copy', this._onCopyCut.bind(this));
+      this.wwe.eventManager.listen('copyAfter', this._onCopyAfter.bind(this));
+      this.wwe.eventManager.listen('cut', this._onCopyCut.bind(this));
+      this.wwe.eventManager.listen('cutAfter', this._onCutAfter.bind(this));
     }
   }, {
     key: '_onCopyCut',
@@ -15603,70 +14579,67 @@ var WwClipboardManager = function () {
       this.wwe.getEditor().focus();
       this._clearClipboardArea();
     }
-
-    /**
-     * Process paste event when occured in table
-     * @param {{source: string, data: event}} event - event
-     * @private
-     */
-
-  }, {
-    key: '_onPasteIntoTable',
-    value: function _onPasteIntoTable(event) {
-      var ev = event.data;
-
-      var range = this.wwe.getEditor().getSelection();
-
-      if (this.wwe.isInTable(range) && this._isSingleCellSelected(range)) {
-        this._tablePasteHelper.pasteClipboard(ev);
-      }
-    }
-  }, {
-    key: '_isSingleCellSelected',
-    value: function _isSingleCellSelected(range) {
-      var startContainer = range.startContainer,
-          endContainer = range.endContainer;
-
-
-      return this._getCell(startContainer) === this._getCell(endContainer);
-    }
-  }, {
-    key: '_getCell',
-    value: function _getCell(node) {
-      return node.nodeName === 'TD' ? node : _domUtils2.default.getParentUntil(node, 'TR');
-    }
-  }, {
-    key: '_replaceNewLineToBr',
-    value: function _replaceNewLineToBr(node) {
-      var textNodes = _domUtils2.default.getAllTextNode(node);
-
-      textNodes.forEach(function (textNode) {
-        if (/\n/.test(textNode.nodeValue)) {
-          textNode.parentNode.innerHTML = textNode.nodeValue.replace(/\n/g, '<br>');
-        }
-      });
-    }
   }, {
     key: '_onWillPaste',
-    value: function _onWillPaste(event) {
+    value: function _onWillPaste(pasteData) {
       var _this2 = this;
 
-      var pasteData = event.data;
-
       var $clipboardContainer = (0, _jquery2.default)('<div>').append(pasteData.fragment.cloneNode(true));
-      this._preparePaste($clipboardContainer);
+
       this._setTableBookmark($clipboardContainer);
 
-      pasteData.fragment = document.createDocumentFragment();
-      $clipboardContainer.contents().each(function (index, element) {
-        pasteData.fragment.appendChild(element);
-      });
+      if (this._pasteToTable($clipboardContainer)) {
+        pasteData.preventDefault();
+      } else {
+        this._preparePaste($clipboardContainer);
+        this._setTableBookmark($clipboardContainer);
+
+        pasteData.fragment = document.createDocumentFragment();
+        (0, _jquery2.default)($clipboardContainer[0].childNodes).each(function (index, element) {
+          pasteData.fragment.appendChild(element);
+        });
+      }
+
+      // @TODO Temporary code : paste to empty code block
+      this._pasteToEmptyCodeBlock(pasteData);
 
       // once right after the squire insertHTML DOM.
       var handler = function handler() {
         _this2.wwe.getEditor().removeEventListener('input', handler);
         _this2.wwe.eventManager.emit('wysiwygRangeChangeAfter', _this2);
         _this2._focusTableBookmark();
+      };
+      this.wwe.getEditor().addEventListener('input', handler);
+    }
+
+    // @TODO Temporary code : paste to empty code block
+    // Squire remove empty code block when paste.
+    // This code should remove after Squire update !!!
+    // https://github.com/neilj/Squire/blob/7cef58bda854c49989c429d90756bff8d6fe758c/source/Range.js#L259
+
+  }, {
+    key: '_pasteToEmptyCodeBlock',
+    value: function _pasteToEmptyCodeBlock(pasteData) {
+      var _this3 = this;
+
+      var sq = this.wwe.getEditor();
+      var range = sq.getSelection().cloneRange();
+      var container = range.startContainer;
+      var wwCodeblockManager = this.wwe.componentManager.getManager('codeblock');
+      var shouldChangeSelection = false;
+      if (wwCodeblockManager.isInCodeBlock(range) && range.collapse && container.nodeName === 'PRE' && !container.textContent) {
+        var brNode = container.firstChild;
+        container.insertBefore(pasteData.fragment, brNode);
+        pasteData.defaultPrevented = true;
+        shouldChangeSelection = true;
+      }
+
+      var handler = function handler() {
+        _this3.wwe.getEditor().removeEventListener('input', handler);
+        if (shouldChangeSelection) {
+          range.setStart(container, 1);
+          sq.setSelection(range);
+        }
       };
       this.wwe.getEditor().addEventListener('input', handler);
     }
@@ -15736,40 +14709,39 @@ var WwClipboardManager = function () {
     }
 
     /**
-     * MS Office use specific CSS attributes with mso- prefix.
-     * But safari does not support mso- prefix.
-     * @param {string} html - html string
-     * @returns {boolean}
+     * Paste to table.
+     * @param {jQuery} $clipboardContainer - clibpard container
+     * @returns {boolean} whether processed or not
      * @private
      */
 
   }, {
-    key: '_isFromMs',
-    value: function _isFromMs(html) {
-      return (/<p style="[^>]*mso-/.test(html)
-      );
-    }
+    key: '_pasteToTable',
+    value: function _pasteToTable($clipboardContainer) {
+      var tableManager = this.wwe.componentManager.getManager('table');
+      var tableSelectionManager = this.wwe.componentManager.getManager('tableSelection');
+      var range = this.wwe.getEditor().getSelection();
+      var pastingToTable = tableManager.isInTable(range);
 
-    /**
-     * P tags append 'BR' to make blank line.
-     * Our viewer renders new line as P tag with margin.
-     * When pasting text from viewer, insert BR between P tags.
-     * @param {Node} node - node
-     * @private
-     */
+      var _$clipboardContainer$ = $clipboardContainer.get(0),
+          childNodes = _$clipboardContainer$.childNodes;
 
-  }, {
-    key: '_preProcessPtag',
-    value: function _preProcessPtag(node) {
-      var pTags = node.querySelectorAll('p');
+      var containsOneTableOnly = childNodes.length === 1 && childNodes[0].nodeName === 'TABLE';
+      var processed = false;
 
-      _tuiCodeSnippet2.default.forEachArray(pTags, function (pTag) {
-        if (pTag.lastChild && pTag.lastChild.nodeName !== 'BR') {
-          pTag.appendChild(document.createElement('br'));
+      if (pastingToTable) {
+        if (containsOneTableOnly) {
+          tableManager.pasteClipboardData($clipboardContainer.first());
+          $clipboardContainer.html(''); // drains clipboard data as we've pasted everything here.
+          processed = true;
+        } else if (tableSelectionManager.getSelectedCells().length) {
+          alert(_i18n2.default.get('Cannot paste values ​​other than a table in the cell selection state'));
+          $clipboardContainer.html(''); // drains clipboard data
+          processed = true;
         }
+      }
 
-        pTag.appendChild(document.createElement('br'));
-      });
+      return processed;
     }
 
     /**
@@ -15781,14 +14753,6 @@ var WwClipboardManager = function () {
   }, {
     key: '_preparePaste',
     value: function _preparePaste($clipboardContainer) {
-      // When pasting text, the empty line processing differ our viewer and MS Office.
-      // In our viewer case, <p>aaa</p><p>bbb<p> have empty line becuase P tags have margin.
-      // In MS Office case, <p>aaa</p><p>bbb<p> do not have empty line becuase P tags means just one line.
-      if (!this._isFromMs($clipboardContainer.html())) {
-        this._preProcessPtag($clipboardContainer.get(0));
-      }
-
-      this._replaceNewLineToBr($clipboardContainer.get(0));
       this._removeEmptyFontElement($clipboardContainer);
 
       this._pch.preparePaste($clipboardContainer);
@@ -15802,6 +14766,7 @@ var WwClipboardManager = function () {
     /**
      * set table bookmark which will gain focus after document modification ends.
      * @param {jQuery} $clipboardContainer - clipboard container
+     * @memberof WwClipboardManager
      * @private
      */
 
@@ -15845,7 +14810,9 @@ var WwClipboardManager = function () {
     }
 
     /**
+     * _extendRange
      * extend range if need
+     * @memberof WwClipboardManager
      * @param {Range} range to extend
      * @private
      */
@@ -15875,6 +14842,7 @@ var WwClipboardManager = function () {
 
     /**
      * Extends current range's startContainer
+     * @memberof WwClipboardManager
      * @param {Range} range Range object
      * @returns {Range}
      * @private
@@ -15898,6 +14866,7 @@ var WwClipboardManager = function () {
 
     /**
      * Extends current range's endContainer
+     * @memberof WwClipboardManager
      * @param {Range} range Range object
      * @returns {Range}
      * @private
@@ -15922,7 +14891,9 @@ var WwClipboardManager = function () {
     }
 
     /**
+     * _isWholeCommonAncestorContainerSelected
      * Check whether whole commonAncestorContainter textContent selected or not
+     * @memberof WwClipboardManager
      * @param {Range} range Range object
      * @returns {boolean} result
      * @private
@@ -15941,7 +14912,7 @@ var WwClipboardManager = function () {
 exports.default = WwClipboardManager;
 
 /***/ }),
-/* 59 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15953,7 +14924,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements WwPasteContentHelper
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -15969,7 +14940,7 @@ var _domUtils = __webpack_require__(4);
 
 var _domUtils2 = _interopRequireDefault(_domUtils);
 
-var _htmlSanitizer = __webpack_require__(9);
+var _htmlSanitizer = __webpack_require__(13);
 
 var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
 
@@ -15979,10 +14950,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class WwPasteContentHelper
- * @param {WysiwygEditor} wwe - wysiwygEditor instance
- * @ignore
  */
 var WwPasteContentHelper = function () {
+  /**
+   * Creates an instance of WwPasteContentHelper.
+   * @param {WysiwygEditor} wwe - wysiwygEditor instance
+   * @memberof WwPasteContentHelper
+   */
   function WwPasteContentHelper(wwe) {
     _classCallCheck(this, WwPasteContentHelper);
 
@@ -15991,6 +14965,7 @@ var WwPasteContentHelper = function () {
 
   /**
    * Process paste data before paste
+   * @memberof WwPasteContentHelper
    * @param {jQuery} $container - clipboard container
    */
 
@@ -16032,6 +15007,7 @@ var WwPasteContentHelper = function () {
     /**
      * Wrap orphan node(inline, text) with div element
      * @param {jQuery} $container - clipboard container
+     * @memberof WwPasteContentHelper
      * @returns {DocumentFragment}
      * @private
      */
@@ -16046,21 +15022,17 @@ var WwPasteContentHelper = function () {
       _tuiCodeSnippet2.default.forEachArray(array, function (node) {
         var isTextNode = node.nodeType === 3;
         /* eslint-disable max-len */
-        var isInlineNode = /^(SPAN|A|CODE|EM|I|STRONG|B|S|U|ABBR|ACRONYM|CITE|DFN|KBD|SAMP|VAR|BDO|Q|SUB|SUP)$/ig.test(node.tagName);
-        var isBR = node.nodeName === 'BR';
+        var isInlineNode = /^(SPAN|A|CODE|EM|I|STRONG|B|S|ABBR|ACRONYM|CITE|DFN|KBD|SAMP|VAR|BDO|Q|SUB|SUP)$/ig.test(node.tagName);
         /* eslint-enable max-len */
 
-        if (isTextNode || isInlineNode || isBR) {
+        if (isTextNode || isInlineNode) {
           if (!currentDiv) {
             currentDiv = document.createElement('div');
             $tempContainer.append(currentDiv);
+            // newFrag.appendChild(currentDiv);
           }
 
           currentDiv.appendChild(node);
-
-          if (isBR) {
-            currentDiv = null;
-          }
         } else {
           if (currentDiv && currentDiv.lastChild.tagName !== 'BR') {
             currentDiv.appendChild((0, _jquery2.default)('<br/>')[0]);
@@ -16068,6 +15040,7 @@ var WwPasteContentHelper = function () {
 
           currentDiv = null;
           $tempContainer.append(node);
+          // newFrag.appendChild(node);
         }
       });
 
@@ -16077,6 +15050,7 @@ var WwPasteContentHelper = function () {
     /**
      * Processing paste data after paste
      * @param {jQuery} $container - clipboard container
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16108,8 +15082,9 @@ var WwPasteContentHelper = function () {
 
     /**
      * PRE tag formatting
-     * @param {jQuery} $container - clipboard container
+     * @memberof WwPasteContentHelper
      * @private
+     * @param {jQuery} $container - clipboard container
      */
 
   }, {
@@ -16122,6 +15097,7 @@ var WwPasteContentHelper = function () {
     /**
      * Unwrap span children of document fragment with div element
      * @param {jQuery} $container - clipboard container
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16149,7 +15125,7 @@ var WwPasteContentHelper = function () {
   }, {
     key: '_unwrapNestedBlocks',
     value: function _unwrapNestedBlocks($container, blockTags) {
-      var $leafElements = $container.find(':not(:has(*))').not('b,s,i,em,code,span,hr');
+      var $leafElements = $container.find(':not(:has(*))').not('b,s,i,em,code,span');
 
       $leafElements.each(function (i, node) {
         var leafElement = node.nodeName === 'BR' ? (0, _jquery2.default)(node.parentNode) : (0, _jquery2.default)(node);
@@ -16170,6 +15146,7 @@ var WwPasteContentHelper = function () {
      * Remove unnecessary block element in pasting data
      * @param {jQuery} $container - clipboard container
      * @param {string} blockTags - Tag names of block tag
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16189,10 +15166,6 @@ var WwPasteContentHelper = function () {
           return;
         }
 
-        if (blockElement.lastChild && blockElement.lastChild.nodeName !== 'BR') {
-          $blockElement.append(document.createElement('br'));
-        }
-
         $blockElement.replaceWith($blockElement.html());
       });
     }
@@ -16200,6 +15173,7 @@ var WwPasteContentHelper = function () {
     /**
      * Remove inline style
      * @param {Node} node Node for remove style attribute
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16233,6 +15207,7 @@ var WwPasteContentHelper = function () {
      * @param {object} rangeInfo Range information
      * @param {boolean} firstBlockIsTaken Whether first block element taken or not
      * @returns {DocumentFragment}
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16290,9 +15265,10 @@ var WwPasteContentHelper = function () {
 
     /**
      * Unwrap fragment first child for pasting node inline
+     * @memberof WwPasteContentHelper
+     * @private
      * @param {Node} node Pasting DocumentFragment
      * @returns {NodeList}
-     * @private
      */
 
   }, {
@@ -16349,6 +15325,7 @@ var WwPasteContentHelper = function () {
      * @param {HTMLElement} pathInfo HTMLElement to make
      * @param {HTMLElement} content Nodes to append
      * @returns {HTMLElement} node
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16373,6 +15350,7 @@ var WwPasteContentHelper = function () {
     /**
      * Pasting table element pre-process
      * @param {jQuery} $container - clipboard container
+     * @memberof WwPasteContentHelper
      * @private
      */
 
@@ -16387,6 +15365,7 @@ var WwPasteContentHelper = function () {
     /**
      * Remove colgroup tag
      * @param {jQuery} $container - clipboard container
+     * @memberof WwPasteContentHelper
      * @private
      **/
 
@@ -16454,545 +15433,7 @@ var WwPasteContentHelper = function () {
 exports.default = WwPasteContentHelper;
 
 /***/ }),
-/* 60 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileoverview Paste helper when past to table
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
-var _domUtils = __webpack_require__(4);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
-var _htmlSanitizer = __webpack_require__(9);
-
-var _htmlSanitizer2 = _interopRequireDefault(_htmlSanitizer);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * Class WwTablePasteHelper
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
- */
-var WwTablePasteHelper = function () {
-  function WwTablePasteHelper(wwe) {
-    _classCallCheck(this, WwTablePasteHelper);
-
-    this.wwe = wwe;
-  }
-
-  /**
-   * Prossse paste clipboardEvent
-   * @param {ClipboardEvent} ev - ClipboardEvent
-   */
-
-
-  _createClass(WwTablePasteHelper, [{
-    key: 'pasteClipboard',
-    value: function pasteClipboard(ev) {
-      var cbData = ev.clipboardData || window.clipboardData;
-      var items = cbData && cbData.items;
-
-      if (items) {
-        this._pasteClipboardItem(items);
-        ev.preventDefault();
-      } else {
-        this._pasteClipboardUsingPasteArea();
-        ev.squirePrevented = true;
-      }
-    }
-
-    /**
-     * ClipboardEvent is not supported in IE.
-     * To get clipboard, create temporay element and then paste into that element.
-     * After end of paste, can get clipboard from that temporary element.
-     * @param {ClipboardEvent} ev - ClipboardEvent
-     * @private
-     */
-
-  }, {
-    key: '_pasteClipboardUsingPasteArea',
-    value: function _pasteClipboardUsingPasteArea() {
-      var _this = this;
-
-      var sq = this.wwe.getEditor();
-      var range = sq.getSelection();
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset,
-          endContainer = range.endContainer,
-          endOffset = range.endOffset;
-
-      var pasteArea = document.createElement('div');
-      var _document = document,
-          body = _document.body;
-
-
-      pasteArea.setAttribute('contenteditable', true);
-      pasteArea.setAttribute('style', 'position:fixed; overflow:hidden; top:0; right:100%; width:1px; height:1px;');
-      body.appendChild(pasteArea);
-
-      range.selectNodeContents(pasteArea);
-      sq.setSelection(range);
-
-      setTimeout(function () {
-        var clipboard = body.removeChild(pasteArea);
-
-        range.setStart(startContainer, startOffset);
-        range.setEnd(endContainer, endOffset);
-
-        sq.focus();
-        sq.setSelection(range);
-
-        _this._pasteClipboardHtml(clipboard.innerHTML);
-      });
-    }
-
-    /**
-     * Paste items of clipboard data
-     * @param {DataTransfer.items} items - items of clipboarddata
-     * @private
-     */
-
-  }, {
-    key: '_pasteClipboardItem',
-    value: function _pasteClipboardItem(items) {
-      var _this2 = this;
-
-      var textItem = null;
-      var htmlItem = null;
-
-      _tuiCodeSnippet2.default.forEachArray(items, function (item) {
-        if (item.type === 'text/html') {
-          htmlItem = item;
-        } else if (item.type === 'text/plain') {
-          textItem = item;
-        }
-      });
-
-      if (htmlItem) {
-        htmlItem.getAsString(function (html) {
-          _this2._pasteClipboardHtml(html);
-        });
-      } else if (textItem) {
-        textItem.getAsString(function (text) {
-          _this2._pasteClipboardContainer(document.createTextNode(text));
-        });
-      }
-    }
-
-    /**
-     * Paste html of clipboard
-     * @param {string} html - html
-     * @private
-     */
-
-  }, {
-    key: '_pasteClipboardHtml',
-    value: function _pasteClipboardHtml(html) {
-      var container = document.createDocumentFragment();
-      var startFramgmentStr = '<!--StartFragment-->';
-      var endFragmentStr = '<!--EndFragment-->';
-      var startFragmentIndex = html.indexOf(startFramgmentStr);
-      var endFragmentIndex = html.lastIndexOf(endFragmentStr);
-
-      if (startFragmentIndex > -1 && endFragmentIndex > -1) {
-        html = html.slice(startFragmentIndex + startFramgmentStr.length, endFragmentIndex);
-      }
-
-      // Wrap with <tr> if html contains dangling <td> tags
-      // Dangling <td> tag is that tag does not have <tr> as parent node.
-      if (/<\/td>((?!<\/tr>)[\s\S])*$/i.test(html)) {
-        html = '<TR>' + html + '</TR>';
-      }
-      // Wrap with <table> if html contains dangling <tr> tags
-      // Dangling <tr> tag is that tag does not have <table> as parent node.
-      if (/<\/tr>((?!<\/table>)[\s\S])*$/i.test(html)) {
-        html = '<TABLE>' + html + '</TABLE>';
-      }
-
-      container.appendChild((0, _htmlSanitizer2.default)(html));
-      this._pasteClipboardContainer(container);
-    }
-
-    /**
-     * Paste container of clipboard
-     * @param {DocumentFragment} clipboardContainer - clipboard
-     * @private
-     */
-
-  }, {
-    key: '_pasteClipboardContainer',
-    value: function _pasteClipboardContainer(clipboardContainer) {
-      var sq = this.wwe.getEditor();
-      var childNodes = clipboardContainer.childNodes;
-
-      var containsOneTableOnly = childNodes.length === 1 && childNodes[0].nodeName === 'TABLE';
-
-      if (containsOneTableOnly) {
-        var tableManager = this.wwe.componentManager.getManager('table');
-        tableManager.pasteTableData(clipboardContainer);
-      } else {
-        var range = sq.getSelection().cloneRange();
-        var fragment = this._preparePasteDocumentFragment(clipboardContainer);
-
-        sq.saveUndoState(range);
-
-        if (!range.collapsed) {
-          this._deleteContentsRange(range);
-        }
-
-        if (_domUtils2.default.isTextNode(range.startContainer)) {
-          this._pasteIntoTextNode(range, fragment);
-        } else {
-          this._pasteIntoElements(range, fragment);
-        }
-
-        sq.setSelection(range);
-      }
-    }
-
-    /**
-     * Prepare clipboard for paste to table
-     * @param {DocumentFragment} clipboardContainer - clipboard
-     * @returns {DocumentFragment} processed result
-     * @private
-     */
-
-  }, {
-    key: '_preparePasteDocumentFragment',
-    value: function _preparePasteDocumentFragment(clipboardContainer) {
-      var childNodes = clipboardContainer.childNodes;
-
-      var fragment = document.createDocumentFragment();
-
-      if (childNodes.length) {
-        fragment.appendChild(this._unwrapBlock(clipboardContainer));
-      } else if (this._isPossibleInsertToTable(clipboardContainer)) {
-        fragment.appendChild(clipboardContainer);
-      }
-
-      return fragment;
-    }
-
-    /**
-     * unwrap block node
-     * @param {Node} node - target node
-     * @returns {DocumentFragment} processed result
-     * @private
-     */
-
-  }, {
-    key: '_unwrapBlock',
-    value: function _unwrapBlock(node) {
-      var fragment = document.createDocumentFragment();
-      var childNodes = _tuiCodeSnippet2.default.toArray(node.childNodes);
-
-      while (childNodes.length) {
-        var child = childNodes.shift();
-
-        if (this._isPossibleInsertToTable(child)) {
-          fragment.appendChild(child);
-        } else {
-          fragment.appendChild(this._unwrapBlock(child));
-
-          // If current child is last or fragment already has last br,
-          // appending br would create unintended line break.
-          var lastChild = fragment.lastChild;
-
-          if (childNodes.length && lastChild && lastChild.nodeName !== 'BR') {
-            fragment.appendChild(document.createElement('br'));
-          }
-        }
-      }
-
-      return fragment;
-    }
-  }, {
-    key: '_isPossibleInsertToTable',
-    value: function _isPossibleInsertToTable(node) {
-      var nodeName = node.nodeName;
-
-      var isChildlessCode = nodeName === 'CODE' && node.childNodes.length > 1;
-      var isList = nodeName === 'UL' || nodeName === 'OL';
-
-      return !isChildlessCode && (isList || _domUtils2.default.isMDSupportInlineNode(node) || _domUtils2.default.isTextNode(node));
-    }
-
-    /**
-     * paste fragment to offset of range.startContainer
-     * @param {Range} range - selection range
-     * @param {DocumentFragment} fragment - paste data
-     * @private
-     */
-
-  }, {
-    key: '_pasteIntoElements',
-    value: function _pasteIntoElements(range, fragment) {
-      var container = range.startContainer,
-          offset = range.startOffset;
-
-      var node = _domUtils2.default.getChildNodeByOffset(container, offset);
-
-      if (!node) {
-        // For example when container is br, br don't have child, so node is null
-        if (container.nodeName === 'TD') {
-          container.appendChild(fragment);
-          range.setStart(container, container.childNodes.length);
-        } else {
-          var parentNode = container.parentNode,
-              nextSibling = container.nextSibling;
-
-
-          parentNode.insertBefore(fragment, nextSibling);
-
-          if (nextSibling) {
-            range.setStart(nextSibling, 0);
-          } else {
-            range.setStartAfter(parentNode.lastChild);
-          }
-        }
-      } else {
-        container.insertBefore(fragment, node);
-        range.setStart(node, 0);
-      }
-
-      range.collapse(true);
-    }
-
-    /**
-     * paste fragment to offset of text node
-     * @param {Range} range - selection range
-     * @param {DocumentFragment} fragment - paste data
-     * @private
-     */
-
-  }, {
-    key: '_pasteIntoTextNode',
-    value: function _pasteIntoTextNode(range, fragment) {
-      var container = range.startContainer,
-          offset = range.startOffset;
-      var parentNode = container.parentNode,
-          textContent = container.textContent;
-
-      var prevText = textContent.slice(0, offset);
-      var postText = textContent.slice(offset, textContent.length);
-      var fragmentChildNodes = fragment.childNodes;
-
-      var firstChild = fragmentChildNodes[0];
-      var isFragmenthasOneTextNode = fragmentChildNodes.length === 1 && _domUtils2.default.isTextNode(firstChild);
-
-      if (!prevText) {
-        parentNode.insertBefore(fragment, container);
-        range.setStart(container, 0);
-      } else if (!postText) {
-        var nextSibling = container.nextSibling;
-
-
-        parentNode.insertBefore(fragment, nextSibling);
-        range.setStartAfter(nextSibling);
-      } else if (isFragmenthasOneTextNode) {
-        var firstChildText = firstChild.textContent;
-
-
-        container.textContent = '' + prevText + firstChildText + postText;
-        range.setStart(container, prevText.length + firstChildText.length);
-      } else {
-        var resultFragment = document.createDocumentFragment();
-
-        resultFragment.appendChild(document.createTextNode(prevText));
-        resultFragment.appendChild(fragment);
-        resultFragment.appendChild(document.createTextNode(postText));
-        parentNode.replaceChild(resultFragment, container);
-
-        var childNodesArray = _tuiCodeSnippet2.default.toArray(parentNode.childNodes);
-        var index = 0;
-        childNodesArray.forEach(function (child, i) {
-          if (child.textContent === postText) {
-            index = i;
-          }
-        });
-
-        range.setStart(parentNode.childNodes[index], 0);
-      }
-
-      range.collapse(true);
-    }
-
-    /**
-     * delete contents of range that is not collapse
-     * @param {Range} range - range is not collapse
-     * @private
-     */
-
-  }, {
-    key: '_deleteContentsRange',
-    value: function _deleteContentsRange(range) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset,
-          endContainer = range.endContainer,
-          endOffset = range.endOffset;
-
-
-      if (startContainer === endContainer) {
-        this._deleteContentsByOffset(startContainer, startOffset, endOffset);
-        range.setStart(startContainer, startOffset);
-        range.collapse(true);
-      } else {
-        this._deleteNotCollapsedRangeContents(range);
-      }
-    }
-  }, {
-    key: '_deleteNotCollapsedRangeContents',
-    value: function _deleteNotCollapsedRangeContents(range) {
-      var startContainer = range.startContainer,
-          startOffset = range.startOffset,
-          endContainer = range.endContainer,
-          endOffset = range.endOffset;
-
-      var common = range.commonAncestorContainer;
-      var startBlock = this._getBlock(startContainer, common, startOffset);
-      var endBlock = this._getBlock(endContainer, common, endOffset - 1);
-
-      if (startBlock === endBlock) {
-        this._removeInSameBlock(startBlock, startContainer, endContainer, startOffset, endOffset);
-
-        // When endContainer is not same endBlock, endBlock is removed.
-        // For example, aaa| <- this is cursor.
-        // When cursor is last, endContainer would be 'TD' and endBlock is text node
-        // In this case, remove all 'aaa' so endBlock should be null.
-        endBlock = endContainer !== endBlock ? null : endBlock;
-      } else {
-        var nextOfstartBlock = startBlock.nextSibling;
-
-
-        if (startContainer.nodeName === 'TD') {
-          nextOfstartBlock = this._removeOneLine(startBlock);
-        } else {
-          // Remove child nodes from node of startOffset in startContainer.
-          this._deleteContentsByOffset(startContainer, startOffset, _domUtils2.default.getOffsetLength(startContainer));
-
-          // Remove nodes from startContainer in startBlock
-          _domUtils2.default.removeNodesByDirection(startBlock, startContainer, false);
-        }
-
-        if (endContainer.nodeName === 'TD') {
-          endBlock = this._removeOneLine(endBlock);
-        } else {
-          // Remove child nodes until node of endOffset in endContainer.
-          this._deleteContentsByOffset(endContainer, 0, endOffset);
-
-          // Remove nodes until endContainer in endBlock
-          _domUtils2.default.removeNodesByDirection(endBlock, endContainer, true);
-        }
-
-        // Remove nodes between startBlock and endBlock
-        _domUtils2.default.removeChildFromStartToEndNode(common, nextOfstartBlock, endBlock);
-      }
-
-      if (endBlock) {
-        range.setStart(endBlock, 0);
-      } else {
-        range.setStartAfter(startBlock);
-      }
-
-      range.collapse(true);
-    }
-  }, {
-    key: '_removeInSameBlock',
-    value: function _removeInSameBlock(block, startContainer, endContainer, startOffset, endOffset) {
-      var start = startContainer === block ? startOffset : 0;
-      var end = endContainer === block ? endOffset : _domUtils2.default.getOffsetLength(block);
-
-      this._deleteContentsByOffset(block, start, end);
-    }
-  }, {
-    key: '_removeOneLine',
-    value: function _removeOneLine(node) {
-      var nextSibling = node.nextSibling,
-          parentNode = node.parentNode;
-
-      var next = nextSibling;
-
-      parentNode.removeChild(node);
-
-      if (nextSibling && nextSibling.nodeName === 'BR') {
-        next = nextSibling.nextSibling;
-        parentNode.removeChild(nextSibling);
-      }
-
-      return next;
-    }
-
-    /**
-     * Find parent block node of startContainer and endContainer
-     * If startContainer or endContainer is same commonAncestor,
-     * find node at offset of startContainer and endContainer.
-     * @param {Node} node - startContainer or endContainer
-     * @param {Node} parent - commonAncestor
-     * @param {Number} offset - startOffset or endOffset-1
-     * @returns {Node} block node
-     * @private
-     */
-
-  }, {
-    key: '_getBlock',
-    value: function _getBlock(node, parent, offset) {
-      return _domUtils2.default.getParentUntil(node, parent) || _domUtils2.default.getChildNodeByOffset(node, offset);
-    }
-
-    /**
-     * delete contents from start offset to end offset
-     * @param {Node} container - container
-     * @param {Number} startOffset - start offset
-     * @param {Number} endOffset - end offset
-     * @private
-     */
-
-  }, {
-    key: '_deleteContentsByOffset',
-    value: function _deleteContentsByOffset(container, startOffset, endOffset) {
-      if (_domUtils2.default.isTextNode(container)) {
-        var textContent = container.textContent;
-
-        var prevText = textContent.slice(0, startOffset);
-        var postText = textContent.slice(endOffset, textContent.length);
-
-        container.textContent = '' + prevText + postText;
-      } else {
-        var startNode = _domUtils2.default.getChildNodeByOffset(container, startOffset);
-        var endNode = _domUtils2.default.getChildNodeByOffset(container, endOffset);
-
-        if (startNode) {
-          _domUtils2.default.removeChildFromStartToEndNode(container, startNode, endNode || null);
-        }
-      }
-    }
-  }]);
-
-  return WwTablePasteHelper;
-}();
-
-exports.default = WwTablePasteHelper;
-
-/***/ }),
-/* 61 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17004,17 +15445,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg list manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
 var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
-
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
 var _domUtils = __webpack_require__(4);
 
@@ -17027,16 +15464,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var FIND_LI_ELEMENT = /<li/i;
 var DIV_OR_LI = 'DIV,LI';
 var UL_OR_OL = 'OL,UL';
-var FIND_TD_ELEMNT = /(<td[^>]*>)(.*?)(<\/td>)/g;
-var FIND_UL_OR_OL_ELEMNT = /<(ul|ol)([^>]*)>(.*?)(<\/\1>)/g;
 
 /**
  * Class WwListManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 
 var WwListManager = function () {
+  /**
+   * Creates an instance of WwListManager.
+   * @param {WysiwygEditor} wwe - WysiwygEditor instance
+   * @memberof WwListManager
+   */
   function WwListManager(wwe) {
     _classCallCheck(this, WwListManager);
 
@@ -17045,6 +15483,7 @@ var WwListManager = function () {
 
     /**
      * Name property
+     * @memberof WwListManager#
      * @type {string}
      */
     this.name = 'list';
@@ -17053,7 +15492,9 @@ var WwListManager = function () {
   }
 
   /**
+   * _init
    * Initialize
+   * @memberof WwListManager
    * @private
    */
 
@@ -17066,7 +15507,9 @@ var WwListManager = function () {
     }
 
     /**
+     * _initEvent
      * Initialize event
+     * @memberof WwListManager
      * @private
      */
 
@@ -17089,13 +15532,14 @@ var WwListManager = function () {
       });
 
       this.eventManager.listen('wysiwygProcessHTMLText', function (html) {
+        html = _this._insertBlankToBetweenSameList(html);
         html = _this._convertFromArbitraryNestingList(html);
 
         return html;
       });
 
-      this.eventManager.listen('convertorBeforeHtmlToMarkdownConverted', function (html) {
-        return _this._insertDataToMarkPassForListInTable(html);
+      this.eventManager.listen('convertorAfterHtmlToMarkdownConverted', function (markdown) {
+        return markdown.replace(/:BLANK_LINE:\n/g, '');
       });
     }
   }, {
@@ -17103,14 +15547,16 @@ var WwListManager = function () {
     value: function _initKeyHandler() {
       var _this2 = this;
 
-      this.wwe.addKeyEventHandler(['TAB', 'CTRL+]', 'META+]'], function (ev) {
+      this.wwe.addKeyEventHandler(['TAB', 'CTRL+]', 'META+]'], function (ev, range) {
         var isNeedNext = void 0;
 
-        if (_this2.wwe.getEditor().hasFormat('LI')) {
-          ev.preventDefault();
-          _this2.eventManager.emit('command', 'Indent');
+        if (range.collapsed) {
+          if (_this2.wwe.getEditor().hasFormat('LI')) {
+            ev.preventDefault();
+            _this2.eventManager.emit('command', 'Indent');
 
-          isNeedNext = false;
+            isNeedNext = false;
+          }
         }
 
         return isNeedNext;
@@ -17119,17 +15565,19 @@ var WwListManager = function () {
       this.wwe.addKeyEventHandler(['SHIFT+TAB', 'CTRL+[', 'META+['], function (ev, range) {
         var isNeedNext = void 0;
 
-        if (_this2.wwe.getEditor().hasFormat('LI')) {
-          ev.preventDefault();
-          var $ul = (0, _jquery2.default)(range.startContainer).closest('li').children(UL_OR_OL);
+        if (range.collapsed) {
+          if (_this2.wwe.getEditor().hasFormat('LI')) {
+            ev.preventDefault();
+            var $ul = (0, _jquery2.default)(range.startContainer).closest('li').children(UL_OR_OL);
 
-          _this2.eventManager.emit('command', 'Outdent');
+            _this2.eventManager.emit('command', 'Outdent');
 
-          if ($ul.length && !$ul.prev().length) {
-            _this2._removeBranchList($ul);
+            if ($ul.length && !$ul.prev().length) {
+              _this2._removeBranchList($ul);
+            }
+
+            isNeedNext = false;
           }
-
-          isNeedNext = false;
         }
 
         return isNeedNext;
@@ -17160,6 +15608,7 @@ var WwListManager = function () {
 
     /**
      * Find empty list for whole container and remove it.
+     * @memberof WwListManager
      * @private
      */
 
@@ -17175,8 +15624,9 @@ var WwListManager = function () {
 
     /**
      * Remove branch lists all from body
-     * @param {jQuery|HTMLElement} $root root to remove branch list
+     * @memberof WwListManager
      * @private
+     * @param {jQuery|HTMLElement} $root root to remove branch list
      */
 
   }, {
@@ -17196,6 +15646,7 @@ var WwListManager = function () {
 
     /**
      * Remove branch list of passed list(ul, ol)
+     * @memberof WwListManager
      * @param {HTMLElement} list list
      * @private
      */
@@ -17215,6 +15666,11 @@ var WwListManager = function () {
       $branchRoot.prepend($list.children().unwrap());
 
       $firstLi.remove();
+    }
+  }, {
+    key: '_insertBlankToBetweenSameList',
+    value: function _insertBlankToBetweenSameList(html) {
+      return html.replace(/<\/(ul|ol)>(<br \/>|<br>){0,}<\1>/g, '</$1>:BLANK_LINE:<$1>');
     }
 
     /**
@@ -17296,17 +15752,6 @@ var WwListManager = function () {
       }
       nestedList.parentNode.replaceChild(fragment, nestedList);
     }
-  }, {
-    key: '_insertDataToMarkPassForListInTable',
-    value: function _insertDataToMarkPassForListInTable(html) {
-      var replacedHtml = html.replace(FIND_TD_ELEMNT, function (match, tdStart, tdContent, tdEnd) {
-        var content = tdContent.replace(FIND_UL_OR_OL_ELEMNT, '<$1 data-tomark-pass="" $2>$3$4');
-
-        return '' + tdStart + content + tdEnd;
-      });
-
-      return replacedHtml;
-    }
 
     /**
      * Return lines in selection
@@ -17384,6 +15829,7 @@ var WwListManager = function () {
      * merge to previous list
      * consider remove this function when https://github.com/neilj/Squire/issues/294 resolved
      * @param {HTMLLIElement} currentLine - current li element
+     * @ignore
      */
 
   }, {
@@ -17411,7 +15857,7 @@ var WwListManager = function () {
      * merge list to targetList
      * @param {HTMLOListElement|HTMLUListElement} list - list to merge
      * @param {HTMLOListElement|HTMLUListElement} targetList - target list
-     * @private
+     * @ignore
      */
 
   }, {
@@ -17429,381 +15875,6 @@ var WwListManager = function () {
         list.parentNode.removeChild(list);
       }
     }
-
-    /**
-     * Check whether is available to make List in table.
-     * @returns {boolean} - li element
-     */
-
-  }, {
-    key: 'isAvailableMakeListInTable',
-    value: function isAvailableMakeListInTable() {
-      var selectionManager = this.wwe.componentManager.getManager('tableSelection');
-      var $selectedCells = selectionManager.getSelectedCells();
-      var sq = this.wwe.getEditor();
-
-      return $selectedCells.length === 0 && sq.hasFormat('table') && !sq.hasFormat('OL') && !sq.hasFormat('UL');
-    }
-
-    /**
-     * Find parent node before TD
-     * @param {Node} node - startContainer or endContainer of range
-     * @param {Number} offset - offset
-     * @returns {Node} - parent node before TD
-     * @private
-     */
-
-  }, {
-    key: '_getParentNodeBeforeTD',
-    value: function _getParentNodeBeforeTD(node, offset) {
-      var parentNode = _domUtils2.default.getParentUntil(node, 'TD');
-
-      if (!parentNode) {
-        var childNodes = node.childNodes;
-
-        var length = childNodes ? childNodes.length : 0;
-        var newOffset = offset > 0 && offset === length ? offset - 1 : offset;
-
-        parentNode = _domUtils2.default.getChildNodeByOffset(node, newOffset);
-      }
-
-      return parentNode;
-    }
-
-    /**
-     * Find LI node inside TD
-     * If target node is not li and parents of taget node is not li, return null.
-     * @param {Node} targetNode - startContainer or endContainer of range
-     * @param {Number} offset - offset
-     * @returns {Node} - LI node or null
-     * @private
-     */
-
-  }, {
-    key: '_findLINodeInsideTD',
-    value: function _findLINodeInsideTD(targetNode, offset) {
-      var liNode = null;
-
-      var liParent = _domUtils2.default.getParentUntilBy(targetNode, function (node) {
-        return node && _domUtils2.default.isListNode(node);
-      }, function (node) {
-        return node && node.nodeName === 'TD';
-      });
-
-      if (liParent) {
-        liNode = liParent;
-      } else if (targetNode.nodeName === 'LI') {
-        liNode = targetNode;
-      } else if (_domUtils2.default.isListNode(targetNode)) {
-        var childLength = targetNode.childNodes.length;
-
-        liNode = targetNode.childNodes[offset >= childLength ? childLength - 1 : offset];
-      }
-
-      return liNode;
-    }
-
-    /**
-     * Get first node on the line where range start.
-     * @param {Node} targetNode - startContainer
-     * @param {Number} offset - startOffset
-     * @returns {Node} - first node where range start
-     * @private
-     */
-
-  }, {
-    key: '_getFirstNodeInLineOfTable',
-    value: function _getFirstNodeInLineOfTable(targetNode, offset) {
-      var startNode = this._findLINodeInsideTD(targetNode, offset);
-
-      if (!startNode) {
-        startNode = this._getParentNodeBeforeTD(targetNode, offset);
-
-        var _startNode = startNode,
-            previousSibling = _startNode.previousSibling;
-
-        while (previousSibling && previousSibling.nodeName !== 'BR' && !_domUtils2.default.isListNode(previousSibling)) {
-          startNode = previousSibling;
-          previousSibling = startNode.previousSibling;
-        }
-      }
-
-      return startNode;
-    }
-
-    /**
-     * Get last node on the line where range end.
-     * @param {Node} targetNode - endContainer
-     * @param {Number} offset - endOffset
-     * @returns {Node} - last node where range end
-     * @private
-     */
-
-  }, {
-    key: '_getLastNodeInLineOfTable',
-    value: function _getLastNodeInLineOfTable(targetNode, offset) {
-      var endNode = this._findLINodeInsideTD(targetNode, offset);
-
-      if (!endNode) {
-        endNode = this._getParentNodeBeforeTD(targetNode, offset);
-
-        while (endNode.nextSibling) {
-          if (endNode.nodeName === 'BR' || _domUtils2.default.isListNode(endNode)) {
-            break;
-          }
-
-          endNode = endNode.nextSibling;
-        }
-      }
-
-      return endNode;
-    }
-
-    /**
-     * Check whether node is last node in the line of table
-     * If the node is li or br, the node is last node in the line of table.
-     * @param {node} node - node
-     * @returns {boolean} - whether node is last node in line of table
-     * @private
-     */
-
-  }, {
-    key: '_isLastNodeInLineOfTable',
-    value: function _isLastNodeInLineOfTable(node) {
-      var nodeName = node.nodeName;
-
-
-      return nodeName === 'LI' || nodeName === 'BR';
-    }
-
-    /**
-     * Get next node in the line of table
-     * If current node is li node and nextSibling is not existing, next node is parent's nextSibling.
-     * If nextSibiling of node is a list node (UL or OL), next node is first child of the list node.
-     * @param {node} node - node
-     * @returns {node} - next node
-     * @private
-     */
-
-  }, {
-    key: '_getNextNodeInLineOfTable',
-    value: function _getNextNodeInLineOfTable(node) {
-      var nextSibling = node.nextSibling;
-
-
-      if (node.nodeName === 'LI' && !nextSibling) {
-        var parentNode = node.parentNode;
-
-
-        while (parentNode.nodeName !== 'TD') {
-          if (parentNode.nextSibling) {
-            nextSibling = parentNode.nextSibling;
-            break;
-          }
-
-          parentNode = parentNode.parentNode;
-        }
-      } else if (_domUtils2.default.isListNode(nextSibling)) {
-        nextSibling = nextSibling.firstChild;
-      }
-
-      return nextSibling;
-    }
-
-    /**
-     * get nodes in each lines of table
-     * @param {range} range - range
-     * @returns {array} - each nodes in line
-     * @private
-     */
-
-  }, {
-    key: '_getLinesOfSelectionInTable',
-    value: function _getLinesOfSelectionInTable(range) {
-      var startContainer = range.startContainer,
-          endContainer = range.endContainer,
-          startOffset = range.startOffset,
-          endOffset = range.endOffset;
-
-      var firstNode = this._getFirstNodeInLineOfTable(startContainer, startOffset);
-      var lastNode = this._getLastNodeInLineOfTable(endContainer, endOffset);
-
-      var lines = [];
-      var oneLine = [];
-
-      while (firstNode) {
-        oneLine.push(firstNode);
-
-        if (this._isLastNodeInLineOfTable(firstNode)) {
-          lines.push(oneLine);
-          oneLine = [];
-        }
-
-        if (firstNode === lastNode) {
-          if (oneLine.length) {
-            lines.push(oneLine);
-          }
-          break;
-        }
-
-        firstNode = this._getNextNodeInLineOfTable(firstNode);
-      }
-
-      return lines;
-    }
-
-    /**
-     * create OL or UL element
-     * @param {string} listType - OL, UL or TASK
-     * @returns {Node} - OL or UL element
-     * @private
-     */
-
-  }, {
-    key: '_createListElement',
-    value: function _createListElement(listType) {
-      return document.createElement(listType === 'TASK' ? 'UL' : listType);
-    }
-
-    /**
-     * create li element
-     * @param {array} oneLineNodes - node array
-     * @param {string} listType - OL, UL or TASK
-     * @returns {Node} - li element
-     * @private
-     */
-
-  }, {
-    key: '_createListItemElement',
-    value: function _createListItemElement(oneLineNodes, listType) {
-      var liNode = document.createElement('li');
-
-      oneLineNodes.forEach(function (node) {
-        liNode.appendChild(node);
-      });
-
-      if (listType === 'TASK') {
-        var taskManager = this.wwe.componentManager.getManager('task');
-
-        taskManager.formatTask(liNode);
-      }
-
-      return liNode;
-    }
-  }, {
-    key: '_mergeListWithPreviousSibiling',
-    value: function _mergeListWithPreviousSibiling(node) {
-      var previousSibling = node.previousSibling;
-
-      var result = node;
-
-      if (previousSibling && node.nodeName === previousSibling.nodeName) {
-        this._mergeList(node, previousSibling);
-        result = previousSibling;
-      }
-
-      return result;
-    }
-  }, {
-    key: '_mergeListWithNextSibiling',
-    value: function _mergeListWithNextSibiling(node) {
-      var nextSibling = node.nextSibling;
-
-
-      if (nextSibling && node.nodeName === nextSibling.nodeName) {
-        this._mergeList(nextSibling, node);
-      }
-
-      return node;
-    }
-
-    /**
-     * make listNode (OL or UL)
-     * @param {range} range - range
-     * @param {staring} listType - UL, OL, TASK
-     * @returns {array} childNodes of list node (OL/UL)
-     */
-
-  }, {
-    key: 'createListInTable',
-    value: function createListInTable(range, listType) {
-      var _this4 = this;
-
-      var lines = this._getLinesOfSelectionInTable(range);
-
-      var lastLine = lines[lines.length - 1];
-      var lastNode = lastLine[lastLine.length - 1];
-      var nextNode = lastNode.nextSibling;
-      var parentNode = lastNode.parentNode;
-
-      var listNode = this._createListElement(listType);
-      var _listNode = listNode,
-          listNodeName = _listNode.nodeName;
-
-
-      var newLIs = [];
-      lines.forEach(function (oneLineNodes) {
-        var oneLineFirstNode = oneLineNodes[0];
-        var liElement = void 0;
-
-        // oneLineFirstNode was already a list item in the table
-        if (oneLineFirstNode.nodeName === 'LI') {
-          var existingListNode = oneLineFirstNode.parentNode;
-          liElement = oneLineFirstNode;
-
-          // If the existing list that is already in table is not same the list to be created,
-          // change the existing list to the list to be created
-          if (existingListNode.nodeName !== listNodeName) {
-            var childNodes = existingListNode.childNodes;
-
-
-            _tuiCodeSnippet2.default.forEachArray(childNodes, function () {
-              listNode.appendChild(existingListNode.firstChild);
-            });
-
-            existingListNode.parentNode.replaceChild(listNode, existingListNode);
-          }
-
-          listNode = liElement.parentNode;
-        } else {
-          liElement = _this4._createListItemElement(oneLineNodes, listType);
-          listNode.appendChild(liElement);
-        }
-
-        newLIs.push(liElement);
-      });
-
-      if (!listNode.parentNode) {
-        parentNode.insertBefore(listNode, nextNode);
-      }
-
-      listNode = this._mergeListWithPreviousSibiling(listNode);
-      this._mergeListWithNextSibiling(listNode);
-
-      return newLIs;
-    }
-
-    /**
-     * adjust range for list node (OL/UL)
-     * according to origin startContainer and endContainer
-     * @param {node} startContainer - startContainer
-     * @param {node} endContainer - endContainer
-     * @param {number} startOffset - startOffset
-     * @param {number} endOffset - endOffset
-     * @param {array} listNode - node array
-     */
-
-  }, {
-    key: 'adjustRange',
-    value: function adjustRange(startContainer, endContainer, startOffset, endOffset, listNode) {
-      var newStartContainer = _domUtils2.default.containsNode(listNode[0], startContainer) ? startContainer : listNode[0];
-      var newEndContainer = _domUtils2.default.containsNode(listNode[listNode.length - 1], endContainer) ? endContainer : listNode[listNode.length - 1];
-
-      var newStartOffset = startContainer.nodeName === 'TD' ? 0 : startOffset;
-      var newEndOffset = endContainer.nodeName === 'TD' ? 0 : endOffset;
-
-      this.wwe.setSelectionByContainerAndOffset(newStartContainer, newStartOffset, newEndContainer, newEndOffset);
-    }
   }]);
 
   return WwListManager;
@@ -17812,7 +15883,7 @@ var WwListManager = function () {
 exports.default = WwListManager;
 
 /***/ }),
-/* 62 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -17824,17 +15895,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg task manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
 var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
-
-var _domUtils = __webpack_require__(4);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -17846,11 +15913,14 @@ var TASK_CHECKED_CLASS_NAME = 'checked';
 
 /**
  * Class WwTaskManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 
 var WwTaskManager = function () {
+  /**
+   * Creates an instance of WwTaskManager.
+   * @param {WysiwygEditor} wwe - WysiwygEditor instance
+   * @memberof WwTaskManager
+   */
   function WwTaskManager(wwe) {
     _classCallCheck(this, WwTaskManager);
 
@@ -17859,6 +15929,7 @@ var WwTaskManager = function () {
 
     /**
      * Name property
+     * @memberof WwTaskManager#
      * @type {string}
      */
     this.name = 'task';
@@ -17867,7 +15938,9 @@ var WwTaskManager = function () {
   }
 
   /**
+   * _init
    * Init
+   * @memberof WwTaskManager
    * @private
    */
 
@@ -17879,18 +15952,18 @@ var WwTaskManager = function () {
       this._initEvent();
 
       this.wwe.getEditor().addEventListener('mousedown', function (ev) {
-        var style = getComputedStyle(ev.target, ':before');
+        var isOnTaskBox = ev.offsetX < 18 && ev.offsetY < 18;
 
-        if (ev.target.hasAttribute(TASK_ATTR_NAME) && _domUtils2.default.isInsideTaskBox(style, ev.offsetX, ev.offsetY)) {
-          // Prevent cursor focusing
-          ev.preventDefault();
+        if (ev.target.hasAttribute(TASK_ATTR_NAME) && isOnTaskBox) {
           (0, _jquery2.default)(ev.target).toggleClass(TASK_CHECKED_CLASS_NAME);
         }
       });
     }
 
     /**
+     * _initEvent
      * Initialize event
+     * @memberof WwTaskManager
      * @private
      */
 
@@ -17905,7 +15978,9 @@ var WwTaskManager = function () {
     }
 
     /**
+     * _initKeyHandler
      * Initialize key event handler
+     * @memberof WwTaskManager
      * @private
      */
 
@@ -17926,9 +16001,11 @@ var WwTaskManager = function () {
     }
 
     /**
+     * isInTaskList
      * Check whether passed range is in task list or not
      * @param {Range} range range
      * @returns {boolean} result
+     * @memberof WwTaskManager
      */
 
   }, {
@@ -17950,8 +16027,10 @@ var WwTaskManager = function () {
     }
 
     /**
+     * unformatTask
      * Unforamt task
      * @param {Node} node target
+     * @memberof WwTaskManager
      */
 
   }, {
@@ -17970,8 +16049,10 @@ var WwTaskManager = function () {
     }
 
     /**
+     * formatTask
      * Format task
      * @param {Node} node target
+     * @memberof WwTaskManager
      */
 
   }, {
@@ -17985,7 +16066,9 @@ var WwTaskManager = function () {
     }
 
     /**
+     * _formatTaskIfNeed
      * Format task if current range has task class name
+     * @memberof WwTaskManager
      * @private
      */
 
@@ -18000,7 +16083,9 @@ var WwTaskManager = function () {
     }
 
     /**
+     * _removeTaskListClass
      * Remove tasklist class
+     * @memberof WwTaskManager
      * @private
      */
 
@@ -18020,7 +16105,7 @@ var WwTaskManager = function () {
 exports.default = WwTaskManager;
 
 /***/ }),
-/* 63 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18032,13 +16117,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg hr manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
-var _tuiCodeSnippet = __webpack_require__(1);
+var _jquery = __webpack_require__(0);
 
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
+var _jquery2 = _interopRequireDefault(_jquery);
 
 var _domUtils = __webpack_require__(4);
 
@@ -18050,10 +16135,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class WwHrManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 var WwHrManager = function () {
+  /**
+   * Creates an instance of WwHrManager.
+   * @param {WysiwygEditor} wwe - WysiwygEditor instance
+   * @memberof WwHrManager
+   */
   function WwHrManager(wwe) {
     _classCallCheck(this, WwHrManager);
 
@@ -18062,6 +16150,7 @@ var WwHrManager = function () {
 
     /**
      * Name property
+     * @memberof WwHrManager#
      * @type {string}
      */
     this.name = 'hr';
@@ -18070,7 +16159,9 @@ var WwHrManager = function () {
   }
 
   /**
+   * _init
    * Initialize
+   * @memberof WwHrManager
    * @private
    */
 
@@ -18078,11 +16169,14 @@ var WwHrManager = function () {
   _createClass(WwHrManager, [{
     key: '_init',
     value: function _init() {
+      this._initKeyHandler();
       this._initEvent();
     }
 
     /**
+     * _initEvent
      * Initialize eventmanager event
+     * @memberof WwHrManager
      * @private
      */
 
@@ -18092,48 +16186,221 @@ var WwHrManager = function () {
       var _this = this;
 
       this.eventManager.listen('wysiwygSetValueAfter', function () {
-        _this._insertEmptyLineIfNeed();
-        _this._changeHRForWysiwyg();
+        _this._unwrapDivOnHr();
+      });
+
+      this.eventManager.listen('wysiwygGetValueBefore', function () {
+        _this._wrapDefaultBlockToOrphanTexts();
       });
     }
 
     /**
-     * If <hr> is frist or last child of root, insert empty line before or after HR
+     * _initKeyHandler
+     * Initialize key event handler
+     * @memberof WwHrManager
      * @private
      */
 
   }, {
-    key: '_insertEmptyLineIfNeed',
-    value: function _insertEmptyLineIfNeed() {
-      var editorContentBody = this.wwe.get$Body()[0];
-      var firstChild = editorContentBody.firstChild,
-          lastChild = editorContentBody.lastChild;
+    key: '_initKeyHandler',
+    value: function _initKeyHandler() {
+      var _this2 = this;
 
+      this.wwe.addKeyEventHandler(function (ev, range) {
+        return _this2._onTypedInHr(range);
+      });
 
-      if (firstChild && firstChild.nodeName === 'HR') {
-        editorContentBody.insertBefore(_domUtils2.default.createEmptyLine(), firstChild);
-      } else if (lastChild && lastChild.nodeName === 'HR') {
-        editorContentBody.appendChild(_domUtils2.default.createEmptyLine());
+      this.wwe.addKeyEventHandler('ENTER', function (ev, range) {
+        if (range.collapsed) {
+          return _this2._removeHrOnEnter(range, ev);
+        }
+
+        return true;
+      });
+
+      this.wwe.addKeyEventHandler('BACK_SPACE', function (ev, range) {
+        if (range.collapsed) {
+          return _this2._removeHrOnBackspace(range, ev);
+        }
+
+        return true;
+      });
+    }
+
+    /**
+     * _isInHr
+     * Check whether passed range is in hr or not
+     * @param {Range} range range
+     * @returns {boolean} result
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_isInHr',
+    value: function _isInHr(range) {
+      return _domUtils2.default.getNodeName(range.startContainer.childNodes[range.startOffset]) === 'HR';
+    }
+
+    /**
+     * _isNearHr
+     * Check whether passed range is near hr or not
+     * @param {Range} range range
+     * @returns {boolean} result
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_isNearHr',
+    value: function _isNearHr(range) {
+      var prevNode = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset - 1);
+
+      return _domUtils2.default.getNodeName(prevNode) === 'HR';
+    }
+
+    /**
+     * Handler for delete HR when user typing within
+     * @param {Range} range Range object
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_onTypedInHr',
+    value: function _onTypedInHr(range) {
+      var _this3 = this;
+
+      // in case user try to input above hr
+      if (this._isInHr(range) || this._isNearHr(range)) {
+        this.wwe.defer(function (wwe) {
+          wwe.saveSelection();
+          _this3._wrapDefaultBlockToOrphanTexts();
+          wwe.restoreSavedSelection();
+        });
       }
     }
 
     /**
-     * <hr> is set contenteditable to false with wrapping div like below.
-     * <div contenteditable="false"><hr contenteditable="false"><div>
+     * _removeHrOnEnter
+     * Remove hr if need on enter
+     * @param {Range} range range
+     * @param {Event} ev event
+     * @returns {boolean} return true if hr was removed
+     * @memberof WwHrManager
      * @private
      */
 
   }, {
-    key: '_changeHRForWysiwyg',
-    value: function _changeHRForWysiwyg() {
-      var editorContentBody = this.wwe.get$Body()[0];
-      var hrNodes = editorContentBody.querySelectorAll('hr');
+    key: '_removeHrOnEnter',
+    value: function _removeHrOnEnter(range, ev) {
+      var hrSuspect = void 0,
+          blockPosition = void 0;
 
-      _tuiCodeSnippet2.default.forEachArray(hrNodes, function (hrNode) {
-        var parentNode = hrNode.parentNode;
+      if (this._isInHr(range)) {
+        hrSuspect = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset);
+      } else if (this._isNearHr(range)) {
+        hrSuspect = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset - 1);
+        blockPosition = 'before';
+      }
 
+      return this._changeHrToNewDefaultBlock(hrSuspect, range, ev, blockPosition);
+    }
 
-        parentNode.replaceChild(_domUtils2.default.createHorizontalRule(), hrNode);
+    /**
+     * _removeHrOnBackspace
+     * Remove hr if need on backspace
+     * @param {Range} range range
+     * @param {Event} ev event
+     * @returns {boolean} return true if hr was removed
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_removeHrOnBackspace',
+    value: function _removeHrOnBackspace(range, ev) {
+      var hrSuspect = void 0,
+          blockPosition = void 0;
+
+      if (this._isInHr(range)) {
+        hrSuspect = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset);
+      } else if (range.startOffset === 0) {
+        hrSuspect = _domUtils2.default.getTopPrevNodeUnder(range.startContainer, this.wwe.get$Body()[0]);
+        blockPosition = 'none';
+      } else if (this._isNearHr(range)) {
+        hrSuspect = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset - 1);
+        blockPosition = 'before';
+      }
+
+      return this._changeHrToNewDefaultBlock(hrSuspect, range, ev, blockPosition);
+    }
+
+    /**
+     * _changeHrToNewDefaultBlock
+     * Remove hr and add new default block then set range to it
+     * @param {Node} hrSuspect Node could be hr
+     * @param {Range} range range
+     * @param {Event} ev event
+     * @param {strong} newBlockPosition new default block add position
+     * @returns {boolean} return true if hr was removed
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_changeHrToNewDefaultBlock',
+    value: function _changeHrToNewDefaultBlock(hrSuspect, range, ev, newBlockPosition) {
+      if (hrSuspect && _domUtils2.default.getNodeName(hrSuspect) === 'HR') {
+        ev.preventDefault();
+
+        if (newBlockPosition !== 'none') {
+          this.wwe.breakToNewDefaultBlock(range, newBlockPosition);
+        }
+
+        (0, _jquery2.default)(hrSuspect).remove();
+
+        return false;
+      }
+
+      return true;
+    }
+
+    /**
+     * _unwrapDivOnHr
+     * Unwrap default block on hr
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_unwrapDivOnHr',
+    value: function _unwrapDivOnHr() {
+      var editorContentBody = this.wwe.get$Body().get(0);
+      this.wwe.get$Body().find('hr').each(function (index, node) {
+        var parentDiv = (0, _jquery2.default)(node).parent('div');
+        if (parentDiv[0] !== editorContentBody) {
+          parentDiv.find('br').remove();
+          (0, _jquery2.default)(node).unwrap();
+        }
+      });
+    }
+
+    /**
+     * _wrapDefaultBlockToOrphanTexts
+     * Wrap default block to orphan texts
+     * mainly, this is used for orphan text that made by controlling hr
+     * @memberof WwHrManager
+     * @private
+     */
+
+  }, {
+    key: '_wrapDefaultBlockToOrphanTexts',
+    value: function _wrapDefaultBlockToOrphanTexts() {
+      var textNodes = this.wwe.get$Body().contents().filter(findTextNodeFilter);
+
+      textNodes.each(function (i, node) {
+        (0, _jquery2.default)(node).wrap('<div />');
       });
     }
   }]);
@@ -18141,10 +16408,23 @@ var WwHrManager = function () {
   return WwHrManager;
 }();
 
+/**
+ * findTextNodeFilter
+ * @function
+ * @this Node
+ * @returns {boolean}
+ * @ignore
+ */
+
+
+function findTextNodeFilter() {
+  return this.nodeType === Node.TEXT_NODE;
+}
+
 exports.default = WwHrManager;
 
 /***/ }),
-/* 64 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18156,7 +16436,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg p tag manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -18170,10 +16450,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class WwPManager
- * @param {WysiwygEditor} wwe - wysiwygEditor instance
- * @ignore
  */
 var WwPManager = function () {
+  /**
+   * Creates an instance of WwPManager.
+   * @param {WysiwygEditor} wwe - wysiwygEditor instance
+   * @memberof WwPManager
+   */
   function WwPManager(wwe) {
     _classCallCheck(this, WwPManager);
 
@@ -18182,6 +16465,7 @@ var WwPManager = function () {
 
     /**
      * Name property
+     * @memberof WwPManager#
      * @type {string}
      */
     this.name = 'p';
@@ -18190,7 +16474,9 @@ var WwPManager = function () {
   }
 
   /**
+   * _initEvent
    * Initialize event
+   * @memberof WwPManager
    * @private
    */
 
@@ -18260,7 +16546,9 @@ var WwPManager = function () {
     }
 
     /**
+     * _ensurePtagContentWrappedWithDiv
      * Wrap new line inside P tag to DIV, and additional empty line added within too
+     * @memberof WwPManager
      * @private
      */
 
@@ -18279,7 +16567,9 @@ var WwPManager = function () {
     }
 
     /**
+     * _unwrapPtags
      * Unwrap P tag
+     * @memberof WwPManager
      * @private
      */
 
@@ -18300,7 +16590,7 @@ var WwPManager = function () {
 exports.default = WwPManager;
 
 /***/ }),
-/* 65 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18312,7 +16602,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements wysiwyg heading manager
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -18332,11 +16622,14 @@ var FIND_HEADING_RX = /h[\d]/i;
 
 /**
  * Class WwHeadingManager
- * @param {WysiwygEditor} wwe - WysiwygEditor instance
- * @ignore
  */
 
 var WwHeadingManager = function () {
+  /**
+   * Creates an instance of WwHeadingManager.
+   * @param {WysiwygEditor} wwe - WysiwygEditor instance
+   * @memberof WwHeadingManager
+   */
   function WwHeadingManager(wwe) {
     _classCallCheck(this, WwHeadingManager);
 
@@ -18345,6 +16638,7 @@ var WwHeadingManager = function () {
 
     /**
      * Name property
+     * @memberof WwHeadingManager#
      * @type {string}
      */
     this.name = 'heading';
@@ -18353,7 +16647,9 @@ var WwHeadingManager = function () {
   }
 
   /**
+   * _init
    * Initialize
+   * @memberof WwHeadingManager
    * @private
    */
 
@@ -18375,7 +16671,9 @@ var WwHeadingManager = function () {
     }
 
     /**
+     * _initKeyHandler
      * Initialize key event handler
+     * @memberof WwHeadingManager
      * @private
      */
 
@@ -18406,6 +16704,7 @@ var WwHeadingManager = function () {
     }
 
     /**
+     * _wrapDefaultBlockToHeadingInner
      * Wrap default block to heading inner contents
      * @private
      */
@@ -18421,7 +16720,9 @@ var WwHeadingManager = function () {
     }
 
     /**
+     * _unwrapHeading
      * Unwrap heading
+     * @memberof WwHeadingManager
      * @private
      */
 
@@ -18434,7 +16735,9 @@ var WwHeadingManager = function () {
     }
 
     /**
+     * _onEnter
      * Enter key handler
+     * @memberof WwHeadingManager
      * @param {Event} event event object
      * @param {Range} range range
      * @private
@@ -18458,7 +16761,9 @@ var WwHeadingManager = function () {
     }
 
     /**
+     * _insertEmptyBlockToPrevious
      * Insert empty block to previous of passed range
+     * @memberof WwHeadingManager
      * @param {Range} range range
      * @private
      */
@@ -18471,7 +16776,9 @@ var WwHeadingManager = function () {
     }
 
     /**
+     * _removePrevTopNodeIfNeed
      * Remove previous top node if need
+     * @memberof WwHeadingManager
      * @param {Event} event event object
      * @param {Range} range range
      * @returns {Boolean} whether needed or not
@@ -18551,7 +16858,7 @@ var WwHeadingManager = function () {
 exports.default = WwHeadingManager;
 
 /***/ }),
-/* 66 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18571,7 +16878,7 @@ var _tuiCodeSnippet = __webpack_require__(1);
 
 var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
 
-var _squireRte = __webpack_require__(67);
+var _squireRte = __webpack_require__(64);
 
 var _squireRte2 = _interopRequireDefault(_squireRte);
 
@@ -18589,7 +16896,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements squire extension
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -18598,12 +16905,17 @@ var isIElt11 = /Trident\/[456]\./.test(navigator.userAgent);
 
 /**
  * Class SquireExt
- * @params {Squire} ...args
+ * @extends {Squire}
  */
 
 var SquireExt = function (_Squire) {
   _inherits(SquireExt, _Squire);
 
+  /**
+   * Creates an instance of SquireExt.
+   * @augments Squire
+   * @memberof SquireExt
+   */
   function SquireExt() {
     var _ref;
 
@@ -18628,6 +16940,7 @@ var SquireExt = function (_Squire) {
   }
 
   /**
+   * _decorateHandlerToCancelable
    * Decorate squire handler to cancelable cuz sometimes, we dont need squire handler process
    * event.preventDefault() will cancel squire and browser default behavior
    * event.squirePrevented = true will cancel squire but allow browser default behavior
@@ -18967,13 +17280,13 @@ var SquireExt = function (_Squire) {
 exports.default = SquireExt;
 
 /***/ }),
-/* 67 */
+/* 64 */
 /***/ (function(module, exports) {
 
-module.exports = __WEBPACK_EXTERNAL_MODULE_67__;
+module.exports = __WEBPACK_EXTERNAL_MODULE_64__;
 
 /***/ }),
-/* 68 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18985,7 +17298,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements WwTextObject
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -19003,16 +17316,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var isIE11 = _tuiCodeSnippet2.default.browser.msie && _tuiCodeSnippet2.default.browser.version === 11;
 var isWindowChrome = navigator.appVersion.indexOf('Win') !== -1 && _tuiCodeSnippet2.default.browser.chrome;
-var isWindows10 = /Windows (NT )?10/g.test(navigator.appVersion);
-var isNeedOffsetFix = isIE11 || isWindowChrome && !isWindows10;
+var isNeedOffsetFix = isIE11 || isWindowChrome;
 
 /**
  * Class WwTextObject
- * @param {WysiwygEditor} wwe - wysiwygEditor
- * @param {Range} range - Range object
  */
 
 var WwTextObject = function () {
+  /**
+   * Creates an instance of WwTextObject.
+   * @param {WysiwygEditor} wwe - wysiwygEditor
+   * @param {Range} range - Range object
+   * @memberof WwTextObject
+   */
   function WwTextObject(wwe, range) {
     _classCallCheck(this, WwTextObject);
 
@@ -19030,6 +17346,7 @@ var WwTextObject = function () {
 
   /**
    * Initialize composition event
+   * @memberof WwTextObject
    * @private
    */
 
@@ -19051,6 +17368,7 @@ var WwTextObject = function () {
     /**
      * Set _range object to given range object
      * @param {Range} range Range object
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19065,6 +17383,7 @@ var WwTextObject = function () {
 
     /**
      * Expand start offset by one
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19079,6 +17398,7 @@ var WwTextObject = function () {
 
     /**
      * Expand end offset by one
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19094,6 +17414,7 @@ var WwTextObject = function () {
     /**
      * setEnd range on start
      * @param {Range} range Range object
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19111,6 +17432,7 @@ var WwTextObject = function () {
     /**
      * Get text content
      * @returns {string}
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19122,6 +17444,7 @@ var WwTextObject = function () {
     /**
      * Replace current selection content to given text
      * @param {string} content Text content
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19129,19 +17452,12 @@ var WwTextObject = function () {
     value: function replaceContent(content) {
       this._wwe.getEditor().setSelection(this._range);
       this._wwe.getEditor().insertHTML(content);
-
-      // When range is in table, 'insertHTML' makes div in table.
-      // So after 'insertHTML', div in table should be unwrap.
-      // 'wysiwygRangeChangeAfter' event let wwTableManager call '_unwrapBlockInTable'
-      if (this._wwe.isInTable(this._range)) {
-        this._wwe.eventManager.emit('wysiwygRangeChangeAfter', this._wwe);
-      }
-
       this._range = this._wwe.getRange();
     }
 
     /**
      * Delete current selection content
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19156,6 +17472,7 @@ var WwTextObject = function () {
      * Peek previous element's content
      * @param {number} offset Offset to peek
      * @returns {string}
+     * @memberof WwTextObject
      */
 
   }, {
@@ -19176,7 +17493,7 @@ var WwTextObject = function () {
 exports.default = WwTextObject;
 
 /***/ }),
-/* 69 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19194,7 +17511,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _blockOverlay = __webpack_require__(70);
+var _blockOverlay = __webpack_require__(67);
 
 var _blockOverlay2 = _interopRequireDefault(_blockOverlay);
 
@@ -19206,7 +17523,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements UI code block gadget
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -19216,16 +17533,20 @@ var GADGET_HEIGHT = 30;
 
 /**
  * Class CodeBlockGadget
- * @param {Object} options - options
- *     @param {EventManager} options.eventManager - event manager instance
- *     @param {HTMLElement} options.container - container element
- *     @param {WysiwygEditor} options.wysiwygEditor - wysiwyg editor instance
- * @ignore
+ * @extends {BlockOverlay}
  */
 
 var CodeBlockGadget = function (_BlockOverlay) {
   _inherits(CodeBlockGadget, _BlockOverlay);
 
+  /**
+   * Creates an instance of CodeBlockGadget.
+   * @param {Object} options - options
+   * @param {EventManager} options.eventManager - event manager instance
+   * @param {HTMLElement} options.container - container element
+   * @param {WysiwygEditor} options.wysiwygEditor - wysiwyg editor instance
+   * @memberof CodeBlockGadget
+   */
   function CodeBlockGadget(_ref) {
     var eventManager = _ref.eventManager,
         container = _ref.container,
@@ -19250,25 +17571,19 @@ var CodeBlockGadget = function (_BlockOverlay) {
   _createClass(CodeBlockGadget, [{
     key: '_initDOM',
     value: function _initDOM() {
-      var _this2 = this;
-
       this.$el.addClass('code-block-header');
       this._$languageLabel = (0, _jquery2.default)('<span>text</span>');
       this.$el.append(this._$languageLabel);
       this._$buttonOpenModalEditor = (0, _jquery2.default)('<button type="button">Editor</button>');
       this.$el.append(this._$buttonOpenModalEditor);
-      this._eventManager.emit('removeEditor', function () {
-        _this2._$buttonOpenModalEditor.off('click');
-        _this2._$buttonOpenModalEditor = null;
-      });
     }
   }, {
     key: '_initDOMEvent',
     value: function _initDOMEvent() {
-      var _this3 = this;
+      var _this2 = this;
 
       this._$buttonOpenModalEditor.on('click', function () {
-        return _this3._openPopupCodeBlockEditor();
+        return _this2._openPopupCodeBlockEditor();
       });
     }
   }, {
@@ -19287,6 +17602,7 @@ var CodeBlockGadget = function (_BlockOverlay) {
 
     /**
      * update gadget position
+     * @memberof CodeBlockGadget
      * @protected
      * @override
      */
@@ -19306,6 +17622,7 @@ var CodeBlockGadget = function (_BlockOverlay) {
 
     /**
      * on show
+     * @memberof CodeBlockGadget
      * @protected
      * @override
      */
@@ -19313,12 +17630,12 @@ var CodeBlockGadget = function (_BlockOverlay) {
   }, {
     key: 'onShow',
     value: function onShow() {
-      var _this4 = this;
+      var _this3 = this;
 
       _get(CodeBlockGadget.prototype.__proto__ || Object.getPrototypeOf(CodeBlockGadget.prototype), 'onShow', this).call(this);
 
       this._onAttachedElementChange = function () {
-        return _this4._updateLanguage();
+        return _this3._updateLanguage();
       };
       (0, _jquery2.default)(this.getAttachedElement()).on(EVENT_LANGUAGE_CHANGED, this._onAttachedElementChange);
 
@@ -19327,6 +17644,7 @@ var CodeBlockGadget = function (_BlockOverlay) {
 
     /**
      * on hide
+     * @memberof CodeBlockGadget
      * @protected
      * @override
      */
@@ -19346,7 +17664,7 @@ var CodeBlockGadget = function (_BlockOverlay) {
 exports.default = CodeBlockGadget;
 
 /***/ }),
-/* 70 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19358,7 +17676,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements UI block overlay
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -19372,13 +17690,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class BlockOverlay
- * @param {Object} options - options
- *     @param {EventManager} options.eventManager - event manager instance
- *     @param {HTMLElement} options.container - container element
- *     @param {string} options.attachedSelector - selector string to find attached element
- * @ignore
  */
 var BlockOverlay = function () {
+  /**
+   * Creates an instance of BlockOverlay.
+   * @param {Object} options - options
+   *  @param {EventManager} options.eventManager - event manager instance
+   *  @param {HTMLElement} options.container - container element
+   *  @param {string} options.attachedSelector - selector string to find attached element
+   * @memberof BlockOverlay
+   */
   function BlockOverlay(_ref) {
     var eventManager = _ref.eventManager,
         container = _ref.container,
@@ -19395,7 +17716,6 @@ var BlockOverlay = function () {
      * is activated.
      * if this blockOverlay is active, It always be visible unconditionally.
      * @type {boolean}
-     * @private
      */
     this.active = false;
 
@@ -19457,6 +17777,7 @@ var BlockOverlay = function () {
     /**
      * update blockOverlay position & size update to attached element
      * you may want to override this to adjust position & size
+     * @memberof BlockOverlay
      * @protected
      */
 
@@ -19472,6 +17793,7 @@ var BlockOverlay = function () {
      * attached element
      * @protected
      * @returns {HTMLElement} - attached element
+     * @memberof BlockOverlay
      */
 
   }, {
@@ -19484,6 +17806,7 @@ var BlockOverlay = function () {
      * visibility
      * @protected
      * @returns {boolean} visibility
+     * @memberof BlockOverlay
      */
 
   }, {
@@ -19496,6 +17819,7 @@ var BlockOverlay = function () {
      * visibility
      * @param {boolean} visibility - is visible
      * @protected
+     * @memberof BlockOverlay
      */
 
   }, {
@@ -19517,6 +17841,7 @@ var BlockOverlay = function () {
 
     /**
      * called on show. you may want to override to get the event
+     * @memberof BlockOverlay
      * @protected
      * @abstract
      */
@@ -19527,6 +17852,7 @@ var BlockOverlay = function () {
 
     /**
      * called on hide. you may want to override to get the event
+     * @memberof BlockOverlay
      * @protected
      */
 
@@ -19544,7 +17870,7 @@ var BlockOverlay = function () {
 exports.default = BlockOverlay;
 
 /***/ }),
-/* 71 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19556,7 +17882,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview editor layout
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -19577,12 +17903,15 @@ var containerTmpl = ['<div class="tui-editor">', '<div class="te-md-container">'
 
 /**
  * Class Layout
- * @param {object} options - Option object
- * @param {EventManager} eventManager - Event manager instance
- * @ignore
  */
 
 var Layout = function () {
+  /**
+   * Creates an instance of Layout.
+   * @param {object} options - Option object
+   * @param {EventManager} eventManager - Event manager instance
+   * @memberof Layout
+   */
   function Layout(options, eventManager) {
     _classCallCheck(this, Layout);
 
@@ -19597,7 +17926,7 @@ var Layout = function () {
 
   /**
    * Initializer
-   * @protected
+   * @memberof Layout
    */
 
 
@@ -19612,6 +17941,7 @@ var Layout = function () {
 
     /**
      * Initialize show and hide event
+     * @memberof Layout
      * @private
      */
 
@@ -19624,6 +17954,7 @@ var Layout = function () {
 
     /**
      * Create editor container with template
+     * @memberof Layout
      * @private
      */
 
@@ -19636,6 +17967,7 @@ var Layout = function () {
 
     /**
      * Switch editor mode to WYSIWYG
+     * @memberof Layout
      */
 
   }, {
@@ -19647,6 +17979,7 @@ var Layout = function () {
 
     /**
      * Switch editor mode to Markdown
+     * @memberof Layout
      */
 
   }, {
@@ -19658,6 +17991,7 @@ var Layout = function () {
 
     /**
      * Initialize editor to Markdown and set preview section
+     * @memberof Layout
      * @private
      */
 
@@ -19670,6 +18004,7 @@ var Layout = function () {
 
     /**
      * Initialize editor to WYSIWYG
+     * @memberof Layout
      * @private
      */
 
@@ -19681,6 +18016,7 @@ var Layout = function () {
 
     /**
      * Set preview to vertical split style
+     * @memberof Layout
      * @private
      */
 
@@ -19693,6 +18029,7 @@ var Layout = function () {
 
     /**
      * Set tab style preview mode
+     * @memberof Layout
      * @private
      */
 
@@ -19705,6 +18042,7 @@ var Layout = function () {
 
     /**
      * Toggle preview style between tab and vertical split
+     * @memberof Layout
      * @param {string} style Preview style ('tab' or 'vertical')
      */
 
@@ -19720,6 +18058,7 @@ var Layout = function () {
 
     /**
      * Hide Editor
+     * @memberof Layout
      */
 
   }, {
@@ -19730,6 +18069,7 @@ var Layout = function () {
 
     /**
      * Show Editor
+     * @memberof Layout
      */
 
   }, {
@@ -19740,6 +18080,7 @@ var Layout = function () {
 
     /**
      * Remove Editor
+     * @memberof Layout
      */
 
   }, {
@@ -19750,6 +18091,7 @@ var Layout = function () {
 
     /**
      * Get jQuery wrapped editor container element
+     * @memberof Layout
      * @returns {jQuery}
      */
 
@@ -19761,6 +18103,7 @@ var Layout = function () {
 
     /**
      * Get jQuery wrapped preview element
+     * @memberof Layout
      * @returns {jQuery}
      */
 
@@ -19772,6 +18115,7 @@ var Layout = function () {
 
     /**
      * Get jQuery wrapped Markdown editor element
+     * @memberof Layout
      * @returns {jQuery}
      */
 
@@ -19783,6 +18127,7 @@ var Layout = function () {
 
     /**
      * Get jQuery wrapped WYSIWYG editor element
+     * @memberof Layout
      * @returns {jQuery}
      */
 
@@ -19799,7 +18144,7 @@ var Layout = function () {
 exports.default = Layout;
 
 /***/ }),
-/* 72 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -19811,7 +18156,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview default UI
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -19819,11 +18164,11 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _defaultToolbar = __webpack_require__(73);
+var _defaultToolbar = __webpack_require__(70);
 
 var _defaultToolbar2 = _interopRequireDefault(_defaultToolbar);
 
-var _tab = __webpack_require__(44);
+var _tab = __webpack_require__(43);
 
 var _tab2 = _interopRequireDefault(_tab);
 
@@ -19831,35 +18176,35 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _modeSwitch = __webpack_require__(78);
+var _modeSwitch = __webpack_require__(75);
 
 var _modeSwitch2 = _interopRequireDefault(_modeSwitch);
 
-var _popupAddLink = __webpack_require__(79);
+var _popupAddLink = __webpack_require__(76);
 
 var _popupAddLink2 = _interopRequireDefault(_popupAddLink);
 
-var _popupAddImage = __webpack_require__(80);
+var _popupAddImage = __webpack_require__(77);
 
 var _popupAddImage2 = _interopRequireDefault(_popupAddImage);
 
-var _popupTableUtils = __webpack_require__(81);
+var _popupTableUtils = __webpack_require__(78);
 
 var _popupTableUtils2 = _interopRequireDefault(_popupTableUtils);
 
-var _popupAddTable = __webpack_require__(82);
+var _popupAddTable = __webpack_require__(79);
 
 var _popupAddTable2 = _interopRequireDefault(_popupAddTable);
 
-var _popupAddHeading = __webpack_require__(83);
+var _popupAddHeading = __webpack_require__(80);
 
 var _popupAddHeading2 = _interopRequireDefault(_popupAddHeading);
 
-var _popupCodeBlockLanguages = __webpack_require__(84);
+var _popupCodeBlockLanguages = __webpack_require__(81);
 
 var _popupCodeBlockLanguages2 = _interopRequireDefault(_popupCodeBlockLanguages);
 
-var _popupCodeBlockEditor = __webpack_require__(85);
+var _popupCodeBlockEditor = __webpack_require__(82);
 
 var _popupCodeBlockEditor2 = _interopRequireDefault(_popupCodeBlockEditor);
 
@@ -19867,7 +18212,7 @@ var _i18n = __webpack_require__(3);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _tooltip = __webpack_require__(35);
+var _tooltip = __webpack_require__(34);
 
 var _tooltip2 = _interopRequireDefault(_tooltip);
 
@@ -19882,14 +18227,22 @@ var CLASS_MODE_SWITCH = 'te-mode-switch-section';
 var CONTAINER_TEMPLATE = '\n    <div class="tui-editor-defaultUI">\n        <div class="' + CLASS_TOOLBAR + '"><div class="' + CLASS_MARKDOWN_TAB + '"></div></div>\n        <div class="' + CLASS_EDITOR + '"></div>\n        <div class="' + CLASS_MODE_SWITCH + '"></div>\n    </div>\n';
 
 /**
- * Class DefaultUI
- * @param {ToastUIEditor} editor - editor instance
+ * Class Default UI
+ * initialize ui instances. toolbar, popups
  */
 
 var DefaultUI = function () {
 
   /**
+   * Creates an instance of DefaultUI.
+   * @param {ToastUIEditor} editor - editor instance
+   * @memberof DefaultUI
+   */
+
+
+  /**
    * mode switch instance
+   * @memberof DefaultUI
    * @private
    * @type {ModeSwitch}
    */
@@ -19897,6 +18250,7 @@ var DefaultUI = function () {
 
   /**
    * markdown tab section jQuery element
+   * @memberof DefaultUI
    * @private
    * @type {HTMLElement}
    */
@@ -19904,12 +18258,14 @@ var DefaultUI = function () {
 
   /**
    * editor type ww/md
+   * @memberof DefaultUI
    * @private
    * @type {string}
    */
 
 
   /**
+   * @memberof DefaultUI
    * @type {HTMLElement}
    * @private
    */
@@ -19917,6 +18273,7 @@ var DefaultUI = function () {
 
   /**
    * DefaultToolbar wrapper element
+   * @memberof DefaultUI
    * @type {jQuery}
    */
   function DefaultUI(editor) {
@@ -19942,6 +18299,7 @@ var DefaultUI = function () {
 
   /**
    * popup instances
+   * @memberof DefaultUI
    * @private
    * @type {Array}
    */
@@ -19949,6 +18307,7 @@ var DefaultUI = function () {
 
   /**
    * markdown tab
+   * @memberof DefaultUI
    * @private
    * @type {Tab}
    */
@@ -19956,6 +18315,7 @@ var DefaultUI = function () {
 
   /**
    * editor instance
+   * @memberof DefaultUI
    * @private
    * @type {ToastUIEditor}
    */
@@ -19963,6 +18323,7 @@ var DefaultUI = function () {
 
   /**
    * editor section element
+   * @memberof DefaultUI
    * @private
    * @type {HTMLElement}
    */
@@ -19970,12 +18331,14 @@ var DefaultUI = function () {
 
   /**
    * DefaultToolbar instance
+   * @memberof DefaultUI
    * @type {DefaultToolbar}
    * @private
    */
 
   /**
    * UI name
+   * @memberof DefaultUI
    * @type {string}
    */
 
@@ -20152,6 +18515,7 @@ var DefaultUI = function () {
     /**
      * get toolbar instance
      * @returns {Toolbar} - toolbar instance
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20163,6 +18527,7 @@ var DefaultUI = function () {
     /**
      * set toolbar instance
      * @param {Toolbar} toolbar - toolbar
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20174,6 +18539,7 @@ var DefaultUI = function () {
 
     /**
      * get mode switch instance
+     * @memberof DefaultUI
      * @returns {ModeSwitch} - mode switch instance
      */
 
@@ -20186,6 +18552,7 @@ var DefaultUI = function () {
     /**
      * get editor section height
      * @returns {Number} - height of editor section
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20199,6 +18566,7 @@ var DefaultUI = function () {
     /**
      * get editor height
      * @returns {Number} - height of editor
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20212,6 +18580,7 @@ var DefaultUI = function () {
     /**
      * get Table Popup
      * @returns {PopupTableUtils} - PopupTableUtils
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20229,6 +18598,7 @@ var DefaultUI = function () {
 
     /**
      * hide
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20239,6 +18609,7 @@ var DefaultUI = function () {
 
     /**
      * show
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20249,19 +18620,13 @@ var DefaultUI = function () {
 
     /**
      * remove
+     * @memberof DefaultUI
      */
 
   }, {
     key: 'remove',
     value: function remove() {
       this.$el.remove();
-      this._markdownTab.remove();
-      this._modeSwitch.remove();
-      this._toolbar.destroy();
-      this._popups.forEach(function (popup) {
-        return popup.remove();
-      });
-      this._popups = [];
       _tooltip2.default.hide();
     }
 
@@ -20269,6 +18634,7 @@ var DefaultUI = function () {
      * creates popup
      * @param {LayerPopupOption} options - layerPopup options
      * @returns {LayerPopup} - crated layerPopup
+     * @memberof DefaultUI
      */
 
   }, {
@@ -20284,7 +18650,7 @@ var DefaultUI = function () {
 exports.default = DefaultUI;
 
 /***/ }),
-/* 73 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20298,7 +18664,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _resizeObserverPolyfill = __webpack_require__(74);
+var _resizeObserverPolyfill = __webpack_require__(71);
 
 var _resizeObserverPolyfill2 = _interopRequireDefault(_resizeObserverPolyfill);
 
@@ -20306,15 +18672,15 @@ var _i18n = __webpack_require__(3);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _toolbar = __webpack_require__(41);
+var _toolbar = __webpack_require__(40);
 
 var _toolbar2 = _interopRequireDefault(_toolbar);
 
-var _popupDropdownToolbar = __webpack_require__(77);
+var _popupDropdownToolbar = __webpack_require__(74);
 
 var _popupDropdownToolbar2 = _interopRequireDefault(_popupDropdownToolbar);
 
-var _toolbarItemFactory = __webpack_require__(43);
+var _toolbarItemFactory = __webpack_require__(42);
 
 var _toolbarItemFactory2 = _interopRequireDefault(_toolbarItemFactory);
 
@@ -20326,14 +18692,15 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview implements DefaultToolbar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 var MORE_BUTTON_NAME = 'more';
 
 /**
- * Class DefaultToolbar
+ * default toolbar
+ * @extends Toolbar
  */
 
 var DefaultToolbar = function (_Toolbar) {
@@ -20341,8 +18708,9 @@ var DefaultToolbar = function (_Toolbar) {
 
   /**
    * popup dropdown toolbar
-   * @type {PopupDropdownToolbar}
+   * @memberof DefaultToolbar
    * @private
+   * @type {PopupDropdownToolbar}
    */
   function DefaultToolbar(eventManager, options) {
     _classCallCheck(this, DefaultToolbar);
@@ -20358,20 +18726,22 @@ var DefaultToolbar = function (_Toolbar) {
    * insert toolbar item
    * @param  {number} index - index at given item inserted
    * @param  {ToolbarItem|string|object} item - toolbar item
-   * @override
+   * @memberof Toolbar
    */
 
 
   /**
    * resize observer
-   * @type {ResizeObserver}
+   * @memberof DefaultToolbar
    * @private
+   * @type {ResizeObserver}
    */
 
   /**
    * more button
-   * @type {ToolbarButton}
+   * @memberof DefaultToolbar
    * @private
+   * @type {ToolbarButton}
    */
 
 
@@ -20466,7 +18836,6 @@ var DefaultToolbar = function (_Toolbar) {
     value: function destroy() {
       if (this._observer) {
         this._observer.disconnect();
-        this._observer = null;
       }
     }
   }]);
@@ -20477,7 +18846,7 @@ var DefaultToolbar = function (_Toolbar) {
 exports.default = DefaultToolbar;
 
 /***/ }),
-/* 74 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -21507,10 +19876,10 @@ var index = (function () {
 
 /* harmony default export */ __webpack_exports__["default"] = (index);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(75)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(72)))
 
 /***/ }),
-/* 75 */
+/* 72 */
 /***/ (function(module, exports) {
 
 var g;
@@ -21537,7 +19906,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 76 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21547,7 +19916,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _button = __webpack_require__(19);
+var _button = __webpack_require__(18);
 
 var _button2 = _interopRequireDefault(_button);
 
@@ -21559,13 +19928,13 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements UI Button
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
  * Toolbar Button UI
- * @ignore
+ * @extends {ToolbarItem}
  */
 var ToolbarButton = function (_Button) {
   _inherits(ToolbarButton, _Button);
@@ -21582,7 +19951,7 @@ var ToolbarButton = function (_Button) {
 exports.default = ToolbarButton;
 
 /***/ }),
-/* 77 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21604,7 +19973,7 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _toolbar = __webpack_require__(41);
+var _toolbar = __webpack_require__(40);
 
 var _toolbar2 = _interopRequireDefault(_toolbar);
 
@@ -21616,18 +19985,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview implements DefaultToolbar
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
-/**
- * Class PopupDropdownToolbar
- * @param {LayerPopupOption} options - layer popup option
- * @ignore
- */
 var PopupDropdownToolbar = function (_LayerPopup) {
   _inherits(PopupDropdownToolbar, _LayerPopup);
 
+  /**
+   * constructor
+   * @param {object} options - popup options
+   */
   function PopupDropdownToolbar(options) {
     _classCallCheck(this, PopupDropdownToolbar);
 
@@ -21645,7 +20013,9 @@ var PopupDropdownToolbar = function (_LayerPopup) {
 
   /**
    * open event string
-   * @type {string}
+   * @memberof PopupDropdownToolbar
+   * @static
+   * @type {ToolbarButton}
    */
 
 
@@ -21658,6 +20028,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
     /**
      * get toolbar items
      * @returns {ToolbarItem[]} - toolbar items
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21670,6 +20041,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
      * get toolbar item at given index
      * @param  {number} index - item index
      * @returns {ToolbarItem} - toolbar item at the index
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21681,6 +20053,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
     /**
      * set toolbar items
      * @param {ToolbarItem[]} items - toolbar items
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21692,6 +20065,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
     /**
      * add toolbar item
      * @param {ToolbarItem|string|object} item - toolbar item
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21704,6 +20078,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
      * insert toolbar item
      * @param  {number} index - index at given item inserted
      * @param  {ToolbarItem|string|object} item - toolbar item
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21716,6 +20091,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
      * get index of given item
      * @param  {ToolbarItem} item - toolbar item
      * @returns {number} - index of given toolbar item
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21729,6 +20105,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
      * @param  {number} index - item index to remove
      * @param  {boolean} destroy - destroy item or not
      * @returns {ToolbarItem} - removed item
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21739,6 +20116,7 @@ var PopupDropdownToolbar = function (_LayerPopup) {
 
     /**
      * remove all toolbar items
+     * @memberof PopupDropdownToolbar
      */
 
   }, {
@@ -21751,7 +20129,8 @@ var PopupDropdownToolbar = function (_LayerPopup) {
      * init instance.
      * store properties & prepare before initialize DOM
      * @param {LayerPopupOption} options - layer popup options
-     * @private
+     * @memberof PopupDropdownToolbar
+     * @protected
      * @override
      */
 
@@ -21771,8 +20150,8 @@ var PopupDropdownToolbar = function (_LayerPopup) {
 
     /**
      * initialize DOM, render popup
-     * @private
-     * @override
+     * @memberof PopupDropdownToolbar
+     * @protected
      */
 
   }, {
@@ -21785,8 +20164,8 @@ var PopupDropdownToolbar = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupDropdownToolbar
+     * @protected
      */
 
   }, {
@@ -21839,7 +20218,7 @@ Object.defineProperty(PopupDropdownToolbar, 'OPEN_EVENT', {
 exports.default = PopupDropdownToolbar;
 
 /***/ }),
-/* 78 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -21875,7 +20254,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements ui mode switch
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -21885,25 +20264,33 @@ var WYSIWYG = 'wysiwyg';
 /**
  * Class ModeSwitch
  * UI Control for switch between Markdown and WYSIWYG
- * @param {jQuery} $rootElement - root jquery element
- * @param {string} initialType - initial type of editor
+ * @extends {UIController}
  */
 
 var ModeSwitch = function (_UIController) {
   _inherits(ModeSwitch, _UIController);
 
   /**
+   * Creates an instance of ModeSwitch.
+   * @param {jQuery} $rootElement - root jquery element
+   * @param {string} initialType - initial type of editor
+   * @memberof ModeSwitch
+   */
+
+
+  /**
    * current mode
+   * @memberof ModeSwitch
    * @type {String}
    * @private
    */
 
   /**
    * mode switch type
+   * @memberof ModeSwitch
    * @property {string} MARKDOWN - Markdown
    * @property {string} WYSIWYG - WYSIWYG
    * @static
-   * @ignore
    */
   function ModeSwitch($rootElement, initialType) {
     _classCallCheck(this, ModeSwitch);
@@ -21934,12 +20321,12 @@ var ModeSwitch = function (_UIController) {
   /**
    * root element
    * @type {jQuery}
-   * @private
    */
 
 
   /**
    * mode switch buttons
+   * @memberof ModeSwitch
    * @type {Object}
    * @private
    */
@@ -21953,6 +20340,7 @@ var ModeSwitch = function (_UIController) {
 
     /**
      * show switch tab bar
+     * @memberof ModeSwitch
      */
 
   }, {
@@ -21963,6 +20351,7 @@ var ModeSwitch = function (_UIController) {
 
     /**
      * hide switch tab bar
+     * @memberof ModeSwitch
      */
 
   }, {
@@ -22032,7 +20421,7 @@ Object.defineProperty(ModeSwitch, 'TYPE', {
 exports.default = ModeSwitch;
 
 /***/ }),
-/* 79 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22070,7 +20459,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements PopupAddLink
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -22079,17 +20468,21 @@ var URL_REGEX = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})(\/([^\s]*))?$/;
 /**
  * Class PopupAddLink
  * It implements a link Add Popup
- * @param {LayerPopupOption} options - layer popup options
- * @ignore
+ * @extends {LayerPopup}
  */
 
 var PopupAddLink = function (_LayerPopup) {
   _inherits(PopupAddLink, _LayerPopup);
 
+  /**
+   * Creates an instance of PopupAddLink.
+   * @param {LayerPopupOption} options - layer popup options
+   * @memberof PopupAddLink
+   */
   function PopupAddLink(options) {
     _classCallCheck(this, PopupAddLink);
 
-    var POPUP_CONTENT = '\n            <label for="url">' + _i18n2.default.get('URL') + '</label>\n            <input type="text" class="te-url-input" />\n            <label for="linkText">' + _i18n2.default.get('Link text') + '</label>\n            <input type="text" class="te-link-text-input" />\n            <div class="te-button-section">\n                <button type="button" class="te-ok-button">' + _i18n2.default.get('OK') + '</button>\n                <button type="button" class="te-close-button">' + _i18n2.default.get('Cancel') + '</button>\n            </div>\n        ';
+    var POPUP_CONTENT = '\n            <label for="linkText">' + _i18n2.default.get('Link text') + '</label>\n            <input type="text" class="te-link-text-input" />\n            <label for="url">' + _i18n2.default.get('URL') + '</label>\n            <input type="text" class="te-url-input" />\n            <div class="te-button-section">\n                <button type="button" class="te-ok-button">' + _i18n2.default.get('OK') + '</button>\n                <button type="button" class="te-close-button">' + _i18n2.default.get('Cancel') + '</button>\n            </div>\n        ';
     options = _tuiCodeSnippet2.default.extend({
       header: true,
       title: _i18n2.default.get('Insert link'),
@@ -22103,7 +20496,8 @@ var PopupAddLink = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupAddLink
+   * @protected
    * @override
    */
 
@@ -22119,7 +20513,8 @@ var PopupAddLink = function (_LayerPopup) {
 
     /**
      * initialize DOM, render popup
-     * @private
+     * @memberof PopupAddLink
+     * @protected
      * @override
      */
 
@@ -22135,7 +20530,8 @@ var PopupAddLink = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupAddLink
+     * @protected
      * @override
      */
 
@@ -22164,7 +20560,12 @@ var PopupAddLink = function (_LayerPopup) {
           inputURL.value = selectedText;
         }
 
-        inputURL.focus();
+        if (selectedText.length > 0 && inputURL.value.length < 1) {
+          inputURL.focus();
+        } else {
+          inputText.focus();
+          inputText.setSelectionRange(0, selectedText.length);
+        }
       });
 
       this.on('hidden', function () {
@@ -22174,8 +20575,9 @@ var PopupAddLink = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupAddLink
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -22255,7 +20657,7 @@ var PopupAddLink = function (_LayerPopup) {
 exports.default = PopupAddLink;
 
 /***/ }),
-/* 80 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22277,7 +20679,7 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _tab = __webpack_require__(44);
+var _tab = __webpack_require__(43);
 
 var _tab2 = _interopRequireDefault(_tab);
 
@@ -22293,7 +20695,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements PopupAddImage
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -22310,13 +20712,17 @@ var TYPE_UI = 'ui';
 /**
  * Class PopupAddImage
  * It implements a Image Add Popup
- * @param {LayerPopupOption} options - layer popup option
- * @ignore
+ * @extends {LayerPopup}
  */
 
 var PopupAddImage = function (_LayerPopup) {
   _inherits(PopupAddImage, _LayerPopup);
 
+  /**
+   * Creates an instance of PopupAddImage.
+   * @param {LayerPopupOption} options - layer popup option
+   * @memberof PopupAddImage
+   */
   function PopupAddImage(options) {
     _classCallCheck(this, PopupAddImage);
 
@@ -22334,7 +20740,8 @@ var PopupAddImage = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupAddImage
+   * @protected
    * @override
    */
 
@@ -22349,7 +20756,8 @@ var PopupAddImage = function (_LayerPopup) {
 
     /**
      * initialize DOM, render popup
-     * @private
+     * @memberof PopupAddImage
+     * @protected
      * @override
      */
 
@@ -22377,7 +20785,8 @@ var PopupAddImage = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupAddImage
+     * @protected
      * @override
      */
 
@@ -22416,7 +20825,7 @@ var PopupAddImage = function (_LayerPopup) {
           if (files.length) {
             var imageFile = files.item(0);
             var hookCallback = function hookCallback(url, text) {
-              return _this2._applyImage(url, text || altText);
+              return _this2._applyImage(url, altText || text);
             };
 
             _this2.eventManager.emit('addImageBlobHook', imageFile, hookCallback, TYPE_UI);
@@ -22433,8 +20842,9 @@ var PopupAddImage = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupAddImage
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -22470,18 +20880,6 @@ var PopupAddImage = function (_LayerPopup) {
     value: function _resetInputs() {
       this.$el.find('input').val('');
     }
-
-    /**
-     * Remove popup
-     * @override
-     */
-
-  }, {
-    key: 'remove',
-    value: function remove() {
-      this.tab.remove();
-      _get(PopupAddImage.prototype.__proto__ || Object.getPrototypeOf(PopupAddImage.prototype), 'remove', this).call(this);
-    }
   }]);
 
   return PopupAddImage;
@@ -22490,7 +20888,7 @@ var PopupAddImage = function (_LayerPopup) {
 exports.default = PopupAddImage;
 
 /***/ }),
-/* 81 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22528,18 +20926,23 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements PopupTableUtils
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
  * PopupTableUtils
  * It implements table utils popup
- * @param {LayerPopupOption} options - layer popup options
+ * @extends {LayerPopup}
  */
 var PopupTableUtils = function (_LayerPopup) {
   _inherits(PopupTableUtils, _LayerPopup);
 
+  /**
+   * Creates an instance of PopupTableUtils.
+   * @param {LayerPopupOption} options - layer popup options
+   * @memberof PopupTableUtils
+   */
   function PopupTableUtils(options) {
     _classCallCheck(this, PopupTableUtils);
 
@@ -22556,7 +20959,8 @@ var PopupTableUtils = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupTableUtils
+   * @protected
    * @override
    */
 
@@ -22570,7 +20974,8 @@ var PopupTableUtils = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupTableUtils
+     * @protected
      * @override
      */
 
@@ -22609,8 +21014,9 @@ var PopupTableUtils = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupTableUtils
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -22653,7 +21059,7 @@ var PopupTableUtils = function (_LayerPopup) {
 exports.default = PopupTableUtils;
 
 /***/ }),
-/* 82 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -22683,7 +21089,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements PopupAddTable
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -22709,15 +21115,22 @@ var LAST_BORDER = 1;
 /**
  * Class PopupAddTable
  * It implements Popup to add a table
- * @param {LayerPopupOption} options - layer popup option
- * @ignore
+ * @extends {LayerPopup}
  */
 
 var PopupAddTable = function (_LayerPopup) {
   _inherits(PopupAddTable, _LayerPopup);
 
   /**
+   * Creates an instance of PopupAddTable.
+   * @param {LayerPopupOption} options - layer popup option
+   * @memberof PopupAddTable
+   */
+
+  /**
    * Toolbar Button which the Popup is bound to.
+   *
+   * @memberof PopupAddTable
    * @type {jQuery}
    * @private
    */
@@ -22736,13 +21149,16 @@ var PopupAddTable = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupAddTable
+   * @protected
    * @override
    */
 
 
   /**
    * EventManager instance
+   *
+   * @memberof PopupAddTabe
    * @type {EventManager}
    * @private
    */
@@ -22761,7 +21177,8 @@ var PopupAddTable = function (_LayerPopup) {
 
     /**
      * initialize DOM, render popup
-     * @private
+     * @memberof PopupAddTable
+     * @protected
      * @override
      */
 
@@ -22776,7 +21193,8 @@ var PopupAddTable = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupAddTable
+     * @protected
      * @override
      */
 
@@ -22807,8 +21225,9 @@ var PopupAddTable = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupAddTable
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -22843,6 +21262,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _cacheElements
      * Cache elements for use
      * @private
      */
@@ -22857,6 +21277,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _resizeTableBySelectionIfNeed
      * Resize table if need
      * @param {number} col column index
      * @param {number} row row index
@@ -22874,6 +21295,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _getResizedTableBound
      * Get resized table bound if Need
      * @param {number} col column index
      * @param {number} row row index
@@ -22911,6 +21333,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _isNeedResizeTable
      * check if need resize table
      * @param {number} col column index
      * @param {number} row row index
@@ -22925,6 +21348,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _getBoundByOffset
      * Get bound by offset
      * @param {number} x offset
      * @param {number} y offset
@@ -22945,6 +21369,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _getOffsetByBound
      * Get offset by bound
      * @param {number} col column index
      * @param {number} row row index
@@ -22965,6 +21390,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _setTableSizeByBound
      * Set table size with bound
      * @param {number} col column index
      * @param {number} row row index
@@ -22981,6 +21407,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _getSelectionBoundByOffset
      * Get selection bound that process with range by offset
      * @param {number} x offset
      * @param {number} y offset
@@ -23009,6 +21436,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _setSelectionAreaByBound
      * Set selection area with bound
      * @param {number} col column index
      * @param {number} row row index
@@ -23023,6 +21451,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _setSelectedBound
      * Set selected bound
      * @param {number} col column index
      * @param {number} row row index
@@ -23037,6 +21466,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _getSelectedTableSize
      * Get selected table size
      * @returns {object} bound
      * @private
@@ -23052,6 +21482,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _setDisplayText
      * Set selected table size text for display
      * @param {number} col column index
      * @param {number} row row index
@@ -23065,6 +21496,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _setTableSize
      * Set table element size
      * @param {number} x offset
      * @param {number} y offset
@@ -23093,6 +21525,7 @@ var PopupAddTable = function (_LayerPopup) {
     }
 
     /**
+     * _setSelectionArea
      * Set selection element size
      * @param {number} x offset
      * @param {number} y offset
@@ -23123,7 +21556,7 @@ PopupAddTable.MIN_COL_SELECTION_INDEX = MIN_COL_SELECTION_INDEX;
 exports.default = PopupAddTable;
 
 /***/ }),
-/* 83 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23160,20 +21593,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Implements PopupAddHeading
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @fileoverview Implements PopupAddTable
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
 /**
- * Class PopupAddHeading
+ * Class PopupHeading
  * It implements Popup to add headings
- * @param {LayerPopupOption} options - layer popup option
- * @ignore
+ * @extends {LayerPopup}
  */
 var PopupAddHeading = function (_LayerPopup) {
   _inherits(PopupAddHeading, _LayerPopup);
 
+  /**
+   * Creates an instance of PopupAddHeading.
+   * @param {LayerPopupOption} options - layer popup option
+   * @memberof PopupAddHeading
+   */
   function PopupAddHeading(options) {
     _classCallCheck(this, PopupAddHeading);
 
@@ -23190,7 +21627,8 @@ var PopupAddHeading = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupAddHeading
+   * @protected
    * @override
    */
 
@@ -23206,7 +21644,8 @@ var PopupAddHeading = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupAddHeading
+     * @protected
      * @override
      */
 
@@ -23225,8 +21664,9 @@ var PopupAddHeading = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupAddHeading
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -23262,7 +21702,7 @@ var PopupAddHeading = function (_LayerPopup) {
 exports.default = PopupAddHeading;
 
 /***/ }),
-/* 84 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23296,7 +21736,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements popup code block languages
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -23304,13 +21744,17 @@ var BUTTON_CLASS_PREFIX = 'te-popup-code-block-lang-';
 
 /**
  * Class Popup code block languages select list
- * @param {LayerPopupOption} options - layer popup option
- * @ignore
+ * @extends {LayerPopup}
  */
 
 var PopupCodeBlockLanguages = function (_LayerPopup) {
   _inherits(PopupCodeBlockLanguages, _LayerPopup);
 
+  /**
+   * Creates an instance of PopupCodeBlockLanguages.
+   * @param {LayerPopupOption} options - layer popup option
+   * @memberof PopupCodeBlockLanguages
+   */
   function PopupCodeBlockLanguages(options) {
     _classCallCheck(this, PopupCodeBlockLanguages);
 
@@ -23334,7 +21778,8 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupCodeBlockLanguages
+   * @protected
    * @override
    */
 
@@ -23355,7 +21800,8 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * initialize DOM, render popup
-     * @private
+     * @memberof PopupCodeBlockLanguages
+     * @protected
      * @override
      */
 
@@ -23372,7 +21818,8 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupCodeBlockLanguages
+     * @protected
      * @override
      */
 
@@ -23397,8 +21844,9 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupCodeBlockLanguages
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -23438,6 +21886,7 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
      * activate an item by index
      * @param {number} index - item index
      * @private
+     * @memberof PopupCodeBlockLanguages
      */
 
   }, {
@@ -23453,6 +21902,7 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * move to prev language
+     * @memberof PopupCodeBlockLanguages
      */
 
   }, {
@@ -23467,6 +21917,7 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * move to next language
+     * @memberof PopupCodeBlockLanguages
      */
 
   }, {
@@ -23481,6 +21932,8 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * current language
+     * @public
+     * @memberof PopupCodeBlockLanguages
      * @returns {string} language
      */
 
@@ -23495,6 +21948,7 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
     /**
      * set current language
      * @param {string} language - current language
+     * @memberof PopupCodeBlockLanguages
      */
 
   }, {
@@ -23510,7 +21964,8 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
     /**
      * show popup
      * @param {object} callback - to be called on language selected & dismissed
-     * @override
+     * @protected
+     * @memberof PopupCodeBlockLanguages
      */
 
   }, {
@@ -23523,7 +21978,8 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 
     /**
      * hide popup
-     * @override
+     * @memberof PopupCodeBlockLanguages
+     * @protected
      */
 
   }, {
@@ -23544,7 +22000,7 @@ var PopupCodeBlockLanguages = function (_LayerPopup) {
 exports.default = PopupCodeBlockLanguages;
 
 /***/ }),
-/* 85 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23570,19 +22026,19 @@ var _layerpopup = __webpack_require__(5);
 
 var _layerpopup2 = _interopRequireDefault(_layerpopup);
 
-var _scrollSyncSplit = __webpack_require__(86);
+var _scrollSyncSplit = __webpack_require__(83);
 
 var _scrollSyncSplit2 = _interopRequireDefault(_scrollSyncSplit);
 
-var _codeBlockEditor = __webpack_require__(87);
+var _codeBlockEditor = __webpack_require__(84);
 
 var _codeBlockEditor2 = _interopRequireDefault(_codeBlockEditor);
 
-var _codeBlockPreview = __webpack_require__(88);
+var _codeBlockPreview = __webpack_require__(85);
 
 var _codeBlockPreview2 = _interopRequireDefault(_codeBlockPreview);
 
-var _codeBlockLanguagesCombo = __webpack_require__(89);
+var _codeBlockLanguagesCombo = __webpack_require__(86);
 
 var _codeBlockLanguagesCombo2 = _interopRequireDefault(_codeBlockLanguagesCombo);
 
@@ -23598,7 +22054,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements popup code block editor
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -23610,13 +22066,17 @@ var TEMPLATE_HEADER_BUTTONS = '\n    <button type="button" class="' + CLASS_PREF
 
 /**
  * Class popup code block editor
- * @param {LayerPopupOption} options - layer popup option
- * @ignore
+ * @extends {LayerPopup}
  */
 
 var PopupCodeBlockEditor = function (_LayerPopup) {
   _inherits(PopupCodeBlockEditor, _LayerPopup);
 
+  /**
+   * Creates an instance of PopupCodeBlockEditor.
+   * @param {LayerPopupOption} options - layer popup option
+   * @memberof PopupCodeBlockEditor
+   */
   function PopupCodeBlockEditor(options) {
     _classCallCheck(this, PopupCodeBlockEditor);
 
@@ -23636,7 +22096,8 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
    * init instance.
    * store properties & prepare before initialize DOM
    * @param {LayerPopupOption} options - layer popup options
-   * @private
+   * @memberof PopupCodeBlockEditor
+   * @protected
    * @override
    */
 
@@ -23652,7 +22113,8 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 
     /**
      * initialize DOM, render popup
-     * @private
+     * @memberof PopupCodeBlockEditor
+     * @protected
      * @override
      */
 
@@ -23682,7 +22144,8 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 
     /**
      * bind DOM events
-     * @private
+     * @memberof PopupCodeBlockEditor
+     * @protected
      * @override
      */
 
@@ -23723,8 +22186,9 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 
     /**
      * bind editor events
-     * @private
-     * @override
+     * @memberof PopupCodeBlockEditor
+     * @protected
+     * @abstract
      */
 
   }, {
@@ -23834,6 +22298,7 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 
     /**
      * store code mirror text to wysiwyg code block
+     * @memberof PopupCodeBlockEditor
      * @private
      */
 
@@ -23848,6 +22313,7 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
      * load code mirror text from wysiwyg code block
      * @param {HTMLElement} codeBlockElement - code block element instance to load code from
      * @private
+     * @memberof PopupCodeBlockEditor
      */
 
   }, {
@@ -23863,6 +22329,7 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
     /**
      * show popup
      * @param {HTMLElement} codeBlockElement - code block element
+     * @memberof PopupCodeBlockEditor
      * @override
      */
 
@@ -23879,6 +22346,7 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 
     /**
      * hide popup
+     * @memberof PopupCodeBlockEditor
      * @override
      */
 
@@ -23905,7 +22373,7 @@ var PopupCodeBlockEditor = function (_LayerPopup) {
 exports.default = PopupCodeBlockEditor;
 
 /***/ }),
-/* 86 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -23917,7 +22385,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements scroll sync split
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -23950,17 +22418,20 @@ var CLASS_CONTENT = {
 
 /**
  * Class ScrollSyncSplit
- * @param {Element} baseElement - an element which attach a splitSyncSplit
- * @param {Element} leftElement - an element to be on left side split view
- * @param {Element} rightElement - an element to be on right side split view
- * @param {object} options - options
- *     @param {boolean} [options.showScrollSyncButton=false] - show scroll sync button on top right corner
- *     @param {boolean} [options.scrollSync=true] - true for enable scroll sync
- *     @param {boolean} [options.splitView=true] - true for split, false for single view
- * @ignore
  */
 
 var ScrollSyncSplit = function () {
+  /**
+   * Creates an instance of ScrollSyncSplit.
+   * @param {Element} baseElement - an element which attach a splitSyncSplit
+   * @param {Element} leftElement - an element to be on left side split view
+   * @param {Element} rightElement - an element to be on right side split view
+   * @param {object} options - options
+   *  @param {boolean} [options.showScrollSyncButton=false] - show scroll sync button on top right corner
+   *  @param {boolean} [options.scrollSync=true] - true for enable scroll sync
+   *  @param {boolean} [options.splitView=true] - true for split, false for single view
+   * @memberof ScrollSyncSplit
+   */
   function ScrollSyncSplit(baseElement, leftElement, rightElement) {
     var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
 
@@ -23974,10 +22445,8 @@ var ScrollSyncSplit = function () {
     this._baseElement = baseElement;
 
     /**
-     * left, right side content elements
-     * @type {HTMLElement[]}
-     * @private
-     */
+       * left, right side content elements
+       */
     this._contentElements = [];
 
     this._initDom(leftElement, rightElement, options);
@@ -24058,6 +22527,7 @@ var ScrollSyncSplit = function () {
      * set content element for given side
      * @param {Element} element - content element
      * @param {string} side - 'left' | 'right'
+     * @memberof ScrollSyncSplit
      * @private
      */
 
@@ -24089,6 +22559,7 @@ var ScrollSyncSplit = function () {
     /**
      * set left side element
      * @param {Element} element - an element to be on left side split view
+     * @memberof ScrollSyncSplit
      * @private
      */
 
@@ -24101,6 +22572,7 @@ var ScrollSyncSplit = function () {
     /**
      * set right side element
      * @param {Element} element - an element to be on right side split view
+     * @memberof ScrollSyncSplit
      * @private
      */
 
@@ -24117,6 +22589,7 @@ var ScrollSyncSplit = function () {
 
     /**
      * toggle multi scroll
+     * @memberof ScrollSyncSplit
      */
 
   }, {
@@ -24132,6 +22605,7 @@ var ScrollSyncSplit = function () {
 
     /**
      * toggle split
+     * @memberof ScrollSyncSplit
      */
 
   }, {
@@ -24143,6 +22617,7 @@ var ScrollSyncSplit = function () {
     /**
      * is scroll synced
      * @returns {boolean} - true for synced, false for each scroll
+     * @memberof ScrollSyncSplit
      */
 
   }, {
@@ -24154,6 +22629,7 @@ var ScrollSyncSplit = function () {
     /**
      * is split view
      * @returns {boolean} - true for split view, false for single view
+     * @memberof ScrollSyncSplit
      */
 
   }, {
@@ -24164,6 +22640,7 @@ var ScrollSyncSplit = function () {
 
     /**
      * sync scroll
+     * @memberof ScrollSyncSplit
      */
 
   }, {
@@ -24194,6 +22671,7 @@ var ScrollSyncSplit = function () {
     /**
      * scroll top
      * @param {number} top - scroll top in pixel
+     * @memberof ScrollSyncSplit
      */
 
   }, {
@@ -24209,7 +22687,7 @@ var ScrollSyncSplit = function () {
 exports.default = ScrollSyncSplit;
 
 /***/ }),
-/* 87 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24225,7 +22703,7 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _codeMirrorExt = __webpack_require__(36);
+var _codeMirrorExt = __webpack_require__(35);
 
 var _codeMirrorExt2 = _interopRequireDefault(_codeMirrorExt);
 
@@ -24237,7 +22715,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements code block editor
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -24245,14 +22723,18 @@ var EVENT_LANGUAGE_CHANGED = 'language-changed';
 
 /**
  * Class Code Block Editor
- * @param {HTMLElement} el - code block editor container element
- * @param {EventManager} eventManager - event manager
- * @ignore
+ * @extends {CodeMirrorExt}
  */
 
 var CodeBlockEditor = function (_CodeMirrorExt) {
   _inherits(CodeBlockEditor, _CodeMirrorExt);
 
+  /**
+   * Creates an instance of CodeBlockEditor.
+   * @param {HTMLElement} el - code block editor container element
+   * @param {EventManager} eventManager - event manager
+   * @memberof CodeBlockEditor
+   */
   function CodeBlockEditor(el, eventManager) {
     _classCallCheck(this, CodeBlockEditor);
 
@@ -24300,6 +22782,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
     /**
      * load code from code block element
      * @param {HTMLElement} codeBlockElement - code block element
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24313,6 +22796,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
     /**
      * save code to code block element
      * @param {HTMLElement} codeBlockElement - code block element
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24326,6 +22810,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
 
     /**
      * clear code and language
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24338,6 +22823,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
     /**
      * get code language
      * @returns {string} - code language
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24349,6 +22835,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
     /**
      * set code language
      * @param {string} [language=''] - code language
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24362,6 +22849,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
     /**
      * get code text
      * @returns {string} - code text
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24373,6 +22861,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
     /**
      * set code text
      * @param {string} [code=''] - code text
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24385,6 +22874,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
 
     /**
      * refresh. call if codemirror resized
+     * @memberof CodeBlockEditor
      */
 
   }, {
@@ -24400,7 +22890,7 @@ var CodeBlockEditor = function (_CodeMirrorExt) {
 exports.default = CodeBlockEditor;
 
 /***/ }),
-/* 88 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24414,7 +22904,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _preview = __webpack_require__(13);
+var _preview = __webpack_require__(12);
 
 var _preview2 = _interopRequireDefault(_preview);
 
@@ -24426,7 +22916,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @fileoverview Implements CodeBlockPreview
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
 
@@ -24434,16 +22924,20 @@ var EVENT_REQUIRE_SCROLL_SYNC = 'requireScrollSync';
 
 /**
  * Class Code block preview
- * @param {jQuery} $el - base element
- * @param {EventManager} eventManager - event manager
- * @param {Convertor} convertor - convertor
- * @param {CodeBlockEditor} codeBlockEditor - code block editor
- * @ignore
+ * @extends {Preview}
  */
 
 var CodeBlockPreview = function (_Preview) {
   _inherits(CodeBlockPreview, _Preview);
 
+  /**
+   * Creates an instance of CodeBlockPreview.
+   * @param {jQuery} $el - base element
+   * @param {EventManager} eventManager - event manager
+   * @param {Convertor} convertor - convertor
+   * @param {CodeBlockEditor} codeBlockEditor - code block editor
+   * @memberof CodeBlockPreview
+   */
   function CodeBlockPreview($el, eventManager, convertor, codeBlockEditor) {
     _classCallCheck(this, CodeBlockPreview);
 
@@ -24467,6 +22961,7 @@ var CodeBlockPreview = function (_Preview) {
 
     /**
      * refresh preview
+     * @memberof CodeBlockPreview
      * @override
      */
 
@@ -24482,6 +22977,7 @@ var CodeBlockPreview = function (_Preview) {
 
     /**
      * clear preview
+     * @memberof CodeBlockPreview
      */
 
   }, {
@@ -24497,7 +22993,7 @@ var CodeBlockPreview = function (_Preview) {
 exports.default = CodeBlockPreview;
 
 /***/ }),
-/* 89 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24509,7 +23005,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileoverview Implements UI code block languages combo
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 
@@ -24521,7 +23017,7 @@ var _i18n = __webpack_require__(3);
 
 var _i18n2 = _interopRequireDefault(_i18n);
 
-var _keyMapper = __webpack_require__(20);
+var _keyMapper = __webpack_require__(19);
 
 var _keyMapper2 = _interopRequireDefault(_keyMapper);
 
@@ -24531,10 +23027,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * Class CodeBlockLanguagesCombo
- * @param {EventManager} eventManager - event manager instance
- * @ignore
  */
 var CodeBlockLanguagesCombo = function () {
+  /**
+   * Creates an instance of CodeBlockLanguagesCombo.
+   * @param {EventManager} eventManager - event manager instance
+   * @memberof CodeBlockLanguagesCombo
+   */
   function CodeBlockLanguagesCombo(eventManager) {
     _classCallCheck(this, CodeBlockLanguagesCombo);
 
@@ -24577,6 +23076,7 @@ var CodeBlockLanguagesCombo = function () {
     /**
      * show popup
      * @private
+     * @memberof CodeBlockGadget
      */
 
   }, {
@@ -24661,7 +23161,7 @@ var CodeBlockLanguagesCombo = function () {
     /**
      * set a callback to be called on language selected
      * @param {function} callback - callback function
-     * @protected
+     * @memberof CodeBlockLanguagesCombo
      */
 
   }, {
@@ -24673,6 +23173,7 @@ var CodeBlockLanguagesCombo = function () {
     /**
      * hide popup
      * @private
+     * @memberof CodeBlockGadget
      */
 
   }, {
@@ -24684,7 +23185,7 @@ var CodeBlockLanguagesCombo = function () {
     /**
      * set language
      * @param {string} language - code block language
-     * @protected
+     * @memberof CodeBlockLanguagesCombo
      */
 
   }, {
@@ -24697,6 +23198,7 @@ var CodeBlockLanguagesCombo = function () {
     /**
      * store selection(typed) language & hide popup
      * @private
+     * @memberof CodeBlockGadget
      */
 
   }, {
@@ -24715,7 +23217,7 @@ var CodeBlockLanguagesCombo = function () {
     /**
      * get element body
      * @returns {HTMLElement} - CodeBlockLanguagesCombo body element
-     * @protected
+     * @memberof CodeBlockLanguagesCombo
      */
 
   }, {
@@ -24731,93 +23233,7 @@ var CodeBlockLanguagesCombo = function () {
 exports.default = CodeBlockLanguagesCombo;
 
 /***/ }),
-/* 90 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _toMark = __webpack_require__(18);
-
-var _toMark2 = _interopRequireDefault(_toMark);
-
-var _domUtils = __webpack_require__(4);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Check if given node is valid delimiter run.
- * According to common-mark spec, following examples are not valid delimiter runs.
- * 1. opening (*|**) preceded by an alphanumeric and followed by a punctuation.
- *    (ex: a**~~c~~b**)
- * 2. closing (*|**) preceded by a punctuation and followed by an alphanumeric.
- *    (ex: **b~~c~~**a)
- * @see {@link https://spec.commonmark.org/0.29/#delimiter-run}
- * @see {@link https://github.com/commonmark/commonmark-spec/issues/611#issuecomment-533578503}
- */
-function isValidDelimiterRun(node) {
-  var isElemNode = _domUtils2.default.isElemNode,
-      isTextNode = _domUtils2.default.isTextNode;
-
-  var isInvalidOpener = isTextNode(node.previousSibling) && isElemNode(node.firstChild);
-  var isInvalidCloser = isTextNode(node.nextSibling) && isElemNode(node.lastChild);
-
-  return !isInvalidOpener && !isInvalidCloser;
-}
-
-function convertEmphasis(node, subContent, delimiter) {
-  var FIND_BEFORE_AND_AFTER_SPACES_RX = /^(\s*)(\S|\S.*\S)(\s*)$/;
-
-  var _subContent$match = subContent.match(FIND_BEFORE_AND_AFTER_SPACES_RX),
-      beforeSpaces = _subContent$match[1],
-      trimmedContent = _subContent$match[2],
-      afterSpaces = _subContent$match[3];
-
-  var convertedContent = void 0;
-
-  if (isValidDelimiterRun(node)) {
-    convertedContent = '' + delimiter + trimmedContent + delimiter;
-  } else {
-    var tagName = node.nodeName.toLowerCase();
-
-    convertedContent = '<' + tagName + '>' + trimmedContent + '</' + tagName + '>';
-  }
-
-  return '' + beforeSpaces + convertedContent + afterSpaces;
-}
-
-exports.default = _toMark2.default.Renderer.factory(_toMark2.default.gfmRenderer, {
-  'EM, I': function EMI(node, subContent) {
-    if (this.isEmptyText(subContent)) {
-      return '';
-    }
-
-    return convertEmphasis(node, subContent, '*');
-  },
-  'STRONG, B': function STRONGB(node, subContent) {
-    if (this.isEmptyText(subContent)) {
-      return '';
-    }
-
-    return convertEmphasis(node, subContent, '**');
-  },
-  'DEL, S': function DELS(node, subContent) {
-    if (this.isEmptyText(subContent)) {
-      return '';
-    }
-
-    return convertEmphasis(node, subContent, '~~');
-  }
-});
-
-/***/ }),
-/* 91 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24831,17 +23247,14 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _emphasisCommon = __webpack_require__(34);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
-* @fileoverview Implements Bold markdown command
-* @author NHN FE Development Lab <dl_javascript@nhn.com>
-*/
-var boldRangeRegex = /^(\*{2}|_{2}).*\1$/;
-var boldContentRegex = /[*_]{2,}([^*_]*)[*_]{2,}/g;
-var boldSymbol = '**';
+var boldRangeRegex = /^[*_]{2,}[^*_]+[*_]{2,}$/; /**
+                                                 * @fileoverview Implements Bold markdown command
+                                                 * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                 */
+
+var boldContentRegex = /[*_]{2,}([^*_]+)[*_]{2,}/g;
 
 /**
  * Bold
@@ -24860,18 +23273,122 @@ var Bold = _commandManager2.default.command('markdown', /** @lends Bold */{
   exec: function exec(mde) {
     var cm = mde.getEditor();
     var doc = cm.getDoc();
-    var originRange = mde.getRange();
 
-    (0, _emphasisCommon.changeSyntax)(doc, originRange, boldSymbol, boldRangeRegex, boldContentRegex);
+    var cursor = doc.getCursor();
+    var selection = doc.getSelection();
+    var isEmpty = !selection;
+
+    // if selection is empty, expend selection to detect a syntax
+    if (isEmpty && cursor.ch > 1) {
+      var tmpSelection = this.expendSelection(doc, cursor);
+      selection = tmpSelection || selection;
+    }
+
+    var isRemoved = this.isNeedRemove(selection);
+    var result = void 0;
+    if (isRemoved) {
+      result = this.remove(selection);
+      result = this._removeBoldSyntax(result);
+    } else {
+      result = this._removeBoldSyntax(selection);
+      result = this.append(result);
+    }
+
+    doc.replaceSelection(result, 'around');
+
+    if (isEmpty && !isRemoved) {
+      this.setCursorToCenter(doc, cursor);
+    }
 
     cm.focus();
+  },
+
+
+  /**
+   * test it has bold
+   * @param {string} text - text selected
+   * @returns {boolean} - true if it has bold
+   */
+  isNeedRemove: function isNeedRemove(text) {
+    return boldRangeRegex.test(text);
+  },
+
+
+  /**
+   * apply bold
+   * @param {string} text - text selected
+   * @returns {string} - bold text
+   */
+  append: function append(text) {
+    return '**' + text + '**';
+  },
+
+
+  /**
+   * remove bold
+   * @param {string} text - text selected
+   * @returns {string} - un-bold text
+   */
+  remove: function remove(text) {
+    return text.substr(2, text.length - 4);
+  },
+
+
+  /**
+   * expand selection
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @returns {string} - text selected
+   */
+  expendSelection: function expendSelection(doc, cursor) {
+    var tmpSelection = doc.getSelection();
+    var result = void 0;
+    var start = {
+      line: cursor.line,
+      ch: cursor.ch - 2
+    };
+    var end = {
+      line: cursor.line,
+      ch: cursor.ch + 2
+    };
+
+    doc.setSelection(start, end);
+
+    if (tmpSelection === '****' || tmpSelection === '____') {
+      result = tmpSelection;
+    } else {
+      doc.setSelection(cursor);
+    }
+
+    return result;
+  },
+
+
+  /**
+   * move cursor to center
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   */
+  setCursorToCenter: function setCursorToCenter(doc, cursor) {
+    doc.setCursor(cursor.line, cursor.ch + 2);
+  },
+
+
+  /**
+   * remove bold syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all bold in the middle of it's content
+   * @private
+   */
+  _removeBoldSyntax: function _removeBoldSyntax(text) {
+    return text ? text.replace(boldContentRegex, '$1') : '';
   }
 });
 
 exports.default = Bold;
 
 /***/ }),
-/* 92 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -24885,82 +23402,15 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _emphasisCommon = __webpack_require__(34);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @fileoverview Implements Italic markdown command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
-var boldItalicRangeRegex = /^(\*{3}|_{3}).*\1$/;
-var boldRangeRegex = /^(\*{2}|_{2}).*\1$/;
-var italicRangeRegex = /^(\*|_).*\1$/;
-var italicContentRegex = /([^*_])[*_]([^*_]+)[*_]([^*_])/g;
+var boldItalicRangeRegex = /^[*_]{3,}[^*_]+[*_]{3,}$/; /**
+                                                        * @fileoverview Implements Italic markdown command
+                                                        * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                                        */
 
-var isBoldItalic = function isBoldItalic(t) {
-  return boldItalicRangeRegex.test(t);
-};
-var isBold = function isBold(t) {
-  return boldRangeRegex.test(t);
-};
-var isItalic = function isItalic(t) {
-  return italicRangeRegex.test(t);
-};
-
-var italicSymbol = '*';
-var boldSymbol = '**';
-var boldItalicSymbol = '***';
-var italicLength = italicSymbol.length;
-var boldLength = boldSymbol.length;
-var boldItalicLength = boldItalicSymbol.length;
-
-/**
- * remove italic syntax in the middle of given text
- * @param {string} text - text selected
- * @returns {string} - text eliminated all italic in the middle of it's content
- * @ignore
- */
-var removeItalicInsideText = function removeItalicInsideText(text) {
-  return text ? text.replace(italicContentRegex, '$1$2$3') : '';
-};
-
-var replaceText = function replaceText(doc, text, range) {
-  // Check 3 cases when both text and expand text
-  // case 1 : bold & italic (when expand 3 both front and end) => remove italic
-  // case 2 : bold (when expand 2 both front and end) => append
-  // case 3 : italic (expand 1 both front and end) => remove
-  var expandReplaceBind = _emphasisCommon.expandReplace.bind(this, doc, range);
-
-  return expandReplaceBind(boldItalicLength, isBoldItalic, function (t) {
-    return (0, _emphasisCommon.removeSyntax)(t, italicSymbol);
-  }) || expandReplaceBind(boldLength, isBold, function (t) {
-    return (0, _emphasisCommon.appendSyntax)(removeItalicInsideText(t), italicSymbol);
-  }) || expandReplaceBind(italicLength, isItalic, function (t) {
-    return (0, _emphasisCommon.removeSyntax)(t, italicSymbol);
-  }) || (0, _emphasisCommon.replace)(doc, text, isBoldItalic, function (t) {
-    return (0, _emphasisCommon.removeSyntax)(t, italicSymbol);
-  }) || (0, _emphasisCommon.replace)(doc, text, isBold, function (t) {
-    return (0, _emphasisCommon.appendSyntax)(removeItalicInsideText(t), italicSymbol);
-  }) || (0, _emphasisCommon.replace)(doc, text, isItalic, function (t) {
-    return (0, _emphasisCommon.removeSyntax)(t, italicSymbol);
-  });
-};
-
-var replaceEmptyText = function replaceEmptyText(doc, range) {
-  // Check 3 cases when expand text
-  // case 1 : bold & italic => remove italic
-  // case 2 : bold => append
-  // case 3 : italic => remove
-  // if there is no match, make italic
-  return (0, _emphasisCommon.expandReplace)(doc, range, boldItalicLength, isBoldItalic, function (t) {
-    return (0, _emphasisCommon.removeSyntax)(t, italicSymbol);
-  }) || (0, _emphasisCommon.expandReplace)(doc, range, boldLength, isBold, function (t) {
-    return (0, _emphasisCommon.appendSyntax)(t, italicSymbol);
-  }) || (0, _emphasisCommon.expandReplace)(doc, range, italicLength, isItalic, function () {
-    return '';
-  }) || doc.replaceSelection('' + italicSymbol + italicSymbol, 'around');
-};
+var italicRangeRegex = /^[*_][^*_]+[*_]$/;
+var italicContentRegex = /[*_]([^*_]+)[*_]/g;
 
 /**
  * Italic
@@ -24980,47 +23430,198 @@ var Italic = _commandManager2.default.command('markdown', /** @lends Italic */{
     var cm = mde.getEditor();
     var doc = cm.getDoc();
 
-    var _doc$getCursor = doc.getCursor(),
-        line = _doc$getCursor.line,
-        ch = _doc$getCursor.ch;
+    var cursor = doc.getCursor();
+    var selection = doc.getSelection();
+    var isEmpty = !selection;
+    var isWithBold = false;
+    var tmpSelection = void 0;
 
-    var range = mde.getRange();
-    var selectionStr = doc.getSelection();
+    // if selection is empty, expend selection to detect a syntax
+    if (isEmpty) {
+      if (cursor.ch > 2) {
+        tmpSelection = this.expendWithBoldSelection(doc, cursor);
 
-    if (selectionStr) {
-      // check selectionStr match bold & italic, bold, italic and then
-      // if there is no match, append italic
-      if (!replaceText(doc, selectionStr, range)) {
-        // Before append italic, remove italic inside text and then append italic
-        // Example: One*Two*Three => *OneTwoThree*
-        doc.replaceSelection((0, _emphasisCommon.appendSyntax)(removeItalicInsideText(selectionStr), italicSymbol), 'around');
+        if (tmpSelection) {
+          isWithBold = 'with';
+        }
       }
+
+      if (isWithBold !== 'with' && cursor.ch > 1) {
+        isWithBold = this.expendOnlyBoldSelection(doc, cursor);
+      }
+
+      if (!isWithBold && cursor.ch > 0) {
+        this.expendSelection(doc, cursor);
+        selection = tmpSelection || selection;
+      }
+    }
+
+    var isRemoved = this.isNeedRemove(selection);
+    var result = void 0;
+    if (isRemoved) {
+      result = this.remove(selection);
+      result = this._removeItalicSyntax(result);
     } else {
-      replaceEmptyText(doc, range);
+      result = this._removeItalicSyntax(selection);
+      result = this.append(result);
+    }
 
-      var afterSelectStr = doc.getSelection();
-      var size = ch;
+    doc.replaceSelection(result, 'around');
 
-      // If text was not selected, after replace text, move cursor
-      if (isBoldItalic(afterSelectStr) || isItalic(afterSelectStr) && !isBold(afterSelectStr)) {
-        // For example **|** => ***|*** (move cusor +symbolLenth)
-        size += italicLength;
-      } else {
-        // For example *|* => | (move cusor -symbolLenth)
-        size -= italicLength;
-      }
-
-      doc.setCursor(line, size);
+    if (isEmpty) {
+      this.setCursorToCenter(doc, cursor, isRemoved);
     }
 
     cm.focus();
+  },
+
+
+  /**
+   * isNeedRemove
+   * test given text has italic or bold
+   * @param {string} text - text to test
+   * @returns {boolean} - true if it has italic or bold
+   */
+  isNeedRemove: function isNeedRemove(text) {
+    return italicRangeRegex.test(text) || boldItalicRangeRegex.test(text);
+  },
+
+
+  /**
+   * apply italic
+   * @param {string} text - text to apply
+   * @returns {string} - italic text
+   */
+  append: function append(text) {
+    return '_' + text + '_';
+  },
+
+
+  /**
+   * remove italic
+   * @param {string} text - text to remove italic syntax
+   * @returns {string} - italic syntax revmoed text
+   */
+  remove: function remove(text) {
+    return text.substr(1, text.length - 2);
+  },
+
+
+  /**
+   * expand selected area
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @returns {string} - text in range after it has been expaneded
+   */
+  expendWithBoldSelection: function expendWithBoldSelection(doc, cursor) {
+    var tmpSelection = doc.getSelection();
+    var result = void 0;
+    var start = {
+      line: cursor.line,
+      ch: cursor.ch - 3
+    };
+    var end = {
+      line: cursor.line,
+      ch: cursor.ch + 3
+    };
+
+    doc.setSelection(start, end);
+
+    if (tmpSelection === '******' || tmpSelection === '______') {
+      result = tmpSelection;
+    } else {
+      doc.setSelection(cursor);
+    }
+
+    return result;
+  },
+
+
+  /**
+   * expand only bold selection
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @returns {string} - text in area after it has been expaneded
+   */
+  expendOnlyBoldSelection: function expendOnlyBoldSelection(doc, cursor) {
+    var tmpSelection = doc.getSelection();
+    var result = false;
+    var start = {
+      line: cursor.line,
+      ch: cursor.ch - 2
+    };
+    var end = {
+      line: cursor.line,
+      ch: cursor.ch + 2
+    };
+
+    doc.setSelection(start, end);
+
+    if (tmpSelection === '****' || tmpSelection === '____') {
+      doc.setSelection(cursor);
+      result = 'only';
+    }
+
+    return result;
+  },
+
+
+  /**
+   * expand only italic selection
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @returns {string} - text in area after it has been expaneded
+   */
+  expendSelection: function expendSelection(doc, cursor) {
+    var tmpSelection = doc.getSelection();
+    var result = void 0;
+    var start = {
+      line: cursor.line,
+      ch: cursor.ch - 2
+    };
+    var end = {
+      line: cursor.line,
+      ch: cursor.ch + 2
+    };
+
+    doc.setSelection(start, end);
+
+    if (tmpSelection === '****' || tmpSelection === '____') {
+      result = tmpSelection;
+    } else {
+      doc.setSelection(cursor);
+    }
+
+    return result;
+  },
+
+  /**
+   * move cursor to center
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @param {boolean} isRemoved - whether it involes deletion
+   */
+  setCursorToCenter: function setCursorToCenter(doc, cursor, isRemoved) {
+    var pos = isRemoved ? -1 : 1;
+    doc.setCursor(cursor.line, cursor.ch + pos);
+  },
+
+
+  /**
+   * remove italic syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all italic in the middle of it's content
+   * @private
+   */
+  _removeItalicSyntax: function _removeItalicSyntax(text) {
+    return text ? text.replace(italicContentRegex, '$1') : '';
   }
 });
 
 exports.default = Italic;
 
 /***/ }),
-/* 93 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25034,17 +23635,14 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _emphasisCommon = __webpack_require__(34);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @fileoverview Implements StrikeThrough markdown command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
-var strikeRangeRegex = /^~~.*~~$/;
-var strikeContentRegex = /~~([^~]*)~~/g;
-var strikeSymbol = '~~';
+var strikeRangeRegex = /^~~[^~]+~~$/; /**
+                                       * @fileoverview Implements StrikeThrough markdown command
+                                       * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+                                       */
+
+var strikeContentRegex = /~~([^~]+)~~/g;
 
 /**
  * Strike
@@ -25063,18 +23661,87 @@ var Strike = _commandManager2.default.command('markdown', /** @lends Strike */{
   exec: function exec(mde) {
     var cm = mde.getEditor();
     var doc = cm.getDoc();
-    var originRange = mde.getRange();
+    var cursor = doc.getCursor();
+    var selection = doc.getSelection();
+    var isNeedToRemove = this.hasStrikeSyntax(selection);
 
-    (0, _emphasisCommon.changeSyntax)(doc, originRange, strikeSymbol, strikeRangeRegex, strikeContentRegex);
+    var result = void 0;
+
+    if (isNeedToRemove) {
+      result = this.remove(selection);
+      result = this._removeStrikeSyntax(result);
+    } else {
+      result = this._removeStrikeSyntax(selection);
+      result = this.append(result);
+    }
+
+    doc.replaceSelection(result, 'around');
+
+    if (!selection && !isNeedToRemove) {
+      this.setCursorToCenter(doc, cursor, isNeedToRemove);
+    }
 
     cm.focus();
+  },
+
+
+  /**
+   * hasStrikeSyntax
+   * @param {string} text Source text
+   * @returns {boolean} Boolean value of strike syntax removal
+   */
+  hasStrikeSyntax: function hasStrikeSyntax(text) {
+    return strikeRangeRegex.test(text);
+  },
+
+
+  /**
+   * append strike
+   * @param {string} text - text to apply
+   * @returns {string} - strike through text
+   */
+  append: function append(text) {
+    return '~~' + text + '~~';
+  },
+
+
+  /**
+   * remove strike
+   * @param {string} text - text to remove
+   * @returns {string} - strike removed text
+   */
+  remove: function remove(text) {
+    return text.substr(2, text.length - 4);
+  },
+
+
+  /**
+   * set cursor to center
+   * @param {CodeMirror.doc} doc - codemirror document
+   * @param {object} cursor - codemirror cursor
+   * @param {boolean} isRemoved - whether it involes deletion
+   */
+  setCursorToCenter: function setCursorToCenter(doc, cursor, isRemoved) {
+    var pos = isRemoved ? -2 : 2;
+    doc.setCursor(cursor.line, cursor.ch + pos);
+  },
+
+
+  /**
+   * remove strike syntax in the middle of given text
+   * @param {string} text - text selected
+   * @returns {string} - text eliminated all strike in the middle of it's content
+   * @private
+   */
+  _removeStrikeSyntax: function _removeStrikeSyntax(text) {
+    return text ? text.replace(strikeContentRegex, '$1') : '';
   }
 });
 
 exports.default = Strike;
 
 /***/ }),
-/* 94 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25101,7 +23768,7 @@ var BlockquoteRegex = /^> ?/;
  */
 /**
 * @fileoverview Implements Blockquote markdown command
-* @author NHN FE Development Lab <dl_javascript@nhn.com>
+* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
 */
 var Blockquote = _commandManager2.default.command('markdown', /** @lends Blockquote */{
   name: 'Blockquote',
@@ -25214,7 +23881,7 @@ var Blockquote = _commandManager2.default.command('markdown', /** @lends Blockqu
 exports.default = Blockquote;
 
 /***/ }),
-/* 95 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25236,7 +23903,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @fileoverview Implements Heading markdown command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var FIND_HEADING_RX = /^#+\s/g;
 
@@ -25315,7 +23982,7 @@ function getHeadingMarkdown(text, size) {
 exports.default = Heading;
 
 /***/ }),
-/* 96 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25344,7 +24011,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements Paragraph markdown command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Paragraph = _commandManager2.default.command('markdown', /** @lends Paragraph */{
   name: 'Paragraph',
@@ -25396,7 +24063,7 @@ function getParagraphMarkdown(lineText) {
 exports.default = Paragraph;
 
 /***/ }),
-/* 97 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25461,13 +24128,13 @@ var HR = _commandManager2.default.command('markdown', /** @lends HR */{
   }
 }); /**
      * @fileoverview Implements HR markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
      */
 
 exports.default = HR;
 
 /***/ }),
-/* 98 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25481,7 +24148,7 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _importManager = __webpack_require__(10);
+var _importManager = __webpack_require__(9);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
@@ -25489,7 +24156,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implements Addlink markdown command
-* @author NHN FE Development Lab <dl_javascript@nhn.com>
+* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
 */
 var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
     encodeMarkdownCharacters = _importManager2.default.encodeMarkdownCharacters,
@@ -25544,7 +24211,7 @@ var AddLink = _commandManager2.default.command('markdown', /** @lends AddLink */
 exports.default = AddLink;
 
 /***/ }),
-/* 99 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25558,7 +24225,7 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _importManager = __webpack_require__(10);
+var _importManager = __webpack_require__(9);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
@@ -25566,7 +24233,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
 * @fileoverview Implments AddImage markdown command
-* @author NHN FE Development Lab <dl_javascript@nhn.com>
+* @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
 */
 var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
     encodeMarkdownCharacters = _importManager2.default.encodeMarkdownCharacters,
@@ -25620,7 +24287,7 @@ var AddImage = _commandManager2.default.command('markdown', /** @lends AddImage 
 exports.default = AddImage;
 
 /***/ }),
-/* 100 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25634,7 +24301,16 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _listRegex = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileoverview Implements UL markdown command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+var MD_UL_TASK_SYNTAX_RX = /([-*])( \[[ xX]]) /;
+var MD_UL_OR_UL_TASK_SYNTAX_RX = /[\d]+\.( \[[ xX]])? /;
 
 /**
  * UL
@@ -25651,19 +24327,66 @@ var UL = _commandManager2.default.command('markdown', /** @lends UL */{
    * @param {MarkdownEditor} mde MarkdownEditor instance
    */
   exec: function exec(mde) {
+    var cm = mde.getEditor();
+    var doc = cm.getDoc();
     var range = mde.getCurrentRange();
     var listManager = mde.componentManager.getManager('list');
+    var lineRange = listManager.expandLineRangeIfNeed(doc, range, isOlOrTask);
+    var startLineNumber = lineRange.start;
+    var endLineNumber = lineRange.end;
+    var line = void 0,
+        currentLineStart = void 0;
 
-    listManager.changeSyntax(range, 'ul');
+    for (var i = startLineNumber; i <= endLineNumber; i += 1) {
+      currentLineStart = {
+        line: i,
+        ch: 0
+      };
+
+      line = doc.getLine(i);
+
+      if (listManager.isListOrParagraph(line)) {
+        if (isUlTask(line)) {
+          listManager.replaceLineText(doc, i, MD_UL_TASK_SYNTAX_RX, '$1 ');
+        } else if (isOlOrTask(line)) {
+          listManager.replaceLineText(doc, i, MD_UL_OR_UL_TASK_SYNTAX_RX, '* ');
+        } else if (!line.match(_listRegex.FIND_MD_UL_RX)) {
+          doc.replaceRange('* ', currentLineStart);
+        }
+
+        if (i === endLineNumber) {
+          listManager.appendBlankLineIfNeed(cm, i, endLineNumber, startLineNumber);
+        }
+      } else {
+        break;
+      }
+    }
+    cm.focus();
   }
-}); /**
-     * @fileoverview Implements UL markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
-     */
+});
+
+/**
+ * Return whether the given line is UL TASK
+ * @param {string} line Line text
+ * @returns {boolean}
+ */
+function isUlTask(line) {
+  return !!(line && line.match(_listRegex.FIND_MD_UL_TASK_RX));
+}
+
+/**
+ * Return whether passed line is OL or TASK or neither
+ * @param {string} line Line text
+ * @returns {boolean}
+ */
+function isOlOrTask(line) {
+  return !!(line && (line.match(_listRegex.FIND_MD_TASK_RX) || line.match(_listRegex.FIND_MD_OL_RX)));
+}
+
 exports.default = UL;
 
 /***/ }),
-/* 101 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25677,7 +24400,16 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _listRegex = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileoverview Implements OL markdown command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
+var MD_LIST_OR_TASK_SYNTAX_RX = /([-*]|[\d]+\.)( \[[ xX]])? /;
 
 /**
  * OL
@@ -25694,20 +24426,58 @@ var OL = _commandManager2.default.command('markdown', /** @lends OL */{
    * @param {MarkdownEditor} mde MarkdownEditor instance
    */
   exec: function exec(mde) {
+    var cm = mde.getEditor();
+    var doc = cm.getDoc();
     var range = mde.getCurrentRange();
     var listManager = mde.componentManager.getManager('list');
+    var lineRange = listManager.expandLineRangeIfNeed(doc, range, isUlOrTask);
+    var startLineNumber = lineRange.start;
+    var endLineNumber = lineRange.end;
+    var ordinalNumber = 1;
+    var line = void 0,
+        currentLineStart = void 0;
 
-    listManager.changeSyntax(range, 'ol');
+    for (var i = startLineNumber; i <= endLineNumber; i += 1) {
+      currentLineStart = {
+        line: i,
+        ch: 0
+      };
+
+      line = doc.getLine(i);
+
+      if (listManager.isListOrParagraph(line)) {
+        if (isUlOrTask(line)) {
+          listManager.replaceLineText(doc, i, MD_LIST_OR_TASK_SYNTAX_RX, ordinalNumber + '. ');
+        } else if (!line.match(_listRegex.FIND_MD_OL_RX)) {
+          doc.replaceRange(ordinalNumber + '. ', currentLineStart);
+        }
+
+        ordinalNumber += 1;
+
+        if (i === endLineNumber) {
+          listManager.appendBlankLineIfNeed(cm, i, endLineNumber, startLineNumber);
+        }
+      } else {
+        break;
+      }
+    }
+    cm.focus();
   }
-}); /**
-     * @fileoverview Implements OL markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
-     */
+});
+
+/**
+ * Return whether passed line is UL or TASK or neither
+ * @param {string} line Line text
+ * @returns {boolean}
+ */
+function isUlOrTask(line) {
+  return !!(line && (line.match(_listRegex.FIND_MD_TASK_RX) || line.match(_listRegex.FIND_MD_UL_RX)));
+}
 
 exports.default = OL;
 
 /***/ }),
-/* 102 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25742,13 +24512,13 @@ var Indent = _commandManager2.default.command('markdown', /** @lends Indent */{
   }
 }); /**
      * @fileoverview Implements Indent markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
      */
 
 exports.default = Indent;
 
 /***/ }),
-/* 103 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25783,13 +24553,13 @@ var Outdent = _commandManager2.default.command('markdown', /** @lends Outdent */
   }
 }); /**
      * @fileoverview Implements Outdent markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
      */
 
 exports.default = Outdent;
 
 /***/ }),
-/* 104 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25852,7 +24622,7 @@ var Table = _commandManager2.default.command('markdown', /** @lends Table */{
  */
 /**
  * @fileoverview Implements Table markdown command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 function makeHeader(col, data) {
@@ -25910,7 +24680,7 @@ function makeBody(col, row, data) {
 exports.default = Table;
 
 /***/ }),
-/* 105 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25924,7 +24694,16 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _listRegex = __webpack_require__(33);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileoverview Implements Task markdown command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+var MD_UL_OR_OL_SYNTAX_RX = /([*-] |[\d]+\. )/;
+var MD_TASK_SYNTAX_RX = /([*-] |[\d]+\. )(\[[ xX]] )/;
 
 /**
  * Task
@@ -25940,19 +24719,59 @@ var Task = _commandManager2.default.command('markdown', /** @lends Task */{
    * @param {MarkdownEditor} mde MarkdownEditor instance
    */
   exec: function exec(mde) {
+    var cm = mde.getEditor();
+    var doc = cm.getDoc();
     var range = mde.getCurrentRange();
     var listManager = mde.componentManager.getManager('list');
+    var lineRange = listManager.createSortedLineRange(range);
+    var startLineNumber = lineRange.start;
+    var endLineNumber = lineRange.end;
+    var line = void 0,
+        currentLineStart = void 0;
 
-    listManager.changeSyntax(range, 'task');
+    for (var i = startLineNumber; i <= endLineNumber; i += 1) {
+      currentLineStart = {
+        line: i,
+        ch: 0
+      };
+
+      line = doc.getLine(i);
+
+      var hasTaskSyntax = !!line.match(MD_TASK_SYNTAX_RX);
+
+      if (listManager.isListOrParagraph(line)) {
+        if (isOlOrUl(line) && hasTaskSyntax) {
+          listManager.replaceLineText(doc, i, MD_TASK_SYNTAX_RX, '$1');
+        } else if (isOlOrUl(line) && !hasTaskSyntax) {
+          listManager.replaceLineText(doc, i, MD_UL_OR_OL_SYNTAX_RX, '$1[ ] ');
+        } else if (!line.match(_listRegex.FIND_MD_TASK_RX)) {
+          doc.replaceRange('* [ ] ', currentLineStart);
+        }
+
+        if (i === endLineNumber) {
+          listManager.appendBlankLineIfNeed(cm, i, endLineNumber, startLineNumber);
+        }
+      } else {
+        break;
+      }
+    }
+    cm.focus();
   }
-}); /**
-     * @fileoverview Implements Task markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
-     */
+});
+
+/**
+ * Return whether passed line is OL or UL or neither
+ * @param {string} line Line text
+ * @returns {boolean}
+ */
+function isOlOrUl(line) {
+  return !!(line && (line.match(_listRegex.FIND_MD_UL_RX) || line.match(_listRegex.FIND_MD_OL_RX)));
+}
+
 exports.default = Task;
 
 /***/ }),
-/* 106 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25970,7 +24789,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var codeRangeRegex = /^`([^`]+)`$/; /**
                                     * @fileoverview Implements Code markdown command
-                                    * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                     */
 
 var codeContentRegex = /`([^`]+)`/g;
@@ -26071,7 +24890,7 @@ var Code = _commandManager2.default.command('markdown', /** @lends Code */{
 exports.default = Code;
 
 /***/ }),
-/* 107 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26124,12 +24943,12 @@ var CodeBlock = _commandManager2.default.command('markdown', /** @lends CodeBloc
   }
 }); /**
      * @fileoverview Implements CodeBlock markdown command
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
      */
 exports.default = CodeBlock;
 
 /***/ }),
-/* 108 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26143,10 +24962,6 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _domUtils = __webpack_require__(4);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26155,10 +24970,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends Command
  * @module wysiwygCommands/Bold
  * @ignore
- */
-/**
- * @fileoverview Implements bold WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 var Bold = _commandManager2.default.command('wysiwyg', /** @lends Bold */{
   name: 'Bold',
@@ -26181,7 +24992,6 @@ var Bold = _commandManager2.default.command('wysiwyg', /** @lends Bold */{
       sq.setSelection(range);
     } else {
       styleBold(sq);
-      _domUtils2.default.optimizeRange(sq.getSelection(), 'B');
     }
   }
 });
@@ -26190,10 +25000,14 @@ var Bold = _commandManager2.default.command('wysiwyg', /** @lends Bold */{
  * Style bold.
  * @param {object} sq - squire editor instance
  */
+/**
+ * @fileoverview Implements bold WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
 function styleBold(sq) {
   if (sq.hasFormat('b') || sq.hasFormat('strong')) {
     sq.changeFormat(null, { tag: 'b' });
-  } else if (!sq.hasFormat('PRE')) {
+  } else if (!sq.hasFormat('a') && !sq.hasFormat('PRE')) {
     if (sq.hasFormat('code')) {
       sq.changeFormat(null, { tag: 'code' });
     }
@@ -26204,7 +25018,7 @@ function styleBold(sq) {
 exports.default = Bold;
 
 /***/ }),
-/* 109 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26218,10 +25032,6 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _domUtils = __webpack_require__(4);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26231,11 +25041,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/Italic
  * @ignore
  */
-/**
- * @fileoverview Implements italic WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
-
 var Italic = _commandManager2.default.command('wysiwyg', /** @lends Italic */{
   name: 'Italic',
   keyMap: ['CTRL+I', 'META+I'],
@@ -26257,7 +25062,6 @@ var Italic = _commandManager2.default.command('wysiwyg', /** @lends Italic */{
       sq.setSelection(range);
     } else {
       styleItalic(sq);
-      _domUtils2.default.optimizeRange(sq.getSelection(), 'I');
     }
   }
 });
@@ -26266,10 +25070,15 @@ var Italic = _commandManager2.default.command('wysiwyg', /** @lends Italic */{
  * Style italic.
  * @param {object} sq - squire editor instance
  */
+/**
+ * @fileoverview Implements italic WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
 function styleItalic(sq) {
   if (sq.hasFormat('i') || sq.hasFormat('em')) {
     sq.changeFormat(null, { tag: 'i' });
-  } else if (!sq.hasFormat('PRE')) {
+  } else if (!sq.hasFormat('a') && !sq.hasFormat('PRE')) {
     if (sq.hasFormat('code')) {
       sq.changeFormat(null, { tag: 'code' });
     }
@@ -26280,7 +25089,7 @@ function styleItalic(sq) {
 exports.default = Italic;
 
 /***/ }),
-/* 110 */
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26294,10 +25103,6 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _domUtils = __webpack_require__(4);
-
-var _domUtils2 = _interopRequireDefault(_domUtils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26307,11 +25112,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/Strike
  * @ignore
  */
-/**
- * @fileoverview Implements strike WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
-
 var Strike = _commandManager2.default.command('wysiwyg', /** @lends Strike */{
   name: 'Strike',
   keyMap: ['CTRL+S', 'META+S'],
@@ -26333,7 +25133,6 @@ var Strike = _commandManager2.default.command('wysiwyg', /** @lends Strike */{
       sq.setSelection(range);
     } else {
       styleStrike(sq);
-      _domUtils2.default.optimizeRange(sq.getSelection(), 'S');
     }
   }
 });
@@ -26342,10 +25141,15 @@ var Strike = _commandManager2.default.command('wysiwyg', /** @lends Strike */{
  * Style strike.
  * @param {object} sq - squire editor instance
  */
+/**
+ * @fileoverview Implements strike WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
 function styleStrike(sq) {
   if (sq.hasFormat('S')) {
     sq.changeFormat(null, { tag: 'S' });
-  } else if (!sq.hasFormat('PRE')) {
+  } else if (!sq.hasFormat('a') && !sq.hasFormat('PRE')) {
     if (sq.hasFormat('code')) {
       sq.changeFormat(null, { tag: 'code' });
     }
@@ -26356,7 +25160,7 @@ function styleStrike(sq) {
 exports.default = Strike;
 
 /***/ }),
-/* 111 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26401,13 +25205,13 @@ var Blockquote = _commandManager2.default.command('wysiwyg', /** @lends Blockquo
   }
 }); /**
      * @fileoverview Implements block quote WysiwygCommand
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
      */
 
 exports.default = Blockquote;
 
 /***/ }),
-/* 112 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26421,7 +25225,7 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _importManager = __webpack_require__(10);
+var _importManager = __webpack_require__(9);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
@@ -26429,7 +25233,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  * @fileoverview Implements AddImage wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
     encodeMarkdownCharacters = _importManager2.default.encodeMarkdownCharacters;
@@ -26468,7 +25272,7 @@ var AddImage = _commandManager2.default.command('wysiwyg', /** @lends AddImage *
 exports.default = AddImage;
 
 /***/ }),
-/* 113 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26482,24 +25286,16 @@ var _jquery = __webpack_require__(0);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _tuiCodeSnippet = __webpack_require__(1);
-
-var _tuiCodeSnippet2 = _interopRequireDefault(_tuiCodeSnippet);
-
 var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
-var _importManager = __webpack_require__(10);
+var _importManager = __webpack_require__(9);
 
 var _importManager2 = _interopRequireDefault(_importManager);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * @fileoverview Implements AddLink wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
- */
 var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
     encodeMarkdownCharacters = _importManager2.default.encodeMarkdownCharacters;
 
@@ -26509,6 +25305,10 @@ var decodeURIGraceful = _importManager2.default.decodeURIGraceful,
  * @extends Command
  * @module wysiwygCommands/AddLink
  * @ignore
+ */
+/**
+ * @fileoverview Implements AddLink wysiwyg command
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 
 var AddLink = _commandManager2.default.command('wysiwyg', /** @lends AddLink */{
@@ -26520,7 +25320,6 @@ var AddLink = _commandManager2.default.command('wysiwyg', /** @lends AddLink */{
    */
   exec: function exec(wwe, data) {
     var sq = wwe.getEditor();
-    var linkAttibute = wwe.getLinkAttribute();
     var url = data.url,
         linkText = data.linkText;
 
@@ -26533,12 +25332,9 @@ var AddLink = _commandManager2.default.command('wysiwyg', /** @lends AddLink */{
       sq.removeAllFormatting();
 
       if (sq.getSelectedText()) {
-        sq.makeLink(url, linkAttibute);
+        sq.makeLink(url);
       } else {
-        var link = sq.createElement('A', _tuiCodeSnippet2.default.extend({
-          href: url
-        }, linkAttibute));
-
+        var link = sq.createElement('A', { href: url });
         (0, _jquery2.default)(link).text(linkText);
         sq.insertElement(link);
       }
@@ -26549,7 +25345,7 @@ var AddLink = _commandManager2.default.command('wysiwyg', /** @lends AddLink */{
 exports.default = AddLink;
 
 /***/ }),
-/* 114 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26578,7 +25374,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements HR wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var HR = _commandManager2.default.command('wysiwyg', /** @lends HR */{
   name: 'HR',
@@ -26590,24 +25386,20 @@ var HR = _commandManager2.default.command('wysiwyg', /** @lends HR */{
   exec: function exec(wwe) {
     var sq = wwe.getEditor();
     var range = sq.getSelection();
+    var currentNode = void 0,
+        nextBlockNode = void 0,
+        previousSibling = void 0;
 
     if (range.collapsed && !sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
-      var hr = document.createElement('hr');
-      var currentNode = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset);
-      var nextBlockNode = _domUtils2.default.getTopNextNodeUnder(currentNode, wwe.get$Body()[0]);
-
-      // If nextBlockNode is div that has hr and has contenteditable as false,
-      // nextBlockNode should be set as nextSibling that is normal block.
-      if (nextBlockNode && !_domUtils2.default.isTextNode(nextBlockNode)) {
-        while (nextBlockNode && nextBlockNode.getAttribute('contenteditable') === 'false') {
-          nextBlockNode = nextBlockNode.nextSibling;
-        }
-      }
+      currentNode = _domUtils2.default.getChildNodeByOffset(range.startContainer, range.startOffset);
+      nextBlockNode = _domUtils2.default.getTopNextNodeUnder(currentNode, wwe.get$Body()[0]);
 
       if (!nextBlockNode) {
-        nextBlockNode = _domUtils2.default.createEmptyLine();
+        nextBlockNode = sq.createDefaultBlock();
         wwe.get$Body().append(nextBlockNode);
       }
+
+      var hr = sq.createElement('HR');
 
       sq.modifyBlocks(function (frag) {
         frag.appendChild(hr);
@@ -26615,19 +25407,16 @@ var HR = _commandManager2.default.command('wysiwyg', /** @lends HR */{
         return frag;
       });
 
-      var previousSibling = hr.previousSibling;
+      previousSibling = hr.previousSibling;
 
       if (previousSibling && _domUtils2.default.isTextNode(previousSibling) && _domUtils2.default.getTextLength(previousSibling) === 0) {
         hr.parentNode.removeChild(previousSibling);
       }
 
-      hr.parentNode.replaceChild(_domUtils2.default.createHorizontalRule(), hr);
-
       range.selectNodeContents(nextBlockNode);
       range.collapse(true);
 
       sq.setSelection(range);
-      sq.saveUndoState(range);
     }
 
     wwe.focus();
@@ -26637,7 +25426,7 @@ var HR = _commandManager2.default.command('wysiwyg', /** @lends HR */{
 exports.default = HR;
 
 /***/ }),
-/* 115 */
+/* 111 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26666,7 +25455,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements Heading wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Heading = _commandManager2.default.command('wysiwyg', /** @lends Heading */{
   name: 'Heading',
@@ -26707,7 +25496,7 @@ var Heading = _commandManager2.default.command('wysiwyg', /** @lends Heading */{
 exports.default = Heading;
 
 /***/ }),
-/* 116 */
+/* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26736,7 +25525,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements Paragraph wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Paragraph = _commandManager2.default.command('wysiwyg', /** @lends Paragraph */{
   name: 'Paragraph',
@@ -26774,7 +25563,7 @@ var Paragraph = _commandManager2.default.command('wysiwyg', /** @lends Paragraph
 exports.default = Paragraph;
 
 /***/ }),
-/* 117 */
+/* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26788,6 +25577,10 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _domUtils = __webpack_require__(4);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26796,6 +25589,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends Command
  * @module wysiwygCommands/UL
  * @ignore
+ */
+/**
+ * @fileoverview Implements ul WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
   name: 'UL',
@@ -26813,26 +25610,25 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
         startOffset = range.startOffset,
         endOffset = range.endOffset;
 
-    var newLIs = [];
 
     wwe.focus();
     sq.saveUndoState(range);
 
-    if (listManager.isAvailableMakeListInTable()) {
-      newLIs = listManager.createListInTable(range, 'UL');
-    } else {
-      var lines = listManager.getLinesOfSelection(startContainer, endContainer);
+    var lines = listManager.getLinesOfSelection(startContainer, endContainer);
 
-      for (var i = 0; i < lines.length; i += 1) {
-        var newLI = this._changeFormatToUnorderedListIfNeed(wwe, lines[i]);
-        if (newLI) {
-          newLIs.push(newLI);
-        }
+    var newLIs = [];
+    for (var i = 0; i < lines.length; i += 1) {
+      var newLI = this._changeFormatToUnorderedListIfNeed(wwe, lines[i]);
+      if (newLI) {
+        newLIs.push(newLI);
       }
     }
 
     if (newLIs.length) {
-      listManager.adjustRange(startContainer, endContainer, startOffset, endOffset, newLIs);
+      var newStartContainer = _domUtils2.default.containsNode(newLIs[0], startContainer) ? startContainer : newLIs[0];
+      var newEndContainer = _domUtils2.default.containsNode(newLIs[newLIs.length - 1], endContainer) ? endContainer : newLIs[newLIs.length - 1];
+
+      wwe.setSelectionByContainerAndOffset(newStartContainer, startOffset, newEndContainer, endOffset);
     }
   },
 
@@ -26850,7 +25646,7 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
     var taskManager = wwe.componentManager.getManager('task');
     var newLI = void 0;
 
-    if (!sq.hasFormat('PRE')) {
+    if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       range.setStart(target, 0);
       range.collapse(true);
       sq.setSelection(range);
@@ -26870,14 +25666,12 @@ var UL = _commandManager2.default.command('wysiwyg', /** @lends UL */{
 
     return newLI;
   }
-}); /**
-     * @fileoverview Implements ul WysiwygCommand
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
-     */
+});
+
 exports.default = UL;
 
 /***/ }),
-/* 118 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -26891,6 +25685,10 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _domUtils = __webpack_require__(4);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -26900,6 +25698,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @module wysiwygCommands/OL
  * @ignore
  */
+/**
+ * @fileoverview Implements ol WysiwygCommand
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+ */
+
 var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
   name: 'OL',
   keyMap: ['CTRL+O', 'META+O'],
@@ -26916,26 +25719,25 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
         endContainer = range.endContainer,
         endOffset = range.endOffset;
 
-    var newLIs = [];
 
     wwe.focus();
     sq.saveUndoState(range);
 
-    if (listManager.isAvailableMakeListInTable()) {
-      newLIs = listManager.createListInTable(range, 'OL');
-    } else {
-      var lines = listManager.getLinesOfSelection(startContainer, endContainer);
+    var lines = listManager.getLinesOfSelection(startContainer, endContainer);
 
-      for (var i = 0; i < lines.length; i += 1) {
-        var newLI = this._changeFormatToOrderedListIfNeed(wwe, lines[i]);
-        if (newLI) {
-          newLIs.push(newLI);
-        }
+    var newLIs = [];
+    for (var i = 0; i < lines.length; i += 1) {
+      var newLI = this._changeFormatToOrderedListIfNeed(wwe, lines[i]);
+      if (newLI) {
+        newLIs.push(newLI);
       }
     }
 
     if (newLIs.length) {
-      listManager.adjustRange(startContainer, endContainer, startOffset, endOffset, newLIs);
+      var newStartContainer = _domUtils2.default.containsNode(newLIs[0], startContainer) ? startContainer : newLIs[0];
+      var newEndContainer = _domUtils2.default.containsNode(newLIs[newLIs.length - 1], endContainer) ? endContainer : newLIs[newLIs.length - 1];
+
+      wwe.setSelectionByContainerAndOffset(newStartContainer, startOffset, newEndContainer, endOffset);
     }
   },
 
@@ -26953,7 +25755,7 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
     var taskManager = wwe.componentManager.getManager('task');
     var newLI = void 0;
 
-    if (!sq.hasFormat('PRE')) {
+    if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       range.setStart(target, 0);
       range.collapse(true);
       sq.setSelection(range);
@@ -26973,15 +25775,12 @@ var OL = _commandManager2.default.command('wysiwyg', /** @lends OL */{
 
     return newLI;
   }
-}); /**
-     * @fileoverview Implements ol WysiwygCommand
-     * @author NHN FE Development Lab <dl_javascript@nhn.com>
-     */
+});
 
 exports.default = OL;
 
 /***/ }),
-/* 119 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27046,7 +25845,7 @@ var Table = _commandManager2.default.command('wysiwyg', /** @lends Table */{
  */
 /**
  * @fileoverview Implements table WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 function focusToFirstTh(sq, $table) {
   var range = sq.getSelection();
@@ -27121,7 +25920,7 @@ function makeBody(col, row, data) {
 exports.default = Table;
 
 /***/ }),
-/* 120 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27197,7 +25996,7 @@ var TableAddRow = _commandManager2.default.command('wysiwyg', /** @lends AddRow 
  */
 /**
  * @fileoverview Implements table add row WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 function getSelectedRowsLength(wwe) {
   var selectionMgr = wwe.componentManager.getManager('tableSelection');
@@ -27246,7 +26045,7 @@ function focusToFirstTd(sq, $tr) {
 exports.default = TableAddRow;
 
 /***/ }),
-/* 121 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27283,7 +26082,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements table add column WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var TableAddCol = _commandManager2.default.command('wysiwyg', /** @lends AddCol */{
   name: 'AddCol',
@@ -27395,7 +26194,7 @@ function focusToNextCell(sq, $cell) {
 exports.default = TableAddCol;
 
 /***/ }),
-/* 122 */
+/* 118 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27424,7 +26223,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements table remove row WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var TableRemoveRow = _commandManager2.default.command('wysiwyg', /** @lends RemoveRow */{
   name: 'RemoveRow',
@@ -27524,7 +26323,7 @@ function getTrs(range, selectionMgr, $table) {
 exports.default = TableRemoveRow;
 
 /***/ }),
-/* 123 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27608,7 +26407,7 @@ var TableRemoveCol = _commandManager2.default.command('wysiwyg', /** @lends Remo
  */
 /**
  * @fileoverview Implements table remove column WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 function getCellByRange(range) {
   var cell = range.startContainer;
@@ -27670,7 +26469,7 @@ function focusToCell(sq, $cell, tableMgr) {
 exports.default = TableRemoveCol;
 
 /***/ }),
-/* 124 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27741,7 +26540,7 @@ var TableAlignCol = _commandManager2.default.command('wysiwyg', /** @lends Align
  */
 /**
  * @fileoverview Implements table align column WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 function setAlignAttributeToTableCells($table, alignDirection, selectionInformation) {
   var isDivided = selectionInformation.isDivided || false;
@@ -27822,7 +26621,7 @@ function getRangeInformation(range, selectionMgr) {
 exports.default = TableAlignCol;
 
 /***/ }),
-/* 125 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27851,7 +26650,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements table remove WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var TableRemove = _commandManager2.default.command('wysiwyg', /** @lends RemoveTable */{
   name: 'RemoveTable',
@@ -27877,7 +26676,7 @@ var TableRemove = _commandManager2.default.command('wysiwyg', /** @lends RemoveT
 exports.default = TableRemove;
 
 /***/ }),
-/* 126 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27906,7 +26705,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements Indent wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Indent = _commandManager2.default.command('wysiwyg', /** @lends Indent */{
   name: 'Indent',
@@ -27953,7 +26752,7 @@ var Indent = _commandManager2.default.command('wysiwyg', /** @lends Indent */{
 exports.default = Indent;
 
 /***/ }),
-/* 127 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27982,7 +26781,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements Outdent wysiwyg command
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Outdent = _commandManager2.default.command('wysiwyg', /** @lends Outdent */{
   name: 'Outdent',
@@ -28033,7 +26832,7 @@ function getCurrent$Li(wwe) {
 exports.default = Outdent;
 
 /***/ }),
-/* 128 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28051,6 +26850,10 @@ var _commandManager = __webpack_require__(2);
 
 var _commandManager2 = _interopRequireDefault(_commandManager);
 
+var _domUtils = __webpack_require__(4);
+
+var _domUtils2 = _interopRequireDefault(_domUtils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -28059,10 +26862,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @extends Command
  * @module wysiwygCommands/Task
  * @ignore
- */
-/**
- * @fileoverview Implements Task WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
  */
 var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
   name: 'Task',
@@ -28080,27 +26879,26 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
         startOffset = range.startOffset,
         endOffset = range.endOffset;
 
-    var newLIs = [];
 
     wwe.focus();
 
     sq.saveUndoState(range);
 
-    if (listManager.isAvailableMakeListInTable()) {
-      newLIs = listManager.createListInTable(range, 'TASK');
-    } else {
-      var lines = listManager.getLinesOfSelection(startContainer, endContainer);
+    var lines = listManager.getLinesOfSelection(startContainer, endContainer);
 
-      for (var i = 0; i < lines.length; i += 1) {
-        var newLI = this._changeFormatToTaskIfNeed(wwe, lines[i]);
-        if (newLI) {
-          newLIs.push(newLI);
-        }
+    var newLIs = [];
+    for (var i = 0; i < lines.length; i += 1) {
+      var newLI = this._changeFormatToTaskIfNeed(wwe, lines[i]);
+      if (newLI) {
+        newLIs.push(newLI);
       }
     }
 
     if (newLIs.length) {
-      listManager.adjustRange(startContainer, endContainer, startOffset, endOffset, newLIs);
+      var newStartContainer = _domUtils2.default.containsNode(newLIs[0], startContainer) ? startContainer : newLIs[0];
+      var newEndContainer = _domUtils2.default.containsNode(newLIs[newLIs.length - 1], endContainer) ? endContainer : newLIs[newLIs.length - 1];
+
+      wwe.setSelectionByContainerAndOffset(newStartContainer, startOffset, newEndContainer, endOffset);
     }
   },
 
@@ -28118,7 +26916,7 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
     var taskManager = wwe.componentManager.getManager('task');
     var newLI = void 0;
 
-    if (!sq.hasFormat('PRE')) {
+    if (!sq.hasFormat('TABLE') && !sq.hasFormat('PRE')) {
       range.setStart(target, 0);
       range.collapse(true);
       sq.setSelection(range);
@@ -28139,12 +26937,14 @@ var Task = _commandManager2.default.command('wysiwyg', /** @lends Task */{
 
     return newLI;
   }
-});
-
+}); /**
+     * @fileoverview Implements Task WysiwygCommand
+     * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
+     */
 exports.default = Task;
 
 /***/ }),
-/* 129 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28181,7 +26981,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /**
  * @fileoverview Implements code WysiwygCommand
- * @author NHN FE Development Lab <dl_javascript@nhn.com>
+ * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
  */
 var Code = _commandManager2.default.command('wysiwyg', /** @lends Code */{
   name: 'Code',
@@ -28249,7 +27049,7 @@ function styleCode(editor, sq) {
 exports.default = Code;
 
 /***/ }),
-/* 130 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28275,7 +27075,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var CODEBLOCK_CLASS_TEMP = 'te-content-codeblock-temp'; /**
                                                          * @fileoverview Implements code block WysiwygCommand
-                                                         * @author NHN FE Development Lab <dl_javascript@nhn.com>
+                                                         * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
                                                          */
 
 var CODEBLOCK_ATTR_NAME = 'data-te-codeblock';
@@ -28355,7 +27155,7 @@ function getCodeBlockBody(range, wwe) {
 exports.default = CodeBlock;
 
 /***/ }),
-/* 131 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28411,14 +27211,15 @@ _i18n2.default.setLanguage(['en', 'en_US'], {
   'Text color': 'Text color',
   'Auto scroll enabled': 'Auto scroll enabled',
   'Auto scroll disabled': 'Auto scroll disabled',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Cannot paste values ​​other than a table in the cell selection state.',
   'Choose language': 'Choose language'
 }); /**
     * @fileoverview I18N for English
-    * @author NHN FE Development Lab <dl_javascript@nhn.com>
+    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
     */
 
 /***/ }),
-/* 132 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28474,14 +27275,15 @@ _i18n2.default.setLanguage(['ko', 'ko_KR'], {
   'Text color': '글자 색상',
   'Auto scroll enabled': '자동 스크롤 켜짐',
   'Auto scroll disabled': '자동 스크롤 꺼짐',
+  'Cannot paste values ​​other than a table in the cell selection state.': '셀 선택 상태에서는 테이블 이외의 값은 붙여넣을 수 없습니다.',
   'Choose language': '언어 선택'
 }); /**
     * @fileoverview I18N for Korean
-    * @author NHN FE Development Lab <dl_javascript@nhn.com>
+    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
     */
 
 /***/ }),
-/* 133 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28537,14 +27339,15 @@ _i18n2.default.setLanguage(['zh', 'zh_CN'], {
   'Text color': '文字颜色',
   'Auto scroll enabled': '自动滚动已启用',
   'Auto scroll disabled': '自动滚动已禁用',
+  'Cannot paste values ​​other than a table in the cell selection state': '在选中单元格状态下无法将值粘贴到表格以外。',
   'Choose language': '选择语言'
 }); /**
     * @fileoverview I18N for Chinese
-    * @author NHN FE Development Lab <dl_javascript@nhn.com>
+    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
     */
 
 /***/ }),
-/* 134 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28600,14 +27403,15 @@ _i18n2.default.setLanguage(['ja', 'ja_JP'], {
   'Text color': '文字色相',
   'Auto scroll enabled': '自動スクロールが有効',
   'Auto scroll disabled': '自動スクロールを無効に',
+  'Cannot paste values ​​other than a table in the cell selection state': '表以外の値をセル選択状態に貼り付けることはできません。',
   'Choose language': '言語選択'
 }); /**
     * @fileoverview I18N for Japanese
-    * @author NHN FE Development Lab <dl_javascript@nhn.com>
+    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
     */
 
 /***/ }),
-/* 135 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28622,21 +27426,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _i18n2.default.setLanguage(['nl', 'nl_NL'], {
   'Markdown': 'Markdown',
   'WYSIWYG': 'WYSIWYG',
-  'Write': 'Opslaan',
-  'Preview': 'Voorbeeld',
+  'Write': 'Write',
+  'Preview': 'Preview',
   'Headings': 'Koppen',
-  'Paragraph': 'Alinea',
+  'Paragraph': 'tekst',
   'Bold': 'Vet',
   'Italic': 'Cursief',
   'Strike': 'Doorhalen',
-  'Code': 'Inline code',
+  'Code': 'Inline Code',
   'Line': 'Regel',
   'Blockquote': 'Citaatblok',
   'Unordered list': 'Opsomming',
   'Ordered list': 'Genummerde opsomming',
   'Task': 'Taak',
-  'Indent': 'Niveau verhogen',
-  'Outdent': 'Niveau verlagen',
+  'Indent': 'Inspringen',
+  'Outdent': 'Outdent',
   'Insert link': 'Link invoegen',
   'Insert CodeBlock': 'Codeblok toevoegen',
   'Insert table': 'Tabel invoegen',
@@ -28646,7 +27450,7 @@ _i18n2.default.setLanguage(['nl', 'nl_NL'], {
   'Select image file': 'Selecteer een afbeelding',
   'Description': 'Omschrijving',
   'OK': 'OK',
-  'More': 'Meer',
+  'More': 'verder',
   'Cancel': 'Annuleren',
   'File': 'Bestand',
   'URL': 'URL',
@@ -28663,14 +27467,15 @@ _i18n2.default.setLanguage(['nl', 'nl_NL'], {
   'Text color': 'Tekstkleur',
   'Auto scroll enabled': 'Autoscroll ingeschakeld',
   'Auto scroll disabled': 'Autoscroll uitgeschakeld',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Kan geen waardes anders dan de tabel in de cell plakken',
   'Choose language': 'Kies een taal'
 }); /**
     * @fileoverview I18N for Dutch
-    * @author NHN FE Development Lab <dl_javascript@nhn.com>
+    * @author NHN Ent. FE Development Lab <dl_javascript@nhnent.com>
     */
 
 /***/ }),
-/* 136 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28726,6 +27531,7 @@ _i18n2.default.setLanguage(['es', 'es_ES'], {
   'Text color': 'Color del texto',
   'Auto scroll enabled': 'Desplazamiento automático habilitado',
   'Auto scroll disabled': 'Desplazamiento automático deshabilitado',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Sólo se pueden pegar tablas en el modo de selección de celdas',
   'Choose language': 'Elegir idioma'
 }); /**
     * @fileoverview I18N for Spanish
@@ -28733,7 +27539,7 @@ _i18n2.default.setLanguage(['es', 'es_ES'], {
     */
 
 /***/ }),
-/* 137 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28789,6 +27595,7 @@ _i18n2.default.setLanguage(['de', 'de_DE'], {
   'Text color': 'Textfarbe',
   'Auto scroll enabled': 'Autoscrollen aktiviert',
   'Auto scroll disabled': 'Autoscrollen deaktiviert',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Im Zellenauswahlstatus können keine anderen Werte als eine Tabelle eingefügt werden',
   'Choose language': 'Sprache auswählen'
 }); /**
     * @fileoverview I18N for German
@@ -28796,7 +27603,7 @@ _i18n2.default.setLanguage(['de', 'de_DE'], {
     */
 
 /***/ }),
-/* 138 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28852,6 +27659,7 @@ _i18n2.default.setLanguage(['ru', 'ru_RU'], {
   'Text color': 'Цвет текста',
   'Auto scroll enabled': 'Автоматическая прокрутка включена',
   'Auto scroll disabled': 'Автоматическая прокрутка отключена',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Вы не можете вставлять значения, отличные от таблицы, в состоянии выбора ячейки.',
   'Choose language': 'Выбрать язык'
 }); /**
     * @fileoverview I18N for Russian
@@ -28859,7 +27667,7 @@ _i18n2.default.setLanguage(['ru', 'ru_RU'], {
     */
 
 /***/ }),
-/* 139 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28915,6 +27723,7 @@ _i18n2.default.setLanguage(['fr', 'fr_FR'], {
   'Text color': 'Couleur du texte',
   'Auto scroll enabled': 'Défilement automatique activé',
   'Auto scroll disabled': 'Défilement automatique désactivé',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Impossible de coller autre chose qu\'un tableau dans la sélection de la cellule.',
   'Choose language': 'Choix de la langue'
 }); /**
     * @fileoverview I18N for French
@@ -28922,7 +27731,7 @@ _i18n2.default.setLanguage(['fr', 'fr_FR'], {
     */
 
 /***/ }),
-/* 140 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -28978,6 +27787,7 @@ _i18n2.default.setLanguage(['uk', 'uk_UA'], {
   'Text color': 'Колір тексту',
   'Auto scroll enabled': 'Автоматична прокрутка включена',
   'Auto scroll disabled': 'Автоматична прокрутка відключена',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Ви не можете вставляти значення, відмінні від таблиці, в стані вибору комірки.',
   'Choose language': 'Вибрати мову'
 }); /**
     * @fileoverview I18N for Ukrainian
@@ -28985,7 +27795,7 @@ _i18n2.default.setLanguage(['uk', 'uk_UA'], {
     */
 
 /***/ }),
-/* 141 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29041,6 +27851,7 @@ _i18n2.default.setLanguage(['tr', 'tr_TR'], {
   'Text color': 'Metin rengi',
   'Auto scroll enabled': 'Otomatik kaydırma açık',
   'Auto scroll disabled': 'Otomatik kaydırma kapalı',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Hücre seçimi sırasında tablo dışında veriler yapıştırılamaz.',
   'Choose language': 'Dil seçiniz'
 }); /**
     * @fileoverview I18N for Turkish
@@ -29048,7 +27859,7 @@ _i18n2.default.setLanguage(['tr', 'tr_TR'], {
     */
 
 /***/ }),
-/* 142 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29104,6 +27915,7 @@ _i18n2.default.setLanguage(['fi', 'fi_FI'], {
   'Text color': 'Tekstin väri',
   'Auto scroll enabled': 'Automaattinen skrollaus käytössä',
   'Auto scroll disabled': 'Automaattinen skrollaus pois käytöstä',
+  'Cannot paste values other than a table in the cell selection state': 'Vain taulukko voidaan liittää solunvalintatilassa.',
   'Choose language': 'Valitse kieli'
 }); /**
     * @fileoverview I18N for Finnish
@@ -29111,7 +27923,7 @@ _i18n2.default.setLanguage(['fi', 'fi_FI'], {
     */
 
 /***/ }),
-/* 143 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29167,6 +27979,7 @@ _i18n2.default.setLanguage(['cs', 'cs_CZ'], {
   'Text color': 'Barva textu',
   'Auto scroll enabled': 'Automatické rolování zapnuto',
   'Auto scroll disabled': 'Automatické rolování vypnuto',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Nelze vkládat jiné hodnoty než tabulka ve stavu výběru buněk',
   'Choose language': 'Vybrat jazyk'
 }); /**
     * @fileoverview I18N for Czech
@@ -29174,7 +27987,7 @@ _i18n2.default.setLanguage(['cs', 'cs_CZ'], {
     */
 
 /***/ }),
-/* 144 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29230,6 +28043,7 @@ _i18n2.default.setLanguage(['ar', 'ar_AR'], {
   'Text color': 'لون النص',
   'Auto scroll enabled': 'التحريك التلقائي ممكّن',
   'Auto scroll disabled': 'التحريك التلقائي معطّل',
+  'Cannot paste values ​​other than a table in the cell selection state': 'لا يمكن اللصق في الجدول إلا في وجود خلايا مختارة',
   'Choose language': 'اختر اللغة'
 }); /**
     * @fileoverview I18N for Arabic
@@ -29237,7 +28051,7 @@ _i18n2.default.setLanguage(['ar', 'ar_AR'], {
     */
 
 /***/ }),
-/* 145 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29293,262 +28107,11 @@ _i18n2.default.setLanguage(['pl', 'pl_PL'], {
   'Text color': 'Kolor tekstu',
   'Auto scroll enabled': 'Włączono automatyczne przewijanie',
   'Auto scroll disabled': 'Wyłączono automatyczne przewijanie',
+  'Cannot paste values ​​other than a table in the cell selection state': 'Nie można wkleić wartości innej niż tabela w trybie wyboru komórki.',
   'Choose language': 'Wybierz język'
 }); /**
     * @fileoverview I18N for Polish
     * @author Marcin Mikołajczak <me@m4sk.in>
-    */
-
-/***/ }),
-/* 146 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _i18n = __webpack_require__(3);
-
-var _i18n2 = _interopRequireDefault(_i18n);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_i18n2.default.setLanguage(['zhtw', 'zh_TW'], {
-  'Markdown': 'Markdown',
-  'WYSIWYG': '所見即所得',
-  'Write': '編輯',
-  'Preview': '預覽',
-  'Headings': '標題',
-  'Paragraph': '內文',
-  'Bold': '粗體',
-  'Italic': '斜體',
-  'Strike': '刪除線',
-  'Code': '內嵌程式碼',
-  'Line': '分隔線',
-  'Blockquote': '引言',
-  'Unordered list': '項目符號清單',
-  'Ordered list': '編號清單',
-  'Task': '核取方塊清單',
-  'Indent': '增加縮排',
-  'Outdent': '減少縮排',
-  'Insert link': '插入超連結',
-  'Insert CodeBlock': '插入程式碼區塊',
-  'Insert table': '插入表格',
-  'Insert image': '插入圖片',
-  'Heading': '標題',
-  'Image URL': '圖片網址',
-  'Select image file': '選擇圖片檔案',
-  'Description': '描述',
-  'OK': '確認',
-  'More': '更多',
-  'Cancel': '取消',
-  'File': '檔案',
-  'URL': 'URL',
-  'Link text': '超連結文字',
-  'Add row': '增加行',
-  'Add col': '增加列',
-  'Remove row': '刪除行',
-  'Remove col': '刪除列',
-  'Align left': '靠左對齊',
-  'Align center': '置中',
-  'Align right': '靠右對齊',
-  'Remove table': '刪除表格',
-  'Would you like to paste as table?': '您要以表格貼上嗎？',
-  'Text color': '文字顏色',
-  'Auto scroll enabled': '已啟用自動滾動',
-  'Auto scroll disabled': '已停用自動滾動',
-  'Choose language': '選擇語言'
-}); /**
-    * @fileoverview I18N for Traditional Chinese
-    * @author Tzu-Ray Su <raysu3329@gmail.com>
-    */
-
-/***/ }),
-/* 147 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _i18n = __webpack_require__(3);
-
-var _i18n2 = _interopRequireDefault(_i18n);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_i18n2.default.setLanguage(['gl', 'gl_ES'], {
-  'Markdown': 'Markdown',
-  'WYSIWYG': 'WYSIWYG',
-  'Write': 'Escribir',
-  'Preview': 'Vista previa',
-  'Headings': 'Encabezados',
-  'Paragraph': 'Parágrafo',
-  'Bold': 'Negriña',
-  'Italic': 'Cursiva',
-  'Strike': 'Riscado',
-  'Code': 'Código',
-  'Line': 'Liña',
-  'Blockquote': 'Cita',
-  'Unordered list': 'Lista desordenada',
-  'Ordered list': 'Lista ordenada',
-  'Task': 'Tarefa',
-  'Indent': 'Sangría',
-  'Outdent': 'Anular sangría',
-  'Insert link': 'Inserir enlace',
-  'Insert CodeBlock': 'Inserir bloque de código',
-  'Insert table': 'Inserir táboa',
-  'Insert image': 'Inserir imaxe',
-  'Heading': 'Encabezado',
-  'Image URL': 'URL da imaxe',
-  'Select image file': 'Seleccionar arquivo da imaxe',
-  'Description': 'Descrición',
-  'OK': 'Aceptar',
-  'More': 'Máis',
-  'Cancel': 'Cancelar',
-  'File': 'Arquivo',
-  'URL': 'URL',
-  'Link text': 'Texto do enlace',
-  'Add row': 'Agregar fila',
-  'Add col': 'Agregar columna',
-  'Remove row': 'Eliminar fila',
-  'Remove col': 'Eliminar columna',
-  'Align left': 'Aliñar á esquerda',
-  'Align center': 'Centrar',
-  'Align right': 'Aliñar á dereita',
-  'Remove table': 'Eliminar táboa',
-  'Would you like to paste as table?': 'Desexa pegar como táboa?',
-  'Text color': 'Cor do texto',
-  'Auto scroll enabled': 'Desprazamento automático habilitado',
-  'Auto scroll disabled': 'Desprazamento automático deshabilitado',
-  'Choose language': 'Elixir idioma'
-}); /**
-    * @fileoverview I18N for Spanish
-    * @author Aida Vidal <avidal@emapic.es>
-    */
-
-/***/ }),
-/* 148 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _i18n = __webpack_require__(3);
-
-var _i18n2 = _interopRequireDefault(_i18n);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_i18n2.default.setLanguage(['sv', 'sv_SE'], {
-  'Markdown': 'Markdown',
-  'WYSIWYG': 'WYSIWYG',
-  'Write': 'Skriv',
-  'Preview': 'Förhandsgranska',
-  'Headings': 'Överskrifter',
-  'Paragraph': 'Paragraf',
-  'Bold': 'Fet',
-  'Italic': 'Kursiv',
-  'Strike': 'Genomstruken',
-  'Code': 'Kodrad',
-  'Line': 'Linje',
-  'Blockquote': 'Citatblock',
-  'Unordered list': 'Punktlista',
-  'Ordered list': 'Numrerad lista',
-  'Task': 'Att göra',
-  'Indent': 'Öka indrag',
-  'Outdent': 'Minska indrag',
-  'Insert link': 'Infoga länk',
-  'Insert CodeBlock': 'Infoga kodblock',
-  'Insert table': 'Infoga tabell',
-  'Insert image': 'Infoga bild',
-  'Heading': 'Överskrift',
-  'Image URL': 'Bildadress',
-  'Select image file': 'Välj en bildfil',
-  'Description': 'Beskrivning',
-  'OK': 'OK',
-  'More': 'Mer',
-  'Cancel': 'Avbryt',
-  'File': 'Fil',
-  'URL': 'Adress',
-  'Link text': 'Länktext',
-  'Add row': 'Infoga rad',
-  'Add col': 'Infoga kolumn',
-  'Remove row': 'Radera rad',
-  'Remove col': 'Radera kolumn',
-  'Align left': 'Vänsterjustera',
-  'Align center': 'Centrera',
-  'Align right': 'Högerjustera',
-  'Remove table': 'Radera tabell',
-  'Would you like to paste as table?': 'Vill du klistra in som en tabell?',
-  'Text color': 'Textfärg',
-  'Auto scroll enabled': 'Automatisk scroll aktiverad',
-  'Auto scroll disabled': 'Automatisk scroll inaktiverad',
-  'Choose language': 'Välj språk'
-}); /**
-     * @fileoverview I18N for Swedish
-     * @author Magnus Aspling <magnus@yug.se>
-     */
-
-/***/ }),
-/* 149 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _i18n = __webpack_require__(3);
-
-var _i18n2 = _interopRequireDefault(_i18n);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_i18n2.default.setLanguage(['it', 'it_IT'], {
-  'Markdown': 'Markdown',
-  'WYSIWYG': 'WYSIWYG',
-  'Write': 'Scrivere',
-  'Preview': 'Anteprima',
-  'Headings': 'Intestazioni',
-  'Paragraph': 'Paragrafo',
-  'Bold': 'Grassetto',
-  'Italic': 'Corsivo',
-  'Strike': 'Barrato',
-  'Code': 'Codice',
-  'Line': 'Linea',
-  'Blockquote': 'Blocco citazione',
-  'Unordered list': 'Lista puntata',
-  'Ordered list': 'Lista numerata',
-  'Task': 'Attività',
-  'Indent': 'Aggiungi indentazione',
-  'Outdent': 'Rimuovi indentazione',
-  'Insert link': 'Inserisci link',
-  'Insert CodeBlock': 'Inserisci blocco di codice',
-  'Insert table': 'Inserisci tabella',
-  'Insert image': 'Inserisci immagine',
-  'Heading': 'Intestazione',
-  'Image URL': 'URL immagine',
-  'Select image file': 'Seleziona file immagine',
-  'Description': 'Descrizione',
-  'OK': 'OK',
-  'More': 'Più',
-  'Cancel': 'Cancella',
-  'File': 'File',
-  'URL': 'URL',
-  'Link text': 'Testo del collegamento',
-  'Add row': 'Aggiungi riga',
-  'Add col': 'Aggiungi colonna',
-  'Remove row': 'Rimuovi riga',
-  'Remove col': 'Rimuovi colonna',
-  'Align left': 'Allinea a sinistra',
-  'Align center': 'Allinea al centro',
-  'Align right': 'Allinea a destra',
-  'Remove table': 'Rimuovi tabella',
-  'Would you like to paste as table?': 'Desideri incollare sotto forma di tabella?',
-  'Text color': 'Colore del testo',
-  'Auto scroll enabled': 'Scrolling automatico abilitato',
-  'Auto scroll disabled': 'Scrolling automatico disabilitato',
-  'Choose language': 'Scegli la lingua'
-}); /**
-    * @fileoverview I18N for Italian
-    * @author Massimo Redaelli <massimo@typish.io>
     */
 
 /***/ })

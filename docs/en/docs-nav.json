@@ -57,10 +57,6 @@
       "text": "Fundamentals",
       "items": [
         {
-          "text": "Configuration",
-          "path": "Configuration.md"
-        },
-        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -97,8 +93,7 @@
           "text": "Auditing"
         },
         {
-          "text": "Settings",
-          "path": "Settings.md"
+          "text": "Setting Management"
         }
       ]
     },
@@ -121,10 +116,6 @@
     {
       "text": "Services",
       "items": [
-        {
-          "text": "Current User",
-          "path": "CurrentUser.md"
-        },
         {
           "text": "Object to object mapping",
           "path": "Object-To-Object-Mapping.md"

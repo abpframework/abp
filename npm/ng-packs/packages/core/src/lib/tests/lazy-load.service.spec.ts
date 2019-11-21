@@ -1,4 +1,5 @@
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
+import clone from 'just-clone';
 import { LazyLoadService } from '../services/lazy-load.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -9,7 +10,7 @@ describe('LazyLoadService', () => {
   const scriptElement = document.createElement('script');
   const linkElement = document.createElement('link');
   const styleElement = document.createElement('style');
-  const cloneDocument = { ...document };
+  const cloneDocument = clone(document);
 
   const createService = createServiceFactory({ service: LazyLoadService });
 
@@ -18,7 +19,7 @@ describe('LazyLoadService', () => {
     service = spectator.service;
   });
 
-  afterEach(() => (document = { ...cloneDocument }));
+  afterEach(() => (document = clone(cloneDocument)));
 
   test('should load script with content just one time', done => {
     const spy = jest.spyOn(document, 'createElement');

@@ -1,8 +1,8 @@
-import { ElementRef, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-export declare class ClickEventStopPropagationDirective implements OnInit, OnDestroy {
+import { ElementRef, EventEmitter, OnInit, Renderer2 } from '@angular/core';
+export declare class ClickEventStopPropagationDirective implements OnInit {
+    private renderer;
     private el;
     readonly stopPropEvent: EventEmitter<MouseEvent>;
-    constructor(el: ElementRef);
+    constructor(renderer: Renderer2, el: ElementRef);
     ngOnInit(): void;
-    ngOnDestroy(): void;
 }

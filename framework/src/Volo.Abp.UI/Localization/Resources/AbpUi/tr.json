@@ -46,13 +46,6 @@
     "DatatableActionDropdownDefaultText": "İşlemler",
     "ChangePassword": "Şifre değiştir",
     "PersonalInfo": "Profilim",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var.",
-    "UnhandledException": "Yakalanmamış hata!",
-    "401Message": "Yetkisiz",
-    "403Message": "Yasak",
-    "404Message": "Sayfa bulunamadı",
-    "500Message": "Sunucu tarafında hata",
-    "GoHomePage": "Ana sayfaya git",
-    "GoBack": "Geri dön"
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Kaydedilmemiş değişiklikler var."
   }
 }

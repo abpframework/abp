@@ -1,4 +1,0 @@
-﻿# String Encryption
-
-TODO!
-

@@ -1,3 +1,0 @@
-# Setting Management Module
-
-TODO

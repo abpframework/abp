@@ -77,9 +77,10 @@ export class IdentityState {
 
   @Action(UpdateRole)
   updateRole({ getState, dispatch }: StateContext<Identity.State>, { payload }: UpdateRole) {
-    return this.identityService
-      .updateRole({ ...getState().selectedRole, ...payload })
-      .pipe(switchMap(() => dispatch(new GetRoles())));
+    return dispatch(new GetRoleById(payload.id)).pipe(
+      switchMap(() => this.identityService.updateRole({ ...getState().selectedRole, ...payload })),
+      switchMap(() => dispatch(new GetRoles())),
+    );
   }
 
   @Action(GetUsers)
@@ -116,9 +117,10 @@ export class IdentityState {
 
   @Action(UpdateUser)
   updateUser({ getState, dispatch }: StateContext<Identity.State>, { payload }: UpdateUser) {
-    return this.identityService
-      .updateUser({ ...getState().selectedUser, ...payload })
-      .pipe(switchMap(() => dispatch(new GetUsers())));
+    return dispatch(new GetUserById(payload.id)).pipe(
+      switchMap(() => this.identityService.updateUser({ ...getState().selectedUser, ...payload })),
+      switchMap(() => dispatch(new GetUsers())),
+    );
   }
 
   @Action(GetUserRoles)

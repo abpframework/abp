@@ -51,12 +51,6 @@ export function setChildRoute(routes: ABP.FullRoute[], parentNameArr: ABP.FullRo
 export function sortRoutes(routes: ABP.FullRoute[] = []): ABP.FullRoute[] {
   if (!routes.length) return [];
   return routes
-    .map((route, index) => {
-      return {
-        ...route,
-        order: typeof route.order === 'undefined' ? index + 1 : route.order,
-      };
-    })
     .sort((a, b) => a.order - b.order)
     .map(route => {
       if (route.children && route.children.length) {

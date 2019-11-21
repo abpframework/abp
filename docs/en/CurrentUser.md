@@ -1,3 +1,0 @@
-﻿# Current User
-
-TODO!

@@ -46,13 +46,6 @@
     "DatatableActionDropdownDefaultText": "Actions",
     "ChangePassword": "Change password",
     "PersonalInfo": "My profile",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "You have unsaved changes.",
-    "UnhandledException": "Unhandled exception!",
-    "401Message": "Unauthorized",
-    "403Message": "Forbidden",
-    "404Message": "Page not found",
-    "500Message": "Internal Server Error",
-    "GoHomePage": "Go to the homepage",
-    "GoBack": "Go back"
+    "AreYouSureYouWantToCancelEditingWarningMessage": "You have unsaved changes."
   }
 }

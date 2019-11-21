@@ -32,7 +32,7 @@ namespace Volo.Abp.FeatureManagement
             Options = options.Value;
         }
 
-        public virtual async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
+        public async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
         {
             await CheckProviderPolicy(providerName);
 
@@ -57,7 +57,7 @@ namespace Volo.Abp.FeatureManagement
             return new FeatureListDto { Features = features };
         }
 
-        public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
+        public async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
         {
             await CheckProviderPolicy(providerName);
 

@@ -14,12 +14,6 @@ div.code-toolbar:hover > .toolbar {
 	opacity: 1;
 }
 
-/* Separate line b/c rules are thrown out if selector is invalid.
-   IE11 and old Edge versions don't support :focus-within. */
-div.code-toolbar:focus-within > .toolbar {
-	opacity: 1;
-}
-
 div.code-toolbar > .toolbar .toolbar-item {
 	display: inline-block;
 }

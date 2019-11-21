@@ -7,7 +7,6 @@ import { __decorate, __metadata } from 'tslib';
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/actions/setting-management.actions.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class SetSelectedSettingTab {
@@ -28,7 +27,6 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/states/setting-management.state.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 let SettingManagementState = class SettingManagementState {
@@ -84,7 +82,6 @@ SettingManagementState = __decorate(
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/components/setting-management.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class SettingManagementComponent {
@@ -147,10 +144,29 @@ class SettingManagementComponent {
   }
 }
 SettingManagementComponent.decorators = [
-    { type: Component, args: [{
-                selector: 'abp-setting-management',
-                template: "<div class=\"row entry-row\">\r\n  <div class=\"col-auto\">\r\n    <h1 class=\"content-header-title\">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>\r\n  </div>\r\n  <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\">\r\n    <abp-breadcrumb></abp-breadcrumb>\r\n  </div>\r\n  <div class=\"col\">\r\n    <div class=\"text-lg-right pt-2\" id=\"AbpContentToolbar\"></div>\r\n  </div>\r\n</div>\r\n\r\n<div id=\"SettingManagementWrapper\">\r\n  <div class=\"card\">\r\n    <div class=\"card-body\">\r\n      <div class=\"row\">\r\n        <div class=\"col-12 col-md-3\">\r\n          <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\r\n            <li\r\n              *abpFor=\"let setting of settings; trackBy: trackByFn\"\r\n              (click)=\"selected = setting\"\r\n              class=\"nav-item\"\r\n              [abpPermission]=\"setting.requiredPolicy\"\r\n            >\r\n              <a\r\n                class=\"nav-link\"\r\n                [id]=\"setting.name + '-tab'\"\r\n                role=\"tab\"\r\n                [class.active]=\"setting.name === selected.name\"\r\n                >{{ setting.name | abpLocalization }}</a\r\n              >\r\n            </li>\r\n          </ul>\r\n        </div>\r\n        <div class=\"col-12 col-md-9\">\r\n          <div *ngIf=\"settings.length\" class=\"tab-content\">\r\n            <div class=\"tab-pane fade show active\" [id]=\"selected.name + '-tab'\" role=\"tabpanel\">\r\n              <ng-container *ngComponentOutlet=\"selected.component\"></ng-container>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
-            }] }
+  {
+    type: Component,
+    args: [
+      {
+        selector: 'abp-setting-management',
+        template:
+          '<div class="row entry-row">\n  <div class="col-auto">\n    <h1 class="content-header-title">{{ \'AbpSettingManagement::Settings\' | abpLocalization }}</h1>\n  </div>\n  <div id="breadcrumb" class="col-md-auto pl-md-0">\n    <abp-breadcrumb></abp-breadcrumb>\n  </div>\n  <div class="col">\n    <div class="text-lg-right pt-2" id="AbpContentToolbar"></div>\n  </div>\n</div>\n\n<div id="SettingManagementWrapper">\n  <div class="card">\n    <div class="card-body">\n      <div class="row">\n        <div class="col-3">\n          <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">\n            <li\n              *abpFor="let setting of settings; trackBy: trackByFn"\n              (click)="selected = setting"\n              class="nav-item"\n              [abpPermission]="setting.requiredPolicy"\n            >\n              <a\n                class="nav-link"\n                [id]="setting.name + \'-tab\'"\n                role="tab"\n                [class.active]="setting.name === selected.name"\n                >{{ setting.name | abpLocalization }}</a\n              >\n            </li>\n          </ul>\n        </div>\n        <div class="col-9">\n          <div *ngIf="settings.length" class="tab-content">\n            <div class="tab-pane fade show active" [id]="selected.name + \'-tab\'" role="tabpanel">\n              <ng-container *ngComponentOutlet="selected.component"></ng-container>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n',
+      },
+    ],
+  },
+];
+/** @nocollapse */
+SettingManagementComponent.ctorParameters = () => [{ type: Router }, { type: Store }];
+if (false) {
+  /** @type {?} */
+  SettingManagementComponent.prototype.settings;
+  /** @type {?} */
+  SettingManagementComponent.prototype.trackByFn;
+  /**
+   * @type {?}
+   * @private
+   */
+  SettingManagementComponent.prototype.router;
   /**
    * @type {?}
    * @private
@@ -160,32 +176,35 @@ SettingManagementComponent.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/setting-management-routing.module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-const ɵ0 = { requiredPolicy: 'AbpAccount.SettingManagement' };
 /** @type {?} */
 const routes = [
-    {
-        path: '',
-        component: DynamicLayoutComponent,
-        children: [
-            { path: '', component: SettingManagementComponent, data: ɵ0 },
-        ],
-    },
+  {
+    path: '',
+    component: DynamicLayoutComponent,
+    children: [{ path: '', component: SettingManagementComponent }],
+  },
 ];
 class SettingManagementRoutingModule {}
 SettingManagementRoutingModule.decorators = [
   {
     type: NgModule,
     args: [
-    {
-        path: '',
-        component: DynamicLayoutComponent,
-        children: [
-            { path: '', component: SettingManagementComponent, data: ɵ0 },
-        ],
-    },
+      {
+        imports: [RouterModule.forChild(routes)],
+        exports: [RouterModule],
+      },
+    ],
+  },
+];
+
+/**
+ * @fileoverview added by tsickle
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+class SettingManagementModule {}
+SettingManagementModule.decorators = [
   {
     type: NgModule,
     args: [
@@ -204,13 +223,11 @@ SettingManagementRoutingModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * Generated from: public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * Generated from: abp-ng.setting-management.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

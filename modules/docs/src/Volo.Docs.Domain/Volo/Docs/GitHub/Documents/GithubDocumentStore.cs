@@ -10,6 +10,7 @@ using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
 using Newtonsoft.Json.Linq;
 using Octokit;
+using ProductHeaderValue = Octokit.ProductHeaderValue;
 using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents

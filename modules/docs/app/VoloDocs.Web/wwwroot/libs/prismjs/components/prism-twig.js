@@ -13,7 +13,7 @@ Prism.languages.twig = {
 			'rd': {
 				pattern: /-?(?:%\}|\}\})$/,
 				inside: {
-					'punctuation': /.+/
+					'punctuation': /.*/
 				}
 			},
 			'string': {

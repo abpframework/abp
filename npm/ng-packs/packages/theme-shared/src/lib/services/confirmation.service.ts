@@ -22,9 +22,10 @@ export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
     message: string,
     title: string,
     severity: Toaster.Severity,
-    options?: Confirmation.Options,
+    options?: Confirmation.Options
   ): Observable<Toaster.Status> {
     this.listenToEscape();
+
     return super.show(message, title, severity, options);
   }
 
@@ -39,7 +40,7 @@ export class ConfirmationService extends AbstractToaster<Confirmation.Options> {
       .pipe(
         takeUntil(this.destroy$),
         debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+        filter((key: KeyboardEvent) => key && key.code === 'Escape')
       )
       .subscribe(_ => {
         this.clear();

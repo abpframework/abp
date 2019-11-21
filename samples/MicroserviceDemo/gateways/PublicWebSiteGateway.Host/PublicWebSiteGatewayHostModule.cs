@@ -90,11 +90,7 @@ namespace PublicWebSiteGateway.Host
             app.MapWhen(
                 ctx => ctx.Request.Path.ToString().StartsWith("/api/abp/") ||
                        ctx.Request.Path.ToString().StartsWith("/Abp/"),
-                app2 =>
-                {
-                    app2.UseRouting();
-                    app2.UseMvcWithDefaultRouteAndArea();
-                }
+                app2 => { app2.UseMvcWithDefaultRouteAndArea(); }
             );
 
             app.UseOcelot().Wait();

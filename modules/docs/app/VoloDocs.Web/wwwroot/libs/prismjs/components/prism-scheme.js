@@ -1,33 +1,29 @@
 Prism.languages.scheme = {
-	'comment': /;.*/,
-	'string': {
-		pattern: /"(?:[^"\\]|\\.)*"|'[^()#'\s]+/,
+	'comment' : /;.*/,
+	'string' :  {
+		pattern: /"(?:[^"\\\r\n]|\\.)*"|'[^('\s]*/,
 		greedy: true
 	},
-	'character': {
-		pattern: /#\\(?:[ux][a-fA-F\d]+|[a-zA-Z]+|\S)/,
-		alias: 'string'
+	'keyword' : {
+		pattern : /(\()(?:define(?:-syntax|-library|-values)?|(?:case-)?lambda|let(?:\*|rec)?(?:-values)?|else|if|cond|begin|delay(?:-force)?|parameterize|guard|set!|(?:quasi-)?quote|syntax-rules)/,
+		lookbehind : true
 	},
-	'keyword': {
-		pattern: /(\()(?:define(?:-syntax|-library|-values)?|(?:case-)?lambda|let(?:\*|rec)?(?:-values)?|else|if|cond|begin|delay(?:-force)?|parameterize|guard|set!|(?:quasi-)?quote|syntax-rules)(?=[()\s])/,
+	'builtin' : {
+		pattern :  /(\()(?:(?:cons|car|cdr|list|call-with-current-continuation|call\/cc|append|abs|apply|eval)\b|null\?|pair\?|boolean\?|eof-object\?|char\?|procedure\?|number\?|port\?|string\?|vector\?|symbol\?|bytevector\?)/,
+		lookbehind : true
+	},
+	'number' : {
+		pattern: /(\s|[()])[-+]?\d*\.?\d+(?:\s*[-+]\s*\d*\.?\d+i)?\b/,
 		lookbehind: true
 	},
-	'builtin': {
-		pattern: /(\()(?:(?:cons|car|cdr|list|call-with-current-continuation|call\/cc|append|abs|apply|eval)\b|null\?|pair\?|boolean\?|eof-object\?|char\?|procedure\?|number\?|port\?|string\?|vector\?|symbol\?|bytevector\?)(?=[()\s])/,
-		lookbehind: true
-	},
-	'number': {
-		pattern: /([\s()])[-+]?(?:\d+\/\d+|\d*\.?\d+(?:\s*[-+]\s*\d*\.?\d+i)?)\b/,
-		lookbehind: true
-	},
-	'boolean': /#[tf]/,
+	'boolean' : /#[tf]/,
 	'operator': {
-		pattern: /(\()(?:[-+*%\/]|[<>]=?|=>?)(?=\s|$)/,
+		pattern: /(\()(?:[-+*%\/]|[<>]=?|=>?)/,
 		lookbehind: true
 	},
-	'function': {
-		pattern: /(\()[^()'\s]+(?=[()\s)]|$)/,
-		lookbehind: true
+	'function' : {
+		pattern : /(\()[^\s()]*(?=\s)/,
+		lookbehind : true
 	},
-	'punctuation': /[()']/
+	'punctuation' : /[()]/
 };

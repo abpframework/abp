@@ -32,7 +32,7 @@ namespace Volo.Abp.PermissionManagement
             _stringLocalizerFactory = stringLocalizerFactory;
         }
 
-        public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
+        public async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
             await CheckProviderPolicy(providerName);
 
@@ -99,7 +99,7 @@ namespace Volo.Abp.PermissionManagement
             return result;
         }
 
-        public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
+        public async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
             await CheckProviderPolicy(providerName);
 

@@ -19,7 +19,6 @@ export declare class ChartComponent implements AfterViewInit, OnDestroy {
     readonly canvas: any;
     readonly base64Image: any;
     ngAfterViewInit(): void;
-    testChartJs(): void;
     onCanvasClick: (event: any) => void;
     initChart: () => void;
     generateLegend: () => any;

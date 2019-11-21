@@ -23,12 +23,12 @@ namespace Volo.Abp.Caching
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
             IDistributedCacheSerializer serializer,
-            IDistributedCacheKeyNormalizer keyNormalizer) : base(
+            ICurrentTenant currentTenant) : base(
                 distributedCacheOption: distributedCacheOption,
                 cache: cache,
                 cancellationTokenProvider: cancellationTokenProvider,
                 serializer: serializer,
-                keyNormalizer: keyNormalizer)
+                currentTenant: currentTenant)
         {
         }
 
@@ -54,7 +54,7 @@ namespace Volo.Abp.Caching
 
         protected IDistributedCacheSerializer Serializer { get; }
 
-        protected IDistributedCacheKeyNormalizer KeyNormalizer { get; }
+        protected ICurrentTenant CurrentTenant { get; }
 
         protected SemaphoreSlim SyncSemaphore { get; }
 
@@ -67,29 +67,29 @@ namespace Volo.Abp.Caching
             IDistributedCache cache,
             ICancellationTokenProvider cancellationTokenProvider,
             IDistributedCacheSerializer serializer,
-            IDistributedCacheKeyNormalizer keyNormalizer)
+            ICurrentTenant currentTenant)
         {
             _distributedCacheOption = distributedCacheOption.Value;
             Cache = cache;
             CancellationTokenProvider = cancellationTokenProvider;
             Logger = NullLogger<DistributedCache<TCacheItem, TCacheKey>>.Instance;
             Serializer = serializer;
-            KeyNormalizer = keyNormalizer;
+            CurrentTenant = currentTenant;
 
             SyncSemaphore = new SemaphoreSlim(1, 1);
 
             SetDefaultOptions();
         }
-
         protected virtual string NormalizeKey(TCacheKey key)
         {
-            return KeyNormalizer.NormalizeKey(
-                new DistributedCacheKeyNormalizeArgs(
-                    key.ToString(),
-                    CacheName,
-                    IgnoreMultiTenancy
-                )
-            );
+            var normalizedKey = "c:" + CacheName + ",k:" + _distributedCacheOption.KeyPrefix + key.ToString();
+
+            if (!IgnoreMultiTenancy && CurrentTenant.Id.HasValue)
+            {
+                normalizedKey = "t:" + CurrentTenant.Id.Value + "," + normalizedKey;
+            }
+
+            return normalizedKey;
         }
 
         protected virtual DistributedCacheEntryOptions GetDefaultCacheEntryOptions()
@@ -102,7 +102,6 @@ namespace Volo.Abp.Caching
                     return options;
                 }
             }
-
             return _distributedCacheOption.GlobalCacheEntryOptions;
         }
 
@@ -116,7 +115,6 @@ namespace Volo.Abp.Caching
             //Configure default cache entry options
             DefaultCacheOptions = GetDefaultCacheEntryOptions();
         }
-
         /// <summary>
         /// Gets a cache item with the given key. If no cache item is found for the given key then returns null.
         /// </summary>
@@ -195,7 +193,6 @@ namespace Volo.Abp.Caching
 
             return Serializer.Deserialize<TCacheItem>(cachedBytes);
         }
-
         /// <summary>
         /// Gets or Adds a cache item with the given key. If no cache item is found for the given key then adds a cache item
         /// provided by <paramref name="factory" /> delegate and returns the provided cache item.
@@ -231,7 +228,6 @@ namespace Volo.Abp.Caching
 
             return value;
         }
-
         /// <summary>
         /// Gets or Adds a cache item with the given key. If no cache item is found for the given key then adds a cache item
         /// provided by <paramref name="factory" /> delegate and returns the provided cache item.
@@ -270,7 +266,6 @@ namespace Volo.Abp.Caching
 
             return value;
         }
-
         /// <summary>
         /// Sets the cache item value for the provided key.
         /// </summary>
@@ -305,7 +300,6 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
-
         /// <summary>
         /// Sets the cache item value for the provided key.
         /// </summary>
@@ -344,7 +338,6 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
-
         /// <summary>
         /// Refreshes the cache value of the given key, and resets its sliding expiration timeout.
         /// </summary>
@@ -400,7 +393,6 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
-
         /// <summary>
         /// Removes the cache item for given key from cache.
         /// </summary>
@@ -426,7 +418,6 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
-
         /// <summary>
         /// Removes the cache item for given key from cache.
         /// </summary>
@@ -456,5 +447,7 @@ namespace Volo.Abp.Caching
                 throw;
             }
         }
+
     }
+
 }

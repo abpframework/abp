@@ -20,8 +20,8 @@ export declare class ModalComponent implements OnDestroy {
     abpButtons: any;
     readonly visibleChange: EventEmitter<boolean>;
     readonly init: EventEmitter<void>;
-    readonly appear: EventEmitter<any>;
-    readonly disappear: EventEmitter<any>;
+    readonly appear: EventEmitter<unknown>;
+    readonly disappear: EventEmitter<unknown>;
     _visible: boolean;
     _busy: boolean;
     isModalOpen: boolean;

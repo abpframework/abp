@@ -5,7 +5,6 @@ import { Store } from '@ngxs/store';
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/services/setting-management-config.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class SettingManagementConfigService {
@@ -19,7 +18,6 @@ class SettingManagementConfigService {
             name: 'AbpSettingManagement::Settings',
             path: 'setting-management',
             parentName: 'AbpUiNavigation::Menu:Administration',
-            requiredPolicy: 'AbpAccount.SettingManagement',
             layout: "application" /* application */,
             order: 6,
             iconClass: 'fa fa-cog',
@@ -57,7 +55,6 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/setting-management-config.module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 const ɵ0 = noop;
@@ -71,13 +68,11 @@ SettingManagementConfigModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * Generated from: public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * Generated from: abp-ng.setting-management.config.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

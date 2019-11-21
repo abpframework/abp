@@ -2,7 +2,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { NgxsModule, NGXS_PLUGINS, Store } from '@ngxs/store';
 import { environment } from '../../../../../apps/dev-app/src/environments/environment';
-import { LAYOUTS } from '@abp/ng.theme.basic';
+import { LAYOUTS } from '../../../../theme-basic/src/public-api';
 import { RouterOutletComponent } from '../components';
 import { CoreModule } from '../core.module';
 import { eLayoutType } from '../enums/common';
@@ -68,58 +68,6 @@ const expectedState = {
       path: '',
       children: [],
       url: '/',
-      order: 1,
-    },
-    {
-      name: 'AbpUiNavigation::Menu:Administration',
-      path: '',
-      order: 1,
-      wrapper: true,
-      children: [
-        {
-          name: 'AbpIdentity::Menu:IdentityManagement',
-          path: 'identity',
-          order: 1,
-          parentName: 'AbpUiNavigation::Menu:Administration',
-          layout: 'application',
-          iconClass: 'fa fa-id-card-o',
-          children: [
-            {
-              path: 'users',
-              name: 'AbpIdentity::Users',
-              order: 1,
-              requiredPolicy: 'AbpIdentity.Users',
-              url: '/identity/users',
-            },
-            {
-              path: 'roles',
-              name: 'AbpIdentity::Roles',
-              order: 2,
-              requiredPolicy: 'AbpIdentity.Roles',
-              url: '/identity/roles',
-            },
-          ],
-          url: '/identity',
-        },
-        {
-          name: 'AbpTenantManagement::Menu:TenantManagement',
-          path: 'tenant-management',
-          parentName: 'AbpUiNavigation::Menu:Administration',
-          layout: 'application',
-          iconClass: 'fa fa-users',
-          children: [
-            {
-              path: 'tenants',
-              name: 'AbpTenantManagement::Tenants',
-              order: 1,
-              requiredPolicy: 'AbpTenantManagement.Tenants',
-              url: '/tenant-management/tenants',
-            },
-          ],
-          url: '/tenant-management',
-          order: 2,
-        },
-      ],
     },
     {
       name: 'AbpAccount::Menu:Account',
@@ -141,16 +89,6 @@ const expectedState = {
         },
       ],
       url: '/account',
-      order: 2,
-    },
-  ],
-  flattedRoutes: [
-    {
-      name: '::Menu:Home',
-      path: '',
-      children: [],
-      url: '/',
-      order: 1,
     },
     {
       name: 'AbpUiNavigation::Menu:Administration',
@@ -199,7 +137,97 @@ const expectedState = {
             },
           ],
           url: '/tenant-management',
+        },
+      ],
+    },
+  ],
+  flattedRoutes: [
+    {
+      name: '::Menu:Home',
+      path: '',
+      children: [],
+      url: '/',
+    },
+    {
+      name: 'AbpAccount::Menu:Account',
+      path: 'account',
+      invisible: true,
+      layout: 'application',
+      children: [
+        {
+          path: 'login',
+          name: 'AbpAccount::Login',
+          order: 1,
+          url: '/account/login',
+        },
+        {
+          path: 'register',
+          name: 'AbpAccount::Register',
           order: 2,
+          url: '/account/register',
+        },
+      ],
+      url: '/account',
+    },
+    {
+      path: 'login',
+      name: 'AbpAccount::Login',
+      order: 1,
+      url: '/account/login',
+    },
+    {
+      path: 'register',
+      name: 'AbpAccount::Register',
+      order: 2,
+      url: '/account/register',
+    },
+    {
+      name: 'AbpUiNavigation::Menu:Administration',
+      path: '',
+      order: 1,
+      wrapper: true,
+      children: [
+        {
+          name: 'AbpIdentity::Menu:IdentityManagement',
+          path: 'identity',
+          order: 1,
+          parentName: 'AbpUiNavigation::Menu:Administration',
+          layout: 'application',
+          iconClass: 'fa fa-id-card-o',
+          children: [
+            {
+              path: 'users',
+              name: 'AbpIdentity::Users',
+              order: 1,
+              requiredPolicy: 'AbpIdentity.Users',
+              url: '/identity/users',
+            },
+            {
+              path: 'roles',
+              name: 'AbpIdentity::Roles',
+              order: 2,
+              requiredPolicy: 'AbpIdentity.Roles',
+              url: '/identity/roles',
+            },
+          ],
+          url: '/identity',
+        },
+        {
+          name: 'AbpTenantManagement::Menu:TenantManagement',
+          path: 'tenant-management',
+          parentName: 'AbpUiNavigation::Menu:Administration',
+          layout: 'application',
+          iconClass: 'fa fa-users',
+          children: [
+            {
+              path: 'tenants',
+              name: 'AbpTenantManagement::Tenants',
+              order: 1,
+              requiredPolicy: 'AbpTenantManagement.Tenants',
+              url: '/tenant-management/tenants',
+            },
+          ],
+          url: '/tenant-management',
         },
       ],
     },
@@ -258,7 +286,6 @@ const expectedState = {
         },
       ],
       url: '/tenant-management',
-      order: 2,
     },
     {
       path: 'tenants',
@@ -266,40 +293,6 @@ const expectedState = {
       order: 1,
       requiredPolicy: 'AbpTenantManagement.Tenants',
       url: '/tenant-management/tenants',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-        },
-        {
-          path: 'register',
-          name: 'AbpAccount::Register',
-          order: 2,
-          url: '/account/register',
-        },
-      ],
-      url: '/account',
-      order: 2,
-    },
-    {
-      path: 'login',
-      name: 'AbpAccount::Login',
-      order: 1,
-      url: '/account/login',
-    },
-    {
-      path: 'register',
-      name: 'AbpAccount::Register',
-      order: 2,
-      url: '/account/register',
     },
   ],
 };

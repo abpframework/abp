@@ -9,7 +9,7 @@
 	 * @type {String}
 	 */
 	var PLUGIN_NAME = 'line-numbers';
-
+	
 	/**
 	 * Regular expression used for determining line breaks
 	 * @type {RegExp}
@@ -71,38 +71,28 @@
 			return;
 		}
 
-		var code = env.element;
-		var pre = code.parentNode;
-
 		// works only for <code> wrapped inside <pre> (not inline)
-		if (!pre || !/pre/i.test(pre.nodeName)) {
+		var pre = env.element.parentNode;
+		var clsReg = /\s*\bline-numbers\b\s*/;
+		if (
+			!pre || !/pre/i.test(pre.nodeName) ||
+			// Abort only if nor the <pre> nor the <code> have the class
+			(!clsReg.test(pre.className) && !clsReg.test(env.element.className))
+		) {
 			return;
 		}
 
-		// Abort if line numbers already exists
-		if (code.querySelector('.line-numbers-rows')) {
+		if (env.element.querySelector('.line-numbers-rows')) {
+			// Abort if line numbers already exists
 			return;
 		}
 
-		var addLineNumbers = false;
-		var lineNumbersRegex = /(?:^|\s)line-numbers(?:\s|$)/;
-
-		for (var element = code; element; element = element.parentNode) {
-			if (lineNumbersRegex.test(element.className)) {
-				addLineNumbers = true;
-				break;
-			}
+		if (clsReg.test(env.element.className)) {
+			// Remove the class 'line-numbers' from the <code>
+			env.element.className = env.element.className.replace(clsReg, ' ');
 		}
-
-		// only add line numbers if <code> or one of its ancestors has the `line-numbers` class
-		if (!addLineNumbers) {
-			return;
-		}
-
-		// Remove the class 'line-numbers' from the <code>
-		code.className = code.className.replace(lineNumbersRegex, ' ');
-		// Add the class 'line-numbers' to the <pre>
-		if (!lineNumbersRegex.test(pre.className)) {
+		if (!clsReg.test(pre.className)) {
+			// Add the class 'line-numbers' to the <pre>
 			pre.className += ' line-numbers';
 		}
 
@@ -110,7 +100,8 @@
 		var linesNum = match ? match.length + 1 : 1;
 		var lineNumbersWrapper;
 
-		var lines = new Array(linesNum + 1).join('<span></span>');
+		var lines = new Array(linesNum + 1);
+		lines = lines.join('<span></span>');
 
 		lineNumbersWrapper = document.createElement('span');
 		lineNumbersWrapper.setAttribute('aria-hidden', 'true');
@@ -132,7 +123,7 @@
 		env.plugins = env.plugins || {};
 		env.plugins.lineNumbers = true;
 	});
-
+	
 	/**
 	 * Global exports
 	 */

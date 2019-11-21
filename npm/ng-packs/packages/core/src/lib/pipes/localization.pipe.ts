@@ -1,9 +1,8 @@
-import { Pipe, PipeTransform, Injectable } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Config } from '../models';
 import { ConfigState } from '../states';
 
-@Injectable()
 @Pipe({
   name: 'abpLocalization',
 })

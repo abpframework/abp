@@ -10,7 +10,6 @@
 		]
 	});
 	Prism.languages.flow['function-variable'].pattern = /[_$a-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*(?=\s*=\s*(?:function\b|(?:\([^()]*\)(?:\s*:\s*\w+)?|[_$a-z\xA0-\uFFFF][$\w\xA0-\uFFFF]*)\s*=>))/i;
-	delete Prism.languages.flow['parameter'];
 
 	Prism.languages.insertBefore('flow', 'operator', {
 		'flow-punctuation': {
@@ -19,7 +18,7 @@
 		}
 	});
 
-	if (!Array.isArray(Prism.languages.flow.keyword)) {
+	if (Prism.util.type(Prism.languages.flow.keyword) !== 'Array') {
 		Prism.languages.flow.keyword = [Prism.languages.flow.keyword];
 	}
 	Prism.languages.flow.keyword.unshift(

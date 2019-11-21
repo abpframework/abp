@@ -5,7 +5,10 @@
     "esModuleInterop": true,
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "paths": {
+      "@abp/ng.core/*": ["packages/core/src/lib/*"]
+    }
   },
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

@@ -1,10 +1,70 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@ngxs/store')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.setting-management.config', ['exports', '@angular/core', '@abp/ng.core', '@abp/ng.theme.shared', '@ngxs/store'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['setting-management'] = global.abp.ng['setting-management'] || {}, global.abp.ng['setting-management'].config = {}), global.ng.core, global.ng_core, global.ng_theme_shared, global.store));
-}(this, (function (exports, core, ng_core, ng_theme_shared, store) { 'use strict';
+(function(global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined'
+    ? factory(
+        exports,
+        require('@angular/core'),
+        require('@abp/ng.core'),
+        require('@abp/ng.theme.shared'),
+        require('@ngxs/store'),
+      )
+    : typeof define === 'function' && define.amd
+    ? define('@abp/ng.setting-management.config', [
+        'exports',
+        '@angular/core',
+        '@abp/ng.core',
+        '@abp/ng.theme.shared',
+        '@ngxs/store',
+      ], factory)
+    : ((global = global || self),
+      factory(
+        ((global.abp = global.abp || {}),
+        (global.abp.ng = global.abp.ng || {}),
+        (global.abp.ng['setting-management'] = global.abp.ng['setting-management'] || {}),
+        (global.abp.ng['setting-management'].config = {})),
+        global.ng.core,
+        global.ng_core,
+        global.ng_theme_shared,
+        global.store,
+      ));
+})(this, function(exports, core, ng_core, ng_theme_shared, store) {
+  'use strict';
 
-    /*! *****************************************************************************
+  /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+  /* global Reflect, Promise */
+
+  var extendStatics = function(d, b) {
+    extendStatics =
+      Object.setPrototypeOf ||
+      ({ __proto__: [] } instanceof Array &&
+        function(d, b) {
+          d.__proto__ = b;
+        }) ||
+      function(d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      };
+    return extendStatics(d, b);
+  };
+
+  function __extends(d, b) {
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : ((__.prototype = b.prototype), new __());
+  }
 
   var __assign = function() {
     __assign =
@@ -330,109 +390,107 @@
     return cooked;
   }
 
-    function __importDefault(mod) {
-        return (mod && mod.__esModule) ? mod : { default: mod };
+  function __importStar(mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
+    result.default = mod;
+    return result;
+  }
+
+  function __importDefault(mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  }
+
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var SettingManagementConfigService = /** @class */ (function() {
+    function SettingManagementConfigService(store) {
+      var _this = this;
+      this.store = store;
+      /** @type {?} */
+      var route = /** @type {?} */ ({
+        name: 'AbpSettingManagement::Settings',
+        path: 'setting-management',
+        parentName: 'AbpUiNavigation::Menu:Administration',
+        layout: 'application' /* application */,
+        order: 6,
+        iconClass: 'fa fa-cog',
+      });
+      ng_core.addAbpRoutes(route);
+      setTimeout(
+        /**
+         * @return {?}
+         */
+        function() {
+          /** @type {?} */
+          var tabs = ng_theme_shared.getSettingTabs();
+          if (!tabs || !tabs.length) {
+            _this.store.dispatch(
+              new ng_core.PatchRouteByName('AbpSettingManagement::Settings', __assign({}, route, { invisible: true })),
+            );
+          }
+        },
+      );
     }
-
+    SettingManagementConfigService.decorators = [
+      {
+        type: core.Injectable,
+        args: [
+          {
+            providedIn: 'root',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    SettingManagementConfigService.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    /** @nocollapse */ SettingManagementConfigService.ngInjectableDef = core.ɵɵdefineInjectable({
+      factory: function SettingManagementConfigService_Factory() {
+        return new SettingManagementConfigService(core.ɵɵinject(store.Store));
+      },
+      token: SettingManagementConfigService,
+      providedIn: 'root',
+    });
+    return SettingManagementConfigService;
+  })();
+  if (false) {
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/setting-management-config.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @type {?}
+     * @private
      */
-    var SettingManagementConfigService = /** @class */ (function () {
-        function SettingManagementConfigService(store) {
-            var _this = this;
-            this.store = store;
-            /** @type {?} */
-            var route = (/** @type {?} */ ({
-                name: 'AbpSettingManagement::Settings',
-                path: 'setting-management',
-                parentName: 'AbpUiNavigation::Menu:Administration',
-                requiredPolicy: 'AbpAccount.SettingManagement',
-                layout: "application" /* application */,
-                order: 6,
-                iconClass: 'fa fa-cog',
-            }));
-            ng_core.addAbpRoutes(route);
-            setTimeout((/**
-             * @return {?}
-             */
-            function () {
-                /** @type {?} */
-                var tabs = ng_theme_shared.getSettingTabs();
-                if (!tabs || !tabs.length) {
-                    _this.store.dispatch(new ng_core.PatchRouteByName('AbpSettingManagement::Settings', __assign({}, route, { invisible: true })));
-                }
-            }));
-        }
-    function __importDefault(mod) {
-        return (mod && mod.__esModule) ? mod : { default: mod };
-    }
+    SettingManagementConfigService.prototype.store;
+  }
 
-    /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/setting-management-config.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var SettingManagementConfigService = /** @class */ (function () {
-        function SettingManagementConfigService(store) {
-            var _this = this;
-            this.store = store;
-            /** @type {?} */
-            var route = (/** @type {?} */ ({
-                name: 'AbpSettingManagement::Settings',
-                path: 'setting-management',
-                parentName: 'AbpUiNavigation::Menu:Administration',
-                requiredPolicy: 'AbpAccount.SettingManagement',
-                layout: "application" /* application */,
-                order: 6,
-                iconClass: 'fa fa-cog',
-            }));
-            ng_core.addAbpRoutes(route);
-            setTimeout((/**
-             * @return {?}
-             */
-            function () {
-                /** @type {?} */
-                var tabs = ng_theme_shared.getSettingTabs();
-                if (!tabs || !tabs.length) {
-                    _this.store.dispatch(new ng_core.PatchRouteByName('AbpSettingManagement::Settings', __assign({}, route, { invisible: true })));
-                }
-            }));
-        }
-        SettingManagementConfigService.decorators = [
-            { type: core.Injectable, args: [{
-                        providedIn: 'root',
-                    },] }
-        ];
-        /** @nocollapse */
-        SettingManagementConfigService.ctorParameters = function () { return [
-            { type: store.Store }
-        ]; };
-        /** @nocollapse */ SettingManagementConfigService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function SettingManagementConfigService_Factory() { return new SettingManagementConfigService(core.ɵɵinject(store.Store)); }, token: SettingManagementConfigService, providedIn: "root" });
-        return SettingManagementConfigService;
-    }());
-    if (false) {
-     * @fileoverview added by tsickle
-     * Generated from: lib/setting-management-config.module.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var ɵ0 = ng_core.noop;
-    var SettingManagementConfigModule = /** @class */ (function () {
-        function SettingManagementConfigModule() {
-        }
-        SettingManagementConfigModule.decorators = [
-            { type: core.NgModule, args: [{
-                        providers: [{ provide: core.APP_INITIALIZER, deps: [SettingManagementConfigService], useFactory: ɵ0, multi: true }],
-                    },] }
-        ];
-        return SettingManagementConfigModule;
-    }());
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var ɵ0 = ng_core.noop;
+  var SettingManagementConfigModule = /** @class */ (function() {
+    function SettingManagementConfigModule() {}
+    SettingManagementConfigModule.decorators = [
+      {
+        type: core.NgModule,
+        args: [
+          {
+            providers: [
+              { provide: core.APP_INITIALIZER, deps: [SettingManagementConfigService], useFactory: ɵ0, multi: true },
+            ],
+          },
+        ],
+      },
+    ];
+    return SettingManagementConfigModule;
+  })();
 
-    exports.SettingManagementConfigModule = SettingManagementConfigModule;
-    exports.ɵa = SettingManagementConfigService;
+  exports.SettingManagementConfigModule = SettingManagementConfigModule;
+  exports.ɵa = SettingManagementConfigService;
 
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-})));
+  Object.defineProperty(exports, '__esModule', { value: true });
+});
 //# sourceMappingURL=abp-ng.setting-management.config.umd.js.map

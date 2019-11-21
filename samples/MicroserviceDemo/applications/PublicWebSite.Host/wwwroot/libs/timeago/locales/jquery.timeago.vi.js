@@ -11,8 +11,8 @@
   jQuery.timeago.settings.strings = {
     prefixAgo: 'cách đây',
     prefixFromNow: null,
-    suffixAgo: "trước",
-    suffixFromNow: "kể từ bây giờ",
+    suffixAgo: null,
+    suffixFromNow: "trước",
     seconds: "chưa đến một phút",
     minute: "khoảng một phút",
     minutes: "%d phút",

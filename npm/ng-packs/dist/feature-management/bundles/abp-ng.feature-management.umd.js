@@ -1,10 +1,86 @@
-(function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@ngxs/store'), require('rxjs'), require('rxjs/operators'), require('@angular/forms')) :
-    typeof define === 'function' && define.amd ? define('@abp/ng.feature-management', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@ngxs/store', 'rxjs', 'rxjs/operators', '@angular/forms'], factory) :
-    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['feature-management'] = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.store, global.rxjs, global.rxjs.operators, global.ng.forms));
-}(this, (function (exports, ng_core, ng_theme_shared, core, store, rxjs, operators, forms) { 'use strict';
+(function(global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined'
+    ? factory(
+        exports,
+        require('@abp/ng.core'),
+        require('@abp/ng.theme.shared'),
+        require('@angular/core'),
+        require('@ngxs/store'),
+        require('rxjs'),
+        require('rxjs/operators'),
+        require('@angular/forms'),
+      )
+    : typeof define === 'function' && define.amd
+    ? define('@abp/ng.feature-management', [
+        'exports',
+        '@abp/ng.core',
+        '@abp/ng.theme.shared',
+        '@angular/core',
+        '@ngxs/store',
+        'rxjs',
+        'rxjs/operators',
+        '@angular/forms',
+      ], factory)
+    : ((global = global || self),
+      factory(
+        ((global.abp = global.abp || {}),
+        (global.abp.ng = global.abp.ng || {}),
+        (global.abp.ng['feature-management'] = {})),
+        global.ng_core,
+        global.ng_theme_shared,
+        global.ng.core,
+        global.store,
+        global.rxjs,
+        global.rxjs.operators,
+        global.ng.forms,
+      ));
+})(this, function(exports, ng_core, ng_theme_shared, core, store, rxjs, operators, forms) {
+  'use strict';
 
-    /*! *****************************************************************************
+  /*! *****************************************************************************
+    Copyright (c) Microsoft Corporation. All rights reserved.
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+    this file except in compliance with the License. You may obtain a copy of the
+    License at http://www.apache.org/licenses/LICENSE-2.0
+
+    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+    MERCHANTABLITY OR NON-INFRINGEMENT.
+
+    See the Apache Version 2.0 License for specific language governing permissions
+    and limitations under the License.
+    ***************************************************************************** */
+  /* global Reflect, Promise */
+
+  var extendStatics = function(d, b) {
+    extendStatics =
+      Object.setPrototypeOf ||
+      ({ __proto__: [] } instanceof Array &&
+        function(d, b) {
+          d.__proto__ = b;
+        }) ||
+      function(d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+      };
+    return extendStatics(d, b);
+  };
+
+  function __extends(d, b) {
+    extendStatics(d, b);
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : ((__.prototype = b.prototype), new __());
+  }
+
+  var __assign = function() {
+    __assign =
+      Object.assign ||
+      function __assign(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+          s = arguments[i];
+          for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
         }
         return t;
       };
@@ -462,9 +538,8 @@
       this.featureManagementService = featureManagementService;
     }
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/feature-management.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} __0
+     * @return {?}
      */
     FeatureManagementState.getFeatures
     /**
@@ -505,9 +580,14 @@
     /**
      * @param {?} _
      * @param {?} __1
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/feature-management.actions.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
+     */
+    FeatureManagementState.prototype.updateFeatures
+    /**
+     * @param {?} _
+     * @param {?} __1
+     * @return {?}
+     */ = function(_, _a) {
       var payload = _a.payload;
       return this.featureManagementService.updateFeatures(payload);
     };
@@ -602,363 +682,190 @@
       configurable: true,
     });
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
-
+    FeatureManagementComponent.prototype.openModal
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/feature-management.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
+     */ = function() {
+      if (!this.providerKey || !this.providerName) {
+        throw new Error('Provider Key and Provider Name are required.');
+      }
+      this.getFeatures();
+    };
+    /**
+     * @return {?}
      */
     FeatureManagementComponent.prototype.getFeatures
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/feature-management.state.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var FeatureManagementState = /** @class */ (function () {
-        function FeatureManagementState(featureManagementService) {
-            this.featureManagementService = featureManagementService;
-        }
-        /**
-         * @param {?} __0
-         * @return {?}
-         */
-        FeatureManagementState.getFeatures = /**
-         * @param {?} __0
-         * @return {?}
-         */
-        function (_a) {
-            var features = _a.features;
-            return features || [];
-        };
-        /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        FeatureManagementState.prototype.getFeatures = /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        function (_a, _b) {
-            var patchState = _a.patchState;
-            var payload = _b.payload;
-            return this.featureManagementService.getFeatures(payload).pipe(operators.tap((/**
-             * @param {?} __0
-             * @return {?}
-     * @fileoverview added by tsickle
-     * Generated from: lib/actions/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
+     * @return {?}
+     */ = function() {
+      var _this = this;
+      this.store
+        .dispatch(
+          new GetFeatures({
+            providerKey: this.providerKey,
+            providerName: this.providerName,
+          }),
+        )
+        .pipe(operators.pluck('FeatureManagementState', 'features'))
+        .subscribe(
+          /**
+           * @param {?} features
+           * @return {?}
+           */
+          function(features) {
+            _this.buildForm(features);
+          },
+        );
+    };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/services/feature-management.service.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-        __decorate([
-            store.Action(GetFeatures),
-            __metadata("design:type", Function),
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/feature-management.state.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @param {?} features
+     * @return {?}
      */
-    var FeatureManagementState = /** @class */ (function () {
-        function FeatureManagementState(featureManagementService) {
-            this.featureManagementService = featureManagementService;
-        }
-        /**
-         * @param {?} __0
-         * @return {?}
-         */
-        FeatureManagementState.getFeatures = /**
-         * @param {?} __0
-         * @return {?}
-         */
-        function (_a) {
-            var features = _a.features;
-            return features || [];
-        };
-        /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        FeatureManagementState.prototype.getFeatures = /**
-         * @param {?} __0
-         * @param {?} __1
-         * @return {?}
-         */
-        function (_a, _b) {
-            var patchState = _a.patchState;
-            var payload = _b.payload;
-            return this.featureManagementService.getFeatures(payload).pipe(operators.tap((/**
-             * @param {?} __0
-             * @return {?}
-             */
-            function (_a) {
-                var features = _a.features;
-                return patchState({
-                    features: features,
-                });
-            })));
-        };
-        /**
-         * @param {?} _
-         * @param {?} __1
-         * @return {?}
-         */
-        FeatureManagementState.prototype.updateFeatures = /**
-         * @param {?} _
-         * @param {?} __1
-         * @return {?}
-         */
-        function (_, _a) {
-            var payload = _a.payload;
-            return this.featureManagementService.updateFeatures(payload);
-        };
-        FeatureManagementState.ctorParameters = function () { return [
-            { type: FeatureManagementService }
-        ]; };
-        __decorate([
-            store.Action(GetFeatures),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, GetFeatures]),
-            __metadata("design:returntype", void 0)
-        ], FeatureManagementState.prototype, "getFeatures", null);
-        __decorate([
-            store.Action(UpdateFeatures),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object, UpdateFeatures]),
-            __metadata("design:returntype", void 0)
-        ], FeatureManagementState.prototype, "updateFeatures", null);
-        __decorate([
-            store.Selector(),
-            __metadata("design:type", Function),
-            __metadata("design:paramtypes", [Object]),
-            __metadata("design:returntype", void 0)
-        ], FeatureManagementState, "getFeatures", null);
-        FeatureManagementState = __decorate([
-            store.State({
-                name: 'FeatureManagementState',
-                defaults: (/** @type {?} */ ({ features: {} })),
-            }),
-            __metadata("design:paramtypes", [FeatureManagementService])
-        ], FeatureManagementState);
-        return FeatureManagementState;
-    }());
-    if (false) {
-        /**
-         * @type {?}
-         * @private
-         */
-        FeatureManagementState.prototype.featureManagementService;
-    }
-
+    FeatureManagementComponent.prototype.buildForm
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/states/index.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-
+     * @param {?} features
+     * @return {?}
+     */ = function(features) {
+      /** @type {?} */
+      var formGroupObj = {};
+      for (var i = 0; i < features.length; i++) {
+        formGroupObj[i] = new forms.FormControl(features[i].value === 'false' ? null : features[i].value);
+      }
+      this.form = new forms.FormGroup(formGroupObj);
+    };
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/components/feature-management/feature-management.component.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
      */
-    var FeatureManagementComponent = /** @class */ (function () {
-        function FeatureManagementComponent(store) {
-            this.store = store;
-            this.visibleChange = new core.EventEmitter();
-            this.modalBusy = false;
-        }
-        Object.defineProperty(FeatureManagementComponent.prototype, "visible", {
-            get: /**
-             * @return {?}
-             */
-            function () {
-                return this._visible;
-            },
-            set: /**
-             * @param {?} value
-             * @return {?}
-             */
-            function (value) {
-                this._visible = value;
-                this.visibleChange.emit(value);
-                if (value)
-                    this.openModal();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        /**
-         * @return {?}
-         */
-        FeatureManagementComponent.prototype.openModal = /**
-         * @return {?}
-         */
-        function () {
-            if (!this.providerKey || !this.providerName) {
-                throw new Error('Provider Key and Provider Name are required.');
-            }
-            this.getFeatures();
-        };
-        /**
-         * @return {?}
-         */
-        FeatureManagementComponent.prototype.getFeatures = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            this.store
-                .dispatch(new GetFeatures({
-                providerKey: this.providerKey,
-                providerName: this.providerName,
-            }))
-                .pipe(operators.pluck('FeatureManagementState', 'features'))
-                .subscribe((/**
-             * @param {?} features
-             * @return {?}
-             */
-            function (features) {
-                _this.buildForm(features);
-            }));
-        };
-        /**
-         * @param {?} features
-         * @return {?}
-         */
-        FeatureManagementComponent.prototype.buildForm = /**
-         * @param {?} features
-         * @return {?}
-         */
-        function (features) {
-            /** @type {?} */
-            var formGroupObj = {};
-            for (var i = 0; i < features.length; i++) {
-                formGroupObj[i] = new forms.FormControl(features[i].value === 'false' ? null : features[i].value);
-            }
-            this.form = new forms.FormGroup(formGroupObj);
-        };
-
-})));
-//# sourceMappingURL=abp-ng.feature-management.umd.js.map
-        FeatureManagementComponent.prototype.save = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            if (this.modalBusy)
-                return;
-            this.modalBusy = true;
-            /** @type {?} */
-            var features = this.store.selectSnapshot(FeatureManagementState.getFeatures);
-            features = features.map((/**
-             * @param {?} feature
-             * @param {?} i
-             * @return {?}
-             */
-            function (feature, i) { return ({
-                name: feature.name,
-                value: !_this.form.value[i] || _this.form.value[i] === 'false' ? null : _this.form.value[i],
-            }); }));
-            this.store
-                .dispatch(new UpdateFeatures({
-                providerKey: this.providerKey,
-                providerName: this.providerName,
-                features: features,
-            }))
-                .pipe(operators.finalize((/**
-             * @return {?}
-             */
-            function () { return (_this.modalBusy = false); })))
-                .subscribe((/**
-             * @return {?}
-             */
-            function () {
-                _this.visible = false;
-            }));
-        };
-        FeatureManagementComponent.decorators = [
-            { type: core.Component, args: [{
-                        selector: 'abp-feature-management',
-                        template: "<abp-modal size=\"md\" [(visible)]=\"visible\" [busy]=\"modalBusy\">\r\n  <ng-template #abpHeader>\r\n    <h3>{{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}</h3>\r\n  </ng-template>\r\n\r\n  <ng-template #abpBody>\r\n    <form *ngIf=\"form\" (ngSubmit)=\"save()\" [formGroup]=\"form\" validateOnSubmit>\r\n      <div\r\n        class=\"row my-3\"\r\n        *ngFor=\"let feature of features$ | async; let i = index\"\r\n        [ngSwitch]=\"feature.valueType.name\"\r\n      >\r\n        <div class=\"col-4\">{{ feature.name }}</div>\r\n        <div class=\"col-8\" *ngSwitchCase=\"'ToggleStringValueType'\">\r\n          <input type=\"checkbox\" name=\"feature.name\" [formControlName]=\"i\" />\r\n        </div>\r\n        <div class=\"col-8\" *ngSwitchCase=\"'FreeTextStringValueType'\">\r\n          <input type=\"text\" name=\"feature.name\" [formControlName]=\"i\" />\r\n        </div>\r\n      </div>\r\n    </form>\r\n  </ng-template>\r\n\r\n  <ng-template #abpFooter>\r\n    <button #abpClose type=\"button\" class=\"btn btn-secondary\">\r\n      {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}\r\n    </button>\r\n    <abp-button iconClass=\"fa fa-check\" [disabled]=\"form?.invalid || modalBusy\" (click)=\"save()\">\r\n      {{ 'AbpFeatureManagement::Save' | abpLocalization }}\r\n    </abp-button>\r\n  </ng-template>\r\n</abp-modal>\r\n"
-                    }] }
-        ];
-        /** @nocollapse */
-        FeatureManagementComponent.ctorParameters = function () { return [
-            { type: store.Store }
-        ]; };
-        FeatureManagementComponent.propDecorators = {
-            providerKey: [{ type: core.Input }],
-            providerName: [{ type: core.Input }],
-            visible: [{ type: core.Input }],
-            visibleChange: [{ type: core.Output }]
-        };
-        __decorate([
-            store.Select(FeatureManagementState.getFeatures),
-            __metadata("design:type", rxjs.Observable)
-        ], FeatureManagementComponent.prototype, "features$", void 0);
-        return FeatureManagementComponent;
-    }());
-    if (false) {
-        /** @type {?} */
-        FeatureManagementComponent.prototype.providerKey;
-        /** @type {?} */
-        FeatureManagementComponent.prototype.providerName;
-        /**
-         * @type {?}
-         * @protected
-         */
-        FeatureManagementComponent.prototype._visible;
-        /** @type {?} */
-        FeatureManagementComponent.prototype.visibleChange;
-        /** @type {?} */
-        FeatureManagementComponent.prototype.features$;
-        /** @type {?} */
-        FeatureManagementComponent.prototype.modalBusy;
-        /** @type {?} */
-        FeatureManagementComponent.prototype.form;
-        /**
-         * @type {?}
-         * @private
-         */
-        FeatureManagementComponent.prototype.store;
-    }
-
+    FeatureManagementComponent.prototype.save
     /**
-     * @fileoverview added by tsickle
-     * Generated from: lib/feature-management.module.ts
-     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     * @return {?}
+     */ = function() {
+      var _this = this;
+      this.modalBusy = true;
+      /** @type {?} */
+      var features = this.store.selectSnapshot(FeatureManagementState.getFeatures);
+      features = features.map(
+        /**
+         * @param {?} feature
+         * @param {?} i
+         * @return {?}
+         */
+        function(feature, i) {
+          return {
+            name: feature.name,
+            value: !_this.form.value[i] || _this.form.value[i] === 'false' ? null : _this.form.value[i],
+          };
+        },
+      );
+      this.store
+        .dispatch(
+          new UpdateFeatures({
+            providerKey: this.providerKey,
+            providerName: this.providerName,
+            features: features,
+          }),
+        )
+        .subscribe(
+          /**
+           * @return {?}
+           */
+          function() {
+            _this.modalBusy = false;
+            _this.visible = false;
+          },
+        );
+    };
+    FeatureManagementComponent.decorators = [
+      {
+        type: core.Component,
+        args: [
+          {
+            selector: 'abp-feature-management',
+            template:
+              '<abp-modal size="md" [(visible)]="visible" [busy]="modalBusy">\n  <ng-template #abpHeader>\n    <h3>{{ \'AbpTenantManagement::Permission:ManageFeatures\' | abpLocalization }}</h3>\n  </ng-template>\n\n  <ng-template #abpBody>\n    <form *ngIf="form" (ngSubmit)="save()" [formGroup]="form">\n      <div\n        class="row my-3"\n        *ngFor="let feature of features$ | async; let i = index"\n        [ngSwitch]="feature.valueType.name"\n      >\n        <div class="col-4">{{ feature.name }}</div>\n        <div class="col-8" *ngSwitchCase="\'ToggleStringValueType\'">\n          <input type="checkbox" name="feature.name" [formControlName]="i" />\n        </div>\n        <div class="col-8" *ngSwitchCase="\'FreeTextStringValueType\'">\n          <input type="text" name="feature.name" [formControlName]="i" />\n        </div>\n      </div>\n    </form>\n  </ng-template>\n\n  <ng-template #abpFooter>\n    <button #abpClose type="button" class="btn btn-secondary">\n      {{ \'AbpFeatureManagement::Cancel\' | abpLocalization }}\n    </button>\n    <abp-button iconClass="fa fa-check" (click)="save()">\n      {{ \'AbpFeatureManagement::Save\' | abpLocalization }}\n    </abp-button>\n  </ng-template>\n</abp-modal>\n',
+          },
+        ],
+      },
+    ];
+    /** @nocollapse */
+    FeatureManagementComponent.ctorParameters = function() {
+      return [{ type: store.Store }];
+    };
+    FeatureManagementComponent.propDecorators = {
+      providerKey: [{ type: core.Input }],
+      providerName: [{ type: core.Input }],
+      visible: [{ type: core.Input }],
+      visibleChange: [{ type: core.Output }],
+    };
+    __decorate(
+      [store.Select(FeatureManagementState.getFeatures), __metadata('design:type', rxjs.Observable)],
+      FeatureManagementComponent.prototype,
+      'features$',
+      void 0,
+    );
+    return FeatureManagementComponent;
+  })();
+  if (false) {
+    /** @type {?} */
+    FeatureManagementComponent.prototype.providerKey;
+    /** @type {?} */
+    FeatureManagementComponent.prototype.providerName;
+    /**
+     * @type {?}
+     * @protected
      */
-    var FeatureManagementModule = /** @class */ (function () {
-        function FeatureManagementModule() {
-        }
-        FeatureManagementModule.decorators = [
-            { type: core.NgModule, args: [{
-                        declarations: [FeatureManagementComponent],
-                        imports: [ng_core.CoreModule, ng_theme_shared.ThemeSharedModule, store.NgxsModule.forFeature([FeatureManagementState])],
-                        exports: [FeatureManagementComponent],
-                    },] }
-        ];
-        return FeatureManagementModule;
-    }());
+    FeatureManagementComponent.prototype._visible;
+    /** @type {?} */
+    FeatureManagementComponent.prototype.visibleChange;
+    /** @type {?} */
+    FeatureManagementComponent.prototype.features$;
+    /** @type {?} */
+    FeatureManagementComponent.prototype.modalBusy;
+    /** @type {?} */
+    FeatureManagementComponent.prototype.form;
+    /**
+     * @type {?}
+     * @private
+     */
+    FeatureManagementComponent.prototype.store;
+  }
 
-    exports.FeatureManagementComponent = FeatureManagementComponent;
-    exports.FeatureManagementModule = FeatureManagementModule;
-    exports.ɵa = FeatureManagementComponent;
-    exports.ɵb = FeatureManagementState;
-    exports.ɵc = FeatureManagementState;
-    exports.ɵd = FeatureManagementService;
-    exports.ɵe = GetFeatures;
-    exports.ɵf = UpdateFeatures;
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var FeatureManagementModule = /** @class */ (function() {
+    function FeatureManagementModule() {}
+    FeatureManagementModule.decorators = [
+      {
+        type: core.NgModule,
+        args: [
+          {
+            declarations: [FeatureManagementComponent],
+            imports: [
+              ng_core.CoreModule,
+              ng_theme_shared.ThemeSharedModule,
+              store.NgxsModule.forFeature([FeatureManagementState]),
+            ],
+            exports: [FeatureManagementComponent],
+          },
+        ],
+      },
+    ];
+    return FeatureManagementModule;
+  })();
 
-    Object.defineProperty(exports, '__esModule', { value: true });
+  exports.FeatureManagementComponent = FeatureManagementComponent;
+  exports.FeatureManagementModule = FeatureManagementModule;
+  exports.ɵa = FeatureManagementComponent;
+  exports.ɵb = FeatureManagementState;
+  exports.ɵc = FeatureManagementState;
+  exports.ɵd = FeatureManagementService;
+  exports.ɵe = GetFeatures;
+  exports.ɵf = UpdateFeatures;
 
-})));
+  Object.defineProperty(exports, '__esModule', { value: true });
+});
 //# sourceMappingURL=abp-ng.feature-management.umd.js.map
