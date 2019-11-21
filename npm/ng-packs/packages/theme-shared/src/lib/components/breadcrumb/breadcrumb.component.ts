@@ -5,18 +5,18 @@ import { ConfigState, ABP } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-breadcrumb',
-  templateUrl: './breadcrumb.component.html'
+  templateUrl: './breadcrumb.component.html',
 })
 export class BreadcrumbComponent implements OnInit {
   show: boolean;
 
   segments: string[] = [];
 
-  constructor(private router: Router, private store: Store) {
-    this.show = !!this.store.selectSnapshot(state => state.LeptonLayoutState);
-  }
+  constructor(private router: Router, private store: Store) {}
 
   ngOnInit(): void {
+    this.show = !!this.store.selectSnapshot(state => state.LeptonLayoutState);
+
     const splittedUrl = this.router.url.split('/').filter(chunk => chunk);
 
     const currentUrl: ABP.FullRoute = this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0]));

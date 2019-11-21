@@ -25,7 +25,7 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     constructor(store: Store, renderer: Renderer2);
     ngOnInit(): void;
     getChecked(name: string): boolean;
-    isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean;
+    isGrantedByOtherProviderName(grantedProviders: PermissionManagement.GrantedProvider[]): boolean;
     onClickCheckbox(clickedPermission: PermissionManagement.Permission, value: any): void;
     setTabCheckboxState(): void;
     setGrantCheckboxState(): void;

@@ -5,7 +5,7 @@
       {{ 'AbpAccount::AlreadyRegistered' | abpLocalization }}
       <a class="text-decoration-none" routerLink="/account/login">{{ 'AbpAccount::Login' | abpLocalization }}</a>
     </strong>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="mt-4">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" validateOnSubmit class="mt-4">
       <div class="form-group">
         <label for="input-user-name">{{ 'AbpAccount::UserName' | abpLocalization }}</label
         ><span> * </span

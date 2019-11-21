@@ -21,14 +21,14 @@ namespace Volo.Abp.Identity
             _roleRepository = roleRepository;
         }
 
-        public async Task<IdentityRoleDto> GetAsync(Guid id)
+        public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(
                 await _roleManager.GetByIdAsync(id)
             );
         }
 
-        public async Task<ListResultDto<IdentityRoleDto>> GetListAsync()
+        public virtual async Task<ListResultDto<IdentityRoleDto>> GetListAsync()
         {
             var list = await _roleRepository.GetListAsync();
 
@@ -36,7 +36,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.Create)]
-        public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
+        public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
             var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
 
@@ -50,7 +50,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.Update)]
-        public async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
+        public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
             var role = await _roleManager.GetByIdAsync(id);
             role.ConcurrencyStamp = input.ConcurrencyStamp;
@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity
         }
 
         [Authorize(IdentityPermissions.Roles.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role == null)
