@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
+using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.Commands
@@ -28,7 +29,9 @@ namespace Volo.Abp.Cli.Commands
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            if (commandLineArgs.Target == null)
+            var projectName = NamespaceHelper.NormalizeNamespace(commandLineArgs.Target);
+            
+            if (projectName == null)
             {
                 throw new CliUsageException(
                     "Project name is missing!" +
@@ -36,9 +39,9 @@ namespace Volo.Abp.Cli.Commands
                     GetUsageInfo()
                 );
             }
-
+            
             Logger.LogInformation("Creating your project...");
-            Logger.LogInformation("Project name: " + commandLineArgs.Target);
+            Logger.LogInformation("Project name: " + projectName);
 
             var template = commandLineArgs.Options.GetOrNull(Options.Template.Short, Options.Template.Long);
             if (template != null)
@@ -73,7 +76,7 @@ namespace Volo.Abp.Cli.Commands
             var outputFolder = commandLineArgs.Options.GetOrNull(Options.OutputFolder.Short, Options.OutputFolder.Long);
 
             outputFolder = Path.Combine(outputFolder != null ? Path.GetFullPath(outputFolder) : Directory.GetCurrentDirectory(),
-                    SolutionName.Parse(commandLineArgs.Target).FullName);
+                    SolutionName.Parse(projectName).FullName);
 
             if (!Directory.Exists(outputFolder))
             {
@@ -86,7 +89,7 @@ namespace Volo.Abp.Cli.Commands
 
             var result = await TemplateProjectBuilder.BuildAsync(
                 new ProjectBuildArgs(
-                    SolutionName.Parse(commandLineArgs.Target),
+                    SolutionName.Parse(projectName),
                     template,
                     version,
                     databaseProvider,
@@ -129,7 +132,7 @@ namespace Volo.Abp.Cli.Commands
                 }
             }
 
-            Logger.LogInformation($"'{commandLineArgs.Target}' has been successfully created to '{outputFolder}'");
+            Logger.LogInformation($"'{projectName}' has been successfully created to '{outputFolder}'");
         }
 
         public string GetUsageInfo()
@@ -194,6 +197,8 @@ namespace Volo.Abp.Cli.Commands
             var optionValue = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
             switch (optionValue)
             {
+                case "none":
+                    return UiFramework.None;
                 case "mvc":
                     return UiFramework.Mvc;
                 case "angular":

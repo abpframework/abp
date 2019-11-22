@@ -48,7 +48,8 @@ public class MyModule : AbpModule
     {
         Configure<VirtualFileSystemOptions>(options =>
         {
-            options.FileSets.AddEmbedded<MyModule>();
+            // "YourRootNameSpace" is the root namespace of your project. It can be empty if your root namespace is empty.
+            options.FileSets.AddEmbedded<MyModule>("YourRootNameSpace");
         });
 
         Configure<AbpLocalizationOptions>(options =>

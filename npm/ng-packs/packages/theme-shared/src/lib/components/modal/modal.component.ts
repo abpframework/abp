@@ -44,6 +44,7 @@ export class ModalComponent implements OnDestroy {
     } else {
       this.renderer.removeClass(document.body, 'modal-open');
       this.disappear.emit();
+      this.destroy$.next();
     }
   }
 
@@ -108,8 +109,13 @@ export class ModalComponent implements OnDestroy {
   close() {
     if (this.busy) return;
 
+    let node: HTMLDivElement;
+    if (!this.modalContent) {
+      node = document.getElementById('modal-container') as HTMLDivElement;
+    }
+
     const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
+      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement).childNodes,
     );
 
     if (hasNgDirty(nodes)) {

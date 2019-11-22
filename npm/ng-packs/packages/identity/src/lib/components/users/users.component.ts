@@ -163,7 +163,7 @@ export class UsersComponent implements OnInit {
   }
 
   save() {
-    if (!this.form.valid) return;
+    if (!this.form.valid || this.modalBusy) return;
     this.modalBusy = true;
 
     const { roleNames } = this.form.value;

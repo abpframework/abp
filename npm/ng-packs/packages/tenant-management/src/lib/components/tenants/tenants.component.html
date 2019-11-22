@@ -129,12 +129,14 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="isDisabledSaveButton">{{
+      'AbpIdentity::Save' | abpLocalization
+    }}</abp-button>
   </ng-template>
 </abp-modal>
 
 <ng-template #tenantModalTemplate>
-  <form [formGroup]="tenantForm" (ngSubmit)="save()">
+  <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
     <div class="mt-2">
       <div class="form-group">
         <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
@@ -145,7 +147,7 @@
 </ng-template>
 
 <ng-template #connectionStringModalTemplate>
-  <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()">
+  <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()" validateOnSubmit>
     <label class="mt-2">
       <div class="form-group">
         <div class="custom-checkbox custom-control mb-2">
@@ -155,6 +157,7 @@
             class="custom-control-input"
             formControlName="useSharedDatabase"
             autofocus
+            (ngModelChange)="onSharedDatabaseChange($event)"
           />
           <label for="useSharedDatabase" class="custom-control-label">{{
             'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization

@@ -2,7 +2,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { createServiceFactory, SpectatorService } from '@ngneat/spectator/jest';
 import { NgxsModule, NGXS_PLUGINS, Store } from '@ngxs/store';
 import { environment } from '../../../../../apps/dev-app/src/environments/environment';
-import { LAYOUTS } from '../../../../theme-basic/src/public-api';
+import { LAYOUTS } from '@abp/ng.theme.basic';
 import { RouterOutletComponent } from '../components';
 import { CoreModule } from '../core.module';
 import { eLayoutType } from '../enums/common';
@@ -68,27 +68,7 @@ const expectedState = {
       path: '',
       children: [],
       url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-        },
-        {
-          path: 'register',
-          name: 'AbpAccount::Register',
-          order: 2,
-          url: '/account/register',
-        },
-      ],
-      url: '/account',
+      order: 1,
     },
     {
       name: 'AbpUiNavigation::Menu:Administration',
@@ -137,8 +117,31 @@ const expectedState = {
             },
           ],
           url: '/tenant-management',
+          order: 2,
         },
       ],
+    },
+    {
+      name: 'AbpAccount::Menu:Account',
+      path: 'account',
+      invisible: true,
+      layout: 'application',
+      children: [
+        {
+          path: 'login',
+          name: 'AbpAccount::Login',
+          order: 1,
+          url: '/account/login',
+        },
+        {
+          path: 'register',
+          name: 'AbpAccount::Register',
+          order: 2,
+          url: '/account/register',
+        },
+      ],
+      url: '/account',
+      order: 2,
     },
   ],
   flattedRoutes: [
@@ -147,39 +150,7 @@ const expectedState = {
       path: '',
       children: [],
       url: '/',
-    },
-    {
-      name: 'AbpAccount::Menu:Account',
-      path: 'account',
-      invisible: true,
-      layout: 'application',
-      children: [
-        {
-          path: 'login',
-          name: 'AbpAccount::Login',
-          order: 1,
-          url: '/account/login',
-        },
-        {
-          path: 'register',
-          name: 'AbpAccount::Register',
-          order: 2,
-          url: '/account/register',
-        },
-      ],
-      url: '/account',
-    },
-    {
-      path: 'login',
-      name: 'AbpAccount::Login',
       order: 1,
-      url: '/account/login',
-    },
-    {
-      path: 'register',
-      name: 'AbpAccount::Register',
-      order: 2,
-      url: '/account/register',
     },
     {
       name: 'AbpUiNavigation::Menu:Administration',
@@ -228,6 +199,7 @@ const expectedState = {
             },
           ],
           url: '/tenant-management',
+          order: 2,
         },
       ],
     },
@@ -286,6 +258,7 @@ const expectedState = {
         },
       ],
       url: '/tenant-management',
+      order: 2,
     },
     {
       path: 'tenants',
@@ -293,6 +266,40 @@ const expectedState = {
       order: 1,
       requiredPolicy: 'AbpTenantManagement.Tenants',
       url: '/tenant-management/tenants',
+    },
+    {
+      name: 'AbpAccount::Menu:Account',
+      path: 'account',
+      invisible: true,
+      layout: 'application',
+      children: [
+        {
+          path: 'login',
+          name: 'AbpAccount::Login',
+          order: 1,
+          url: '/account/login',
+        },
+        {
+          path: 'register',
+          name: 'AbpAccount::Register',
+          order: 2,
+          url: '/account/register',
+        },
+      ],
+      url: '/account',
+      order: 2,
+    },
+    {
+      path: 'login',
+      name: 'AbpAccount::Login',
+      order: 1,
+      url: '/account/login',
+    },
+    {
+      path: 'register',
+      name: 'AbpAccount::Register',
+      order: 2,
+      url: '/account/register',
     },
   ],
 };

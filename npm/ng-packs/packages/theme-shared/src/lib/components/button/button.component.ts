@@ -7,12 +7,13 @@ import { ABP } from '@abp/ng.core';
   template: `
     <button
       #button
-      [attr.type]="buttonType || type"
+      [id]="buttonId"
+      [attr.type]="buttonType"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
-      (click)="onClick($event)"
-      (focus)="onFocus($event)"
-      (blur)="onBlur($event)"
+      (click.stop)="click.next($event); abpClick.next($event)"
+      (focus)="focus.next($event); abpFocus.next($event)"
+      (blur)="blur.next($event); abpBlur.next($event)"
     >
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
@@ -20,10 +21,13 @@ import { ABP } from '@abp/ng.core';
 })
 export class ButtonComponent implements OnInit {
   @Input()
+  buttonId = '';
+
+  @Input()
   buttonClass = 'btn btn-primary';
 
   @Input()
-  buttonType; // TODO: Add initial value.
+  buttonType = 'button';
 
   @Input()
   iconClass: string;
@@ -37,22 +41,41 @@ export class ButtonComponent implements OnInit {
   @Input()
   attributes: ABP.Dictionary<string>;
 
+  /*
+   *
+   *
+   * @deprecated use abpClick instead
+   */
   // tslint:disable-next-line: no-output-native
   @Output() readonly click = new EventEmitter<MouseEvent>();
 
+  /*
+   *
+   *
+   * @deprecated use abpFocus instead
+   */
   // tslint:disable-next-line: no-output-native
   @Output() readonly focus = new EventEmitter<FocusEvent>();
 
+  /*
+   *
+   *
+   * @deprecated use abpBlur instead
+   */
   // tslint:disable-next-line: no-output-native
   @Output() readonly blur = new EventEmitter<FocusEvent>();
 
+  // tslint:disable-next-line: no-output-native
+  @Output() readonly abpClick = new EventEmitter<MouseEvent>();
+
+  // tslint:disable-next-line: no-output-native
+  @Output() readonly abpFocus = new EventEmitter<FocusEvent>();
+
+  // tslint:disable-next-line: no-output-native
+  @Output() readonly abpBlur = new EventEmitter<FocusEvent>();
+
   @ViewChild('button', { static: true })
   buttonRef: ElementRef<HTMLButtonElement>;
-
-  /**
-   * @deprecated Use buttonType instead. To be deleted in v1
-   */
-  @Input() type = 'button';
 
   get icon(): string {
     return `${this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none'}`;
@@ -66,20 +89,5 @@ export class ButtonComponent implements OnInit {
         this.renderer.setAttribute(this.buttonRef.nativeElement, key, this.attributes[key]);
       });
     }
-  }
-
-  onClick(event: MouseEvent) {
-    event.stopPropagation();
-    this.click.next(event);
-  }
-
-  onFocus(event: FocusEvent) {
-    event.stopPropagation();
-    this.focus.next(event);
-  }
-
-  onBlur(event: FocusEvent) {
-    event.stopPropagation();
-    this.blur.next(event);
   }
 }

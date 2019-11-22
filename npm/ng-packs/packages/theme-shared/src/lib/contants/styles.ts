@@ -184,6 +184,10 @@ export default `
   color: #FFF !important;
 }
 
+.custom-checkbox > label {
+  cursor: pointer;
+}
+
 /* <animations */
 
 .fade-in-top {

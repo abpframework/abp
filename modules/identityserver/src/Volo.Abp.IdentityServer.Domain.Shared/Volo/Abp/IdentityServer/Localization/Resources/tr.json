@@ -1,0 +1,8 @@
+﻿{
+  "culture": "tr",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity Resource adı zaten mevcut: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api Resource adı zaten mevcut: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId already zaten mevcut: {ClientId}"
+  }
+}

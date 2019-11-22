@@ -76,6 +76,8 @@ export class FeatureManagementComponent {
   }
 
   save() {
+    if (this.modalBusy) return;
+
     this.modalBusy = true;
 
     let features = this.store.selectSnapshot(FeatureManagementState.getFeatures);

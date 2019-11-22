@@ -1,74 +1,10 @@
-(function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined'
-    ? factory(
-        exports,
-        require('@abp/ng.core'),
-        require('@abp/ng.theme.shared'),
-        require('@angular/core'),
-        require('@angular/router'),
-        require('@ngxs/store'),
-      )
-    : typeof define === 'function' && define.amd
-    ? define('@abp/ng.setting-management', [
-        'exports',
-        '@abp/ng.core',
-        '@abp/ng.theme.shared',
-        '@angular/core',
-        '@angular/router',
-        '@ngxs/store',
-      ], factory)
-    : ((global = global || self),
-      factory(
-        ((global.abp = global.abp || {}),
-        (global.abp.ng = global.abp.ng || {}),
-        (global.abp.ng['setting-management'] = {})),
-        global.ng_core,
-        global.ng_theme_shared,
-        global.ng.core,
-        global.ng.router,
-        global.store,
-      ));
-})(this, function(exports, ng_core, ng_theme_shared, core, router, store) {
-  'use strict';
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@abp/ng.core'), require('@abp/ng.theme.shared'), require('@angular/core'), require('@angular/router'), require('@ngxs/store')) :
+    typeof define === 'function' && define.amd ? define('@abp/ng.setting-management', ['exports', '@abp/ng.core', '@abp/ng.theme.shared', '@angular/core', '@angular/router', '@ngxs/store'], factory) :
+    (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['setting-management'] = {}), global.ng_core, global.ng_theme_shared, global.ng.core, global.ng.router, global.store));
+}(this, (function (exports, ng_core, ng_theme_shared, core, router, store) { 'use strict';
 
-  /*! *****************************************************************************
-    Copyright (c) Microsoft Corporation. All rights reserved.
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-    this file except in compliance with the License. You may obtain a copy of the
-    License at http://www.apache.org/licenses/LICENSE-2.0
-
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
-
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
-    ***************************************************************************** */
-  /* global Reflect, Promise */
-
-  var extendStatics = function(d, b) {
-    extendStatics =
-      Object.setPrototypeOf ||
-      ({ __proto__: [] } instanceof Array &&
-        function(d, b) {
-          d.__proto__ = b;
-        }) ||
-      function(d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-      };
-    return extendStatics(d, b);
-  };
-
-  function __extends(d, b) {
-    extendStatics(d, b);
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : ((__.prototype = b.prototype), new __());
-  }
-
-  var __assign = function() {
+    /*! *****************************************************************************
     __assign =
       Object.assign ||
       function __assign(t) {
@@ -429,235 +365,227 @@
   var SettingManagementState = /** @class */ (function() {
     function SettingManagementState() {}
     /**
-     * @param {?} __0
-     * @return {?}
+     * @fileoverview added by tsickle
+     * Generated from: lib/actions/setting-management.actions.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     SettingManagementState.getSelectedTab
     /**
-     * @param {?} __0
-     * @return {?}
-     */ = function(_a) {
-      var selectedTab = _a.selectedTab;
-      return selectedTab;
-    };
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
+     * @fileoverview added by tsickle
+     * Generated from: lib/states/setting-management.state.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    SettingManagementState.prototype.settingManagementAction
-    /**
-     * @param {?} __0
-     * @param {?} __1
-     * @return {?}
-     */ = function(_a, _b) {
-      var patchState = _a.patchState;
-      var payload = _b.payload;
-      patchState({
-        selectedTab: payload,
-      });
-    };
-    __decorate(
-      [
-        store.Action(SetSelectedSettingTab),
-        __metadata('design:type', Function),
-        __metadata('design:paramtypes', [Object, SetSelectedSettingTab]),
-        __metadata('design:returntype', void 0),
-      ],
-      SettingManagementState.prototype,
-      'settingManagementAction',
-      null,
-    );
-    __decorate(
-      [
-        store.Selector(),
-        __metadata('design:type', Function),
-        __metadata('design:paramtypes', [Object]),
-        __metadata('design:returntype', void 0),
-      ],
-      SettingManagementState,
-      'getSelectedTab',
-      null,
-    );
-    SettingManagementState = __decorate(
-      [
-        store.State({
-          name: 'SettingManagementState',
-          defaults: /** @type {?} */ ({ selectedTab: {} }),
-        }),
-      ],
-      SettingManagementState,
-    );
-    return SettingManagementState;
-  })();
-
-  /**
-   * @fileoverview added by tsickle
-   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-   */
-  var SettingManagementComponent = /** @class */ (function() {
-    function SettingManagementComponent(router, store) {
-      this.router = router;
-      this.store = store;
-      this.settings = [];
-      this.trackByFn
-      /**
-       * @param {?} _
-       * @param {?} item
-       * @return {?}
-       */ = function(_, item) {
-        return item.name;
-      };
-    }
-    Object.defineProperty(SettingManagementComponent.prototype, 'selected', {
-      /**
-       * @return {?}
-       */
-      get: function() {
-        /** @type {?} */
-        var value = this.store.selectSnapshot(SettingManagementState.getSelectedTab);
-        if ((!value || !value.component) && this.settings.length) {
-          return this.settings[0];
+    var SettingManagementState = /** @class */ (function () {
+        function SettingManagementState() {
         }
-        return value;
-      },
-      /**
-       * @param {?} value
-       * @return {?}
-       */
-      set: function(value) {
-        this.store.dispatch(new SetSelectedSettingTab(value));
-      },
-      enumerable: true,
-      configurable: true,
-    });
-    /**
-     * @return {?}
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        SettingManagementState.getSelectedTab = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var selectedTab = _a.selectedTab;
+            return selectedTab;
+        };
+        /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        SettingManagementState.prototype.settingManagementAction = /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        function (_a, _b) {
+            var patchState = _a.patchState;
+     * @fileoverview added by tsickle
+     * Generated from: lib/actions/setting-management.actions.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+            __metadata("design:paramtypes", [Object, SetSelectedSettingTab]),
+            __metadata("design:returntype", void 0)
+        ], SettingManagementState.prototype, "settingManagementAction", null);
+     * @fileoverview added by tsickle
+     * Generated from: lib/states/setting-management.state.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    SettingManagementComponent.prototype.ngOnInit
-    /**
-     * @return {?}
-     */ = function() {
-      var _this = this;
-      this.settings = ng_theme_shared
-        .getSettingTabs()
-        .filter(
-          /**
-           * @param {?} setting
-           * @return {?}
-           */
-          function(setting) {
-            return _this.store.selectSnapshot(ng_core.ConfigState.getGrantedPolicy(setting.requiredPolicy));
-          },
-        )
-        .sort(
-          /**
-           * @param {?} a
-           * @param {?} b
-           * @return {?}
-           */
-          function(a, b) {
-            return a.order - b.order;
-          },
-        );
-      if (!this.selected && this.settings.length) {
-        this.selected = this.settings[0];
-      }
-    };
-    SettingManagementComponent.decorators = [
-      {
-        type: core.Component,
-        args: [
-          {
-            selector: 'abp-setting-management',
-            template:
-              '<div class="row entry-row">\n  <div class="col-auto">\n    <h1 class="content-header-title">{{ \'AbpSettingManagement::Settings\' | abpLocalization }}</h1>\n  </div>\n  <div id="breadcrumb" class="col-md-auto pl-md-0">\n    <abp-breadcrumb></abp-breadcrumb>\n  </div>\n  <div class="col">\n    <div class="text-lg-right pt-2" id="AbpContentToolbar"></div>\n  </div>\n</div>\n\n<div id="SettingManagementWrapper">\n  <div class="card">\n    <div class="card-body">\n      <div class="row">\n        <div class="col-3">\n          <ul class="nav flex-column nav-pills" id="nav-tab" role="tablist">\n            <li\n              *abpFor="let setting of settings; trackBy: trackByFn"\n              (click)="selected = setting"\n              class="nav-item"\n              [abpPermission]="setting.requiredPolicy"\n            >\n              <a\n                class="nav-link"\n                [id]="setting.name + \'-tab\'"\n                role="tab"\n                [class.active]="setting.name === selected.name"\n                >{{ setting.name | abpLocalization }}</a\n              >\n            </li>\n          </ul>\n        </div>\n        <div class="col-9">\n          <div *ngIf="settings.length" class="tab-content">\n            <div class="tab-pane fade show active" [id]="selected.name + \'-tab\'" role="tabpanel">\n              <ng-container *ngComponentOutlet="selected.component"></ng-container>\n            </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n',
-          },
-        ],
-      },
-    ];
-    /** @nocollapse */
-    SettingManagementComponent.ctorParameters = function() {
-      return [{ type: router.Router }, { type: store.Store }];
-    };
-    return SettingManagementComponent;
-  })();
-  if (false) {
-    /** @type {?} */
-    SettingManagementComponent.prototype.settings;
-    /** @type {?} */
-    SettingManagementComponent.prototype.trackByFn;
-    /**
-     * @type {?}
-     * @private
-     */
-    SettingManagementComponent.prototype.router;
-    /**
-     * @type {?}
-     * @private
-     */
-    SettingManagementComponent.prototype.store;
-  }
+    var SettingManagementState = /** @class */ (function () {
+        function SettingManagementState() {
+        }
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        SettingManagementState.getSelectedTab = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var selectedTab = _a.selectedTab;
+            return selectedTab;
+        };
+        /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        SettingManagementState.prototype.settingManagementAction = /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        function (_a, _b) {
+            var patchState = _a.patchState;
+            var payload = _b.payload;
+            patchState({
+                selectedTab: payload,
+            });
+        };
+        __decorate([
+            store.Action(SetSelectedSettingTab),
+            __metadata("design:type", Function),
+            __metadata("design:paramtypes", [Object, SetSelectedSettingTab]),
+            __metadata("design:returntype", void 0)
+        ], SettingManagementState.prototype, "settingManagementAction", null);
+        __decorate([
+            store.Selector(),
+            __metadata("design:type", Function),
+            __metadata("design:paramtypes", [Object]),
+            __metadata("design:returntype", void 0)
+        ], SettingManagementState, "getSelectedTab", null);
+        SettingManagementState = __decorate([
+            store.State({
+                name: 'SettingManagementState',
+                defaults: (/** @type {?} */ ({ selectedTab: {} })),
+            })
+        ], SettingManagementState);
+        return SettingManagementState;
+    }());
 
-  /**
-   * @fileoverview added by tsickle
-   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-   */
-  /** @type {?} */
-  var routes = [
-    {
-      path: '',
-      component: ng_core.DynamicLayoutComponent,
-      children: [{ path: '', component: SettingManagementComponent }],
-    },
-  ];
-  var SettingManagementRoutingModule = /** @class */ (function() {
-    function SettingManagementRoutingModule() {}
-    SettingManagementRoutingModule.decorators = [
-      {
-        type: core.NgModule,
-        args: [
-          {
-            imports: [router.RouterModule.forChild(routes)],
-            exports: [router.RouterModule],
-          },
-        ],
-      },
-    ];
-    return SettingManagementRoutingModule;
-  })();
-
-  /**
-   * @fileoverview added by tsickle
-   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-   */
-  var SettingManagementModule = /** @class */ (function() {
-    function SettingManagementModule() {}
-    SettingManagementModule.decorators = [
-      {
-        type: core.NgModule,
-        args: [
-          {
-            declarations: [SettingManagementComponent],
-            imports: [
-              SettingManagementRoutingModule,
-              ng_core.CoreModule,
-              ng_theme_shared.ThemeSharedModule,
-              store.NgxsModule.forFeature([SettingManagementState]),
+    /**
+     * @fileoverview added by tsickle
+     * Generated from: lib/components/setting-management.component.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var SettingManagementComponent = /** @class */ (function () {
+        function SettingManagementComponent(router, store) {
+            this.router = router;
+            this.store = store;
+            this.settings = [];
+            this.trackByFn = (/**
+             * @param {?} _
+             * @param {?} item
+             * @return {?}
+             */
+            function (_, item) { return item.name; });
+        }
+        Object.defineProperty(SettingManagementComponent.prototype, "selected", {
+            get: /**
+             * @return {?}
+             */
+            function () {
+                /** @type {?} */
+                var value = this.store.selectSnapshot(SettingManagementState.getSelectedTab);
+                if ((!value || !value.component) && this.settings.length) {
+                    return this.settings[0];
+                }
+                return value;
+            },
+            set: /**
+             * @param {?} value
+             * @return {?}
+             */
+            function (value) {
+                this.store.dispatch(new SetSelectedSettingTab(value));
+            },
+            enumerable: true,
+            configurable: true
+        });
+        /**
+         * @return {?}
+         */
+        SettingManagementComponent.prototype.ngOnInit = /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            this.settings = ng_theme_shared.getSettingTabs()
+                .filter((/**
+             * @param {?} setting
+             * @return {?}
+             */
+            function (setting) { return _this.store.selectSnapshot(ng_core.ConfigState.getGrantedPolicy(setting.requiredPolicy)); }))
+                .sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function (a, b) { return a.order - b.order; }));
+            if (!this.selected && this.settings.length) {
+                this.selected = this.settings[0];
+            }
+        };
+        SettingManagementComponent.decorators = [
+            { type: core.Component, args: [{
+                        selector: 'abp-setting-management',
+                        template: "<div class=\"row entry-row\">\r\n  <div class=\"col-auto\">\r\n    <h1 class=\"content-header-title\">{{ 'AbpSettingManagement::Settings' | abpLocalization }}</h1>\r\n  </div>\r\n  <div id=\"breadcrumb\" class=\"col-md-auto pl-md-0\">\r\n    <abp-breadcrumb></abp-breadcrumb>\r\n  </div>\r\n  <div class=\"col\">\r\n    <div class=\"text-lg-right pt-2\" id=\"AbpContentToolbar\"></div>\r\n  </div>\r\n</div>\r\n\r\n<div id=\"SettingManagementWrapper\">\r\n  <div class=\"card\">\r\n    <div class=\"card-body\">\r\n      <div class=\"row\">\r\n        <div class=\"col-12 col-md-3\">\r\n          <ul class=\"nav flex-column nav-pills\" id=\"nav-tab\" role=\"tablist\">\r\n            <li\r\n              *abpFor=\"let setting of settings; trackBy: trackByFn\"\r\n              (click)=\"selected = setting\"\r\n              class=\"nav-item\"\r\n              [abpPermission]=\"setting.requiredPolicy\"\r\n            >\r\n              <a\r\n                class=\"nav-link\"\r\n                [id]=\"setting.name + '-tab'\"\r\n                role=\"tab\"\r\n                [class.active]=\"setting.name === selected.name\"\r\n                >{{ setting.name | abpLocalization }}</a\r\n              >\r\n            </li>\r\n          </ul>\r\n        </div>\r\n        <div class=\"col-12 col-md-9\">\r\n          <div *ngIf=\"settings.length\" class=\"tab-content\">\r\n            <div class=\"tab-pane fade show active\" [id]=\"selected.name + '-tab'\" role=\"tabpanel\">\r\n              <ng-container *ngComponentOutlet=\"selected.component\"></ng-container>\r\n            </div>\r\n          </div>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n"
+                    }] }
+        ];
+        /** @nocollapse */
+        SettingManagementComponent.ctorParameters = function () { return [
+            { type: router.Router },
+            { type: store.Store }
+        ]; };
+        return SettingManagementComponent;
+    }());
+    if (false) {
+        /** @type {?} */
+        SettingManagementComponent.prototype.settings;
+     * @fileoverview added by tsickle
+     * Generated from: lib/setting-management-routing.module.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var ɵ0 = { requiredPolicy: 'AbpAccount.SettingManagement' };
+    /** @type {?} */
+    var routes = [
+        {
+            path: '',
+            component: ng_core.DynamicLayoutComponent,
+            children: [
+                { path: '', component: SettingManagementComponent, data: ɵ0 },
             ],
-          },
-        ],
-      },
-    ];
-    return SettingManagementModule;
-  })();
+        },
+     * @fileoverview added by tsickle
+     * Generated from: lib/setting-management.module.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var SettingManagementModule = /** @class */ (function () {
+        function SettingManagementModule() {
+        }
+        SettingManagementModule.decorators = [
+            { type: core.NgModule, args: [{
+                        declarations: [SettingManagementComponent],
+                        imports: [
+                            SettingManagementRoutingModule,
+                            ng_core.CoreModule,
+                            ng_theme_shared.ThemeSharedModule,
+                            store.NgxsModule.forFeature([SettingManagementState]),
+                        ],
+                    },] }
+        ];
+        return SettingManagementModule;
+    }());
 
-  exports.SettingManagementComponent = SettingManagementComponent;
-  exports.SettingManagementModule = SettingManagementModule;
-  exports.ɵa = SettingManagementRoutingModule;
-  exports.ɵb = SettingManagementState;
-  exports.ɵc = SetSelectedSettingTab;
+    exports.SettingManagementComponent = SettingManagementComponent;
+    exports.SettingManagementModule = SettingManagementModule;
+    exports.ɵa = SettingManagementRoutingModule;
+    exports.ɵb = SettingManagementState;
+    exports.ɵc = SetSelectedSettingTab;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-});
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
 //# sourceMappingURL=abp-ng.setting-management.umd.js.map
