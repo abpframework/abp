@@ -13,7 +13,7 @@ describe('HomeComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HomeModule, NgxsModule.forRoot(), RouterTestingModule],
+      imports: [ NgxsModule.forRoot(), HomeModule, RouterTestingModule],
       providers: [{ provide: OAuthService, useValue: { hasValidAccessToken: () => false } }],
     });
     fixture = TestBed.createComponent(HomeComponent);
