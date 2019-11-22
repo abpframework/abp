@@ -58,7 +58,7 @@ public static string Schema { get; set; } = AbpIdentityConsts.DefaultDbSchema;
 
 ### Model Mapping
 
-- **Do** 重写 `DbContext` 的 `OnModelCreating` 方法显式 **配置所有实体**. 例如:
+- **推荐** 重写 `DbContext` 的 `OnModelCreating` 方法显式 **配置所有实体**. 例如:
 
 ````C#
 protected override void OnModelCreating(ModelBuilder builder)
