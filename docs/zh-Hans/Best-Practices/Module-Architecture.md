@@ -57,7 +57,7 @@
 * **推荐** 将领域层划分为两个项目:
   * **Domain.Shared** 包(项目) 命名为*CompanyName.ModuleName.Domain.Shared*,包含常量,枚举和其他类型, 它不能包含实体,存储库,域服务或任何其他业务对象. 可以安全地与模块中的所有层使用. 此包也可以与第三方客户端使用.
   * **Domain** 包(项目) 命名为*CompanyName.ModuleName.Domain*, 包含实体, 仓储接口,领域服务接口及其实现和其他领域对象.
-    * Domain 包依赖于 **Domain.Share** 包.
+    * Domain 包依赖于 **Domain.Shared** 包.
 
 #### 应用服务层
 

@@ -57,7 +57,7 @@ Next section describes the packages in more details.
 * **Do** divide the domain layer into two projects:
   * **Domain.Shared** package, named as *CompanyName.ModuleName.Domain.Shared*, that contains constants, enums and other types those can be safely shared with the all layers of the module. This package can also be shared to 3rd-party clients. It can not contain entities, repositories, domain services or any other business objects.
   * **Domain** package, named as *CompanyName.ModuleName.Domain*, that contains entities, repository interfaces, domain service interfaces and their implementations and other domain objects.
-    * Domain package depends on the **Domain.Share** package.
+    * Domain package depends on the **Domain.Shared** package.
 
 #### Application Layer
 
