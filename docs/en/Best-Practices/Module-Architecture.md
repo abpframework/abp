@@ -85,5 +85,5 @@ Next section describes the packages in more details.
 
 #### Web Layer
 
-* Do create a **Web** package, named as *CompanyName.ModuleName.Web*, that contains pages, views, scripts, styles, images and other UI components.
+* **Do** create a **Web** package, named as *CompanyName.ModuleName.Web*, that contains pages, views, scripts, styles, images and other UI components.
   * Web package only depends on the **HttpApi** package.
