@@ -28,7 +28,7 @@
                         <hr class="my-4" />
                         @await Component.InvokeAsync(group.ComponentType, new
                         {
-                            settingDefinitions = group.Parameter
+                            parameter = group.Parameter
                         })
                     </abp-tab>
                 }
