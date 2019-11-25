@@ -45,13 +45,25 @@ export default `
 }
 
 .modal-backdrop {
-  position: absolute !important;
+  position: fixed !important;
   top: 0 !important;
   left: 0 !important;
-  width: 100% !important;
+  width: calc(100% - 7px) !important;
   height: 100% !important;
   background-color: rgba(0, 0, 0, 0.6) !important;
   z-index: 1040 !important;
+}
+
+.modal::-webkit-scrollbar {
+  width: 7px;
+}
+
+.modal::-webkit-scrollbar-track {
+  background: #ddd;
+}
+
+.modal::-webkit-scrollbar-thumb {
+  background: #8a8686;
 }
 
 .modal-dialog {

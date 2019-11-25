@@ -14,7 +14,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
 import { ToastComponent } from './components/toast/toast.component';
-import styles from './contants/styles';
+import styles from './constants/styles';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
@@ -29,16 +29,7 @@ export function appendScript(injector: Injector) {
     import('chart.js').then(() => chartJsLoaded$.next(true));
 
     const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
-
-    return forkJoin(
-      lazyLoadService.load(
-        null,
-        'style',
-        styles,
-        'head',
-        'afterbegin',
-      ) /* lazyLoadService.load(null, 'script', scripts) */,
-    ).toPromise();
+    return lazyLoadService.load(null, 'style', styles, 'head', 'afterbegin').toPromise();
   };
 
   return fn;
@@ -75,6 +66,8 @@ export function appendScript(injector: Injector) {
   entryComponents: [ErrorComponent],
 })
 export class ThemeSharedModule {
+  constructor(private errorHandler: ErrorHandler) {}
+
   static forRoot(options = {} as RootParams): ModuleWithProviders {
     return {
       ngModule: ThemeSharedModule,
@@ -82,7 +75,7 @@ export class ThemeSharedModule {
         {
           provide: APP_INITIALIZER,
           multi: true,
-          deps: [Injector, ErrorHandler],
+          deps: [Injector],
           useFactory: appendScript,
         },
         { provide: MessageService, useClass: MessageService },
