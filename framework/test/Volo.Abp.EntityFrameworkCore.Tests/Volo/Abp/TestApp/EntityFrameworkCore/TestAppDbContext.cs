@@ -11,6 +11,8 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         public DbSet<City> Cities { get; set; }
 
+        public DbSet<PersonView> PersonView { get; set; }
+
         public DbSet<ThirdDbContextDummyEntity> DummyEntities { get; set; }
 
         public DbSet<EntityWithIntPk> EntityWithIntPks { get; set; }
@@ -29,6 +31,13 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
             {
                 b.HasKey(p => new {p.PersonId, p.Number});
             });
+
+            modelBuilder
+                .Entity<PersonView>(p =>
+                {
+                    p.HasNoKey();
+                    p.ToView("View_PersonView");
+                });
         }
     }
 }
