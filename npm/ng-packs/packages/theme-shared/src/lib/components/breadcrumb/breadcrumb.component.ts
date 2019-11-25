@@ -17,15 +17,17 @@ export class BreadcrumbComponent implements OnInit {
   ngOnInit(): void {
     this.show = !!this.store.selectSnapshot(state => state.LeptonLayoutState);
     if (this.show) {
-      const splittedUrl = this.router.url.split('/').filter(chunk => chunk);
+      let splittedUrl = this.router.url.split('/').filter(chunk => chunk);
 
-      const currentUrl: ABP.FullRoute =
-        this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0])) ||
-        this.store.selectSnapshot(ConfigState.getRoute(null, null, this.router.url));
+      let currentUrl: ABP.FullRoute = this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0]));
 
       if (!currentUrl) {
-        this.show = false;
-        return;
+        currentUrl = this.store.selectSnapshot(ConfigState.getRoute(null, null, this.router.url));
+        splittedUrl = [this.router.url];
+        if (!currentUrl) {
+          this.show = false;
+          return;
+        }
       }
 
       this.segments.push(currentUrl.name);
