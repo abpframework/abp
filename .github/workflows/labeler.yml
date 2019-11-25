@@ -1,0 +1,11 @@
+name: "Pull Request Labeler"
+on:
+  pull_request:
+    branches:
+      - master
+      - dev
+jobs:
+  angular-label:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/labeler@v2
