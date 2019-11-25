@@ -16,21 +16,30 @@ export class BreadcrumbComponent implements OnInit {
 
   ngOnInit(): void {
     this.show = !!this.store.selectSnapshot(state => state.LeptonLayoutState);
+    if (this.show) {
+      const splittedUrl = this.router.url.split('/').filter(chunk => chunk);
 
-    const splittedUrl = this.router.url.split('/').filter(chunk => chunk);
+      const currentUrl: ABP.FullRoute =
+        this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0])) ||
+        this.store.selectSnapshot(ConfigState.getRoute(null, null, this.router.url));
 
-    const currentUrl: ABP.FullRoute = this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0]));
-    this.segments.push(currentUrl.name);
+      if (!currentUrl) {
+        this.show = false;
+        return;
+      }
 
-    if (splittedUrl.length > 1) {
-      const [, ...arr] = splittedUrl;
+      this.segments.push(currentUrl.name);
 
-      let childRoute: ABP.FullRoute = currentUrl;
-      for (let i = 0; i < arr.length; i++) {
-        const element = arr[i];
-        childRoute = childRoute.children.find(child => child.path === element);
+      if (splittedUrl.length > 1) {
+        const [, ...arr] = splittedUrl;
 
-        this.segments.push(childRoute.name);
+        let childRoute: ABP.FullRoute = currentUrl;
+        for (let i = 0; i < arr.length; i++) {
+          const element = arr[i];
+          childRoute = childRoute.children.find(child => child.path === element);
+
+          this.segments.push(childRoute.name);
+        }
       }
     }
   }
