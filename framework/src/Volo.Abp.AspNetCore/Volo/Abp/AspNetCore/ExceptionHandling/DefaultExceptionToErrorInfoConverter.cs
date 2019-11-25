@@ -78,6 +78,11 @@ namespace Volo.Abp.AspNetCore.ExceptionHandling
                 errorInfo.Details = (exception as IHasErrorDetails)?.Details;
             }
 
+            if (exception is AbpValidationException)
+            {
+                errorInfo.Message = exception.Message;
+            }
+
             if (exception is IHasValidationErrors)
             {
                 if (errorInfo.Message.IsNullOrEmpty())
