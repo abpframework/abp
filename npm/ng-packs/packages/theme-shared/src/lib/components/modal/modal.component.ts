@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
-import { dialogAnimation, fadeAnimation } from '../../animations/modal.animations';
+import { fadeAnimation } from '../../animations/modal.animations';
 import { Toaster } from '../../models/toaster';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
@@ -23,7 +23,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
-  animations: [fadeAnimation, dialogAnimation],
+  animations: [fadeAnimation],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
