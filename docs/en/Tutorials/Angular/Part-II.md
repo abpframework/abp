@@ -249,12 +249,13 @@ export class BookListComponent implements OnInit {
 
 > The `NgbDateAdapter` converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
+#### Create the Book Type Array
 
 Open the `book-list.component.ts` and then create an array, named `bookTypeArr`:
 
 ```js
 //...
-form: FormGroup;
+booksType = Books.BookType;
 
 bookTypeArr = Object.keys(Books.BookType).filter(
     bookType => typeof this.booksType[bookType] === 'number'
