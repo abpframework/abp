@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Volo.Abp.Autofac" Version="0.20.0" />
   </ItemGroup>
 
 </Project>
