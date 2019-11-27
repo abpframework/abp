@@ -1,8 +1,18 @@
-import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
+import {
+  Action,
+  createSelector,
+  Selector,
+  State,
+  StateContext,
+  Store,
+} from '@ngxs/store';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
-import { GetAppConfiguration, PatchRouteByName } from '../actions/config.actions';
+import {
+  GetAppConfiguration,
+  PatchRouteByName,
+} from '../actions/config.actions';
 import { SetLanguage } from '../actions/session.actions';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
@@ -73,9 +83,12 @@ export class ConfigState {
   }
 
   static getApiUrl(key?: string) {
-    const selector = createSelector([ConfigState], (state: Config.State): string => {
-      return state.environment.apis[key || 'default'].url;
-    });
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State): string => {
+        return state.environment.apis[key || 'default'].url;
+      },
+    );
 
     return selector;
   }
@@ -90,10 +103,19 @@ export class ConfigState {
   static getSettings(keyword?: string) {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       if (keyword) {
-        const keys = snq(() => Object.keys(state.setting.values).filter(key => key.indexOf(keyword) > -1), []);
+        const keys = snq(
+          () =>
+            Object.keys(state.setting.values).filter(
+              key => key.indexOf(keyword) > -1,
+            ),
+          [],
+        );
 
         if (keys.length) {
-          return keys.reduce((acc, key) => ({ ...acc, [key]: state.setting.values[key] }), {});
+          return keys.reduce(
+            (acc, key) => ({ ...acc, [key]: state.setting.values[key] }),
+            {},
+          );
         }
       }
 
@@ -103,15 +125,40 @@ export class ConfigState {
   }
 
   static getGrantedPolicy(key: string) {
-    const selector = createSelector([ConfigState], (state: Config.State): boolean => {
-      if (!key) return true;
-      return snq(() => state.auth.grantedPolicies[key], false);
-    });
+    const selector = createSelector(
+      [ConfigState],
+      (state: Config.State): boolean => {
+        if (!key) return true;
+        const getPolicy = k => snq(() => state.auth.grantedPolicies[k], false);
+
+        const orRegexp = /\|\|/g;
+        const andRegexp = /&&/g;
+
+        if (orRegexp.test(key)) {
+          const keys = key.split('||').filter(k => !!k);
+
+          if (keys.length !== 2) return false;
+
+          return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
+        } else if (andRegexp.test(key)) {
+          const keys = key.split('&&').filter(k => !!k);
+
+          if (keys.length !== 2) return false;
+
+          return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
+        }
+
+        return getPolicy(key);
+      },
+    );
 
     return selector;
   }
 
-  static getLocalization(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]) {
+  static getLocalization(
+    key: string | Config.LocalizationWithDefault,
+    ...interpolateParams: string[]
+  ) {
     let defaultValue: string;
 
     if (typeof key !== 'string') {
@@ -164,7 +211,10 @@ export class ConfigState {
     return selector;
   }
 
-  constructor(private appConfigurationService: ApplicationConfigurationService, private store: Store) {}
+  constructor(
+    private appConfigurationService: ApplicationConfigurationService,
+    private store: Store,
+  ) {}
 
   @Action(GetAppConfiguration)
   addData({ patchState, dispatch }: StateContext<Config.State>) {
@@ -175,19 +225,25 @@ export class ConfigState {
         }),
       ),
       switchMap(configuration => {
-        let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
+        let defaultLang: string =
+          configuration.setting.values['Abp.Localization.DefaultLanguage'];
 
         if (defaultLang.includes(';')) {
           defaultLang = defaultLang.split(';')[0];
         }
 
-        return this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
+        return this.store.selectSnapshot(SessionState.getLanguage)
+          ? of(null)
+          : dispatch(new SetLanguage(defaultLang));
       }),
     );
   }
 
   @Action(PatchRouteByName)
-  patchRoute({ patchState, getState }: StateContext<Config.State>, { name, newValue }: PatchRouteByName) {
+  patchRoute(
+    { patchState, getState }: StateContext<Config.State>,
+    { name, newValue }: PatchRouteByName,
+  ) {
     let routes: ABP.FullRoute[] = getState().routes;
 
     const index = routes.findIndex(route => route.name === name);
@@ -208,7 +264,9 @@ function patchRouteDeep(
 ): ABP.FullRoute[] {
   routes = routes.map(route => {
     if (route.name === name) {
-      newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === '' ? route.path : newValue.path) || ''}`;
+      newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === ''
+        ? route.path
+        : newValue.path) || ''}`;
 
       if (newValue.children && newValue.children.length) {
         newValue.children = newValue.children.map(child => ({
@@ -219,7 +277,12 @@ function patchRouteDeep(
 
       return { ...route, ...newValue };
     } else if (route.children && route.children.length) {
-      route.children = patchRouteDeep(route.children, name, newValue, (parentUrl || '/') + route.path);
+      route.children = patchRouteDeep(
+        route.children,
+        name,
+        newValue,
+        (parentUrl || '/') + route.path,
+      );
     }
 
     return route;
