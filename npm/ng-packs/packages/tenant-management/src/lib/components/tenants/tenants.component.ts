@@ -77,9 +77,13 @@ export class TenantsComponent implements OnInit {
   get isDisabledSaveButton(): boolean {
     if (!this.selectedModalContent) return false;
 
-    if (this.selectedModalContent.type === 'saveConnStr' && this.defaultConnectionStringForm.invalid) {
+    if (
+      this.selectedModalContent.type === 'saveConnStr' &&
+      this.defaultConnectionStringForm &&
+      this.defaultConnectionStringForm.invalid
+    ) {
       return true;
-    } else if (this.selectedModalContent.type === 'saveTenant' && this.tenantForm.invalid) {
+    } else if (this.selectedModalContent.type === 'saveTenant' && this.tenantForm && this.tenantForm.invalid) {
       return true;
     } else {
       return false;

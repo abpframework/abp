@@ -15,7 +15,7 @@ import { Navigate, RouterError, RouterState, RouterDataResolved } from '@ngxs/ro
 import { Actions, ofActionSuccessful, Store } from '@ngxs/store';
 import { Observable, Subject } from 'rxjs';
 import snq from 'snq';
-import { ErrorComponent } from '../components/error/error.component';
+import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { HttpErrorConfig, ErrorScreenErrorCodes } from '../models/common';
 import { Toaster } from '../models/toaster';
 import { ConfirmationService } from '../services/confirmation.service';
@@ -45,7 +45,7 @@ export const DEFAULT_ERROR_MESSAGES = {
 
 @Injectable({ providedIn: 'root' })
 export class ErrorHandler {
-  componentRef: ComponentRef<ErrorComponent>;
+  componentRef: ComponentRef<HttpErrorWrapperComponent>;
 
   constructor(
     private actions: Actions,
@@ -196,11 +196,11 @@ export class ErrorHandler {
     );
   }
 
-  createErrorComponent(instance: Partial<ErrorComponent>) {
+  createErrorComponent(instance: Partial<HttpErrorWrapperComponent>) {
     const renderer = this.rendererFactory.createRenderer(null, null);
     const host = renderer.selectRootElement(document.body, true);
 
-    this.componentRef = this.cfRes.resolveComponentFactory(ErrorComponent).create(this.injector);
+    this.componentRef = this.cfRes.resolveComponentFactory(HttpErrorWrapperComponent).create(this.injector);
 
     for (const key in this.componentRef.instance) {
       if (this.componentRef.instance.hasOwnProperty(key)) {

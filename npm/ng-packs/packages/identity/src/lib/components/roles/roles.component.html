@@ -6,7 +6,7 @@
       </div>
       <div class="text-right col col-md-6">
         <button
-          [abpPermission]="'AbpIdentity.Roles.Create'"
+          *abpPermission="'AbpIdentity.Roles.Create'"
           id="create-role"
           class="btn btn-primary"
           type="button"
@@ -73,18 +73,18 @@
                 <i class="fa fa-cog mr-1"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}
               </button>
               <div ngbDropdownMenu>
-                <button [abpPermission]="'AbpIdentity.Roles.Update'" ngbDropdownItem (click)="edit(data.id)">
+                <button *abpPermission="'AbpIdentity.Roles.Update'" ngbDropdownItem (click)="edit(data.id)">
                   {{ 'AbpIdentity::Edit' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpIdentity.Roles.ManagePermissions'"
+                  *abpPermission="'AbpIdentity.Roles.ManagePermissions'"
                   ngbDropdownItem
                   (click)="providerKey = data.name; visiblePermissions = true"
                 >
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpIdentity.Roles.Delete'"
+                  *abpPermission="'AbpIdentity.Roles.Delete'"
                   ngbDropdownItem
                   (click)="delete(data.id, data.name)"
                 >
