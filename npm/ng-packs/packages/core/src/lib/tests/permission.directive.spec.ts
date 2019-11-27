@@ -46,7 +46,10 @@ describe('PermissionDirective', () => {
 
   describe('structural', () => {
     beforeEach(() => {
-      spectator = createDirective(`<div id="test-element" *abpPermission="'test'">Testing Permission Directive</div>`);
+      spectator = createDirective(
+        '<div id="test-element" *abpPermission="condition">Testing Permission Directive</div>',
+        { hostProps: { condition: '' } },
+      );
       directive = spectator.directive;
     });
 
@@ -55,7 +58,10 @@ describe('PermissionDirective', () => {
     });
 
     it('should remove the element from DOM', () => {
-      expect(spectator.query('#test-element')).toBeFalsy();
+      expect(spectator.query('#test-element')).toBeTruthy();
+      expect(spectator.directive.subscription).toBeUndefined();
+      spectator.setHostInput({ condition: 'test' });
+      expect(spectator.directive.subscription).toBeTruthy();
       grantedPolicy$.next(true);
       expect(spectator.query('#test-element')).toBeTruthy();
       grantedPolicy$.next(false);
@@ -63,6 +69,17 @@ describe('PermissionDirective', () => {
       grantedPolicy$.next(true);
       grantedPolicy$.next(true);
       expect(spectator.queryAll('#test-element')).toHaveLength(1);
+    });
+
+    describe('#subscription', () => {
+      it('should call the unsubscribe', () => {
+        const spy = jest.fn(() => {});
+        spectator.setHostInput({ condition: 'test' });
+        spectator.directive.subscription.unsubscribe = spy;
+        spectator.setHostInput({ condition: 'test2' });
+
+        expect(spy).toHaveBeenCalled();
+      });
     });
   });
 });
