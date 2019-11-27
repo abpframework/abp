@@ -28,6 +28,7 @@ import { ConfigState } from './states/config.state';
 import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
+import './utils/date-extensions';
 
 @NgModule({
   imports: [
