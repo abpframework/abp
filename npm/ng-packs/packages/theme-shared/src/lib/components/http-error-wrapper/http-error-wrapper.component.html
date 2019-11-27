@@ -1,4 +1,4 @@
-<div #container id="abp-error" class="error">
+<div #container id="abp-http-error-container" class="error" [style.backgroundColor]="backgroundColor">
   <button *ngIf="!hideCloseIcon" id="abp-close-button" type="button" class="close mr-2" (click)="destroy()">
     <span aria-hidden="true">&times;</span>
   </button>
