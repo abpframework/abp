@@ -34,6 +34,7 @@ export class PermissionDirective implements OnInit, OnDestroy {
         .pipe(takeUntilDestroy(this))
         .subscribe(isGranted => {
           if (this.templateRef && isGranted) {
+            this.vcRef.clear();
             this.vcRef.createEmbeddedView(this.templateRef);
           } else if (this.templateRef && !isGranted) {
             this.vcRef.clear();
