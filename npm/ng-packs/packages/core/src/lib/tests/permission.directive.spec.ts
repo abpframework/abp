@@ -43,4 +43,26 @@ describe('PermissionDirective', () => {
       expect(spy.mock.calls).toHaveLength(0);
     });
   });
+
+  describe('structural', () => {
+    beforeEach(() => {
+      spectator = createDirective(`<div id="test-element" *abpPermission="'test'">Testing Permission Directive</div>`);
+      directive = spectator.directive;
+    });
+
+    it('should be created', () => {
+      expect(directive).toBeTruthy();
+    });
+
+    it('should remove the element from DOM', () => {
+      expect(spectator.query('#test-element')).toBeFalsy();
+      grantedPolicy$.next(true);
+      expect(spectator.query('#test-element')).toBeTruthy();
+      grantedPolicy$.next(false);
+      expect(spectator.query('#test-element')).toBeFalsy();
+      grantedPolicy$.next(true);
+      grantedPolicy$.next(true);
+      expect(spectator.queryAll('#test-element')).toHaveLength(1);
+    });
+  });
 });
