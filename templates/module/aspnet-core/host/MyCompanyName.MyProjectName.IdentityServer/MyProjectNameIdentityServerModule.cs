@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -65,6 +68,8 @@ namespace MyCompanyName.MyProjectName
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
     {
+        private const string DefaultCorsPolicyName = "Default";
+
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
@@ -100,7 +105,7 @@ namespace MyCompanyName.MyProjectName
 
             Configure<AppUrlOptions>(options =>
             {
-                options.Applications["MVC"].RootUrl = configuration["AppSelfUrl"];
+                options.Applications["MVC"].RootUrl = configuration["App:SelfUrl"];
             });
 
             context.Services.AddAuthentication()
@@ -133,6 +138,25 @@ namespace MyCompanyName.MyProjectName
                     .AddDataProtection()
                     .PersistKeysToStackExchangeRedis(redis, "MyProjectName-Protection-Keys");
             }
+
+            context.Services.AddCors(options =>
+            {
+                options.AddPolicy(DefaultCorsPolicyName, builder =>
+                {
+                    builder
+                        .WithOrigins(
+                            configuration["App:CorsOrigins"]
+                                .Split(",", StringSplitOptions.RemoveEmptyEntries)
+                                .Select(o => o.RemovePostFix("/"))
+                                .ToArray()
+                        )
+                        .WithAbpExposedHeaders()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
+                });
+            });
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -147,6 +171,7 @@ namespace MyCompanyName.MyProjectName
             app.UseCorrelationId();
             app.UseVirtualFiles();
             app.UseRouting();
+            app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
             if (MultiTenancyConsts.IsEnabled)
