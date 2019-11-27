@@ -820,8 +820,7 @@ namespace MyCompanyName.MyProjectName.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpTenants_Name",
                 table: "AbpTenants",
-                column: "Name",
-                unique: true);
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
