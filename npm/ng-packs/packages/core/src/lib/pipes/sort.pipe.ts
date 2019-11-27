@@ -37,8 +37,8 @@ export class SortPipe implements PipeTransform {
       ...stringArray,
       ...value.filter(
         item =>
-          typeof item[sortKey] !== 'number' &&
-          typeof item[sortKey] !== 'string',
+          typeof (sortKey ? item[sortKey] : item) !== 'number' &&
+          typeof (sortKey ? item[sortKey] : item) !== 'string',
       ),
     ];
     return sortOrder === 'asc' ? sorted : sorted.reverse();
