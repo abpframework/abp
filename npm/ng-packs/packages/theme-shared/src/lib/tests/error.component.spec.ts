@@ -1,14 +1,14 @@
 import { SpectatorHost, createHostFactory } from '@ngneat/spectator/jest';
-import { ErrorComponent } from '../components/error/error.component';
+import { HttpErrorWrapperComponent } from '../components/http-error-wrapper/http-error-wrapper.component';
 import { LocalizationPipe } from '@abp/ng.core';
 import { Store } from '@ngxs/store';
 import { Renderer2, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs';
 
 describe('ErrorComponent', () => {
-  let spectator: SpectatorHost<ErrorComponent>;
+  let spectator: SpectatorHost<HttpErrorWrapperComponent>;
   const createHost = createHostFactory({
-    component: ErrorComponent,
+    component: HttpErrorWrapperComponent,
     declarations: [LocalizationPipe],
     mocks: [Store],
     providers: [
@@ -18,7 +18,7 @@ describe('ErrorComponent', () => {
   });
 
   beforeEach(() => {
-    spectator = createHost('<abp-error></abp-error>');
+    spectator = createHost('<abp-http-error-wrapper></abp-http-error-wrapper>');
     spectator.component.destroy$ = new Subject();
   });
 

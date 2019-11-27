@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -13,8 +13,14 @@ import { ConfigState } from '../states';
 export class PermissionGuard implements CanActivate {
   constructor(private store: Store) {}
 
-  canActivate({ data }: ActivatedRouteSnapshot): Observable<boolean> {
-    const resource = snq(() => data.routes.requiredPolicy) || (data.requiredPolicy as string);
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    let resource = snq(() => route.data.routes.requiredPolicy) || snq(() => route.data.requiredPolicy as string);
+    if (!resource) {
+      resource = snq(
+        () => route.routeConfig.children.find(child => state.url.indexOf(child.path) > -1).data.requiredPolicy,
+      );
+    }
+
     return this.store.select(ConfigState.getGrantedPolicy(resource)).pipe(
       tap(access => {
         if (!access) {

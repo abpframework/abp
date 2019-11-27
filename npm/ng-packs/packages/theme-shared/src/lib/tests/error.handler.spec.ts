@@ -22,14 +22,17 @@ describe('ErrorHandler', () => {
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot([])],
     stubsEnabled: false,
-    routes: [{ path: '', component: DummyComponent }, { path: 'account/login', component: RouterOutletComponent }],
+    routes: [
+      { path: '', component: DummyComponent },
+      { path: 'account/login', component: RouterOutletComponent },
+    ],
   });
 
   beforeEach(() => {
     spectator = createComponent();
     store = spectator.get(Store);
 
-    const abpError = document.querySelector('abp-error');
+    const abpError = document.querySelector('abp-http-error-wrapper');
     if (abpError) document.body.removeChild(abpError);
   });
 
@@ -133,14 +136,17 @@ describe('ErrorHandler with custom error component', () => {
       ErrorModule,
     ],
     stubsEnabled: false,
-    routes: [{ path: '', component: DummyComponent }, { path: 'account/login', component: RouterOutletComponent }],
+    routes: [
+      { path: '', component: DummyComponent },
+      { path: 'account/login', component: RouterOutletComponent },
+    ],
   });
 
   beforeEach(() => {
     spectator = createComponent();
     store = spectator.get(Store);
 
-    const abpError = document.querySelector('abp-error');
+    const abpError = document.querySelector('abp-http-error-wrapper');
     if (abpError) document.body.removeChild(abpError);
   });
 
