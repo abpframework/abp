@@ -347,6 +347,11 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
+            if (mutableEntityType.IsOwned())
+            {
+                return;
+            }
+
             ConfigureConcurrencyStampProperty<TEntity>(modelBuilder, mutableEntityType);
             ConfigureExtraProperties<TEntity>(modelBuilder, mutableEntityType);
             ConfigureAuditProperties<TEntity>(modelBuilder, mutableEntityType);
