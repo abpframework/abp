@@ -1,6 +1,6 @@
 <abp-modal size="md" [(visible)]="visible" [busy]="modalBusy">
   <ng-template #abpHeader>
-    <h3>{{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}</h3>
+    <h3>{{ 'AbpFeatureManagement::Features' | abpLocalization }}</h3>
   </ng-template>
 
   <ng-template #abpBody>
@@ -18,15 +18,20 @@
           <input type="text" name="feature.name" [formControlName]="i" />
         </div>
       </div>
+      <div *ngIf="!(features$ | async)?.length">
+        {{ 'AbpFeatureManagement::NoFeatureFoundMessage' | abpLocalization }}
+      </div>
     </form>
   </ng-template>
 
   <ng-template #abpFooter>
-    <button #abpClose type="button" class="btn btn-secondary">
-      {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
-    </button>
-    <abp-button iconClass="fa fa-check" [disabled]="form?.invalid || modalBusy" (click)="save()">
-      {{ 'AbpFeatureManagement::Save' | abpLocalization }}
-    </abp-button>
+    <ng-container *ngIf="(features$ | async)?.length">
+      <button #abpClose type="button" class="btn btn-secondary">
+        {{ 'AbpFeatureManagement::Cancel' | abpLocalization }}
+      </button>
+      <abp-button iconClass="fa fa-check" [disabled]="form?.invalid || modalBusy" (click)="save()">
+        {{ 'AbpFeatureManagement::Save' | abpLocalization }}
+      </abp-button>
+    </ng-container>
   </ng-template>
 </abp-modal>
