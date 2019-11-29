@@ -13,7 +13,7 @@ export class LazyLoadService {
     type: 'script' | 'style',
     content: string = '',
     targetQuery: string = 'body',
-    position: InsertPosition = 'afterend',
+    position: InsertPosition = 'beforeend',
   ): Observable<void> {
     if (!urlOrUrls && !content) {
       return throwError('Should pass url or content');
