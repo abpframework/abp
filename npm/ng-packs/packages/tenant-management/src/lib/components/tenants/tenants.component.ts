@@ -83,7 +83,11 @@ export class TenantsComponent implements OnInit {
       this.defaultConnectionStringForm.invalid
     ) {
       return true;
-    } else if (this.selectedModalContent.type === 'saveTenant' && this.tenantForm && this.tenantForm.invalid) {
+    } else if (
+      this.selectedModalContent.type === 'saveTenant' &&
+      this.tenantForm &&
+      this.tenantForm.invalid
+    ) {
       return true;
     } else {
       return false;
@@ -143,7 +147,11 @@ export class TenantsComponent implements OnInit {
         this._useSharedDatabase = fetchedConnectionString ? false : true;
         this.defaultConnectionString = fetchedConnectionString ? fetchedConnectionString : '';
         this.createDefaultConnectionStringForm();
-        this.openModal('AbpTenantManagement::ConnectionStrings', this.connectionStringModalTemplate, 'saveConnStr');
+        this.openModal(
+          'AbpTenantManagement::ConnectionStrings',
+          this.connectionStringModalTemplate,
+          'saveConnStr',
+        );
       });
   }
 
@@ -187,7 +195,10 @@ export class TenantsComponent implements OnInit {
         });
     } else {
       this.tenantService
-        .updateDefaultConnectionString({ id: this.selected.id, defaultConnectionString: this.connectionString })
+        .updateDefaultConnectionString({
+          id: this.selected.id,
+          defaultConnectionString: this.connectionString,
+        })
         .pipe(
           take(1),
           finalize(() => (this.modalBusy = false)),
@@ -211,17 +222,22 @@ export class TenantsComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.get();
       });
   }
 
   delete(id: string, name: string) {
     this.confirmationService
-      .warn('AbpTenantManagement::TenantDeletionConfirmationMessage', 'AbpTenantManagement::AreYouSure', {
-        messageLocalizationParams: [name],
-      })
+      .warn(
+        'AbpTenantManagement::TenantDeletionConfirmationMessage',
+        'AbpTenantManagement::AreYouSure',
+        {
+          messageLocalizationParams: [name],
+        },
+      )
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new DeleteTenant(id));
+          this.store.dispatch(new DeleteTenant(id)).subscribe(() => this.get());
         }
       });
   }
@@ -244,7 +260,9 @@ export class TenantsComponent implements OnInit {
   onSharedDatabaseChange(value: boolean) {
     if (!value) {
       setTimeout(() => {
-        const defaultConnectionString = document.getElementById('defaultConnectionString') as HTMLInputElement;
+        const defaultConnectionString = document.getElementById(
+          'defaultConnectionString',
+        ) as HTMLInputElement;
         if (defaultConnectionString) {
           defaultConnectionString.focus();
         }

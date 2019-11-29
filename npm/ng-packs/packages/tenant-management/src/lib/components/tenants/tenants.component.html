@@ -60,7 +60,12 @@
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
           <th pResizableColumn (click)="sortOrderIcon.sort('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
-            <abp-sort-order-icon #sortOrderIcon key="name" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            <abp-sort-order-icon
+              #sortOrderIcon
+              key="name"
+              [(selectedKey)]="sortKey"
+              [(order)]="sortOrder"
+            >
             </abp-sort-order-icon>
           </th>
         </tr>
@@ -148,34 +153,32 @@
 
 <ng-template #connectionStringModalTemplate>
   <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()" validateOnSubmit>
-    <label class="mt-2">
-      <div class="form-group">
-        <div class="custom-checkbox custom-control mb-2">
-          <input
-            id="useSharedDatabase"
-            type="checkbox"
-            class="custom-control-input"
-            formControlName="useSharedDatabase"
-            autofocus
-            (ngModelChange)="onSharedDatabaseChange($event)"
-          />
-          <label for="useSharedDatabase" class="custom-control-label">{{
-            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
-          }}</label>
-        </div>
-      </div>
-      <label class="form-group" *ngIf="!useSharedDatabase">
-        <label for="defaultConnectionString">{{
-          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
-        }}</label>
+    <div class="form-group">
+      <div class="custom-checkbox custom-control mb-2">
         <input
-          type="text"
-          id="defaultConnectionString"
-          class="form-control"
-          formControlName="defaultConnectionString"
+          id="useSharedDatabase"
+          type="checkbox"
+          class="custom-control-input"
+          formControlName="useSharedDatabase"
+          autofocus
+          (ngModelChange)="onSharedDatabaseChange($event)"
         />
-      </label>
-    </label>
+        <label for="useSharedDatabase" class="custom-control-label">{{
+          'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
+        }}</label>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="!useSharedDatabase">
+      <label for="defaultConnectionString">{{
+        'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
+      }}</label>
+      <input
+        type="text"
+        id="defaultConnectionString"
+        class="form-control"
+        formControlName="defaultConnectionString"
+      />
+    </div>
   </form>
 </ng-template>
 
