@@ -1,12 +1,11 @@
 import { CoreModule } from '@abp/ng.core';
 import { Component } from '@angular/core';
+import { RouterTestingModule } from '@angular/router/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { NgxsModule } from '@ngxs/store';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { ToasterService } from '../services/toaster.service';
 import { ThemeSharedModule } from '../theme-shared.module';
-import { RouterModule } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
   selector: 'abp-dummy',
@@ -23,7 +22,7 @@ describe('ToasterService', () => {
   let service: ToasterService;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    imports: [CoreModule, ThemeSharedModule, NgxsModule.forRoot(), RouterTestingModule],
+    imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
     providers: [MessageService],
   });
 
@@ -63,7 +62,10 @@ describe('ToasterService', () => {
   });
 
   it('should display multiple toasts', () => {
-    service.addAll([{ summary: 'summary1', detail: 'detail1' }, { summary: 'summary2', detail: 'detail2' }]);
+    service.addAll([
+      { summary: 'summary1', detail: 'detail1' },
+      { summary: 'summary2', detail: 'detail2' },
+    ]);
     spectator.detectChanges();
     expect(spectator.queryAll('div.ui-toast-summary').map(node => node.textContent.trim())).toEqual([
       'summary1',

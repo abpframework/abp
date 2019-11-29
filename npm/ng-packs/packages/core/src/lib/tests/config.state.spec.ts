@@ -1,8 +1,15 @@
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import {
+  createServiceFactory,
+  SpectatorService,
+  SpyObject,
+} from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { ReplaySubject, timer, Subject, of } from 'rxjs';
 import { Config } from '../models/config';
-import { ApplicationConfigurationService, ConfigStateService } from '../services';
+import {
+  ApplicationConfigurationService,
+  ConfigStateService,
+} from '../services';
 import { ConfigState } from '../states';
 import { SetLanguage, PatchRouteByName } from '../actions';
 
@@ -91,6 +98,7 @@ export const CONFIG_STATE_DATA = {
     },
     grantedPolicies: {
       'Abp.Identity': false,
+      'Abp.Account': true,
     },
   },
   setting: {
@@ -126,7 +134,10 @@ describe('ConfigState', () => {
     store = spectator.get(Store);
     service = spectator.service;
     appConfigService = spectator.get(ApplicationConfigurationService);
-    state = new ConfigState(spectator.get(ApplicationConfigurationService), store);
+    state = new ConfigState(
+      spectator.get(ApplicationConfigurationService),
+      store,
+    );
   });
 
   describe('#getAll', () => {
@@ -137,24 +148,34 @@ describe('ConfigState', () => {
 
   describe('#getApplicationInfo', () => {
     it('should return application property', () => {
-      expect(ConfigState.getApplicationInfo(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.environment.application);
+      expect(ConfigState.getApplicationInfo(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.environment.application,
+      );
     });
   });
 
   describe('#getOne', () => {
     it('should return one property', () => {
-      expect(ConfigState.getOne('environment')(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.environment);
+      expect(ConfigState.getOne('environment')(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.environment,
+      );
     });
   });
 
   describe('#getDeep', () => {
     it('should return deeper', () => {
-      expect(ConfigState.getDeep('environment.localization.defaultResourceName')(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.environment.localization.defaultResourceName,
-      );
-      expect(ConfigState.getDeep(['environment', 'localization', 'defaultResourceName'])(CONFIG_STATE_DATA)).toEqual(
-        CONFIG_STATE_DATA.environment.localization.defaultResourceName,
-      );
+      expect(
+        ConfigState.getDeep('environment.localization.defaultResourceName')(
+          CONFIG_STATE_DATA,
+        ),
+      ).toEqual(CONFIG_STATE_DATA.environment.localization.defaultResourceName);
+      expect(
+        ConfigState.getDeep([
+          'environment',
+          'localization',
+          'defaultResourceName',
+        ])(CONFIG_STATE_DATA),
+      ).toEqual(CONFIG_STATE_DATA.environment.localization.defaultResourceName);
 
       expect(ConfigState.getDeep('test')(null)).toBeFalsy();
     });
@@ -162,21 +183,33 @@ describe('ConfigState', () => {
 
   describe('#getRoute', () => {
     it('should return route', () => {
-      expect(ConfigState.getRoute(null, '::Menu:Home')(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.flattedRoutes[0]);
-      expect(ConfigState.getRoute('identity')(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.flattedRoutes[1]);
+      expect(
+        ConfigState.getRoute(null, '::Menu:Home')(CONFIG_STATE_DATA),
+      ).toEqual(CONFIG_STATE_DATA.flattedRoutes[0]);
+      expect(ConfigState.getRoute('identity')(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.flattedRoutes[1],
+      );
     });
   });
 
   describe('#getApiUrl', () => {
     it('should return api url', () => {
-      expect(ConfigState.getApiUrl('other')(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.environment.apis.other.url);
-      expect(ConfigState.getApiUrl()(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.environment.apis.default.url);
+      expect(ConfigState.getApiUrl('other')(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.environment.apis.other.url,
+      );
+      expect(ConfigState.getApiUrl()(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.environment.apis.default.url,
+      );
     });
   });
 
   describe('#getSetting', () => {
     it('should return a setting', () => {
-      expect(ConfigState.getSetting('Abp.Localization.DefaultLanguage')(CONFIG_STATE_DATA)).toEqual(
+      expect(
+        ConfigState.getSetting('Abp.Localization.DefaultLanguage')(
+          CONFIG_STATE_DATA,
+        ),
+      ).toEqual(
         CONFIG_STATE_DATA.setting.values['Abp.Localization.DefaultLanguage'],
       );
     });
@@ -184,41 +217,82 @@ describe('ConfigState', () => {
 
   describe('#getSettings', () => {
     it('should return settings', () => {
-      expect(ConfigState.getSettings('Localization')(CONFIG_STATE_DATA)).toEqual({
+      expect(
+        ConfigState.getSettings('Localization')(CONFIG_STATE_DATA),
+      ).toEqual({
         'Abp.Localization.DefaultLanguage': 'en',
       });
 
-      expect(ConfigState.getSettings('AllSettings')(CONFIG_STATE_DATA)).toEqual(CONFIG_STATE_DATA.setting.values);
+      expect(ConfigState.getSettings('AllSettings')(CONFIG_STATE_DATA)).toEqual(
+        CONFIG_STATE_DATA.setting.values,
+      );
     });
   });
 
   describe('#getGrantedPolicy', () => {
     it('should return a granted policy', () => {
-      expect(ConfigState.getGrantedPolicy('Abp.Identity')(CONFIG_STATE_DATA)).toBe(false);
+      expect(
+        ConfigState.getGrantedPolicy('Abp.Identity')(CONFIG_STATE_DATA),
+      ).toBe(false);
+      expect(
+        ConfigState.getGrantedPolicy('Abp.Identity || Abp.Account')(
+          CONFIG_STATE_DATA,
+        ),
+      ).toBe(true);
+      expect(
+        ConfigState.getGrantedPolicy('Abp.Account && Abp.Identity')(
+          CONFIG_STATE_DATA,
+        ),
+      ).toBe(false);
+      expect(
+        ConfigState.getGrantedPolicy('Abp.Account &&')(CONFIG_STATE_DATA),
+      ).toBe(false);
+      expect(
+        ConfigState.getGrantedPolicy('|| Abp.Account')(CONFIG_STATE_DATA),
+      ).toBe(false);
       expect(ConfigState.getGrantedPolicy('')(CONFIG_STATE_DATA)).toBe(true);
     });
   });
 
   describe('#getLocalization', () => {
     it('should return a localization', () => {
-      expect(ConfigState.getLocalization('AbpIdentity::Identity')(CONFIG_STATE_DATA)).toBe('identity');
+      expect(
+        ConfigState.getLocalization('AbpIdentity::Identity')(CONFIG_STATE_DATA),
+      ).toBe('identity');
 
-      expect(ConfigState.getLocalization('AbpIdentity::NoIdentity')(CONFIG_STATE_DATA)).toBe('AbpIdentity::NoIdentity');
+      expect(
+        ConfigState.getLocalization('AbpIdentity::NoIdentity')(
+          CONFIG_STATE_DATA,
+        ),
+      ).toBe('AbpIdentity::NoIdentity');
 
-      expect(ConfigState.getLocalization({ key: '', defaultValue: 'default' })(CONFIG_STATE_DATA)).toBe('default');
+      expect(
+        ConfigState.getLocalization({ key: '', defaultValue: 'default' })(
+          CONFIG_STATE_DATA,
+        ),
+      ).toBe('default');
 
-      expect(ConfigState.getLocalization("::'{0}' and '{1}' do not match.", 'first', 'second')(CONFIG_STATE_DATA)).toBe(
-        'first and second do not match.',
-      );
+      expect(
+        ConfigState.getLocalization(
+          "::'{0}' and '{1}' do not match.",
+          'first',
+          'second',
+        )(CONFIG_STATE_DATA),
+      ).toBe('first and second do not match.');
 
       try {
         ConfigState.getLocalization('::Test')({
           ...CONFIG_STATE_DATA,
-          environment: { ...CONFIG_STATE_DATA.environment, localization: {} as any },
+          environment: {
+            ...CONFIG_STATE_DATA.environment,
+            localization: {} as any,
+          },
         });
         expect(false).toBeTruthy(); // fail
       } catch (error) {
-        expect((error as Error).message).toContain('Please check your environment');
+        expect((error as Error).message).toContain(
+          'Please check your environment',
+        );
       }
     });
   });
@@ -273,7 +347,9 @@ describe('ConfigState', () => {
         name: 'Home',
         path: 'home',
         url: '/home',
-        children: [{ path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' }],
+        children: [
+          { path: 'dashboard', name: 'Dashboard', url: '/home/dashboard' },
+        ],
       });
     });
 

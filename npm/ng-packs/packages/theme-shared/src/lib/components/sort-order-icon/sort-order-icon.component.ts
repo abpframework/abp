@@ -5,29 +5,53 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './sort-order-icon.component.html',
 })
 export class SortOrderIconComponent {
-  private _order: string;
-  private _selectedKey: string;
+  private _order: 'asc' | 'desc' | '';
+  private _selectedSortKey: string;
 
+  /**
+   * @deprecated use selectedSortKey instead.
+   */
   @Input()
   set selectedKey(value: string) {
-    this._selectedKey = value;
+    this.selectedSortKey = value;
     this.selectedKeyChange.emit(value);
   }
   get selectedKey(): string {
-    return this._selectedKey;
+    return this._selectedSortKey;
+  }
+
+  @Input()
+  set selectedSortKey(value: string) {
+    this._selectedSortKey = value;
+    this.selectedSortKeyChange.emit(value);
+  }
+  get selectedSortKey(): string {
+    return this._selectedSortKey;
   }
 
   @Output() readonly selectedKeyChange = new EventEmitter<string>();
+  @Output() readonly selectedSortKeyChange = new EventEmitter<string>();
+
+  /**
+   * @deprecated use sortKey instead.
+   */
+  @Input()
+  get key(): string {
+    return this.sortKey;
+  }
+  set key(value: string) {
+    this.sortKey = value;
+  }
 
   @Input()
-  key: string;
+  sortKey: string;
 
   @Input()
-  set order(value: string) {
+  set order(value: 'asc' | 'desc' | '') {
     this._order = value;
     this.orderChange.emit(value);
   }
-  get order(): string {
+  get order(): 'asc' | 'desc' | '' {
     return this._order;
   }
 
@@ -37,16 +61,18 @@ export class SortOrderIconComponent {
   iconClass: string;
 
   get icon(): string {
-    if (!this.selectedKey) return 'fa-sort';
-    if (this.selectedKey === this.key) return `fa-sort-${this.order}`;
+    if (!this.selectedSortKey) return 'fa-sort';
+    if (this.selectedSortKey === this.sortKey) return `fa-sort-${this.order}`;
     else return '';
   }
 
   sort(key: string) {
-    this.selectedKey = key;
+    this.selectedKey = key; // TODO: To be removed
+    this.selectedSortKey = key;
     switch (this.order) {
       case '':
         this.order = 'asc';
+        this.orderChange.emit('asc');
         break;
       case 'asc':
         this.order = 'desc';
@@ -54,7 +80,8 @@ export class SortOrderIconComponent {
         break;
       case 'desc':
         this.order = '';
-        this.selectedKey = '';
+        this.selectedKey = ''; // TODO: To be removed
+        this.orderChange.emit('');
         break;
     }
   }

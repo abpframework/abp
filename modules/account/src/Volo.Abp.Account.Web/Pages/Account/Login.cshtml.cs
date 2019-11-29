@@ -10,8 +10,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Volo.Abp.Account.Web.Settings;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using Volo.Abp.Validation;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -56,7 +58,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             _accountOptions = accountOptions.Value;
         }
 
-        public virtual async Task OnGetAsync()
+        public virtual async Task<IActionResult> OnGetAsync()
         {
             LoginInput = new LoginInputModel();
 
@@ -71,8 +73,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 })
                 .ToList();
 
-            EnableLocalLogin = true; //TODO: We can get default from a setting?
-            
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+
             ExternalProviders = providers.ToArray();
 
             if (IsExternalLoginOnly)
@@ -80,12 +82,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 //return await ExternalLogin(vm.ExternalLoginScheme, returnUrl);
                 throw new NotImplementedException();
             }
+
+            return Page();
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = true; //TODO: We can get default from a setting?
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
             ValidateModel();
 

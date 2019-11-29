@@ -34,7 +34,7 @@ namespace Volo.Abp.Identity
         public virtual string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the Surame for the user.
+        /// Gets or sets the Surname for the user.
         /// </summary>
         public virtual string Surname { get; set; }
 

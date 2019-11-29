@@ -22,7 +22,7 @@ describe('ConfirmationService', () => {
   let service: ConfirmationService;
   const createComponent = createComponentFactory({
     component: DummyComponent,
-    imports: [CoreModule, ThemeSharedModule, NgxsModule.forRoot(), RouterTestingModule],
+    imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
     providers: [MessageService],
   });
 

@@ -312,10 +312,10 @@ http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
 http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
 
 
-"__tenant" parameter name can be changed using AspNetCoreMultiTenancyOptions. Example:
+"__tenant" parameter name can be changed using AbpAspNetCoreMultiTenancyOptions. Example:
 
 ````C#
-services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 {
     options.TenantKey = "MyTenantKey";
 });
