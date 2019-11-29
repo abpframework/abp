@@ -29,7 +29,7 @@ export function appendScript(injector: Injector) {
     import('chart.js').then(() => chartJsLoaded$.next(true));
 
     const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
-    return lazyLoadService.load(null, 'style', styles, 'head', 'afterbegin').toPromise();
+    return lazyLoadService.load(null, 'style', styles, 'head', 'beforeend').toPromise();
   };
 
   return fn;

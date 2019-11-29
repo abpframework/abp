@@ -10,6 +10,6 @@ export class InitialService {
   }
 
   appendStyle() {
-    return this.lazyLoadService.load(null, 'style', styles, 'head', 'afterbegin');
+    return this.lazyLoadService.load(null, 'style', styles, 'head', 'beforeend');
   }
 }
