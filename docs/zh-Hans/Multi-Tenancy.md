@@ -312,10 +312,10 @@ Volo.Abp.AspNetCore.MultiTenancy 添加了下面这些租户解析器,从当前W
 http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
 http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
 
-可以使用AspNetCoreMultiTenancyOptions修改默认的参数名"__tenant".例如:
+可以使用AbpAspNetCoreMultiTenancyOptions修改默认的参数名"__tenant".例如:
 
 ````C#
-services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 {
     options.TenantKey = "MyTenantKey";
 });
