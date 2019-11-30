@@ -124,7 +124,7 @@ export class UsersComponent implements OnInit {
         name: [this.selected.name || '', [Validators.maxLength(64)]],
         surname: [this.selected.surname || '', [Validators.maxLength(64)]],
         phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
-        lockoutEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
+        lockoutEnabled: [this.selected.lockoutEnabled || (this.selected.id ? false : true)],
         twoFactorEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
         roleNames: this.fb.array(
           this.roles.map(role =>
