@@ -1,9 +1,7 @@
 using NUglify;
-using NUglify.JavaScript;
-using Volo.Abp.AspNetCore.Mvc.UI.Minification.Scripts;
-using Volo.Abp.DependencyInjection;
+using Volo.Abp.Minify.Scripts;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification.NUglify
+namespace Volo.Abp.Minify.NUglify
 {
     public class NUglifyJavascriptMinifier : NUglifyMinifierBase, IJavascriptMinifier
     {

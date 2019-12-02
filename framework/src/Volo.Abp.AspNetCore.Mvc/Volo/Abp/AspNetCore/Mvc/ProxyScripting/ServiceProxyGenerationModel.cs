@@ -11,6 +11,8 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
 
         public bool UseCache { get; set; }
 
+        public bool Minify { get; set; }
+
         public string Modules { get; set; }
 
         public string Controllers { get; set; }
@@ -32,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
 
         public ProxyScriptingModel CreateOptions()
         {
-            var options = new ProxyScriptingModel(Type, UseCache);
+            var options = new ProxyScriptingModel(Type, UseCache, Minify);
 
             if (!Modules.IsNullOrEmpty())
             {
