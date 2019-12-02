@@ -5,12 +5,12 @@
     "access": "public"
   },
   "dependencies": {
-    "ansi-colors": "^3.2.4",
+    "ansi-colors": "^4.1.1",
     "extend-object": "^1.0.0",
     "gulp": "^4.0.2",
     "merge-stream": "^2.0.0",
     "path": "^0.12.7",
-    "rimraf": "^2.6.3"
+    "rimraf": "^3.0.0"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
 }
