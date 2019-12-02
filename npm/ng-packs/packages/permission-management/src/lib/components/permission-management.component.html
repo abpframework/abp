@@ -75,7 +75,7 @@
                 [attr.for]="permission.name"
                 (click)="onClickCheckbox(permission, permissionCheckbox.value)"
                 >{{ permission.displayName }}
-                <ng-container *ngIf="providerName !== 'R'">
+                <ng-container *ngIf="!hideBadges">
                   <span
                     *ngFor="let provider of permission.grantedProviders"
                     class="badge badge-light"
