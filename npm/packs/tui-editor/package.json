@@ -9,7 +9,7 @@
     "@abp/highlight.js": "^1.0.3",
     "@abp/jquery": "^1.0.3",
     "@abp/markdown-it": "^1.0.3",
-    "tui-editor": "^1.4.7"
+    "tui-editor": "^1.4.8"
   },
   "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
 }

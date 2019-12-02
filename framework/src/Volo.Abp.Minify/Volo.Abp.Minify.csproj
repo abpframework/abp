@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\..\common.props" />
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyName>Volo.Abp.Http</AssemblyName>
-    <PackageId>Volo.Abp.Http</PackageId>
+    <AssemblyName>Volo.Abp.Minify</AssemblyName>
+    <PackageId>Volo.Abp.Minify</PackageId>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -14,9 +14,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Volo.Abp.Http.Abstractions\Volo.Abp.Http.Abstractions.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Json\Volo.Abp.Json.csproj" />
-    <ProjectReference Include="..\Volo.Abp.Minify\Volo.Abp.Minify.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Core\Volo.Abp.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUglify" Version="1.5.13" />
   </ItemGroup>
 
 </Project>

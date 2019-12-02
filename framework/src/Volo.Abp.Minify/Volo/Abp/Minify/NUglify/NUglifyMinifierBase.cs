@@ -4,7 +4,7 @@ using System.Linq;
 using NUglify;
 using Volo.Abp.DependencyInjection;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification.NUglify
+namespace Volo.Abp.Minify.NUglify
 {
     public abstract class NUglifyMinifierBase : IMinifier, ITransientDependency
     {

@@ -1,7 +1,7 @@
 using NUglify;
-using Volo.Abp.AspNetCore.Mvc.UI.Minification.Styles;
+using Volo.Abp.Minify.Styles;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification.NUglify
+namespace Volo.Abp.Minify.NUglify
 {
     public class NUglifyCssMinifier : NUglifyMinifierBase, ICssMinifier
     {

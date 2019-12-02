@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using NUglify;
 
-namespace Volo.Abp.AspNetCore.Mvc.UI.Minification.NUglify
+namespace Volo.Abp.Minify.NUglify
 {
     public class NUglifyException : AbpException
     {

@@ -8,6 +8,8 @@ namespace Volo.Abp.Http.ProxyScripting
 
         public bool UseCache { get; set; }
 
+        public bool Minify { get; set; }
+
         public string[] Modules { get; set; }
 
         public string[] Controllers { get; set; }
@@ -16,10 +18,11 @@ namespace Volo.Abp.Http.ProxyScripting
 
         public IDictionary<string, string> Properties { get; set; }
 
-        public ProxyScriptingModel(string generatorType, bool useCache = true)
+        public ProxyScriptingModel(string generatorType, bool useCache = true, bool minify = false)
         {
             GeneratorType = generatorType;
             UseCache = useCache;
+            Minify = minify;
 
             Properties = new Dictionary<string, string>();
         }
