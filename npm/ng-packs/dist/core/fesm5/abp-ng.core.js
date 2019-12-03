@@ -352,20 +352,8 @@ var RestService = /** @class */ (function () {
         var _a = config.observe, observe = _a === void 0 ? "body" /* Body */ : _a, skipHandleError = config.skipHandleError;
         /** @type {?} */
         var url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
-        var method = request.method, params = request.params, options = __rest(request, ["method", "params"]);
-        return this.http
-            .request(method, url, (/** @type {?} */ (__assign({ observe: observe }, (params && {
-            params: Object.keys(params).reduce((/**
-             * @param {?} acc
-             * @param {?} key
-             * @return {?}
-             */
-            function (acc, key) {
-                var _a;
-                return (__assign({}, acc, (typeof params[key] !== 'undefined' && params[key] !== '' && (_a = {}, _a[key] = params[key], _a))));
-            }), {}),
-        }), options))))
-            .pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
+        var method = request.method, options = __rest(request, ["method"]);
+        return this.http.request(method, url, (/** @type {?} */ (__assign({ observe: observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
          * @param {?} err
          * @return {?}
          */
@@ -684,7 +672,7 @@ var LocalizationService = /** @class */ (function () {
         this.router = router;
         this.ngZone = ngZone;
         if (otherInstance)
-            throw new Error('LocalizationService should have only one instance.');
+            throw new Error('LocaleService should have only one instance.');
     }
     Object.defineProperty(LocalizationService.prototype, "currentLang", {
         get: /**
@@ -1018,16 +1006,14 @@ var ConfigState = /** @class */ (function () {
     /**
      * @param {?=} path
      * @param {?=} name
-     * @param {?=} url
      * @return {?}
      */
     ConfigState.getRoute = /**
      * @param {?=} path
      * @param {?=} name
-     * @param {?=} url
      * @return {?}
      */
-    function (path, name, url) {
+    function (path, name) {
         /** @type {?} */
         var selector = createSelector([ConfigState_1], (/**
          * @param {?} state
@@ -1044,9 +1030,6 @@ var ConfigState = /** @class */ (function () {
                     return route;
                 }
                 else if (name && route.name === name) {
-                    return route;
-                }
-                else if (url && route.url === url) {
                     return route;
                 }
             }));
@@ -1114,13 +1097,11 @@ var ConfigState = /** @class */ (function () {
                 var keys = snq((/**
                  * @return {?}
                  */
-                function () {
-                    return Object.keys(state.setting.values).filter((/**
-                     * @param {?} key
-                     * @return {?}
-                     */
-                    function (key) { return key.indexOf(keyword) > -1; }));
-                }), []);
+                function () { return Object.keys(state.setting.values).filter((/**
+                 * @param {?} key
+                 * @return {?}
+                 */
+                function (key) { return key.indexOf(keyword) > -1; })); }), []);
                 if (keys.length) {
                     return keys.reduce((/**
                      * @param {?} acc
@@ -1157,42 +1138,10 @@ var ConfigState = /** @class */ (function () {
         function (state) {
             if (!key)
                 return true;
-            /** @type {?} */
-            var getPolicy = (/**
-             * @param {?} k
+            return snq((/**
              * @return {?}
              */
-            function (k) { return snq((/**
-             * @return {?}
-             */
-            function () { return state.auth.grantedPolicies[k]; }), false); });
-            /** @type {?} */
-            var orRegexp = /\|\|/g;
-            /** @type {?} */
-            var andRegexp = /&&/g;
-            if (orRegexp.test(key)) {
-                /** @type {?} */
-                var keys = key.split('||').filter((/**
-                 * @param {?} k
-                 * @return {?}
-                 */
-                function (k) { return !!k; }));
-                if (keys.length !== 2)
-                    return false;
-                return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
-            }
-            else if (andRegexp.test(key)) {
-                /** @type {?} */
-                var keys = key.split('&&').filter((/**
-                 * @param {?} k
-                 * @return {?}
-                 */
-                function (k) { return !!k; }));
-                if (keys.length !== 2)
-                    return false;
-                return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
-            }
-            return getPolicy(key);
+            function () { return state.auth.grantedPolicies[key]; }), false);
         }));
         return selector;
     };
@@ -1298,9 +1247,7 @@ var ConfigState = /** @class */ (function () {
             if (defaultLang.includes(';')) {
                 defaultLang = defaultLang.split(';')[0];
             }
-            return _this.store.selectSnapshot(SessionState.getLanguage)
-                ? of(null)
-                : dispatch(new SetLanguage(defaultLang));
+            return _this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
         })));
     };
     /**
@@ -1363,8 +1310,7 @@ var ConfigState = /** @class */ (function () {
             name: 'ConfigState',
             defaults: (/** @type {?} */ ({})),
         }),
-        __metadata("design:paramtypes", [ApplicationConfigurationService,
-            Store])
+        __metadata("design:paramtypes", [ApplicationConfigurationService, Store])
     ], ConfigState);
     return ConfigState;
 }());
@@ -1395,9 +1341,7 @@ function patchRouteDeep(routes, name, newValue, parentUrl) {
      */
     function (route) {
         if (route.name === name) {
-            newValue.url = parentUrl + "/" + ((!newValue.path && newValue.path === ''
-                ? route.path
-                : newValue.path) || '');
+            newValue.url = parentUrl + "/" + ((!newValue.path && newValue.path === '' ? route.path : newValue.path) || '');
             if (newValue.children && newValue.children.length) {
                 newValue.children = newValue.children.map((/**
                  * @param {?} child
@@ -1983,7 +1927,7 @@ var ForDirective = /** @class */ (function () {
             return;
         /** @type {?} */
         var compareFn = this.compareFn;
-        if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
+        if (typeof this.filterBy !== 'undefined' && this.filterVal) {
             items = items.filter((/**
              * @param {?} item
              * @return {?}
@@ -2121,7 +2065,6 @@ var FormSubmitDirective = /** @class */ (function () {
         this.formGroupDirective = formGroupDirective;
         this.host = host;
         this.cdRef = cdRef;
-        this.debounce = 200;
         this.ngSubmit = new EventEmitter();
         this.executedNgSubmit = false;
     }
@@ -2141,7 +2084,7 @@ var FormSubmitDirective = /** @class */ (function () {
             _this.executedNgSubmit = true;
         }));
         fromEvent((/** @type {?} */ (this.host.nativeElement)), 'keyup')
-            .pipe(debounceTime(this.debounce), filter((/**
+            .pipe(debounceTime(200), filter((/**
          * @param {?} key
          * @return {?}
          */
@@ -2188,15 +2131,12 @@ var FormSubmitDirective = /** @class */ (function () {
         { type: ChangeDetectorRef }
     ]; };
     FormSubmitDirective.propDecorators = {
-        debounce: [{ type: Input }],
         notValidateOnSubmit: [{ type: Input }],
         ngSubmit: [{ type: Output }]
     };
     return FormSubmitDirective;
 }());
 if (false) {
-    /** @type {?} */
-    FormSubmitDirective.prototype.debounce;
     /** @type {?} */
     FormSubmitDirective.prototype.notValidateOnSubmit;
     /** @type {?} */
@@ -2458,46 +2398,11 @@ if (false) {
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PermissionDirective = /** @class */ (function () {
-    function PermissionDirective(elRef, renderer, store, templateRef, vcRef) {
+    function PermissionDirective(elRef, renderer, store) {
         this.elRef = elRef;
         this.renderer = renderer;
         this.store = store;
-        this.templateRef = templateRef;
-        this.vcRef = vcRef;
     }
-    /**
-     * @private
-     * @return {?}
-     */
-    PermissionDirective.prototype.check = /**
-     * @private
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-        this.subscription = this.store
-            .select(ConfigState.getGrantedPolicy(this.condition))
-            .pipe(takeUntilDestroy(this))
-            .subscribe((/**
-         * @param {?} isGranted
-         * @return {?}
-         */
-        function (isGranted) {
-            if (_this.templateRef && isGranted) {
-                _this.vcRef.clear();
-                _this.vcRef.createEmbeddedView(_this.templateRef);
-            }
-            else if (_this.templateRef && !isGranted) {
-                _this.vcRef.clear();
-            }
-            else if (!isGranted && !_this.templateRef) {
-                _this.renderer.removeChild(((/** @type {?} */ (_this.elRef.nativeElement))).parentElement, _this.elRef.nativeElement);
-            }
-        }));
-    };
     /**
      * @return {?}
      */
@@ -2505,8 +2410,20 @@ var PermissionDirective = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        if (this.templateRef && !this.condition) {
-            this.vcRef.createEmbeddedView(this.templateRef);
+        var _this = this;
+        if (this.condition) {
+            this.store
+                .select(ConfigState.getGrantedPolicy(this.condition))
+                .pipe(takeUntilDestroy(this))
+                .subscribe((/**
+             * @param {?} isGranted
+             * @return {?}
+             */
+            function (isGranted) {
+                if (!isGranted) {
+                    _this.renderer.removeChild(((/** @type {?} */ (_this.elRef.nativeElement))).parentElement, _this.elRef.nativeElement);
+                }
+            }));
         }
     };
     /**
@@ -2516,20 +2433,6 @@ var PermissionDirective = /** @class */ (function () {
      * @return {?}
      */
     function () { };
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    PermissionDirective.prototype.ngOnChanges = /**
-     * @param {?} __0
-     * @return {?}
-     */
-    function (_a) {
-        var condition = _a.condition;
-        if ((condition || { currentValue: null }).currentValue) {
-            this.check();
-        }
-    };
     PermissionDirective.decorators = [
         { type: Directive, args: [{
                     selector: '[abpPermission]',
@@ -2537,11 +2440,9 @@ var PermissionDirective = /** @class */ (function () {
     ];
     /** @nocollapse */
     PermissionDirective.ctorParameters = function () { return [
-        { type: ElementRef },
+        { type: ElementRef, decorators: [{ type: Optional }] },
         { type: Renderer2 },
-        { type: Store },
-        { type: TemplateRef, decorators: [{ type: Optional }] },
-        { type: ViewContainerRef }
+        { type: Store }
     ]; };
     PermissionDirective.propDecorators = {
         condition: [{ type: Input, args: ['abpPermission',] }]
@@ -2551,8 +2452,6 @@ var PermissionDirective = /** @class */ (function () {
 if (false) {
     /** @type {?} */
     PermissionDirective.prototype.condition;
-    /** @type {?} */
-    PermissionDirective.prototype.subscription;
     /**
      * @type {?}
      * @private
@@ -2568,16 +2467,6 @@ if (false) {
      * @private
      */
     PermissionDirective.prototype.store;
-    /**
-     * @type {?}
-     * @private
-     */
-    PermissionDirective.prototype.templateRef;
-    /**
-     * @type {?}
-     * @private
-     */
-    PermissionDirective.prototype.vcRef;
 }
 
 /**
@@ -2800,35 +2689,18 @@ var PermissionGuard = /** @class */ (function () {
         this.store = store;
     }
     /**
-     * @param {?} route
-     * @param {?} state
+     * @param {?} __0
      * @return {?}
      */
     PermissionGuard.prototype.canActivate = /**
-     * @param {?} route
-     * @param {?} state
+     * @param {?} __0
      * @return {?}
      */
-    function (route, state) {
+    function (_a) {
         var _this = this;
+        var data = _a.data;
         /** @type {?} */
-        var resource = snq((/**
-         * @return {?}
-         */
-        function () { return route.data.routes.requiredPolicy; })) || snq((/**
-         * @return {?}
-         */
-        function () { return (/** @type {?} */ (route.data.requiredPolicy)); }));
-        if (!resource) {
-            resource = snq((/**
-             * @return {?}
-             */
-            function () { return route.routeConfig.children.find((/**
-             * @param {?} child
-             * @return {?}
-             */
-            function (child) { return state.url.indexOf(child.path) > -1; })).data.requiredPolicy; }));
-        }
+        var resource = (/** @type {?} */ (data.requiredPolicy));
         return this.store.select(ConfigState.getGrantedPolicy(resource)).pipe(tap((/**
          * @param {?} access
          * @return {?}
@@ -3410,13 +3282,11 @@ var SortPipe = /** @class */ (function () {
             function (item) { return typeof item === 'string'; })).sort();
         }
         else {
-            numberArray = value
-                .filter((/**
+            numberArray = value.filter((/**
              * @param {?} item
              * @return {?}
              */
-            function (item) { return typeof item[sortKey] === 'number'; }))
-                .sort((/**
+            function (item) { return typeof item[sortKey] === 'number'; })).sort((/**
              * @param {?} a
              * @param {?} b
              * @return {?}
@@ -3443,14 +3313,7 @@ var SortPipe = /** @class */ (function () {
             }));
         }
         /** @type {?} */
-        var sorted = __spread(numberArray, stringArray, value.filter((/**
-         * @param {?} item
-         * @return {?}
-         */
-        function (item) {
-            return typeof (sortKey ? item[sortKey] : item) !== 'number' &&
-                typeof (sortKey ? item[sortKey] : item) !== 'string';
-        })));
+        var sorted = numberArray.concat(stringArray);
         return sortOrder === 'asc' ? sorted : sorted.reverse();
     };
     SortPipe.decorators = [
@@ -3866,7 +3729,7 @@ var LazyLoadService = /** @class */ (function () {
         var _this = this;
         if (content === void 0) { content = ''; }
         if (targetQuery === void 0) { targetQuery = 'body'; }
-        if (position === void 0) { position = 'beforeend'; }
+        if (position === void 0) { position = 'afterend'; }
         if (!urlOrUrls && !content) {
             return throwError('Should pass url or content');
         }
@@ -4237,21 +4100,6 @@ var LocaleProvider = {
     useClass: LocaleId,
     deps: [LocalizationService],
 };
-
-/**
- * @fileoverview added by tsickle
- * Generated from: lib/utils/date-extensions.ts
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-Date.prototype.toLocalISOString = (/**
- * @this {?}
- * @return {?}
- */
-function () {
-    /** @type {?} */
-    var timezoneOffset = this.getTimezoneOffset();
-    return new Date(this.getTime() - timezoneOffset * 60000).toISOString();
-});
 
 /**
  * @fileoverview added by tsickle

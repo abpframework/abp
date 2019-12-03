@@ -33,4 +33,3 @@ export declare class RolesComponent implements OnInit {
     onPageChange(data: any): void;
     get(): void;
     onClickSaveButton(): void;
-}

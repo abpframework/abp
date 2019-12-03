@@ -1,17 +1,11 @@
-import { ElementRef, OnDestroy, OnInit, Renderer2, ViewContainerRef, TemplateRef, SimpleChanges, OnChanges } from '@angular/core';
+import { ElementRef, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { Store } from '@ngxs/store';
-import { Subscription } from 'rxjs';
-export declare class PermissionDirective implements OnInit, OnDestroy, OnChanges {
+export declare class PermissionDirective implements OnInit, OnDestroy {
     private elRef;
     private renderer;
     private store;
-    private templateRef;
-    private vcRef;
     condition: string;
-    subscription: Subscription;
-    constructor(elRef: ElementRef, renderer: Renderer2, store: Store, templateRef: TemplateRef<any>, vcRef: ViewContainerRef);
-    private check;
+    constructor(elRef: ElementRef, renderer: Renderer2, store: Store);
     ngOnInit(): void;
     ngOnDestroy(): void;
-    ngOnChanges({ condition }: SimpleChanges): void;
 }
