@@ -207,10 +207,27 @@
                                 }
                             </div>
                         }
+
+
+                        @if (Model.DocumentSections != null && Model.DocumentSections.Count > 0)
+                        {
+                            foreach (var key in Model.DocumentSections)
+                            {
+                                @(key.Key + ":")
+                                <select class="doc-section-combobox mr-4 mt-2" id="@("Section" + key.Key + "ComboboxId")" data-key="@key.Key">
+                                    @foreach (var value in key.Value)
+                                    {
+                                        <option value="@value">@value</option>
+                                    }
+                                </select>
+                            }
+                        }
+
                     </div>
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
+
                                 @if (Model.DocumentLanguageIsDifferent)
                                 {
                                     <abp-alert alert-type="Warning" dismissible="true" class="mb-0">

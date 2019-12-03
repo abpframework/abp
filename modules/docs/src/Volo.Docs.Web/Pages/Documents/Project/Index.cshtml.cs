@@ -56,22 +56,30 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool DocumentLanguageIsDifferent { get; set; }
 
+        public DocumentSectionDictionary DocumentSections { get; set; }
+
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
+        private readonly IDocumentSectionHtmlReplacer _documentSectionHtmlReplacer;
+        private readonly IDocumentSectionFinder _documentSectionFinder;
         private readonly DocsUiOptions _uiOptions;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
-            IOptions<DocsUiOptions> options)
+            IOptions<DocsUiOptions> options,
+            IDocumentSectionHtmlReplacer documentSectionHtmlReplacer,
+            IDocumentSectionFinder documentSectionFinder)
         {
             ObjectMapperContext = typeof(DocsWebModule);
 
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
+            _documentSectionHtmlReplacer = documentSectionHtmlReplacer;
+            _documentSectionFinder = documentSectionFinder;
             _uiOptions = options.Value;
         }
 
@@ -374,6 +382,10 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void ConvertDocumentContentToHtml()
         {
+            DocumentSections = _documentSectionFinder.Find(Document.Content);
+
+            Document.Content = _documentSectionHtmlReplacer.Replace(Document.Content, DocumentSections);
+
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
 
