@@ -57,10 +57,7 @@ namespace Volo.Docs.HtmlConverting
                 sections.Add(key, new List<string>() { value });
             }
 
-            var endOfSection = targetPartOfDocument.IndexOf(DocumentSectionConsts.SectionCloser, StringComparison.InvariantCulture)
-                + DocumentSectionConsts.SectionCloser.Length;
-
-            return FindNextSections(targetPartOfDocument.Substring(endOfSection), sections);
+            return FindNextSections(targetPartOfDocument.Substring(endOfSectionOpener), sections);
         }
     }
 }
