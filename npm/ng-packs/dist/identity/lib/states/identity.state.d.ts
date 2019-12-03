@@ -11,13 +11,13 @@ export declare class IdentityState {
     constructor(identityService: IdentityService);
     getRoles({ patchState }: StateContext<Identity.State>, { payload }: GetRoles): import("rxjs").Observable<import("@abp/ng.core").ABP.PagedResponse<Identity.RoleItem>>;
     getRole({ patchState }: StateContext<Identity.State>, { payload }: GetRoleById): import("rxjs").Observable<Identity.RoleItem>;
-    deleteRole({ dispatch }: StateContext<Identity.State>, { payload }: GetRoleById): import("rxjs").Observable<void>;
-    addRole({ dispatch }: StateContext<Identity.State>, { payload }: CreateRole): import("rxjs").Observable<void>;
-    updateRole({ getState, dispatch }: StateContext<Identity.State>, { payload }: UpdateRole): import("rxjs").Observable<void>;
+    deleteRole(_: any, { payload }: GetRoleById): import("rxjs").Observable<Identity.RoleItem>;
+    addRole(_: any, { payload }: CreateRole): import("rxjs").Observable<Identity.RoleItem>;
+    updateRole({ getState }: StateContext<Identity.State>, { payload }: UpdateRole): import("rxjs").Observable<Identity.RoleItem>;
     getUsers({ patchState }: StateContext<Identity.State>, { payload }: GetUsers): import("rxjs").Observable<import("@abp/ng.core").ABP.PagedResponse<Identity.UserItem>>;
     getUser({ patchState }: StateContext<Identity.State>, { payload }: GetUserById): import("rxjs").Observable<Identity.UserItem>;
-    deleteUser({ dispatch }: StateContext<Identity.State>, { payload }: GetUserById): import("rxjs").Observable<void>;
-    addUser({ dispatch }: StateContext<Identity.State>, { payload }: CreateUser): import("rxjs").Observable<void>;
-    updateUser({ getState, dispatch }: StateContext<Identity.State>, { payload }: UpdateUser): import("rxjs").Observable<void>;
+    deleteUser(_: any, { payload }: GetUserById): import("rxjs").Observable<null>;
+    addUser(_: any, { payload }: CreateUser): import("rxjs").Observable<Identity.UserItem>;
+    updateUser({ getState }: StateContext<Identity.State>, { payload }: UpdateUser): import("rxjs").Observable<Identity.UserItem>;
     getUserRoles({ patchState }: StateContext<Identity.State>, { payload }: GetUserRoles): import("rxjs").Observable<Identity.RoleItem[]>;
 }

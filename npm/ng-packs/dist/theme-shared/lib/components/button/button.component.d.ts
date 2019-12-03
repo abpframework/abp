@@ -12,11 +12,11 @@ export declare class ButtonComponent implements OnInit {
     readonly click: EventEmitter<MouseEvent>;
     readonly focus: EventEmitter<FocusEvent>;
     readonly blur: EventEmitter<FocusEvent>;
+    readonly abpClick: EventEmitter<MouseEvent>;
+    readonly abpFocus: EventEmitter<FocusEvent>;
+    readonly abpBlur: EventEmitter<FocusEvent>;
     buttonRef: ElementRef<HTMLButtonElement>;
     readonly icon: string;
     constructor(renderer: Renderer2);
     ngOnInit(): void;
-    onClick(event: MouseEvent): void;
-    onFocus(event: FocusEvent): void;
-    onBlur(event: FocusEvent): void;
 }
