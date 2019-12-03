@@ -6,7 +6,6 @@
 
     /**
      * @fileoverview added by tsickle
-     * Generated from: lib/services/tenant-management-config.service.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var TenantManagementConfigService = /** @class */ (function () {
@@ -40,7 +39,6 @@
 
     /**
      * @fileoverview added by tsickle
-     * Generated from: lib/tenant-management-config.module.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var ɵ0 = ng_core.noop;

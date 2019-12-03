@@ -3,7 +3,6 @@ import { addAbpRoutes, noop } from '@abp/ng.core';
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/services/tenant-management-config.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 class TenantManagementConfigService {
@@ -36,7 +35,6 @@ TenantManagementConfigService.ctorParameters = () => [];
 
 /**
  * @fileoverview added by tsickle
- * Generated from: lib/tenant-management-config.module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 const ɵ0 = noop;
@@ -50,13 +48,11 @@ TenantManagementConfigModule.decorators = [
 
 /**
  * @fileoverview added by tsickle
- * Generated from: public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
- * Generated from: abp-ng.tenant-management.config.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 

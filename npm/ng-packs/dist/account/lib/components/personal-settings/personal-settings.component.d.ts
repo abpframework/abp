@@ -15,3 +15,4 @@ export declare class PersonalSettingsComponent implements OnInit {
     ngOnInit(): void;
     buildForm(): void;
     submit(): void;
+}
