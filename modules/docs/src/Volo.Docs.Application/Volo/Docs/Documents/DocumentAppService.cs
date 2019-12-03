@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.Application.Services;
 using Volo.Abp.Caching;
 using Volo.Docs.Projects;
 
@@ -18,19 +16,21 @@ namespace Volo.Docs.Documents
         protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
-
+        protected IHostEnvironment HostEnvironment { get; }
         public DocumentAppService(
             IProjectRepository projectRepository,
             IDocumentStoreFactory documentStoreFactory,
             IDistributedCache<DocumentWithDetailsDto> documentCache,
             IDistributedCache<LanguageConfig> languageCache,
-            IDistributedCache<DocumentResourceDto> resourceCache)
+            IDistributedCache<DocumentResourceDto> resourceCache, 
+            IHostEnvironment hostEnvironment)
         {
             _projectRepository = projectRepository;
             _documentStoreFactory = documentStoreFactory;
             DocumentCache = documentCache;
             LanguageCache = languageCache;
             ResourceCache = resourceCache;
+            HostEnvironment = hostEnvironment;
         }
 
         public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
@@ -83,7 +83,7 @@ namespace Volo.Docs.Documents
                 return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
             }
 
-            if (Debugger.IsAttached)
+            if (HostEnvironment.IsDevelopment())
             {
                 return await GetResourceAsync();
             }
@@ -119,7 +119,7 @@ namespace Volo.Docs.Documents
                 return CreateDocumentWithDetailsDto(project, document);
             }
 
-            if (Debugger.IsAttached)
+            if (HostEnvironment.IsDevelopment())
             {
                 return await GetDocumentAsync();
             }
