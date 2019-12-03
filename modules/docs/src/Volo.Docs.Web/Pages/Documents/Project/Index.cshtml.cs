@@ -384,7 +384,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             DocumentSections = _documentSectionFinder.Find(Document.Content);
 
-            Document.Content = _documentSectionHtmlReplacer.Replace(Document.Content, DocumentSections);
+            Document.Content = _documentSectionHtmlReplacer.Replace(Document.Content);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);

@@ -102,7 +102,6 @@
             );
         };
 
-
         var initSections = function () {
             var getQueryStringParameterByName = function (name) {
                 var url = window.location.href;
@@ -139,20 +138,73 @@
                 window.history.replaceState({}, document.title, new_uri);
             };
 
-            var changeSections = function (combobox) {
-                var key = $(combobox).data('key');
-                var value = combobox.value;
+            var setSections = function () {
 
-                $(".doc-section[data-key=" + key + "]").hide();
-                $(".doc-section[data-key=" + key + "][data-value=" + value + "]").show();
+                var sections = $(".doc-section");
 
-                localStorage["abp-doc-section-" + key] = value;
+                var comboboxes = $(".doc-section-combobox");
+                var comboboxKeys = [];
+                var comboboxSelectedValues = [];
+
+                for (var i = 0; i < comboboxes.length; i++) {
+                    comboboxKeys.push($(comboboxes[i]).data("key"));
+                    comboboxSelectedValues.push(comboboxes[i].value);
+                }
+
+                for (i = 0; i < sections.length; i++) {
+                    var keys = $(sections[i]).data("keys");
+                    var values = $(sections[i]).data("values");
+
+                    var show = false;
+                    var keysSplitted;
+                    var valuesSplitted;
+
+                    if (keys.indexOf("&") >= 0) {
+                        keysSplitted = keys.split("&");
+                        valuesSplitted = values.split("&");
+
+                        var hide = false;
+
+                        for (var k = 0; k < keysSplitted.length; k++) {
+                            if (valuesSplitted[k] !== comboboxSelectedValues[comboboxKeys.indexOf(keysSplitted[k])]) {
+                                hide = true;
+                                break;
+                            }
+                        }
+
+                        show = !hide;
+                    }
+                    else if (keys.indexOf("|") >= 0) {
+                        keysSplitted = keys.split("|");
+                        valuesSplitted = values.split("|");
+
+                        for (k = 0; k < keysSplitted.length; k++) {
+                            if (valuesSplitted[k] === comboboxSelectedValues[comboboxKeys.indexOf(keysSplitted[k])]) {
+                                show = true;
+                                break;
+                            }
+                        }
+                    }
+                    else {
+                        if (values === comboboxSelectedValues[comboboxKeys.indexOf(keys)]) {
+                            show = true;
+                        }
+                    }
+
+                    if (show) {
+                        $(sections[i]).show();
+                    }
+                    else {
+                        $(sections[i]).hide();
+                    }
+                }
 
                 setQueryString();
             };
 
             $(".doc-section-combobox").change(function () {
-                changeSections(this);
+                localStorage["abp-doc-section-" + $(this).data("key")] = this.value;
+                setSections();
             });
 
             var comboboxes = $(".doc-section-combobox");
@@ -172,9 +224,7 @@
                 }
             }
 
-            for (var k = 0; k < comboboxes.length; k++) {
-                changeSections(comboboxes[k]);
-            }
+            setSections();
         };
 
 

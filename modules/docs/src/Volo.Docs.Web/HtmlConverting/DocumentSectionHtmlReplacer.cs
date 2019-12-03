@@ -1,17 +1,46 @@
-﻿namespace Volo.Docs.HtmlConverting
+﻿using System;
+
+namespace Volo.Docs.HtmlConverting
 {
     public class DocumentSectionHtmlReplacer : IDocumentSectionHtmlReplacer
     {
-        public string Replace(string document, DocumentSectionDictionary sections)
+        public string Replace(string document)
         {
-            foreach (var key in sections)
+            while (document.Contains(DocumentSectionConsts.SectionOpenerPrefix))
             {
-                foreach (var value in key.Value)
+                var sectionIndex = document.IndexOf(DocumentSectionConsts.SectionOpenerPrefix, StringComparison.InvariantCulture);
+
+                var sectionCloserIndex = document.Substring(sectionIndex + DocumentSectionConsts.SectionOpenerPrefix.Length)
+                    .IndexOf(DocumentSectionConsts.SectionOpenerPostfix, StringComparison.InvariantCulture);
+
+                var keysValues = document.Substring(sectionIndex + DocumentSectionConsts.SectionOpenerPrefix.Length)
+                [0..sectionCloserIndex];
+
+                var andOperation = keysValues.Contains(DocumentSectionConsts.SectionOpenerAndCondition, StringComparison.InvariantCulture);
+                var orOperation = keysValues.Contains(DocumentSectionConsts.SectionOpenerOrCondition, StringComparison.InvariantCulture);
+
+                var splitterChar = andOperation ? DocumentSectionConsts.SectionOpenerAndCondition : DocumentSectionConsts.SectionOpenerOrCondition;
+
+                string[] keysValuesSplitted = keysValues.Split(splitterChar);
+
+                var keys = new string[keysValuesSplitted.Length];
+                var values = new string[keysValuesSplitted.Length];
+
+                for (int i = 0; i < keysValuesSplitted.Length; i++)
                 {
-                    document = document.Replace(
-                        DocumentSectionConsts.SectionOpenerPrefix + key.Key + DocumentSectionConsts.SectionOpenerKeyValueSeparator + value + DocumentSectionConsts.SectionOpenerPostfix,
-                        $"<div class=\"doc-section\" data-key=\"{key.Key}\" data-value=\"{value}\" style=\"display: none\">");
+                    keys[i] = keysValuesSplitted[i].Split(DocumentSectionConsts.SectionOpenerKeyValueSeparator)[0];
+                    values[i] = keysValuesSplitted[i].Split(DocumentSectionConsts.SectionOpenerKeyValueSeparator)[1];
                 }
+
+                var div = $"<div class=\"doc-section\" data-keys=\"" +
+                    $"{string.Join(splitterChar, keys)}" +
+                    $"\" data-values=\"" +
+                    $"{string.Join(splitterChar, values)}" +
+                    $"\" style=\"display: none\">";
+
+                document = document.Remove(sectionIndex, sectionCloserIndex + DocumentSectionConsts.SectionOpenerPrefix.Length +1);
+
+                document = document.Insert(sectionIndex, div);
             }
 
             document = document.Replace(DocumentSectionConsts.SectionCloser, "</div>");

@@ -30,7 +30,7 @@ namespace Volo.Docs.HtmlConverting
             }
         }
 
-        private DocumentSectionDictionary FindNextSections(string targetPartOfDocument, DocumentSectionDictionary sections) 
+        private DocumentSectionDictionary FindNextSections(string targetPartOfDocument, DocumentSectionDictionary sections)
         {
             var startOfSection = targetPartOfDocument.IndexOf(DocumentSectionConsts.SectionOpenerPrefix, StringComparison.InvariantCulture);
 
@@ -41,10 +41,44 @@ namespace Volo.Docs.HtmlConverting
 
             var endOfSectionOpener = targetPartOfDocument.Substring(startOfSection).IndexOf(DocumentSectionConsts.SectionOpenerPostfix, StringComparison.InvariantCulture);
 
-            var keyValueWithSeparator = targetPartOfDocument.Substring(startOfSection)
+            var keysValues = targetPartOfDocument.Substring(startOfSection)
                 [DocumentSectionConsts.SectionOpenerPrefix.Length..endOfSectionOpener];
 
+            sections = ParseAndAddContidionToSections(keysValues, sections);
+
+            return FindNextSections(targetPartOfDocument.Substring(endOfSectionOpener), sections);
+        }
+
+        private DocumentSectionDictionary ParseAndAddContidionToSections(string keysValues, DocumentSectionDictionary sections) 
+        {
+            if (keysValues.Contains(DocumentSectionConsts.SectionOpenerAndCondition, StringComparison.InvariantCulture))
+            {
+                var keysValuesSplitted = keysValues.Split(DocumentSectionConsts.SectionOpenerAndCondition);
+                foreach (var keyValue in keysValuesSplitted)
+                {
+                    sections = AddContidionToSections(keyValue, sections);
+                }
+            }
+            else if (keysValues.Contains(DocumentSectionConsts.SectionOpenerOrCondition, StringComparison.InvariantCulture))
+            {
+                var keysValuesSplitted = keysValues.Split(DocumentSectionConsts.SectionOpenerOrCondition);
+                foreach (var keyValue in keysValuesSplitted)
+                {
+                    sections = AddContidionToSections(keyValue, sections);
+                }
+            }
+            else
+            {
+                sections = AddContidionToSections(keysValues, sections);
+            }
+
+            return sections;
+        }
+
+        private DocumentSectionDictionary AddContidionToSections(string keyValueWithSeparator, DocumentSectionDictionary sections) 
+        {
             var keyValue = keyValueWithSeparator.Split(DocumentSectionConsts.SectionOpenerKeyValueSeparator);
+
             var key = keyValue[0];
             var value = keyValue[1];
 
@@ -57,7 +91,7 @@ namespace Volo.Docs.HtmlConverting
                 sections.Add(key, new List<string>() { value });
             }
 
-            return FindNextSections(targetPartOfDocument.Substring(endOfSectionOpener), sections);
+            return sections;
         }
     }
 }

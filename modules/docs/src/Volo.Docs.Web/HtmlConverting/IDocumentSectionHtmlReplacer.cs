@@ -4,6 +4,6 @@ namespace Volo.Docs.HtmlConverting
 {
     public interface IDocumentSectionHtmlReplacer : ITransientDependency
     {
-        public string Replace(string document, DocumentSectionDictionary sections);
+        public string Replace(string document);
     }
 }
