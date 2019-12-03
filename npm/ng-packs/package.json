@@ -1,16 +1,14 @@
 {
   "scripts": {
-    "start": "ng serve dev-app",
     "ng": "ng",
-    "test": "ng test --watchAll --runInBand",
-    "symlink": "symlink",
     "abpng": "abpng",
+    "symlink": "symlink",
+    "start": "ng serve dev-app",
+    "test": "ng test --watchAll --runInBand",
     "commit": "git-cz",
-    "lint": "ng lint --fix",
+    "lint": "ng lint",
     "scripts:build": "cd scripts && npm install && npm run build",
-    "ci": "yarn ci:build:sync && yarn ci:build:async && yarn ci:test && yarn ng lint",
-    "ci:build:sync": "symlink copy --angular --no-watch --sync --packages @abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config",
-    "ci:build:async": "symlink copy --angular --no-watch --all-packages --excluded-packages @abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config",
+    "ci": "yarn scripts:build --noCommit && yarn ci:test && yarn ng lint",
     "ci:test": "ng test --coverage=false"
   },
   "devDependencies": {
