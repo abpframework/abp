@@ -16,7 +16,6 @@ namespace Volo.Docs.HtmlConverting
 
         public DocumentSectionDictionary Find(string document)
         {
-            return FindNextSections(document, new DocumentSectionDictionary());
             try
             {
                 return FindNextSections(document, new DocumentSectionDictionary());
