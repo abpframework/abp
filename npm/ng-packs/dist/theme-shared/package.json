@@ -27,5 +27,6 @@
   "fesm2015": "fesm2015/abp-ng.theme.shared.js",
   "typings": "abp-ng.theme.shared.d.ts",
   "metadata": "abp-ng.theme.shared.metadata.json",
-  "sideEffects": false
+  "sideEffects": false,
+  "gitHead": "2f588b67002cd64e8660f43217c2197ccc9fe631"
 }

@@ -1,24 +1,23 @@
 import { ConfigState, takeUntilDestroy, StartLoader, StopLoader, SortPipe, RestOccurError, LazyLoadService, CoreModule } from '@abp/ng.core';
-import { Component, EventEmitter, Renderer2, Input, Output, ViewChild, ElementRef, ChangeDetectorRef, Injectable, ɵɵdefineInjectable, ɵɵinject, ContentChild, ViewChildren, Directive, Optional, Self, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, Inject, INJECTOR, InjectionToken, APP_INITIALIZER, NgModule } from '@angular/core';
+import { Component, EventEmitter, Renderer2, Input, Output, ViewChild, ElementRef, ChangeDetectorRef, Injectable, ɵɵdefineInjectable, ɵɵinject, ContentChild, ViewChildren, Directive, Optional, Self, InjectionToken, ApplicationRef, ComponentFactoryResolver, RendererFactory2, Injector, Inject, INJECTOR, APP_INITIALIZER, NgModule } from '@angular/core';
 import { takeUntilDestroy as takeUntilDestroy$1, NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
+import { ReplaySubject, BehaviorSubject, Subject, fromEvent, interval, timer, forkJoin } from 'rxjs';
 import { __read, __assign, __extends, __spread } from 'tslib';
 import { Router, NavigationStart, NavigationEnd, NavigationError } from '@angular/router';
 import { Store, ofActionSuccessful, Actions } from '@ngxs/store';
-import { ReplaySubject, BehaviorSubject, Subject, fromEvent, interval, timer } from 'rxjs';
 import { takeUntil, debounceTime, filter } from 'rxjs/operators';
-import snq from 'snq';
 import { animation, style, animate, trigger, transition, useAnimation, keyframes, state } from '@angular/animations';
 import { Table } from 'primeng/table';
 import clone from 'just-clone';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterError, RouterDataResolved, Navigate, RouterState } from '@ngxs/router-plugin';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common';
+import { RouterError, RouterDataResolved, RouterState, Navigate } from '@ngxs/router-plugin';
+import snq from 'snq';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/breadcrumb/breadcrumb.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var BreadcrumbComponent = /** @class */ (function () {
@@ -39,77 +38,63 @@ var BreadcrumbComponent = /** @class */ (function () {
          * @return {?}
          */
         function (state) { return state.LeptonLayoutState; }));
-        if (this.show) {
-            /** @type {?} */
-            var splittedUrl = this.router.url.split('/').filter((/**
-             * @param {?} chunk
-             * @return {?}
-             */
-            function (chunk) { return chunk; }));
-            /** @type {?} */
-            var currentUrl = this.store.selectSnapshot(ConfigState.getRoute(splittedUrl[0]));
-            if (!currentUrl) {
-                currentUrl = this.store.selectSnapshot(ConfigState.getRoute(null, null, this.router.url));
-                splittedUrl = [this.router.url];
-                if (!currentUrl) {
-                    this.show = false;
-                    return;
-                }
-            }
-            this.segments.push(currentUrl.name);
-            if (splittedUrl.length > 1) {
-                var _a = __read(splittedUrl), arr = _a.slice(1);
-                /** @type {?} */
-                var childRoute = currentUrl;
-                var _loop_1 = function (i) {
-                    /** @type {?} */
-                    var element = arr[i];
-                    childRoute = childRoute.children.find((/**
-                     * @param {?} child
-                     * @return {?}
-                     */
-                    function (child) { return child.path === element; }));
-                    this_1.segments.push(childRoute.name);
-                };
-                var this_1 = this;
-                for (var i = 0; i < arr.length; i++) {
-                    _loop_1(i);
-                }
-            }
-        }
-    };
-    BreadcrumbComponent.decorators = [
-        { type: Component, args: [{
-                    selector: 'abp-breadcrumb',
-                    template: "<ol *ngIf=\"show\" class=\"breadcrumb\">\n  <li class=\"breadcrumb-item\">\n    <a routerLink=\"/\"><i class=\"fa fa-home\"></i> </a>\n  </li>\n  <li\n    *ngFor=\"let segment of segments; let last = last\"\n    class=\"breadcrumb-item\"\n    [class.active]=\"last\"\n    aria-current=\"page\"\n  >\n    {{ segment | abpLocalization }}\n  </li>\n</ol>\n"
-                }] }
-    ];
-    /** @nocollapse */
-    BreadcrumbComponent.ctorParameters = function () { return [
-        { type: Router },
-        { type: Store }
-    ]; };
-    return BreadcrumbComponent;
-}());
+        /** @type {?} */
+        var element = arr[i];
+        childRoute = childRoute.children.find(
+          /**
+           * @param {?} child
+           * @return {?}
+           */
+          function(child) {
+            return child.path === element;
+          },
+        );
+        this_1.segments.push(childRoute.name);
+      };
+      var this_1 = this;
+      for (var i = 0; i < arr.length; i++) {
+        _loop_1(i);
+      }
+    }
+  };
+  BreadcrumbComponent.decorators = [
+    {
+      type: Component,
+      args: [
+        {
+          selector: 'abp-breadcrumb',
+          template:
+            '<ol *ngIf="show" class="breadcrumb">\n  <li class="breadcrumb-item">\n    <a routerLink="/"><i class="fa fa-home"></i> </a>\n  </li>\n  <li\n    *ngFor="let segment of segments; let last = last"\n    class="breadcrumb-item"\n    [class.active]="last"\n    aria-current="page"\n  >\n    {{ segment | abpLocalization }}\n  </li>\n</ol>\n',
+        },
+      ],
+    },
+  ];
+  /** @nocollapse */
+  BreadcrumbComponent.ctorParameters = function() {
+    return [{ type: Router }, { type: Store }];
+  };
+  return BreadcrumbComponent;
+})();
 if (false) {
-    /** @type {?} */
-    BreadcrumbComponent.prototype.show;
-    /** @type {?} */
-    BreadcrumbComponent.prototype.segments;
-    /**
-     * @type {?}
-     * @private
-     */
-    BreadcrumbComponent.prototype.router;
-    /**
-     * @type {?}
-     * @private
-     */
-    BreadcrumbComponent.prototype.store;
+  /** @type {?} */
+  BreadcrumbComponent.prototype.show;
+  /** @type {?} */
+  BreadcrumbComponent.prototype.segments;
+  /**
+   * @type {?}
+   * @private
+   */
+  BreadcrumbComponent.prototype.router;
+  /**
+   * @type {?}
+   * @private
+   */
+  BreadcrumbComponent.prototype.store;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/button/button.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ButtonComponent = /** @class */ (function () {
@@ -120,33 +105,12 @@ var ButtonComponent = /** @class */ (function () {
         this.buttonType = 'button';
         this.loading = false;
         this.disabled = false;
-        /*
-           *
-           *
-           * @deprecated use abpClick instead
-           */
         // tslint:disable-next-line: no-output-native
         this.click = new EventEmitter();
-        /*
-           *
-           *
-           * @deprecated use abpFocus instead
-           */
         // tslint:disable-next-line: no-output-native
         this.focus = new EventEmitter();
-        /*
-           *
-           *
-           * @deprecated use abpBlur instead
-           */
         // tslint:disable-next-line: no-output-native
         this.blur = new EventEmitter();
-        // tslint:disable-next-line: no-output-native
-        this.abpClick = new EventEmitter();
-        // tslint:disable-next-line: no-output-native
-        this.abpFocus = new EventEmitter();
-        // tslint:disable-next-line: no-output-native
-        this.abpBlur = new EventEmitter();
     }
     Object.defineProperty(ButtonComponent.prototype, "icon", {
         get: /**
@@ -176,11 +140,47 @@ var ButtonComponent = /** @class */ (function () {
             }));
         }
     };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    ButtonComponent.prototype.onClick = /**
+     * @param {?} event
+     * @return {?}
+     */
+    function (event) {
+        event.stopPropagation();
+        this.click.next(event);
+    };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    ButtonComponent.prototype.onFocus = /**
+     * @param {?} event
+     * @return {?}
+     */
+    function (event) {
+        event.stopPropagation();
+        this.focus.next(event);
+    };
+    /**
+     * @param {?} event
+     * @return {?}
+     */
+    ButtonComponent.prototype.onBlur = /**
+     * @param {?} event
+     * @return {?}
+     */
+    function (event) {
+        event.stopPropagation();
+        this.blur.next(event);
+    };
     ButtonComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-button',
                     // tslint:disable-next-line: component-max-inline-declarations
-                    template: "\n    <button\n      #button\n      [id]=\"buttonId\"\n      [attr.type]=\"buttonType\"\n      [ngClass]=\"buttonClass\"\n      [disabled]=\"loading || disabled\"\n      (click.stop)=\"click.next($event); abpClick.next($event)\"\n      (focus)=\"focus.next($event); abpFocus.next($event)\"\n      (blur)=\"blur.next($event); abpBlur.next($event)\"\n    >\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
+                    template: "\n    <button\n      #button\n      [id]=\"buttonId\"\n      [attr.type]=\"buttonType\"\n      [ngClass]=\"buttonClass\"\n      [disabled]=\"loading || disabled\"\n      (click)=\"onClick($event)\"\n      (focus)=\"onFocus($event)\"\n      (blur)=\"onBlur($event)\"\n    >\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
                 }] }
     ];
     /** @nocollapse */
@@ -198,9 +198,6 @@ var ButtonComponent = /** @class */ (function () {
         click: [{ type: Output }],
         focus: [{ type: Output }],
         blur: [{ type: Output }],
-        abpClick: [{ type: Output }],
-        abpFocus: [{ type: Output }],
-        abpBlur: [{ type: Output }],
         buttonRef: [{ type: ViewChild, args: ['button', { static: true },] }]
     };
     return ButtonComponent;
@@ -227,22 +224,105 @@ if (false) {
     /** @type {?} */
     ButtonComponent.prototype.blur;
     /** @type {?} */
-    ButtonComponent.prototype.abpClick;
-    /** @type {?} */
-    ButtonComponent.prototype.abpFocus;
-    /** @type {?} */
-    ButtonComponent.prototype.abpBlur;
-    /** @type {?} */
     ButtonComponent.prototype.buttonRef;
     /**
      * @type {?}
      * @private
      */
-    ButtonComponent.prototype.renderer;
+    get: function() {
+      return '' + (this.loading ? 'fa fa-spinner fa-spin' : this.iconClass || 'd-none');
+    },
+    enumerable: true,
+    configurable: true,
+  });
+  /**
+   * @return {?}
+   */
+  ButtonComponent.prototype.ngOnInit
+  /**
+   * @return {?}
+   */ = function() {
+    var _this = this;
+    if (this.attributes) {
+      Object.keys(this.attributes).forEach(
+        /**
+         * @param {?} key
+         * @return {?}
+         */
+        function(key) {
+          _this.renderer.setAttribute(_this.buttonRef.nativeElement, key, _this.attributes[key]);
+        },
+      );
+    }
+  };
+  ButtonComponent.decorators = [
+    {
+      type: Component,
+      args: [
+        {
+          selector: 'abp-button',
+          // tslint:disable-next-line: component-max-inline-declarations
+          template:
+            '\n    <button\n      #button\n      [attr.type]="buttonType || type"\n      [ngClass]="buttonClass"\n      [disabled]="loading || disabled"\n      (click)="click.emit($event)"\n      (focus)="focus.emit($event)"\n      (blur)="blur.emit($event)"\n    >\n      <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>\n    </button>\n  ',
+        },
+      ],
+    },
+  ];
+  /** @nocollapse */
+  ButtonComponent.ctorParameters = function() {
+    return [{ type: Renderer2 }];
+  };
+  ButtonComponent.propDecorators = {
+    buttonClass: [{ type: Input }],
+    buttonType: [{ type: Input }],
+    iconClass: [{ type: Input }],
+    loading: [{ type: Input }],
+    disabled: [{ type: Input }],
+    attributes: [{ type: Input }],
+    click: [{ type: Output }],
+    focus: [{ type: Output }],
+    blur: [{ type: Output }],
+    buttonRef: [{ type: ViewChild, args: ['button', { static: true }] }],
+    type: [{ type: Input }],
+  };
+  return ButtonComponent;
+})();
+if (false) {
+  /** @type {?} */
+  ButtonComponent.prototype.buttonClass;
+  /** @type {?} */
+  ButtonComponent.prototype.buttonType;
+  /** @type {?} */
+  ButtonComponent.prototype.iconClass;
+  /** @type {?} */
+  ButtonComponent.prototype.loading;
+  /** @type {?} */
+  ButtonComponent.prototype.disabled;
+  /** @type {?} */
+  ButtonComponent.prototype.attributes;
+  /** @type {?} */
+  ButtonComponent.prototype.click;
+  /** @type {?} */
+  ButtonComponent.prototype.focus;
+  /** @type {?} */
+  ButtonComponent.prototype.blur;
+  /** @type {?} */
+  ButtonComponent.prototype.buttonRef;
+  /**
+   * @deprecated Use buttonType instead. To be deleted in v1
+   * @type {?}
+   */
+  ButtonComponent.prototype.type;
+  /**
+   * @type {?}
+   * @private
+   */
+  ButtonComponent.prototype.renderer;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/widget-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -250,24 +330,25 @@ if (false) {
  * @return {?}
  */
 function getRandomBackgroundColor(count) {
+  /** @type {?} */
+  var colors = [];
+  for (var i = 0; i < count; i++) {
     /** @type {?} */
-    var colors = [];
-    for (var i = 0; i < count; i++) {
-        /** @type {?} */
-        var r = ((i + 5) * (i + 5) * 474) % 255;
-        /** @type {?} */
-        var g = ((i + 5) * (i + 5) * 1600) % 255;
-        /** @type {?} */
-        var b = ((i + 5) * (i + 5) * 84065) % 255;
-        colors.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.7)');
-    }
-    return colors;
+    var r = ((i + 5) * (i + 5) * 474) % 255;
+    /** @type {?} */
+    var g = ((i + 5) * (i + 5) * 1600) % 255;
+    /** @type {?} */
+    var b = ((i + 5) * (i + 5) * 84065) % 255;
+    colors.push('rgba(' + r + ', ' + g + ', ' + b + ', 0.7)');
+  }
+  return colors;
 }
 /** @type {?} */
 var chartJsLoaded$ = new ReplaySubject(1);
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/chart/chart.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ChartComponent = /** @class */ (function () {
@@ -401,6 +482,7 @@ var ChartComponent = /** @class */ (function () {
             _this._initialized = true;
         }));
     };
+    this.refresh
     /**
      * @return {?}
      */
@@ -429,47 +511,7 @@ var ChartComponent = /** @class */ (function () {
             this.chart = null;
         }
     };
-    ChartComponent.decorators = [
-        { type: Component, args: [{
-                    selector: 'abp-chart',
-                    template: "<div\n  style=\"position:relative\"\n  [style.width]=\"responsive && !width ? null : width\"\n  [style.height]=\"responsive && !height ? null : height\"\n>\n  <canvas\n    [attr.width]=\"responsive && !width ? null : width\"\n    [attr.height]=\"responsive && !height ? null : height\"\n    (click)=\"onCanvasClick($event)\"\n  ></canvas>\n</div>\n"
-                }] }
-    ];
-    /** @nocollapse */
-    ChartComponent.ctorParameters = function () { return [
-        { type: ElementRef },
-        { type: ChangeDetectorRef }
-    ]; };
-    ChartComponent.propDecorators = {
-        type: [{ type: Input }],
-        options: [{ type: Input }],
-        plugins: [{ type: Input }],
-        width: [{ type: Input }],
-        height: [{ type: Input }],
-        responsive: [{ type: Input }],
-        onDataSelect: [{ type: Output }],
-        initialized: [{ type: Output }],
-        data: [{ type: Input }]
-    };
-    return ChartComponent;
-}());
-if (false) {
-    /** @type {?} */
-    ChartComponent.prototype.type;
-    /** @type {?} */
-    ChartComponent.prototype.options;
-    /** @type {?} */
-    ChartComponent.prototype.plugins;
-    /** @type {?} */
-    ChartComponent.prototype.width;
-    /** @type {?} */
-    ChartComponent.prototype.height;
-    /** @type {?} */
-    ChartComponent.prototype.responsive;
-    /** @type {?} */
-    ChartComponent.prototype.onDataSelect;
-    /** @type {?} */
-    ChartComponent.prototype.initialized;
+    this.reinit
     /**
      * @type {?}
      * @private
@@ -500,6 +542,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/abstracts/toaster.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -629,6 +672,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/confirmation.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ConfirmationService = /** @class */ (function (_super) {
@@ -654,27 +698,43 @@ var ConfirmationService = /** @class */ (function (_super) {
      * @param {?} severity
      * @param {?=} options
      * @return {?}
-     */
-    function (message, title, severity, options) {
-        this.listenToEscape();
-        return _super.prototype.show.call(this, message, title, severity, options);
+     */ = function() {
+      if (_this.chart) {
+        _this.chart.destroy();
+        _this.initChart();
+      }
     };
-    /**
-     * @param {?=} status
-     * @return {?}
-     */
-    ConfirmationService.prototype.clear = /**
-     * @param {?=} status
-     * @return {?}
-     */
-    function (status) {
-        _super.prototype.clear.call(this, status);
-        this.destroy$.next();
-    };
+  }
+  Object.defineProperty(ChartComponent.prototype, 'data', {
     /**
      * @return {?}
      */
-    ConfirmationService.prototype.listenToEscape = /**
+    get: function() {
+      return this._data;
+    },
+    /**
+     * @param {?} val
+     * @return {?}
+     */
+    set: function(val) {
+      this._data = val;
+      this.reinit();
+    },
+    enumerable: true,
+    configurable: true,
+  });
+  Object.defineProperty(ChartComponent.prototype, 'canvas', {
+    /**
+     * @return {?}
+     */
+    get: function() {
+      return this.el.nativeElement.children[0].children[0];
+    },
+    enumerable: true,
+    configurable: true,
+  });
+  Object.defineProperty(ChartComponent.prototype, 'base64Image', {
+    /**
      * @return {?}
      */
     function () {
@@ -689,36 +749,42 @@ var ConfirmationService = /** @class */ (function (_super) {
          * @param {?} _
          * @return {?}
          */
-        function (_) {
-            _this.clear();
-        }));
-    };
-    ConfirmationService.decorators = [
-        { type: Injectable, args: [{ providedIn: 'root' },] }
-    ];
-    /** @nocollapse */
-    ConfirmationService.ctorParameters = function () { return [
-        { type: MessageService }
-    ]; };
-    /** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({ factory: function ConfirmationService_Factory() { return new ConfirmationService(ɵɵinject(MessageService)); }, token: ConfirmationService, providedIn: "root" });
-    return ConfirmationService;
-}(AbstractToaster));
+        function(_) {
+          _this.clear();
+        },
+      );
+  };
+  ConfirmationService.decorators = [{ type: Injectable, args: [{ providedIn: 'root' }] }];
+  /** @nocollapse */
+  ConfirmationService.ctorParameters = function() {
+    return [{ type: MessageService }];
+  };
+  /** @nocollapse */ ConfirmationService.ngInjectableDef = ɵɵdefineInjectable({
+    factory: function ConfirmationService_Factory() {
+      return new ConfirmationService(ɵɵinject(MessageService));
+    },
+    token: ConfirmationService,
+    providedIn: 'root',
+  });
+  return ConfirmationService;
+})(AbstractToaster);
 if (false) {
-    /** @type {?} */
-    ConfirmationService.prototype.key;
-    /** @type {?} */
-    ConfirmationService.prototype.sticky;
-    /** @type {?} */
-    ConfirmationService.prototype.destroy$;
-    /**
-     * @type {?}
-     * @protected
-     */
-    ConfirmationService.prototype.messageService;
+  /** @type {?} */
+  ConfirmationService.prototype.key;
+  /** @type {?} */
+  ConfirmationService.prototype.sticky;
+  /** @type {?} */
+  ConfirmationService.prototype.destroy$;
+  /**
+   * @type {?}
+   * @protected
+   */
+  ConfirmationService.prototype.messageService;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/confirmation/confirmation.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ConfirmationComponent = /** @class */ (function () {
@@ -753,32 +819,32 @@ var ConfirmationComponent = /** @class */ (function () {
     return ConfirmationComponent;
 }());
 if (false) {
-    /** @type {?} */
-    ConfirmationComponent.prototype.confirm;
-    /** @type {?} */
-    ConfirmationComponent.prototype.reject;
-    /** @type {?} */
-    ConfirmationComponent.prototype.dismiss;
-    /**
-     * @type {?}
-     * @private
-     */
-    ConfirmationComponent.prototype.confirmationService;
+  /** @type {?} */
+  ConfirmationComponent.prototype.confirm;
+  /** @type {?} */
+  ConfirmationComponent.prototype.reject;
+  /** @type {?} */
+  ConfirmationComponent.prototype.dismiss;
+  /**
+   * @type {?}
+   * @private
+   */
+  ConfirmationComponent.prototype.confirmationService;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/error/error.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var HttpErrorWrapperComponent = /** @class */ (function () {
-    function HttpErrorWrapperComponent() {
+var ErrorComponent = /** @class */ (function () {
+    function ErrorComponent() {
         this.status = 0;
         this.title = 'Oops!';
         this.details = 'Sorry, an error has occured.';
         this.customComponent = null;
-        this.hideCloseIcon = false;
     }
-    Object.defineProperty(HttpErrorWrapperComponent.prototype, "statusText", {
+    Object.defineProperty(ErrorComponent.prototype, "statusText", {
         get: /**
          * @return {?}
          */
@@ -791,30 +857,16 @@ var HttpErrorWrapperComponent = /** @class */ (function () {
     /**
      * @return {?}
      */
-    HttpErrorWrapperComponent.prototype.ngOnInit = /**
-     * @return {?}
-     */
-    function () {
-        this.backgroundColor =
-            snq((/**
-             * @return {?}
-             */
-            function () { return window.getComputedStyle(document.body).getPropertyValue('background-color'); })) || '#fff';
-    };
-    /**
-     * @return {?}
-     */
-    HttpErrorWrapperComponent.prototype.ngAfterViewInit = /**
+    ErrorComponent.prototype.ngAfterViewInit = /**
      * @return {?}
      */
     function () {
         var _this = this;
         if (this.customComponent) {
             /** @type {?} */
-            var customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(this.injector);
+            var customComponentRef = this.cfRes.resolveComponentFactory(this.customComponent).create(null);
             customComponentRef.instance.errorStatus = this.status;
             customComponentRef.instance.destroy$ = this.destroy$;
-            this.appRef.attachView(customComponentRef.hostView);
             this.containerRef.nativeElement.appendChild(((/** @type {?} */ (customComponentRef.hostView))).rootNodes[0]);
             customComponentRef.changeDetectorRef.detectChanges();
         }
@@ -834,59 +886,52 @@ var HttpErrorWrapperComponent = /** @class */ (function () {
     /**
      * @return {?}
      */
-    HttpErrorWrapperComponent.prototype.ngOnDestroy = /**
+    ErrorComponent.prototype.ngOnDestroy = /**
      * @return {?}
      */
     function () { };
     /**
      * @return {?}
      */
-    HttpErrorWrapperComponent.prototype.destroy = /**
+    ErrorComponent.prototype.destroy = /**
      * @return {?}
      */
     function () {
         this.destroy$.next();
         this.destroy$.complete();
     };
-    HttpErrorWrapperComponent.decorators = [
+    ErrorComponent.decorators = [
         { type: Component, args: [{
-                    selector: 'abp-http-error-wrapper',
-                    template: "<div #container id=\"abp-http-error-container\" class=\"error\" [style.backgroundColor]=\"backgroundColor\">\r\n  <button *ngIf=\"!hideCloseIcon\" id=\"abp-close-button\" type=\"button\" class=\"close mr-2\" (click)=\"destroy()\">\r\n    <span aria-hidden=\"true\">&times;</span>\r\n  </button>\r\n\r\n  <div *ngIf=\"!customComponent\" class=\"row centered\">\r\n    <div class=\"col-md-12\">\r\n      <div class=\"error-template\">\r\n        <h1>{{ statusText }} {{ title | abpLocalization }}</h1>\r\n        <div class=\"error-details\">\r\n          {{ details | abpLocalization }}\r\n        </div>\r\n        <div class=\"error-actions\">\r\n          <a (click)=\"destroy()\" routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\r\n            ><span class=\"glyphicon glyphicon-home\"></span>\r\n            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}\r\n          </a>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n",
-                    styles: [".error{position:fixed;top:0;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}"]
+                    selector: 'abp-error',
+                    template: "<div #container id=\"abp-error\" class=\"error\">\r\n  <button id=\"abp-close-button\" type=\"button\" class=\"close mr-3\" (click)=\"destroy()\">\r\n    <span aria-hidden=\"true\">&times;</span>\r\n  </button>\r\n\r\n  <div *ngIf=\"!customComponent\" class=\"row centered\">\r\n    <div class=\"col-md-12\">\r\n      <div class=\"error-template\">\r\n        <h1>{{ statusText }} {{ title | abpLocalization }}</h1>\r\n        <div class=\"error-details\">\r\n          {{ details | abpLocalization }}\r\n        </div>\r\n        <div class=\"error-actions\">\r\n          <a (click)=\"destroy()\" routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\r\n            ><span class=\"glyphicon glyphicon-home\"></span>\r\n            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}\r\n          </a>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n",
+                    styles: [".error{position:fixed;top:0;background-color:#fff;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}"]
                 }] }
     ];
-    HttpErrorWrapperComponent.propDecorators = {
+    ErrorComponent.propDecorators = {
         containerRef: [{ type: ViewChild, args: ['container', { static: false },] }]
     };
-    return HttpErrorWrapperComponent;
+    return ErrorComponent;
 }());
 if (false) {
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.appRef;
+    ErrorComponent.prototype.cfRes;
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.cfRes;
+    ErrorComponent.prototype.status;
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.injector;
+    ErrorComponent.prototype.title;
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.status;
+    ErrorComponent.prototype.details;
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.title;
+    ErrorComponent.prototype.customComponent;
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.details;
+    ErrorComponent.prototype.destroy$;
     /** @type {?} */
-    HttpErrorWrapperComponent.prototype.customComponent;
-    /** @type {?} */
-    HttpErrorWrapperComponent.prototype.destroy$;
-    /** @type {?} */
-    HttpErrorWrapperComponent.prototype.hideCloseIcon;
-    /** @type {?} */
-    HttpErrorWrapperComponent.prototype.backgroundColor;
-    /** @type {?} */
-    HttpErrorWrapperComponent.prototype.containerRef;
+    ErrorComponent.prototype.containerRef;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/loader-bar/loader-bar.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LoaderBarComponent = /** @class */ (function () {
@@ -1074,72 +1119,101 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/animations/fade.animations.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var fadeIn = animation([style({ opacity: '0' }), animate('{{ time}} {{ easing }}', style({ opacity: '1' }))], {
-    params: { time: '350ms', easing: 'ease' },
+  params: { time: '350ms', easing: 'ease' },
 });
 /** @type {?} */
-var fadeOut = animation([style({ opacity: '1' }), animate('{{ time}} {{ easing }}', style({ opacity: '0' }))], { params: { time: '350ms', easing: 'ease' } });
+var fadeOut = animation([style({ opacity: '1' }), animate('{{ time}} {{ easing }}', style({ opacity: '0' }))], {
+  params: { time: '350ms', easing: 'ease' },
+});
 /** @type {?} */
-var fadeInDown = animation([
+var fadeInDown = animation(
+  [
     style({ opacity: '0', transform: '{{ transform }} translateY(-20px)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '1', transform: '{{ transform }} translateY(0)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeInUp = animation([
+var fadeInUp = animation(
+  [
     style({ opacity: '0', transform: '{{ transform }} translateY(20px)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '1', transform: '{{ transform }} translateY(0)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeInLeft = animation([
+var fadeInLeft = animation(
+  [
     style({ opacity: '0', transform: '{{ transform }} translateX(20px)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '1', transform: '{{ transform }} translateX(0)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeInRight = animation([
+var fadeInRight = animation(
+  [
     style({ opacity: '0', transform: '{{ transform }} translateX(-20px)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '1', transform: '{{ transform }} translateX(0)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeOutDown = animation([
+var fadeOutDown = animation(
+  [
     style({ opacity: '1', transform: '{{ transform }} translateY(0)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '0', transform: '{{ transform }} translateY(20px)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeOutUp = animation([
+var fadeOutUp = animation(
+  [
     style({ opacity: '1', transform: '{{ transform }} translateY(0)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '0', transform: '{{ transform }} translateY(-20px)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeOutLeft = animation([
+var fadeOutLeft = animation(
+  [
     style({ opacity: '1', transform: '{{ transform }} translateX(0)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '0', transform: '{{ transform }} translateX(20px)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 /** @type {?} */
-var fadeOutRight = animation([
+var fadeOutRight = animation(
+  [
     style({ opacity: '1', transform: '{{ transform }} translateX(0)' }),
     animate('{{ time }} {{ easing }}', style({ opacity: '0', transform: '{{ transform }} translateX(-20px)' })),
-], { params: { time: '350ms', easing: 'ease', transform: '' } });
+  ],
+  { params: { time: '350ms', easing: 'ease', transform: '' } },
+);
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/animations/modal.animations.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var fadeAnimation = trigger('fade', [
-    transition(':enter', useAnimation(fadeIn)),
-    transition(':leave', useAnimation(fadeOut)),
+  transition(':enter', useAnimation(fadeIn)),
+  transition(':leave', useAnimation(fadeOut)),
 ]);
 /** @type {?} */
 var dialogAnimation = trigger('dialog', [
-    transition(':enter', useAnimation(fadeInDown)),
-    transition(':leave', useAnimation(fadeOut)),
+  transition(':enter', useAnimation(fadeInDown)),
+  transition(':leave', useAnimation(fadeOut)),
 ]);
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/modal/modal.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ModalComponent = /** @class */ (function () {
@@ -1215,53 +1289,44 @@ var ModalComponent = /** @class */ (function () {
         configurable: true
     });
     /**
+     * @param {?} value
      * @return {?}
      */
-    ModalComponent.prototype.ngOnDestroy = /**
-     * @return {?}
-     */
-    function () {
-        this.destroy$.next();
-    };
+    set: function(value) {
+      var _this = this;
+      if (typeof value !== 'boolean') return;
+      this.isModalOpen = value;
+      this._visible = value;
+      this.visibleChange.emit(value);
+      if (value) {
+        setTimeout(
+          /**
+           * @return {?}
+           */
+          function() {
+            return _this.listen();
+          },
+          0,
+        );
+        this.renderer.addClass(document.body, 'modal-open');
+        this.appear.emit();
+      } else {
+        this.renderer.removeClass(document.body, 'modal-open');
+        this.disappear.emit();
+      }
+    },
+    enumerable: true,
+    configurable: true,
+  });
+  Object.defineProperty(ModalComponent.prototype, 'busy', {
     /**
      * @return {?}
      */
-    ModalComponent.prototype.close = /**
-     * @return {?}
-     */
-    function () {
-        var _this = this;
-        if (this.busy)
-            return;
-        /** @type {?} */
-        var node;
-        if (!this.modalContent) {
-            node = (/** @type {?} */ (document.getElementById('modal-container')));
-        }
-        /** @type {?} */
-        var nodes = getFlatNodes(((/** @type {?} */ ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body')))).childNodes);
-        if (hasNgDirty(nodes)) {
-            if (this.isConfirmationOpen)
-                return;
-            this.isConfirmationOpen = true;
-            this.confirmationService
-                .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
-                .subscribe((/**
-             * @param {?} status
-             * @return {?}
-             */
-            function (status) {
-                _this.isConfirmationOpen = false;
-                if (status === "confirm" /* confirm */) {
-                    _this.visible = false;
-                }
-            }));
-        }
-        else {
-            this.visible = false;
-        }
-    };
+    get: function() {
+      return this._busy;
+    },
     /**
+     * @param {?} value
      * @return {?}
      */
     ModalComponent.prototype.listen = /**
@@ -1302,8 +1367,8 @@ var ModalComponent = /** @class */ (function () {
     ModalComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-modal',
-                    template: "<div\r\n  *ngIf=\"visible\"\r\n  [@fade]=\"isModalOpen\"\r\n  id=\"modal-container\"\r\n  class=\"modal show {{ modalClass }}\"\r\n  tabindex=\"-1\"\r\n  role=\"dialog\"\r\n>\r\n  <div class=\"modal-backdrop\" (click)=\"close()\"></div>\r\n  <div\r\n    id=\"abp-modal-dialog\"\r\n    class=\"modal-dialog modal-{{ size }}\"\r\n    role=\"document\"\r\n    [class.modal-dialog-centered]=\"centered\"\r\n    #abpModalContent\r\n  >\r\n    <div id=\"abp-modal-content\" class=\"modal-content\">\r\n      <div id=\"abp-modal-header\" class=\"modal-header\">\r\n        <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\r\n        \u200B\r\n        <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n      <div id=\"abp-modal-body\" class=\"modal-body\">\r\n        <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\r\n      </div>\r\n      <div id=\"abp-modal-footer\" class=\"modal-footer\">\r\n        <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <ng-content></ng-content>\r\n</div>\r\n",
-                    animations: [fadeAnimation]
+                    template: "<ng-container *ngIf=\"visible\">\r\n  <div class=\"modal show {{ modalClass }}\" tabindex=\"-1\" role=\"dialog\">\r\n    <div class=\"modal-backdrop\" [@fade]=\"isModalOpen\" (click)=\"close()\"></div>\r\n    <div\r\n      id=\"abp-modal-dialog\"\r\n      class=\"modal-dialog modal-{{ size }}\"\r\n      role=\"document\"\r\n      [class.modal-dialog-centered]=\"centered\"\r\n      [@dialog]=\"isModalOpen\"\r\n      #abpModalContent\r\n    >\r\n      <div id=\"abp-modal-content\" class=\"modal-content\">\r\n        <div id=\"abp-modal-header\" class=\"modal-header\">\r\n          <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\r\n          \u200B\r\n          <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\r\n            <span aria-hidden=\"true\">&times;</span>\r\n          </button>\r\n        </div>\r\n        <div id=\"abp-modal-body\" class=\"modal-body\">\r\n          <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\r\n        </div>\r\n        <div id=\"abp-modal-footer\" class=\"modal-footer\">\r\n          <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\r\n        </div>\r\n      </div>\r\n    </div>\r\n    <ng-content></ng-content>\r\n  </div>\r\n</ng-container>\r\n",
+                    animations: [fadeAnimation, dialogAnimation]
                 }] }
     ];
     /** @nocollapse */
@@ -1386,144 +1451,62 @@ if (false) {
  * @return {?}
  */
 function getFlatNodes(nodes) {
-    return Array.from(nodes).reduce((/**
+  return Array.from(nodes).reduce(
+    /**
      * @param {?} acc
      * @param {?} val
      * @return {?}
      */
-    function (acc, val) { return __spread(acc, (val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])); }), []);
+    function(acc, val) {
+      return __spread(acc, val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val]);
+    },
+    [],
+  );
 }
 /**
  * @param {?} nodes
  * @return {?}
  */
 function hasNgDirty(nodes) {
-    return nodes.findIndex((/**
-     * @param {?} node
-     * @return {?}
-     */
-    function (node) { return (node.className || '').indexOf('ng-dirty') > -1; })) > -1;
+  return (
+    nodes.findIndex(
+      /**
+       * @param {?} node
+       * @return {?}
+       */
+      function(node) {
+        return (node.className || '').indexOf('ng-dirty') > -1;
+      },
+    ) > -1
+  );
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/sort-order-icon/sort-order-icon.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var SortOrderIconComponent = /** @class */ (function () {
-    function SortOrderIconComponent() {
-        this.selectedKeyChange = new EventEmitter();
-        this.selectedSortKeyChange = new EventEmitter();
-        this.orderChange = new EventEmitter();
-    }
-    Object.defineProperty(SortOrderIconComponent.prototype, "selectedKey", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            return this._selectedSortKey;
-        },
-        /**
-         * @deprecated use selectedSortKey instead.
-         */
-        set: /**
-         * @deprecated use selectedSortKey instead.
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this.selectedSortKey = value;
-            this.selectedKeyChange.emit(value);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(SortOrderIconComponent.prototype, "selectedSortKey", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            return this._selectedSortKey;
-        },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this._selectedSortKey = value;
-            this.selectedSortKeyChange.emit(value);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(SortOrderIconComponent.prototype, "key", {
-        /**
-         * @deprecated use sortKey instead.
-         */
-        get: /**
-         * @deprecated use sortKey instead.
-         * @return {?}
-         */
-        function () {
-            return this.sortKey;
-        },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this.sortKey = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(SortOrderIconComponent.prototype, "order", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            return this._order;
-        },
-        set: /**
-         * @param {?} value
-         * @return {?}
-         */
-        function (value) {
-            this._order = value;
-            this.orderChange.emit(value);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(SortOrderIconComponent.prototype, "icon", {
-        get: /**
-         * @return {?}
-         */
-        function () {
-            if (!this.selectedSortKey)
-                return 'fa-sort';
-            if (this.selectedSortKey === this.sortKey)
-                return "fa-sort-" + this.order;
-            else
-                return '';
-        },
-        enumerable: true,
-        configurable: true
-    });
+var SortOrderIconComponent = /** @class */ (function() {
+  function SortOrderIconComponent() {
+    this.selectedKeyChange = new EventEmitter();
+    this.orderChange = new EventEmitter();
+  }
+  Object.defineProperty(SortOrderIconComponent.prototype, 'selectedKey', {
     /**
-     * @param {?} key
      * @return {?}
      */
-    SortOrderIconComponent.prototype.sort = /**
-     * @param {?} key
+    get: function() {
+      return this._selectedKey;
+    },
+    /**
+     * @param {?} value
      * @return {?}
      */
     function (key) {
-        this.selectedKey = key; // TODO: To be removed
-        this.selectedSortKey = key;
+        this.selectedKey = key;
         switch (this.order) {
             case '':
                 this.order = 'asc';
-                this.orderChange.emit('asc');
                 break;
             case 'asc':
                 this.order = 'desc';
@@ -1531,24 +1514,20 @@ var SortOrderIconComponent = /** @class */ (function () {
                 break;
             case 'desc':
                 this.order = '';
-                this.selectedKey = ''; // TODO: To be removed
-                this.orderChange.emit('');
+                this.selectedKey = '';
                 break;
         }
     };
     SortOrderIconComponent.decorators = [
         { type: Component, args: [{
                     selector: 'abp-sort-order-icon',
-                    template: "<span class=\"float-right {{ iconClass }}\">\n  <i class=\"fa {{ icon }}\"></i>\n</span>\n"
+                    template: "<span class=\"float-right {{ iconClass }}\">\r\n  <i class=\"fa {{ icon }}\"></i>\r\n</span>\r\n"
                 }] }
     ];
     SortOrderIconComponent.propDecorators = {
         selectedKey: [{ type: Input }],
-        selectedSortKey: [{ type: Input }],
         selectedKeyChange: [{ type: Output }],
-        selectedSortKeyChange: [{ type: Output }],
         key: [{ type: Input }],
-        sortKey: [{ type: Input }],
         order: [{ type: Input }],
         orderChange: [{ type: Output }],
         iconClass: [{ type: Input }]
@@ -1565,13 +1544,11 @@ if (false) {
      * @type {?}
      * @private
      */
-    SortOrderIconComponent.prototype._selectedSortKey;
+    SortOrderIconComponent.prototype._selectedKey;
     /** @type {?} */
     SortOrderIconComponent.prototype.selectedKeyChange;
     /** @type {?} */
-    SortOrderIconComponent.prototype.selectedSortKeyChange;
-    /** @type {?} */
-    SortOrderIconComponent.prototype.sortKey;
+    SortOrderIconComponent.prototype.key;
     /** @type {?} */
     SortOrderIconComponent.prototype.orderChange;
     /** @type {?} */
@@ -1580,6 +1557,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/table-empty-message/table-empty-message.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var TableEmptyMessageComponent = /** @class */ (function () {
@@ -1626,6 +1604,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/toast/toast.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ToastComponent = /** @class */ (function () {
@@ -1643,12 +1622,14 @@ var ToastComponent = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/contants/styles.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar {\n  height: 5px !important;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar-track {\n  background: #ddd;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar-thumb {\n  background: #8a8686;\n}\n\n.modal.show {\n  display: block !important;\n}\n\n.modal-backdrop {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: calc(100% - 7px);\n  height: 100%;\n  background-color: rgba(0, 0, 0, 0.6);\n  z-index: 1040;\n}\n\n.modal::-webkit-scrollbar {\n  width: 7px;\n}\n\n.modal::-webkit-scrollbar-track {\n  background: #ddd;\n}\n\n.modal::-webkit-scrollbar-thumb {\n  background: #8a8686;\n}\n\n.modal-dialog {\n  z-index: 1050;\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-toast .ui-toast-message {\n  box-sizing: border-box;\n  border: 2px solid transparent;\n  border-radius: 4px;\n  color: #1b1d29;\n}\n\n.abp-toast .ui-toast-message-content {\n  padding: 10px;\n}\n\n.abp-toast .ui-toast-message-content .ui-toast-icon {\n  top: 0;\n  left: 0;\n  padding: 10px;\n}\n\n.abp-toast .ui-toast-summary {\n  margin: 0;\n  font-weight: 700;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-error {\n  border: 2px solid #ba1659;\n  background-color: #f4f4f7;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-error .ui-toast-message-content .ui-toast-icon {\n  color: #ba1659;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-warn {\n  border: 2px solid #ed5d98;\n  background-color: #f4f4f7;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-warn .ui-toast-message-content .ui-toast-icon {\n  color: #ed5d98;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-success {\n  border: 2px solid #1c9174;\n  background-color: #f4f4f7;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-success .ui-toast-message-content .ui-toast-icon {\n  color: #1c9174;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-info {\n  border: 2px solid #fccb31;\n  background-color: #f4f4f7;\n}\n\nbody abp-toast .ui-toast .ui-toast-message.ui-toast-message-info .ui-toast-message-content .ui-toast-icon {\n  color: #fccb31;\n}\n\n.abp-confirm .ui-toast-message {\n  box-sizing: border-box;\n  padding: 0px;\n  border:0 none;\n  border-radius: 4px;\n  background-color: transparent !important;\n  font-family: \"Poppins\", sans-serif;\n  text-align: center;\n}\n\n.abp-confirm .ui-toast-message-content {\n  padding: 0px;\n}\n\n.abp-confirm .abp-confirm-icon {\n  margin: 32px 50px 5px !important;\n  color: #f8bb86 !important;\n  font-size: 52px !important;\n}\n\n.abp-confirm .ui-toast-close-icon {\n  display: none !important;\n}\n\n.abp-confirm .abp-confirm-summary {\n  display: block !important;\n  margin-bottom: 13px !important;\n  padding: 13px 16px 0px !important;\n  font-weight: 600 !important;\n  font-size: 18px !important;\n}\n\n.abp-confirm .abp-confirm-body {\n  display: inline-block !important;\n  padding: 0px 10px !important;\n}\n\n.abp-confirm .abp-confirm-footer {\n  display: block;\n  margin-top: 30px;\n  padding: 16px;\n  text-align: right;\n}\n\n.abp-confirm .abp-confirm-footer .btn {\n  margin-left: 10px !important;\n}\n\n.ui-widget-overlay {\n  z-index: 1000;\n}\n\n.color-white {\n  color: #FFF !important;\n}\n\n.custom-checkbox > label {\n  cursor: pointer;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n.abp-collapsed-height {\n  -moz-transition: max-height linear 0.35s;\n  -ms-transition: max-height linear 0.35s;\n  -o-transition: max-height linear 0.35s;\n  -webkit-transition: max-height linear 0.35s;\n  overflow:hidden;\n  transition:max-height 0.35s linear;\n  height:auto;\n  max-height: 0;\n}\n\n.abp-mh-25 {\n  max-height: 25vh;\n}\n\n.abp-mh-50 {\n  transition:max-height 0.65s linear;\n  max-height: 50vh;\n}\n\n.abp-mh-75 {\n  transition:max-height 0.85s linear;\n  max-height: 75vh;\n}\n\n.abp-mh-100 {\n  transition:max-height 1s linear;\n  max-height: 100vh;\n}\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(0px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
+var styles = "\n.is-invalid .form-control {\n  border-color: #dc3545;\n  border-style: solid !important;\n}\n\n.is-invalid .invalid-feedback,\n.is-invalid + * .invalid-feedback {\n  display: block;\n}\n\n.data-tables-filter {\n  text-align: right;\n}\n\n.pointer {\n  cursor: pointer;\n}\n\n.navbar .dropdown-submenu a::after {\n  transform: rotate(-90deg);\n  position: absolute;\n  right: 16px;\n  top: 18px;\n}\n\n.navbar .dropdown-menu {\n  min-width: 215px;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar {\n  height: 5px !important;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar-track {\n  background: #ddd;\n}\n\n.ui-table-scrollable-body::-webkit-scrollbar-thumb {\n  background: #8a8686;\n}\n\n.modal.show {\n  display: block !important;\n}\n\n.modal-backdrop {\n  position: absolute !important;\n  top: 0 !important;\n  left: 0 !important;\n  width: 100% !important;\n  height: 100% !important;\n  background-color: rgba(0, 0, 0, 0.6) !important;\n  z-index: 1040 !important;\n}\n\n.modal-dialog {\n  z-index: 1050 !important;\n}\n\n.abp-ellipsis-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-ellipsis {\n  overflow: hidden !important;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}\n\n.abp-toast .ui-toast-message {\n  box-sizing: border-box !important;\n  border: 2px solid transparent !important;\n  border-radius: 4px !important;\n  background-color: #f4f4f7 !important;\n  color: #1b1d29 !important;\n}\n\n.abp-toast .ui-toast-message-content {\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-message-content .ui-toast-icon {\n  top: 0 !important;\n  left: 0 !important;\n  padding: 10px !important;\n}\n\n.abp-toast .ui-toast-summary {\n  margin: 0 !important;\n  font-weight: 700 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error {\n  border-color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-error .ui-toast-message-content .ui-toast-icon {\n  color: #ba1659 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning {\n  border-color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-warning .ui-toast-message-content .ui-toast-icon {\n  color: #ed5d98 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success {\n  border-color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-success .ui-toast-message-content .ui-toast-icon {\n  color: #1c9174 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info {\n  border-color: #fccb31 !important;\n}\n\n.abp-toast .ui-toast-message.ui-toast-message-info .ui-toast-message-content .ui-toast-icon {\n  color: #fccb31 !important;\n}\n\n.abp-confirm .ui-toast-message {\n  box-sizing: border-box !important;\n  padding: 0px !important;\n  border:0 none !important;\n  border-radius: 4px !important;\n  background-color: #fff !important;\n  color: rgba(0, 0, 0, .65) !important;\n  font-family: \"Poppins\", sans-serif;\n  text-align: center !important;\n}\n\n.abp-confirm .ui-toast-message-content {\n  padding: 0px !important;\n}\n\n.abp-confirm .abp-confirm-icon {\n  margin: 32px 50px 5px !important;\n  color: #f8bb86 !important;\n  font-size: 52px !important;\n}\n\n.abp-confirm .ui-toast-close-icon {\n  display: none !important;\n}\n\n.abp-confirm .abp-confirm-summary {\n  display: block !important;\n  margin-bottom: 13px !important;\n  padding: 13px 16px 0px !important;\n  font-weight: 600 !important;\n  font-size: 18px !important;\n}\n\n.abp-confirm .abp-confirm-body {\n  display: inline-block !important;\n  padding: 0px 10px !important;\n}\n\n.abp-confirm .abp-confirm-footer {\n  display: block !important;\n  margin-top: 30px !important;\n  padding: 16px !important;\n  background-color: #f4f4f7 !important;\n  text-align: right !important;\n}\n\n.abp-confirm .abp-confirm-footer .btn {\n  margin-left: 10px !important;\n}\n\n.ui-widget-overlay {\n  z-index: 1000;\n}\n\n.color-white {\n  color: #FFF !important;\n}\n\n/* <animations */\n\n.fade-in-top {\n  animation: fadeInTop 0.2s ease-in-out;\n}\n\n.fade-out-top {\n  animation: fadeOutTop 0.2s ease-in-out;\n}\n\n.abp-collapsed-height {\n  -moz-transition: max-height linear 0.35s;\n  -ms-transition: max-height linear 0.35s;\n  -o-transition: max-height linear 0.35s;\n  -webkit-transition: max-height linear 0.35s;\n  overflow:hidden;\n  transition:max-height 0.35s linear;\n  height:auto;\n  max-height: 0;\n}\n\n.abp-mh-25 {\n  max-height: 25vh;\n}\n\n.abp-mh-50 {\n  transition:max-height 0.65s linear;\n  max-height: 50vh;\n}\n\n.abp-mh-75 {\n  transition:max-height 0.85s linear;\n  max-height: 75vh;\n}\n\n.abp-mh-100 {\n  transition:max-height 1s linear;\n  max-height: 100vh;\n}\n\n@keyframes fadeInTop {\n  from {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n\n  to {\n    transform: translateY(0px);\n    opacity: 1;\n  }\n}\n\n@keyframes fadeOutTop {\n  to {\n    transform: translateY(-5px);\n    opacity: 0;\n  }\n}\n\n/* </animations */\n\n";
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/table-sort.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1705,19 +1686,38 @@ if (false) {
     /** @type {?} */
     TableSortDirective.prototype.value;
     /**
-     * @type {?}
-     * @private
+     * @param {?} value
+     * @return {?}
      */
     TableSortDirective.prototype.table;
     /**
-     * @type {?}
-     * @private
+     * @return {?}
      */
     TableSortDirective.prototype.sortPipe;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/tokens/error-pages.token.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * @param {?=} config
+ * @return {?}
+ */
+function httpErrorConfigFactory(config) {
+    if (config === void 0) { config = (/** @type {?} */ ({})); }
+    if (config.errorScreen && config.errorScreen.component && !config.errorScreen.forWhichErrors) {
+        config.errorScreen.forWhichErrors = [401, 403, 404, 500];
+    }
+    return (/** @type {?} */ (__assign({ errorScreen: {} }, config)));
+}
+/** @type {?} */
+var HTTP_ERROR_CONFIG = new InjectionToken('HTTP_ERROR_CONFIG');
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/handlers/error.handler.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -1931,6 +1931,7 @@ var ErrorHandler = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        console.warn(this.store.selectSnapshot(RouterState.url));
         this.store.dispatch(new Navigate(['/account/login'], null, { state: { redirectUrl: this.store.selectSnapshot(RouterState.url) } }));
     };
     /**
@@ -1947,17 +1948,14 @@ var ErrorHandler = /** @class */ (function () {
         var renderer = this.rendererFactory.createRenderer(null, null);
         /** @type {?} */
         var host = renderer.selectRootElement(document.body, true);
-        this.componentRef = this.cfRes.resolveComponentFactory(HttpErrorWrapperComponent).create(this.injector);
+        this.componentRef = this.cfRes.resolveComponentFactory(ErrorComponent).create(this.injector);
         for (var key in this.componentRef.instance) {
             if (this.componentRef.instance.hasOwnProperty(key)) {
                 this.componentRef.instance[key] = instance[key];
             }
         }
-        this.componentRef.instance.hideCloseIcon = this.httpErrorConfig.errorScreen.hideCloseIcon;
         if (this.canCreateCustomError((/** @type {?} */ (instance.status)))) {
             this.componentRef.instance.cfRes = this.cfRes;
-            this.componentRef.instance.appRef = this.appRef;
-            this.componentRef.instance.injector = this.injector;
             this.componentRef.instance.customComponent = this.httpErrorConfig.errorScreen.component;
         }
         this.appRef.attachView(this.componentRef.hostView);
@@ -2003,9 +2001,9 @@ var ErrorHandler = /** @class */ (function () {
         { type: ComponentFactoryResolver },
         { type: RendererFactory2 },
         { type: Injector },
-        { type: undefined, decorators: [{ type: Inject, args: ['HTTP_ERROR_CONFIG',] }] }
+        { type: undefined, decorators: [{ type: Inject, args: [HTTP_ERROR_CONFIG,] }] }
     ]; };
-    /** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService), ɵɵinject(ApplicationRef), ɵɵinject(ComponentFactoryResolver), ɵɵinject(RendererFactory2), ɵɵinject(INJECTOR), ɵɵinject("HTTP_ERROR_CONFIG")); }, token: ErrorHandler, providedIn: "root" });
+    /** @nocollapse */ ErrorHandler.ngInjectableDef = ɵɵdefineInjectable({ factory: function ErrorHandler_Factory() { return new ErrorHandler(ɵɵinject(Actions), ɵɵinject(Store), ɵɵinject(ConfirmationService), ɵɵinject(ApplicationRef), ɵɵinject(ComponentFactoryResolver), ɵɵinject(RendererFactory2), ɵɵinject(INJECTOR), ɵɵinject(HTTP_ERROR_CONFIG)); }, token: ErrorHandler, providedIn: "root" });
     return ErrorHandler;
 }());
 if (false) {
@@ -2055,120 +2053,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?=} config
- * @return {?}
- */
-function httpErrorConfigFactory(config) {
-    if (config === void 0) { config = (/** @type {?} */ ({})); }
-    if (config.errorScreen && config.errorScreen.component && !config.errorScreen.forWhichErrors) {
-        config.errorScreen.forWhichErrors = [401, 403, 404, 500];
-    }
-    return (/** @type {?} */ (__assign({ errorScreen: {} }, config)));
-}
-/** @type {?} */
-var HTTP_ERROR_CONFIG = new InjectionToken('HTTP_ERROR_CONFIG');
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @param {?} value
- * @return {?}
- */
-function padNumber(value) {
-    if (isNumber(value)) {
-        return ("0" + value).slice(-2);
-    }
-    else {
-        return '';
-    }
-}
-/**
- * @param {?} value
- * @return {?}
- */
-function isNumber(value) {
-    return !isNaN(toInteger(value));
-}
-/**
- * @param {?} value
- * @return {?}
- */
-function toInteger(value) {
-    return parseInt("" + value, 10);
-}
-var DateParserFormatter = /** @class */ (function (_super) {
-    __extends(DateParserFormatter, _super);
-    function DateParserFormatter(datePipe) {
-        var _this = _super.call(this) || this;
-        _this.datePipe = datePipe;
-        return _this;
-    }
-    /**
-     * @param {?} value
-     * @return {?}
-     */
-    DateParserFormatter.prototype.parse = /**
-     * @param {?} value
-     * @return {?}
-     */
-    function (value) {
-        if (value) {
-            /** @type {?} */
-            var dateParts = value.trim().split('-');
-            if (dateParts.length === 1 && isNumber(dateParts[0])) {
-                return { year: toInteger(dateParts[0]), month: null, day: null };
-            }
-            else if (dateParts.length === 2 && isNumber(dateParts[0]) && isNumber(dateParts[1])) {
-                return { year: toInteger(dateParts[0]), month: toInteger(dateParts[1]), day: null };
-            }
-            else if (dateParts.length === 3 && isNumber(dateParts[0]) && isNumber(dateParts[1]) && isNumber(dateParts[2])) {
-                return { year: toInteger(dateParts[0]), month: toInteger(dateParts[1]), day: toInteger(dateParts[2]) };
-            }
-        }
-        return null;
-    };
-    /**
-     * @param {?} date
-     * @return {?}
-     */
-    DateParserFormatter.prototype.format = /**
-     * @param {?} date
-     * @return {?}
-     */
-    function (date) {
-        if (date && this.datePipe) {
-            return this.datePipe.transform(new Date(date.year, date.month, date.day), 'shortDate');
-        }
-        else {
-            return date
-                ? date.year + "-" + (isNumber(date.month) ? padNumber(date.month) : '') + "-" + (isNumber(date.day) ? padNumber(date.day) : '')
-                : '';
-        }
-    };
-    DateParserFormatter.decorators = [
-        { type: Injectable }
-    ];
-    /** @nocollapse */
-    DateParserFormatter.ctorParameters = function () { return [
-        { type: DatePipe, decorators: [{ type: Optional }] }
-    ]; };
-    return DateParserFormatter;
-}(NgbDateParserFormatter));
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    DateParserFormatter.prototype.datePipe;
-}
-
-/**
- * @fileoverview added by tsickle
+ * Generated from: lib/theme-shared.module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2176,24 +2061,35 @@ if (false) {
  * @return {?}
  */
 function appendScript(injector) {
+  /** @type {?} */
+  var fn
+  /**
+   * @return {?}
+   */ = (function() {
+    import('chart.js').then(
+      /**
+       * @return {?}
+       */
+      function() {
+        return chartJsLoaded$.next(true);
+      },
+    );
     /** @type {?} */
-    var fn = (/**
-     * @return {?}
-     */
-    function () {
-        import('chart.js').then((/**
-         * @return {?}
-         */
-        function () { return chartJsLoaded$.next(true); }));
-        /** @type {?} */
-        var lazyLoadService = injector.get(LazyLoadService);
-        return lazyLoadService.load(null, 'style', styles, 'head', 'beforeend').toPromise();
-    });
-    return fn;
+    var lazyLoadService = injector.get(LazyLoadService);
+    return forkJoin(
+      lazyLoadService.load(
+        null,
+        'style',
+        styles,
+        'head',
+        'afterbegin',
+      ) /* lazyLoadService.load(null, 'script', scripts) */,
+    ).toPromise();
+  });
+  return fn;
 }
 var ThemeSharedModule = /** @class */ (function () {
-    function ThemeSharedModule(errorHandler) {
-        this.errorHandler = errorHandler;
+    function ThemeSharedModule() {
     }
     /**
      * @param {?=} options
@@ -2211,7 +2107,7 @@ var ThemeSharedModule = /** @class */ (function () {
                 {
                     provide: APP_INITIALIZER,
                     multi: true,
-                    deps: [Injector],
+                    deps: [Injector, ErrorHandler],
                     useFactory: appendScript,
                 },
                 { provide: MessageService, useClass: MessageService },
@@ -2221,7 +2117,6 @@ var ThemeSharedModule = /** @class */ (function () {
                     useFactory: httpErrorConfigFactory,
                     deps: [HTTP_ERROR_CONFIG],
                 },
-                { provide: NgbDateParserFormatter, useClass: DateParserFormatter },
             ],
         };
     };
@@ -2233,7 +2128,7 @@ var ThemeSharedModule = /** @class */ (function () {
                         ButtonComponent,
                         ChartComponent,
                         ConfirmationComponent,
-                        HttpErrorWrapperComponent,
+                        ErrorComponent,
                         LoaderBarComponent,
                         ModalComponent,
                         TableEmptyMessageComponent,
@@ -2253,51 +2148,48 @@ var ThemeSharedModule = /** @class */ (function () {
                         SortOrderIconComponent,
                         TableSortDirective,
                     ],
-                    providers: [DatePipe],
-                    entryComponents: [HttpErrorWrapperComponent],
+                    entryComponents: [ErrorComponent],
                 },] }
     ];
-    /** @nocollapse */
-    ThemeSharedModule.ctorParameters = function () { return [
-        { type: ErrorHandler }
-    ]; };
     return ThemeSharedModule;
 }());
-if (false) {
-    /**
-     * @type {?}
-     * @private
-     */
-    ThemeSharedModule.prototype.errorHandler;
-}
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/animations/bounce.animations.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var bounceIn = animation([
+var bounceIn = animation(
+  [
     style({ opacity: '0', display: '{{ display }}' }),
-    animate('{{ time}} {{ easing }}', keyframes([
+    animate(
+      '{{ time}} {{ easing }}',
+      keyframes([
         style({ opacity: '0', transform: '{{ transform }} scale(0.0)', offset: 0 }),
         style({ opacity: '0', transform: '{{ transform }} scale(0.8)', offset: 0.5 }),
-        style({ opacity: '1', transform: '{{ transform }} scale(1.0)', offset: 1 })
-    ]))
-], {
+        style({ opacity: '1', transform: '{{ transform }} scale(1.0)', offset: 1 }),
+      ]),
+    ),
+  ],
+  {
     params: {
-        time: '350ms',
-        easing: 'cubic-bezier(.7,.31,.72,1.47)',
-        display: 'block',
-        transform: 'translate(-50%, -50%)'
-    }
-});
+      time: '350ms',
+      easing: 'cubic-bezier(.7,.31,.72,1.47)',
+      display: 'block',
+      transform: 'translate(-50%, -50%)',
+    },
+  },
+);
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/animations/collapse.animations.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
-var collapseY = animation([
+var collapseY = animation(
+  [
     style({ height: '*', overflow: 'hidden', 'box-sizing': 'border-box' }),
     animate('{{ time }} {{ easing }}', style({ height: '0', padding: '0px' })),
 ], { params: { time: '350ms', easing: 'ease' } });
@@ -2311,7 +2203,8 @@ var collapseX = animation([
     animate('{{ time }} {{ easing }}', style({ width: '0', padding: '0px' })),
 ], { params: { time: '350ms', easing: 'ease' } });
 /** @type {?} */
-var expandY = animation([
+var expandY = animation(
+  [
     style({ height: '0', overflow: 'hidden', 'box-sizing': 'border-box' }),
     animate('{{ time }} {{ easing }}', style({ height: '*', padding: '*' })),
 ], { params: { time: '350ms', easing: 'ease' } });
@@ -2350,33 +2243,38 @@ var collapseLinearWithMargin = trigger('collapseLinearWithMargin', [
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/animations/slide.animations.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
 var slideFromBottom = trigger('slideFromBottom', [
-    transition('* <=> *', [
-        style({ 'margin-top': '20px', opacity: '0' }),
-        animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' })),
-    ]),
+  transition('* <=> *', [
+    style({ 'margin-top': '20px', opacity: '0' }),
+    animate('0.2s ease-out', style({ opacity: '1', 'margin-top': '0px' })),
+  ]),
 ]);
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/animations/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/common.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2398,6 +2296,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/confirmation.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Confirmation;
@@ -2431,110 +2330,115 @@ var Confirmation;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/setting-management.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
  * @record
  */
-function SettingTab() { }
+function SettingTab() {}
 if (false) {
-    /** @type {?} */
-    SettingTab.prototype.component;
-    /** @type {?} */
-    SettingTab.prototype.name;
-    /** @type {?} */
-    SettingTab.prototype.order;
-    /** @type {?|undefined} */
-    SettingTab.prototype.requiredPolicy;
+  /** @type {?} */
+  SettingTab.prototype.component;
+  /** @type {?} */
+  SettingTab.prototype.name;
+  /** @type {?} */
+  SettingTab.prototype.order;
+  /** @type {?|undefined} */
+  SettingTab.prototype.requiredPolicy;
 }
 /** @type {?} */
-var SETTING_TABS = (/** @type {?} */ ([]));
+var SETTING_TABS = /** @type {?} */ ([]);
 /**
  * @param {?} tab
  * @return {?}
  */
 function addSettingTab(tab) {
-    if (!Array.isArray(tab)) {
-        tab = [tab];
-    }
-    SETTING_TABS.push.apply(SETTING_TABS, __spread(tab));
+  if (!Array.isArray(tab)) {
+    tab = [tab];
+  }
+  SETTING_TABS.push.apply(SETTING_TABS, __spread(tab));
 }
 /**
  * @return {?}
  */
 function getSettingTabs() {
-    return SETTING_TABS;
+  return SETTING_TABS;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/statistics.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Statistics;
-(function (Statistics) {
-    /**
-     * @record
-     */
-    function Response() { }
-    Statistics.Response = Response;
-    if (false) {
-        /** @type {?} */
-        Response.prototype.data;
-    }
-    /**
-     * @record
-     */
-    function Data() { }
-    Statistics.Data = Data;
-    /**
-     * @record
-     */
-    function Filter() { }
-    Statistics.Filter = Filter;
-    if (false) {
-        /** @type {?} */
-        Filter.prototype.startDate;
-        /** @type {?} */
-        Filter.prototype.endDate;
-    }
+(function(Statistics) {
+  /**
+   * @record
+   */
+  function Response() {}
+  Statistics.Response = Response;
+  if (false) {
+    /** @type {?} */
+    Response.prototype.data;
+  }
+  /**
+   * @record
+   */
+  function Data() {}
+  Statistics.Data = Data;
+  /**
+   * @record
+   */
+  function Filter() {}
+  Statistics.Filter = Filter;
+  if (false) {
+    /** @type {?} */
+    Filter.prototype.startDate;
+    /** @type {?} */
+    Filter.prototype.endDate;
+  }
 })(Statistics || (Statistics = {}));
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/toaster.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Toaster;
-(function (Toaster) {
-    /**
-     * @record
-     */
-    function Options() { }
-    Toaster.Options = Options;
-    if (false) {
-        /** @type {?|undefined} */
-        Options.prototype.id;
-        /** @type {?|undefined} */
-        Options.prototype.closable;
-        /** @type {?|undefined} */
-        Options.prototype.life;
-        /** @type {?|undefined} */
-        Options.prototype.sticky;
-        /** @type {?|undefined} */
-        Options.prototype.data;
-        /** @type {?|undefined} */
-        Options.prototype.messageLocalizationParams;
-        /** @type {?|undefined} */
-        Options.prototype.titleLocalizationParams;
-    }
+(function(Toaster) {
+  /**
+   * @record
+   */
+  function Options() {}
+  Toaster.Options = Options;
+  if (false) {
+    /** @type {?|undefined} */
+    Options.prototype.id;
+    /** @type {?|undefined} */
+    Options.prototype.closable;
+    /** @type {?|undefined} */
+    Options.prototype.life;
+    /** @type {?|undefined} */
+    Options.prototype.sticky;
+    /** @type {?|undefined} */
+    Options.prototype.data;
+    /** @type {?|undefined} */
+    Options.prototype.messageLocalizationParams;
+    /** @type {?|undefined} */
+    Options.prototype.titleLocalizationParams;
+  }
 })(Toaster || (Toaster = {}));
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/toaster.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ToasterService = /** @class */ (function (_super) {
@@ -2580,23 +2484,27 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: abp-ng.theme.shared.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { BreadcrumbComponent, ButtonComponent, ChartComponent, ConfirmationComponent, ConfirmationService, DateParserFormatter, LoaderBarComponent, ModalComponent, SortOrderIconComponent, TableEmptyMessageComponent, TableSortDirective, ThemeSharedModule, ToastComponent, Toaster, ToasterService, addSettingTab, appendScript, bounceIn, chartJsLoaded$, collapse, collapseLinearWithMargin, collapseWithMargin, collapseX, collapseY, collapseYWithMargin, dialogAnimation, expandX, expandY, expandYWithMargin, fadeAnimation, fadeIn, fadeInDown, fadeInLeft, fadeInRight, fadeInUp, fadeOut, fadeOutDown, fadeOutLeft, fadeOutRight, fadeOutUp, getRandomBackgroundColor, getSettingTabs, slideFromBottom, BreadcrumbComponent as ɵa, ButtonComponent as ɵb, ChartComponent as ɵc, ConfirmationComponent as ɵd, ConfirmationService as ɵe, AbstractToaster as ɵf, HttpErrorWrapperComponent as ɵg, LoaderBarComponent as ɵh, ModalComponent as ɵi, fadeAnimation as ɵj, fadeIn as ɵk, fadeOut as ɵl, TableEmptyMessageComponent as ɵm, ToastComponent as ɵn, SortOrderIconComponent as ɵo, TableSortDirective as ɵp, ErrorHandler as ɵq, httpErrorConfigFactory as ɵs, HTTP_ERROR_CONFIG as ɵt, DateParserFormatter as ɵu };
+export { BreadcrumbComponent, ButtonComponent, ChartComponent, ConfirmationComponent, ConfirmationService, LoaderBarComponent, ModalComponent, SortOrderIconComponent, TableEmptyMessageComponent, TableSortDirective, ThemeSharedModule, ToastComponent, Toaster, ToasterService, addSettingTab, appendScript, bounceIn, chartJsLoaded$, collapse, collapseLinearWithMargin, collapseWithMargin, collapseX, collapseY, collapseYWithMargin, dialogAnimation, expandX, expandY, expandYWithMargin, fadeAnimation, fadeIn, fadeInDown, fadeInLeft, fadeInRight, fadeInUp, fadeOut, fadeOutDown, fadeOutLeft, fadeOutRight, fadeOutUp, getRandomBackgroundColor, getSettingTabs, slideFromBottom, BreadcrumbComponent as ɵa, ButtonComponent as ɵb, ChartComponent as ɵc, ConfirmationComponent as ɵd, ConfirmationService as ɵe, AbstractToaster as ɵf, ErrorComponent as ɵg, LoaderBarComponent as ɵh, ModalComponent as ɵi, fadeAnimation as ɵj, dialogAnimation as ɵk, fadeIn as ɵl, fadeOut as ɵm, fadeInDown as ɵn, TableEmptyMessageComponent as ɵo, ToastComponent as ɵp, SortOrderIconComponent as ɵq, TableSortDirective as ɵr, ErrorHandler as ɵs, httpErrorConfigFactory as ɵt, HTTP_ERROR_CONFIG as ɵu };
 //# sourceMappingURL=abp-ng.theme.shared.js.map

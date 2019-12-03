@@ -17,5 +17,6 @@
   "fesm2015": "fesm2015/abp-ng.feature-management.js",
   "typings": "abp-ng.feature-management.d.ts",
   "metadata": "abp-ng.feature-management.metadata.json",
-  "sideEffects": false
+  "sideEffects": false,
+  "gitHead": "2f588b67002cd64e8660f43217c2197ccc9fe631"
 }

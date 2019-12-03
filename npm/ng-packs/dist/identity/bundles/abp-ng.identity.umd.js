@@ -11,193 +11,297 @@
     Licensed under the Apache License, Version 2.0 (the "License"); you may not use
     this file except in compliance with the License. You may obtain a copy of the
     License at http://www.apache.org/licenses/LICENSE-2.0
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+  }
 
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-    WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-    MERCHANTABLITY OR NON-INFRINGEMENT.
-
-    See the Apache Version 2.0 License for specific language governing permissions
-    and limitations under the License.
-    ***************************************************************************** */
-    /* global Reflect, Promise */
-
-    var extendStatics = function(d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+  function __param(paramIndex, decorator) {
+    return function(target, key) {
+      decorator(target, key, paramIndex);
     };
+  }
 
-    function __extends(d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    }
+  function __metadata(metadataKey, metadataValue) {
+    if (typeof Reflect === 'object' && typeof Reflect.metadata === 'function')
+      return Reflect.metadata(metadataKey, metadataValue);
+  }
 
-    var __assign = function() {
-        __assign = Object.assign || function __assign(t) {
-            for (var s, i = 1, n = arguments.length; i < n; i++) {
-                s = arguments[i];
-                for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
-            }
-            return t;
-        };
-        return __assign.apply(this, arguments);
-    };
-
-    function __rest(s, e) {
-        var t = {};
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-            t[p] = s[p];
-        if (s != null && typeof Object.getOwnPropertySymbols === "function")
-            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-                if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                    t[p[i]] = s[p[i]];
-            }
-        return t;
-    }
-
-    function __decorate(decorators, target, key, desc) {
-        var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-        else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    }
-
-    function __param(paramIndex, decorator) {
-        return function (target, key) { decorator(target, key, paramIndex); }
-    }
-
-    function __metadata(metadataKey, metadataValue) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(metadataKey, metadataValue);
-    }
-
-    function __awaiter(thisArg, _arguments, P, generator) {
-        return new (P || (P = Promise))(function (resolve, reject) {
-            function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-            function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-            function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-            step((generator = generator.apply(thisArg, _arguments || [])).next());
-        });
-    }
-
-    function __generator(thisArg, body) {
-        var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-        return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-        function verb(n) { return function (v) { return step([n, v]); }; }
-        function step(op) {
-            if (f) throw new TypeError("Generator is already executing.");
-            while (_) try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-                if (y = 0, t) op = [op[0] & 2, t.value];
-                switch (op[0]) {
-                    case 0: case 1: t = op; break;
-                    case 4: _.label++; return { value: op[1], done: false };
-                    case 5: _.label++; y = op[1]; op = [0]; continue;
-                    case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                    default:
-                        if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                        if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                        if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                        if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                        if (t[2]) _.ops.pop();
-                        _.trys.pop(); continue;
-                }
-                op = body.call(thisArg, _);
-            } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-            if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-        }
-    }
-
-    function __exportStar(m, exports) {
-        for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-    }
-
-    function __values(o) {
-        var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
-        if (m) return m.call(o);
-        return {
-            next: function () {
-                if (o && i >= o.length) o = void 0;
-                return { value: o && o[i++], done: !o };
-            }
-        };
-    }
-
-    function __read(o, n) {
-        var m = typeof Symbol === "function" && o[Symbol.iterator];
-        if (!m) return o;
-        var i = m.call(o), r, ar = [], e;
+  function __awaiter(thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function(resolve, reject) {
+      function fulfilled(value) {
         try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+          step(generator.next(value));
+        } catch (e) {
+          reject(e);
         }
-        catch (error) { e = { error: error }; }
-        finally {
-            try {
-                if (r && !r.done && (m = i["return"])) m.call(i);
-            }
-            finally { if (e) throw e.error; }
+      }
+      function rejected(value) {
+        try {
+          step(generator['throw'](value));
+        } catch (e) {
+          reject(e);
         }
-        return ar;
-    }
+      }
+      function step(result) {
+        result.done
+          ? resolve(result.value)
+          : new P(function(resolve) {
+              resolve(result.value);
+            }).then(fulfilled, rejected);
+      }
+      step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+  }
 
-    function __spread() {
-        for (var ar = [], i = 0; i < arguments.length; i++)
-            ar = ar.concat(__read(arguments[i]));
-        return ar;
+  function __generator(thisArg, body) {
+    var _ = {
+        label: 0,
+        sent: function() {
+          if (t[0] & 1) throw t[1];
+          return t[1];
+        },
+        trys: [],
+        ops: [],
+      },
+      f,
+      y,
+      t,
+      g;
+    return (
+      (g = { next: verb(0), throw: verb(1), return: verb(2) }),
+      typeof Symbol === 'function' &&
+        (g[Symbol.iterator] = function() {
+          return this;
+        }),
+      g
+    );
+    function verb(n) {
+      return function(v) {
+        return step([n, v]);
+      };
     }
+    function step(op) {
+      if (f) throw new TypeError('Generator is already executing.');
+      while (_)
+        try {
+          if (
+            ((f = 1),
+            y &&
+              (t = op[0] & 2 ? y['return'] : op[0] ? y['throw'] || ((t = y['return']) && t.call(y), 0) : y.next) &&
+              !(t = t.call(y, op[1])).done)
+          )
+            return t;
+          if (((y = 0), t)) op = [op[0] & 2, t.value];
+          switch (op[0]) {
+            case 0:
+            case 1:
+              t = op;
+              break;
+            case 4:
+              _.label++;
+              return { value: op[1], done: false };
+            case 5:
+              _.label++;
+              y = op[1];
+              op = [0];
+              continue;
+            case 7:
+              op = _.ops.pop();
+              _.trys.pop();
+              continue;
+            default:
+              if (!((t = _.trys), (t = t.length > 0 && t[t.length - 1])) && (op[0] === 6 || op[0] === 2)) {
+                _ = 0;
+                continue;
+              }
+              if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) {
+                _.label = op[1];
+                break;
+              }
+              if (op[0] === 6 && _.label < t[1]) {
+                _.label = t[1];
+                t = op;
+                break;
+              }
+              if (t && _.label < t[2]) {
+                _.label = t[2];
+                _.ops.push(op);
+                break;
+              }
+              if (t[2]) _.ops.pop();
+              _.trys.pop();
+              continue;
+          }
+          op = body.call(thisArg, _);
+        } catch (e) {
+          op = [6, e];
+          y = 0;
+        } finally {
+          f = t = 0;
+        }
+      if (op[0] & 5) throw op[1];
+      return { value: op[0] ? op[1] : void 0, done: true };
+    }
+  }
 
-    function __spreadArrays() {
-        for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-        for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-                r[k] = a[j];
-        return r;
+  function __exportStar(m, exports) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+  }
+
+  function __values(o) {
+    var m = typeof Symbol === 'function' && o[Symbol.iterator],
+      i = 0;
+    if (m) return m.call(o);
+    return {
+      next: function() {
+        if (o && i >= o.length) o = void 0;
+        return { value: o && o[i++], done: !o };
+      },
     };
+  }
 
-    function __await(v) {
-        return this instanceof __await ? (this.v = v, this) : new __await(v);
+  function __read(o, n) {
+    var m = typeof Symbol === 'function' && o[Symbol.iterator];
+    if (!m) return o;
+    var i = m.call(o),
+      r,
+      ar = [],
+      e;
+    try {
+      while ((n === void 0 || n-- > 0) && !(r = i.next()).done) ar.push(r.value);
+    } catch (error) {
+      e = { error: error };
+    } finally {
+      try {
+        if (r && !r.done && (m = i['return'])) m.call(i);
+      } finally {
+        if (e) throw e.error;
+      }
     }
+    return ar;
+  }
 
-    function __asyncGenerator(thisArg, _arguments, generator) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-        var g = generator.apply(thisArg, _arguments || []), i, q = [];
-        return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-        function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
-        function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
-        function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
-        function fulfill(value) { resume("next", value); }
-        function reject(value) { resume("throw", value); }
-        function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+  function __spread() {
+    for (var ar = [], i = 0; i < arguments.length; i++) ar = ar.concat(__read(arguments[i]));
+    return ar;
+  }
+
+  function __spreadArrays() {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+      for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++) r[k] = a[j];
+    return r;
+  }
+
+  function __await(v) {
+    return this instanceof __await ? ((this.v = v), this) : new __await(v);
+  }
+
+  function __asyncGenerator(thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError('Symbol.asyncIterator is not defined.');
+    var g = generator.apply(thisArg, _arguments || []),
+      i,
+      q = [];
+    return (
+      (i = {}),
+      verb('next'),
+      verb('throw'),
+      verb('return'),
+      (i[Symbol.asyncIterator] = function() {
+        return this;
+      }),
+      i
+    );
+    function verb(n) {
+      if (g[n])
+        i[n] = function(v) {
+          return new Promise(function(a, b) {
+            q.push([n, v, a, b]) > 1 || resume(n, v);
+          });
+        };
     }
-
-    function __asyncDelegator(o) {
-        var i, p;
-        return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
-        function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: n === "return" } : f ? f(v) : v; } : f; }
+    function resume(n, v) {
+      try {
+        step(g[n](v));
+      } catch (e) {
+        settle(q[0][3], e);
+      }
     }
-
-    function __asyncValues(o) {
-        if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
-        var m = o[Symbol.asyncIterator], i;
-        return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
-        function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
-        function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+    function step(r) {
+      r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
     }
-
-    function __makeTemplateObject(cooked, raw) {
-        if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
-        return cooked;
-    };
-
-    function __importStar(mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-        result.default = mod;
-        return result;
+    function fulfill(value) {
+      resume('next', value);
     }
+    function reject(value) {
+      resume('throw', value);
+    }
+    function settle(f, v) {
+      if ((f(v), q.shift(), q.length)) resume(q[0][0], q[0][1]);
+    }
+  }
+
+  function __asyncDelegator(o) {
+    var i, p;
+    return (
+      (i = {}),
+      verb('next'),
+      verb('throw', function(e) {
+        throw e;
+      }),
+      verb('return'),
+      (i[Symbol.iterator] = function() {
+        return this;
+      }),
+      i
+    );
+    function verb(n, f) {
+      i[n] = o[n]
+        ? function(v) {
+            return (p = !p) ? { value: __await(o[n](v)), done: n === 'return' } : f ? f(v) : v;
+          }
+        : f;
+    }
+  }
+
+  function __asyncValues(o) {
+    if (!Symbol.asyncIterator) throw new TypeError('Symbol.asyncIterator is not defined.');
+    var m = o[Symbol.asyncIterator],
+      i;
+    return m
+      ? m.call(o)
+      : ((o = typeof __values === 'function' ? __values(o) : o[Symbol.iterator]()),
+        (i = {}),
+        verb('next'),
+        verb('throw'),
+        verb('return'),
+        (i[Symbol.asyncIterator] = function() {
+          return this;
+        }),
+        i);
+    function verb(n) {
+      i[n] =
+        o[n] &&
+        function(v) {
+          return new Promise(function(resolve, reject) {
+            (v = o[n](v)), settle(resolve, reject, v.done, v.value);
+          });
+        };
+    }
+    function settle(resolve, reject, d, v) {
+      Promise.resolve(v).then(function(v) {
+        resolve({ value: v, done: d });
+      }, reject);
+    }
+  }
+
+  function __makeTemplateObject(cooked, raw) {
+    if (Object.defineProperty) {
+      Object.defineProperty(cooked, 'raw', { value: raw });
+    } else {
+      cooked.raw = raw;
+    }
+    return cooked;
+  }
 
     function __importDefault(mod) {
         return (mod && mod.__esModule) ? mod : { default: mod };
@@ -205,6 +309,7 @@
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/actions/identity.actions.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var GetRoles = /** @class */ (function () {
@@ -220,357 +325,250 @@
         /** @type {?} */
         GetRoles.prototype.payload;
     }
-    var GetRoleById = /** @class */ (function () {
-        function GetRoleById(payload) {
-            this.payload = payload;
-        }
-        GetRoleById.type = '[Identity] Get Role By Id';
-        return GetRoleById;
-    }());
-    if (false) {
-        /** @type {?} */
-        GetRoleById.type;
-        /** @type {?} */
-        GetRoleById.prototype.payload;
+    GetRoles.type = '[Identity] Get Roles';
+    return GetRoles;
+  })();
+  if (false) {
+    /** @type {?} */
+    GetRoles.type;
+    /** @type {?} */
+    GetRoles.prototype.payload;
+  }
+  var GetRoleById = /** @class */ (function() {
+    function GetRoleById(payload) {
+      this.payload = payload;
     }
-    var DeleteRole = /** @class */ (function () {
-        function DeleteRole(payload) {
-            this.payload = payload;
-        }
-        DeleteRole.type = '[Identity] Delete Role';
-        return DeleteRole;
-    }());
-    if (false) {
-        /** @type {?} */
-        DeleteRole.type;
-        /** @type {?} */
-        DeleteRole.prototype.payload;
+    GetRoleById.type = '[Identity] Get Role By Id';
+    return GetRoleById;
+  })();
+  if (false) {
+    /** @type {?} */
+    GetRoleById.type;
+    /** @type {?} */
+    GetRoleById.prototype.payload;
+  }
+  var DeleteRole = /** @class */ (function() {
+    function DeleteRole(payload) {
+      this.payload = payload;
     }
-    var CreateRole = /** @class */ (function () {
-        function CreateRole(payload) {
-            this.payload = payload;
-        }
-        CreateRole.type = '[Identity] Create Role';
-        return CreateRole;
-    }());
-    if (false) {
-        /** @type {?} */
-        CreateRole.type;
-        /** @type {?} */
-        CreateRole.prototype.payload;
+    DeleteRole.type = '[Identity] Delete Role';
+    return DeleteRole;
+  })();
+  if (false) {
+    /** @type {?} */
+    DeleteRole.type;
+    /** @type {?} */
+    DeleteRole.prototype.payload;
+  }
+  var CreateRole = /** @class */ (function() {
+    function CreateRole(payload) {
+      this.payload = payload;
     }
-    var UpdateRole = /** @class */ (function () {
-        function UpdateRole(payload) {
-            this.payload = payload;
-        }
-        UpdateRole.type = '[Identity] Update Role';
-        return UpdateRole;
-    }());
-    if (false) {
-        /** @type {?} */
-        UpdateRole.type;
-        /** @type {?} */
-        UpdateRole.prototype.payload;
-    }
-    var GetUsers = /** @class */ (function () {
-        function GetUsers(payload) {
-            this.payload = payload;
-        }
-        GetUsers.type = '[Identity] Get Users';
-        return GetUsers;
-    }());
-    if (false) {
-        /** @type {?} */
-        GetUsers.type;
-        /** @type {?} */
-        GetUsers.prototype.payload;
-    }
-    var GetUserById = /** @class */ (function () {
-        function GetUserById(payload) {
-            this.payload = payload;
-        }
-        GetUserById.type = '[Identity] Get User By Id';
-        return GetUserById;
-    }());
-    if (false) {
-        /** @type {?} */
-        GetUserById.type;
-        /** @type {?} */
-        GetUserById.prototype.payload;
-    }
-    var DeleteUser = /** @class */ (function () {
-        function DeleteUser(payload) {
-            this.payload = payload;
-        }
-        DeleteUser.type = '[Identity] Delete User';
-        return DeleteUser;
-    }());
-    if (false) {
-        /** @type {?} */
-        DeleteUser.type;
-        /** @type {?} */
-        DeleteUser.prototype.payload;
-    }
-    var CreateUser = /** @class */ (function () {
-        function CreateUser(payload) {
-            this.payload = payload;
-        }
-        CreateUser.type = '[Identity] Create User';
-        return CreateUser;
-    }());
-    if (false) {
-        /** @type {?} */
-        CreateUser.type;
-        /** @type {?} */
-        CreateUser.prototype.payload;
-    }
-    var UpdateUser = /** @class */ (function () {
-        function UpdateUser(payload) {
-            this.payload = payload;
-        }
-        UpdateUser.type = '[Identity] Update User';
-        return UpdateUser;
-    }());
-    if (false) {
-        /** @type {?} */
-        UpdateUser.type;
-        /** @type {?} */
-        UpdateUser.prototype.payload;
-    }
-    var GetUserRoles = /** @class */ (function () {
-        function GetUserRoles(payload) {
-            this.payload = payload;
-        }
-        GetUserRoles.type = '[Identity] Get User Roles';
-        return GetUserRoles;
-    }());
-    if (false) {
-        /** @type {?} */
-        GetUserRoles.type;
-        /** @type {?} */
-        GetUserRoles.prototype.payload;
+    CreateRole.type = '[Identity] Create Role';
+    return CreateRole;
+  })();
+  if (false) {
+    /** @type {?} */
+    CreateRole.type;
+    /** @type {?} */
+    CreateRole.prototype.payload;
+  }
+  var UpdateRole = /** @class */ (function() {
+    function UpdateRole(payload) {
+    function __importDefault(mod) {
+        return (mod && mod.__esModule) ? mod : { default: mod };
     }
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/actions/identity.actions.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
-    var IdentityService = /** @class */ (function () {
-        function IdentityService(rest) {
-            this.rest = rest;
+    var GetRoles = /** @class */ (function () {
+        function GetRoles(payload) {
+            this.payload = payload;
         }
-        /**
-         * @param {?=} params
-         * @return {?}
-         */
-        IdentityService.prototype.getRoles = /**
-         * @param {?=} params
-         * @return {?}
-         */
-        function (params) {
-            if (params === void 0) { params = (/** @type {?} */ ({})); }
-            /** @type {?} */
-            var request = {
-                method: 'GET',
-                url: '/api/identity/roles',
-                params: params,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} id
-         * @return {?}
-         */
-        IdentityService.prototype.getRoleById = /**
-         * @param {?} id
-         * @return {?}
-         */
-        function (id) {
-            /** @type {?} */
-            var request = {
-                method: 'GET',
-                url: "/api/identity/roles/" + id,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} id
-         * @return {?}
-         */
-        IdentityService.prototype.deleteRole = /**
-         * @param {?} id
-         * @return {?}
-         */
-        function (id) {
-            /** @type {?} */
-            var request = {
-                method: 'DELETE',
-                url: "/api/identity/roles/" + id,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} body
-         * @return {?}
-         */
-        IdentityService.prototype.createRole = /**
-         * @param {?} body
-         * @return {?}
-         */
-        function (body) {
-            /** @type {?} */
-            var request = {
-                method: 'POST',
-                url: '/api/identity/roles',
-                body: body,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} body
-         * @return {?}
-         */
-        IdentityService.prototype.updateRole = /**
-         * @param {?} body
-         * @return {?}
-         */
-        function (body) {
-            /** @type {?} */
-            var url = "/api/identity/roles/" + body.id;
-            delete body.id;
-            /** @type {?} */
-            var request = {
-                method: 'PUT',
-                url: url,
-                body: body,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?=} params
-         * @return {?}
-         */
-        IdentityService.prototype.getUsers = /**
-         * @param {?=} params
-         * @return {?}
-         */
-        function (params) {
-            if (params === void 0) { params = (/** @type {?} */ ({})); }
-            /** @type {?} */
-            var request = {
-                method: 'GET',
-                url: '/api/identity/users',
-                params: params,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} id
-         * @return {?}
-         */
-        IdentityService.prototype.getUserById = /**
-         * @param {?} id
-         * @return {?}
-         */
-        function (id) {
-            /** @type {?} */
-            var request = {
-                method: 'GET',
-                url: "/api/identity/users/" + id,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} id
-         * @return {?}
-         */
-        IdentityService.prototype.getUserRoles = /**
-         * @param {?} id
-         * @return {?}
-         */
-        function (id) {
-            /** @type {?} */
-            var request = {
-                method: 'GET',
-                url: "/api/identity/users/" + id + "/roles",
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} id
-         * @return {?}
-         */
-        IdentityService.prototype.deleteUser = /**
-         * @param {?} id
-         * @return {?}
-         */
-        function (id) {
-            /** @type {?} */
-            var request = {
-                method: 'DELETE',
-                url: "/api/identity/users/" + id,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} body
-         * @return {?}
-         */
-        IdentityService.prototype.createUser = /**
-         * @param {?} body
-         * @return {?}
-         */
-        function (body) {
-            /** @type {?} */
-            var request = {
-                method: 'POST',
-                url: '/api/identity/users',
-                body: body,
-            };
-            return this.rest.request(request);
-        };
-        /**
-         * @param {?} body
-         * @return {?}
-         */
-        IdentityService.prototype.updateUser = /**
-         * @param {?} body
-         * @return {?}
-         */
-        function (body) {
-            /** @type {?} */
-            var url = "/api/identity/users/" + body.id;
-            delete body.id;
-            /** @type {?} */
-            var request = {
-                method: 'PUT',
-                url: url,
-                body: body,
-            };
-            return this.rest.request(request);
-        };
-        IdentityService.decorators = [
-            { type: core.Injectable, args: [{
-                        providedIn: 'root',
-                    },] }
-        ];
-        /** @nocollapse */
-        IdentityService.ctorParameters = function () { return [
-            { type: ng_core.RestService }
-        ]; };
-        /** @nocollapse */ IdentityService.ngInjectableDef = core.ɵɵdefineInjectable({ factory: function IdentityService_Factory() { return new IdentityService(core.ɵɵinject(ng_core.RestService)); }, token: IdentityService, providedIn: "root" });
-        return IdentityService;
+        GetRoles.type = '[Identity] Get Roles';
+        return GetRoles;
     }());
     if (false) {
-        /**
-         * @type {?}
-         * @private
-         */
-        IdentityService.prototype.rest;
+        /** @type {?} */
+        GetRoles.type;
+        /** @type {?} */
+        GetRoles.prototype.payload;
+  })();
+  if (false) {
+    /** @type {?} */
+    DeleteUser.type;
+    /** @type {?} */
+    DeleteUser.prototype.payload;
+  }
+  var CreateUser = /** @class */ (function() {
+    function CreateUser(payload) {
+      this.payload = payload;
     }
+    CreateUser.type = '[Identity] Create User';
+    return CreateUser;
+  })();
+  if (false) {
+    /** @type {?} */
+    CreateUser.type;
+    /** @type {?} */
+    CreateUser.prototype.payload;
+  }
+  var UpdateUser = /** @class */ (function() {
+    function UpdateUser(payload) {
+      this.payload = payload;
+    }
+    UpdateUser.type = '[Identity] Update User';
+    return UpdateUser;
+  })();
+  if (false) {
+    /** @type {?} */
+    UpdateUser.type;
+    /** @type {?} */
+    UpdateUser.prototype.payload;
+  }
+  var GetUserRoles = /** @class */ (function() {
+    function GetUserRoles(payload) {
+      this.payload = payload;
+    }
+    GetUserRoles.type = '[Identity] Get User Roles';
+    return GetUserRoles;
+  })();
+  if (false) {
+    /** @type {?} */
+    GetUserRoles.type;
+    /** @type {?} */
+    GetUserRoles.prototype.payload;
+  }
 
+  /**
+   * @fileoverview added by tsickle
+   * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+   */
+  var IdentityService = /** @class */ (function() {
+    function IdentityService(rest) {
+      this.rest = rest;
+    }
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/services/identity.service.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    IdentityService.prototype.getRoles
+    /**
+     * @param {?=} params
+     * @return {?}
+     */ = function(params) {
+      if (params === void 0) {
+        params = /** @type {?} */ ({});
+      }
+      /** @type {?} */
+      var request = {
+        method: 'GET',
+        url: '/api/identity/roles',
+        params: params,
+      };
+      return this.rest.request(request);
+    };
+    /**
+     * @fileoverview added by tsickle
+     * Generated from: lib/states/identity.state.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+     */
+    var IdentityState = /** @class */ (function () {
+        function IdentityState(identityService) {
+            this.identityService = identityService;
+        }
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        IdentityState.getRoles = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var roles = _a.roles;
+            return roles.items || [];
+        };
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        IdentityState.getRolesTotalCount = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var roles = _a.roles;
+            return roles.totalCount || 0;
+        };
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        IdentityState.getUsers = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var users = _a.users;
+            return users.items || [];
+        };
+        /**
+         * @param {?} __0
+         * @return {?}
+         */
+        IdentityState.getUsersTotalCount = /**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var users = _a.users;
+            return users.totalCount || 0;
+        };
+        /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        IdentityState.prototype.getRoles = /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        function (_a, _b) {
+            var patchState = _a.patchState;
+            var payload = _b.payload;
+            return this.identityService.getRoles(payload).pipe(operators.tap((/**
+             * @param {?} roles
+             * @return {?}
+             */
+     * @fileoverview added by tsickle
+     * Generated from: lib/services/identity.service.ts
+     * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+         * @param {?} __1
+         * @return {?}
+         */
+        IdentityState.prototype.getRole = /**
+         * @param {?} __0
+         * @param {?} __1
+         * @return {?}
+         */
+        function (_a, _b) {
+            var patchState = _a.patchState;
+            var payload = _b.payload;
+            return this.identityService.getRoleById(payload).pipe(operators.tap((/**
+             * @param {?} selectedRole
+             * @return {?}
+             */
+            function (selectedRole) {
+                return patchState({
+                    selectedRole: selectedRole,
+     * @fileoverview added by tsickle
+     * Generated from: lib/states/identity.state.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var IdentityState = /** @class */ (function () {
@@ -672,32 +670,40 @@
             })));
         };
         /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
         IdentityState.prototype.deleteRole = /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
-        function (_, _a) {
-            var payload = _a.payload;
-            return this.identityService.deleteRole(payload);
+        function (_a, _b) {
+            var dispatch = _a.dispatch;
+            var payload = _b.payload;
+            return this.identityService.deleteRole(payload).pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return dispatch(new GetRoles()); })));
         };
         /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
         IdentityState.prototype.addRole = /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
-        function (_, _a) {
-            var payload = _a.payload;
-            return this.identityService.createRole(payload);
+        function (_a, _b) {
+            var dispatch = _a.dispatch;
+            var payload = _b.payload;
+            return this.identityService.createRole(payload).pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return dispatch(new GetRoles()); })));
         };
         /**
          * @param {?} __0
@@ -710,9 +716,14 @@
          * @return {?}
          */
         function (_a, _b) {
-            var getState = _a.getState;
+            var getState = _a.getState, dispatch = _a.dispatch;
             var payload = _b.payload;
-            return this.identityService.updateRole(__assign({}, getState().selectedRole, payload));
+            return this.identityService
+                .updateRole(__assign({}, getState().selectedRole, payload))
+                .pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return dispatch(new GetRoles()); })));
         };
         /**
          * @param {?} __0
@@ -761,32 +772,40 @@
             })));
         };
         /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
         IdentityState.prototype.deleteUser = /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
-        function (_, _a) {
-            var payload = _a.payload;
-            return this.identityService.deleteUser(payload);
+        function (_a, _b) {
+            var dispatch = _a.dispatch;
+            var payload = _b.payload;
+            return this.identityService.deleteUser(payload).pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return dispatch(new GetUsers()); })));
         };
         /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
         IdentityState.prototype.addUser = /**
-         * @param {?} _
+         * @param {?} __0
          * @param {?} __1
          * @return {?}
          */
-        function (_, _a) {
-            var payload = _a.payload;
-            return this.identityService.createUser(payload);
+        function (_a, _b) {
+            var dispatch = _a.dispatch;
+            var payload = _b.payload;
+            return this.identityService.createUser(payload).pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return dispatch(new GetUsers()); })));
         };
         /**
          * @param {?} __0
@@ -799,9 +818,14 @@
          * @return {?}
          */
         function (_a, _b) {
-            var getState = _a.getState;
+            var getState = _a.getState, dispatch = _a.dispatch;
             var payload = _b.payload;
-            return this.identityService.updateUser(__assign({}, getState().selectedUser, payload));
+            return this.identityService
+                .updateUser(__assign({}, getState().selectedUser, payload))
+                .pipe(operators.switchMap((/**
+             * @return {?}
+             */
+            function () { return dispatch(new GetUsers()); })));
         };
         /**
          * @param {?} __0
@@ -938,6 +962,7 @@
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/components/roles/roles.component.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var RolesComponent = /** @class */ (function () {
@@ -1043,7 +1068,6 @@
              */
             function () {
                 _this.isModalVisible = false;
-                _this.get();
             }));
         };
         /**
@@ -1064,33 +1088,6 @@
             })
                 .subscribe((/**
              * @param {?} status
-             * @return {?}
-             */
-            function (status) {
-                if (status === "confirm" /* confirm */) {
-                    _this.store.dispatch(new DeleteRole(id)).subscribe((/**
-                     * @return {?}
-                     */
-                    function () { return _this.get(); }));
-                }
-            }));
-        };
-        /**
-         * @param {?} data
-         * @return {?}
-         */
-        RolesComponent.prototype.onPageChange = /**
-         * @param {?} data
-         * @return {?}
-         */
-        function (data) {
-            this.pageQuery.skipCount = data.first;
-            this.pageQuery.maxResultCount = data.rows;
-            this.get();
-        };
-        /**
-         * @return {?}
-         */
         RolesComponent.prototype.get = /**
          * @return {?}
          */
@@ -1117,7 +1114,7 @@
         RolesComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-roles',
-                        template: "<div id=\"identity-roles-wrapper\" class=\"card\">\r\n  <div class=\"card-header\">\r\n    <div class=\"row\">\r\n      <div class=\"col col-md-6\">\r\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>\r\n      </div>\r\n      <div class=\"text-right col col-md-6\">\r\n        <button\r\n          *abpPermission=\"'AbpIdentity.Roles.Create'\"\r\n          id=\"create-role\"\r\n          class=\"btn btn-primary\"\r\n          type=\"button\"\r\n          (click)=\"add()\"\r\n        >\r\n          <i class=\"fa fa-plus mr-1\"></i>\r\n          <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"card-body\">\r\n    <p-table\r\n      *ngIf=\"[150, 0] as columnWidths\"\r\n      [value]=\"data$ | async\"\r\n      [abpTableSort]=\"{ key: sortKey, order: sortOrder }\"\r\n      [lazy]=\"true\"\r\n      [lazyLoadOnInit]=\"false\"\r\n      [paginator]=\"true\"\r\n      [rows]=\"10\"\r\n      [totalRecords]=\"totalCount$ | async\"\r\n      [loading]=\"loading\"\r\n      [resizableColumns]=\"true\"\r\n      [scrollable]=\"true\"\r\n      (onLazyLoad)=\"onPageChange($event)\"\r\n    >\r\n      <ng-template pTemplate=\"colgroup\">\r\n        <colgroup>\r\n          <col *ngFor=\"let width of columnWidths\" [ngStyle]=\"{ 'width.px': width || undefined }\" />\r\n        </colgroup>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"emptymessage\" let-columns>\r\n        <tr\r\n          abp-table-empty-message\r\n          [attr.colspan]=\"columnWidths.length\"\r\n          localizationResource=\"AbpIdentity\"\r\n          localizationProp=\"NoDataAvailableInDatatable\"\r\n        ></tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"header\" let-columns>\r\n        <tr>\r\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('name')\">\r\n            {{ 'AbpIdentity::RoleName' | abpLocalization }}\r\n            <abp-sort-order-icon\r\n              #sortOrderIcon\r\n              key=\"name\"\r\n              [(selectedKey)]=\"sortKey\"\r\n              [(order)]=\"sortOrder\"\r\n            ></abp-sort-order-icon>\r\n          </th>\r\n        </tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"body\" let-data>\r\n        <tr>\r\n          <td class=\"text-center\">\r\n            <div ngbDropdown container=\"body\" class=\"d-inline-block\">\r\n              <button\r\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\r\n                data-toggle=\"dropdown\"\r\n                aria-haspopup=\"true\"\r\n                ngbDropdownToggle\r\n              >\r\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\r\n              </button>\r\n              <div ngbDropdownMenu>\r\n                <button\r\n                  *abpPermission=\"'AbpIdentity.Roles.Update'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"edit(data.id)\"\r\n                >\r\n                  {{ 'AbpIdentity::Edit' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  *abpPermission=\"'AbpIdentity.Roles.ManagePermissions'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"providerKey = data.name; visiblePermissions = true\"\r\n                >\r\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  *abpPermission=\"'AbpIdentity.Roles.Delete'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"delete(data.id, data.name)\"\r\n                >\r\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </td>\r\n          <td>\r\n            {{ data.name\r\n            }}<span *ngIf=\"data.isDefault\" class=\"badge badge-pill badge-success ml-1\">{{\r\n              'AbpIdentity::DisplayName:IsDefault' | abpLocalization\r\n            }}</span>\r\n            <span *ngIf=\"data.isPublic\" class=\"badge badge-pill badge-info ml-1\">{{\r\n              'AbpIdentity::DisplayName:IsPublic' | abpLocalization\r\n            }}</span>\r\n          </td>\r\n        </tr>\r\n      </ng-template>\r\n    </p-table>\r\n  </div>\r\n</div>\r\n\r\n<abp-modal size=\"md\" [(visible)]=\"isModalVisible\" [busy]=\"modalBusy\">\r\n  <ng-template #abpHeader>\r\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>\r\n  </ng-template>\r\n\r\n  <ng-template #abpBody>\r\n    <form #formRef [formGroup]=\"form\" (ngSubmit)=\"save()\" validateOnSubmit>\r\n      <div class=\"form-group\">\r\n        <label for=\"role-name\">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label\r\n        ><span> * </span>\r\n        <input autofocus type=\"text\" id=\"role-name\" class=\"form-control\" formControlName=\"name\" />\r\n      </div>\r\n\r\n      <div class=\"custom-checkbox custom-control mb-2\">\r\n        <input\r\n          type=\"checkbox\"\r\n          id=\"role-is-default\"\r\n          class=\"custom-control-input\"\r\n          formControlName=\"isDefault\"\r\n        />\r\n        <label class=\"custom-control-label\" for=\"role-is-default\">{{\r\n          'AbpIdentity::DisplayName:IsDefault' | abpLocalization\r\n        }}</label>\r\n      </div>\r\n\r\n      <div class=\"custom-checkbox custom-control mb-2\">\r\n        <input\r\n          type=\"checkbox\"\r\n          id=\"role-is-public\"\r\n          class=\"custom-control-input\"\r\n          formControlName=\"isPublic\"\r\n        />\r\n        <label class=\"custom-control-label\" for=\"role-is-public\">{{\r\n          'AbpIdentity::DisplayName:IsPublic' | abpLocalization\r\n        }}</label>\r\n      </div>\r\n    </form>\r\n  </ng-template>\r\n\r\n  <ng-template #abpFooter>\r\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\r\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\r\n    </button>\r\n    <abp-button iconClass=\"fa fa-check\" [disabled]=\"form?.invalid\" (click)=\"onClickSaveButton()\">{{\r\n      'AbpIdentity::Save' | abpLocalization\r\n    }}</abp-button>\r\n  </ng-template>\r\n</abp-modal>\r\n\r\n<abp-permission-management\r\n  [(visible)]=\"visiblePermissions\"\r\n  providerName=\"R\"\r\n  [providerKey]=\"providerKey\"\r\n  [hideBadges]=\"true\"\r\n>\r\n</abp-permission-management>\r\n"
+                        template: "<div id=\"identity-roles-wrapper\" class=\"card\">\r\n  <div class=\"card-header\">\r\n    <div class=\"row\">\r\n      <div class=\"col col-md-6\">\r\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Roles' | abpLocalization }}</h5>\r\n      </div>\r\n      <div class=\"text-right col col-md-6\">\r\n        <button\r\n          [abpPermission]=\"'AbpIdentity.Roles.Create'\"\r\n          id=\"create-role\"\r\n          class=\"btn btn-primary\"\r\n          type=\"button\"\r\n          (click)=\"add()\"\r\n        >\r\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n\r\n  <div class=\"card-body\">\r\n    <p-table\r\n      *ngIf=\"[150, 0] as columnWidths\"\r\n      [value]=\"data$ | async\"\r\n      [abpTableSort]=\"{ key: sortKey, order: sortOrder }\"\r\n      [lazy]=\"true\"\r\n      [lazyLoadOnInit]=\"false\"\r\n      [paginator]=\"true\"\r\n      [rows]=\"10\"\r\n      [totalRecords]=\"totalCount$ | async\"\r\n      [loading]=\"loading\"\r\n      [resizableColumns]=\"true\"\r\n      [scrollable]=\"true\"\r\n      (onLazyLoad)=\"onPageChange($event)\"\r\n    >\r\n      <ng-template pTemplate=\"colgroup\">\r\n        <colgroup>\r\n          <col *ngFor=\"let width of columnWidths\" [ngStyle]=\"{ 'width.px': width || undefined }\" />\r\n        </colgroup>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"emptymessage\" let-columns>\r\n        <tr\r\n          abp-table-empty-message\r\n          [attr.colspan]=\"columnWidths.length\"\r\n          localizationResource=\"AbpIdentity\"\r\n          localizationProp=\"NoDataAvailableInDatatable\"\r\n        ></tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"header\" let-columns>\r\n        <tr>\r\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('name')\">\r\n            {{ 'AbpIdentity::RoleName' | abpLocalization }}\r\n            <abp-sort-order-icon\r\n              #sortOrderIcon\r\n              key=\"name\"\r\n              [(selectedKey)]=\"sortKey\"\r\n              [(order)]=\"sortOrder\"\r\n            ></abp-sort-order-icon>\r\n          </th>\r\n        </tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"body\" let-data>\r\n        <tr>\r\n          <td class=\"text-center\">\r\n            <div ngbDropdown container=\"body\" class=\"d-inline-block\">\r\n              <button\r\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\r\n                data-toggle=\"dropdown\"\r\n                aria-haspopup=\"true\"\r\n                ngbDropdownToggle\r\n              >\r\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\r\n              </button>\r\n              <div ngbDropdownMenu>\r\n                <button [abpPermission]=\"'AbpIdentity.Roles.Update'\" ngbDropdownItem (click)=\"edit(data.id)\">\r\n                  {{ 'AbpIdentity::Edit' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  [abpPermission]=\"'AbpIdentity.Roles.ManagePermissions'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"providerKey = data.name; visiblePermissions = true\"\r\n                >\r\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  [abpPermission]=\"'AbpIdentity.Roles.Delete'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"delete(data.id, data.name)\"\r\n                >\r\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </td>\r\n          <td>{{ data.name }}</td>\r\n        </tr>\r\n      </ng-template>\r\n    </p-table>\r\n  </div>\r\n</div>\r\n\r\n<abp-modal size=\"md\" [(visible)]=\"isModalVisible\" [busy]=\"modalBusy\">\r\n  <ng-template #abpHeader>\r\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewRole') | abpLocalization }}</h3>\r\n  </ng-template>\r\n\r\n  <ng-template #abpBody>\r\n    <form #formRef [formGroup]=\"form\" (ngSubmit)=\"save()\" validateOnSubmit>\r\n      <div class=\"form-group\">\r\n        <label for=\"role-name\">{{ 'AbpIdentity::RoleName' | abpLocalization }}</label\r\n        ><span> * </span>\r\n        <input autofocus type=\"text\" id=\"role-name\" class=\"form-control\" formControlName=\"name\" />\r\n      </div>\r\n\r\n      <div class=\"custom-checkbox custom-control mb-2\">\r\n        <input type=\"checkbox\" id=\"role-is-default\" class=\"custom-control-input\" formControlName=\"isDefault\" />\r\n        <label class=\"custom-control-label\" for=\"role-is-default\">{{\r\n          'AbpIdentity::DisplayName:IsDefault' | abpLocalization\r\n        }}</label>\r\n      </div>\r\n\r\n      <div class=\"custom-checkbox custom-control mb-2\">\r\n        <input type=\"checkbox\" id=\"role-is-public\" class=\"custom-control-input\" formControlName=\"isPublic\" />\r\n        <label class=\"custom-control-label\" for=\"role-is-public\">{{\r\n          'AbpIdentity::DisplayName:IsPublic' | abpLocalization\r\n        }}</label>\r\n      </div>\r\n    </form>\r\n  </ng-template>\r\n\r\n  <ng-template #abpFooter>\r\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\r\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\r\n    </button>\r\n    <abp-button iconClass=\"fa fa-check\" [disabled]=\"form?.invalid\" (click)=\"onClickSaveButton()\">{{\r\n      'AbpIdentity::Save' | abpLocalization\r\n    }}</abp-button>\r\n  </ng-template>\r\n</abp-modal>\r\n\r\n<abp-permission-management [(visible)]=\"visiblePermissions\" providerName=\"R\" [providerKey]=\"providerKey\">\r\n</abp-permission-management>\r\n"
                     }] }
         ];
         /** @nocollapse */
@@ -1185,6 +1182,7 @@
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/components/users/users.component.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var UsersComponent = /** @class */ (function () {
@@ -1209,15 +1207,6 @@
         }
         Object.defineProperty(UsersComponent.prototype, "roleGroups", {
             get: /**
-             * @return {?}
-             */
-            function () {
-                var _this = this;
-                return snq((/**
-                 * @return {?}
-                 */
-                function () { return (/** @type {?} */ (((/** @type {?} */ (_this.form.get('roleNames')))).controls)); }), []);
-            },
             enumerable: true,
             configurable: true
         });
@@ -1274,14 +1263,11 @@
                 _this.roles = _this.store.selectSnapshot(IdentityState.getRoles);
                 _this.form = _this.fb.group({
                     userName: [_this.selected.userName || '', [forms.Validators.required, forms.Validators.maxLength(256)]],
-                    email: [
-                        _this.selected.email || '',
-                        [forms.Validators.required, forms.Validators.email, forms.Validators.maxLength(256)],
-                    ],
+                    email: [_this.selected.email || '', [forms.Validators.required, forms.Validators.email, forms.Validators.maxLength(256)]],
                     name: [_this.selected.name || '', [forms.Validators.maxLength(64)]],
                     surname: [_this.selected.surname || '', [forms.Validators.maxLength(64)]],
                     phoneNumber: [_this.selected.phoneNumber || '', [forms.Validators.maxLength(16)]],
-                    lockoutEnabled: [_this.selected.lockoutEnabled || (_this.selected.id ? false : true)],
+                    lockoutEnabled: [_this.selected.twoFactorEnabled || (_this.selected.id ? false : true)],
                     twoFactorEnabled: [_this.selected.twoFactorEnabled || (_this.selected.id ? false : true)],
                     roleNames: _this.fb.array(_this.roles.map((/**
                      * @param {?} role
@@ -1290,16 +1276,14 @@
                     function (role) {
                         var _a;
                         return _this.fb.group((_a = {},
-                            _a[role.name] = [
-                                !!snq((/**
+                            _a[role.name] = [!!snq((/**
                                  * @return {?}
                                  */
                                 function () { return _this.selectedUserRoles.find((/**
                                  * @param {?} userRole
                                  * @return {?}
                                  */
-                                function (userRole) { return userRole.id === role.id; })); })),
-                            ],
+                                function (userRole) { return userRole.id === role.id; })); }))],
                             _a));
                     }))),
                 });
@@ -1379,17 +1363,15 @@
             var mappedRoleNames = snq((/**
              * @return {?}
              */
-            function () {
-                return roleNames.filter((/**
-                 * @param {?} role
-                 * @return {?}
-                 */
-                function (role) { return !!role[Object.keys(role)[0]]; })).map((/**
-                 * @param {?} role
-                 * @return {?}
-                 */
-                function (role) { return Object.keys(role)[0]; }));
-            }), []);
+            function () { return roleNames.filter((/**
+             * @param {?} role
+             * @return {?}
+             */
+            function (role) { return !!role[Object.keys(role)[0]]; })).map((/**
+             * @param {?} role
+             * @return {?}
+             */
+            function (role) { return Object.keys(role)[0]; })); }), []);
             this.store
                 .dispatch(this.selected.id
                 ? new UpdateUser(__assign({}, this.selected, this.form.value, { id: this.selected.id, roleNames: mappedRoleNames }))
@@ -1403,7 +1385,6 @@
              */
             function () {
                 _this.isModalVisible = false;
-                _this.get();
             }));
         };
         /**
@@ -1428,10 +1409,7 @@
              */
             function (status) {
                 if (status === "confirm" /* confirm */) {
-                    _this.store.dispatch(new DeleteUser(id)).subscribe((/**
-                     * @return {?}
-                     */
-                    function () { return _this.get(); }));
+                    _this.store.dispatch(new DeleteUser(id));
                 }
             }));
         };
@@ -1448,27 +1426,13 @@
             this.pageQuery.maxResultCount = data.rows;
             this.get();
         };
-        /**
-         * @return {?}
-         */
-        UsersComponent.prototype.get = /**
-         * @return {?}
-         */
-        function () {
-            var _this = this;
-            this.loading = true;
-            this.store
-                .dispatch(new GetUsers(this.pageQuery))
-                .pipe(operators.finalize((/**
-             * @return {?}
-             */
             function () { return (_this.loading = false); })))
                 .subscribe();
         };
         UsersComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-users',
-                        template: "<div id=\"identity-roles-wrapper\" class=\"card\">\r\n  <div class=\"card-header\">\r\n    <div class=\"row\">\r\n      <div class=\"col col-md-6\">\r\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>\r\n      </div>\r\n      <div class=\"text-right col col-md-6\">\r\n        <button\r\n          *abpPermission=\"'AbpIdentity.Users.Create'\"\r\n          id=\"create-role\"\r\n          class=\"btn btn-primary\"\r\n          type=\"button\"\r\n          (click)=\"add()\"\r\n        >\r\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"card-body\">\r\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\r\n      <label\r\n        ><input\r\n          type=\"search\"\r\n          class=\"form-control form-control-sm\"\r\n          [placeholder]=\"'AbpUi::PagerSearch' | abpLocalization\"\r\n          (input.debounce)=\"onSearch($event.target.value)\"\r\n      /></label>\r\n    </div>\r\n    <p-table\r\n      *ngIf=\"[150, 250, 250, 250] as columnWidths\"\r\n      [value]=\"data$ | async\"\r\n      [abpTableSort]=\"{ key: sortKey, order: sortOrder }\"\r\n      [lazy]=\"true\"\r\n      [lazyLoadOnInit]=\"false\"\r\n      [paginator]=\"true\"\r\n      [rows]=\"10\"\r\n      [totalRecords]=\"totalCount$ | async\"\r\n      [loading]=\"loading\"\r\n      [resizableColumns]=\"true\"\r\n      [scrollable]=\"true\"\r\n      (onLazyLoad)=\"onPageChange($event)\"\r\n    >\r\n      <ng-template pTemplate=\"colgroup\">\r\n        <colgroup>\r\n          <col *ngFor=\"let width of columnWidths\" [ngStyle]=\"{ 'width.px': width || undefined }\" />\r\n        </colgroup>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"emptymessage\" let-columns>\r\n        <tr\r\n          abp-table-empty-message\r\n          [attr.colspan]=\"columnWidths.length\"\r\n          localizationResource=\"AbpIdentity\"\r\n          localizationProp=\"NoDataAvailableInDatatable\"\r\n        ></tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"header\">\r\n        <tr>\r\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('userName')\">\r\n            {{ 'AbpIdentity::UserName' | abpLocalization }}\r\n            <abp-sort-order-icon #sortOrderIcon key=\"userName\" [(selectedKey)]=\"sortKey\" [(order)]=\"sortOrder\">\r\n            </abp-sort-order-icon>\r\n          </th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('email')\">\r\n            {{ 'AbpIdentity::EmailAddress' | abpLocalization }}\r\n            <abp-sort-order-icon key=\"email\" [(selectedKey)]=\"sortKey\" [(order)]=\"sortOrder\"></abp-sort-order-icon>\r\n          </th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('phoneNumber')\">\r\n            {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}\r\n            <abp-sort-order-icon key=\"phoneNumber\" [(selectedKey)]=\"sortKey\" [(order)]=\"sortOrder\">\r\n            </abp-sort-order-icon>\r\n          </th>\r\n        </tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"body\" let-data>\r\n        <tr>\r\n          <td class=\"text-center\">\r\n            <div ngbDropdown container=\"body\" class=\"d-inline-block\">\r\n              <button\r\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\r\n                data-toggle=\"dropdown\"\r\n                aria-haspopup=\"true\"\r\n                ngbDropdownToggle\r\n              >\r\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\r\n              </button>\r\n              <div ngbDropdownMenu>\r\n                <button *abpPermission=\"'AbpIdentity.Users.Update'\" ngbDropdownItem (click)=\"edit(data.id)\">\r\n                  {{ 'AbpIdentity::Edit' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  *abpPermission=\"'AbpIdentity.Users.ManagePermissions'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"providerKey = data.id; visiblePermissions = true\"\r\n                >\r\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  *abpPermission=\"'AbpIdentity.Users.Delete'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"delete(data.id, data.userName)\"\r\n                >\r\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </td>\r\n          <td>{{ data.userName }}</td>\r\n          <td>{{ data.email }}</td>\r\n          <td>{{ data.phoneNumber }}</td>\r\n        </tr>\r\n      </ng-template>\r\n    </p-table>\r\n  </div>\r\n</div>\r\n\r\n<abp-modal [(visible)]=\"isModalVisible\" [busy]=\"modalBusy\" (disappear)=\"form = null\">\r\n  <ng-template #abpHeader>\r\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>\r\n  </ng-template>\r\n\r\n  <ng-template #abpBody>\r\n    <ng-template #loaderRef\r\n      ><div class=\"text-center\"><i class=\"fa fa-pulse fa-spinner\"></i></div\r\n    ></ng-template>\r\n\r\n    <form *ngIf=\"form; else loaderRef\" [formGroup]=\"form\" (ngSubmit)=\"save()\">\r\n      <ngb-tabset>\r\n        <ngb-tab [title]=\"'AbpIdentity::UserInformations' | abpLocalization\">\r\n          <ng-template ngbTabContent>\r\n            <div class=\"mt-2 fade-in-top\">\r\n              <div class=\"form-group\">\r\n                <label for=\"user-name\">{{ 'AbpIdentity::UserName' | abpLocalization }}</label\r\n                ><span> * </span>\r\n                <input type=\"text\" id=\"user-name\" class=\"form-control\" formControlName=\"userName\" autofocus />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>\r\n                <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>\r\n                <input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"password\">{{ 'AbpIdentity::Password' | abpLocalization }}</label\r\n                ><span *ngIf=\"!selected.userName\"> * </span>\r\n                <input\r\n                  type=\"password\"\r\n                  id=\"password\"\r\n                  autocomplete=\"new-password\"\r\n                  class=\"form-control\"\r\n                  formControlName=\"password\"\r\n                />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"email\">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label\r\n                ><span> * </span>\r\n                <input type=\"text\" id=\"email\" class=\"form-control\" formControlName=\"email\" />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"phone-number\">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>\r\n                <input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\r\n              </div>\r\n\r\n              <div class=\"custom-checkbox custom-control mb-2\">\r\n                <input\r\n                  type=\"checkbox\"\r\n                  id=\"lockout-checkbox\"\r\n                  class=\"custom-control-input\"\r\n                  formControlName=\"lockoutEnabled\"\r\n                />\r\n                <label class=\"custom-control-label\" for=\"lockout-checkbox\">{{\r\n                  'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization\r\n                }}</label>\r\n              </div>\r\n\r\n              <div class=\"custom-checkbox custom-control mb-2\">\r\n                <input\r\n                  type=\"checkbox\"\r\n                  id=\"two-factor-checkbox\"\r\n                  class=\"custom-control-input\"\r\n                  formControlName=\"twoFactorEnabled\"\r\n                />\r\n                <label class=\"custom-control-label\" for=\"two-factor-checkbox\">{{\r\n                  'AbpIdentity::DisplayName:TwoFactorEnabled' | abpLocalization\r\n                }}</label>\r\n              </div>\r\n            </div>\r\n          </ng-template>\r\n        </ngb-tab>\r\n        <ngb-tab [title]=\"'AbpIdentity::Roles' | abpLocalization\">\r\n          <ng-template ngbTabContent>\r\n            <div class=\"mt-2 fade-in-top\">\r\n              <div\r\n                *ngFor=\"let roleGroup of roleGroups; let i = index; trackBy: trackByFn\"\r\n                class=\"custom-checkbox custom-control mb-2\"\r\n              >\r\n                <input\r\n                  type=\"checkbox\"\r\n                  name=\"Roles[0].IsAssigned\"\r\n                  value=\"true\"\r\n                  class=\"custom-control-input\"\r\n                  [attr.id]=\"'roles-' + i\"\r\n                  [formControl]=\"roleGroup.controls[roles[i].name]\"\r\n                />\r\n                <label class=\"custom-control-label\" [attr.for]=\"'roles-' + i\">{{ roles[i].name }}</label>\r\n              </div>\r\n            </div>\r\n          </ng-template>\r\n        </ngb-tab>\r\n      </ngb-tabset>\r\n    </form>\r\n  </ng-template>\r\n\r\n  <ng-template #abpFooter>\r\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\r\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\r\n    </button>\r\n    <abp-button iconClass=\"fa fa-check\" (click)=\"save()\" [disabled]=\"form?.invalid\">{{\r\n      'AbpIdentity::Save' | abpLocalization\r\n    }}</abp-button>\r\n  </ng-template>\r\n</abp-modal>\r\n\r\n<abp-permission-management [(visible)]=\"visiblePermissions\" providerName=\"U\" [providerKey]=\"providerKey\">\r\n</abp-permission-management>\r\n"
+                        template: "<div id=\"identity-roles-wrapper\" class=\"card\">\r\n  <div class=\"card-header\">\r\n    <div class=\"row\">\r\n      <div class=\"col col-md-6\">\r\n        <h5 class=\"card-title\">{{ 'AbpIdentity::Users' | abpLocalization }}</h5>\r\n      </div>\r\n      <div class=\"text-right col col-md-6\">\r\n        <button\r\n          [abpPermission]=\"'AbpIdentity.Users.Create'\"\r\n          id=\"create-role\"\r\n          class=\"btn btn-primary\"\r\n          type=\"button\"\r\n          (click)=\"add()\"\r\n        >\r\n          <i class=\"fa fa-plus mr-1\"></i> <span>{{ 'AbpIdentity::NewUser' | abpLocalization }}</span>\r\n        </button>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <div class=\"card-body\">\r\n    <div id=\"data-tables-table-filter\" class=\"data-tables-filter\">\r\n      <label\r\n        ><input\r\n          type=\"search\"\r\n          class=\"form-control form-control-sm\"\r\n          [placeholder]=\"'AbpUi::PagerSearch' | abpLocalization\"\r\n          (input.debounce)=\"onSearch($event.target.value)\"\r\n      /></label>\r\n    </div>\r\n    <p-table\r\n      *ngIf=\"[150, 250, 250, 250] as columnWidths\"\r\n      [value]=\"data$ | async\"\r\n      [abpTableSort]=\"{ key: sortKey, order: sortOrder }\"\r\n      [lazy]=\"true\"\r\n      [lazyLoadOnInit]=\"false\"\r\n      [paginator]=\"true\"\r\n      [rows]=\"10\"\r\n      [totalRecords]=\"totalCount$ | async\"\r\n      [loading]=\"loading\"\r\n      [resizableColumns]=\"true\"\r\n      [scrollable]=\"true\"\r\n      (onLazyLoad)=\"onPageChange($event)\"\r\n    >\r\n      <ng-template pTemplate=\"colgroup\">\r\n        <colgroup>\r\n          <col *ngFor=\"let width of columnWidths\" [ngStyle]=\"{ 'width.px': width || undefined }\" />\r\n        </colgroup>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"emptymessage\" let-columns>\r\n        <tr\r\n          abp-table-empty-message\r\n          [attr.colspan]=\"columnWidths.length\"\r\n          localizationResource=\"AbpIdentity\"\r\n          localizationProp=\"NoDataAvailableInDatatable\"\r\n        ></tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"header\">\r\n        <tr>\r\n          <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('userName')\">\r\n            {{ 'AbpIdentity::UserName' | abpLocalization }}\r\n            <abp-sort-order-icon #sortOrderIcon key=\"userName\" [(selectedKey)]=\"sortKey\" [(order)]=\"sortOrder\">\r\n            </abp-sort-order-icon>\r\n          </th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('email')\">\r\n            {{ 'AbpIdentity::EmailAddress' | abpLocalization }}\r\n            <abp-sort-order-icon key=\"email\" [(selectedKey)]=\"sortKey\" [(order)]=\"sortOrder\"></abp-sort-order-icon>\r\n          </th>\r\n          <th pResizableColumn (click)=\"sortOrderIcon.sort('phoneNumber')\">\r\n            {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}\r\n            <abp-sort-order-icon key=\"phoneNumber\" [(selectedKey)]=\"sortKey\" [(order)]=\"sortOrder\">\r\n            </abp-sort-order-icon>\r\n          </th>\r\n        </tr>\r\n      </ng-template>\r\n      <ng-template pTemplate=\"body\" let-data>\r\n        <tr>\r\n          <td class=\"text-center\">\r\n            <div ngbDropdown container=\"body\" class=\"d-inline-block\">\r\n              <button\r\n                class=\"btn btn-primary btn-sm dropdown-toggle\"\r\n                data-toggle=\"dropdown\"\r\n                aria-haspopup=\"true\"\r\n                ngbDropdownToggle\r\n              >\r\n                <i class=\"fa fa-cog mr-1\"></i>{{ 'AbpIdentity::Actions' | abpLocalization }}\r\n              </button>\r\n              <div ngbDropdownMenu>\r\n                <button [abpPermission]=\"'AbpIdentity.Users.Update'\" ngbDropdownItem (click)=\"edit(data.id)\">\r\n                  {{ 'AbpIdentity::Edit' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  [abpPermission]=\"'AbpIdentity.Users.ManagePermissions'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"providerKey = data.id; visiblePermissions = true\"\r\n                >\r\n                  {{ 'AbpIdentity::Permissions' | abpLocalization }}\r\n                </button>\r\n                <button\r\n                  [abpPermission]=\"'AbpIdentity.Users.Delete'\"\r\n                  ngbDropdownItem\r\n                  (click)=\"delete(data.id, data.userName)\"\r\n                >\r\n                  {{ 'AbpIdentity::Delete' | abpLocalization }}\r\n                </button>\r\n              </div>\r\n            </div>\r\n          </td>\r\n          <td>{{ data.userName }}</td>\r\n          <td>{{ data.email }}</td>\r\n          <td>{{ data.phoneNumber }}</td>\r\n        </tr>\r\n      </ng-template>\r\n    </p-table>\r\n  </div>\r\n</div>\r\n\r\n<abp-modal [(visible)]=\"isModalVisible\" [busy]=\"modalBusy\" (disappear)=\"form = null\">\r\n  <ng-template #abpHeader>\r\n    <h3>{{ (selected?.id ? 'AbpIdentity::Edit' : 'AbpIdentity::NewUser') | abpLocalization }}</h3>\r\n  </ng-template>\r\n\r\n  <ng-template #abpBody>\r\n    <ng-template #loaderRef\r\n      ><div class=\"text-center\"><i class=\"fa fa-pulse fa-spinner\"></i></div\r\n    ></ng-template>\r\n\r\n    <form *ngIf=\"form; else loaderRef\" [formGroup]=\"form\" (ngSubmit)=\"save()\">\r\n      <ngb-tabset>\r\n        <ngb-tab [title]=\"'AbpIdentity::UserInformations' | abpLocalization\">\r\n          <ng-template ngbTabContent>\r\n            <div class=\"mt-2 fade-in-top\">\r\n              <div class=\"form-group\">\r\n                <label for=\"user-name\">{{ 'AbpIdentity::UserName' | abpLocalization }}</label\r\n                ><span> * </span>\r\n                <input type=\"text\" id=\"user-name\" class=\"form-control\" formControlName=\"userName\" autofocus />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"name\">{{ 'AbpIdentity::DisplayName:Name' | abpLocalization }}</label>\r\n                <input type=\"text\" id=\"name\" class=\"form-control\" formControlName=\"name\" />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"surname\">{{ 'AbpIdentity::DisplayName:Surname' | abpLocalization }}</label>\r\n                <input type=\"text\" id=\"surname\" class=\"form-control\" formControlName=\"surname\" />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"password\">{{ 'AbpIdentity::Password' | abpLocalization }}</label\r\n                ><span *ngIf=\"!selected.userName\"> * </span>\r\n                <input\r\n                  type=\"password\"\r\n                  id=\"password\"\r\n                  autocomplete=\"new-password\"\r\n                  class=\"form-control\"\r\n                  formControlName=\"password\"\r\n                />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"email\">{{ 'AbpIdentity::EmailAddress' | abpLocalization }}</label\r\n                ><span> * </span>\r\n                <input type=\"text\" id=\"email\" class=\"form-control\" formControlName=\"email\" />\r\n              </div>\r\n\r\n              <div class=\"form-group\">\r\n                <label for=\"phone-number\">{{ 'AbpIdentity::PhoneNumber' | abpLocalization }}</label>\r\n                <input type=\"text\" id=\"phone-number\" class=\"form-control\" formControlName=\"phoneNumber\" />\r\n              </div>\r\n\r\n              <div class=\"custom-checkbox custom-control mb-2\">\r\n                <input\r\n                  type=\"checkbox\"\r\n                  id=\"lockout-checkbox\"\r\n                  class=\"custom-control-input\"\r\n                  formControlName=\"lockoutEnabled\"\r\n                />\r\n                <label class=\"custom-control-label\" for=\"lockout-checkbox\">{{\r\n                  'AbpIdentity::DisplayName:LockoutEnabled' | abpLocalization\r\n                }}</label>\r\n              </div>\r\n\r\n              <div class=\"custom-checkbox custom-control mb-2\">\r\n                <input\r\n                  type=\"checkbox\"\r\n                  id=\"two-factor-checkbox\"\r\n                  class=\"custom-control-input\"\r\n                  formControlName=\"twoFactorEnabled\"\r\n                />\r\n                <label class=\"custom-control-label\" for=\"two-factor-checkbox\">{{\r\n                  'AbpIdentity::DisplayName:TwoFactorEnabled' | abpLocalization\r\n                }}</label>\r\n              </div>\r\n            </div>\r\n          </ng-template>\r\n        </ngb-tab>\r\n        <ngb-tab [title]=\"'AbpIdentity::Roles' | abpLocalization\">\r\n          <ng-template ngbTabContent>\r\n            <div class=\"mt-2 fade-in-top\">\r\n              <div\r\n                *ngFor=\"let roleGroup of roleGroups; let i = index; trackBy: trackByFn\"\r\n                class=\"custom-checkbox custom-control mb-2\"\r\n              >\r\n                <input\r\n                  type=\"checkbox\"\r\n                  name=\"Roles[0].IsAssigned\"\r\n                  value=\"true\"\r\n                  class=\"custom-control-input\"\r\n                  [attr.id]=\"'roles-' + i\"\r\n                  [formControl]=\"roleGroup.controls[roles[i].name]\"\r\n                />\r\n                <label class=\"custom-control-label\" [attr.for]=\"'roles-' + i\">{{ roles[i].name }}</label>\r\n              </div>\r\n            </div>\r\n          </ng-template>\r\n        </ngb-tab>\r\n      </ngb-tabset>\r\n    </form>\r\n  </ng-template>\r\n\r\n  <ng-template #abpFooter>\r\n    <button type=\"button\" class=\"btn btn-secondary\" #abpClose>\r\n      {{ 'AbpIdentity::Cancel' | abpLocalization }}\r\n    </button>\r\n    <abp-button iconClass=\"fa fa-check\" (click)=\"save()\" [disabled]=\"form?.invalid\">{{\r\n      'AbpIdentity::Save' | abpLocalization\r\n    }}</abp-button>\r\n  </ng-template>\r\n</abp-modal>\r\n\r\n<abp-permission-management [(visible)]=\"visiblePermissions\" providerName=\"U\" [providerKey]=\"providerKey\">\r\n</abp-permission-management>\r\n"
                     }] }
         ];
         /** @nocollapse */
@@ -1546,110 +1510,16 @@
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/identity-routing.module.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var ɵ0 = { requiredPolicy: 'AbpIdentity.Roles' }, ɵ1 = { requiredPolicy: 'AbpIdentity.Users' };
-    /** @type {?} */
-    var routes = [
-        { path: '', redirectTo: 'roles', pathMatch: 'full' },
-        {
-            path: '',
-            component: ng_core.DynamicLayoutComponent,
-            canActivate: [ng_core.AuthGuard, ng_core.PermissionGuard],
-            children: [
-                {
-                    path: 'roles',
-                    component: RolesComponent,
-                    data: ɵ0,
-                },
-                {
-                    path: 'users',
-                    component: UsersComponent,
-                    data: ɵ1,
-                },
-            ],
-        },
-    ];
-    var IdentityRoutingModule = /** @class */ (function () {
-        function IdentityRoutingModule() {
-        }
-        IdentityRoutingModule.decorators = [
-            { type: core.NgModule, args: [{
-                        imports: [router.RouterModule.forChild(routes)],
-                        exports: [router.RouterModule],
-                    },] }
-        ];
-        return IdentityRoutingModule;
-    }());
-
-    /**
      * @fileoverview added by tsickle
+     * Generated from: lib/identity.module.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    var IdentityModule = /** @class */ (function () {
-        function IdentityModule() {
-        }
-        IdentityModule.decorators = [
-            { type: core.NgModule, args: [{
-                        declarations: [RolesComponent, UsersComponent],
-                        imports: [
-                            store.NgxsModule.forFeature([IdentityState]),
-                            ng_core.CoreModule,
-                            IdentityRoutingModule,
-                            ngBootstrap.NgbTabsetModule,
-                            ng_theme_shared.ThemeSharedModule,
-                            table.TableModule,
-                            ngBootstrap.NgbDropdownModule,
-                            ng_permissionManagement.PermissionManagementModule,
-                            core$1.NgxValidateCoreModule,
-                        ],
-                    },] }
-        ];
-        return IdentityModule;
-    }());
-    /**
-     *
-     * @deprecated
-     * @return {?}
-     */
-    function IdentityProviders() {
-        return [];
-    }
-
-    /**
      * @fileoverview added by tsickle
+     * Generated from: lib/constants/routes.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
-     */
-    /**
-     *
-     * @deprecated
-     * @type {?}
-     */
-    var IDENTITY_ROUTES = {
-        routes: (/** @type {?} */ ([
-            {
-                name: 'AbpUiNavigation::Menu:Administration',
-                path: '',
-                order: 1,
-                wrapper: true,
-            },
-            {
-                name: 'AbpIdentity::Menu:IdentityManagement',
-                path: 'identity',
-                order: 1,
-                parentName: 'AbpUiNavigation::Menu:Administration',
-                layout: "application" /* application */,
-                iconClass: 'fa fa-id-card-o',
-                children: [
-                    { path: 'roles', name: 'AbpIdentity::Roles', order: 2, requiredPolicy: 'AbpIdentity.Roles' },
-                    { path: 'users', name: 'AbpIdentity::Users', order: 1, requiredPolicy: 'AbpIdentity.Users' },
-                ],
-            },
-        ])),
-    };
-
-    /**
      * @fileoverview added by tsickle
+     * Generated from: lib/models/identity.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var Identity;

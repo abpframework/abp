@@ -13,4 +13,3 @@ export declare class ChangePasswordComponent implements OnInit {
     constructor(fb: FormBuilder, store: Store, toasterService: ToasterService);
     ngOnInit(): void;
     onSubmit(): void;
-}

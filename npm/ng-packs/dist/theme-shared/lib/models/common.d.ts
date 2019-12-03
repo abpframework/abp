@@ -7,6 +7,5 @@ export interface HttpErrorConfig {
     errorScreen?: {
         component: Type<any>;
         forWhichErrors?: [ErrorScreenErrorCodes] | [ErrorScreenErrorCodes, ErrorScreenErrorCodes] | [ErrorScreenErrorCodes, ErrorScreenErrorCodes, ErrorScreenErrorCodes] | [ErrorScreenErrorCodes, ErrorScreenErrorCodes, ErrorScreenErrorCodes, ErrorScreenErrorCodes];
-        hideCloseIcon?: boolean;
     };
 }
