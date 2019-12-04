@@ -13,7 +13,7 @@
     "object-literal-key-quotes": [true, "as-needed"],
     "ordered-imports": false,
     "trailing-comma": false,
-    "component-max-inline-declarations": [true, { "animations": 20, "styles": 10, "template": 10 }],
+    "component-max-inline-declarations": [true, { "animations": 20, "styles": 20, "template": 20 }],
     "no-forward-ref": true,
     "no-lifecycle-call": true,
     "no-pipe-impure": true,
