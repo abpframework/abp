@@ -32,18 +32,18 @@ namespace Volo.Docs.HtmlConverting
                     values[i] = keysValuesSplitted[i].Split(DocumentSectionConsts.SectionOpenerKeyValueSeparator)[1];
                 }
 
-                var div = $"<div class=\"doc-section\" data-keys=\"" +
+                var div = $"<span class=\"doc-section\" data-keys=\"" +
                     $"{string.Join(splitterChar, keys)}" +
                     $"\" data-values=\"" +
                     $"{string.Join(splitterChar, values)}" +
-                    $"\" style=\"display: none\">";
+                    $"\">";
 
                 document = document.Remove(sectionIndex, sectionCloserIndex + DocumentSectionConsts.SectionOpenerPrefix.Length +1);
 
                 document = document.Insert(sectionIndex, div);
             }
 
-            document = document.Replace(DocumentSectionConsts.SectionCloser, "</div>");
+            document = document.Replace(DocumentSectionConsts.SectionCloser, "</span>");
 
             return document;
         }
