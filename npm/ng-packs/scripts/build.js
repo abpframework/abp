@@ -78,6 +78,7 @@ import program from 'commander';
     );
   } catch (error) {
     console.error(error.stderr);
+    process.exit(1);
   }
 
   if (!program.noCommit) {
