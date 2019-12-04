@@ -35,37 +35,50 @@ import program from 'commander';
       stdout: 'inherit',
       cwd: '..',
     });
+
+    execa.sync(
+      'yarn',
+      [
+        'symlink',
+        'copy',
+        '--angular',
+        '--no-watch',
+        '--sync',
+        '--packages',
+        '@abp/ng.core,@abp/ng.theme.shared',
+      ],
+      { stdout: 'inherit', cwd: '../' },
+    );
+
+    await execa(
+      'yarn',
+      [
+        'symlink',
+        'copy',
+        '--angular',
+        '--no-watch',
+        '--packages',
+        '@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
+      ],
+      { stdout: 'inherit', cwd: '../' },
+    );
+
+    await execa(
+      'yarn',
+      [
+        'symlink',
+        'copy',
+        '--angular',
+        '--no-watch',
+        '--all-packages',
+        '--excluded-packages',
+        '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
+      ],
+      { stdout: 'inherit', cwd: '../' },
+    );
   } catch (error) {
     console.error(error.stderr);
   }
-
-  execa.sync(
-    'yarn',
-    [
-      'symlink',
-      'copy',
-      '--angular',
-      '--no-watch',
-      '--sync',
-      '--packages',
-      '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
-    ],
-    { stdout: 'inherit', cwd: '../' },
-  );
-
-  await execa(
-    'yarn',
-    [
-      'symlink',
-      'copy',
-      '--angular',
-      '--no-watch',
-      '--all-packages',
-      '--excluded-packages',
-      '@abp/ng.core,@abp/ng.theme.shared,@abp/ng.feature-management,@abp/ng.permission-management,@abp/ng.account.config,@abp/ng.identity.config,@abp/ng.setting-management.config,@abp/ng.tenant-management.config',
-    ],
-    { stdout: 'inherit', cwd: '../' },
-  );
 
   if (!program.noCommit) {
     await execa('git', ['add', '../dist/*', '../package.json'], { stdout: 'inherit' });
