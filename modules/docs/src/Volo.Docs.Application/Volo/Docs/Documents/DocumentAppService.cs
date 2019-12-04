@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Volo.Abp.Caching;
 using Volo.Docs.Projects;
 
@@ -100,6 +101,20 @@ namespace Volo.Docs.Documents
             );
         }
 
+        public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
+        {
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            var document = await GetDocumentWithDetailsDtoAsync(
+                project,
+                project.ParametersDocumentName,
+                input.LanguageCode,
+                input.Version
+            );
+
+            return JsonConvert.DeserializeObject<DocumentParametersDto>(document.Content);
+        }
+
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDtoAsync(
             Project project,
             string documentName,
@@ -143,5 +158,6 @@ namespace Volo.Docs.Documents
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
             return documentDto;
         }
+
     }
 }

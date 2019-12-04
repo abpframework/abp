@@ -2,7 +2,7 @@
 
 namespace Volo.Docs.HtmlConverting
 {
-    public class DocumentSectionDictionary : Dictionary<string,List<string>>
+    public class DocumentRenderParameters : Dictionary<string,string>
     {
     }
 }

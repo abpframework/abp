@@ -56,13 +56,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool DocumentLanguageIsDifferent { get; set; }
 
-        public DocumentSectionDictionary DocumentSections { get; set; }
+        public DocumentParametersDto DocumentPreferences { get; set; }
+
+        public DocumentRenderParameters UserPreferences { get; set; }
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
-        private readonly IDocumentSectionHtmlReplacer _documentSectionHtmlReplacer;
-        private readonly IDocumentSectionFinder _documentSectionFinder;
+        private readonly IDocumentSectionRenderer _documentSectionRenderer;
         private readonly DocsUiOptions _uiOptions;
 
         public IndexModel(
@@ -70,16 +71,14 @@ namespace Volo.Docs.Pages.Documents.Project
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
             IOptions<DocsUiOptions> options,
-            IDocumentSectionHtmlReplacer documentSectionHtmlReplacer,
-            IDocumentSectionFinder documentSectionFinder)
+            IDocumentSectionRenderer documentSectionRenderer)
         {
             ObjectMapperContext = typeof(DocsWebModule);
 
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
-            _documentSectionHtmlReplacer = documentSectionHtmlReplacer;
-            _documentSectionFinder = documentSectionFinder;
+            _documentSectionRenderer = documentSectionRenderer;
             _uiOptions = options.Value;
         }
 
@@ -361,7 +360,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
             }
 
-            ConvertDocumentContentToHtml();
+            await ConvertDocumentContentToHtmlAsync();
         }
 
         private void SetLanguageSelectListItems()
@@ -380,11 +379,13 @@ namespace Volo.Docs.Pages.Documents.Project
             }
         }
 
-        private void ConvertDocumentContentToHtml()
+        private async Task ConvertDocumentContentToHtmlAsync()
         {
-            DocumentSections = _documentSectionFinder.Find(Document.Content);
+            await SetDocumentPreferences();
 
-            Document.Content = _documentSectionHtmlReplacer.Replace(Document.Content);
+            UserPreferences = GetParameters();
+
+            Document.Content = await _documentSectionRenderer.Render(Document.Content, UserPreferences);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
@@ -403,6 +404,94 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+
+        private DocumentRenderParameters GetParameters()
+        {
+            var parameters = new DocumentRenderParameters();
+
+            var cookie = Request.Cookies["AbpIoDocsPreferences"];
+
+            if (cookie != null)
+            {
+                var keyValues = cookie.Split("|");
+
+                foreach (var keyValue in keyValues)
+                {
+                    if (keyValue.Split("=").Length < 2)
+                    {
+                        continue;
+                    }
+                    var key = keyValue.Split("=")[0];
+                    var value = keyValue.Split("=")[1];
+
+                    parameters.Add(key, value);
+                }
+            }
+
+            var query = Request.Query;
+
+            foreach (var keyValue in query)
+            {
+                if (parameters.ContainsKey(keyValue.Key))
+                {
+                    parameters.Remove(keyValue.Key);
+                }
+                parameters.Add(keyValue.Key, keyValue.Value);
+            }
+
+            foreach (var parameter in DocumentPreferences.Parameters)
+            {
+                if (!parameters.ContainsKey(parameter.Name))
+                {
+                    parameters.Add(parameter.Name, parameter.Values.FirstOrDefault().Key);
+                }
+            }
+
+            return parameters;
+        }
+
+        public async Task SetDocumentPreferences()
+        {
+            var projectParameters = await _documentAppService.GetParametersAsync(
+                    new GetParametersDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        LanguageCode = LanguageCode,
+                        Version = Version
+                    });
+
+            var availableparameters = await _documentSectionRenderer.GetAvailableParametersAsync(Document.Content);
+
+            DocumentPreferences = new DocumentParametersDto
+            {
+                Parameters = new List<DocumentParameterDto>()
+            };
+
+            foreach (var parameter in projectParameters.Parameters)
+            {
+                var availableParameter = availableparameters.GetOrDefault(parameter.Name);
+                if (availableParameter != null)
+                {
+                    var newParameter = new DocumentParameterDto
+                    {
+                        Name = parameter.Name,
+                        DisplayName = parameter.DisplayName,
+                        Values = new Dictionary<string, string>()
+                    };
+
+                    foreach (var value in parameter.Values)
+                    {
+                        if (availableParameter.Contains(value.Key))
+                        {
+                            newParameter.Values.Add(value.Key, value.Value);
+                        }
+                    }
+
+                    DocumentPreferences.Parameters.Add(newParameter);
+                }
+
+            }
         }
     }
 }

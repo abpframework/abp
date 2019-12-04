@@ -1,129 +1,10 @@
 ﻿(function ($) {
 
     $(function () {
-
-        var initToc = function () {
-
-            function handleCustomScrolls() {
-                var wWidth = $(window).width();
-                if (wWidth > 766) {
-                    $("#sidebar-scroll").mCustomScrollbar({
-                        theme: "minimal"
-                    });
-
-                    $("#scroll-index").mCustomScrollbar({
-                        theme: "minimal-dark"
-                    });
-                }
-            }
-
-            $('li:not(.last-link) a.tree-toggle').click(function () {
-                $(this).parent().children('ul.tree').toggle(100);
-                $(this).closest("li").toggleClass("selected-tree");
-            });
-
-            $('li:not(.last-link) span.plus-icon i.fa-chevron-right').click(function () {
-
-                var $element = $(this).parent();
-
-                $element.parent().children('ul.tree').toggle(100);
-                $element.closest("li").toggleClass("selected-tree");
-            });
-
-            var scrollTopBtn = $(".scroll-top-btn");
-            var enoughHeight = $(".docs-sidebar-wrapper > .docs-top").height() + 60;
-
-            $(window).scroll(function () {
-                var topPos = $(window).scrollTop();
-                if (topPos > enoughHeight) {
-                    $(scrollTopBtn).addClass("showup");
-                    $("body").addClass("scrolled");
-                } else {
-                    $(scrollTopBtn).removeClass("showup");
-                    $("body").removeClass("scrolled");
-                }
-            });
-
-            $(scrollTopBtn).click(function () {
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 500);
-                return false;
-            });
-
-            var scrollToHashLink = function () {
-                var hash = window.location.hash;
-
-                if (!hash || hash === "#") {
-                    return;
-                }
-
-                var $targetElement = $(hash);
-
-                $targetElement = $targetElement.length ? $targetElement : $('[name=' + this.hash.slice(1) + ']');
-
-                if (!$targetElement.length) {
-                    return;
-                }
-
-                $('html,body').stop().animate({
-                    scrollTop: $targetElement.offset().top
-                }, 200);
-
-                return;
-            };
-
-            var createToc = function () {
-                handleCustomScrolls();
-
-                $("#docs-sticky-index").empty();
-
-                var $myNav = $("#docs-sticky-index");
-                Toc.init($myNav);
-
-                $("body").scrollspy({
-                    target: $myNav
-                });
-
-                $("#docs-sticky-index a").on('click', function (event) {
-                    if (this.hash !== "") {
-                        event.preventDefault();
-                        var hash = this.hash;
-                        $('html, body').animate({
-                            scrollTop: $(hash).offset().top
-                        }, 500, function () {
-                            window.location.hash = hash;
-                        });
-                    }
-                });
-
-                $(".btn-toggle").on("click", function () {
-                    $(".toggle-row").slideToggle(400);
-                    $(this).toggleClass("less");
-                });
-
-                $(".close-mmenu").on("click", function () {
-                    $(".navbar-collapse").removeClass("show");
-                });
-
-                $(".open-dmenu").on("click", function () {
-                    $(".docs-tree-list").slideToggle();
-                });
-
-                scrollToHashLink();
-            };
-
-            $(window).resize(function () {
-                handleCustomScrolls();
-            });
-
-
-            createToc();
-        };
-
         var initNavigationFilter = function (navigationContainerId) {
 
             var $navigation = $("#" + navigationContainerId);
+
 
             var getShownDocumentLinks = function () {
                 return $navigation.find(".mCSB_container > li a:visible").not(".tree-toggle");
@@ -222,24 +103,26 @@
         };
 
         var initSections = function () {
-            var getQueryStringParameterByName = function (name) {
-                var url = window.location.href;
-                name = name.replace(/[\[\]]/g, '\\$&');
-                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                    results = regex.exec(url);
-                if (!results) return null;
-                if (!results[2]) return '';
-                return decodeURIComponent(results[2].replace(/\+/g, ' '));
-            };
-
-            var setQueryString = function () {
+            var clearQueryString = function () {
                 var uri = window.location.href.toString();
 
                 if (uri.indexOf("?") > 0) {
                     uri = uri.substring(0, uri.indexOf("?"));
                 }
 
+                window.history.replaceState({}, document.title, uri);
+            };
+
+            var setQueryString = function () {
+                clearQueryString();
+
+                var uri = window.location.href.toString();
+
                 var comboboxes = $(".doc-section-combobox");
+
+                if (comboboxes.length < 1) {
+                    return;
+                }
 
                 var new_uri = uri + "?";
 
@@ -257,99 +140,47 @@
                 window.history.replaceState({}, document.title, new_uri);
             };
 
-            var setSections = function () {
+            var setCookies = function () {
+                var cookie = abp.utils.getCookieValue("AbpIoDocsPreferences");
 
-                var sections = $(".doc-section");
+                if (!cookie || cookie == null || cookie === null) {
+                    cookie = "";
+                }
+                var keyValues = cookie.split("|");
 
                 var comboboxes = $(".doc-section-combobox");
-                var comboboxKeys = [];
-                var comboboxSelectedValues = [];
 
                 for (var i = 0; i < comboboxes.length; i++) {
-                    comboboxKeys.push($(comboboxes[i]).data("key"));
-                    comboboxSelectedValues.push(comboboxes[i].value);
-                }
+                    var key = $(comboboxes[i]).data('key');
+                    var value = comboboxes[i].value;
 
-                for (i = 0; i < sections.length; i++) {
-                    var keys = $(sections[i]).data("keys");
-                    var values = $(sections[i]).data("values");
+                    var changed = false;
+                    var keyValueslength = keyValues.length;
+                    for (var k = 0; k < keyValueslength; k++) {
+                        var splitted = keyValues[k].split("=");
 
-                    var show = false;
-                    var keysSplitted;
-                    var valuesSplitted;
-
-                    if (keys.indexOf("&") >= 0) {
-                        keysSplitted = keys.split("&");
-                        valuesSplitted = values.split("&");
-
-                        var hide = false;
-
-                        for (var k = 0; k < keysSplitted.length; k++) {
-                            if (valuesSplitted[k] !== comboboxSelectedValues[comboboxKeys.indexOf(keysSplitted[k])]) {
-                                hide = true;
-                                break;
-                            }
-                        }
-
-                        show = !hide;
-                    }
-                    else if (keys.indexOf("|") >= 0) {
-                        keysSplitted = keys.split("|");
-                        valuesSplitted = values.split("|");
-
-                        for (k = 0; k < keysSplitted.length; k++) {
-                            if (valuesSplitted[k] === comboboxSelectedValues[comboboxKeys.indexOf(keysSplitted[k])]) {
-                                show = true;
-                                break;
-                            }
-                        }
-                    }
-                    else {
-                        if (values === comboboxSelectedValues[comboboxKeys.indexOf(keys)]) {
-                            show = true;
+                        if (splitted.length > 0 && splitted[0] === key) {
+                            keyValues[k] = key + "=" + value;
+                            console.log(keyValues[k]);
+                            changed = true;
                         }
                     }
 
-                    var headers = $(sections[i]).find(':header');
-
-                    if (show) {
-                        headers.removeAttr('data-toc-skip');
-                        $(sections[i]).show();
-                    }
-                    else {
-                        headers.attr('data-toc-skip', 'true');
-                        $(sections[i]).hide();
+                    if (!changed) {
+                        keyValues.push(key + "=" + value);
                     }
                 }
 
-                setQueryString();
-
-                initToc();
+                abp.utils.setCookieValue("AbpIoDocsPreferences", keyValues.join('|'));
             };
 
             $(".doc-section-combobox").change(function () {
-                localStorage["abp-doc-section-" + $(this).data("key")] = this.value;
-                setSections();
+                setCookies();
+                clearQueryString();
+                location.reload();
             });
 
-            var comboboxes = $(".doc-section-combobox");
-
-            for (var i = 0; i < comboboxes.length; i++) {
-                var key = $(comboboxes[i]).data("key");
-
-                var cacheValue = localStorage["abp-doc-section-" + key];
-
-                if (cacheValue) {
-                    comboboxes[i].value = cacheValue;
-                }
-                var queryValue = getQueryStringParameterByName(key);
-
-                if (queryValue) {
-                    comboboxes[i].value = queryValue;
-                }
-            }
-
-            setSections();
+            setQueryString();
         };
 
 
@@ -361,7 +192,6 @@
 
         initSections();
 
-        initToc();
     });
 
 })(jQuery);
