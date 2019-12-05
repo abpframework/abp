@@ -382,10 +382,9 @@ namespace Volo.Docs.Pages.Documents.Project
         private async Task ConvertDocumentContentToHtmlAsync()
         {
             await SetDocumentPreferences();
+            SetUserPreferences();
 
-            UserPreferences = GetParameters();
-
-            Document.Content = await _documentSectionRenderer.Render(Document.Content, UserPreferences);
+            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
@@ -406,9 +405,9 @@ namespace Volo.Docs.Pages.Documents.Project
             Document.Content = content;
         }
 
-        private DocumentRenderParameters GetParameters()
+        private void SetUserPreferences()
         {
-            var parameters = new DocumentRenderParameters();
+            UserPreferences = new DocumentRenderParameters();
 
             var cookie = Request.Cookies["AbpIoDocsPreferences"];
 
@@ -425,7 +424,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     var key = keyValue.Split("=")[0];
                     var value = keyValue.Split("=")[1];
 
-                    parameters.Add(key, value);
+                    UserPreferences.Add(key, value);
                 }
             }
 
@@ -433,22 +432,25 @@ namespace Volo.Docs.Pages.Documents.Project
 
             foreach (var keyValue in query)
             {
-                if (parameters.ContainsKey(keyValue.Key))
+                if (UserPreferences.ContainsKey(keyValue.Key))
                 {
-                    parameters.Remove(keyValue.Key);
+                    UserPreferences.Remove(keyValue.Key);
                 }
-                parameters.Add(keyValue.Key, keyValue.Value);
+                UserPreferences.Add(keyValue.Key, keyValue.Value);
+            }
+
+            if (DocumentPreferences?.Parameters == null)
+            {
+                return;
             }
 
             foreach (var parameter in DocumentPreferences.Parameters)
             {
-                if (!parameters.ContainsKey(parameter.Name))
+                if (!UserPreferences.ContainsKey(parameter.Name))
                 {
-                    parameters.Add(parameter.Name, parameter.Values.FirstOrDefault().Key);
+                    UserPreferences.Add(parameter.Name, parameter.Values.FirstOrDefault().Key);
                 }
             }
-
-            return parameters;
         }
 
         public async Task SetDocumentPreferences()
@@ -461,12 +463,22 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     });
 
+            if (projectParameters?.Parameters == null)
+            {
+                return;
+            }
+
             var availableparameters = await _documentSectionRenderer.GetAvailableParametersAsync(Document.Content);
 
             DocumentPreferences = new DocumentParametersDto
             {
                 Parameters = new List<DocumentParameterDto>()
             };
+
+            if (availableparameters == null || !availableparameters.Any())
+            {
+                return;
+            }
 
             foreach (var parameter in projectParameters.Parameters)
             {
@@ -490,7 +502,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
                     DocumentPreferences.Parameters.Add(newParameter);
                 }
-
             }
         }
     }

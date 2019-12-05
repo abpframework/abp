@@ -209,7 +209,7 @@
                         }
 
 
-                        @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Count > 0)
+                        @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
                         {
                             foreach (var parameter in Model.DocumentPreferences.Parameters)
                             {

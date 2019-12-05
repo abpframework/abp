@@ -4,94 +4,102 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Scriban;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Volo.Docs.HtmlConverting
 {
     public class ScribanDocumentSectionRenderer : IDocumentSectionRenderer
     {
-        public async Task<string> Render(string document, DocumentRenderParameters parameters = null)
+        private const string jsonOpener = "````json";
+        private const string jsonCloser = "````";
+        private const string docs_param = "//[doc-params]";
+
+        public ILogger<ScribanDocumentSectionRenderer> Logger { get; set; }
+
+        public ScribanDocumentSectionRenderer()
         {
-            Template scribanTemplate;
+            Logger = NullLogger<ScribanDocumentSectionRenderer>.Instance;
+        }
+
+        public async Task<string> RenderAsync(string document, DocumentRenderParameters parameters = null)
+        {
+            Template scribanTemplate = Template.Parse(document);
+
             if (parameters == null)
             {
-                scribanTemplate = Template.Parse(document);
-                return scribanTemplate.Render();
+                return await scribanTemplate.RenderAsync();
             }
 
-            var p2 = new Dictionary<string, string>();
-
-            foreach (var item in parameters)
-            {
-                p2.Add(item.Key, item.Value);
-            }
-
-            scribanTemplate = Template.Parse(document);
-            var result = scribanTemplate.Render(p2);
-
-            try
-            {
-                return await RemoveOptionsJson(result);
-            }
-            catch (Exception)
-            {
-                return scribanTemplate.Render();
-            }
+            var result = await scribanTemplate.RenderAsync(parameters);
+            return RemoveOptionsJson(result);
         }
 
         public async Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document)
         {
             try
             {
-                var jsonOpener = "````json";
-                var jsonCloser = "````";
-                var docs_param = "//[doc-params]";
-
-                if (!document.Contains(jsonOpener))
+                if (!document.Contains(jsonOpener) || !document.Contains(docs_param))
                 {
                     return new Dictionary<string, List<string>>();
                 }
 
-                var searchedIndex = 0;
-                while (searchedIndex < document.Length)
+                var (jsonBeginningIndex, JsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
+
+                if (jsonBeginningIndex < 0 || JsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                 {
-                    var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(jsonOpener) + jsonOpener.Length + searchedIndex;
-                    var JsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(jsonCloser) + jsonBeginningIndex;
-                    var insideJsonSection = document[jsonBeginningIndex..JsonEndingIndex];
-
-                    if (insideJsonSection.IndexOf(docs_param) < 0)
-                    {
-                        searchedIndex = JsonEndingIndex + jsonCloser.Length;
-                        continue;
-                    }
-
-                    var pureJson = insideJsonSection.Replace(docs_param, "").Trim();
-
-                    return JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(pureJson);
+                    return new Dictionary<string, List<string>>();
                 }
 
-                return new Dictionary<string, List<string>>();
+                var pureJson = insideJsonSection.Replace(docs_param, "").Trim();
+
+                return JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(pureJson);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                //log
+                Logger.LogWarning("Unable to parse parameters of document.");
                 return new Dictionary<string, List<string>>();
             }
         }
 
-        private async Task<string> RemoveOptionsJson(string document) 
+        private string RemoveOptionsJson(string document)
         {
-            var jsonOpener = "````json";
-            var jsonCloser = "````";
-            var docs_param = "//[doc-params]";
+            var orgDocument = document;
+            try
+            {
+                if (!document.Contains(jsonOpener) || !document.Contains(docs_param))
+                {
+                    return orgDocument;
+                }
 
+                var (jsonBeginningIndex, JsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
+
+                if (jsonBeginningIndex < 0 || JsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
+                {
+                    return orgDocument;
+                }
+
+                return document.Remove(
+                            jsonBeginningIndex - jsonOpener.Length, (JsonEndingIndex + jsonCloser.Length) - (jsonBeginningIndex - jsonOpener.Length)
+                        );
+            }
+            catch (Exception)
+            {
+                return orgDocument;
+            }
+        }
+
+        private (int, int, string) GetJsonBeginEndIndexesAndPureJson(string document)
+        {
             var searchedIndex = 0;
+
             while (searchedIndex < document.Length)
             {
                 var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(jsonOpener) + jsonOpener.Length + searchedIndex;
 
                 if (jsonBeginningIndex < 0)
                 {
-                    return document;
+                    return (-1,-1,"");
                 }
 
                 var JsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(jsonCloser) + jsonBeginningIndex;
@@ -103,13 +111,10 @@ namespace Volo.Docs.HtmlConverting
                     continue;
                 }
 
-                return document.Remove(
-                    jsonBeginningIndex - jsonOpener.Length, (JsonEndingIndex + jsonCloser.Length) - (jsonBeginningIndex - jsonOpener.Length)
-                    );
-
+                return (jsonBeginningIndex, JsonEndingIndex, insideJsonSection);
             }
 
-            return document;
+            return (-1, -1, "");
         }
     }
 }
