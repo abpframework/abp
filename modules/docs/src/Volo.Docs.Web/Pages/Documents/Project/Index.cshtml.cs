@@ -437,6 +437,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 if (UserPreferences.ContainsKey(keyValue.Key))
                 {
                     UserPreferences.Remove(keyValue.Key);
+                    UserPreferences.Remove(keyValue.Key + "_Value");
                 }
                 UserPreferences.Add(keyValue.Key, keyValue.Value);
                 UserPreferences.Add(keyValue.Key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == keyValue.Key)
