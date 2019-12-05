@@ -208,6 +208,7 @@
                             </div>
                         }
 
+                    <div class="alert alert-info" role="alert">
 
                         @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
                         {
@@ -217,7 +218,7 @@
                                 <select class="doc-section-combobox mr-4 mt-2" id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
                                     @foreach (var value in parameter.Values)
                                     {
-                                        @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name]:null))
+                                        @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
                                         {
                                             <option value="@value.Key" selected="selected">@value.Value</option>
                                         }
@@ -229,6 +230,7 @@
                                 </select>
                             }
                         }
+                    </div>
 
                     </div>
                     <div class="docs-text-field">
