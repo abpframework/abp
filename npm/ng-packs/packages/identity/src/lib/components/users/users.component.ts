@@ -1,7 +1,14 @@
 import { ABP, ConfigState } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
 import { Component, TemplateRef, TrackByFunction, ViewChild, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
@@ -66,7 +73,11 @@ export class UsersComponent implements OnInit {
     return snq(() => (this.form.get('roleNames') as FormArray).controls as FormGroup[], []);
   }
 
-  constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
+  constructor(
+    private confirmationService: ConfirmationService,
+    private fb: FormBuilder,
+    private store: Store,
+  ) {}
 
   ngOnInit() {
     this.get();
@@ -106,16 +117,21 @@ export class UsersComponent implements OnInit {
       this.roles = this.store.selectSnapshot(IdentityState.getRoles);
       this.form = this.fb.group({
         userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
-        email: [this.selected.email || '', [Validators.required, Validators.email, Validators.maxLength(256)]],
+        email: [
+          this.selected.email || '',
+          [Validators.required, Validators.email, Validators.maxLength(256)],
+        ],
         name: [this.selected.name || '', [Validators.maxLength(64)]],
         surname: [this.selected.surname || '', [Validators.maxLength(64)]],
         phoneNumber: [this.selected.phoneNumber || '', [Validators.maxLength(16)]],
-        lockoutEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
+        lockoutEnabled: [this.selected.lockoutEnabled || (this.selected.id ? false : true)],
         twoFactorEnabled: [this.selected.twoFactorEnabled || (this.selected.id ? false : true)],
         roleNames: this.fb.array(
           this.roles.map(role =>
             this.fb.group({
-              [role.name]: [!!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))],
+              [role.name]: [
+                !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id)),
+              ],
             }),
           ),
         ),
@@ -168,7 +184,8 @@ export class UsersComponent implements OnInit {
 
     const { roleNames } = this.form.value;
     const mappedRoleNames = snq(
-      () => roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]),
+      () =>
+        roleNames.filter(role => !!role[Object.keys(role)[0]]).map(role => Object.keys(role)[0]),
       [],
     );
 
@@ -189,6 +206,7 @@ export class UsersComponent implements OnInit {
       .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
         this.isModalVisible = false;
+        this.get();
       });
   }
 
@@ -199,7 +217,7 @@ export class UsersComponent implements OnInit {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new DeleteUser(id));
+          this.store.dispatch(new DeleteUser(id)).subscribe(() => this.get());
         }
       });
   }

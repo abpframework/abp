@@ -32,7 +32,7 @@
           </ng-container>
 
           <ng-template #defaultLink let-route>
-            <li class="nav-item" [abpPermission]="route.requiredPolicy">
+            <li class="nav-item" *abpPermission="route.requiredPolicy">
               <a class="nav-link" [routerLink]="[route.url]"
                 ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}</a
               >
@@ -42,7 +42,7 @@
           <ng-template #dropdownLink let-route>
             <li
               #navbarRootDropdown
-              [abpPermission]="route.requiredPolicy"
+              *abpPermission="route.requiredPolicy"
               [abpVisibility]="routeContainer"
               class="nav-item dropdown"
               display="static"
@@ -86,7 +86,7 @@
           </ng-template>
 
           <ng-template #defaultChild let-child>
-            <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">
+            <div class="dropdown-submenu" *abpPermission="child.requiredPolicy">
               <a class="dropdown-item" [routerLink]="[child.url]">
                 <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>
                 {{ child.name | abpLocalization }}</a
@@ -103,7 +103,7 @@
               [display]="isDropdownChildDynamic ? 'dynamic' : 'static'"
               placement="right-top"
               [autoClose]="true"
-              [abpPermission]="child.requiredPolicy"
+              *abpPermission="child.requiredPolicy"
               (openChange)="openChange($event, childrenContainer)"
             >
               <div ngbDropdownToggle [class.dropdown-toggle]="false">
@@ -158,7 +158,7 @@
 </ng-template>
 
 <ng-template #language>
-  <li *ngIf="(dropdownLanguages$ | async)?.length > 1" class="nav-item">
+  <li *ngIf="(dropdownLanguages$ | async)?.length > 0" class="nav-item">
     <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">
       <a
         ngbDropdownToggle
@@ -213,10 +213,10 @@
         [class.d-block]="smallScreen"
         [class.abp-mh-25]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile">{{
+        <a class="dropdown-item" routerLink="/account/manage-profile"><i class="fa fa-cog mr-1"></i>{{
           'AbpAccount::ManageYourProfile' | abpLocalization
         }}</a>
-        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{
+        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"><i class="fa fa-power-off mr-1"></i>{{
           'AbpUi::Logout' | abpLocalization
         }}</a>
       </div>

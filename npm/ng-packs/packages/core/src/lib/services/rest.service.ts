@@ -23,17 +23,31 @@ export class RestService {
     config = config || ({} as Rest.Config);
     const { observe = Rest.Observe.Body, skipHandleError } = config;
     const url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
-    const { method, ...options } = request;
+    const { method, params, ...options } = request;
 
-    return this.http.request<T>(method, url, { observe, ...options } as any).pipe(
-      observe === Rest.Observe.Body ? take(1) : tap(),
-      catchError(err => {
-        if (skipHandleError) {
-          return throwError(err);
-        }
+    return this.http
+      .request<T>(method, url, {
+        observe,
+        ...(params && {
+          params: Object.keys(params).reduce(
+            (acc, key) => ({
+              ...acc,
+              ...(typeof params[key] !== 'undefined' && params[key] !== '' && { [key]: params[key] }),
+            }),
+            {},
+          ),
+        }),
+        ...options,
+      } as any)
+      .pipe(
+        observe === Rest.Observe.Body ? take(1) : tap(),
+        catchError(err => {
+          if (skipHandleError) {
+            return throwError(err);
+          }
 
-        return this.handleError(err);
-      }),
-    );
+          return this.handleError(err);
+        }),
+      );
   }
 }

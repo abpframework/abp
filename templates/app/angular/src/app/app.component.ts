@@ -22,7 +22,9 @@ export class AppComponent implements OnInit {
           'fontawesome-v4-shims.min.css',
         ],
         'style',
+        null,
         'head',
+        'afterbegin',
       )
       .subscribe();
   }

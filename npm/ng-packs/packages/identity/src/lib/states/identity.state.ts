@@ -66,20 +66,18 @@ export class IdentityState {
   }
 
   @Action(DeleteRole)
-  deleteRole({ dispatch }: StateContext<Identity.State>, { payload }: GetRoleById) {
-    return this.identityService.deleteRole(payload).pipe(switchMap(() => dispatch(new GetRoles())));
+  deleteRole(_, { payload }: GetRoleById) {
+    return this.identityService.deleteRole(payload);
   }
 
   @Action(CreateRole)
-  addRole({ dispatch }: StateContext<Identity.State>, { payload }: CreateRole) {
-    return this.identityService.createRole(payload).pipe(switchMap(() => dispatch(new GetRoles())));
+  addRole(_, { payload }: CreateRole) {
+    return this.identityService.createRole(payload);
   }
 
   @Action(UpdateRole)
-  updateRole({ getState, dispatch }: StateContext<Identity.State>, { payload }: UpdateRole) {
-    return this.identityService
-      .updateRole({ ...getState().selectedRole, ...payload })
-      .pipe(switchMap(() => dispatch(new GetRoles())));
+  updateRole({ getState }: StateContext<Identity.State>, { payload }: UpdateRole) {
+    return this.identityService.updateRole({ ...getState().selectedRole, ...payload });
   }
 
   @Action(GetUsers)
@@ -105,20 +103,18 @@ export class IdentityState {
   }
 
   @Action(DeleteUser)
-  deleteUser({ dispatch }: StateContext<Identity.State>, { payload }: GetUserById) {
-    return this.identityService.deleteUser(payload).pipe(switchMap(() => dispatch(new GetUsers())));
+  deleteUser(_, { payload }: GetUserById) {
+    return this.identityService.deleteUser(payload);
   }
 
   @Action(CreateUser)
-  addUser({ dispatch }: StateContext<Identity.State>, { payload }: CreateUser) {
-    return this.identityService.createUser(payload).pipe(switchMap(() => dispatch(new GetUsers())));
+  addUser(_, { payload }: CreateUser) {
+    return this.identityService.createUser(payload);
   }
 
   @Action(UpdateUser)
-  updateUser({ getState, dispatch }: StateContext<Identity.State>, { payload }: UpdateUser) {
-    return this.identityService
-      .updateUser({ ...getState().selectedUser, ...payload })
-      .pipe(switchMap(() => dispatch(new GetUsers())));
+  updateUser({ getState }: StateContext<Identity.State>, { payload }: UpdateUser) {
+    return this.identityService.updateUser({ ...getState().selectedUser, ...payload });
   }
 
   @Action(GetUserRoles)

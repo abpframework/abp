@@ -1,0 +1,4 @@
+ui-angular:
+  - npm/ng-packs/**/*
+  - templates/app/angular/**/*
+  - templates/module/angular/**/*

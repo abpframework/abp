@@ -6,11 +6,11 @@
 /**
  * @record
  */
-export function TenantIdResponse() {}
+export function TenantIdResponse() { }
 if (false) {
-  /** @type {?} */
-  TenantIdResponse.prototype.success;
-  /** @type {?} */
-  TenantIdResponse.prototype.tenantId;
+    /** @type {?} */
+    TenantIdResponse.prototype.success;
+    /** @type {?} */
+    TenantIdResponse.prototype.tenantId;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LmpzIiwic291cmNlUm9vdCI6Im5nOi8vQGFicC9uZy5hY2NvdW50LyIsInNvdXJjZXMiOlsibGliL21vZGVscy90ZW5hbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBQSxzQ0FHQzs7O0lBRkMsbUNBQWlCOztJQUNqQixvQ0FBaUIiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgaW50ZXJmYWNlIFRlbmFudElkUmVzcG9uc2Uge1xyXG4gIHN1Y2Nlc3M6IGJvb2xlYW47XHJcbiAgdGVuYW50SWQ6IHN0cmluZztcclxufVxyXG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidGVuYW50LmpzIiwic291cmNlUm9vdCI6Im5nOi8vQGFicC9uZy5hY2NvdW50LyIsInNvdXJjZXMiOlsibGliL21vZGVscy90ZW5hbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7QUFBQSxzQ0FHQzs7O0lBRkMsbUNBQWlCOztJQUNqQixvQ0FBaUIiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgaW50ZXJmYWNlIFRlbmFudElkUmVzcG9uc2Uge1xuICBzdWNjZXNzOiBib29sZWFuO1xuICB0ZW5hbnRJZDogc3RyaW5nO1xufVxuIl19

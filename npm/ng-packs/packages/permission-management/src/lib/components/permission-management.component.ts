@@ -31,6 +31,9 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   @Input()
   providerKey: string;
 
+  @Input()
+  hideBadges = false;
+
   protected _visible;
 
   @Input()
@@ -72,7 +75,9 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   get selectedGroupPermissions$(): Observable<PermissionWithMargin[]> {
     return this.groups$.pipe(
       map(groups =>
-        this.selectedGroup ? groups.find(group => group.name === this.selectedGroup.name).permissions : [],
+        this.selectedGroup
+          ? groups.find(group => group.name === this.selectedGroup.name).permissions
+          : [],
       ),
       map<PermissionManagement.Permission[], PermissionWithMargin[]>(permissions =>
         permissions.map(
@@ -103,7 +108,11 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 
   onClickCheckbox(clickedPermission: PermissionManagement.Permission, value) {
-    if (clickedPermission.isGranted && this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)) return;
+    if (
+      clickedPermission.isGranted &&
+      this.isGrantedByOtherProviderName(clickedPermission.grantedProviders)
+    )
+      return;
 
     setTimeout(() => {
       this.permissions = this.permissions.map(per => {
@@ -158,7 +167,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectThisTab() {
     this.selectedGroupPermissions$.pipe(take(1)).subscribe(permissions => {
       permissions.forEach(permission => {
-        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders)) return;
+        if (permission.isGranted && this.isGrantedByOtherProviderName(permission.grantedProviders))
+          return;
 
         const index = this.permissions.findIndex(per => per.name === permission.name);
 
@@ -176,7 +186,8 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   onClickSelectAll() {
     this.permissions = this.permissions.map(permission => ({
       ...permission,
-      isGranted: this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
+      isGranted:
+        this.isGrantedByOtherProviderName(permission.grantedProviders) || !this.selectAllTab,
     }));
 
     this.selectThisTab = !this.selectAllTab;
@@ -195,7 +206,10 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
 
     const changedPermissions: PermissionManagement.MinimumPermission[] = this.permissions
       .filter(per =>
-        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted === per.isGranted ? false : true,
+        unchangedPermissions.find(unchanged => unchanged.name === per.name).isGranted ===
+        per.isGranted
+          ? false
+          : true,
       )
       .map(({ name, isGranted }) => ({ name, isGranted }));
 
@@ -255,7 +269,10 @@ export class PermissionManagementComponent implements OnInit, OnChanges {
   }
 }
 
-function findMargin(permissions: PermissionManagement.Permission[], permission: PermissionManagement.Permission) {
+function findMargin(
+  permissions: PermissionManagement.Permission[],
+  permission: PermissionManagement.Permission,
+) {
   const parentPermission = permissions.find(per => per.name === permission.parentName);
 
   if (parentPermission && parentPermission.parentName) {

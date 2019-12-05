@@ -44,31 +44,37 @@ namespace Volo.Abp.Cli.Commands
             var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
             var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
+            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long);
+            if (directory == null)
+            {
+                directory = Directory.GetCurrentDirectory();
+            }
+
             var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
 
             if (updateNuget || both)
             {
-                await UpdateNugetPackages(commandLineArgs);
+                await UpdateNugetPackages(commandLineArgs, directory);
             }
 
             if (updateNpm || both)
             {
-                UpdateNpmPackages();
+                UpdateNpmPackages(directory);
             }
 
         }
 
-        private void UpdateNpmPackages()
+        private void UpdateNpmPackages(string directory)
         {
-            _npmPackagesUpdater.Update(Directory.GetCurrentDirectory());
+            _npmPackagesUpdater.Update(directory);
         }
 
-        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs)
+        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
         {
             var includePreviews =
                 commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
 
-            var solution = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").FirstOrDefault();
+            var solution = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
 
             if (solution != null)
             {
@@ -131,6 +137,12 @@ namespace Volo.Abp.Cli.Commands
 
         public static class Options
         {
+            public static class SolutionPath
+            {
+                public const string Short = "sp";
+                public const string Long = "solution-path";
+            }
+            
             public static class IncludePreviews
             {
                 public const string Short = "p";

@@ -46,3 +46,47 @@ var IdentityConfigService = /** @class */ (function () {
     /** @nocollapse */ IdentityConfigService.ngInjectableDef = ɵɵdefineInjectable({ factory: function IdentityConfigService_Factory() { return new IdentityConfigService(ɵɵinject(Router), ɵɵinject(RestService)); }, token: IdentityConfigService, providedIn: "root" });
     return IdentityConfigService;
 }());
+if (false) {
+    /**
+     * @type {?}
+     * @private
+     */
+    IdentityConfigService.prototype.router;
+    /**
+     * @type {?}
+     * @private
+     */
+    IdentityConfigService.prototype.restService;
+}
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/identity-config.module.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var ɵ0 = noop;
+var IdentityConfigModule = /** @class */ (function () {
+    function IdentityConfigModule() {
+    }
+    IdentityConfigModule.decorators = [
+        { type: NgModule, args: [{
+                    providers: [{ provide: APP_INITIALIZER, deps: [IdentityConfigService], useFactory: ɵ0, multi: true }],
+                },] }
+    ];
+    return IdentityConfigModule;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: public-api.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: abp-ng.identity.config.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+
+export { IdentityConfigModule, IdentityConfigService };
+//# sourceMappingURL=abp-ng.identity.config.js.map

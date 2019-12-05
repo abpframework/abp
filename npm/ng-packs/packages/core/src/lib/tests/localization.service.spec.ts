@@ -43,9 +43,13 @@ describe('LocalizationService', () => {
 
   describe('#instant', () => {
     it('should be return a localization', () => {
-      store.selectSnapshot.andCallFake((selector: (state: any, ...states: any[]) => Observable<string>) => {
-        return selector({ ConfigState: { getLocalization: (keys, ...interpolateParams) => keys } });
-      });
+      store.selectSnapshot.andCallFake(
+        (selector: (state: any, ...states: any[]) => Observable<string>) => {
+          return selector({
+            ConfigState: { getLocalization: (keys, ...interpolateParams) => keys },
+          });
+        },
+      );
 
       expect(service.instant('AbpTest')).toBe('AbpTest');
     });
@@ -72,7 +76,7 @@ describe('LocalizationService', () => {
       try {
         const instance = new LocalizationService(null, null, null, {} as any);
       } catch (error) {
-        expect((error as Error).message).toBe('LocaleService should have only one instance.');
+        expect((error as Error).message).toBe('LocalizationService should have only one instance.');
       }
     });
   });

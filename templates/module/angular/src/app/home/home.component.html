@@ -1,15 +1,6 @@
-<div class="card">
-  <div class="card-header">{{ '::Welcome' | abpLocalization }}</div>
-  <div class="card-body">
-    <p>
-      {{ '::LongWelcomeMessage' | abpLocalization }}
-    </p>
-    <p *ngIf="!hasLoggedIn">
-      <a routerLink="/account/login" [state]="{ redirectUrl: '/' }" class="btn btn-primary" role="button"
-        ><i class="fa fa-sign-in"></i>{{ 'AbpIdentity::Login' | abpLocalization }}</a
-      >
-    </p>
-    <hr />
-    <p class="text-right"><a href="https://abp.io?ref=tmpl" target="_blank">abp.io</a></p>
-  </div>
+<div id="AbpContentToolbar"></div>
+<div class="row">
+  <a routerLink="/account/login" [state]="{ redirectUrl: '/' }" role="button">
+    {{ '::Login' | abpLocalization }}</a
+  >
 </div>

@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
 import program from 'commander';
-import ora from 'ora';
-import { axiosInstance } from './utils/axios';
-import { moduleSelection, uiSelection } from './utils/prompt';
 import { cli } from './cli';
 const clear = require('clear');
 const figlet = require('figlet');

@@ -48,6 +48,12 @@ export default `
 .container > .card {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
+.abp-confirm .abp-confirm-footer {
+    background-color: #f4f4f7 !important;
+}
+.abp-confirm .ui-toast-message-content {
+    background-color: #fff !important;
+}
 
 @media screen and (min-width: 768px) {
     .navbar .dropdown:hover > .dropdown-menu {
