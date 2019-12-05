@@ -208,31 +208,45 @@
                             </div>
                         }
 
-                    <div class="alert alert-info" role="alert">
-
                         @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
                         {
-                            foreach (var parameter in Model.DocumentPreferences.Parameters)
-                            {
-                                @(parameter.DisplayName + ":")
-                                <select class="doc-section-combobox mr-4 mt-2" id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
-                                    @foreach (var value in parameter.Values)
+                            <div class="alert alert-primary">
+                                <abp-row>
+                                    <p class="ml-3">
+                                        <i class="fa fa-info-circle"></i> 
+                                    </p>
+                                </abp-row>
+                                <abp-row>
+                                    @foreach (var parameter in Model.DocumentPreferences.Parameters)
                                     {
-                                        @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
-                                        {
-                                            <option value="@value.Key" selected="selected">@value.Value</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@value.Key">@value.Value</option>
-                                        }
+                                        <abp-column size="_6" abp-rounded="_0">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName + ":")</span>
+                                                </div>
+                                                <select class="doc-section-combobox form-control"
+                                                        aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
+                                                        id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
+                                                    @foreach (var value in parameter.Values)
+                                                    {
+                                                        @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
+                                                        {
+                                                            <option value="@value.Key" selected="selected">@value.Value</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@value.Key">@value.Value</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </abp-column>
                                     }
-                                </select>
-                            }
+                                </abp-row>
+                            </div>
                         }
                     </div>
 
-                    </div>
                     <div class="docs-text-field">
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
