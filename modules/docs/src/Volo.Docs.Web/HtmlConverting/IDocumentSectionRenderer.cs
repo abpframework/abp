@@ -8,7 +8,7 @@ namespace Volo.Docs.HtmlConverting
 {
     public interface IDocumentSectionRenderer: ITransientDependency
     {
-        Task<string> Render(string doucment, DocumentRenderParameters parameters);
+        Task<string> RenderAsync(string doucment, DocumentRenderParameters parameters);
 
         Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document);
     }

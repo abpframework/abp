@@ -105,14 +105,22 @@ namespace Volo.Docs.Documents
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            var document = await GetDocumentWithDetailsDtoAsync(
-                project,
-                project.ParametersDocumentName,
-                input.LanguageCode,
-                input.Version
-            );
+            try
+            {
+                var document = await GetDocumentWithDetailsDtoAsync(
+                    project,
+                    project.ParametersDocumentName,
+                    input.LanguageCode,
+                    input.Version
+                );
 
-            return JsonConvert.DeserializeObject<DocumentParametersDto>(document.Content);
+                return JsonConvert.DeserializeObject<DocumentParametersDto>(document.Content);
+            }
+            catch (DocumentNotFoundException)
+            {
+                Logger.LogWarning($"Parameter file ({project.ParametersDocumentName}) not found.");
+                return new DocumentParametersDto();
+            }
         }
 
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDtoAsync(
