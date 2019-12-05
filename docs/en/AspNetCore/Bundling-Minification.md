@@ -114,7 +114,7 @@ public class MyWebModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BundlingOptions>(options =>
+        Configure<AbpBundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -151,7 +151,7 @@ public class MyWebExtensionModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BundlingOptions>(options =>
+        Configure<AbpBundlingOptions>(options =>
         {
             options
                 .ScriptBundles
@@ -189,7 +189,7 @@ public class MyExtensionGlobalStyleContributor : BundleContributor
 Then you can use this contributor as like below:
 
 ````C#
-services.Configure<BundlingOptions>(options =>
+services.Configure<AbpBundlingOptions>(options =>
 {
     options
         .ScriptBundles
@@ -317,7 +317,7 @@ In some specific cases, it may be needed to create a **new** bundle **inherited*
 Example:
 
 ````c#
-services.Configure<BundlingOptions>(options =>
+services.Configure<AbpBundlingOptions>(options =>
 {
     options
         .StyleBundles

@@ -11,7 +11,7 @@ Prism.languages.scss = Prism.languages.extend('css', {
 		}
 	},
 	// url, compassified
-	'url': /(?:[-a-z]+-)*url(?=\()/i,
+	'url': /(?:[-a-z]+-)?url(?=\()/i,
 	// CSS selector regex is not appropriate for Sass
 	// since there can be lot more things (var, @ directive, nesting..)
 	// a selector must start at the end of a property or after a brace (end of other rules or nesting)
@@ -21,13 +21,19 @@ Prism.languages.scss = Prism.languages.extend('css', {
 	// this one was hard to do, so please be careful if you edit this one :)
 	'selector': {
 		// Initial look-ahead is used to prevent matching of blank selectors
-		pattern: /(?=\S)[^@;{}()]?(?:[^@;{}()]|&|#\{\$[-\w]+\})+(?=\s*\{(?:\}|\s|[^}]+[:{][^}]+))/m,
+		pattern: /(?=\S)[^@;{}()]?(?:[^@;{}()]|#\{\$[-\w]+\})+(?=\s*\{(?:\}|\s|[^}]+[:{][^}]+))/m,
 		inside: {
 			'parent': {
 				pattern: /&/,
 				alias: 'important'
 			},
 			'placeholder': /%[-\w]+/,
+			'variable': /\$[-\w]+|#\{\$[-\w]+\}/
+		}
+	},
+	'property': {
+		pattern: /(?:[\w-]|\$[-\w]+|#\{\$[-\w]+\})+(?=\s*:)/,
+		inside: {
 			'variable': /\$[-\w]+|#\{\$[-\w]+\}/
 		}
 	}
@@ -42,13 +48,6 @@ Prism.languages.insertBefore('scss', 'atrule', {
 		}
 	]
 });
-
-Prism.languages.scss.property = {
-	pattern: /(?:[\w-]|\$[-\w]+|#\{\$[-\w]+\})+(?=\s*:)/i,
-	inside: {
-		'variable': /\$[-\w]+|#\{\$[-\w]+\}/
-	}
-};
 
 Prism.languages.insertBefore('scss', 'important', {
 	// var and interpolated vars
@@ -65,7 +64,10 @@ Prism.languages.insertBefore('scss', 'function', {
 		alias: 'keyword'
 	},
 	'boolean': /\b(?:true|false)\b/,
-	'null': /\bnull\b/,
+	'null': {
+		pattern: /\bnull\b/,
+		alias: 'keyword'
+	},
 	'operator': {
 		pattern: /(\s)(?:[-+*\/%]|[=!]=|<=?|>=?|and|or|not)(?=\s)/,
 		lookbehind: true

@@ -7,7 +7,7 @@ import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { finalize } from 'rxjs/operators';
 
-const { minLength, required } = Validators;
+const { minLength, required, maxLength } = Validators;
 
 const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 
@@ -61,12 +61,12 @@ export class ChangePasswordComponent implements OnInit {
         newPassword: [
           '',
           {
-            validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength)],
+            validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)],
           },
         ],
         repeatNewPassword: [
           '',
-          { validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength)] },
+          { validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)] },
         ],
       },
       {

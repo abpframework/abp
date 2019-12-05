@@ -59,7 +59,8 @@ Entities with composite keys should implement the `GetKeys()` method as shown ab
 
 Notice that you also need to define keys of the entity in your **object-relational mapping** (ORM) configuration.
 
-> Composite primary keys has a restriction with repositories. Since it has not known Id property, you can not use `IRepository<TEntity, TKey>` for these entities. However, you can always use `IRepository<TEntity>`. See [repositories documentation](Repositories.md) for more.
+> Also note that Entities with Composite Primary Keys cannot utilize the `IRepository<TEntity, TKey>` interface since it requires a single unique Id property.  However, you can always use `IRepository<TEntity>`. See [repositories documentation](Repositories.md) for more.
+
 
 ### AggregateRoot Class
 

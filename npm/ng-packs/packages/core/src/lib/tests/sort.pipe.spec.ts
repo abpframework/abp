@@ -17,10 +17,28 @@ describe('SortPipe', () => {
   });
 
   test('should sort object array in given order with given key', () => {
-    const array = [{ key: 5 }, { key: 'b' }, { key: 1 }, { key: 'a' }];
+    const array = [
+      { key: 5 },
+      { key: 'b' },
+      { key: 1 },
+      { key: 'a' },
+      { key: null },
+    ];
 
-    expect(pipe.transform(array, 'asc', 'key')).toEqual([{ key: 1 }, { key: 5 }, { key: 'a' }, { key: 'b' }]);
-    expect(pipe.transform(array, 'desc', 'key')).toEqual([{ key: 'b' }, { key: 'a' }, { key: 5 }, { key: 1 }]);
+    expect(pipe.transform(array, 'asc', 'key')).toEqual([
+      { key: 1 },
+      { key: 5 },
+      { key: 'a' },
+      { key: 'b' },
+      { key: null },
+    ]);
+    expect(pipe.transform(array, 'desc', 'key')).toEqual([
+      { key: null },
+      { key: 'b' },
+      { key: 'a' },
+      { key: 5 },
+      { key: 1 },
+    ]);
   });
 
   test('should require an array as value', () => {

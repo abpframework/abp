@@ -7,6 +7,7 @@
 code[class*="language-"],
 pre[class*="language-"] {
 	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	font-size: 1em;
 	text-align: left;
 	white-space: pre;
 	word-spacing: normal;
@@ -83,7 +84,7 @@ code[class*="language-"] {
 .token.entity,
 .token.url,
 .language-css .token.string,
-.toke.variable,
+.token.variable,
 .token.inserted {
 	color: yellowgreen;
 }
@@ -113,4 +114,17 @@ code[class*="language-"] {
 
 .token.deleted {
 	color: red;
+}
+
+/* Plugin styles: Diff Highlight */
+pre.diff-highlight.diff-highlight > code .token.deleted:not(.prefix),
+pre > code.diff-highlight.diff-highlight .token.deleted:not(.prefix) {
+	background-color: rgba(255, 0, 0, .3);
+	display: inline;
+}
+
+pre.diff-highlight.diff-highlight > code .token.inserted:not(.prefix),
+pre > code.diff-highlight.diff-highlight .token.inserted:not(.prefix) {
+	background-color: rgba(0, 255, 128, .3);
+	display: inline;
 }

@@ -1,11 +1,12 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/application-layout/application-layout.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
-import * as tslib_1 from 'tslib';
-import { ConfigState, GetAppConfiguration, SessionState, SetLanguage, takeUntilDestroy } from '@abp/ng.core';
+import * as tslib_1 from "tslib";
+import { ConfigState, GetAppConfiguration, SessionState, SetLanguage, takeUntilDestroy, } from '@abp/ng.core';
 import { collapseWithMargin, slideFromBottom } from '@abp/ng.theme.shared';
-import { Component, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Renderer2, TemplateRef, ViewChild, } from '@angular/core';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Select, Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -15,454 +16,357 @@ import { debounceTime, filter, map } from 'rxjs/operators';
 import snq from 'snq';
 import { AddNavigationElement } from '../../actions';
 import { LayoutState } from '../../states';
-var ApplicationLayoutComponent = /** @class */ (function() {
-  function ApplicationLayoutComponent(store, oauthService, renderer) {
-    this.store = store;
-    this.oauthService = oauthService;
-    this.renderer = renderer;
-    this.isCollapsed = true;
-    this.rightPartElements = [];
-    this.trackByFn
-    /**
-     * @param {?} _
-     * @param {?} item
-     * @return {?}
-     */ = function(_, item) {
-      return item.name;
-    };
-    this.trackElementByFn
-    /**
-     * @param {?} _
-     * @param {?} element
-     * @return {?}
-     */ = function(_, element) {
-      return element;
-    };
-  }
-  Object.defineProperty(ApplicationLayoutComponent.prototype, 'appInfo', {
-    get:
-      // do not set true or false
-      /**
-       * @return {?}
-       */
-      function() {
-        return this.store.selectSnapshot(ConfigState.getApplicationInfo);
-      },
-    enumerable: true,
-    configurable: true,
-  });
-  Object.defineProperty(ApplicationLayoutComponent.prototype, 'visibleRoutes$', {
-    /**
-     * @return {?}
-     */
-    get: function() {
-      return this.routes$.pipe(
-        map(
-          /**
-           * @param {?} routes
-           * @return {?}
-           */
-          function(routes) {
-            return getVisibleRoutes(routes);
-          },
-        ),
-      );
-    },
-    enumerable: true,
-    configurable: true,
-  });
-  Object.defineProperty(ApplicationLayoutComponent.prototype, 'defaultLanguage$', {
-    /**
-     * @return {?}
-     */
-    get: function() {
-      var _this = this;
-      return this.languages$.pipe(
-        map(
-          /**
-           * @param {?} languages
-           * @return {?}
-           */
-          function(languages) {
-            return snq(
-              /**
-               * @return {?}
-               */
-              function() {
-                return languages.find(
-                  /**
-                   * @param {?} lang
-                   * @return {?}
-                   */
-                  function(lang) {
-                    return lang.cultureName === _this.selectedLangCulture;
-                  },
-                ).displayName;
-              },
-            );
-          },
-          '',
-        ),
-      );
-    },
-    enumerable: true,
-    configurable: true,
-  });
-  Object.defineProperty(ApplicationLayoutComponent.prototype, 'dropdownLanguages$', {
-    /**
-     * @return {?}
-     */
-    get: function() {
-      var _this = this;
-      return this.languages$.pipe(
-        map(
-          /**
-           * @param {?} languages
-           * @return {?}
-           */
-          function(languages) {
-            return snq(
-              /**
-               * @return {?}
-               */
-              function() {
-                return languages.filter(
-                  /**
-                   * @param {?} lang
-                   * @return {?}
-                   */
-                  function(lang) {
-                    return lang.cultureName !== _this.selectedLangCulture;
-                  },
-                );
-              },
-            );
-          },
-          [],
-        ),
-      );
-    },
-    enumerable: true,
-    configurable: true,
-  });
-  Object.defineProperty(ApplicationLayoutComponent.prototype, 'selectedLangCulture', {
-    /**
-     * @return {?}
-     */
-    get: function() {
-      return this.store.selectSnapshot(SessionState.getLanguage);
-    },
-    enumerable: true,
-    configurable: true,
-  });
-  /**
-   * @private
-   * @return {?}
-   */
-  ApplicationLayoutComponent.prototype.checkWindowWidth
-  /**
-   * @private
-   * @return {?}
-   */ = function() {
-    var _this = this;
-    setTimeout(
-      /**
-       * @return {?}
-       */
-      function() {
-        if (window.innerWidth < 768) {
-          _this.isDropdownChildDynamic = false;
-          if (_this.smallScreen === false) {
-            _this.isCollapsed = false;
-            setTimeout(
-              /**
-               * @return {?}
-               */
-              function() {
-                _this.isCollapsed = true;
-              },
-              100,
-            );
-          }
-          _this.smallScreen = true;
-        } else {
-          _this.isDropdownChildDynamic = true;
-          _this.smallScreen = false;
-        }
-      },
-      0,
-    );
-  };
-  /**
-   * @return {?}
-   */
-  ApplicationLayoutComponent.prototype.ngAfterViewInit
-  /**
-   * @return {?}
-   */ = function() {
-    var _this = this;
-    /** @type {?} */
-    var navigations = this.store.selectSnapshot(LayoutState.getNavigationElements).map(
-      /**
-       * @param {?} __0
-       * @return {?}
-       */
-      (function(_a) {
-        var name = _a.name;
-        return name;
-      }),
-    );
-    if (navigations.indexOf('LanguageRef') < 0) {
-      this.store.dispatch(
-        new AddNavigationElement([
-          { element: this.languageRef, order: 4, name: 'LanguageRef' },
-          { element: this.currentUserRef, order: 5, name: 'CurrentUserRef' },
-        ]),
-      );
+var ApplicationLayoutComponent = /** @class */ (function () {
+    function ApplicationLayoutComponent(store, oauthService, renderer) {
+        this.store = store;
+        this.oauthService = oauthService;
+        this.renderer = renderer;
+        this.isCollapsed = true;
+        this.rightPartElements = [];
+        this.trackByFn = (/**
+         * @param {?} _
+         * @param {?} item
+         * @return {?}
+         */
+        function (_, item) { return item.name; });
+        this.trackElementByFn = (/**
+         * @param {?} _
+         * @param {?} element
+         * @return {?}
+         */
+        function (_, element) { return element; });
     }
-    this.navElements$
-      .pipe(
-        map(
-          /**
-           * @param {?} elements
-           * @return {?}
-           */
-          function(elements) {
-            return elements.map(
-              /**
-               * @param {?} __0
-               * @return {?}
-               */
-              function(_a) {
-                var element = _a.element;
-                return element;
-              },
-            );
-          },
-        ),
-        filter(
-          /**
-           * @param {?} elements
-           * @return {?}
-           */
-          function(elements) {
-            return !compare(elements, _this.rightPartElements);
-          },
-        ),
-        takeUntilDestroy(this),
-      )
-      .subscribe(
+    Object.defineProperty(ApplicationLayoutComponent.prototype, "appInfo", {
+        get: 
+        // do not set true or false
         /**
+         * @return {?}
+         */
+        function () {
+            return this.store.selectSnapshot(ConfigState.getApplicationInfo);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ApplicationLayoutComponent.prototype, "visibleRoutes$", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.routes$.pipe(map((/**
+             * @param {?} routes
+             * @return {?}
+             */
+            function (routes) { return getVisibleRoutes(routes); })));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ApplicationLayoutComponent.prototype, "defaultLanguage$", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            return this.languages$.pipe(map((/**
+             * @param {?} languages
+             * @return {?}
+             */
+            function (languages) { return snq((/**
+             * @return {?}
+             */
+            function () { return languages.find((/**
+             * @param {?} lang
+             * @return {?}
+             */
+            function (lang) { return lang.cultureName === _this.selectedLangCulture; })).displayName; })); }), ''));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ApplicationLayoutComponent.prototype, "dropdownLanguages$", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            var _this = this;
+            return this.languages$.pipe(map((/**
+             * @param {?} languages
+             * @return {?}
+             */
+            function (languages) { return snq((/**
+             * @return {?}
+             */
+            function () { return languages.filter((/**
+             * @param {?} lang
+             * @return {?}
+             */
+            function (lang) { return lang.cultureName !== _this.selectedLangCulture; })); })); }), []));
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ApplicationLayoutComponent.prototype, "selectedLangCulture", {
+        get: /**
+         * @return {?}
+         */
+        function () {
+            return this.store.selectSnapshot(SessionState.getLanguage);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    /**
+     * @private
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.checkWindowWidth = /**
+     * @private
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        setTimeout((/**
+         * @return {?}
+         */
+        function () {
+            if (window.innerWidth < 768) {
+                _this.isDropdownChildDynamic = false;
+                if (_this.smallScreen === false) {
+                    _this.isCollapsed = false;
+                    setTimeout((/**
+                     * @return {?}
+                     */
+                    function () {
+                        _this.isCollapsed = true;
+                    }), 100);
+                }
+                _this.smallScreen = true;
+            }
+            else {
+                _this.isDropdownChildDynamic = true;
+                _this.smallScreen = false;
+            }
+        }), 0);
+    };
+    /**
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.ngAfterViewInit = /**
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        /** @type {?} */
+        var navigations = this.store.selectSnapshot(LayoutState.getNavigationElements).map((/**
+         * @param {?} __0
+         * @return {?}
+         */
+        function (_a) {
+            var name = _a.name;
+            return name;
+        }));
+        if (navigations.indexOf('LanguageRef') < 0) {
+            this.store.dispatch(new AddNavigationElement([
+                { element: this.languageRef, order: 4, name: 'LanguageRef' },
+                { element: this.currentUserRef, order: 5, name: 'CurrentUserRef' },
+            ]));
+        }
+        this.navElements$
+            .pipe(map((/**
          * @param {?} elements
          * @return {?}
          */
-        function(elements) {
-          setTimeout(
-            /**
-             * @return {?}
-             */
-            function() {
-              return (_this.rightPartElements = elements);
-            },
-            0,
-          );
-        },
-      );
-    this.checkWindowWidth();
-    fromEvent(window, 'resize')
-      .pipe(
-        takeUntilDestroy(this),
-        debounceTime(150),
-      )
-      .subscribe(
-        /**
+        function (elements) { return elements.map((/**
+         * @param {?} __0
          * @return {?}
          */
-        function() {
-          _this.checkWindowWidth();
-        },
-      );
-  };
-  /**
-   * @return {?}
-   */
-  ApplicationLayoutComponent.prototype.ngOnDestroy
-  /**
-   * @return {?}
-   */ = function() {};
-  /**
-   * @param {?} cultureName
-   * @return {?}
-   */
-  ApplicationLayoutComponent.prototype.onChangeLang
-  /**
-   * @param {?} cultureName
-   * @return {?}
-   */ = function(cultureName) {
-    this.store.dispatch(new SetLanguage(cultureName));
-  };
-  /**
-   * @return {?}
-   */
-  ApplicationLayoutComponent.prototype.logout
-  /**
-   * @return {?}
-   */ = function() {
-    this.oauthService.logOut();
-    this.store.dispatch(
-      new Navigate(['/'], null, {
-        state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
-      }),
-    );
-    this.store.dispatch(new GetAppConfiguration());
-  };
-  /**
-   * @param {?} event
-   * @param {?} childrenContainer
-   * @return {?}
-   */
-  ApplicationLayoutComponent.prototype.openChange
-  /**
-   * @param {?} event
-   * @param {?} childrenContainer
-   * @return {?}
-   */ = function(event, childrenContainer) {
-    var _this = this;
-    if (!event) {
-      Object.keys(childrenContainer.style)
-        .filter(
-          /**
-           * @param {?} key
-           * @return {?}
-           */
-          function(key) {
-            return Number.isInteger(+key);
-          },
-        )
-        .forEach(
-          /**
-           * @param {?} key
-           * @return {?}
-           */
-          function(key) {
-            _this.renderer.removeStyle(childrenContainer, childrenContainer.style[key]);
-          },
-        );
-      this.renderer.removeStyle(childrenContainer, 'left');
-    }
-  };
-  // required for dynamic component
-  ApplicationLayoutComponent.type = 'application' /* application */;
-  ApplicationLayoutComponent.decorators = [
-    {
-      type: Component,
-      args: [
-        {
-          selector: 'abp-layout-application',
-          template:
-            '<nav\n  class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"\n  id="main-navbar"\n  style="min-height: 4rem;"\n>\n  <div class="container ">\n    <a class="navbar-brand" routerLink="/">\n      <img *ngIf="appInfo.logoUrl; else appName" [src]="appInfo.logoUrl" [alt]="appInfo.name" />\n    </a>\n    <button\n      class="navbar-toggler"\n      type="button"\n      [attr.aria-expanded]="!isCollapsed"\n      (click)="isCollapsed = !isCollapsed"\n    >\n      <span class="navbar-toggler-icon"></span>\n    </button>\n    <div class="navbar-collapse" id="main-navbar-collapse">\n      <ng-container *ngTemplateOutlet="!smallScreen ? navigations : null"></ng-container>\n\n      <div *ngIf="smallScreen" class="overflow-hidden" [@collapseWithMargin]="isCollapsed ? \'collapsed\' : \'expanded\'">\n        <ng-container *ngTemplateOutlet="navigations"></ng-container>\n      </div>\n\n      <ng-template #navigations>\n        <ul class="navbar-nav mx-auto">\n          <ng-container\n            *ngFor="let route of visibleRoutes$ | async; trackBy: trackByFn"\n            [ngTemplateOutlet]="route?.children?.length ? dropdownLink : defaultLink"\n            [ngTemplateOutletContext]="{ $implicit: route }"\n          >\n          </ng-container>\n\n          <ng-template #defaultLink let-route>\n            <li class="nav-item" [abpPermission]="route.requiredPolicy">\n              <a class="nav-link" [routerLink]="[route.url]">{{ route.name | abpLocalization }}</a>\n            </li>\n          </ng-template>\n\n          <ng-template #dropdownLink let-route>\n            <li\n              #navbarRootDropdown\n              [abpPermission]="route.requiredPolicy"\n              [abpVisibility]="routeContainer"\n              class="nav-item dropdown"\n              display="static"\n              (click)="\n                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)\n              "\n            >\n              <a\n                class="nav-link dropdown-toggle"\n                data-toggle="dropdown"\n                aria-haspopup="true"\n                aria-expanded="false"\n                href="javascript:void(0)"\n              >\n                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}\n              </a>\n              <div\n                #routeContainer\n                class="dropdown-menu border-0 shadow-sm"\n                [class.d-block]="smallScreen"\n                [class.overflow-hidden]="smallScreen"\n                (click)="$event.preventDefault(); $event.stopPropagation()"\n              >\n                <div\n                  class="abp-collapsed abp-main-nav-dropdown"\n                  [class.expanded]="smallScreen ? navbarRootDropdown.expand : true"\n                >\n                  <ng-template\n                    #forTemplate\n                    ngFor\n                    [ngForOf]="route.children"\n                    [ngForTrackBy]="trackByFn"\n                    [ngForTemplate]="childWrapper"\n                  ></ng-template>\n                </div>\n              </div>\n            </li>\n          </ng-template>\n\n          <ng-template #childWrapper let-child>\n            <ng-template\n              [ngTemplateOutlet]="child?.children?.length ? dropdownChild : defaultChild"\n              [ngTemplateOutletContext]="{ $implicit: child }"\n            ></ng-template>\n          </ng-template>\n\n          <ng-template #defaultChild let-child>\n            <div class="dropdown-submenu" [abpPermission]="child.requiredPolicy">\n              <a class="dropdown-item" [routerLink]="[child.url]">\n                <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>\n                {{ child.name | abpLocalization }}</a\n              >\n            </div>\n          </ng-template>\n\n          <ng-template #dropdownChild let-child>\n            <div\n              [abpVisibility]="childrenContainer"\n              class="dropdown-submenu"\n              ngbDropdown\n              #dropdownSubmenu="ngbDropdown"\n              [display]="isDropdownChildDynamic ? \'dynamic\' : \'static\'"\n              placement="right-top"\n              [autoClose]="true"\n              [abpPermission]="child.requiredPolicy"\n              (openChange)="openChange($event, childrenContainer)"\n            >\n              <div ngbDropdownToggle [class.dropdown-toggle]="false">\n                <a\n                  abpEllipsis="210px"\n                  [abpEllipsisEnabled]="isDropdownChildDynamic"\n                  role="button"\n                  class="btn d-block text-left dropdown-toggle"\n                >\n                  <i *ngIf="child.iconClass" [ngClass]="child.iconClass"></i>\n                  {{ child.name | abpLocalization }}\n                </a>\n              </div>\n              <div\n                #childrenContainer\n                class="dropdown-menu border-0 shadow-sm"\n                [class.d-block]="smallScreen"\n                [class.overflow-hidden]="smallScreen"\n              >\n                <div\n                  class="abp-collapsed abp-main-nav-dropdown"\n                  [class.expanded]="smallScreen ? dropdownSubmenu.isOpen() : true"\n                >\n                  <ng-template\n                    ngFor\n                    [ngForOf]="child.children"\n                    [ngForTrackBy]="trackByFn"\n                    [ngForTemplate]="childWrapper"\n                  ></ng-template>\n                </div>\n              </div>\n            </div>\n          </ng-template>\n        </ul>\n\n        <ul class="navbar-nav">\n          <ng-container\n            *ngFor="let element of rightPartElements; trackBy: trackElementByFn"\n            [ngTemplateOutlet]="element"\n          ></ng-container>\n        </ul>\n      </ng-template>\n    </div>\n  </div>\n</nav>\n\n<div [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path" class="container">\n  <router-outlet #outlet="outlet"></router-outlet>\n</div>\n\n<abp-confirmation></abp-confirmation>\n<abp-toast></abp-toast>\n\n<ng-template #appName>\n  {{ appInfo.name }}\n</ng-template>\n\n<ng-template #language>\n  <li class="nav-item">\n    <div class="dropdown" ngbDropdown #languageDropdown="ngbDropdown" display="static">\n      <a\n        ngbDropdownToggle\n        class="nav-link"\n        href="javascript:void(0)"\n        role="button"\n        id="dropdownMenuLink"\n        data-toggle="dropdown"\n        aria-haspopup="true"\n        aria-expanded="false"\n      >\n        {{ defaultLanguage$ | async }}\n      </a>\n      <div\n        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"\n        aria-labelledby="dropdownMenuLink"\n        [class.d-block]="smallScreen"\n        [class.overflow-hidden]="smallScreen"\n      >\n        <div\n          class="abp-collapsed abp-main-nav-dropdown"\n          [class.expanded]="smallScreen ? languageDropdown.isOpen() : true"\n        >\n          <a\n            *ngFor="let lang of dropdownLanguages$ | async"\n            href="javascript:void(0)"\n            class="dropdown-item"\n            (click)="onChangeLang(lang.cultureName)"\n            >{{ lang?.displayName }}</a\n          >\n        </div>\n      </div>\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf="(currentUser$ | async)?.isAuthenticated" class="nav-item">\n    <div ngbDropdown class="dropdown" #currentUserDropdown="ngbDropdown" display="static">\n      <a\n        ngbDropdownToggle\n        class="nav-link"\n        href="javascript:void(0)"\n        role="button"\n        id="dropdownMenuLink"\n        data-toggle="dropdown"\n        aria-haspopup="true"\n        aria-expanded="false"\n      >\n        {{ (currentUser$ | async)?.userName }}\n      </a>\n      <div\n        class="dropdown-menu dropdown-menu-right border-0 shadow-sm"\n        aria-labelledby="dropdownMenuLink"\n        [class.overflow-hidden]="smallScreen"\n        [class.d-block]="smallScreen"\n      >\n        <div\n          class="abp-collapsed abp-main-nav-dropdown"\n          [class.expanded]="smallScreen ? currentUserDropdown.isOpen() : true"\n        >\n          <a class="dropdown-item" routerLink="/account/manage-profile">{{\n            \'AbpAccount::ManageYourProfile\' | abpLocalization\n          }}</a>\n          <a class="dropdown-item" href="javascript:void(0)" (click)="logout()">{{\n            \'AbpUi::Logout\' | abpLocalization\n          }}</a>\n        </div>\n      </div>\n    </div>\n  </li>\n</ng-template>\n',
-          animations: [slideFromBottom, collapseWithMargin],
-        },
-      ],
-    },
-  ];
-  /** @nocollapse */
-  ApplicationLayoutComponent.ctorParameters = function() {
-    return [{ type: Store }, { type: OAuthService }, { type: Renderer2 }];
-  };
-  ApplicationLayoutComponent.propDecorators = {
-    currentUserRef: [{ type: ViewChild, args: ['currentUser', { static: false, read: TemplateRef }] }],
-    languageRef: [{ type: ViewChild, args: ['language', { static: false, read: TemplateRef }] }],
-  };
-  tslib_1.__decorate(
-    [Select(ConfigState.getOne('routes')), tslib_1.__metadata('design:type', Observable)],
-    ApplicationLayoutComponent.prototype,
-    'routes$',
-    void 0,
-  );
-  tslib_1.__decorate(
-    [Select(ConfigState.getOne('currentUser')), tslib_1.__metadata('design:type', Observable)],
-    ApplicationLayoutComponent.prototype,
-    'currentUser$',
-    void 0,
-  );
-  tslib_1.__decorate(
-    [Select(ConfigState.getDeep('localization.languages')), tslib_1.__metadata('design:type', Observable)],
-    ApplicationLayoutComponent.prototype,
-    'languages$',
-    void 0,
-  );
-  tslib_1.__decorate(
-    [Select(LayoutState.getNavigationElements), tslib_1.__metadata('design:type', Observable)],
-    ApplicationLayoutComponent.prototype,
-    'navElements$',
-    void 0,
-  );
-  return ApplicationLayoutComponent;
-})();
+        function (_a) {
+            var element = _a.element;
+            return element;
+        })); })), filter((/**
+         * @param {?} elements
+         * @return {?}
+         */
+        function (elements) { return !compare(elements, _this.rightPartElements); })), takeUntilDestroy(this))
+            .subscribe((/**
+         * @param {?} elements
+         * @return {?}
+         */
+        function (elements) {
+            setTimeout((/**
+             * @return {?}
+             */
+            function () { return (_this.rightPartElements = elements); }), 0);
+        }));
+        this.checkWindowWidth();
+        fromEvent(window, 'resize')
+            .pipe(takeUntilDestroy(this), debounceTime(150))
+            .subscribe((/**
+         * @return {?}
+         */
+        function () {
+            _this.checkWindowWidth();
+        }));
+    };
+    /**
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
+    /**
+     * @param {?} cultureName
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.onChangeLang = /**
+     * @param {?} cultureName
+     * @return {?}
+     */
+    function (cultureName) {
+        this.store.dispatch(new SetLanguage(cultureName));
+    };
+    /**
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.logout = /**
+     * @return {?}
+     */
+    function () {
+        this.oauthService.logOut();
+        this.store.dispatch(new Navigate(['/'], null, {
+            state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
+        }));
+        this.store.dispatch(new GetAppConfiguration());
+    };
+    /**
+     * @param {?} event
+     * @param {?} childrenContainer
+     * @return {?}
+     */
+    ApplicationLayoutComponent.prototype.openChange = /**
+     * @param {?} event
+     * @param {?} childrenContainer
+     * @return {?}
+     */
+    function (event, childrenContainer) {
+        var _this = this;
+        if (!event) {
+            Object.keys(childrenContainer.style)
+                .filter((/**
+             * @param {?} key
+             * @return {?}
+             */
+            function (key) { return Number.isInteger(+key); }))
+                .forEach((/**
+             * @param {?} key
+             * @return {?}
+             */
+            function (key) {
+                _this.renderer.removeStyle(childrenContainer, childrenContainer.style[key]);
+            }));
+            this.renderer.removeStyle(childrenContainer, 'left');
+        }
+    };
+    // required for dynamic component
+    ApplicationLayoutComponent.type = "application" /* application */;
+    ApplicationLayoutComponent.decorators = [
+        { type: Component, args: [{
+                    selector: 'abp-layout-application',
+                    template: "<nav\n  class=\"navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4\"\n  id=\"main-navbar\"\n  style=\"min-height: 4rem;\"\n>\n  <div class=\"container \">\n    <a class=\"navbar-brand\" routerLink=\"/\">\n      <img *ngIf=\"appInfo.logoUrl; else appName\" [src]=\"appInfo.logoUrl\" [alt]=\"appInfo.name\" />\n    </a>\n    <button\n      class=\"navbar-toggler\"\n      type=\"button\"\n      [attr.aria-expanded]=\"!isCollapsed\"\n      (click)=\"isCollapsed = !isCollapsed\"\n    >\n      <span class=\"navbar-toggler-icon\"></span>\n    </button>\n    <div class=\"navbar-collapse\" [class.overflow-hidden]=\"smallScreen\" id=\"main-navbar-collapse\">\n      <ng-container *ngTemplateOutlet=\"!smallScreen ? navigations : null\"></ng-container>\n\n      <div *ngIf=\"smallScreen\" [@collapseWithMargin]=\"isCollapsed ? 'collapsed' : 'expanded'\">\n        <ng-container *ngTemplateOutlet=\"navigations\"></ng-container>\n      </div>\n\n      <ng-template #navigations>\n        <ul class=\"navbar-nav mx-auto\">\n          <ng-container\n            *ngFor=\"let route of visibleRoutes$ | async; trackBy: trackByFn\"\n            [ngTemplateOutlet]=\"route?.children?.length ? dropdownLink : defaultLink\"\n            [ngTemplateOutletContext]=\"{ $implicit: route }\"\n          >\n          </ng-container>\n\n          <ng-template #defaultLink let-route>\n            <li class=\"nav-item\" *abpPermission=\"route.requiredPolicy\">\n              <a class=\"nav-link\" [routerLink]=\"[route.url]\"\n                ><i *ngIf=\"route.iconClass\" [ngClass]=\"route.iconClass\"></i> {{ route.name | abpLocalization }}</a\n              >\n            </li>\n          </ng-template>\n\n          <ng-template #dropdownLink let-route>\n            <li\n              #navbarRootDropdown\n              *abpPermission=\"route.requiredPolicy\"\n              [abpVisibility]=\"routeContainer\"\n              class=\"nav-item dropdown\"\n              display=\"static\"\n              (click)=\"\n                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)\n              \"\n            >\n              <a\n                class=\"nav-link dropdown-toggle\"\n                data-toggle=\"dropdown\"\n                aria-haspopup=\"true\"\n                aria-expanded=\"false\"\n                href=\"javascript:void(0)\"\n              >\n                <i *ngIf=\"route.iconClass\" [ngClass]=\"route.iconClass\"></i> {{ route.name | abpLocalization }}\n              </a>\n              <div\n                #routeContainer\n                class=\"dropdown-menu border-0 shadow-sm\"\n                (click)=\"$event.preventDefault(); $event.stopPropagation()\"\n                [class.abp-collapsed-height]=\"smallScreen\"\n                [class.d-block]=\"smallScreen\"\n                [class.abp-mh-25]=\"smallScreen && navbarRootDropdown.expand\"\n              >\n                <ng-template\n                  #forTemplate\n                  ngFor\n                  [ngForOf]=\"route.children\"\n                  [ngForTrackBy]=\"trackByFn\"\n                  [ngForTemplate]=\"childWrapper\"\n                ></ng-template>\n              </div>\n            </li>\n          </ng-template>\n\n          <ng-template #childWrapper let-child>\n            <ng-template\n              [ngTemplateOutlet]=\"child?.children?.length ? dropdownChild : defaultChild\"\n              [ngTemplateOutletContext]=\"{ $implicit: child }\"\n            ></ng-template>\n          </ng-template>\n\n          <ng-template #defaultChild let-child>\n            <div class=\"dropdown-submenu\" *abpPermission=\"child.requiredPolicy\">\n              <a class=\"dropdown-item\" [routerLink]=\"[child.url]\">\n                <i *ngIf=\"child.iconClass\" [ngClass]=\"child.iconClass\"></i>\n                {{ child.name | abpLocalization }}</a\n              >\n            </div>\n          </ng-template>\n\n          <ng-template #dropdownChild let-child>\n            <div\n              [abpVisibility]=\"childrenContainer\"\n              class=\"dropdown-submenu\"\n              ngbDropdown\n              #dropdownSubmenu=\"ngbDropdown\"\n              [display]=\"isDropdownChildDynamic ? 'dynamic' : 'static'\"\n              placement=\"right-top\"\n              [autoClose]=\"true\"\n              *abpPermission=\"child.requiredPolicy\"\n              (openChange)=\"openChange($event, childrenContainer)\"\n            >\n              <div ngbDropdownToggle [class.dropdown-toggle]=\"false\">\n                <a\n                  abpEllipsis=\"210px\"\n                  [abpEllipsisEnabled]=\"isDropdownChildDynamic\"\n                  role=\"button\"\n                  class=\"btn d-block text-left dropdown-toggle\"\n                >\n                  <i *ngIf=\"child.iconClass\" [ngClass]=\"child.iconClass\"></i>\n                  {{ child.name | abpLocalization }}\n                </a>\n              </div>\n              <div\n                #childrenContainer\n                class=\"dropdown-menu border-0 shadow-sm\"\n                [class.abp-collapsed-height]=\"smallScreen\"\n                [class.d-block]=\"smallScreen\"\n                [class.abp-mh-25]=\"smallScreen && dropdownSubmenu.isOpen()\"\n              >\n                <ng-template\n                  ngFor\n                  [ngForOf]=\"child.children\"\n                  [ngForTrackBy]=\"trackByFn\"\n                  [ngForTemplate]=\"childWrapper\"\n                ></ng-template>\n              </div>\n            </div>\n          </ng-template>\n        </ul>\n\n        <ul class=\"navbar-nav\">\n          <ng-container\n            *ngFor=\"let element of rightPartElements; trackBy: trackElementByFn\"\n            [ngTemplateOutlet]=\"element\"\n          ></ng-container>\n        </ul>\n      </ng-template>\n    </div>\n  </div>\n</nav>\n\n<div [@slideFromBottom]=\"outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path\" class=\"container\">\n  <router-outlet #outlet=\"outlet\"></router-outlet>\n</div>\n\n<abp-confirmation></abp-confirmation>\n<abp-toast></abp-toast>\n\n<ng-template #appName>\n  {{ appInfo.name }}\n</ng-template>\n\n<ng-template #language>\n  <li *ngIf=\"(dropdownLanguages$ | async)?.length > 0\" class=\"nav-item\">\n    <div class=\"dropdown\" ngbDropdown #languageDropdown=\"ngbDropdown\" display=\"static\">\n      <a\n        ngbDropdownToggle\n        class=\"nav-link\"\n        href=\"javascript:void(0)\"\n        role=\"button\"\n        id=\"dropdownMenuLink\"\n        data-toggle=\"dropdown\"\n        aria-haspopup=\"true\"\n        aria-expanded=\"false\"\n      >\n        {{ defaultLanguage$ | async }}\n      </a>\n      <div\n        class=\"dropdown-menu dropdown-menu-right border-0 shadow-sm\"\n        aria-labelledby=\"dropdownMenuLink\"\n        [class.abp-collapsed-height]=\"smallScreen\"\n        [class.d-block]=\"smallScreen\"\n        [class.abp-mh-25]=\"smallScreen && languageDropdown.isOpen()\"\n      >\n        <a\n          *ngFor=\"let lang of dropdownLanguages$ | async\"\n          href=\"javascript:void(0)\"\n          class=\"dropdown-item\"\n          (click)=\"onChangeLang(lang.cultureName)\"\n          >{{ lang?.displayName }}</a\n        >\n      </div>\n    </div>\n  </li>\n</ng-template>\n\n<ng-template #currentUser>\n  <li *ngIf=\"(currentUser$ | async)?.isAuthenticated\" class=\"nav-item\">\n    <div ngbDropdown class=\"dropdown\" #currentUserDropdown=\"ngbDropdown\" display=\"static\">\n      <a\n        ngbDropdownToggle\n        class=\"nav-link\"\n        href=\"javascript:void(0)\"\n        role=\"button\"\n        id=\"dropdownMenuLink\"\n        data-toggle=\"dropdown\"\n        aria-haspopup=\"true\"\n        aria-expanded=\"false\"\n      >\n        {{ (currentUser$ | async)?.userName }}\n      </a>\n      <div\n        class=\"dropdown-menu dropdown-menu-right border-0 shadow-sm\"\n        aria-labelledby=\"dropdownMenuLink\"\n        [class.abp-collapsed-height]=\"smallScreen\"\n        [class.d-block]=\"smallScreen\"\n        [class.abp-mh-25]=\"smallScreen && currentUserDropdown.isOpen()\"\n      >\n        <a class=\"dropdown-item\" routerLink=\"/account/manage-profile\"><i class=\"fa fa-cog mr-1\"></i>{{\n          'AbpAccount::ManageYourProfile' | abpLocalization\n        }}</a>\n        <a class=\"dropdown-item\" href=\"javascript:void(0)\" (click)=\"logout()\"><i class=\"fa fa-power-off mr-1\"></i>{{\n          'AbpUi::Logout' | abpLocalization\n        }}</a>\n      </div>\n    </div>\n  </li>\n</ng-template>\n",
+                    animations: [slideFromBottom, collapseWithMargin]
+                }] }
+    ];
+    /** @nocollapse */
+    ApplicationLayoutComponent.ctorParameters = function () { return [
+        { type: Store },
+        { type: OAuthService },
+        { type: Renderer2 }
+    ]; };
+    ApplicationLayoutComponent.propDecorators = {
+        currentUserRef: [{ type: ViewChild, args: ['currentUser', { static: false, read: TemplateRef },] }],
+        languageRef: [{ type: ViewChild, args: ['language', { static: false, read: TemplateRef },] }]
+    };
+    tslib_1.__decorate([
+        Select(ConfigState.getOne('routes')),
+        tslib_1.__metadata("design:type", Observable)
+    ], ApplicationLayoutComponent.prototype, "routes$", void 0);
+    tslib_1.__decorate([
+        Select(ConfigState.getOne('currentUser')),
+        tslib_1.__metadata("design:type", Observable)
+    ], ApplicationLayoutComponent.prototype, "currentUser$", void 0);
+    tslib_1.__decorate([
+        Select(ConfigState.getDeep('localization.languages')),
+        tslib_1.__metadata("design:type", Observable)
+    ], ApplicationLayoutComponent.prototype, "languages$", void 0);
+    tslib_1.__decorate([
+        Select(LayoutState.getNavigationElements),
+        tslib_1.__metadata("design:type", Observable)
+    ], ApplicationLayoutComponent.prototype, "navElements$", void 0);
+    return ApplicationLayoutComponent;
+}());
 export { ApplicationLayoutComponent };
 if (false) {
-  /** @type {?} */
-  ApplicationLayoutComponent.type;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.routes$;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.currentUser$;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.languages$;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.navElements$;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.currentUserRef;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.languageRef;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.isDropdownChildDynamic;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.isCollapsed;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.smallScreen;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.rightPartElements;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.trackByFn;
-  /** @type {?} */
-  ApplicationLayoutComponent.prototype.trackElementByFn;
-  /**
-   * @type {?}
-   * @private
-   */
-  ApplicationLayoutComponent.prototype.store;
-  /**
-   * @type {?}
-   * @private
-   */
-  ApplicationLayoutComponent.prototype.oauthService;
-  /**
-   * @type {?}
-   * @private
-   */
-  ApplicationLayoutComponent.prototype.renderer;
+    /** @type {?} */
+    ApplicationLayoutComponent.type;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.routes$;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.currentUser$;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.languages$;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.navElements$;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.currentUserRef;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.languageRef;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.isDropdownChildDynamic;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.isCollapsed;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.smallScreen;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.rightPartElements;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.trackByFn;
+    /** @type {?} */
+    ApplicationLayoutComponent.prototype.trackElementByFn;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplicationLayoutComponent.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplicationLayoutComponent.prototype.oauthService;
+    /**
+     * @type {?}
+     * @private
+     */
+    ApplicationLayoutComponent.prototype.renderer;
 }
 /**
  * @param {?} routes
  * @return {?}
  */
 function getVisibleRoutes(routes) {
-  return routes.reduce(
-    /**
+    return routes.reduce((/**
      * @param {?} acc
      * @param {?} val
      * @return {?}
      */
-    function(acc, val) {
-      if (val.invisible) return acc;
-      if (val.children && val.children.length) {
-        val.children = getVisibleRoutes(val.children);
-      }
-      return tslib_1.__spread(acc, [val]);
-    },
-    [],
-  );
+    function (acc, val) {
+        if (val.invisible)
+            return acc;
+        if (val.children && val.children.length) {
+            val.children = getVisibleRoutes(val.children);
+        }
+        return tslib_1.__spread(acc, [val]);
+    }), []);
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwbGljYXRpb24tbGF5b3V0LmNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGhlbWUuYmFzaWMvIiwic291cmNlcyI6WyJsaWIvY29tcG9uZW50cy9hcHBsaWNhdGlvbi1sYXlvdXQvYXBwbGljYXRpb24tbGF5b3V0LmNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFJTCxXQUFXLEVBRVgsbUJBQW1CLEVBQ25CLFlBQVksRUFDWixXQUFXLEVBQ1gsZ0JBQWdCLEdBQ2pCLE1BQU0sY0FBYyxDQUFDO0FBQ3RCLE9BQU8sRUFBRSxrQkFBa0IsRUFBRSxlQUFlLEVBQUUsTUFBTSxzQkFBc0IsQ0FBQztBQUMzRSxPQUFPLEVBRUwsU0FBUyxFQUdULFNBQVMsRUFDVCxXQUFXLEVBRVgsU0FBUyxHQUdWLE1BQU0sZUFBZSxDQUFDO0FBRXZCLE9BQU8sRUFBRSxRQUFRLEVBQUUsV0FBVyxFQUFFLE1BQU0scUJBQXFCLENBQUM7QUFDNUQsT0FBTyxFQUFFLE1BQU0sRUFBRSxLQUFLLEVBQUUsTUFBTSxhQUFhLENBQUM7QUFDNUMsT0FBTyxFQUFFLFlBQVksRUFBRSxNQUFNLHFCQUFxQixDQUFDO0FBQ25ELE9BQU8sT0FBTyxNQUFNLGNBQWMsQ0FBQztBQUNuQyxPQUFPLEVBQUUsU0FBUyxFQUFFLFVBQVUsRUFBRSxNQUFNLE1BQU0sQ0FBQztBQUM3QyxPQUFPLEVBQUUsWUFBWSxFQUFFLE1BQU0sRUFBRSxHQUFHLEVBQUUsTUFBTSxnQkFBZ0IsQ0FBQztBQUMzRCxPQUFPLEdBQUcsTUFBTSxLQUFLLENBQUM7QUFDdEIsT0FBTyxFQUFFLG9CQUFvQixFQUFFLE1BQU0sZUFBZSxDQUFDO0FBRXJELE9BQU8sRUFBRSxXQUFXLEVBQUUsTUFBTSxjQUFjLENBQUM7QUFFM0M7SUFrRUUsb0NBQW9CLEtBQVksRUFBVSxZQUEwQixFQUFVLFFBQW1CO1FBQTdFLFVBQUssR0FBTCxLQUFLLENBQU87UUFBVSxp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Z0RBQzREOztJQUU1RCxrREFDcUQ7O0lBRXJELG9EQUNpQzs7SUFFakMsaURBQzhCOztJQUU5Qiw0REFBZ0M7O0lBRWhDLGlEQUFtQjs7SUFFbkIsaURBQXFCOztJQTZCckIsdURBQTJDOztJQUUzQywrQ0FBbUU7O0lBRW5FLHNEQUEyRTs7Ozs7SUFFL0QsMkNBQW9COzs7OztJQUFFLGtEQUFrQzs7Ozs7SUFBRSw4Q0FBMkI7Ozs7OztBQWtGbkcsU0FBUyxnQkFBZ0IsQ0FBQyxNQUF1QjtJQUMvQyxPQUFPLE1BQU0sQ0FBQyxNQUFNOzs7OztJQUFDLFVBQUMsR0FBRyxFQUFFLEdBQUc7UUFDNUIsSUFBSSxHQUFHLENBQUMsU0FBUztZQUFFLE9BQU8sR0FBRyxDQUFDO1FBRTlCLElBQUksR0FBRyxDQUFDLFFBQVEsSUFBSSxHQUFHLENBQUMsUUFBUSxDQUFDLE1BQU0sRUFBRTtZQUN2QyxHQUFHLENBQUMsUUFBUSxHQUFHLGdCQUFnQixDQUFDLEdBQUcsQ0FBQyxRQUFRLENBQUMsQ0FBQztTQUMvQztRQUVELHdCQUFXLEdBQUcsR0FBRSxHQUFHLEdBQUU7SUFDdkIsQ0FBQyxHQUFFLEVBQUUsQ0FBQyxDQUFDO0FBQ1QsQ0FBQyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7XG4gIEFCUCxcbiAgQXBwbGljYXRpb25Db25maWd1cmF0aW9uLFxuICBDb25maWcsXG4gIENvbmZpZ1N0YXRlLFxuICBlTGF5b3V0VHlwZSxcbiAgR2V0QXBwQ29uZmlndXJhdGlvbixcbiAgU2Vzc2lvblN0YXRlLFxuICBTZXRMYW5ndWFnZSxcbiAgdGFrZVVudGlsRGVzdHJveSxcbn0gZnJvbSAnQGFicC9uZy5jb3JlJztcbmltcG9ydCB7IGNvbGxhcHNlV2l0aE1hcmdpbiwgc2xpZGVGcm9tQm90dG9tIH0gZnJvbSAnQGFicC9uZy50aGVtZS5zaGFyZWQnO1xuaW1wb3J0IHtcbiAgQWZ0ZXJWaWV3SW5pdCxcbiAgQ29tcG9uZW50LFxuICBPbkRlc3Ryb3ksXG4gIFF1ZXJ5TGlzdCxcbiAgUmVuZGVyZXIyLFxuICBUZW1wbGF0ZVJlZixcbiAgVHJhY2tCeUZ1bmN0aW9uLFxuICBWaWV3Q2hpbGQsXG4gIFZpZXdDaGlsZHJlbixcbiAgRWxlbWVudFJlZixcbn0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQgeyBOZ2JEcm9wZG93biB9IGZyb20gJ0BuZy1ib290c3RyYXAvbmctYm9vdHN0cmFwJztcbmltcG9ydCB7IE5hdmlnYXRlLCBSb3V0ZXJTdGF0ZSB9IGZyb20gJ0BuZ3hzL3JvdXRlci1wbHVnaW4nO1xuaW1wb3J0IHsgU2VsZWN0LCBTdG9yZSB9IGZyb20gJ0BuZ3hzL3N0b3JlJztcbmltcG9ydCB7IE9BdXRoU2VydmljZSB9IGZyb20gJ2FuZ3VsYXItb2F1dGgyLW9pZGMnO1xuaW1wb3J0IGNvbXBhcmUgZnJvbSAnanVzdC1jb21wYXJlJztcbmltcG9ydCB7IGZyb21FdmVudCwgT2JzZXJ2YWJsZSB9IGZyb20gJ3J4anMnO1xuaW1wb3J0IHsgZGVib3VuY2VUaW1lLCBmaWx0ZXIsIG1hcCB9IGZyb20gJ3J4anMvb3BlcmF0b3JzJztcbmltcG9ydCBzbnEgZnJvbSAnc25xJztcbmltcG9ydCB7IEFkZE5hdmlnYXRpb25FbGVtZW50IH0gZnJvbSAnLi4vLi4vYWN0aW9ucyc7XG5pbXBvcnQgeyBMYXlvdXQgfSBmcm9tICcuLi8uLi9tb2RlbHMvbGF5b3V0JztcbmltcG9ydCB7IExheW91dFN0YXRlIH0gZnJvbSAnLi4vLi4vc3RhdGVzJztcblxuQENvbXBvbmVudCh7XG4gIHNlbGVjdG9yOiAnYWJwLWxheW91dC1hcHBsaWNhdGlvbicsXG4gIHRlbXBsYXRlVXJsOiAnLi9hcHBsaWNhdGlvbi1sYXlvdXQuY29tcG9uZW50Lmh0bWwnLFxuICBhbmltYXRpb25zOiBbc2xpZGVGcm9tQm90dG9tLCBjb2xsYXBzZVdpdGhNYXJnaW5dLFxufSlcbmV4cG9ydCBjbGFzcyBBcHBsaWNhdGlvbkxheW91dENvbXBvbmVudCBpbXBsZW1lbnRzIEFmdGVyVmlld0luaXQsIE9uRGVzdHJveSB7XG4gIC8vIHJlcXVpcmVkIGZvciBkeW5hbWljIGNvbXBvbmVudFxuICBzdGF0aWMgdHlwZSA9IGVMYXlvdXRUeXBlLmFwcGxpY2F0aW9uO1xuXG4gIEBTZWxlY3QoQ29uZmlnU3RhdGUuZ2V0T25lKCdyb3V0ZXMnKSlcbiAgcm91dGVzJDogT2JzZXJ2YWJsZTxBQlAuRnVsbFJvdXRlW10+O1xuXG4gIEBTZWxlY3QoQ29uZmlnU3RhdGUuZ2V0T25lKCdjdXJyZW50VXNlcicpKVxuICBjdXJyZW50VXNlciQ6IE9ic2VydmFibGU8QXBwbGljYXRpb25Db25maWd1cmF0aW9uLkN1cnJlbnRVc2VyPjtcblxuICBAU2VsZWN0KENvbmZpZ1N0YXRlLmdldERlZXAoJ2xvY2FsaXphdGlvbi5sYW5ndWFnZXMnKSlcbiAgbGFuZ3VhZ2VzJDogT2JzZXJ2YWJsZTxBcHBsaWNhdGlvbkNvbmZpZ3VyYXRpb24uTGFuZ3VhZ2VbXT47XG5cbiAgQFNlbGVjdChMYXlvdXRTdGF0ZS5nZXROYXZpZ2F0aW9uRWxlbWVudHMpXG4gIG5hdkVsZW1lbnRzJDogT2JzZXJ2YWJsZTxMYXlvdXQuTmF2aWdhdGlvbkVsZW1lbnRbXT47XG5cbiAgQFZpZXdDaGlsZCgnY3VycmVudFVzZXInLCB7IHN0YXRpYzogZmFsc2UsIHJlYWQ6IFRlbXBsYXRlUmVmIH0pXG4gIGN1cnJlbnRVc2VyUmVmOiBUZW1wbGF0ZVJlZjxhbnk+O1xuXG4gIEBWaWV3Q2hpbGQoJ2xhbmd1YWdlJywgeyBzdGF0aWM6IGZhbHNlLCByZWFkOiBUZW1wbGF0ZVJlZiB9KVxuICBsYW5ndWFnZVJlZjogVGVtcGxhdGVSZWY8YW55PjtcblxuICBpc0Ryb3Bkb3duQ2hpbGREeW5hbWljOiBib29sZWFuO1xuXG4gIGlzQ29sbGFwc2VkID0gdHJ1ZTtcblxuICBzbWFsbFNjcmVlbjogYm9vbGVhbjsgLy8gZG8gbm90IHNldCB0cnVlIG9yIGZhbHNlXG5cbiAgZ2V0IGFwcEluZm8oKTogQ29uZmlnLkFwcGxpY2F0aW9uIHtcbiAgICByZXR1cm4gdGhpcy5zdG9yZS5zZWxlY3RTbmFwc2hvdChDb25maWdTdGF0ZS5nZXRBcHBsaWNhdGlvbkluZm8pO1xuICB9XG5cbiAgZ2V0IHZpc2libGVSb3V0ZXMkKCk6IE9ic2VydmFibGU8QUJQLkZ1bGxSb3V0ZVtdPiB7XG4gICAgcmV0dXJuIHRoaXMucm91dGVzJC5waXBlKG1hcChyb3V0ZXMgPT4gZ2V0VmlzaWJsZVJvdXRlcyhyb3V0ZXMpKSk7XG4gIH1cblxuICBnZXQgZGVmYXVsdExhbmd1YWdlJCgpOiBPYnNlcnZhYmxlPHN0cmluZz4ge1xuICAgIHJldHVybiB0aGlzLmxhbmd1YWdlcyQucGlwZShcbiAgICAgIG1hcChcbiAgICAgICAgbGFuZ3VhZ2VzID0+IHNucSgoKSA9PiBsYW5ndWFnZXMuZmluZChsYW5nID0+IGxhbmcuY3VsdHVyZU5hbWUgPT09IHRoaXMuc2VsZWN0ZWRMYW5nQ3VsdHVyZSkuZGlzcGxheU5hbWUpLFxuICAgICAgICAnJyxcbiAgICAgICksXG4gICAgKTtcbiAgfVxuXG4gIGdldCBkcm9wZG93bkxhbmd1YWdlcyQoKTogT2JzZXJ2YWJsZTxBcHBsaWNhdGlvbkNvbmZpZ3VyYXRpb24uTGFuZ3VhZ2VbXT4ge1xuICAgIHJldHVybiB0aGlzLmxhbmd1YWdlcyQucGlwZShcbiAgICAgIG1hcChsYW5ndWFnZXMgPT4gc25xKCgpID0+IGxhbmd1YWdlcy5maWx0ZXIobGFuZyA9PiBsYW5nLmN1bHR1cmVOYW1lICE9PSB0aGlzLnNlbGVjdGVkTGFuZ0N1bHR1cmUpKSwgW10pLFxuICAgICk7XG4gIH1cblxuICBnZXQgc2VsZWN0ZWRMYW5nQ3VsdHVyZSgpOiBzdHJpbmcge1xuICAgIHJldHVybiB0aGlzLnN0b3JlLnNlbGVjdFNuYXBzaG90KFNlc3Npb25TdGF0ZS5nZXRMYW5ndWFnZSk7XG4gIH1cblxuICByaWdodFBhcnRFbGVtZW50czogVGVtcGxhdGVSZWY8YW55PltdID0gW107XG5cbiAgdHJhY2tCeUZuOiBUcmFja0J5RnVuY3Rpb248QUJQLkZ1bGxSb3V0ZT4gPSAoXywgaXRlbSkgPT4gaXRlbS5uYW1lO1xuXG4gIHRyYWNrRWxlbWVudEJ5Rm46IFRyYWNrQnlGdW5jdGlvbjxBQlAuRnVsbFJvdXRlPiA9IChfLCBlbGVtZW50KSA9PiBlbGVtZW50O1xuXG4gIGNvbnN0cnVjdG9yKHByaXZhdGUgc3RvcmU6IFN0b3JlLCBwcml2YXRlIG9hdXRoU2VydmljZTogT0F1dGhTZXJ2aWNlLCBwcml2YXRlIHJlbmRlcmVyOiBSZW5kZXJlcjIpIHt9XG5cbiAgcHJpdmF0ZSBjaGVja1dpbmRvd1dpZHRoKCkge1xuICAgIHNldFRpbWVvdXQoKCkgPT4ge1xuICAgICAgaWYgKHdpbmRvdy5pbm5lcldpZHRoIDwgNzY4KSB7XG4gICAgICAgIHRoaXMuaXNEcm9wZG93bkNoaWxkRHluYW1pYyA9IGZhbHNlO1xuICAgICAgICBpZiAodGhpcy5zbWFsbFNjcmVlbiA9PT0gZmFsc2UpIHtcbiAgICAgICAgICB0aGlzLmlzQ29sbGFwc2VkID0gZmFsc2U7XG4gICAgICAgICAgc2V0VGltZW91dCgoKSA9PiB7XG4gICAgICAgICAgICB0aGlzLmlzQ29sbGFwc2VkID0gdHJ1ZTtcbiAgICAgICAgICB9LCAxMDApO1xuICAgICAgICB9XG4gICAgICAgIHRoaXMuc21hbGxTY3JlZW4gPSB0cnVlO1xuICAgICAgfSBlbHNlIHtcbiAgICAgICAgdGhpcy5pc0Ryb3Bkb3duQ2hpbGREeW5hbWljID0gdHJ1ZTtcbiAgICAgICAgdGhpcy5zbWFsbFNjcmVlbiA9IGZhbHNlO1xuICAgICAgfVxuICAgIH0sIDApO1xuICB9XG5cbiAgbmdBZnRlclZpZXdJbml0KCkge1xuICAgIGNvbnN0IG5hdmlnYXRpb25zID0gdGhpcy5zdG9yZS5zZWxlY3RTbmFwc2hvdChMYXlvdXRTdGF0ZS5nZXROYXZpZ2F0aW9uRWxlbWVudHMpLm1hcCgoeyBuYW1lIH0pID0+IG5hbWUpO1xuXG4gICAgaWYgKG5hdmlnYXRpb25zLmluZGV4T2YoJ0xhbmd1YWdlUmVmJykgPCAwKSB7XG4gICAgICB0aGlzLnN0b3JlLmRpc3BhdGNoKFxuICAgICAgICBuZXcgQWRkTmF2aWdhdGlvbkVsZW1lbnQoW1xuICAgICAgICAgIHsgZWxlbWVudDogdGhpcy5sYW5ndWFnZVJlZiwgb3JkZXI6IDQsIG5hbWU6ICdMYW5ndWFnZVJlZicgfSxcbiAgICAgICAgICB7IGVsZW1lbnQ6IHRoaXMuY3VycmVudFVzZXJSZWYsIG9yZGVyOiA1LCBuYW1lOiAnQ3VycmVudFVzZXJSZWYnIH0sXG4gICAgICAgIF0pLFxuICAgICAgKTtcbiAgICB9XG5cbiAgICB0aGlzLm5hdkVsZW1lbnRzJFxuICAgICAgLnBpcGUoXG4gICAgICAgIG1hcChlbGVtZW50cyA9PiBlbGVtZW50cy5tYXAoKHsgZWxlbWVudCB9KSA9PiBlbGVtZW50KSksXG4gICAgICAgIGZpbHRlcihlbGVtZW50cyA9PiAhY29tcGFyZShlbGVtZW50cywgdGhpcy5yaWdodFBhcnRFbGVtZW50cykpLFxuICAgICAgICB0YWtlVW50aWxEZXN0cm95KHRoaXMpLFxuICAgICAgKVxuICAgICAgLnN1YnNjcmliZShlbGVtZW50cyA9PiB7XG4gICAgICAgIHNldFRpbWVvdXQoKCkgPT4gKHRoaXMucmlnaHRQYXJ0RWxlbWVudHMgPSBlbGVtZW50cyksIDApO1xuICAgICAgfSk7XG5cbiAgICB0aGlzLmNoZWNrV2luZG93V2lkdGgoKTtcblxuICAgIGZyb21FdmVudCh3aW5kb3csICdyZXNpemUnKVxuICAgICAgLnBpcGUoXG4gICAgICAgIHRha2VVbnRpbERlc3Ryb3kodGhpcyksXG4gICAgICAgIGRlYm91bmNlVGltZSgxNTApLFxuICAgICAgKVxuICAgICAgLnN1YnNjcmliZSgoKSA9PiB7XG4gICAgICAgIHRoaXMuY2hlY2tXaW5kb3dXaWR0aCgpO1xuICAgICAgfSk7XG4gIH1cblxuICBuZ09uRGVzdHJveSgpIHt9XG5cbiAgb25DaGFuZ2VMYW5nKGN1bHR1cmVOYW1lOiBzdHJpbmcpIHtcbiAgICB0aGlzLnN0b3JlLmRpc3BhdGNoKG5ldyBTZXRMYW5ndWFnZShjdWx0dXJlTmFtZSkpO1xuICB9XG5cbiAgbG9nb3V0KCkge1xuICAgIHRoaXMub2F1dGhTZXJ2aWNlLmxvZ091dCgpO1xuICAgIHRoaXMuc3RvcmUuZGlzcGF0Y2goXG4gICAgICBuZXcgTmF2aWdhdGUoWycvJ10sIG51bGwsIHtcbiAgICAgICAgc3RhdGU6IHsgcmVkaXJlY3RVcmw6IHRoaXMuc3RvcmUuc2VsZWN0U25hcHNob3QoUm91dGVyU3RhdGUpLnN0YXRlLnVybCB9LFxuICAgICAgfSksXG4gICAgKTtcbiAgICB0aGlzLnN0b3JlLmRpc3BhdGNoKG5ldyBHZXRBcHBDb25maWd1cmF0aW9uKCkpO1xuICB9XG5cbiAgb3BlbkNoYW5nZShldmVudDogYm9vbGVhbiwgY2hpbGRyZW5Db250YWluZXI6IEhUTUxEaXZFbGVtZW50KSB7XG4gICAgaWYgKCFldmVudCkge1xuICAgICAgT2JqZWN0LmtleXMoY2hpbGRyZW5Db250YWluZXIuc3R5bGUpXG4gICAgICAgIC5maWx0ZXIoa2V5ID0+IE51bWJlci5pc0ludGVnZXIoK2tleSkpXG4gICAgICAgIC5mb3JFYWNoKGtleSA9PiB7XG4gICAgICAgICAgdGhpcy5yZW5kZXJlci5yZW1vdmVTdHlsZShjaGlsZHJlbkNvbnRhaW5lciwgY2hpbGRyZW5Db250YWluZXIuc3R5bGVba2V5XSk7XG4gICAgICAgIH0pO1xuICAgICAgdGhpcy5yZW5kZXJlci5yZW1vdmVTdHlsZShjaGlsZHJlbkNvbnRhaW5lciwgJ2xlZnQnKTtcbiAgICB9XG4gIH1cbn1cblxuZnVuY3Rpb24gZ2V0VmlzaWJsZVJvdXRlcyhyb3V0ZXM6IEFCUC5GdWxsUm91dGVbXSkge1xuICByZXR1cm4gcm91dGVzLnJlZHVjZSgoYWNjLCB2YWwpID0+IHtcbiAgICBpZiAodmFsLmludmlzaWJsZSkgcmV0dXJuIGFjYztcblxuICAgIGlmICh2YWwuY2hpbGRyZW4gJiYgdmFsLmNoaWxkcmVuLmxlbmd0aCkge1xuICAgICAgdmFsLmNoaWxkcmVuID0gZ2V0VmlzaWJsZVJvdXRlcyh2YWwuY2hpbGRyZW4pO1xuICAgIH1cblxuICAgIHJldHVybiBbLi4uYWNjLCB2YWxdO1xuICB9LCBbXSk7XG59XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYXBwbGljYXRpb24tbGF5b3V0LmNvbXBvbmVudC5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcudGhlbWUuYmFzaWMvIiwic291cmNlcyI6WyJsaWIvY29tcG9uZW50cy9hcHBsaWNhdGlvbi1sYXlvdXQvYXBwbGljYXRpb24tbGF5b3V0LmNvbXBvbmVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7QUFBQSxPQUFPLEVBSUwsV0FBVyxFQUVYLG1CQUFtQixFQUNuQixZQUFZLEVBQ1osV0FBVyxFQUNYLGdCQUFnQixHQUNqQixNQUFNLGNBQWMsQ0FBQztBQUN0QixPQUFPLEVBQUUsa0JBQWtCLEVBQUUsZUFBZSxFQUFFLE1BQU0sc0JBQXNCLENBQUM7QUFDM0UsT0FBTyxFQUVMLFNBQVMsRUFHVCxTQUFTLEVBQ1QsV0FBVyxFQUVYLFNBQVMsR0FHVixNQUFNLGVBQWUsQ0FBQztBQUV2QixPQUFPLEVBQUUsUUFBUSxFQUFFLFdBQVcsRUFBRSxNQUFNLHFCQUFxQixDQUFDO0FBQzVELE9BQU8sRUFBRSxNQUFNLEVBQUUsS0FBSyxFQUFFLE1BQU0sYUFBYSxDQUFDO0FBQzVDLE9BQU8sRUFBRSxZQUFZLEVBQUUsTUFBTSxxQkFBcUIsQ0FBQztBQUNuRCxPQUFPLE9BQU8sTUFBTSxjQUFjLENBQUM7QUFDbkMsT0FBTyxFQUFFLFNBQVMsRUFBRSxVQUFVLEVBQUUsTUFBTSxNQUFNLENBQUM7QUFDN0MsT0FBTyxFQUFFLFlBQVksRUFBRSxNQUFNLEVBQUUsR0FBRyxFQUFFLE1BQU0sZ0JBQWdCLENBQUM7QUFDM0QsT0FBTyxHQUFHLE1BQU0sS0FBSyxDQUFDO0FBQ3RCLE9BQU8sRUFBRSxvQkFBb0IsRUFBRSxNQUFNLGVBQWUsQ0FBQztBQUVyRCxPQUFPLEVBQUUsV0FBVyxFQUFFLE1BQU0sY0FBYyxDQUFDO0FBRTNDO0lBa0VFLG9DQUFvQixLQUFZLEVBQVUsWUFBMEIsRUFBVSxRQUFtQjtRQUE3RSxVQUFLLEdBQUwsS0FBSyxDQUFPO1FBQVUs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LGdEQUM0RDs7SUFFNUQsa0RBQ3FEOztJQUVyRCxvREFDaUM7O0lBRWpDLGlEQUM4Qjs7SUFFOUIsNERBQWdDOztJQUVoQyxpREFBbUI7O0lBRW5CLGlEQUFxQjs7SUE2QnJCLHVEQUEyQzs7SUFFM0MsK0NBQW1FOztJQUVuRSxzREFBMkU7Ozs7O0lBRS9ELDJDQUFvQjs7Ozs7SUFBRSxrREFBa0M7Ozs7O0lBQUUsOENBQTJCOzs7Ozs7QUFrRm5HLFNBQVMsZ0JBQWdCLENBQUMsTUFBdUI7SUFDL0MsT0FBTyxNQUFNLENBQUMsTUFBTTs7Ozs7SUFBQyxVQUFDLEdBQUcsRUFBRSxHQUFHO1FBQzVCLElBQUksR0FBRyxDQUFDLFNBQVM7WUFBRSxPQUFPLEdBQUcsQ0FBQztRQUU5QixJQUFJLEdBQUcsQ0FBQyxRQUFRLElBQUksR0FBRyxDQUFDLFFBQVEsQ0FBQyxNQUFNLEVBQUU7WUFDdkMsR0FBRyxDQUFDLFFBQVEsR0FBRyxnQkFBZ0IsQ0FBQyxHQUFHLENBQUMsUUFBUSxDQUFDLENBQUM7U0FDL0M7UUFFRCx3QkFBVyxHQUFHLEdBQUUsR0FBRyxHQUFFO0lBQ3ZCLENBQUMsR0FBRSxFQUFFLENBQUMsQ0FBQztBQUNULENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQge1xuICBBQlAsXG4gIEFwcGxpY2F0aW9uQ29uZmlndXJhdGlvbixcbiAgQ29uZmlnLFxuICBDb25maWdTdGF0ZSxcbiAgZUxheW91dFR5cGUsXG4gIEdldEFwcENvbmZpZ3VyYXRpb24sXG4gIFNlc3Npb25TdGF0ZSxcbiAgU2V0TGFuZ3VhZ2UsXG4gIHRha2VVbnRpbERlc3Ryb3ksXG59IGZyb20gJ0BhYnAvbmcuY29yZSc7XG5pbXBvcnQgeyBjb2xsYXBzZVdpdGhNYXJnaW4sIHNsaWRlRnJvbUJvdHRvbSB9IGZyb20gJ0BhYnAvbmcudGhlbWUuc2hhcmVkJztcbmltcG9ydCB7XG4gIEFmdGVyVmlld0luaXQsXG4gIENvbXBvbmVudCxcbiAgT25EZXN0cm95LFxuICBRdWVyeUxpc3QsXG4gIFJlbmRlcmVyMixcbiAgVGVtcGxhdGVSZWYsXG4gIFRyYWNrQnlGdW5jdGlvbixcbiAgVmlld0NoaWxkLFxuICBWaWV3Q2hpbGRyZW4sXG4gIEVsZW1lbnRSZWYsXG59IGZyb20gJ0Bhbmd1bGFyL2NvcmUnO1xuaW1wb3J0IHsgTmdiRHJvcGRvd24gfSBmcm9tICdAbmctYm9vdHN0cmFwL25nLWJvb3RzdHJhcCc7XG5pbXBvcnQgeyBOYXZpZ2F0ZSwgUm91dGVyU3RhdGUgfSBmcm9tICdAbmd4cy9yb3V0ZXItcGx1Z2luJztcbmltcG9ydCB7IFNlbGVjdCwgU3RvcmUgfSBmcm9tICdAbmd4cy9zdG9yZSc7XG5pbXBvcnQgeyBPQXV0aFNlcnZpY2UgfSBmcm9tICdhbmd1bGFyLW9hdXRoMi1vaWRjJztcbmltcG9ydCBjb21wYXJlIGZyb20gJ2p1c3QtY29tcGFyZSc7XG5pbXBvcnQgeyBmcm9tRXZlbnQsIE9ic2VydmFibGUgfSBmcm9tICdyeGpzJztcbmltcG9ydCB7IGRlYm91bmNlVGltZSwgZmlsdGVyLCBtYXAgfSBmcm9tICdyeGpzL29wZXJhdG9ycyc7XG5pbXBvcnQgc25xIGZyb20gJ3NucSc7XG5pbXBvcnQgeyBBZGROYXZpZ2F0aW9uRWxlbWVudCB9IGZyb20gJy4uLy4uL2FjdGlvbnMnO1xuaW1wb3J0IHsgTGF5b3V0IH0gZnJvbSAnLi4vLi4vbW9kZWxzL2xheW91dCc7XG5pbXBvcnQgeyBMYXlvdXRTdGF0ZSB9IGZyb20gJy4uLy4uL3N0YXRlcyc7XG5cbkBDb21wb25lbnQoe1xuICBzZWxlY3RvcjogJ2FicC1sYXlvdXQtYXBwbGljYXRpb24nLFxuICB0ZW1wbGF0ZVVybDogJy4vYXBwbGljYXRpb24tbGF5b3V0LmNvbXBvbmVudC5odG1sJyxcbiAgYW5pbWF0aW9uczogW3NsaWRlRnJvbUJvdHRvbSwgY29sbGFwc2VXaXRoTWFyZ2luXSxcbn0pXG5leHBvcnQgY2xhc3MgQXBwbGljYXRpb25MYXlvdXRDb21wb25lbnQgaW1wbGVtZW50cyBBZnRlclZpZXdJbml0LCBPbkRlc3Ryb3kge1xuICAvLyByZXF1aXJlZCBmb3IgZHluYW1pYyBjb21wb25lbnRcbiAgc3RhdGljIHR5cGUgPSBlTGF5b3V0VHlwZS5hcHBsaWNhdGlvbjtcblxuICBAU2VsZWN0KENvbmZpZ1N0YXRlLmdldE9uZSgncm91dGVzJykpXG4gIHJvdXRlcyQ6IE9ic2VydmFibGU8QUJQLkZ1bGxSb3V0ZVtdPjtcblxuICBAU2VsZWN0KENvbmZpZ1N0YXRlLmdldE9uZSgnY3VycmVudFVzZXInKSlcbiAgY3VycmVudFVzZXIkOiBPYnNlcnZhYmxlPEFwcGxpY2F0aW9uQ29uZmlndXJhdGlvbi5DdXJyZW50VXNlcj47XG5cbiAgQFNlbGVjdChDb25maWdTdGF0ZS5nZXREZWVwKCdsb2NhbGl6YXRpb24ubGFuZ3VhZ2VzJykpXG4gIGxhbmd1YWdlcyQ6IE9ic2VydmFibGU8QXBwbGljYXRpb25Db25maWd1cmF0aW9uLkxhbmd1YWdlW10+O1xuXG4gIEBTZWxlY3QoTGF5b3V0U3RhdGUuZ2V0TmF2aWdhdGlvbkVsZW1lbnRzKVxuICBuYXZFbGVtZW50cyQ6IE9ic2VydmFibGU8TGF5b3V0Lk5hdmlnYXRpb25FbGVtZW50W10+O1xuXG4gIEBWaWV3Q2hpbGQoJ2N1cnJlbnRVc2VyJywgeyBzdGF0aWM6IGZhbHNlLCByZWFkOiBUZW1wbGF0ZVJlZiB9KVxuICBjdXJyZW50VXNlclJlZjogVGVtcGxhdGVSZWY8YW55PjtcblxuICBAVmlld0NoaWxkKCdsYW5ndWFnZScsIHsgc3RhdGljOiBmYWxzZSwgcmVhZDogVGVtcGxhdGVSZWYgfSlcbiAgbGFuZ3VhZ2VSZWY6IFRlbXBsYXRlUmVmPGFueT47XG5cbiAgaXNEcm9wZG93bkNoaWxkRHluYW1pYzogYm9vbGVhbjtcblxuICBpc0NvbGxhcHNlZCA9IHRydWU7XG5cbiAgc21hbGxTY3JlZW46IGJvb2xlYW47IC8vIGRvIG5vdCBzZXQgdHJ1ZSBvciBmYWxzZVxuXG4gIGdldCBhcHBJbmZvKCk6IENvbmZpZy5BcHBsaWNhdGlvbiB7XG4gICAgcmV0dXJuIHRoaXMuc3RvcmUuc2VsZWN0U25hcHNob3QoQ29uZmlnU3RhdGUuZ2V0QXBwbGljYXRpb25JbmZvKTtcbiAgfVxuXG4gIGdldCB2aXNpYmxlUm91dGVzJCgpOiBPYnNlcnZhYmxlPEFCUC5GdWxsUm91dGVbXT4ge1xuICAgIHJldHVybiB0aGlzLnJvdXRlcyQucGlwZShtYXAocm91dGVzID0+IGdldFZpc2libGVSb3V0ZXMocm91dGVzKSkpO1xuICB9XG5cbiAgZ2V0IGRlZmF1bHRMYW5ndWFnZSQoKTogT2JzZXJ2YWJsZTxzdHJpbmc+IHtcbiAgICByZXR1cm4gdGhpcy5sYW5ndWFnZXMkLnBpcGUoXG4gICAgICBtYXAoXG4gICAgICAgIGxhbmd1YWdlcyA9PiBzbnEoKCkgPT4gbGFuZ3VhZ2VzLmZpbmQobGFuZyA9PiBsYW5nLmN1bHR1cmVOYW1lID09PSB0aGlzLnNlbGVjdGVkTGFuZ0N1bHR1cmUpLmRpc3BsYXlOYW1lKSxcbiAgICAgICAgJycsXG4gICAgICApLFxuICAgICk7XG4gIH1cblxuICBnZXQgZHJvcGRvd25MYW5ndWFnZXMkKCk6IE9ic2VydmFibGU8QXBwbGljYXRpb25Db25maWd1cmF0aW9uLkxhbmd1YWdlW10+IHtcbiAgICByZXR1cm4gdGhpcy5sYW5ndWFnZXMkLnBpcGUoXG4gICAgICBtYXAobGFuZ3VhZ2VzID0+IHNucSgoKSA9PiBsYW5ndWFnZXMuZmlsdGVyKGxhbmcgPT4gbGFuZy5jdWx0dXJlTmFtZSAhPT0gdGhpcy5zZWxlY3RlZExhbmdDdWx0dXJlKSksIFtdKSxcbiAgICApO1xuICB9XG5cbiAgZ2V0IHNlbGVjdGVkTGFuZ0N1bHR1cmUoKTogc3RyaW5nIHtcbiAgICByZXR1cm4gdGhpcy5zdG9yZS5zZWxlY3RTbmFwc2hvdChTZXNzaW9uU3RhdGUuZ2V0TGFuZ3VhZ2UpO1xuICB9XG5cbiAgcmlnaHRQYXJ0RWxlbWVudHM6IFRlbXBsYXRlUmVmPGFueT5bXSA9IFtdO1xuXG4gIHRyYWNrQnlGbjogVHJhY2tCeUZ1bmN0aW9uPEFCUC5GdWxsUm91dGU+ID0gKF8sIGl0ZW0pID0+IGl0ZW0ubmFtZTtcblxuICB0cmFja0VsZW1lbnRCeUZuOiBUcmFja0J5RnVuY3Rpb248QUJQLkZ1bGxSb3V0ZT4gPSAoXywgZWxlbWVudCkgPT4gZWxlbWVudDtcblxuICBjb25zdHJ1Y3Rvcihwcml2YXRlIHN0b3JlOiBTdG9yZSwgcHJpdmF0ZSBvYXV0aFNlcnZpY2U6IE9BdXRoU2VydmljZSwgcHJpdmF0ZSByZW5kZXJlcjogUmVuZGVyZXIyKSB7fVxuXG4gIHByaXZhdGUgY2hlY2tXaW5kb3dXaWR0aCgpIHtcbiAgICBzZXRUaW1lb3V0KCgpID0+IHtcbiAgICAgIGlmICh3aW5kb3cuaW5uZXJXaWR0aCA8IDc2OCkge1xuICAgICAgICB0aGlzLmlzRHJvcGRvd25DaGlsZER5bmFtaWMgPSBmYWxzZTtcbiAgICAgICAgaWYgKHRoaXMuc21hbGxTY3JlZW4gPT09IGZhbHNlKSB7XG4gICAgICAgICAgdGhpcy5pc0NvbGxhcHNlZCA9IGZhbHNlO1xuICAgICAgICAgIHNldFRpbWVvdXQoKCkgPT4ge1xuICAgICAgICAgICAgdGhpcy5pc0NvbGxhcHNlZCA9IHRydWU7XG4gICAgICAgICAgfSwgMTAwKTtcbiAgICAgICAgfVxuICAgICAgICB0aGlzLnNtYWxsU2NyZWVuID0gdHJ1ZTtcbiAgICAgIH0gZWxzZSB7XG4gICAgICAgIHRoaXMuaXNEcm9wZG93bkNoaWxkRHluYW1pYyA9IHRydWU7XG4gICAgICAgIHRoaXMuc21hbGxTY3JlZW4gPSBmYWxzZTtcbiAgICAgIH1cbiAgICB9LCAwKTtcbiAgfVxuXG4gIG5nQWZ0ZXJWaWV3SW5pdCgpIHtcbiAgICBjb25zdCBuYXZpZ2F0aW9ucyA9IHRoaXMuc3RvcmUuc2VsZWN0U25hcHNob3QoTGF5b3V0U3RhdGUuZ2V0TmF2aWdhdGlvbkVsZW1lbnRzKS5tYXAoKHsgbmFtZSB9KSA9PiBuYW1lKTtcblxuICAgIGlmIChuYXZpZ2F0aW9ucy5pbmRleE9mKCdMYW5ndWFnZVJlZicpIDwgMCkge1xuICAgICAgdGhpcy5zdG9yZS5kaXNwYXRjaChcbiAgICAgICAgbmV3IEFkZE5hdmlnYXRpb25FbGVtZW50KFtcbiAgICAgICAgICB7IGVsZW1lbnQ6IHRoaXMubGFuZ3VhZ2VSZWYsIG9yZGVyOiA0LCBuYW1lOiAnTGFuZ3VhZ2VSZWYnIH0sXG4gICAgICAgICAgeyBlbGVtZW50OiB0aGlzLmN1cnJlbnRVc2VyUmVmLCBvcmRlcjogNSwgbmFtZTogJ0N1cnJlbnRVc2VyUmVmJyB9LFxuICAgICAgICBdKSxcbiAgICAgICk7XG4gICAgfVxuXG4gICAgdGhpcy5uYXZFbGVtZW50cyRcbiAgICAgIC5waXBlKFxuICAgICAgICBtYXAoZWxlbWVudHMgPT4gZWxlbWVudHMubWFwKCh7IGVsZW1lbnQgfSkgPT4gZWxlbWVudCkpLFxuICAgICAgICBmaWx0ZXIoZWxlbWVudHMgPT4gIWNvbXBhcmUoZWxlbWVudHMsIHRoaXMucmlnaHRQYXJ0RWxlbWVudHMpKSxcbiAgICAgICAgdGFrZVVudGlsRGVzdHJveSh0aGlzKSxcbiAgICAgIClcbiAgICAgIC5zdWJzY3JpYmUoZWxlbWVudHMgPT4ge1xuICAgICAgICBzZXRUaW1lb3V0KCgpID0+ICh0aGlzLnJpZ2h0UGFydEVsZW1lbnRzID0gZWxlbWVudHMpLCAwKTtcbiAgICAgIH0pO1xuXG4gICAgdGhpcy5jaGVja1dpbmRvd1dpZHRoKCk7XG5cbiAgICBmcm9tRXZlbnQod2luZG93LCAncmVzaXplJylcbiAgICAgIC5waXBlKFxuICAgICAgICB0YWtlVW50aWxEZXN0cm95KHRoaXMpLFxuICAgICAgICBkZWJvdW5jZVRpbWUoMTUwKSxcbiAgICAgIClcbiAgICAgIC5zdWJzY3JpYmUoKCkgPT4ge1xuICAgICAgICB0aGlzLmNoZWNrV2luZG93V2lkdGgoKTtcbiAgICAgIH0pO1xuICB9XG5cbiAgbmdPbkRlc3Ryb3koKSB7fVxuXG4gIG9uQ2hhbmdlTGFuZyhjdWx0dXJlTmFtZTogc3RyaW5nKSB7XG4gICAgdGhpcy5zdG9yZS5kaXNwYXRjaChuZXcgU2V0TGFuZ3VhZ2UoY3VsdHVyZU5hbWUpKTtcbiAgfVxuXG4gIGxvZ291dCgpIHtcbiAgICB0aGlzLm9hdXRoU2VydmljZS5sb2dPdXQoKTtcbiAgICB0aGlzLnN0b3JlLmRpc3BhdGNoKFxuICAgICAgbmV3IE5hdmlnYXRlKFsnLyddLCBudWxsLCB7XG4gICAgICAgIHN0YXRlOiB7IHJlZGlyZWN0VXJsOiB0aGlzLnN0b3JlLnNlbGVjdFNuYXBzaG90KFJvdXRlclN0YXRlKS5zdGF0ZS51cmwgfSxcbiAgICAgIH0pLFxuICAgICk7XG4gICAgdGhpcy5zdG9yZS5kaXNwYXRjaChuZXcgR2V0QXBwQ29uZmlndXJhdGlvbigpKTtcbiAgfVxuXG4gIG9wZW5DaGFuZ2UoZXZlbnQ6IGJvb2xlYW4sIGNoaWxkcmVuQ29udGFpbmVyOiBIVE1MRGl2RWxlbWVudCkge1xuICAgIGlmICghZXZlbnQpIHtcbiAgICAgIE9iamVjdC5rZXlzKGNoaWxkcmVuQ29udGFpbmVyLnN0eWxlKVxuICAgICAgICAuZmlsdGVyKGtleSA9PiBOdW1iZXIuaXNJbnRlZ2VyKCtrZXkpKVxuICAgICAgICAuZm9yRWFjaChrZXkgPT4ge1xuICAgICAgICAgIHRoaXMucmVuZGVyZXIucmVtb3ZlU3R5bGUoY2hpbGRyZW5Db250YWluZXIsIGNoaWxkcmVuQ29udGFpbmVyLnN0eWxlW2tleV0pO1xuICAgICAgICB9KTtcbiAgICAgIHRoaXMucmVuZGVyZXIucmVtb3ZlU3R5bGUoY2hpbGRyZW5Db250YWluZXIsICdsZWZ0Jyk7XG4gICAgfVxuICB9XG59XG5cbmZ1bmN0aW9uIGdldFZpc2libGVSb3V0ZXMocm91dGVzOiBBQlAuRnVsbFJvdXRlW10pIHtcbiAgcmV0dXJuIHJvdXRlcy5yZWR1Y2UoKGFjYywgdmFsKSA9PiB7XG4gICAgaWYgKHZhbC5pbnZpc2libGUpIHJldHVybiBhY2M7XG5cbiAgICBpZiAodmFsLmNoaWxkcmVuICYmIHZhbC5jaGlsZHJlbi5sZW5ndGgpIHtcbiAgICAgIHZhbC5jaGlsZHJlbiA9IGdldFZpc2libGVSb3V0ZXModmFsLmNoaWxkcmVuKTtcbiAgICB9XG5cbiAgICByZXR1cm4gWy4uLmFjYywgdmFsXTtcbiAgfSwgW10pO1xufVxuIl19

@@ -2,10 +2,11 @@
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@abp/ng.core')) :
     typeof define === 'function' && define.amd ? define('@abp/ng.tenant-management.config', ['exports', '@angular/core', '@abp/ng.core'], factory) :
     (global = global || self, factory((global.abp = global.abp || {}, global.abp.ng = global.abp.ng || {}, global.abp.ng['tenant-management'] = global.abp.ng['tenant-management'] || {}, global.abp.ng['tenant-management'].config = {}), global.ng.core, global.ng_core));
-}(this, function (exports, core, ng_core) { 'use strict';
+}(this, (function (exports, core, ng_core) { 'use strict';
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/services/tenant-management-config.service.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var TenantManagementConfigService = /** @class */ (function () {
@@ -39,6 +40,7 @@
 
     /**
      * @fileoverview added by tsickle
+     * Generated from: lib/tenant-management-config.module.ts
      * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
      */
     var ɵ0 = ng_core.noop;
@@ -58,5 +60,5 @@
 
     Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+})));
 //# sourceMappingURL=abp-ng.tenant-management.config.umd.js.map

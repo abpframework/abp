@@ -200,15 +200,15 @@ public async Task<BookDto> GetAsync(Guid id)
 
 ### CRUD应用服务
 
-如果需要创建具有Create,Update,Delete和Get方法的简单CRUD应用服务,则可以使用ABP的基类轻松构建服务. 你可以继承CrudAppService或 AsyncCrudAppService.
+如果需要创建具有Create,Update,Delete和Get方法的简单CRUD应用服务,则可以使用ABP的基类轻松构建服务. 你可以继承CrudAppService.
 
 示例:
 
-创建继承`IAsyncCrudAppService`接口的`IBookAppService`接口.
+创建继承`ICrudAppService`接口的`IBookAppService`接口.
 
 ````csharp
 public interface IBookAppService : 
-    IAsyncCrudAppService< //Defines CRUD methods
+    ICrudAppService< //Defines CRUD methods
         BookDto, //Used to show books
         Guid, //Primary key of the book entity
         PagedAndSortedResultRequestDto, //Used for paging/sorting on getting a list of books
@@ -218,12 +218,12 @@ public interface IBookAppService :
 }
 ````
 
-* IAsyncCrudAppService有泛型参数来获取实体的主键类型和CRUD操作的DTO类型(它不获取实体类型,因为实体类型未向客户端公开使用此接口).
+* ICrudAppService有泛型参数来获取实体的主键类型和CRUD操作的DTO类型(它不获取实体类型,因为实体类型未向客户端公开使用此接口).
 
-`IAsyncCrudAppService`声明以下方法:
+`ICrudAppService`声明以下方法:
 
 ````csharp
-public interface IAsyncCrudAppService<
+public interface ICrudAppService<
     TEntityDto,
     in TKey,
     in TGetListInput,
@@ -278,7 +278,7 @@ public class CreateUpdateBookDto
 
 ````csharp
 public class BookAppService : 
-    AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+    CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                         CreateUpdateBookDto, CreateUpdateBookDto>,
     IBookAppService
 {
@@ -289,7 +289,7 @@ public class BookAppService :
 }
 ````
 
-`AsyncCrudAppService`实现了`IAsyncCrudAppService`接口中声明的所有方法. 然后,你可以添加自己的自定义方法或覆盖和自定义实现.
+`CrudAppService`实现了`ICrudAppService`接口中声明的所有方法. 然后,你可以添加自己的自定义方法或覆盖和自定义实现.
 
 ### 生命周期
 

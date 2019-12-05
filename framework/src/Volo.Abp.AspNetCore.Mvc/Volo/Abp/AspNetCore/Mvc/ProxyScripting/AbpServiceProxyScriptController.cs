@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Auditing;
+using Volo.Abp.Http;
 using Volo.Abp.Http.ProxyScripting;
 
 namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
@@ -17,11 +18,11 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
         }
 
         [HttpGet]
-        [Produces("text/javascript", "text/plain")]
-        public string GetAll(ServiceProxyGenerationModel model)
+        [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
+        public ActionResult GetAll(ServiceProxyGenerationModel model)
         {
             model.Normalize();
-            return _proxyScriptManager.GetScript(model.CreateOptions());
+            return Content(_proxyScriptManager.GetScript(model.CreateOptions()), MimeTypes.Application.Javascript);
         }
     }
 }

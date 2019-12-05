@@ -1,26 +1,25 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/toast/toast.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import { Component } from '@angular/core';
-export class ToastComponent {}
+export class ToastComponent {
+}
 ToastComponent.decorators = [
-  {
-    type: Component,
-    args: [
-      {
-        selector: 'abp-toast',
-        // tslint:disable-next-line: component-max-inline-declarations
-        template: `
+    { type: Component, args: [{
+                selector: 'abp-toast',
+                // tslint:disable-next-line: component-max-inline-declarations
+                template: `
     <p-toast position="bottom-right" key="abpToast" styleClass="abp-toast" [baseZIndex]="1000">
       <ng-template let-message pTemplate="message">
         <span
           class="ui-toast-icon pi"
           [ngClass]="{
-            'pi-info-circle': message.severity == 'info',
-            'pi-exclamation-triangle': message.severity == 'warn',
-            'pi-times': message.severity == 'error',
-            'pi-check': message.severity == 'success'
+            'pi-info-circle': message.severity === 'info',
+            'pi-exclamation-triangle': message.severity === 'warn',
+            'pi-times': message.severity === 'error',
+            'pi-check': message.severity === 'success'
           }"
         ></span>
         <div class="ui-toast-message-text-content">
@@ -29,9 +28,7 @@ ToastComponent.decorators = [
         </div>
       </ng-template>
     </p-toast>
-  `,
-      },
-    ],
-  },
+  `
+            }] }
 ];
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidG9hc3QuY29tcG9uZW50LmpzIiwic291cmNlUm9vdCI6Im5nOi8vQGFicC9uZy50aGVtZS5zaGFyZWQvIiwic291cmNlcyI6WyJsaWIvY29tcG9uZW50cy90b2FzdC90b2FzdC5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztBQUFBLE9BQU8sRUFBRSxTQUFTLEVBQUUsTUFBTSxlQUFlLENBQUM7QUF5QjFDLE1BQU0sT0FBTyxjQUFjOzs7WUF2QjFCLFNBQVMsU0FBQztnQkFDVCxRQUFRLEVBQUUsV0FBVzs7Z0JBRXJCLFFBQVEsRUFBRTs7Ozs7Ozs7Ozs7Ozs7Ozs7O0dBa0JUO2FBQ0YiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBDb21wb25lbnQgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcblxuQENvbXBvbmVudCh7XG4gIHNlbGVjdG9yOiAnYWJwLXRvYXN0JyxcbiAgLy8gdHNsaW50OmRpc2FibGUtbmV4dC1saW5lOiBjb21wb25lbnQtbWF4LWlubGluZS1kZWNsYXJhdGlvbnNcbiAgdGVtcGxhdGU6IGBcbiAgICA8cC10b2FzdCBwb3NpdGlvbj1cImJvdHRvbS1yaWdodFwiIGtleT1cImFicFRvYXN0XCIgc3R5bGVDbGFzcz1cImFicC10b2FzdFwiIFtiYXNlWkluZGV4XT1cIjEwMDBcIj5cbiAgICAgIDxuZy10ZW1wbGF0ZSBsZXQtbWVzc2FnZSBwVGVtcGxhdGU9XCJtZXNzYWdlXCI+XG4gICAgICAgIDxzcGFuXG4gICAgICAgICAgY2xhc3M9XCJ1aS10b2FzdC1pY29uIHBpXCJcbiAgICAgICAgICBbbmdDbGFzc109XCJ7XG4gICAgICAgICAgICAncGktaW5mby1jaXJjbGUnOiBtZXNzYWdlLnNldmVyaXR5ID09ICdpbmZvJyxcbiAgICAgICAgICAgICdwaS1leGNsYW1hdGlvbi10cmlhbmdsZSc6IG1lc3NhZ2Uuc2V2ZXJpdHkgPT0gJ3dhcm4nLFxuICAgICAgICAgICAgJ3BpLXRpbWVzJzogbWVzc2FnZS5zZXZlcml0eSA9PSAnZXJyb3InLFxuICAgICAgICAgICAgJ3BpLWNoZWNrJzogbWVzc2FnZS5zZXZlcml0eSA9PSAnc3VjY2VzcydcbiAgICAgICAgICB9XCJcbiAgICAgICAgPjwvc3Bhbj5cbiAgICAgICAgPGRpdiBjbGFzcz1cInVpLXRvYXN0LW1lc3NhZ2UtdGV4dC1jb250ZW50XCI+XG4gICAgICAgICAgPGRpdiBjbGFzcz1cInVpLXRvYXN0LXN1bW1hcnlcIj57eyBtZXNzYWdlLnN1bW1hcnkgfCBhYnBMb2NhbGl6YXRpb246IG1lc3NhZ2UudGl0bGVMb2NhbGl6YXRpb25QYXJhbXMgfX08L2Rpdj5cbiAgICAgICAgICA8ZGl2IGNsYXNzPVwidWktdG9hc3QtZGV0YWlsXCI+e3sgbWVzc2FnZS5kZXRhaWwgfCBhYnBMb2NhbGl6YXRpb246IG1lc3NhZ2UubWVzc2FnZUxvY2FsaXphdGlvblBhcmFtcyB9fTwvZGl2PlxuICAgICAgICA8L2Rpdj5cbiAgICAgIDwvbmctdGVtcGxhdGU+XG4gICAgPC9wLXRvYXN0PlxuICBgXG59KVxuZXhwb3J0IGNsYXNzIFRvYXN0Q29tcG9uZW50IHt9XG4iXX0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidG9hc3QuY29tcG9uZW50LmpzIiwic291cmNlUm9vdCI6Im5nOi8vQGFicC9uZy50aGVtZS5zaGFyZWQvIiwic291cmNlcyI6WyJsaWIvY29tcG9uZW50cy90b2FzdC90b2FzdC5jb21wb25lbnQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7QUFBQSxPQUFPLEVBQUUsU0FBUyxFQUFFLE1BQU0sZUFBZSxDQUFDO0FBeUIxQyxNQUFNLE9BQU8sY0FBYzs7O1lBdkIxQixTQUFTLFNBQUM7Z0JBQ1QsUUFBUSxFQUFFLFdBQVc7O2dCQUVyQixRQUFRLEVBQUU7Ozs7Ozs7Ozs7Ozs7Ozs7OztHQWtCVDthQUNGIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgQ29tcG9uZW50IH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5cbkBDb21wb25lbnQoe1xuICBzZWxlY3RvcjogJ2FicC10b2FzdCcsXG4gIC8vIHRzbGludDpkaXNhYmxlLW5leHQtbGluZTogY29tcG9uZW50LW1heC1pbmxpbmUtZGVjbGFyYXRpb25zXG4gIHRlbXBsYXRlOiBgXG4gICAgPHAtdG9hc3QgcG9zaXRpb249XCJib3R0b20tcmlnaHRcIiBrZXk9XCJhYnBUb2FzdFwiIHN0eWxlQ2xhc3M9XCJhYnAtdG9hc3RcIiBbYmFzZVpJbmRleF09XCIxMDAwXCI+XG4gICAgICA8bmctdGVtcGxhdGUgbGV0LW1lc3NhZ2UgcFRlbXBsYXRlPVwibWVzc2FnZVwiPlxuICAgICAgICA8c3BhblxuICAgICAgICAgIGNsYXNzPVwidWktdG9hc3QtaWNvbiBwaVwiXG4gICAgICAgICAgW25nQ2xhc3NdPVwie1xuICAgICAgICAgICAgJ3BpLWluZm8tY2lyY2xlJzogbWVzc2FnZS5zZXZlcml0eSA9PT0gJ2luZm8nLFxuICAgICAgICAgICAgJ3BpLWV4Y2xhbWF0aW9uLXRyaWFuZ2xlJzogbWVzc2FnZS5zZXZlcml0eSA9PT0gJ3dhcm4nLFxuICAgICAgICAgICAgJ3BpLXRpbWVzJzogbWVzc2FnZS5zZXZlcml0eSA9PT0gJ2Vycm9yJyxcbiAgICAgICAgICAgICdwaS1jaGVjayc6IG1lc3NhZ2Uuc2V2ZXJpdHkgPT09ICdzdWNjZXNzJ1xuICAgICAgICAgIH1cIlxuICAgICAgICA+PC9zcGFuPlxuICAgICAgICA8ZGl2IGNsYXNzPVwidWktdG9hc3QtbWVzc2FnZS10ZXh0LWNvbnRlbnRcIj5cbiAgICAgICAgICA8ZGl2IGNsYXNzPVwidWktdG9hc3Qtc3VtbWFyeVwiPnt7IG1lc3NhZ2Uuc3VtbWFyeSB8IGFicExvY2FsaXphdGlvbjogbWVzc2FnZS50aXRsZUxvY2FsaXphdGlvblBhcmFtcyB9fTwvZGl2PlxuICAgICAgICAgIDxkaXYgY2xhc3M9XCJ1aS10b2FzdC1kZXRhaWxcIj57eyBtZXNzYWdlLmRldGFpbCB8IGFicExvY2FsaXphdGlvbjogbWVzc2FnZS5tZXNzYWdlTG9jYWxpemF0aW9uUGFyYW1zIH19PC9kaXY+XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9uZy10ZW1wbGF0ZT5cbiAgICA8L3AtdG9hc3Q+XG4gIGAsXG59KVxuZXhwb3J0IGNsYXNzIFRvYXN0Q29tcG9uZW50IHt9XG4iXX0=

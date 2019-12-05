@@ -29,13 +29,19 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="asDefaultServices">
         /// True, to register the HTTP client proxy as the default implementation for the services.
         /// </param>
+        /// <param name="configureHttpClientBuilder">
+        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
+        /// </param>
         public static IServiceCollection AddHttpClientProxies(
             [NotNull] this IServiceCollection services,
             [NotNull] Assembly assembly,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultServices = true)
+            bool asDefaultServices = true,
+            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
         {
             Check.NotNull(services, nameof(assembly));
+
+            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
 
             //TODO: Make a configuration option and add remoteServiceName inside it!
             //TODO: Add option to change type filter
@@ -50,7 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     serviceType, 
                     remoteServiceConfigurationName,
                     asDefaultServices
-                    );
+                );
             }
 
             return services;
@@ -68,16 +74,53 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="asDefaultService">
         /// True, to register the HTTP client proxy as the default implementation for the service <typeparamref name="T"/>.
         /// </param>
+        /// <param name="configureHttpClientBuilder">
+        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
+        /// </param>
         public static IServiceCollection AddHttpClientProxy<T>(
             [NotNull] this IServiceCollection services,
             [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
-            bool asDefaultService = true)
+            bool asDefaultService = true,
+            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
         {
+            AddHttpClientFactoryAndPolicy(services, remoteServiceConfigurationName, configureHttpClientBuilder);
+
             return services.AddHttpClientProxy(
                 typeof(T),
                 remoteServiceConfigurationName,
                 asDefaultService
             );
+        }
+
+        /// <summary>
+        /// Use IHttpClientFactory and polly
+        /// </summary>
+        /// <param name="services">Service collection</param>
+        /// <param name="remoteServiceConfigurationName">
+        /// The name of the remote service configuration to be used by the HTTP Client proxies.
+        /// See <see cref="AbpRemoteServiceOptions"/>.
+        /// </param>
+        /// <param name="configureHttpClientBuilder">
+        /// A delegate that is used to configure an <see cref="T:Microsoft.Extensions.DependencyInjection.IHttpClientBuilder" />.
+        /// </param>
+        public static IServiceCollection AddHttpClientFactoryAndPolicy(
+            [NotNull] this IServiceCollection services,
+            [NotNull] string remoteServiceConfigurationName = RemoteServiceConfigurationDictionary.DefaultName,
+            Action<IHttpClientBuilder> configureHttpClientBuilder = null)
+        {
+            var httpClientBuilder = services.AddHttpClient(remoteServiceConfigurationName);
+            if (configureHttpClientBuilder == null)
+            {
+                httpClientBuilder.AddTransientHttpErrorPolicy(builder =>
+                    // retry 3 times
+                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
+            }
+            else
+            {
+                configureHttpClientBuilder.Invoke(httpClientBuilder);
+            }
+
+            return services;
         }
 
         /// <summary>
@@ -106,12 +149,6 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.HttpClientProxies[type] = new DynamicHttpClientProxyConfig(type, remoteServiceConfigurationName);
             });
-            
-            //use IHttpClientFactory and polly
-            services.AddHttpClient(remoteServiceConfigurationName)
-                .AddTransientHttpErrorPolicy(builder =>
-                    // retry 3 times
-                    builder.WaitAndRetryAsync(3, i => TimeSpan.FromSeconds(Math.Pow(2, i))));
 
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);
             services.AddTransient(interceptorType);

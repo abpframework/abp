@@ -10,14 +10,14 @@ import { registerLocaleData, CommonModule } from '@angular/common';
 import compare from 'just-compare';
 import clone from 'just-clone';
 import { FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Table } from 'primeng/table';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { OAuthService, OAuthModule } from 'angular-oauth2-oidc';
 import { NgxsRouterPluginModule } from '@ngxs/router-plugin';
 import { NgxsStoragePluginModule } from '@ngxs/storage-plugin';
 import { takeUntilDestroy as takeUntilDestroy$1 } from '@ngx-validate/core';
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/abstracts/ng-model.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -142,11 +142,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/abstracts/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/actions/config.actions.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PatchRouteByName = /** @class */ (function () {
@@ -178,6 +180,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/actions/loader.actions.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var StartLoader = /** @class */ (function () {
@@ -209,6 +212,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/actions/profile.actions.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var GetProfile = /** @class */ (function () {
@@ -250,6 +254,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/actions/rest.actions.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var RestOccurError = /** @class */ (function () {
@@ -268,6 +273,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/actions/session.actions.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var SetLanguage = /** @class */ (function () {
@@ -299,11 +305,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/actions/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/rest.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var RestService = /** @class */ (function () {
@@ -344,8 +352,20 @@ var RestService = /** @class */ (function () {
         var _a = config.observe, observe = _a === void 0 ? "body" /* Body */ : _a, skipHandleError = config.skipHandleError;
         /** @type {?} */
         var url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
-        var method = request.method, options = __rest(request, ["method"]);
-        return this.http.request(method, url, (/** @type {?} */ (__assign({ observe: observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
+        var method = request.method, params = request.params, options = __rest(request, ["method", "params"]);
+        return this.http
+            .request(method, url, (/** @type {?} */ (__assign({ observe: observe }, (params && {
+            params: Object.keys(params).reduce((/**
+             * @param {?} acc
+             * @param {?} key
+             * @return {?}
+             */
+            function (acc, key) {
+                var _a;
+                return (__assign({}, acc, (typeof params[key] !== 'undefined' && params[key] !== '' && (_a = {}, _a[key] = params[key], _a))));
+            }), {}),
+        }), options))))
+            .pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
          * @param {?} err
          * @return {?}
          */
@@ -384,6 +404,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/application-configuration.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApplicationConfigurationService = /** @class */ (function () {
@@ -426,6 +447,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/route-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -500,6 +522,14 @@ function sortRoutes(routes) {
     if (!routes.length)
         return [];
     return routes
+        .map((/**
+     * @param {?} route
+     * @param {?} index
+     * @return {?}
+     */
+    function (route, index) {
+        return __assign({}, route, { order: typeof route.order === 'undefined' ? index + 1 : route.order });
+    }))
         .sort((/**
      * @param {?} a
      * @param {?} b
@@ -538,6 +568,7 @@ function getAbpRoutes() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/constants/different-locales.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 // Different locales from .NET
@@ -575,6 +606,7 @@ var localesMapping = {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/initial-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -620,7 +652,7 @@ function localeInitializer(injector) {
             registerLocale(lang).then((/**
              * @return {?}
              */
-            function () { return resolve(); }), reject);
+            function () { return resolve('resolved'); }), reject);
         }));
     });
     return fn;
@@ -643,6 +675,7 @@ function registerLocale(locale) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/localization.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LocalizationService = /** @class */ (function () {
@@ -651,7 +684,7 @@ var LocalizationService = /** @class */ (function () {
         this.router = router;
         this.ngZone = ngZone;
         if (otherInstance)
-            throw new Error('LocaleService should have only one instance.');
+            throw new Error('LocalizationService should have only one instance.');
     }
     Object.defineProperty(LocalizationService.prototype, "currentLang", {
         get: /**
@@ -781,6 +814,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/states/session.state.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var SessionState = /** @class */ (function () {
@@ -896,6 +930,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/states/config.state.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ConfigState = /** @class */ (function () {
@@ -983,14 +1018,16 @@ var ConfigState = /** @class */ (function () {
     /**
      * @param {?=} path
      * @param {?=} name
+     * @param {?=} url
      * @return {?}
      */
     ConfigState.getRoute = /**
      * @param {?=} path
      * @param {?=} name
+     * @param {?=} url
      * @return {?}
      */
-    function (path, name) {
+    function (path, name, url) {
         /** @type {?} */
         var selector = createSelector([ConfigState_1], (/**
          * @param {?} state
@@ -1007,6 +1044,9 @@ var ConfigState = /** @class */ (function () {
                     return route;
                 }
                 else if (name && route.name === name) {
+                    return route;
+                }
+                else if (url && route.url === url) {
                     return route;
                 }
             }));
@@ -1074,11 +1114,13 @@ var ConfigState = /** @class */ (function () {
                 var keys = snq((/**
                  * @return {?}
                  */
-                function () { return Object.keys(state.setting.values).filter((/**
-                 * @param {?} key
-                 * @return {?}
-                 */
-                function (key) { return key.indexOf(keyword) > -1; })); }), []);
+                function () {
+                    return Object.keys(state.setting.values).filter((/**
+                     * @param {?} key
+                     * @return {?}
+                     */
+                    function (key) { return key.indexOf(keyword) > -1; }));
+                }), []);
                 if (keys.length) {
                     return keys.reduce((/**
                      * @param {?} acc
@@ -1115,10 +1157,42 @@ var ConfigState = /** @class */ (function () {
         function (state) {
             if (!key)
                 return true;
-            return snq((/**
+            /** @type {?} */
+            var getPolicy = (/**
+             * @param {?} k
              * @return {?}
              */
-            function () { return state.auth.grantedPolicies[key]; }), false);
+            function (k) { return snq((/**
+             * @return {?}
+             */
+            function () { return state.auth.grantedPolicies[k]; }), false); });
+            /** @type {?} */
+            var orRegexp = /\|\|/g;
+            /** @type {?} */
+            var andRegexp = /&&/g;
+            if (orRegexp.test(key)) {
+                /** @type {?} */
+                var keys = key.split('||').filter((/**
+                 * @param {?} k
+                 * @return {?}
+                 */
+                function (k) { return !!k; }));
+                if (keys.length !== 2)
+                    return false;
+                return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
+            }
+            else if (andRegexp.test(key)) {
+                /** @type {?} */
+                var keys = key.split('&&').filter((/**
+                 * @param {?} k
+                 * @return {?}
+                 */
+                function (k) { return !!k; }));
+                if (keys.length !== 2)
+                    return false;
+                return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
+            }
+            return getPolicy(key);
         }));
         return selector;
     };
@@ -1224,7 +1298,9 @@ var ConfigState = /** @class */ (function () {
             if (defaultLang.includes(';')) {
                 defaultLang = defaultLang.split(';')[0];
             }
-            return _this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
+            return _this.store.selectSnapshot(SessionState.getLanguage)
+                ? of(null)
+                : dispatch(new SetLanguage(defaultLang));
         })));
     };
     /**
@@ -1287,7 +1363,8 @@ var ConfigState = /** @class */ (function () {
             name: 'ConfigState',
             defaults: (/** @type {?} */ ({})),
         }),
-        __metadata("design:paramtypes", [ApplicationConfigurationService, Store])
+        __metadata("design:paramtypes", [ApplicationConfigurationService,
+            Store])
     ], ConfigState);
     return ConfigState;
 }());
@@ -1318,7 +1395,9 @@ function patchRouteDeep(routes, name, newValue, parentUrl) {
      */
     function (route) {
         if (route.name === name) {
-            newValue.url = parentUrl + "/" + ((!newValue.path && newValue.path === '' ? route.path : newValue.path) || '');
+            newValue.url = parentUrl + "/" + ((!newValue.path && newValue.path === ''
+                ? route.path
+                : newValue.path) || '');
             if (newValue.children && newValue.children.length) {
                 newValue.children = newValue.children.map((/**
                  * @param {?} child
@@ -1342,6 +1421,7 @@ function patchRouteDeep(routes, name, newValue, parentUrl) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/rxjs-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -1388,6 +1468,7 @@ function (componentInstance, destroyMethodName) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/dynamic-layout.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var DynamicLayoutComponent = /** @class */ (function () {
@@ -1527,6 +1608,7 @@ function findLayout(segments, routes) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/router-outlet.component.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var RouterOutletComponent = /** @class */ (function () {
@@ -1543,16 +1625,19 @@ var RouterOutletComponent = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/components/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/constants/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/autofocus.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AutofocusDirective = /** @class */ (function () {
@@ -1600,6 +1685,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/ellipsis.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var EllipsisDirective = /** @class */ (function () {
@@ -1641,22 +1727,12 @@ var EllipsisDirective = /** @class */ (function () {
     /**
      * @return {?}
      */
-    EllipsisDirective.prototype.ngAfterContentInit = /**
+    EllipsisDirective.prototype.ngAfterViewInit = /**
      * @return {?}
      */
     function () {
-        var _this = this;
-        setTimeout((/**
-         * @return {?}
-         */
-        function () {
-            /** @type {?} */
-            var title = _this.title;
-            _this.title = title || ((/** @type {?} */ (_this.elRef.nativeElement))).innerText;
-            if (_this.title !== title) {
-                _this.cdRef.detectChanges();
-            }
-        }), 0);
+        this.title = this.title || ((/** @type {?} */ (this.elRef.nativeElement))).innerText;
+        this.cdRef.detectChanges();
     };
     EllipsisDirective.decorators = [
         { type: Directive, args: [{
@@ -1699,6 +1775,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/for.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AbpForContext = /** @class */ (function () {
@@ -1906,7 +1983,7 @@ var ForDirective = /** @class */ (function () {
             return;
         /** @type {?} */
         var compareFn = this.compareFn;
-        if (typeof this.filterBy !== 'undefined' && this.filterVal) {
+        if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
             items = items.filter((/**
              * @param {?} item
              * @return {?}
@@ -1996,6 +2073,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/common-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2013,6 +2091,7 @@ function noop() {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/generator-utils.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -2028,11 +2107,13 @@ function uuid(a) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/form-submit.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var FormSubmitDirective = /** @class */ (function () {
@@ -2040,6 +2121,7 @@ var FormSubmitDirective = /** @class */ (function () {
         this.formGroupDirective = formGroupDirective;
         this.host = host;
         this.cdRef = cdRef;
+        this.debounce = 200;
         this.ngSubmit = new EventEmitter();
         this.executedNgSubmit = false;
     }
@@ -2059,7 +2141,7 @@ var FormSubmitDirective = /** @class */ (function () {
             _this.executedNgSubmit = true;
         }));
         fromEvent((/** @type {?} */ (this.host.nativeElement)), 'keyup')
-            .pipe(debounceTime(200), filter((/**
+            .pipe(debounceTime(this.debounce), filter((/**
          * @param {?} key
          * @return {?}
          */
@@ -2072,19 +2154,6 @@ var FormSubmitDirective = /** @class */ (function () {
                 _this.host.nativeElement.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
             }
             _this.executedNgSubmit = false;
-        }));
-        fromEvent(this.host.nativeElement, 'submit')
-            .pipe(takeUntilDestroy(this), filter((/**
-         * @return {?}
-         */
-        function () { return !_this.notValidateOnSubmit && typeof _this.notValidateOnSubmit !== 'string'; })))
-            .subscribe((/**
-         * @return {?}
-         */
-        function () {
-            if (!_this.executedNgSubmit) {
-                _this.markAsDirty();
-            }
         }));
     };
     /**
@@ -2109,7 +2178,7 @@ var FormSubmitDirective = /** @class */ (function () {
     FormSubmitDirective.decorators = [
         { type: Directive, args: [{
                     // tslint:disable-next-line: directive-selector
-                    selector: 'form[ngSubmit][formGroup]'
+                    selector: 'form[ngSubmit][formGroup]',
                 },] }
     ];
     /** @nocollapse */
@@ -2119,12 +2188,15 @@ var FormSubmitDirective = /** @class */ (function () {
         { type: ChangeDetectorRef }
     ]; };
     FormSubmitDirective.propDecorators = {
+        debounce: [{ type: Input }],
         notValidateOnSubmit: [{ type: Input }],
         ngSubmit: [{ type: Output }]
     };
     return FormSubmitDirective;
 }());
 if (false) {
+    /** @type {?} */
+    FormSubmitDirective.prototype.debounce;
     /** @type {?} */
     FormSubmitDirective.prototype.notValidateOnSubmit;
     /** @type {?} */
@@ -2174,6 +2246,7 @@ function setDirty(controls) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/profile.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ProfileService = /** @class */ (function () {
@@ -2253,6 +2326,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/states/profile.state.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ProfileState = /** @class */ (function () {
@@ -2374,19 +2448,56 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/states/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/permission.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PermissionDirective = /** @class */ (function () {
-    function PermissionDirective(elRef, renderer, store) {
+    function PermissionDirective(elRef, renderer, store, templateRef, vcRef) {
         this.elRef = elRef;
         this.renderer = renderer;
         this.store = store;
+        this.templateRef = templateRef;
+        this.vcRef = vcRef;
     }
+    /**
+     * @private
+     * @return {?}
+     */
+    PermissionDirective.prototype.check = /**
+     * @private
+     * @return {?}
+     */
+    function () {
+        var _this = this;
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+        this.subscription = this.store
+            .select(ConfigState.getGrantedPolicy(this.condition))
+            .pipe(takeUntilDestroy(this))
+            .subscribe((/**
+         * @param {?} isGranted
+         * @return {?}
+         */
+        function (isGranted) {
+            if (_this.templateRef && isGranted) {
+                _this.vcRef.clear();
+                _this.vcRef.createEmbeddedView(_this.templateRef);
+            }
+            else if (_this.templateRef && !isGranted) {
+                _this.vcRef.clear();
+            }
+            else if (!isGranted && !_this.templateRef) {
+                _this.renderer.removeChild(((/** @type {?} */ (_this.elRef.nativeElement))).parentElement, _this.elRef.nativeElement);
+            }
+        }));
+    };
     /**
      * @return {?}
      */
@@ -2394,20 +2505,8 @@ var PermissionDirective = /** @class */ (function () {
      * @return {?}
      */
     function () {
-        var _this = this;
-        if (this.condition) {
-            this.store
-                .select(ConfigState.getGrantedPolicy(this.condition))
-                .pipe(takeUntilDestroy(this))
-                .subscribe((/**
-             * @param {?} isGranted
-             * @return {?}
-             */
-            function (isGranted) {
-                if (!isGranted) {
-                    _this.renderer.removeChild(((/** @type {?} */ (_this.elRef.nativeElement))).parentElement, _this.elRef.nativeElement);
-                }
-            }));
+        if (this.templateRef && !this.condition) {
+            this.vcRef.createEmbeddedView(this.templateRef);
         }
     };
     /**
@@ -2417,6 +2516,20 @@ var PermissionDirective = /** @class */ (function () {
      * @return {?}
      */
     function () { };
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    PermissionDirective.prototype.ngOnChanges = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var condition = _a.condition;
+        if ((condition || { currentValue: null }).currentValue) {
+            this.check();
+        }
+    };
     PermissionDirective.decorators = [
         { type: Directive, args: [{
                     selector: '[abpPermission]',
@@ -2424,9 +2537,11 @@ var PermissionDirective = /** @class */ (function () {
     ];
     /** @nocollapse */
     PermissionDirective.ctorParameters = function () { return [
-        { type: ElementRef, decorators: [{ type: Optional }] },
+        { type: ElementRef },
         { type: Renderer2 },
-        { type: Store }
+        { type: Store },
+        { type: TemplateRef, decorators: [{ type: Optional }] },
+        { type: ViewContainerRef }
     ]; };
     PermissionDirective.propDecorators = {
         condition: [{ type: Input, args: ['abpPermission',] }]
@@ -2436,6 +2551,8 @@ var PermissionDirective = /** @class */ (function () {
 if (false) {
     /** @type {?} */
     PermissionDirective.prototype.condition;
+    /** @type {?} */
+    PermissionDirective.prototype.subscription;
     /**
      * @type {?}
      * @private
@@ -2451,170 +2568,27 @@ if (false) {
      * @private
      */
     PermissionDirective.prototype.store;
-}
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-var SortPipe = /** @class */ (function () {
-    function SortPipe() {
-    }
-    /**
-     * @param {?} value
-     * @param {?=} sortOrder
-     * @param {?=} sortKey
-     * @return {?}
-     */
-    SortPipe.prototype.transform = /**
-     * @param {?} value
-     * @param {?=} sortOrder
-     * @param {?=} sortKey
-     * @return {?}
-     */
-    function (value, sortOrder, sortKey) {
-        if (sortOrder === void 0) { sortOrder = 'asc'; }
-        sortOrder = sortOrder && ((/** @type {?} */ (sortOrder.toLowerCase())));
-        if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc'))
-            return value;
-        /** @type {?} */
-        var numberArray = [];
-        /** @type {?} */
-        var stringArray = [];
-        if (!sortKey) {
-            numberArray = value.filter((/**
-             * @param {?} item
-             * @return {?}
-             */
-            function (item) { return typeof item === 'number'; })).sort();
-            stringArray = value.filter((/**
-             * @param {?} item
-             * @return {?}
-             */
-            function (item) { return typeof item === 'string'; })).sort();
-        }
-        else {
-            numberArray = value.filter((/**
-             * @param {?} item
-             * @return {?}
-             */
-            function (item) { return typeof item[sortKey] === 'number'; })).sort((/**
-             * @param {?} a
-             * @param {?} b
-             * @return {?}
-             */
-            function (a, b) { return a[sortKey] - b[sortKey]; }));
-            stringArray = value
-                .filter((/**
-             * @param {?} item
-             * @return {?}
-             */
-            function (item) { return typeof item[sortKey] === 'string'; }))
-                .sort((/**
-             * @param {?} a
-             * @param {?} b
-             * @return {?}
-             */
-            function (a, b) {
-                if (a[sortKey] < b[sortKey])
-                    return -1;
-                else if (a[sortKey] > b[sortKey])
-                    return 1;
-                else
-                    return 0;
-            }));
-        }
-        /** @type {?} */
-        var sorted = numberArray.concat(stringArray);
-        return sortOrder === 'asc' ? sorted : sorted.reverse();
-    };
-    SortPipe.decorators = [
-        { type: Injectable },
-        { type: Pipe, args: [{
-                    name: 'abpSort',
-                },] }
-    ];
-    return SortPipe;
-}());
-
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-/**
- * @record
- */
-function TableSortOptions() { }
-if (false) {
-    /** @type {?} */
-    TableSortOptions.prototype.key;
-    /** @type {?} */
-    TableSortOptions.prototype.order;
-}
-var TableSortDirective = /** @class */ (function () {
-    function TableSortDirective(table, sortPipe) {
-        this.table = table;
-        this.sortPipe = sortPipe;
-        this.value = [];
-    }
-    /**
-     * @param {?} __0
-     * @return {?}
-     */
-    TableSortDirective.prototype.ngOnChanges = /**
-     * @param {?} __0
-     * @return {?}
-     */
-    function (_a) {
-        var value = _a.value, abpTableSort = _a.abpTableSort;
-        if (value || abpTableSort) {
-            this.abpTableSort = this.abpTableSort || ((/** @type {?} */ ({})));
-            this.table.value = this.sortPipe.transform(clone(this.value), this.abpTableSort.order, this.abpTableSort.key);
-        }
-    };
-    TableSortDirective.decorators = [
-        { type: Directive, args: [{
-                    selector: '[abpTableSort]',
-                    providers: [SortPipe],
-                },] }
-    ];
-    /** @nocollapse */
-    TableSortDirective.ctorParameters = function () { return [
-        { type: Table, decorators: [{ type: Optional }, { type: Self }] },
-        { type: SortPipe }
-    ]; };
-    TableSortDirective.propDecorators = {
-        abpTableSort: [{ type: Input }],
-        value: [{ type: Input }]
-    };
-    return TableSortDirective;
-}());
-if (false) {
-    /** @type {?} */
-    TableSortDirective.prototype.abpTableSort;
-    /** @type {?} */
-    TableSortDirective.prototype.value;
     /**
      * @type {?}
      * @private
      */
-    TableSortDirective.prototype.table;
+    PermissionDirective.prototype.templateRef;
     /**
      * @type {?}
      * @private
      */
-    TableSortDirective.prototype.sortPipe;
+    PermissionDirective.prototype.vcRef;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/visibility.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var VisibilityDirective = /** @class */ (function () {
     function VisibilityDirective(elRef, renderer) {
         this.elRef = elRef;
         this.renderer = renderer;
-        this.mutationObserverEnabled = true;
         this.completed$ = new Subject();
     }
     /**
@@ -2630,64 +2604,51 @@ var VisibilityDirective = /** @class */ (function () {
         }
         /** @type {?} */
         var observer;
-        if (this.mutationObserverEnabled) {
-            observer = new MutationObserver((/**
-             * @param {?} mutations
+        observer = new MutationObserver((/**
+         * @param {?} mutations
+         * @return {?}
+         */
+        function (mutations) {
+            mutations.forEach((/**
+             * @param {?} mutation
              * @return {?}
              */
-            function (mutations) {
-                mutations.forEach((/**
-                 * @param {?} mutation
-                 * @return {?}
-                 */
-                function (mutation) {
-                    if (!mutation.target)
-                        return;
-                    /** @type {?} */
-                    var htmlNodes = snq((/**
-                     * @return {?}
-                     */
-                    function () { return Array.from(mutation.target.childNodes).filter((/**
-                     * @param {?} node
-                     * @return {?}
-                     */
-                    function (node) { return node instanceof HTMLElement; })); }), []);
-                    if (!htmlNodes.length) {
-                        _this.removeFromDOM();
-                        _this.disconnect();
-                    }
-                    else {
-                        setTimeout((/**
-                         * @return {?}
-                         */
-                        function () {
-                            _this.disconnect();
-                        }), 0);
-                    }
-                }));
-            }));
-            observer.observe(this.focusedElement, {
-                childList: true,
-            });
-        }
-        else {
-            setTimeout((/**
-             * @return {?}
-             */
-            function () {
+            function (mutation) {
+                if (!mutation.target)
+                    return;
                 /** @type {?} */
                 var htmlNodes = snq((/**
                  * @return {?}
                  */
-                function () { return Array.from(_this.focusedElement.childNodes).filter((/**
+                function () { return Array.from(mutation.target.childNodes).filter((/**
                  * @param {?} node
                  * @return {?}
                  */
                 function (node) { return node instanceof HTMLElement; })); }), []);
-                if (!htmlNodes.length)
+                if (!htmlNodes.length) {
                     _this.removeFromDOM();
-            }), 0);
-        }
+                }
+            }));
+        }));
+        observer.observe(this.focusedElement, {
+            childList: true,
+        });
+        setTimeout((/**
+         * @return {?}
+         */
+        function () {
+            /** @type {?} */
+            var htmlNodes = snq((/**
+             * @return {?}
+             */
+            function () { return Array.from(_this.focusedElement.childNodes).filter((/**
+             * @param {?} node
+             * @return {?}
+             */
+            function (node) { return node instanceof HTMLElement; })); }), []);
+            if (!htmlNodes.length)
+                _this.removeFromDOM();
+        }), 0);
         this.completed$.subscribe((/**
          * @return {?}
          */
@@ -2710,7 +2671,10 @@ var VisibilityDirective = /** @class */ (function () {
      * @return {?}
      */
     function () {
+        if (!this.elRef.nativeElement)
+            return;
         this.renderer.removeChild(this.elRef.nativeElement.parentElement, this.elRef.nativeElement);
+        this.disconnect();
     };
     VisibilityDirective.decorators = [
         { type: Directive, args: [{
@@ -2723,16 +2687,13 @@ var VisibilityDirective = /** @class */ (function () {
         { type: Renderer2 }
     ]; };
     VisibilityDirective.propDecorators = {
-        focusedElement: [{ type: Input, args: ['abpVisibility',] }],
-        mutationObserverEnabled: [{ type: Input }]
+        focusedElement: [{ type: Input, args: ['abpVisibility',] }]
     };
     return VisibilityDirective;
 }());
 if (false) {
     /** @type {?} */
     VisibilityDirective.prototype.focusedElement;
-    /** @type {?} */
-    VisibilityDirective.prototype.mutationObserverEnabled;
     /** @type {?} */
     VisibilityDirective.prototype.completed$;
     /**
@@ -2749,31 +2710,35 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/enums/common.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @enum {string} */
 var eLayoutType = {
-    account: 'account',
-    application: 'application',
-    empty: 'empty',
+    account: "account",
+    application: "application",
+    empty: "empty",
     /**
      * @deprecated since version 0.9.0
      */
-    setting: 'setting',
+    setting: "setting",
 };
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/enums/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/guards/auth.guard.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var AuthGuard = /** @class */ (function () {
@@ -2827,6 +2792,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/guards/permission.guard.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var PermissionGuard = /** @class */ (function () {
@@ -2834,18 +2800,35 @@ var PermissionGuard = /** @class */ (function () {
         this.store = store;
     }
     /**
-     * @param {?} __0
+     * @param {?} route
+     * @param {?} state
      * @return {?}
      */
     PermissionGuard.prototype.canActivate = /**
-     * @param {?} __0
+     * @param {?} route
+     * @param {?} state
      * @return {?}
      */
-    function (_a) {
+    function (route, state) {
         var _this = this;
-        var data = _a.data;
         /** @type {?} */
-        var resource = (/** @type {?} */ (data.requiredPolicy));
+        var resource = snq((/**
+         * @return {?}
+         */
+        function () { return route.data.routes.requiredPolicy; })) || snq((/**
+         * @return {?}
+         */
+        function () { return (/** @type {?} */ (route.data.requiredPolicy)); }));
+        if (!resource) {
+            resource = snq((/**
+             * @return {?}
+             */
+            function () { return route.routeConfig.children.find((/**
+             * @param {?} child
+             * @return {?}
+             */
+            function (child) { return state.url.indexOf(child.path) > -1; })).data.requiredPolicy; }));
+        }
         return this.store.select(ConfigState.getGrantedPolicy(resource)).pipe(tap((/**
          * @param {?} access
          * @return {?}
@@ -2878,11 +2861,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/guards/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/interceptors/api.interceptor.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApiInterceptor = /** @class */ (function () {
@@ -2954,11 +2939,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/interceptors/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/application-configuration.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ApplicationConfiguration;
@@ -3055,6 +3042,7 @@ var ApplicationConfiguration;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/common.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ABP;
@@ -3152,6 +3140,7 @@ var ABP;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/config.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Config;
@@ -3213,6 +3202,7 @@ var Config;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/rest.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Rest;
@@ -3256,6 +3246,7 @@ var Rest;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/session.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Session;
@@ -3275,6 +3266,7 @@ var Session;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/profile.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var Profile;
@@ -3320,11 +3312,13 @@ var Profile;
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/models/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/pipes/localization.pipe.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LocalizationPipe = /** @class */ (function () {
@@ -3355,6 +3349,7 @@ var LocalizationPipe = /** @class */ (function () {
         function (acc, val) { return (Array.isArray(val) ? __spread(acc, val) : __spread(acc, [val])); }), []))));
     };
     LocalizationPipe.decorators = [
+        { type: Injectable },
         { type: Pipe, args: [{
                     name: 'abpLocalization',
                 },] }
@@ -3375,11 +3370,107 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/pipes/sort.pipe.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+var SortPipe = /** @class */ (function () {
+    function SortPipe() {
+    }
+    /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */
+    SortPipe.prototype.transform = /**
+     * @param {?} value
+     * @param {?=} sortOrder
+     * @param {?=} sortKey
+     * @return {?}
+     */
+    function (value, sortOrder, sortKey) {
+        if (sortOrder === void 0) { sortOrder = 'asc'; }
+        sortOrder = sortOrder && ((/** @type {?} */ (sortOrder.toLowerCase())));
+        if (!value || (sortOrder !== 'asc' && sortOrder !== 'desc'))
+            return value;
+        /** @type {?} */
+        var numberArray = [];
+        /** @type {?} */
+        var stringArray = [];
+        if (!sortKey) {
+            numberArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item === 'number'; })).sort();
+            stringArray = value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item === 'string'; })).sort();
+        }
+        else {
+            numberArray = value
+                .filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item[sortKey] === 'number'; }))
+                .sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function (a, b) { return a[sortKey] - b[sortKey]; }));
+            stringArray = value
+                .filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            function (item) { return typeof item[sortKey] === 'string'; }))
+                .sort((/**
+             * @param {?} a
+             * @param {?} b
+             * @return {?}
+             */
+            function (a, b) {
+                if (a[sortKey] < b[sortKey])
+                    return -1;
+                else if (a[sortKey] > b[sortKey])
+                    return 1;
+                else
+                    return 0;
+            }));
+        }
+        /** @type {?} */
+        var sorted = __spread(numberArray, stringArray, value.filter((/**
+         * @param {?} item
+         * @return {?}
+         */
+        function (item) {
+            return typeof (sortKey ? item[sortKey] : item) !== 'number' &&
+                typeof (sortKey ? item[sortKey] : item) !== 'string';
+        })));
+        return sortOrder === 'asc' ? sorted : sorted.reverse();
+    };
+    SortPipe.decorators = [
+        { type: Injectable },
+        { type: Pipe, args: [{
+                    name: 'abpSort',
+                },] }
+    ];
+    return SortPipe;
+}());
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/pipes/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/plugins/config.plugin.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /** @type {?} */
@@ -3575,11 +3666,13 @@ function flatRoutes(routes) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/plugins/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/config-state.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ConfigStateService = /** @class */ (function () {
@@ -3746,6 +3839,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/lazy-load.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LazyLoadService = /** @class */ (function () {
@@ -3772,7 +3866,7 @@ var LazyLoadService = /** @class */ (function () {
         var _this = this;
         if (content === void 0) { content = ''; }
         if (targetQuery === void 0) { targetQuery = 'body'; }
-        if (position === void 0) { position = 'afterend'; }
+        if (position === void 0) { position = 'beforeend'; }
         if (!urlOrUrls && !content) {
             return throwError('Should pass url or content');
         }
@@ -3853,6 +3947,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/profile-state.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ProfileStateService = /** @class */ (function () {
@@ -3890,6 +3985,7 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/session-state.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var SessionStateService = /** @class */ (function () {
@@ -3936,11 +4032,13 @@ if (false) {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/tokens/common.token.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 /**
@@ -3964,16 +4062,17 @@ var CONFIG = new InjectionToken('CONFIG');
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/tokens/index.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/debounce.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var InputEventDebounceDirective = /** @class */ (function () {
-    function InputEventDebounceDirective(renderer, el) {
-        this.renderer = renderer;
+    function InputEventDebounceDirective(el) {
         this.el = el;
         this.debounce = 300;
         this.debounceEvent = new EventEmitter();
@@ -3996,15 +4095,21 @@ var InputEventDebounceDirective = /** @class */ (function () {
             _this.debounceEvent.emit(event);
         }));
     };
+    /**
+     * @return {?}
+     */
+    InputEventDebounceDirective.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
     InputEventDebounceDirective.decorators = [
         { type: Directive, args: [{
                     // tslint:disable-next-line: directive-selector
-                    selector: '[input.debounce]'
+                    selector: '[input.debounce]',
                 },] }
     ];
     /** @nocollapse */
     InputEventDebounceDirective.ctorParameters = function () { return [
-        { type: Renderer2 },
         { type: ElementRef }
     ]; };
     InputEventDebounceDirective.propDecorators = {
@@ -4022,21 +4127,16 @@ if (false) {
      * @type {?}
      * @private
      */
-    InputEventDebounceDirective.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
     InputEventDebounceDirective.prototype.el;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/directives/stop-propagation.directive.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var ClickEventStopPropagationDirective = /** @class */ (function () {
-    function ClickEventStopPropagationDirective(renderer, el) {
-        this.renderer = renderer;
+    function ClickEventStopPropagationDirective(el) {
         this.el = el;
         this.stopPropEvent = new EventEmitter();
     }
@@ -4059,15 +4159,21 @@ var ClickEventStopPropagationDirective = /** @class */ (function () {
             _this.stopPropEvent.emit(event);
         }));
     };
+    /**
+     * @return {?}
+     */
+    ClickEventStopPropagationDirective.prototype.ngOnDestroy = /**
+     * @return {?}
+     */
+    function () { };
     ClickEventStopPropagationDirective.decorators = [
         { type: Directive, args: [{
                     // tslint:disable-next-line: directive-selector
-                    selector: '[click.stop]'
+                    selector: '[click.stop]',
                 },] }
     ];
     /** @nocollapse */
     ClickEventStopPropagationDirective.ctorParameters = function () { return [
-        { type: Renderer2 },
         { type: ElementRef }
     ]; };
     ClickEventStopPropagationDirective.propDecorators = {
@@ -4082,16 +4188,12 @@ if (false) {
      * @type {?}
      * @private
      */
-    ClickEventStopPropagationDirective.prototype.renderer;
-    /**
-     * @type {?}
-     * @private
-     */
     ClickEventStopPropagationDirective.prototype.el;
 }
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/providers/locale.provider.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var LocaleId = /** @class */ (function (_super) {
@@ -4138,6 +4240,22 @@ var LocaleProvider = {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/utils/date-extensions.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+Date.prototype.toLocalISOString = (/**
+ * @this {?}
+ * @return {?}
+ */
+function () {
+    /** @type {?} */
+    var timezoneOffset = this.getTimezoneOffset();
+    return new Date(this.getTime() - timezoneOffset * 60000).toISOString();
+});
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/core.module.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 var CoreModule = /** @class */ (function () {
@@ -4190,8 +4308,9 @@ var CoreModule = /** @class */ (function () {
         { type: NgModule, args: [{
                     imports: [
                         NgxsModule.forFeature([ProfileState, SessionState, ConfigState]),
-                        NgxsStoragePluginModule.forRoot({ key: 'SessionState' }),
                         NgxsRouterPluginModule.forRoot(),
+                        NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
+                        OAuthModule.forRoot(),
                         CommonModule,
                         HttpClientModule,
                         FormsModule,
@@ -4205,7 +4324,6 @@ var CoreModule = /** @class */ (function () {
                         EllipsisDirective,
                         ForDirective,
                         FormSubmitDirective,
-                        TableSortDirective,
                         LocalizationPipe,
                         SortPipe,
                         PermissionDirective,
@@ -4228,7 +4346,6 @@ var CoreModule = /** @class */ (function () {
                         FormSubmitDirective,
                         LocalizationPipe,
                         SortPipe,
-                        TableSortDirective,
                         PermissionDirective,
                         VisibilityDirective,
                         InputEventDebounceDirective,
@@ -4245,13 +4362,15 @@ var CoreModule = /** @class */ (function () {
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: public-api.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
 /**
  * @fileoverview added by tsickle
+ * Generated from: abp-ng.core.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 
-export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigState, ConfigStateService, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationPipe, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, ProfileStateService, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SessionStateService, SetLanguage, SetTenant, SortPipe, StartLoader, StopLoader, TableSortDirective, UpdateProfile, VisibilityDirective, addAbpRoutes, configFactory, environmentFactory, getAbpRoutes, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, VisibilityDirective as ɵba, InputEventDebounceDirective as ɵbb, ClickEventStopPropagationDirective as ɵbc, AbstractNgModelComponent as ɵbd, LocaleId as ɵbe, LocaleProvider as ɵbf, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbg, ConfigPlugin as ɵbh, ApiInterceptor as ɵbi, getInitialData as ɵbj, localeInitializer as ɵbk, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, TableSortDirective as ɵw, SortPipe as ɵx, LocalizationPipe as ɵy, PermissionDirective as ɵz };
+export { AbstractNgModelComponent, ApiInterceptor, ApplicationConfigurationService, AuthGuard, AutofocusDirective, CONFIG, ChangePassword, ConfigPlugin, ConfigState, ConfigStateService, CoreModule, DynamicLayoutComponent, ENVIRONMENT, EllipsisDirective, ForDirective, FormSubmitDirective, GetAppConfiguration, GetProfile, LazyLoadService, LocalizationPipe, LocalizationService, NGXS_CONFIG_PLUGIN_OPTIONS, PatchRouteByName, PermissionDirective, PermissionGuard, ProfileService, ProfileState, ProfileStateService, Rest, RestOccurError, RestService, RouterOutletComponent, SessionState, SessionStateService, SetLanguage, SetTenant, SortPipe, StartLoader, StopLoader, UpdateProfile, VisibilityDirective, addAbpRoutes, configFactory, environmentFactory, getAbpRoutes, getInitialData, localeInitializer, noop, organizeRoutes, registerLocale, setChildRoute, sortRoutes, takeUntilDestroy, uuid, ProfileState as ɵa, ProfileService as ɵb, InputEventDebounceDirective as ɵba, ClickEventStopPropagationDirective as ɵbb, AbstractNgModelComponent as ɵbc, LocaleId as ɵbd, LocaleProvider as ɵbe, NGXS_CONFIG_PLUGIN_OPTIONS as ɵbf, ConfigPlugin as ɵbg, ApiInterceptor as ɵbh, getInitialData as ɵbi, localeInitializer as ɵbj, RestService as ɵc, GetProfile as ɵd, UpdateProfile as ɵe, ChangePassword as ɵf, SessionState as ɵh, LocalizationService as ɵi, SetLanguage as ɵj, SetTenant as ɵk, ConfigState as ɵm, ApplicationConfigurationService as ɵn, PatchRouteByName as ɵo, GetAppConfiguration as ɵp, RouterOutletComponent as ɵq, DynamicLayoutComponent as ɵr, AutofocusDirective as ɵs, EllipsisDirective as ɵt, ForDirective as ɵu, FormSubmitDirective as ɵv, LocalizationPipe as ɵw, SortPipe as ɵx, PermissionDirective as ɵy, VisibilityDirective as ɵz };
 //# sourceMappingURL=abp-ng.core.js.map

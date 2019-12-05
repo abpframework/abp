@@ -10,6 +10,7 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     private renderer;
     providerName: string;
     providerKey: string;
+    hideBadges: boolean;
     protected _visible: any;
     visible: boolean;
     readonly visibleChange: EventEmitter<boolean>;
@@ -25,7 +26,7 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     constructor(store: Store, renderer: Renderer2);
     ngOnInit(): void;
     getChecked(name: string): boolean;
-    isGrantedByRole(grantedProviders: PermissionManagement.GrantedProvider[]): boolean;
+    isGrantedByOtherProviderName(grantedProviders: PermissionManagement.GrantedProvider[]): boolean;
     onClickCheckbox(clickedPermission: PermissionManagement.Permission, value: any): void;
     setTabCheckboxState(): void;
     setGrantCheckboxState(): void;

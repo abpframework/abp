@@ -1,82 +1,70 @@
 /**
  * @fileoverview added by tsickle
+ * Generated from: lib/services/permission-management.service.ts
  * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
  */
 import { Injectable } from '@angular/core';
 import { RestService } from '@abp/ng.core';
-import * as i0 from '@angular/core';
-import * as i1 from '@abp/ng.core';
-var PermissionManagementService = /** @class */ (function() {
-  function PermissionManagementService(rest) {
-    this.rest = rest;
-  }
-  /**
-   * @param {?} params
-   * @return {?}
-   */
-  PermissionManagementService.prototype.getPermissions
-  /**
-   * @param {?} params
-   * @return {?}
-   */ = function(params) {
-    /** @type {?} */
-    var request = {
-      method: 'GET',
-      url: '/api/abp/permissions',
-      params: params,
+import * as i0 from "@angular/core";
+import * as i1 from "@abp/ng.core";
+var PermissionManagementService = /** @class */ (function () {
+    function PermissionManagementService(rest) {
+        this.rest = rest;
+    }
+    /**
+     * @param {?} params
+     * @return {?}
+     */
+    PermissionManagementService.prototype.getPermissions = /**
+     * @param {?} params
+     * @return {?}
+     */
+    function (params) {
+        /** @type {?} */
+        var request = {
+            method: 'GET',
+            url: '/api/abp/permissions',
+            params: params,
+        };
+        return this.rest.request(request);
     };
-    return this.rest.request(request);
-  };
-  /**
-   * @param {?} __0
-   * @return {?}
-   */
-  PermissionManagementService.prototype.updatePermissions
-  /**
-   * @param {?} __0
-   * @return {?}
-   */ = function(_a) {
-    var permissions = _a.permissions,
-      providerKey = _a.providerKey,
-      providerName = _a.providerName;
-    /** @type {?} */
-    var request = {
-      method: 'PUT',
-      url: '/api/abp/permissions',
-      body: { permissions: permissions },
-      params: { providerKey: providerKey, providerName: providerName },
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    PermissionManagementService.prototype.updatePermissions = /**
+     * @param {?} __0
+     * @return {?}
+     */
+    function (_a) {
+        var permissions = _a.permissions, providerKey = _a.providerKey, providerName = _a.providerName;
+        /** @type {?} */
+        var request = {
+            method: 'PUT',
+            url: '/api/abp/permissions',
+            body: { permissions: permissions },
+            params: { providerKey: providerKey, providerName: providerName },
+        };
+        return this.rest.request(request);
     };
-    return this.rest.request(request);
-  };
-  PermissionManagementService.decorators = [
-    {
-      type: Injectable,
-      args: [
-        {
-          providedIn: 'root',
-        },
-      ],
-    },
-  ];
-  /** @nocollapse */
-  PermissionManagementService.ctorParameters = function() {
-    return [{ type: RestService }];
-  };
-  /** @nocollapse */ PermissionManagementService.ngInjectableDef = i0.ɵɵdefineInjectable({
-    factory: function PermissionManagementService_Factory() {
-      return new PermissionManagementService(i0.ɵɵinject(i1.RestService));
-    },
-    token: PermissionManagementService,
-    providedIn: 'root',
-  });
-  return PermissionManagementService;
-})();
+    PermissionManagementService.decorators = [
+        { type: Injectable, args: [{
+                    providedIn: 'root',
+                },] }
+    ];
+    /** @nocollapse */
+    PermissionManagementService.ctorParameters = function () { return [
+        { type: RestService }
+    ]; };
+    /** @nocollapse */ PermissionManagementService.ngInjectableDef = i0.ɵɵdefineInjectable({ factory: function PermissionManagementService_Factory() { return new PermissionManagementService(i0.ɵɵinject(i1.RestService)); }, token: PermissionManagementService, providedIn: "root" });
+    return PermissionManagementService;
+}());
 export { PermissionManagementService };
 if (false) {
-  /**
-   * @type {?}
-   * @private
-   */
-  PermissionManagementService.prototype.rest;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionManagementService.prototype.rest;
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGVybWlzc2lvbi1tYW5hZ2VtZW50LnNlcnZpY2UuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AYWJwL25nLnBlcm1pc3Npb24tbWFuYWdlbWVudC8iLCJzb3VyY2VzIjpbImxpYi9zZXJ2aWNlcy9wZXJtaXNzaW9uLW1hbmFnZW1lbnQuc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsT0FBTyxFQUFFLFVBQVUsRUFBRSxNQUFNLGVBQWUsQ0FBQztBQUMzQyxPQUFPLEVBQUUsV0FBVyxFQUFRLE1BQU0sY0FBYyxDQUFDOzs7QUFJakQ7SUFJRSxxQ0FBb0IsSUFBaUI7UUFBakIsU0FBSSxHQUFKLElBQUksQ0FBYTtJQUFHLENBQUM7Ozs7O0lBRXpDLG9EQUFjOzs7O0lBQWQsVUFBZSxNQUE0Qzs7WUFDbkQsT0FBTyxHQUF1RDtZQUNsRSxNQUFNLEVBQUUsS0FBSztZQUNiLEdBQUcsRUFBRSxzQkFBc0I7WUFDM0IsTUFBTSxRQUFBO1NBQ1A7UUFFRCxPQUFPLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUFzRSxPQUFPLENBQUMsQ0FBQztJQUN6RyxDQUFDOzs7OztJQUVELHVEQUFpQjs7OztJQUFqQixVQUFrQixFQUkwRDtZQUgxRSw0QkFBVyxFQUNYLDRCQUFXLEVBQ1gsOEJBQVk7O1lBRU4sT0FBTyxHQUFxRDtZQUNoRSxNQUFNLEVBQUUsS0FBSztZQUNiLEdBQUcsRUFBRSxzQkFBc0I7WUFDM0IsSUFBSSxFQUFFLEVBQUUsV0FBVyxhQUFBLEVBQUU7WUFDckIsTUFBTSxFQUFFLEVBQUUsV0FBVyxhQUFBLEVBQUUsWUFBWSxjQUFBLEVBQUU7U0FDdEM7UUFFRCxPQUFPLElBQUksQ0FBQyxJQUFJLENBQUMsT0FBTyxDQUEyQyxPQUFPLENBQUMsQ0FBQztJQUM5RSxDQUFDOztnQkE3QkYsVUFBVSxTQUFDO29CQUNWLFVBQVUsRUFBRSxNQUFNO2lCQUNuQjs7OztnQkFOUSxXQUFXOzs7c0NBRHBCO0NBbUNDLEFBOUJELElBOEJDO1NBM0JZLDJCQUEyQjs7Ozs7O0lBQzFCLDJDQUF5QiIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IEluamVjdGFibGUgfSBmcm9tICdAYW5ndWxhci9jb3JlJztcbmltcG9ydCB7IFJlc3RTZXJ2aWNlLCBSZXN0IH0gZnJvbSAnQGFicC9uZy5jb3JlJztcbmltcG9ydCB7IE9ic2VydmFibGUgfSBmcm9tICdyeGpzJztcbmltcG9ydCB7IFBlcm1pc3Npb25NYW5hZ2VtZW50IH0gZnJvbSAnLi4vbW9kZWxzL3Blcm1pc3Npb24tbWFuYWdlbWVudCc7XG5cbkBJbmplY3RhYmxlKHtcbiAgcHJvdmlkZWRJbjogJ3Jvb3QnLFxufSlcbmV4cG9ydCBjbGFzcyBQZXJtaXNzaW9uTWFuYWdlbWVudFNlcnZpY2Uge1xuICBjb25zdHJ1Y3Rvcihwcml2YXRlIHJlc3Q6IFJlc3RTZXJ2aWNlKSB7fVxuXG4gIGdldFBlcm1pc3Npb25zKHBhcmFtczogUGVybWlzc2lvbk1hbmFnZW1lbnQuR3JhbnRlZFByb3ZpZGVyKTogT2JzZXJ2YWJsZTxQZXJtaXNzaW9uTWFuYWdlbWVudC5SZXNwb25zZT4ge1xuICAgIGNvbnN0IHJlcXVlc3Q6IFJlc3QuUmVxdWVzdDxQZXJtaXNzaW9uTWFuYWdlbWVudC5HcmFudGVkUHJvdmlkZXI+ID0ge1xuICAgICAgbWV0aG9kOiAnR0VUJyxcbiAgICAgIHVybDogJy9hcGkvYWJwL3Blcm1pc3Npb25zJyxcbiAgICAgIHBhcmFtcyxcbiAgICB9O1xuXG4gICAgcmV0dXJuIHRoaXMucmVzdC5yZXF1ZXN0PFBlcm1pc3Npb25NYW5hZ2VtZW50LkdyYW50ZWRQcm92aWRlciwgUGVybWlzc2lvbk1hbmFnZW1lbnQuUmVzcG9uc2U+KHJlcXVlc3QpO1xuICB9XG5cbiAgdXBkYXRlUGVybWlzc2lvbnMoe1xuICAgIHBlcm1pc3Npb25zLFxuICAgIHByb3ZpZGVyS2V5LFxuICAgIHByb3ZpZGVyTmFtZSxcbiAgfTogUGVybWlzc2lvbk1hbmFnZW1lbnQuR3JhbnRlZFByb3ZpZGVyICYgUGVybWlzc2lvbk1hbmFnZW1lbnQuVXBkYXRlUmVxdWVzdCk6IE9ic2VydmFibGU8bnVsbD4ge1xuICAgIGNvbnN0IHJlcXVlc3Q6IFJlc3QuUmVxdWVzdDxQZXJtaXNzaW9uTWFuYWdlbWVudC5VcGRhdGVSZXF1ZXN0PiA9IHtcbiAgICAgIG1ldGhvZDogJ1BVVCcsXG4gICAgICB1cmw6ICcvYXBpL2FicC9wZXJtaXNzaW9ucycsXG4gICAgICBib2R5OiB7IHBlcm1pc3Npb25zIH0sXG4gICAgICBwYXJhbXM6IHsgcHJvdmlkZXJLZXksIHByb3ZpZGVyTmFtZSB9LFxuICAgIH07XG5cbiAgICByZXR1cm4gdGhpcy5yZXN0LnJlcXVlc3Q8UGVybWlzc2lvbk1hbmFnZW1lbnQuVXBkYXRlUmVxdWVzdCwgbnVsbD4ocmVxdWVzdCk7XG4gIH1cbn1cbiJdfQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicGVybWlzc2lvbi1tYW5hZ2VtZW50LnNlcnZpY2UuanMiLCJzb3VyY2VSb290Ijoibmc6Ly9AYWJwL25nLnBlcm1pc3Npb24tbWFuYWdlbWVudC8iLCJzb3VyY2VzIjpbImxpYi9zZXJ2aWNlcy9wZXJtaXNzaW9uLW1hbmFnZW1lbnQuc2VydmljZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7OztBQUFBLE9BQU8sRUFBRSxVQUFVLEVBQUUsTUFBTSxlQUFlLENBQUM7QUFDM0MsT0FBTyxFQUFFLFdBQVcsRUFBUSxNQUFNLGNBQWMsQ0FBQzs7O0FBSWpEO0lBSUUscUNBQW9CLElBQWlCO1FBQWpCLFNBQUksR0FBSixJQUFJLENBQWE7SUFBRyxDQUFDOzs7OztJQUV6QyxvREFBYzs7OztJQUFkLFVBQWUsTUFBNEM7O1lBQ25ELE9BQU8sR0FBdUQ7WUFDbEUsTUFBTSxFQUFFLEtBQUs7WUFDYixHQUFHLEVBQUUsc0JBQXNCO1lBQzNCLE1BQU0sUUFBQTtTQUNQO1FBRUQsT0FBTyxJQUFJLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBc0UsT0FBTyxDQUFDLENBQUM7SUFDekcsQ0FBQzs7Ozs7SUFFRCx1REFBaUI7Ozs7SUFBakIsVUFBa0IsRUFJMEQ7WUFIMUUsNEJBQVcsRUFDWCw0QkFBVyxFQUNYLDhCQUFZOztZQUVOLE9BQU8sR0FBcUQ7WUFDaEUsTUFBTSxFQUFFLEtBQUs7WUFDYixHQUFHLEVBQUUsc0JBQXNCO1lBQzNCLElBQUksRUFBRSxFQUFFLFdBQVcsYUFBQSxFQUFFO1lBQ3JCLE1BQU0sRUFBRSxFQUFFLFdBQVcsYUFBQSxFQUFFLFlBQVksY0FBQSxFQUFFO1NBQ3RDO1FBRUQsT0FBTyxJQUFJLENBQUMsSUFBSSxDQUFDLE9BQU8sQ0FBMkMsT0FBTyxDQUFDLENBQUM7SUFDOUUsQ0FBQzs7Z0JBN0JGLFVBQVUsU0FBQztvQkFDVixVQUFVLEVBQUUsTUFBTTtpQkFDbkI7Ozs7Z0JBTlEsV0FBVzs7O3NDQURwQjtDQW1DQyxBQTlCRCxJQThCQztTQTNCWSwyQkFBMkI7Ozs7OztJQUMxQiwyQ0FBeUIiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBJbmplY3RhYmxlIH0gZnJvbSAnQGFuZ3VsYXIvY29yZSc7XG5pbXBvcnQgeyBSZXN0U2VydmljZSwgUmVzdCB9IGZyb20gJ0BhYnAvbmcuY29yZSc7XG5pbXBvcnQgeyBPYnNlcnZhYmxlIH0gZnJvbSAncnhqcyc7XG5pbXBvcnQgeyBQZXJtaXNzaW9uTWFuYWdlbWVudCB9IGZyb20gJy4uL21vZGVscy9wZXJtaXNzaW9uLW1hbmFnZW1lbnQnO1xuXG5ASW5qZWN0YWJsZSh7XG4gIHByb3ZpZGVkSW46ICdyb290Jyxcbn0pXG5leHBvcnQgY2xhc3MgUGVybWlzc2lvbk1hbmFnZW1lbnRTZXJ2aWNlIHtcbiAgY29uc3RydWN0b3IocHJpdmF0ZSByZXN0OiBSZXN0U2VydmljZSkge31cblxuICBnZXRQZXJtaXNzaW9ucyhwYXJhbXM6IFBlcm1pc3Npb25NYW5hZ2VtZW50LkdyYW50ZWRQcm92aWRlcik6IE9ic2VydmFibGU8UGVybWlzc2lvbk1hbmFnZW1lbnQuUmVzcG9uc2U+IHtcbiAgICBjb25zdCByZXF1ZXN0OiBSZXN0LlJlcXVlc3Q8UGVybWlzc2lvbk1hbmFnZW1lbnQuR3JhbnRlZFByb3ZpZGVyPiA9IHtcbiAgICAgIG1ldGhvZDogJ0dFVCcsXG4gICAgICB1cmw6ICcvYXBpL2FicC9wZXJtaXNzaW9ucycsXG4gICAgICBwYXJhbXMsXG4gICAgfTtcblxuICAgIHJldHVybiB0aGlzLnJlc3QucmVxdWVzdDxQZXJtaXNzaW9uTWFuYWdlbWVudC5HcmFudGVkUHJvdmlkZXIsIFBlcm1pc3Npb25NYW5hZ2VtZW50LlJlc3BvbnNlPihyZXF1ZXN0KTtcbiAgfVxuXG4gIHVwZGF0ZVBlcm1pc3Npb25zKHtcbiAgICBwZXJtaXNzaW9ucyxcbiAgICBwcm92aWRlcktleSxcbiAgICBwcm92aWRlck5hbWUsXG4gIH06IFBlcm1pc3Npb25NYW5hZ2VtZW50LkdyYW50ZWRQcm92aWRlciAmIFBlcm1pc3Npb25NYW5hZ2VtZW50LlVwZGF0ZVJlcXVlc3QpOiBPYnNlcnZhYmxlPG51bGw+IHtcbiAgICBjb25zdCByZXF1ZXN0OiBSZXN0LlJlcXVlc3Q8UGVybWlzc2lvbk1hbmFnZW1lbnQuVXBkYXRlUmVxdWVzdD4gPSB7XG4gICAgICBtZXRob2Q6ICdQVVQnLFxuICAgICAgdXJsOiAnL2FwaS9hYnAvcGVybWlzc2lvbnMnLFxuICAgICAgYm9keTogeyBwZXJtaXNzaW9ucyB9LFxuICAgICAgcGFyYW1zOiB7IHByb3ZpZGVyS2V5LCBwcm92aWRlck5hbWUgfSxcbiAgICB9O1xuXG4gICAgcmV0dXJuIHRoaXMucmVzdC5yZXF1ZXN0PFBlcm1pc3Npb25NYW5hZ2VtZW50LlVwZGF0ZVJlcXVlc3QsIG51bGw+KHJlcXVlc3QpO1xuICB9XG59XG4iXX0=

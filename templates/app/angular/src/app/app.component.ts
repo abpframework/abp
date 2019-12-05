@@ -24,6 +24,7 @@ export class AppComponent implements OnInit {
         'style',
         null,
         'head',
+        'afterbegin',
       )
       .subscribe();
   }

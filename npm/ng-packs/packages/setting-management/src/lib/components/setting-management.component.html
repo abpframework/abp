@@ -19,7 +19,7 @@
             <li
               *abpFor="let setting of settings; trackBy: trackByFn"
               (click)="selected = setting"
-              class="nav-item"
+              class="nav-item pointer"
               [abpPermission]="setting.requiredPolicy"
             >
               <a

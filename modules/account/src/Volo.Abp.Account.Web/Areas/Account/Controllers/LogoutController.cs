@@ -17,9 +17,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         }
 
         //todo@alper: this method can be moved to AccountController like "account/logout"
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
+
+            if (returnUrl != null)
+            {
+                return LocalRedirect(returnUrl);
+            }
 
             return RedirectToPage("/Account/Login");
         }

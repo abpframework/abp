@@ -1,4 +1,4 @@
-(function () {
+(function (self, document) {
 
 	if (typeof self === 'undefined' || !self.Prism || !self.document || !document.createRange) {
 		return;
@@ -96,4 +96,4 @@
 			env.highlightedCode = env.element.innerHTML;
 		}
 	});
-}());
+}(self, document));

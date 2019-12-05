@@ -1,5 +1,9 @@
 import { Injector, ModuleWithProviders } from '@angular/core';
-export declare function appendScript(injector: Injector): () => Promise<void[]>;
+import { ErrorHandler } from './handlers/error.handler';
+import { RootParams } from './models/common';
+export declare function appendScript(injector: Injector): () => Promise<void>;
 export declare class ThemeSharedModule {
-    static forRoot(): ModuleWithProviders;
+    private errorHandler;
+    constructor(errorHandler: ErrorHandler);
+    static forRoot(options?: RootParams): ModuleWithProviders;
 }
