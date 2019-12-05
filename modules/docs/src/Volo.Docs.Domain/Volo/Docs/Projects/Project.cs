@@ -61,9 +61,9 @@ namespace Volo.Docs.Projects
             [NotNull] string shortName, 
             [NotNull] string documentStoreType,
             [NotNull] string format,
-            [NotNull] string defaultDocumentName, 
-            [NotNull] string navigationDocumentName, 
-            [NotNull] string parametersDocumentName)
+            [NotNull] string defaultDocumentName = "Index", 
+            [NotNull] string navigationDocumentName = "docs-nav.json", 
+            [NotNull] string parametersDocumentName = "docs-params.json")
         {
             Id = id;
 
