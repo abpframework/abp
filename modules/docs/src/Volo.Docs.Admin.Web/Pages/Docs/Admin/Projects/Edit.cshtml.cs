@@ -96,6 +96,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
             [StringLength(ProjectConsts.MaxNavigationDocumentNameLength)]
             public string NavigationDocumentName { get; set; }
 
+            [StringLength(ProjectConsts.MaxParametersDocumentNameLength)]
+            public string ParametersDocumentName { get; set; }
+
             [StringLength(ProjectConsts.MaxVersionNameLength)]
             public string MinimumVersion { get; set; }
 

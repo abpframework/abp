@@ -2,7 +2,7 @@
 
     $(function () {
         var initNavigationFilter = function (navigationContainerId) {
-         
+
             var $navigation = $("#" + navigationContainerId);
 
 
@@ -102,11 +102,95 @@
             );
         };
 
+        var initSections = function () {
+            var clearQueryString = function () {
+                var uri = window.location.href.toString();
+
+                if (uri.indexOf("?") > 0) {
+                    uri = uri.substring(0, uri.indexOf("?"));
+                }
+
+                window.history.replaceState({}, document.title, uri);
+            };
+
+            var setQueryString = function () {
+                clearQueryString();
+
+                var uri = window.location.href.toString();
+
+                var comboboxes = $(".doc-section-combobox");
+
+                if (comboboxes.length < 1) {
+                    return;
+                }
+
+                var new_uri = uri + "?";
+
+                for (var i = 0; i < comboboxes.length; i++) {
+                    var key = $(comboboxes[i]).data('key');
+                    var value = comboboxes[i].value;
+
+                    new_uri += key + "=" + value;
+
+                    if (i !== comboboxes.length - 1) {
+                        new_uri += "&";
+                    }
+                }
+
+                window.history.replaceState({}, document.title, new_uri);
+            };
+
+            var setCookies = function () {
+                var cookie = abp.utils.getCookieValue("AbpIoDocsPreferences");
+
+                if (!cookie || cookie == null || cookie === null) {
+                    cookie = "";
+                }
+                var keyValues = cookie.split("|");
+
+                var comboboxes = $(".doc-section-combobox");
+
+                for (var i = 0; i < comboboxes.length; i++) {
+                    var key = $(comboboxes[i]).data('key');
+                    var value = comboboxes[i].value;
+
+                    var changed = false;
+                    var keyValueslength = keyValues.length;
+                    for (var k = 0; k < keyValueslength; k++) {
+                        var splitted = keyValues[k].split("=");
+
+                        if (splitted.length > 0 && splitted[0] === key) {
+                            keyValues[k] = key + "=" + value;
+                            console.log(keyValues[k]);
+                            changed = true;
+                        }
+                    }
+
+                    if (!changed) {
+                        keyValues.push(key + "=" + value);
+                    }
+                }
+
+                abp.utils.setCookieValue("AbpIoDocsPreferences", keyValues.join('|'));
+            };
+
+            $(".doc-section-combobox").change(function () {
+                setCookies();
+                clearQueryString();
+                location.reload();
+            });
+
+            setQueryString();
+        };
+
+
         initNavigationFilter("sidebar-scroll");
 
         initAnchorTags(".docs-page .docs-body");
 
         initSocialShareLinks();
+
+        initSections();
 
     });
 

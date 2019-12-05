@@ -27,7 +27,8 @@ namespace Volo.Docs
                 GithubDocumentStore.Type,
                 "md",
                 "index",
-                "docs-nav.json"
+                "docs-nav.json",
+                "docs-params.json"
             );
 
             project
