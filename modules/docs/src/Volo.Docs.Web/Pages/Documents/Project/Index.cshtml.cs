@@ -409,7 +409,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             UserPreferences = new DocumentRenderParameters();
 
-            var cookie = Request.Cookies["AbpIoDocsPreferences"];
+            var cookie = Request.Cookies["AbpDocsPreferences"];
 
             if (cookie != null)
             {

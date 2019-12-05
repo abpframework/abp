@@ -141,7 +141,7 @@
             };
 
             var setCookies = function () {
-                var cookie = abp.utils.getCookieValue("AbpIoDocsPreferences");
+                var cookie = abp.utils.getCookieValue("AbpDocsPreferences");
 
                 if (!cookie || cookie == null || cookie === null) {
                     cookie = "";
@@ -171,7 +171,7 @@
                     }
                 }
 
-                abp.utils.setCookieValue("AbpIoDocsPreferences", keyValues.join('|'));
+                abp.utils.setCookieValue("AbpDocsPreferences", keyValues.join('|'));
             };
 
             $(".doc-section-combobox").change(function () {
