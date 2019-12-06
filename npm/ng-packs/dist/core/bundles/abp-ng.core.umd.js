@@ -4339,7 +4339,7 @@
         function () {
             var _this = this;
             rxjs.fromEvent(this.el.nativeElement, 'click')
-                .pipe(core$1.takeUntilDestroy(this))
+                .pipe(takeUntilDestroy(this))
                 .subscribe((/**
              * @param {?} event
              * @return {?}

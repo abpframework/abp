@@ -269,7 +269,7 @@
         BreadcrumbComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-breadcrumb',
-                        template: "<ol *ngIf=\"show\" class=\"breadcrumb\">\n  <li class=\"breadcrumb-item\">\n    <a routerLink=\"/\"><i class=\"fa fa-home\"></i> </a>\n  </li>\n  <li\n    *ngFor=\"let segment of segments; let last = last\"\n    class=\"breadcrumb-item\"\n    [class.active]=\"last\"\n    aria-current=\"page\"\n  >\n    {{ segment | abpLocalization }}\n  </li>\n</ol>\n"
+                        template: "<ol *ngIf=\"show\" class=\"breadcrumb\">\r\n  <li class=\"breadcrumb-item\">\r\n    <a routerLink=\"/\"><i class=\"fa fa-home\"></i> </a>\r\n  </li>\r\n  <li\r\n    *ngFor=\"let segment of segments; let last = last\"\r\n    class=\"breadcrumb-item\"\r\n    [class.active]=\"last\"\r\n    aria-current=\"page\"\r\n  >\r\n    {{ segment | abpLocalization }}\r\n  </li>\r\n</ol>\r\n"
                     }] }
         ];
         /** @nocollapse */
@@ -309,32 +309,23 @@
             this.buttonType = 'button';
             this.loading = false;
             this.disabled = false;
-            /*
-               *
-               *
-               * @deprecated use abpClick instead
-               */
-            // tslint:disable-next-line: no-output-native
+            // tslint:disable
+            /**
+             * @deprecated use abpClick instead
+             */
             this.click = new core.EventEmitter();
-            /*
-               *
-               *
-               * @deprecated use abpFocus instead
-               */
+            /**
+             * @deprecated use abpFocus instead
+             */
             // tslint:disable-next-line: no-output-native
             this.focus = new core.EventEmitter();
-            /*
-               *
-               *
-               * @deprecated use abpBlur instead
-               */
-            // tslint:disable-next-line: no-output-native
+            /**
+             * @deprecated use abpBlur instead
+             */
             this.blur = new core.EventEmitter();
-            // tslint:disable-next-line: no-output-native
+            // tslint:enable
             this.abpClick = new core.EventEmitter();
-            // tslint:disable-next-line: no-output-native
             this.abpFocus = new core.EventEmitter();
-            // tslint:disable-next-line: no-output-native
             this.abpBlur = new core.EventEmitter();
         }
         Object.defineProperty(ButtonComponent.prototype, "icon", {
@@ -368,7 +359,6 @@
         ButtonComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-button',
-                        // tslint:disable-next-line: component-max-inline-declarations
                         template: "\n    <button\n      #button\n      [id]=\"buttonId\"\n      [attr.type]=\"buttonType\"\n      [ngClass]=\"buttonClass\"\n      [disabled]=\"loading || disabled\"\n      (click.stop)=\"click.next($event); abpClick.next($event)\"\n      (focus)=\"focus.next($event); abpFocus.next($event)\"\n      (blur)=\"blur.next($event); abpBlur.next($event)\"\n    >\n      <i [ngClass]=\"icon\" class=\"mr-1\"></i><ng-content></ng-content>\n    </button>\n  "
                     }] }
         ];
@@ -409,11 +399,20 @@
         ButtonComponent.prototype.disabled;
         /** @type {?} */
         ButtonComponent.prototype.attributes;
-        /** @type {?} */
+        /**
+         * @deprecated use abpClick instead
+         * @type {?}
+         */
         ButtonComponent.prototype.click;
-        /** @type {?} */
+        /**
+         * @deprecated use abpFocus instead
+         * @type {?}
+         */
         ButtonComponent.prototype.focus;
-        /** @type {?} */
+        /**
+         * @deprecated use abpBlur instead
+         * @type {?}
+         */
         ButtonComponent.prototype.blur;
         /** @type {?} */
         ButtonComponent.prototype.abpClick;
@@ -623,7 +622,7 @@
         ChartComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-chart',
-                        template: "<div\n  style=\"position:relative\"\n  [style.width]=\"responsive && !width ? null : width\"\n  [style.height]=\"responsive && !height ? null : height\"\n>\n  <canvas\n    [attr.width]=\"responsive && !width ? null : width\"\n    [attr.height]=\"responsive && !height ? null : height\"\n    (click)=\"onCanvasClick($event)\"\n  ></canvas>\n</div>\n"
+                        template: "<div\r\n  style=\"position:relative\"\r\n  [style.width]=\"responsive && !width ? null : width\"\r\n  [style.height]=\"responsive && !height ? null : height\"\r\n>\r\n  <canvas\r\n    [attr.width]=\"responsive && !width ? null : width\"\r\n    [attr.height]=\"responsive && !height ? null : height\"\r\n    (click)=\"onCanvasClick($event)\"\r\n  ></canvas>\r\n</div>\r\n"
                     }] }
         ];
         /** @nocollapse */
@@ -1046,7 +1045,7 @@
         HttpErrorWrapperComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-http-error-wrapper',
-                        template: "<div #container id=\"abp-http-error-container\" class=\"error\" [style.backgroundColor]=\"backgroundColor\">\n  <button *ngIf=\"!hideCloseIcon\" id=\"abp-close-button\" type=\"button\" class=\"close mr-2\" (click)=\"destroy()\">\n    <span aria-hidden=\"true\">&times;</span>\n  </button>\n\n  <div *ngIf=\"!customComponent\" class=\"row centered\">\n    <div class=\"col-md-12\">\n      <div class=\"error-template\">\n        <h1>{{ statusText }} {{ title | abpLocalization }}</h1>\n        <div class=\"error-details\">\n          {{ details | abpLocalization }}\n        </div>\n        <div class=\"error-actions\">\n          <a (click)=\"destroy()\" routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\n            ><span class=\"glyphicon glyphicon-home\"></span>\n            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}\n          </a>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>\n",
+                        template: "<div #container id=\"abp-http-error-container\" class=\"error\" [style.backgroundColor]=\"backgroundColor\">\r\n  <button *ngIf=\"!hideCloseIcon\" id=\"abp-close-button\" type=\"button\" class=\"close mr-2\" (click)=\"destroy()\">\r\n    <span aria-hidden=\"true\">&times;</span>\r\n  </button>\r\n\r\n  <div *ngIf=\"!customComponent\" class=\"row centered\">\r\n    <div class=\"col-md-12\">\r\n      <div class=\"error-template\">\r\n        <h1>{{ statusText }} {{ title | abpLocalization }}</h1>\r\n        <div class=\"error-details\">\r\n          {{ details | abpLocalization }}\r\n        </div>\r\n        <div class=\"error-actions\">\r\n          <a (click)=\"destroy()\" routerLink=\"/\" class=\"btn btn-primary btn-md mt-2\"\r\n            ><span class=\"glyphicon glyphicon-home\"></span>\r\n            {{ { key: '::Menu:Home', defaultValue: 'Home' } | abpLocalization }}\r\n          </a>\r\n        </div>\r\n      </div>\r\n    </div>\r\n  </div>\r\n</div>\r\n",
                         styles: [".error{position:fixed;top:0;width:100vw;height:100vh;z-index:999999}.centered{position:fixed;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}"]
                     }] }
         ];
@@ -1501,7 +1500,7 @@
         ModalComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-modal',
-                        template: "<div\n  *ngIf=\"visible\"\n  [@fade]=\"isModalOpen\"\n  id=\"modal-container\"\n  class=\"modal show {{ modalClass }}\"\n  tabindex=\"-1\"\n  role=\"dialog\"\n>\n  <div class=\"modal-backdrop\" (click)=\"close()\"></div>\n  <div\n    id=\"abp-modal-dialog\"\n    class=\"modal-dialog modal-{{ size }}\"\n    role=\"document\"\n    [class.modal-dialog-centered]=\"centered\"\n    #abpModalContent\n  >\n    <div id=\"abp-modal-content\" class=\"modal-content\">\n      <div id=\"abp-modal-header\" class=\"modal-header\">\n        <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\n        \u200B\n        <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\n          <span aria-hidden=\"true\">&times;</span>\n        </button>\n      </div>\n      <div id=\"abp-modal-body\" class=\"modal-body\">\n        <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\n      </div>\n      <div id=\"abp-modal-footer\" class=\"modal-footer\">\n        <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\n      </div>\n    </div>\n  </div>\n  <ng-content></ng-content>\n</div>\n",
+                        template: "<div\r\n  *ngIf=\"visible\"\r\n  [@fade]=\"isModalOpen\"\r\n  id=\"modal-container\"\r\n  class=\"modal show {{ modalClass }}\"\r\n  tabindex=\"-1\"\r\n  role=\"dialog\"\r\n>\r\n  <div class=\"modal-backdrop\" (click)=\"close()\"></div>\r\n  <div\r\n    id=\"abp-modal-dialog\"\r\n    class=\"modal-dialog modal-{{ size }}\"\r\n    role=\"document\"\r\n    [class.modal-dialog-centered]=\"centered\"\r\n    #abpModalContent\r\n  >\r\n    <div id=\"abp-modal-content\" class=\"modal-content\">\r\n      <div id=\"abp-modal-header\" class=\"modal-header\">\r\n        <ng-container *ngTemplateOutlet=\"abpHeader\"></ng-container>\r\n        \u200B\r\n        <button id=\"abp-modal-close-button\" type=\"button\" class=\"close\" aria-label=\"Close\" (click)=\"close()\">\r\n          <span aria-hidden=\"true\">&times;</span>\r\n        </button>\r\n      </div>\r\n      <div id=\"abp-modal-body\" class=\"modal-body\">\r\n        <ng-container *ngTemplateOutlet=\"abpBody\"></ng-container>\r\n      </div>\r\n      <div id=\"abp-modal-footer\" class=\"modal-footer\">\r\n        <ng-container *ngTemplateOutlet=\"abpFooter\"></ng-container>\r\n      </div>\r\n    </div>\r\n  </div>\r\n  <ng-content></ng-content>\r\n</div>\r\n",
                         animations: [fadeAnimation]
                     }] }
         ];
@@ -1739,7 +1738,7 @@
         SortOrderIconComponent.decorators = [
             { type: core.Component, args: [{
                         selector: 'abp-sort-order-icon',
-                        template: "<span class=\"float-right {{ iconClass }}\">\n  <i class=\"fa {{ icon }}\"></i>\n</span>\n"
+                        template: "<span class=\"float-right {{ iconClass }}\">\r\n  <i class=\"fa {{ icon }}\"></i>\r\n</span>\r\n"
                     }] }
         ];
         SortOrderIconComponent.propDecorators = {

@@ -3782,7 +3782,7 @@ class ClickEventStopPropagationDirective {
      */
     ngOnInit() {
         fromEvent(this.el.nativeElement, 'click')
-            .pipe(takeUntilDestroy$1(this))
+            .pipe(takeUntilDestroy(this))
             .subscribe((/**
          * @param {?} event
          * @return {?}
