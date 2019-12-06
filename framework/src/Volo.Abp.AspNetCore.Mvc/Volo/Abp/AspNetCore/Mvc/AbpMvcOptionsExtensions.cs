@@ -4,6 +4,7 @@ using Volo.Abp.AspNetCore.Mvc.Auditing;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Features;
+using Volo.Abp.AspNetCore.Mvc.ModelBinding;
 using Volo.Abp.AspNetCore.Mvc.Uow;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 
@@ -35,7 +36,7 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private static void AddModelBinders(MvcOptions options)
         {
-            //options.ModelBinderProviders.Add(new AbpDateTimeModelBinderProvider());
+            options.ModelBinderProviders.Insert(0, new AbpDateTimeModelBinderProvider());
         }
 
         private static void AddMetadataProviders(MvcOptions options, IServiceCollection services)

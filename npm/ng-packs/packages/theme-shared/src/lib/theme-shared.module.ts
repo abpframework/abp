@@ -8,13 +8,13 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
 import { ConfirmationComponent } from './components/confirmation/confirmation.component';
-import { ErrorComponent } from './components/error/error.component';
+import { HttpErrorWrapperComponent } from './components/http-error-wrapper/http-error-wrapper.component';
 import { LoaderBarComponent } from './components/loader-bar/loader-bar.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
 import { ToastComponent } from './components/toast/toast.component';
-import styles from './contants/styles';
+import styles from './constants/styles';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
 import { chartJsLoaded$ } from './utils/widget-utils';
@@ -29,16 +29,7 @@ export function appendScript(injector: Injector) {
     import('chart.js').then(() => chartJsLoaded$.next(true));
 
     const lazyLoadService: LazyLoadService = injector.get(LazyLoadService);
-
-    return forkJoin(
-      lazyLoadService.load(
-        null,
-        'style',
-        styles,
-        'head',
-        'afterbegin',
-      ) /* lazyLoadService.load(null, 'script', scripts) */,
-    ).toPromise();
+    return lazyLoadService.load(null, 'style', styles, 'head', 'beforeend').toPromise();
   };
 
   return fn;
@@ -51,7 +42,7 @@ export function appendScript(injector: Injector) {
     ButtonComponent,
     ChartComponent,
     ConfirmationComponent,
-    ErrorComponent,
+    HttpErrorWrapperComponent,
     LoaderBarComponent,
     ModalComponent,
     TableEmptyMessageComponent,
@@ -72,9 +63,11 @@ export function appendScript(injector: Injector) {
     TableSortDirective,
   ],
   providers: [DatePipe],
-  entryComponents: [ErrorComponent],
+  entryComponents: [HttpErrorWrapperComponent],
 })
 export class ThemeSharedModule {
+  constructor(private errorHandler: ErrorHandler) {}
+
   static forRoot(options = {} as RootParams): ModuleWithProviders {
     return {
       ngModule: ThemeSharedModule,
@@ -82,7 +75,7 @@ export class ThemeSharedModule {
         {
           provide: APP_INITIALIZER,
           multi: true,
-          deps: [Injector, ErrorHandler],
+          deps: [Injector],
           useFactory: appendScript,
         },
         { provide: MessageService, useClass: MessageService },

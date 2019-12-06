@@ -1,4 +1,4 @@
-import { ConfigState, GetAppConfiguration, ABP } from '@abp/ng.core';
+import { ConfigState, GetAppConfiguration, ABP, SessionState } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import snq from 'snq';
 import { RegisterRequest } from '../../models';
 import { AccountService } from '../../services/account.service';
 import { PasswordRules, validatePassword } from '@ngx-validate/core';
+import { HttpHeaders } from '@angular/common/http';
 const { maxLength, minLength, required, email } = Validators;
 
 @Component({
@@ -29,7 +30,9 @@ export class RegisterComponent implements OnInit {
     private store: Store,
     private toasterService: ToasterService,
   ) {
-    this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
+    this.oauthService.configure(
+      this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig,
+    );
     this.oauthService.loadDiscoveryDocument();
   }
 
@@ -62,7 +65,10 @@ export class RegisterComponent implements OnInit {
 
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: ['', [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)]],
+      password: [
+        '',
+        [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)],
+      ],
       email: ['', [required, email]],
     });
   }
@@ -79,10 +85,22 @@ export class RegisterComponent implements OnInit {
       appName: 'Angular',
     } as RegisterRequest;
 
+    const tenant = this.store.selectSnapshot(SessionState.getTenant);
+
     this.accountService
       .register(newUser)
       .pipe(
-        switchMap(() => from(this.oauthService.fetchTokenUsingPasswordFlow(newUser.userName, newUser.password))),
+        switchMap(() =>
+          from(
+            this.oauthService.fetchTokenUsingPasswordFlow(
+              newUser.userName,
+              newUser.password,
+              new HttpHeaders({
+                ...(tenant && tenant.id && { __tenant: tenant.id }),
+              }),
+            ),
+          ),
+        ),
         switchMap(() => this.store.dispatch(new GetAppConfiguration())),
         tap(() => this.store.dispatch(new Navigate(['/']))),
         take(1),

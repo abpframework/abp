@@ -1,6 +1,6 @@
-import { Directive, ElementRef, EventEmitter, OnInit, Output, Renderer2, OnDestroy } from '@angular/core';
+import { Directive, ElementRef, EventEmitter, OnInit, Output, OnDestroy } from '@angular/core';
 import { fromEvent } from 'rxjs';
-import { takeUntilDestroy } from '@ngx-validate/core';
+import { takeUntilDestroy } from '../utils/rxjs-utils';
 
 @Directive({
   // tslint:disable-next-line: directive-selector

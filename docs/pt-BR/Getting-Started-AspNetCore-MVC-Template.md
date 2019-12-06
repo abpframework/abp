@@ -26,8 +26,10 @@ abp new Acme.BookStore
 
 A solução criada requer;
 
-- [Visual Studio 2017 (v15.9.0 +)](https://visualstudio.microsoft.com/tr/downloads/)
-- [.NET Core 2.2 ou superior](https://www.microsoft.com/net/download/dotnet-core/)
+* [Visual Studio 2019 (v16.3+)](https://visualstudio.microsoft.com/vs/)
+* [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
+* [Node v12+](https://nodejs.org)
+* [Yarn v1.19+](https://yarnpkg.com/)
 
 ### A Estrutura da Solução
 

@@ -333,8 +333,17 @@ class RestService {
         const { observe = "body" /* Body */, skipHandleError } = config;
         /** @type {?} */
         const url = (api || this.store.selectSnapshot(ConfigState.getApiUrl())) + request.url;
-        const { method } = request, options = __rest(request, ["method"]);
-        return this.http.request(method, url, (/** @type {?} */ (Object.assign({ observe }, options)))).pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
+        const { method, params } = request, options = __rest(request, ["method", "params"]);
+        return this.http
+            .request(method, url, (/** @type {?} */ (Object.assign({ observe }, (params && {
+            params: Object.keys(params).reduce((/**
+             * @param {?} acc
+             * @param {?} key
+             * @return {?}
+             */
+            (acc, key) => (Object.assign({}, acc, (typeof params[key] !== 'undefined' && params[key] !== '' && { [key]: params[key] })))), {}),
+        }), options))))
+            .pipe(observe === "body" /* Body */ ? take(1) : tap(), catchError((/**
          * @param {?} err
          * @return {?}
          */
@@ -653,7 +662,7 @@ class LocalizationService {
         this.router = router;
         this.ngZone = ngZone;
         if (otherInstance)
-            throw new Error('LocaleService should have only one instance.');
+            throw new Error('LocalizationService should have only one instance.');
     }
     /**
      * @return {?}
@@ -908,9 +917,10 @@ let ConfigState = ConfigState_1 = class ConfigState {
     /**
      * @param {?=} path
      * @param {?=} name
+     * @param {?=} url
      * @return {?}
      */
-    static getRoute(path, name) {
+    static getRoute(path, name, url) {
         /** @type {?} */
         const selector = createSelector([ConfigState_1], (/**
          * @param {?} state
@@ -927,6 +937,9 @@ let ConfigState = ConfigState_1 = class ConfigState {
                     return route;
                 }
                 else if (name && route.name === name) {
+                    return route;
+                }
+                else if (url && route.url === url) {
                     return route;
                 }
             }));
@@ -1016,10 +1029,42 @@ let ConfigState = ConfigState_1 = class ConfigState {
         (state) => {
             if (!key)
                 return true;
-            return snq((/**
+            /** @type {?} */
+            const getPolicy = (/**
+             * @param {?} k
              * @return {?}
              */
-            () => state.auth.grantedPolicies[key]), false);
+            k => snq((/**
+             * @return {?}
+             */
+            () => state.auth.grantedPolicies[k]), false));
+            /** @type {?} */
+            const orRegexp = /\|\|/g;
+            /** @type {?} */
+            const andRegexp = /&&/g;
+            if (orRegexp.test(key)) {
+                /** @type {?} */
+                const keys = key.split('||').filter((/**
+                 * @param {?} k
+                 * @return {?}
+                 */
+                k => !!k));
+                if (keys.length !== 2)
+                    return false;
+                return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
+            }
+            else if (andRegexp.test(key)) {
+                /** @type {?} */
+                const keys = key.split('&&').filter((/**
+                 * @param {?} k
+                 * @return {?}
+                 */
+                k => !!k));
+                if (keys.length !== 2)
+                    return false;
+                return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
+            }
+            return getPolicy(key);
         }));
         return selector;
     }
@@ -1114,7 +1159,9 @@ let ConfigState = ConfigState_1 = class ConfigState {
             if (defaultLang.includes(';')) {
                 defaultLang = defaultLang.split(';')[0];
             }
-            return this.store.selectSnapshot(SessionState.getLanguage) ? of(null) : dispatch(new SetLanguage(defaultLang));
+            return this.store.selectSnapshot(SessionState.getLanguage)
+                ? of(null)
+                : dispatch(new SetLanguage(defaultLang));
         })));
     }
     /**
@@ -1170,7 +1217,8 @@ ConfigState = ConfigState_1 = __decorate([
         name: 'ConfigState',
         defaults: (/** @type {?} */ ({})),
     }),
-    __metadata("design:paramtypes", [ApplicationConfigurationService, Store])
+    __metadata("design:paramtypes", [ApplicationConfigurationService,
+        Store])
 ], ConfigState);
 if (false) {
     /**
@@ -1198,7 +1246,9 @@ function patchRouteDeep(routes, name, newValue, parentUrl = '') {
      */
     route => {
         if (route.name === name) {
-            newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === '' ? route.path : newValue.path) || ''}`;
+            newValue.url = `${parentUrl}/${(!newValue.path && newValue.path === ''
+                ? route.path
+                : newValue.path) || ''}`;
             if (newValue.children && newValue.children.length) {
                 newValue.children = newValue.children.map((/**
                  * @param {?} child
@@ -1748,7 +1798,7 @@ class ForDirective {
             return;
         /** @type {?} */
         const compareFn = this.compareFn;
-        if (typeof this.filterBy !== 'undefined' && this.filterVal) {
+        if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
             items = items.filter((/**
              * @param {?} item
              * @return {?}
@@ -1890,6 +1940,7 @@ class FormSubmitDirective {
         this.formGroupDirective = formGroupDirective;
         this.host = host;
         this.cdRef = cdRef;
+        this.debounce = 200;
         this.ngSubmit = new EventEmitter();
         this.executedNgSubmit = false;
     }
@@ -1905,7 +1956,7 @@ class FormSubmitDirective {
             this.executedNgSubmit = true;
         }));
         fromEvent((/** @type {?} */ (this.host.nativeElement)), 'keyup')
-            .pipe(debounceTime(200), filter((/**
+            .pipe(debounceTime(this.debounce), filter((/**
          * @param {?} key
          * @return {?}
          */
@@ -1947,10 +1998,13 @@ FormSubmitDirective.ctorParameters = () => [
     { type: ChangeDetectorRef }
 ];
 FormSubmitDirective.propDecorators = {
+    debounce: [{ type: Input }],
     notValidateOnSubmit: [{ type: Input }],
     ngSubmit: [{ type: Output }]
 };
 if (false) {
+    /** @type {?} */
+    FormSubmitDirective.prototype.debounce;
     /** @type {?} */
     FormSubmitDirective.prototype.notValidateOnSubmit;
     /** @type {?} */
@@ -2180,35 +2234,65 @@ class PermissionDirective {
      * @param {?} elRef
      * @param {?} renderer
      * @param {?} store
+     * @param {?} templateRef
+     * @param {?} vcRef
      */
-    constructor(elRef, renderer, store) {
+    constructor(elRef, renderer, store, templateRef, vcRef) {
         this.elRef = elRef;
         this.renderer = renderer;
         this.store = store;
+        this.templateRef = templateRef;
+        this.vcRef = vcRef;
+    }
+    /**
+     * @private
+     * @return {?}
+     */
+    check() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+        this.subscription = this.store
+            .select(ConfigState.getGrantedPolicy(this.condition))
+            .pipe(takeUntilDestroy(this))
+            .subscribe((/**
+         * @param {?} isGranted
+         * @return {?}
+         */
+        isGranted => {
+            if (this.templateRef && isGranted) {
+                this.vcRef.clear();
+                this.vcRef.createEmbeddedView(this.templateRef);
+            }
+            else if (this.templateRef && !isGranted) {
+                this.vcRef.clear();
+            }
+            else if (!isGranted && !this.templateRef) {
+                this.renderer.removeChild(((/** @type {?} */ (this.elRef.nativeElement))).parentElement, this.elRef.nativeElement);
+            }
+        }));
     }
     /**
      * @return {?}
      */
     ngOnInit() {
-        if (this.condition) {
-            this.store
-                .select(ConfigState.getGrantedPolicy(this.condition))
-                .pipe(takeUntilDestroy(this))
-                .subscribe((/**
-             * @param {?} isGranted
-             * @return {?}
-             */
-            isGranted => {
-                if (!isGranted) {
-                    this.renderer.removeChild(((/** @type {?} */ (this.elRef.nativeElement))).parentElement, this.elRef.nativeElement);
-                }
-            }));
+        if (this.templateRef && !this.condition) {
+            this.vcRef.createEmbeddedView(this.templateRef);
         }
     }
     /**
      * @return {?}
      */
     ngOnDestroy() { }
+    /**
+     * @param {?} __0
+     * @return {?}
+     */
+    ngOnChanges({ condition }) {
+        if ((condition || { currentValue: null }).currentValue) {
+            this.check();
+        }
+    }
 }
 PermissionDirective.decorators = [
     { type: Directive, args: [{
@@ -2217,9 +2301,11 @@ PermissionDirective.decorators = [
 ];
 /** @nocollapse */
 PermissionDirective.ctorParameters = () => [
-    { type: ElementRef, decorators: [{ type: Optional }] },
+    { type: ElementRef },
     { type: Renderer2 },
-    { type: Store }
+    { type: Store },
+    { type: TemplateRef, decorators: [{ type: Optional }] },
+    { type: ViewContainerRef }
 ];
 PermissionDirective.propDecorators = {
     condition: [{ type: Input, args: ['abpPermission',] }]
@@ -2227,6 +2313,8 @@ PermissionDirective.propDecorators = {
 if (false) {
     /** @type {?} */
     PermissionDirective.prototype.condition;
+    /** @type {?} */
+    PermissionDirective.prototype.subscription;
     /**
      * @type {?}
      * @private
@@ -2242,6 +2330,16 @@ if (false) {
      * @private
      */
     PermissionDirective.prototype.store;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.templateRef;
+    /**
+     * @type {?}
+     * @private
+     */
+    PermissionDirective.prototype.vcRef;
 }
 
 /**
@@ -2458,12 +2556,29 @@ class PermissionGuard {
         this.store = store;
     }
     /**
-     * @param {?} __0
+     * @param {?} route
+     * @param {?} state
      * @return {?}
      */
-    canActivate({ data }) {
+    canActivate(route, state) {
         /** @type {?} */
-        const resource = (/** @type {?} */ (data.requiredPolicy));
+        let resource = snq((/**
+         * @return {?}
+         */
+        () => route.data.routes.requiredPolicy)) || snq((/**
+         * @return {?}
+         */
+        () => (/** @type {?} */ (route.data.requiredPolicy))));
+        if (!resource) {
+            resource = snq((/**
+             * @return {?}
+             */
+            () => route.routeConfig.children.find((/**
+             * @param {?} child
+             * @return {?}
+             */
+            child => state.url.indexOf(child.path) > -1)).data.requiredPolicy));
+        }
         return this.store.select(ConfigState.getGrantedPolicy(resource)).pipe(tap((/**
          * @param {?} access
          * @return {?}
@@ -3024,11 +3139,13 @@ class SortPipe {
             item => typeof item === 'string')).sort();
         }
         else {
-            numberArray = value.filter((/**
+            numberArray = value
+                .filter((/**
              * @param {?} item
              * @return {?}
              */
-            item => typeof item[sortKey] === 'number')).sort((/**
+            item => typeof item[sortKey] === 'number'))
+                .sort((/**
              * @param {?} a
              * @param {?} b
              * @return {?}
@@ -3055,7 +3172,16 @@ class SortPipe {
             }));
         }
         /** @type {?} */
-        const sorted = numberArray.concat(stringArray);
+        const sorted = [
+            ...numberArray,
+            ...stringArray,
+            ...value.filter((/**
+             * @param {?} item
+             * @return {?}
+             */
+            item => typeof (sortKey ? item[sortKey] : item) !== 'number' &&
+                typeof (sortKey ? item[sortKey] : item) !== 'string')),
+        ];
         return sortOrder === 'asc' ? sorted : sorted.reverse();
     }
 }
@@ -3385,7 +3511,7 @@ class LazyLoadService {
      * @param {?=} position
      * @return {?}
      */
-    load(urlOrUrls, type, content = '', targetQuery = 'body', position = 'afterend') {
+    load(urlOrUrls, type, content = '', targetQuery = 'body', position = 'beforeend') {
         if (!urlOrUrls && !content) {
             return throwError('Should pass url or content');
         }
@@ -3734,6 +3860,21 @@ const LocaleProvider = {
     useClass: LocaleId,
     deps: [LocalizationService],
 };
+
+/**
+ * @fileoverview added by tsickle
+ * Generated from: lib/utils/date-extensions.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+Date.prototype.toLocalISOString = (/**
+ * @this {?}
+ * @return {?}
+ */
+function () {
+    /** @type {?} */
+    const timezoneOffset = this.getTimezoneOffset();
+    return new Date(this.getTime() - timezoneOffset * 60000).toISOString();
+});
 
 /**
  * @fileoverview added by tsickle

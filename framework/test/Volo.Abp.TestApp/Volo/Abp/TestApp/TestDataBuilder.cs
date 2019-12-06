@@ -38,10 +38,15 @@ namespace Volo.Abp.TestApp
 
         private void AddCities()
         {
+            var istanbul = new City(IstanbulCityId, "Istanbul");
+            istanbul.Districts.Add(new District(istanbul.Id, "Bakirkoy", 1283999));
+            istanbul.Districts.Add(new District(istanbul.Id, "Mecidiyeköy", 2222321));
+            istanbul.Districts.Add(new District(istanbul.Id, "Uskudar", 726172));
+
             _cityRepository.Insert(new City(Guid.NewGuid(), "Tokyo"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Madrid"));
             _cityRepository.Insert(new City(LondonCityId, "London") {ExtraProperties = { { "Population", 10_470_000 } } });
-            _cityRepository.Insert(new City(IstanbulCityId, "Istanbul"));
+            _cityRepository.Insert(istanbul);
             _cityRepository.Insert(new City(Guid.NewGuid(), "Paris"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Washington"));
             _cityRepository.Insert(new City(Guid.NewGuid(), "Sao Paulo"));

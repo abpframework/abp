@@ -10,6 +10,7 @@ export declare class PermissionManagementComponent implements OnInit, OnChanges 
     private renderer;
     providerName: string;
     providerKey: string;
+    hideBadges: boolean;
     protected _visible: any;
     visible: boolean;
     readonly visibleChange: EventEmitter<boolean>;

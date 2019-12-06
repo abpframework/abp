@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -18,10 +18,12 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
+using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -48,12 +50,21 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public IAuditingManager AuditingManager { get; set; }
 
+        public IClock Clock { get; set; }
+
         public ILogger<AbpDbContext<TDbContext>> Logger { get; set; }
 
         private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
             = typeof(AbpDbContext<TDbContext>)
                 .GetMethod(
                     nameof(ConfigureBaseProperties),
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                );
+
+        private static readonly MethodInfo ConfigureValueConverterMethodInfo
+            = typeof(AbpDbContext<TDbContext>)
+                .GetMethod(
+                    nameof(ConfigureValueConverter),
                     BindingFlags.Instance | BindingFlags.NonPublic
                 );
 
@@ -73,6 +84,10 @@ namespace Volo.Abp.EntityFrameworkCore
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 ConfigureBasePropertiesMethodInfo
+                    .MakeGenericMethod(entityType.ClrType)
+                    .Invoke(this, new object[] { modelBuilder, entityType });
+
+                ConfigureValueConverterMethodInfo
                     .MakeGenericMethod(entityType.ClrType)
                     .Invoke(this, new object[] { modelBuilder, entityType });
             }
@@ -332,6 +347,11 @@ namespace Volo.Abp.EntityFrameworkCore
         protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
+            if (mutableEntityType.IsOwned())
+            {
+                return;
+            }
+
             ConfigureConcurrencyStampProperty<TEntity>(modelBuilder, mutableEntityType);
             ConfigureExtraProperties<TEntity>(modelBuilder, mutableEntityType);
             ConfigureAuditProperties<TEntity>(modelBuilder, mutableEntityType);
@@ -485,6 +505,39 @@ namespace Volo.Abp.EntityFrameworkCore
                 {
                     modelBuilder.Entity<TEntity>().HasQueryFilter(filterExpression);
                 }
+            }
+        }
+
+        protected virtual void ConfigureValueConverter<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (mutableEntityType.BaseType == null &&
+                !typeof(TEntity).IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) &&
+                !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
+                !mutableEntityType.IsOwned())
+            {
+                if (Clock == null || !Clock.SupportsMultipleTimezone)
+                {
+                    return;
+                }
+
+                var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
+
+                var dateTimePropertyInfos = typeof(TEntity).GetProperties()
+                    .Where(property =>
+                        (property.PropertyType == typeof(DateTime) ||
+                         property.PropertyType == typeof(DateTime?)) &&
+                        property.CanWrite &&
+                        !property.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true)
+                    ).ToList();
+
+                dateTimePropertyInfos.ForEach(property =>
+                {
+                    modelBuilder
+                        .Entity<TEntity>()
+                        .Property(property.Name)
+                        .HasConversion(dateTimeValueConverter);
+                });
             }
         }
 

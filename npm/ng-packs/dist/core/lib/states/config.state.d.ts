@@ -10,7 +10,7 @@ export declare class ConfigState {
     static getApplicationInfo(state: Config.State): Config.Application;
     static getOne(key: string): (state: Config.State) => any;
     static getDeep(keys: string[] | string): (state: Config.State) => any;
-    static getRoute(path?: string, name?: string): (state: Config.State) => ABP.FullRoute;
+    static getRoute(path?: string, name?: string, url?: string): (state: Config.State) => ABP.FullRoute;
     static getApiUrl(key?: string): (state: Config.State) => string;
     static getSetting(key: string): (state: Config.State) => string;
     static getSettings(keyword?: string): (state: Config.State) => {};

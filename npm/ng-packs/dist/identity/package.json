@@ -2,9 +2,9 @@
   "name": "@abp/ng.identity",
   "version": "1.0.4",
   "dependencies": {
-    "@abp/ng.identity.config": "^1.0.3",
-    "@abp/ng.permission-management": "^1.0.4",
     "@abp/ng.theme.shared": "^1.0.4",
+    "@abp/ng.permission-management": "^1.0.4",
+    "@abp/ng.identity.config": "^1.0.3",
     "tslib": "^1.9.0"
   },
   "publishConfig": {
@@ -19,6 +19,5 @@
   "fesm2015": "fesm2015/abp-ng.identity.js",
   "typings": "abp-ng.identity.d.ts",
   "metadata": "abp-ng.identity.metadata.json",
-  "sideEffects": false,
-  "gitHead": "2f588b67002cd64e8660f43217c2197ccc9fe631"
+  "sideEffects": false
 }

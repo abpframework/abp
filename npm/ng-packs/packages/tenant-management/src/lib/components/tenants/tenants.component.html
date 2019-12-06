@@ -6,7 +6,7 @@
       </div>
       <div class="text-right col col-md-6">
         <button
-          [abpPermission]="'AbpTenantManagement.Tenants.Create'"
+          *abpPermission="'AbpTenantManagement.Tenants.Create'"
           id="create-tenants"
           class="btn btn-primary"
           type="button"
@@ -60,7 +60,12 @@
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
           <th pResizableColumn (click)="sortOrderIcon.sort('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
-            <abp-sort-order-icon #sortOrderIcon key="name" [(selectedKey)]="sortKey" [(order)]="sortOrder">
+            <abp-sort-order-icon
+              #sortOrderIcon
+              key="name"
+              [(selectedKey)]="sortKey"
+              [(order)]="sortOrder"
+            >
             </abp-sort-order-icon>
           </th>
         </tr>
@@ -79,28 +84,28 @@
               </button>
               <div ngbDropdownMenu>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.Update'"
+                  *abpPermission="'AbpTenantManagement.Tenants.Update'"
                   ngbDropdownItem
                   (click)="editTenant(data.id)"
                 >
                   {{ 'AbpTenantManagement::Edit' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.ManageConnectionStrings'"
+                  *abpPermission="'AbpTenantManagement.Tenants.ManageConnectionStrings'"
                   ngbDropdownItem
                   (click)="onEditConnectionString(data.id)"
                 >
                   {{ 'AbpTenantManagement::Permission:ManageConnectionStrings' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.ManageFeatures'"
+                  *abpPermission="'AbpTenantManagement.Tenants.ManageFeatures'"
                   ngbDropdownItem
                   (click)="providerKey = data.id; visibleFeatures = true"
                 >
                   {{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.Delete'"
+                  *abpPermission="'AbpTenantManagement.Tenants.Delete'"
                   ngbDropdownItem
                   (click)="delete(data.id, data.name)"
                 >
@@ -148,34 +153,32 @@
 
 <ng-template #connectionStringModalTemplate>
   <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()" validateOnSubmit>
-    <label class="mt-2">
-      <div class="form-group">
-        <div class="custom-checkbox custom-control mb-2">
-          <input
-            id="useSharedDatabase"
-            type="checkbox"
-            class="custom-control-input"
-            formControlName="useSharedDatabase"
-            autofocus
-            (ngModelChange)="onSharedDatabaseChange($event)"
-          />
-          <label for="useSharedDatabase" class="custom-control-label">{{
-            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
-          }}</label>
-        </div>
-      </div>
-      <label class="form-group" *ngIf="!useSharedDatabase">
-        <label for="defaultConnectionString">{{
-          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
-        }}</label>
+    <div class="form-group">
+      <div class="custom-checkbox custom-control mb-2">
         <input
-          type="text"
-          id="defaultConnectionString"
-          class="form-control"
-          formControlName="defaultConnectionString"
+          id="useSharedDatabase"
+          type="checkbox"
+          class="custom-control-input"
+          formControlName="useSharedDatabase"
+          autofocus
+          (ngModelChange)="onSharedDatabaseChange($event)"
         />
-      </label>
-    </label>
+        <label for="useSharedDatabase" class="custom-control-label">{{
+          'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
+        }}</label>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="!useSharedDatabase">
+      <label for="defaultConnectionString">{{
+        'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
+      }}</label>
+      <input
+        type="text"
+        id="defaultConnectionString"
+        class="form-control"
+        formControlName="defaultConnectionString"
+      />
+    </div>
   </form>
 </ng-template>
 

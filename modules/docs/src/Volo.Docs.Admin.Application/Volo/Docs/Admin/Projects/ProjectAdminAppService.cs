@@ -53,7 +53,8 @@ namespace Volo.Docs.Admin.Projects
                 input.DocumentStoreType,
                 input.Format,
                 input.DefaultDocumentName,
-                input.NavigationDocumentName
+                input.NavigationDocumentName,
+                input.ParametersDocumentName
             )
             {
                 MinimumVersion = input.MinimumVersion,

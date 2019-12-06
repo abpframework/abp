@@ -17,6 +17,5 @@
   "fesm2015": "fesm2015/abp-ng.permission-management.js",
   "typings": "abp-ng.permission-management.d.ts",
   "metadata": "abp-ng.permission-management.metadata.json",
-  "sideEffects": false,
-  "gitHead": "2f588b67002cd64e8660f43217c2197ccc9fe631"
+  "sideEffects": false
 }

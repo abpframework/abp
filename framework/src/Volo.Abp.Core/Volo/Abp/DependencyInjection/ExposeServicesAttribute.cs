@@ -9,9 +9,9 @@ namespace Volo.Abp.DependencyInjection
     {
         public Type[] ServiceTypes { get; }
 
-        public bool? IncludeDefaults { get; set; }
+        public bool IncludeDefaults { get; set; }
 
-        public bool? IncludeSelf { get; set; }
+        public bool IncludeSelf { get; set; }
 
         public ExposeServicesAttribute(params Type[] serviceTypes)
         {
@@ -22,19 +22,19 @@ namespace Volo.Abp.DependencyInjection
         {
             var serviceList = ServiceTypes.ToList();
 
-            if (IncludeDefaults == true)
+            if (IncludeDefaults)
             {
                 foreach (var type in GetDefaultServices(targetType))
                 {
                     serviceList.AddIfNotContains(type);
                 }
 
-                if (IncludeSelf != false)
+                if (IncludeSelf)
                 {
                     serviceList.AddIfNotContains(targetType);
                 }
             }
-            else if (IncludeSelf == true)
+            else if (IncludeSelf)
             {
                 serviceList.AddIfNotContains(targetType);
             }
