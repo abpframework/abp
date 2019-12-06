@@ -31,9 +31,9 @@ import program from 'commander';
   await fse.writeJSON('../package.json', packageJson, { spaces: 2 });
 
   try {
-    await execa('yarn', {
+    await execa('yarn', ['install', '--ignore-scripts'], {
       stdout: 'inherit',
-      cwd: '..',
+      cwd: '../',
     });
 
     execa.sync(
