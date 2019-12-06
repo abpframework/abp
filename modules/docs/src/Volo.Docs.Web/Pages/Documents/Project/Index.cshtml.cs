@@ -425,6 +425,8 @@ namespace Volo.Docs.Pages.Documents.Project
                     var value = keyValue.Split("=")[1];
 
                     UserPreferences.Add(key, value);
+                    UserPreferences.Add(key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p=>p.Name == key)
+                        ?.Values.FirstOrDefault(v=>v.Key == value).Value);
                 }
             }
 
@@ -435,8 +437,11 @@ namespace Volo.Docs.Pages.Documents.Project
                 if (UserPreferences.ContainsKey(keyValue.Key))
                 {
                     UserPreferences.Remove(keyValue.Key);
+                    UserPreferences.Remove(keyValue.Key + "_Value");
                 }
                 UserPreferences.Add(keyValue.Key, keyValue.Value);
+                UserPreferences.Add(keyValue.Key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == keyValue.Key)
+                    ?.Values.FirstOrDefault(v => v.Key == keyValue.Value).Value);
             }
 
             if (DocumentPreferences?.Parameters == null)
@@ -449,6 +454,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 if (!UserPreferences.ContainsKey(parameter.Name))
                 {
                     UserPreferences.Add(parameter.Name, parameter.Values.FirstOrDefault().Key);
+                    UserPreferences.Add(parameter.Name + "_Value", parameter.Values.FirstOrDefault().Value);
                 }
             }
         }

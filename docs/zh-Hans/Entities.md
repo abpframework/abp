@@ -41,7 +41,7 @@ public class UserRole : Entity
     
     public DateTime CreationTime { get; set; }
 
-    public Phone()
+    public UserRole()
     {
             
     }
