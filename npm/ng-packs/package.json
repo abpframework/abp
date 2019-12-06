@@ -8,7 +8,8 @@
     "commit": "git-cz",
     "lint": "ng lint",
     "scripts:build": "cd scripts && npm install && yarn build",
-    "ci": "yarn scripts:build --noCommit && yarn ci:test && yarn ng lint",
+    "prepare:workspace": "yarn scripts:build --noCommit",
+    "ci": "yarn prepare:workspace && yarn ci:test && yarn ng lint",
     "ci:test": "ng test --coverage=false"
   },
   "devDependencies": {
