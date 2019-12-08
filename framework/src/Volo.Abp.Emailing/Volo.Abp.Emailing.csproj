@@ -19,6 +19,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Volo\Abp\Emailing\Localization\en.json" />
+    <None Remove="Volo\Abp\Emailing\Localization\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\en.json" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\zh-Hans.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Scriban" Version="2.1.0" />
   </ItemGroup>
 

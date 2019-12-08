@@ -29,6 +29,8 @@
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "字段必须是长度为{0}的字符串.",
     "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "字段必须是最小长度为{1}并且最大长度{*}的字符串.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "字段{0}不是有效的完全限定的http,https或ftp URL.",
-    "ThisFieldIsInvalid.": "字段是无效值."
+    "ThisFieldIsInvalid.": "字段是无效值.",
+    "DisplayName:Abp.Localization.DefaultLanguage": "默认语言",
+    "Description:Abp.Localization.DefaultLanguage": "应用程序默认语言."
   }
 }
