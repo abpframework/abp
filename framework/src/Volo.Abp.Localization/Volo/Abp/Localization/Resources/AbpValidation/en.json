@@ -29,6 +29,8 @@
     "ThisFieldMustBeAStringWithAMaximumLengthOf{0}": "This field must be a string with a maximum length of {0}.",
     "ThisFieldMustBeAStringWithAMinimumLengthOf{1}AndAMaximumLengthOf{0}": "This field must be a string with a minimum length of {1} and a maximum length of {0}.",
     "ThisFieldIsNotAValidFullyQualifiedHttpHttpsOrFtpUrl": "This field is not a valid fully-qualified http, https, or ftp URL.",
-    "ThisFieldIsInvalid.": "This field is invalid."
+    "ThisFieldIsInvalid.": "This field is invalid.",
+    "DisplayName:Abp.Localization.DefaultLanguage": "Default language",
+    "Description:Abp.Localization.DefaultLanguage": "The default language of the application."
   }
 }
