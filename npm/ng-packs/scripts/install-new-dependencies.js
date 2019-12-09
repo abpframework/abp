@@ -10,7 +10,7 @@ import fse from 'fs-extra';
 
   projectNames.forEach(project => {
     // do not convert to async
-    const { dependencies = {}, peerDependencies = {} } = fse.readJSONSync(
+    const { dependencies = {}, peerDependencies = {}, name, version } = fse.readJSONSync(
       `../packages/${project}/package.json`,
     );
 
@@ -18,7 +18,12 @@ import fse from 'fs-extra';
       ...packageJson.devDependencies,
       ...dependencies,
       ...peerDependencies,
+      ...{ [name]: version },
     };
+
+    packageJson.devDependencies = Object.keys(packageJson.devDependencies)
+      .sort()
+      .reduce((acc, key) => ({ ...acc, [key]: packageJson.devDependencies[key] }), {});
   });
 
   await fse.writeJSON('../package.json', packageJson, { spaces: 2 });
