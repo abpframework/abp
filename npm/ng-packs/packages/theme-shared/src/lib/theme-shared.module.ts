@@ -1,7 +1,7 @@
 import { CoreModule, LazyLoadService } from '@abp/ng.core';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng';
 import { ToastModule } from 'primeng/toast';
 import { forkJoin } from 'rxjs';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';

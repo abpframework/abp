@@ -7,12 +7,12 @@
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "@ngx-validate/core": "^0.0.7",
-    "bootstrap": "^4.3.1",
+    "bootstrap": "^4.4.1",
     "chart.js": "^2.9.2",
     "font-awesome": "^4.7.0",
     "ngx-perfect-scrollbar": "^8.0.0",
     "primeicons": "^2.0.0",
-    "primeng": "^8.1.1"
+    "primeng": "^9.0.0-rc.2"
   },
   "publishConfig": {
     "access": "public"

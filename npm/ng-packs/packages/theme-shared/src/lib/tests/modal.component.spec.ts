@@ -1,7 +1,7 @@
 import { LocalizationPipe } from '@abp/ng.core';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng';
 import { ToastModule } from 'primeng/toast';
 import { timer } from 'rxjs';
 import { ButtonComponent, ConfirmationComponent, ModalComponent } from '../components';

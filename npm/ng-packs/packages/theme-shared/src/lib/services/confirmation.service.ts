@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AbstractToaster } from '../abstracts/toaster';
 import { Confirmation } from '../models/confirmation';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng';
 import { fromEvent, Observable, Subject } from 'rxjs';
 import { takeUntil, debounceTime, filter } from 'rxjs/operators';
 import { Toaster } from '../models/toaster';

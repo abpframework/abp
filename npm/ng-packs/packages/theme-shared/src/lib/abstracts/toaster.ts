@@ -1,7 +1,7 @@
-import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable, Subject } from 'rxjs';
 import { Toaster } from '../models/toaster';
 import { Config } from '@abp/ng.core';
+import { MessageService } from 'primeng';
 
 export abstract class AbstractToaster<T = Toaster.Options> {
   status$: Subject<Toaster.Status>;
@@ -12,19 +12,35 @@ export abstract class AbstractToaster<T = Toaster.Options> {
 
   constructor(protected messageService: MessageService) {}
 
-  info(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
+  info(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: T,
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'info', options);
   }
 
-  success(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
+  success(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: T,
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'success', options);
   }
 
-  warn(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
+  warn(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: T,
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'warn', options);
   }
 
-  error(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
+  error(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    options?: T,
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'error', options);
   }
 

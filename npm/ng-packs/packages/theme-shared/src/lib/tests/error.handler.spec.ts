@@ -6,7 +6,7 @@ import { createRoutingFactory, SpectatorRouting } from '@ngneat/spectator/jest';
 import { NgxsModule, Store } from '@ngxs/store';
 import { DEFAULT_ERROR_MESSAGES, ErrorHandler } from '../handlers';
 import { ThemeSharedModule } from '../theme-shared.module';
-import { MessageService } from 'primeng/components/common/messageservice';
+import { MessageService } from 'primeng';
 import { RouterError, RouterDataResolved } from '@ngxs/router-plugin';
 import { NavigationError, ResolveEnd } from '@angular/router';
 
