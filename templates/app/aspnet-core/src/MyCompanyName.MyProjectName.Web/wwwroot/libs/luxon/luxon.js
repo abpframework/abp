@@ -230,6 +230,174 @@ var luxon = (function (exports) {
     return ZoneIsAbstractError;
   }(LuxonError);
 
+  /**
+   * @private
+   */
+  var n = "numeric",
+      s = "short",
+      l = "long";
+  var DATE_SHORT = {
+    year: n,
+    month: n,
+    day: n
+  };
+  var DATE_MED = {
+    year: n,
+    month: s,
+    day: n
+  };
+  var DATE_FULL = {
+    year: n,
+    month: l,
+    day: n
+  };
+  var DATE_HUGE = {
+    year: n,
+    month: l,
+    day: n,
+    weekday: l
+  };
+  var TIME_SIMPLE = {
+    hour: n,
+    minute: n
+  };
+  var TIME_WITH_SECONDS = {
+    hour: n,
+    minute: n,
+    second: n
+  };
+  var TIME_WITH_SHORT_OFFSET = {
+    hour: n,
+    minute: n,
+    second: n,
+    timeZoneName: s
+  };
+  var TIME_WITH_LONG_OFFSET = {
+    hour: n,
+    minute: n,
+    second: n,
+    timeZoneName: l
+  };
+  var TIME_24_SIMPLE = {
+    hour: n,
+    minute: n,
+    hour12: false
+  };
+  /**
+   * {@link toLocaleString}; format like '09:30:23', always 24-hour.
+   */
+
+  var TIME_24_WITH_SECONDS = {
+    hour: n,
+    minute: n,
+    second: n,
+    hour12: false
+  };
+  /**
+   * {@link toLocaleString}; format like '09:30:23 EDT', always 24-hour.
+   */
+
+  var TIME_24_WITH_SHORT_OFFSET = {
+    hour: n,
+    minute: n,
+    second: n,
+    hour12: false,
+    timeZoneName: s
+  };
+  /**
+   * {@link toLocaleString}; format like '09:30:23 Eastern Daylight Time', always 24-hour.
+   */
+
+  var TIME_24_WITH_LONG_OFFSET = {
+    hour: n,
+    minute: n,
+    second: n,
+    hour12: false,
+    timeZoneName: l
+  };
+  /**
+   * {@link toLocaleString}; format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
+   */
+
+  var DATETIME_SHORT = {
+    year: n,
+    month: n,
+    day: n,
+    hour: n,
+    minute: n
+  };
+  /**
+   * {@link toLocaleString}; format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
+   */
+
+  var DATETIME_SHORT_WITH_SECONDS = {
+    year: n,
+    month: n,
+    day: n,
+    hour: n,
+    minute: n,
+    second: n
+  };
+  var DATETIME_MED = {
+    year: n,
+    month: s,
+    day: n,
+    hour: n,
+    minute: n
+  };
+  var DATETIME_MED_WITH_SECONDS = {
+    year: n,
+    month: s,
+    day: n,
+    hour: n,
+    minute: n,
+    second: n
+  };
+  var DATETIME_MED_WITH_WEEKDAY = {
+    year: n,
+    month: s,
+    day: n,
+    weekday: s,
+    hour: n,
+    minute: n
+  };
+  var DATETIME_FULL = {
+    year: n,
+    month: l,
+    day: n,
+    hour: n,
+    minute: n,
+    timeZoneName: s
+  };
+  var DATETIME_FULL_WITH_SECONDS = {
+    year: n,
+    month: l,
+    day: n,
+    hour: n,
+    minute: n,
+    second: n,
+    timeZoneName: s
+  };
+  var DATETIME_HUGE = {
+    year: n,
+    month: l,
+    day: n,
+    weekday: l,
+    hour: n,
+    minute: n,
+    timeZoneName: l
+  };
+  var DATETIME_HUGE_WITH_SECONDS = {
+    year: n,
+    month: l,
+    day: n,
+    weekday: l,
+    hour: n,
+    minute: n,
+    second: n,
+    timeZoneName: l
+  };
+
   /*
     This is just a junk drawer, containing anything used across multiple classes.
     Because Luxon is small(ish), this should stay small and we won't worry about splitting
@@ -429,9 +597,14 @@ var luxon = (function (exports) {
   } // signedOffset('-5', '30') -> -330
 
   function signedOffset(offHourStr, offMinuteStr) {
-    var offHour = parseInt(offHourStr, 10) || 0,
-        offMin = parseInt(offMinuteStr, 10) || 0,
-        offMinSigned = offHour < 0 ? -offMin : offMin;
+    var offHour = parseInt(offHourStr, 10); // don't || this because we want to preserve -0
+
+    if (Number.isNaN(offHour)) {
+      offHour = 0;
+    }
+
+    var offMin = parseInt(offMinuteStr, 10) || 0,
+        offMinSigned = offHour < 0 || Object.is(offHour, -0) ? -offMin : offMin;
     return offHour * 60 + offMinSigned;
   } // COERCION
 
@@ -440,7 +613,6 @@ var luxon = (function (exports) {
     if (typeof value === "boolean" || value === "" || Number.isNaN(numericValue)) throw new InvalidArgumentError("Invalid unit value " + value);
     return numericValue;
   }
-
   function normalizeObject(obj, normalizer, nonUnitKeys) {
     var normalized = {};
 
@@ -458,7 +630,7 @@ var luxon = (function (exports) {
   function formatOffset(offset, format) {
     var hours = Math.trunc(offset / 60),
         minutes = Math.abs(offset % 60),
-        sign = hours >= 0 ? "+" : "-",
+        sign = hours >= 0 && !Object.is(hours, -0) ? "+" : "-",
         base = "" + sign + Math.abs(hours);
 
     switch (format) {
@@ -479,175 +651,6 @@ var luxon = (function (exports) {
     return pick(obj, ["hour", "minute", "second", "millisecond"]);
   }
   var ianaRegex = /[A-Za-z_+-]{1,256}(:?\/[A-Za-z_+-]{1,256}(\/[A-Za-z_+-]{1,256})?)?/;
-
-  /**
-   * @private
-   */
-  var n = "numeric",
-      s = "short",
-      l = "long",
-      d2 = "2-digit";
-  var DATE_SHORT = {
-    year: n,
-    month: n,
-    day: n
-  };
-  var DATE_MED = {
-    year: n,
-    month: s,
-    day: n
-  };
-  var DATE_FULL = {
-    year: n,
-    month: l,
-    day: n
-  };
-  var DATE_HUGE = {
-    year: n,
-    month: l,
-    day: n,
-    weekday: l
-  };
-  var TIME_SIMPLE = {
-    hour: n,
-    minute: d2
-  };
-  var TIME_WITH_SECONDS = {
-    hour: n,
-    minute: d2,
-    second: d2
-  };
-  var TIME_WITH_SHORT_OFFSET = {
-    hour: n,
-    minute: d2,
-    second: d2,
-    timeZoneName: s
-  };
-  var TIME_WITH_LONG_OFFSET = {
-    hour: n,
-    minute: d2,
-    second: d2,
-    timeZoneName: l
-  };
-  var TIME_24_SIMPLE = {
-    hour: n,
-    minute: d2,
-    hour12: false
-  };
-  /**
-   * {@link toLocaleString}; format like '09:30:23', always 24-hour.
-   */
-
-  var TIME_24_WITH_SECONDS = {
-    hour: n,
-    minute: d2,
-    second: d2,
-    hour12: false
-  };
-  /**
-   * {@link toLocaleString}; format like '09:30:23 EDT', always 24-hour.
-   */
-
-  var TIME_24_WITH_SHORT_OFFSET = {
-    hour: n,
-    minute: d2,
-    second: d2,
-    hour12: false,
-    timeZoneName: s
-  };
-  /**
-   * {@link toLocaleString}; format like '09:30:23 Eastern Daylight Time', always 24-hour.
-   */
-
-  var TIME_24_WITH_LONG_OFFSET = {
-    hour: n,
-    minute: d2,
-    second: d2,
-    hour12: false,
-    timeZoneName: l
-  };
-  /**
-   * {@link toLocaleString}; format like '10/14/1983, 9:30 AM'. Only 12-hour if the locale is.
-   */
-
-  var DATETIME_SHORT = {
-    year: n,
-    month: n,
-    day: n,
-    hour: n,
-    minute: d2
-  };
-  /**
-   * {@link toLocaleString}; format like '10/14/1983, 9:30:33 AM'. Only 12-hour if the locale is.
-   */
-
-  var DATETIME_SHORT_WITH_SECONDS = {
-    year: n,
-    month: n,
-    day: n,
-    hour: n,
-    minute: d2,
-    second: d2
-  };
-  var DATETIME_MED = {
-    year: n,
-    month: s,
-    day: n,
-    hour: n,
-    minute: d2
-  };
-  var DATETIME_MED_WITH_SECONDS = {
-    year: n,
-    month: s,
-    day: n,
-    hour: n,
-    minute: d2,
-    second: d2
-  };
-  var DATETIME_MED_WITH_WEEKDAY = {
-    year: n,
-    month: s,
-    day: n,
-    weekday: s,
-    hour: n,
-    minute: d2
-  };
-  var DATETIME_FULL = {
-    year: n,
-    month: l,
-    day: n,
-    hour: n,
-    minute: d2,
-    timeZoneName: s
-  };
-  var DATETIME_FULL_WITH_SECONDS = {
-    year: n,
-    month: l,
-    day: n,
-    hour: n,
-    minute: d2,
-    second: d2,
-    timeZoneName: s
-  };
-  var DATETIME_HUGE = {
-    year: n,
-    month: l,
-    day: n,
-    weekday: l,
-    hour: n,
-    minute: d2,
-    timeZoneName: l
-  };
-  var DATETIME_HUGE_WITH_SECONDS = {
-    year: n,
-    month: l,
-    day: n,
-    weekday: l,
-    hour: n,
-    minute: d2,
-    second: d2,
-    timeZoneName: l
-  };
 
   function stringify(obj) {
     return JSON.stringify(obj, Object.keys(obj).sort());
@@ -854,826 +857,6 @@ var luxon = (function (exports) {
         return dateTimeHuge;
     }
   }
-
-  /**
-   * @interface
-   */
-
-  var Zone =
-  /*#__PURE__*/
-  function () {
-    function Zone() {}
-
-    var _proto = Zone.prototype;
-
-    /**
-     * Returns the offset's common name (such as EST) at the specified timestamp
-     * @abstract
-     * @param {number} ts - Epoch milliseconds for which to get the name
-     * @param {Object} opts - Options to affect the format
-     * @param {string} opts.format - What style of offset to return. Accepts 'long' or 'short'.
-     * @param {string} opts.locale - What locale to return the offset name in.
-     * @return {string}
-     */
-    _proto.offsetName = function offsetName(ts, opts) {
-      throw new ZoneIsAbstractError();
-    }
-    /**
-     * Returns the offset's value as a string
-     * @abstract
-     * @param {number} ts - Epoch milliseconds for which to get the offset
-     * @param {string} format - What style of offset to return.
-     *                          Accepts 'narrow', 'short', or 'techie'. Returning '+6', '+06:00', or '+0600' respectively
-     * @return {string}
-     */
-    ;
-
-    _proto.formatOffset = function formatOffset(ts, format) {
-      throw new ZoneIsAbstractError();
-    }
-    /**
-     * Return the offset in minutes for this zone at the specified timestamp.
-     * @abstract
-     * @param {number} ts - Epoch milliseconds for which to compute the offset
-     * @return {number}
-     */
-    ;
-
-    _proto.offset = function offset(ts) {
-      throw new ZoneIsAbstractError();
-    }
-    /**
-     * Return whether this Zone is equal to another zone
-     * @abstract
-     * @param {Zone} otherZone - the zone to compare
-     * @return {boolean}
-     */
-    ;
-
-    _proto.equals = function equals(otherZone) {
-      throw new ZoneIsAbstractError();
-    }
-    /**
-     * Return whether this Zone is valid.
-     * @abstract
-     * @type {boolean}
-     */
-    ;
-
-    _createClass(Zone, [{
-      key: "type",
-
-      /**
-       * The type of zone
-       * @abstract
-       * @type {string}
-       */
-      get: function get() {
-        throw new ZoneIsAbstractError();
-      }
-      /**
-       * The name of this zone.
-       * @abstract
-       * @type {string}
-       */
-
-    }, {
-      key: "name",
-      get: function get() {
-        throw new ZoneIsAbstractError();
-      }
-      /**
-       * Returns whether the offset is known to be fixed for the whole year.
-       * @abstract
-       * @type {boolean}
-       */
-
-    }, {
-      key: "universal",
-      get: function get() {
-        throw new ZoneIsAbstractError();
-      }
-    }, {
-      key: "isValid",
-      get: function get() {
-        throw new ZoneIsAbstractError();
-      }
-    }]);
-
-    return Zone;
-  }();
-
-  var singleton = null;
-  /**
-   * Represents the local zone for this Javascript environment.
-   * @implements {Zone}
-   */
-
-  var LocalZone =
-  /*#__PURE__*/
-  function (_Zone) {
-    _inheritsLoose(LocalZone, _Zone);
-
-    function LocalZone() {
-      return _Zone.apply(this, arguments) || this;
-    }
-
-    var _proto = LocalZone.prototype;
-
-    /** @override **/
-    _proto.offsetName = function offsetName(ts, _ref) {
-      var format = _ref.format,
-          locale = _ref.locale;
-      return parseZoneInfo(ts, format, locale);
-    }
-    /** @override **/
-    ;
-
-    _proto.formatOffset = function formatOffset$1(ts, format) {
-      return formatOffset(this.offset(ts), format);
-    }
-    /** @override **/
-    ;
-
-    _proto.offset = function offset(ts) {
-      return -new Date(ts).getTimezoneOffset();
-    }
-    /** @override **/
-    ;
-
-    _proto.equals = function equals(otherZone) {
-      return otherZone.type === "local";
-    }
-    /** @override **/
-    ;
-
-    _createClass(LocalZone, [{
-      key: "type",
-
-      /** @override **/
-      get: function get() {
-        return "local";
-      }
-      /** @override **/
-
-    }, {
-      key: "name",
-      get: function get() {
-        if (hasIntl()) {
-          return new Intl.DateTimeFormat().resolvedOptions().timeZone;
-        } else return "local";
-      }
-      /** @override **/
-
-    }, {
-      key: "universal",
-      get: function get() {
-        return false;
-      }
-    }, {
-      key: "isValid",
-      get: function get() {
-        return true;
-      }
-    }], [{
-      key: "instance",
-
-      /**
-       * Get a singleton instance of the local zone
-       * @return {LocalZone}
-       */
-      get: function get() {
-        if (singleton === null) {
-          singleton = new LocalZone();
-        }
-
-        return singleton;
-      }
-    }]);
-
-    return LocalZone;
-  }(Zone);
-
-  var matchingRegex = RegExp("^" + ianaRegex.source + "$");
-  var dtfCache = {};
-
-  function makeDTF(zone) {
-    if (!dtfCache[zone]) {
-      dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
-        hour12: false,
-        timeZone: zone,
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit"
-      });
-    }
-
-    return dtfCache[zone];
-  }
-
-  var typeToPos = {
-    year: 0,
-    month: 1,
-    day: 2,
-    hour: 3,
-    minute: 4,
-    second: 5
-  };
-
-  function hackyOffset(dtf, date) {
-    var formatted = dtf.format(date).replace(/\u200E/g, ""),
-        parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
-        fMonth = parsed[1],
-        fDay = parsed[2],
-        fYear = parsed[3],
-        fHour = parsed[4],
-        fMinute = parsed[5],
-        fSecond = parsed[6];
-    return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
-  }
-
-  function partsOffset(dtf, date) {
-    var formatted = dtf.formatToParts(date),
-        filled = [];
-
-    for (var i = 0; i < formatted.length; i++) {
-      var _formatted$i = formatted[i],
-          type = _formatted$i.type,
-          value = _formatted$i.value,
-          pos = typeToPos[type];
-
-      if (!isUndefined(pos)) {
-        filled[pos] = parseInt(value, 10);
-      }
-    }
-
-    return filled;
-  }
-
-  var ianaZoneCache = {};
-  /**
-   * A zone identified by an IANA identifier, like America/New_York
-   * @implements {Zone}
-   */
-
-  var IANAZone =
-  /*#__PURE__*/
-  function (_Zone) {
-    _inheritsLoose(IANAZone, _Zone);
-
-    /**
-     * @param {string} name - Zone name
-     * @return {IANAZone}
-     */
-    IANAZone.create = function create(name) {
-      if (!ianaZoneCache[name]) {
-        ianaZoneCache[name] = new IANAZone(name);
-      }
-
-      return ianaZoneCache[name];
-    }
-    /**
-     * Reset local caches. Should only be necessary in testing scenarios.
-     * @return {void}
-     */
-    ;
-
-    IANAZone.resetCache = function resetCache() {
-      ianaZoneCache = {};
-      dtfCache = {};
-    }
-    /**
-     * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
-     * @param {string} s - The string to check validity on
-     * @example IANAZone.isValidSpecifier("America/New_York") //=> true
-     * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
-     * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
-     * @return {boolean}
-     */
-    ;
-
-    IANAZone.isValidSpecifier = function isValidSpecifier(s) {
-      return !!(s && s.match(matchingRegex));
-    }
-    /**
-     * Returns whether the provided string identifies a real zone
-     * @param {string} zone - The string to check
-     * @example IANAZone.isValidZone("America/New_York") //=> true
-     * @example IANAZone.isValidZone("Fantasia/Castle") //=> false
-     * @example IANAZone.isValidZone("Sport~~blorp") //=> false
-     * @return {boolean}
-     */
-    ;
-
-    IANAZone.isValidZone = function isValidZone(zone) {
-      try {
-        new Intl.DateTimeFormat("en-US", {
-          timeZone: zone
-        }).format();
-        return true;
-      } catch (e) {
-        return false;
-      }
-    } // Etc/GMT+8 -> -480
-
-    /** @ignore */
-    ;
-
-    IANAZone.parseGMTOffset = function parseGMTOffset(specifier) {
-      if (specifier) {
-        var match = specifier.match(/^Etc\/GMT([+-]\d{1,2})$/i);
-
-        if (match) {
-          return -60 * parseInt(match[1]);
-        }
-      }
-
-      return null;
-    };
-
-    function IANAZone(name) {
-      var _this;
-
-      _this = _Zone.call(this) || this;
-      /** @private **/
-
-      _this.zoneName = name;
-      /** @private **/
-
-      _this.valid = IANAZone.isValidZone(name);
-      return _this;
-    }
-    /** @override **/
-
-
-    var _proto = IANAZone.prototype;
-
-    /** @override **/
-    _proto.offsetName = function offsetName(ts, _ref) {
-      var format = _ref.format,
-          locale = _ref.locale;
-      return parseZoneInfo(ts, format, locale, this.name);
-    }
-    /** @override **/
-    ;
-
-    _proto.formatOffset = function formatOffset$1(ts, format) {
-      return formatOffset(this.offset(ts), format);
-    }
-    /** @override **/
-    ;
-
-    _proto.offset = function offset(ts) {
-      var date = new Date(ts),
-          dtf = makeDTF(this.name),
-          _ref2 = dtf.formatToParts ? partsOffset(dtf, date) : hackyOffset(dtf, date),
-          year = _ref2[0],
-          month = _ref2[1],
-          day = _ref2[2],
-          hour = _ref2[3],
-          minute = _ref2[4],
-          second = _ref2[5];
-
-      var asUTC = objToLocalTS({
-        year: year,
-        month: month,
-        day: day,
-        hour: hour,
-        minute: minute,
-        second: second,
-        millisecond: 0
-      });
-      var asTS = date.valueOf();
-      asTS -= asTS % 1000;
-      return (asUTC - asTS) / (60 * 1000);
-    }
-    /** @override **/
-    ;
-
-    _proto.equals = function equals(otherZone) {
-      return otherZone.type === "iana" && otherZone.name === this.name;
-    }
-    /** @override **/
-    ;
-
-    _createClass(IANAZone, [{
-      key: "type",
-      get: function get() {
-        return "iana";
-      }
-      /** @override **/
-
-    }, {
-      key: "name",
-      get: function get() {
-        return this.zoneName;
-      }
-      /** @override **/
-
-    }, {
-      key: "universal",
-      get: function get() {
-        return false;
-      }
-    }, {
-      key: "isValid",
-      get: function get() {
-        return this.valid;
-      }
-    }]);
-
-    return IANAZone;
-  }(Zone);
-
-  var singleton$1 = null;
-  /**
-   * A zone with a fixed offset (i.e. no DST)
-   * @implements {Zone}
-   */
-
-  var FixedOffsetZone =
-  /*#__PURE__*/
-  function (_Zone) {
-    _inheritsLoose(FixedOffsetZone, _Zone);
-
-    /**
-     * Get an instance with a specified offset
-     * @param {number} offset - The offset in minutes
-     * @return {FixedOffsetZone}
-     */
-    FixedOffsetZone.instance = function instance(offset) {
-      return offset === 0 ? FixedOffsetZone.utcInstance : new FixedOffsetZone(offset);
-    }
-    /**
-     * Get an instance of FixedOffsetZone from a UTC offset string, like "UTC+6"
-     * @param {string} s - The offset string to parse
-     * @example FixedOffsetZone.parseSpecifier("UTC+6")
-     * @example FixedOffsetZone.parseSpecifier("UTC+06")
-     * @example FixedOffsetZone.parseSpecifier("UTC-6:00")
-     * @return {FixedOffsetZone}
-     */
-    ;
-
-    FixedOffsetZone.parseSpecifier = function parseSpecifier(s) {
-      if (s) {
-        var r = s.match(/^utc(?:([+-]\d{1,2})(?::(\d{2}))?)?$/i);
-
-        if (r) {
-          return new FixedOffsetZone(signedOffset(r[1], r[2]));
-        }
-      }
-
-      return null;
-    };
-
-    _createClass(FixedOffsetZone, null, [{
-      key: "utcInstance",
-
-      /**
-       * Get a singleton instance of UTC
-       * @return {FixedOffsetZone}
-       */
-      get: function get() {
-        if (singleton$1 === null) {
-          singleton$1 = new FixedOffsetZone(0);
-        }
-
-        return singleton$1;
-      }
-    }]);
-
-    function FixedOffsetZone(offset) {
-      var _this;
-
-      _this = _Zone.call(this) || this;
-      /** @private **/
-
-      _this.fixed = offset;
-      return _this;
-    }
-    /** @override **/
-
-
-    var _proto = FixedOffsetZone.prototype;
-
-    /** @override **/
-    _proto.offsetName = function offsetName() {
-      return this.name;
-    }
-    /** @override **/
-    ;
-
-    _proto.formatOffset = function formatOffset$1(ts, format) {
-      return formatOffset(this.fixed, format);
-    }
-    /** @override **/
-    ;
-
-    /** @override **/
-    _proto.offset = function offset() {
-      return this.fixed;
-    }
-    /** @override **/
-    ;
-
-    _proto.equals = function equals(otherZone) {
-      return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
-    }
-    /** @override **/
-    ;
-
-    _createClass(FixedOffsetZone, [{
-      key: "type",
-      get: function get() {
-        return "fixed";
-      }
-      /** @override **/
-
-    }, {
-      key: "name",
-      get: function get() {
-        return this.fixed === 0 ? "UTC" : "UTC" + formatOffset(this.fixed, "narrow");
-      }
-    }, {
-      key: "universal",
-      get: function get() {
-        return true;
-      }
-    }, {
-      key: "isValid",
-      get: function get() {
-        return true;
-      }
-    }]);
-
-    return FixedOffsetZone;
-  }(Zone);
-
-  /**
-   * A zone that failed to parse. You should never need to instantiate this.
-   * @implements {Zone}
-   */
-
-  var InvalidZone =
-  /*#__PURE__*/
-  function (_Zone) {
-    _inheritsLoose(InvalidZone, _Zone);
-
-    function InvalidZone(zoneName) {
-      var _this;
-
-      _this = _Zone.call(this) || this;
-      /**  @private */
-
-      _this.zoneName = zoneName;
-      return _this;
-    }
-    /** @override **/
-
-
-    var _proto = InvalidZone.prototype;
-
-    /** @override **/
-    _proto.offsetName = function offsetName() {
-      return null;
-    }
-    /** @override **/
-    ;
-
-    _proto.formatOffset = function formatOffset() {
-      return "";
-    }
-    /** @override **/
-    ;
-
-    _proto.offset = function offset() {
-      return NaN;
-    }
-    /** @override **/
-    ;
-
-    _proto.equals = function equals() {
-      return false;
-    }
-    /** @override **/
-    ;
-
-    _createClass(InvalidZone, [{
-      key: "type",
-      get: function get() {
-        return "invalid";
-      }
-      /** @override **/
-
-    }, {
-      key: "name",
-      get: function get() {
-        return this.zoneName;
-      }
-      /** @override **/
-
-    }, {
-      key: "universal",
-      get: function get() {
-        return false;
-      }
-    }, {
-      key: "isValid",
-      get: function get() {
-        return false;
-      }
-    }]);
-
-    return InvalidZone;
-  }(Zone);
-
-  /**
-   * @private
-   */
-  function normalizeZone(input, defaultZone) {
-    var offset;
-
-    if (isUndefined(input) || input === null) {
-      return defaultZone;
-    } else if (input instanceof Zone) {
-      return input;
-    } else if (isString(input)) {
-      var lowered = input.toLowerCase();
-      if (lowered === "local") return defaultZone;else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;else if ((offset = IANAZone.parseGMTOffset(input)) != null) {
-        // handle Etc/GMT-4, which V8 chokes on
-        return FixedOffsetZone.instance(offset);
-      } else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
-    } else if (isNumber(input)) {
-      return FixedOffsetZone.instance(input);
-    } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
-      // This is dumb, but the instanceof check above doesn't seem to really work
-      // so we're duck checking it
-      return input;
-    } else {
-      return new InvalidZone(input);
-    }
-  }
-
-  var now = function now() {
-    return Date.now();
-  },
-      defaultZone = null,
-      // not setting this directly to LocalZone.instance bc loading order issues
-  defaultLocale = null,
-      defaultNumberingSystem = null,
-      defaultOutputCalendar = null,
-      throwOnInvalid = false;
-  /**
-   * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
-   */
-
-
-  var Settings =
-  /*#__PURE__*/
-  function () {
-    function Settings() {}
-
-    /**
-     * Reset Luxon's global caches. Should only be necessary in testing scenarios.
-     * @return {void}
-     */
-    Settings.resetCaches = function resetCaches() {
-      Locale.resetCache();
-      IANAZone.resetCache();
-    };
-
-    _createClass(Settings, null, [{
-      key: "now",
-
-      /**
-       * Get the callback for returning the current timestamp.
-       * @type {function}
-       */
-      get: function get() {
-        return now;
-      }
-      /**
-       * Set the callback for returning the current timestamp.
-       * The function should return a number, which will be interpreted as an Epoch millisecond count
-       * @type {function}
-       * @example Settings.now = () => Date.now() + 3000 // pretend it is 3 seconds in the future
-       * @example Settings.now = () => 0 // always pretend it's Jan 1, 1970 at midnight in UTC time
-       */
-      ,
-      set: function set(n) {
-        now = n;
-      }
-      /**
-       * Get the default time zone to create DateTimes in.
-       * @type {string}
-       */
-
-    }, {
-      key: "defaultZoneName",
-      get: function get() {
-        return Settings.defaultZone.name;
-      }
-      /**
-       * Set the default time zone to create DateTimes in. Does not affect existing instances.
-       * @type {string}
-       */
-      ,
-      set: function set(z) {
-        if (!z) {
-          defaultZone = null;
-        } else {
-          defaultZone = normalizeZone(z);
-        }
-      }
-      /**
-       * Get the default time zone object to create DateTimes in. Does not affect existing instances.
-       * @type {Zone}
-       */
-
-    }, {
-      key: "defaultZone",
-      get: function get() {
-        return defaultZone || LocalZone.instance;
-      }
-      /**
-       * Get the default locale to create DateTimes with. Does not affect existing instances.
-       * @type {string}
-       */
-
-    }, {
-      key: "defaultLocale",
-      get: function get() {
-        return defaultLocale;
-      }
-      /**
-       * Set the default locale to create DateTimes with. Does not affect existing instances.
-       * @type {string}
-       */
-      ,
-      set: function set(locale) {
-        defaultLocale = locale;
-      }
-      /**
-       * Get the default numbering system to create DateTimes with. Does not affect existing instances.
-       * @type {string}
-       */
-
-    }, {
-      key: "defaultNumberingSystem",
-      get: function get() {
-        return defaultNumberingSystem;
-      }
-      /**
-       * Set the default numbering system to create DateTimes with. Does not affect existing instances.
-       * @type {string}
-       */
-      ,
-      set: function set(numberingSystem) {
-        defaultNumberingSystem = numberingSystem;
-      }
-      /**
-       * Get the default output calendar to create DateTimes with. Does not affect existing instances.
-       * @type {string}
-       */
-
-    }, {
-      key: "defaultOutputCalendar",
-      get: function get() {
-        return defaultOutputCalendar;
-      }
-      /**
-       * Set the default output calendar to create DateTimes with. Does not affect existing instances.
-       * @type {string}
-       */
-      ,
-      set: function set(outputCalendar) {
-        defaultOutputCalendar = outputCalendar;
-      }
-      /**
-       * Get whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
-       * @type {boolean}
-       */
-
-    }, {
-      key: "throwOnInvalid",
-      get: function get() {
-        return throwOnInvalid;
-      }
-      /**
-       * Set whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
-       * @type {boolean}
-       */
-      ,
-      set: function set(t) {
-        throwOnInvalid = t;
-      }
-    }]);
-
-    return Settings;
-  }();
 
   function stringifyTokens(splits, tokenToString) {
     var s = "";
@@ -2220,6 +1403,848 @@ var luxon = (function (exports) {
     return Formatter;
   }();
 
+  var Invalid =
+  /*#__PURE__*/
+  function () {
+    function Invalid(reason, explanation) {
+      this.reason = reason;
+      this.explanation = explanation;
+    }
+
+    var _proto = Invalid.prototype;
+
+    _proto.toMessage = function toMessage() {
+      if (this.explanation) {
+        return this.reason + ": " + this.explanation;
+      } else {
+        return this.reason;
+      }
+    };
+
+    return Invalid;
+  }();
+
+  /**
+   * @interface
+   */
+
+  var Zone =
+  /*#__PURE__*/
+  function () {
+    function Zone() {}
+
+    var _proto = Zone.prototype;
+
+    /**
+     * Returns the offset's common name (such as EST) at the specified timestamp
+     * @abstract
+     * @param {number} ts - Epoch milliseconds for which to get the name
+     * @param {Object} opts - Options to affect the format
+     * @param {string} opts.format - What style of offset to return. Accepts 'long' or 'short'.
+     * @param {string} opts.locale - What locale to return the offset name in.
+     * @return {string}
+     */
+    _proto.offsetName = function offsetName(ts, opts) {
+      throw new ZoneIsAbstractError();
+    }
+    /**
+     * Returns the offset's value as a string
+     * @abstract
+     * @param {number} ts - Epoch milliseconds for which to get the offset
+     * @param {string} format - What style of offset to return.
+     *                          Accepts 'narrow', 'short', or 'techie'. Returning '+6', '+06:00', or '+0600' respectively
+     * @return {string}
+     */
+    ;
+
+    _proto.formatOffset = function formatOffset(ts, format) {
+      throw new ZoneIsAbstractError();
+    }
+    /**
+     * Return the offset in minutes for this zone at the specified timestamp.
+     * @abstract
+     * @param {number} ts - Epoch milliseconds for which to compute the offset
+     * @return {number}
+     */
+    ;
+
+    _proto.offset = function offset(ts) {
+      throw new ZoneIsAbstractError();
+    }
+    /**
+     * Return whether this Zone is equal to another zone
+     * @abstract
+     * @param {Zone} otherZone - the zone to compare
+     * @return {boolean}
+     */
+    ;
+
+    _proto.equals = function equals(otherZone) {
+      throw new ZoneIsAbstractError();
+    }
+    /**
+     * Return whether this Zone is valid.
+     * @abstract
+     * @type {boolean}
+     */
+    ;
+
+    _createClass(Zone, [{
+      key: "type",
+
+      /**
+       * The type of zone
+       * @abstract
+       * @type {string}
+       */
+      get: function get() {
+        throw new ZoneIsAbstractError();
+      }
+      /**
+       * The name of this zone.
+       * @abstract
+       * @type {string}
+       */
+
+    }, {
+      key: "name",
+      get: function get() {
+        throw new ZoneIsAbstractError();
+      }
+      /**
+       * Returns whether the offset is known to be fixed for the whole year.
+       * @abstract
+       * @type {boolean}
+       */
+
+    }, {
+      key: "universal",
+      get: function get() {
+        throw new ZoneIsAbstractError();
+      }
+    }, {
+      key: "isValid",
+      get: function get() {
+        throw new ZoneIsAbstractError();
+      }
+    }]);
+
+    return Zone;
+  }();
+
+  var singleton = null;
+  /**
+   * Represents the local zone for this Javascript environment.
+   * @implements {Zone}
+   */
+
+  var LocalZone =
+  /*#__PURE__*/
+  function (_Zone) {
+    _inheritsLoose(LocalZone, _Zone);
+
+    function LocalZone() {
+      return _Zone.apply(this, arguments) || this;
+    }
+
+    var _proto = LocalZone.prototype;
+
+    /** @override **/
+    _proto.offsetName = function offsetName(ts, _ref) {
+      var format = _ref.format,
+          locale = _ref.locale;
+      return parseZoneInfo(ts, format, locale);
+    }
+    /** @override **/
+    ;
+
+    _proto.formatOffset = function formatOffset$1(ts, format) {
+      return formatOffset(this.offset(ts), format);
+    }
+    /** @override **/
+    ;
+
+    _proto.offset = function offset(ts) {
+      return -new Date(ts).getTimezoneOffset();
+    }
+    /** @override **/
+    ;
+
+    _proto.equals = function equals(otherZone) {
+      return otherZone.type === "local";
+    }
+    /** @override **/
+    ;
+
+    _createClass(LocalZone, [{
+      key: "type",
+
+      /** @override **/
+      get: function get() {
+        return "local";
+      }
+      /** @override **/
+
+    }, {
+      key: "name",
+      get: function get() {
+        if (hasIntl()) {
+          return new Intl.DateTimeFormat().resolvedOptions().timeZone;
+        } else return "local";
+      }
+      /** @override **/
+
+    }, {
+      key: "universal",
+      get: function get() {
+        return false;
+      }
+    }, {
+      key: "isValid",
+      get: function get() {
+        return true;
+      }
+    }], [{
+      key: "instance",
+
+      /**
+       * Get a singleton instance of the local zone
+       * @return {LocalZone}
+       */
+      get: function get() {
+        if (singleton === null) {
+          singleton = new LocalZone();
+        }
+
+        return singleton;
+      }
+    }]);
+
+    return LocalZone;
+  }(Zone);
+
+  var matchingRegex = RegExp("^" + ianaRegex.source + "$");
+  var dtfCache = {};
+
+  function makeDTF(zone) {
+    if (!dtfCache[zone]) {
+      dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
+        hour12: false,
+        timeZone: zone,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+    }
+
+    return dtfCache[zone];
+  }
+
+  var typeToPos = {
+    year: 0,
+    month: 1,
+    day: 2,
+    hour: 3,
+    minute: 4,
+    second: 5
+  };
+
+  function hackyOffset(dtf, date) {
+    var formatted = dtf.format(date).replace(/\u200E/g, ""),
+        parsed = /(\d+)\/(\d+)\/(\d+),? (\d+):(\d+):(\d+)/.exec(formatted),
+        fMonth = parsed[1],
+        fDay = parsed[2],
+        fYear = parsed[3],
+        fHour = parsed[4],
+        fMinute = parsed[5],
+        fSecond = parsed[6];
+    return [fYear, fMonth, fDay, fHour, fMinute, fSecond];
+  }
+
+  function partsOffset(dtf, date) {
+    var formatted = dtf.formatToParts(date),
+        filled = [];
+
+    for (var i = 0; i < formatted.length; i++) {
+      var _formatted$i = formatted[i],
+          type = _formatted$i.type,
+          value = _formatted$i.value,
+          pos = typeToPos[type];
+
+      if (!isUndefined(pos)) {
+        filled[pos] = parseInt(value, 10);
+      }
+    }
+
+    return filled;
+  }
+
+  var ianaZoneCache = {};
+  /**
+   * A zone identified by an IANA identifier, like America/New_York
+   * @implements {Zone}
+   */
+
+  var IANAZone =
+  /*#__PURE__*/
+  function (_Zone) {
+    _inheritsLoose(IANAZone, _Zone);
+
+    /**
+     * @param {string} name - Zone name
+     * @return {IANAZone}
+     */
+    IANAZone.create = function create(name) {
+      if (!ianaZoneCache[name]) {
+        ianaZoneCache[name] = new IANAZone(name);
+      }
+
+      return ianaZoneCache[name];
+    }
+    /**
+     * Reset local caches. Should only be necessary in testing scenarios.
+     * @return {void}
+     */
+    ;
+
+    IANAZone.resetCache = function resetCache() {
+      ianaZoneCache = {};
+      dtfCache = {};
+    }
+    /**
+     * Returns whether the provided string is a valid specifier. This only checks the string's format, not that the specifier identifies a known zone; see isValidZone for that.
+     * @param {string} s - The string to check validity on
+     * @example IANAZone.isValidSpecifier("America/New_York") //=> true
+     * @example IANAZone.isValidSpecifier("Fantasia/Castle") //=> true
+     * @example IANAZone.isValidSpecifier("Sport~~blorp") //=> false
+     * @return {boolean}
+     */
+    ;
+
+    IANAZone.isValidSpecifier = function isValidSpecifier(s) {
+      return !!(s && s.match(matchingRegex));
+    }
+    /**
+     * Returns whether the provided string identifies a real zone
+     * @param {string} zone - The string to check
+     * @example IANAZone.isValidZone("America/New_York") //=> true
+     * @example IANAZone.isValidZone("Fantasia/Castle") //=> false
+     * @example IANAZone.isValidZone("Sport~~blorp") //=> false
+     * @return {boolean}
+     */
+    ;
+
+    IANAZone.isValidZone = function isValidZone(zone) {
+      try {
+        new Intl.DateTimeFormat("en-US", {
+          timeZone: zone
+        }).format();
+        return true;
+      } catch (e) {
+        return false;
+      }
+    } // Etc/GMT+8 -> -480
+
+    /** @ignore */
+    ;
+
+    IANAZone.parseGMTOffset = function parseGMTOffset(specifier) {
+      if (specifier) {
+        var match = specifier.match(/^Etc\/GMT([+-]\d{1,2})$/i);
+
+        if (match) {
+          return -60 * parseInt(match[1]);
+        }
+      }
+
+      return null;
+    };
+
+    function IANAZone(name) {
+      var _this;
+
+      _this = _Zone.call(this) || this;
+      /** @private **/
+
+      _this.zoneName = name;
+      /** @private **/
+
+      _this.valid = IANAZone.isValidZone(name);
+      return _this;
+    }
+    /** @override **/
+
+
+    var _proto = IANAZone.prototype;
+
+    /** @override **/
+    _proto.offsetName = function offsetName(ts, _ref) {
+      var format = _ref.format,
+          locale = _ref.locale;
+      return parseZoneInfo(ts, format, locale, this.name);
+    }
+    /** @override **/
+    ;
+
+    _proto.formatOffset = function formatOffset$1(ts, format) {
+      return formatOffset(this.offset(ts), format);
+    }
+    /** @override **/
+    ;
+
+    _proto.offset = function offset(ts) {
+      var date = new Date(ts),
+          dtf = makeDTF(this.name),
+          _ref2 = dtf.formatToParts ? partsOffset(dtf, date) : hackyOffset(dtf, date),
+          year = _ref2[0],
+          month = _ref2[1],
+          day = _ref2[2],
+          hour = _ref2[3],
+          minute = _ref2[4],
+          second = _ref2[5],
+          adjustedHour = hour === 24 ? 0 : hour;
+
+      var asUTC = objToLocalTS({
+        year: year,
+        month: month,
+        day: day,
+        hour: adjustedHour,
+        minute: minute,
+        second: second,
+        millisecond: 0
+      });
+      var asTS = date.valueOf();
+      asTS -= asTS % 1000;
+      return (asUTC - asTS) / (60 * 1000);
+    }
+    /** @override **/
+    ;
+
+    _proto.equals = function equals(otherZone) {
+      return otherZone.type === "iana" && otherZone.name === this.name;
+    }
+    /** @override **/
+    ;
+
+    _createClass(IANAZone, [{
+      key: "type",
+      get: function get() {
+        return "iana";
+      }
+      /** @override **/
+
+    }, {
+      key: "name",
+      get: function get() {
+        return this.zoneName;
+      }
+      /** @override **/
+
+    }, {
+      key: "universal",
+      get: function get() {
+        return false;
+      }
+    }, {
+      key: "isValid",
+      get: function get() {
+        return this.valid;
+      }
+    }]);
+
+    return IANAZone;
+  }(Zone);
+
+  var singleton$1 = null;
+  /**
+   * A zone with a fixed offset (meaning no DST)
+   * @implements {Zone}
+   */
+
+  var FixedOffsetZone =
+  /*#__PURE__*/
+  function (_Zone) {
+    _inheritsLoose(FixedOffsetZone, _Zone);
+
+    /**
+     * Get an instance with a specified offset
+     * @param {number} offset - The offset in minutes
+     * @return {FixedOffsetZone}
+     */
+    FixedOffsetZone.instance = function instance(offset) {
+      return offset === 0 ? FixedOffsetZone.utcInstance : new FixedOffsetZone(offset);
+    }
+    /**
+     * Get an instance of FixedOffsetZone from a UTC offset string, like "UTC+6"
+     * @param {string} s - The offset string to parse
+     * @example FixedOffsetZone.parseSpecifier("UTC+6")
+     * @example FixedOffsetZone.parseSpecifier("UTC+06")
+     * @example FixedOffsetZone.parseSpecifier("UTC-6:00")
+     * @return {FixedOffsetZone}
+     */
+    ;
+
+    FixedOffsetZone.parseSpecifier = function parseSpecifier(s) {
+      if (s) {
+        var r = s.match(/^utc(?:([+-]\d{1,2})(?::(\d{2}))?)?$/i);
+
+        if (r) {
+          return new FixedOffsetZone(signedOffset(r[1], r[2]));
+        }
+      }
+
+      return null;
+    };
+
+    _createClass(FixedOffsetZone, null, [{
+      key: "utcInstance",
+
+      /**
+       * Get a singleton instance of UTC
+       * @return {FixedOffsetZone}
+       */
+      get: function get() {
+        if (singleton$1 === null) {
+          singleton$1 = new FixedOffsetZone(0);
+        }
+
+        return singleton$1;
+      }
+    }]);
+
+    function FixedOffsetZone(offset) {
+      var _this;
+
+      _this = _Zone.call(this) || this;
+      /** @private **/
+
+      _this.fixed = offset;
+      return _this;
+    }
+    /** @override **/
+
+
+    var _proto = FixedOffsetZone.prototype;
+
+    /** @override **/
+    _proto.offsetName = function offsetName() {
+      return this.name;
+    }
+    /** @override **/
+    ;
+
+    _proto.formatOffset = function formatOffset$1(ts, format) {
+      return formatOffset(this.fixed, format);
+    }
+    /** @override **/
+    ;
+
+    /** @override **/
+    _proto.offset = function offset() {
+      return this.fixed;
+    }
+    /** @override **/
+    ;
+
+    _proto.equals = function equals(otherZone) {
+      return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
+    }
+    /** @override **/
+    ;
+
+    _createClass(FixedOffsetZone, [{
+      key: "type",
+      get: function get() {
+        return "fixed";
+      }
+      /** @override **/
+
+    }, {
+      key: "name",
+      get: function get() {
+        return this.fixed === 0 ? "UTC" : "UTC" + formatOffset(this.fixed, "narrow");
+      }
+    }, {
+      key: "universal",
+      get: function get() {
+        return true;
+      }
+    }, {
+      key: "isValid",
+      get: function get() {
+        return true;
+      }
+    }]);
+
+    return FixedOffsetZone;
+  }(Zone);
+
+  /**
+   * A zone that failed to parse. You should never need to instantiate this.
+   * @implements {Zone}
+   */
+
+  var InvalidZone =
+  /*#__PURE__*/
+  function (_Zone) {
+    _inheritsLoose(InvalidZone, _Zone);
+
+    function InvalidZone(zoneName) {
+      var _this;
+
+      _this = _Zone.call(this) || this;
+      /**  @private */
+
+      _this.zoneName = zoneName;
+      return _this;
+    }
+    /** @override **/
+
+
+    var _proto = InvalidZone.prototype;
+
+    /** @override **/
+    _proto.offsetName = function offsetName() {
+      return null;
+    }
+    /** @override **/
+    ;
+
+    _proto.formatOffset = function formatOffset() {
+      return "";
+    }
+    /** @override **/
+    ;
+
+    _proto.offset = function offset() {
+      return NaN;
+    }
+    /** @override **/
+    ;
+
+    _proto.equals = function equals() {
+      return false;
+    }
+    /** @override **/
+    ;
+
+    _createClass(InvalidZone, [{
+      key: "type",
+      get: function get() {
+        return "invalid";
+      }
+      /** @override **/
+
+    }, {
+      key: "name",
+      get: function get() {
+        return this.zoneName;
+      }
+      /** @override **/
+
+    }, {
+      key: "universal",
+      get: function get() {
+        return false;
+      }
+    }, {
+      key: "isValid",
+      get: function get() {
+        return false;
+      }
+    }]);
+
+    return InvalidZone;
+  }(Zone);
+
+  /**
+   * @private
+   */
+  function normalizeZone(input, defaultZone) {
+    var offset;
+
+    if (isUndefined(input) || input === null) {
+      return defaultZone;
+    } else if (input instanceof Zone) {
+      return input;
+    } else if (isString(input)) {
+      var lowered = input.toLowerCase();
+      if (lowered === "local") return defaultZone;else if (lowered === "utc" || lowered === "gmt") return FixedOffsetZone.utcInstance;else if ((offset = IANAZone.parseGMTOffset(input)) != null) {
+        // handle Etc/GMT-4, which V8 chokes on
+        return FixedOffsetZone.instance(offset);
+      } else if (IANAZone.isValidSpecifier(lowered)) return IANAZone.create(input);else return FixedOffsetZone.parseSpecifier(lowered) || new InvalidZone(input);
+    } else if (isNumber(input)) {
+      return FixedOffsetZone.instance(input);
+    } else if (typeof input === "object" && input.offset && typeof input.offset === "number") {
+      // This is dumb, but the instanceof check above doesn't seem to really work
+      // so we're duck checking it
+      return input;
+    } else {
+      return new InvalidZone(input);
+    }
+  }
+
+  var now = function now() {
+    return Date.now();
+  },
+      defaultZone = null,
+      // not setting this directly to LocalZone.instance bc loading order issues
+  defaultLocale = null,
+      defaultNumberingSystem = null,
+      defaultOutputCalendar = null,
+      throwOnInvalid = false;
+  /**
+   * Settings contains static getters and setters that control Luxon's overall behavior. Luxon is a simple library with few options, but the ones it does have live here.
+   */
+
+
+  var Settings =
+  /*#__PURE__*/
+  function () {
+    function Settings() {}
+
+    /**
+     * Reset Luxon's global caches. Should only be necessary in testing scenarios.
+     * @return {void}
+     */
+    Settings.resetCaches = function resetCaches() {
+      Locale.resetCache();
+      IANAZone.resetCache();
+    };
+
+    _createClass(Settings, null, [{
+      key: "now",
+
+      /**
+       * Get the callback for returning the current timestamp.
+       * @type {function}
+       */
+      get: function get() {
+        return now;
+      }
+      /**
+       * Set the callback for returning the current timestamp.
+       * The function should return a number, which will be interpreted as an Epoch millisecond count
+       * @type {function}
+       * @example Settings.now = () => Date.now() + 3000 // pretend it is 3 seconds in the future
+       * @example Settings.now = () => 0 // always pretend it's Jan 1, 1970 at midnight in UTC time
+       */
+      ,
+      set: function set(n) {
+        now = n;
+      }
+      /**
+       * Get the default time zone to create DateTimes in.
+       * @type {string}
+       */
+
+    }, {
+      key: "defaultZoneName",
+      get: function get() {
+        return Settings.defaultZone.name;
+      }
+      /**
+       * Set the default time zone to create DateTimes in. Does not affect existing instances.
+       * @type {string}
+       */
+      ,
+      set: function set(z) {
+        if (!z) {
+          defaultZone = null;
+        } else {
+          defaultZone = normalizeZone(z);
+        }
+      }
+      /**
+       * Get the default time zone object to create DateTimes in. Does not affect existing instances.
+       * @type {Zone}
+       */
+
+    }, {
+      key: "defaultZone",
+      get: function get() {
+        return defaultZone || LocalZone.instance;
+      }
+      /**
+       * Get the default locale to create DateTimes with. Does not affect existing instances.
+       * @type {string}
+       */
+
+    }, {
+      key: "defaultLocale",
+      get: function get() {
+        return defaultLocale;
+      }
+      /**
+       * Set the default locale to create DateTimes with. Does not affect existing instances.
+       * @type {string}
+       */
+      ,
+      set: function set(locale) {
+        defaultLocale = locale;
+      }
+      /**
+       * Get the default numbering system to create DateTimes with. Does not affect existing instances.
+       * @type {string}
+       */
+
+    }, {
+      key: "defaultNumberingSystem",
+      get: function get() {
+        return defaultNumberingSystem;
+      }
+      /**
+       * Set the default numbering system to create DateTimes with. Does not affect existing instances.
+       * @type {string}
+       */
+      ,
+      set: function set(numberingSystem) {
+        defaultNumberingSystem = numberingSystem;
+      }
+      /**
+       * Get the default output calendar to create DateTimes with. Does not affect existing instances.
+       * @type {string}
+       */
+
+    }, {
+      key: "defaultOutputCalendar",
+      get: function get() {
+        return defaultOutputCalendar;
+      }
+      /**
+       * Set the default output calendar to create DateTimes with. Does not affect existing instances.
+       * @type {string}
+       */
+      ,
+      set: function set(outputCalendar) {
+        defaultOutputCalendar = outputCalendar;
+      }
+      /**
+       * Get whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
+       * @type {boolean}
+       */
+
+    }, {
+      key: "throwOnInvalid",
+      get: function get() {
+        return throwOnInvalid;
+      }
+      /**
+       * Set whether Luxon will throw when it encounters invalid DateTimes, Durations, or Intervals
+       * @type {boolean}
+       */
+      ,
+      set: function set(t) {
+        throwOnInvalid = t;
+      }
+    }]);
+
+    return Settings;
+  }();
+
   var intlDTCache = {};
 
   function getCachedDTF(locString, opts) {
@@ -2240,7 +2265,7 @@ var luxon = (function (exports) {
 
   var intlNumCache = {};
 
-  function getCachendINF(locString, opts) {
+  function getCachedINF(locString, opts) {
     if (opts === void 0) {
       opts = {};
     }
@@ -2258,7 +2283,7 @@ var luxon = (function (exports) {
 
   var intlRelCache = {};
 
-  function getCachendRTF(locString, opts) {
+  function getCachedRTF(locString, opts) {
     if (opts === void 0) {
       opts = {};
     }
@@ -2399,7 +2424,7 @@ var luxon = (function (exports) {
           useGrouping: false
         };
         if (opts.padTo > 0) intlOpts.minimumIntegerDigits = opts.padTo;
-        this.inf = getCachendINF(intl, intlOpts);
+        this.inf = getCachedINF(intl, intlOpts);
       }
     }
 
@@ -2517,7 +2542,7 @@ var luxon = (function (exports) {
       }, opts);
 
       if (!isEnglish && hasRelative()) {
-        this.rtf = getCachendRTF(intl, opts);
+        this.rtf = getCachedRTF(intl, opts);
       }
     }
 
@@ -3107,27 +3132,6 @@ var luxon = (function (exports) {
     return parse(s, [sqlYmdWithTimeExtensionRegex, extractISOYmdTimeOffsetAndIANAZone], [sqlTimeCombinedRegex, extractISOTimeOffsetAndIANAZone]);
   }
 
-  var Invalid =
-  /*#__PURE__*/
-  function () {
-    function Invalid(reason, explanation) {
-      this.reason = reason;
-      this.explanation = explanation;
-    }
-
-    var _proto = Invalid.prototype;
-
-    _proto.toMessage = function toMessage() {
-      if (this.explanation) {
-        return this.reason + ": " + this.explanation;
-      } else {
-        return this.reason;
-      }
-    };
-
-    return Invalid;
-  }();
-
   var INVALID = "Invalid Duration"; // unit conversion constants
 
   var lowOrderMatrix = {
@@ -3542,7 +3546,9 @@ var luxon = (function (exports) {
       if (this.hours !== 0 || this.minutes !== 0 || this.seconds !== 0 || this.milliseconds !== 0) s += "T";
       if (this.hours !== 0) s += this.hours + "H";
       if (this.minutes !== 0) s += this.minutes + "M";
-      if (this.seconds !== 0 || this.milliseconds !== 0) s += this.seconds + this.milliseconds / 1000 + "S";
+      if (this.seconds !== 0 || this.milliseconds !== 0) // this will handle "floating point madness" by removing extra decimal places
+        // https://stackoverflow.com/questions/588004/is-floating-point-math-broken
+        s += roundTo(this.seconds + this.milliseconds / 1000, 3) + "S";
       if (s === "P") s += "T0S";
       return s;
     }
@@ -3608,6 +3614,28 @@ var luxon = (function (exports) {
       if (!this.isValid) return this;
       var dur = friendlyDuration(duration);
       return this.plus(dur.negate());
+    }
+    /**
+     * Scale this Duration by the specified amount. Return a newly-constructed Duration.
+     * @param {function} fn - The function to apply to each unit. Arity is 1 or 2: the value of the unit and, optionally, the unit name. Must return a number.
+     * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit(x => x * 2) //=> { hours: 2, minutes: 60 }
+     * @example Duration.fromObject({ hours: 1, minutes: 30 }).mapUnit((x, u) => u === "hour" ? x * 2 : x) //=> { hours: 2, minutes: 30 }
+     * @return {Duration}
+     */
+    ;
+
+    _proto.mapUnits = function mapUnits(fn) {
+      if (!this.isValid) return this;
+      var result = {};
+
+      for (var _i2 = 0, _Object$keys = Object.keys(this.values); _i2 < _Object$keys.length; _i2++) {
+        var k = _Object$keys[_i2];
+        result[k] = asNumber(fn(this.values[k], k));
+      }
+
+      return clone(this, {
+        values: result
+      }, true);
     }
     /**
      * Get the value of unit.
@@ -3721,8 +3749,8 @@ var luxon = (function (exports) {
       var lastUnit;
       normalizeValues(this.matrix, vals);
 
-      for (var _i2 = 0, _orderedUnits2 = orderedUnits; _i2 < _orderedUnits2.length; _i2++) {
-        var k = _orderedUnits2[_i2];
+      for (var _i3 = 0, _orderedUnits2 = orderedUnits; _i3 < _orderedUnits2.length; _i3++) {
+        var k = _orderedUnits2[_i3];
 
         if (units.indexOf(k) >= 0) {
           lastUnit = k;
@@ -3777,8 +3805,8 @@ var luxon = (function (exports) {
       if (!this.isValid) return this;
       var negated = {};
 
-      for (var _i3 = 0, _Object$keys = Object.keys(this.values); _i3 < _Object$keys.length; _i3++) {
-        var k = _Object$keys[_i3];
+      for (var _i4 = 0, _Object$keys2 = Object.keys(this.values); _i4 < _Object$keys2.length; _i4++) {
+        var k = _Object$keys2[_i4];
         negated[k] = -this.values[k];
       }
 
@@ -3807,8 +3835,8 @@ var luxon = (function (exports) {
         return false;
       }
 
-      for (var _i4 = 0, _orderedUnits3 = orderedUnits; _i4 < _orderedUnits3.length; _i4++) {
-        var u = _orderedUnits3[_i4];
+      for (var _i5 = 0, _orderedUnits3 = orderedUnits; _i5 < _orderedUnits3.length; _i5++) {
+        var u = _orderedUnits3[_i5];
 
         if (this.values[u] !== other.values[u]) {
           return false;
@@ -3989,7 +4017,7 @@ var luxon = (function (exports) {
    * * **Interrogation** To analyze the Interval, use {@link count}, {@link length}, {@link hasSame}, {@link contains}, {@link isAfter}, or {@link isBefore}.
    * * **Transformation** To create other Intervals out of this one, use {@link set}, {@link splitAt}, {@link splitBy}, {@link divideEqually}, {@link merge}, {@link xor}, {@link union}, {@link intersection}, or {@link difference}.
    * * **Comparison** To compare this Interval to another one, use {@link equals}, {@link overlaps}, {@link abutsStart}, {@link abutsEnd}, {@link engulfs}
-   * * **Output*** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toFormat}, and {@link toDuration}.
+   * * **Output** To convert the Interval into other representations, see {@link toString}, {@link toISO}, {@link toISODate}, {@link toISOTime}, {@link toFormat}, and {@link toDuration}.
    */
 
 
@@ -4386,7 +4414,7 @@ var luxon = (function (exports) {
     /**
      * Return an Interval representing the intersection of this Interval and the specified Interval.
      * Specifically, the resulting Interval has the maximum start time and the minimum end time of the two Intervals.
-     * Returns null if the intersection is empty, i.e., the intervals don't intersect.
+     * Returns null if the intersection is empty, meaning, the intervals don't intersect.
      * @param {Interval} other
      * @return {Interval}
      */
@@ -4548,6 +4576,31 @@ var luxon = (function (exports) {
       return this.s.toISO(opts) + "/" + this.e.toISO(opts);
     }
     /**
+     * Returns an ISO 8601-compliant string representation of date of this Interval.
+     * The time components are ignored.
+     * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+     * @return {string}
+     */
+    ;
+
+    _proto.toISODate = function toISODate() {
+      if (!this.isValid) return INVALID$1;
+      return this.s.toISODate() + "/" + this.e.toISODate();
+    }
+    /**
+     * Returns an ISO 8601-compliant string representation of time of this Interval.
+     * The date components are ignored.
+     * @see https://en.wikipedia.org/wiki/ISO_8601#Time_intervals
+     * @param {Object} opts - The same options as {@link DateTime.toISO}
+     * @return {string}
+     */
+    ;
+
+    _proto.toISOTime = function toISOTime(opts) {
+      if (!this.isValid) return INVALID$1;
+      return this.s.toISOTime(opts) + "/" + this.e.toISOTime(opts);
+    }
+    /**
      * Returns a string representation of this Interval formatted according to the specified format string.
      * @param {string} dateFormat - the format string. This string formats the start and end time. See {@link DateTime.toFormat} for details.
      * @param {Object} opts - options
@@ -4614,7 +4667,7 @@ var luxon = (function (exports) {
         return this.isValid ? this.e : null;
       }
       /**
-       * Returns whether this Interval's end is at least its start, i.e. that the Interval isn't 'backwards'.
+       * Returns whether this Interval's end is at least its start, meaning that the Interval isn't 'backwards'.
        * @type {boolean}
        */
 
@@ -5253,6 +5306,12 @@ var luxon = (function (exports) {
         case "m":
           return intUnit(oneOrTwo);
 
+        case "q":
+          return intUnit(oneOrTwo);
+
+        case "qq":
+          return intUnit(two);
+
         case "s":
           return intUnit(oneOrTwo);
 
@@ -5348,6 +5407,7 @@ var luxon = (function (exports) {
       long: "EEEE"
     },
     dayperiod: "a",
+    dayPeriod: "a",
     hour: {
       numeric: "h",
       "2-digit": "hh"
@@ -5464,6 +5524,9 @@ var luxon = (function (exports) {
         case "k":
           return "weekYear";
 
+        case "q":
+          return "quarter";
+
         default:
           return null;
       }
@@ -5477,6 +5540,10 @@ var luxon = (function (exports) {
       zone = IANAZone.create(matches.z);
     } else {
       zone = null;
+    }
+
+    if (!isUndefined(matches.q)) {
+      matches.M = (matches.q - 1) * 3 + 1;
     }
 
     if (!isUndefined(matches.h)) {
@@ -5990,6 +6057,8 @@ var luxon = (function (exports) {
       hours: "hour",
       minute: "minute",
       minutes: "minute",
+      quarter: "quarter",
+      quarters: "quarter",
       second: "second",
       seconds: "second",
       millisecond: "millisecond",
@@ -6179,9 +6248,9 @@ var luxon = (function (exports) {
      * @param {number} [month=1] - The month, 1-indexed
      * @param {number} [day=1] - The day of the month
      * @param {number} [hour=0] - The hour of the day, in 24-hour time
-     * @param {number} [minute=0] - The minute of the hour, i.e. a number between 0 and 59
-     * @param {number} [second=0] - The second of the minute, i.e. a number between 0 and 59
-     * @param {number} [millisecond=0] - The millisecond of the second, i.e. a number between 0 and 999
+     * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
+     * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
+     * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
      * @example DateTime.local()                            //~> now
      * @example DateTime.local(2017)                        //~> 2017-01-01T00:00:00
      * @example DateTime.local(2017, 3)                     //~> 2017-03-01T00:00:00
@@ -6217,9 +6286,9 @@ var luxon = (function (exports) {
      * @param {number} [month=1] - The month, 1-indexed
      * @param {number} [day=1] - The day of the month
      * @param {number} [hour=0] - The hour of the day, in 24-hour time
-     * @param {number} [minute=0] - The minute of the hour, i.e. a number between 0 and 59
-     * @param {number} [second=0] - The second of the minute, i.e. a number between 0 and 59
-     * @param {number} [millisecond=0] - The millisecond of the second, i.e. a number between 0 and 999
+     * @param {number} [minute=0] - The minute of the hour, meaning a number between 0 and 59
+     * @param {number} [second=0] - The second of the minute, meaning a number between 0 and 59
+     * @param {number} [millisecond=0] - The millisecond of the second, meaning a number between 0 and 999
      * @example DateTime.utc()                            //~> now
      * @example DateTime.utc(2017)                        //~> 2017-01-01T00:00:00Z
      * @example DateTime.utc(2017, 3)                     //~> 2017-03-01T00:00:00Z
@@ -6283,7 +6352,7 @@ var luxon = (function (exports) {
       });
     }
     /**
-     * Create a DateTime from a number of milliseconds since the epoch (i.e. since 1 January 1970 00:00:00 UTC). Uses the default zone.
+     * Create a DateTime from a number of milliseconds since the epoch (meaning since 1 January 1970 00:00:00 UTC). Uses the default zone.
      * @param {number} milliseconds - a number of milliseconds since 1970 UTC
      * @param {Object} options - configuration options for the DateTime
      * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
@@ -6313,7 +6382,7 @@ var luxon = (function (exports) {
       }
     }
     /**
-     * Create a DateTime from a number of seconds since the epoch (i.e. since 1 January 1970 00:00:00 UTC). Uses the default zone.
+     * Create a DateTime from a number of seconds since the epoch (meaning since 1 January 1970 00:00:00 UTC). Uses the default zone.
      * @param {number} seconds - a number of seconds since 1970 UTC
      * @param {Object} options - configuration options for the DateTime
      * @param {string|Zone} [options.zone='local'] - the zone to place the DateTime into
@@ -6971,7 +7040,7 @@ var luxon = (function (exports) {
       return this.set(o);
     }
     /**
-     * "Set" this DateTime to the end (i.e. the last millisecond) of a unit of time
+     * "Set" this DateTime to the end (meaning the last millisecond) of a unit of time
      * @param {string} unit - The unit to go to the end of. Can be 'year', 'month', 'day', 'hour', 'minute', 'second', or 'millisecond'.
      * @example DateTime.local(2014, 3, 3).endOf('month').toISO(); //=> '2014-03-31T23:59:59.999-05:00'
      * @example DateTime.local(2014, 3, 3).endOf('year').toISO(); //=> '2014-12-31T23:59:59.999-05:00'
@@ -7037,7 +7106,7 @@ var luxon = (function (exports) {
       return this.isValid ? Formatter.create(this.loc.clone(opts), opts).formatDateTime(this) : INVALID$2;
     }
     /**
-     * Returns an array of format "parts", i.e. individual tokens along with metadata. This is allows callers to post-process individual sections of the formatted output.
+     * Returns an array of format "parts", meaning individual tokens along with metadata. This is allows callers to post-process individual sections of the formatted output.
      * Defaults to the system's locale if no locale has been specified
      * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat/formatToParts
      * @param opts {Object} - Intl.DateTimeFormat constructor options, same as `toLocaleString`.
@@ -7767,7 +7836,7 @@ var luxon = (function (exports) {
         return this.isValid ? possiblyCachedWeekData(this).weekday : NaN;
       }
       /**
-       * Get the ordinal (i.e. the day of the year)
+       * Get the ordinal (meaning the day of the year)
        * @example DateTime.local(2017, 5, 25).ordinal //=> 145
        * @type {number|DateTime}
        */
@@ -7843,7 +7912,7 @@ var luxon = (function (exports) {
     }, {
       key: "offset",
       get: function get() {
-        return this.isValid ? this.zone.offset(this.ts) : NaN;
+        return this.isValid ? +this.o : NaN;
       }
       /**
        * Get the short human name for the zone's current offset, for example "EST" or "EDT".
