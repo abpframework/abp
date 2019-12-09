@@ -4,7 +4,7 @@
     "InternalServerErrorMessage": "An internal error occurred during your request!",
     "ValidationErrorMessage": "Your request is not valid!",
     "ValidationNarrativeErrorMessageTitle": "The following errors were detected during validation.",
-    "DefaultErrorMessage": "An error has been occurred!",
+    "DefaultErrorMessage": "An error has occurred!",
     "DefaultErrorMessageDetail": "Error detail not sent by server.",
     "DefaultErrorMessage401": "You are not authenticated!",
     "DefaultErrorMessage401Detail": "You should sign in to perform this operation.",
