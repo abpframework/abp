@@ -3,7 +3,7 @@
   <Import Project="..\..\..\common.test.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>Volo.Abp.Caching.Tests</AssemblyName>
     <PackageId>Volo.Abp.Caching.Tests</PackageId>
     <RootNamespace />
