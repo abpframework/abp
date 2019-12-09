@@ -1,6 +1,17 @@
 // ESM syntax is supported.
 import execa from 'execa';
-import fse from 'fs-extra';
+
+const versions = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
+let nextSemanticVersion = (process.argv[2] || '').toLowerCase();
+
+if (versions.indexOf(nextSemanticVersion) < 0) {
+  console.log(
+    "Please enter the next semantic version like this: 'npm run publish patch'. Available versions: " +
+      JSON.stringify(versions),
+  );
+
+  process.exit(1);
+}
 
 (async () => {
   try {
