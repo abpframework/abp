@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.tenant-management.config",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "publishConfig": {
     "access": "public"
   },
@@ -16,5 +16,6 @@
   "sideEffects": false,
   "dependencies": {
     "tslib": "^1.9.0"
-  }
+  },
+  "gitHead": "42d9eb857fca97c046ebac4286b6831c8b8c1887"
 }

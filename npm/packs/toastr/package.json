@@ -1,12 +1,12 @@
 {
-  "version": "1.0.3",
+  "version": "1.1.0",
   "name": "@abp/toastr",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^1.0.3",
+    "@abp/jquery": "^1.1.0",
     "toastr": "^2.1.4"
   },
-  "gitHead": "4d6791834b7723d8ad78ba4d23ae3425f170fdeb"
+  "gitHead": "42d9eb857fca97c046ebac4286b6831c8b8c1887"
 }
