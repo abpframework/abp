@@ -1,6 +1,6 @@
 {
   "name": "@abp/ng.core",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "dependencies": {
     "@ngxs/router-plugin": "^3.5.1",
     "@ngxs/storage-plugin": "^3.5.1",
