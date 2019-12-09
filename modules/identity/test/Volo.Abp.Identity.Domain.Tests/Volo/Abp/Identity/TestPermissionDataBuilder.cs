@@ -3,6 +3,7 @@ using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity
 {
@@ -45,7 +46,7 @@ namespace Volo.Abp.Identity
 
         private void AddUserPermissions()
         {
-            var david = _userRepository.FindByNormalizedUserName(_lookupNormalizer.NormalizeName("david"));
+            var david = AsyncHelper.RunSync(() => _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("david")));
             AddPermission(TestPermissionNames.MyPermission1, UserPermissionValueProvider.ProviderName, david.Id.ToString());
         }
 
