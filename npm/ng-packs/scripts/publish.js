@@ -27,6 +27,17 @@ if (versions.indexOf(nextSemanticVersion) < 0) {
     );
 
     await fse.rename('../lerna.json', '../lerna.version.json');
+
+    await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
+
+    await fse.rename('../lerna.exec.json', '../lerna.json');
+
+    await execa('yarn', ['lerna', 'exec', '--', 'npm', 'publish'], {
+      stdout: 'inherit',
+      cwd: '../',
+    });
+
+    await fse.rename('../lerna.json', '../lerna.exec.json');
   } catch (error) {
     console.error(error.stderr);
     process.exit(1);
