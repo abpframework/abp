@@ -24,7 +24,7 @@ namespace Volo.Docs.HtmlConverting
 
         public async Task<string> RenderAsync(string document, DocumentRenderParameters parameters = null)
         {
-            Template scribanTemplate = Template.Parse(document);
+            var scribanTemplate = Template.Parse(document);
 
             if (parameters == null)
             {
@@ -44,9 +44,9 @@ namespace Volo.Docs.HtmlConverting
                     return new Dictionary<string, List<string>>();
                 }
 
-                var (jsonBeginningIndex, JsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
+                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
 
-                if (jsonBeginningIndex < 0 || JsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
+                if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                 {
                     return new Dictionary<string, List<string>>();
                 }
@@ -72,15 +72,15 @@ namespace Volo.Docs.HtmlConverting
                     return orgDocument;
                 }
 
-                var (jsonBeginningIndex, JsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
+                var (jsonBeginningIndex, jsonEndingIndex, insideJsonSection) = GetJsonBeginEndIndexesAndPureJson(document);
 
-                if (jsonBeginningIndex < 0 || JsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
+                if (jsonBeginningIndex < 0 || jsonEndingIndex <= 0 || string.IsNullOrWhiteSpace(insideJsonSection))
                 {
                     return orgDocument;
                 }
 
                 return document.Remove(
-                            jsonBeginningIndex - jsonOpener.Length, (JsonEndingIndex + jsonCloser.Length) - (jsonBeginningIndex - jsonOpener.Length)
+                            jsonBeginningIndex - jsonOpener.Length, (jsonEndingIndex + jsonCloser.Length) - (jsonBeginningIndex - jsonOpener.Length)
                         );
             }
             catch (Exception)
@@ -95,23 +95,23 @@ namespace Volo.Docs.HtmlConverting
 
             while (searchedIndex < document.Length)
             {
-                var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(jsonOpener) + jsonOpener.Length + searchedIndex;
+                var jsonBeginningIndex = document.Substring(searchedIndex).IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length + searchedIndex;
 
                 if (jsonBeginningIndex < 0)
                 {
                     return (-1,-1,"");
                 }
 
-                var JsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(jsonCloser) + jsonBeginningIndex;
-                var insideJsonSection = document[jsonBeginningIndex..JsonEndingIndex];
+                var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(jsonCloser, StringComparison.Ordinal) + jsonBeginningIndex;
+                var insideJsonSection = document[jsonBeginningIndex..jsonEndingIndex];
 
                 if (insideJsonSection.IndexOf(docs_param) < 0)
                 {
-                    searchedIndex = JsonEndingIndex + jsonCloser.Length;
+                    searchedIndex = jsonEndingIndex + jsonCloser.Length;
                     continue;
                 }
 
-                return (jsonBeginningIndex, JsonEndingIndex, insideJsonSection);
+                return (jsonBeginningIndex, jsonEndingIndex, insideJsonSection);
             }
 
             return (-1, -1, "");
