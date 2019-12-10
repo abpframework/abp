@@ -6,7 +6,7 @@
   "modules": "[build.js, sync.js]",
   "scripts": {
     "build": "node -r esm build.js",
-    "publish": "node -r esm publish.js",
+    "publish-packages": "node -r esm publish.js",
     "install-new-dependencies": "node -r esm install-new-dependencies.js",
     "sync": "node -r esm sync.js",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -30,14 +30,21 @@ if (versions.indexOf(nextSemanticVersion) < 0) {
 
     await execa('yarn', ['build', '--noInstall'], { stdout: 'inherit' });
 
-    await fse.rename('../lerna.exec.json', '../lerna.json');
+    await fse.rename('../lerna.publish.json', '../lerna.json');
 
-    await execa('yarn', ['lerna', 'exec', '--', 'npm', 'publish'], {
+    await execa('yarn', ['lerna', 'exec', '--', '"npm publish"'], {
       stdout: 'inherit',
       cwd: '../',
     });
 
-    await fse.rename('../lerna.json', '../lerna.exec.json');
+    await fse.rename('../lerna.json', '../lerna.publish.json');
+
+    await execa('git', ['add', '../packages/*', '../package.json', '../lerna.version.json'], {
+      stdout: 'inherit',
+    });
+    await execa('git', ['commit', '-m', 'Upgrade ng package versions', '--no-verify'], {
+      stdout: 'inherit',
+    });
   } catch (error) {
     console.error(error.stderr);
     process.exit(1);
