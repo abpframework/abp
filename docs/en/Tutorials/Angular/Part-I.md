@@ -631,10 +631,10 @@ Replace `book-list.component.html` content as shown below:
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>{{ data.name }}</td>
-          <td>{{ booksType[data.type] }}</td>
-          <td>{{ data.publishDate | date }}</td>
-          <td>{{ data.price }}</td>
+          <td>{%{{{ data.name }}}%}</td>
+          <td>{%{{{ booksType[data.type] }}}%}</td>
+          <td>{%{{{ data.publishDate | date }}}%}</td>
+          <td>{%{{{ data.price }}}%}</td>
         </tr>
       </ng-template>
     </p-table>
