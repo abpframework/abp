@@ -1,5 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
@@ -227,6 +229,110 @@ namespace Volo.Abp.AuditLogging
             //Assert
             var logs = await AuditLogRepository.GetCountAsync();
             logs.ShouldBe(2);
+        }
+
+        [Fact]
+        public async Task GetAverageExecutionDurationPerDayAsync()
+        {
+            // Arrange
+            var userId = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var userId2 = new Guid("4456fb0d-74cc-4807-9eee-23e551e6cb06");
+            var ipAddress = "153.1.7.61";
+            var firstComment = "first Comment";
+
+            var log1 = new AuditLogInfo
+            {
+                UserId = userId,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Parse("2020-01-01 01:00:00"),
+                ExecutionDuration = 45,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                UserName = "Douglas",
+                EntityChanges = {
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity",
+                    ChangeType = EntityChangeType.Created,
+                    ChangeTime = DateTime.Now,
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                },
+                    new EntityChangeInfo
+                {
+                    EntityId = Guid.NewGuid().ToString(),
+                    EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity",
+                    ChangeType = EntityChangeType.Created,
+                    ChangeTime = DateTime.Now,
+                    PropertyChanges = new List<EntityPropertyChangeInfo>
+                    {
+                        new EntityPropertyChangeInfo
+                        {
+                            PropertyTypeFullName = typeof(string).FullName,
+                            PropertyName = "Name",
+                            NewValue = "New value",
+                            OriginalValue = null
+                        }
+                    }
+                }
+
+                }
+            };
+
+            var log2 = new AuditLogInfo
+            {
+                UserId = userId2,
+                ImpersonatorUserId = Guid.NewGuid(),
+                ImpersonatorTenantId = Guid.NewGuid(),
+                ExecutionTime = DateTime.Parse("2020-01-01 03:00:00"),
+                ExecutionDuration = 55,
+                ClientIpAddress = ipAddress,
+                ClientName = "MyDesktop",
+                BrowserInfo = "Chrome",
+                Comments = new List<string> { firstComment, "Second Comment" },
+                HttpStatusCode = (int?)HttpStatusCode.BadGateway,
+                EntityChanges = {
+                    new EntityChangeInfo
+                    {
+                        EntityId = Guid.NewGuid().ToString(),
+                        EntityTypeFullName = "Volo.Abp.AuditLogging.TestEntity",
+                        ChangeType = EntityChangeType.Created,
+                        ChangeTime = DateTime.Now,
+                        PropertyChanges = new List<EntityPropertyChangeInfo>
+                        {
+                            new EntityPropertyChangeInfo
+                            {
+                                PropertyTypeFullName = typeof(string).FullName,
+                                PropertyName = "Name",
+                                NewValue = "New value",
+                                OriginalValue = null
+                            }
+                        }
+                    }
+
+                }
+            };
+
+            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log1));
+            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log2));
+
+            //Assert
+            var date = DateTime.Parse("2020-01-01");
+            var results = await AuditLogRepository.GetAverageExecutionDurationPerDayAsync(date, date);
+            results.Count.ShouldBe(1);
+            results.Values.First().ShouldBe(50); // (45 + 55) / 2
         }
     }
 }
