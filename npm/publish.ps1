@@ -1,12 +1,9 @@
 & cd ng-packs\scripts
 & npm install
-& npm run build
+& yarn publish-packages patch
 & cd ../../
 & yarn
 & yarn lerna publish patch --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish
-& cd ng-packs\scripts
-& npm run sync
-& cd ../../
 & yarn update:templates
 & yarn global add gulp
 & yarn gulp:app
