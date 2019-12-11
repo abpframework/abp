@@ -1,8 +1,8 @@
 {
   "name": "@abp/ng.permission-management",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "dependencies": {
-    "@abp/ng.theme.shared": "^1.1.0"
+    "@abp/ng.theme.shared": "^1.1.1"
   },
   "publishConfig": {
     "access": "public"
