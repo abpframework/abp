@@ -26,7 +26,7 @@ namespace Volo.Abp.FeatureManagement
                 return providerKey;
             }
 
-            return PrincipalAccessor.Principal?.FindEditionId()?.ToString("N");
+            return PrincipalAccessor.Principal?.FindEditionId()?.ToString();
         }
     }
 }
