@@ -1,14 +1,14 @@
 import { createDirectiveFactory, SpectatorDirective } from '@ngneat/spectator/jest';
-import { ClickEventStopPropagationDirective } from '../directives/stop-propagation.directive';
+import { StopPropagationDirective } from '../directives/stop-propagation.directive';
 
-describe('ClickEventStopPropagationDirective', () => {
-  let spectator: SpectatorDirective<ClickEventStopPropagationDirective>;
-  let directive: ClickEventStopPropagationDirective;
+describe('StopPropagationDirective', () => {
+  let spectator: SpectatorDirective<StopPropagationDirective>;
+  let directive: StopPropagationDirective;
   let link: HTMLAnchorElement;
   const childClickEventFn = jest.fn(() => null);
   const parentClickEventFn = jest.fn(() => null);
   const createDirective = createDirectiveFactory({
-    directive: ClickEventStopPropagationDirective,
+    directive: StopPropagationDirective,
   });
 
   beforeEach(() => {
