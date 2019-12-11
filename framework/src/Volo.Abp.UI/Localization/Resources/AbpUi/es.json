@@ -1,5 +1,5 @@
 {
-  "culture": "en",
+  "culture": "es",
   "texts": {
     "InternalServerErrorMessage": "Ocurrió un error interno en su pedido!",
     "ValidationErrorMessage": "Su pedido no es válido!",

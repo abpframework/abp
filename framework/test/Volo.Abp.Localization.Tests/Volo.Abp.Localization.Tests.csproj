@@ -12,13 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\Localization\TestResources\Base\CountryNames\es.json" />
-    <None Remove="Volo\Abp\Localization\TestResources\Base\Validation\es.json" />
-    <None Remove="Volo\Abp\Localization\TestResources\SourceExt\es.json" />
-    <None Remove="Volo\Abp\Localization\TestResources\Source\es.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <ProjectReference Include="..\..\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
