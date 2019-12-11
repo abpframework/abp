@@ -55,4 +55,4 @@ const publish = async () => {
 
 publish();
 
-export default publish();
+export default publish;
