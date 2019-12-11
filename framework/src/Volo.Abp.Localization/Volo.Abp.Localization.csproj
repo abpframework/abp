@@ -18,6 +18,10 @@
   </ItemGroup>
   
   <ItemGroup>
+    <None Remove="Volo\Abp\Localization\Resources\AbpValidation\es.json" />
+  </ItemGroup>
+  
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
   </ItemGroup>
 

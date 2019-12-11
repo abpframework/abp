@@ -66,6 +66,12 @@ namespace Volo.Abp.Localization
             {
                 _localizer["Car"].Value.ShouldBe("Auto");
             }
+
+            using (AbpCultureHelper.Use("es"))
+            {
+                _localizer["Car"].Value.ShouldBe("Auto");
+            }
+
         }
 
         [Fact]
@@ -85,6 +91,12 @@ namespace Volo.Abp.Localization
             {
                 _localizer["SeeYou"].Value.ShouldBe("Ci vediamo");
             }
+
+            using (AbpCultureHelper.Use("es"))
+            {
+                _localizer["SeeYou"].Value.ShouldBe("Nos vemos");
+            }
+
         }
 
         [Fact]
@@ -102,6 +114,15 @@ namespace Volo.Abp.Localization
             {
                 _localizer["USA"].Value.ShouldBe("Amerika Birleşik Devletleri"); //Inherited from CountryNames/tr.json
             }
+
+            using (AbpCultureHelper.Use("es"))
+            {
+                _localizer["USA"].Value.ShouldBe("Estados unidos de America"); //Inherited from CountryNames/es.json
+                _localizer["ThisFieldIsRequired"].Value.ShouldBe("El campo no puede estar vacío"); //Inherited from Validation/es.json
+
+                _localizer.GetAllStrings().ShouldContain(ls => ls.Name == "USA");
+            }
+
         }
 
         [Fact]
@@ -111,6 +132,13 @@ namespace Volo.Abp.Localization
             {
                 _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("This field's length can be maximum of '42' chars"); //Overriden in Source/en.json
             }
+
+            using (AbpCultureHelper.Use("es"))
+            {
+                _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("El campo puede tener un máximo de '42' caracteres"); //Overriden in Source/es.json
+            }
+
+            
         }
 
         [Fact]
@@ -121,6 +149,10 @@ namespace Volo.Abp.Localization
 
             _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["Car"].Value.ShouldBe("Araba");
             _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
+
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("es"))["Car"].Value.ShouldBe("Auto");
+            _localizer.WithCulture(CultureInfo.GetCultureInfo("es"))["CarPlural"].Value.ShouldBe("Autos");
+
         }
 
         [Fact]
@@ -142,6 +174,24 @@ namespace Volo.Abp.Localization
                           ls.ResourceNotFound == false
                 );
             }
+
+            using (AbpCultureHelper.Use("es"))
+            {
+                var localizedStrings = _localizer.GetAllStrings(true).ToList();
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "FortyTwo" &&
+                          ls.Value == "Cuarenta y dos" &&
+                          ls.ResourceNotFound == false
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Universo" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+
         }
 
         [Fact]
@@ -161,6 +211,22 @@ namespace Volo.Abp.Localization
                           ls.ResourceNotFound == false
                 );
             }
+
+            using (AbpCultureHelper.Use("es"))
+            {
+                var localizedStrings = _localizer.GetAllStrings(false).ToList();
+
+                localizedStrings.ShouldNotContain(
+                    ls => ls.Name == "FortyTwo"
+                );
+
+                localizedStrings.ShouldContain(
+                    ls => ls.Name == "Universe" &&
+                          ls.Value == "Universo" &&
+                          ls.ResourceNotFound == false
+                );
+            }
+
         }
 
         [Fact]
