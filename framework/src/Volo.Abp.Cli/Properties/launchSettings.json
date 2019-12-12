@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Volo.Abp.Cli": {
+      "commandName": "Project",
+      "commandLineArgs": "suite i"
+    }
+  }
+}

@@ -33,6 +33,7 @@ namespace Volo.Abp.Cli
                 options.Commands["add-module"] = typeof(AddModuleCommand);
                 options.Commands["login"] = typeof(LoginCommand);
                 options.Commands["logout"] = typeof(LogoutCommand);
+                options.Commands["suite"] = typeof(SuiteCommand);
             });
         }
     }
