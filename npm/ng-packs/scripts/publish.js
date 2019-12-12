@@ -32,10 +32,16 @@ const publish = async () => {
 
     await fse.rename('../lerna.publish.json', '../lerna.json');
 
-    await execa('yarn', ['lerna', 'exec', '--', '"npm publish"'], {
-      stdout: 'inherit',
-      cwd: '../',
-    });
+    await fse.remove('../dist/dev-app');
+
+    await execa(
+      'yarn',
+      ['lerna', 'exec', '--', '"npm publish --registry https://registry.npmjs.org"'],
+      {
+        stdout: 'inherit',
+        cwd: '../',
+      },
+    );
 
     await fse.rename('../lerna.json', '../lerna.publish.json');
 
