@@ -36,7 +36,7 @@ namespace Volo.Abp.Cli.Commands
             switch (operationType)
             {
                 case "":
-                    Logger.LogInformation("Running Suite...");
+                case null:
                     RunSuite();
                     break;
 
@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.Commands
                 case "update":
                 case "u":
                     Logger.LogInformation("Updating Suite...");
-                    UpdateSuite();
+                    await UpdateSuiteAsync();
                     break;
 
                 case "remove":
@@ -62,21 +62,20 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task InstallSuiteAsync()
         {
-            var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
-            if (apiKeyResult == null || string.IsNullOrEmpty(apiKeyResult.ApiKey))
-            {
-                Logger.LogInformation("Couldn't retrieve the API Key for Nuget!");
-                await Task.CompletedTask;
-                return;
-            }
+            var nugetIndexUrl = await GetNuGetIndexUrlAsync();
+            var result = CmdHelper.RunCmd("dotnet tool install " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
 
-            var nugetIndexUrl = CliUrls.GetNuGetServiceIndexUrl(apiKeyResult.ApiKey);
-            CmdHelper.RunCmd("dotnet tool install " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
+            if (result == 0)
+            {
+                Logger.LogInformation("Suite has been successfully installed.");
+                Logger.LogInformation("You can run it with the CLI command \"abp suite\"");
+            }
         }
 
-        private static void UpdateSuite()
+        private async Task UpdateSuiteAsync()
         {
-            CmdHelper.RunCmd("dotnet tool update " + SuitePackageName + " -g");
+            var nugetIndexUrl = await GetNuGetIndexUrlAsync();
+            CmdHelper.RunCmd("dotnet tool update " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
         }
 
         private static void RemoveSuite()
@@ -100,6 +99,23 @@ namespace Volo.Abp.Cli.Commands
             }
 
             CmdHelper.RunCmd("abp-suite");
+        }
+
+        private async Task<string> GetNuGetIndexUrlAsync()
+        {
+            var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
+            if (apiKeyResult == null ||
+                string.IsNullOrEmpty(apiKeyResult.ApiKey))
+            {
+                Logger.LogError("Couldn't retrieve your NuGet API key!");
+                Logger.LogWarning(File.Exists(CliPaths.AccessToken)
+                    ? "Make sure you have an active session and license on commercial.abp.io. To re-sign in you can use the CLI command \"abp login <username>\"."
+                    : "You are not signed in to commercial.abp.io. Use the CLI command \"abp login <username>\" to sign in.");
+
+                return null;
+            }
+
+            return CliUrls.GetNuGetServiceIndexUrl(apiKeyResult.ApiKey);
         }
 
         public string GetUsageInfo()
@@ -130,7 +146,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Shortcut commands to use Abp Suite tool.";
+            return "Utility commands to use Abp Suite tool. Installs, updates, removes or starts Suite.";
         }
     }
 }
