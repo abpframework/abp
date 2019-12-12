@@ -13,7 +13,7 @@ import program from 'commander';
       await execa('yarn', ['install-new-dependencies'], { stdout: 'inherit' });
     }
 
-    execa.sync(
+    await execa(
       'yarn',
       [
         'symlink',
