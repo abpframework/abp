@@ -75,7 +75,7 @@ Zmáčkněte F5 (nebo Ctrl+F5) ke spuštění aplikace. Výstup by měl být pod
 
 #### Použití příkazu EF Core Update-Database
 
-Ef Core máš příkaz `Update-Database`, který v případě potřeby vytvoří databázi a aplikuje čekající migrace. Klikněte pravým na projekt `.Web` a zvolte **Set as StartUp Project**:
+Ef Core máš příkaz `Update-Database`, který v případě potřeby vytvoří databázi a aplikuje čekající migrace. Klikněte pravým na projekt `.HttpApi.Host` a zvolte **Set as StartUp Project**:
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 
