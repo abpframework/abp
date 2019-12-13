@@ -131,8 +131,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Automatically updates all ABP related NuGet packages and NPM packages in a" +
-                   " solution or project to the latest versions";
+            return "Update all ABP related NuGet packages and NPM packages in a solution or project to the latest version.";
         }
 
         public static class Options

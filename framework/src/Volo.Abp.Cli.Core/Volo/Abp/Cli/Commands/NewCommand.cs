@@ -175,7 +175,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Generates a new solution based on the ABP startup templates.";
+            return "Generate a new solution based on the ABP startup templates.";
         }
 
         protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)

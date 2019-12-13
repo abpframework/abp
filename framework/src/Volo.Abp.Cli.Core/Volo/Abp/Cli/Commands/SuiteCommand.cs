@@ -146,7 +146,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Utility commands to use Abp Suite tool. Installs, updates, removes or starts Suite.";
+            return "Install, update, remove or start ABP Suite. See https://commercial.abp.io/tools/suite.";
         }
     }
 }
