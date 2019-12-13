@@ -42,19 +42,19 @@ namespace Volo.Abp.Cli.Commands
 
                 case "install":
                 case "i":
-                    Logger.LogInformation("Installing Suite...");
+                    Logger.LogInformation("Installing ABP Suite...");
                     await InstallSuiteAsync();
                     break;
 
                 case "update":
                 case "u":
-                    Logger.LogInformation("Updating Suite...");
+                    Logger.LogInformation("Updating ABP Suite...");
                     await UpdateSuiteAsync();
                     break;
 
                 case "remove":
                 case "r":
-                    Logger.LogInformation("Removing Suite...");
+                    Logger.LogInformation("Removing ABP Suite...");
                     RemoveSuite();
                     break;
             }
@@ -67,7 +67,7 @@ namespace Volo.Abp.Cli.Commands
 
             if (result == 0)
             {
-                Logger.LogInformation("Suite has been successfully installed.");
+                Logger.LogInformation("ABP Suite has been successfully installed.");
                 Logger.LogInformation("You can run it with the CLI command \"abp suite\"");
             }
         }
@@ -89,13 +89,13 @@ namespace Volo.Abp.Cli.Commands
             {
                 if (!GlobalToolHelper.IsGlobalToolInstalled("abp-suite"))
                 {
-                    Logger.LogWarning("Suite is not installed! To install it you can run the command: \"abp suite install\"");
+                    Logger.LogWarning("ABP Suite is not installed! To install it you can run the command: \"abp suite install\"");
                     return;
                 }
             }
             catch (Exception ex)
             {
-                Logger.LogWarning("Couldn't check Suite installed status: " + ex.Message);
+                Logger.LogWarning("Couldn't check ABP Suite installed status: " + ex.Message);
             }
 
             CmdHelper.RunCmd("abp-suite");
@@ -129,10 +129,10 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("");
-            sb.AppendLine("<no argument>                               (runs Suite)");
-            sb.AppendLine("-i|--install                                (installs Suite as a dotnet global tool)");
-            sb.AppendLine("-u|--update                                 (updates Suite to the latest)");
-            sb.AppendLine("-r|--remove                                 (uninstalls Suite)");
+            sb.AppendLine("<no argument>                               (run ABP Suite)");
+            sb.AppendLine("-i|--install                                (install ABP Suite as a dotnet global tool)");
+            sb.AppendLine("-u|--update                                 (update ABP Suite to the latest)");
+            sb.AppendLine("-r|--remove                                 (uninstall ABP Suite)");
             sb.AppendLine("");
             sb.AppendLine("Examples:");
             sb.AppendLine("");
