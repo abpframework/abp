@@ -117,7 +117,7 @@ namespace Volo.Abp.Localization
 
             using (AbpCultureHelper.Use("es"))
             {
-                _localizer["USA"].Value.ShouldBe("Estados unidos de America"); //Inherited from CountryNames/es.json
+                _localizer["USA"].Value.ShouldBe("Estados unidos de América"); //Inherited from CountryNames/es.json
                 _localizer["ThisFieldIsRequired"].Value.ShouldBe("El campo no puede estar vacío"); //Inherited from Validation/es.json
 
                 _localizer.GetAllStrings().ShouldContain(ls => ls.Name == "USA");
@@ -181,7 +181,7 @@ namespace Volo.Abp.Localization
 
                 localizedStrings.ShouldContain(
                     ls => ls.Name == "FortyTwo" &&
-                          ls.Value == "Cuarenta y dos" &&
+                          ls.Value == "Curenta y dos" &&
                           ls.ResourceNotFound == false
                 );
 
@@ -217,7 +217,7 @@ namespace Volo.Abp.Localization
                 var localizedStrings = _localizer.GetAllStrings(false).ToList();
 
                 localizedStrings.ShouldNotContain(
-                    ls => ls.Name == "FortyTwo"
+                    ls => ls.Name == "FortyThree"
                 );
 
                 localizedStrings.ShouldContain(
