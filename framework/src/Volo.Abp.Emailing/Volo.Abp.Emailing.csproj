@@ -19,13 +19,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Volo\Abp\Emailing\Localization\en.json" />
-    <None Remove="Volo\Abp\Emailing\Localization\zh-Hans.json" />
+    <Content Remove="Volo\Abp\Emailing\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\en.json" />
-    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\zh-Hans.json" />
+    <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
   </ItemGroup>
 
   <ItemGroup>
