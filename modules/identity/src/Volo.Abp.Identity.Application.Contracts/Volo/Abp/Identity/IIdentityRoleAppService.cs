@@ -8,7 +8,7 @@ namespace Volo.Abp.Identity
 {
     public interface IIdentityRoleAppService : IApplicationService
     {
-        Task<ListResultDto<IdentityRoleDto>> GetListAsync();
+        Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input);
 
         Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input);
 
