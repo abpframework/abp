@@ -35,9 +35,7 @@ namespace Volo.Abp.Emailing
             {
                 options.Resources
                     .Add<EmailingResource>("en")
-                    .AddBaseTypes(
-                        typeof(EmailingResource)
-                    ).AddVirtualJson("/Volo/Abp/Emailing/Localization");
+                    .AddVirtualJson("/Volo/Abp/Emailing/Localization");
             });
 
             Configure<AbpBackgroundJobOptions>(options =>
