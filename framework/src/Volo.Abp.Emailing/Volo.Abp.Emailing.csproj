@@ -20,9 +20,6 @@
 
   <ItemGroup>
     <Content Remove="Volo\Abp\Emailing\Localization\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\Emailing\Localization\*.json" />
   </ItemGroup>
 
