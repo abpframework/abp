@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Uow
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class Uow_Completed_Tests : Uow_Completed_Tests<AbpMongoDbTestModule>
     {
     }

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Domain
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class ConcurrencyStamp_Tests : ConcurrencyStamp_Tests<AbpMongoDbTestModule>
     {
 

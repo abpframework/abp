@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Repositories
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class Repository_Specifications_Tests : Repository_Specifications_Tests<AbpMongoDbTestModule>
     {
     }

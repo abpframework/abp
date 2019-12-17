@@ -16,7 +16,7 @@ namespace Volo.Abp.MongoDB
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            var connectionString = MongoDbFixture.GetConnectionString().EnsureEndsWith('/') +
+            var connectionString = MongoDbFixture.ConnectionString.EnsureEndsWith('/') +
                                    "Db_" +
                                    Guid.NewGuid().ToString("N");
 

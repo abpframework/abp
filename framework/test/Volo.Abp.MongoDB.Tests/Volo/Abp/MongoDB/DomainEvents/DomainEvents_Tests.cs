@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.DomainEvents
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class DomainEvents_Tests : DomainEvents_Tests<AbpMongoDbTestModule>
     {
     }

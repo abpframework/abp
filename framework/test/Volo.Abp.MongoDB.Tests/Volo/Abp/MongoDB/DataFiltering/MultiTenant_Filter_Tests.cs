@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.DataFiltering
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class MultiTenant_Filter_Tests : MultiTenant_Filter_Tests<AbpMongoDbTestModule>
     {
         

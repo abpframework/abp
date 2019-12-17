@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Domain
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class ExtraProperties_Tests : ExtraProperties_Tests<AbpMongoDbTestModule>
     {
 

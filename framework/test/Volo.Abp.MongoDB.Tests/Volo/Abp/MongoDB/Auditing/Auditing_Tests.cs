@@ -3,7 +3,7 @@ using Xunit;
 
 namespace Volo.Abp.MongoDB.Auditing
 {
-    [Collection("MongoDB Collection")]
+    [Collection(MongoTestCollection.Name)]
     public class Auditing_Tests : Auditing_Tests<AbpMongoDbTestModule>
     {
 
