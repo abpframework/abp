@@ -39,6 +39,6 @@
     "DisplayName:Abp.Account.IsSelfRegistrationEnabled": "启用自行注册",
     "Description:Abp.Account.IsSelfRegistrationEnabled": "是否允许用户自行注册帐户.",
     "DisplayName:Abp.Account.EnableLocalLogin": "使用本地帐户进行身份验证",
-    "Description:Abp.Account.EnableLocalLogin": "伺服器是否将允许用户使用本地帐户进行身份验证。"
+    "Description:Abp.Account.EnableLocalLogin": "服务器是否将允许用户使用本地帐户进行身份验证。"
   }
 }
