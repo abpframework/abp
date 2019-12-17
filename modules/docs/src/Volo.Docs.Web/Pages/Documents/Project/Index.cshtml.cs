@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -87,7 +89,15 @@ namespace Volo.Docs.Pages.Documents.Project
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
 
-            await SetProjectAsync();
+            try
+            {
+                await SetProjectAsync();    
+            }
+            catch (EntityNotFoundException e)
+            {
+                Logger.LogWarning(e.Message);
+                return NotFound();
+            }
 
             if (ShowProjectsCombobox)
             {
