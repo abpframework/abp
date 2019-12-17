@@ -241,6 +241,33 @@ body abp-toast .ui-toast .ui-toast-message.ui-toast-message-info .ui-toast-messa
   max-height: 100vh;
 }
 
+[class^="sorting"] {
+  opacity: .3;
+  cursor: pointer;
+}
+[class^="sorting"]:before {
+  right: 0.5rem;
+  content: "↑";
+}
+[class^="sorting"]:after {
+  right: 0.5rem;
+  content: "↓";
+}
+
+.sorting_desc {
+  opacity: 1;
+}
+.sorting_desc:before {
+  opacity: .3;
+}
+
+.sorting_asc {
+  opacity: 1;
+}
+.sorting_asc:after {
+  opacity: .3;
+}
+
 @keyframes fadeInTop {
   from {
     transform: translateY(-5px);
