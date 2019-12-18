@@ -31,8 +31,7 @@ namespace Volo.Abp.Localization
                 includeParentCultures
             );
         }
-
-
+        
         public IEnumerable<LocalizedString> GetAllStrings(bool includeParentCultures, bool includeBaseLocalizers)
         {
             return GetAllStrings(
