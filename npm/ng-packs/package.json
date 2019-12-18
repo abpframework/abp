@@ -11,7 +11,8 @@
     "prepare:workspace": "yarn scripts:build",
     "ci": "yarn prepare:workspace && yarn ci:test && yarn ng lint",
     "ci:test": "ng test --coverage=false",
-    "lerna": "lerna"
+    "lerna": "lerna",
+    "generate:changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "devDependencies": {
     "@abp/ng.account": "^1.1.1",
@@ -57,6 +58,7 @@
     "bootstrap": "^4.3.1",
     "chart.js": "^2.9.2",
     "codelyzer": "^5.1.2",
+    "conventional-changelog-cli": "^2.0.31",
     "cz-conventional-changelog": "3.0.2",
     "font-awesome": "^4.7.0",
     "jest": "^24.9.0",

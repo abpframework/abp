@@ -79,12 +79,17 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         {
             Logger.LogDebug("Executing AbpApplicationConfigurationAppService.GetAuthConfigAsync()");
 
-
             var authConfig = new ApplicationAuthConfigurationDto();
 
-            foreach (var policyName in await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync())
+            var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
+
+            Logger.LogDebug($"GetPoliciesNamesAsync returns {policyNames.Count} items.");
+
+            foreach (var policyName in policyNames)
             {
                 authConfig.Policies[policyName] = true;
+
+                Logger.LogDebug($"_authorizationService.IsGrantedAsync? {policyName}");
 
                 if (await _authorizationService.IsGrantedAsync(policyName))
                 {
@@ -130,7 +135,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
         private static CurrentCultureDto GetCurrentCultureInfo()
         {
-           return new CurrentCultureDto
+            return new CurrentCultureDto
             {
                 Name = CultureInfo.CurrentUICulture.Name,
                 DisplayName = CultureInfo.CurrentUICulture.DisplayName,
@@ -173,7 +178,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
             }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetSettingConfigAsync()");
-            
+
             return result;
         }
 
