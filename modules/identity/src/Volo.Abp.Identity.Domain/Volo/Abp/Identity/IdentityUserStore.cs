@@ -597,11 +597,12 @@ namespace Volo.Abp.Identity
         /// <param name="email">The email to set.</param>
         /// <param name="cancellationToken">The <see cref="CancellationToken"/> used to propagate notifications that the operation should be canceled.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        public virtual Task SetEmailAsync([NotNull] IdentityUser user, string email, CancellationToken cancellationToken = default)
+        public virtual Task SetEmailAsync([NotNull] IdentityUser user, [NotNull]  string email, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
             Check.NotNull(user, nameof(user));
+            Check.NotNull(email, nameof(email));
 
             user.Email = email;
 
