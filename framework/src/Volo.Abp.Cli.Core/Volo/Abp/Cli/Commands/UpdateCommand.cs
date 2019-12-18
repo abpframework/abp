@@ -20,21 +20,12 @@ namespace Volo.Abp.Cli.Commands
 
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
-        private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
-        private readonly AbpCliOptions _options;
-        private readonly IJsonSerializer _jsonSerializer;
 
         public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
-            NpmPackagesUpdater npmPackagesUpdater,
-            ICliAnalyticsCollect cliAnalyticsCollect, 
-            IJsonSerializer jsonSerializer, 
-            IOptions<AbpCliOptions> options)
+            NpmPackagesUpdater npmPackagesUpdater)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;
-            _cliAnalyticsCollect = cliAnalyticsCollect;
-            _jsonSerializer = jsonSerializer;
-            _options = options.Value;
 
             Logger = NullLogger<UpdateCommand>.Instance;
         }
@@ -44,24 +35,18 @@ namespace Volo.Abp.Cli.Commands
             var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
             var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
-            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long);
-            if (directory == null)
-            {
-                directory = Directory.GetCurrentDirectory();
-            }
+            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long) ??
+                            Directory.GetCurrentDirectory();
 
-            var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
-
-            if (updateNuget || both)
+            if (updateNuget || !updateNpm)
             {
                 await UpdateNugetPackages(commandLineArgs, directory);
             }
 
-            if (updateNpm || both)
+            if (updateNpm || !updateNuget)
             {
                 UpdateNpmPackages(directory);
             }
-
         }
 
         private void UpdateNpmPackages(string directory)
