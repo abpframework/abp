@@ -9,12 +9,12 @@ namespace Volo.Abp.PermissionManagement
 {
     public class PermissionStore : IPermissionStore, ITransientDependency
     {
+        public ILogger<PermissionStore> Logger { get; set; }
+        
         protected IPermissionGrantRepository PermissionGrantRepository { get; }
 
         protected IDistributedCache<PermissionGrantCacheItem> Cache { get; }
-
-        protected ILogger<PermissionStore> Logger { get; set; }
-
+        
         public PermissionStore(
             IPermissionGrantRepository permissionGrantRepository,
             IDistributedCache<PermissionGrantCacheItem> cache)
