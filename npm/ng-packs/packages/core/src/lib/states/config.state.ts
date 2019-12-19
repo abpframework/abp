@@ -246,10 +246,20 @@ export class ConfigState {
   ) {
     let routes: ABP.FullRoute[] = getState().routes;
 
-    const index = routes.findIndex(route => route.name === name);
-
     routes = patchRouteDeep(routes, name, newValue);
 
+    const flattedRoutes = getState().flattedRoutes;
+    const index = flattedRoutes.findIndex(route => route.name === name);
+
+    if (index > -1) {
+      flattedRoutes[index] = newValue as ABP.FullRoute;
+    }
+
+    return patchState({
+      routes,
+      flattedRoutes,
+    });
+  }
     return patchState({
       routes,
     });
