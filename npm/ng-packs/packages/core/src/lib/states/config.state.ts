@@ -1,18 +1,8 @@
-import {
-  Action,
-  createSelector,
-  Selector,
-  State,
-  StateContext,
-  Store,
-} from '@ngxs/store';
+import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
-import {
-  GetAppConfiguration,
-  PatchRouteByName,
-} from '../actions/config.actions';
+import { GetAppConfiguration, PatchRouteByName, AddRoute } from '../actions/config.actions';
 import { SetLanguage } from '../actions/session.actions';
 import { ABP } from '../models/common';
 import { Config } from '../models/config';
@@ -83,12 +73,9 @@ export class ConfigState {
   }
 
   static getApiUrl(key?: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State): string => {
-        return state.environment.apis[key || 'default'].url;
-      },
-    );
+    const selector = createSelector([ConfigState], (state: Config.State): string => {
+      return state.environment.apis[key || 'default'].url;
+    });
 
     return selector;
   }
@@ -104,18 +91,12 @@ export class ConfigState {
     const selector = createSelector([ConfigState], (state: Config.State) => {
       if (keyword) {
         const keys = snq(
-          () =>
-            Object.keys(state.setting.values).filter(
-              key => key.indexOf(keyword) > -1,
-            ),
+          () => Object.keys(state.setting.values).filter(key => key.indexOf(keyword) > -1),
           [],
         );
 
         if (keys.length) {
-          return keys.reduce(
-            (acc, key) => ({ ...acc, [key]: state.setting.values[key] }),
-            {},
-          );
+          return keys.reduce((acc, key) => ({ ...acc, [key]: state.setting.values[key] }), {});
         }
       }
 
@@ -125,32 +106,29 @@ export class ConfigState {
   }
 
   static getGrantedPolicy(key: string) {
-    const selector = createSelector(
-      [ConfigState],
-      (state: Config.State): boolean => {
-        if (!key) return true;
-        const getPolicy = k => snq(() => state.auth.grantedPolicies[k], false);
+    const selector = createSelector([ConfigState], (state: Config.State): boolean => {
+      if (!key) return true;
+      const getPolicy = k => snq(() => state.auth.grantedPolicies[k], false);
 
-        const orRegexp = /\|\|/g;
-        const andRegexp = /&&/g;
+      const orRegexp = /\|\|/g;
+      const andRegexp = /&&/g;
 
-        if (orRegexp.test(key)) {
-          const keys = key.split('||').filter(k => !!k);
+      if (orRegexp.test(key)) {
+        const keys = key.split('||').filter(k => !!k);
 
-          if (keys.length !== 2) return false;
+        if (keys.length !== 2) return false;
 
-          return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
-        } else if (andRegexp.test(key)) {
-          const keys = key.split('&&').filter(k => !!k);
+        return getPolicy(keys[0].trim()) || getPolicy(keys[1].trim());
+      } else if (andRegexp.test(key)) {
+        const keys = key.split('&&').filter(k => !!k);
 
-          if (keys.length !== 2) return false;
+        if (keys.length !== 2) return false;
 
-          return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
-        }
+        return getPolicy(keys[0].trim()) && getPolicy(keys[1].trim());
+      }
 
-        return getPolicy(key);
-      },
-    );
+      return getPolicy(key);
+    });
 
     return selector;
   }
@@ -225,8 +203,7 @@ export class ConfigState {
         }),
       ),
       switchMap(configuration => {
-        let defaultLang: string =
-          configuration.setting.values['Abp.Localization.DefaultLanguage'];
+        let defaultLang: string = configuration.setting.values['Abp.Localization.DefaultLanguage'];
 
         if (defaultLang.includes(';')) {
           defaultLang = defaultLang.split(';')[0];
@@ -260,8 +237,59 @@ export class ConfigState {
       flattedRoutes,
     });
   }
+
+  @Action(AddRoute)
+  addRoute({ patchState, getState }: StateContext<Config.State>, { payload }: AddRoute) {
+    let routes: ABP.FullRoute[] = getState().routes;
+    const flattedRoutes = getState().flattedRoutes;
+    const route: ABP.FullRoute = { ...payload };
+
+    if (route.parentName) {
+      const index = flattedRoutes.findIndex(r => r.name === route.parentName);
+
+      if (index < 0) return;
+
+      const parent = flattedRoutes[index];
+      if (parent.url.replace('/', '')) {
+        route.url = `${parent.url}/${route.path}`;
+      } else {
+        route.url = `/${route.path}`;
+      }
+
+      route.order = route.order || route.order === 0 ? route.order : parent.children.length;
+      parent.children = [...(parent.children || []), route].sort((a, b) => a.order - b.order);
+
+      flattedRoutes[index] = parent;
+      flattedRoutes.push(route);
+
+      let parentName = parent.name;
+      const parentNameArr = [parentName];
+
+      while (parentName) {
+        parentName = snq(() => flattedRoutes.find(r => r.name === parentName).parentName);
+
+        if (parentName) {
+          parentNameArr.unshift(parentName);
+        }
+      }
+
+      routes = updateRouteDeep(routes, parentNameArr, parent);
+    } else {
+      route.url = `/${route.path}`;
+
+      if (route.order || route.order === 0) {
+        routes = [...routes, route].sort((a, b) => a.order - b.order);
+      } else {
+        route.order = routes.length;
+        routes = [...routes, route];
+      }
+
+      flattedRoutes.push(route);
+    }
+
     return patchState({
       routes,
+      flattedRoutes,
     });
   }
 }
@@ -304,4 +332,26 @@ function patchRouteDeep(
   }
 
   return organizeRoutes(routes);
+}
+
+function updateRouteDeep(
+  routes: ABP.FullRoute[],
+  parentNameArr: string[],
+  newValue: ABP.FullRoute,
+  parentIndex = 0,
+) {
+  const index = routes.findIndex(route => route.name === parentNameArr[parentIndex]);
+
+  if (parentIndex === parentNameArr.length - 1) {
+    routes[index] = newValue;
+  } else {
+    routes[index].children = updateRouteDeep(
+      routes[index].children,
+      parentNameArr,
+      newValue,
+      parentIndex + 1,
+    );
+  }
+
+  return routes;
 }
