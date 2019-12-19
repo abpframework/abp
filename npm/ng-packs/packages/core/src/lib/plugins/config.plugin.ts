@@ -1,6 +1,13 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { Router, Routes } from '@angular/router';
-import { actionMatcher, InitState, NgxsNextPluginFn, NgxsPlugin, setValue, UpdateState } from '@ngxs/store';
+import {
+  actionMatcher,
+  InitState,
+  NgxsNextPluginFn,
+  NgxsPlugin,
+  setValue,
+  UpdateState,
+} from '@ngxs/store';
 import snq from 'snq';
 import { ABP } from '../models';
 import { organizeRoutes, getAbpRoutes } from '../utils/route-utils';
@@ -12,7 +19,10 @@ export const NGXS_CONFIG_PLUGIN_OPTIONS = new InjectionToken('NGXS_CONFIG_PLUGIN
 export class ConfigPlugin implements NgxsPlugin {
   private initialized = false;
 
-  constructor(@Inject(NGXS_CONFIG_PLUGIN_OPTIONS) private options: ABP.Root, private router: Router) {}
+  constructor(
+    @Inject(NGXS_CONFIG_PLUGIN_OPTIONS) private options: ABP.Root,
+    private router: Router,
+  ) {}
 
   handle(state: any, event: any, next: NgxsNextPluginFn) {
     const matches = actionMatcher(event);
@@ -54,7 +64,9 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
   routes
     .filter(route => route.component || route.loadChildren)
     .forEach(route => {
-      const abpPackage = abpRoutes.find(abp => abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper);
+      const abpPackage = abpRoutes.find(
+        abp => abp.path.toLowerCase() === route.path.toLowerCase() && !abp.wrapper,
+      );
 
       const { length } = transformed;
 
@@ -104,6 +116,7 @@ function flatRoutes(routes: ABP.FullRoute[]): ABP.FullRoute[] {
     return r.reduce((acc, val) => {
       let value: ABP.FullRoute[] = [val];
       if (val.children) {
+        val.children = val.children.map(child => ({ ...child, parentName: val.name }));
         value = [val, ...flat(val.children)];
       }
 
