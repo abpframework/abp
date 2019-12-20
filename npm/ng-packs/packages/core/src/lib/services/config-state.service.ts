@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ConfigState } from '../states';
+import { GetAppConfiguration, PatchRouteByName, AddRoute } from '../actions/config.actions';
+import { ABP } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -46,5 +48,17 @@ export class ConfigStateService {
 
   getLocalization(...args: Parameters<typeof ConfigState.getLocalization>) {
     return this.store.selectSnapshot(ConfigState.getLocalization(...args));
+  }
+
+  addData() {
+    return this.store.dispatch(new GetAppConfiguration());
+  }
+
+  patchRoute(name: string, newValue: Partial<ABP.Route>) {
+    return this.store.dispatch(new PatchRouteByName(name, newValue));
+  }
+
+  addRoute(payload: Omit<ABP.Route, 'children'>) {
+    return this.store.dispatch(new AddRoute(payload));
   }
 }
