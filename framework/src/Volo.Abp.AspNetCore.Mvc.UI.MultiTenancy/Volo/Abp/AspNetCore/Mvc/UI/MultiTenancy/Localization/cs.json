@@ -6,6 +6,7 @@
     "Switch": "změnit",
     "Name": "Název",
     "SwitchTenantHint": "Nechte pole prázdné ke změně na hostitele.",
+    "SwitchTenant": "Změnit tenant",
     "NotSelected": "Nevybrán"
   }
 }

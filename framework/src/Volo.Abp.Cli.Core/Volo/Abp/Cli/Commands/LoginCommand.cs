@@ -72,7 +72,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Sign in to " + CliUrls.AccountAbpIo + ".";
         }
 
         public static class Options

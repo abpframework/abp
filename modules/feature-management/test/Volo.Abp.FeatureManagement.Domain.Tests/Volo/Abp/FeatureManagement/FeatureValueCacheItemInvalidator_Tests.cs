@@ -28,11 +28,11 @@ namespace Volo.Abp.FeatureManagement
             // Arrange cache feature.
             await _featureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+                TestEditionIds.Regular.ToString());
 
             var feature = await _featureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N"));
+                TestEditionIds.Regular.ToString());
 
             // Act
             await _featureValueRepository.DeleteAsync(feature);
@@ -40,7 +40,7 @@ namespace Volo.Abp.FeatureManagement
             // Assert
             (await _cache.GetAsync(FeatureValueCacheItem.CalculateCacheKey(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString("N")))).ShouldBeNull();
+                TestEditionIds.Regular.ToString()))).ShouldBeNull();
 
         }
     }

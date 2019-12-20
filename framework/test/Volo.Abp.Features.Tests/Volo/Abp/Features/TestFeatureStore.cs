@@ -20,9 +20,9 @@ namespace Volo.Abp.Features
         {
             _settingRecords = new List<SettingRecord>
             {
-                new SettingRecord("BooleanTestFeature1", TenantFeatureValueProvider.ProviderName, Tenant1Id.ToString("N"), "true"),
-                new SettingRecord("BooleanTestFeature2", TenantFeatureValueProvider.ProviderName, Tenant1Id.ToString("N"), "true"),
-                new SettingRecord("IntegerTestFeature1", TenantFeatureValueProvider.ProviderName, Tenant2Id.ToString("N"), "34")
+                new SettingRecord("BooleanTestFeature1", TenantFeatureValueProvider.ProviderName, Tenant1Id.ToString(), "true"),
+                new SettingRecord("BooleanTestFeature2", TenantFeatureValueProvider.ProviderName, Tenant1Id.ToString(), "true"),
+                new SettingRecord("IntegerTestFeature1", TenantFeatureValueProvider.ProviderName, Tenant2Id.ToString(), "34")
             };
         }
 

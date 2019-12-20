@@ -165,7 +165,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("  abp new Acme.BookStore -d mongodb");
             sb.AppendLine("  abp new Acme.BookStore -d mongodb -o d:\\my-project");
             sb.AppendLine("  abp new Acme.BookStore -t module");
-            sb.AppendLine("  abp new Acme.BookStore -t module no-ui");
+            sb.AppendLine("  abp new Acme.BookStore -t module --no-ui");
             sb.AppendLine("  abp new Acme.BookStore --local-framework-ref --abp-path \"D:\\github\\abp\"");
             sb.AppendLine("");
             sb.AppendLine("See the documentation for more info: https://docs.abp.io/en/abp/latest/CLI");
@@ -175,7 +175,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Generates a new solution based on the ABP startup templates.";
+            return "Generate a new solution based on the ABP startup templates.";
         }
 
         protected virtual DatabaseProvider GetDatabaseProvider(CommandLineArgs commandLineArgs)

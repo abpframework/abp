@@ -82,7 +82,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Show command line help. Write ` abp help <command> `";
         }
     }
 }

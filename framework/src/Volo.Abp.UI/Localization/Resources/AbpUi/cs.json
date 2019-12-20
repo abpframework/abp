@@ -46,6 +46,13 @@
     "DatatableActionDropdownDefaultText": "Akce",
     "ChangePassword": "Změnit heslo",
     "PersonalInfo": "Můj profil",
-    "AreYouSureYouWantToCancelEditingWarningMessage": "Máte neuložené změny."
+    "AreYouSureYouWantToCancelEditingWarningMessage": "Máte neuložené změny.",
+    "UnhandledException": "Neošetřená výjimka!",
+    "401Message": "Neoprávněno",
+    "403Message": "Zakázáno",
+    "404Message": "Stránka nenalezena",
+    "500Message": "Interní chyba serveru",
+    "GoHomePage": "Přejít na domovskou stránku",
+    "GoBack": "Jít zpět"
   }
 }

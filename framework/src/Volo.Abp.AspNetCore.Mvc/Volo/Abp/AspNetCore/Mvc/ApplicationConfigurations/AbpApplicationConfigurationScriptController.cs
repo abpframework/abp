@@ -2,6 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Volo.Abp.Auditing;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
@@ -28,12 +29,15 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
         [Produces(MimeTypes.Application.Javascript, MimeTypes.Text.Plain)]
         public async Task<ActionResult> Get()
         {
-            return Content(
-                CreateAbpExtendScript(
-                    await _configurationAppService.GetAsync()
-                ),
-                MimeTypes.Application.Javascript
+            Logger.LogDebug("Executing AbpApplicationConfigurationScriptController.Get()");
+
+            var result = CreateAbpExtendScript(
+                await _configurationAppService.GetAsync()
             );
+
+            Logger.LogDebug("Executed AbpApplicationConfigurationScriptController.Get()");
+            
+            return Content(result, MimeTypes.Application.Javascript);
         }
 
         private string CreateAbpExtendScript(ApplicationConfigurationDto config)

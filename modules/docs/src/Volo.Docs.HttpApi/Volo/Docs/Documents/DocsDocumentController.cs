@@ -46,6 +46,8 @@ namespace Volo.Docs.Documents
             return DocumentAppService.GetResourceAsync(input);
         }
 
+        [HttpGet]
+        [Route("parameters")]
         public Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
         {
             return DocumentAppService.GetParametersAsync(input);
