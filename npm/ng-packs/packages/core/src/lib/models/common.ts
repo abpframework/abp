@@ -1,5 +1,6 @@
 import { Config } from './config';
 import { eLayoutType } from '../enums/common';
+import { Type } from '@angular/core';
 
 export namespace ABP {
   export interface Root {
@@ -46,5 +47,10 @@ export namespace ABP {
 
   export interface Dictionary<T = any> {
     [key: string]: T;
+  }
+
+  export interface ComponentData<T = any> {
+    key: string;
+    default: Type<T>;
   }
 }
