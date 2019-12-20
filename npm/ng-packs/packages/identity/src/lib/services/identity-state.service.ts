@@ -72,7 +72,7 @@ export class IdentityStateService {
     return this.store.dispatch(new CreateUser(payload));
   }
 
-  updateUser(payload: Identity.UserItem) {
+  updateUser(payload: Identity.UserSaveRequest & { id: string }) {
     return this.store.dispatch(new UpdateUser(payload));
   }
 
