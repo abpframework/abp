@@ -7,6 +7,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
@@ -28,6 +29,33 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             CurrentUser = currentUser;
             HttpContextAccessor = httpContextAccessor;
             Cache = cache;
+        }
+
+        public ApplicationConfigurationDto Get()
+        {
+            var cacheKey = CreateCacheKey();
+            var httpContext = HttpContextAccessor?.HttpContext;
+
+            if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
+            {
+                return configuration;
+            }
+
+            configuration = Cache.GetOrAdd(
+                cacheKey,
+                () => AsyncHelper.RunSync(Proxy.Service.GetAsync),
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(120) //TODO: Should be configurable. Default value should be higher (5 mins would be good).
+                }
+            );
+
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = configuration;
+            }
+
+            return configuration;
         }
 
         public async Task<ApplicationConfigurationDto> GetAsync()
