@@ -50,14 +50,7 @@ export class ConfigPlugin implements NgxsPlugin {
 }
 
 function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): any {
-  // TODO: remove in v1
-  const oldAbpRoutes: ABP.FullRoute[] = routes
-    .filter(route => {
-      return snq(() => route.data.routes.routes.find(r => r.path === route.path), false);
-    })
-    .reduce((acc, val) => [...acc, ...val.data.routes.routes], []);
-  // tslint:disable-next-line: deprecation
-  const abpRoutes = [...getAbpRoutes(), ...oldAbpRoutes];
+  const abpRoutes = [...getAbpRoutes()];
 
   wrappers = abpRoutes.filter(ar => ar.wrapper);
   const transformed = [] as ABP.FullRoute[];
@@ -89,8 +82,7 @@ function transformRoutes(routes: Routes = [], wrappers: ABP.FullRoute[] = []): a
 
 function setUrls(routes: ABP.FullRoute[], parentUrl?: string): ABP.FullRoute[] {
   if (parentUrl) {
-    // this if block using for only recursive call
-
+    // recursive block
     return routes.map(route => ({
       ...route,
       url: `${parentUrl}/${route.path}`,
