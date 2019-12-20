@@ -16,14 +16,14 @@ namespace Volo.Abp.PermissionManagement.EntityFrameworkCore
 
         }
 
-        public Task<PermissionGrant> FindAsync(string name, string providerName, string providerKey)
+        public async Task<PermissionGrant> FindAsync(string name, string providerName, string providerKey)
         {
-            return Task.FromResult(DbSet
-                .FirstOrDefault(s =>
+            return await DbSet
+                .FirstOrDefaultAsync(s =>
                     s.Name == name &&
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey
-                ));
+                );
         }
 
         public async Task<List<PermissionGrant>> GetListAsync(string providerName, string providerKey)
