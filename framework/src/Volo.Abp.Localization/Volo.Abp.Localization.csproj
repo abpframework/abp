@@ -14,6 +14,7 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <None Remove="Volo\Abp\Localization\Resources\**\*.json" />
     <EmbeddedResource Include="Volo\Abp\Localization\Resources\**\*.json" />
   </ItemGroup>
   
