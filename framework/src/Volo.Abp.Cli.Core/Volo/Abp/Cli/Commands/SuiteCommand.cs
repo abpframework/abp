@@ -1,17 +1,11 @@
 using System;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.Licensing;
-using Volo.Abp.Cli.ProjectBuilding;
-using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -60,6 +54,12 @@ namespace Volo.Abp.Cli.Commands
         private async Task InstallSuiteAsync()
         {
             var nugetIndexUrl = await GetNuGetIndexUrlAsync();
+            
+            if (nugetIndexUrl == null)
+            {
+                return;
+            }
+
             var result = CmdHelper.RunCmd("dotnet tool install " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
 
             if (result == 0)
@@ -72,6 +72,12 @@ namespace Volo.Abp.Cli.Commands
         private async Task UpdateSuiteAsync()
         {
             var nugetIndexUrl = await GetNuGetIndexUrlAsync();
+
+            if (nugetIndexUrl == null)
+            {
+                return;
+            }
+
             CmdHelper.RunCmd("dotnet tool update " + SuitePackageName + " --add-source " + nugetIndexUrl + " -g");
         }
 
@@ -101,8 +107,8 @@ namespace Volo.Abp.Cli.Commands
         private async Task<string> GetNuGetIndexUrlAsync()
         {
             var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
-            if (apiKeyResult == null ||
-                string.IsNullOrEmpty(apiKeyResult.ApiKey))
+
+            if (apiKeyResult == null || string.IsNullOrEmpty(apiKeyResult.ApiKey))
             {
                 Logger.LogError("Couldn't retrieve your NuGet API key!");
                 Logger.LogWarning(File.Exists(CliPaths.AccessToken)

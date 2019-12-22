@@ -265,7 +265,7 @@
           "items": [            
             {
               "text": "PostgreSQL Integration",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "path": "EntityFrameworkCore-PostgreSQL-Integration.md"
             }
           ]
         },
