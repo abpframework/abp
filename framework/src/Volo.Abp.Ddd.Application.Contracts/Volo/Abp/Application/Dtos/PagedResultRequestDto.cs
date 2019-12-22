@@ -10,6 +10,21 @@ namespace Volo.Abp.Application.Dtos
     public class PagedResultRequestDto : LimitedResultRequestDto, IPagedResultRequest
     {
         [Range(0, int.MaxValue)]
-        public virtual int SkipCount { get; set; }
+        public virtual int SkipCount {
+            get
+            {
+                return (PageIndex - 1) * PageSize;
+            }
+            set
+            {
+                SkipCount = value;
+            }
+        }
+
+        [Range(1, int.MaxValue)]
+        public int PageSize { get; set; } = 20;
+
+        [Range(1, int.MaxValue)]
+        public int PageIndex { get; set; } = 1;
     }
 }
