@@ -21,9 +21,5 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
-
-        Task<long> GetCountAsync(
-            CancellationToken cancellationToken = default
-        );
     }
 }
