@@ -30,10 +30,11 @@ import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import './utils/date-extensions';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
+import { ReplaceableComponentsState } from './states/replaceable-components.state';
 
 @NgModule({
   imports: [
-    NgxsModule.forFeature([ProfileState, SessionState, ConfigState]),
+    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
     OAuthModule.forRoot(),
