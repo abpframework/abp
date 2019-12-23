@@ -373,6 +373,59 @@ describe('ConfigState', () => {
         url: '/',
         children: [{ path: 'dashboard', name: 'Dashboard', url: '/dashboard' }],
       });
+  describe('#AddRoute', () => {
+    const newRoute = {
+      name: 'My new page',
+      iconClass: 'fa fa-dashboard',
+      path: 'page',
+      invisible: false,
+      order: 2,
+      requiredPolicy: 'MyProjectName::MyNewPage',
+    } as Omit<ABP.Route, 'children'>;
+
+    test('should add a new route', () => {
+      let patchStateArg;
+
+      const patchState = jest.fn(s => (patchStateArg = s));
+      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
+
+      state.addRoute({ patchState, getState } as any, new AddRoute(newRoute));
+
+      expect(patchStateArg.routes[CONFIG_STATE_DATA.routes.length]).toEqual({
+        ...newRoute,
+        url: '/page',
+      });
+      expect(patchStateArg.flattedRoutes[CONFIG_STATE_DATA.flattedRoutes.length]).toEqual(
+        patchStateArg.routes[CONFIG_STATE_DATA.routes.length],
+      );
+    });
+
+    it('should add a new child route', () => {
+      let patchStateArg;
+
+      const patchState = jest.fn(s => (patchStateArg = s));
+      const getState = jest.fn(() => clone(CONFIG_STATE_DATA));
+
+      state.addRoute(
+        { patchState, getState } as any,
+        new AddRoute({ ...newRoute, parentName: 'AbpAccount::Login' }),
+      );
+
+      expect(patchStateArg.routes[1].children[0].children[0]).toEqual({
+        ...newRoute,
+        parentName: 'AbpAccount::Login',
+        url: '/account/login/page',
+      });
+
+      expect(patchStateArg.flattedRoutes[CONFIG_STATE_DATA.flattedRoutes.length]).toEqual(
+        patchStateArg.routes[1].children[0].children[0],
+      );
+
+      expect(
+        patchStateArg.flattedRoutes[
+          CONFIG_STATE_DATA.flattedRoutes.findIndex(route => route.name === 'AbpAccount::Login')
+        ],
+      ).toEqual(patchStateArg.routes[1].children[0]);
     });
   });
 });
