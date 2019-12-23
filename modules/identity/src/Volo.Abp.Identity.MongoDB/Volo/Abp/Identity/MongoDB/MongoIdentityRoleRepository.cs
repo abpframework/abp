@@ -43,11 +43,5 @@ namespace Volo.Abp.Identity.MongoDB
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
                 .ToListAsync(GetCancellationToken(cancellationToken));
         }
-
-        public async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
-        {
-            return await GetMongoQueryable()
-                .LongCountAsync(GetCancellationToken(cancellationToken));
-        }
     }
 }
