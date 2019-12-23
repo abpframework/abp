@@ -29,6 +29,7 @@ import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import './utils/date-extensions';
+import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import './utils/date-extensions';
     RouterModule,
   ],
   declarations: [
+    ReplaceableRouteContainerComponent,
     RouterOutletComponent,
     DynamicLayoutComponent,
     AutofocusDirective,
@@ -77,6 +79,7 @@ import './utils/date-extensions';
     LocalizationPipe,
     StopPropagationDirective,
     AbstractNgModelComponent,
+    ReplaceableRouteContainerComponent,
   ],
   providers: [LocalizationPipe],
   entryComponents: [RouterOutletComponent, DynamicLayoutComponent],

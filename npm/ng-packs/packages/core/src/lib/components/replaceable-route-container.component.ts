@@ -2,12 +2,12 @@ import { Type, Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'identity-route-wrapper',
+  selector: 'abp-replaceable-route-container',
   template: `
     <ng-container *ngComponentOutlet="defaultComponent"></ng-container>
   `,
 })
-export class RouteWrapperComponent implements OnInit {
+export class ReplaceableRouteContainerComponent implements OnInit {
   defaultComponent: Type<any>;
 
   constructor(private route: ActivatedRoute) {}

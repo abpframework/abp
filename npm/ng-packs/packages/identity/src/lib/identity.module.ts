@@ -10,10 +10,9 @@ import { UsersComponent } from './components/users/users.component';
 import { PermissionManagementModule } from '@abp/ng.permission-management';
 import { TableModule } from 'primeng/table';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { RouteWrapperComponent } from './components/route-wrapper.component';
 
 @NgModule({
-  declarations: [RolesComponent, UsersComponent, RouteWrapperComponent],
+  declarations: [RolesComponent, UsersComponent],
   imports: [
     NgxsModule.forFeature([IdentityState]),
     CoreModule,

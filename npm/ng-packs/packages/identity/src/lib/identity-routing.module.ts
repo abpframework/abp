@@ -1,9 +1,15 @@
-import { AuthGuard, DynamicLayoutComponent, PermissionGuard, ABP, CoreModule } from '@abp/ng.core';
+import {
+  AuthGuard,
+  DynamicLayoutComponent,
+  PermissionGuard,
+  ABP,
+  CoreModule,
+  ReplaceableRouteContainerComponent,
+} from '@abp/ng.core';
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
 import { RolesComponent } from './components/roles/roles.component';
 import { UsersComponent } from './components/users/users.component';
-import { RouteWrapperComponent } from './components/route-wrapper.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
@@ -14,7 +20,7 @@ const routes: Routes = [
     children: [
       {
         path: 'roles',
-        component: RouteWrapperComponent,
+        component: ReplaceableRouteContainerComponent,
         data: {
           requiredPolicy: 'AbpIdentity.Roles',
           component: {
@@ -25,8 +31,14 @@ const routes: Routes = [
       },
       {
         path: 'users',
-        component: UsersComponent,
-        data: { requiredPolicy: 'AbpIdentity.Users' },
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          requiredPolicy: 'AbpIdentity.Users',
+          component: {
+            key: 'AbpIdentity.Roles',
+            default: UsersComponent,
+          } as ABP.ComponentData<UsersComponent>,
+        },
       },
     ],
   },
