@@ -19,23 +19,23 @@ export class TenantManagementStateService {
     return this.store.selectSnapshot(TenantManagementState.getTenantsTotalCount);
   }
 
-  dispatchGetTenants(payload?: ABP.PageQueryParams) {
-    return this.store.dispatch(new GetTenants(payload));
+  dispatchGetTenants(...args: ConstructorParameters<typeof GetTenants>) {
+    return this.store.dispatch(new GetTenants(...args));
   }
 
-  dispatchGetTenantById(payload: string) {
-    return this.store.dispatch(new GetTenantById(payload));
+  dispatchGetTenantById(...args: ConstructorParameters<typeof GetTenantById>) {
+    return this.store.dispatch(new GetTenantById(...args));
   }
 
-  dispatchCreateTenant(payload: TenantManagement.AddRequest) {
-    return this.store.dispatch(new CreateTenant(payload));
+  dispatchCreateTenant(...args: ConstructorParameters<typeof CreateTenant>) {
+    return this.store.dispatch(new CreateTenant(...args));
   }
 
-  dispatchUpdateTenant(payload: TenantManagement.UpdateRequest) {
-    return this.store.dispatch(new UpdateTenant(payload));
+  dispatchUpdateTenant(...args: ConstructorParameters<typeof UpdateTenant>) {
+    return this.store.dispatch(new UpdateTenant(...args));
   }
 
-  dispatchDeleteTenant(payload: string) {
-    return this.store.dispatch(new DeleteTenant(payload));
+  dispatchDeleteTenant(...args: ConstructorParameters<typeof DeleteTenant>) {
+    return this.store.dispatch(new DeleteTenant(...args));
   }
 }
