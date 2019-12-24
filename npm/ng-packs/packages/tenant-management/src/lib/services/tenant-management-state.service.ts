@@ -19,23 +19,23 @@ export class TenantManagementStateService {
     return this.store.selectSnapshot(TenantManagementState.getTenantsTotalCount);
   }
 
-  getTenants(payload?: ABP.PageQueryParams) {
+  dispatchGetTenants(payload?: ABP.PageQueryParams) {
     return this.store.dispatch(new GetTenants(payload));
   }
 
-  getTenantById(payload: string) {
+  dispatchGetTenantById(payload: string) {
     return this.store.dispatch(new GetTenantById(payload));
   }
 
-  createTenant(payload: TenantManagement.AddRequest) {
+  dispatchCreateTenant(payload: TenantManagement.AddRequest) {
     return this.store.dispatch(new CreateTenant(payload));
   }
 
-  updateTenant(payload: TenantManagement.UpdateRequest) {
+  dispatchUpdateTenant(payload: TenantManagement.UpdateRequest) {
     return this.store.dispatch(new UpdateTenant(payload));
   }
 
-  deleteTenant(payload: string) {
+  dispatchDeleteTenant(payload: string) {
     return this.store.dispatch(new DeleteTenant(payload));
   }
 }
