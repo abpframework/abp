@@ -24,7 +24,7 @@ const routes: Routes = [
         data: {
           requiredPolicy: 'AbpIdentity.Roles',
           component: {
-            key: 'AbpIdentity.Roles',
+            key: 'Identity.RolesComponent',
             default: RolesComponent,
           } as ABP.ComponentData<RolesComponent>,
         },
@@ -35,7 +35,7 @@ const routes: Routes = [
         data: {
           requiredPolicy: 'AbpIdentity.Users',
           component: {
-            key: 'AbpIdentity.Roles',
+            key: 'Identity.UsersComponent',
             default: UsersComponent,
           } as ABP.ComponentData<UsersComponent>,
         },

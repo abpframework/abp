@@ -2,10 +2,10 @@ import { Type } from '@angular/core';
 
 export namespace ReplaceableComponents {
   export interface State {
-    replaceableComponents: Data[];
+    replaceableComponents: ReplaceableComponent[];
   }
 
-  export interface Data {
+  export interface ReplaceableComponent {
     component: Type<any>;
     key: string;
   }

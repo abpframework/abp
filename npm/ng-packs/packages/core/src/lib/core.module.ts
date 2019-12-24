@@ -83,7 +83,11 @@ import { ReplaceableComponentsState } from './states/replaceable-components.stat
     ReplaceableRouteContainerComponent,
   ],
   providers: [LocalizationPipe],
-  entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
+  entryComponents: [
+    RouterOutletComponent,
+    DynamicLayoutComponent,
+    ReplaceableRouteContainerComponent,
+  ],
 })
 export class CoreModule {
   static forRoot(options = {} as ABP.Root): ModuleWithProviders {

@@ -11,15 +11,15 @@ export class ReplaceableComponentsState {
   @Selector()
   static getAll({
     replaceableComponents,
-  }: ReplaceableComponents.State): ReplaceableComponents.Data[] {
+  }: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent[] {
     return replaceableComponents || [];
   }
 
-  static getOne(key: string) {
+  static getComponent(key: string) {
     const selector = createSelector(
       [ReplaceableComponentsState],
-      ({ replaceableComponents }: ReplaceableComponents.State) => {
-        return snq(() => replaceableComponents.find(component => component.key === key));
+      (state: ReplaceableComponents.State): ReplaceableComponents.ReplaceableComponent => {
+        return snq(() => state.replaceableComponents.find(component => component.key === key));
       },
     );
 
@@ -31,14 +31,20 @@ export class ReplaceableComponentsState {
     { getState, patchState }: StateContext<ReplaceableComponents.State>,
     { payload }: AddReplaceableComponent,
   ) {
-    if (!Array.isArray(payload)) {
-      payload = [payload];
+    let { replaceableComponents } = getState();
+
+    if (replaceableComponents && replaceableComponents.length) {
+      const index = replaceableComponents.findIndex(component => component.key === payload.key);
+
+      if (index > -1) {
+        replaceableComponents[index] = payload;
+      }
+    } else {
+      replaceableComponents = [...replaceableComponents, payload];
     }
 
-    const { replaceableComponents } = getState();
-
     patchState({
-      replaceableComponents: [...replaceableComponents, ...payload],
+      replaceableComponents,
     });
   }
 }
