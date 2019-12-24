@@ -35,6 +35,13 @@ namespace Volo.Abp.TenantManagement.EntityFrameworkCore
                 .FirstOrDefault(t => t.Name == name);
         }
 
+        public Tenant FindById(Guid id, bool includeDetails = true)
+        {
+            return DbSet
+                .IncludeDetails(includeDetails)
+                .FirstOrDefault(t => t.Id == id);
+        }
+
         public virtual async Task<List<Tenant>> GetListAsync(
             string sorting = null,
             int maxResultCount = int.MaxValue,
