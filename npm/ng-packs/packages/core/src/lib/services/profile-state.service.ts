@@ -14,15 +14,15 @@ export class ProfileStateService {
     return this.store.selectSnapshot(ProfileState.getProfile);
   }
 
-  fetchProfile() {
+  dispatchGetProfile() {
     return this.store.dispatch(new GetProfile());
   }
 
-  updateProfile(payload: Profile.Response) {
+  dispatchUpdateProfile(payload: Profile.Response) {
     return this.store.dispatch(new UpdateProfile(payload));
   }
 
-  changePassword(payload: Profile.ChangePasswordRequest) {
+  dispatchChangePassword(payload: Profile.ChangePasswordRequest) {
     return this.store.dispatch(new ChangePassword(payload));
   }
 }

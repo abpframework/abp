@@ -18,11 +18,11 @@ export class SessionStateService {
     return this.store.selectSnapshot(SessionState.getTenant);
   }
 
-  setLanguage(payload: string) {
+  dispatchSetLanguage(payload: string) {
     return this.store.dispatch(new SetLanguage(payload));
   }
 
-  setTenant(payload: ABP.BasicItem) {
+  dispatchSetTenant(payload: ABP.BasicItem) {
     return this.store.dispatch(new SetTenant(payload));
   }
 }

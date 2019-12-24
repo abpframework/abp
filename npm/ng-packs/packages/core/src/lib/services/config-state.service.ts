@@ -50,15 +50,15 @@ export class ConfigStateService {
     return this.store.selectSnapshot(ConfigState.getLocalization(...args));
   }
 
-  addData() {
+  dispatchGetAppConfiguration() {
     return this.store.dispatch(new GetAppConfiguration());
   }
 
-  patchRoute(name: string, newValue: Partial<ABP.Route>) {
+  dispatchPatchRouteByName(name: string, newValue: Partial<ABP.Route>) {
     return this.store.dispatch(new PatchRouteByName(name, newValue));
   }
 
-  addRoute(payload: Omit<ABP.Route, 'children'>) {
+  dispatchAddRoute(payload: Omit<ABP.Route, 'children'>) {
     return this.store.dispatch(new AddRoute(payload));
   }
 }
