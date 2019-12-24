@@ -12,11 +12,13 @@ export class LayoutStateService {
     return this.store.selectSnapshot(LayoutState.getNavigationElements);
   }
 
-  dispatchAddNavigationElement(payload: Layout.NavigationElement | Layout.NavigationElement[]) {
-    return this.store.dispatch(new AddNavigationElement(payload));
+  dispatchAddNavigationElement(...args: ConstructorParameters<typeof AddNavigationElement>) {
+    return this.store.dispatch(new AddNavigationElement(...args));
   }
 
-  dispatchRemoveNavigationElementByName(name: string) {
-    return this.store.dispatch(new RemoveNavigationElementByName(name));
+  dispatchRemoveNavigationElementByName(
+    ...args: ConstructorParameters<typeof RemoveNavigationElementByName>
+  ) {
+    return this.store.dispatch(new RemoveNavigationElementByName(...args));
   }
 }
