@@ -9,13 +9,6 @@ namespace Volo.Abp.Castle.DynamicProxy
     public class CastleAbpInterceptorAdapter<TInterceptor> : IInterceptor
         where TInterceptor : IAbpInterceptor
     {
-        private static readonly MethodInfo MethodExecuteWithoutReturnValueAsync =
-            typeof(CastleAbpInterceptorAdapter<TInterceptor>)
-                .GetMethod(
-                    nameof(ExecuteWithoutReturnValueAsync),
-                    BindingFlags.NonPublic | BindingFlags.Instance
-                );
-
         private static readonly MethodInfo MethodExecuteWithReturnValueAsync =
             typeof(CastleAbpInterceptorAdapter<TInterceptor>)
                 .GetMethod(
@@ -36,22 +29,20 @@ namespace Volo.Abp.Castle.DynamicProxy
 
             var method = invocation.MethodInvocationTarget ?? invocation.Method;
 
-            if (method.IsAsync())
-            {
-                InterceptAsyncMethod(invocation, proceedInfo);
-            }
-            else
+            if (!method.IsAsync())
             {
                 proceedInfo.Invoke();
+                return;
             }
+
+            InterceptAsyncMethod(invocation, proceedInfo);
         }
 
         private void InterceptAsyncMethod(IInvocation invocation, IInvocationProceedInfo proceedInfo)
         {
             if (invocation.Method.ReturnType == typeof(Task))
             {
-                invocation.ReturnValue = MethodExecuteWithoutReturnValueAsync
-                    .Invoke(this, new object[] { invocation, proceedInfo });
+                invocation.ReturnValue = ExecuteWithoutReturnValueAsync(invocation, proceedInfo);
             }
             else
             {
@@ -63,8 +54,6 @@ namespace Volo.Abp.Castle.DynamicProxy
 
         private async Task ExecuteWithoutReturnValueAsync(IInvocation invocation, IInvocationProceedInfo proceedInfo)
         {
-            await Task.Yield();
-
             await _abpInterceptor.InterceptAsync(
                 new CastleAbpMethodInvocationAdapter(invocation, proceedInfo)
             );
