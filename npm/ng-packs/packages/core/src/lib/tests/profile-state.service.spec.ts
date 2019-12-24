@@ -2,6 +2,8 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { ProfileStateService } from '../services/profile-state.service';
 import { ProfileState } from '../states/profile.state';
 import { Store } from '@ngxs/store';
+import * as ProfileActions from '../actions';
+
 describe('ProfileStateService', () => {
   let service: ProfileStateService;
   let spectator: SpectatorService<ProfileStateService>;
@@ -33,6 +35,23 @@ describe('ProfileStateService', () => {
           service[fnName]();
           expect(spy).toHaveBeenCalledWith(ProfileState[fnName]);
         }
+      });
+  });
+
+  test('should have a dispatch method for every ProfileState action', () => {
+    const reg = /(?<=dispatch)(\w+)(?=\()/gm;
+    ProfileStateService.toString()
+      .match(reg)
+      .forEach(fnName => {
+        expect(ProfileActions[fnName]).toBeTruthy();
+
+        const spy = jest.spyOn(store, 'dispatch');
+        spy.mockClear();
+
+        const params = Array.from(new Array(ProfileActions[fnName].length));
+
+        service[`dispatch${fnName}`](...params);
+        expect(spy).toHaveBeenCalledWith(new ProfileActions[fnName](...params));
       });
   });
 });

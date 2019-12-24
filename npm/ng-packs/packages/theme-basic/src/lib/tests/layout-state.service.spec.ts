@@ -1,7 +1,8 @@
 import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
+import { Store } from '@ngxs/store';
+import * as LayoutActions from '../actions';
 import { LayoutStateService } from '../services/layout-state.service';
 import { LayoutState } from '../states/layout.state';
-import { Store } from '@ngxs/store';
 describe('LayoutStateService', () => {
   let service: LayoutStateService;
   let spectator: SpectatorService<LayoutStateService>;
@@ -34,6 +35,23 @@ describe('LayoutStateService', () => {
           service[fnName]();
           expect(spy).toHaveBeenCalledWith(LayoutState[fnName]);
         }
+      });
+  });
+
+  test('should have a dispatch method for every LayoutState action', () => {
+    const reg = /(?<=dispatch)(\w+)(?=\()/gm;
+    LayoutStateService.toString()
+      .match(reg)
+      .forEach(fnName => {
+        expect(LayoutActions[fnName]).toBeTruthy();
+
+        const spy = jest.spyOn(store, 'dispatch');
+        spy.mockClear();
+
+        const params = Array.from(new Array(LayoutActions[fnName].length));
+
+        service[`dispatch${fnName}`](...params);
+        expect(spy).toHaveBeenCalledWith(new LayoutActions[fnName](...params));
       });
   });
 });
