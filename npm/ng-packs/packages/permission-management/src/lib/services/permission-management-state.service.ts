@@ -17,13 +17,11 @@ export class PermissionManagementStateService {
     return this.store.selectSnapshot(PermissionManagementState.getEntityDisplayName);
   }
 
-  dispatchGetPermissions(payload: PermissionManagement.GrantedProvider) {
-    return this.store.dispatch(new GetPermissions(payload));
+  dispatchGetPermissions(...args: ConstructorParameters<typeof GetPermissions>) {
+    return this.store.dispatch(new GetPermissions(...args));
   }
 
-  dispatchUpdatePermissions(
-    payload: PermissionManagement.GrantedProvider & PermissionManagement.UpdateRequest,
-  ) {
-    return this.store.dispatch(new UpdatePermissions(payload));
+  dispatchUpdatePermissions(...args: ConstructorParameters<typeof UpdatePermissions>) {
+    return this.store.dispatch(new UpdatePermissions(...args));
   }
 }
