@@ -229,7 +229,7 @@ export class ConfigState {
     const index = flattedRoutes.findIndex(route => route.name === name);
 
     if (index > -1) {
-      flattedRoutes[index] = newValue as ABP.FullRoute;
+      flattedRoutes[index] = { ...flattedRoutes[index], ...newValue } as ABP.FullRoute;
     }
 
     return patchState({
