@@ -19,13 +19,14 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public virtual void FirstOrDefault()
+        public virtual async Task FirstOrDefault()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var entity = EntityWithIntPkRepository.FirstOrDefault(e => e.Name == "Entity1");
                 entity.ShouldNotBeNull();
                 entity.Name.ShouldBe("Entity1");
+                return Task.CompletedTask;
             });
         }
 

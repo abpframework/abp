@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -23,31 +24,34 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
         }
 
         [Fact]
-        public void GetBookList()
+        public async Task GetBookList()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 _bookRepository.Any().ShouldBeTrue();
+                return Task.CompletedTask;
             });
         }
 
         [Fact]
-        public void GetPhoneInSecondDbContextList()
+        public async Task GetPhoneInSecondDbContextList()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 _phoneInSecondDbContextRepository.Any().ShouldBeTrue();
+                return Task.CompletedTask;
             });
         }
 
         [Fact]
-        public void EfCore_Include_Extension()
+        public async Task EfCore_Include_Extension()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var person = PersonRepository.Include(p => p.Phones).Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
+                return Task.CompletedTask;
             });
         }
     }
