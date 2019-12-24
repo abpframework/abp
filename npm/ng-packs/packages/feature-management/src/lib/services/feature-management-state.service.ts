@@ -14,11 +14,11 @@ export class FeatureManagementStateService {
     return this.store.selectSnapshot(FeatureManagementState.getFeatures);
   }
 
-  fetchFeatures(payload: FeatureManagement.Provider) {
+  dispatchGetFeatures(payload: FeatureManagement.Provider) {
     return this.store.dispatch(new GetFeatures(payload));
   }
 
-  updateFeatures(payload: FeatureManagement.Provider & FeatureManagement.Features) {
+  dispatchUpdateFeatures(payload: FeatureManagement.Provider & FeatureManagement.Features) {
     return this.store.dispatch(new UpdateFeatures(payload));
   }
 }
