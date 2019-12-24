@@ -36,47 +36,47 @@ export class IdentityStateService {
     return this.store.selectSnapshot(IdentityState.getUsersTotalCount);
   }
 
-  dispatchGetRoles(payload?: ABP.PageQueryParams) {
-    return this.store.dispatch(new GetRoles(payload));
+  dispatchGetRoles(...args: ConstructorParameters<typeof GetRoles>) {
+    return this.store.dispatch(new GetRoles(...args));
   }
 
-  dispatchGetRoleById(payload: string) {
-    return this.store.dispatch(new GetRoleById(payload));
+  dispatchGetRoleById(...args: ConstructorParameters<typeof GetRoleById>) {
+    return this.store.dispatch(new GetRoleById(...args));
   }
 
-  dispatchDeleteRole(payload: string) {
-    return this.store.dispatch(new DeleteRole(payload));
+  dispatchDeleteRole(...args: ConstructorParameters<typeof DeleteRole>) {
+    return this.store.dispatch(new DeleteRole(...args));
   }
 
-  dispatchCreateRole(payload: Identity.RoleSaveRequest) {
-    return this.store.dispatch(new CreateRole(payload));
+  dispatchCreateRole(...args: ConstructorParameters<typeof CreateRole>) {
+    return this.store.dispatch(new CreateRole(...args));
   }
 
-  dispatchUpdateRole(payload: Identity.RoleItem) {
-    return this.store.dispatch(new UpdateRole(payload));
+  dispatchUpdateRole(...args: ConstructorParameters<typeof UpdateRole>) {
+    return this.store.dispatch(new UpdateRole(...args));
   }
 
-  dispatchGetUsers(payload?: ABP.PageQueryParams) {
-    return this.store.dispatch(new GetUsers(payload));
+  dispatchGetUsers(...args: ConstructorParameters<typeof GetUsers>) {
+    return this.store.dispatch(new GetUsers(...args));
   }
 
-  dispatchGetUserById(payload: string) {
-    return this.store.dispatch(new GetUserById(payload));
+  dispatchGetUserById(...args: ConstructorParameters<typeof GetUserById>) {
+    return this.store.dispatch(new GetUserById(...args));
   }
 
-  dispatchDeleteUser(payload: string) {
-    return this.store.dispatch(new DeleteUser(payload));
+  dispatchDeleteUser(...args: ConstructorParameters<typeof DeleteUser>) {
+    return this.store.dispatch(new DeleteUser(...args));
   }
 
-  dispatchCreateUser(payload: Identity.UserSaveRequest) {
-    return this.store.dispatch(new CreateUser(payload));
+  dispatchCreateUser(...args: ConstructorParameters<typeof CreateUser>) {
+    return this.store.dispatch(new CreateUser(...args));
   }
 
-  dispatchUpdateUser(payload: Identity.UserSaveRequest & { id: string }) {
-    return this.store.dispatch(new UpdateUser(payload));
+  dispatchUpdateUser(...args: ConstructorParameters<typeof UpdateUser>) {
+    return this.store.dispatch(new UpdateUser(...args));
   }
 
-  dispatchGetUserRoles(payload: string) {
-    return this.store.dispatch(new GetUserRoles(payload));
+  dispatchGetUserRoles(...args: ConstructorParameters<typeof GetUserRoles>) {
+    return this.store.dispatch(new GetUserRoles(...args));
   }
 }
