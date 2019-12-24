@@ -40,25 +40,13 @@ namespace Volo.Abp.Castle.DynamicProxy
             _lazyArgumentsDictionary = new Lazy<IReadOnlyDictionary<string, object>>(GetArgumentsDictionary);
         }
 
-        public void Proceed()
-        {
-            ProceedInfo.Invoke();
-
-            if (Invocation.Method.IsAsync())
-            {
-                AsyncHelper.RunSync(() => (Task)Invocation.ReturnValue);
-            }
-        }
-
         public Task ProceedAsync()
         {
             ProceedInfo.Invoke();
 
             _actualReturnValue = Invocation.ReturnValue;
 
-            return Invocation.Method.IsAsync()
-                ? (Task)_actualReturnValue
-                : Task.FromResult(_actualReturnValue);
+            return (Task) _actualReturnValue;
         }
 
         private IReadOnlyDictionary<string, object> GetArgumentsDictionary()

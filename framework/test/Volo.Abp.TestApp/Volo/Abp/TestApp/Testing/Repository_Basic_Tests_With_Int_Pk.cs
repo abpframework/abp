@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
@@ -29,11 +30,11 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public virtual void Get()
+        public virtual async Task Get()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(async () =>
             {
-                var entity = EntityWithIntPkRepository.Get(1);
+                var entity = await EntityWithIntPkRepository.GetAsync(1);
                 entity.ShouldNotBeNull();
                 entity.Name.ShouldBe("Entity1");
             });

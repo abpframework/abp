@@ -28,7 +28,7 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void Complex_Event_Test()
+        public async Task Complex_Event_Test()
         {
             var personName = Guid.NewGuid().ToString("N");
 
@@ -75,9 +75,9 @@ namespace Volo.Abp.TestApp.Testing
                     return Task.CompletedTask;
                 });
 
-                PersonRepository.Insert(new Person(Guid.NewGuid(), personName, 15));
+                await PersonRepository.InsertAsync(new Person(Guid.NewGuid(), personName, 15));
 
-                uow.Complete();
+                await uow.CompleteAsync();
             }
            
             creatingEventTriggered.ShouldBeTrue();

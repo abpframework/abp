@@ -42,13 +42,8 @@ namespace Volo.Abp.Castle.DynamicProxy
             }
             else
             {
-                InterceptSyncMethod(invocation, proceedInfo);
+                proceedInfo.Invoke();
             }
-        }
-
-        private void InterceptSyncMethod(IInvocation invocation, IInvocationProceedInfo proceedInfo)
-        {
-            _abpInterceptor.Intercept(new CastleAbpMethodInvocationAdapter(invocation, proceedInfo));
         }
 
         private void InterceptAsyncMethod(IInvocation invocation, IInvocationProceedInfo proceedInfo)

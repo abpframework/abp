@@ -14,9 +14,11 @@ namespace Volo.Abp.MongoDB.Repositories
         [Fact]
         public void Linq_Queries()
         {
-            PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
-
-            PersonRepository.Count().ShouldBeGreaterThan(0);
+            WithUnitOfWork(() =>
+            {
+                PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
+                PersonRepository.Count().ShouldBeGreaterThan(0);
+            });
         }
 
         [Fact]
