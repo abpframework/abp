@@ -36,47 +36,47 @@ export class IdentityStateService {
     return this.store.selectSnapshot(IdentityState.getUsersTotalCount);
   }
 
-  fetchRoles(payload?: ABP.PageQueryParams) {
+  dispatchGetRoles(payload?: ABP.PageQueryParams) {
     return this.store.dispatch(new GetRoles(payload));
   }
 
-  fetchRole(payload: string) {
+  dispatchGetRoleById(payload: string) {
     return this.store.dispatch(new GetRoleById(payload));
   }
 
-  deleteRole(payload: string) {
+  dispatchDeleteRole(payload: string) {
     return this.store.dispatch(new DeleteRole(payload));
   }
 
-  createRole(payload: Identity.RoleSaveRequest) {
+  dispatchCreateRole(payload: Identity.RoleSaveRequest) {
     return this.store.dispatch(new CreateRole(payload));
   }
 
-  updateRole(payload: Identity.RoleItem) {
+  dispatchUpdateRole(payload: Identity.RoleItem) {
     return this.store.dispatch(new UpdateRole(payload));
   }
 
-  fetchUsers(payload?: ABP.PageQueryParams) {
+  dispatchGetUsers(payload?: ABP.PageQueryParams) {
     return this.store.dispatch(new GetUsers(payload));
   }
 
-  fetchUser(payload: string) {
+  dispatchGetUserById(payload: string) {
     return this.store.dispatch(new GetUserById(payload));
   }
 
-  deleteUser(payload: string) {
+  dispatchDeleteUser(payload: string) {
     return this.store.dispatch(new DeleteUser(payload));
   }
 
-  createUser(payload: Identity.UserSaveRequest) {
+  dispatchCreateUser(payload: Identity.UserSaveRequest) {
     return this.store.dispatch(new CreateUser(payload));
   }
 
-  updateUser(payload: Identity.UserSaveRequest & { id: string }) {
+  dispatchUpdateUser(payload: Identity.UserSaveRequest & { id: string }) {
     return this.store.dispatch(new UpdateUser(payload));
   }
 
-  getUserRoles(payload: string) {
+  dispatchGetUserRoles(payload: string) {
     return this.store.dispatch(new GetUserRoles(payload));
   }
 }
