@@ -54,11 +54,11 @@ export class ConfigStateService {
     return this.store.dispatch(new GetAppConfiguration());
   }
 
-  dispatchPatchRouteByName(name: string, newValue: Partial<ABP.Route>) {
-    return this.store.dispatch(new PatchRouteByName(name, newValue));
+  dispatchPatchRouteByName(...args: ConstructorParameters<typeof PatchRouteByName>) {
+    return this.store.dispatch(new PatchRouteByName(...args));
   }
 
-  dispatchAddRoute(payload: Omit<ABP.Route, 'children'>) {
-    return this.store.dispatch(new AddRoute(payload));
+  dispatchAddRoute(...args: ConstructorParameters<typeof AddRoute>) {
+    return this.store.dispatch(new AddRoute(...args));
   }
 }

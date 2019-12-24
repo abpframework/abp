@@ -18,11 +18,11 @@ export class ProfileStateService {
     return this.store.dispatch(new GetProfile());
   }
 
-  dispatchUpdateProfile(payload: Profile.Response) {
-    return this.store.dispatch(new UpdateProfile(payload));
+  dispatchUpdateProfile(...args: ConstructorParameters<typeof UpdateProfile>) {
+    return this.store.dispatch(new UpdateProfile(...args));
   }
 
-  dispatchChangePassword(payload: Profile.ChangePasswordRequest) {
-    return this.store.dispatch(new ChangePassword(payload));
+  dispatchChangePassword(...args: ConstructorParameters<typeof ChangePassword>) {
+    return this.store.dispatch(new ChangePassword(...args));
   }
 }
