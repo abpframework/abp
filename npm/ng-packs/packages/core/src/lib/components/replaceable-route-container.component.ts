@@ -23,13 +23,9 @@ export class ReplaceableRouteContainerComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute, private store: Store) {}
 
   ngOnInit() {
-    if (!this.defaultComponent) {
-      this.defaultComponent = this.route.snapshot.data.component.default;
-    }
-
-    if (!this.componentKey) {
-      this.componentKey = (this.route.snapshot.data.component as ABP.ComponentData).key;
-    }
+    this.defaultComponent = this.route.snapshot.data.replaceableComponent.defaultComponent;
+    this.componentKey = (this.route.snapshot.data
+      .replaceableComponent as ReplaceableComponents.RouteData).key;
 
     this.store
       .select(ReplaceableComponentsState.getComponent(this.componentKey))
