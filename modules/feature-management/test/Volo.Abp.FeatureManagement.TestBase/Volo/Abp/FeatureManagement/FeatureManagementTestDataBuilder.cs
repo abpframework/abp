@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Features;
 using Volo.Abp.Guids;
 
@@ -20,12 +21,12 @@ namespace Volo.Abp.FeatureManagement
             _featureValueRepository = featureValueRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
             #region "Regular" edition features
 
             //SocialLogins
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
@@ -36,7 +37,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //UserCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
@@ -47,7 +48,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //ProjectCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
@@ -62,7 +63,7 @@ namespace Volo.Abp.FeatureManagement
             #region "Enterprise" edition features
 
             //SocialLogins
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
@@ -73,7 +74,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //EmailSupport
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.EmailSupport,
@@ -84,7 +85,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //UserCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
@@ -95,7 +96,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //ProjectCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
@@ -106,7 +107,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //BackupCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.BackupCount,
@@ -121,7 +122,7 @@ namespace Volo.Abp.FeatureManagement
             #region "Ultimate" edition features
 
             //SocialLogins
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.SocialLogins,
@@ -132,7 +133,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //EmailSupport
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.EmailSupport,
@@ -143,7 +144,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //EmailSupport
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.DailyAnalysis,
@@ -154,7 +155,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //UserCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.UserCount,
@@ -165,7 +166,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //ProjectCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.ProjectCount,
@@ -176,7 +177,7 @@ namespace Volo.Abp.FeatureManagement
             );
 
             //BackupCount
-            _featureValueRepository.Insert(
+            await _featureValueRepository.InsertAsync(
                 new FeatureValue(
                     _guidGenerator.Create(),
                     TestFeatureDefinitionProvider.BackupCount,

@@ -15,14 +15,9 @@ namespace Volo.Abp.Auditing
             Logger = NullLogger<SimpleLogAuditingStore>.Instance;
         }
 
-        public void Save(AuditLogInfo auditInfo)
-        {
-            Logger.LogInformation(auditInfo.ToString());
-        }
-
         public Task SaveAsync(AuditLogInfo auditInfo)
         {
-            Save(auditInfo);
+            Logger.LogInformation(auditInfo.ToString());
             return Task.FromResult(0);
         }
     }
