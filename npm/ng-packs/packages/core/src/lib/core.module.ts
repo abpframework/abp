@@ -31,6 +31,8 @@ import { getInitialData, localeInitializer } from './utils/initial-utils';
 import './utils/date-extensions';
 import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
 import { ReplaceableComponentsState } from './states/replaceable-components.state';
+import { InitDirective } from './directives/init.directive';
+import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 
 @NgModule({
   imports: [
@@ -46,6 +48,7 @@ import { ReplaceableComponentsState } from './states/replaceable-components.stat
   ],
   declarations: [
     ReplaceableRouteContainerComponent,
+    ReplaceableTemplateContainerComponent,
     RouterOutletComponent,
     DynamicLayoutComponent,
     AutofocusDirective,
@@ -54,6 +57,7 @@ import { ReplaceableComponentsState } from './states/replaceable-components.stat
     FormSubmitDirective,
     LocalizationPipe,
     SortPipe,
+    InitDirective,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
@@ -68,19 +72,21 @@ import { ReplaceableComponentsState } from './states/replaceable-components.stat
     RouterModule,
     RouterOutletComponent,
     DynamicLayoutComponent,
+    AbstractNgModelComponent,
+    ReplaceableRouteContainerComponent,
     AutofocusDirective,
     EllipsisDirective,
     ForDirective,
     FormSubmitDirective,
-    LocalizationPipe,
-    SortPipe,
+    InitDirective,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
-    LocalizationPipe,
+    ReplaceableTemplateDirective,
     StopPropagationDirective,
-    AbstractNgModelComponent,
-    ReplaceableRouteContainerComponent,
+    LocalizationPipe,
+    SortPipe,
+    LocalizationPipe,
   ],
   providers: [LocalizationPipe],
   entryComponents: [
