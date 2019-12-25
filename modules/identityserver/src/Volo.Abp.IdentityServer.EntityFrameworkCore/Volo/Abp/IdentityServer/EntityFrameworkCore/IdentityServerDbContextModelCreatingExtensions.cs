@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.IO.Compression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Newtonsoft.Json;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
@@ -205,7 +208,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                     .HasConversion(
                         d => JsonConvert.SerializeObject(d, Formatting.None),
                         s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
-                    );
+                    ).Metadata.SetValueComparer(new ValueComparer<Dictionary<string, string>>(
+                        (d1, d2) => d1.SequenceEqual(d2),
+                        d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
+                        d => d.ToDictionary(k => k.Key, v => v.Value)));
 
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
@@ -232,7 +238,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                     .HasConversion(
                         d => JsonConvert.SerializeObject(d, Formatting.None),
                         s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
-                    );
+                    ).Metadata.SetValueComparer(new ValueComparer<Dictionary<string, string>>(
+                        (d1, d2) => d1.SequenceEqual(d2),
+                        d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
+                        d => d.ToDictionary(k => k.Key, v => v.Value)));
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
