@@ -49,6 +49,10 @@ export class RolesComponent implements OnInit {
   @ViewChild('formRef', { static: false, read: ElementRef })
   formRef: ElementRef<HTMLFormElement>;
 
+  onVisiblePermissionChange = event => {
+    this.visiblePermissions = event;
+  };
+
   constructor(
     private confirmationService: ConfirmationService,
     private fb: FormBuilder,

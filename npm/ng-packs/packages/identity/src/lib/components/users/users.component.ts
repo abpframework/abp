@@ -69,6 +69,10 @@ export class UsersComponent implements OnInit {
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
 
+  onVisiblePermissionChange = event => {
+    this.visiblePermissions = event;
+  };
+
   get roleGroups(): FormGroup[] {
     return snq(() => (this.form.get('roleNames') as FormArray).controls as FormGroup[], []);
   }
