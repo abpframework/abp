@@ -34,13 +34,6 @@ namespace Volo.Abp.BackgroundJobs
             );
         }
 
-        public List<BackgroundJobInfo> GetWaitingJobs(int maxResultCount)
-        {
-            return ObjectMapper.Map<List<BackgroundJobRecord>, List<BackgroundJobInfo>>(
-                BackgroundJobRepository.GetWaitingList(maxResultCount)
-            );
-        }
-
         public virtual async Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
         {
             return ObjectMapper.Map<List<BackgroundJobRecord>, List<BackgroundJobInfo>>(
