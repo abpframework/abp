@@ -48,7 +48,6 @@ import { ReplaceableTemplateDirective } from './directives/replaceable-template.
   ],
   declarations: [
     ReplaceableRouteContainerComponent,
-    ReplaceableTemplateContainerComponent,
     RouterOutletComponent,
     DynamicLayoutComponent,
     AutofocusDirective,
@@ -62,6 +61,7 @@ import { ReplaceableTemplateDirective } from './directives/replaceable-template.
     VisibilityDirective,
     InputEventDebounceDirective,
     StopPropagationDirective,
+    ReplaceableTemplateDirective,
     AbstractNgModelComponent,
   ],
   exports: [
