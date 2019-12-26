@@ -25,7 +25,7 @@ export class PermissionManagementComponent {
   @Input()
   hideBadges = false;
 
-  protected _visible;
+  protected _visible = false;
 
   @Input()
   get visible(): boolean {
@@ -33,6 +33,8 @@ export class PermissionManagementComponent {
   }
 
   set visible(value: boolean) {
+    if (value === this._visible) return;
+
     if (value) {
       this.openModal().subscribe(() => {
         this._visible = true;
