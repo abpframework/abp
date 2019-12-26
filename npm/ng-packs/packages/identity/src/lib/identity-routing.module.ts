@@ -2,9 +2,9 @@ import {
   AuthGuard,
   DynamicLayoutComponent,
   PermissionGuard,
-  ABP,
   CoreModule,
   ReplaceableRouteContainerComponent,
+  ReplaceableComponents,
 } from '@abp/ng.core';
 import { NgModule, Type } from '@angular/core';
 import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
@@ -23,10 +23,10 @@ const routes: Routes = [
         component: ReplaceableRouteContainerComponent,
         data: {
           requiredPolicy: 'AbpIdentity.Roles',
-          component: {
+          replaceableComponent: {
             key: 'Identity.RolesComponent',
-            default: RolesComponent,
-          } as ABP.ComponentData<RolesComponent>,
+            defaultComponent: RolesComponent,
+          } as ReplaceableComponents.RouteData<RolesComponent>,
         },
       },
       {
@@ -34,10 +34,10 @@ const routes: Routes = [
         component: ReplaceableRouteContainerComponent,
         data: {
           requiredPolicy: 'AbpIdentity.Users',
-          component: {
+          replaceableComponent: {
             key: 'Identity.UsersComponent',
-            default: UsersComponent,
-          } as ABP.ComponentData<UsersComponent>,
+            defaultComponent: UsersComponent,
+          } as ReplaceableComponents.RouteData<UsersComponent>,
         },
       },
     ],
