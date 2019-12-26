@@ -33,12 +33,12 @@ export class ReplaceableComponentsState {
   ) {
     let { replaceableComponents } = getState();
 
-    if (replaceableComponents && replaceableComponents.length) {
-      const index = replaceableComponents.findIndex(component => component.key === payload.key);
-
-      if (index > -1) {
-        replaceableComponents[index] = payload;
-      }
+    const index = snq(
+      () => replaceableComponents.findIndex(component => component.key === payload.key),
+      -1,
+    );
+    if (index > -1) {
+      replaceableComponents[index] = payload;
     } else {
       replaceableComponents = [...replaceableComponents, payload];
     }

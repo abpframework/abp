@@ -33,11 +33,13 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
     any
   >;
 
-  externalComponent: Type<any> = null; // externalComponent must equal to null
+  externalComponent: Type<any>;
 
   defaultComponentRef: any;
 
   defaultComponentSubscriptions = {} as ABP.Dictionary<Subscription>;
+
+  initialized = false;
 
   constructor(
     private injector: Injector,
@@ -64,7 +66,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
       .pipe(
         filter(
           (res = {} as ReplaceableComponents.ReplaceableComponent) =>
-            !compare(res.component, this.externalComponent),
+            !this.initialized || !compare(res.component, this.externalComponent),
         ),
         takeUntilDestroy(this),
       )
@@ -86,6 +88,8 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
         } else {
           this.vcRef.createEmbeddedView(this.templateRef, this.context);
         }
+
+        this.initialized = true;
       });
   }
 
