@@ -14,7 +14,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Volo\Abp\Application\Localization\**\*.json" />
+    <Content Remove="Volo\Abp\Application\Localization\**\*.json" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
+    <ProjectReference Include="..\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
   </ItemGroup>
 
 </Project>
