@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
@@ -135,6 +137,30 @@ namespace Volo.Abp.Validation
             });
         }
 
+        //TODO: Create a Volo.Abp.Ddd.Application.Contracts.Tests project and move this to there and remove Volo.Abp.Ddd.Application.Contracts dependency from this project.
+        [Fact]
+        public async Task LimitedResultRequestDto_Should_Throw_Exception_For_Requests_More_Than_MaxMaxResultCount()
+        {
+            var exception = await Assert.ThrowsAsync<AbpValidationException>(async () =>
+            {
+                await _myAppService.MyMethodWithLimitedResult(new LimitedResultRequestDto
+                {
+                    MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount + 1
+                });
+            });
+
+            exception.ValidationErrors.ShouldContain(e => e.MemberNames.Contains(nameof(LimitedResultRequestDto.MaxResultCount)));
+        }
+
+        [Fact]
+        public async Task LimitedResultRequestDto_Should_Be_Valid_For_Requests_Less_Than_MaxMaxResultCount()
+        {
+            await _myAppService.MyMethodWithLimitedResult(new LimitedResultRequestDto
+            {
+                MaxResultCount = LimitedResultRequestDto.MaxMaxResultCount -1
+            });
+        }
+
         [Fact]
         public async Task Should_Stop_Recursive_Validation_In_A_Constant_Depth()
         {
@@ -195,6 +221,7 @@ namespace Volo.Abp.Validation
             Task<MyMethodOutput> MyMethod6(MyMethod6Input input);
             Task<MyMethodOutput> MyMethod8(MyClassWithRecursiveReference input);
             Task MyMethodWithNullableEnum(MyEnum? value);
+            Task MyMethodWithLimitedResult(LimitedResultRequestDto input);
         }
 
         public class MyAppService : IMyAppService, ITransientDependency
@@ -238,6 +265,11 @@ namespace Volo.Abp.Validation
             public Task<MyMethodOutput> MyMethod8(MyClassWithRecursiveReference input)
             {
                 return Task.FromResult(new MyMethodOutput { Result = 42 });
+            }
+
+            public Task MyMethodWithLimitedResult(LimitedResultRequestDto input)
+            {
+                return Task.CompletedTask;
             }
 
             public Task MyMethodWithNullableEnum(MyEnum? value)
