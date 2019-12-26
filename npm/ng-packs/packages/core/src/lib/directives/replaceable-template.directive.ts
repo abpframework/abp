@@ -3,32 +3,41 @@ import {
   Directive,
   Injector,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
+  SimpleChanges,
   TemplateRef,
   Type,
   ViewContainerRef,
-  SimpleChanges,
 } from '@angular/core';
 import { Store } from '@ngxs/store';
-import compare from 'just-compare';
+import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
+import { ABP } from '../models/common';
 import { ReplaceableComponents } from '../models/replaceable-components';
 import { ReplaceableComponentsState } from '../states/replaceable-components.state';
 import { takeUntilDestroy } from '../utils/rxjs-utils';
+import compare from 'just-compare';
+import snq from 'snq';
 
 @Directive({ selector: '[abpReplaceableTemplate]' })
-export class ReplaceableTemplateDirective implements OnInit, OnDestroy {
+export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChanges {
   private context = {};
 
   @Input('abpReplaceableTemplate')
   data: { inputs: any; outputs: any; componentKey: string };
 
-  providedData = { inputs: {}, outputs: {} } as { inputs: any; outputs: any; componentKey: string };
+  providedData = { inputs: {}, outputs: {} } as ReplaceableComponents.ReplaceableTemplateData<
+    any,
+    any
+  >;
 
   externalComponent: Type<any> = null; // externalComponent must equal to null
 
   defaultComponentRef: any;
+
+  defaultComponentSubscriptions = {} as ABP.Dictionary<Subscription>;
 
   constructor(
     private injector: Injector,
@@ -39,12 +48,12 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy {
   ) {
     this.context = {
       initTemplate: ref => {
+        Object.keys(this.defaultComponentSubscriptions).forEach(key => {
+          this.defaultComponentSubscriptions[key].unsubscribe();
+        });
+        this.defaultComponentSubscriptions = {} as ABP.Dictionary<Subscription>;
         this.defaultComponentRef = ref;
         this.setDefaultComponentInputs();
-        setTimeout(() => {
-          ref.providerKey = 'admin';
-          ref.visible = true;
-        }, 5000);
       },
     };
   }
@@ -81,16 +90,37 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
+    if (snq(() => changes.data.currentValue.inputs) && this.defaultComponentRef) {
+      this.setDefaultComponentInputs();
+    }
   }
 
   ngOnDestroy() {}
 
   setDefaultComponentInputs() {
-    if (!this.defaultComponentRef) return;
+    if (!this.defaultComponentRef || !this.data.inputs) return;
+
+    for (const key in this.data.inputs) {
+      if (this.data.inputs.hasOwnProperty(key)) {
+        if (!compare(this.defaultComponentRef[key], this.data.inputs[key].value)) {
+          this.defaultComponentRef[key] = this.data.inputs[key].value;
+
+          if (this.data.inputs[key].twoWay && !this.defaultComponentSubscriptions[key]) {
+            this.defaultComponentSubscriptions[key] = this.defaultComponentRef[
+              `${key}Change`
+            ].subscribe(value => {
+              this.data.outputs[`${key}Change`](value);
+            });
+          }
+        }
+      }
+    }
   }
 
   setProvidedData() {
+    this.providedData = { ...this.data, inputs: {} };
+
+    if (!this.providedData.inputs) return;
     Object.defineProperties(this.providedData.inputs, {
       ...Object.keys(this.data.inputs).reduce(
         (acc, key) => ({
@@ -110,9 +140,5 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy {
         {},
       ),
     });
-
-    this.providedData.outputs = this.data.outputs;
-
-    console.warn(this.providedData);
   }
 }
