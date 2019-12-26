@@ -231,13 +231,10 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiResource.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 apiResource.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
                 apiResource.Property(x => x.Properties)
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
-                    ).Metadata.SetValueComparer(new ValueComparer<Dictionary<string, string>>(
+                    .ConfigureJsonConversionWithValueComparer(
                         (d1, d2) => d1.SequenceEqual(d2),
                         d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
-                        d => d.ToDictionary(k => k.Key, v => v.Value)));
+                        d => d.ToDictionary(k => k.Key, v => v.Value));
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
