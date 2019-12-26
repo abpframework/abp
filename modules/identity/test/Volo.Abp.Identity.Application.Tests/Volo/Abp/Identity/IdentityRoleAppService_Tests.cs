@@ -39,10 +39,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto
-            {
-                MaxResultCount = int.MaxValue
-            });
+            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
             //Assert
 

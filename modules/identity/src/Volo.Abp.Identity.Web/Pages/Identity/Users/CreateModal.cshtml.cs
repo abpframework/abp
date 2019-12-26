@@ -28,10 +28,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         {
             UserInfo = new UserInfoViewModel();
 
-            var roleDtoList = await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto
-            {
-                MaxResultCount = int.MaxValue
-            });
+            var roleDtoList = await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
             Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList.Items);
 
