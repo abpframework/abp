@@ -1,6 +1,5 @@
-import { Config } from './config';
 import { eLayoutType } from '../enums/common';
-import { Type } from '@angular/core';
+import { Config } from './config';
 
 export namespace ABP {
   export interface Root {
@@ -49,8 +48,5 @@ export namespace ABP {
     [key: string]: T;
   }
 
-  export interface ComponentData<T = any> {
-    key: string;
-    default: Type<T>;
-  }
+  export type ExtractFromGeneric<Generic> = Generic extends Array<infer X> ? X : Generic;
 }
