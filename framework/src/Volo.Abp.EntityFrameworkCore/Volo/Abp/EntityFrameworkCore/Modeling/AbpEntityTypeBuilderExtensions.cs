@@ -2,13 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
@@ -59,15 +56,11 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             if (b.Metadata.ClrType.IsAssignableTo<IHasExtraProperties>())
             {
                 b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
-                    )
                     .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
-                    .Metadata.SetValueComparer(new ValueComparer<Dictionary<string, object>>(
+                    .ConfigureJsonConversionWithValueComparer(
                         (d1, d2) => d1.SequenceEqual(d2),
                         d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
-                        d => d.ToDictionary(k => k.Key, v => v.Value)));
+                        d => d.ToDictionary(k => k.Key, v => v.Value));
             }
         }
 
