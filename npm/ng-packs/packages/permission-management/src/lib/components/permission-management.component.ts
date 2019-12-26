@@ -15,15 +15,18 @@ type PermissionWithMargin = PermissionManagement.Permission & {
   templateUrl: './permission-management.component.html',
   exportAs: 'abpPermissionManagement',
 })
-export class PermissionManagementComponent {
+export class PermissionManagementComponent
+  implements
+    PermissionManagement.PermissionManagementComponentInputs,
+    PermissionManagement.PermissionManagementComponentOutputs {
   @Input()
-  providerName: string;
+  readonly providerName: string;
 
   @Input()
-  providerKey: string;
+  readonly providerKey: string;
 
   @Input()
-  hideBadges = false;
+  readonly hideBadges = false;
 
   protected _visible = false;
 
