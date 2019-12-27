@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore.TestApp.ThirdDbContext;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
 {
@@ -29,9 +30,9 @@ namespace Volo.Abp.EntityFrameworkCore.TestApp.SecondContext
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<SecondContextTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

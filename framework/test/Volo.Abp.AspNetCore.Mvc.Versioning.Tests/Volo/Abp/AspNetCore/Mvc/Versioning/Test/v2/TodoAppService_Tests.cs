@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.Versioning.App.v2;
 using Xunit;
@@ -15,9 +16,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.Test.v2
         }
 
         [Fact]
-        public void Get()
+        public async Task GetAsync()
         {
-            _todoAppService.Get(42).ShouldBe("42-2.0");
+            (await _todoAppService.GetAsync(42)).ShouldBe("42-2.0");
         }
     }
 }

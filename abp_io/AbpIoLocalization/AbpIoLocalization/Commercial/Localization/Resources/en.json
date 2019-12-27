@@ -25,6 +25,7 @@
     "Volo.AbpIo.Commercial:010004": "Can not find the specified user! The user must have already registered.",
     "MyOrganizations": "My organizations",
     "ApiKey": "API key",
-    "UserNameNotFound": "There is no user with username {0}"
+    "UserNameNotFound": "There is no user with username {0}",
+    "SuccessfullyAddedToNewsletter": "Thanks you for subscribing to our newsletter!"
   }
 }

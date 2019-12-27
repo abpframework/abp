@@ -24,7 +24,7 @@ describe('SortOrderIconComponent', () => {
     component.sort(newKey);
     expect(component.selectedSortKey).toBe(newKey);
     expect(component.order).toBe('asc');
-    expect(component.icon).toBe('fa-sort-asc');
+    expect(component.icon).toBe('sorting_asc');
   });
 
   test("shouldn't have any icon class when sortKey and selectedSortKey are different", () => {

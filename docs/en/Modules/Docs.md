@@ -408,11 +408,100 @@ public class Person
 ```
 ~~~
 
-
-
 As an example you can see ABP Framework documentation:
 
 [https://github.com/abpframework/abp/blob/master/docs/en/](https://github.com/abpframework/abp/blob/master/docs/en/)
+
+#### Conditional sections feature (Using Scriban)
+
+Docs module uses [Scriban](<https://github.com/lunet-io/scriban/tree/master/doc> ) for conditionally show or hide some parts of a document. In order to use that feature, you have to create a JSON file as **Parameter document** per every language. It will contain all the key-values, as well as their display names.
+
+For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/blob/master/en/docs-params.json):
+
+```json
+{
+    "parameters": [{
+        "name": "UI",
+        "displayName": "UI",
+		"values": {
+			"MVC": "MVC / Razor Pages",
+			"NG": "Angular"
+		}
+    },
+	{
+        "name": "DB",
+        "displayName": "Database",
+		"values": {
+			"EF": "Entity Framework Core",
+			"Mongo": "MongoDB"			
+		}
+    },
+	{
+        "name": "Tiered",
+        "displayName": "Tiered",
+		"values": {
+			"No": "Not Tiered",
+			"Yes": "Tiered"
+		}
+    }]
+}
+```
+
+Since not every single document in your projects may not have sections or may not need all of those parameters, you have to declare which of those parameters will be used for sectioning the document, as a JSON block anywhere on the document. 
+
+For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/Getting-Started.md):
+
+```
+.....
+
+​````json
+//[doc-params]
+{
+    "UI": ["MVC","NG"],
+    "DB": ["EF", "Mongo"],
+    "Tiered": ["Yes", "No"]
+}
+​````
+
+........
+```
+
+This section will be automatically deleted during render. And f course, those key values must match with the ones in **Parameter document**.
+
+![Interface](..\images\docs-section-ui.png)
+
+Now you can use **Scriban** syntax to create sections in your document.
+
+For example:
+
+````
+{{ if UI == "NG" }}
+
+* `-u` argument specifies the UI framework, `angular` in this case.
+
+{{ end }}
+
+{{ if DB == "Mongo" }}
+
+* `-d` argument specifies the database provider, `mongodb` in this case.
+
+{{ end }}
+
+{{ if Tiered == "Yes" }}
+
+* `--tiered` argument is used to create N-tiered solution where authentication server, UI and API layers are physically separated.
+
+{{ end }}
+
+````
+
+You can also use variables in a text, adding **_Value** postfix to its key:
+
+````
+This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider.
+````
+
+**IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](<https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block> ) for more information.
 
 ### 8- Creating the Navigation Document
 
