@@ -1,5 +1,7 @@
 import { eLayoutType } from '../enums/common';
 import { Config } from './config';
+import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export namespace ABP {
   export interface Root {
@@ -48,5 +50,7 @@ export namespace ABP {
     [key: string]: T;
   }
 
-  export type ExtractFromGeneric<Generic> = Generic extends Array<infer X> ? X : Generic;
+  export type ExtractFromOutput<
+    T extends EventEmitter<any> | Subject<any>
+  > = T extends EventEmitter<infer X> ? X : T extends Subject<infer Y> ? Y : never;
 }
