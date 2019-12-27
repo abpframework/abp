@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Features
 {
@@ -10,14 +11,14 @@ namespace Volo.Abp.Features
          */
 
         [RequiresFeature("BooleanTestFeature2")]
-        public virtual int Feature2()
+        public virtual Task<int> Feature2Async()
         {
-            return 42;
+            return Task.FromResult(42);
         }
 
-        public virtual void NoAdditionalFeature()
+        public virtual Task NoAdditionalFeatureAsync()
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

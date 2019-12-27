@@ -119,8 +119,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log1));
-            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
             var logs = await AuditLogRepository.GetListAsync();
@@ -223,8 +223,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log1));
-            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
             var logs = await AuditLogRepository.GetCountAsync();
@@ -325,8 +325,8 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log1));
-            AuditLogRepository.Insert(new AuditLog(GuidGenerator, log2));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
             var date = DateTime.Parse("2020-01-01");

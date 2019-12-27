@@ -53,7 +53,7 @@ namespace Microsoft.Extensions.DependencyInjection
             foreach (var serviceType in serviceTypes)
             {
                 services.AddHttpClientProxy(
-                    serviceType, 
+                    serviceType,
                     remoteServiceConfigurationName,
                     asDefaultServices
                 );
@@ -153,7 +153,7 @@ namespace Microsoft.Extensions.DependencyInjection
             var interceptorType = typeof(DynamicHttpProxyInterceptor<>).MakeGenericType(type);
             services.AddTransient(interceptorType);
 
-            var interceptorAdapterType = typeof(CastleAbpInterceptorAdapter<>).MakeGenericType(interceptorType);
+            var interceptorAdapterType = typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptorType);
 
             if (asDefaultService)
             {
@@ -174,7 +174,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     var service = ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
-                            (IInterceptor) serviceProvider.GetRequiredService(interceptorAdapterType)
+                            (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         );
 
                     return Activator.CreateInstance(

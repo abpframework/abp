@@ -31,7 +31,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Sign out from " + CliUrls.AccountAbpIo + ".";
         }
     }
 }

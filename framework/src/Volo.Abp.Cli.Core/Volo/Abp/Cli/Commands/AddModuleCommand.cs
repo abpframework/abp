@@ -75,9 +75,8 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Adds a multi-package module to a solution by finding all packages of the module, " +
-                   "finding related projects in the solution and adding each package to the" +
-                   " corresponding project in the solution.";
+            return "Add a multi-package module to a solution by finding all packages of the module, " +
+                   "finding related projects in the solution and adding each package to the corresponding project in the solution.";
         }
 
         protected virtual string GetSolutionFile(CommandLineArgs commandLineArgs)

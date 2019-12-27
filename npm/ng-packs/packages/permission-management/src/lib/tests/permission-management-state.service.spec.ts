@@ -2,13 +2,17 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { PermissionManagementStateService } from '../services/permission-management-state.service';
 import { PermissionManagementState } from '../states/permission-management.state';
 import { Store } from '@ngxs/store';
+import * as PermissionManagementActions from '../actions';
 
 describe('PermissionManagementStateService', () => {
   let service: PermissionManagementStateService;
   let spectator: SpectatorService<PermissionManagementStateService>;
   let store: SpyObject<Store>;
 
-  const createService = createServiceFactory({ service: PermissionManagementStateService, mocks: [Store] });
+  const createService = createServiceFactory({
+    service: PermissionManagementStateService,
+    mocks: [Store],
+  });
   beforeEach(() => {
     spectator = createService();
     service = spectator.service;
@@ -34,6 +38,23 @@ describe('PermissionManagementStateService', () => {
           service[fnName]();
           expect(spy).toHaveBeenCalledWith(PermissionManagementState[fnName]);
         }
+      });
+  });
+
+  test('should have a dispatch method for every PermissionManagementState action', () => {
+    const reg = /(?<=dispatch)(\w+)(?=\()/gm;
+    PermissionManagementStateService.toString()
+      .match(reg)
+      .forEach(fnName => {
+        expect(PermissionManagementActions[fnName]).toBeTruthy();
+
+        const spy = jest.spyOn(store, 'dispatch');
+        spy.mockClear();
+
+        const params = Array.from(new Array(PermissionManagementActions[fnName].length));
+
+        service[`dispatch${fnName}`](...params);
+        expect(spy).toHaveBeenCalledWith(new PermissionManagementActions[fnName](...params));
       });
   });
 });

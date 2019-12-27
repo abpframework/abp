@@ -128,6 +128,24 @@ abp update [options]
 * `--npm`: Only updates NPM packages.
 * `--nuget`: Only updates NuGet packages.
 
+### login
+
+Some features of the CLI requires to be logged in to abp.io platform. To login with your username write 
+
+```bash
+abp login <username>
+```
+
+Notice that, a new login with an already active session, will kill the previous session and creates a new one.
+
+### logout
+
+Logs you out by removing the session token from your computer.
+
+```
+abp logout
+```
+
 ### help
 
 Writes basic usage information of the CLI.

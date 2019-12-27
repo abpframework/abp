@@ -1,4 +1,5 @@
-﻿using IdentityServer4.Models;
+﻿using System.Threading.Tasks;
+using IdentityServer4.Models;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.IdentityServer.ApiResources;
@@ -12,7 +13,7 @@ using PersistedGrant = Volo.Abp.IdentityServer.Grants.PersistedGrant;
 
 namespace Volo.Abp.IdentityServer
 {
-    //TODO: There are two data builders (ses  AbpIdentityServerTestDataBuilder in Volo.Abp.IdentityServer.TestBase). It should be somehow unified!
+    //TODO: There are two data builders (see  AbpIdentityServerTestDataBuilder in Volo.Abp.IdentityServer.TestBase). It should be somehow unified!
 
     public class AbpIdentityServerTestDataBuilder : ITransientDependency
     {
@@ -36,15 +37,15 @@ namespace Volo.Abp.IdentityServer
             _identityResourceRepository = identityResourceRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            AddClients();
-            AddPersistentGrants();
-            AddApiResources();
-            AddIdentityResources();
+            await AddClients();
+            await AddPersistentGrants();
+            await AddApiResources();
+            await AddIdentityResources();
         }
 
-        private void AddClients()
+        private async Task AddClients()
         {
             var client42 = new Client(_guidGenerator.Create(), "42")
             {
@@ -55,12 +56,12 @@ namespace Volo.Abp.IdentityServer
 
             client42.AddScope("api1");
 
-            _clientRepository.Insert(client42);
+            await _clientRepository.InsertAsync(client42);
         }
 
-        private void AddPersistentGrants()
+        private async Task AddPersistentGrants()
         {
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "38",
                 ClientId = "TestClientId-38",
@@ -69,7 +70,7 @@ namespace Volo.Abp.IdentityServer
                 Data = "TestData-38"
             });
 
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "37",
                 ClientId = "TestClientId-37",
@@ -78,7 +79,7 @@ namespace Volo.Abp.IdentityServer
                 Data = "TestData-37"
             });
 
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "36",
                 ClientId = "TestClientId-X",
@@ -87,7 +88,7 @@ namespace Volo.Abp.IdentityServer
                 Data = "TestData-36"
             });
 
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "35",
                 ClientId = "TestClientId-X",
@@ -97,7 +98,7 @@ namespace Volo.Abp.IdentityServer
             });
         }
 
-        private void AddApiResources()
+        private async Task AddApiResources()
         {
             var apiResource = new ApiResource(_guidGenerator.Create(), "Test-ApiResource-Name-1")
             {
@@ -110,10 +111,10 @@ namespace Volo.Abp.IdentityServer
             apiResource.AddScope("Test-ApiResource-ApiScope-Name-1", "Test-ApiResource-ApiScope-DisplayName-1");
             apiResource.AddUserClaim("Test-ApiResource-Claim-Type-1");
 
-            _apiResourceRepository.Insert(apiResource);
+            await _apiResourceRepository.InsertAsync(apiResource);
         }
 
-        private void AddIdentityResources()
+        private async Task AddIdentityResources()
         {
             var identityResource = new IdentityResource(_guidGenerator.Create(), "Test-Identity-Resource-Name-1")
             {
@@ -125,7 +126,7 @@ namespace Volo.Abp.IdentityServer
 
             identityResource.AddUserClaim("Test-Identity-Resource-1-IdentityClaim-Type-1");
 
-            _identityResourceRepository.Insert(identityResource);
+            await _identityResourceRepository.InsertAsync(identityResource);
         }
     }
 }

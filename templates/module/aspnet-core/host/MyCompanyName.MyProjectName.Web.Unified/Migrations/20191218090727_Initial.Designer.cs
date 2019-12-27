@@ -10,14 +10,14 @@ using MyCompanyName.MyProjectName.EntityFrameworkCore;
 namespace MyCompanyName.MyProjectName.Migrations
 {
     [DbContext(typeof(UnifiedDbContext))]
-    [Migration("20191127123650_Initial")]
+    [Migration("20191218090727_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.0.0")
+                .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -426,6 +426,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnName("Email")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
@@ -469,6 +470,7 @@ namespace MyCompanyName.MyProjectName.Migrations
                         .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmail")
+                        .IsRequired()
                         .HasColumnName("NormalizedEmail")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
