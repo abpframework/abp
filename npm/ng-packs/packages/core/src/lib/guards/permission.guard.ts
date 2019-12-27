@@ -13,12 +13,22 @@ import { ConfigState } from '../states';
 export class PermissionGuard implements CanActivate {
   constructor(private store: Store) {}
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    let resource = snq(() => route.data.routes.requiredPolicy) || snq(() => route.data.requiredPolicy as string);
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot,
+  ): Observable<boolean> | boolean {
+    let resource =
+      snq(() => route.data.routes.requiredPolicy) || snq(() => route.data.requiredPolicy as string);
     if (!resource) {
       resource = snq(
-        () => route.routeConfig.children.find(child => state.url.indexOf(child.path) > -1).data.requiredPolicy,
+        () =>
+          route.routeConfig.children.find(child => state.url.indexOf(child.path) > -1).data
+            .requiredPolicy,
       );
+
+      if (!resource) {
+        return true;
+      }
     }
 
     return this.store.select(ConfigState.getGrantedPolicy(resource)).pipe(
