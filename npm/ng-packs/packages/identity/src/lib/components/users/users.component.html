@@ -62,7 +62,7 @@
             {{ 'AbpIdentity::UserName' | abpLocalization }}
             <abp-sort-order-icon
               #sortOrderIcon
-              key="userName"
+              sortKey="userName"
               [(selectedSortKey)]="sortKey"
               [(order)]="sortOrder"
             >
@@ -71,14 +71,14 @@
           <th pResizableColumn (click)="sortOrderIcon.sort('email')">
             {{ 'AbpIdentity::EmailAddress' | abpLocalization }}
             <abp-sort-order-icon
-              key="email"
+              sortKey="email"
               [(selectedSortKey)]="sortKey"
               [(order)]="sortOrder"
             ></abp-sort-order-icon>
           </th>
           <th pResizableColumn (click)="sortOrderIcon.sort('phoneNumber')">
             {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
-            <abp-sort-order-icon key="phoneNumber" [(selectedSortKey)]="sortKey" [(order)]="sortOrder">
+            <abp-sort-order-icon sortKey="phoneNumber" [(selectedSortKey)]="sortKey" [(order)]="sortOrder">
             </abp-sort-order-icon>
           </th>
         </tr>
