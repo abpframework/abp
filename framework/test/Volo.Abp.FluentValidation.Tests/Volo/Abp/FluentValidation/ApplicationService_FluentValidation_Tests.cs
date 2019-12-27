@@ -49,18 +49,23 @@ namespace Volo.Abp.FluentValidation
         {
             // MyStringValue should be aaa, MyStringValue2 should be bbb. MyStringValue3 should be ccc
 
-            var exception = Assert.Throws<AbpValidationException>(() => _myAppService.MyMethod(new MyMethodInput
-            {
-                MyStringValue = "a",
-                MyMethodInput2 = new MyMethodInput2
-                {
-                    MyStringValue2 = "b"
-                },
-                MyMethodInput3 = new MyMethodInput3
-                {
-                    MyStringValue3 = "c"
-                }
-            }));
+            var exception = await Assert.ThrowsAsync<AbpValidationException>(
+                async () => await _myAppService.MyMethodAsync(
+                    new MyMethodInput
+                    {
+                        MyStringValue = "a",
+                        MyMethodInput2 = new MyMethodInput2
+                        {
+                            MyStringValue2 = "b"
+                        },
+                        MyMethodInput3 = new MyMethodInput3
+                        {
+                            MyStringValue3 = "c"
+                        }
+                    }
+                )
+            );
+            
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
