@@ -27,21 +27,6 @@ namespace Volo.Abp.FluentValidation
         [Fact]
         public async Task Should_Work_Proper_With_Right_Inputs()
         {
-            // MyStringValue should be aaa, MyStringValue2 should be bbb. MyStringValue3 should be ccc
-            var output = _myAppService.MyMethod(new MyMethodInput
-            {
-                MyStringValue = "aaa",
-                MyMethodInput2 = new MyMethodInput2
-                {
-                    MyStringValue2 = "bbb"
-                },
-                MyMethodInput3 = new MyMethodInput3
-                {
-                    MyStringValue3 = "ccc"
-                }
-            });
-            output.ShouldBe("aaabbbccc");
-
             var asyncOutput = await _myAppService.MyMethodAsync(new MyMethodInput
             {
                 MyStringValue = "aaa",
@@ -63,19 +48,6 @@ namespace Volo.Abp.FluentValidation
         {
             // MyStringValue should be aaa, MyStringValue2 should be bbb. MyStringValue3 should be ccc
 
-            Assert.Throws<AbpValidationException>(() => _myAppService.MyMethod(new MyMethodInput
-            {
-                MyStringValue = "a",
-                MyMethodInput2 = new MyMethodInput2
-                {
-                    MyStringValue2 = "b"
-                },
-                MyMethodInput3 = new MyMethodInput3
-                {
-                    MyStringValue3 = "c"
-                }
-            }));
-
             await Assert.ThrowsAsync<AbpValidationException>(async () => await _myAppService.MyMethodAsync(
                 new MyMethodInput
                 {
@@ -92,9 +64,9 @@ namespace Volo.Abp.FluentValidation
         }
 
         [Fact]
-        public void NotValidateMyMethod_Test()
+        public async Task NotValidateMyMethod_Test()
         {
-            var output = _myAppService.NotValidateMyMethod(new MyMethodInput4
+            var output = await _myAppService.NotValidateMyMethod(new MyMethodInput4
             {
                 MyStringValue4 = "444"
             });
@@ -125,29 +97,22 @@ namespace Volo.Abp.FluentValidation
 
         public interface IMyAppService
         {
-            string MyMethod(MyMethodInput input);
-
             Task<string> MyMethodAsync(MyMethodInput input);
 
-            string NotValidateMyMethod(MyMethodInput4 input);
+            Task<string> NotValidateMyMethod(MyMethodInput4 input);
         }
 
         public class MyAppService : IMyAppService, ITransientDependency
         {
-            public string MyMethod(MyMethodInput input)
-            {
-                return input.MyStringValue + input.MyMethodInput2.MyStringValue2 + input.MyMethodInput3.MyStringValue3;
-            }
-
             public Task<string> MyMethodAsync(MyMethodInput input)
             {
                 return Task.FromResult(input.MyStringValue + input.MyMethodInput2.MyStringValue2 +
                                        input.MyMethodInput3.MyStringValue3);
             }
 
-            public string NotValidateMyMethod(MyMethodInput4 input)
+            public Task<string> NotValidateMyMethod(MyMethodInput4 input)
             {
-                return input.MyStringValue4;
+                return Task.FromResult(input.MyStringValue4);
             }
         }
 

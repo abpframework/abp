@@ -1,14 +1,15 @@
 import { ABP, ConfigState } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, TrackByFunction, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
-  FormControl,
 } from '@angular/forms';
+import { PasswordRules, validatePassword } from '@ngx-validate/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
@@ -16,15 +17,14 @@ import snq from 'snq';
 import {
   CreateUser,
   DeleteUser,
+  GetRoles,
   GetUserById,
   GetUserRoles,
   GetUsers,
   UpdateUser,
-  GetRoles,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
-import { PasswordRules, validatePassword } from '@ngx-validate/core';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',

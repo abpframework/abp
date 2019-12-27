@@ -3,6 +3,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.Autofac;
 using Volo.Abp.Features;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.FeatureManagement
 {
@@ -37,9 +38,9 @@ namespace Volo.Abp.FeatureManagement
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<FeatureManagementTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

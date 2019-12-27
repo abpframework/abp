@@ -31,33 +31,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             Cache = cache;
         }
 
-        public ApplicationConfigurationDto Get()
-        {
-            var cacheKey = CreateCacheKey();
-            var httpContext = HttpContextAccessor?.HttpContext;
-
-            if (httpContext != null && httpContext.Items[cacheKey] is ApplicationConfigurationDto configuration)
-            {
-                return configuration;
-            }
-
-            configuration = Cache.GetOrAdd(
-                cacheKey,
-                () => AsyncHelper.RunSync(Proxy.Service.GetAsync),
-                () => new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(120) //TODO: Should be configurable. Default value should be higher (5 mins would be good).
-                }
-            );
-
-            if (httpContext != null)
-            {
-                httpContext.Items[cacheKey] = configuration;
-            }
-
-            return configuration;
-        }
-
         public async Task<ApplicationConfigurationDto> GetAsync()
         {
             var cacheKey = CreateCacheKey();

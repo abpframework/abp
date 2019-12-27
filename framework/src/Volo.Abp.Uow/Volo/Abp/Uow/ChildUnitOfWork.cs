@@ -53,29 +53,14 @@ namespace Volo.Abp.Uow
             _parent.Reserve(reservationName);
         }
 
-        public void SaveChanges()
-        {
-            _parent.SaveChanges();
-        }
-
         public Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return _parent.SaveChangesAsync(cancellationToken);
         }
 
-        public void Complete()
-        {
-
-        }
-
         public Task CompleteAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
-        }
-
-        public void Rollback()
-        {
-            _parent.Rollback();
         }
 
         public Task RollbackAsync(CancellationToken cancellationToken = default)

@@ -19,9 +19,9 @@ import { ABP } from '@abp/ng.core';
       [attr.type]="buttonType"
       [ngClass]="buttonClass"
       [disabled]="loading || disabled"
-      (click.stop)="click.next($event); abpClick.next($event)"
-      (focus)="focus.next($event); abpFocus.next($event)"
-      (blur)="blur.next($event); abpBlur.next($event)"
+      (click.stop)="abpClick.next($event)"
+      (focus)="abpFocus.next($event)"
+      (blur)="abpBlur.next($event)"
     >
       <i [ngClass]="icon" class="mr-1"></i><ng-content></ng-content>
     </button>
@@ -48,24 +48,6 @@ export class ButtonComponent implements OnInit {
 
   @Input()
   attributes: ABP.Dictionary<string>;
-
-  // tslint:disable
-  /**
-   * @deprecated use abpClick instead
-   */
-  @Output() readonly click = new EventEmitter<MouseEvent>();
-
-  /**
-   * @deprecated use abpFocus instead
-   */
-  // tslint:disable-next-line: no-output-native
-  @Output() readonly focus = new EventEmitter<FocusEvent>();
-
-  /**
-   * @deprecated use abpBlur instead
-   */
-  @Output() readonly blur = new EventEmitter<FocusEvent>();
-  // tslint:enable
 
   @Output() readonly abpClick = new EventEmitter<MouseEvent>();
 

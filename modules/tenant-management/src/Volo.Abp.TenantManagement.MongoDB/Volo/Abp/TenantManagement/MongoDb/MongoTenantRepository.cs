@@ -34,6 +34,12 @@ namespace Volo.Abp.TenantManagement.MongoDB
                 .FirstOrDefault(t => t.Name == name);
         }
 
+        public Tenant FindById(Guid id, bool includeDetails = true)
+        {
+            return GetMongoQueryable()
+                .FirstOrDefault(t => t.Id == id);
+        }
+
         public virtual async Task<List<Tenant>> GetListAsync(
             string sorting = null, 
             int maxResultCount = int.MaxValue, 

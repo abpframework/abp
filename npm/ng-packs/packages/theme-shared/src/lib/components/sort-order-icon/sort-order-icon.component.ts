@@ -8,17 +8,8 @@ export class SortOrderIconComponent {
   private _order: 'asc' | 'desc' | '';
   private _selectedSortKey: string;
 
-  /**
-   * @deprecated use selectedSortKey instead.
-   */
   @Input()
-  set selectedKey(value: string) {
-    this.selectedSortKey = value;
-    this.selectedKeyChange.emit(value);
-  }
-  get selectedKey(): string {
-    return this._selectedSortKey;
-  }
+  sortKey: string;
 
   @Input()
   set selectedSortKey(value: string) {
@@ -28,23 +19,6 @@ export class SortOrderIconComponent {
   get selectedSortKey(): string {
     return this._selectedSortKey;
   }
-
-  @Output() readonly selectedKeyChange = new EventEmitter<string>();
-  @Output() readonly selectedSortKeyChange = new EventEmitter<string>();
-
-  /**
-   * @deprecated use sortKey instead.
-   */
-  @Input()
-  get key(): string {
-    return this.sortKey;
-  }
-  set key(value: string) {
-    this.sortKey = value;
-  }
-
-  @Input()
-  sortKey: string;
 
   @Input()
   set order(value: 'asc' | 'desc' | '') {
@@ -56,6 +30,7 @@ export class SortOrderIconComponent {
   }
 
   @Output() readonly orderChange = new EventEmitter<string>();
+  @Output() readonly selectedSortKeyChange = new EventEmitter<string>();
 
   @Input()
   iconClass: string;
@@ -67,7 +42,6 @@ export class SortOrderIconComponent {
   }
 
   sort(key: string) {
-    this.selectedKey = key; // TODO: To be removed
     this.selectedSortKey = key;
     switch (this.order) {
       case '':
@@ -80,7 +54,6 @@ export class SortOrderIconComponent {
         break;
       case 'desc':
         this.order = '';
-        this.selectedKey = ''; // TODO: To be removed
         this.orderChange.emit('');
         break;
     }

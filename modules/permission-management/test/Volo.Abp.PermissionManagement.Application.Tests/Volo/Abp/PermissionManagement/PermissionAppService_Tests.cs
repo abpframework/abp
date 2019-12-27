@@ -65,7 +65,7 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
         [Fact]
         public async Task Update_Revoke_Test()
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     Guid.NewGuid(), 
                     "MyPermission1",
