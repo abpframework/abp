@@ -30,8 +30,8 @@ export class ReplaceableRouteContainerComponent implements OnInit, OnDestroy {
     this.store
       .select(ReplaceableComponentsState.getComponent(this.componentKey))
       .pipe(takeUntilDestroy(this), distinctUntilChanged())
-      .subscribe(({ component } = {} as ReplaceableComponents.ReplaceableComponent) => {
-        this.externalComponent = component;
+      .subscribe((res = {} as ReplaceableComponents.ReplaceableComponent) => {
+        this.externalComponent = res.component;
       });
   }
 
