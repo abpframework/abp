@@ -50,10 +50,7 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
   ) {
     this.context = {
       initTemplate: ref => {
-        Object.keys(this.defaultComponentSubscriptions).forEach(key => {
-          this.defaultComponentSubscriptions[key].unsubscribe();
-        });
-        this.defaultComponentSubscriptions = {} as ABP.Dictionary<Subscription>;
+        this.resetDefaultComponent();
         this.defaultComponentRef = ref;
         this.setDefaultComponentInputs();
       },
@@ -73,6 +70,9 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
       .subscribe((res = {} as ReplaceableComponents.ReplaceableComponent) => {
         this.vcRef.clear();
         this.externalComponent = res.component;
+        if (this.defaultComponentRef) {
+          this.resetDefaultComponent();
+        }
 
         if (res.component) {
           this.setProvidedData();
@@ -102,19 +102,27 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
   ngOnDestroy() {}
 
   setDefaultComponentInputs() {
-    if (!this.defaultComponentRef || !this.data.inputs) return;
+    if (!this.defaultComponentRef || (!this.data.inputs && !this.data.outputs)) return;
 
-    for (const key in this.data.inputs) {
-      if (this.data.inputs.hasOwnProperty(key)) {
-        if (!compare(this.defaultComponentRef[key], this.data.inputs[key].value)) {
-          this.defaultComponentRef[key] = this.data.inputs[key].value;
+    if (this.data.inputs) {
+      for (const key in this.data.inputs) {
+        if (this.data.inputs.hasOwnProperty(key)) {
+          if (!compare(this.defaultComponentRef[key], this.data.inputs[key].value)) {
+            this.defaultComponentRef[key] = this.data.inputs[key].value;
+          }
+        }
+      }
+    }
 
-          if (this.data.inputs[key].twoWay && !this.defaultComponentSubscriptions[key]) {
-            this.defaultComponentSubscriptions[key] = this.defaultComponentRef[
-              `${key}Change`
-            ].subscribe(value => {
-              this.data.outputs[`${key}Change`](value);
-            });
+    if (this.data.outputs) {
+      for (const key in this.data.outputs) {
+        if (this.data.outputs.hasOwnProperty(key)) {
+          if (!this.defaultComponentSubscriptions[key]) {
+            this.defaultComponentSubscriptions[key] = this.defaultComponentRef[key].subscribe(
+              value => {
+                this.data.outputs[key](value);
+              },
+            );
           }
         }
       }
@@ -144,5 +152,13 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
         {},
       ),
     });
+  }
+
+  resetDefaultComponent() {
+    Object.keys(this.defaultComponentSubscriptions).forEach(key => {
+      this.defaultComponentSubscriptions[key].unsubscribe();
+    });
+    this.defaultComponentSubscriptions = {} as ABP.Dictionary<Subscription>;
+    this.defaultComponentRef = null;
   }
 }
