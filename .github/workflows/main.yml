@@ -4,8 +4,12 @@ on:
     paths:
       - 'framework/**'
       - 'modules/**'
-    branches:
-      - dev
+      - 'templates/**'
+  push:
+    paths:
+      - 'framework/**'
+      - 'modules/**'
+      - 'templates/**'
 jobs:
   build-test:
     runs-on: windows-latest
