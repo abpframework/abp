@@ -14,6 +14,8 @@ using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.EventBus.Local;
 using Volo.Abp.Guids;
 using Volo.Abp.MongoDB;
+using Volo.Abp.MultiTenancy;
+using Volo.Abp.Reflection;
 using Volo.Abp.Threading;
 
 namespace Volo.Abp.Domain.Repositories.MongoDB
@@ -311,8 +313,6 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
         where TMongoDbContext : IAbpMongoDbContext
         where TEntity : class, IEntity<TKey>
     {
-        public virtual IMongoDbRepositoryFilterer<TEntity, TKey> RepositoryFilterer { get; set; }
-
         public MongoDbRepository(IMongoDbContextProvider<TMongoDbContext> dbContextProvider)
             : base(dbContextProvider)
         {
@@ -340,7 +340,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             CancellationToken cancellationToken = default)
         {
             return await Collection
-                .Find(RepositoryFilterer.CreateEntityFilter(id, true))
+                .Find(CreateEntityFilter(id, true))
                 .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
@@ -350,9 +350,56 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             CancellationToken cancellationToken = default)
         {
             return Collection.DeleteOneAsync(
-                RepositoryFilterer.CreateEntityFilter(id),
+                CreateEntityFilter(id),
                 GetCancellationToken(cancellationToken)
             );
+        }
+
+        protected override FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
+        {
+            if (!withConcurrencyStamp || !(entity is IHasConcurrencyStamp entityWithConcurrencyStamp))
+            {
+                return Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id);
+            }
+
+            if (concurrencyStamp == null)
+            {
+                concurrencyStamp = entityWithConcurrencyStamp.ConcurrencyStamp;
+            }
+
+            return Builders<TEntity>.Filter.And(
+                Builders<TEntity>.Filter.Eq(e => e.Id, entity.Id),
+                Builders<TEntity>.Filter.Eq(e => ((IHasConcurrencyStamp)e).ConcurrencyStamp, concurrencyStamp)
+            );
+        }
+
+        protected virtual FilterDefinition<TEntity> CreateEntityFilter(TKey id, bool applyFilters = false)
+        {
+            var filters = new List<FilterDefinition<TEntity>>
+            {
+                Builders<TEntity>.Filter.Eq(e => e.Id, id)
+            };
+
+            if (applyFilters)
+            {
+                AddGlobalFilters(filters);
+            }
+
+            return Builders<TEntity>.Filter.And(filters);
+        }
+
+        protected virtual void AddGlobalFilters(List<FilterDefinition<TEntity>> filters)
+        {
+            if (typeof(ISoftDelete).IsAssignableFrom(typeof(TEntity)) && DataFilter.IsEnabled<ISoftDelete>())
+            {
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((ISoftDelete)e).IsDeleted, false));
+            }
+
+            if (typeof(IMultiTenant).IsAssignableFrom(typeof(TEntity)))
+            {
+                var tenantId = CurrentTenant.Id;
+                filters.Add(Builders<TEntity>.Filter.Eq(e => ((IMultiTenant)e).TenantId, tenantId));
+            }
         }
     }
 }
