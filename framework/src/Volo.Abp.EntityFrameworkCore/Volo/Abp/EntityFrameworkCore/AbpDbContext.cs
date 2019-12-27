@@ -67,6 +67,13 @@ namespace Volo.Abp.EntityFrameworkCore
                     BindingFlags.Instance | BindingFlags.NonPublic
                 );
 
+        private static readonly MethodInfo ConfigureValueGeneratedMethodInfo
+            = typeof(AbpDbContext<TDbContext>)
+                .GetMethod(
+                    nameof(ConfigureValueGenerated),
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                );
+
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
@@ -87,6 +94,10 @@ namespace Volo.Abp.EntityFrameworkCore
                     .Invoke(this, new object[] { modelBuilder, entityType });
 
                 ConfigureValueConverterMethodInfo
+                    .MakeGenericMethod(entityType.ClrType)
+                    .Invoke(this, new object[] { modelBuilder, entityType });
+
+                ConfigureValueGeneratedMethodInfo
                     .MakeGenericMethod(entityType.ClrType)
                     .Invoke(this, new object[] { modelBuilder, entityType });
             }
@@ -499,6 +510,23 @@ namespace Volo.Abp.EntityFrameworkCore
                         .HasConversion(dateTimeValueConverter);
                 });
             }
+        }
+
+        protected virtual void ConfigureValueGenerated<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (!typeof(IEntity<Guid>).IsAssignableFrom(typeof(TEntity)))
+            {
+                return;
+            }
+
+            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>) x).Id);
+            if (idPropertyBuilder.Metadata.PropertyInfo.IsDefined(typeof(DatabaseGeneratedAttribute), true))
+            {
+                return;
+            }
+
+            idPropertyBuilder.ValueGeneratedNever();
         }
 
         protected virtual bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType) where TEntity : class
