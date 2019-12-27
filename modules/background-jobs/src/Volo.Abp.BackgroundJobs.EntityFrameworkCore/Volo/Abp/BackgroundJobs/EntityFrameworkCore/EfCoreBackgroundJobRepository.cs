@@ -21,12 +21,6 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
             Clock = clock;
         }
 
-        public List<BackgroundJobRecord> GetWaitingList(int maxResultCount)
-        {
-            return GetWaitingListQuery(maxResultCount)
-                .ToList();
-        }
-
         public async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
         {
             return await GetWaitingListQuery(maxResultCount)

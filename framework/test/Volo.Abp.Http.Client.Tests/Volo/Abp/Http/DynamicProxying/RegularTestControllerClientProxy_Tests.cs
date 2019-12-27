@@ -18,12 +18,6 @@ namespace Volo.Abp.Http.DynamicProxying
         }
 
         [Fact]
-        public void IncrementValue()
-        {
-            _controller.IncrementValue(42).ShouldBe(43);
-        }
-
-        [Fact]
         public async Task IncrementValueAsync()
         {
             (await _controller.IncrementValueAsync(42)).ShouldBe(43);

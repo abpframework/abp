@@ -18,11 +18,11 @@ namespace Volo.Abp.Authorization
         }
 
         [Fact]
-        public void Should_Not_Allow_To_Call_Method_If_Has_No_Permission_ProtectedByClass()
+        public async Task Should_Not_Allow_To_Call_Method_If_Has_No_Permission_ProtectedByClass()
         {
-            Assert.Throws<AbpAuthorizationException>(() =>
+            await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
             {
-                _myAuthorizedService1.ProtectedByClass();
+                await _myAuthorizedService1.ProtectedByClass();
             });
         }
 
@@ -36,9 +36,9 @@ namespace Volo.Abp.Authorization
         }
 
         [Fact]
-        public void Should_Allow_To_Call_Anonymous_Method()
+        public async Task Should_Allow_To_Call_Anonymous_Method()
         {
-            _myAuthorizedService1.Anonymous().ShouldBe(42);
+            (await _myAuthorizedService1.Anonymous()).ShouldBe(42);
         }
 
         [Fact]

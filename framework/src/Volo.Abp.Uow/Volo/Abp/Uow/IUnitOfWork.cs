@@ -32,15 +32,9 @@ namespace Volo.Abp.Uow
 
         void Reserve([NotNull] string reservationName);
 
-        void SaveChanges();
-
         Task SaveChangesAsync(CancellationToken cancellationToken = default);
 
-        void Complete();
-
         Task CompleteAsync(CancellationToken cancellationToken = default);
-
-        void Rollback();
 
         Task RollbackAsync(CancellationToken cancellationToken = default);
 

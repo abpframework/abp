@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Shouldly;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {
@@ -38,7 +39,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync();
+            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
             //Assert
 

@@ -12,11 +12,14 @@ namespace Volo.Abp.MongoDB.Repositories
     public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
         [Fact]
-        public void Linq_Queries()
+        public async Task Linq_Queries()
         {
-            PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
-
-            PersonRepository.Count().ShouldBeGreaterThan(0);
+            await WithUnitOfWorkAsync(() =>
+            {
+                PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
+                PersonRepository.Count().ShouldBeGreaterThan(0);
+                return Task.CompletedTask;
+            });
         }
 
         [Fact]

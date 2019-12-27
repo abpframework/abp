@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Blogging.Blogs;
 using Volo.Blogging.Blogs.Dtos;
@@ -16,6 +17,7 @@ namespace Volo.Blogging.Pages.Blog.Posts
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;
         private readonly IAuthorizationService _authorization;
+        private readonly BloggingUrlOptions _blogOptions;
 
         [BindProperty(SupportsGet = true)]
         public string BlogShortName { get; set; }
@@ -25,11 +27,12 @@ namespace Volo.Blogging.Pages.Blog.Posts
 
         public BlogDto Blog { get; set; }
 
-        public NewModel(IPostAppService postAppService, IBlogAppService blogAppService, IAuthorizationService authorization)
+        public NewModel(IPostAppService postAppService, IBlogAppService blogAppService, IAuthorizationService authorization, IOptions<BloggingUrlOptions> blogOptions)
         {
             _postAppService = postAppService;
             _blogAppService = blogAppService;
             _authorization = authorization;
+            _blogOptions = blogOptions.Value;
         }
 
         public async Task<ActionResult> OnGetAsync()
@@ -54,7 +57,8 @@ namespace Volo.Blogging.Pages.Blog.Posts
             var postWithDetailsDto = await _postAppService.CreateAsync(ObjectMapper.Map<CreatePostViewModel,CreatePostDto>(Post));
 
             //TODO: Try Url.Page(...)
-            return Redirect(Url.Content($"~/blog/{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(postWithDetailsDto.Url)}"));
+            var urlPrefix = _blogOptions.RoutePrefix;
+            return Redirect(Url.Content($"~{urlPrefix}{WebUtility.UrlEncode(blog.ShortName)}/{WebUtility.UrlEncode(postWithDetailsDto.Url)}"));
         }
 
         public class CreatePostViewModel

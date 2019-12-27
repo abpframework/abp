@@ -107,7 +107,7 @@ namespace Volo.Abp.Identity
                 ).ShouldBeGreaterThan(0);
             }
 
-            users = await UserRepository.GetListAsync(null, int.MaxValue, 0, "undefined-username");
+            users = await UserRepository.GetListAsync(null, 999, 0, "undefined-username");
             users.Count.ShouldBe(0);
         }
 

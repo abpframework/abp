@@ -20,24 +20,10 @@ namespace Volo.Abp.BackgroundJobs
             BackgroundJobRepository = backgroundJobRepository;
         }
 
-        public BackgroundJobInfo Find(Guid jobId)
-        {
-            return ObjectMapper.Map<BackgroundJobRecord, BackgroundJobInfo>(
-                BackgroundJobRepository.Find(jobId)
-            );
-        }
-
         public virtual async Task<BackgroundJobInfo> FindAsync(Guid jobId)
         {
             return ObjectMapper.Map<BackgroundJobRecord, BackgroundJobInfo>(
                 await BackgroundJobRepository.FindAsync(jobId)
-            );
-        }
-
-        public void Insert(BackgroundJobInfo jobInfo)
-        {
-            BackgroundJobRepository.Insert(
-                ObjectMapper.Map<BackgroundJobInfo, BackgroundJobRecord>(jobInfo)
             );
         }
 
@@ -48,13 +34,6 @@ namespace Volo.Abp.BackgroundJobs
             );
         }
 
-        public List<BackgroundJobInfo> GetWaitingJobs(int maxResultCount)
-        {
-            return ObjectMapper.Map<List<BackgroundJobRecord>, List<BackgroundJobInfo>>(
-                BackgroundJobRepository.GetWaitingList(maxResultCount)
-            );
-        }
-
         public virtual async Task<List<BackgroundJobInfo>> GetWaitingJobsAsync(int maxResultCount)
         {
             return ObjectMapper.Map<List<BackgroundJobRecord>, List<BackgroundJobInfo>>(
@@ -62,26 +41,9 @@ namespace Volo.Abp.BackgroundJobs
             );
         }
 
-        public void Delete(Guid jobId)
-        {
-            BackgroundJobRepository.Delete(jobId);
-        }
-
         public virtual async Task DeleteAsync(Guid jobId)
         {
             await BackgroundJobRepository.DeleteAsync(jobId);
-        }
-
-        public void Update(BackgroundJobInfo jobInfo)
-        {
-            var backgroundJobRecord = BackgroundJobRepository.Find(jobInfo.Id);
-            if (backgroundJobRecord == null)
-            {
-                return;
-            }
-
-            ObjectMapper.Map(jobInfo, backgroundJobRecord);
-            BackgroundJobRepository.Update(backgroundJobRecord);
         }
 
         public virtual async Task UpdateAsync(BackgroundJobInfo jobInfo)

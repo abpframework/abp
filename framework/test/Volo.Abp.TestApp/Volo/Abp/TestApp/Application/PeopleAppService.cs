@@ -13,7 +13,7 @@ namespace Volo.Abp.TestApp.Application
 {
     public class PeopleAppService : CrudAppService<Person, PersonDto, Guid>, IPeopleAppService
     {
-        public PeopleAppService(IRepository<Person, Guid> repository) 
+        public PeopleAppService(IRepository<Person, Guid> repository)
             : base(repository)
         {
 
@@ -36,7 +36,7 @@ namespace Volo.Abp.TestApp.Application
             var phone = new Phone(person.Id, phoneDto.Number, phoneDto.Type);
 
             person.Phones.Add(phone);
-            Repository.Update(person);
+            await Repository.UpdateAsync(person);
             return ObjectMapper.Map<Phone, PhoneDto>(phone);
         }
 
@@ -44,7 +44,7 @@ namespace Volo.Abp.TestApp.Application
         {
             var person = await GetEntityByIdAsync(id);
             person.Phones.RemoveAll(p => p.Number == number);
-            Repository.Update(person);
+            await Repository.UpdateAsync(person);
         }
 
         [Authorize]

@@ -1,4 +1,5 @@
-﻿using Volo.Abp.ApiVersioning;
+﻿using System.Threading.Tasks;
+using Volo.Abp.ApiVersioning;
 using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v1
@@ -12,9 +13,9 @@ namespace Volo.Abp.AspNetCore.Mvc.Versioning.App.v1
             _requestedApiVersion = requestedApiVersion;
         }
 
-        public string Get(int id)
+        public Task<string> GetAsync(int id)
         {
-            return $"Compat-{id}-{GetVersionOrNone()}";
+            return Task.FromResult($"Compat-{id}-{GetVersionOrNone()}");
         }
 
         private string GetVersionOrNone()
