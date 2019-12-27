@@ -321,10 +321,12 @@ namespace Volo.Abp.Application.Services
 
                 var propertyInfo = entity.GetType().GetProperty(nameof(IMultiTenant.TenantId));
 
-                if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
+                if (propertyInfo == null || propertyInfo.GetSetMethod(true) == null)
                 {
-                    propertyInfo.SetValue(entity, tenantId, null);
+                    return;
                 }
+
+                propertyInfo.SetValue(entity, tenantId);
             }
         }
 
