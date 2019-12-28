@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Localization.Resources.AbpDdd;
 
@@ -34,8 +35,7 @@ namespace Volo.Abp.Application.Dtos
         {
             if (MaxResultCount > MaxMaxResultCount)
             {
-                var localizer = (IStringLocalizer<AbpDddResource>)validationContext
-                    .GetService(typeof(IStringLocalizer<AbpDddResource>));
+                var localizer = validationContext.GetRequiredService<IStringLocalizer<AbpDddResource>>();
 
                 yield return new ValidationResult(
                     localizer[
