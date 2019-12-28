@@ -32,8 +32,13 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
             model.Normalize();
 
             var script = _proxyScriptManager.GetScript(model.CreateOptions());
-            return Content(_options.MinifyGeneratedScript == true ? _javascriptMinifier.Minify(script) : script,
-                MimeTypes.Application.Javascript);
+
+            return Content(
+                _options.MinifyGeneratedScript == true
+                    ? _javascriptMinifier.Minify(script)
+                    : script,
+                MimeTypes.Application.Javascript
+            );
         }
     }
 }
