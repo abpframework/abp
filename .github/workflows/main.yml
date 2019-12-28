@@ -1,15 +1,15 @@
-name: 'Main'
+name: "Main"
 on:
   pull_request:
     paths:
-      - 'framework/**'
-      - 'modules/**'
-      - 'templates/**'
+      - "framework/**"
+      - "modules/**"
+      - "templates/**"
   push:
     paths:
-      - 'framework/**'
-      - 'modules/**'
-      - 'templates/**'
+      - "framework/**"
+      - "modules/**"
+      - "templates/**"
 jobs:
   build-test:
     runs-on: windows-latest
@@ -17,8 +17,8 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-dotnet@master
         with:
-          dotnet-version: '3.0.100'
-          
+          dotnet-version: "3.1.100"
+
       - name: Build All
         run: .\build-all.ps1
         shell: pwsh
