@@ -49,6 +49,9 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
             ValidateLoginInfo(login);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
+
             var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
 
             if (identityUser == null)

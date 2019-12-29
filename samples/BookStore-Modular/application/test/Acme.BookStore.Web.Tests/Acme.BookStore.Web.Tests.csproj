@@ -3,7 +3,7 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Exe</OutputType>
     <AssetTargetFallback>$(AssetTargetFallback);portable-net45+win8+wp8+wpa81;</AssetTargetFallback>
     <RootNamespace>Acme.BookStore</RootNamespace>
@@ -14,7 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
     <ProjectReference Include="..\Acme.BookStore.Application.Tests\Acme.BookStore.Application.Tests.csproj" />
     <ProjectReference Include="..\..\src\Acme.BookStore.Web\Acme.BookStore.Web.csproj" />
     <ProjectReference Include="..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.TestBase\Volo.Abp.AspNetCore.TestBase.csproj" />

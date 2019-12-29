@@ -62,8 +62,8 @@
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
             <abp-sort-order-icon
               #sortOrderIcon
-              key="name"
-              [(selectedKey)]="sortKey"
+              sortKey="name"
+              [(selectedSortKey)]="sortKey"
               [(order)]="sortOrder"
             >
             </abp-sort-order-icon>

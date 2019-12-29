@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp.ApiVersioning;
 using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.DependencyInjection;
@@ -62,6 +63,14 @@ namespace Volo.Abp.AspNetCore.Mvc
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IAsyncActionFilter));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IFilterMetadata));
                 options.IgnoredInterfaces.AddIfNotContains(typeof(IActionFilter));
+            });
+
+            context.Services.PostConfigure<AbpAspNetCoreMvcOptions>(options =>
+            {
+                if (options.MinifyGeneratedScript == null)
+                {
+                    options.MinifyGeneratedScript = context.Services.GetHostingEnvironment().IsProduction();
+                }
             });
 
             var mvcCoreBuilder = context.Services.AddMvcCore();

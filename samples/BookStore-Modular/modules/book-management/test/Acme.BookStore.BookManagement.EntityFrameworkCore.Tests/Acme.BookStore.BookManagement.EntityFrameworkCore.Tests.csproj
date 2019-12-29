@@ -3,15 +3,15 @@
   <Import Project="..\..\common.props" />
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>Acme.BookStore.BookManagement</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.0.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.0" />
     <ProjectReference Include="..\..\src\Acme.BookStore.BookManagement.EntityFrameworkCore\Acme.BookStore.BookManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Acme.BookStore.BookManagement.TestBase\Acme.BookStore.BookManagement.TestBase.csproj" />
   </ItemGroup>

@@ -154,11 +154,7 @@ namespace VoloDocs.Web
             app.UseAbpRequestLocalization();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
-            //https://github.com/aspnet/AspNetCore/issues/13715#issuecomment-528929683
-            app.Use((context, next) => {
-                context.SetEndpoint(null);
-                return next();
-            });
+           
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseMvc(routes =>

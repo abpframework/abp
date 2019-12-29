@@ -3,7 +3,7 @@
 # compiled output
 /tmp
 /out-tsc
-/dist/dev-app
+/dist
 # Only exists if Bazel was run
 /bazel-out
 
@@ -40,11 +40,9 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
-yarn.lock
 
 # System Files
 .DS_Store
 Thumbs.db
 
-# Packages
 !**/[Pp]ackages/*

@@ -32,7 +32,7 @@ namespace Volo.Abp.Cli.NuGet
 
         public async Task<SemanticVersion> GetLatestVersionOrNullAsync(string packageId, bool includePreviews = false, bool includeNightly = false)
         {
-            using (var client = new CliHttpClient())
+            using (var client = new CliHttpClient(setBearerToken: false))
             {
                 var url = includeNightly ?
                     $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json" :

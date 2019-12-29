@@ -16,7 +16,7 @@ import { EllipsisDirective } from './directives/ellipsis.directive';
 import { ForDirective } from './directives/for.directive';
 import { FormSubmitDirective } from './directives/form-submit.directive';
 import { PermissionDirective } from './directives/permission.directive';
-import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
+import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
@@ -54,7 +54,7 @@ import './utils/date-extensions';
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
-    ClickEventStopPropagationDirective,
+    StopPropagationDirective,
     AbstractNgModelComponent,
   ],
   exports: [
@@ -75,7 +75,7 @@ import './utils/date-extensions';
     VisibilityDirective,
     InputEventDebounceDirective,
     LocalizationPipe,
-    ClickEventStopPropagationDirective,
+    StopPropagationDirective,
     AbstractNgModelComponent,
   ],
   providers: [LocalizationPipe],

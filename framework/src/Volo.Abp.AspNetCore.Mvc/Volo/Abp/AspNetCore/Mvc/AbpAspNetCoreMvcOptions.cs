@@ -4,6 +4,8 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpAspNetCoreMvcOptions
     {
+        public bool? MinifyGeneratedScript { get; set; }
+
         public AbpConventionalControllerOptions ConventionalControllers { get; }
 
         public AbpAspNetCoreMvcOptions()

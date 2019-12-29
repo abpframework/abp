@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
@@ -25,40 +26,52 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             DatabaseProvider = databaseProvider;
         }
 
-        public override TEntity Insert(TEntity entity, bool autoSave = false)
-        {
-            Collection.Add(entity);
-            return entity;
-        }
-
-        public override TEntity Update(TEntity entity, bool autoSave = false)
-        {
-            Collection.Update(entity);
-            return entity;
-        }
-
-        public override void Delete(TEntity entity, bool autoSave = false)
-        {
-            Collection.Remove(entity);
-        }
-
-        public override List<TEntity> GetList(bool includeDetails = false)
-        {
-            return Collection.ToList();
-        }
-
-        public override long GetCount()
-        {
-            return Collection.Count();
-        }
-
         protected override IQueryable<TEntity> GetQueryable()
         {
             return ApplyDataFilters(Collection.AsQueryable());
         }
+
+        public override Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            var entities = Collection.AsQueryable().Where(predicate).ToList();
+            foreach (var entity in entities)
+            {
+                Collection.Remove(entity);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            Collection.Add(entity);
+            return Task.FromResult(entity);
+        }
+
+        public override Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            Collection.Update(entity);
+            return Task.FromResult(entity);
+        }
+
+        public override Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
+        {
+            Collection.Remove(entity);
+            return Task.CompletedTask;
+        }
+
+        public override Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Collection.ToList());
+        }
+
+        public override Task<long> GetCountAsync(CancellationToken cancellationToken = default)
+        {
+            return Task.FromResult(Collection.LongCount());
+        }
     }
 
-    public class MemoryDbRepository<TMemoryDbContext, TEntity, TKey> : MemoryDbRepository<TMemoryDbContext, TEntity>, IMemoryDbRepository<TEntity, TKey> 
+    public class MemoryDbRepository<TMemoryDbContext, TEntity, TKey> : MemoryDbRepository<TMemoryDbContext, TEntity>, IMemoryDbRepository<TEntity, TKey>
         where TMemoryDbContext : MemoryDbContext
         where TEntity : class, IEntity<TKey>
     {
@@ -67,16 +80,16 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
         {
         }
 
-        public override TEntity Insert(TEntity entity, bool autoSave = false)
+        public override Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             SetIdIfNeeded(entity);
-            return base.Insert(entity, autoSave);
+            return base.InsertAsync(entity, autoSave, cancellationToken);
         }
 
         protected virtual void SetIdIfNeeded(TEntity entity)
         {
-            if (typeof(TKey) == typeof(int) || 
-                typeof(TKey) == typeof(long) || 
+            if (typeof(TKey) == typeof(int) ||
+                typeof(TKey) == typeof(long) ||
                 typeof(TKey) == typeof(Guid))
             {
                 if (EntityHelper.HasDefaultId(entity))
@@ -86,14 +99,9 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             }
         }
 
-        public virtual TEntity Find(TKey id, bool includeDetails = true)
+        public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return GetQueryable().FirstOrDefault(e => e.Id.Equals(id));
-        }
-
-        public virtual TEntity Get(TKey id, bool includeDetails = true)
-        {
-            var entity = Find(id, includeDetails);
+            var entity = await FindAsync(id, includeDetails, cancellationToken);
 
             if (entity == null)
             {
@@ -103,31 +111,20 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
             return entity;
         }
 
-        public virtual Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
-        {
-            return Task.FromResult(Get(id, includeDetails));
-        }
-
         public virtual Task<TEntity> FindAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            return Task.FromResult(Find(id, includeDetails));
+            return Task.FromResult(GetQueryable().FirstOrDefault(e => e.Id.Equals(id)));
         }
 
-        public virtual void Delete(TKey id, bool autoSave = false)
+        public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entity = Find(id);
+            var entity = await FindAsync(id, cancellationToken: cancellationToken);
             if (entity == null)
             {
                 return;
             }
 
-            Delete(entity);
-        }
-
-        public virtual Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
-        {
-            Delete(id);
-            return Task.CompletedTask;
+            await DeleteAsync(entity, autoSave, cancellationToken);
         }
     }
 }

@@ -171,6 +171,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         {
             RemoveEmptySelectors(controller.Selectors);
 
+            var controllerType = controller.ControllerType.AsType();
+            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(controllerType.GetTypeInfo());
+            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(controllerType))
+            {
+                return;
+            }
+
             if (controller.Selectors.Any(selector => selector.AttributeRouteModel != null))
             {
                 return;
@@ -187,6 +194,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Conventions
         protected virtual void ConfigureSelector(string rootPath, string controllerName, ActionModel action, [CanBeNull] ConventionalControllerSetting configuration)
         {
             RemoveEmptySelectors(action.Selectors);
+
+            var remoteServiceAtt = ReflectionHelper.GetSingleAttributeOrDefault<RemoteServiceAttribute>(action.ActionMethod);
+            if (remoteServiceAtt != null && !remoteServiceAtt.IsEnabledFor(action.ActionMethod))
+            {
+                return;
+            }
 
             if (!action.Selectors.Any())
             {

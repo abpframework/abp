@@ -1,22 +1,26 @@
 {
   "name": "scripts",
   "version": "1.0.0",
-  "description": "Abp publish helper scripts",
+  "description": "ABP helper scripts",
   "main": "index.js",
   "modules": "[build.js, sync.js]",
   "scripts": {
     "build": "node -r esm build.js",
+    "build:prod": "node -r esm prod-build.js",
+    "publish-packages": "node -r esm publish.js",
+    "install-new-dependencies": "node -r esm install-new-dependencies.js",
     "sync": "node -r esm sync.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
     "babel-preset-node6": "^11.0.0",
     "commander": "^4.0.1",
-    "esm": "^3.2.25",
     "execa": "^2.0.3",
     "fs-extra": "^8.1.0",
     "prompt-confirm": "^2.0.4"
+  },
+  "devDependencies": {
+    "esm": "^3.2.25"
   }
 }

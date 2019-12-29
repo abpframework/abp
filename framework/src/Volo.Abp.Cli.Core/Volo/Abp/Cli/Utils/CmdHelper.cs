@@ -11,10 +11,12 @@ namespace Volo.Abp.Cli.Utils
             Process.Start(procStartInfo).WaitForExit();
         }
 
-        public static void RunCmd(string command)
+        public static int RunCmd(string command)
         {
             var procStartInfo = new ProcessStartInfo(GetFileName(), GetArguments(command));
-            Process.Start(procStartInfo).WaitForExit();
+            var process = Process.Start(procStartInfo);
+            process?.WaitForExit();
+            return process?.ExitCode ?? 0;
         }
 
         public static string RunCmdAndGetOutput(string command)
@@ -66,7 +68,7 @@ namespace Volo.Abp.Cli.Utils
             }
 
             //Windows default.
-            return "cmd.exe"; 
+            return "cmd.exe";
         }
     }
 }

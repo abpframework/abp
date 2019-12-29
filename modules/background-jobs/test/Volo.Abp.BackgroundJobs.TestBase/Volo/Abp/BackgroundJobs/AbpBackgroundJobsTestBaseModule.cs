@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs
 {
@@ -28,9 +29,9 @@ namespace Volo.Abp.BackgroundJobs
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<BackgroundJobsTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

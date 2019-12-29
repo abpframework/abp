@@ -36,7 +36,7 @@ namespace Volo.Abp.BackgroundJobs
             {
                 var store = scope.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
 
-                var waitingJobs = store.GetWaitingJobs(WorkerOptions.MaxJobFetchCount);
+                var waitingJobs = AsyncHelper.RunSync(() => store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount));
 
                 if (!waitingJobs.Any())
                 {
@@ -62,7 +62,7 @@ namespace Volo.Abp.BackgroundJobs
                         {
                             jobExecuter.Execute(context);
 
-                            store.Delete(jobInfo.Id);
+                            AsyncHelper.RunSync(() => store.DeleteAsync(jobInfo.Id));
                         }
                         catch (BackgroundJobExecutionException)
                         {
@@ -94,7 +94,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             try
             {
-                store.Update(jobInfo);
+                AsyncHelper.RunSync(() => store.UpdateAsync(jobInfo));
             }
             catch (Exception updateEx)
             {

@@ -193,24 +193,67 @@
                 </div>
 
                 <div class="docs-content-field">
-                    <div class="position-relative">
-                        @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                        {
-                            <div class="contributors">
-                                <small class="text-muted">@(L["Contributors"].Value + " :")</small>
-                                @foreach (var contributor in Model.Document.Contributors)
-                                {
-                                    <a href="@contributor.UserProfileUrl" target="_blank">
-                                        <img src="@contributor.AvatarUrl"
-                                             class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
-                                    </a>
-                                }
-                            </div>
-                        }
-                    </div>
                     <div class="docs-text-field">
+                        <div class="position-relative">
+                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                            {
+                                <div class="contributors">
+                                    <small class="text-muted">@(L["Contributors"].Value + " :")</small>
+                                    @foreach (var contributor in Model.Document.Contributors)
+                                    {
+                                        <a href="@contributor.UserProfileUrl" target="_blank">
+                                            <img src="@contributor.AvatarUrl"
+                                                 class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
+                                        </a>
+                                    }
+                                </div>
+                            }
+
+                            @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
+                            {
+                                <div class="alert alert-primary alert-criteria">
+                                    <abp-row>
+                                        <abp-column>
+                                            <p class="alert-p mb-2">
+                                                <i class="fa fa-info-circle"></i>
+                                                @L["MultipleVersionDocumentInfo"]
+                                            </p>
+                                        </abp-column>
+                                    </abp-row>
+                                    <abp-form-row>
+                                        @foreach (var parameter in Model.DocumentPreferences.Parameters)
+                                        {
+                                            <abp-column size="_4">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="@("Section" + parameter.Name + "ComboboxAddonId")">@(parameter.DisplayName)</span>
+                                                    </div>
+                                                    <select class="doc-section-combobox form-control"
+                                                            aria-describedby="@("Section" + parameter.Name + "ComboboxAddonId")"
+                                                            id="@("Section" + parameter.Name + "ComboboxId")" data-key="@parameter.Name">
+                                                        @foreach (var value in parameter.Values)
+                                                        {
+                                                            @if (value.Key == (Model.UserPreferences.ContainsKey(parameter.Name) ? Model.UserPreferences[parameter.Name] : null))
+                                                            {
+                                                                <option value="@value.Key" selected="selected">@value.Value</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@value.Key">@value.Value</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+                                            </abp-column>
+                                        }
+                                    </abp-form-row>
+                                </div>
+                            }
+                        </div>
+
                         <div data-spy="scroll" data-target="#docs-sticky-index" data-offset="0">
                             <article class="docs-body">
+
                                 @if (Model.DocumentLanguageIsDifferent)
                                 {
                                     <abp-alert alert-type="Warning" dismissible="true" class="mb-0">
@@ -219,10 +262,13 @@
                                 }
                                 @Html.Raw(Model.Document.Content)
                             </article>
+
+                            <div id="crawler_link" style="display:none;">
+
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="col-md-2 docs-page-index position-relative bg-light">
@@ -257,3 +303,4 @@
 
     </div>
 </div>
+

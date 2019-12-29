@@ -22,7 +22,7 @@ namespace Volo.Abp.PermissionManagement
         [Fact]
         public async Task CheckAsync()
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     Guid.NewGuid(),
                     "MyPermission1",
@@ -54,7 +54,7 @@ namespace Volo.Abp.PermissionManagement
         [Fact]
         public async Task SetAsync()
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     Guid.NewGuid(),
                     "MyPermission1",
