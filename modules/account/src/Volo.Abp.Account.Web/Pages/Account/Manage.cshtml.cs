@@ -19,7 +19,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public async Task OnGetAsync()
         {
-            var user = await _profileAppService.GetAsync();
+            var user = await _profileAppService.GetAsync().ConfigureAwait(false);
 
             PersonalSettingsInfoModel = ObjectMapper.Map<ProfileDto, PersonalSettingsInfoModel>(user);
         }
