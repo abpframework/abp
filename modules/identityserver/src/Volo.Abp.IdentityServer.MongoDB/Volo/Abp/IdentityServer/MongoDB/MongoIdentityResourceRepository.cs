@@ -24,7 +24,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .OrderBy(sorting ?? nameof(IdentityResource.Name))
                 .As<IMongoQueryable<IdentityResource>>()
                 .PageBy<IdentityResource, IMongoQueryable<IdentityResource>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<IdentityResource> FindByNameAsync(
@@ -34,7 +34,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(x => x.Name == name)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<List<IdentityResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
@@ -42,17 +42,17 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .Where(ar => scopeNames.Contains(ar.Name))
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task<long> GetTotalCountAsync()
         {
-            return await GetCountAsync();
+            return await GetCountAsync().ConfigureAwait(false);
         }
 
         public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken);
+            return await GetMongoQueryable().AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
 }
