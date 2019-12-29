@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Localization.Resources.AbpValidation;
+﻿using Volo.Abp.Localization.Resources.AbpLocalization;
 using Volo.Abp.Settings;
 
 namespace Volo.Abp.Localization
@@ -18,7 +18,7 @@ namespace Volo.Abp.Localization
 
         private static LocalizableString L(string name)
         {
-            return LocalizableString.Create<AbpValidationResource>(name);
+            return LocalizableString.Create<AbpLocalizationResource>(name);
         }
     }
 }
