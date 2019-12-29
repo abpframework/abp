@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
         [Fact]
         public async Task Should_Get_Same_Text_If_Not_Defined_In_Razor_View()
         {
-            var result = await GetResponseAsStringAsync("/LocalizationTest/HelloJohn");
+            var result = await GetResponseAsStringAsync("/LocalizationTest/HelloJohn").ConfigureAwait(false);
             result.ShouldBe("Hello <b>John</b>.");
         }
         
@@ -36,13 +36,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
         {
             using (AbpCultureHelper.Use("en"))
             {
-                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
+                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm").ConfigureAwait(false);
                 result.ShouldContain("<label for=\"BirthDate\">Birth date</label>");
             }
 
             using (AbpCultureHelper.Use("tr"))
             {
-                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
+                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm").ConfigureAwait(false);
                 result.ShouldContain("<label for=\"BirthDate\">Dogum gunu</label>");
             }
         }

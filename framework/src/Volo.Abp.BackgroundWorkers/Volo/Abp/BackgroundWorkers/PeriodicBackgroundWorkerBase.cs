@@ -25,14 +25,14 @@ namespace Volo.Abp.BackgroundWorkers
 
         public override async Task StartAsync(CancellationToken cancellationToken = default)
         {
-            await base.StartAsync(cancellationToken);
+            await base.StartAsync(cancellationToken).ConfigureAwait(false);
             Timer.Start(cancellationToken);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken = default)
         {
             Timer.Stop(cancellationToken);
-            await base.StopAsync(cancellationToken);
+            await base.StopAsync(cancellationToken).ConfigureAwait(false);
         }
         
         private void Timer_Elapsed(object sender, System.EventArgs e)

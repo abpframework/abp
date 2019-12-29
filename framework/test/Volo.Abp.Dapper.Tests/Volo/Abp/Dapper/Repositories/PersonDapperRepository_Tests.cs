@@ -11,7 +11,7 @@ namespace Volo.Abp.Dapper.Repositories
         [Fact]
         public async Task GetAllPersonNames_Test()
         {
-            var allNames = await GetRequiredService<PersonDapperRepository>().GetAllPersonNames();
+            var allNames = await GetRequiredService<PersonDapperRepository>().GetAllPersonNames().ConfigureAwait(false);
             allNames.ShouldNotBeEmpty();
             allNames.ShouldContain(x => x == "Douglas");
             allNames.ShouldContain(x => x == "John-Deleted");
@@ -23,9 +23,9 @@ namespace Volo.Abp.Dapper.Repositories
         public async Task UpdatePersonNames_Test()
         {
             var personDapperRepository = GetRequiredService<PersonDapperRepository>();
-            await personDapperRepository.UpdatePersonNames("test");
+            await personDapperRepository.UpdatePersonNames("test").ConfigureAwait(false);
 
-            var allNames = await personDapperRepository.GetAllPersonNames();
+            var allNames = await personDapperRepository.GetAllPersonNames().ConfigureAwait(false);
             allNames.ShouldNotBeEmpty();
             allNames.ShouldAllBe(x => x == "test");
         }
@@ -41,11 +41,11 @@ namespace Volo.Abp.Dapper.Repositories
                 IsTransactional = true
             }))
             {
-                await personDapperRepository.UpdatePersonNames("test");
-                await uow.RollbackAsync();
+                await personDapperRepository.UpdatePersonNames("test").ConfigureAwait(false);
+                await uow.RollbackAsync().ConfigureAwait(false);
             }
 
-            var allNames = await personDapperRepository.GetAllPersonNames();
+            var allNames = await personDapperRepository.GetAllPersonNames().ConfigureAwait(false);
             allNames.ShouldAllBe(x => x != "test");
         }
     }

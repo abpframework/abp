@@ -35,7 +35,7 @@ namespace Volo.Abp.Cli.Auth
                 configuration["[o]abp-organization-name"] = organizationName;
             }
 
-            var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
+            var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration).ConfigureAwait(false);
 
             File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
         }

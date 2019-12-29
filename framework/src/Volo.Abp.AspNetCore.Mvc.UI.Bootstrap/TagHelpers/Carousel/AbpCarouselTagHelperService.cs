@@ -19,7 +19,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Carousel
 
             var itemList = InitilizeCarouselItemsContentsContext(context, output);
 
-            await output.GetChildContentAsync();
+            await output.GetChildContentAsync().ConfigureAwait(false);
 
             SetOneItemAsActive(context, output, itemList);
             SetItems(context, output, itemList);

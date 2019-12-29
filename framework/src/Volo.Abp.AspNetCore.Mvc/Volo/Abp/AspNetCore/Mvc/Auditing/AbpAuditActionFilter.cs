@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             if (!ShouldSaveAudit(context, out var auditLog, out var auditLogAction))
             {
-                await next();
+                await next().ConfigureAwait(false);
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
 
                 try
                 {
-                    var result = await next();
+                    var result = await next().ConfigureAwait(false);
 
                     if (result.Exception != null && !result.ExceptionHandled)
                     {

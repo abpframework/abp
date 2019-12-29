@@ -21,7 +21,7 @@ namespace Volo.Abp.DynamicProxy
 				return;
 		    }
 
-			await invocation.ProceedAsync();
+            await invocation.ProceedAsync().ConfigureAwait(false);
 		    _cache[invocation.Method] = invocation.ReturnValue;
 	    }
     }

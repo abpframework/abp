@@ -31,7 +31,7 @@ namespace Volo.Abp.Data
                         .ServiceProvider
                         .GetRequiredService(contributorType);
 
-                    await contributor.SeedAsync(context);
+                    await contributor.SeedAsync(context).ConfigureAwait(false);
                 }
             }
         }

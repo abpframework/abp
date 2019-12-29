@@ -55,16 +55,16 @@ namespace Volo.Abp.Cli.Licensing
                                     $"Waiting {timeSpan.TotalSeconds} secs for the next try...");
                             }
                         })
-                    .ExecuteAsync(async () => await client.GetAsync($"{CliUrls.WwwAbpIo}api/license/api-key"));
+                    .ExecuteAsync(async () => await client.GetAsync($"{CliUrls.WwwAbpIo}api/license/api-key").ConfigureAwait(false)).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new Exception($"ERROR: Remote server returns '{response.StatusCode}'");
                 }
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response).ConfigureAwait(false);
 
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 return JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
             }
         }

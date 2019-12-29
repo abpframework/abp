@@ -38,11 +38,11 @@ namespace Volo.Abp.Cli.NuGet
                     $"https://www.myget.org/F/abp-nightly/api/v3/flatcontainer/{packageId.ToLowerInvariant()}/index.json" :
                     $"https://api.nuget.org/v3-flatcontainer/{packageId.ToLowerInvariant()}/index.json";
 
-                var responseMessage = await client.GetAsync(url, CancellationTokenProvider.Token);
+                var responseMessage = await client.GetAsync(url, CancellationTokenProvider.Token).ConfigureAwait(false);
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage).ConfigureAwait(false);
 
-                var result = await responseMessage.Content.ReadAsStringAsync();
+                var result = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 var versions = JsonSerializer.Deserialize<NuGetVersionResultDto>(result).Versions.Select(x => SemanticVersion.Parse(x));
 

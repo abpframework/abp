@@ -101,7 +101,7 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, includeDetails, cancellationToken);
+            var entity = await FindAsync(id, includeDetails, cancellationToken).ConfigureAwait(false);
 
             if (entity == null)
             {
@@ -118,13 +118,13 @@ namespace Volo.Abp.Domain.Repositories.MemoryDb
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, cancellationToken: cancellationToken);
+            var entity = await FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
             if (entity == null)
             {
                 return;
             }
 
-            await DeleteAsync(entity, autoSave, cancellationToken);
+            await DeleteAsync(entity, autoSave, cancellationToken).ConfigureAwait(false);
         }
     }
 }

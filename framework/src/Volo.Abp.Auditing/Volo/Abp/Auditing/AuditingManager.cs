@@ -116,7 +116,7 @@ namespace Volo.Abp.Auditing
 
             if (ShouldSave(saveHandle.AuditLog))
             {
-                await _auditingStore.SaveAsync(saveHandle.AuditLog);
+                await _auditingStore.SaveAsync(saveHandle.AuditLog).ConfigureAwait(false);
             }
         }
 
@@ -152,7 +152,7 @@ namespace Volo.Abp.Auditing
 
             public async Task SaveAsync()
             {
-                await _auditingManager.SaveAsync(this);
+                await _auditingManager.SaveAsync(this).ConfigureAwait(false);
             }
 
             public void Dispose()

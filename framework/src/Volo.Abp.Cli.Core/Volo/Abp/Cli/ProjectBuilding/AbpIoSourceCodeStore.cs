@@ -49,7 +49,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
             string version = null)
         {
 
-            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type);
+            var latestVersion = await GetLatestSourceCodeVersionAsync(name, type).ConfigureAwait(false);
             if (version == null)
             {
                 version = latestVersion;
@@ -73,7 +73,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     Type = type,
                     Version = version
                 }
-            );
+            ).ConfigureAwait(false);
 
             if (Options.CacheTemplates)
             {
@@ -98,11 +98,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
                         MimeTypes.Application.Json
                     ),
                     CancellationTokenProvider.Token
-                );
+                ).ConfigureAwait(false);
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response).ConfigureAwait(false);
 
-                var result = await response.Content.ReadAsStringAsync();
+                var result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 return JsonSerializer.Deserialize<GetLatestSourceCodeVersionResultDto>(result).Version;
             }
@@ -118,11 +118,11 @@ namespace Volo.Abp.Cli.ProjectBuilding
                     $"{CliUrls.WwwAbpIo}api/download/{input.Type}/",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     CancellationTokenProvider.Token
-                );
+                ).ConfigureAwait(false);
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage).ConfigureAwait(false);
 
-                return await responseMessage.Content.ReadAsByteArrayAsync();
+                return await responseMessage.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             }
         }
 
