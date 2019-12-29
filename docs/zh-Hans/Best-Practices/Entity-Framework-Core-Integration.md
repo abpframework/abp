@@ -173,12 +173,12 @@ public static IQueryable<IdentityUser> IncludeDetails(
 
 * **推荐** 推荐在仓储其他方法中使用 `IncludeDetails` 扩展方法, 就像上面的示例代码一样(参阅 FindByNormalizedUserNameAsync).
 
-- **推荐** 覆盖具有 **子集合** 的聚合根仓储中的`IncludeDetails` 方法. 例如:
+- **推荐** 覆盖具有 **子集合** 的聚合根仓储中的 `WithDetails` 方法. 例如:
 
 ````C#
-protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
+public override IQueryable<IdentityUser> WithDetails()
 {
-    return queryable.IncludeDetails(); //uses the extension method defined above
+    return GetQueryable().IncludeDetails(); // Uses the extension method defined above
 }
 ````
 
@@ -205,4 +205,3 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
     }
 }
 ````
-
