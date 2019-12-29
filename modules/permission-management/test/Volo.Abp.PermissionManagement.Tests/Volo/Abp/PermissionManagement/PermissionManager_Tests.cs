@@ -28,11 +28,11 @@ namespace Volo.Abp.PermissionManagement
                 "MyPermission1",
                 "Test",
                 "Test")
-            );
+            ).ConfigureAwait(false);
 
             var grantedProviders = await _permissionManager.GetAsync("MyPermission1",
                 "Test",
-                "Test");
+                "Test").ConfigureAwait(false);
 
             grantedProviders.ShouldNotBeNull();
             grantedProviders.IsGranted.ShouldBeTrue();
@@ -46,7 +46,7 @@ namespace Volo.Abp.PermissionManagement
             await Assert.ThrowsAsync<AbpException>(async () => await _permissionManager.GetAsync(
                 "MyPermission1NotExist",
                 "Test",
-                "Test"));
+                "Test").ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         [Fact]
@@ -57,18 +57,18 @@ namespace Volo.Abp.PermissionManagement
                 "MyPermission1",
                 "Test",
                 "Test")
-            );
+            ).ConfigureAwait(false);
 
             await _permissionGrantRepository.InsertAsync(new PermissionGrant(
                 Guid.NewGuid(),
                 "MyPermission2",
                 "Test",
                 "Test")
-            );
+            ).ConfigureAwait(false);
 
             var permissionWithGrantedProviders = await _permissionManager.GetAllAsync(
                 "Test",
-                "Test");
+                "Test").ConfigureAwait(false);
 
             permissionWithGrantedProviders.ShouldNotBeNull();
             permissionWithGrantedProviders.ShouldContain(x =>
@@ -82,16 +82,16 @@ namespace Volo.Abp.PermissionManagement
         {
             (await _permissionGrantRepository.FindAsync("MyPermission2",
                 "Test",
-                "Test")).ShouldBeNull();
+                "Test").ConfigureAwait(false)).ShouldBeNull();
 
             await _permissionManager.SetAsync(
                 "MyPermission2",
                 "Test",
-                "Test", true);
+                "Test", true).ConfigureAwait(false);
 
             (await _permissionGrantRepository.FindAsync("MyPermission2",
                 "Test",
-                "Test")).ShouldNotBeNull();
+                "Test").ConfigureAwait(false)).ShouldNotBeNull();
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Volo.Abp.PermissionManagement
                 "MyPermission1NotExist",
                 "Test",
                 "Test",
-                true));
+                true).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
     }
