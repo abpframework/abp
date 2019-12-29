@@ -39,11 +39,11 @@ namespace Volo.Abp.PermissionManagement.Identity
             if (providerName == UserPermissionValueProvider.ProviderName)
             {
                 var userId = Guid.Parse(providerKey);
-                var roleNames = await _userRoleFinder.GetRolesAsync(userId);
+                var roleNames = await _userRoleFinder.GetRolesAsync(userId).ConfigureAwait(false);
 
                 foreach (var roleName in roleNames)
                 {
-                    var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, roleName);
+                    var permissionGrant = await PermissionGrantRepository.FindAsync(name, Name, roleName).ConfigureAwait(false);
                     if (permissionGrant != null)
                     {
                         return new PermissionValueProviderGrantInfo(true, roleName);
