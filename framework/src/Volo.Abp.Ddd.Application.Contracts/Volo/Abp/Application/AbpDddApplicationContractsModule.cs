@@ -22,7 +22,7 @@ namespace Volo.Abp.Application
             Configure<AbpLocalizationOptions>(options =>
             {
                 options.Resources
-                    .Add<AbpDddResource>("en")
+                    .Add<AbpDddApplicationContractsResource>("en")
                     .AddVirtualJson("/Volo/Abp/Application/Localization/Resources/AbpDdd");
             });
         }
