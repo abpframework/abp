@@ -22,7 +22,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Localize()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 _templateLocalizer.Localize(_testResource, "<p>{{#L:CarPlural}} <b>{{#L:Universe}}</b></p>")
                     .ShouldBe("<p>Cars <b>Universe</b></p>");
@@ -32,7 +32,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Work_Even_If_No_Text_To_Localize()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 _templateLocalizer.Localize(_testResource, "<p>test</p>")
                     .ShouldBe("<p>test</p>");
