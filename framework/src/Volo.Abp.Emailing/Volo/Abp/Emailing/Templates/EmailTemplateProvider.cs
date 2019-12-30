@@ -103,7 +103,7 @@ namespace Volo.Abp.Emailing.Templates
             var localizer = StringLocalizerFactory.Create(emailTemplateDefinition.LocalizationResource);
             if (cultureName != null)
             {
-                using (localizer.Change(new CultureInfo(cultureName)))
+                using (CultureHelper.Use(new CultureInfo(cultureName)))
                 {
                     emailTemplate.SetContent(TemplateLocalizer.Localize(localizer, emailTemplate.Content));
                 }

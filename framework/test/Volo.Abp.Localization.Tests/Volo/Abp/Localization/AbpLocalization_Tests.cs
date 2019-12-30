@@ -50,24 +50,24 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Get_Localized_Text_If_Defined_In_Current_Culture()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 _localizer["Car"].Value.ShouldBe("Car");
                 _localizer["CarPlural"].Value.ShouldBe("Cars");
             }
 
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 _localizer["Car"].Value.ShouldBe("Araba");
                 _localizer["CarPlural"].Value.ShouldBe("Araba");
             }
 
-            using (AbpCultureHelper.Use("it"))
+            using (CultureHelper.Use("it"))
             {
                 _localizer["Car"].Value.ShouldBe("Auto");
             }
 
-            using (AbpCultureHelper.Use("es"))
+            using (CultureHelper.Use("es"))
             {
                 _localizer["Car"].Value.ShouldBe("Auto");
             }
@@ -77,22 +77,22 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Get_Extension_Texts()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 _localizer["SeeYou"].Value.ShouldBe("See you");
             }
 
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 _localizer["SeeYou"].Value.ShouldBe("See you"); //Not defined in tr, getting from default lang
             }
 
-            using (AbpCultureHelper.Use("it"))
+            using (CultureHelper.Use("it"))
             {
                 _localizer["SeeYou"].Value.ShouldBe("Ci vediamo");
             }
 
-            using (AbpCultureHelper.Use("es"))
+            using (CultureHelper.Use("es"))
             {
                 _localizer["SeeYou"].Value.ShouldBe("Nos vemos");
             }
@@ -102,7 +102,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Get_From_Inherited_Texts()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 _localizer["USA"].Value.ShouldBe("United States of America"); //Inherited from CountryNames/en.json
                 _localizer["ThisFieldIsRequired"].Value.ShouldBe("This field is required"); //Inherited from Validation/en.json
@@ -110,12 +110,12 @@ namespace Volo.Abp.Localization
                 _localizer.GetAllStrings().ShouldContain(ls => ls.Name == "USA");
             }
 
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 _localizer["USA"].Value.ShouldBe("Amerika Birleşik Devletleri"); //Inherited from CountryNames/tr.json
             }
 
-            using (AbpCultureHelper.Use("es"))
+            using (CultureHelper.Use("es"))
             {
                 _localizer["USA"].Value.ShouldBe("Estados unidos de América"); //Inherited from CountryNames/es.json
                 _localizer["ThisFieldIsRequired"].Value.ShouldBe("El campo no puede estar vacío"); //Inherited from Validation/es.json
@@ -128,12 +128,12 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Override_Inherited_Text()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
                 _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("This field's length can be maximum of '42' chars"); //Overriden in Source/en.json
             }
 
-            using (AbpCultureHelper.Use("es"))
+            using (CultureHelper.Use("es"))
             {
                 _localizer["MaxLenghtErrorMessage", 42].Value.ShouldBe("El campo puede tener un máximo de '42' caracteres"); //Overriden in Source/es.json
             }
@@ -144,29 +144,29 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Get_Localized_Text_If_Defined_In_Requested_Culture()
         {
-            using (_localizer.Change(CultureInfo.GetCultureInfo("en")))
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
             {
                 _localizer["Car"].Value.ShouldBe("Car");
             }
-            using (_localizer.Change(CultureInfo.GetCultureInfo("en")))
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("en")))
             {
                 _localizer["CarPlural"].Value.ShouldBe("Cars");
             }
 
-            using (_localizer.Change(CultureInfo.GetCultureInfo("tr")))
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("tr")))
             {
                 _localizer["Car"].Value.ShouldBe("Araba");
             }
-            using (_localizer.Change(CultureInfo.GetCultureInfo("tr")))
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("tr")))
             {
                 _localizer["CarPlural"].Value.ShouldBe("Araba");
             }
 
-            using (_localizer.Change(CultureInfo.GetCultureInfo("es")))
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("es")))
             {
                 _localizer["Car"].Value.ShouldBe("Auto");
             }
-            using (_localizer.Change(CultureInfo.GetCultureInfo("es")))
+            using (CultureHelper.Use(CultureInfo.GetCultureInfo("es")))
             {
                 _localizer["CarPlural"].Value.ShouldBe("Autos");
             }
@@ -175,7 +175,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void GetAllStrings_With_Parents()
         {
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 var localizedStrings = _localizer.GetAllStrings(true).ToList();
 
@@ -192,7 +192,7 @@ namespace Volo.Abp.Localization
                 );
             }
 
-            using (AbpCultureHelper.Use("es"))
+            using (CultureHelper.Use("es"))
             {
                 var localizedStrings = _localizer.GetAllStrings(true).ToList();
 
@@ -214,7 +214,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void GetAllStrings_Without_Parents()
         {
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 var localizedStrings = _localizer.GetAllStrings(false).ToList();
 
@@ -229,7 +229,7 @@ namespace Volo.Abp.Localization
                 );
             }
 
-            using (AbpCultureHelper.Use("es"))
+            using (CultureHelper.Use("es"))
             {
                 var localizedStrings = _localizer.GetAllStrings(false).ToList();
 
@@ -249,7 +249,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void GetAllStrings_With_Inheritance()
         {
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 var localizedStrings = _localizer
                     .GetAllStrings(true, includeBaseLocalizers: true)
@@ -278,7 +278,7 @@ namespace Volo.Abp.Localization
         [Fact]
         public void GetAllStrings_Without_Inheritance()
         {
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
                 var localizedStrings = _localizer
                     .GetAllStrings(true, includeBaseLocalizers: false)

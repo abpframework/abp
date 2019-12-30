@@ -71,7 +71,7 @@ namespace Volo.Abp.Localization
             {
                 foreach (var baseLocalizer in BaseLocalizers)
                 {
-                    using (baseLocalizer.Change(CultureInfo.GetCultureInfo(cultureName)))
+                    using (CultureHelper.Use(CultureInfo.GetCultureInfo(cultureName)))
                     {
                         var baseLocalizedString = baseLocalizer[name];
                         if (baseLocalizedString != null && !baseLocalizedString.ResourceNotFound)
@@ -138,7 +138,7 @@ namespace Volo.Abp.Localization
             {
                 foreach (var baseLocalizer in BaseLocalizers.Select(l => l))
                 {
-                    using (baseLocalizer.Change(CultureInfo.GetCultureInfo(cultureName)))
+                    using (CultureHelper.Use(CultureInfo.GetCultureInfo(cultureName)))
                     {
                         //TODO: Try/catch is a workaround here!
                         try
