@@ -10,6 +10,7 @@ import { pluck, finalize } from 'rxjs/operators';
 @Component({
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
+  exportAs: 'abpFeatureManagement',
 })
 export class FeatureManagementComponent {
   @Input()
