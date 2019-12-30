@@ -6,6 +6,7 @@ using Octokit;
 using Volo.Abp;
 using Volo.Abp.Modularity;
 using Volo.Docs.GitHub.Documents;
+using Volo.Abp.Testing;
 
 namespace Volo.Docs
 {
