@@ -24,7 +24,7 @@ import snq from 'snq';
 @Directive({ selector: '[abpReplaceableTemplate]' })
 export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChanges {
   @Input('abpReplaceableTemplate')
-  data: { inputs: any; outputs: any; componentKey: string };
+  data: ReplaceableComponents.ReplaceableTemplateDirectiveInput<any, any>;
 
   providedData = { inputs: {}, outputs: {} } as ReplaceableComponents.ReplaceableTemplateData<
     any,
