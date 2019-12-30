@@ -1,4 +1,4 @@
-﻿namespace Volo.Abp.Account.Web.Settings
+﻿namespace Volo.Abp.Account.Settings
 {
     public class AccountSettingNames
     {
