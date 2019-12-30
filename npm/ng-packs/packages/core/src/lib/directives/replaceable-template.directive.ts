@@ -23,8 +23,6 @@ import snq from 'snq';
 
 @Directive({ selector: '[abpReplaceableTemplate]' })
 export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChanges {
-  private context = {};
-
   @Input('abpReplaceableTemplate')
   data: { inputs: any; outputs: any; componentKey: string };
 
@@ -32,6 +30,8 @@ export class ReplaceableTemplateDirective implements OnInit, OnDestroy, OnChange
     any,
     any
   >;
+
+  context = {} as any;
 
   externalComponent: Type<any>;
 
