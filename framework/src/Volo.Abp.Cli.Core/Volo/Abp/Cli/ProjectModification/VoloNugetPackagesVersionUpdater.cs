@@ -56,9 +56,6 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 doc.LoadXml(content);
 
-                var packageId = package.Attributes["Include"].Value;
-                var packageVersion = SemanticVersion.Parse(versionAttribute.Value);
-                var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews).ConfigureAwait(false);
                 var packageNodeList = doc.SelectNodes("/Project/ItemGroup/PackageReference[starts-with(@Include, 'Volo.')]");
 
                 if (packageNodeList != null)
@@ -77,7 +74,7 @@ namespace Volo.Abp.Cli.ProjectModification
 
                         Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, packageVersion);
 
-                        var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews);
+                        var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews).ConfigureAwait(false);
 
                         if (latestVersion != null && packageVersion < latestVersion)
                         {
