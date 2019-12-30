@@ -5,6 +5,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.TestApp.Domain;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.MultiTenancy;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.Threading;
 
@@ -22,6 +23,7 @@ namespace Volo.Abp.TestApp
         {
             ConfigureAutoMapper();
             ConfigureDistributedEventBus();
+            ConfigureMultiTenancy();
         }
 
         public override void OnApplicationInitialization(ApplicationInitializationContext context)
@@ -49,6 +51,14 @@ namespace Volo.Abp.TestApp
            {
                options.EtoMappings.Add<Person, PersonEto>();
            });
+        }
+
+        private void ConfigureMultiTenancy()
+        {
+            Configure<AbpMultiTenancyOptions>(options =>
+            {
+                options.IsEnabled = true;
+            });
         }
 
         private static void SeedTestData(ApplicationInitializationContext context)

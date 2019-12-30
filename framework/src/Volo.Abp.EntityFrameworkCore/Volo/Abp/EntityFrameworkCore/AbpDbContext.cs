@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
@@ -31,11 +32,16 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
-        protected virtual bool IsMultiTenantFilterEnabled => DataFilter?.IsEnabled<IMultiTenant>() ?? false;
+        protected virtual bool IsMultiTenantFilterEnabled => MultiTenancyOptionsAccessor != null &&
+                                                             MultiTenancyOptionsAccessor.Value.IsEnabled &&
+                                                             MultiTenancyOptionsAccessor.Value.DatabaseStyle != MultiTenancyDatabaseStyle.PerTenant &&
+                                                             DataFilter != null && DataFilter.IsEnabled<IMultiTenant>();
 
         protected virtual bool IsSoftDeleteFilterEnabled => DataFilter?.IsEnabled<ISoftDelete>() ?? false;
 
         public ICurrentTenant CurrentTenant { get; set; }
+
+        public IOptions<AbpMultiTenancyOptions> MultiTenancyOptionsAccessor { get; set; }
 
         public IGuidGenerator GuidGenerator { get; set; }
 
