@@ -33,7 +33,9 @@
               {{ 'AbpIdentity::PersonalSettings' | abpLocalization }}
               <hr />
             </h4>
-            <abp-personal-settings-form></abp-personal-settings-form>
+            <abp-personal-settings-form
+              *abpReplaceableTemplate="{ componentKey: 'Account.PersonalSettingsComponent' }"
+            ></abp-personal-settings-form>
           </div>
         </div>
       </div>

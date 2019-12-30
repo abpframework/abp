@@ -14,4 +14,10 @@ export namespace Account {
 
   // tslint:disable-next-line: no-empty-interface
   export interface TenantBoxComponentOutputs {}
+
+  // tslint:disable-next-line: no-empty-interface
+  export interface PersonalSettingsComponentInputs {}
+
+  // tslint:disable-next-line: no-empty-interface
+  export interface PersonalSettingsComponentOutputs {}
 }
