@@ -35,7 +35,7 @@ namespace Volo.Abp.Application.Dtos
         {
             if (MaxResultCount > MaxMaxResultCount)
             {
-                var localizer = validationContext.GetRequiredService<IStringLocalizer<AbpDddResource>>();
+                var localizer = validationContext.GetRequiredService<IStringLocalizer<AbpDddApplicationContractsResource>>();
 
                 yield return new ValidationResult(
                     localizer[

@@ -1,5 +1,4 @@
 ﻿using Volo.Abp.Localization.Resources.AbpLocalization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Settings;
 using Volo.Abp.VirtualFileSystem;
@@ -27,12 +26,6 @@ namespace Volo.Abp.Localization
                 options
                     .Resources
                     .Add<DefaultResource>("en");
-
-                //TODO: Obsolete, Remove in the future version
-                options
-                    .Resources
-                    .Add<AbpValidationResource>("en")
-                    .AddVirtualJson("/Volo/Abp/Validation/Localization");//load from Volo.Abp.Validation
 
                 options
                     .Resources
