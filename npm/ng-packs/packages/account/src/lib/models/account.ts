@@ -20,4 +20,10 @@ export namespace Account {
 
   // tslint:disable-next-line: no-empty-interface
   export interface PersonalSettingsComponentOutputs {}
+
+  // tslint:disable-next-line: no-empty-interface
+  export interface ChangePasswordComponentInputs {}
+
+  // tslint:disable-next-line: no-empty-interface
+  export interface ChangePasswordComponentOutputs {}
 }
