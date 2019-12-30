@@ -72,14 +72,18 @@ namespace Volo.Abp.Cli.ProjectModification
                         packageId = package.Attributes["Include"].Value;
                         var packageVersion = SemanticVersion.Parse(versionAttribute.Value);
 
-                        Logger.LogDebug("Checking package \"{0}\"...", packageId);
+                        Logger.LogDebug("Checking package: \"{0}\" - Current version: {1}", packageId, packageVersion);
 
                         var latestVersion = await _nuGetService.GetLatestVersionOrNullAsync(packageId, includePreviews);
 
                         if (latestVersion != null && packageVersion < latestVersion)
                         {
-                            Logger.LogInformation("Updating package \"{0}\" v{1} to v{2}", packageId, packageVersion.ToString(), latestVersion.ToString());
+                            Logger.LogInformation("Updating package \"{0}\" from v{1} to v{2}.", packageId, packageVersion.ToString(), latestVersion.ToString());
                             versionAttribute.Value = latestVersion.ToString();
+                        }
+                        else
+                        {
+                            Logger.LogDebug("Package: \"{0}-v{1}\" is up to date.", packageId, packageVersion);
                         }
                     }
 
