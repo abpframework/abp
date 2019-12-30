@@ -2,10 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
-namespace Volo.Abp
+namespace Volo.Abp.Testing
 {
-    //TODO: Move to "Testing" namespace
-
     public abstract class AbpIntegratedTest<TStartupModule> : AbpTestBaseWithServiceProvider, IDisposable
         where TStartupModule : IAbpModule
     {

@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Uow
