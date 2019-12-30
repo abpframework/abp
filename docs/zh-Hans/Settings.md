@@ -40,6 +40,33 @@ ABP会自动发现并注册设置的定义.
 * **Providers**: 限制可用于特定的设置值提供程序(参阅设置值提供程序部分了解更多).
 * **Properties**: 设置此值的自定义属性 名称/值 集合,可以在之后的应用程序代码中使用.
 
+### 更改依赖模块的设置定义
+
+在某些情况下,你可能希望更改应用程序/模块所依赖的其他模块中定义的设置的某些属性. 设置定义提供程序可以查询和更新设置定义.
+
+下面的示例中获取了由 [Volo.Abp.Emailing](Emailing.md) 包定义的设置并将其更改:
+
+````csharp
+public class MySettingDefinitionProvider : SettingDefinitionProvider
+{
+    public override void Define(ISettingDefinitionContext context)
+    {
+        var smtpHost = context.GetOrNull("Abp.Mailing.Smtp.Host");
+        if (smtpHost != null)
+        {
+            smtpHost.DefaultValue = "mail.mydomain.com";
+            smtpHost.DisplayName =
+                new LocalizableString(
+                    typeof(MyLocalizationResource),
+                    "SmtpServer_DisplayName"
+                );
+        }
+    }
+}
+````
+
+> 使用常量作为设置名称是一种好习惯,ABP的包就是这样做的. `Abp.Mailing.Smtp`设置名称是在`EmailSettingNames`类(在Volo.Abp.Emailing名称空间中)定义的常量.
+
 ## 读取设置值
 
 ### ISettingProvider
@@ -117,6 +144,30 @@ var requireDigit = abp.setting.getBoolean('Abp.Identity.Password.RequireDigit');
 > 设置回退系统从底部 (用户) 到 (默认) 方向起用用.
 
 全局,租户和用户设置值提供程序使用 `ISettingStore` 从数据源读取值(参见下面的小节).
+
+### 在应用程序配置中设置值
+
+上一节提到 `ConfigurationSettingValueProvider` 从 `IConfiguration` 服务中读取设置, 该服务默认从 `appsettings.json` 中读取值. 所以在  `appsettings.json` 文件中配置设置值是最简单的方式.
+
+例如你可以像以下方式一样配置 [IEmailSender](Emailing.md) 设置:
+
+````json
+{
+  "Settings": {
+    "Abp.Mailing.DefaultFromAddress": "noreply@mydomain.com",
+    "Abp.Mailing.DefaultFromDisplayName": "My Application",
+    "Abp.Mailing.Smtp.Host": "mail.mydomain.com",
+    "Abp.Mailing.Smtp.Port": "547",
+    "Abp.Mailing.Smtp.UserName": "myusername",
+    "Abp.Mailing.Smtp.Password": "mySecretPassW00rd",
+    "Abp.Mailing.Smtp.EnableSsl": "True"
+  }
+}
+````
+
+设置值应该在 `Settings` 部分配置,如本例所示.
+
+> `IConfiguration`是.NET Core的服务,它不仅可以从 `appsettings.json` 中读取值,还可以从环境,用户机密...等中读取值. 有关更多信息请参阅[微软文档](https://docs.microsoft.com/zh-cn/aspnet/core/fundamentals/configuration/).
 
 ### 自定义设置值提供程序
 
