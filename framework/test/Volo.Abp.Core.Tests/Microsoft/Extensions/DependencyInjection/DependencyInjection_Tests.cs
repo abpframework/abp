@@ -4,6 +4,7 @@ using Shouldly;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Microsoft.Extensions.DependencyInjection

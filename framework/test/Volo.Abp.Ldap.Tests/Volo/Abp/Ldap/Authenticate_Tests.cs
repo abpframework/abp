@@ -1,6 +1,7 @@
 ﻿using System;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Ldap

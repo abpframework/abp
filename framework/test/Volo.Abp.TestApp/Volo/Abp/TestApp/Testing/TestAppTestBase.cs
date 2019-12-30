@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.TestApp.Testing
