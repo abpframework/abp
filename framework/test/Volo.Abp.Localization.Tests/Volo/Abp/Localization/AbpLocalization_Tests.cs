@@ -144,15 +144,32 @@ namespace Volo.Abp.Localization
         [Fact]
         public void Should_Get_Localized_Text_If_Defined_In_Requested_Culture()
         {
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("en"))["Car"].Value.ShouldBe("Car");
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("en"))["CarPlural"].Value.ShouldBe("Cars");
+            using (_localizer.Change(CultureInfo.GetCultureInfo("en")))
+            {
+                _localizer["Car"].Value.ShouldBe("Car");
+            }
+            using (_localizer.Change(CultureInfo.GetCultureInfo("en")))
+            {
+                _localizer["CarPlural"].Value.ShouldBe("Cars");
+            }
 
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["Car"].Value.ShouldBe("Araba");
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("tr"))["CarPlural"].Value.ShouldBe("Araba");
+            using (_localizer.Change(CultureInfo.GetCultureInfo("tr")))
+            {
+                _localizer["Car"].Value.ShouldBe("Araba");
+            }
+            using (_localizer.Change(CultureInfo.GetCultureInfo("tr")))
+            {
+                _localizer["CarPlural"].Value.ShouldBe("Araba");
+            }
 
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("es"))["Car"].Value.ShouldBe("Auto");
-            _localizer.WithCulture(CultureInfo.GetCultureInfo("es"))["CarPlural"].Value.ShouldBe("Autos");
-
+            using (_localizer.Change(CultureInfo.GetCultureInfo("es")))
+            {
+                _localizer["Car"].Value.ShouldBe("Auto");
+            }
+            using (_localizer.Change(CultureInfo.GetCultureInfo("es")))
+            {
+                _localizer["CarPlural"].Value.ShouldBe("Autos");
+            }
         }
 
         [Fact]
