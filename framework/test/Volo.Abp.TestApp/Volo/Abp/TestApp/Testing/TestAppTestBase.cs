@@ -29,9 +29,9 @@ namespace Volo.Abp.TestApp.Testing
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    await action();
+                    await action().ConfigureAwait(false);
 
-                    await uow.CompleteAsync();
+                    await uow.CompleteAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -49,8 +49,8 @@ namespace Volo.Abp.TestApp.Testing
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    var result = await func();
-                    await uow.CompleteAsync();
+                    var result = await func().ConfigureAwait(false);
+                    await uow.CompleteAsync().ConfigureAwait(false);
                     return result;
                 }
             }

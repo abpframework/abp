@@ -18,7 +18,7 @@ namespace Volo.Abp.IdentityServer.Clients
         [Fact]
         public async Task FindClientByIdAsync_Should_Return_Null_If_Not_Found()
         {
-            var client = await _clientStore.FindClientByIdAsync("non-existing-id");
+            var client = await _clientStore.FindClientByIdAsync("non-existing-id").ConfigureAwait(false);
             client.ShouldBeNull();
         }
 
@@ -26,7 +26,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task FindClientByIdAsync_Should_Return_The_Client_If_Found()
         {
             //Act
-            var client = await _clientStore.FindClientByIdAsync("42");
+            var client = await _clientStore.FindClientByIdAsync("42").ConfigureAwait(false);
 
             //Assert
             client.ShouldNotBeNull();

@@ -25,7 +25,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
         {
             if (!context.ActionDescriptor.IsControllerAction())
             {
-                await next();
+                await next().ConfigureAwait(false);
                 return;
             }
 
@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
 
             if (unitOfWorkAttr?.IsDisabled == true)
             {
-                await next();
+                await next().ConfigureAwait(false);
                 return;
             }
 
@@ -48,10 +48,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             //Trying to begin a reserved UOW by AbpUnitOfWorkMiddleware
             if (_unitOfWorkManager.TryBeginReserved(AbpUnitOfWorkMiddleware.UnitOfWorkReservationName, options))
             {
-                var result = await next();
+                var result = await next().ConfigureAwait(false);
                 if (!Succeed(result))
                 {
-                    await RollbackAsync(context);
+                    await RollbackAsync(context).ConfigureAwait(false);
                 }
 
                 return;
@@ -60,10 +60,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             //Begin a new, independent unit of work
             using (var uow = _unitOfWorkManager.Begin(options))
             {
-                var result = await next();
+                var result = await next().ConfigureAwait(false);
                 if (Succeed(result))
                 {
-                    await uow.CompleteAsync(context.HttpContext.RequestAborted);
+                    await uow.CompleteAsync(context.HttpContext.RequestAborted).ConfigureAwait(false);
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             var currentUow = _unitOfWorkManager.Current;
             if (currentUow != null)
             {
-                await currentUow.RollbackAsync(context.HttpContext.RequestAborted);
+                await currentUow.RollbackAsync(context.HttpContext.RequestAborted).ConfigureAwait(false);
             }
         }
 

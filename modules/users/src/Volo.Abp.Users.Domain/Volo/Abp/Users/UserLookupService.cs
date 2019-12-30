@@ -32,7 +32,7 @@ namespace Volo.Abp.Users
 
         public async Task<TUser> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+            var localUser = await _userRepository.FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
 
             if (ExternalUserLookupServiceProvider == null)
             {
@@ -48,13 +48,13 @@ namespace Volo.Abp.Users
 
             try
             {
-                externalUser = await ExternalUserLookupServiceProvider.FindByIdAsync(id, cancellationToken);
+                externalUser = await ExternalUserLookupServiceProvider.FindByIdAsync(id, cancellationToken).ConfigureAwait(false);
                 if (externalUser == null)
                 {
                     if (localUser != null)
                     {
                         //TODO: Instead of deleting, should be make it inactive or something like that?
-                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
+                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken)).ConfigureAwait(false);
                     }
 
                     return null;
@@ -68,25 +68,25 @@ namespace Volo.Abp.Users
 
             if (localUser == null)
             {
-                await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
-                return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+                await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken)).ConfigureAwait(false);
+                return await _userRepository.FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
             if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
             {
-                await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
+                await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken)).ConfigureAwait(false);
             }
             else
             {
                 return localUser;
             }
 
-            return await _userRepository.FindAsync(id, cancellationToken: cancellationToken);
+            return await _userRepository.FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            var localUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken);
+            var localUser = await _userRepository.FindByUserNameAsync(userName, cancellationToken).ConfigureAwait(false);
 
             if (ExternalUserLookupServiceProvider == null)
             {
@@ -102,13 +102,13 @@ namespace Volo.Abp.Users
 
             try
             {
-                externalUser = await ExternalUserLookupServiceProvider.FindByUserNameAsync(userName, cancellationToken);
+                externalUser = await ExternalUserLookupServiceProvider.FindByUserNameAsync(userName, cancellationToken).ConfigureAwait(false);
                 if (externalUser == null)
                 {
                     if (localUser != null)
                     {
                         //TODO: Instead of deleting, should be make it passive or something like that?
-                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken));
+                        await WithNewUowAsync(() => _userRepository.DeleteAsync(localUser, cancellationToken: cancellationToken)).ConfigureAwait(false);
                     }
 
                     return null;
@@ -122,20 +122,20 @@ namespace Volo.Abp.Users
 
             if (localUser == null)
             {
-                await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken));
-                return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
+                await WithNewUowAsync(() => _userRepository.InsertAsync(CreateUser(externalUser), cancellationToken: cancellationToken)).ConfigureAwait(false);
+                return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken).ConfigureAwait(false);
             }
 
             if (localUser is IUpdateUserData && ((IUpdateUserData)localUser).Update(externalUser))
             {
-                await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken));
+                await WithNewUowAsync(() => _userRepository.UpdateAsync(localUser, cancellationToken: cancellationToken)).ConfigureAwait(false);
             }
             else
             {
                 return localUser;
             }
 
-            return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken);
+            return await _userRepository.FindAsync(externalUser.Id, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         protected abstract TUser CreateUser(IUserData externalUser);
@@ -144,8 +144,8 @@ namespace Volo.Abp.Users
         {
             using (var uow = _unitOfWorkManager.Begin(requiresNew: true))
             {
-                await func();
-                await uow.SaveChangesAsync();
+                await func().ConfigureAwait(false);
+                await uow.SaveChangesAsync().ConfigureAwait(false);
             }
         }
     }

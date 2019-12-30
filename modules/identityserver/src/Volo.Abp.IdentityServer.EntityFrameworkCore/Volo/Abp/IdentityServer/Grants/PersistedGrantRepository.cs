@@ -42,7 +42,7 @@ namespace Volo.Abp.IdentityServer.Grants
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            ).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(
@@ -54,7 +54,7 @@ namespace Volo.Abp.IdentityServer.Grants
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            ).ConfigureAwait(false);
         }
     }
 }

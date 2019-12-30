@@ -17,7 +17,7 @@ namespace Volo.Abp.MailKit
             var mailMessage = new MailMessage("from_mail_address@asd.com", "to_mail_address@asd.com", "subject", "body")
             { IsBodyHtml = true };
 
-            await mailSender.SendAsync(mailMessage);
+            await mailSender.SendAsync(mailMessage).ConfigureAwait(false);
         }
 
         //[Fact]
@@ -29,7 +29,7 @@ namespace Volo.Abp.MailKit
                 IsBodyHtml = true
             };
 
-            await mailSender.SendAsync(mailMessage);
+            await mailSender.SendAsync(mailMessage).ConfigureAwait(false);
         }
 
         private static MailKitSmtpEmailSender CreateMailKitEmailSender()

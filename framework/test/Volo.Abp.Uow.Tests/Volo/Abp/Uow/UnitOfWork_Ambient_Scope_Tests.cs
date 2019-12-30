@@ -29,13 +29,13 @@ namespace Volo.Abp.Uow
                     _unitOfWorkManager.Current.ShouldNotBeNull();
                     _unitOfWorkManager.Current.Id.ShouldBe(uow1.Id);
 
-                    await uow2.CompleteAsync();
+                    await uow2.CompleteAsync().ConfigureAwait(false);
                 }
 
                 _unitOfWorkManager.Current.ShouldNotBeNull();
                 _unitOfWorkManager.Current.ShouldBe(uow1);
 
-                await uow1.CompleteAsync();
+                await uow1.CompleteAsync().ConfigureAwait(false);
             }
 
             _unitOfWorkManager.Current.ShouldBeNull();
@@ -55,7 +55,7 @@ namespace Volo.Abp.Uow
                     _unitOfWorkManager.Current.ShouldNotBeNull();
                     _unitOfWorkManager.Current.Id.ShouldNotBe(uow1.Id);
 
-                    await uow2.CompleteAsync();
+                    await uow2.CompleteAsync().ConfigureAwait(false);
                 }
 
                 _unitOfWorkManager.Current.ShouldBeNull();
@@ -65,7 +65,7 @@ namespace Volo.Abp.Uow
                 _unitOfWorkManager.Current.ShouldNotBeNull();
                 _unitOfWorkManager.Current.Id.ShouldBe(uow1.Id);
 
-                await uow1.CompleteAsync();
+                await uow1.CompleteAsync().ConfigureAwait(false);
             }
 
             _unitOfWorkManager.Current.ShouldBeNull();

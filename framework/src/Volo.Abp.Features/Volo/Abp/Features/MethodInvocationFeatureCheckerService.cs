@@ -25,7 +25,7 @@ namespace Volo.Abp.Features
 
             foreach (var requiresFeatureAttribute in GetRequiredFeatureAttributes(context.Method))
             {
-                await _featureChecker.CheckEnabledAsync(requiresFeatureAttribute.RequiresAll, requiresFeatureAttribute.Features);
+                await _featureChecker.CheckEnabledAsync(requiresFeatureAttribute.RequiresAll, requiresFeatureAttribute.Features).ConfigureAwait(false);
             }
         }
 
