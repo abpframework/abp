@@ -3,6 +3,7 @@ using Microsoft.Extensions.Localization;
 using Shouldly;
 using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Volo.Abp.VirtualFileSystem;
 using Xunit;
 

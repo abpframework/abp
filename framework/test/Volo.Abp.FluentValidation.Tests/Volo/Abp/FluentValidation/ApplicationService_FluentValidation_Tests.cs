@@ -6,6 +6,7 @@ using Shouldly;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Volo.Abp.Validation;
 using Xunit;
 

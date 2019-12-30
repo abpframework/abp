@@ -5,6 +5,7 @@ using NSubstitute;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Auditing

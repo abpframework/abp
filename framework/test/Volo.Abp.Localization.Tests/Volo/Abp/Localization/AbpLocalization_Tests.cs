@@ -7,6 +7,7 @@ using Volo.Abp.Localization.TestResources.Base.CountryNames;
 using Volo.Abp.Localization.TestResources.Base.Validation;
 using Volo.Abp.Localization.TestResources.Source;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Volo.Abp.VirtualFileSystem;
 using Xunit;
 

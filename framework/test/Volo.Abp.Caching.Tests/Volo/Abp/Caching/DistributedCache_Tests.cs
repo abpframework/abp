@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Shouldly;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Caching
