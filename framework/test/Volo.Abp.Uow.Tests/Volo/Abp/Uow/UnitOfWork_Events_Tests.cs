@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Uow
@@ -15,7 +17,7 @@ namespace Volo.Abp.Uow
         }
 
         [Fact]
-        public void Should_Trigger_Complete_On_Success()
+        public async Task Should_Trigger_Complete_On_Success()
         {
             var completed = false;
             var disposed = false;
@@ -25,7 +27,7 @@ namespace Volo.Abp.Uow
                 uow.OnCompleted(async () => completed = true);
                 uow.Disposed += (sender, args) => disposed = true;
 
-                uow.Complete();
+                await uow.CompleteAsync().ConfigureAwait(false);
 
                 completed.ShouldBeTrue();
             }
@@ -34,7 +36,7 @@ namespace Volo.Abp.Uow
         }
 
         [Fact]
-        public void Should_Trigger_Complete_On_Success_In_Child_Uow()
+        public async Task Should_Trigger_Complete_On_Success_In_Child_Uow()
         {
             var completed = false;
             var disposed = false;
@@ -46,7 +48,7 @@ namespace Volo.Abp.Uow
                     childUow.OnCompleted(async () => completed = true);
                     uow.Disposed += (sender, args) => disposed = true;
 
-                    childUow.Complete();
+                    await childUow.CompleteAsync().ConfigureAwait(false);
 
                     completed.ShouldBeFalse(); //Parent has not been completed yet!
                     disposed.ShouldBeFalse();
@@ -55,7 +57,7 @@ namespace Volo.Abp.Uow
                 completed.ShouldBeFalse(); //Parent has not been completed yet!
                 disposed.ShouldBeFalse();
 
-                uow.Complete();
+                await uow.CompleteAsync().ConfigureAwait(false);
 
                 completed.ShouldBeTrue(); //It's completed now!
                 disposed.ShouldBeFalse(); //But not disposed yet!
@@ -110,7 +112,7 @@ namespace Volo.Abp.Uow
         [InlineData(true)]
         [InlineData(false)]
         [Theory]
-        public void Should_Trigger_Failed_If_Rolled_Back(bool callComplete)
+        public async Task Should_Trigger_Failed_If_Rolled_Back(bool callComplete)
         {
             var completed = false;
             var failed = false;
@@ -122,11 +124,11 @@ namespace Volo.Abp.Uow
                 uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
                 uow.Disposed += (sender, args) => disposed = true;
 
-                uow.Rollback();
+                await uow.RollbackAsync().ConfigureAwait(false);
 
                 if (callComplete)
                 {
-                    uow.Complete();
+                    await uow.CompleteAsync().ConfigureAwait(false);
                 }
             }
 

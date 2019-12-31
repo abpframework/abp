@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Identity;
@@ -38,46 +39,46 @@ namespace Volo.Abp.IdentityServer
             _persistentGrantRepository = persistentGrantRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            AddPersistedGrants();
-            AddIdentityResources();
-            AddApiResources();
-            AddClients();
-            AddClaimTypes();
+            await AddPersistedGrants().ConfigureAwait(false);
+            await AddIdentityResources().ConfigureAwait(false);
+            await AddApiResources().ConfigureAwait(false);
+            await AddClients().ConfigureAwait(false);
+            await AddClaimTypes().ConfigureAwait(false);
         }
 
-        private void AddPersistedGrants()
+        private async Task AddPersistedGrants()
         {
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "PersistedGrantKey1",
                 SubjectId = "PersistedGrantSubjectId1",
                 ClientId = "PersistedGrantClientId1",
                 Type = "PersistedGrantType1",
                 Data = ""
-            });
+            }).ConfigureAwait(false);
 
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "PersistedGrantKey2",
                 SubjectId = "PersistedGrantSubjectId2",
                 ClientId = "c1",
                 Type = "c1type",
                 Data = ""
-            });
+            }).ConfigureAwait(false);
 
-            _persistentGrantRepository.Insert(new PersistedGrant(_guidGenerator.Create())
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
                 Key = "PersistedGrantKey3",
                 SubjectId = "PersistedGrantSubjectId3",
                 ClientId = "c1",
                 Type = "c1type",
                 Data = ""
-            });
+            }).ConfigureAwait(false);
         }
 
-        private void AddIdentityResources()
+        private async Task AddIdentityResources()
         {
             var identityResource = new IdentityResource(_testData.IdentityResource1Id, "NewIdentityResource1")
             {
@@ -87,12 +88,12 @@ namespace Volo.Abp.IdentityServer
 
             identityResource.AddUserClaim(nameof(ApiResourceClaim.Type));
 
-            _identityResourceRepository.Insert(identityResource);
-            _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create(), "NewIdentityResource2"));
-            _identityResourceRepository.Insert(new IdentityResource(_guidGenerator.Create(), "NewIdentityResource3"));
+            await _identityResourceRepository.InsertAsync(identityResource).ConfigureAwait(false);
+            await _identityResourceRepository.InsertAsync(new IdentityResource(_guidGenerator.Create(), "NewIdentityResource2")).ConfigureAwait(false);
+            await _identityResourceRepository.InsertAsync(new IdentityResource(_guidGenerator.Create(), "NewIdentityResource3")).ConfigureAwait(false);
         }
 
-        private void AddApiResources()
+        private async Task AddApiResources()
         {
             var apiResource = new ApiResource(_testData.ApiResource1Id, "NewApiResource1");
             apiResource.Description = nameof(apiResource.Description);
@@ -102,12 +103,12 @@ namespace Volo.Abp.IdentityServer
             apiResource.AddUserClaim(nameof(ApiResourceClaim.Type));
             apiResource.AddSecret(nameof(ApiSecret.Value));
 
-            _apiResourceRepository.Insert(apiResource);
-            _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create(), "NewApiResource2"));
-            _apiResourceRepository.Insert(new ApiResource(_guidGenerator.Create(), "NewApiResource3"));
+            await _apiResourceRepository.InsertAsync(apiResource).ConfigureAwait(false);
+            await _apiResourceRepository.InsertAsync(new ApiResource(_guidGenerator.Create(), "NewApiResource2")).ConfigureAwait(false);
+            await _apiResourceRepository.InsertAsync(new ApiResource(_guidGenerator.Create(), "NewApiResource3")).ConfigureAwait(false);
         }
 
-        private void AddClients()
+        private async Task AddClients()
         {
             var client = new Client(_testData.Client1Id, "ClientId1")
             {
@@ -129,17 +130,17 @@ namespace Volo.Abp.IdentityServer
             client.AddScope(nameof(ClientScope.Scope));
             client.AddSecret(nameof(ClientSecret.Value));
 
-            _clientRepository.Insert(client);
+            await _clientRepository.InsertAsync(client).ConfigureAwait(false);
 
-            _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId2"));
-            _clientRepository.Insert(new Client(_guidGenerator.Create(), "ClientId3"));
+            await _clientRepository.InsertAsync(new Client(_guidGenerator.Create(), "ClientId2")).ConfigureAwait(false);
+            await _clientRepository.InsertAsync(new Client(_guidGenerator.Create(), "ClientId3")).ConfigureAwait(false);
         }
 
-        private void AddClaimTypes()
+        private async Task AddClaimTypes()
         {
             var ageClaim = new IdentityClaimType(Guid.NewGuid(), "Age", false, false, null, null, null,
                 IdentityClaimValueType.Int);
-            _identityClaimTypeRepository.Insert(ageClaim);
+            await _identityClaimTypeRepository.InsertAsync(ageClaim).ConfigureAwait(false);
         }
     }
 }

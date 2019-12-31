@@ -85,7 +85,7 @@ namespace Volo.Abp.EventBus.RabbitMq
 
             var eventData = Serializer.Deserialize(ea.Body, eventType);
 
-            await TriggerHandlersAsync(eventType, eventData);
+            await TriggerHandlersAsync(eventType, eventData).ConfigureAwait(false);
         }
 
         public IDisposable Subscribe<TEvent>(IDistributedEventHandler<TEvent> handler) where TEvent : class

@@ -1,7 +1,7 @@
-﻿namespace Volo.Abp.Localization.Resources.AbpValidation
-{
-    //TODO: Move to Volo.Abp.Validation!
+﻿using Volo.Abp.Localization;
 
+namespace Volo.Abp.Validation.Localization
+{
     [LocalizationResourceName("AbpValidation")]
     public class AbpValidationResource
     {

@@ -4,6 +4,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <AssemblyName>Volo.Abp.AspNetCore.Mvc.UI.Packages</AssemblyName>
     <PackageId>Volo.Abp.AspNetCore.Mvc.UI.Packages</PackageId>
     <IsPackable>true</IsPackable>

@@ -225,7 +225,7 @@ using Volo.Abp.Application.Services;
 namespace Acme.BookStore
 {
     public interface IBookAppService : 
-        IAsyncCrudAppService< //定义了CRUD方法
+        ICrudAppService< //定义了CRUD方法
             BookDto, //用来展示书籍
             Guid, //Book实体的主键
             PagedAndSortedResultRequestDto, //获取书籍的时候用于分页和排序
@@ -238,8 +238,8 @@ namespace Acme.BookStore
 ````
 
 * 框架定义应用程序服务的接口<u>不是必需的</u>. 但是,它被建议作为最佳实践.
-* `IAsyncCrudAppService`定义了常见的**CRUD**方法:`GetAsync`,`GetListAsync`,`CreateAsync`,`UpdateAsync`和`DeleteAsync`. 你可以从空的`IApplicationService`接口继承并手动定义自己的方法.
-* `IAsyncCrudAppService`有一些变体, 你可以在每个方法中使用单独的DTO,也可以分别单独指定.
+* `ICrudAppService`定义了常见的**CRUD**方法:`GetAsync`,`GetListAsync`,`CreateAsync`,`UpdateAsync`和`DeleteAsync`. 你可以从空的`IApplicationService`接口继承并手动定义自己的方法.
+* `ICrudAppService`有一些变体, 你可以在每个方法中使用单独的DTO,也可以分别单独指定.
 
 
 #### BookAppService
@@ -255,7 +255,7 @@ using Volo.Abp.Domain.Repositories;
 namespace Acme.BookStore
 {
     public class BookAppService : 
-        AsyncCrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
+        CrudAppService<Book, BookDto, Guid, PagedAndSortedResultRequestDto,
                             CreateUpdateBookDto, CreateUpdateBookDto>,
         IBookAppService
     {
@@ -268,7 +268,7 @@ namespace Acme.BookStore
 }
 ````
 
-* `BookAppService`继承了`AsyncCrudAppService<...>`.`AsyncCrudAppService<...>`实现了上面定义的CRUD方法.
+* `BookAppService`继承了`CrudAppService<...>`.它实现了上面定义的CRUD方法.
 * `BookAppService`注入`IRepository <Book,Guid>`,这是`Book`实体的默认仓储. ABP自动为每个聚合根(或实体)创建默认仓储. 请参阅[仓储文档](../../Repositories.md)
 * `BookAppService`使用`IObjectMapper`将`Book`对象转换为`BookDto`对象, 将`CreateUpdateBookDto`对象转换为`Book`对象. 启动模板使用[AutoMapper](http://automapper.org/)库作为对象映射提供程序. 你之前定义了映射, 因此它将按预期工作.
 

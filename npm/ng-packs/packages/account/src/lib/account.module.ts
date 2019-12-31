@@ -25,22 +25,14 @@ import { AuthWrapperComponent } from './components/auth-wrapper/auth-wrapper.com
     ManageProfileComponent,
     PersonalSettingsComponent,
   ],
-  imports: [CoreModule, AccountRoutingModule, ThemeSharedModule, TableModule, NgbDropdownModule, NgxValidateCoreModule],
+  imports: [
+    CoreModule,
+    AccountRoutingModule,
+    ThemeSharedModule,
+    TableModule,
+    NgbDropdownModule,
+    NgxValidateCoreModule,
+  ],
   exports: [],
 })
 export class AccountModule {}
-
-/**
- *
- * @deprecated since version 0.9
- */
-export function AccountProviders(options = {} as Options): Provider[] {
-  return [
-    { provide: ACCOUNT_OPTIONS, useValue: options },
-    {
-      provide: 'ACCOUNT_OPTIONS',
-      useFactory: optionsFactory,
-      deps: [ACCOUNT_OPTIONS],
-    },
-  ];
-}

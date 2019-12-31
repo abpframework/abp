@@ -26,9 +26,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var content = await output.GetChildContentAsync();
+            var content = await output.GetChildContentAsync().ConfigureAwait(false);
 
-            var buttonsAsHtml = await GetButtonsAsHtmlAsync(context, output, content);
+            var buttonsAsHtml = await GetButtonsAsHtmlAsync(context, output, content).ConfigureAwait(false);
 
             output.PreElement.SetHtmlContent(buttonsAsHtml);
 
@@ -43,13 +43,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
         {
             var buttonBuilder = new StringBuilder("");
 
-            var mainButton = await GetMainButtonAsync(context, output, content);
+            var mainButton = await GetMainButtonAsync(context, output, content).ConfigureAwait(false);
 
             buttonBuilder.AppendLine(mainButton);
 
             if (TagHelper.DropdownStyle == DropdownStyle.Split)
             {
-                var splitButton = await GetSplitButtonAsync(context, output);
+                var splitButton = await GetSplitButtonAsync(context, output).ConfigureAwait(false);
 
                 buttonBuilder.AppendLine(splitButton);
             }
@@ -68,7 +68,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForMainButton(context, output);
 
-            var buttonTag = await abpButtonTagHelper.ProcessAndGetOutputAsync(attributes, context, "button", TagMode.StartTagAndEndTag);
+            var buttonTag = await abpButtonTagHelper.ProcessAndGetOutputAsync(attributes, context, "button", TagMode.StartTagAndEndTag).ConfigureAwait(false);
 
             buttonTag.PreContent.SetHtmlContent(content.GetContent());
 
@@ -89,7 +89,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Dropdown
             abpButtonTagHelper.ButtonType = TagHelper.ButtonType;
             var attributes = GetAttributesForSplitButton(context, output);
 
-            return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag);
+            return await abpButtonTagHelper.RenderAsync(attributes, context, _htmlEncoder, "button", TagMode.StartTagAndEndTag).ConfigureAwait(false);
         }
 
         protected virtual TagHelperAttributeList GetAttributesForMainButton(TagHelperContext context, TagHelperOutput output)

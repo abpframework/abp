@@ -1,13 +1,14 @@
 ﻿using Volo.Abp.FeatureManagement.Localization;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.FeatureManagement
 {
     [DependsOn(
-        typeof(AbpLocalizationModule)
+        typeof(AbpValidationModule)
         )]
     public class AbpFeatureManagementDomainSharedModule : AbpModule
     {

@@ -19,13 +19,13 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     //TODO: Refactor to make tests easier.
 
-    public class PersonAppService_Tests : AspNetCoreMvcTestBase
+    public class PeopleAppService_Tests : AspNetCoreMvcTestBase
     {
         private readonly IRepository<Person, Guid> _personRepository;
         private readonly IJsonSerializer _jsonSerializer;
         private readonly IObjectMapper _objectMapper;
 
-        public PersonAppService_Tests()
+        public PeopleAppService_Tests()
         {
             _personRepository = ServiceProvider.GetRequiredService<IRepository<Person, Guid>>();
             _jsonSerializer = ServiceProvider.GetRequiredService<IJsonSerializer>();
@@ -35,27 +35,27 @@ namespace Volo.Abp.AspNetCore.Mvc
         [Fact]
         public async Task GetAll_Test()
         {
-            var result = await GetResponseAsObjectAsync<ListResultDto<PersonDto>>("/api/app/people");
+            var result = await GetResponseAsObjectAsync<ListResultDto<PersonDto>>("/api/app/people").ConfigureAwait(false);
             result.Items.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Get_Test()
         {
-            var firstPerson = _personRepository.First();
+            var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            var result = await GetResponseAsObjectAsync<PersonDto>($"/api/app/people/{firstPerson.Id}");
+            var result = await GetResponseAsObjectAsync<PersonDto>($"/api/app/people/{firstPerson.Id}").ConfigureAwait(false);
             result.Name.ShouldBe(firstPerson.Name);
         }
 
         [Fact]
         public async Task Delete_Test()
         {
-            var firstPerson = _personRepository.First();
+            var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            await Client.DeleteAsync($"/api/app/people/{firstPerson.Id}");
+            await Client.DeleteAsync($"/api/app/people/{firstPerson.Id}").ConfigureAwait(false);
 
-            (await _personRepository.FindAsync(firstPerson.Id)).ShouldBeNull();
+            (await _personRepository.FindAsync(firstPerson.Id).ConfigureAwait(false)).ShouldBeNull();
         }
 
         [Fact]
@@ -68,10 +68,10 @@ namespace Volo.Abp.AspNetCore.Mvc
             var response = await Client.PostAsync(
                 "/api/app/people",
                 new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json)
-            );
+            ).ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             PersonDto resultDto = _jsonSerializer.Deserialize<PersonDto>(resultAsString);
 
             //Assert
@@ -80,7 +80,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             resultDto.Name.ShouldBe("John");
             resultDto.Age.ShouldBe(33);
 
-            (await _personRepository.FindAsync(resultDto.Id)).ShouldNotBeNull();
+            (await _personRepository.FindAsync(resultDto.Id).ConfigureAwait(false)).ShouldNotBeNull();
         }
 
 
@@ -89,7 +89,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             //Arrange
 
-            var firstPerson = _personRepository.First();
+            var firstPerson = (await _personRepository.GetListAsync()).First();
             var firstPersonAge = firstPerson.Age; //Persist to a variable since we are using in-memory database which shares same entity.
             var updateDto = _objectMapper.Map<Person, PersonDto>(firstPerson);
             updateDto.Age = updateDto.Age + 1;
@@ -100,10 +100,10 @@ namespace Volo.Abp.AspNetCore.Mvc
             var response = await Client.PutAsync(
                 $"/api/app/people/{updateDto.Id}",
                 new StringContent(putData, Encoding.UTF8, MimeTypes.Application.Json)
-            );
+            ).ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             PersonDto resultDto = _jsonSerializer.Deserialize<PersonDto>(resultAsString);
 
             //Assert
@@ -112,7 +112,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             resultDto.Name.ShouldBe(firstPerson.Name);
             resultDto.Age.ShouldBe(firstPersonAge + 1);
 
-            var personInDb = (await _personRepository.FindAsync(resultDto.Id));
+            var personInDb = (await _personRepository.FindAsync(resultDto.Id).ConfigureAwait(false));
             personInDb.ShouldNotBeNull();
             personInDb.Name.ShouldBe(firstPerson.Name);
             personInDb.Age.ShouldBe(firstPersonAge + 1);
@@ -123,7 +123,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         {
             //Arrange
 
-            var personToAddNewPhone = _personRepository.First();
+            var personToAddNewPhone = (await _personRepository.GetListAsync()).First();
             var phoneNumberToAdd = RandomHelper.GetRandom(1000000, 9000000).ToString();
 
             //Act
@@ -133,10 +133,10 @@ namespace Volo.Abp.AspNetCore.Mvc
             var response = await Client.PostAsync(
                 $"/api/app/people/{personToAddNewPhone.Id}/phones",
                 new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json)
-            );
+            ).ConfigureAwait(false);
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync();
+            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             var resultDto = _jsonSerializer.Deserialize<PhoneDto>(resultAsString);
 
             //Assert
@@ -144,7 +144,7 @@ namespace Volo.Abp.AspNetCore.Mvc
             resultDto.Type.ShouldBe(PhoneType.Mobile);
             resultDto.Number.ShouldBe(phoneNumberToAdd);
 
-            var personInDb = await _personRepository.FindAsync(personToAddNewPhone.Id);
+            var personInDb = await _personRepository.FindAsync(personToAddNewPhone.Id).ConfigureAwait(false);
             personInDb.ShouldNotBeNull();
             personInDb.Phones.Any(p => p.Number == phoneNumberToAdd).ShouldBeTrue();
         }
@@ -152,21 +152,21 @@ namespace Volo.Abp.AspNetCore.Mvc
         [Fact]
         public async Task GetPhones_Test()
         {
-            var douglas = _personRepository.First(p => p.Name == "Douglas");
+            var douglas = (await _personRepository.GetListAsync()).First(p => p.Name == "Douglas");
 
-            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/people/{douglas.Id}/phones");
+            var result = await GetResponseAsObjectAsync<ListResultDto<PhoneDto>>($"/api/app/people/{douglas.Id}/phones").ConfigureAwait(false);
             result.Items.Count.ShouldBe(douglas.Phones.Count);
         }
 
         [Fact]
         public async Task DeletePhone_Test()
         {
-            var douglas = _personRepository.First(p => p.Name == "Douglas");
+            var douglas = (await _personRepository.GetListAsync()).First(p => p.Name == "Douglas");
             var firstPhone = douglas.Phones.First();
 
-            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/phones?number={firstPhone.Number}");
+            await Client.DeleteAsync($"/api/app/people/{douglas.Id}/phones?number={firstPhone.Number}").ConfigureAwait(false);
 
-            douglas = _personRepository.First(p => p.Name == "Douglas");
+            douglas = (await _personRepository.GetListAsync()).First(p => p.Name == "Douglas");
             douglas.Phones.Any(p => p.Number == firstPhone.Number).ShouldBeFalse();
         }
     }

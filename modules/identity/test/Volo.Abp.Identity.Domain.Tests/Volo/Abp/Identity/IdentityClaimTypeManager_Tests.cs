@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity
         {
             var claimType = await _claimTypeManager.CreateAsync(new IdentityClaimType(Guid.NewGuid(), "Phone", false,
                 false, null,
-                null, null, IdentityClaimValueType.String));
+                null, null, IdentityClaimValueType.String)).ConfigureAwait(false);
 
             claimType.ShouldNotBeNull();
             claimType.Name.ShouldBe("Phone");
@@ -36,17 +36,17 @@ namespace Volo.Abp.Identity
         {
             await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.CreateAsync(
                 new IdentityClaimType(
-                    Guid.NewGuid(), "Age")));
+                    Guid.NewGuid(), "Age")).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task UpdateAsync()
         {
-            var ageClaim = _identityClaimTypeRepository.Find(_testData.AgeClaimId);
+            var ageClaim = await _identityClaimTypeRepository.FindAsync(_testData.AgeClaimId).ConfigureAwait(false);
             ageClaim.ShouldNotBeNull();
             ageClaim.Description = "this is age";
 
-            var updatedAgeClaimType = await _claimTypeManager.UpdateAsync(ageClaim);
+            var updatedAgeClaimType = await _claimTypeManager.UpdateAsync(ageClaim).ConfigureAwait(false);
             updatedAgeClaimType.ShouldNotBeNull();
             updatedAgeClaimType.Description.ShouldBe("this is age");
         }
@@ -57,7 +57,7 @@ namespace Volo.Abp.Identity
         {
             await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.UpdateAsync(
                 new IdentityClaimType(
-                    Guid.NewGuid(), "Age")));
+                    Guid.NewGuid(), "Age")).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
 
@@ -65,9 +65,9 @@ namespace Volo.Abp.Identity
         public async Task Static_IdentityClaimType_Cant_Not_Update()
         {
             var phoneClaim = new IdentityClaimType(Guid.NewGuid(), "Phone", true, true);
-            _identityClaimTypeRepository.Insert(phoneClaim);
+            await _identityClaimTypeRepository.InsertAsync(phoneClaim).ConfigureAwait(false);
 
-            await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.UpdateAsync(phoneClaim));
+            await Assert.ThrowsAnyAsync<AbpException>(async () => await _claimTypeManager.UpdateAsync(phoneClaim).ConfigureAwait(false)).ConfigureAwait(false);
         }
     }
 }

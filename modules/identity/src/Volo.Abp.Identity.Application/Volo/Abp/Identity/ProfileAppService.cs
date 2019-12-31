@@ -21,39 +21,39 @@ namespace Volo.Abp.Identity
         {
             return ObjectMapper.Map<IdentityUser, ProfileDto>(
                 await _userManager.GetByIdAsync(CurrentUser.GetId())
-            );
+.ConfigureAwait(false));
         }
 
         public virtual async Task<ProfileDto> UpdateAsync(UpdateProfileDto input)
         {
-            var user = await _userManager.GetByIdAsync(CurrentUser.GetId());
+            var user = await _userManager.GetByIdAsync(CurrentUser.GetId()).ConfigureAwait(false);
 
-            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled))
+            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsUserNameUpdateEnabled).ConfigureAwait(false))
             {
-                (await _userManager.SetUserNameAsync(user, input.UserName)).CheckErrors();
+                (await _userManager.SetUserNameAsync(user, input.UserName).ConfigureAwait(false)).CheckErrors();
             }
 
-            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled))
+            if (await SettingProvider.IsTrueAsync(IdentitySettingNames.User.IsEmailUpdateEnabled).ConfigureAwait(false))
             {
-                (await _userManager.SetEmailAsync(user, input.Email)).CheckErrors();
+                (await _userManager.SetEmailAsync(user, input.Email).ConfigureAwait(false)).CheckErrors();
             }
 
-            (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber)).CheckErrors();
+            (await _userManager.SetPhoneNumberAsync(user, input.PhoneNumber).ConfigureAwait(false)).CheckErrors();
 
             user.Name = input.Name;
             user.Surname = input.Surname;
 
-            (await _userManager.UpdateAsync(user)).CheckErrors();
+            (await _userManager.UpdateAsync(user).ConfigureAwait(false)).CheckErrors();
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
             return ObjectMapper.Map<IdentityUser, ProfileDto>(user);
         }
 
         public virtual async Task ChangePasswordAsync(ChangePasswordInput input)
         {
-            var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId());
-            (await _userManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword)).CheckErrors();
+            var currentUser = await _userManager.GetByIdAsync(CurrentUser.GetId()).ConfigureAwait(false);
+            (await _userManager.ChangePasswordAsync(currentUser, input.CurrentPassword, input.NewPassword).ConfigureAwait(false)).CheckErrors();
         }
     }
 }

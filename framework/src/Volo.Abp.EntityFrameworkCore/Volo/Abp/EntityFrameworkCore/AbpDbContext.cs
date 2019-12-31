@@ -22,7 +22,6 @@ using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
-using Volo.Abp.Threading;
 using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
@@ -68,6 +67,13 @@ namespace Volo.Abp.EntityFrameworkCore
                     BindingFlags.Instance | BindingFlags.NonPublic
                 );
 
+        private static readonly MethodInfo ConfigureValueGeneratedMethodInfo
+            = typeof(AbpDbContext<TDbContext>)
+                .GetMethod(
+                    nameof(ConfigureValueGenerated),
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                );
+
         protected AbpDbContext(DbContextOptions<TDbContext> options)
             : base(options)
         {
@@ -90,48 +96,13 @@ namespace Volo.Abp.EntityFrameworkCore
                 ConfigureValueConverterMethodInfo
                     .MakeGenericMethod(entityType.ClrType)
                     .Invoke(this, new object[] { modelBuilder, entityType });
+
+                ConfigureValueGeneratedMethodInfo
+                    .MakeGenericMethod(entityType.ClrType)
+                    .Invoke(this, new object[] { modelBuilder, entityType });
             }
         }
-
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            //TODO: Reduce duplications with SaveChangesAsync
-            //TODO: Instead of adding entity changes to audit log, write them to uow and add to audit log only if uow succeed
-
-            try
-            {
-                var auditLog = AuditingManager?.Current?.Log;
-
-                List<EntityChangeInfo> entityChangeList = null;
-                if (auditLog != null)
-                {
-                    entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
-                }
-
-                var changeReport = ApplyAbpConcepts();
-
-                var result = base.SaveChanges(acceptAllChangesOnSuccess);
-
-                AsyncHelper.RunSync(() => EntityChangeEventHelper.TriggerEventsAsync(changeReport));
-
-                if (auditLog != null)
-                {
-                    EntityHistoryHelper.UpdateChangeList(entityChangeList);
-                    auditLog.EntityChanges.AddRange(entityChangeList);
-                }
-
-                return result;
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw new AbpDbConcurrencyException(ex.Message, ex);
-            }
-            finally
-            {
-                ChangeTracker.AutoDetectChangesEnabled = true;
-            }
-        }
-
+        
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             try
@@ -146,9 +117,9 @@ namespace Volo.Abp.EntityFrameworkCore
 
                 var changeReport = ApplyAbpConcepts();
 
-                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
 
-                await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
+                await EntityChangeEventHelper.TriggerEventsAsync(changeReport).ConfigureAwait(false);
 
                 if (auditLog != null)
                 {
@@ -539,6 +510,23 @@ namespace Volo.Abp.EntityFrameworkCore
                         .HasConversion(dateTimeValueConverter);
                 });
             }
+        }
+
+        protected virtual void ConfigureValueGenerated<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (!typeof(IEntity<Guid>).IsAssignableFrom(typeof(TEntity)))
+            {
+                return;
+            }
+
+            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>) x).Id);
+            if (idPropertyBuilder.Metadata.PropertyInfo.IsDefined(typeof(DatabaseGeneratedAttribute), true))
+            {
+                return;
+            }
+
+            idPropertyBuilder.ValueGeneratedNever();
         }
 
         protected virtual bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType) where TEntity : class

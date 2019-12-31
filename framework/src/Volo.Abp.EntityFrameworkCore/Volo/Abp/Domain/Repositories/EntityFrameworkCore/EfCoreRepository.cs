@@ -40,42 +40,16 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             );
         }
         
-        public override TEntity Insert(TEntity entity, bool autoSave = false)
-        {
-            var savedEntity = DbSet.Add(entity).Entity;
-
-            if (autoSave)
-            {
-                DbContext.SaveChanges();
-            }
-
-            return savedEntity;
-        }
-
         public override async Task<TEntity> InsertAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var savedEntity = DbSet.Add(entity).Entity;
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
             }
 
             return savedEntity;
-        }
-
-        public override TEntity Update(TEntity entity, bool autoSave = false)
-        {
-            DbContext.Attach(entity);
-
-            var updatedEntity = DbContext.Update(entity).Entity;
-
-            if (autoSave)
-            {
-                DbContext.SaveChanges();
-            }
-
-            return updatedEntity;
         }
 
         public override async Task<TEntity> UpdateAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
@@ -86,54 +60,32 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
             }
 
             return updatedEntity;
         }
-
-        public override void Delete(TEntity entity, bool autoSave = false)
-        {
-            DbSet.Remove(entity);
-
-            if (autoSave)
-            {
-                DbContext.SaveChanges();
-            }
-        }
-
+        
         public override async Task DeleteAsync(TEntity entity, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             DbSet.Remove(entity);
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
             }
-        }
-
-        public override List<TEntity> GetList(bool includeDetails = false)
-        {
-            return includeDetails
-                ? WithDetails().ToList()
-                : DbSet.ToList();
         }
 
         public override async Task<List<TEntity>> GetListAsync(bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return includeDetails
                 ? await WithDetails().ToListAsync(GetCancellationToken(cancellationToken))
-                : await DbSet.ToListAsync(GetCancellationToken(cancellationToken));
-        }
-
-        public override long GetCount()
-        {
-            return DbSet.LongCount();
+.ConfigureAwait(false) : await DbSet.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public override async Task<long> GetCountAsync(CancellationToken cancellationToken = default)
         {
-            return await DbSet.LongCountAsync(GetCancellationToken(cancellationToken));
+            return await DbSet.LongCountAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         protected override IQueryable<TEntity> GetQueryable()
@@ -141,21 +93,11 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             return DbSet.AsQueryable();
         }
 
-        public override void Delete(Expression<Func<TEntity, bool>> predicate, bool autoSave = false)
-        {
-            base.Delete(predicate, autoSave);
-
-            if (autoSave)
-            {
-                DbContext.SaveChanges();
-            }
-        }
-
         public override async Task DeleteAsync(Expression<Func<TEntity, bool>> predicate, bool autoSave = false, CancellationToken cancellationToken = default)
         {
             var entities = await GetQueryable()
                 .Where(predicate)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
 
             foreach (var entity in entities)
             {
@@ -164,7 +106,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
             if (autoSave)
             {
-                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken));
+                await DbContext.SaveChangesAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
             }
         }
 
@@ -177,7 +119,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             await DbContext
                 .Entry(entity)
                 .Collection(propertyExpression)
-                .LoadAsync(GetCancellationToken(cancellationToken));
+                .LoadAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task EnsurePropertyLoadedAsync<TProperty>(
@@ -189,7 +131,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
             await DbContext
                 .Entry(entity)
                 .Reference(propertyExpression)
-                .LoadAsync(GetCancellationToken(cancellationToken));
+                .LoadAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public override IQueryable<TEntity> WithDetails()
@@ -245,7 +187,7 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
 
         public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, includeDetails, GetCancellationToken(cancellationToken));
+            var entity = await FindAsync(id, includeDetails, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
 
             if (entity == null)
             {
@@ -266,29 +208,18 @@ namespace Volo.Abp.Domain.Repositories.EntityFrameworkCore
         {
             return includeDetails
                 ? await WithDetails().FirstOrDefaultAsync(e => e.Id.Equals(id), GetCancellationToken(cancellationToken))
-                : await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken));
-        }
-
-        public virtual void Delete(TKey id, bool autoSave = false)
-        {
-            var entity = Find(id, includeDetails: false);
-            if (entity == null)
-            {
-                return;
-            }
-
-            Delete(entity, autoSave);
+.ConfigureAwait(false) : await DbSet.FindAsync(new object[] { id }, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, includeDetails: false, cancellationToken: cancellationToken);
+            var entity = await FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
             if (entity == null)
             {
                 return;
             }
 
-            await DeleteAsync(entity, autoSave, cancellationToken);
+            await DeleteAsync(entity, autoSave, cancellationToken).ConfigureAwait(false);
         }
     }
 }

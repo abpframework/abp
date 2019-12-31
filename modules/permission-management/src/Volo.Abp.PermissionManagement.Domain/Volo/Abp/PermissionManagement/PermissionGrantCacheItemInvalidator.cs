@@ -29,7 +29,7 @@ namespace Volo.Abp.PermissionManagement
 
             using (CurrentTenant.Change(eventData.Entity.TenantId))
             {
-                await Cache.RemoveAsync(cacheKey);
+                await Cache.RemoveAsync(cacheKey).ConfigureAwait(false);
             }
         }
 

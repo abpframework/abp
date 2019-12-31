@@ -2,13 +2,14 @@
 using Volo.Abp.Localization;
 using MyCompanyName.MyProjectName.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
 {
     [DependsOn(
-        typeof(AbpLocalizationModule)
+        typeof(AbpValidationModule)
     )]
     public class MyProjectNameDomainSharedModule : AbpModule
     {

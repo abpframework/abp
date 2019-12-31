@@ -20,7 +20,7 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Get_An_Extra_Property()
         {
-            var london = await CityRepository.FindByNameAsync("London");
+            var london = await CityRepository.FindByNameAsync("London").ConfigureAwait(false);
             london.HasProperty("Population").ShouldBeTrue();
             london.GetProperty<int>("Population").ShouldBe(10_470_000);
         }
@@ -28,11 +28,11 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Add_An_Extra_Property()
         {
-            var london = await CityRepository.FindByNameAsync("London");
+            var london = await CityRepository.FindByNameAsync("London").ConfigureAwait(false);
             london.SetProperty("AreaAsKm", 1572);
-            await CityRepository.UpdateAsync(london);
+            await CityRepository.UpdateAsync(london).ConfigureAwait(false);
 
-            var london2 = await CityRepository.FindByNameAsync("London");
+            var london2 = await CityRepository.FindByNameAsync("London").ConfigureAwait(false);
             london2.HasProperty("AreaAsKm").ShouldBeTrue();
             london2.GetProperty<int>("AreaAsKm").ShouldBe(1572);
         }
@@ -40,12 +40,12 @@ namespace Volo.Abp.TestApp.Testing
         [Fact]
         public async Task Should_Update_An_Existing_Extra_Property()
         {
-            var london = await CityRepository.FindByNameAsync("London");
+            var london = await CityRepository.FindByNameAsync("London").ConfigureAwait(false);
 
             london.ExtraProperties["Population"] = 11_000_042;
-            await CityRepository.UpdateAsync(london);
+            await CityRepository.UpdateAsync(london).ConfigureAwait(false);
 
-            var london2 = await CityRepository.FindByNameAsync("London");
+            var london2 = await CityRepository.FindByNameAsync("London").ConfigureAwait(false);
             london2.HasProperty("Population").ShouldBeTrue();
             london2.GetProperty<int>("Population").ShouldBe(11_000_042);
         }

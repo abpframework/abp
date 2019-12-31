@@ -31,7 +31,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             }
 
             ProcessMainTag(context, output);
-            await SetContentAsHtmlAsync(context, output);
+            await SetContentAsHtmlAsync(context, output).ConfigureAwait(false);
         }
 
         protected virtual async Task SetContentAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
@@ -39,9 +39,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             var html = new StringBuilder("");
 
             html.AppendLine(GetOpeningTags(context, output));
-            html.AppendLine(await GetPreviousButtonAsync(context, output));
-            html.AppendLine(await GetPagesAsync(context, output));
-            html.AppendLine(await GetNextButton(context, output));
+            html.AppendLine(await GetPreviousButtonAsync(context, output).ConfigureAwait(false));
+            html.AppendLine(await GetPagesAsync(context, output).ConfigureAwait(false));
+            html.AppendLine(await GetNextButton(context, output).ConfigureAwait(false));
             html.AppendLine(GetClosingTags(context, output));
 
             output.Content.SetHtmlContent(html.ToString());
@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             foreach (var page in TagHelper.Model.Pages)
             {
-                pagesHtml.AppendLine(await GetPageAsync(context, output, page));
+                pagesHtml.AppendLine(await GetPageAsync(context, output, page).ConfigureAwait(false));
             }
 
             return pagesHtml.ToString();
@@ -86,7 +86,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             }
             else
             {
-                pageHtml.AppendLine(await RenderAnchorTagHelperLinkHtmlAsync(context, output, page.Index.ToString(), page.Index.ToString()));
+                pageHtml.AppendLine(await RenderAnchorTagHelperLinkHtmlAsync(context, output, page.Index.ToString(), page.Index.ToString()).ConfigureAwait(false));
             }
 
             pageHtml.AppendLine("</li>");
@@ -102,7 +102,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
                 : (TagHelper.Model.CurrentPage - 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage == 1 ? "disabled" : "") + "\">\r\n" +
-                (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey)) + "                </li>";
+                (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey).ConfigureAwait(false)) + "                </li>";
         }
 
         protected virtual async Task<string> GetNextButton(TagHelperContext context, TagHelperOutput output)
@@ -111,7 +111,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
             var currentPage = (TagHelper.Model.CurrentPage + 1).ToString();
             return
                 "<li class=\"page-item " + (TagHelper.Model.CurrentPage >= TagHelper.Model.TotalPageCount ? "disabled" : "") + "\">\r\n" +
-                (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey)) +
+                (await RenderAnchorTagHelperLinkHtmlAsync(context, output, currentPage, localizationKey).ConfigureAwait(false)) +
                 "                </li>";
         }
 
@@ -121,7 +121,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Pagination
 
             var anchorTagHelper = GetAnchorTagHelper(currentPage, out var attributeList);
 
-            var tagHelperOutput = await anchorTagHelper.ProcessAndGetOutputAsync(attributeList, context, "a", TagMode.StartTagAndEndTag);
+            var tagHelperOutput = await anchorTagHelper.ProcessAndGetOutputAsync(attributeList, context, "a", TagMode.StartTagAndEndTag).ConfigureAwait(false);
 
             tagHelperOutput.Content.SetHtmlContent(localizer[localizationKey]);
 

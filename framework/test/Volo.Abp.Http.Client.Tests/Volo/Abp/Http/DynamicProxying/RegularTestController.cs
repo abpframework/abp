@@ -12,13 +12,6 @@ namespace Volo.Abp.Http.DynamicProxying
     public class RegularTestController : AbpController, IRegularTestController
     {
         [HttpGet]
-        [Route("increment/{value}")] //full URL: .../api/regular-test-controller/increment/{value}
-        public int IncrementValue(int value)
-        {
-            return value + 1;
-        }
-
-        [HttpGet]
         [Route("increment")]
         public Task<int> IncrementValueAsync(int value)
         {

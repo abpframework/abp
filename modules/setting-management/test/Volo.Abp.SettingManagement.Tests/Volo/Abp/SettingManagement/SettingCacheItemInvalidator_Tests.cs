@@ -29,9 +29,9 @@ namespace Volo.Abp.SettingManagement
         public async Task GetOrNullAsync_Should_Cached()
         {
             // Act
-            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()))).ShouldBeNull();
-            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
-            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()))).ShouldNotBeNull();
+            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString())).ConfigureAwait(false)).ShouldBeNull();
+            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()).ConfigureAwait(false);
+            (await _cache.GetAsync(SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString())).ConfigureAwait(false)).ShouldNotBeNull();
         }
 
         [Fact]
@@ -39,15 +39,15 @@ namespace Volo.Abp.SettingManagement
         {
             // Arrange
             // GetOrNullAsync will cache language.
-            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
+            await _settingManagementStore.GetOrNullAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()).ConfigureAwait(false);
 
             // Act
-            var lang = await _settingRepository.FindAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString());
-            await _settingRepository.DeleteAsync(lang);
+            var lang = await _settingRepository.FindAsync("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()).ConfigureAwait(false);
+            await _settingRepository.DeleteAsync(lang).ConfigureAwait(false);
 
             // Assert
             (await _cache.GetAsync(
-                SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString()))).ShouldBeNull();
+                SettingCacheItem.CalculateCacheKey("MySetting2", UserSettingValueProvider.ProviderName, _testData.User1Id.ToString())).ConfigureAwait(false)).ShouldBeNull();
         }
     }
 }

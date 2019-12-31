@@ -51,9 +51,9 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 args.TemplateName,
                 SourceCodeTypes.Template,
                 args.Version
-            );
+            ).ConfigureAwait(false);
              
-            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync().ConfigureAwait(false);
             if (apiKeyResult?.ApiKey != null)
             {
                 args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
@@ -103,7 +103,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 ProjectName = args.SolutionName.FullName,
                 TemplateName = args.TemplateName,
                 TemplateVersion = templateFile.Version
-            });
+            }).ConfigureAwait(false);
 
             return new ProjectBuildResult(context.Result.ZipContent, args.SolutionName.ProjectName);
         }

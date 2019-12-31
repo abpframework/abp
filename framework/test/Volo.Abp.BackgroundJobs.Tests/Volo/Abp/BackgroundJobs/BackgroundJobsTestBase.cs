@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.BackgroundJobs
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.BackgroundJobs
 {
     public abstract class BackgroundJobsTestBase : AbpIntegratedTest<AbpBackgroundJobsTestModule>
     {

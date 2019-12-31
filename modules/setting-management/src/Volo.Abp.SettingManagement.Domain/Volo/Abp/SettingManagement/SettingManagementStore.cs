@@ -26,58 +26,58 @@ namespace Volo.Abp.SettingManagement
 
         public async Task<string> GetOrNullAsync(string name, string providerName, string providerKey)
         {
-            var cacheItem = await GetCacheItemAsync(name, providerName, providerKey);
+            var cacheItem = await GetCacheItemAsync(name, providerName, providerKey).ConfigureAwait(false);
             return cacheItem.Value;
         }
 
         public async Task SetAsync(string name, string value, string providerName, string providerKey)
         {
-            var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
+            var setting = await SettingRepository.FindAsync(name, providerName, providerKey).ConfigureAwait(false);
             if (setting == null)
             {
                 setting = new Setting(GuidGenerator.Create(), name, value, providerName, providerKey);
-                await SettingRepository.InsertAsync(setting);
+                await SettingRepository.InsertAsync(setting).ConfigureAwait(false);
             }
             else
             {
                 setting.Value = value;
-                await SettingRepository.UpdateAsync(setting);
+                await SettingRepository.UpdateAsync(setting).ConfigureAwait(false);
             }
         }
 
         public async Task<List<SettingValue>> GetListAsync(string providerName, string providerKey)
         {
-            var settings = await SettingRepository.GetListAsync(providerName, providerKey);
+            var settings = await SettingRepository.GetListAsync(providerName, providerKey).ConfigureAwait(false);
             return settings.Select(s => new SettingValue(s.Name, s.Value)).ToList();
         }
 
         public async Task DeleteAsync(string name, string providerName, string providerKey)
         {
-            var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
+            var setting = await SettingRepository.FindAsync(name, providerName, providerKey).ConfigureAwait(false);
             if (setting != null)
             {
-                await SettingRepository.DeleteAsync(setting);
+                await SettingRepository.DeleteAsync(setting).ConfigureAwait(false);
             }
         }
 
         protected virtual async Task<SettingCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
         {
             var cacheKey = CalculateCacheKey(name, providerName, providerKey);
-            var cacheItem = await Cache.GetAsync(cacheKey);
+            var cacheItem = await Cache.GetAsync(cacheKey).ConfigureAwait(false);
 
             if (cacheItem != null)
             {
                 return cacheItem;
             }
 
-            var setting = await SettingRepository.FindAsync(name, providerName, providerKey);
+            var setting = await SettingRepository.FindAsync(name, providerName, providerKey).ConfigureAwait(false);
 
             cacheItem = new SettingCacheItem(setting?.Value);
 
             await Cache.SetAsync(
                 cacheKey,
                 cacheItem
-            );
+            ).ConfigureAwait(false);
 
             return cacheItem;
         }

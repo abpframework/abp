@@ -3,6 +3,7 @@ using Shouldly;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Caching
@@ -25,7 +26,7 @@ namespace Volo.Abp.Caching
             var cacheKey = Guid.NewGuid().ToString();
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey);
+            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
             cacheItem.ShouldBeNull();
 
             GetDefaultCachingOptions(personCache).SlidingExpiration.ShouldBe(TimeSpan.FromMinutes(20));

@@ -8,7 +8,7 @@ describe('SortOrderIconComponent', () => {
 
   beforeEach(() => {
     spectator = createHost(
-      '<abp-sort-order-icon key="testKey" [(selectedSortKey)]="selectedSortKey" [(order)]="order"></abp-sort-order-icon>',
+      '<abp-sort-order-icon sortKey="testKey" [(selectedSortKey)]="selectedSortKey" [(order)]="order"></abp-sort-order-icon>',
       {
         hostProps: {
           selectedSortKey: '',

@@ -15,7 +15,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<string[]> GetRolesAsync(Guid userId)
         {
-            return (await _identityUserRepository.GetRoleNamesAsync(userId)).ToArray();
+            return (await _identityUserRepository.GetRoleNamesAsync(userId).ConfigureAwait(false)).ToArray();
         }
     }
 }
