@@ -264,7 +264,7 @@
           "items": [
             {
               "text": "PostgreSQL integrace",
-              "path": "EntityFrameworkCore-PostgreSQL-Integration.md"
+              "path": "Entity-Framework-Core-PostgreSQL.md"
             }
           ]
         },
