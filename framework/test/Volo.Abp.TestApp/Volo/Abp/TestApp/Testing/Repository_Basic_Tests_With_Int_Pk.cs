@@ -27,7 +27,7 @@ namespace Volo.Abp.TestApp.Testing
                 entity.ShouldNotBeNull();
                 entity.Name.ShouldBe("Entity1");
                 return Task.CompletedTask;
-            });
+            }).ConfigureAwait(false);
         }
 
         [Fact]
@@ -35,10 +35,10 @@ namespace Volo.Abp.TestApp.Testing
         {
             await WithUnitOfWorkAsync(async () =>
             {
-                var entity = await EntityWithIntPkRepository.GetAsync(1);
+                var entity = await EntityWithIntPkRepository.GetAsync(1).ConfigureAwait(false);
                 entity.ShouldNotBeNull();
                 entity.Name.ShouldBe("Entity1");
-            });
+            }).ConfigureAwait(false);
         }
     }
 }

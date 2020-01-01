@@ -18,13 +18,13 @@ namespace Volo.Abp.TestApp.EntityFrameworkCore
 
         public async Task<City> FindByNameAsync(string name)
         {
-            return await this.FirstOrDefaultAsync(c => c.Name == name);
+            return await this.FirstOrDefaultAsync(c => c.Name == name).ConfigureAwait(false);
         }
 
         public async Task<List<Person>> GetPeopleInTheCityAsync(string cityName)
         {
-            var city = await FindByNameAsync(cityName);
-            return await DbContext.People.Where(p => p.CityId == city.Id).ToListAsync();
+            var city = await FindByNameAsync(cityName).ConfigureAwait(false);
+            return await DbContext.People.Where(p => p.CityId == city.Id).ToListAsync().ConfigureAwait(false);
         }
     }
 }

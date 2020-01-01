@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.Account.Web.Settings;
+using Volo.Abp.Account.Settings;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -22,7 +22,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task OnGet()
         {
-            await CheckSelfRegistrationAsync();
+            await CheckSelfRegistrationAsync().ConfigureAwait(false);
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
@@ -30,22 +30,22 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             ValidateModel();
 
-            await CheckSelfRegistrationAsync();
+            await CheckSelfRegistrationAsync().ConfigureAwait(false);
 
             var user = new IdentityUser(GuidGenerator.Create(), Input.UserName, Input.EmailAddress, CurrentTenant.Id);
 
-            (await UserManager.CreateAsync(user, Input.Password)).CheckErrors();
-            
-            await UserManager.SetEmailAsync(user, Input.EmailAddress);
+            (await UserManager.CreateAsync(user, Input.Password).ConfigureAwait(false)).CheckErrors();
 
-            await SignInManager.SignInAsync(user, isPersistent: false);
+            await UserManager.SetEmailAsync(user, Input.EmailAddress).ConfigureAwait(false);
+
+            await SignInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
 
             return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
         {
-            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled).ConfigureAwait(false))
             {
                 throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
             }

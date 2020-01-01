@@ -37,7 +37,7 @@ namespace Volo.Abp.Cli.Commands
 
             if (updateNuget || !updateNpm)
             {
-                await UpdateNugetPackages(commandLineArgs, directory);
+                await UpdateNugetPackages(commandLineArgs, directory).ConfigureAwait(false);
             }
 
             if (updateNpm || !updateNuget)
@@ -62,7 +62,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews).ConfigureAwait(false);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -74,7 +74,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews).ConfigureAwait(false);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;

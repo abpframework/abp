@@ -97,7 +97,7 @@ namespace Volo.Abp.Cli.Commands
                     gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
-            );
+            ).ConfigureAwait(false);
 
             using (var templateFileStream = new MemoryStream(result.ZipContent))
             {

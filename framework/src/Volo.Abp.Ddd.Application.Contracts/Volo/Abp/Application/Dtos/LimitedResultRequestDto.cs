@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Localization;
 using Volo.Abp.Application.Localization.Resources.AbpDdd;
 
@@ -32,13 +33,19 @@ namespace Volo.Abp.Application.Dtos
 
         public virtual IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            var l = validationContext.GetService(typeof(IStringLocalizer<AbpDddResource>)) as IStringLocalizer<AbpDddResource>;
-             
             if (MaxResultCount > MaxMaxResultCount)
             {
+                var localizer = validationContext.GetRequiredService<IStringLocalizer<AbpDddApplicationContractsResource>>();
+
                 yield return new ValidationResult(
-                    errorMessage:l?["MaxResultCountExceededExceptionMessage", nameof(MaxResultCount), MaxMaxResultCount, typeof(LimitedResultRequestDto).FullName, nameof(MaxMaxResultCount)],
-                    new []{nameof(MaxResultCount)});
+                    localizer[
+                        "MaxResultCountExceededExceptionMessage", 
+                        nameof(MaxResultCount),
+                        MaxMaxResultCount, 
+                        typeof(LimitedResultRequestDto).FullName, 
+                        nameof(MaxMaxResultCount)
+                    ],
+                    new[] { nameof(MaxResultCount) });
             }
         }
     }

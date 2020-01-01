@@ -36,15 +36,15 @@ namespace Microsoft.AspNetCore.RequestLocalization
         {
             if (_requestLocalizationOptions == null)
             {
-                using (await _syncSemaphore.LockAsync())
+                using (await _syncSemaphore.LockAsync().ConfigureAwait(false))
                 {
                     using (var serviceScope = _serviceProviderFactory.CreateScope())
                     {
                         var languageProvider = serviceScope.ServiceProvider.GetRequiredService<ILanguageProvider>();
                         var settingProvider = serviceScope.ServiceProvider.GetRequiredService<ISettingProvider>();
 
-                        var languages = await languageProvider.GetLanguagesAsync();
-                        var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage);
+                        var languages = await languageProvider.GetLanguagesAsync().ConfigureAwait(false);
+                        var defaultLanguage = await settingProvider.GetOrNullAsync(LocalizationSettingNames.DefaultLanguage).ConfigureAwait(false);
 
                         var options = !languages.Any()
                             ? new RequestLocalizationOptions()

@@ -32,29 +32,29 @@ namespace Volo.Abp.Emailing
                 Subject = subject,
                 Body = body,
                 IsBodyHtml = isBodyHtml
-            });
+            }).ConfigureAwait(false);
         }
 
         public virtual async Task SendAsync(string from, string to, string subject, string body, bool isBodyHtml = true)
         {
-            await SendAsync(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml });
+            await SendAsync(new MailMessage(from, to, subject, body) { IsBodyHtml = isBodyHtml }).ConfigureAwait(false);
         }
 
         public virtual async Task SendAsync(MailMessage mail, bool normalize = true)
         {
             if (normalize)
             {
-                await NormalizeMailAsync(mail);
+                await NormalizeMailAsync(mail).ConfigureAwait(false);
             }
 
-            await SendEmailAsync(mail);
+            await SendEmailAsync(mail).ConfigureAwait(false);
         }
 
         public virtual async Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
             if (!BackgroundJobManager.IsAvailable())
             {
-                await SendAsync(to, subject, body, isBodyHtml);
+                await SendAsync(to, subject, body, isBodyHtml).ConfigureAwait(false);
                 return;
             }
 
@@ -66,7 +66,7 @@ namespace Volo.Abp.Emailing
                     Body = body,
                     IsBodyHtml = isBodyHtml
                 }
-            );
+            ).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -86,8 +86,8 @@ namespace Volo.Abp.Emailing
             if (mail.From == null || mail.From.Address.IsNullOrEmpty())
             {
                 mail.From = new MailAddress(
-                    await Configuration.GetDefaultFromAddressAsync(),
-                    await Configuration.GetDefaultFromDisplayNameAsync(),
+                    await Configuration.GetDefaultFromAddressAsync().ConfigureAwait(false),
+                    await Configuration.GetDefaultFromDisplayNameAsync().ConfigureAwait(false),
                     Encoding.UTF8
                     );
             }

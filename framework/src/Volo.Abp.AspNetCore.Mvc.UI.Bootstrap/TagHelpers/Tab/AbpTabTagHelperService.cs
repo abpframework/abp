@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
         {
             SetPlaceholderForNameIfNotProvided();
 
-            var innerContent = await output.GetChildContentAsync();
+            var innerContent = await output.GetChildContentAsync().ConfigureAwait(false);
             var tabHeader = GetTabHeaderItem(context, output);
             var tabContent = GetTabContentItem(context, output, innerContent.GetContent());
 

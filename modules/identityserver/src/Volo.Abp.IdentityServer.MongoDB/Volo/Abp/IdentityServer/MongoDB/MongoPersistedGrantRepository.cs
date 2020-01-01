@@ -20,14 +20,14 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
 
             return await GetMongoQueryable()
-                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken));
+                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<List<PersistedGrant>> GetListBySubjectIdAsync(string subjectId, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
                 .Where(x => x.SubjectId == subjectId)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string subjectId, string clientId, CancellationToken cancellationToken = default)
@@ -35,7 +35,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            ).ConfigureAwait(false);
         }
 
         public async Task DeleteAsync(string subjectId, string clientId, string type, CancellationToken cancellationToken = default)
@@ -43,7 +43,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            );
+            ).ConfigureAwait(false);
         }
     }
 }

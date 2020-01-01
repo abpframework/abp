@@ -28,13 +28,13 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
         public async Task OnGetAsync(Guid id)
         {
-            UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await _identityUserAppService.GetAsync(id));
+            UserInfo = ObjectMapper.Map<IdentityUserDto, UserInfoViewModel>(await _identityUserAppService.GetAsync(id).ConfigureAwait(false));
 
             Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(
-                (await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto())).Items
+                (await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto()).ConfigureAwait(false)).Items
             );
 
-            var userRoleNames = (await _identityUserAppService.GetRolesAsync(UserInfo.Id)).Items.Select(r => r.Name).ToList();
+            var userRoleNames = (await _identityUserAppService.GetRolesAsync(UserInfo.Id).ConfigureAwait(false)).Items.Select(r => r.Name).ToList();
             foreach (var role in Roles)
             {
                 if (userRoleNames.Contains(role.Name))
@@ -50,7 +50,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
 
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserUpdateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
-            await _identityUserAppService.UpdateAsync(UserInfo.Id, input);
+            await _identityUserAppService.UpdateAsync(UserInfo.Id, input).ConfigureAwait(false);
 
             return NoContent();
         }

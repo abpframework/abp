@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
-using Volo.Abp.UI.Navigation;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.UI.Navigation
@@ -19,7 +19,7 @@ namespace Volo.Abp.UI.Navigation
         [Fact]
         public async Task Should_Get_Menu()
         {
-            var mainMenu = await _menuManager.GetAsync(StandardMenus.Main);
+            var mainMenu = await _menuManager.GetAsync(StandardMenus.Main).ConfigureAwait(false);
 
             mainMenu.Name.ShouldBe(StandardMenus.Main);
             mainMenu.DisplayName.ShouldBe("Main Menu");

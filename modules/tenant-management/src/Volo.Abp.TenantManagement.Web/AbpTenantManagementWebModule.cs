@@ -1,13 +1,9 @@
-﻿using Localization.Resources.AbpUi;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
-using Volo.Abp.FeatureManagement.Localization;
-using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Localization;
 using Volo.Abp.TenantManagement.Web.Navigation;

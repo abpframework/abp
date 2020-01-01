@@ -1,5 +1,6 @@
 ﻿using Shouldly;
 using Volo.Abp.Minify.Styles;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Minify.NUglify

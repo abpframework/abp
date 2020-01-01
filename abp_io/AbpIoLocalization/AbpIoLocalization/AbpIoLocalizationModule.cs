@@ -8,13 +8,14 @@ using AbpIoLocalization.Support.Localization;
 using AbpIoLocalization.Www;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace AbpIoLocalization
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(AbpValidationModule))]
     public class AbpIoLocalizationModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

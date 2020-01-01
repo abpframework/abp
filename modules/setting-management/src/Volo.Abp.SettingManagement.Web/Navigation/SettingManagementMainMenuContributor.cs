@@ -23,7 +23,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
             var settingPageCreationContext = new SettingPageCreationContext(context.ServiceProvider);
             if (
                 !settingManagementPageOptions.Contributors.Any() ||
-                !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext))
+                !(await CheckAnyOfPagePermissionsGranted(settingManagementPageOptions, settingPageCreationContext).ConfigureAwait(false))
                 )
             {
                 return;
@@ -49,7 +49,7 @@ namespace Volo.Abp.SettingManagement.Web.Navigation
         {
             foreach (var contributor in settingManagementPageOptions.Contributors)
             {
-                if (await contributor.CheckPermissionsAsync(settingPageCreationContext))
+                if (await contributor.CheckPermissionsAsync(settingPageCreationContext).ConfigureAwait(false))
                 {
                     return true;
                 }

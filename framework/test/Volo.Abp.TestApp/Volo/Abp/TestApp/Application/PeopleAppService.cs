@@ -21,7 +21,7 @@ namespace Volo.Abp.TestApp.Application
         
         public async Task<ListResultDto<PhoneDto>> GetPhones(Guid id, GetPersonPhonesFilter filter)
         {
-            var phones = (await GetEntityByIdAsync(id)).Phones
+            var phones = (await GetEntityByIdAsync(id).ConfigureAwait(false)).Phones
                 .WhereIf(filter.Type.HasValue, p => p.Type == filter.Type)
                 .ToList();
             
@@ -32,19 +32,19 @@ namespace Volo.Abp.TestApp.Application
 
         public async Task<PhoneDto> AddPhone(Guid id, PhoneDto phoneDto)
         {
-            var person = await GetEntityByIdAsync(id);
+            var person = await GetEntityByIdAsync(id).ConfigureAwait(false);
             var phone = new Phone(person.Id, phoneDto.Number, phoneDto.Type);
 
             person.Phones.Add(phone);
-            await Repository.UpdateAsync(person);
+            await Repository.UpdateAsync(person).ConfigureAwait(false);
             return ObjectMapper.Map<Phone, PhoneDto>(phone);
         }
 
         public async Task RemovePhone(Guid id, string number)
         {
-            var person = await GetEntityByIdAsync(id);
+            var person = await GetEntityByIdAsync(id).ConfigureAwait(false);
             person.Phones.RemoveAll(p => p.Number == number);
-            await Repository.UpdateAsync(person);
+            await Repository.UpdateAsync(person).ConfigureAwait(false);
         }
 
         [Authorize]

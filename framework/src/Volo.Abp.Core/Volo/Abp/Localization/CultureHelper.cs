@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Volo.Abp.Localization
 {
-    public static class AbpCultureHelper
+    public static class CultureHelper
     {
         public static IDisposable Use([NotNull] string culture, string uiCulture = null)
         {

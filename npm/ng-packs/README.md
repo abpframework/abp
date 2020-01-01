@@ -1,4 +1,10 @@
-<h1> Abp Ng Packages </h1>
+# Abp Ng Packages
+
+<a href="https://github.com/abpframework/abp/actions?query=workflow%3AAngular">![action badge](https://img.shields.io/github/workflow/status/abpframework/abp/Angular)</a>
+<a href="https://github.com/abpframework/abp/labels/ui-angular">![issues](https://img.shields.io/github/issues/abpframework/abp/ui-angular)</a>
+<a href="https://github.com/abpframework/abp/pulls?utf8=%E2%9C%93&q=is%3Apr+is%3Aopen+label%3Aui-angular">![pull requests](https://img.shields.io/github/issues-pr-raw/abpframework/abp/ui-angular)</a>
+<a href="https://npmjs.org/package/@abp/ng.core">![npm](https://img.shields.io/npm/dm/@abp/ng.core)</a>
+![npm version](https://img.shields.io/npm/v/@abp/ng.core?label=version)
 
 ## Getting started
 

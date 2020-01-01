@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.DynamicProxy
@@ -40,9 +41,9 @@ namespace Volo.Abp.DynamicProxy
 
 		    var target = ServiceProvider.GetService<SimpleInterceptionTargetClass>();
 
-		    //Act
+            //Act
 
-		    await target.DoItAsync();
+            await target.DoItAsync().ConfigureAwait(false);
 
 		    //Assert
 
@@ -65,7 +66,7 @@ namespace Volo.Abp.DynamicProxy
 
 		    //Act
 
-		    var result = await target.GetValueAsync();
+		    var result = await target.GetValueAsync().ConfigureAwait(false);
 
 		    //Assert
 
@@ -89,9 +90,9 @@ namespace Volo.Abp.DynamicProxy
 
 		    //Act & Assert
 
-		    (await target.GetValueAsync(42)).ShouldBe(42); //First run, not cached yet
-		    (await target.GetValueAsync(43)).ShouldBe(42); //First run, cached previous value
-		    (await target.GetValueAsync(44)).ShouldBe(42); //First run, cached previous value
+		    (await target.GetValueAsync(42).ConfigureAwait(false)).ShouldBe(42); //First run, not cached yet
+		    (await target.GetValueAsync(43).ConfigureAwait(false)).ShouldBe(42); //First run, cached previous value
+		    (await target.GetValueAsync(44).ConfigureAwait(false)).ShouldBe(42); //First run, cached previous value
 	    }
 	}
 }

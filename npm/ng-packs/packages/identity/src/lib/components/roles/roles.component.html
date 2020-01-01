@@ -163,9 +163,39 @@
 </abp-modal>
 
 <abp-permission-management
-  [(visible)]="visiblePermissions"
-  providerName="R"
-  [providerKey]="providerKey"
-  [hideBadges]="true"
+  #abpPermissionManagement="abpPermissionManagement"
+  *abpReplaceableTemplate="
+    {
+      inputs: {
+        providerName: { value: 'R' },
+        providerKey: { value: providerKey },
+        visible: { value: visiblePermissions, twoWay: true },
+        hideBadges: { value: true }
+      },
+      outputs: { visibleChange: onVisiblePermissionChange },
+      componentKey: 'PermissionManagement.PermissionManagementComponent'
+    };
+    let init = initTemplate
+  "
+  (abpInit)="init(abpPermissionManagement)"
 >
 </abp-permission-management>
+
+<!-- <abp-permission-management
+  #abpPermissionManagement="abpPermissionManagement"
+  *abpReplaceableTemplate="{
+    inputs: {
+      providerName: { value: 'R' },
+      providerKey: { value: providerKey },
+      visible: { value: visiblePermissions, twoWay: true },
+      hideBadges: { value: true }
+    },
+    outputs: { visibleChange: onVisiblePermissionChange },
+    componentKey: 'PermissionManagement.PermissionManagementComponent'
+  }"
+  [(visible)]="visiblePermissions"
+  [providerKey]="providerKey"
+  [hideBadges]="true"
+  providerName="R"
+>
+</abp-permission-management> -->

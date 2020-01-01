@@ -6,12 +6,14 @@ import { throwError } from 'rxjs';
 import { catchError, take, finalize } from 'rxjs/operators';
 import snq from 'snq';
 import { AccountService } from '../../services/account.service';
+import { Account } from '../../models/account';
 
 @Component({
   selector: 'abp-tenant-box',
   templateUrl: './tenant-box.component.html',
 })
-export class TenantBoxComponent implements OnInit {
+export class TenantBoxComponent
+  implements OnInit, Account.TenantBoxComponentInputs, Account.TenantBoxComponentOutputs {
   tenant = {} as ABP.BasicItem;
 
   tenantName: string;
@@ -20,7 +22,11 @@ export class TenantBoxComponent implements OnInit {
 
   inProgress: boolean;
 
-  constructor(private store: Store, private toasterService: ToasterService, private accountService: AccountService) {}
+  constructor(
+    private store: Store,
+    private toasterService: ToasterService,
+    private accountService: AccountService,
+  ) {}
 
   ngOnInit() {
     this.tenant = this.store.selectSnapshot(SessionState.getTenant) || ({} as ABP.BasicItem);
@@ -56,9 +62,13 @@ export class TenantBoxComponent implements OnInit {
             this.tenantName = this.tenant.name;
             this.isModalVisible = false;
           } else {
-            this.toasterService.error('AbpUiMultiTenancy::GivenTenantIsNotAvailable', 'AbpUi::Error', {
-              messageLocalizationParams: [this.tenant.name],
-            });
+            this.toasterService.error(
+              'AbpUiMultiTenancy::GivenTenantIsNotAvailable',
+              'AbpUi::Error',
+              {
+                messageLocalizationParams: [this.tenant.name],
+              },
+            );
             this.tenant = {} as ABP.BasicItem;
           }
           this.store.dispatch(new SetTenant(success ? this.tenant : null));

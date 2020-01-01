@@ -40,7 +40,7 @@ namespace Volo.Abp.PermissionManagement
                         providerKey,
                         tenantId
                     )
-                );
+                ).ConfigureAwait(false);
             }
         }
     }

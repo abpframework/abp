@@ -71,11 +71,11 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         {
             CheckDisposed();
 
-            using (await SyncObj.LockAsync())
+            using (await SyncObj.LockAsync().ConfigureAwait(false))
             {
-                await EnsureInitializedAsync();
+                await EnsureInitializedAsync().ConfigureAwait(false);
 
-                await PublishAsync(args, priority, delay);
+                await PublishAsync(args, priority, delay).ConfigureAwait(false);
 
                 return null;
             }
@@ -90,9 +90,9 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return;
             }
 
-            using (await SyncObj.LockAsync())
+            using (await SyncObj.LockAsync().ConfigureAwait(false))
             {
-                await EnsureInitializedAsync();
+                await EnsureInitializedAsync().ConfigureAwait(false);
             }
         }
 

@@ -16,7 +16,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task FindDefaultConnectionString()
         {
-            var acme = await _tenantRepository.FindByNameAsync("acme");
+            var acme = await _tenantRepository.FindByNameAsync("acme").ConfigureAwait(false);
 
             acme.ShouldNotBeNull();
             acme.FindDefaultConnectionString().ShouldBe("DefaultConnString-Value");
@@ -25,7 +25,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task FindConnectionString()
         {
-            var acme = await _tenantRepository.FindByNameAsync("acme");
+            var acme = await _tenantRepository.FindByNameAsync("acme").ConfigureAwait(false);
 
             acme.ShouldNotBeNull();
             acme.FindConnectionString(Data.ConnectionStrings.DefaultConnectionStringName).ShouldBe("DefaultConnString-Value");

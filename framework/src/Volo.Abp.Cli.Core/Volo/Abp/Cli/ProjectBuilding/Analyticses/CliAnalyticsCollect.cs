@@ -38,12 +38,12 @@ namespace Volo.Abp.Cli.ProjectBuilding.Analyticses
                     $"{CliUrls.WwwAbpIo}api/clianalytics/collect",
                     new StringContent(postData, Encoding.UTF8, MimeTypes.Application.Json),
                     _cancellationTokenProvider.Token
-                );
+                ).ConfigureAwait(false);
 
                 if (!responseMessage.IsSuccessStatusCode)
                 {
                     var exceptionMessage = "Remote server returns '" + (int)responseMessage.StatusCode + "-" + responseMessage.ReasonPhrase + "'. ";
-                    var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage);
+                    var remoteServiceErrorMessage = await _remoteServiceExceptionHandler.GetAbpRemoteServiceErrorAsync(responseMessage).ConfigureAwait(false);
 
                     if (remoteServiceErrorMessage != null)
                     {

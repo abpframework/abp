@@ -4,6 +4,6 @@ namespace Volo.Abp.Cli.Licensing
 {
     public interface IApiKeyService
     {
-        Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync();
+        Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false);
     }
 }

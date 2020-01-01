@@ -117,9 +117,9 @@ namespace Volo.Abp.EntityFrameworkCore
 
                 var changeReport = ApplyAbpConcepts();
 
-                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
 
-                await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
+                await EntityChangeEventHelper.TriggerEventsAsync(changeReport).ConfigureAwait(false);
 
                 if (auditLog != null)
                 {
