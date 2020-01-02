@@ -1,18 +1,18 @@
-﻿# Switch to EF Core PostgreSQL Provider
+﻿# Switch to EF Core SQLite Provider
 
-This document explains how to switch to the **PostgreSQL** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
+This document explains how to switch to the **SQLite** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 
 ## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package
 
-`.EntityFrameworkCore` project in the solution depends on the [Volo.Abp.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.SqlServer) NuGet package. Remove this package and add the same version of the [Volo.Abp.EntityFrameworkCore.PostgreSql](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.PostgreSql) package.
+`.EntityFrameworkCore` project in the solution depends on the [Volo.Abp.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.SqlServer) NuGet package. Remove this package and add the same version of the [Volo.Abp.EntityFrameworkCore.Sqlite](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.Sqlite) package.
 
 ## Replace the Module Dependency
 
-Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, remove `typeof(AbpEntityFrameworkCoreSqlServerModule)` from the `DependsOn` attribute, add `typeof(AbpEntityFrameworkCorePostgreSqlModule)` (also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.PostgreSql;`).
+Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, remove `typeof(AbpEntityFrameworkCoreSqlServerModule)` from the `DependsOn` attribute, add `typeof(AbpEntityFrameworkCoreSqliteModule)` (also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.Sqlite;`).
 
-## UsePostgreSql()
+## UseSqlite()
 
-Find `UseSqlServer()` calls in your solution, replace with `UsePostgreSql()`. Check the following files:
+Find `UseSqlServer()` calls in your solution, replace with `UseSqlite()`. Check the following files:
 
 * *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
 * *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
@@ -21,7 +21,7 @@ Find `UseSqlServer()` calls in your solution, replace with `UsePostgreSql()`. Ch
 
 ## Change the Connection Strings
 
-PostgreSql connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/postgresql/ ) for details of PostgreSql connection string options.
+SQLite connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/sqlite/ ) for details of SQLite connection string options.
 
 You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 

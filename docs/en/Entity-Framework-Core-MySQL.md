@@ -47,7 +47,7 @@ Then `ConfigureIdentityServer()` method will set the field lengths to not exceed
 The startup template uses [Entity Framework Core's Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). EF Core Migrations depend on the selected DBMS provider. So, changing the DBMS provider will cause the migration fails.
 
 * Delete the Migrations folder under the `.EntityFrameworkCore.DbMigrations` project and re-build the solution.
-* Run `Add-Migration "Initial"` on the Package Manager Console (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore.DbMigrations` project as the default project in de Package Manager Console).
+* Run `Add-Migration "Initial"` on the Package Manager Console (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore.DbMigrations` project as the default project in the Package Manager Console).
 
 This will create a database migration with all database objects (tables) configured.
 
