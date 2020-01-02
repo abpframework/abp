@@ -1,73 +1,41 @@
 ﻿# Switch to EF Core PostgreSQL Provider
 
-> See [Entity Framework Core Integration document](../Entity-Framework-Core.md) for the basics of the EF Core integration.
+This document explains how to switch to the **PostgreSQL** database provider for **[the application startup template](Startup-Templates/Application.md)** which comes with SQL Server provider pre-configured.
 
-## EntityFrameworkCore Project Update
+## Replace the Volo.Abp.EntityFrameworkCore.SqlServer Package
 
-- In `Acme.BookStore.EntityFrameworkCore` project replace package `Volo.Abp.EntityFrameworkCore.SqlServer` with `Volo.Abp.EntityFrameworkCore.PostgreSql` 
-- Update to use PostgreSQL in `BookStoreEntityFrameworkCoreModule`
-  - Replace the `AbpEntityFrameworkCoreSqlServerModule` with the `AbpEntityFrameworkCorePostgreSqlModule`
-  - Replace the `options.UseSqlServer()` with the `options.UsePostgreSql()`
-- In other projects update the PostgreSQL connection string in necessary `appsettings.json` files
-  - more info of [PostgreSQL connection strings](https://www.connectionstrings.com/postgresql/),You need to pay attention to `Npgsql` in this document
+`.EntityFrameworkCore` project in the solution depends on the [Volo.Abp.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.SqlServer) NuGet package. Remove this package and add the same version of the [Volo.Abp.EntityFrameworkCore.PostgreSql](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.PostgreSql) package.
 
-##  EntityFrameworkCore.DbMigrations Project Update
-- Update to use PostgreSQL in `XXXMigrationsDbContextFactory`
-  - Replace the `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseSqlServer()` with the `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseNpgsql()`
+## Replace the Module Dependency
 
-## Delete Existing Migrations
+Find ***YourProjectName*EntityFrameworkCoreModule** class inside the `.EntityFrameworkCore` project, remove `typeof(AbpEntityFrameworkCoreSqlServerModule)` from the `DependsOn` attribute, add `typeof(AbpEntityFrameworkCorePostgreSqlModule)` (also replace `using Volo.Abp.EntityFrameworkCore.SqlServer;` with `using Volo.Abp.EntityFrameworkCore.PostgreSql;`).
 
-Delete all existing migration files (including `DbContextModelSnapshot`)
+## UsePostgreSql()
 
-![postgresql-delete-initial-migrations](images/postgresql-delete-initial-migrations.png)
+Find `UseSqlServer()` calls in your solution, replace with `UsePostgreSql()`. Check the following files:
 
-## Regenerate Initial Migration
+* *YourProjectName*EntityFrameworkCoreModule.cs inside the `.EntityFrameworkCore` project.
+* *YourProjectName*MigrationsDbContextFactory.cs inside the `.EntityFrameworkCore.DbMigrations` project.
 
-Set the correct startup project (usually a web project)
+> Depending on your solution structure, you may find more code files need to be changed.
 
-![set-as-startup-project](../images/set-as-startup-project.png)
+## Change the Connection Strings
 
-Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), select the `.EntityFrameworkCore.DbMigrations` as the **Default project** and execute the following command:
+PostgreSql connection strings are different than SQL Server connection strings. So, check all `appsettings.json` files in your solution and replace the connection strings inside them. See the [connectionstrings.com]( https://www.connectionstrings.com/postgresql/ ) for details of PostgreSql connection string options.
 
-Run `Add-Migration` command.
-````
-PM> Add-Migration Initial
-````
+You typically will change the `appsettings.json` inside the `.DbMigrator` and `.Web` projects, but it depends on your solution structure.
 
-## Update the Database
+## Re-Generate the Migrations
 
-You have two options to create the database.
+The startup template uses [Entity Framework Core's Code First Migrations](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). EF Core Migrations depend on the selected DBMS provider. So, changing the DBMS provider will cause the migration fails.
 
-## Using the DbMigrator Application
+* Delete the Migrations folder under the `.EntityFrameworkCore.DbMigrations` project and re-build the solution.
+* Run `Add-Migration "Initial"` on the Package Manager Console (select the `.DbMigrator`  (or `.Web`) project as the startup project in the Solution Explorer and select the `.EntityFrameworkCore.DbMigrations` project as the default project in the Package Manager Console).
 
-The solution contains a console application (named `Acme.BookStore.DbMigrator` in this sample) that can create database, apply migrations and seed initial data. It is useful on development as well as on production environment.
+This will create a database migration with all database objects (tables) configured.
 
-> `.DbMigrator` project has its own `appsettings.json`. So, if you have changed the connection string above, you should also change this one.
+Run the `.DbMigrator` project to create the database and seed the initial data.
 
-Right click to the `.DbMigrator` project and select **Set as StartUp Project**:
+## Run the Application
 
-![set-as-startup-project](../images/set-as-startup-project.png)
-
-Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown below:
-
-![set-as-startup-project](../images/db-migrator-app.png)
-
-### Using EF Core Update-Database Command
-
-Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations.
-
-Set the correct startup project (usually a web project)
-
-![set-as-startup-project](../images/set-as-startup-project.png)
-
-Open the **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), select the `.EntityFrameworkCore.DbMigrations` as the **Default project** and execute the following command:
-
-````
-PM> Update-Database
-````
-
-This will create a new database based on the configured connection string.
-
-![postgresql-update-database](images/postgresql-update-database.png)
-
-> Using the `.DbMigrator` tool is the suggested way, because it also seeds the initial data to be able to properly run the web application.
+It is ready. Just run the application and enjoy coding.
