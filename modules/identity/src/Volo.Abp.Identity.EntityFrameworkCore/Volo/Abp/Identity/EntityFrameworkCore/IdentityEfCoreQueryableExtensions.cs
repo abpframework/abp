@@ -16,7 +16,8 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .Include(x => x.Roles)
                 .Include(x => x.Logins)
                 .Include(x => x.Claims)
-                .Include(x => x.Tokens);
+                .Include(x => x.Tokens)
+                .Include(x => x.OrganizationUnits);
         }
 
         public static IQueryable<IdentityRole> IncludeDetails(this IQueryable<IdentityRole> queryable, bool include = true)

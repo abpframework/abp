@@ -19,10 +19,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
         public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
 
-        public DbSet<OrganizationUnitRole> OrganizationUnitRoles { get; set; }
-
-        public DbSet<OrganizationUnitUser> OrganizationUnitUsers { get; set; }
-
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
             : base(options)
         {

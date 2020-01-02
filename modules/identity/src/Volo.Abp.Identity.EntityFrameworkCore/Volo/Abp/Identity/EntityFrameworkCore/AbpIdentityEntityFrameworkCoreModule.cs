@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users.EntityFrameworkCore;
 
@@ -16,6 +17,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 options.AddRepository<IdentityUser, EfCoreIdentityUserRepository>();
                 options.AddRepository<IdentityRole, EfCoreIdentityRoleRepository>();
                 options.AddRepository<IdentityClaimType, EfCoreIdentityClaimTypeRepository>();
+                options.AddRepository<OrganizationUnit, EfCoreOrganizationUnitRepository>();
             });
         }
     }

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Guids;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Users;
 
@@ -125,6 +126,11 @@ namespace Volo.Abp.Identity
         /// </summary>
         public virtual ICollection<IdentityUserToken> Tokens { get; protected set; }
 
+        /// <summary>
+        /// Navigation property for this organization units.
+        /// </summary>
+        public virtual ICollection<OrganizationUnitUser> OrganizationUnits { get; protected set; }
+
         protected IdentityUser()
         {
             ExtraProperties = new Dictionary<string, object>();
@@ -148,6 +154,7 @@ namespace Volo.Abp.Identity
             Claims = new Collection<IdentityUserClaim>();
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
+            OrganizationUnits = new Collection<OrganizationUnitUser>();
 
             ExtraProperties = new Dictionary<string, object>();
         }
@@ -275,6 +282,37 @@ namespace Volo.Abp.Identity
         public virtual void RemoveToken(string loginProvider, string name)
         {
             Tokens.RemoveAll(t => t.LoginProvider == loginProvider && t.Name == name);
+        }
+
+        public virtual void AddOrganizationUnit(Guid organizationUnitId)
+        {
+            Check.NotNull(organizationUnitId, nameof(organizationUnitId));
+
+            if (IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.Add(new OrganizationUnitUser(TenantId, Id, organizationUnitId));
+        }
+
+        public virtual void RemoveOrganizationUnit(Guid organizationUnitId)
+        {
+            Check.NotNull(organizationUnitId, nameof(organizationUnitId));
+
+            if (IsInOrganizationUnit(organizationUnitId))
+            {
+                return;
+            }
+
+            OrganizationUnits.RemoveAll(ou => ou.OrganizationUnitId == organizationUnitId);
+        }
+
+        public virtual bool IsInOrganizationUnit(Guid organizationUnitId)
+        {
+            Check.NotNull(organizationUnitId, nameof(organizationUnitId));
+
+            return OrganizationUnits.Any(ou => ou.OrganizationUnitId == organizationUnitId);
         }
 
         public override string ToString()
