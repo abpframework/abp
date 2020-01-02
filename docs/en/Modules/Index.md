@@ -17,7 +17,7 @@ There are some **free and open source** application modules developed and mainta
 * **Blogging**: Used to create fancy blogs. ABP's [own blog](https://abp.io/blog/abp/) already using this module.
 * [**Docs**](Docs.md): Used to create technical documentation pages. ABP's [own documentation](https://docs.abp.io) already using this module.
 * **Identity**: Used to manage roles, users and their permissions.
-* **Identity Server**: Integrates to IdentityServer4.
+* **IdentityServer**: Integrates to IdentityServer4.
 * **Permission Management**: Used to persist permissions.
 * **[Setting Management](Setting-Management.md)**: Used to persist and manage the [settings](../Settings.md).
 * **Tenant Management**: Used to manage tenants for a [multi-tenant](../Multi-Tenancy.md) application.

@@ -246,6 +246,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiSecret.HasKey(x => new { x.ApiResourceId, x.Type, x.Value });
 
                 apiSecret.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
+                apiSecret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
 
                 if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
                 {
@@ -255,8 +256,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 {
                     apiSecret.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
                 }
-
-                apiSecret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ApiResourceClaim>(apiClaim =>

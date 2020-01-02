@@ -1,8 +1,8 @@
-﻿## Entity Framework Core PostgreSQL Integration
+﻿# Switch to EF Core PostgreSQL Provider
 
 > See [Entity Framework Core Integration document](../Entity-Framework-Core.md) for the basics of the EF Core integration.
 
-### EntityFrameworkCore Project Update
+## EntityFrameworkCore Project Update
 
 - In `Acme.BookStore.EntityFrameworkCore` project replace package `Volo.Abp.EntityFrameworkCore.SqlServer` with `Volo.Abp.EntityFrameworkCore.PostgreSql` 
 - Update to use PostgreSQL in `BookStoreEntityFrameworkCoreModule`
@@ -11,17 +11,17 @@
 - In other projects update the PostgreSQL connection string in necessary `appsettings.json` files
   - more info of [PostgreSQL connection strings](https://www.connectionstrings.com/postgresql/),You need to pay attention to `Npgsql` in this document
 
-###  EntityFrameworkCore.DbMigrations Project Update
+##  EntityFrameworkCore.DbMigrations Project Update
 - Update to use PostgreSQL in `XXXMigrationsDbContextFactory`
   - Replace the `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseSqlServer()` with the `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseNpgsql()`
 
-### Delete Existing Migrations
+## Delete Existing Migrations
 
 Delete all existing migration files (including `DbContextModelSnapshot`)
 
 ![postgresql-delete-initial-migrations](images/postgresql-delete-initial-migrations.png)
 
-### Regenerate Initial Migration
+## Regenerate Initial Migration
 
 Set the correct startup project (usually a web project)
 
@@ -34,11 +34,11 @@ Run `Add-Migration` command.
 PM> Add-Migration Initial
 ````
 
-### Update the Database
+## Update the Database
 
 You have two options to create the database.
 
-#### Using the DbMigrator Application
+## Using the DbMigrator Application
 
 The solution contains a console application (named `Acme.BookStore.DbMigrator` in this sample) that can create database, apply migrations and seed initial data. It is useful on development as well as on production environment.
 
@@ -52,7 +52,7 @@ Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown be
 
 ![set-as-startup-project](../images/db-migrator-app.png)
 
-#### Using EF Core Update-Database Command
+### Using EF Core Update-Database Command
 
 Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations.
 
