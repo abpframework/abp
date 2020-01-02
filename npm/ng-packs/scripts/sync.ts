@@ -1,4 +1,3 @@
-// ESM syntax is supported.
 import fse from 'fs-extra';
 import execa from 'execa';
 
@@ -8,7 +7,9 @@ import execa from 'execa';
 
   for (let i = 0; i < projectNames.length; i++) {
     const project = projectNames[i];
-    const { dependencies: distDependencies, version } = await fse.readJson(`../dist/${project}/package.json`);
+    const { dependencies: distDependencies, version } = await fse.readJson(
+      `../dist/${project}/package.json`,
+    );
     const srcPackagePath = `../packages/${project}/package.json`;
     const srcPackage = await fse.readJson(srcPackagePath);
 
@@ -25,7 +26,9 @@ import execa from 'execa';
 
   try {
     await execa('git', ['add', '../packages/*', '../package.json'], { stdout: 'inherit' });
-    await execa('git', ['commit', '-m', 'Update source packages versions', '--no-verify'], { stdout: 'inherit' });
+    await execa('git', ['commit', '-m', 'Update source packages versions', '--no-verify'], {
+      stdout: 'inherit',
+    });
   } catch (error) {
     console.error(error.stderr);
   }
