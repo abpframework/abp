@@ -12,7 +12,8 @@ namespace Volo.Abp.IdentityServer.Grants
 {
     public class PersistentGrantRepository : EfCoreRepository<IIdentityServerDbContext, PersistedGrant, Guid>, IPersistentGrantRepository
     {
-        public PersistentGrantRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) : base(dbContextProvider)
+        public PersistentGrantRepository(IDbContextProvider<IIdentityServerDbContext> dbContextProvider) 
+            : base(dbContextProvider)
         {
 
         }
