@@ -12,7 +12,7 @@
     "test": "ng test --watchAll --runInBand",
     "commit": "git-cz",
     "lint": "ng lint",
-    "scripts:build": "cd scripts && npm install && yarn build",
+    "scripts:build": "cd scripts && yarn && yarn build",
     "prepare:workspace": "yarn scripts:build",
     "ci": "yarn prepare:workspace && yarn ci:test && yarn ng lint && yarn ci:build",
     "ci:test": "ng test --coverage=false",
