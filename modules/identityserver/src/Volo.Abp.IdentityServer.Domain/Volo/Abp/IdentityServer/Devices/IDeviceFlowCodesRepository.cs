@@ -11,5 +11,10 @@ namespace Volo.Abp.IdentityServer.Devices
             string userCode,
             CancellationToken cancellationToken = default
         );
+
+        Task<DeviceFlowCodes> FindByDeviceCodeAsync(
+            string deviceCode,
+            CancellationToken cancellationToken = default
+        );
     }
 }

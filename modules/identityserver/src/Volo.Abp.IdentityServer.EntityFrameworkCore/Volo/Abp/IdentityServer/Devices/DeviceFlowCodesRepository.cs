@@ -25,5 +25,14 @@ namespace Volo.Abp.IdentityServer.Devices
                 .FirstOrDefaultAsync(d => d.UserCode == userCode, GetCancellationToken(cancellationToken))
                 .ConfigureAwait(false);
         }
+
+        public async Task<DeviceFlowCodes> FindByDeviceCodeAsync(
+            string deviceCode, 
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken))
+                .ConfigureAwait(false);
+        }
     }
 }

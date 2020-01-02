@@ -1,11 +1,10 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using IdentityServer4.Services;
+﻿using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity;
-using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Validation;
@@ -33,7 +32,7 @@ namespace Volo.Abp.IdentityServer
 
             AddIdentityServer(context.Services);
         }
-        
+
         private static void AddIdentityServer(IServiceCollection services)
         {
             var configuration = services.GetConfiguration();
@@ -58,7 +57,12 @@ namespace Volo.Abp.IdentityServer
 
             if (!services.IsAdded<IPersistedGrantService>())
             {
-                identityServerBuilder.AddInMemoryPersistedGrants();
+                services.TryAddSingleton<IPersistedGrantStore, InMemoryPersistedGrantStore>();
+            }
+
+            if (!services.IsAdded<IDeviceFlowStore>())
+            {
+                services.TryAddSingleton<IDeviceFlowStore, InMemoryDeviceFlowStore>();
             }
 
             if (!services.IsAdded<IClientStore>())

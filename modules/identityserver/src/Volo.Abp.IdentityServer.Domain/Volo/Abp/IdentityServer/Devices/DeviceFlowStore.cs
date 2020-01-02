@@ -33,25 +33,29 @@ namespace Volo.Abp.IdentityServer.Devices
             Check.NotNull(userCode, nameof(userCode));
             Check.NotNull(data, nameof(data));
 
-            await DeviceFlowCodesRepository.InsertAsync(
-                new DeviceFlowCodes(GuidGenerator.Create())
-                {
-                    DeviceCode = deviceCode,
-                    UserCode = userCode,
-                    ClientId = data.ClientId,
-                    SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value,
-                    CreationTime = data.CreationTime,
-                    Expiration = data.CreationTime.AddSeconds(data.Lifetime),
-                    Data = Serialize(data)
-                }
-            ).ConfigureAwait(false);
+            await DeviceFlowCodesRepository
+                .InsertAsync(
+                    new DeviceFlowCodes(GuidGenerator.Create())
+                    {
+                        DeviceCode = deviceCode,
+                        UserCode = userCode,
+                        ClientId = data.ClientId,
+                        SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value,
+                        CreationTime = data.CreationTime,
+                        Expiration = data.CreationTime.AddSeconds(data.Lifetime),
+                        Data = Serialize(data)
+                    }
+                ).ConfigureAwait(false);
         }
         
         public async Task<DeviceCode> FindByUserCodeAsync(string userCode)
         {
             Check.NotNull(userCode, nameof(userCode));
 
-            var deviceCodes = await DeviceFlowCodesRepository.FindByUserCodeAsync(userCode).ConfigureAwait(false);
+            var deviceCodes = await DeviceFlowCodesRepository
+                .FindByUserCodeAsync(userCode)
+                .ConfigureAwait(false);
+
             if (deviceCodes == null)
             {
                 return null;
@@ -60,19 +64,61 @@ namespace Volo.Abp.IdentityServer.Devices
             return DeserializeToDeviceCode(deviceCodes.Data);
         }
 
-        public Task<DeviceCode> FindByDeviceCodeAsync(string deviceCode)
+        public async Task<DeviceCode> FindByDeviceCodeAsync(string deviceCode)
         {
-            throw new NotImplementedException();
+            Check.NotNull(deviceCode, nameof(deviceCode));
+
+            var deviceCodes = await DeviceFlowCodesRepository
+                .FindByDeviceCodeAsync(deviceCode)
+                .ConfigureAwait(false);
+            
+            if (deviceCodes == null)
+            {
+                return null;
+            }
+
+            return DeserializeToDeviceCode(deviceCodes.Data);
         }
 
-        public Task UpdateByUserCodeAsync(string userCode, DeviceCode data)
+        public async Task UpdateByUserCodeAsync(string userCode, DeviceCode data)
         {
-            throw new NotImplementedException();
+            Check.NotNull(userCode, nameof(userCode));
+            Check.NotNull(data, nameof(data));
+
+
+            var deviceCodes = await DeviceFlowCodesRepository
+                .FindByUserCodeAsync(userCode)
+                .ConfigureAwait(false);
+
+            if (deviceCodes == null)
+            {
+                throw new InvalidOperationException($"Could not update device code by the given userCode: {userCode}");
+            }
+
+            deviceCodes.SubjectId = data.Subject?.FindFirst(JwtClaimTypes.Subject).Value;
+            deviceCodes.Data = Serialize(data);
+
+            await DeviceFlowCodesRepository
+                .UpdateAsync(deviceCodes, autoSave: true)
+                .ConfigureAwait(false);
         }
 
-        public Task RemoveByDeviceCodeAsync(string deviceCode)
+        public async Task RemoveByDeviceCodeAsync(string deviceCode)
         {
-            throw new NotImplementedException();
+            Check.NotNull(deviceCode, nameof(deviceCode));
+
+            var deviceCodes = await DeviceFlowCodesRepository
+                .FindByDeviceCodeAsync(deviceCode)
+                .ConfigureAwait(false);
+
+            if (deviceCodes == null)
+            {
+                return;
+            }
+
+            await DeviceFlowCodesRepository
+                .DeleteAsync(deviceCodes, autoSave: true)
+                .ConfigureAwait(false);
         }
 
         private string Serialize([CanBeNull] DeviceCode deviceCode)

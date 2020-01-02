@@ -25,5 +25,12 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .FirstOrDefaultAsync(d => d.UserCode == userCode, GetCancellationToken(cancellationToken))
                 .ConfigureAwait(false);
         }
+
+        public async Task<DeviceFlowCodes> FindByDeviceCodeAsync(string deviceCode, CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken))
+                .ConfigureAwait(false);
+        }
     }
 }
