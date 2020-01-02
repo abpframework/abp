@@ -63,6 +63,7 @@
     "Identity.PasswordConfirmationFailed": "Password does not match the confirm password.",
     "Identity.StaticRoleRenamingErrorMessage": "Static roles can not be renamed.",
     "Identity.StaticRoleDeletionErrorMessage": "Static roles can not be deleted.",
+    "Identity.OrganizationUnit.DuplicateDisplayNameWarning": "There is already an organization unit with name {0}. Two units with same name can not be created in same level.",
     "Volo.Abp.Identity:010001": "You can not delete your own account!",
     "Permission:IdentityManagement": "Identity management",
     "Permission:RoleManagement": "Role management",

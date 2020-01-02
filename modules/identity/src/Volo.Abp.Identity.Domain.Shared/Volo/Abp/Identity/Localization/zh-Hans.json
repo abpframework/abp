@@ -63,6 +63,7 @@
     "Identity.PasswordConfirmationFailed": "密码或确认密码不一致.",
     "Identity.StaticRoleRenamingErrorMessage": "无法重命名静态角色.",
     "Identity.StaticRoleDeletionErrorMessage": "无法删除静态角色.",
+    "Identity.OrganizationUnit.DuplicateDisplayNameWarning": "已存在名为 {0} 的组织单位. 无法在同一级别创建相同名称的组织单位.",
     "Volo.Abp.Identity:010001": "您无法删除自己的帐户!",
     "Permission:IdentityManagement": "身份标识管理",
     "Permission:RoleManagement": "角色管理",

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -15,6 +16,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         public DbSet<IdentityRole> Roles { get; set; }
 
         public DbSet<IdentityClaimType> ClaimTypes { get; set; }
+
+        public DbSet<OrganizationUnit> OrganizationUnits { get; set; }
+
+        public DbSet<OrganizationUnitRole> OrganizationUnitRoles { get; set; }
+
+        public DbSet<OrganizationUnitUser> OrganizationUnitUsers { get; set; }
 
         public IdentityDbContext(DbContextOptions<IdentityDbContext> options)
             : base(options)

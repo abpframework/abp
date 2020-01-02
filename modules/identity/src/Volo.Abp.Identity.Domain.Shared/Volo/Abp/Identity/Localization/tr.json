@@ -63,6 +63,7 @@
     "Identity.UserNameNotFound": "{0} kullanıcısı bulunamadı.",
     "Identity.UserNotInRole": "Kullanıcı '{0}' rolünde değil.",
     "Identity.PasswordConfirmationFailed": "Yeni şifre ile onay şifresi uyuşmuyor.",
+    "Identity.OrganizationUnit.DuplicateDisplayNameWarning": "{0} isminde bir birim zaten var. Aynı seviyede aynı isimli iki birim olamaz.",
     "Volo.Abp.Identity:010001": "Kendi hesabınızı silemezsiniz!",
     "Permission:IdentityManagement": "Kimlik yönetimi",
     "Permission:RoleManagement": "Rol yönetimi",
