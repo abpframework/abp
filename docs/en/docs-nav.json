@@ -262,9 +262,13 @@
         {
           "text": "Entity Framework Core Integration",
           "path": "Entity-Framework-Core.md",
-          "items": [            
+          "items": [
             {
-              "text": "PostgreSQL Integration",
+              "text": "Switch to MySQL",
+              "path": "Entity-Framework-Core-MySQL.md"
+            },
+			{
+              "text": "Switch to PostgreSQL",
               "path": "Entity-Framework-Core-PostgreSQL.md"
             }
           ]
