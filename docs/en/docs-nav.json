@@ -278,7 +278,7 @@
                   "text": "Switch to PostgreSQL",
                   "path": "Entity-Framework-Core-PostgreSQL.md"
                 },
-				{
+                {
                   "text": "Switch to SQLite",
                   "path": "Entity-Framework-Core-SQLite.md"
                 }
