@@ -45,13 +45,7 @@ export default `
 }
 
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1040;
 }
 
 .modal::-webkit-scrollbar {
