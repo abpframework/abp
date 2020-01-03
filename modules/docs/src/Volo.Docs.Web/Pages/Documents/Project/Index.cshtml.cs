@@ -393,7 +393,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             await SetDocumentPreferences();
             SetUserPreferences();
-
+            UserPreferences.Add("Document_Language_Code", LanguageCode);
             Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
