@@ -20,7 +20,8 @@ namespace Volo.Abp.IdentityServer
         typeof(AbpIdentityDomainModule),
         typeof(AbpSecurityModule),
         typeof(AbpCachingModule),
-        typeof(AbpValidationModule)
+        typeof(AbpValidationModule),
+        typeof(AbpBackgroundWorkersModule)
         )]
     public class AbpIdentityServerDomainModule : AbpModule
     {
