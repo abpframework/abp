@@ -24,12 +24,12 @@ namespace Volo.Abp.Cli.Commands
             AbpCliOptions = cliOptions.Value;
         }
 
-        public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
+        public Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             if (string.IsNullOrWhiteSpace(commandLineArgs.Target))
             {
                 Logger.LogInformation(GetUsageInfo());
-                return;
+                return Task.CompletedTask;
             }
 
             var commandType = AbpCliOptions.Commands[commandLineArgs.Target];
@@ -39,6 +39,8 @@ namespace Volo.Abp.Cli.Commands
                 var command = (IConsoleCommand) scope.ServiceProvider.GetRequiredService(commandType);
                 Logger.LogInformation(command.GetUsageInfo());
             }
+
+            return Task.CompletedTask;
         }
 
         public string GetUsageInfo()
