@@ -7,15 +7,12 @@ using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundWorkers
 {
-    /// <summary>
-    /// Extends <see cref="BackgroundWorkerBase"/> to add a periodic running Timer. 
-    /// </summary>
-    public abstract class PeriodicBackgroundWorkerBase : BackgroundWorkerBase
+    public abstract class AsyncPeriodicBackgroundWorkerBase : BackgroundWorkerBase
     {
         protected IServiceScopeFactory ServiceScopeFactory { get; }
         protected AbpTimer Timer { get; }
 
-        protected PeriodicBackgroundWorkerBase(
+        protected AsyncPeriodicBackgroundWorkerBase(
             AbpTimer timer,
             IServiceScopeFactory serviceScopeFactory)
         {
@@ -42,7 +39,9 @@ namespace Volo.Abp.BackgroundWorkers
             {
                 using (var scope = ServiceScopeFactory.CreateScope())
                 {
-                    DoWork(new PeriodicBackgroundWorkerContext(scope.ServiceProvider));
+                    AsyncHelper.RunSync(
+                        () => DoWorkAsync(new PeriodicBackgroundWorkerContext(scope.ServiceProvider))
+                    );
                 }
             }
             catch (Exception ex)
@@ -51,9 +50,6 @@ namespace Volo.Abp.BackgroundWorkers
             }
         }
 
-        /// <summary>
-        /// Periodic works should be done by implementing this method.
-        /// </summary>
-        protected abstract void DoWork(PeriodicBackgroundWorkerContext workerContext);
+        protected abstract Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext);
     }
 }
