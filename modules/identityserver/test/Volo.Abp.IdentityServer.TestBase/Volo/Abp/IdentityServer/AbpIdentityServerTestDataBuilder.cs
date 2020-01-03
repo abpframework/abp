@@ -6,8 +6,10 @@ using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -19,7 +21,9 @@ namespace Volo.Abp.IdentityServer
         private readonly IIdentityResourceRepository _identityResourceRepository;
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
         private readonly IPersistentGrantRepository _persistentGrantRepository;
+        private readonly IDeviceFlowCodesRepository _deviceFlowCodesRepository;
         private readonly AbpIdentityServerTestData _testData;
+        private readonly IClock _clock;
 
         public AbpIdentityServerTestDataBuilder(
             IGuidGenerator guidGenerator,
@@ -28,7 +32,9 @@ namespace Volo.Abp.IdentityServer
             IIdentityResourceRepository identityResourceRepository,
             IIdentityClaimTypeRepository identityClaimTypeRepository,
             AbpIdentityServerTestData testData,
-            IPersistentGrantRepository persistentGrantRepository)
+            IPersistentGrantRepository persistentGrantRepository,
+            IDeviceFlowCodesRepository deviceFlowCodesRepository,
+            IClock clock)
         {
             _testData = testData;
             _guidGenerator = guidGenerator;
@@ -37,15 +43,46 @@ namespace Volo.Abp.IdentityServer
             _identityResourceRepository = identityResourceRepository;
             _identityClaimTypeRepository = identityClaimTypeRepository;
             _persistentGrantRepository = persistentGrantRepository;
+            _clock = clock;
+            _deviceFlowCodesRepository = deviceFlowCodesRepository;
         }
 
         public async Task BuildAsync()
         {
+            await AddDeviceFlowCodes().ConfigureAwait(false);
             await AddPersistedGrants().ConfigureAwait(false);
             await AddIdentityResources().ConfigureAwait(false);
             await AddApiResources().ConfigureAwait(false);
             await AddClients().ConfigureAwait(false);
             await AddClaimTypes().ConfigureAwait(false);
+        }
+
+        private async Task AddDeviceFlowCodes()
+        {
+            await _deviceFlowCodesRepository.InsertAsync(
+                new DeviceFlowCodes(_guidGenerator.Create())
+                {
+                    ClientId = "c1",
+                    DeviceCode = "DeviceCode1",
+                    Expiration = _clock.Now.AddDays(1),
+                    Data = "{\"Lifetime\":\"42\"}",
+                    UserCode = "DeviceFlowCodesUserCode1",
+                    SubjectId = "DeviceFlowCodesSubjectId1"
+                }
+            );
+
+            await _deviceFlowCodesRepository.InsertAsync(
+                new DeviceFlowCodes(_guidGenerator.Create())
+                {
+                    ClientId = "c1",
+                    DeviceCode = "DeviceCode2",
+                    Expiration = _clock.Now.AddDays(-1),
+                    Data = "",
+                    UserCode = "DeviceFlowCodesUserCode2",
+                    SubjectId = "DeviceFlowCodesSubjectId2"
+                }
+            );
+
         }
 
         private async Task AddPersistedGrants()
@@ -74,7 +111,18 @@ namespace Volo.Abp.IdentityServer
                 SubjectId = "PersistedGrantSubjectId3",
                 ClientId = "c1",
                 Type = "c1type",
-                Data = ""
+                Data = "",
+                Expiration = _clock.Now.AddDays(1),
+            }).ConfigureAwait(false);
+
+            await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
+            {
+                Key = "PersistedGrantKey_Expired1",
+                SubjectId = "PersistedGrantSubjectId_Expired1",
+                ClientId = "c1",
+                Type = "c1type",
+                Data = "",
+                Expiration = _clock.Now.AddDays(-1)
             }).ConfigureAwait(false);
         }
 

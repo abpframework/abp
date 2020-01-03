@@ -6,6 +6,7 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
@@ -288,6 +289,24 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 apiScopeClaim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
                 apiScopeClaim.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
+            });
+
+            builder.Entity<DeviceFlowCodes>(b =>
+            {
+                b.ToTable(options.TablePrefix + "DeviceFlowCodes", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.DeviceCode).HasMaxLength(200).IsRequired();
+                b.Property(x => x.UserCode).HasMaxLength(200).IsRequired();
+                b.Property(x => x.SubjectId).HasMaxLength(200);
+                b.Property(x => x.ClientId).HasMaxLength(200).IsRequired();
+                b.Property(x => x.Expiration).IsRequired();
+                b.Property(x => x.Data).HasMaxLength(50000).IsRequired();
+
+                b.HasIndex(x => new { x.UserCode }).IsUnique();
+                b.HasIndex(x => x.DeviceCode).IsUnique();
+                b.HasIndex(x => x.Expiration);
             });
         }
     }
