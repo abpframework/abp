@@ -2,9 +2,12 @@
 using IdentityServer4.Stores;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Options;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.Caching;
 using Volo.Abp.Identity;
+using Volo.Abp.IdentityServer.Tokens;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security;
 using Volo.Abp.Validation;
@@ -74,6 +77,20 @@ namespace Volo.Abp.IdentityServer
             {
                 identityServerBuilder.AddInMemoryApiResources(configuration.GetSection("IdentityServer:ApiResources"));
                 identityServerBuilder.AddInMemoryIdentityResources(configuration.GetSection("IdentityServer:IdentityResources"));
+            }
+        }
+
+        public override void OnApplicationInitialization(ApplicationInitializationContext context)
+        {
+            var options = context.ServiceProvider.GetRequiredService<IOptions<TokenCleanupOptions>>().Value;
+            if (options.IsCleanupEnabled)
+            {
+                context.ServiceProvider
+                    .GetRequiredService<IBackgroundWorkerManager>()
+                    .Add(
+                        context.ServiceProvider
+                            .GetRequiredService<TokenCleanupBackgroundWorker>()
+                    );
             }
         }
     }

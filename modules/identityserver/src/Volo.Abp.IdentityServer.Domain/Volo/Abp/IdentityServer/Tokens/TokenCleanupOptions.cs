@@ -29,6 +29,6 @@ namespace Volo.Abp.IdentityServer.Tokens
         /// If <see cref="AbpBackgroundWorkerOptions.IsEnabled"/> is false,
         /// this property is ignored and the cleanup worker doesn't work for this application instance.
         /// </summary>
-        public bool EnableCleanup { get; set; } = true;
+        public bool IsCleanupEnabled { get; set; } = true;
     }
 }
