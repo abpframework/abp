@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs
 {
@@ -21,7 +20,7 @@ namespace Volo.Abp.BackgroundJobs
             Logger = NullLogger<BackgroundJobExecuter>.Instance;
         }
 
-        public virtual void Execute(JobExecutionContext context)
+        public virtual async Task ExecuteAsync(JobExecutionContext context)
         {
             var job = context.ServiceProvider.GetService(context.JobType);
             if (job == null)
@@ -41,7 +40,7 @@ namespace Volo.Abp.BackgroundJobs
             {
                 if (jobExecuteMethod.Name == nameof(IAsyncBackgroundJob<object>.ExecuteAsync))
                 {
-                    AsyncHelper.RunSync(() => (Task) jobExecuteMethod.Invoke(job, new[] {context.JobArgs}));
+                    await ((Task) jobExecuteMethod.Invoke(job, new[] {context.JobArgs})).ConfigureAwait(false);
                 }
                 else
                 {
