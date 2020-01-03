@@ -392,9 +392,11 @@ namespace Volo.Docs.Pages.Documents.Project
         private async Task ConvertDocumentContentToHtmlAsync()
         {
             await SetDocumentPreferencesAsync();
-
             SetUserPreferences();
+
             UserPreferences.Add("Document_Language_Code", LanguageCode);
+            UserPreferences.Add("Document_Version", Version);
+
             Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
