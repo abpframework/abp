@@ -1,0 +1,26 @@
+<div class="ui-table ui-widget" [style.max-height.px]="maxHeight">
+  <div class="ui-table-wrapper">
+    <div class="ui-table-scrollable-wrapper">
+      <table>
+        <colgroup>
+          <ng-container *ngTemplateOutlet="colgroupTemplate"></ng-container>
+        </colgroup>
+        <thead class="ui-table-thead">
+          <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+        </thead>
+        <tbody class="ui-table-tbody">
+          <ng-container
+            *ngFor="let val of slicedValue"
+            [ngTemplateOutlet]="bodyTemplate"
+            [ngTemplateOutletContext]="{ $implicit: val }"
+          ></ng-container>
+        </tbody>
+      </table>
+    </div>
+    <abp-paginator
+      *ngIf="rows"
+      [totalPages]="totalPages"
+      (valueChange)="page = $event; pageChange.emit($event)"
+    ></abp-paginator>
+  </div>
+</div>

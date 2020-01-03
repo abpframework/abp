@@ -1,9 +1,10 @@
 import { CoreModule, LazyLoadService } from '@abp/ng.core';
+import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToastModule } from 'primeng/toast';
-import { forkJoin } from 'rxjs';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -13,16 +14,16 @@ import { LoaderBarComponent } from './components/loader-bar/loader-bar.component
 import { ModalComponent } from './components/modal/modal.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
+import { TableComponent } from './components/table/table.component';
 import { ToastComponent } from './components/toast/toast.component';
 import styles from './constants/styles';
 import { TableSortDirective } from './directives/table-sort.directive';
 import { ErrorHandler } from './handlers/error.handler';
-import { chartJsLoaded$ } from './utils/widget-utils';
 import { RootParams } from './models/common';
-import { HTTP_ERROR_CONFIG, httpErrorConfigFactory } from './tokens/http-error.token';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
-import { DatePipe } from '@angular/common';
+import { chartJsLoaded$ } from './utils/widget-utils';
+import { PaginatorComponent } from './components/paginator/paginator.component';
 
 export function appendScript(injector: Injector) {
   const fn = () => {
@@ -45,6 +46,8 @@ export function appendScript(injector: Injector) {
     HttpErrorWrapperComponent,
     LoaderBarComponent,
     ModalComponent,
+    PaginatorComponent,
+    TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     SortOrderIconComponent,
@@ -57,6 +60,8 @@ export function appendScript(injector: Injector) {
     ConfirmationComponent,
     LoaderBarComponent,
     ModalComponent,
+    PaginatorComponent,
+    TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     SortOrderIconComponent,
