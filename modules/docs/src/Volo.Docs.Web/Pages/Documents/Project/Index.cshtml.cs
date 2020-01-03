@@ -91,7 +91,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
             try
             {
-                await SetProjectAsync();    
+                await SetProjectAsync();
             }
             catch (EntityNotFoundException e)
             {
@@ -391,7 +391,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task ConvertDocumentContentToHtmlAsync()
         {
-            await SetDocumentPreferences();
+            await SetDocumentPreferencesAsync();
+
             SetUserPreferences();
             UserPreferences.Add("Document_Language_Code", LanguageCode);
             Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
@@ -431,12 +432,13 @@ namespace Volo.Docs.Pages.Documents.Project
                     {
                         continue;
                     }
+
                     var key = keyValue.Split("=")[0];
                     var value = keyValue.Split("=")[1];
 
                     UserPreferences.Add(key, value);
-                    UserPreferences.Add(key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p=>p.Name == key)
-                        ?.Values.FirstOrDefault(v=>v.Key == value).Value);
+                    UserPreferences.Add(key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == key)
+                        ?.Values.FirstOrDefault(v => v.Key == value).Value);
                 }
             }
 
@@ -449,9 +451,11 @@ namespace Volo.Docs.Pages.Documents.Project
                     UserPreferences.Remove(keyValue.Key);
                     UserPreferences.Remove(keyValue.Key + "_Value");
                 }
+
                 UserPreferences.Add(keyValue.Key, keyValue.Value);
-                UserPreferences.Add(keyValue.Key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == keyValue.Key)
-                    ?.Values.FirstOrDefault(v => v.Key == keyValue.Value).Value);
+                UserPreferences.Add(keyValue.Key + "_Value",
+                    DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == keyValue.Key)?.Values
+                        .FirstOrDefault(v => v.Key == keyValue.Value).Value);
             }
 
             if (DocumentPreferences?.Parameters == null)
@@ -469,7 +473,7 @@ namespace Volo.Docs.Pages.Documents.Project
             }
         }
 
-        public async Task SetDocumentPreferences()
+        public async Task SetDocumentPreferencesAsync()
         {
             var projectParameters = await _documentAppService.GetParametersAsync(
                     new GetParametersDocumentInput

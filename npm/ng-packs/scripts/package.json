@@ -20,6 +20,7 @@
     "typescript": "^3.7.4"
   },
   "devDependencies": {
+    "@types/node": "^13.1.2",
     "esm": "^3.2.25",
     "ts-node": "^8.5.4",
     "tsconfig-paths": "^3.9.0"
