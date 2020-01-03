@@ -10,12 +10,12 @@ namespace Volo.Abp.Settings
     public class SettingValueProviderManager : ISettingValueProviderManager, ISingletonDependency
     {
         public List<ISettingValueProvider> Providers => _lazyProviders.Value;
-        protected SettingOptions Options { get; }
+        protected AbpSettingOptions Options { get; }
         private readonly Lazy<List<ISettingValueProvider>> _lazyProviders;
 
         public SettingValueProviderManager(
             IServiceProvider serviceProvider,
-            IOptions<SettingOptions> options)
+            IOptions<AbpSettingOptions> options)
         {
 
             Options = options.Value;

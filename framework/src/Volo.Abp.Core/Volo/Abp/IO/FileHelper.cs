@@ -54,7 +54,7 @@ namespace Volo.Abp.IO
         {
             using (var reader = File.OpenText(path))
             {
-                return await reader.ReadToEndAsync();
+                return await reader.ReadToEndAsync().ConfigureAwait(false);
             }
         }
 
@@ -68,7 +68,7 @@ namespace Volo.Abp.IO
             using (var stream = File.Open(path, FileMode.Open))
             {
                 var result = new byte[stream.Length];
-                await stream.ReadAsync(result, 0, (int)stream.Length);
+                await stream.ReadAsync(result, 0, (int)stream.Length).ConfigureAwait(false);
                 return result;
             }
         }

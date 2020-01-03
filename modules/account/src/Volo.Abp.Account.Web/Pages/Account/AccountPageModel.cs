@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Identity;
+using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace Volo.Abp.Account.Web.Pages.Account
 {
@@ -17,6 +18,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         protected AccountPageModel()
         {
             LocalizationResourceType = typeof(AccountResource);
+            ObjectMapperContext = typeof(AbpAccountWebModule);
         }
 
         protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)

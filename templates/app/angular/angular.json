@@ -23,14 +23,36 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": false,
+            "extractCss": true,
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "src/styles.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/font-awesome/css/font-awesome.min.css",
-              "node_modules/primeng/resources/themes/nova-light/theme.css",
-              "node_modules/primeicons/primeicons.css",
-              "node_modules/primeng/resources/primeng.min.css"
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "lazy": true,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "lazy": true,
+                "bundleName": "fontawesome-v4-shims.min"
+              },
+              {
+                "input": "node_modules/primeng/resources/themes/nova-light/theme.css",
+                "lazy": true,
+                "bundleName": "primeng-nova-light-theme"
+              },
+              {
+                "input": "node_modules/primeicons/primeicons.css",
+                "lazy": true,
+                "bundleName": "primeicons"
+              },
+              {
+                "input": "node_modules/primeng/resources/primeng.min.css",
+                "lazy": true,
+                "bundleName": "primeng.min"
+              }
             ],
             "scripts": []
           },

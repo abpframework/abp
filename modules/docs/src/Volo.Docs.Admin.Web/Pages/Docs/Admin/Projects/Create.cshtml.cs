@@ -14,7 +14,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 {
-    public class CreateModel : AbpPageModel
+    public class CreateModel : DocsAdminPageModel
     {
         [BindProperty]
         public CreateGithubProjectViewModel GithubProject { get; set; }
@@ -87,6 +87,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [StringLength(ProjectConsts.MaxNavigationDocumentNameLength)]
             public string NavigationDocumentName { get; set; } = "docs-nav.json";
+
+            [StringLength(ProjectConsts.MaxParametersDocumentNameLength)]
+            public string ParametersDocumentName { get; set; } = "docs-params.json";
 
             [StringLength(ProjectConsts.MaxVersionNameLength)]
             public string MinimumVersion { get; set; }

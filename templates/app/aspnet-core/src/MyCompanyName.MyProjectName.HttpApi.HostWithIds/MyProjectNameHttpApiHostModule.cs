@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using MyCompanyName.MyProjectName.EntityFrameworkCore;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -46,13 +48,13 @@ namespace MyCompanyName.MyProjectName
             ConfigureUrls(configuration);
             ConfigureConventionalControllers();
             ConfigureAuthentication(context, configuration);
-            ConfigureSwagger(context);
             ConfigureLocalization();
             ConfigureVirtualFileSystem(context);
             ConfigureCors(context, configuration);
+            ConfigureSwaggerServices(context);
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -66,7 +68,7 @@ namespace MyCompanyName.MyProjectName
 
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain.Shared"));
                     options.FileSets.ReplaceEmbeddedByPhysical<MyProjectNameDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, $"..{Path.DirectorySeparatorChar}MyCompanyName.MyProjectName.Domain"));
@@ -84,7 +86,7 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication()
                 .AddIdentityServerAuthentication(options =>
@@ -99,12 +101,12 @@ namespace MyCompanyName.MyProjectName
                 });
         }
 
-        private static void ConfigureSwagger(ServiceConfigurationContext context)
+        private static void ConfigureSwaggerServices(ServiceConfigurationContext context)
         {
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info {Title = "MyProjectName API", Version = "v1"});
+                    options.SwaggerDoc("v1", new OpenApiInfo {Title = "MyProjectName API", Version = "v1"});
                     options.DocInclusionPredicate((docName, description) => true);
                 });
         }
@@ -121,7 +123,7 @@ namespace MyCompanyName.MyProjectName
             });
         }
 
-        private void ConfigureCors(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureCors(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddCors(options =>
             {
@@ -147,9 +149,10 @@ namespace MyCompanyName.MyProjectName
         {
             var app = context.GetApplicationBuilder();
 
-            app.UseCors(DefaultCorsPolicyName);
-
+            app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
+            app.UseCors(DefaultCorsPolicyName);
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
@@ -159,12 +162,15 @@ namespace MyCompanyName.MyProjectName
             }
 
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
+
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
+
             app.UseAuditing();
             app.UseMvcWithDefaultRouteAndArea();
         }

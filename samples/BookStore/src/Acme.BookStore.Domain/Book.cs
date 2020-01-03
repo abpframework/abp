@@ -12,5 +12,19 @@ namespace Acme.BookStore
         public DateTime PublishDate { get; set; }
 
         public float Price { get; set; }
+
+        protected Book()
+        {
+
+        }
+
+        public Book(Guid id, string name, BookType type, DateTime publishDate, float price)
+        :base(id)
+        {
+            Name = name;
+            Type = type;
+            PublishDate = publishDate;
+            Price = price;
+        }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using ProductManagement;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
@@ -53,7 +54,6 @@ namespace BackendAdminApp.Host
                 })
                 .AddCookie("Cookies", options =>
                 {
-                    options.Cookie.Expiration = TimeSpan.FromDays(365);
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -77,7 +77,7 @@ namespace BackendAdminApp.Host
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "Backend Admin Application API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Backend Admin Application API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                 });
 
@@ -97,7 +97,9 @@ namespace BackendAdminApp.Host
 
             app.UseCorrelationId();
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

@@ -137,7 +137,7 @@ createBook() {
 Add a `form` variable and inject a `FormBuilder` service to the `book-list.component.ts` as shown below (remember add the import statement).
 
 ```js
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 form: FormGroup;
 
@@ -195,7 +195,7 @@ Open `book-list.component.html` and add the form in the body template of the mod
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {{ type }}</option>
+        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -217,25 +217,6 @@ Open `book-list.component.html` and add the form in the body template of the mod
 - This template creates a form with Name, Price, Type and Publish date fields.
 
 > We've used [NgBootstrap datepicker](https://ng-bootstrap.github.io/#/components/datepicker/overview) in this component.
-
-Open the `book-list.component.ts` and then create an array, named `bookTypeArr`:
-
-```js
-//...
-form: FormGroup;
-
-bookTypeArr = Object.keys(Books.BookType).filter(
-    bookType => typeof this.booksType[bookType] === 'number'
-);
-```
-
-The `bookTypeArr` contains the fields of the `BookType` enum. Resulting array is shown below:
-
-```js
-['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
-```
-
-This array was used in the previous form template (in the `ngFor` loop).
 
 #### Datepicker Requirements
 
@@ -268,6 +249,28 @@ export class BookListComponent implements OnInit {
 
 > The `NgbDateAdapter` converts Datepicker value to `Date` type. See the [datepicker adapters](https://ng-bootstrap.github.io/#/components/datepicker/overview) for more details.
 
+#### Create the Book Type Array
+
+Open the `book-list.component.ts` and then create an array, named `bookTypeArr`:
+
+```js
+//...
+booksType = Books.BookType;
+
+bookTypeArr = Object.keys(Books.BookType).filter(
+    bookType => typeof this.booksType[bookType] === 'number'
+);
+```
+
+The `bookTypeArr` contains the fields of the `BookType` enum. Resulting array is shown below:
+
+```js
+['Adventure', 'Biography', 'Dystopia', 'Fantastic' ...]
+```
+
+This array was used in the previous form template (in the `ngFor` loop).
+
+
 ![new-book-form](images/bookstore-new-book-form.png)
 
 #### Saving the Book
@@ -293,6 +296,9 @@ This adds a save button to the bottom area of the modal:
 Then define a `save` method in the `BookListComponent`:
 
 ```js
+//...
+import { ..., CreateUpdateBook } from '../../store/actions';
+//...
 save() {
   if (this.form.invalid) {
     return;
@@ -330,7 +336,7 @@ update(updateBookInput: Books.CreateUpdateBookInput, id: string): Observable<Boo
 
 #### CreateUpdateBook Action
 
-Open the `books.actins.ts` and add `id` parameter to the `CreateUpdateBook` action:
+Open the `books.actions.ts` and add `id` parameter to the `CreateUpdateBook` action:
 
 ```js
 export class CreateUpdateBook {
@@ -455,10 +461,10 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
           </div>
         </div>
       </td>
-      <td>{{ data.name }}</td>
-      <td>{{ booksType[data.type] }}</td>
-      <td>{{ data.publishDate | date }}</td>
-      <td>{{ data.price }}</td>
+      <td>{%{{{ data.name }}}%}</td>
+      <td>{%{{{ booksType[data.type] }}}%}</td>
+      <td>{%{{{ data.publishDate | date }}}%}</td>
+      <td>{%{{{ data.price }}}%}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -477,7 +483,7 @@ Update the modal header to change the title based on the current operation:
 
 ```html
 <ng-template #abpHeader>
-  <h3>{{ selectedBook.id ? 'Edit' : 'New Book' }}</h3>
+  <h3>{%{{{ selectedBook.id ? 'Edit' : 'New Book' }}}%}</h3>
 </ng-template>
 ```
 

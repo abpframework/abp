@@ -14,6 +14,7 @@
     "NoProjectWarning": "Hiç proje yok!",
     "DocumentNotFound": "Aradığınız döküman bulunamadı!",
     "NavigationDocumentNotFound": "Bu döküman için menü bulunamadı!",
-    "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir."
+    "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir.",
+    "MultipleVersionDocumentInfo": "Bu dökümanın birden çok versiyonu bulunmaktadır. Sizin için en uygun olan seçenekleri seçiniz."
   }
 }

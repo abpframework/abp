@@ -5,7 +5,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 
 namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
 {
-    public class CreateModalModel : AbpPageModel
+    public class CreateModalModel : TenantManagementPageModel
     {
         [BindProperty]
         public TenantInfoModel Tenant { get; set; }
@@ -22,7 +22,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             ValidateModel();
 
             var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
-            await _tenantAppService.CreateAsync(input);
+            await _tenantAppService.CreateAsync(input).ConfigureAwait(false);
 
             return NoContent();
         }

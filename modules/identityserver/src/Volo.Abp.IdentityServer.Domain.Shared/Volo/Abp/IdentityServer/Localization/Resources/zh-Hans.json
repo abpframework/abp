@@ -1,0 +1,8 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Volo.IdentityServer:DuplicateIdentityResourceName": "Identity资源名称已存在: {Name}",
+    "Volo.IdentityServer:DuplicateApiResourceName": "Api资源名称已存在: {Name}",
+    "Volo.IdentityServer:DuplicateClientId": "ClientId已经存在: {ClientId}"
+  }
+}

@@ -1,11 +1,17 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck } from 'rxjs/operators';
-import { CreateRole, DeleteRole, GetRoleById, GetRoles, UpdateRole } from '../../actions/identity.actions';
+import {
+  CreateRole,
+  DeleteRole,
+  GetRoleById,
+  GetRoles,
+  UpdateRole,
+} from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
 
@@ -13,7 +19,7 @@ import { IdentityState } from '../../states/identity.state';
   selector: 'abp-roles',
   templateUrl: './roles.component.html',
 })
-export class RolesComponent {
+export class RolesComponent implements OnInit {
   @Select(IdentityState.getRoles)
   data$: Observable<Identity.RoleItem[]>;
 
@@ -26,29 +32,38 @@ export class RolesComponent {
 
   isModalVisible: boolean;
 
-  visiblePermissions: boolean = false;
+  visiblePermissions = false;
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'name',
+  pageQuery: ABP.PageQueryParams = {};
+
+  loading = false;
+
+  modalBusy = false;
+
+  sortOrder = '';
+
+  sortKey = '';
+
+  @ViewChild('formRef', { static: false, read: ElementRef })
+  formRef: ElementRef<HTMLFormElement>;
+
+  onVisiblePermissionChange = event => {
+    this.visiblePermissions = event;
   };
 
-  loading: boolean = false;
+  constructor(
+    private confirmationService: ConfirmationService,
+    private fb: FormBuilder,
+    private store: Store,
+  ) {}
 
-  modalBusy: boolean = false;
-
-  @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
-
-  constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
-
-  onSearch(value) {
-    this.pageQuery.filter = value;
+  ngOnInit() {
     this.get();
   }
 
-  createForm() {
+  buildForm() {
     this.form = this.fb.group({
       name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
         Validators.required,
@@ -60,16 +75,16 @@ export class RolesComponent {
   }
 
   openModal() {
-    this.createForm();
+    this.buildForm();
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.RoleItem;
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
@@ -86,12 +101,13 @@ export class RolesComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
+          ? new UpdateRole({ ...this.selected, ...this.form.value, id: this.selected.id })
           : new CreateRole(this.form.value),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.isModalVisible = false;
+        this.get();
       });
   }
 
@@ -102,7 +118,7 @@ export class RolesComponent {
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new DeleteRole(id));
+          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.get());
         }
       });
   }
@@ -120,5 +136,11 @@ export class RolesComponent {
       .dispatch(new GetRoles(this.pageQuery))
       .pipe(finalize(() => (this.loading = false)))
       .subscribe();
+  }
+
+  onClickSaveButton() {
+    this.formRef.nativeElement.dispatchEvent(
+      new Event('submit', { bubbles: true, cancelable: true }),
+    );
   }
 }

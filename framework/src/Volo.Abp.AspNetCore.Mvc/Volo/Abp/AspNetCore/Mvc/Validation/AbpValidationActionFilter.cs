@@ -22,15 +22,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Validation
             if (!context.ActionDescriptor.IsControllerAction() ||
                 !context.ActionDescriptor.HasObjectResult())
             {
-                await next();
+                await next().ConfigureAwait(false);
                 return;
             }
 
-            using (AbpCrossCuttingConcerns.Applying(context.Controller, AbpCrossCuttingConcerns.Validation))
-            {
-                _validator.Validate(context.ModelState);
-                await next();
-            }
+            _validator.Validate(context.ModelState);
+            await next().ConfigureAwait(false);
         }
     }
 }

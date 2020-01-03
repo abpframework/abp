@@ -22,7 +22,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task FindApiResourceAsync_Should_Return_Null_If_Not_Found()
         {
             //Act
-            var resource = await _resourceStore.FindApiResourceAsync("non-existing-name");
+            var resource = await _resourceStore.FindApiResourceAsync("non-existing-name").ConfigureAwait(false);
 
             //Assert
             resource.ShouldBeNull();
@@ -32,7 +32,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task FindApiResourceAsync_Should_Return_If_Found()
         {
             //Act
-            var apiResource = await _resourceStore.FindApiResourceAsync("Test-ApiResource-Name-1");
+            var apiResource = await _resourceStore.FindApiResourceAsync("Test-ApiResource-Name-1").ConfigureAwait(false);
 
             //Assert
             apiResource.ShouldNotBe(null);
@@ -48,7 +48,7 @@ namespace Volo.Abp.IdentityServer.Clients
             var apiResources = (await _resourceStore.FindApiResourcesByScopeAsync(new List<string>
             {
                 "Test-ApiResource-ApiScope-Name-1"
-            })).ToList();
+            }).ConfigureAwait(false)).ToList();
 
             //Assert
             apiResources.ShouldNotBe(null);
@@ -63,7 +63,7 @@ namespace Volo.Abp.IdentityServer.Clients
             var identityResourcesByScope = await _resourceStore.FindIdentityResourcesByScopeAsync(new List<string>
             {
                 "Test-Identity-Resource-Name-1"
-            });
+            }).ConfigureAwait(false);
 
             //Assert
             var resourcesByScope = identityResourcesByScope as IdentityResource[] ?? identityResourcesByScope.ToArray();
@@ -77,7 +77,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task GetAllResourcesAsync_Should_Return()
         {
             //Act
-            var resources = await _resourceStore.GetAllResourcesAsync();
+            var resources = await _resourceStore.GetAllResourcesAsync().ConfigureAwait(false);
 
             //Assert
             resources.ShouldNotBe(null);

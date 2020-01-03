@@ -23,13 +23,14 @@ namespace Volo.Abp.BackgroundJobs
 
             services.OnRegistred(context =>
             {
-                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)))
+                if (ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IBackgroundJob<>)) ||
+                    ReflectionHelper.IsAssignableToGenericType(context.ImplementationType, typeof(IAsyncBackgroundJob<>)))
                 {
                     jobTypes.Add(context.ImplementationType);
                 }
             });
 
-            services.Configure<BackgroundJobOptions>(options =>
+            services.Configure<AbpBackgroundJobOptions>(options =>
             {
                 foreach (var jobType in jobTypes)
                 {

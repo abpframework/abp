@@ -1,11 +1,14 @@
-﻿using Volo.Abp.EntityFrameworkCore.Modeling;
+﻿using JetBrains.Annotations;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Volo.Blogging.EntityFrameworkCore
 {
-    public class BloggingModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class BloggingModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
-        public BloggingModelBuilderConfigurationOptions()
-            : base(BloggingConsts.DefaultDbTablePrefix, BloggingConsts.DefaultDbSchema)
+        public BloggingModelBuilderConfigurationOptions(
+            [NotNull] string tablePrefix = "",
+            [CanBeNull] string schema = null)
+            : base(tablePrefix, schema)
         {
         }
     }

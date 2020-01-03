@@ -1,4 +1,4 @@
-import { GetAppConfiguration, ConfigState } from '@abp/ng.core';
+import { GetAppConfiguration, ConfigState, SessionState } from '@abp/ng.core';
 import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Navigate } from '@ngxs/router-plugin';
@@ -9,6 +9,7 @@ import { Options } from '../../models/options';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import snq from 'snq';
+import { HttpHeaders } from '@angular/common/http';
 
 const { maxLength, minLength, required } = Validators;
 
@@ -43,8 +44,13 @@ export class LoginComponent {
     // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
 
     this.inProgress = true;
+    const tenant = this.store.selectSnapshot(SessionState.getTenant);
     from(
-      this.oauthService.fetchTokenUsingPasswordFlow(this.form.get('username').value, this.form.get('password').value),
+      this.oauthService.fetchTokenUsingPasswordFlow(
+        this.form.get('username').value,
+        this.form.get('password').value,
+        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
+      ),
     )
       .pipe(
         switchMap(() => this.store.dispatch(new GetAppConfiguration())),

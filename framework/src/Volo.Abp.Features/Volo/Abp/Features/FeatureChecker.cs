@@ -9,7 +9,7 @@ namespace Volo.Abp.Features
 {
     public class FeatureChecker : FeatureCheckerBase
     {
-        protected FeatureOptions Options { get; }
+        protected AbpFeatureOptions Options { get; }
         protected IServiceProvider ServiceProvider { get; }
         protected IFeatureDefinitionManager FeatureDefinitionManager { get; }
         protected List<IFeatureValueProvider> Providers => _providers.Value;
@@ -17,7 +17,7 @@ namespace Volo.Abp.Features
         private readonly Lazy<List<IFeatureValueProvider>> _providers;
 
         public FeatureChecker(
-            IOptions<FeatureOptions> options,
+            IOptions<AbpFeatureOptions> options,
             IServiceProvider serviceProvider,
             IFeatureDefinitionManager featureDefinitionManager)
         {
@@ -46,7 +46,7 @@ namespace Volo.Abp.Features
                 providers = providers.Where(p => featureDefinition.AllowedProviders.Contains(p.Name));
             }
 
-            return await GetOrNullValueFromProvidersAsync(providers, featureDefinition);
+            return await GetOrNullValueFromProvidersAsync(providers, featureDefinition).ConfigureAwait(false);
         }
 
         protected virtual async Task<string> GetOrNullValueFromProvidersAsync(
@@ -55,7 +55,7 @@ namespace Volo.Abp.Features
         {
             foreach (var provider in providers)
             {
-                var value = await provider.GetOrNullAsync(feature);
+                var value = await provider.GetOrNullAsync(feature).ConfigureAwait(false);
                 if (value != null)
                 {
                     return value;

@@ -115,7 +115,7 @@ namespace MyCompany.MyProject
         {
             Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new MyCustomTenantResolver());
+                options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
 
             //...
@@ -124,14 +124,14 @@ namespace MyCompany.MyProject
 }
 ````
 
-MyCustomTenantResolver必须像下面这样实现**ITenantResolver**接口:
+`MyCustomTenantResolveContributor`必须像下面这样实现**ITenantResolveContributor**接口:
 
 ````C#
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    public class MyCustomTenantResolver : ITenantResolver
+    public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
         public void Resolve(ITenantResolveContext context)
         {
@@ -308,10 +308,14 @@ Volo.Abp.AspNetCore.MultiTenancy 添加了下面这些租户解析器,从当前W
 * **HeaderTenantResolver**: 尝试从HTTP header中获取当前租户,默认的header名称是"__tenant".
 * **CookieTenantResolver**: 尝试从当前cookie中获取当前租户.默认的Cookie名称是"__tenant".
 
-可以使用AspNetCoreMultiTenancyOptions修改默认的参数名"__tenant".例如:
+> 如果你使用nginx作为反向代理服务器,请注意如果`TenantKey`包含下划线或其他特殊字符可能存在问题, 请参考: 
+http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
+http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
+
+可以使用AbpAspNetCoreMultiTenancyOptions修改默认的参数名"__tenant".例如:
 
 ````C#
-services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 {
     options.TenantKey = "MyTenantKey";
 });

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Http.Client;
 using Volo.Abp.TestApp.Application;
 using Volo.Abp.TestApp.Application.Dto;
 using Volo.Abp.TestApp.Domain;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace Volo.Abp.Http.DynamicProxying
 {
-    public class PersonAppServiceClientProxy_Tests : AbpHttpTestBase
+    public class PersonAppServiceClientProxy_Tests : AbpHttpClientTestBase
     {
         private readonly IPeopleAppService _peopleAppService;
         private readonly IRepository<Person, Guid> _personRepository;
@@ -26,9 +27,9 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task Get()
         {
-            var firstPerson = _personRepository.First();
+            var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            var person = await _peopleAppService.GetAsync(firstPerson.Id);
+            var person = await _peopleAppService.GetAsync(firstPerson.Id).ConfigureAwait(false);
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(firstPerson.Name);
@@ -37,7 +38,7 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto()).ConfigureAwait(false);
             people.TotalCount.ShouldBeGreaterThan(0);
             people.Items.Count.ShouldBe((int) people.TotalCount);
         }
@@ -45,11 +46,11 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task Delete()
         {
-            var firstPerson = _personRepository.First();
+            var firstPerson = (await _personRepository.GetListAsync()).First();
 
-            await _peopleAppService.DeleteAsync(firstPerson.Id);
+            await _peopleAppService.DeleteAsync(firstPerson.Id).ConfigureAwait(false);
 
-            firstPerson = _personRepository.FirstOrDefault(p => p.Id == firstPerson.Id);
+            firstPerson = (await _personRepository.GetListAsync()).FirstOrDefault(p => p.Id == firstPerson.Id);
             firstPerson.ShouldBeNull();
         }
 
@@ -59,17 +60,17 @@ namespace Volo.Abp.Http.DynamicProxying
             var uniquePersonName = Guid.NewGuid().ToString();
 
             var person = await _peopleAppService.CreateAsync(new PersonDto
-                {
-                    Name = uniquePersonName,
-                    Age = 42
-                }
-            );
+            {
+                Name = uniquePersonName,
+                Age = 42
+            }
+            ).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.Id.ShouldNotBe(Guid.Empty);
             person.Name.ShouldBe(uniquePersonName);
 
-            var personInDb = _personRepository.FirstOrDefault(p => p.Name == uniquePersonName);
+            var personInDb = (await _personRepository.GetListAsync()).FirstOrDefault(p => p.Name == uniquePersonName);
             personInDb.ShouldNotBeNull();
             personInDb.Id.ShouldBe(person.Id);
         }
@@ -77,7 +78,7 @@ namespace Volo.Abp.Http.DynamicProxying
         [Fact]
         public async Task Update()
         {
-            var firstPerson = _personRepository.First();
+            var firstPerson = (await _personRepository.GetListAsync()).First();
             var uniquePersonName = Guid.NewGuid().ToString();
 
             var person = await _peopleAppService.UpdateAsync(
@@ -88,18 +89,27 @@ namespace Volo.Abp.Http.DynamicProxying
                     Name = uniquePersonName,
                     Age = firstPerson.Age
                 }
-            );
+            ).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.Id.ShouldBe(firstPerson.Id);
             person.Name.ShouldBe(uniquePersonName);
             person.Age.ShouldBe(firstPerson.Age);
 
-            var personInDb = _personRepository.FirstOrDefault(p => p.Id == firstPerson.Id);
+            var personInDb = (await _personRepository.GetListAsync()).FirstOrDefault(p => p.Id == firstPerson.Id);
             personInDb.ShouldNotBeNull();
             personInDb.Id.ShouldBe(person.Id);
             personInDb.Name.ShouldBe(person.Name);
             personInDb.Age.ShouldBe(person.Age);
+        }
+
+        [Fact]
+        public async Task GetWithAuthorized()
+        {
+            await Assert.ThrowsAnyAsync<Exception>(async () =>
+            {
+                await _peopleAppService.GetWithAuthorized().ConfigureAwait(false);
+            }).ConfigureAwait(false);
         }
 
         [Fact]
@@ -118,7 +128,7 @@ namespace Volo.Abp.Http.DynamicProxying
                         }
                     }
                 }
-            );
+            ).ConfigureAwait(false);
 
             result.Value1.ShouldBe("value one");
             result.Inner1.Value2.ShouldBe("value two");

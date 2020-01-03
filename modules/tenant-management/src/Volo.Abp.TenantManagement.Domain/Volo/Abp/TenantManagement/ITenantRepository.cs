@@ -18,6 +18,11 @@ namespace Volo.Abp.TenantManagement
             bool includeDetails = true
         );
 
+        Tenant FindById(
+            Guid id,
+            bool includeDetails = true
+        );
+
         Task<List<Tenant>> GetListAsync(
             string sorting = null, 
             int maxResultCount = int.MaxValue, 

@@ -1,8 +1,10 @@
 ﻿using System;
+using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.SettingManagement
 {
     [Serializable]
+    [IgnoreMultiTenancy]
     public class SettingCacheItem
     {
         public string Value { get; set; }

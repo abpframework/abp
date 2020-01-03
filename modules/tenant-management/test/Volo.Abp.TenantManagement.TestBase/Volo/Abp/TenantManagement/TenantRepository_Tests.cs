@@ -20,13 +20,13 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task FindByNameAsync()
         {
-            var tenant = await TenantRepository.FindByNameAsync("acme");
+            var tenant = await TenantRepository.FindByNameAsync("acme").ConfigureAwait(false);
             tenant.ShouldNotBeNull();
 
-            tenant = await TenantRepository.FindByNameAsync("undefined-tenant");
+            tenant = await TenantRepository.FindByNameAsync("undefined-tenant").ConfigureAwait(false);
             tenant.ShouldBeNull();
 
-            tenant = await TenantRepository.FindByNameAsync("acme", includeDetails: true);
+            tenant = await TenantRepository.FindByNameAsync("acme", includeDetails: true).ConfigureAwait(false);
             tenant.ShouldNotBeNull();
             tenant.ConnectionStrings.Count.ShouldBeGreaterThanOrEqualTo(2);
         }
@@ -34,15 +34,15 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task FindAsync()
         {
-            var tenantId = (await TenantRepository.FindByNameAsync("acme")).Id;
+            var tenantId = (await TenantRepository.FindByNameAsync("acme").ConfigureAwait(false)).Id;
 
-            var tenant = await TenantRepository.FindAsync(tenantId);
+            var tenant = await TenantRepository.FindAsync(tenantId).ConfigureAwait(false);
             tenant.ShouldNotBeNull();
 
-            tenant = await TenantRepository.FindAsync(Guid.NewGuid());
+            tenant = await TenantRepository.FindAsync(Guid.NewGuid()).ConfigureAwait(false);
             tenant.ShouldBeNull();
 
-            tenant = await TenantRepository.FindAsync(tenantId, includeDetails: true);
+            tenant = await TenantRepository.FindAsync(tenantId, includeDetails: true).ConfigureAwait(false);
             tenant.ShouldNotBeNull();
             tenant.ConnectionStrings.Count.ShouldBeGreaterThanOrEqualTo(2);
         }
@@ -50,7 +50,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task GetListAsync()
         {
-            var tenants = await TenantRepository.GetListAsync();
+            var tenants = await TenantRepository.GetListAsync().ConfigureAwait(false);
             tenants.ShouldContain(t => t.Name == "acme");
             tenants.ShouldContain(t => t.Name == "volosoft");
         }
@@ -58,7 +58,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task Should_Eager_Load_Tenant_Collections()
         {
-            var role = await TenantRepository.FindByNameAsync("acme");
+            var role = await TenantRepository.FindByNameAsync("acme").ConfigureAwait(false);
             role.ConnectionStrings.ShouldNotBeNull();
             role.ConnectionStrings.Any().ShouldBeTrue();
         }

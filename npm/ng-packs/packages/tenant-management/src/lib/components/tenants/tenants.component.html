@@ -2,17 +2,15 @@
   <div class="card-header">
     <div class="row">
       <div class="col col-md-6">
-        <h5 class="card-title">
-          {{ 'AbpTenantManagement::Tenants' | abpLocalization }}
-        </h5>
+        <h5 class="card-title">{{ 'AbpTenantManagement::Tenants' | abpLocalization }}</h5>
       </div>
       <div class="text-right col col-md-6">
         <button
-          [abpPermission]="'AbpTenantManagement.Tenants.Create'"
+          *abpPermission="'AbpTenantManagement.Tenants.Create'"
           id="create-tenants"
           class="btn btn-primary"
           type="button"
-          (click)="onAddTenant()"
+          (click)="addTenant()"
         >
           <i class="fa fa-plus mr-1"></i>
           <span>{{ 'AbpTenantManagement::NewTenant' | abpLocalization }}</span>
@@ -31,25 +29,51 @@
       /></label>
     </div>
     <p-table
+      *ngIf="[150, 0] as columnWidths"
       [value]="data$ | async"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [lazy]="true"
       [lazyLoadOnInit]="false"
       [paginator]="true"
       [rows]="10"
       [totalRecords]="totalCount$ | async"
       [loading]="loading"
+      [resizableColumns]="true"
+      [scrollable]="true"
       (onLazyLoad)="onPageChange($event)"
     >
-      <ng-template pTemplate="header">
+      <ng-template pTemplate="colgroup">
+        <colgroup>
+          <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
+        </colgroup>
+      </ng-template>
+      <ng-template pTemplate="emptymessage" let-columns>
+        <tr
+          abp-table-empty-message
+          [attr.colspan]="columnWidths.length"
+          localizationResource="AbpTenantManagement"
+          localizationProp="NoDataAvailableInDatatable"
+        ></tr>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th>{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</th>
+          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
+            {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
+            <abp-sort-order-icon
+              #sortOrderIcon
+              sortKey="name"
+              [(selectedSortKey)]="sortKey"
+              [(order)]="sortOrder"
+            >
+            </abp-sort-order-icon>
+          </th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-data>
         <tr>
-          <td>
-            <div ngbDropdown class="d-inline-block">
+          <td class="text-center">
+            <div ngbDropdown container="body" class="d-inline-block">
               <button
                 class="btn btn-primary btn-sm dropdown-toggle"
                 data-toggle="dropdown"
@@ -60,28 +84,28 @@
               </button>
               <div ngbDropdownMenu>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.Update'"
+                  *abpPermission="'AbpTenantManagement.Tenants.Update'"
                   ngbDropdownItem
-                  (click)="onEditTenant(data.id)"
+                  (click)="editTenant(data.id)"
                 >
                   {{ 'AbpTenantManagement::Edit' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.ManageConnectionStrings'"
+                  *abpPermission="'AbpTenantManagement.Tenants.ManageConnectionStrings'"
                   ngbDropdownItem
                   (click)="onEditConnectionString(data.id)"
                 >
                   {{ 'AbpTenantManagement::Permission:ManageConnectionStrings' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.ManageFeatures'"
+                  *abpPermission="'AbpTenantManagement.Tenants.ManageFeatures'"
                   ngbDropdownItem
                   (click)="providerKey = data.id; visibleFeatures = true"
                 >
                   {{ 'AbpTenantManagement::Permission:ManageFeatures' | abpLocalization }}
                 </button>
                 <button
-                  [abpPermission]="'AbpTenantManagement.Tenants.Delete'"
+                  *abpPermission="'AbpTenantManagement.Tenants.Delete'"
                   ngbDropdownItem
                   (click)="delete(data.id, data.name)"
                 >
@@ -97,7 +121,7 @@
   </div>
 </div>
 
-<abp-modal [(visible)]="isModalVisible" [busy]="modalBusy">
+<abp-modal size="md" [(visible)]="isModalVisible" [busy]="modalBusy">
   <ng-template #abpHeader>
     <h3>{{ selectedModalContent.title | abpLocalization }}</h3>
   </ng-template>
@@ -110,12 +134,14 @@
     <button #abpClose type="button" class="btn btn-secondary">
       {{ 'AbpTenantManagement::Cancel' | abpLocalization }}
     </button>
-    <abp-button iconClass="fa fa-check" (click)="save()">{{ 'AbpIdentity::Save' | abpLocalization }}</abp-button>
+    <abp-button iconClass="fa fa-check" (click)="save()" [disabled]="isDisabledSaveButton">{{
+      'AbpIdentity::Save' | abpLocalization
+    }}</abp-button>
   </ng-template>
 </abp-modal>
 
 <ng-template #tenantModalTemplate>
-  <form [formGroup]="tenantForm" (ngSubmit)="save()">
+  <form [formGroup]="tenantForm" (ngSubmit)="save()" validateOnSubmit>
     <div class="mt-2">
       <div class="form-group">
         <label for="name">{{ 'AbpTenantManagement::TenantName' | abpLocalization }}</label>
@@ -126,39 +152,48 @@
 </ng-template>
 
 <ng-template #connectionStringModalTemplate>
-  <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()">
-    <label class="mt-2">
-      <div class="form-group">
-        <div class="custom-checkbox custom-control mb-2">
-          <input
-            id="useSharedDatabase"
-            type="checkbox"
-            class="custom-control-input"
-            formControlName="useSharedDatabase"
-            autofocus
-          />
-          <label for="useSharedDatabase" class="custom-control-label">{{
-            'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
-          }}</label>
-        </div>
-      </div>
-      <label class="form-group" *ngIf="!useSharedDatabase">
-        <label for="defaultConnectionString">{{
-          'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
-        }}</label>
+  <form [formGroup]="defaultConnectionStringForm" (ngSubmit)="save()" validateOnSubmit>
+    <div class="form-group">
+      <div class="custom-checkbox custom-control mb-2">
         <input
-          type="text"
-          id="defaultConnectionString"
-          class="form-control"
-          formControlName="defaultConnectionString"
+          id="useSharedDatabase"
+          type="checkbox"
+          class="custom-control-input"
+          formControlName="useSharedDatabase"
+          autofocus
+          (ngModelChange)="onSharedDatabaseChange($event)"
         />
-      </label>
-    </label>
+        <label for="useSharedDatabase" class="custom-control-label">{{
+          'AbpTenantManagement::DisplayName:UseSharedDatabase' | abpLocalization
+        }}</label>
+      </div>
+    </div>
+    <div class="form-group" *ngIf="!useSharedDatabase">
+      <label for="defaultConnectionString">{{
+        'AbpTenantManagement::DisplayName:DefaultConnectionString' | abpLocalization
+      }}</label>
+      <input
+        type="text"
+        id="defaultConnectionString"
+        class="form-control"
+        formControlName="defaultConnectionString"
+      />
+    </div>
   </form>
 </ng-template>
 
 <abp-feature-management
+  *abpReplaceableTemplate="{
+    inputs: {
+      providerName: { value: 'T' },
+      providerKey: { value: providerKey },
+      visible: { value: visibleFeatures, twoWay: true }
+    },
+    outputs: { visibleChange: onVisibleFeaturesChange },
+    componentKey: 'FeatureManagement.FeatureManagementComponent'
+  }"
   [(visible)]="visibleFeatures"
-  providerName="Tenant"
+  providerName="T"
   [providerKey]="providerKey"
-></abp-feature-management>
+>
+</abp-feature-management>

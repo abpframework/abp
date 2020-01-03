@@ -49,6 +49,10 @@
       "text": "基础知识",
       "items": [
         {
+          "text": "配置",
+          "path": "Configuration.md"
+        },
+        {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
           "items": [
@@ -77,13 +81,15 @@
           "text": "授权"
         },
         {
-          "text": "缓存"
+          "text": "缓存",
+          "path": "Caching.md"
         },
         {
           "text": "审计"
-        },
+        }, 
         {
-          "text": "设置管理"
+          "text": "设置管理",
+          "path": "Settings.md"
         }
       ]
     },
@@ -107,7 +113,13 @@
       "text": "服务",
       "items": [
         {
-          "text": "对象序列化"
+          "text": "当前用户",
+          "path": "CurrentUser.md"
+        },
+        {
+          "text": "对象到对象映射",
+          "path": "Object-To-Object-Mapping.md"
+
         },
         {
           "text": "JSON序列化"
@@ -234,6 +246,7 @@
     },
     {
       "text": "数据访问",
+      "path":"Data-Access.md",
       "items": [
         {
           "text": "Entity Framework Core 集成",
@@ -241,7 +254,7 @@
           "items": [            
             {
               "text": "PostgreSQL 集成",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "path": "Entity-Framework-Core-PostgreSQL.md"
             }
           ]
         },

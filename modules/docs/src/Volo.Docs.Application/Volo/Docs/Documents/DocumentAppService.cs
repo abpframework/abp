@@ -1,36 +1,37 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Volo.Abp.Application.Services;
+using Newtonsoft.Json;
 using Volo.Abp.Caching;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
-    public class DocumentAppService : ApplicationService, IDocumentAppService
+    public class DocumentAppService : DocsAppServiceBase, IDocumentAppService
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentStoreFactory _documentStoreFactory;
         protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
-
+        protected IHostEnvironment HostEnvironment { get; }
         public DocumentAppService(
             IProjectRepository projectRepository,
             IDocumentStoreFactory documentStoreFactory,
             IDistributedCache<DocumentWithDetailsDto> documentCache,
             IDistributedCache<LanguageConfig> languageCache,
-            IDistributedCache<DocumentResourceDto> resourceCache)
+            IDistributedCache<DocumentResourceDto> resourceCache,
+            IHostEnvironment hostEnvironment)
         {
             _projectRepository = projectRepository;
             _documentStoreFactory = documentStoreFactory;
             DocumentCache = documentCache;
             LanguageCache = languageCache;
             ResourceCache = resourceCache;
+            HostEnvironment = hostEnvironment;
         }
 
         public virtual async Task<DocumentWithDetailsDto> GetAsync(GetDocumentInput input)
@@ -83,7 +84,7 @@ namespace Volo.Docs.Documents
                 return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
             }
 
-            if (Debugger.IsAttached)
+            if (HostEnvironment.IsDevelopment())
             {
                 return await GetResourceAsync();
             }
@@ -98,6 +99,33 @@ namespace Volo.Docs.Documents
                     SlidingExpiration = TimeSpan.FromMinutes(30)
                 }
             );
+        }
+
+        public async Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input)
+        {
+            var project = await _projectRepository.GetAsync(input.ProjectId);
+
+            try
+            {
+                if (string.IsNullOrWhiteSpace(project.ParametersDocumentName))
+                {
+                    return await Task.FromResult<DocumentParametersDto>(null);
+                }
+
+                var document = await GetDocumentWithDetailsDtoAsync(
+                    project,
+                    project.ParametersDocumentName,
+                    input.LanguageCode,
+                    input.Version
+                );
+
+                return JsonConvert.DeserializeObject<DocumentParametersDto>(document.Content);
+            }
+            catch (DocumentNotFoundException)
+            {
+                Logger.LogWarning($"Parameter file ({project.ParametersDocumentName}) not found.");
+                return new DocumentParametersDto();
+            }
         }
 
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDtoAsync(
@@ -119,7 +147,7 @@ namespace Volo.Docs.Documents
                 return CreateDocumentWithDetailsDto(project, document);
             }
 
-            if (Debugger.IsAttached)
+            if (HostEnvironment.IsDevelopment())
             {
                 return await GetDocumentAsync();
             }
@@ -143,5 +171,6 @@ namespace Volo.Docs.Documents
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
             return documentDto;
         }
+
     }
 }

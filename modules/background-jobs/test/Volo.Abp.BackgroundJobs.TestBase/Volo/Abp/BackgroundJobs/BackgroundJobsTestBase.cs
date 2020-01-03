@@ -1,5 +1,6 @@
 ﻿using Volo.Abp;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 
 namespace Volo.Abp.BackgroundJobs
 {

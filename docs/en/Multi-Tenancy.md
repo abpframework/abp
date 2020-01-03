@@ -114,7 +114,7 @@ namespace MyCompany.MyProject
         {
             Configure<TenantResolveOptions>(options =>
             {
-                options.TenantResolvers.Add(new MyCustomTenantResolver());
+                options.TenantResolvers.Add(new MyCustomTenantResolveContributor());
             });
 
             //...
@@ -123,14 +123,14 @@ namespace MyCompany.MyProject
 }
 ````
 
-MyCustomTenantResolver must implement **ITenantResolver** as shown below:
+`MyCustomTenantResolveContributor` must implement **ITenantResolveContributor** as shown below:
 
 ````C#
 using Volo.Abp.MultiTenancy;
 
 namespace MyCompany.MyProject
 {
-    public class MyCustomTenantResolver : ITenantResolver
+    public class MyCustomTenantResolveContributor : ITenantResolveContributor
     {
         public void Resolve(ITenantResolveContext context)
         {
@@ -307,10 +307,15 @@ Volo.Abp.AspNetCore.MultiTenancy package adds following tenant resolvers to dete
 * **HeaderTenantResolver**: Tries to find current tenant id from HTTP header. Header name is "__tenant" by default.
 * **CookieTenantResolver**: Tries to find current tenant id from cookie values. Cookie name is "__tenant" by default.
 
-"__tenant" parameter name can be changed using AspNetCoreMultiTenancyOptions. Example:
+> If you use nginx as a reverse proxy server, please note that if `TenantKey` contains an underscore or other special characters, there may be a problem, please refer to: 
+http://nginx.org/en/docs/http/ngx_http_core_module.html#ignore_invalid_headers
+http://nginx.org/en/docs/http/ngx_http_core_module.html#underscores_in_headers
+
+
+"__tenant" parameter name can be changed using AbpAspNetCoreMultiTenancyOptions. Example:
 
 ````C#
-services.Configure<AspNetCoreMultiTenancyOptions>(options =>
+services.Configure<AbpAspNetCoreMultiTenancyOptions>(options =>
 {
     options.TenantKey = "MyTenantKey";
 });

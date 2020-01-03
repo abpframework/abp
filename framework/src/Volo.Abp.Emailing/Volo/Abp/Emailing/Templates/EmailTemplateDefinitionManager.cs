@@ -12,12 +12,12 @@ namespace Volo.Abp.Emailing.Templates
     {
         protected Lazy<IDictionary<string, EmailTemplateDefinition>> EmailTemplateDefinitions { get; }
 
-        protected EmailTemplateOptions Options { get; }
+        protected AbpEmailTemplateOptions Options { get; }
 
         protected IServiceProvider ServiceProvider { get; }
 
         public EmailTemplateDefinitionManager(
-            IOptions<EmailTemplateOptions> options,
+            IOptions<AbpEmailTemplateOptions> options,
             IServiceProvider serviceProvider)
         {
             ServiceProvider = serviceProvider;

@@ -1,0 +1,11 @@
+{
+  "version": "1.1.1",
+  "name": "@abp/luxon",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "luxon": "^1.21.3"
+  },
+  "gitHead": "b926d7a3fed6365550493ec00bdfe9da9dd6c541"
+}

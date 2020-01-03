@@ -56,7 +56,7 @@ namespace Volo.Abp.BackgroundWorkers
 
             foreach (var worker in _backgroundWorkers)
             {
-                await worker.StartAsync(cancellationToken);
+                await worker.StartAsync(cancellationToken).ConfigureAwait(false);
             }
         }
 
@@ -66,7 +66,7 @@ namespace Volo.Abp.BackgroundWorkers
 
             foreach (var worker in _backgroundWorkers)
             {
-                await worker.StopAsync(cancellationToken);
+                await worker.StopAsync(cancellationToken).ConfigureAwait(false);
             }
         }
     }

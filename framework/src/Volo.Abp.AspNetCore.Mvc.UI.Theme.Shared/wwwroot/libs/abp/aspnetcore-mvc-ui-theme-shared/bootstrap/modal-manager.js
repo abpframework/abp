@@ -16,11 +16,11 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
             var _callbacks = [];
 
             return {
-                add: function(callback) {
+                add: function (callback) {
                     _callbacks.push(callback);
                 },
 
-                triggerAll: function(thisObj, argumentList) {
+                triggerAll: function (thisObj, argumentList) {
                     for (var i = 0; i < _callbacks.length; i++) {
                         _callbacks[i].apply(thisObj, argumentList);
                     }
@@ -69,7 +69,7 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                     //TODO: data-ajaxForm comparison seems wrong!
                     if (_$form.attr('data-ajaxForm') === undefined || _$form.attr('data-ajaxForm') === false) {
                         _$form.abpAjaxForm();
-                    } 
+                    }
 
                     if (_$form.attr('data-check-form-on-close') === undefined || _$form.attr('data-check-form-on-close') != 'false') {
                         _$form.needConfirmationOnUnsavedClose(_$modal);
@@ -94,7 +94,18 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 });
 
                 _$modal.on('shown.bs.modal', function () {
-                    _$modal.find('input:not([type=hidden]):first').focus();
+                    //focuses first element if it's a typeable input. 
+                    var $firstVisibleInput = _$modal.find('input:not([type=hidden]):first');
+                    if ($firstVisibleInput.hasClass("datepicker")) {
+                        return; //don't pop-up date pickers...
+                    }
+
+                    var focusableInputs = ["text", "password", "email", "number", "search", "tel", "url"];
+                    if (!focusableInputs.includes($firstVisibleInput.prop("type"))) {
+                        return;
+                    }
+
+                    $firstVisibleInput.focus();
                 });
 
                 var modalClass = abp.modals[options.modalClass];
@@ -136,44 +147,44 @@ $.validator.defaults.ignore = ''; //TODO: Would be better if we can apply only f
                 _$modal.modal('hide');
             };
 
-            var _onClose = function(onCloseCallback) {
+            var _onClose = function (onCloseCallback) {
                 _onCloseCallbacks.add(onCloseCallback);
             };
 
-            var _onResult = function(callback) {
+            var _onResult = function (callback) {
                 _onResultCallbacks.add(callback);
             };
 
             _publicApi = {
                 open: _open,
 
-                reopen: function() {
+                reopen: function () {
                     _open(_args);
                 },
 
                 close: _close,
 
-                getModalId: function() {
+                getModalId: function () {
                     return _modalId;
                 },
 
-                getModal: function() {
+                getModal: function () {
                     return _$modal;
                 },
 
-                getForm: function() {
+                getForm: function () {
                     return _$form;
                 },
 
-                getArgs: function() {
+                getArgs: function () {
                     return _args;
                 },
 
-                getOptions: function() {
+                getOptions: function () {
                     return _options;
                 },
 
-                setResult: function() {
+                setResult: function () {
                     _onResultCallbacks.triggerAll(_publicApi, arguments);
                 },
 

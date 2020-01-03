@@ -15,14 +15,11 @@
 
   <ItemGroup>
     <content Remove="Volo\Abp\PermissionManagement\Localization\Domain\*.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\PermissionManagement\Localization\Domain\*.json" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
 </Project>

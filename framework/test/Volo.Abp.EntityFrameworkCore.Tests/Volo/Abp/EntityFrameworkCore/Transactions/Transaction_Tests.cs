@@ -32,18 +32,18 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
 
             try
             {
-                await WithUnitOfWorkAsync(new UnitOfWorkOptions { IsTransactional = true }, async () =>
+                await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions { IsTransactional = true }, async () =>
                 {
-                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
                     throw new Exception(exceptionMessage);
-                });
+                }).ConfigureAwait(false);
             }
             catch (Exception e) when (e.Message == exceptionMessage)
             {
 
             }
 
-            var person = await _personRepository.FindAsync(personId);
+            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
             person.ShouldBeNull();
         }
 
@@ -52,16 +52,16 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
         {
             var personId = Guid.NewGuid();
 
-            await WithUnitOfWorkAsync(new UnitOfWorkOptions { IsTransactional = true }, async () =>
+            await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions { IsTransactional = true }, async () =>
             {
                 _unitOfWorkManager.Current.ShouldNotBeNull();
 
-                await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                await _personRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
 
-                await _unitOfWorkManager.Current.RollbackAsync();
-            });
+                await _unitOfWorkManager.Current.RollbackAsync().ConfigureAwait(false);
+            }).ConfigureAwait(false);
 
-            var person = await _personRepository.FindAsync(personId);
+            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
             person.ShouldBeNull();
         }
 
@@ -75,21 +75,21 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
             {
                 var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
 
-                using (uowManager.Begin(new UnitOfWorkOptions { IsTransactional = true }))
+                using (uowManager.Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
                 {
                     _unitOfWorkManager.Current.ShouldNotBeNull();
 
-                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
-                    await _bookRepository.InsertAsync(new BookInSecondDbContext { Id = bookId, Name = bookId.ToString() });
+                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
+                    await _bookRepository.InsertAsync(new BookInSecondDbContext(bookId, bookId.ToString())).ConfigureAwait(false);
 
-                    await _unitOfWorkManager.Current.SaveChangesAsync();
+                    await _unitOfWorkManager.Current.SaveChangesAsync().ConfigureAwait(false);
 
                     //Will automatically rollback since not called the Complete!
                 }
             }
 
-            (await _personRepository.FindAsync(personId)).ShouldBeNull();
-            (await _bookRepository.FindAsync(bookId)).ShouldBeNull();
+            (await _personRepository.FindAsync(personId).ConfigureAwait(false)).ShouldBeNull();
+            (await _bookRepository.FindAsync(bookId).ConfigureAwait(false)).ShouldBeNull();
         }
     }
 }

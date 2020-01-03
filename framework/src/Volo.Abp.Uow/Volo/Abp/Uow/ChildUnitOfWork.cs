@@ -9,7 +9,7 @@ namespace Volo.Abp.Uow
     {
         public Guid Id => _parent.Id;
 
-        public IUnitOfWorkOptions Options => _parent.Options;
+        public IAbpUnitOfWorkOptions Options => _parent.Options;
 
         public IUnitOfWork Outer => _parent.Outer;
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.Uow
             _parent.SetOuter(outer);
         }
 
-        public void Initialize(UnitOfWorkOptions options)
+        public void Initialize(AbpUnitOfWorkOptions options)
         {
             _parent.Initialize(options);
         }
@@ -53,29 +53,14 @@ namespace Volo.Abp.Uow
             _parent.Reserve(reservationName);
         }
 
-        public void SaveChanges()
-        {
-            _parent.SaveChanges();
-        }
-
         public Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             return _parent.SaveChangesAsync(cancellationToken);
         }
 
-        public void Complete()
-        {
-
-        }
-
         public Task CompleteAsync(CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
-        }
-
-        public void Rollback()
-        {
-            _parent.Rollback();
         }
 
         public Task RollbackAsync(CancellationToken cancellationToken = default)

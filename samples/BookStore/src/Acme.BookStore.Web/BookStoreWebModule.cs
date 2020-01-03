@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -23,7 +25,7 @@ using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation;
-using Volo.Abp.Ui.Navigation.Urls;
+using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore.Web
@@ -71,7 +73,7 @@ namespace Acme.BookStore.Web
             ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -79,7 +81,7 @@ namespace Acme.BookStore.Web
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication()
                 .AddIdentityServerAuthentication(options =>
@@ -103,11 +105,11 @@ namespace Acme.BookStore.Web
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookStoreDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}Acme.BookStore.Domain", Path.DirectorySeparatorChar)));
@@ -138,7 +140,7 @@ namespace Acme.BookStore.Web
 
         private void ConfigureNavigationServices()
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new BookStoreMenuContributor());
             });
@@ -157,7 +159,7 @@ namespace Acme.BookStore.Web
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "BookStore API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookStore API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -169,6 +171,9 @@ namespace Acme.BookStore.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.UseCorrelationId();
+            app.UseAbpRequestLocalization();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -179,6 +184,9 @@ namespace Acme.BookStore.Web
             }
 
             app.UseVirtualFiles();
+
+            app.UseRouting();
+
             app.UseAuthentication();
             app.UseJwtTokenMiddleware();
 
@@ -188,6 +196,7 @@ namespace Acme.BookStore.Web
             }
 
             app.UseIdentityServer();
+            app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseSwagger();
             app.UseSwaggerUI(options =>

@@ -11,7 +11,7 @@ using Volo.Blogging.Posts;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class EditModel : AbpPageModel
+    public class EditModel : BloggingPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;

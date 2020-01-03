@@ -38,7 +38,7 @@ namespace Volo.Abp.Cli.Commands
             if (password.IsNullOrWhiteSpace())
             {
                 throw new CliUsageException(
-                    "Password name is missing!" +
+                    "Password is missing!" +
                     Environment.NewLine + Environment.NewLine +
                     GetUsageInfo()
                 );
@@ -48,7 +48,7 @@ namespace Volo.Abp.Cli.Commands
                 commandLineArgs.Target,
                 password,
                 commandLineArgs.Options.GetOrNull(Options.Organization.Short, Options.Organization.Long)
-            );
+            ).ConfigureAwait(false);
 
             Logger.LogInformation($"Successfully logged in as '{commandLineArgs.Target}'");
         }
@@ -72,7 +72,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return string.Empty;
+            return "Sign in to " + CliUrls.AccountAbpIo + ".";
         }
 
         public static class Options

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.IdentityServer
 {
@@ -25,9 +26,9 @@ namespace Volo.Abp.IdentityServer
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<AbpIdentityServerTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

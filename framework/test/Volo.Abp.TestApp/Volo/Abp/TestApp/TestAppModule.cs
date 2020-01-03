@@ -6,6 +6,7 @@ using Volo.Abp.TestApp.Domain;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.TestApp.Application.Dto;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.TestApp
 {
@@ -44,7 +45,7 @@ namespace Volo.Abp.TestApp
 
         private void ConfigureDistributedEventBus()
         {
-           Configure<DistributedEventBusOptions>(options =>
+           Configure<AbpDistributedEventBusOptions>(options =>
            {
                options.EtoMappings.Add<Person, PersonEto>();
            });
@@ -54,9 +55,9 @@ namespace Volo.Abp.TestApp
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<TestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

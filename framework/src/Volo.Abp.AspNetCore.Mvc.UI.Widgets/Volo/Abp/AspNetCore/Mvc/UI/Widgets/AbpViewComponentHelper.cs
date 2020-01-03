@@ -14,13 +14,13 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
     [Dependency(ReplaceServices = true)]
     public class AbpViewComponentHelper : IViewComponentHelper, IViewContextAware, ITransientDependency
     {
-        protected WidgetOptions Options { get; }
+        protected AbpWidgetOptions Options { get; }
         protected IPageWidgetManager PageWidgetManager { get; }
         protected DefaultViewComponentHelper DefaultViewComponentHelper { get; }
 
         public AbpViewComponentHelper(
             DefaultViewComponentHelper defaultViewComponentHelper,
-            IOptions<WidgetOptions> widgetOptions,
+            IOptions<AbpWidgetOptions> widgetOptions,
             IPageWidgetManager pageWidgetManager)
         {
             DefaultViewComponentHelper = defaultViewComponentHelper;
@@ -33,10 +33,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             var widget = Options.Widgets.Find(name);
             if (widget == null)
             {
-                return await DefaultViewComponentHelper.InvokeAsync(name, arguments);
+                return await DefaultViewComponentHelper.InvokeAsync(name, arguments).ConfigureAwait(false);
             }
 
-            return await InvokeWidgetAsync(arguments, widget);
+            return await InvokeWidgetAsync(arguments, widget).ConfigureAwait(false);
         }
 
         public virtual async Task<IHtmlContent> InvokeAsync(Type componentType, object arguments)
@@ -44,10 +44,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             var widget = Options.Widgets.Find(componentType);
             if (widget == null)
             {
-                return await DefaultViewComponentHelper.InvokeAsync(componentType, arguments);
+                return await DefaultViewComponentHelper.InvokeAsync(componentType, arguments).ConfigureAwait(false);
             }
 
-            return await InvokeWidgetAsync(arguments, widget);
+            return await InvokeWidgetAsync(arguments, widget).ConfigureAwait(false);
         }
 
         public virtual void Contextualize(ViewContext viewContext)
@@ -68,7 +68,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             
             return new HtmlContentBuilder()
                 .AppendHtml($"<div {wrapperAttributesBuilder}>")
-                .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))
+                .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments).ConfigureAwait(false))
                 .AppendHtml("</div>");
         }
     }

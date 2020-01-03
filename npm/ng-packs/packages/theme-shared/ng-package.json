@@ -7,12 +7,14 @@
   "whitelistedNonPeerDependencies": [
     "@abp/ng.core",
     "@angular/cdk",
+    "@fortawesome/fontawesome-free",
     "@ng-bootstrap/ng-bootstrap",
     "@ngx-validate/core",
     "bootstrap",
     "font-awesome",
     "ngx-perfect-scrollbar",
     "primeicons",
-    "primeng"
+    "primeng",
+    "chart.js"
   ]
 }

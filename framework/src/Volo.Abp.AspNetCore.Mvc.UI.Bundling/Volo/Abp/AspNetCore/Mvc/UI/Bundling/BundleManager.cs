@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -20,10 +22,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
     {
         public ILogger<BundleManager> Logger { get; set; }
 
-        protected readonly BundlingOptions Options;
-        protected readonly BundleContributorOptions ContributorOptions;
+        protected readonly AbpBundlingOptions Options;
+        protected readonly AbpBundleContributorOptions ContributorOptions;
         protected readonly IWebContentFileProvider WebContentFileProvider;
-        protected readonly IHostingEnvironment HostingEnvironment;
+        protected readonly IWebHostEnvironment HostingEnvironment;
         protected readonly IScriptBundler ScriptBundler;
         protected readonly IStyleBundler StyleBundler;
         protected readonly IServiceProvider ServiceProvider;
@@ -32,11 +34,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
         protected readonly IWebRequestResources RequestResources;
 
         public BundleManager(
-            IOptions<BundlingOptions> options,
-            IOptions<BundleContributorOptions> contributorOptions,
+            IOptions<AbpBundlingOptions> options,
+            IOptions<AbpBundleContributorOptions> contributorOptions,
             IScriptBundler scriptBundler,
             IStyleBundler styleBundler,
-            IHostingEnvironment hostingEnvironment,
+            IWebHostEnvironment hostingEnvironment,
             IServiceProvider serviceProvider,
             IDynamicFileProvider dynamicFileProvider,
             IBundleCache bundleCache,
@@ -57,21 +59,21 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             Logger = NullLogger<BundleManager>.Instance;
         }
 
-        public virtual IReadOnlyList<string> GetStyleBundleFiles(string bundleName)
+        public virtual async Task<IReadOnlyList<string>> GetStyleBundleFilesAsync(string bundleName)
         {
-            return GetBundleFiles(Options.StyleBundles, bundleName, StyleBundler);
+            return await GetBundleFilesAsync(Options.StyleBundles, bundleName, StyleBundler).ConfigureAwait(false);
         }
 
-        public virtual IReadOnlyList<string> GetScriptBundleFiles(string bundleName)
+        public virtual async Task<IReadOnlyList<string>> GetScriptBundleFilesAsync(string bundleName)
         {
-            return GetBundleFiles(Options.ScriptBundles, bundleName, ScriptBundler);
+            return await GetBundleFilesAsync(Options.ScriptBundles, bundleName, ScriptBundler).ConfigureAwait(false);
         }
 
-        protected virtual IReadOnlyList<string> GetBundleFiles(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
+        protected virtual async Task<IReadOnlyList<string>> GetBundleFilesAsync(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
         {
             var contributors = GetContributors(bundles, bundleName);
-            var bundleFiles = RequestResources.TryAdd(GetBundleFiles(contributors));
-            var dynamicResources = RequestResources.TryAdd(GetDynamicResources(contributors));
+            var bundleFiles = RequestResources.TryAdd(await GetBundleFilesAsync(contributors));
+            var dynamicResources = RequestResources.TryAdd(await GetDynamicResourcesAsync(contributors));
 
             if (!IsBundlingEnabled())
             {
@@ -138,11 +140,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             DynamicFileProvider.AddOrUpdate(
                 new InMemoryFileInfo(
-                    Encoding.UTF8.GetBytes(bundleResult.Content),
                     "/wwwroot/" + bundleRelativePath, //TODO: get rid of wwwroot!
+                    Encoding.UTF8.GetBytes(bundleResult.Content),
                     fileName
-                    )
-                );
+                )
+            );
         }
 
         protected virtual bool IsBundlingEnabled()
@@ -177,22 +179,36 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             }
         }
 
-        protected virtual List<string> GetBundleFiles(List<BundleContributor> contributors)
+        protected async Task<List<string>> GetBundleFilesAsync(List<IBundleContributor> contributors)
         {
             var context = CreateBundleConfigurationContext();
 
-            contributors.ForEach(c => c.PreConfigureBundle(context));
-            contributors.ForEach(c => c.ConfigureBundle(context));
-            contributors.ForEach(c => c.PostConfigureBundle(context));
+            foreach (var contributor in contributors)
+            {
+                await contributor.PreConfigureBundleAsync(context).ConfigureAwait(false);
+            }
+
+            foreach (var contributor in contributors)
+            {
+                await contributor.ConfigureBundleAsync(context).ConfigureAwait(false);
+            }
+
+            foreach (var contributor in contributors)
+            {
+                await contributor.PostConfigureBundleAsync(context).ConfigureAwait(false);
+            }
 
             return context.Files;
         }
 
-        protected virtual List<string> GetDynamicResources(List<BundleContributor> contributors)
+        protected virtual async Task<List<string>> GetDynamicResourcesAsync(List<IBundleContributor> contributors)
         {
             var context = CreateBundleConfigurationContext();
 
-            contributors.ForEach(c => c.ConfigureDynamicResources(context));
+            foreach (var contributor in contributors)
+            {
+                await contributor.ConfigureDynamicResourcesAsync(context).ConfigureAwait(false);
+            }
 
             return context.Files;
         }
@@ -202,9 +218,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return new BundleConfigurationContext(ServiceProvider, WebContentFileProvider);
         }
 
-        protected virtual List<BundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)
+        protected virtual List<IBundleContributor> GetContributors(BundleConfigurationCollection bundles, string bundleName)
         {
-            var contributors = new List<BundleContributor>();
+            var contributors = new List<IBundleContributor>();
 
             AddContributorsWithBaseBundles(contributors, bundles, bundleName);
 
@@ -221,7 +237,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
             return contributors;
         }
 
-        protected virtual void AddContributorsWithBaseBundles(List<BundleContributor> contributors, BundleConfigurationCollection bundles, string bundleName)
+        protected virtual void AddContributorsWithBaseBundles(List<IBundleContributor> contributors, BundleConfigurationCollection bundles, string bundleName)
         {
             var bundleConfiguration = bundles.Get(bundleName);
 

@@ -3,6 +3,8 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.VirtualFileSystem.Embedded;
 
 namespace Microsoft.Extensions.FileProviders
 {
@@ -54,8 +56,25 @@ namespace Microsoft.Extensions.FileProviders
 
             using (var stream = fileInfo.CreateReadStream())
             {
-                return await stream.GetAllBytesAsync();
+                return await stream.GetAllBytesAsync().ConfigureAwait(false);
             }
+        }
+
+        public static string GetVirtualOrPhysicalPathOrNull([NotNull] this IFileInfo fileInfo)
+        {
+            Check.NotNull(fileInfo, nameof(fileInfo));
+
+            if (fileInfo is EmbeddedResourceFileInfo embeddedFileInfo)
+            {
+                return embeddedFileInfo.VirtualPath;
+            }
+
+            if (fileInfo is InMemoryFileInfo inMemoryFileInfo)
+            {
+                return inMemoryFileInfo.DynamicPath;
+            }
+
+            return fileInfo.PhysicalPath;
         }
     }
 }

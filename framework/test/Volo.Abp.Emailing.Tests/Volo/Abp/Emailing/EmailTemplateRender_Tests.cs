@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Emailing.Templates;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Emailing
@@ -43,7 +44,7 @@ namespace Volo.Abp.Emailing
                 }
             };
 
-            var result = await _templateRender.RenderAsync(template, model);
+            var result = await _templateRender.RenderAsync(template, model).ConfigureAwait(false);
             result.ShouldBe("Hello john@abp.io 1:iphone,2:ipad,");
         }
 

@@ -5,6 +5,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryForm;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQueryValidationUnobtrusive;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Lodash;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.Luxon;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Select2;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.SweetAlert;
@@ -25,7 +26,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Bundling
         typeof(SweetalertScriptContributor),
         typeof(ToastrScriptBundleContributor),
         typeof(MalihuCustomScrollbarPluginScriptBundleContributor),
-        typeof(TimeagoScriptContributor)
+        typeof(LuxonScriptContributor),
+        typeof(TimeagoScriptContributor),
+        typeof(BootstrapDatepickerScriptContributor)
         )]
     public class SharedThemeGlobalScriptContributor : BundleContributor
     {

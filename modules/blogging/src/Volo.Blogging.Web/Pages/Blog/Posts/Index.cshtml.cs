@@ -10,7 +10,7 @@ using Volo.Blogging.Tagging.Dtos;
 
 namespace Volo.Blogging.Pages.Blog.Posts
 {
-    public class IndexModel : AbpPageModel
+    public class IndexModel : BloggingPageModel
     {
         private readonly IPostAppService _postAppService;
         private readonly IBlogAppService _blogAppService;

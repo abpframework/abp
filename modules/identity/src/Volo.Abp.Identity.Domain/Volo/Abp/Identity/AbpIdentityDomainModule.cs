@@ -11,7 +11,6 @@ using Volo.Abp.Identity.Settings;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
-using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity
 {
@@ -25,7 +24,7 @@ namespace Volo.Abp.Identity
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<DistributedEventBusOptions>(options =>
+            Configure<AbpDistributedEventBusOptions>(options =>
             {
                 options.EtoMappings.Add<IdentityUser, UserEto>();
             });

@@ -6,11 +6,13 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
@@ -22,6 +24,7 @@ using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
+using Volo.Abp.Caching;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Http.Client.IdentityModel;
 using Volo.Abp.Identity.Web;
@@ -68,16 +71,25 @@ namespace MyCompanyName.MyProjectName.Web
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
-            ConfigureNavigationServices();
-            ConfigureSwaggerServices(context.Services);
+            ConfigureNavigationServices(configuration);
             ConfigureMultiTenancy();
+            ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureCache(IConfiguration configuration)
+        {
+            Configure<AbpDistributedCacheOptions>(options =>
+            {
+                options.KeyPrefix = "MyProjectName:";
+            });
+        }
+
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -87,13 +99,13 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureMultiTenancy()
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication(options =>
                 {
@@ -102,7 +114,6 @@ namespace MyCompanyName.MyProjectName.Web
                 })
                 .AddCookie("Cookies", options =>
                 {
-                    options.Cookie.Expiration = TimeSpan.FromDays(365);
                     options.ExpireTimeSpan = TimeSpan.FromDays(365);
                 })
                 .AddOpenIdConnect("oidc", options =>
@@ -134,11 +145,11 @@ namespace MyCompanyName.MyProjectName.Web
             });
         }
 
-        private void ConfigureVirtualFileSystem(IHostingEnvironment hostingEnvironment)
+        private void ConfigureVirtualFileSystem(IWebHostEnvironment hostingEnvironment)
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
@@ -156,11 +167,11 @@ namespace MyCompanyName.MyProjectName.Web
             }
         }
 
-        private void ConfigureNavigationServices()
+        private void ConfigureNavigationServices(IConfiguration configuration)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
-                options.MenuContributors.Add(new MyProjectNameMenuContributor());
+                options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
         }
 
@@ -169,7 +180,7 @@ namespace MyCompanyName.MyProjectName.Web
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -178,8 +189,8 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureRedis(
             ServiceConfigurationContext context,
-            IConfigurationRoot configuration,
-            IHostingEnvironment hostingEnvironment)
+            IConfiguration configuration,
+            IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
             {
@@ -200,6 +211,8 @@ namespace MyCompanyName.MyProjectName.Web
             var app = context.GetApplicationBuilder();
             var env = context.GetEnvironment();
 
+            app.UseCorrelationId();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -210,7 +223,9 @@ namespace MyCompanyName.MyProjectName.Web
             }
 
             app.UseVirtualFiles();
+            app.UseRouting();
             app.UseAuthentication();
+            app.UseAuthorization();
 
             if (MultiTenancyConsts.IsEnabled)
             {

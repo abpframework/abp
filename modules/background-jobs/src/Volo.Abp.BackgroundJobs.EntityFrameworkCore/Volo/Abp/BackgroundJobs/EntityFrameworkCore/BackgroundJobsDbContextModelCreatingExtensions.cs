@@ -12,7 +12,10 @@ namespace Volo.Abp.BackgroundJobs.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BackgroundJobsModelBuilderConfigurationOptions();
+            var options = new BackgroundJobsModelBuilderConfigurationOptions(
+                BackgroundJobsDbProperties.DbTablePrefix,
+                BackgroundJobsDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
             

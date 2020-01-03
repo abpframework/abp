@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Uow;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http;
 using Volo.Abp.Json;
 
-namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
+namespace Volo.Abp.AspNetCore.ExceptionHandling
 {
     public class AbpExceptionHandlingMiddleware : IMiddleware, ITransientDependency
     {
@@ -28,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
         {
             try
             {
-                await next(context);
+                await next(context).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -43,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                 {
                     if (actionInfo.IsObjectResult) //TODO: Align with AbpExceptionFilter.ShouldHandleException!
                     {
-                        await HandleAndWrapException(context, ex);
+                        await HandleAndWrapException(context, ex).ConfigureAwait(false);
                         return;
                     }
                 }
@@ -71,7 +72,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ExceptionHandling
                         errorInfoConverter.Convert(exception)
                     )
                 )
-            );
+            ).ConfigureAwait(false);
         }
 
         private Task ClearCacheHeaders(object state)

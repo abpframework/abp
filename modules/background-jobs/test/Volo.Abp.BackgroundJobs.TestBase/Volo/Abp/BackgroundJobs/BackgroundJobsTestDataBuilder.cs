@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Timing;
 
@@ -20,12 +21,11 @@ namespace Volo.Abp.BackgroundJobs
             _clock = clock;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            _backgroundJobRepository.Insert(
-                new BackgroundJobRecord
+            await _backgroundJobRepository.InsertAsync(
+                new BackgroundJobRecord(_testData.JobId1)
                 {
-                    Id = _testData.JobId1,
                     JobName = "TestJobName",
                     JobArgs = "{ value: 1 }",
                     NextTryTime = _clock.Now.Subtract(TimeSpan.FromMinutes(1)),
@@ -35,12 +35,11 @@ namespace Volo.Abp.BackgroundJobs
                     CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(2)),
                     TryCount = 0
                 }
-            );
+            ).ConfigureAwait(false);
 
-            _backgroundJobRepository.Insert(
-                new BackgroundJobRecord
+            await _backgroundJobRepository.InsertAsync(
+                new BackgroundJobRecord(_testData.JobId2)
                 {
-                    Id = _testData.JobId2,
                     JobName = "TestJobName",
                     JobArgs = "{ value: 2 }",
                     NextTryTime = _clock.Now.AddMinutes(42),
@@ -50,12 +49,11 @@ namespace Volo.Abp.BackgroundJobs
                     CreationTime = _clock.Now.Subtract(TimeSpan.FromDays(2)),
                     TryCount = 3
                 }
-            );
+            ).ConfigureAwait(false);
 
-            _backgroundJobRepository.Insert(
-                new BackgroundJobRecord
+            await _backgroundJobRepository.InsertAsync(
+                new BackgroundJobRecord(_testData.JobId3)
                 {
-                    Id = _testData.JobId3,
                     JobName = "TestJobName",
                     JobArgs = "{ value: 3 }",
                     NextTryTime = _clock.Now,
@@ -65,7 +63,7 @@ namespace Volo.Abp.BackgroundJobs
                     CreationTime = _clock.Now.Subtract(TimeSpan.FromMinutes(90)),
                     TryCount = 2
                 }
-            );
+            ).ConfigureAwait(false);
         }
     }
 }

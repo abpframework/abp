@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Data;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Docs.GitHub.Documents;
 using Volo.Docs.Projects;
@@ -18,7 +19,7 @@ namespace Volo.Docs
             _projectRepository = projectRepository;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
             var project = new Project(
                 _testData.PorjectId,
@@ -27,7 +28,8 @@ namespace Volo.Docs
                 GithubDocumentStore.Type,
                 "md",
                 "index",
-                "docs-nav.json"
+                "docs-nav.json",
+                "docs-params.json"
             );
 
             project
@@ -35,7 +37,7 @@ namespace Volo.Docs
                 .SetProperty("GitHubAccessToken", "123456")
                 .SetProperty("GitHubUserAgent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64)");
 
-            _projectRepository.Insert(project);
+            await _projectRepository.InsertAsync(project);
         }
     }
 }

@@ -76,10 +76,38 @@ namespace Volo.Abp.Domain.Entities
         {
             var lambdaParam = Expression.Parameter(typeof(TEntity));
             var leftExpression = Expression.PropertyOrField(lambdaParam, "Id");
-            Expression<Func<object>> closure = () => id;
+            var idValue = Convert.ChangeType(id, typeof(TKey));
+            Expression<Func<object>> closure = () => idValue;
             var rightExpression = Expression.Convert(closure.Body, leftExpression.Type);
             var lambdaBody = Expression.Equal(leftExpression, rightExpression);
             return Expression.Lambda<Func<TEntity, bool>>(lambdaBody, lambdaParam);
+        }
+
+        public static void TrySetId<TKey>(
+            IEntity<TKey> entity, 
+            Func<TKey> idFactory, 
+            bool checkForDisableGuidGenerationAttribute = false)
+        {
+            //TODO: Can be optimized (by caching per entity type)?
+            var entityType = entity.GetType();
+            var idProperty = entityType.GetProperty(
+                nameof(entity.Id)
+            );
+
+            if (idProperty == null || idProperty.GetSetMethod(true) == null)
+            {
+                return;
+            }
+
+            if (checkForDisableGuidGenerationAttribute)
+            {
+                if (idProperty.IsDefined(typeof(DisableIdGenerationAttribute), true))
+                {
+                    return;
+                }
+            }
+
+            idProperty.SetValue(entity, idFactory());
         }
     }
 }

@@ -10,9 +10,9 @@ namespace Volo.Abp.MultiTenancy
     public class TenantResolver : ITenantResolver, ITransientDependency
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly TenantResolveOptions _options;
+        private readonly AbpTenantResolveOptions _options;
 
-        public TenantResolver(IOptions<TenantResolveOptions> options, IServiceProvider serviceProvider)
+        public TenantResolver(IOptions<AbpTenantResolveOptions> options, IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
             _options = options.Value;

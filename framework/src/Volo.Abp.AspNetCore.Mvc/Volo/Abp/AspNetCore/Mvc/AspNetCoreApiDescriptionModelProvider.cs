@@ -25,12 +25,12 @@ namespace Volo.Abp.AspNetCore.Mvc
 
         private readonly IApiDescriptionGroupCollectionProvider _descriptionProvider;
         private readonly AbpAspNetCoreMvcOptions _options;
-        private readonly ApiDescriptionModelOptions _modelOptions;
+        private readonly AbpApiDescriptionModelOptions _modelOptions;
 
         public AspNetCoreApiDescriptionModelProvider(
             IApiDescriptionGroupCollectionProvider descriptionProvider,
             IOptions<AbpAspNetCoreMvcOptions> options,
-            IOptions<ApiDescriptionModelOptions> modelOptions)
+            IOptions<AbpApiDescriptionModelOptions> modelOptions)
         {
             _descriptionProvider = descriptionProvider;
             _options = options.Value;

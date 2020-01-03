@@ -50,11 +50,9 @@
 	var inlineLanguages = [
 		'c',
 		{ lang: 'c++', alias: 'cpp' },
-		'fortran',
-		'ats',
-		'dsp'
+		'fortran'
 	];
-	var inlineLanguageRe = '%< *-\\*- *{lang}\\d* *-\\*-[\\s\\S]+?%>';
+	var inlineLanguageRe = /%< *-\*- *{lang}\d* *-\*-[\s\S]+?%>/.source;
 
 	inlineLanguages.forEach(function (lang) {
 		var alias = lang;

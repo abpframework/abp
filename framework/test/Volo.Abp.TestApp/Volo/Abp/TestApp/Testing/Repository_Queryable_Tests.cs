@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
@@ -20,44 +21,48 @@ namespace Volo.Abp.TestApp.Testing
         }
 
         [Fact]
-        public void Any()
+        public async Task Any()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 PersonRepository.Any().ShouldBeTrue();
-            });
+                return Task.CompletedTask;
+            }).ConfigureAwait(false);
         }
 
         [Fact]
-        public void Single()
+        public async Task Single()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var person = PersonRepository.Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
-            });
+                return Task.CompletedTask;
+            }).ConfigureAwait(false);
         }
 
         [Fact]
-        public void WithDetails()
+        public async Task WithDetails()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var person = PersonRepository.WithDetails().Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
-            });
+                return Task.CompletedTask;
+            }).ConfigureAwait(false);
         }
 
         [Fact]
-        public void WithDetails_Explicit()
+        public async Task WithDetails_Explicit()
         {
-            WithUnitOfWork(() =>
+            await WithUnitOfWorkAsync(() =>
             {
                 var person = PersonRepository.WithDetails(p => p.Phones).Single(p => p.Id == TestDataBuilder.UserDouglasId);
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
-            });
+                return Task.CompletedTask;
+            }).ConfigureAwait(false);
         }
     }
 }

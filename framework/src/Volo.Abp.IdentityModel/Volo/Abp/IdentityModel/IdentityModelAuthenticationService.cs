@@ -19,11 +19,11 @@ namespace Volo.Abp.IdentityModel
     public class IdentityModelAuthenticationService : IIdentityModelAuthenticationService, ITransientDependency
     {
         public ILogger<IdentityModelAuthenticationService> Logger { get; set; }
-        protected IdentityClientOptions ClientOptions { get; }
+        protected AbpIdentityClientOptions ClientOptions { get; }
         protected ICancellationTokenProvider CancellationTokenProvider { get; }
 
         public IdentityModelAuthenticationService(
-            IOptions<IdentityClientOptions> options,
+            IOptions<AbpIdentityClientOptions> options,
             ICancellationTokenProvider cancellationTokenProvider)
         {
             CancellationTokenProvider = cancellationTokenProvider;
@@ -35,7 +35,7 @@ namespace Volo.Abp.IdentityModel
             [NotNull] HttpClient client,
             string identityClientName = null)
         {
-            var accessToken = await GetAccessTokenOrNullAsync(identityClientName);
+            var accessToken = await GetAccessTokenOrNullAsync(identityClientName).ConfigureAwait(false);
             if (accessToken == null)
             {
                 return false;
@@ -55,18 +55,18 @@ namespace Volo.Abp.IdentityModel
                 return null;
             }
 
-            return await GetAccessTokenAsync(configuration);
+            return await GetAccessTokenAsync(configuration).ConfigureAwait(false);
         }
 
         public virtual async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
         {
-            var discoveryResponse = await GetDiscoveryResponse(configuration);
+            var discoveryResponse = await GetDiscoveryResponse(configuration).ConfigureAwait(false);
             if (discoveryResponse.IsError)
             {
                 throw new AbpException($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
-            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
+            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration).ConfigureAwait(false);
             if (tokenResponse.IsError)
             {
                 throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
@@ -92,7 +92,7 @@ namespace Volo.Abp.IdentityModel
                    ClientOptions.IdentityClients.Default;
         }
 
-        protected virtual async Task<DiscoveryResponse> GetDiscoveryResponse(
+        protected virtual async Task<DiscoveryDocumentResponse> GetDiscoveryResponse(
             IdentityClientConfiguration configuration)
         {
             using (var httpClient = new HttpClient())
@@ -104,12 +104,12 @@ namespace Volo.Abp.IdentityModel
                     {
                         RequireHttps = configuration.RequireHttps
                     }
-                });
+                }).ConfigureAwait(false);
             }
         }
 
         protected virtual async Task<TokenResponse> GetTokenResponse(
-            DiscoveryResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse, 
             IdentityClientConfiguration configuration)
         {
             using (var httpClient = new HttpClient())
@@ -118,21 +118,21 @@ namespace Volo.Abp.IdentityModel
                 {
                     case OidcConstants.GrantTypes.ClientCredentials:
                         return await httpClient.RequestClientCredentialsTokenAsync(
-                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
+                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration).ConfigureAwait(false),
                             CancellationTokenProvider.Token
-                        );
+                        ).ConfigureAwait(false);
                     case OidcConstants.GrantTypes.Password:
                         return await httpClient.RequestPasswordTokenAsync(
-                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
+                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration).ConfigureAwait(false),
                             CancellationTokenProvider.Token
-                        );
+                        ).ConfigureAwait(false);
                     default:
                         throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
                 }
             }
         }
 
-        protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryResponse discoveryResponse, IdentityClientConfiguration configuration)
+        protected virtual Task<PasswordTokenRequest> CreatePasswordTokenRequestAsync(DiscoveryDocumentResponse discoveryResponse, IdentityClientConfiguration configuration)
         {
             var request =  new PasswordTokenRequest
             {
@@ -150,7 +150,7 @@ namespace Volo.Abp.IdentityModel
         }
 
         protected virtual Task<ClientCredentialsTokenRequest>  CreateClientCredentialsTokenRequestAsync(
-            DiscoveryResponse discoveryResponse, 
+            DiscoveryDocumentResponse discoveryResponse, 
             IdentityClientConfiguration configuration)
         {
             var request =  new ClientCredentialsTokenRequest
@@ -166,7 +166,7 @@ namespace Volo.Abp.IdentityModel
             return Task.FromResult(request);
         }
 
-        protected virtual Task AddParametersToRequestAsync(IdentityClientConfiguration configuration, Request request)
+        protected virtual Task AddParametersToRequestAsync(IdentityClientConfiguration configuration, ProtocolRequest request)
         {
             foreach (var pair in configuration.Where(p => p.Key.StartsWith("[o]", StringComparison.OrdinalIgnoreCase)))
             {

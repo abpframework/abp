@@ -1,9 +1,0 @@
-/**
- * @fileoverview added by tsickle
- * @suppress {checkTypes,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
- */
-export { RootSettingManagementModule } from './lib/root-setting-management.module';
-export { SettingManagementModule } from './lib/setting-management.module';
-export { SettingComponent } from './lib/components';
-export { SETTING_MANAGEMENT_ROUTES } from './lib/constants';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL0BhYnAvbmcuc2V0dGluZy1tYW5hZ2VtZW50LyIsInNvdXJjZXMiOlsicHVibGljLWFwaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0FBQUEsNENBQWMsc0NBQXNDLENBQUM7QUFDckQsd0NBQWMsaUNBQWlDLENBQUM7QUFDaEQsaUNBQWMsa0JBQWtCLENBQUM7QUFDakMsMENBQWMsaUJBQWlCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgKiBmcm9tICcuL2xpYi9yb290LXNldHRpbmctbWFuYWdlbWVudC5tb2R1bGUnO1xuZXhwb3J0ICogZnJvbSAnLi9saWIvc2V0dGluZy1tYW5hZ2VtZW50Lm1vZHVsZSc7XG5leHBvcnQgKiBmcm9tICcuL2xpYi9jb21wb25lbnRzJztcbmV4cG9ydCAqIGZyb20gJy4vbGliL2NvbnN0YW50cyc7XG4iXX0=

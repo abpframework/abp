@@ -34,5 +34,16 @@ namespace Volo.Abp.Domain.Entities.Auditing
 
         /// <inheritdoc />
         public virtual DateTime? DeletionTime { get; set; }
+
+        protected FullAuditedEntity()
+        {
+
+        }
+
+        protected FullAuditedEntity(TKey id)
+            : base(id)
+        {
+
+        }
     }
 }

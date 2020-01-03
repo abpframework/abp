@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Localization;
 using Volo.Docs.Documents;
 using Volo.Docs.HtmlConverting;
@@ -56,20 +58,29 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public bool DocumentLanguageIsDifferent { get; set; }
 
+        public DocumentParametersDto DocumentPreferences { get; set; }
+
+        public DocumentRenderParameters UserPreferences { get; set; }
+
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
         private readonly IProjectAppService _projectAppService;
+        private readonly IDocumentSectionRenderer _documentSectionRenderer;
         private readonly DocsUiOptions _uiOptions;
 
         public IndexModel(
             IDocumentAppService documentAppService,
             IDocumentToHtmlConverterFactory documentToHtmlConverterFactory,
             IProjectAppService projectAppService,
-            IOptions<DocsUiOptions> options)
+            IOptions<DocsUiOptions> options,
+            IDocumentSectionRenderer documentSectionRenderer)
         {
+            ObjectMapperContext = typeof(DocsWebModule);
+
             _documentAppService = documentAppService;
             _documentToHtmlConverterFactory = documentToHtmlConverterFactory;
             _projectAppService = projectAppService;
+            _documentSectionRenderer = documentSectionRenderer;
             _uiOptions = options.Value;
         }
 
@@ -78,12 +89,15 @@ namespace Volo.Docs.Pages.Documents.Project
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
 
-            if (IsDocumentCultureDifferentThanCurrent())
+            try
             {
-                return ReloadPageWithCulture();
+                await SetProjectAsync();
             }
-
-            await SetProjectAsync();
+            catch (EntityNotFoundException e)
+            {
+                Logger.LogWarning(e.Message);
+                return NotFound();
+            }
 
             if (ShowProjectsCombobox)
             {
@@ -101,6 +115,11 @@ namespace Volo.Docs.Pages.Documents.Project
             if (!CheckLanguage())
             {
                 return RedirectToDefaultLanguage();
+            }
+
+            if (IsDocumentCultureDifferentThanCurrent())
+            {
+                return ReloadPageWithCulture();
             }
 
             await SetDocumentAsync();
@@ -122,7 +141,6 @@ namespace Volo.Docs.Pages.Documents.Project
             {
                 return false;
             }
-
         }
 
         private bool IsDefaultDocument()
@@ -153,7 +171,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private IActionResult ReloadPageWithCulture()
         {
-            var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/" + Version + "/" +
+            var returnUrl = DocumentsUrlPrefix + LanguageCode + "/" + ProjectName + "/"
+                            + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" +
                             DocumentName;
 
             return Redirect("/Abp/Languages/Switch?culture=" + LanguageCode + "&uiCulture=" + LanguageCode + "&returnUrl=" + returnUrl);
@@ -164,8 +183,9 @@ namespace Volo.Docs.Pages.Documents.Project
             return RedirectToPage(new
             {
                 projectName = ProjectName,
-                version = Version,
-                languageCode = DefaultLanguageCode
+                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
+                languageCode = DefaultLanguageCode,
+                documentName = DocumentName
             });
         }
 
@@ -174,7 +194,7 @@ namespace Volo.Docs.Pages.Documents.Project
             return RedirectToPage(new
             {
                 projectName = ProjectName,
-                version = Version,
+                version = (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version),
                 documentName = "",
                 languageCode = DefaultLanguageCode
             });
@@ -187,7 +207,7 @@ namespace Volo.Docs.Pages.Documents.Project
             ProjectSelectItems = projects.Items.Select(p => new SelectListItem
             {
                 Text = p.Name,
-                Value = p.Id != Project.Id ? "/" + DocumentsUrlPrefix + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
+                Value = p.Id != Project.Id ? DocumentsUrlPrefix + LanguageCode + "/" + p.ShortName + "/" + DocsAppConsts.Latest : null,
                 Selected = p.Id == Project.Id
             }).ToList();
         }
@@ -229,6 +249,13 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = versions.First().Version;
                     }
                 }
+            }
+            else
+            {
+                LatestVersionInfo = new VersionInfoViewModel(
+                    $"{DocsAppConsts.Latest}",
+                    DocsAppConsts.Latest,
+                    true);
             }
 
             VersionSelectItems = versions.Select(v => new SelectListItem
@@ -343,7 +370,7 @@ namespace Volo.Docs.Pages.Documents.Project
                 }
             }
 
-            ConvertDocumentContentToHtml();
+            await ConvertDocumentContentToHtmlAsync();
         }
 
         private void SetLanguageSelectListItems()
@@ -355,15 +382,23 @@ namespace Volo.Docs.Pages.Documents.Project
                 LanguageSelectListItems.Add(
                     new SelectListItem(
                         language.DisplayName,
-                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + Version + "/" + DocumentName,
+                        DocumentsUrlPrefix + language.Code + "/" + Project.ShortName + "/" + (LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Version) + "/" + DocumentName,
                         language.Code == LanguageCode
                         )
                     );
             }
         }
 
-        private void ConvertDocumentContentToHtml()
+        private async Task ConvertDocumentContentToHtmlAsync()
         {
+            await SetDocumentPreferencesAsync();
+            SetUserPreferences();
+
+            UserPreferences.Add("Document_Language_Code", LanguageCode);
+            UserPreferences.Add("Document_Version", Version);
+
+            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
+
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
 
@@ -381,6 +416,115 @@ namespace Volo.Docs.Pages.Documents.Project
             );
 
             Document.Content = content;
+        }
+
+        private void SetUserPreferences()
+        {
+            UserPreferences = new DocumentRenderParameters();
+
+            var cookie = Request.Cookies["AbpDocsPreferences"];
+
+            if (cookie != null)
+            {
+                var keyValues = cookie.Split("|");
+
+                foreach (var keyValue in keyValues)
+                {
+                    if (keyValue.Split("=").Length < 2)
+                    {
+                        continue;
+                    }
+
+                    var key = keyValue.Split("=")[0];
+                    var value = keyValue.Split("=")[1];
+
+                    UserPreferences.Add(key, value);
+                    UserPreferences.Add(key + "_Value", DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == key)
+                        ?.Values.FirstOrDefault(v => v.Key == value).Value);
+                }
+            }
+
+            var query = Request.Query;
+
+            foreach (var (key, value) in query)
+            {
+                if (UserPreferences.ContainsKey(key))
+                {
+                    UserPreferences.Remove(key);
+                    UserPreferences.Remove(key + "_Value");
+                }
+
+                UserPreferences.Add(key, value);
+                UserPreferences.Add(key + "_Value",
+                    DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == key)?.Values
+                        .FirstOrDefault(v => v.Key == value).Value);
+            }
+
+            if (DocumentPreferences?.Parameters == null)
+            {
+                return;
+            }
+
+            foreach (var parameter in DocumentPreferences.Parameters)
+            {
+                if (!UserPreferences.ContainsKey(parameter.Name))
+                {
+                    UserPreferences.Add(parameter.Name, parameter.Values.FirstOrDefault().Key);
+                    UserPreferences.Add(parameter.Name + "_Value", parameter.Values.FirstOrDefault().Value);
+                }
+            }
+        }
+
+        public async Task SetDocumentPreferencesAsync()
+        {
+            var projectParameters = await _documentAppService.GetParametersAsync(
+                    new GetParametersDocumentInput
+                    {
+                        ProjectId = Project.Id,
+                        LanguageCode = LanguageCode,
+                        Version = Version
+                    });
+
+            if (projectParameters?.Parameters == null)
+            {
+                return;
+            }
+
+            var availableparameters = await _documentSectionRenderer.GetAvailableParametersAsync(Document.Content);
+
+            DocumentPreferences = new DocumentParametersDto
+            {
+                Parameters = new List<DocumentParameterDto>()
+            };
+
+            if (availableparameters == null || !availableparameters.Any())
+            {
+                return;
+            }
+
+            foreach (var parameter in projectParameters.Parameters)
+            {
+                var availableParameter = availableparameters.GetOrDefault(parameter.Name);
+                if (availableParameter != null)
+                {
+                    var newParameter = new DocumentParameterDto
+                    {
+                        Name = parameter.Name,
+                        DisplayName = parameter.DisplayName,
+                        Values = new Dictionary<string, string>()
+                    };
+
+                    foreach (var value in parameter.Values)
+                    {
+                        if (availableParameter.Contains(value.Key))
+                        {
+                            newParameter.Values.Add(value.Key, value.Value);
+                        }
+                    }
+
+                    DocumentPreferences.Parameters.Add(newParameter);
+                }
+            }
         }
     }
 }

@@ -14,7 +14,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Localization\Volo.Abp.Localization.csproj" />
+    <EmbeddedResource Include="Volo\Abp\IdentityServer\Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Volo\Abp\IdentityServer\Localization\Resources\*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
   </ItemGroup>
 
 </Project>

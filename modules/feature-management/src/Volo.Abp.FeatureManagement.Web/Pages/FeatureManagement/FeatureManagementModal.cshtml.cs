@@ -29,12 +29,14 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
 
         public FeatureManagementModal(IFeatureAppService featureAppService)
         {
+            ObjectMapperContext = typeof(AbpFeatureManagementWebModule);
+
             _featureAppService = featureAppService;
         }
 
         public async Task OnGetAsync()
         {
-            FeatureListDto = await _featureAppService.GetAsync(ProviderName, ProviderKey);
+            FeatureListDto = await _featureAppService.GetAsync(ProviderName, ProviderKey).ConfigureAwait(false);
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -48,7 +50,7 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
                 }).ToList()
             };
 
-            await _featureAppService.UpdateAsync(ProviderName, ProviderKey, features);
+            await _featureAppService.UpdateAsync(ProviderName, ProviderKey, features).ConfigureAwait(false);
 
             return NoContent();
         }

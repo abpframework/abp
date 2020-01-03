@@ -12,7 +12,6 @@ Prism.languages.jolie = Prism.languages.extend('clike', {
 });
 
 delete Prism.languages.jolie['class-name'];
-delete Prism.languages.jolie['function'];
 
 Prism.languages.insertBefore( 'jolie', 'keyword', {
 	'function':

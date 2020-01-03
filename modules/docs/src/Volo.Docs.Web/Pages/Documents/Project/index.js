@@ -115,7 +115,7 @@
             })
         })
 
-     
+
     };
 
     initNavigationFilter("sidebar-scroll");

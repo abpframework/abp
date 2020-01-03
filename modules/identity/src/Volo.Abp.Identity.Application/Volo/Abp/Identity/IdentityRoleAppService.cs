@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
-using Volo.Abp.Application.Services;
 
 namespace Volo.Abp.Identity
 {
     [Authorize(IdentityPermissions.Roles.Default)]
-    public class IdentityRoleAppService : ApplicationService, IIdentityRoleAppService
+    public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppService
     {
         private readonly IdentityRoleManager _roleManager;
         private readonly IIdentityRoleRepository _roleRepository;
@@ -22,61 +21,64 @@ namespace Volo.Abp.Identity
             _roleRepository = roleRepository;
         }
 
-        public async Task<IdentityRoleDto> GetAsync(Guid id)
+        public virtual async Task<IdentityRoleDto> GetAsync(Guid id)
         {
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(
-                await _roleManager.GetByIdAsync(id)
-            );
+                await _roleManager.GetByIdAsync(id).ConfigureAwait(false));
         }
 
-        public async Task<ListResultDto<IdentityRoleDto>> GetListAsync()
+        public virtual async Task<PagedResultDto<IdentityRoleDto>> GetListAsync(PagedAndSortedResultRequestDto input)
         {
-            var list = await _roleRepository.GetListAsync();
+            var list = await _roleRepository.GetListAsync(input.Sorting, input.MaxResultCount, input.SkipCount).ConfigureAwait(false);
+            var totalCount = await _roleRepository.GetCountAsync().ConfigureAwait(false);
 
-            return new ListResultDto<IdentityRoleDto>(ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list));
+            return new PagedResultDto<IdentityRoleDto>(
+                totalCount,
+                ObjectMapper.Map<List<IdentityRole>, List<IdentityRoleDto>>(list)
+                );
         }
 
         [Authorize(IdentityPermissions.Roles.Create)]
-        public async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
+        public virtual async Task<IdentityRoleDto> CreateAsync(IdentityRoleCreateDto input)
         {
             var role = new IdentityRole(GuidGenerator.Create(), input.Name, CurrentTenant.Id);
 
             role.IsDefault = input.IsDefault;
             role.IsPublic = input.IsPublic;
 
-            (await _roleManager.CreateAsync(role)).CheckErrors();
-            await CurrentUnitOfWork.SaveChangesAsync();
+            (await _roleManager.CreateAsync(role).ConfigureAwait(false)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
 
         [Authorize(IdentityPermissions.Roles.Update)]
-        public async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
+        public virtual async Task<IdentityRoleDto> UpdateAsync(Guid id, IdentityRoleUpdateDto input)
         {
-            var role = await _roleManager.GetByIdAsync(id);
+            var role = await _roleManager.GetByIdAsync(id).ConfigureAwait(false);
             role.ConcurrencyStamp = input.ConcurrencyStamp;
 
-            (await _roleManager.SetRoleNameAsync(role, input.Name)).CheckErrors();
+            (await _roleManager.SetRoleNameAsync(role, input.Name).ConfigureAwait(false)).CheckErrors();
 
             role.IsDefault = input.IsDefault;
             role.IsPublic = input.IsPublic;
 
-            (await _roleManager.UpdateAsync(role)).CheckErrors();
-            await CurrentUnitOfWork.SaveChangesAsync();
+            (await _roleManager.UpdateAsync(role).ConfigureAwait(false)).CheckErrors();
+            await CurrentUnitOfWork.SaveChangesAsync().ConfigureAwait(false);
 
             return ObjectMapper.Map<IdentityRole, IdentityRoleDto>(role);
         }
 
         [Authorize(IdentityPermissions.Roles.Delete)]
-        public async Task DeleteAsync(Guid id)
+        public virtual async Task DeleteAsync(Guid id)
         {
-            var role = await _roleManager.FindByIdAsync(id.ToString());
+            var role = await _roleManager.FindByIdAsync(id.ToString()).ConfigureAwait(false);
             if (role == null)
             {
                 return;
             }
 
-            (await _roleManager.DeleteAsync(role)).CheckErrors();
+            (await _roleManager.DeleteAsync(role).ConfigureAwait(false)).CheckErrors();
         }
     }
 }

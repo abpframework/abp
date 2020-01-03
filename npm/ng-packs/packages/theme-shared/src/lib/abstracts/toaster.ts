@@ -1,32 +1,39 @@
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Observable, Subject } from 'rxjs';
 import { Toaster } from '../models/toaster';
+import { Config } from '@abp/ng.core';
 
-export class AbstractToaster<T = Toaster.Options> {
+export abstract class AbstractToaster<T = Toaster.Options> {
   status$: Subject<Toaster.Status>;
 
-  key: string = 'abpToast';
+  key = 'abpToast';
 
-  sticky: boolean = false;
+  sticky = false;
 
   constructor(protected messageService: MessageService) {}
-  info(message: string, title: string, options?: T): Observable<Toaster.Status> {
+
+  info(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
     return this.show(message, title, 'info', options);
   }
 
-  success(message: string, title: string, options?: T): Observable<Toaster.Status> {
+  success(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
     return this.show(message, title, 'success', options);
   }
 
-  warn(message: string, title: string, options?: T): Observable<Toaster.Status> {
+  warn(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
     return this.show(message, title, 'warn', options);
   }
 
-  error(message: string, title: string, options?: T): Observable<Toaster.Status> {
+  error(message: Config.LocalizationParam, title: Config.LocalizationParam, options?: T): Observable<Toaster.Status> {
     return this.show(message, title, 'error', options);
   }
 
-  protected show(message: string, title: string, severity: Toaster.Severity, options?: T): Observable<Toaster.Status> {
+  protected show(
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam,
+    severity: Toaster.Severity,
+    options?: T,
+  ): Observable<Toaster.Status> {
     this.messageService.clear(this.key);
 
     this.messageService.add({

@@ -5,7 +5,7 @@ namespace Volo.Abp.Authorization.Permissions
 {
     public class ClientPermissionValueProvider : PermissionValueProvider
     {
-        public const string ProviderName = "Client";
+        public const string ProviderName = "C";
 
         public override string Name => ProviderName;
 
@@ -25,7 +25,7 @@ namespace Volo.Abp.Authorization.Permissions
             }
 
             return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
-                ? PermissionGrantResult.Granted
+.ConfigureAwait(false) ? PermissionGrantResult.Granted
                 : PermissionGrantResult.Undefined;
         }
     }

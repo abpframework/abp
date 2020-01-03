@@ -1,5 +1,7 @@
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -8,6 +10,11 @@ using Volo.Abp.AspNetCore.TestBase;
 
 namespace Volo.Abp.AspNetCore
 {
+    public class AbpAspNetCoreTestBase : AbpAspNetCoreTestBase<Startup>
+    {
+
+    }
+
     public abstract class AbpAspNetCoreTestBase<TStartup> : AbpAspNetCoreIntegratedTestBase<TStartup>
         where TStartup : class
     {
@@ -19,21 +26,27 @@ namespace Volo.Abp.AspNetCore
 
         protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
+            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode).ConfigureAwait(false);
             return JsonConvert.DeserializeObject<T>(strResponse, SharedJsonSerializerSettings);
         }
 
         protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            var response = await GetResponseAsync(url, expectedStatusCode);
-            return await response.Content.ReadAsStringAsync();
+            using (var response = await GetResponseAsync(url, expectedStatusCode).ConfigureAwait(false))
+            {
+                return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            }
         }
 
         protected virtual async Task<HttpResponseMessage> GetResponseAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            var response = await Client.GetAsync(url);
-            response.StatusCode.ShouldBe(expectedStatusCode);
-            return response;
+            using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
+            {
+                requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
+                var response = await Client.SendAsync(requestMessage).ConfigureAwait(false);
+                response.StatusCode.ShouldBe(expectedStatusCode);
+                return response;
+            }
         }
     }
 }

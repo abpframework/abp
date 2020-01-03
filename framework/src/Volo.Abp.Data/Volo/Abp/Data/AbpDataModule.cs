@@ -20,7 +20,7 @@ namespace Volo.Abp.Data
         {
             var configuration = context.Services.GetConfiguration();
 
-            Configure<DbConnectionOptions>(configuration);
+            Configure<AbpDbConnectionOptions>(configuration);
 
             context.Services.AddSingleton(typeof(IDataFilter<>), typeof(DataFilter<>));
         }
@@ -37,7 +37,7 @@ namespace Volo.Abp.Data
                 }
             });
 
-            services.Configure<DataSeedOptions>(options =>
+            services.Configure<AbpDataSeedOptions>(options =>
             {
                 options.Contributors.AddIfNotContains(contributors);
             });

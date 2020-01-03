@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.AuditLogging.Localization;
+﻿using Volo.Abp.AuditLogging.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 

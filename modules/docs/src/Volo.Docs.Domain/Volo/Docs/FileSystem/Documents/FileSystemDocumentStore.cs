@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
@@ -38,7 +37,7 @@ namespace Volo.Docs.FileSystem.Documents
                 Format = project.Format,
                 LocalDirectory = localDirectory,
                 Title = documentName,
-                RawRootUrl = $"/document-resources?projectId={project.Id.ToString()}&version={version}&name=",
+                RawRootUrl = $"/document-resources?projectId={project.Id.ToString()}&version={version}&languageCode={languageCode}&name=",
                 RootUrl = "/"
             };
         }

@@ -3,10 +3,9 @@ import { Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { GetAppConfiguration } from '../actions/config.actions';
 import differentLocales from '../constants/different-locales';
-import { SessionState } from '../states/session.state';
 
 export function getInitialData(injector: Injector) {
-  const fn = function() {
+  const fn = () => {
     const store: Store = injector.get(Store);
 
     return store.dispatch(new GetAppConfiguration()).toPromise();
@@ -16,13 +15,13 @@ export function getInitialData(injector: Injector) {
 }
 
 export function localeInitializer(injector: Injector) {
-  const fn = function() {
+  const fn = () => {
     const store: Store = injector.get(Store);
 
-    const lang = store.selectSnapshot(SessionState.getLanguage) || 'en';
+    const lang = store.selectSnapshot(state => state.SessionState.language) || 'en';
 
     return new Promise((resolve, reject) => {
-      registerLocale(lang).then(() => resolve(), reject);
+      registerLocale(lang).then(() => resolve('resolved'), reject);
     });
   };
 

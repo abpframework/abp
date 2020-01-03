@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Mongo2Go;
 using Volo.Abp.Data;
 using Volo.Abp.Modularity;
@@ -19,7 +19,7 @@ namespace Acme.BookStore.MongoDB
                                     "Db_" +		
                                     Guid.NewGuid().ToString("N");
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = connectionString;
             });
