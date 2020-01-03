@@ -65,7 +65,7 @@ namespace Volo.Abp.IdentityServer
                     ClientId = "c1",
                     DeviceCode = "DeviceCode1",
                     Expiration = _clock.Now.AddDays(1),
-                    Data = "",
+                    Data = "{\"Lifetime\":\"42\"}",
                     UserCode = "DeviceFlowCodesUserCode1",
                     SubjectId = "DeviceFlowCodesSubjectId1"
                 }
