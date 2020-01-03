@@ -446,18 +446,18 @@ namespace Volo.Docs.Pages.Documents.Project
 
             var query = Request.Query;
 
-            foreach (var keyValue in query)
+            foreach (var (key, value) in query)
             {
-                if (UserPreferences.ContainsKey(keyValue.Key))
+                if (UserPreferences.ContainsKey(key))
                 {
-                    UserPreferences.Remove(keyValue.Key);
-                    UserPreferences.Remove(keyValue.Key + "_Value");
+                    UserPreferences.Remove(key);
+                    UserPreferences.Remove(key + "_Value");
                 }
 
-                UserPreferences.Add(keyValue.Key, keyValue.Value);
-                UserPreferences.Add(keyValue.Key + "_Value",
-                    DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == keyValue.Key)?.Values
-                        .FirstOrDefault(v => v.Key == keyValue.Value).Value);
+                UserPreferences.Add(key, value);
+                UserPreferences.Add(key + "_Value",
+                    DocumentPreferences.Parameters?.FirstOrDefault(p => p.Name == key)?.Values
+                        .FirstOrDefault(v => v.Key == value).Value);
             }
 
             if (DocumentPreferences?.Parameters == null)
