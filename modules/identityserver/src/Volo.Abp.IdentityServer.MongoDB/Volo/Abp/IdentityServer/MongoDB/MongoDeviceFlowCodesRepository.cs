@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.IdentityServer.Devices;
@@ -30,6 +32,19 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
             return await GetMongoQueryable()
                 .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken))
+                .ConfigureAwait(false);
+        }
+
+        public async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(
+            DateTime maxExpirationDate, 
+            int maxResultCount,
+            CancellationToken cancellationToken = default)
+        {
+            return await GetMongoQueryable()
+                .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
+                .OrderBy(x => x.ClientId)
+                .Take(maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken))
                 .ConfigureAwait(false);
         }
     }

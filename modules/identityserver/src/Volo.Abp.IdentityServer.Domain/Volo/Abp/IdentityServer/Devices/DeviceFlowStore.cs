@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 using IdentityModel;
 using IdentityServer4.Models;

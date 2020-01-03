@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,17 @@ namespace Volo.Abp.IdentityServer.Devices
         {
             return await DbSet
                 .FirstOrDefaultAsync(d => d.DeviceCode == deviceCode, GetCancellationToken(cancellationToken))
+                .ConfigureAwait(false);
+        }
+
+        public async Task<List<DeviceFlowCodes>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
+            CancellationToken cancellationToken = default)
+        {
+            return await DbSet
+                .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
+                .OrderBy(x => x.ClientId)
+                .Take(maxResultCount)
+                .ToListAsync(GetCancellationToken(cancellationToken))
                 .ConfigureAwait(false);
         }
     }

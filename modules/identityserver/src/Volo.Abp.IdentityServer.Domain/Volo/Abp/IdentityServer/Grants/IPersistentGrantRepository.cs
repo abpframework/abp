@@ -18,6 +18,12 @@ namespace Volo.Abp.IdentityServer.Grants
             CancellationToken cancellationToken = default
         );
 
+        Task<List<PersistedGrant>> GetListByExpirationAsync(
+            DateTime maxExpirationDate,
+            int maxResultCount,
+            CancellationToken cancellationToken = default
+        );
+
         Task DeleteAsync(
             string subjectId,
             string clientId,

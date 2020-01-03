@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
@@ -14,6 +15,12 @@ namespace Volo.Abp.IdentityServer.Devices
 
         Task<DeviceFlowCodes> FindByDeviceCodeAsync(
             string deviceCode,
+            CancellationToken cancellationToken = default
+        );
+
+        Task<List<DeviceFlowCodes>> GetListByExpirationAsync(
+            DateTime maxExpirationDate,
+            int maxResultCount,
             CancellationToken cancellationToken = default
         );
     }
