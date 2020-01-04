@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Services;
 using Volo.Abp.Identity.Localization;
+using Volo.Abp.Threading;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.Identity.Organizations
@@ -18,13 +20,19 @@ namespace Volo.Abp.Identity.Organizations
         protected IOrganizationUnitRepository _organizationUnitRepository { get; private set; }
 
         private readonly IStringLocalizer<IdentityResource> _localizer;
+        private readonly IIdentityRoleRepository _identityRoleRepository;
+        private readonly ICancellationTokenProvider _cancellationTokenProvider;
 
         public OrganizationUnitManager(
             IOrganizationUnitRepository organizationUnitRepository,
-            IStringLocalizer<IdentityResource> localizer)
+            IStringLocalizer<IdentityResource> localizer,
+            IIdentityRoleRepository identityRoleRepository,
+            ICancellationTokenProvider cancellationTokenProvider)
         {
             _organizationUnitRepository = organizationUnitRepository;
             _localizer = localizer;
+            _identityRoleRepository = identityRoleRepository;
+            _cancellationTokenProvider = cancellationTokenProvider;
         }
 
         [UnitOfWork]
@@ -133,6 +141,46 @@ namespace Volo.Abp.Identity.Organizations
             var code = await GetCodeOrDefaultAsync(parentId.Value);
 
             return await _organizationUnitRepository.GetAllChildrenWithParentCodeAsync(code, parentId);
+        }
+
+        public virtual Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
+        {
+            return Task.FromResult(user.IsInOrganizationUnit(ou.Id));
+        }
+
+        public virtual async Task AddRoleToOrganizationUnitAsync(Guid roleId, Guid ouId)
+        {
+            await AddRoleToOrganizationUnitAsync(
+                await _identityRoleRepository.GetAsync(roleId),
+                await _organizationUnitRepository.GetAsync(ouId)
+                );
+        }
+
+        public virtual Task AddRoleToOrganizationUnitAsync(IdentityRole role, OrganizationUnit ou)
+        {
+            var currentRoles = ou.Roles;
+
+            if (currentRoles.Any(r => r.Id == role.Id))
+            {
+                return Task.FromResult(0);
+            }
+            ou.AddRole(role.Id);
+            return Task.FromResult(0);
+        }
+
+        public virtual async Task RemoveRoleFromOrganizationUnitAsync(Guid roleId, Guid ouId)
+        {
+            await RemoveRoleFromOrganizationUnitAsync(
+                await _identityRoleRepository.GetAsync(roleId),
+                await _organizationUnitRepository.GetAsync(ouId, true)
+                );
+        }
+
+        public virtual async Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
+        {
+            await _organizationUnitRepository.EnsureCollectionLoadedAsync(organizationUnit, ou => ou.Roles, _cancellationTokenProvider.Token).ConfigureAwait(false);
+
+            organizationUnit.RemoveRole(role.Id);
         }
     }
 }

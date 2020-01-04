@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -29,6 +30,17 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
 
             return queryable
                 .Include(x => x.Claims);
+        }
+
+        public static IQueryable<OrganizationUnit> IncludeDetails(this IQueryable<OrganizationUnit> queryable, bool include = true)
+        {
+            if (!include)
+            {
+                return queryable;
+            }
+
+            return queryable
+                .Include(x => x.Roles);
         }
     }
 }

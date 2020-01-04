@@ -106,7 +106,7 @@ namespace Volo.Abp.Identity
         public virtual async Task AddToOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await AddToOrganizationUnitAsync(
-                await GetByIdAsync(userId),
+                await _identityUserRepository.GetAsync(userId, true),
                 await _organizationUnitRepository.GetAsync(ouId)
                 );
         }
@@ -130,7 +130,7 @@ namespace Volo.Abp.Identity
         public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await RemoveFromOrganizationUnitAsync(
-                await GetByIdAsync(userId),
+                await _identityUserRepository.GetAsync(userId, true),
                 await _organizationUnitRepository.GetAsync(ouId)
                 );
         }
@@ -145,7 +145,7 @@ namespace Volo.Abp.Identity
         public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
         {
             await SetOrganizationUnitsAsync(
-                await GetByIdAsync(userId),
+                await _identityUserRepository.GetAsync(userId, true),
                 organizationUnitIds
                 );
         }

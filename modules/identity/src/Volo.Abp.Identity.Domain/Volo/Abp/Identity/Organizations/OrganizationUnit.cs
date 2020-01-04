@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
@@ -38,6 +39,11 @@ namespace Volo.Abp.Identity.Organizations
         public virtual ICollection<OrganizationUnit> Children { get; set; }
 
         /// <summary>
+        /// Roles of this OU.
+        /// </summary>
+        public virtual ICollection<OrganizationUnitRole> Roles { get; protected set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="OrganizationUnit"/> class.
         /// </summary>
         public OrganizationUnit()
@@ -56,6 +62,8 @@ namespace Volo.Abp.Identity.Organizations
             TenantId = tenantId;
             DisplayName = displayName;
             ParentId = parentId;
+
+            Roles = new Collection<OrganizationUnitRole>();
         }
 
         /// <summary>
@@ -173,6 +181,37 @@ namespace Volo.Abp.Identity.Organizations
             }
 
             return splittedCode.Take(splittedCode.Length - 1).JoinAsString(".");
+        }
+
+        public virtual void AddRole(Guid roleId)
+        {
+            Check.NotNull(roleId, nameof(roleId));
+
+            if (IsInRole(roleId))
+            {
+                return;
+            }
+
+            Roles.Add(new OrganizationUnitRole(TenantId, roleId, Id));
+        }
+
+        public virtual void RemoveRole(Guid roleId)
+        {
+            Check.NotNull(roleId, nameof(roleId));
+
+            if (!IsInRole(roleId))
+            {
+                return;
+            }
+
+            Roles.RemoveAll(r => r.RoleId == roleId);
+        }
+
+        public virtual bool IsInRole(Guid roleId)
+        {
+            Check.NotNull(roleId, nameof(roleId));
+
+            return Roles.Any(r => r.RoleId == roleId);
         }
     }
 }
