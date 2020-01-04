@@ -10,6 +10,7 @@ using Nito.AsyncEx;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Volo.Abp.RabbitMQ;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
@@ -181,7 +182,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
                 try
                 {
-                    JobExecuter.Execute(context);
+                    AsyncHelper.RunSync(() => JobExecuter.ExecuteAsync(context));
                     ChannelAccessor.Channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
                 }
                 catch (BackgroundJobExecutionException)

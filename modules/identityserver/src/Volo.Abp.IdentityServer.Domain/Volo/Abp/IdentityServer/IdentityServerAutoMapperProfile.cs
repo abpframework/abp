@@ -2,14 +2,15 @@
 using System.Security.Claims;
 using AutoMapper;
 using Volo.Abp.IdentityServer.ApiResources;
+using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
-namespace Volo.Abp.IdentityServer.Clients
+namespace Volo.Abp.IdentityServer
 {
-    public class ClientAutoMapperProfile : Profile
+    public class IdentityServerAutoMapperProfile : Profile
     {
-        public ClientAutoMapperProfile()
+        public IdentityServerAutoMapperProfile()
         {
             //TODO: Reverse maps will not used probably. Remove those will not used
 

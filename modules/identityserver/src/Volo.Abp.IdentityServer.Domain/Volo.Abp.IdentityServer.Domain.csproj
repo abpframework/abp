@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Security\Volo.Abp.Security.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Caching\Volo.Abp.Caching.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Validation\Volo.Abp.Validation.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.BackgroundWorkers\Volo.Abp.BackgroundWorkers.csproj" />
   </ItemGroup>
 
   <ItemGroup>

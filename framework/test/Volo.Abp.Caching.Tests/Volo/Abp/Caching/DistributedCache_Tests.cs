@@ -38,7 +38,7 @@ namespace Volo.Abp.Caching
         }
 
         [Fact]
-        public async Task GetOrAddAsync()
+        public void GetOrAdd()
         {
             var personCache = GetRequiredService<IDistributedCache<PersonCacheItem>>();
 
@@ -49,12 +49,12 @@ namespace Volo.Abp.Caching
 
             bool factoryExecuted = false;
 
-            var cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+            var cacheItem = personCache.GetOrAdd(cacheKey,
+                () =>
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);
-                }).ConfigureAwait(false);
+                });
 
             factoryExecuted.ShouldBeTrue();
             cacheItem.Name.ShouldBe(personName);
@@ -63,12 +63,12 @@ namespace Volo.Abp.Caching
 
             factoryExecuted = false;
 
-            cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+            cacheItem = personCache.GetOrAdd(cacheKey,
+                () =>
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);
-                }).ConfigureAwait(false);
+                });
 
             factoryExecuted.ShouldBeFalse();
             cacheItem.Name.ShouldBe(personName);
@@ -165,12 +165,12 @@ namespace Volo.Abp.Caching
 
             bool factoryExecuted = false;
 
-            var cacheItem = await personCache.GetOrAddAsync(cacheKey,
-                async () =>
+            var cacheItem = personCache.GetOrAdd(cacheKey,
+                () =>
                 {
                     factoryExecuted = true;
                     return new PersonCacheItem(personName);
-                }).ConfigureAwait(false);
+                });
 
             factoryExecuted.ShouldBeTrue();
             cacheItem.Name.ShouldBe(personName);
