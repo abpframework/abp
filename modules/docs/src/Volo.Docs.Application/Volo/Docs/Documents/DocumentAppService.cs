@@ -23,7 +23,7 @@ namespace Volo.Docs.Documents
             IDocumentStoreFactory documentStoreFactory,
             IDistributedCache<DocumentWithDetailsDto> documentCache,
             IDistributedCache<LanguageConfig> languageCache,
-            IDistributedCache<DocumentResourceDto> resourceCache, 
+            IDistributedCache<DocumentResourceDto> resourceCache,
             IHostEnvironment hostEnvironment)
         {
             _projectRepository = projectRepository;
@@ -107,6 +107,11 @@ namespace Volo.Docs.Documents
 
             try
             {
+                if (string.IsNullOrWhiteSpace(project.ParametersDocumentName))
+                {
+                    return await Task.FromResult<DocumentParametersDto>(null);
+                }
+
                 var document = await GetDocumentWithDetailsDtoAsync(
                     project,
                     project.ParametersDocumentName,

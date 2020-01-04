@@ -1,13 +1,12 @@
 const glob = require('glob');
-var path = require('path');
-const childProcess = require('child_process');
+const execa = require('execa');
 
-const gulp = pkgJsonPath => {
+const gulp = gulpfilePath => {
   try {
-    console.log('Running the yarn command... Cwd: ' + pkgJsonPath);
-    childProcess.execSync(`yarn`, { cwd: pkgJsonPath });
+    console.log('Running the yarn command... Cwd: ' + gulpfilePath);
+    execa.sync(`yarn`, ['install'], { cwd: gulpfilePath });
     console.log('Running the gulp command...');
-    return childProcess.execSync(`gulp`, { cwd: pkgJsonPath, stdio: 'inherit' });
+    execa.sync(`yarn`, ['gulp'], { cwd: gulpfilePath, stdio: 'inherit' });
   } catch (error) {
     console.log('exec error: ' + error.message);
     process.exit(error.status);
@@ -16,12 +15,12 @@ const gulp = pkgJsonPath => {
 
 const folder = process.argv[2] || '.';
 
-glob(folder + '/**/package.json', {}, (er, files) => {
+glob(folder + '/**/gulpfile.js', {}, (er, files) => {
   files.forEach(file => {
-    if (file.includes('node_modules')) {
+    if (file.includes('node_modules') || file.includes('wwwroot')) {
       return;
     }
 
-    gulp(file.replace('/package.json', ''));
+    gulp(file.replace('/gulpfile.js', ''));
   });
 });

@@ -2,6 +2,8 @@ import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spect
 import { IdentityStateService } from '../services/identity-state.service';
 import { IdentityState } from '../states/identity.state';
 import { Store } from '@ngxs/store';
+import * as IdentityActions from '../actions/identity.actions';
+
 describe('IdentityStateService', () => {
   let service: IdentityStateService;
   let spectator: SpectatorService<IdentityStateService>;
@@ -34,6 +36,23 @@ describe('IdentityStateService', () => {
           service[fnName]();
           expect(spy).toHaveBeenCalledWith(IdentityState[fnName]);
         }
+      });
+  });
+
+  test('should have a dispatch method for every IdentityState action', () => {
+    const reg = /(?<=dispatch)(\w+)(?=\()/gm;
+    IdentityStateService.toString()
+      .match(reg)
+      .forEach(fnName => {
+        expect(IdentityActions[fnName]).toBeTruthy();
+
+        const spy = jest.spyOn(store, 'dispatch');
+        spy.mockClear();
+
+        const params = Array.from(new Array(IdentityActions[fnName].length));
+
+        service[`dispatch${fnName}`](...params);
+        expect(spy).toHaveBeenCalledWith(new IdentityActions[fnName](...params));
       });
   });
 });

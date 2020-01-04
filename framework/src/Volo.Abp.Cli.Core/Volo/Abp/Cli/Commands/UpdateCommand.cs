@@ -5,12 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -20,21 +17,12 @@ namespace Volo.Abp.Cli.Commands
 
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
-        private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
-        private readonly AbpCliOptions _options;
-        private readonly IJsonSerializer _jsonSerializer;
 
         public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
-            NpmPackagesUpdater npmPackagesUpdater,
-            ICliAnalyticsCollect cliAnalyticsCollect, 
-            IJsonSerializer jsonSerializer, 
-            IOptions<AbpCliOptions> options)
+            NpmPackagesUpdater npmPackagesUpdater)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;
-            _cliAnalyticsCollect = cliAnalyticsCollect;
-            _jsonSerializer = jsonSerializer;
-            _options = options.Value;
 
             Logger = NullLogger<UpdateCommand>.Instance;
         }
@@ -44,24 +32,18 @@ namespace Volo.Abp.Cli.Commands
             var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
             var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
-            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long);
-            if (directory == null)
+            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long) ??
+                            Directory.GetCurrentDirectory();
+
+            if (updateNuget || !updateNpm)
             {
-                directory = Directory.GetCurrentDirectory();
+                await UpdateNugetPackages(commandLineArgs, directory).ConfigureAwait(false);
             }
 
-            var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
-
-            if (updateNuget || both)
-            {
-                await UpdateNugetPackages(commandLineArgs, directory);
-            }
-
-            if (updateNpm || both)
+            if (updateNpm || !updateNuget)
             {
                 UpdateNpmPackages(directory);
             }
-
         }
 
         private void UpdateNpmPackages(string directory)
@@ -80,7 +62,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews).ConfigureAwait(false);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -92,7 +74,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews).ConfigureAwait(false);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
@@ -131,8 +113,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Automatically updates all ABP related NuGet packages and NPM packages in a" +
-                   " solution or project to the latest versions";
+            return "Update all ABP related NuGet packages and NPM packages in a solution or project to the latest version.";
         }
 
         public static class Options

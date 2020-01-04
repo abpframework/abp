@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             var items = InitilizeFormGroupContentsContext(context, output);
 
-            await output.GetChildContentAsync();
+            await output.GetChildContentAsync().ConfigureAwait(false);
 
             var headers = GetHeaders(context, output, items);
             var contents = GetConents(context, output, items);

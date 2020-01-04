@@ -28,17 +28,17 @@ namespace Volo.Abp.PermissionManagement
         {
             (await _cache.GetAsync(PermissionGrantCacheItem.CalculateCacheKey("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString()))).ShouldBeNull();
+                PermissionTestDataBuilder.User1Id.ToString())).ConfigureAwait(false)).ShouldBeNull();
 
 
             await _permissionStore.IsGrantedAsync("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString());
+                PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false);
 
 
             (await _cache.GetAsync(PermissionGrantCacheItem.CalculateCacheKey("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString()))).ShouldNotBeNull();
+                PermissionTestDataBuilder.User1Id.ToString())).ConfigureAwait(false)).ShouldNotBeNull();
         }
 
         [Fact]
@@ -47,17 +47,17 @@ namespace Volo.Abp.PermissionManagement
             // IsGrantedAsync will cache PermissionGrant
             await _permissionStore.IsGrantedAsync("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString());
+                PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false);
 
             var permissionGrant = await _permissionGrantRepository.FindAsync("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString());
+                PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false);
             permissionGrant.ShouldNotBeNull();
-            await _permissionGrantRepository.DeleteAsync(permissionGrant);
+            await _permissionGrantRepository.DeleteAsync(permissionGrant).ConfigureAwait(false);
 
             (await _cache.GetAsync(PermissionGrantCacheItem.CalculateCacheKey("MyPermission1",
                 UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString()))).ShouldBeNull();
+                PermissionTestDataBuilder.User1Id.ToString())).ConfigureAwait(false)).ShouldBeNull();
         }
     }
 }

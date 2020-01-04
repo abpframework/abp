@@ -16,7 +16,7 @@ import { EllipsisDirective } from './directives/ellipsis.directive';
 import { ForDirective } from './directives/for.directive';
 import { FormSubmitDirective } from './directives/form-submit.directive';
 import { PermissionDirective } from './directives/permission.directive';
-import { ClickEventStopPropagationDirective } from './directives/stop-propagation.directive';
+import { StopPropagationDirective } from './directives/stop-propagation.directive';
 import { VisibilityDirective } from './directives/visibility.directive';
 import { ApiInterceptor } from './interceptors/api.interceptor';
 import { ABP } from './models/common';
@@ -29,10 +29,14 @@ import { ProfileState } from './states/profile.state';
 import { SessionState } from './states/session.state';
 import { getInitialData, localeInitializer } from './utils/initial-utils';
 import './utils/date-extensions';
+import { ReplaceableRouteContainerComponent } from './components/replaceable-route-container.component';
+import { ReplaceableComponentsState } from './states/replaceable-components.state';
+import { InitDirective } from './directives/init.directive';
+import { ReplaceableTemplateDirective } from './directives/replaceable-template.directive';
 
 @NgModule({
   imports: [
-    NgxsModule.forFeature([ProfileState, SessionState, ConfigState]),
+    NgxsModule.forFeature([ReplaceableComponentsState, ProfileState, SessionState, ConfigState]),
     NgxsRouterPluginModule.forRoot(),
     NgxsStoragePluginModule.forRoot({ key: ['SessionState'] }),
     OAuthModule.forRoot(),
@@ -43,6 +47,7 @@ import './utils/date-extensions';
     RouterModule,
   ],
   declarations: [
+    ReplaceableRouteContainerComponent,
     RouterOutletComponent,
     DynamicLayoutComponent,
     AutofocusDirective,
@@ -51,10 +56,12 @@ import './utils/date-extensions';
     FormSubmitDirective,
     LocalizationPipe,
     SortPipe,
+    InitDirective,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
-    ClickEventStopPropagationDirective,
+    StopPropagationDirective,
+    ReplaceableTemplateDirective,
     AbstractNgModelComponent,
   ],
   exports: [
@@ -65,21 +72,28 @@ import './utils/date-extensions';
     RouterModule,
     RouterOutletComponent,
     DynamicLayoutComponent,
+    AbstractNgModelComponent,
+    ReplaceableRouteContainerComponent,
     AutofocusDirective,
     EllipsisDirective,
     ForDirective,
     FormSubmitDirective,
-    LocalizationPipe,
-    SortPipe,
+    InitDirective,
     PermissionDirective,
     VisibilityDirective,
     InputEventDebounceDirective,
+    ReplaceableTemplateDirective,
+    StopPropagationDirective,
     LocalizationPipe,
-    ClickEventStopPropagationDirective,
-    AbstractNgModelComponent,
+    SortPipe,
+    LocalizationPipe,
   ],
   providers: [LocalizationPipe],
-  entryComponents: [RouterOutletComponent, DynamicLayoutComponent],
+  entryComponents: [
+    RouterOutletComponent,
+    DynamicLayoutComponent,
+    ReplaceableRouteContainerComponent,
+  ],
 })
 export class CoreModule {
   static forRoot(options = {} as ABP.Root): ModuleWithProviders {

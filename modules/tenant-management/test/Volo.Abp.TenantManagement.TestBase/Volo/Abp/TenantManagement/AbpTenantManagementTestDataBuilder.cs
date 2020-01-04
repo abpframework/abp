@@ -25,13 +25,13 @@ namespace Volo.Abp.TenantManagement
 
         private async Task AddTenantsAsync()
         {
-            var acme = await _tenantManager.CreateAsync("acme");
+            var acme = await _tenantManager.CreateAsync("acme").ConfigureAwait(false);
             acme.ConnectionStrings.Add(new TenantConnectionString(acme.Id, ConnectionStrings.DefaultConnectionStringName, "DefaultConnString-Value"));
             acme.ConnectionStrings.Add(new TenantConnectionString(acme.Id, "MyConnString", "MyConnString-Value"));
-            await _tenantRepository.InsertAsync(acme);
+            await _tenantRepository.InsertAsync(acme).ConfigureAwait(false);
 
-            var volosoft = await _tenantManager.CreateAsync("volosoft");
-            await _tenantRepository.InsertAsync(volosoft);
+            var volosoft = await _tenantManager.CreateAsync("volosoft").ConfigureAwait(false);
+            await _tenantRepository.InsertAsync(volosoft).ConfigureAwait(false);
         }
     }
 }

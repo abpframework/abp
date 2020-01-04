@@ -18,7 +18,6 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
@@ -32,6 +31,7 @@ using VoloDocs.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.Validation.Localization;
 
 namespace VoloDocs.Web
 {
@@ -154,11 +154,7 @@ namespace VoloDocs.Web
             app.UseAbpRequestLocalization();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
-            //https://github.com/aspnet/AspNetCore/issues/13715#issuecomment-528929683
-            app.Use((context, next) => {
-                context.SetEndpoint(null);
-                return next();
-            });
+           
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseMvc(routes =>

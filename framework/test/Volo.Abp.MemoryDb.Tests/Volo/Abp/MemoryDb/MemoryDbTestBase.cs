@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.MemoryDb
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.MemoryDb
 {
     public abstract class MemoryDbTestBase : AbpIntegratedTest<AbpMemoryDbTestModule>
     {

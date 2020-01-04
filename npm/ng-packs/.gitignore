@@ -3,7 +3,7 @@
 # compiled output
 /tmp
 /out-tsc
-/dist/dev-app
+/dist
 # Only exists if Bazel was run
 /bazel-out
 
@@ -45,5 +45,4 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Packages
 !**/[Pp]ackages/*

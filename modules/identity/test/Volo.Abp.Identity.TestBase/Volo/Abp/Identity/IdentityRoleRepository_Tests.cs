@@ -23,14 +23,14 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("admin"))).ShouldNotBeNull();
-            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("undefined-role"))).ShouldBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("admin")).ConfigureAwait(false)).ShouldNotBeNull();
+            (await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("undefined-role")).ConfigureAwait(false)).ShouldBeNull();
         }
 
         [Fact]
         public async Task GetListAsync()
         {
-            var roles = await RoleRepository.GetListAsync();
+            var roles = await RoleRepository.GetListAsync().ConfigureAwait(false);
             roles.ShouldContain(r => r.Name == "admin");
             roles.ShouldContain(r => r.Name == "moderator");
             roles.ShouldContain(r => r.Name == "supporter");
@@ -39,13 +39,13 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetCountAsync()
         {
-            (await RoleRepository.GetCountAsync()).ShouldBeGreaterThan(0);
+            (await RoleRepository.GetCountAsync().ConfigureAwait(false)).ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Should_Eager_Load_Role_Collections()
         {
-            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator"));
+            var role = await RoleRepository.FindByNormalizedNameAsync(LookupNormalizer.NormalizeName("moderator")).ConfigureAwait(false);
             role.Claims.ShouldNotBeNull();
             role.Claims.Any().ShouldBeTrue();
         }

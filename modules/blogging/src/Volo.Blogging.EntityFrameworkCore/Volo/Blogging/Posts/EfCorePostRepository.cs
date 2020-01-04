@@ -7,7 +7,6 @@ using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Blogging.EntityFrameworkCore;
-using System.Linq.Dynamic.Core;
 
 namespace Volo.Blogging.Posts
 {

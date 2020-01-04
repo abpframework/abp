@@ -3,6 +3,7 @@ using Volo.Abp.Domain.Services;
 
 namespace Volo.Abp.Identity
 {
+    //TODO: Rename to IdentityClaimTypeManager in v2.0!
     public class IdenityClaimTypeManager : DomainService
     {
         private readonly IIdentityClaimTypeRepository _identityClaimTypeRepository;
@@ -14,17 +15,17 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityClaimType> CreateAsync(IdentityClaimType claimType)
         {
-            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name))
+            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name).ConfigureAwait(false))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }
 
-            return await _identityClaimTypeRepository.InsertAsync(claimType);
+            return await _identityClaimTypeRepository.InsertAsync(claimType).ConfigureAwait(false);
         }
 
         public virtual async Task<IdentityClaimType> UpdateAsync(IdentityClaimType claimType)
         {
-            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id))
+            if (await _identityClaimTypeRepository.AnyAsync(claimType.Name, claimType.Id).ConfigureAwait(false))
             {
                 throw new AbpException($"Name Exist: {claimType.Name}");
             }
@@ -35,7 +36,7 @@ namespace Volo.Abp.Identity
             }
             
 
-            return await _identityClaimTypeRepository.UpdateAsync(claimType);
+            return await _identityClaimTypeRepository.UpdateAsync(claimType).ConfigureAwait(false);
         }
     }
 }

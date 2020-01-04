@@ -6,7 +6,7 @@ import { takeUntilDestroy } from '../utils/rxjs-utils';
   // tslint:disable-next-line: directive-selector
   selector: '[click.stop]',
 })
-export class ClickEventStopPropagationDirective implements OnInit, OnDestroy {
+export class StopPropagationDirective implements OnInit, OnDestroy {
   @Output('click.stop') readonly stopPropEvent = new EventEmitter<MouseEvent>();
 
   constructor(private el: ElementRef) {}

@@ -79,7 +79,7 @@ namespace Volo.Abp.Cli.Commands
                     gitHubLocalRepositoryPath,
                     commandLineArgs.Options
                 )
-            );
+            ).ConfigureAwait(false);
 
             using (var templateFileStream = new MemoryStream(result.ZipContent))
             {
@@ -143,7 +143,7 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Downloads the source code of the specified module.";
+            return "Download the source code of the specified module.";
         }
 
         public static class Options

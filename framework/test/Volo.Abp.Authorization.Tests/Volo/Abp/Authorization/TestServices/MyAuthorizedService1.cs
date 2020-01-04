@@ -8,26 +8,26 @@ namespace Volo.Abp.Authorization.TestServices
     public class MyAuthorizedService1 : IMyAuthorizedService1, ITransientDependency
     {
         [AllowAnonymous]
-        public virtual int Anonymous()
+        public virtual Task<int> Anonymous()
         {
-            return 42;
+            return Task.FromResult(42);
         }
 
         [AllowAnonymous]
         public virtual async Task<int> AnonymousAsync()
         {
-            await Task.Delay(10);
+            await Task.Delay(10).ConfigureAwait(false);
             return 42;
         }
 
-        public virtual int ProtectedByClass()
+        public virtual Task<int> ProtectedByClass()
         {
-            return 42;
+            return Task.FromResult(42);
         }
 
         public virtual async Task<int> ProtectedByClassAsync()
         {
-            await Task.Delay(10);
+            await Task.Delay(10).ConfigureAwait(false);
             return 42;
         }
     }

@@ -195,7 +195,7 @@ Open `book-list.component.html` and add the form in the body template of the mod
       <label for="book-type">Type</label><span> * </span>
       <select class="form-control" id="book-type" formControlName="type">
         <option [ngValue]="null">Select a book type</option>
-        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {{ type }}</option>
+        <option [ngValue]="booksType[type]" *ngFor="let type of bookTypeArr"> {%{{{ type }}}%}</option>
       </select>
     </div>
 
@@ -461,10 +461,10 @@ Open the `book-list.component.html` and add modify the `p-table` as shown belo
           </div>
         </div>
       </td>
-      <td>{{ data.name }}</td>
-      <td>{{ booksType[data.type] }}</td>
-      <td>{{ data.publishDate | date }}</td>
-      <td>{{ data.price }}</td>
+      <td>{%{{{ data.name }}}%}</td>
+      <td>{%{{{ booksType[data.type] }}}%}</td>
+      <td>{%{{{ data.publishDate | date }}}%}</td>
+      <td>{%{{{ data.price }}}%}</td>
     </tr>
   </ng-template>
 </p-table>
@@ -483,7 +483,7 @@ Update the modal header to change the title based on the current operation:
 
 ```html
 <ng-template #abpHeader>
-  <h3>{{ selectedBook.id ? 'Edit' : 'New Book' }}</h3>
+  <h3>{%{{{ selectedBook.id ? 'Edit' : 'New Book' }}}%}</h3>
 </ng-template>
 ```
 

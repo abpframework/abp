@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using Nito.AsyncEx;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Threading;
 
@@ -17,6 +18,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
 
         protected AbpBackgroundJobOptions Options { get; }
 
+        protected SemaphoreSlim SyncSemaphore { get; }
+
         public JobQueueManager(
             IOptions<AbpBackgroundJobOptions> options,
             IServiceProvider serviceProvider)
@@ -24,6 +27,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             ServiceProvider = serviceProvider;
             Options = options.Value;
             JobQueues = new ConcurrentDictionary<string, IRunnable>();
+            SyncSemaphore = new SemaphoreSlim(1, 1);
         }
 
         public async Task StartAsync(CancellationToken cancellationToken = default)
@@ -36,7 +40,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             foreach (var jobConfiguration in Options.GetJobs())
             {
                 var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(jobConfiguration.ArgsType));
-                await jobQueue.StartAsync(cancellationToken);
+                await jobQueue.StartAsync(cancellationToken).ConfigureAwait(false);
                 JobQueues[jobConfiguration.JobName] = jobQueue;
             }
         }
@@ -45,26 +49,37 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         {
             foreach (var jobQueue in JobQueues.Values)
             {
-                await jobQueue.StopAsync(cancellationToken);
+                await jobQueue.StopAsync(cancellationToken).ConfigureAwait(false);
             }
 
             JobQueues.Clear();
         }
 
-        public IJobQueue<TArgs> Get<TArgs>()
+        public async Task<IJobQueue<TArgs>> GetAsync<TArgs>()
         {
             var jobConfiguration = Options.GetJob(typeof(TArgs));
 
-            return (IJobQueue<TArgs>)JobQueues.GetOrAdd(jobConfiguration.JobName, _ =>
+            if (JobQueues.TryGetValue(jobConfiguration.JobName, out var jobQueue))
             {
-                var jobQueue = (IRunnable) ServiceProvider
-                    .GetRequiredService(typeof(IJobQueue<>)
-                        .MakeGenericType(typeof(TArgs)));
+                return (IJobQueue<TArgs>)jobQueue;
+            }
 
-                AsyncHelper.RunSync(() => jobQueue.StartAsync());
+            using (await SyncSemaphore.LockAsync().ConfigureAwait(false))
+            {
+                if (JobQueues.TryGetValue(jobConfiguration.JobName, out jobQueue))
+                {
+                    return (IJobQueue<TArgs>)jobQueue;
+                }
 
-                return jobQueue;
-            });
+                jobQueue = (IJobQueue<TArgs>)ServiceProvider
+                    .GetRequiredService(typeof(IJobQueue<>).MakeGenericType(typeof(TArgs)));
+
+                await jobQueue.StartAsync().ConfigureAwait(false);
+
+                JobQueues.TryAdd(jobConfiguration.JobName, jobQueue);
+
+                return (IJobQueue<TArgs>)jobQueue;
+            }
         }
     }
 }

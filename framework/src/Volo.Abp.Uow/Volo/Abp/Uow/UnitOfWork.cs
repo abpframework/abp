@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Uow
 {
@@ -75,21 +74,13 @@ namespace Volo.Abp.Uow
             Outer = outer;
         }
 
-        public virtual void SaveChanges()
-        {
-            foreach (var databaseApi in GetAllActiveDatabaseApis())
-            {
-                (databaseApi as ISupportsSavingChanges)?.SaveChanges();
-            }
-        }
-
         public virtual async Task SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var databaseApi in GetAllActiveDatabaseApis())
             {
                 if (databaseApi is ISupportsSavingChanges)
                 {
-                    await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken);
+                    await (databaseApi as ISupportsSavingChanges).SaveChangesAsync(cancellationToken).ConfigureAwait(false);
                 }
             }
         }
@@ -104,30 +95,6 @@ namespace Volo.Abp.Uow
             return _transactionApis.Values.ToImmutableList();
         }
 
-        public virtual void Complete()
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            PreventMultipleComplete();
-
-            try
-            {
-                _isCompleting = true;
-                SaveChanges();
-                CommitTransactions();
-                IsCompleted = true;
-                OnCompleted();
-            }
-            catch (Exception ex)
-            {
-                _exception = ex;
-                throw;
-            }
-        }
-
         public virtual async Task CompleteAsync(CancellationToken cancellationToken = default)
         {
             if (_isRolledback)
@@ -140,28 +107,16 @@ namespace Volo.Abp.Uow
             try
             {
                 _isCompleting = true;
-                await SaveChangesAsync(cancellationToken);
-                await CommitTransactionsAsync();
+                await SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+                await CommitTransactionsAsync().ConfigureAwait(false);
                 IsCompleted = true;
-                await OnCompletedAsync();
+                await OnCompletedAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {
                 _exception = ex;
                 throw;
             }
-        }
-
-        public virtual void Rollback()
-        {
-            if (_isRolledback)
-            {
-                return;
-            }
-
-            _isRolledback = true;
-
-            RollbackAll();
         }
 
         public virtual async Task RollbackAsync(CancellationToken cancellationToken = default)
@@ -173,7 +128,7 @@ namespace Volo.Abp.Uow
 
             _isRolledback = true;
 
-            await RollbackAllAsync(cancellationToken);
+            await RollbackAllAsync(cancellationToken).ConfigureAwait(false);
         }
 
         public IDatabaseApi FindDatabaseApi(string key)
@@ -235,24 +190,11 @@ namespace Volo.Abp.Uow
             CompletedHandlers.Add(handler);
         }
 
-        public void OnFailed(Func<Task> handler)
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual void OnCompleted()
-        {
-            foreach (var handler in CompletedHandlers)
-            {
-                AsyncHelper.RunSync(handler);
-            }
-        }
-
         protected virtual async Task OnCompletedAsync()
         {
             foreach (var handler in CompletedHandlers)
             {
-                await handler.Invoke();
+                await handler.Invoke().ConfigureAwait(false);
             }
         }
 
@@ -336,7 +278,7 @@ namespace Volo.Abp.Uow
                 {
                     try
                     {
-                        await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                        await (databaseApi as ISupportsRollback).RollbackAsync(cancellationToken).ConfigureAwait(false);
                     }
                     catch { }
                 }
@@ -348,7 +290,7 @@ namespace Volo.Abp.Uow
                 {
                     try
                     {
-                        await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken);
+                        await (transactionApi as ISupportsRollback).RollbackAsync(cancellationToken).ConfigureAwait(false);
                     }
                     catch { }
                 }
@@ -367,7 +309,7 @@ namespace Volo.Abp.Uow
         {
             foreach (var transaction in GetAllActiveTransactionApis())
             {
-                await transaction.CommitAsync();
+                await transaction.CommitAsync().ConfigureAwait(false);
             }
         }
 

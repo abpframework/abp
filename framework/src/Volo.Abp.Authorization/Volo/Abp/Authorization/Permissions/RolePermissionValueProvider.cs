@@ -27,7 +27,7 @@ namespace Volo.Abp.Authorization.Permissions
 
             foreach (var role in roles)
             {
-                if (await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, role))
+                if (await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, role).ConfigureAwait(false))
                 {
                     return PermissionGrantResult.Granted;
                 }

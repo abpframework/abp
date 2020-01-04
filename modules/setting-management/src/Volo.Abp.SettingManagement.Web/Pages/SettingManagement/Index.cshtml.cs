@@ -26,7 +26,7 @@ namespace Volo.Abp.SettingManagement.Web.Pages.SettingManagement
 
             foreach (var contributor in _options.Contributors)
             {
-                await contributor.ConfigureAsync(SettingPageCreationContext);
+                await contributor.ConfigureAsync(SettingPageCreationContext).ConfigureAwait(false);
             }
         }
     }

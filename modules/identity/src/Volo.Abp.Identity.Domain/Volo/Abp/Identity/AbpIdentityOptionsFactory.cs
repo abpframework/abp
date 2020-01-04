@@ -39,19 +39,19 @@ namespace Volo.Abp.Identity
 
         protected virtual async Task OverrideOptionsAsync(IdentityOptions options)
         {
-            options.Password.RequiredLength = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength);
-            options.Password.RequiredUniqueChars = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars);
-            options.Password.RequireNonAlphanumeric = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireNonAlphanumeric, options.Password.RequireNonAlphanumeric);
-            options.Password.RequireLowercase = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireLowercase, options.Password.RequireLowercase);
-            options.Password.RequireUppercase = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireUppercase, options.Password.RequireUppercase);
-            options.Password.RequireDigit = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireDigit, options.Password.RequireDigit);
+            options.Password.RequiredLength = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequiredLength, options.Password.RequiredLength).ConfigureAwait(false);
+            options.Password.RequiredUniqueChars = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequiredUniqueChars, options.Password.RequiredUniqueChars).ConfigureAwait(false);
+            options.Password.RequireNonAlphanumeric = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireNonAlphanumeric, options.Password.RequireNonAlphanumeric).ConfigureAwait(false);
+            options.Password.RequireLowercase = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireLowercase, options.Password.RequireLowercase).ConfigureAwait(false);
+            options.Password.RequireUppercase = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireUppercase, options.Password.RequireUppercase).ConfigureAwait(false);
+            options.Password.RequireDigit = await _settingProvider.GetAsync(IdentitySettingNames.Password.RequireDigit, options.Password.RequireDigit).ConfigureAwait(false);
 
-            options.Lockout.AllowedForNewUsers = await _settingProvider.GetAsync(IdentitySettingNames.Lockout.AllowedForNewUsers, options.Lockout.AllowedForNewUsers);
+            options.Lockout.AllowedForNewUsers = await _settingProvider.GetAsync(IdentitySettingNames.Lockout.AllowedForNewUsers, options.Lockout.AllowedForNewUsers).ConfigureAwait(false);
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(await _settingProvider.GetAsync(IdentitySettingNames.Lockout.LockoutDuration, options.Lockout.DefaultLockoutTimeSpan.TotalSeconds.To<int>()));
-            options.Lockout.MaxFailedAccessAttempts = await _settingProvider.GetAsync(IdentitySettingNames.Lockout.MaxFailedAccessAttempts, options.Lockout.MaxFailedAccessAttempts);
+            options.Lockout.MaxFailedAccessAttempts = await _settingProvider.GetAsync(IdentitySettingNames.Lockout.MaxFailedAccessAttempts, options.Lockout.MaxFailedAccessAttempts).ConfigureAwait(false);
 
-            options.SignIn.RequireConfirmedEmail = await _settingProvider.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail, options.SignIn.RequireConfirmedEmail);
-            options.SignIn.RequireConfirmedPhoneNumber = await _settingProvider.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, options.SignIn.RequireConfirmedPhoneNumber);
+            options.SignIn.RequireConfirmedEmail = await _settingProvider.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedEmail, options.SignIn.RequireConfirmedEmail).ConfigureAwait(false);
+            options.SignIn.RequireConfirmedPhoneNumber = await _settingProvider.GetAsync(IdentitySettingNames.SignIn.RequireConfirmedPhoneNumber, options.SignIn.RequireConfirmedPhoneNumber).ConfigureAwait(false);
 
         }
     }

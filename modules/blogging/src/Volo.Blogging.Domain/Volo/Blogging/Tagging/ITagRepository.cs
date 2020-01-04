@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Repositories;
 
@@ -15,6 +16,6 @@ namespace Volo.Blogging.Tagging
 
         Task<List<Tag>> GetListAsync(IEnumerable<Guid> ids);
 
-        void DecreaseUsageCountOfTags(List<Guid> id);
+        Task DecreaseUsageCountOfTagsAsync(List<Guid> id, CancellationToken cancellationToken = default);
     }
 }

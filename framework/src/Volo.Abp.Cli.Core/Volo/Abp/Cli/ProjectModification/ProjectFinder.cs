@@ -130,6 +130,12 @@ namespace Volo.Abp.Cli.ProjectModification
                 return projectFolders.ToArray();
             }
 
+            var hostFolder = Path.Combine(baseFolder, "host");
+            if (Directory.Exists(hostFolder))
+            {
+                projectFolders.Add(hostFolder);
+            }
+
             var srcFolder = Path.Combine(baseFolder, "src");
             if (Directory.Exists(srcFolder))
             {

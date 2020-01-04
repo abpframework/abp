@@ -6,7 +6,8 @@ namespace Volo.Abp.Application.Dtos
     public interface ILimitedResultRequest
     {
         /// <summary>
-        /// Max expected result count.
+        /// Maximum result count should be returned.
+        /// This is generally used to limit result count on paging.
         /// </summary>
         int MaxResultCount { get; set; }
     }

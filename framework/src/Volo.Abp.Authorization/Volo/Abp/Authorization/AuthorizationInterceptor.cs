@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Authorization
 {
@@ -14,16 +13,10 @@ namespace Volo.Abp.Authorization
             _methodInvocationAuthorizationService = methodInvocationAuthorizationService;
         }
 
-        public override void Intercept(IAbpMethodInvocation invocation)
-        {
-            AsyncHelper.RunSync(() => AuthorizeAsync(invocation));
-            invocation.Proceed();
-        }
-
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
-            await AuthorizeAsync(invocation);
-            await invocation.ProceedAsync();
+            await AuthorizeAsync(invocation).ConfigureAwait(false);
+            await invocation.ProceedAsync().ConfigureAwait(false);
         }
 
         protected virtual async Task AuthorizeAsync(IAbpMethodInvocation invocation)
@@ -32,7 +25,7 @@ namespace Volo.Abp.Authorization
                 new MethodInvocationAuthorizationContext(
                     invocation.Method
                 )
-            );
+            ).ConfigureAwait(false);
         }
     }
 }

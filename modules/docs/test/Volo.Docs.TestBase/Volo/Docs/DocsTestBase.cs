@@ -6,6 +6,7 @@ using Octokit;
 using Volo.Abp;
 using Volo.Abp.Modularity;
 using Volo.Docs.GitHub.Documents;
+using Volo.Abp.Testing;
 
 namespace Volo.Docs
 {
@@ -32,6 +33,7 @@ namespace Volo.Docs
                         "https://api.github.com/repos/abpframework/abp/releases/16293679/assets",
                         "https://uploads.github.com/repos/abpframework/abp/releases/16293679/assets{?name,label}",
                         16293679,
+                        "",
                         "0.15.0",
                         "master",
                         "0.15.0",

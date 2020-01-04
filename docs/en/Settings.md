@@ -40,6 +40,33 @@ ABP automatically discovers this class and registers the setting definitions.
 * **Providers**: Can be used to restrict providers available for a particular setting (see the setting value providers section for more).
 * **Properties**: A name/value collection to set custom properties about this setting those can be used later in the application code.
 
+### Change Setting Definitions of a Depended Module
+
+In some cases, you may want to change some properties of a settings defined in some other module that your application/module depends on. A setting definition provider can query and update setting definitions. 
+
+The following example gets a setting defined by the [Volo.Abp.Emailing](Emailing.md) package and changes its properties:
+
+````csharp
+public class MySettingDefinitionProvider : SettingDefinitionProvider
+{
+    public override void Define(ISettingDefinitionContext context)
+    {
+        var smtpHost = context.GetOrNull("Abp.Mailing.Smtp.Host");
+        if (smtpHost != null)
+        {
+            smtpHost.DefaultValue = "mail.mydomain.com";
+            smtpHost.DisplayName = 
+                new LocalizableString(
+                    typeof(MyLocalizationResource),
+                    "SmtpServer_DisplayName"
+                );
+        }
+    }
+}
+````
+
+> Using constants for the setting names is a good practice and ABP packages do it. `Abp.Mailing.Smtp.Host` setting name is a constant defined by the `EmailSettingNames` class (in the `Volo.Abp.Emailing` namespace).
+
 ## Reading Setting Values
 
 ### ISettingProvider
@@ -118,6 +145,30 @@ There are 5 pre-built setting value providers registered by the order below:
 
 Global, Tenant and User setting value providers use the `ISettingStore` to read the value from the data source (see the section below).
 
+### Setting Values in the Application Configuration
+
+As mentioned in the previous section, `ConfigurationSettingValueProvider` reads the settings from the `IConfiguration` service, which can read values from the `appsettings.json` by default. So, the easiest way to configure setting values to define them in the `appsettings.json` file.
+
+For example, you can configure  [IEmailSender](Emailing.md) settings as shown below:
+
+````json
+{
+  "Settings": {
+    "Abp.Mailing.DefaultFromAddress": "noreply@mydomain.com",
+    "Abp.Mailing.DefaultFromDisplayName": "My Application",
+    "Abp.Mailing.Smtp.Host": "mail.mydomain.com",
+    "Abp.Mailing.Smtp.Port": "547",
+    "Abp.Mailing.Smtp.UserName": "myusername",
+    "Abp.Mailing.Smtp.Password": "mySecretPassW00rd",
+    "Abp.Mailing.Smtp.EnableSsl": "True"
+  }
+}
+````
+
+Setting values should be configured under the `Settings` section as like in this example.
+
+> `IConfiguration`  is an .NET Core service and it can read values not only from the `appsettings.json`, but also from the environment, user secrets... etc. See [Microsoft's documentation]( https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/ ) for more.
+
 ### Custom Setting Value Providers
 
 If you need to extend the setting system, you can define a class derived from the `SettingValueProvider` class. Example:
@@ -165,7 +216,7 @@ This example adds it as the last item, so it will be the first value provider us
 
 ### ISettingStore
 
-While a setting value provider is free to use any source to get the setting value, the`ISettingStore` service is the default source of the setting values. Global, Tenant and User setting value providers use it.
+While a setting value provider is free to use any source to get the setting value, the `ISettingStore` service is the default source of the setting values. Global, Tenant and User setting value providers use it.
 
 ## ISettingEncryptionService
 

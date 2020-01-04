@@ -45,13 +45,7 @@ export default `
 }
 
 .modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: calc(100% - 7px);
-  height: 100%;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 1040;
 }
 
 .modal::-webkit-scrollbar {
@@ -239,6 +233,33 @@ body abp-toast .ui-toast .ui-toast-message.ui-toast-message-info .ui-toast-messa
 .abp-mh-100 {
   transition:max-height 1s linear;
   max-height: 100vh;
+}
+
+[class^="sorting"] {
+  opacity: .3;
+  cursor: pointer;
+}
+[class^="sorting"]:before {
+  right: 0.5rem;
+  content: "↑";
+}
+[class^="sorting"]:after {
+  right: 0.5rem;
+  content: "↓";
+}
+
+.sorting_desc {
+  opacity: 1;
+}
+.sorting_desc:before {
+  opacity: .3;
+}
+
+.sorting_asc {
+  opacity: 1;
+}
+.sorting_asc:after {
+  opacity: .3;
 }
 
 @keyframes fadeInTop {

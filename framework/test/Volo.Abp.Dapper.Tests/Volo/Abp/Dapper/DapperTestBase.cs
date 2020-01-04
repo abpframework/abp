@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Dapper
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.Dapper
 {
     public abstract class DapperTestBase : AbpIntegratedTest<AbpDapperTestModule>
     {

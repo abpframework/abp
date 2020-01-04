@@ -26,7 +26,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task<List<Client>> GetListAsync(
@@ -40,7 +40,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .OrderBy(sorting ?? nameof(Client.ClientName))
                 .As<IMongoQueryable<Client>>()
                 .PageBy<Client, IMongoQueryable<Client>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(
@@ -50,17 +50,17 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .SelectMany(x => x.AllowedCorsOrigins)
                 .Select(y => y.Origin)
                 .Distinct()
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
+            return await GetMongoQueryable().AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
 
         public virtual async Task<long> GetTotalCount()
         {
-            return await GetCountAsync();
+            return await GetCountAsync().ConfigureAwait(false);
         }
     }
 }

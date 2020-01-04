@@ -22,7 +22,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             ValidateModel();
 
             var input = ObjectMapper.Map<TenantInfoModel, TenantCreateDto>(Tenant);
-            await _tenantAppService.CreateAsync(input);
+            await _tenantAppService.CreateAsync(input).ConfigureAwait(false);
 
             return NoContent();
         }

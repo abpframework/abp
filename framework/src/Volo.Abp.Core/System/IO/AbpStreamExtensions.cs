@@ -17,7 +17,7 @@ namespace System.IO
         {
             using (var memoryStream = new MemoryStream())
             {
-                await stream.CopyToAsync(memoryStream);
+                await stream.CopyToAsync(memoryStream).ConfigureAwait(false);
                 return memoryStream.ToArray();
             }
         }

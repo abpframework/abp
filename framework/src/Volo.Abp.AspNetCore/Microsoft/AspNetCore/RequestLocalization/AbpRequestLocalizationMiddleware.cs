@@ -25,11 +25,13 @@ namespace Microsoft.AspNetCore.RequestLocalization
         {
             var middleware = new RequestLocalizationMiddleware(
                 next,
-                new OptionsWrapper<RequestLocalizationOptions>(_requestLocalizationOptionsProvider.GetLocalizationOptions()),
+                new OptionsWrapper<RequestLocalizationOptions>(
+                    await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
+.ConfigureAwait(false)),
                 _loggerFactory
             );
 
-            await middleware.Invoke(context);
+            await middleware.Invoke(context).ConfigureAwait(false);
         }
     }
 }

@@ -28,9 +28,9 @@ namespace Volo.Abp.TestApp.Testing
             {
                 Birthday = DateTime.Parse("2020-01-01 00:00:00"),
                 LastActive = DateTime.Parse("2020-01-01 00:00:00"),
-            }, true);
+            }, true).ConfigureAwait(false);
 
-            var person = await _personRepository.GetAsync(personId);
+            var person = await _personRepository.GetAsync(personId).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.CreationTime.Kind.ShouldBe(DateTimeKind.Utc);
@@ -53,9 +53,9 @@ namespace Volo.Abp.TestApp.Testing
             {
                 Birthday = DateTime.Parse("2020-01-01 00:00:00"),
                 LastActive = DateTime.Parse("2020-01-01 00:00:00"),
-            }, true);
+            }, true).ConfigureAwait(false);
 
-            var person = await _personRepository.GetViewAsync(personName);
+            var person = await _personRepository.GetViewAsync(personName).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.CreationTime.Kind.ShouldBe(DateTimeKind.Utc);
