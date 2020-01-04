@@ -25,7 +25,7 @@ namespace Volo.Abp.SettingManagement
         public async Task GetOrNull_NotExist_Should_Be_Null()
         {
             var value = await _settingManagementStore.GetOrNullAsync("notExistName", "notExistProviderName",
-                "notExistProviderKey");
+                "notExistProviderKey").ConfigureAwait(false);
 
             value.ShouldBeNull();
         }
@@ -33,7 +33,7 @@ namespace Volo.Abp.SettingManagement
         [Fact]
         public async Task GetOrNullAsync()
         {
-            var value = await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+            var value = await _settingManagementStore.GetOrNullAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null).ConfigureAwait(false);
 
             value.ShouldNotBeNull();
             value.ShouldBe("42");
@@ -42,22 +42,22 @@ namespace Volo.Abp.SettingManagement
         [Fact]
         public async Task SetAsync()
         {
-            var setting = await _settingRepository.FindAsync(_testData.SettingId);
+            var setting = await _settingRepository.FindAsync(_testData.SettingId).ConfigureAwait(false);
             setting.Value.ShouldBe("42");
 
-            await _settingManagementStore.SetAsync("MySetting1", "43", GlobalSettingValueProvider.ProviderName, null);
+            await _settingManagementStore.SetAsync("MySetting1", "43", GlobalSettingValueProvider.ProviderName, null).ConfigureAwait(false);
 
-            (await _settingRepository.FindAsync(_testData.SettingId)).Value.ShouldBe("43");
+            (await _settingRepository.FindAsync(_testData.SettingId).ConfigureAwait(false)).Value.ShouldBe("43");
         }
 
         [Fact]
         public async Task DeleteAsync()
         {
-            (await _settingRepository.FindAsync(_testData.SettingId)).ShouldNotBeNull();
+            (await _settingRepository.FindAsync(_testData.SettingId).ConfigureAwait(false)).ShouldNotBeNull();
 
-            await _settingManagementStore.DeleteAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null);
+            await _settingManagementStore.DeleteAsync("MySetting1", GlobalSettingValueProvider.ProviderName, null).ConfigureAwait(false);
 
-            (await _settingRepository.FindAsync(_testData.SettingId)).ShouldBeNull();
+            (await _settingRepository.FindAsync(_testData.SettingId).ConfigureAwait(false)).ShouldBeNull();
         }
 
     }

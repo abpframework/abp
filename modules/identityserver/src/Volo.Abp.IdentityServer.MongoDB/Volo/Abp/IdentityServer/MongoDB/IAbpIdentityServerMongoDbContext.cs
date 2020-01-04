@@ -1,6 +1,7 @@
 ﻿using MongoDB.Driver;
 using Volo.Abp.Data;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 using Volo.Abp.MongoDB;
@@ -18,5 +19,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         IMongoCollection<IdentityResource> IdentityResources { get; }
 
         IMongoCollection<PersistedGrant> PersistedGrants { get; }
+
+        IMongoCollection<DeviceFlowCodes> DeviceFlowCodes { get; }
     }
 }

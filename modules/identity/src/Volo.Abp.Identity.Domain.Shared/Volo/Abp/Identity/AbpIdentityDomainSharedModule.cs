@@ -1,15 +1,18 @@
 ﻿using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.Users;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Identity
 {
-    [DependsOn(typeof(AbpUsersDomainSharedModule))]
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(
+        typeof(AbpUsersDomainSharedModule),
+        typeof(AbpValidationModule)
+        )]
     public class AbpIdentityDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)

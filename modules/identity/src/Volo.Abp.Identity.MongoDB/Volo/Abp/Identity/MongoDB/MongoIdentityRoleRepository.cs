@@ -27,7 +27,7 @@ namespace Volo.Abp.Identity.MongoDB
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<List<IdentityRole>> GetListAsync(
@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .As<IMongoQueryable<IdentityRole>>()
                 .PageBy<IdentityRole, IMongoQueryable<IdentityRole>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
     }
 }

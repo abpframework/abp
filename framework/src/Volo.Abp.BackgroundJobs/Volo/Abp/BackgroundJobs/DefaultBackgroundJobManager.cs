@@ -32,7 +32,7 @@ namespace Volo.Abp.BackgroundJobs
         public virtual async Task<string> EnqueueAsync<TArgs>(TArgs args, BackgroundJobPriority priority = BackgroundJobPriority.Normal, TimeSpan? delay = null)
         {
             var jobName = BackgroundJobNameAttribute.GetName<TArgs>();
-            var jobId = await EnqueueAsync(jobName, args, priority, delay);
+            var jobId = await EnqueueAsync(jobName, args, priority, delay).ConfigureAwait(false);
             return jobId.ToString();
         }
 
@@ -53,7 +53,7 @@ namespace Volo.Abp.BackgroundJobs
                 jobInfo.NextTryTime = Clock.Now.Add(delay.Value);
             }
 
-            await Store.InsertAsync(jobInfo);
+            await Store.InsertAsync(jobInfo).ConfigureAwait(false);
 
             return jobInfo.Id;
         }

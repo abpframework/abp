@@ -78,7 +78,11 @@
           </th>
           <th pResizableColumn (click)="sortOrderIcon.sort('phoneNumber')">
             {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
-            <abp-sort-order-icon sortKey="phoneNumber" [(selectedSortKey)]="sortKey" [(order)]="sortOrder">
+            <abp-sort-order-icon
+              sortKey="phoneNumber"
+              [(selectedSortKey)]="sortKey"
+              [(order)]="sortOrder"
+            >
             </abp-sort-order-icon>
           </th>
         </tr>
@@ -259,8 +263,19 @@
 </abp-modal>
 
 <abp-permission-management
-  [(visible)]="visiblePermissions"
-  providerName="U"
-  [providerKey]="providerKey"
+  #abpPermissionManagement="abpPermissionManagement"
+  *abpReplaceableTemplate="
+    {
+      inputs: {
+        providerName: { value: 'U' },
+        providerKey: { value: providerKey },
+        visible: { value: visiblePermissions, twoWay: true }
+      },
+      outputs: { visibleChange: onVisiblePermissionChange },
+      componentKey: 'PermissionManagement.PermissionManagementComponent'
+    };
+    let init = initTemplate
+  "
+  (abpInit)="init(abpPermissionManagement)"
 >
 </abp-permission-management>

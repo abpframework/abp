@@ -19,7 +19,7 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task FindAsyncByName()
         {
-            var acme = await _tenantStore.FindAsync("acme");
+            var acme = await _tenantStore.FindAsync("acme").ConfigureAwait(false);
             acme.ShouldNotBeNull();
             acme.Name.ShouldBe("acme");
         }
@@ -27,10 +27,10 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task FindAsyncById()
         {
-            var acme = await _tenantRepository.FindByNameAsync("acme");
+            var acme = await _tenantRepository.FindByNameAsync("acme").ConfigureAwait(false);
             acme.ShouldNotBeNull();
 
-             (await _tenantStore.FindAsync(acme.Id)).ShouldNotBeNull();
+             (await _tenantStore.FindAsync(acme.Id).ConfigureAwait(false)).ShouldNotBeNull();
         }
     }
 }

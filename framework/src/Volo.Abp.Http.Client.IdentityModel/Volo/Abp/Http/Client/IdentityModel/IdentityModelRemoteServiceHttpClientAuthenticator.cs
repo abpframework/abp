@@ -25,7 +25,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
         {
             if (context.RemoteService.GetUseCurrentAccessToken() != false)
             {
-                var accessToken = await GetAccessTokenFromHttpContextOrNullAsync();
+                var accessToken = await GetAccessTokenFromHttpContextOrNullAsync().ConfigureAwait(false);
                 if (accessToken != null)
                 {
                     context.Request.SetBearerToken(accessToken);
@@ -36,7 +36,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
             await IdentityModelAuthenticationService.TryAuthenticateAsync(
                 context.Client,
                 context.RemoteService.GetIdentityClient()
-            );
+            ).ConfigureAwait(false);
         }
 
         protected virtual async Task<string> GetAccessTokenFromHttpContextOrNullAsync()
@@ -47,7 +47,7 @@ namespace Volo.Abp.Http.Client.IdentityModel
                 return null;
             }
 
-            return await httpContext.GetTokenAsync("access_token");
+            return await httpContext.GetTokenAsync("access_token").ConfigureAwait(false);
         }
     }
 }

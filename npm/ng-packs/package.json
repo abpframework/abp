@@ -1,4 +1,9 @@
 {
+  "homepage": "https://abp.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abpframework/abp.git"
+  },
   "scripts": {
     "ng": "ng",
     "abpng": "abpng",
@@ -7,7 +12,7 @@
     "test": "ng test --watchAll --runInBand",
     "commit": "git-cz",
     "lint": "ng lint",
-    "scripts:build": "cd scripts && npm install && yarn build",
+    "scripts:build": "cd scripts && yarn && yarn build",
     "prepare:workspace": "yarn scripts:build",
     "ci": "yarn prepare:workspace && yarn ci:test && yarn ng lint && yarn ci:build",
     "ci:test": "ng test --coverage=false",
@@ -30,11 +35,11 @@
     "@abp/ng.theme.basic": "^1.1.1",
     "@abp/ng.theme.shared": "^1.1.1",
     "@angular-builders/jest": "^8.2.0",
-    "@angular-devkit/build-angular": "~0.803.20",
-    "@angular-devkit/build-ng-packagr": "~0.803.20",
+    "@angular-devkit/build-angular": "~0.803.21",
+    "@angular-devkit/build-ng-packagr": "~0.803.21",
     "@angular/animations": "~8.2.14",
     "@angular/cdk": "^8.2.3",
-    "@angular/cli": "~8.3.18",
+    "@angular/cli": "~8.3.21",
     "@angular/common": "~8.2.14",
     "@angular/compiler": "~8.2.14",
     "@angular/compiler-cli": "~8.2.14",

@@ -41,7 +41,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityRole> GetByIdAsync(Guid id)
         {
-            var role = await Store.FindByIdAsync(id.ToString(), CancellationToken);
+            var role = await Store.FindByIdAsync(id.ToString(), CancellationToken).ConfigureAwait(false);
             if (role == null)
             {
                 throw new EntityNotFoundException(typeof(IdentityRole), id);
@@ -57,7 +57,7 @@ namespace Volo.Abp.Identity
                 throw new BusinessException(_localizer["Identity.StaticRoleRenamingErrorMessage"]); // TODO: localize & change exception type
             }
 
-            return await base.SetRoleNameAsync(role,name);
+            return await base.SetRoleNameAsync(role, name).ConfigureAwait(false);
         }
 
         public override async Task<IdentityResult> DeleteAsync(IdentityRole role)
@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity
                 throw new BusinessException(_localizer["Identity.StaticRoleDeletionErrorMessage"]); // TODO: localize & change exception type
             }
 
-            return await base.DeleteAsync(role);
+            return await base.DeleteAsync(role).ConfigureAwait(false);
         }
     }
 }

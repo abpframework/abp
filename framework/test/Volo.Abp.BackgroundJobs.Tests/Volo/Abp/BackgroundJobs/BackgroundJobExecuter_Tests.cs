@@ -23,7 +23,7 @@ namespace Volo.Abp.BackgroundJobs
 
             //Act
 
-            _backgroundJobExecuter.Execute(
+            await _backgroundJobExecuter.ExecuteAsync(
                 new JobExecutionContext(
                     ServiceProvider,
                     typeof(MyJob),
@@ -46,7 +46,7 @@ namespace Volo.Abp.BackgroundJobs
 
             //Act
 
-            _backgroundJobExecuter.Execute(
+            await _backgroundJobExecuter.ExecuteAsync(
                 new JobExecutionContext(
                     ServiceProvider,
                     typeof(MyAsyncJob),

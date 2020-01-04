@@ -501,6 +501,10 @@ You can also use variables in a text, adding **_Value** postfix to its key:
 This document assumes that you prefer to use **{{ UI_Value }}** as the UI framework and **{{ DB_Value }}** as the database provider.
 ````
 
+Also, **Document_Language_Code** and **Document_Version** keys are pre-defined if you want to get the language code or the version of the current document (This may be useful for creating links that redirects to another documentation system in another domain).
+
+------
+
 **IMPORTANT NOTICE**: Scriban uses "{{" and "}}" for syntax. Therefore, you must use escape blocks if you are going to use those in your document (an Angular document, for example). See [Scriban docs](<https://github.com/lunet-io/scriban/blob/master/doc/language.md#13-escape-block> ) for more information.
 
 ### 8- Creating the Navigation Document

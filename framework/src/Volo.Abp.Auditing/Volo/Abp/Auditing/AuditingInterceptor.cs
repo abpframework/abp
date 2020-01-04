@@ -22,7 +22,7 @@ namespace Volo.Abp.Auditing
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
-                await invocation.ProceedAsync();
+                await invocation.ProceedAsync().ConfigureAwait(false);
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace Volo.Abp.Auditing
 
             try
             {
-                await invocation.ProceedAsync();
+                await invocation.ProceedAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {

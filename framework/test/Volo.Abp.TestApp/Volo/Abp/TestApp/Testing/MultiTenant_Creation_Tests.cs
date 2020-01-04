@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using Shouldly;
-using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
@@ -45,9 +42,9 @@ namespace Volo.Abp.TestApp.Testing
                 Id = personId,
                 Name = "Person1",
                 Age = 21
-            });
+            }).ConfigureAwait(false);
 
-            var person = await _personRepository.FindAsync(personId);
+            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.TenantId.ShouldNotBeNull();
@@ -66,9 +63,9 @@ namespace Volo.Abp.TestApp.Testing
                 Id = personId,
                 Name = "Person1",
                 Age = 21
-            });
+            }).ConfigureAwait(false);
 
-            var person = await _personRepository.FindAsync(personId);
+            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.TenantId.ShouldBeNull();

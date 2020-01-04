@@ -2,7 +2,7 @@
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
-namespace Volo.Abp.Account.Web.Settings
+namespace Volo.Abp.Account.Settings
 {
     public class AccountSettingDefinitionProvider : SettingDefinitionProvider
     {

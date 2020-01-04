@@ -254,7 +254,7 @@
           "items": [            
             {
               "text": "PostgreSQL 集成",
-              "path": "EntityFrameworkCore-PostgreSQL-Integration.md"
+              "path": "Entity-Framework-Core-PostgreSQL.md"
             }
           ]
         },

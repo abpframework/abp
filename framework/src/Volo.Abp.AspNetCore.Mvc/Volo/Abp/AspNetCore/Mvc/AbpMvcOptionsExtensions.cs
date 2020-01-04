@@ -5,6 +5,7 @@ using Volo.Abp.AspNetCore.Mvc.Conventions;
 using Volo.Abp.AspNetCore.Mvc.ExceptionHandling;
 using Volo.Abp.AspNetCore.Mvc.Features;
 using Volo.Abp.AspNetCore.Mvc.ModelBinding;
+using Volo.Abp.AspNetCore.Mvc.Response;
 using Volo.Abp.AspNetCore.Mvc.Uow;
 using Volo.Abp.AspNetCore.Mvc.Validation;
 
@@ -28,6 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc
         private static void AddFilters(MvcOptions options)
         {
             options.Filters.AddService(typeof(AbpAuditActionFilter));
+            options.Filters.AddService(typeof(AbpNoContentActionFilter));
             options.Filters.AddService(typeof(AbpFeatureActionFilter));
             options.Filters.AddService(typeof(AbpValidationActionFilter));
             options.Filters.AddService(typeof(AbpUowActionFilter));

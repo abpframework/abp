@@ -94,6 +94,10 @@ export class TenantsComponent implements OnInit {
     }
   }
 
+  onVisibleFeaturesChange = (value: boolean) => {
+    this.visibleFeatures = value;
+  };
+
   constructor(
     private confirmationService: ConfirmationService,
     private tenantService: TenantManagementService,

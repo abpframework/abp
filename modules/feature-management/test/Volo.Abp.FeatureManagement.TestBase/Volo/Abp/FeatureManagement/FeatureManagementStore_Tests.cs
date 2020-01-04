@@ -27,11 +27,11 @@ namespace Volo.Abp.FeatureManagement
             // Act
             (await FeatureManagementStore.GetOrNullAsync(Guid.NewGuid().ToString(),
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).ShouldBeNull();
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).ShouldBeNull();
 
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).ShouldNotBeNull();
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).ShouldNotBeNull();
         }
 
         [Fact]
@@ -40,17 +40,17 @@ namespace Volo.Abp.FeatureManagement
             // Arrange
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).ShouldNotBeNull();
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).ShouldNotBeNull();
 
             // Act
             await FeatureManagementStore.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString());
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false);
 
             // Assert
             (await FeatureManagementStore.GetOrNullAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).ShouldBeNull();
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).ShouldBeNull();
         }
 
         [Fact]
@@ -59,18 +59,18 @@ namespace Volo.Abp.FeatureManagement
             // Arrange
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).Value.ShouldBe(true.ToString().ToLowerInvariant());
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).Value.ShouldBe(true.ToString().ToLowerInvariant());
 
             // Act
             await FeatureManagementStore.SetAsync(TestFeatureDefinitionProvider.SocialLogins,
                 false.ToString().ToUpperInvariant(),
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString());
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false);
 
             // Assert
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).Value.ShouldBe(false.ToString().ToUpperInvariant());
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).Value.ShouldBe(false.ToString().ToUpperInvariant());
         }
 
         [Fact]
@@ -79,18 +79,18 @@ namespace Volo.Abp.FeatureManagement
             // Arrange
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).ShouldNotBeNull();
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).ShouldNotBeNull();
 
             // Act
             await FeatureManagementStore.DeleteAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString());
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false);
 
 
             // Assert
             (await FeatureValueRepository.FindAsync(TestFeatureDefinitionProvider.SocialLogins,
                 EditionFeatureValueProvider.ProviderName,
-                TestEditionIds.Regular.ToString())).ShouldBeNull();
+                TestEditionIds.Regular.ToString()).ConfigureAwait(false)).ShouldBeNull();
 
 
         }

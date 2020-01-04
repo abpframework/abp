@@ -1,4 +1,3 @@
-// ESM syntax is supported.
 import execa from 'execa';
 import fse from 'fs-extra';
 

@@ -22,13 +22,13 @@ namespace Volo.Abp.Identity.MongoDB
             {
                 return await GetMongoQueryable()
                     .Where(ct => ct.Name == name)
-                    .AnyAsync();
+                    .AnyAsync().ConfigureAwait(false);
             }
             else
             {
                 return await GetMongoQueryable()
                     .Where(ct => ct.Id != ignoredId && ct.Name == name)
-                    .AnyAsync();
+                    .AnyAsync().ConfigureAwait(false);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity.MongoDB
                 .OrderBy(sorting ?? nameof(IdentityClaimType.Name))
                 .As<IMongoQueryable<IdentityClaimType>>()
                 .PageBy<IdentityClaimType, IMongoQueryable<IdentityClaimType>>(skipCount, maxResultCount)
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
         }
     }
 }
