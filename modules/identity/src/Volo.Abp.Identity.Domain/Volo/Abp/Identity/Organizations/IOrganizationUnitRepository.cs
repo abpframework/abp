@@ -10,5 +10,7 @@ namespace Volo.Abp.Identity.Organizations
         Task<List<OrganizationUnit>> GetChildrenAsync(Guid? parentId);
 
         Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(string code, Guid? parentId);
+
+        Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids);
     }
 }

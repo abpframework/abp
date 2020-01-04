@@ -129,7 +129,7 @@ namespace Volo.Abp.Identity
         /// <summary>
         /// Navigation property for this organization units.
         /// </summary>
-        public virtual ICollection<OrganizationUnitUser> OrganizationUnits { get; protected set; }
+        public virtual ICollection<IdentityUserOrganizationUnit> OrganizationUnits { get; protected set; }
 
         protected IdentityUser()
         {
@@ -154,7 +154,7 @@ namespace Volo.Abp.Identity
             Claims = new Collection<IdentityUserClaim>();
             Logins = new Collection<IdentityUserLogin>();
             Tokens = new Collection<IdentityUserToken>();
-            OrganizationUnits = new Collection<OrganizationUnitUser>();
+            OrganizationUnits = new Collection<IdentityUserOrganizationUnit>();
 
             ExtraProperties = new Dictionary<string, object>();
         }
@@ -293,7 +293,7 @@ namespace Volo.Abp.Identity
                 return;
             }
 
-            OrganizationUnits.Add(new OrganizationUnitUser(TenantId, Id, organizationUnitId));
+            OrganizationUnits.Add(new IdentityUserOrganizationUnit(TenantId, Id, organizationUnitId));
         }
 
         public virtual void RemoveOrganizationUnit(Guid organizationUnitId)

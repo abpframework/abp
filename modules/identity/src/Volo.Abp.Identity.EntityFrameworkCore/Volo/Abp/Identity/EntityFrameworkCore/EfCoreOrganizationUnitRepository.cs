@@ -28,5 +28,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await DbSet.Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
                 .ToListAsync();
         }
+
+        public async Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids)
+        {
+            return await DbSet.Where(t => ids.Contains(t.Id)).ToListAsync();
+        }
     }
 }

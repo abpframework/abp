@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using JetBrains.Annotations;
 
 namespace Volo.Abp.Identity
@@ -29,5 +30,7 @@ namespace Volo.Abp.Identity
 
         [CanBeNull]
         public string[] RoleNames { get; set; }
+
+        public Guid[] OrganizationUnits { get; set; }
     }
 }

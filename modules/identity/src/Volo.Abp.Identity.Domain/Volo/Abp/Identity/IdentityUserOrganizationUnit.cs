@@ -2,12 +2,12 @@
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.MultiTenancy;
 
-namespace Volo.Abp.Identity.Organizations
+namespace Volo.Abp.Identity
 {
     /// <summary>
     /// Represents membership of a User to an OU.
     /// </summary>
-    public class OrganizationUnitUser : CreationAuditedEntity<Guid>, IMultiTenant, ISoftDelete
+    public class IdentityUserOrganizationUnit : CreationAuditedEntity<Guid>, IMultiTenant, ISoftDelete
     {
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Volo.Abp.Identity.Organizations
         /// <summary>
         /// Initializes a new instance of the <see cref="UserOrganizationUnit"/> class.
         /// </summary>
-        public OrganizationUnitUser()
+        public IdentityUserOrganizationUnit()
         {
 
         }
@@ -44,7 +44,7 @@ namespace Volo.Abp.Identity.Organizations
         /// <param name="tenantId">TenantId</param>
         /// <param name="userId">Id of the User.</param>
         /// <param name="organizationUnitId">Id of the <see cref="OrganizationUnit"/>.</param>
-        public OrganizationUnitUser(Guid? tenantId, Guid userId, Guid organizationUnitId)
+        public IdentityUserOrganizationUnit(Guid? tenantId, Guid userId, Guid organizationUnitId)
         {
             TenantId = tenantId;
             UserId = userId;

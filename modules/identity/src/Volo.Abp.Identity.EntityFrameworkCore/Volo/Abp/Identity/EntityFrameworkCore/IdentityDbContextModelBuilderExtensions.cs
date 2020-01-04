@@ -165,9 +165,9 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasIndex(ou => new { ou.RoleId, ou.OrganizationUnitId });
             });
 
-            builder.Entity<OrganizationUnitUser>(b =>
+            builder.Entity<IdentityUserOrganizationUnit>(b =>
             {
-                b.ToTable(options.TablePrefix + "OrganizationUnitUsers", options.Schema);
+                b.ToTable(options.TablePrefix + "UserOrganizationUnits", options.Schema);
 
                 b.HasKey(ou => new { ou.OrganizationUnitId, ou.UserId });
 

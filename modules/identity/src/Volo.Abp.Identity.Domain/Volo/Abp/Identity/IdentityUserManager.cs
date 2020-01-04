@@ -9,7 +9,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
+using Volo.Abp.Identity.Organizations;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
+using Volo.Abp.Settings;
+using Volo.Abp.Identity.Settings;
 
 namespace Volo.Abp.Identity
 {
@@ -18,6 +23,9 @@ namespace Volo.Abp.Identity
         protected override CancellationToken CancellationToken => _cancellationTokenProvider.Token;
 
         private readonly ICancellationTokenProvider _cancellationTokenProvider;
+        protected IOrganizationUnitRepository _organizationUnitRepository { get; private set; }
+        protected IIdentityUserRepository _identityUserRepository { get; private set; }
+        private readonly ISettingProvider _settingProvider;
 
         public IdentityUserManager(
             IdentityUserStore store,
@@ -28,7 +36,10 @@ namespace Volo.Abp.Identity
             ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors,
             IServiceProvider services,
             ILogger<IdentityUserManager> logger,
-            ICancellationTokenProvider cancellationTokenProvider)
+            ICancellationTokenProvider cancellationTokenProvider,
+            IOrganizationUnitRepository organizationUnitRepository,
+            IIdentityUserRepository identityUserRepository,
+            ISettingProvider settingProvider)
             : base(
                   store,
                   optionsAccessor,
@@ -41,6 +52,9 @@ namespace Volo.Abp.Identity
                   logger)
         {
             _cancellationTokenProvider = cancellationTokenProvider;
+            _organizationUnitRepository = organizationUnitRepository;
+            _identityUserRepository = identityUserRepository;
+            _settingProvider = settingProvider;
         }
 
         public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
@@ -58,7 +72,7 @@ namespace Volo.Abp.Identity
         {
             Check.NotNull(user, nameof(user));
             Check.NotNull(roleNames, nameof(roleNames));
-            
+
             var currentRoleNames = await GetRolesAsync(user).ConfigureAwait(false);
 
             var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct()).ConfigureAwait(false);
@@ -74,6 +88,116 @@ namespace Volo.Abp.Identity
             }
 
             return IdentityResult.Success;
+        }
+
+        public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
+        {
+            return await IsInOrganizationUnitAsync(
+                await GetByIdAsync(userId),
+                await _organizationUnitRepository.GetAsync(ouId)
+                );
+        }
+
+        public virtual Task<bool> IsInOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
+        {
+            return Task.FromResult(user.IsInOrganizationUnit(ou.Id));
+        }
+
+        public virtual async Task AddToOrganizationUnitAsync(Guid userId, Guid ouId)
+        {
+            await AddToOrganizationUnitAsync(
+                await GetByIdAsync(userId),
+                await _organizationUnitRepository.GetAsync(ouId)
+                );
+        }
+
+        public virtual async Task AddToOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
+        {
+            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, _cancellationTokenProvider.Token).ConfigureAwait(false);
+            
+            var currentOus = user.OrganizationUnits;
+
+            if (currentOus.Any(cou => cou.Id == ou.Id))
+            {
+                return;
+            }
+
+            await CheckMaxUserOrganizationUnitMembershipCountAsync(user.TenantId, currentOus.Count + 1);
+
+            user.AddOrganizationUnit(ou.Id);
+        }
+
+        public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
+        {
+            await RemoveFromOrganizationUnitAsync(
+                await GetByIdAsync(userId),
+                await _organizationUnitRepository.GetAsync(ouId)
+                );
+        }
+
+        public virtual async Task RemoveFromOrganizationUnitAsync(IdentityUser user, OrganizationUnit ou)
+        {
+            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, _cancellationTokenProvider.Token).ConfigureAwait(false);
+
+            user.RemoveOrganizationUnit(ou.Id);
+        }
+
+        public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
+        {
+            await SetOrganizationUnitsAsync(
+                await GetByIdAsync(userId),
+                organizationUnitIds
+                );
+        }
+
+        public virtual async Task SetOrganizationUnitsAsync(IdentityUser user, params Guid[] organizationUnitIds)
+        {
+            Check.NotNull(user, nameof(user));
+            Check.NotNull(organizationUnitIds, nameof(organizationUnitIds));
+
+            await CheckMaxUserOrganizationUnitMembershipCountAsync(user.TenantId, organizationUnitIds.Length);
+
+            var currentOus = user.OrganizationUnits;
+
+            //Remove from removed OUs
+            foreach (var currentOu in currentOus)
+            {
+                if (!organizationUnitIds.Contains(currentOu.Id))
+                {
+                    await RemoveFromOrganizationUnitAsync(user.Id, currentOu.Id);
+                }
+            }
+
+            //Add to added OUs
+            foreach (var organizationUnitId in organizationUnitIds)
+            {
+                if (currentOus.All(ou => ou.Id != organizationUnitId))
+                {
+                    await AddToOrganizationUnitAsync(
+                        user,
+                        await _organizationUnitRepository.GetAsync(organizationUnitId)
+                        );
+                }
+            }
+        }
+
+        private async Task CheckMaxUserOrganizationUnitMembershipCountAsync(Guid? tenantId, int requestedCount)
+        {
+            var maxCount = await _settingProvider.GetAsync<int>(IdentitySettingNames.OrganizationUnit.MaxUserMembershipCount).ConfigureAwait(false);
+            if (requestedCount > maxCount)
+            {
+                throw new AbpException(string.Format("Can not set more than {0} organization unit for a user!", maxCount));
+            }
+        }
+
+        [UnitOfWork]
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(IdentityUser user)
+        {
+            await _identityUserRepository.EnsureCollectionLoadedAsync(user, u => u.OrganizationUnits, _cancellationTokenProvider.Token).ConfigureAwait(false);
+
+            var ouOfUser = user.OrganizationUnits;
+
+            return await _organizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId));
         }
     }
 }
