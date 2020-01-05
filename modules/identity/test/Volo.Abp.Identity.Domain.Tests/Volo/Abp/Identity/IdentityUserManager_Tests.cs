@@ -4,8 +4,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Shouldly;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Uow;
 using Xunit;
+using System.Linq;
 
 namespace Volo.Abp.Identity
 {
@@ -14,6 +16,7 @@ namespace Volo.Abp.Identity
         private readonly IdentityUserManager _identityUserManager;
         private readonly IIdentityUserRepository _identityUserRepository;
         private readonly IIdentityRoleRepository _identityRoleRepository;
+        private readonly IOrganizationUnitRepository _organizationUnitRepository;
         private readonly ILookupNormalizer _lookupNormalizer;
         private readonly IUnitOfWorkManager _unitOfWorkManager;
         private readonly IdentityTestData _testData;
@@ -23,6 +26,7 @@ namespace Volo.Abp.Identity
             _identityUserManager = GetRequiredService<IdentityUserManager>();
             _identityUserRepository = GetRequiredService<IIdentityUserRepository>();
             _identityRoleRepository = GetRequiredService<IIdentityRoleRepository>();
+            _organizationUnitRepository = GetRequiredService<IOrganizationUnitRepository>();
             _lookupNormalizer = GetRequiredService<ILookupNormalizer>();
             _testData = GetRequiredService<IdentityTestData>();
             _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
@@ -79,6 +83,61 @@ namespace Volo.Abp.Identity
                 identityResult.Succeeded.ShouldBeTrue();
                 user.Roles.ShouldNotContain(x => x.RoleId == _testData.RoleModeratorId);
                 user.Roles.ShouldNotContain(x => x.RoleId == roleSupporter.Id);
+
+                await uow.CompleteAsync().ConfigureAwait(false);
+            }
+        }
+
+        [Fact]
+        public async Task SetOrganizationUnitsAsync()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("david")).ConfigureAwait(false);
+                user.ShouldNotBeNull();
+
+                var ou = await _organizationUnitRepository.GetOrganizationUnit(
+                    _lookupNormalizer.NormalizeName("OU11")).ConfigureAwait(false);
+                ou.ShouldNotBeNull();
+
+                await _identityUserManager.SetOrganizationUnitsAsync(user, new Guid[]
+                {
+                    ou.Id
+                }).ConfigureAwait(false);
+
+                user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("david")).ConfigureAwait(false);
+                user.OrganizationUnits.Count.ShouldBeGreaterThan(0);
+                user.OrganizationUnits.FirstOrDefault(uou => uou.OrganizationUnitId == ou.Id).ShouldNotBeNull();
+
+                await uow.CompleteAsync().ConfigureAwait(false);
+            }
+        }
+
+        [Fact]
+        public async Task SetOrganizationUnits_Should_Remove()
+        {
+            using (var uow = _unitOfWorkManager.Begin())
+            {
+                var ou = await _organizationUnitRepository.GetOrganizationUnit(
+                    _lookupNormalizer.NormalizeName("OU111")).ConfigureAwait(false);
+                ou.ShouldNotBeNull();
+
+                var user = await _identityUserRepository.FindByNormalizedUserNameAsync(
+                    _lookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
+                user.ShouldNotBeNull();
+
+                var ouNew = await _organizationUnitRepository.GetOrganizationUnit(
+                    _lookupNormalizer.NormalizeName("OU2")).ConfigureAwait(false);
+                ouNew.ShouldNotBeNull();
+
+                await _identityUserManager.SetOrganizationUnitsAsync(user, new Guid[]
+                {
+                    ouNew.Id
+                }).ConfigureAwait(false);
+
+                user.OrganizationUnits.ShouldNotContain(x => x.OrganizationUnitId == ou.Id);
 
                 await uow.CompleteAsync().ConfigureAwait(false);
             }

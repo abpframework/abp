@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
 using Xunit;
@@ -14,6 +15,7 @@ namespace Volo.Abp.Identity
     {
         protected IIdentityUserRepository UserRepository { get; }
         protected IIdentityRoleRepository RoleRepository { get; }
+        protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
         protected ILookupNormalizer LookupNormalizer { get; }
 
         protected LazyLoading_Tests()
@@ -21,6 +23,7 @@ namespace Volo.Abp.Identity
             UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
             RoleRepository = ServiceProvider.GetRequiredService<IIdentityRoleRepository>();
             LookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
+            OrganizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
         }
 
         [Fact]
@@ -54,6 +57,22 @@ namespace Volo.Abp.Identity
 
                 john.Tokens.ShouldNotBeNull();
                 john.Tokens.Any().ShouldBeTrue();
+
+                john.OrganizationUnits.ShouldNotBeNull();
+                john.OrganizationUnits.Any().ShouldBeTrue();
+
+                await uow.CompleteAsync().ConfigureAwait(false);
+            }
+        }
+
+        [Fact]
+        public async Task Should_Lazy_Load_OrganizationUnit_Collections()
+        {
+            using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+            {
+                var ou = await OrganizationUnitRepository.GetOrganizationUnit(LookupNormalizer.NormalizeName("OU111"), includeDetails: false).ConfigureAwait(false);
+                ou.Roles.ShouldNotBeNull(); //?
+                ou.Roles.Any().ShouldBeTrue();
 
                 await uow.CompleteAsync().ConfigureAwait(false);
             }

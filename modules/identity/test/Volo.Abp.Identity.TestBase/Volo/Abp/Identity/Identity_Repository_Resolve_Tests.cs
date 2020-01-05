@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Xunit;
 
@@ -20,6 +21,10 @@ namespace Volo.Abp.Identity
             ServiceProvider.GetService<IRepository<IdentityRole>>().ShouldNotBeNull();
             ServiceProvider.GetService<IRepository<IdentityRole, Guid>>().ShouldNotBeNull();
             ServiceProvider.GetService<IIdentityRoleRepository>().ShouldNotBeNull();
+
+            ServiceProvider.GetService<IRepository<OrganizationUnit>>().ShouldNotBeNull();
+            ServiceProvider.GetService<IRepository<OrganizationUnit, Guid>>().ShouldNotBeNull();
+            ServiceProvider.GetService<IOrganizationUnitRepository>().ShouldNotBeNull();
         }
     }
 }

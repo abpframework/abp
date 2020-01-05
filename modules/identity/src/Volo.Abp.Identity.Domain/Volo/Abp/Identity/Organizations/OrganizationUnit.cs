@@ -62,7 +62,6 @@ namespace Volo.Abp.Identity.Organizations
             TenantId = tenantId;
             DisplayName = displayName;
             ParentId = parentId;
-
             Roles = new Collection<OrganizationUnitRole>();
         }
 

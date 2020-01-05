@@ -149,6 +149,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.Property(ou => ou.DisplayName).IsRequired().HasMaxLength(OrganizationUnitConsts.MaxDisplayNameLength).HasColumnName(nameof(OrganizationUnit.DisplayName));
 
                 b.HasMany(ou => ou.Children).WithOne().HasForeignKey(ou => ou.ParentId);
+                b.HasMany(ou => ou.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
 
                 b.HasIndex(ou => ou.ParentId);
             });

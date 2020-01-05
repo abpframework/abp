@@ -300,7 +300,7 @@ namespace Volo.Abp.Identity
         {
             Check.NotNull(organizationUnitId, nameof(organizationUnitId));
 
-            if (IsInOrganizationUnit(organizationUnitId))
+            if (!IsInOrganizationUnit(organizationUnitId))
             {
                 return;
             }

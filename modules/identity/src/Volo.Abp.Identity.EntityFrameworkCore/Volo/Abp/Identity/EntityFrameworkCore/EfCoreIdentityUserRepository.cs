@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
+using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity.EntityFrameworkCore
 {
@@ -141,6 +142,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                         u.Email.Contains(filter)
                 )
                 .LongCountAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
+        public virtual async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            Guid id,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var query = from userOU in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join ou in DbContext.OrganizationUnits.IncludeDetails(includeDetails) on userOU.OrganizationUnitId equals ou.Id
+                        where userOU.UserId == id
+                        select ou;
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public override IQueryable<IdentityUser> WithDetails()

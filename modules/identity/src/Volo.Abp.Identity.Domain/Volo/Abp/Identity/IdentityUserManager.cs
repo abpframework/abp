@@ -157,7 +157,7 @@ namespace Volo.Abp.Identity
 
             await CheckMaxUserOrganizationUnitMembershipCountAsync(user.TenantId, organizationUnitIds.Length);
 
-            var currentOus = user.OrganizationUnits;
+            var currentOus = await _identityUserRepository.GetOrganizationUnitsAsync(user.Id).ConfigureAwait(false);
 
             //Remove from removed OUs
             foreach (var currentOu in currentOus)

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Volo.Abp.Domain.Repositories;
+using Volo.Abp.Identity.Organizations;
 
 namespace Volo.Abp.Identity
 {
@@ -60,6 +61,11 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
+
+        Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            Guid id,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default);
 
         Task<long> GetCountAsync(
             string filter = null,

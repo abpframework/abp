@@ -144,6 +144,9 @@ namespace Volo.Abp.Identity
 
             john.Tokens.ShouldNotBeNull();
             john.Tokens.Any().ShouldBeTrue();
+
+            john.OrganizationUnits.ShouldNotBeNull();
+            john.OrganizationUnits.Any().ShouldBeTrue();
         }
     }
 }
