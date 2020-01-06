@@ -8,6 +8,7 @@ using Volo.Abp;
 using Volo.Abp.Castle.DynamicProxy;
 using Volo.Abp.Http.Client;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Validation;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -154,6 +155,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddTransient(interceptorType);
 
             var interceptorAdapterType = typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(interceptorType);
+            
+            var validationInterceptorAdapterType =
+                typeof(AbpAsyncDeterminationInterceptor<>).MakeGenericType(typeof(ValidationInterceptor));
 
             if (asDefaultService)
             {
@@ -162,6 +166,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     serviceProvider => ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
                             (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         )
                 );
@@ -174,6 +179,7 @@ namespace Microsoft.Extensions.DependencyInjection
                     var service = ProxyGeneratorInstance
                         .CreateInterfaceProxyWithoutTarget(
                             type,
+                            (IInterceptor)serviceProvider.GetRequiredService(validationInterceptorAdapterType),
                             (IInterceptor)serviceProvider.GetRequiredService(interceptorAdapterType)
                         );
 
