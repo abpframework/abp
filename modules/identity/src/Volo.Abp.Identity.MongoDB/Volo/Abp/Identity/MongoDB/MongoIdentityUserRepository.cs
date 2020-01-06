@@ -9,6 +9,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
 using Volo.Abp.Guids;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
@@ -17,14 +18,14 @@ namespace Volo.Abp.Identity.MongoDB
     {
         private readonly IGuidGenerator _guidGenerator;
 
-        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IGuidGenerator guidGenerator) 
+        public MongoIdentityUserRepository(IMongoDbContextProvider<IAbpIdentityMongoDbContext> dbContextProvider, IGuidGenerator guidGenerator)
             : base(dbContextProvider)
         {
             _guidGenerator = guidGenerator;
         }
 
         public async Task<IdentityUser> FindByNormalizedUserNameAsync(
-            string normalizedUserName, 
+            string normalizedUserName,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -36,7 +37,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public async Task<List<string>> GetRoleNamesAsync(
-            Guid id, 
+            Guid id,
             CancellationToken cancellationToken = default)
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
@@ -44,9 +45,20 @@ namespace Volo.Abp.Identity.MongoDB
             return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
+        public async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId);
+            var organizationUnits = DbContext.OrganizationUnits.AsQueryable().Where(ou => organizationUnitIds.Contains(ou.Id));
+            var roleIds = organizationUnits.SelectMany(x => x.Roles.Select(r => r.Id));
+            return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).Select(r => r.Name).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
         public async Task<IdentityUser> FindByLoginAsync(
-            string loginProvider, 
-            string providerKey, 
+            string loginProvider,
+            string providerKey,
             bool includeDetails = true,
             CancellationToken cancellationToken = default)
         {
@@ -74,7 +86,7 @@ namespace Volo.Abp.Identity.MongoDB
         }
 
         public async Task<List<IdentityUser>> GetListByNormalizedRoleNameAsync(
-            string normalizedRoleName, 
+            string normalizedRoleName,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -92,9 +104,9 @@ namespace Volo.Abp.Identity.MongoDB
 
         public async Task<List<IdentityUser>> GetListAsync(
             string sorting = null,
-            int maxResultCount = int.MaxValue, 
-            int skipCount = 0, 
-            string filter = null, 
+            int maxResultCount = int.MaxValue,
+            int skipCount = 0,
+            string filter = null,
             bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
@@ -119,6 +131,16 @@ namespace Volo.Abp.Identity.MongoDB
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
             var roleIds = user.Roles.Select(r => r.RoleId).ToArray();
             return await DbContext.Roles.AsQueryable().Where(r => roleIds.Contains(r.Id)).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
+        public async Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
+            Guid id,
+            bool includeDetails = false,
+            CancellationToken cancellationToken = default)
+        {
+            var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId);
+            return await DbContext.OrganizationUnits.AsQueryable().Where(ou => organizationUnitIds.Contains(ou.Id)).ToListAsync().ConfigureAwait(false);
         }
 
         public async Task<long> GetCountAsync(

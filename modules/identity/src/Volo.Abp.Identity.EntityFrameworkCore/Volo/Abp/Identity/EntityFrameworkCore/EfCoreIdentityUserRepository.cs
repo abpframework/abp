@@ -44,6 +44,19 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
+        public virtual async Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
+            Guid id,
+            CancellationToken cancellationToken = default)
+        {
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join roleOu in DbContext.Set<OrganizationUnitRole>() on userOu.OrganizationUnitId equals roleOu.OrganizationUnitId
+                        join userOuRoles in DbContext.Roles on roleOu.RoleId equals userOuRoles.Id
+                        where userOu.UserId == id
+                        select userOuRoles.Name;
+
+            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
         public virtual async Task<IdentityUser> FindByLoginAsync(
             string loginProvider, 
             string providerKey, 

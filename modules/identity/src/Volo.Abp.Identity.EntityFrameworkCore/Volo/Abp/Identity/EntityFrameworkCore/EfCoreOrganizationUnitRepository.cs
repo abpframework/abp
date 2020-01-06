@@ -18,28 +18,28 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
         }
 
-        public async Task<List<OrganizationUnit>> GetChildrenAsync(Guid? parentId)
+        public async Task<List<OrganizationUnit>> GetChildrenAsync(Guid? parentId, CancellationToken cancellationToken = default)
         {
             return await DbSet.Where(x => x.ParentId == parentId)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
-        public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(string code, Guid? parentId)
+        public async Task<List<OrganizationUnit>> GetAllChildrenWithParentCodeAsync(string code, Guid? parentId, CancellationToken cancellationToken = default)
         {
             return await DbSet.Where(ou => ou.Code.StartsWith(code) && ou.Id != parentId.Value)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
-        public async Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids)
+        public async Task<List<OrganizationUnit>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(t => ids.Contains(t.Id)).ToListAsync();
+            return await DbSet.Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
-        public async Task<List<OrganizationUnit>> GetListAsync(bool includeDetails = true)
+        public override async Task<List<OrganizationUnit>> GetListAsync(bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .ToListAsync();
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public async Task<OrganizationUnit> GetOrganizationUnit(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default)
@@ -52,14 +52,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 ).ConfigureAwait(false);
         }
 
-        public async Task AddRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId)
+        public Task AddRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default)
         {
             var our = new OrganizationUnitRole(tenantId, role.Id, ou.Id);
             DbContext.Set<OrganizationUnitRole>().Add(our);
-            await DbContext.SaveChangesAsync();
+            return Task.FromResult(0);
         }
 
-        public async Task RemoveRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId)
+        public async Task RemoveRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default)
         {
             var context = DbContext.Set<OrganizationUnitRole>();
             var our = await context.FirstOrDefaultAsync(our =>
@@ -68,12 +68,12 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                                         our.TenantId == tenantId
                                         );
             DbContext.Set<OrganizationUnitRole>().Remove(our);
-            await DbContext.SaveChangesAsync();
         }
 
         public override IQueryable<OrganizationUnit> WithDetails()
         {
             return GetQueryable().IncludeDetails();
         }
+
     }
 }

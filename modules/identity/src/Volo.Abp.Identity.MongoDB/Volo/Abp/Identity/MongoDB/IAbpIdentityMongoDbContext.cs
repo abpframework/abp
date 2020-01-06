@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using Volo.Abp.Data;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
@@ -12,5 +13,7 @@ namespace Volo.Abp.Identity.MongoDB
         IMongoCollection<IdentityRole> Roles { get; }
 
         IMongoCollection<IdentityClaimType> ClaimTypes { get; }
+
+        IMongoCollection<OrganizationUnit> OrganizationUnits { get; }
     }
 }

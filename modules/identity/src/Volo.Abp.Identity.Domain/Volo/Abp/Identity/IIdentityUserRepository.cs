@@ -22,6 +22,10 @@ namespace Volo.Abp.Identity
             CancellationToken cancellationToken = default
         );
 
+        Task<List<string>> GetRoleNamesInOrganizationUnitAsync(
+            Guid id,
+            CancellationToken cancellationToken = default);
+
         Task<IdentityUser> FindByLoginAsync(
             [NotNull] string loginProvider,
             [NotNull] string providerKey,

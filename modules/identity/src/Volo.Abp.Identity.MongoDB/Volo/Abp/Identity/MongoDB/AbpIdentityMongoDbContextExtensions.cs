@@ -1,4 +1,5 @@
 ﻿using System;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
@@ -30,6 +31,11 @@ namespace Volo.Abp.Identity.MongoDB
             builder.Entity<IdentityClaimType>(b =>
             {
                 b.CollectionName = options.CollectionPrefix + "ClaimTypes";
+            });
+
+            builder.Entity<OrganizationUnit>(b =>
+            {
+                b.CollectionName = options.CollectionPrefix + "OrganizationUnit";
             });
         }
     }

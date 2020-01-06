@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using Volo.Abp.Data;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.MongoDB;
 
 namespace Volo.Abp.Identity.MongoDB
@@ -12,6 +13,8 @@ namespace Volo.Abp.Identity.MongoDB
         public IMongoCollection<IdentityRole> Roles => Collection<IdentityRole>();
 
         public IMongoCollection<IdentityClaimType> ClaimTypes => Collection<IdentityClaimType>();
+
+        public IMongoCollection<OrganizationUnit> OrganizationUnits => Collection<OrganizationUnit>();
 
         protected override void CreateModel(IMongoModelBuilder modelBuilder)
         {

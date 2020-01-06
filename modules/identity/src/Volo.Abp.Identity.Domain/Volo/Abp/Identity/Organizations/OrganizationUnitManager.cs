@@ -151,8 +151,8 @@ namespace Volo.Abp.Identity.Organizations
         public virtual async Task AddRoleToOrganizationUnitAsync(Guid roleId, Guid ouId)
         {
             await AddRoleToOrganizationUnitAsync(
-                await _identityRoleRepository.GetAsync(roleId),
-                await _organizationUnitRepository.GetAsync(ouId)
+                await _identityRoleRepository.GetAsync(roleId).ConfigureAwait(false),
+                await _organizationUnitRepository.GetAsync(ouId, true).ConfigureAwait(false)
                 );
         }
 
@@ -162,7 +162,7 @@ namespace Volo.Abp.Identity.Organizations
 
             if (currentRoles.Any(r => r.Id == role.Id))
             {
-                return;
+                return ;
             }
             ou.AddRole(role.Id);
             await _organizationUnitRepository.AddRole(ou, role, ou.TenantId);
