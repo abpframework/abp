@@ -35,7 +35,7 @@ namespace Volo.Abp.Identity.MongoDB
 
             builder.Entity<OrganizationUnit>(b =>
             {
-                b.CollectionName = options.CollectionPrefix + "OrganizationUnit";
+                b.CollectionName = options.CollectionPrefix + "OrganizationUnits";
             });
         }
     }

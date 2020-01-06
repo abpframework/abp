@@ -41,6 +41,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(u => u.Logins).WithOne().HasForeignKey(ul => ul.UserId).IsRequired();
                 b.HasMany(u => u.Roles).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
                 b.HasMany(u => u.Tokens).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
+                b.HasMany(u => u.OrganizationUnits).WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
                 b.HasIndex(u => u.NormalizedUserName);
                 b.HasIndex(u => u.NormalizedEmail);
@@ -151,7 +152,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.HasMany(ou => ou.Children).WithOne().HasForeignKey(ou => ou.ParentId);
                 b.HasMany(ou => ou.Roles).WithOne().HasForeignKey(our => our.OrganizationUnitId).IsRequired();
 
-                b.HasIndex(ou => ou.ParentId);
+                b.HasIndex(ou => ou.Code);
             });
 
             builder.Entity<OrganizationUnitRole>(b =>

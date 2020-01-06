@@ -91,7 +91,7 @@ namespace Volo.Abp.Identity
             var adminRole = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin")).ConfigureAwait(false);
             await _organizationUnitManager.AddRoleToOrganizationUnitAsync(adminRole, ou);
             
-            //TODO: This method has a bug: includeDetails not work or add role not work
+            //TODO: This method has a bug: add role not work
             ou = await _organizationUnitRepository.GetOrganizationUnit("OU1", includeDetails: true).ConfigureAwait(false);
             ou.Roles.FirstOrDefault().Id.ShouldBe(adminRole.Id);
         }
