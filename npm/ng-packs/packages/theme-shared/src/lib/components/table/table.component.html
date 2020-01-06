@@ -1,22 +1,8 @@
-<div class="ui-table ui-widget" [style.max-height.px]="maxHeight">
+<div class="ui-table ui-widget">
   <div class="ui-table-wrapper">
-    <div class="ui-table-scrollable-wrapper">
-      <table>
-        <colgroup>
-          <ng-container *ngTemplateOutlet="colgroupTemplate"></ng-container>
-        </colgroup>
-        <thead class="ui-table-thead">
-          <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
-        </thead>
-        <tbody class="ui-table-tbody">
-          <ng-container
-            *ngFor="let val of slicedValue"
-            [ngTemplateOutlet]="bodyTemplate"
-            [ngTemplateOutletContext]="{ $implicit: val }"
-          ></ng-container>
-        </tbody>
-      </table>
-    </div>
+    <ng-container
+      *ngTemplateOutlet="scrollable ? scrollableTemplate : defaultTemplate"
+    ></ng-container>
     <abp-paginator
       *ngIf="rows"
       [totalPages]="totalPages"
@@ -24,3 +10,59 @@
     ></abp-paginator>
   </div>
 </div>
+
+<ng-template #scrollableTemplate>
+  <div class="ui-table-scrollable-wrapper">
+    <div class="ui-table-scrollable-view"></div>
+    <div class="ui-table-scrollable-header ui-widget-header">
+      <div [style.margin-left.px]="-bodyScrollLeft" class="ui-table-scrollable-header-box">
+        <table class="ui-table-scrollable-header-table">
+          <ng-container *ngTemplateOutlet="colGroup"></ng-container>
+          <ng-container *ngTemplateOutlet="head"></ng-container>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div
+      #scrollableBody
+      (scroll)="bodyScrollLeft = scrollableBody.scrollLeft"
+      class="ui-table-scrollable-body"
+      [style.max-height]="scrollHeight"
+    >
+      <table class="ui-table-scrollable-body-table">
+        <ng-container *ngTemplateOutlet="colGroup"></ng-container>
+        <ng-container *ngTemplateOutlet="body"></ng-container>
+      </table>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #defaultTemplate>
+  <table>
+    <ng-container *ngTemplateOutlet="colGroup"></ng-container>
+    <ng-container *ngTemplateOutlet="head"></ng-container>
+    <ng-container *ngTemplateOutlet="body"></ng-container>
+  </table>
+</ng-template>
+
+<ng-template #colGroup>
+  <colgroup>
+    <ng-container *ngTemplateOutlet="colgroupTemplate"></ng-container>
+  </colgroup>
+</ng-template>
+
+<ng-template #head>
+  <thead class="ui-table-thead">
+    <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
+  </thead>
+</ng-template>
+
+<ng-template #body>
+  <tbody class="ui-table-tbody">
+    <ng-container
+      *ngFor="let val of slicedValue"
+      [ngTemplateOutlet]="bodyTemplate"
+      [ngTemplateOutletContext]="{ $implicit: val }"
+    ></ng-container>
+  </tbody>
+</ng-template>

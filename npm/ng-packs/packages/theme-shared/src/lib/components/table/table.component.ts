@@ -3,7 +3,6 @@ import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@an
 @Component({
   selector: 'abp-table',
   templateUrl: 'table.component.html',
-  styleUrls: ['table.component.scss'],
 })
 export class TableComponent implements OnInit {
   private _totalRecords: number;
@@ -21,7 +20,10 @@ export class TableComponent implements OnInit {
   colgroupTemplate: TemplateRef<any>;
 
   @Input()
-  maxHeight: number;
+  scrollHeight: string;
+
+  @Input()
+  scrollable: boolean;
 
   @Input()
   rows: number;
@@ -30,6 +32,8 @@ export class TableComponent implements OnInit {
   readonly pageChange = new EventEmitter<number>();
 
   page = 1;
+
+  bodyScrollLeft = 0;
 
   @Input()
   get totalRecords(): number {
