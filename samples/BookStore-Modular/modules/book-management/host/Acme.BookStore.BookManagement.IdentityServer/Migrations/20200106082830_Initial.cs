@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyCompanyName.MyProjectName.Migrations
+namespace Acme.BookStore.BookManagement.Migrations
 {
     public partial class Initial : Migration
     {
@@ -40,27 +40,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AbpBackgroundJobs",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    ExtraProperties = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    JobName = table.Column<string>(maxLength: 128, nullable: false),
-                    JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
-                    TryCount = table.Column<short>(nullable: false, defaultValue: (short)0),
-                    CreationTime = table.Column<DateTime>(nullable: false),
-                    NextTryTime = table.Column<DateTime>(nullable: false),
-                    LastTryTime = table.Column<DateTime>(nullable: true),
-                    IsAbandoned = table.Column<bool>(nullable: false, defaultValue: false),
-                    Priority = table.Column<byte>(nullable: false, defaultValue: (byte)15)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AbpClaimTypes",
                 columns: table => new
                 {
@@ -78,21 +57,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AbpFeatureValues",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(nullable: false),
-                    Name = table.Column<string>(maxLength: 128, nullable: false),
-                    Value = table.Column<string>(maxLength: 128, nullable: false),
-                    ProviderName = table.Column<string>(maxLength: 64, nullable: true),
-                    ProviderKey = table.Column<string>(maxLength: 64, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AbpFeatureValues", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -281,6 +245,27 @@ namespace MyCompanyName.MyProjectName.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityServerClients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityServerDeviceFlowCodes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    DeviceCode = table.Column<string>(maxLength: 200, nullable: false),
+                    UserCode = table.Column<string>(maxLength: 200, nullable: false),
+                    SubjectId = table.Column<string>(maxLength: 200, nullable: true),
+                    ClientId = table.Column<string>(maxLength: 200, nullable: false),
+                    Expiration = table.Column<DateTime>(nullable: false),
+                    Data = table.Column<string>(maxLength: 50000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityServerDeviceFlowCodes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -819,11 +804,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 columns: new[] { "TenantId", "UserId", "ExecutionTime" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AbpBackgroundJobs_IsAbandoned_NextTryTime",
-                table: "AbpBackgroundJobs",
-                columns: new[] { "IsAbandoned", "NextTryTime" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AbpEntityChanges_AuditLogId",
                 table: "AbpEntityChanges",
                 column: "AuditLogId");
@@ -837,11 +817,6 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "IX_AbpEntityPropertyChanges_EntityChangeId",
                 table: "AbpEntityPropertyChanges",
                 column: "EntityChangeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AbpFeatureValues_Name_ProviderName_ProviderKey",
-                table: "AbpFeatureValues",
-                columns: new[] { "Name", "ProviderName", "ProviderKey" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpPermissionGrants_Name_ProviderName_ProviderKey",
@@ -909,6 +884,23 @@ namespace MyCompanyName.MyProjectName.Migrations
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerDeviceFlowCodes_DeviceCode",
+                table: "IdentityServerDeviceFlowCodes",
+                column: "DeviceCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerDeviceFlowCodes_Expiration",
+                table: "IdentityServerDeviceFlowCodes",
+                column: "Expiration");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_IdentityServerDeviceFlowCodes_UserCode",
+                table: "IdentityServerDeviceFlowCodes",
+                column: "UserCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IdentityServerPersistedGrants_Expiration",
                 table: "IdentityServerPersistedGrants",
                 column: "Expiration");
@@ -925,16 +917,10 @@ namespace MyCompanyName.MyProjectName.Migrations
                 name: "AbpAuditLogActions");
 
             migrationBuilder.DropTable(
-                name: "AbpBackgroundJobs");
-
-            migrationBuilder.DropTable(
                 name: "AbpClaimTypes");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityPropertyChanges");
-
-            migrationBuilder.DropTable(
-                name: "AbpFeatureValues");
 
             migrationBuilder.DropTable(
                 name: "AbpPermissionGrants");
@@ -995,6 +981,9 @@ namespace MyCompanyName.MyProjectName.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityServerClientSecrets");
+
+            migrationBuilder.DropTable(
+                name: "IdentityServerDeviceFlowCodes");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerIdentityClaims");
