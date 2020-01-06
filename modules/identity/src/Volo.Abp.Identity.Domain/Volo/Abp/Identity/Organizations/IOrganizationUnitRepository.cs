@@ -18,8 +18,5 @@ namespace Volo.Abp.Identity.Organizations
 
         Task<OrganizationUnit> GetOrganizationUnit(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default);
 
-        Task AddRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default);
-
-        Task RemoveRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default);
     }
 }

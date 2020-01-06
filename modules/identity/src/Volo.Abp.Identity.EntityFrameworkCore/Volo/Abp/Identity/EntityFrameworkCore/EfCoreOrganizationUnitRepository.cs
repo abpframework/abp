@@ -52,24 +52,6 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 ).ConfigureAwait(false);
         }
 
-        public Task AddRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default)
-        {
-            var our = new OrganizationUnitRole(tenantId, role.Id, ou.Id);
-            DbContext.Set<OrganizationUnitRole>().Add(our);
-            return Task.FromResult(0);
-        }
-
-        public async Task RemoveRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default)
-        {
-            var context = DbContext.Set<OrganizationUnitRole>();
-            var our = await context.FirstOrDefaultAsync(our =>
-                                        our.OrganizationUnitId == ou.Id &&
-                                        our.RoleId == role.Id &&
-                                        our.TenantId == tenantId
-                                        );
-            DbContext.Set<OrganizationUnitRole>().Remove(our);
-        }
-
         public override IQueryable<OrganizationUnit> WithDetails()
         {
             return GetQueryable().IncludeDetails();

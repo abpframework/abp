@@ -22,8 +22,6 @@ namespace Volo.Abp.Identity
             ServiceProvider.GetService<IRepository<IdentityRole, Guid>>().ShouldNotBeNull();
             ServiceProvider.GetService<IIdentityRoleRepository>().ShouldNotBeNull();
 
-            ServiceProvider.GetService<IRepository<OrganizationUnit>>().ShouldNotBeNull();
-            ServiceProvider.GetService<IRepository<OrganizationUnit, Guid>>().ShouldNotBeNull();
             ServiceProvider.GetService<IOrganizationUnitRepository>().ShouldNotBeNull();
         }
     }

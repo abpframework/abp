@@ -52,15 +52,5 @@ namespace Volo.Abp.Identity.MongoDB
                         GetCancellationToken(cancellationToken)
                     ).ConfigureAwait(false);
         }
-
-        public Task AddRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveRole(OrganizationUnit ou, IdentityRole role, Guid? tenantId, CancellationToken cancellationToken = default)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

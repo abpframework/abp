@@ -156,16 +156,16 @@ namespace Volo.Abp.Identity.Organizations
                 );
         }
 
-        public virtual async Task AddRoleToOrganizationUnitAsync(IdentityRole role, OrganizationUnit ou)
+        public virtual Task AddRoleToOrganizationUnitAsync(IdentityRole role, OrganizationUnit ou)
         {
             var currentRoles = ou.Roles;
 
             if (currentRoles.Any(r => r.Id == role.Id))
             {
-                return ;
+                return Task.FromResult(0);
             }
             ou.AddRole(role.Id);
-            await _organizationUnitRepository.AddRole(ou, role, ou.TenantId);
+            return Task.FromResult(0);
         }
 
         public virtual async Task RemoveRoleFromOrganizationUnitAsync(Guid roleId, Guid ouId)
@@ -176,10 +176,10 @@ namespace Volo.Abp.Identity.Organizations
                 );
         }
 
-        public virtual async Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
+        public virtual Task RemoveRoleFromOrganizationUnitAsync(IdentityRole role, OrganizationUnit organizationUnit)
         {
-            await _organizationUnitRepository.RemoveRole(organizationUnit, role, organizationUnit.TenantId);
             organizationUnit.RemoveRole(role.Id);
+            return Task.FromResult(0);
         }
     }
 }
