@@ -2,6 +2,7 @@ export * from './breadcrumb/breadcrumb.component';
 export * from './button/button.component';
 export * from './chart/chart.component';
 export * from './confirmation/confirmation.component';
+export * from './loading/loading.component';
 export * from './loader-bar/loader-bar.component';
 export * from './modal/modal.component';
 export * from './paginator/paginator.component';

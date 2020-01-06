@@ -46,9 +46,7 @@
 </ng-template>
 
 <ng-template #colGroup>
-  <colgroup>
-    <ng-container *ngTemplateOutlet="colgroupTemplate"></ng-container>
-  </colgroup>
+  <ng-container *ngTemplateOutlet="colgroupTemplate"></ng-container>
 </ng-template>
 
 <ng-template #head>
@@ -60,7 +58,7 @@
 <ng-template #body>
   <tbody class="ui-table-tbody">
     <ng-container
-      *ngFor="let val of slicedValue"
+      *ngFor="let val of slicedValue; trackBy: trackByFn"
       [ngTemplateOutlet]="bodyTemplate"
       [ngTemplateOutletContext]="{ $implicit: val }"
     ></ng-container>

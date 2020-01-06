@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, TemplateRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  TemplateRef,
+  Output,
+  EventEmitter,
+  TrackByFunction,
+} from '@angular/core';
 
 @Component({
   selector: 'abp-table',
@@ -28,12 +36,19 @@ export class TableComponent implements OnInit {
   @Input()
   rows: number;
 
+  @Input()
+  trackingProp = 'id';
+
   @Output()
   readonly pageChange = new EventEmitter<number>();
 
   page = 1;
 
   bodyScrollLeft = 0;
+
+  trackByFn: TrackByFunction<any> = (_, value) => {
+    return typeof value === 'object' ? value[this.trackingProp] || value : value;
+  };
 
   @Input()
   get totalRecords(): number {

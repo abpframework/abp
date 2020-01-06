@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, TrackByFunction } from '@angular/core';
 
 @Component({
   selector: 'abp-paginator',
@@ -11,8 +11,7 @@ export class PaginatorComponent implements OnInit {
     return this._value;
   }
   set value(newValue: number) {
-    if (newValue < 1) return;
-    else if (newValue > this.totalPages) return;
+    if (newValue < 1 || newValue > this.totalPages || newValue === this._value) return;
 
     this._value = newValue;
     this.valueChange.emit(newValue);
@@ -35,6 +34,8 @@ export class PaginatorComponent implements OnInit {
       return [this.value - 2, this.value - 1, this.value, this.value + 1, this.value + 2];
     }
   }
+
+  trackByFn: TrackByFunction<number> = (_, page) => page;
 
   ngOnInit() {
     if (!this.value || this.value < 1 || this.value > this.totalPages) {

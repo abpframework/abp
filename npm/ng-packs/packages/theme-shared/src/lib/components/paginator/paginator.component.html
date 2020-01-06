@@ -15,7 +15,7 @@
     ><span class="ui-paginator-icon pi pi-caret-left"></span></a
   ><span class="ui-paginator-pages"
     ><a
-      *ngFor="let page of pageArray"
+      *ngFor="let page of pageArray; trackBy: trackByFn"
       (click)="changePage(page)"
       class="ui-paginator-page ui-paginator-element ui-state-default ui-corner-all"
       [class.ui-state-active]="page === value"

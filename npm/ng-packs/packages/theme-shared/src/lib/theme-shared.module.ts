@@ -24,6 +24,8 @@ import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.t
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { chartJsLoaded$ } from './utils/widget-utils';
 import { PaginatorComponent } from './components/paginator/paginator.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { LoadingDirective } from './directives/loading.directive';
 
 export function appendScript(injector: Injector) {
   const fn = () => {
@@ -45,12 +47,14 @@ export function appendScript(injector: Injector) {
     ConfirmationComponent,
     HttpErrorWrapperComponent,
     LoaderBarComponent,
+    LoadingComponent,
     ModalComponent,
     PaginatorComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     SortOrderIconComponent,
+    LoadingDirective,
     TableSortDirective,
   ],
   exports: [
@@ -59,16 +63,18 @@ export function appendScript(injector: Injector) {
     ChartComponent,
     ConfirmationComponent,
     LoaderBarComponent,
+    LoadingComponent,
     ModalComponent,
     PaginatorComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     SortOrderIconComponent,
+    LoadingDirective,
     TableSortDirective,
   ],
   providers: [DatePipe],
-  entryComponents: [HttpErrorWrapperComponent],
+  entryComponents: [HttpErrorWrapperComponent, LoadingComponent],
 })
 export class ThemeSharedModule {
   constructor(private errorHandler: ErrorHandler) {}
