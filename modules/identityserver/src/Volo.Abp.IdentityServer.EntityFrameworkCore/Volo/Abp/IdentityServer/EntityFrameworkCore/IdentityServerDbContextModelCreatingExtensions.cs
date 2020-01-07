@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Newtonsoft.Json;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.EntityFrameworkCore.ValueComparers;
+using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
 using Volo.Abp.IdentityServer.Grants;
@@ -204,10 +203,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 identityResource.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
                 identityResource.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
                 identityResource.Property(x => x.Properties)
-                    .ConfigureJsonConversionWithValueComparer(
-                        (d1, d2) => d1.SequenceEqual(d2),
-                        d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
-                        d => d.ToDictionary(k => k.Key, v => v.Value));
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, object>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer());
 
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
@@ -231,10 +228,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiResource.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 apiResource.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
                 apiResource.Property(x => x.Properties)
-                    .ConfigureJsonConversionWithValueComparer(
-                        (d1, d2) => d1.SequenceEqual(d2),
-                        d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
-                        d => d.ToDictionary(k => k.Key, v => v.Value));
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, object>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer());
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
