@@ -64,7 +64,7 @@ export class TableComponent implements AfterViewInit {
 
   bodyScrollLeft = 0;
 
-  colspan = 1;
+  colspan = 0;
 
   trackByFn: TrackByFunction<any> = (_, value) => {
     return typeof value === 'object' ? value[this.trackingProp] || value : value;

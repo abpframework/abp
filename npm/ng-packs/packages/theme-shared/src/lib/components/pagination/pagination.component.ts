@@ -1,18 +1,16 @@
 import { Component, Input, OnInit, Output, EventEmitter, TrackByFunction } from '@angular/core';
 
 @Component({
-  selector: 'abp-paginator',
-  templateUrl: 'paginator.component.html',
+  selector: 'abp-pagination',
+  templateUrl: 'pagination.component.html',
 })
-export class PaginatorComponent implements OnInit {
+export class PaginationComponent implements OnInit {
   private _value = 1;
   @Input()
   get value(): number {
     return this._value;
   }
   set value(newValue: number) {
-    if (newValue < 1 || newValue > this.totalPages || newValue === this._value) return;
-
     this._value = newValue;
     this.valueChange.emit(newValue);
   }

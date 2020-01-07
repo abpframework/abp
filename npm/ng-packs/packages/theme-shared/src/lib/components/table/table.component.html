@@ -3,11 +3,11 @@
     <ng-container
       *ngTemplateOutlet="scrollable ? scrollableTemplate : defaultTemplate"
     ></ng-container>
-    <abp-paginator
+    <abp-pagination
       *ngIf="rows"
       [totalPages]="totalPages"
       (valueChange)="page = $event; pageChange.emit($event)"
-    ></abp-paginator>
+    ></abp-pagination>
   </div>
 </div>
 
@@ -57,15 +57,14 @@
 
 <ng-template #body>
   <tbody class="ui-table-tbody">
-    <ng-container
-      *ngTemplateOutlet="value && value.length ? container : emptyTemplate"
-    ></ng-container>
-    <ng-template
-      #container
-      *ngFor="let val of slicedValue; trackBy: trackByFn"
-      [ngTemplateOutlet]="bodyTemplate"
-      [ngTemplateOutletContext]="{ $implicit: val }"
-    ></ng-template>
+    <ng-container *ngIf="value && value.length; else emptyTemplate">
+      <ng-template
+        #bodyTemplateWrapper
+        *ngFor="let val of slicedValue; trackBy: trackByFn"
+        [ngTemplateOutlet]="bodyTemplate"
+        [ngTemplateOutletContext]="{ $implicit: val }"
+      ></ng-template>
+    </ng-container>
   </tbody>
 </ng-template>
 

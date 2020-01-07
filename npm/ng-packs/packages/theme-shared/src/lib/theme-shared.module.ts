@@ -23,7 +23,7 @@ import { RootParams } from './models/common';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { chartJsLoaded$ } from './utils/widget-utils';
-import { PaginatorComponent } from './components/paginator/paginator.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { LoadingDirective } from './directives/loading.directive';
 
@@ -49,7 +49,7 @@ export function appendScript(injector: Injector) {
     LoaderBarComponent,
     LoadingComponent,
     ModalComponent,
-    PaginatorComponent,
+    PaginationComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
@@ -65,7 +65,7 @@ export function appendScript(injector: Injector) {
     LoaderBarComponent,
     LoadingComponent,
     ModalComponent,
-    PaginatorComponent,
+    PaginationComponent,
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
