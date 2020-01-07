@@ -1,4 +1,4 @@
-<div class="ui-table ui-widget">
+<div #wrapper class="ui-table ui-widget">
   <div class="ui-table-wrapper">
     <ng-container
       *ngTemplateOutlet="scrollable ? scrollableTemplate : defaultTemplate"
@@ -58,9 +58,21 @@
 <ng-template #body>
   <tbody class="ui-table-tbody">
     <ng-container
+      *ngTemplateOutlet="value && value.length ? container : emptyTemplate"
+    ></ng-container>
+    <ng-template
+      #container
       *ngFor="let val of slicedValue; trackBy: trackByFn"
       [ngTemplateOutlet]="bodyTemplate"
       [ngTemplateOutletContext]="{ $implicit: val }"
-    ></ng-container>
+    ></ng-template>
   </tbody>
+</ng-template>
+
+<ng-template #emptyTemplate>
+  <tr>
+    <td class="text-center" [attr.colspan]="colspan">
+      {{ emptyMessage | abpLocalization }}
+    </td>
+  </tr>
 </ng-template>

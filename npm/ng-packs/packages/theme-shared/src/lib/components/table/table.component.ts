@@ -1,18 +1,20 @@
 import {
+  AfterViewInit,
   Component,
-  OnInit,
-  Input,
-  TemplateRef,
-  Output,
+  ElementRef,
   EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
   TrackByFunction,
+  ViewChild,
 } from '@angular/core';
 
 @Component({
   selector: 'abp-table',
   templateUrl: 'table.component.html',
 })
-export class TableComponent implements OnInit {
+export class TableComponent implements AfterViewInit {
   private _totalRecords: number;
 
   @Input()
@@ -39,12 +41,20 @@ export class TableComponent implements OnInit {
   @Input()
   trackingProp = 'id';
 
+  @Input()
+  emptyMessage = 'AbpAccount::NoDataAvailableInDatatable';
+
   @Output()
   readonly pageChange = new EventEmitter<number>();
+
+  @ViewChild('wrapper', { read: ElementRef, static: false })
+  wrapperRef: ElementRef<HTMLDivElement>;
 
   page = 1;
 
   bodyScrollLeft = 0;
+
+  colspan = 1;
 
   trackByFn: TrackByFunction<any> = (_, value) => {
     return typeof value === 'object' ? value[this.trackingProp] || value : value;
@@ -79,5 +89,7 @@ export class TableComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngAfterViewInit() {
+    this.colspan = this.wrapperRef.nativeElement.querySelectorAll('th').length;
+  }
 }
