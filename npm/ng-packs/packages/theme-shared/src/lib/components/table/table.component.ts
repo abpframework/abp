@@ -8,11 +8,21 @@ import {
   TemplateRef,
   TrackByFunction,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 
 @Component({
   selector: 'abp-table',
   templateUrl: 'table.component.html',
+  styles: [
+    `
+      .ui-table .ui-table-tbody > tr:nth-child(even):hover,
+      .ui-table .ui-table-tbody > tr:hover {
+        background-color: #eaeaea;
+      }
+    `,
+  ],
+  encapsulation: ViewEncapsulation.None,
 })
 export class TableComponent implements AfterViewInit {
   private _totalRecords: number;
