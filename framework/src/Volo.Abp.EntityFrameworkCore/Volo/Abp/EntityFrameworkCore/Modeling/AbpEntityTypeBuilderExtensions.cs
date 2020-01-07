@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
+using Volo.Abp.EntityFrameworkCore.ValueComparers;
+using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.EntityFrameworkCore.Modeling
@@ -57,10 +58,8 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
             {
                 b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
                     .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
-                    .ConfigureJsonConversionWithValueComparer(
-                        (d1, d2) => d1.SequenceEqual(d2),
-                        d => d.Aggregate(0, (k, v) => HashCode.Combine(k, v.GetHashCode())),
-                        d => d.ToDictionary(k => k.Key, v => v.Value));
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, object>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer());
             }
         }
 
