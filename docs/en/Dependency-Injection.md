@@ -184,8 +184,6 @@ public class MyModule : AbpModule
 }
 ````
 
-
-
 ## Injecting Dependencies
 
 There are three common ways of using a service that has already been registered.
