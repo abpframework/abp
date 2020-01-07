@@ -76,7 +76,7 @@ Setting values are cached using the [distributed cache](../Caching.md) system. A
 Setting Management module is extensible, just like the [setting system](../Settings.md).  You can extend it by defining setting management providers. There are 5 pre-built setting management providers registered by the order below:
 
 * `DefaultValueSettingManagementProvider`: Gets the value from the default value of the setting definition. It can not set the default value since default values are hard-coded on the setting definition.
-* `ConfigurationSettingManagementProvider`: Gets the value from the [IConfiguration service](Configuration.md). It can not set the configuration value because it is not possible to change the configuration values on runtime.
+* `ConfigurationSettingManagementProvider`: Gets the value from the [IConfiguration service](../Configuration.md). It can not set the configuration value because it is not possible to change the configuration values on runtime.
 * `GlobalSettingManagementProvider`: Gets or sets the global (system-wide) value for a setting.
 * `TenantSettingManagementProvider`: Gets or sets the setting value for a tenant.
 * `UserSettingManagementProvider`: Gets the setting value for a user.

@@ -148,8 +148,8 @@ namespace Acme.BookStore.BookManagement.Migrations
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
                     Name = table.Column<string>(maxLength: 64, nullable: true),
                     Surname = table.Column<string>(maxLength: 64, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
@@ -163,6 +163,27 @@ namespace Acme.BookStore.BookManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BmBooks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    PublishDate = table.Column<DateTime>(nullable: false),
+                    Price = table.Column<float>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BmBooks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -424,8 +445,7 @@ namespace Acme.BookStore.BookManagement.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AbpTenants_Name",
                 table: "AbpTenants",
-                column: "Name",
-                unique: true);
+                column: "Name");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AbpUserClaims_UserId",
@@ -497,6 +517,9 @@ namespace Acme.BookStore.BookManagement.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BmBooks");
 
             migrationBuilder.DropTable(
                 name: "AbpEntityChanges");

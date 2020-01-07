@@ -12,13 +12,13 @@
 @section scripts {
     <abp-script-bundle name="@typeof(IndexModel).FullName">
         <abp-script type="@typeof(OwlCarouselScriptContributor)" />
-        <abp-script src="/Pages/Blog/Shared/Scripts/blog.js" />
+        <abp-script src="/Pages/Blogs/Shared/Scripts/blog.js" />
     </abp-script-bundle>
 }
 @section styles {
     <abp-style-bundle name="@typeof(IndexModel).FullName">
         <abp-script type="@typeof(OwlCarouselStyleContributor)" />
-        <abp-style src="/Pages/Blog/Shared/Styles/blog.css" />
+        <abp-style src="/Pages/Blogs/Shared/Styles/blog.css" />
     </abp-style-bundle>
 }
 
@@ -69,7 +69,7 @@
                             <p class="tags">
                                 @foreach (var tag in post.Tags)
                                 {
-                                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                 }
                             </p>
 
@@ -178,7 +178,7 @@
                                             <p class="tags">
                                                 @foreach (var tag in post.Tags)
                                                 {
-                                                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
+                                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@tag.Name" class="tag">@tag.Name</a>
                                                 }
                                             </p>
                                         </div>
@@ -200,7 +200,7 @@
                             @foreach (var popularTag in Model.PopularTags)
                             {
                                 <div class="list-group-item">
-                                    <a asp-page="/Blog/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
+                                    <a asp-page="/Blogs/Posts/Index" asp-route-blogShortName="@Model.BlogShortName" asp-route-tagName="@popularTag.Name">@popularTag.Name <span>(@popularTag.UsageCount @L["Posts"])</span></a>
                                 </div>
 
                             }
