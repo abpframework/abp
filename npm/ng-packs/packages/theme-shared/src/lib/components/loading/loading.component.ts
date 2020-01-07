@@ -10,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
   styles: [
     `
       .abp-loading {
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.2);
         position: absolute;
         width: 100%;
         height: 100%;
