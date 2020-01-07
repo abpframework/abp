@@ -62,3 +62,12 @@ Once you want to separate a module's database, you typically will need to create
 ## Multi-Tenancy
 
 See [the multi-tenancy document](Multi-Tenancy.md) to learn how to use separate databases for tenants.
+
+## Replace the Connection String Resolver
+
+ABP defines the `IConnectionStringResolver` and uses it whenever it needs a connection string. It has two pre-built implementations:
+
+* `DefaultConnectionStringResolver` uses the `AbpDbConnectionOptions` to select the connection string based on the rules defined in the "Configure the Connection Strings" section above.
+* `MultiTenantConnectionStringResolver` used for multi-tenant applications and tries to get the configured connection string for the current tenant if available. It uses the `ITenantStore` to find the connection strings. It inherits from the `DefaultConnectionStringResolver` and fallbacks to the base logic if no connection string specified for the current tenant.
+
+If you need a custom logic to determine the connection string, implement the `IConnectionStringResolver` interface (optionally derive from the existing implementations) and replace the existing implementation using the [dependency injection](Dependency-Injection.md) system.
