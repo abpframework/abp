@@ -28,7 +28,7 @@
       [headerTemplate]="tableHeader"
       [bodyTemplate]="tableBody"
       [value]="data$ | async"
-      [rows]="10"
+      [rows]="pageQuery.maxResultCount"
       [totalRecords]="totalCount$ | async"
       [scrollable]="true"
       (pageChange)="onPageChange($event)"
