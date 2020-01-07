@@ -13,7 +13,7 @@ namespace Volo.Abp.Account.Settings
                     AccountSettingNames.IsSelfRegistrationEnabled, 
                     "true", 
                     L("DisplayName:Abp.Account.IsSelfRegistrationEnabled"), 
-                    L("Description:Abp.Account.IsSelfRegistrationEnabled"))
+                    L("Description:Abp.Account.IsSelfRegistrationEnabled"), isVisibleToClients : true)
             );
 
             context.Add(
@@ -21,7 +21,7 @@ namespace Volo.Abp.Account.Settings
                     AccountSettingNames.EnableLocalLogin, 
                     "true", 
                     L("DisplayName:Abp.Account.EnableLocalLogin"), 
-                    L("Description:Abp.Account.EnableLocalLogin"))
+                    L("Description:Abp.Account.EnableLocalLogin"), isVisibleToClients : true)
             );
         }
 
