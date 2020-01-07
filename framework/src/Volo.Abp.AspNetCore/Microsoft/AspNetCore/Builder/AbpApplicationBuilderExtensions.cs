@@ -20,6 +20,7 @@ namespace Microsoft.AspNetCore.Builder
         {
             Check.NotNull(app, nameof(app));
 
+            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
             var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
             var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
@@ -33,7 +34,6 @@ namespace Microsoft.AspNetCore.Builder
                 application.Dispose();
             });
 
-            app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
             application.Initialize(app.ApplicationServices);
         }
 
