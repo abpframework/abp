@@ -11,13 +11,13 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
+using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
@@ -323,147 +323,9 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            ConfigureConcurrencyStampProperty<TEntity>(modelBuilder, mutableEntityType);
-            ConfigureExtraProperties<TEntity>(modelBuilder, mutableEntityType);
-            ConfigureAuditProperties<TEntity>(modelBuilder, mutableEntityType);
-            ConfigureTenantIdProperty<TEntity>(modelBuilder, mutableEntityType);
+            modelBuilder.Entity<TEntity>().ConfigureByConvention();
+
             ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);
-        }
-
-        protected virtual void ConfigureConcurrencyStampProperty<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (!typeof(IHasConcurrencyStamp).IsAssignableFrom(typeof(TEntity)))
-            {
-                return;
-            }
-
-            modelBuilder.Entity<TEntity>(b =>
-            {
-                b.Property(x => ((IHasConcurrencyStamp) x).ConcurrencyStamp)
-                    .IsConcurrencyToken()
-                    .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
-            });
-        }
-
-        protected virtual void ConfigureExtraProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (!typeof(IHasExtraProperties).IsAssignableFrom(typeof(TEntity)))
-            {
-                return;
-            }
-
-            modelBuilder.Entity<TEntity>(b =>
-            {
-                b.Property(x => ((IHasExtraProperties) x).ExtraProperties)
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
-                    )
-                    .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
-            });
-        }
-
-        protected virtual void ConfigureAuditProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IHasCreationTime)x).CreationTime)
-                        .IsRequired()
-                        .HasColumnName(nameof(IHasCreationTime.CreationTime));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IMayHaveCreator>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IMayHaveCreator)x).CreatorId)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IMayHaveCreator.CreatorId));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IMustHaveCreator>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IMustHaveCreator)x).CreatorId)
-                        .IsRequired()
-                        .HasColumnName(nameof(IMustHaveCreator.CreatorId));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IHasModificationTime>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IHasModificationTime)x).LastModificationTime)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IHasModificationTime.LastModificationTime));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IModificationAuditedObject>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IModificationAuditedObject)x).LastModifierId)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<ISoftDelete>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((ISoftDelete) x).IsDeleted)
-                        .IsRequired()
-                        .HasDefaultValue(false)
-                        .HasColumnName(nameof(ISoftDelete.IsDeleted));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IHasDeletionTime>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IHasDeletionTime)x).DeletionTime)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IHasDeletionTime.DeletionTime));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IDeletionAuditedObject>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IDeletionAuditedObject)x).DeleterId)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
-                });
-            }
-        }
-
-        protected virtual void ConfigureTenantIdProperty<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (!typeof(TEntity).IsAssignableTo<IMultiTenant>())
-            {
-                return;
-            }
-
-            modelBuilder.Entity<TEntity>(b =>
-            {
-                b.Property(x => ((IMultiTenant)x).TenantId)
-                    .IsRequired(false)
-                    .HasColumnName(nameof(IMultiTenant.TenantId));
-            });
         }
 
         protected virtual void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
