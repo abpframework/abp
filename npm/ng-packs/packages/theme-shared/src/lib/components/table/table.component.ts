@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -9,7 +8,10 @@ import {
   TrackByFunction,
   ViewChild,
   ViewEncapsulation,
+  AfterViewInit,
 } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-table',
@@ -19,6 +21,15 @@ import {
       .ui-table .ui-table-tbody > tr:nth-child(even):hover,
       .ui-table .ui-table-tbody > tr:hover {
         background-color: #eaeaea;
+      }
+
+      .ui-table .ui-table-tbody > tr.empty-row:hover {
+        background-color: transparent;
+      }
+
+      .ui-table .ui-table-tbody > tr.empty-row > div {
+        margin: 10px;
+        text-align: center;
       }
     `,
   ],
@@ -64,7 +75,7 @@ export class TableComponent implements AfterViewInit {
 
   bodyScrollLeft = 0;
 
-  colspan = 0;
+  colspan: number;
 
   trackByFn: TrackByFunction<any> = (_, value) => {
     return typeof value === 'object' ? value[this.trackingProp] || value : value;
@@ -89,7 +100,7 @@ export class TableComponent implements AfterViewInit {
   }
 
   get slicedValue(): any[] {
-    if (!this.rows || this.rows > this.value.length) {
+    if (!this.rows || this.rows >= this.value.length) {
       return this.value;
     }
 
@@ -97,9 +108,9 @@ export class TableComponent implements AfterViewInit {
     return this.value.slice(start, start + this.rows);
   }
 
-  constructor() {}
-
   ngAfterViewInit() {
-    this.colspan = this.wrapperRef.nativeElement.querySelectorAll('th').length;
+    setTimeout(() => {
+      this.colspan = this.wrapperRef.nativeElement.querySelectorAll('th').length;
+    }, 0);
   }
 }

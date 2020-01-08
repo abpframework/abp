@@ -69,9 +69,9 @@
 </ng-template>
 
 <ng-template #emptyTemplate>
-  <tr>
-    <td class="text-center" [attr.colspan]="colspan">
+  <tr class="empty-row" #emptyRow>
+    <div [style.width.px]="emptyRow.offsetWidth">
       {{ emptyMessage | abpLocalization }}
-    </td>
+    </div>
   </tr>
 </ng-template>

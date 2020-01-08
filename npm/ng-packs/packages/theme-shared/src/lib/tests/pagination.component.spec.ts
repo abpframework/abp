@@ -32,7 +32,7 @@ describe('PaginationComponent', () => {
       '7',
     ]);
 
-    spectator.setHostInput({ value: 2 });
+    spectator.click('.ui-paginator-first');
 
     expect(spectator.queryAll('.ui-paginator-page').map(node => node.textContent)).toEqual([
       '1',
