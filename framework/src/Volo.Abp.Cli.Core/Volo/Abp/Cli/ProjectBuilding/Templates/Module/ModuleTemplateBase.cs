@@ -43,6 +43,8 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.Module
                 "MyCompanyName.MyProjectName.Web.Unified",
                 projectFolderPath: "/aspnet-core/host/MyCompanyName.MyProjectName.Web.Unified"
             ));
+
+            steps.Add(new RemoveFolderStep("/angular"));
         }
 
         private void RandomizeSslPorts(ProjectBuildContext context, List<ProjectBuildPipelineStep> steps)
