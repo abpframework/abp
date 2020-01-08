@@ -35,6 +35,21 @@ This configuration defines three different connection strings:
 
 [Pre-built application modules](Modules/Index.md) define constants for the connection string names. For example, the IdentityServer module defines a ` ConnectionStringName ` constant in the ` AbpIdentityServerDbProperties ` class (located in the ` Volo.Abp.IdentityServer ` namespace). Other modules similarly define constants, so you can investigate the connection string name.
 
+### AbpDbConnectionOptions
+
+ABP actually uses the `AbpDbConnectionOptions` to get the connection strings. If you set the connection strings as explained above, `AbpDbConnectionOptions` is automatically filled. However, you can set or override the connection strings using [the options pattern](Options.md). You can configure the `AbpDbConnectionOptions` in the `ConfigureServices` method of your [module](Module-Development-Basics.md) as shown below:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpDbConnectionOptions>(options =>
+    {
+        options.ConnectionStrings.Default = "...";
+        options.ConnectionStrings["AbpPermissionManagement"] = "...";
+    });
+}
+````
+
 ## Set the Connection String Name
 
 A module typically has a unique connection string name associated to its `DbContext` class using the `ConnectionStringName` attribute. Example:
