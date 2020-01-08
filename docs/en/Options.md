@@ -71,3 +71,48 @@ public class MyService : ITransientDependency
 ````
 
 Read [the Microsoft documentation](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/configuration/options) for all details of the options pattern.
+
+## Pre Configure
+
+One restriction of the options pattern is that you can only resolve (inject) the `IOptions<MyOptions>` and get the option values when the dependency injection configuration completes (that means the `ConfigureServices` methods of all modules complete).
+
+If you are developing a module, you may need to allow developers to set some options and use these options in the dependency injection registration phase. You may need to configure other services or change the dependency injection registration code based on these option values.
+
+For such cases, ABP introduces the `PreConfigure<TOptions>` and the `ExecutePreConfiguredActions<TOptions>` extension methods for the `IServiceCollection`. The pattern works as explained below.
+
+1. Define a plan option class in your module. Example:
+
+````csharp
+public class MyPreOptions
+{
+    public bool MyValue { get; set; }
+}
+````
+
+Then any [module class](Module-Development-Basics.md) depends on your module can use the `PreConfigure<TOptions>` method in its `PreConfigureServices` method. Example:
+
+````csharp
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<MyPreOptions>(options =>
+    {
+        options.MyValue = true;
+    });
+}
+````
+
+> Multiple modules can pre-configure the options and override the option values based on their dependency order.
+
+Finally, your module can execute the `ExecutePreConfiguredActions` method in its `ConfigureServices` method to get the configured option values. Example:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    var options = context.Services.ExecutePreConfiguredActions<MyPreOptions>();
+    if (options.MyValue)
+    {
+        //...
+    }
+}
+````
+
