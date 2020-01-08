@@ -61,6 +61,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "Options",
+          "path": "Options.md"
+        },
+        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
