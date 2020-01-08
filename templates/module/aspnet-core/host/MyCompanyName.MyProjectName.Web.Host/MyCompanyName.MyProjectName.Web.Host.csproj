@@ -51,4 +51,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Volo.Abp.AspNetCore.Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null, ProcessorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\framework\src\Volo.Abp.AspNetCore.Serilog\bin\Debug\netcoreapp3.1\Volo.Abp.AspNetCore.Serilog.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
