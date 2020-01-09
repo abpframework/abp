@@ -252,9 +252,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.ObjectMapping.Test
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Ddd.Application.Contracts", "src\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj", "{73559227-EBF0-475F-835B-1FF0CD9132AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Minify", "src\Volo.Abp.Minify\Volo.Abp.Minify.csproj", "{928DC30D-C078-4BB4-A9F8-FE7252C67DC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Minify", "src\Volo.Abp.Minify\Volo.Abp.Minify.csproj", "{928DC30D-C078-4BB4-A9F8-FE7252C67DC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.Minify.Tests", "test\Volo.Abp.Minify.Tests\Volo.Abp.Minify.Tests.csproj", "{E69182B3-350A-43F5-A935-5EBBEBECEF97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Volo.Abp.Minify.Tests", "test\Volo.Abp.Minify.Tests\Volo.Abp.Minify.Tests.csproj", "{E69182B3-350A-43F5-A935-5EBBEBECEF97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Volo.Abp.EntityFrameworkCore.CosmosDB", "src\Volo.Abp.EntityFrameworkCore.CosmosDB\Volo.Abp.EntityFrameworkCore.CosmosDB.csproj", "{8DBDBC04-DA3E-4018-84C4-25D64F74767E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -762,6 +764,10 @@ Global
 		{E69182B3-350A-43F5-A935-5EBBEBECEF97}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E69182B3-350A-43F5-A935-5EBBEBECEF97}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E69182B3-350A-43F5-A935-5EBBEBECEF97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DBDBC04-DA3E-4018-84C4-25D64F74767E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DBDBC04-DA3E-4018-84C4-25D64F74767E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DBDBC04-DA3E-4018-84C4-25D64F74767E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DBDBC04-DA3E-4018-84C4-25D64F74767E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -892,6 +898,7 @@ Global
 		{73559227-EBF0-475F-835B-1FF0CD9132AA} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{928DC30D-C078-4BB4-A9F8-FE7252C67DC6} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 		{E69182B3-350A-43F5-A935-5EBBEBECEF97} = {447C8A77-E5F0-4538-8687-7383196D04EA}
+		{8DBDBC04-DA3E-4018-84C4-25D64F74767E} = {5DF0E140-0513-4D0D-BE2E-3D4D85CD70E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BB97ECF4-9A84-433F-A80B-2A3285BDD1D5}
