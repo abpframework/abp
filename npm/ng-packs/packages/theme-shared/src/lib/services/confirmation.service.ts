@@ -7,14 +7,14 @@ import { Config } from '@abp/ng.core';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
-  status$: Subject<Confirmation.Status> | Subject<Toaster.Status>;
+  status$: Subject<Toaster.Status>;
   confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
 
   info(
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status | Toaster.Status> {
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'info', options);
   }
 
@@ -22,7 +22,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status | Toaster.Status> {
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'success', options);
   }
 
@@ -30,7 +30,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status | Toaster.Status> {
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'warning', options);
   }
 
@@ -38,7 +38,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status | Toaster.Status> {
+  ): Observable<Toaster.Status> {
     return this.show(message, title, 'error', options);
   }
 
@@ -47,7 +47,7 @@ export class ConfirmationService {
     title: Config.LocalizationParam,
     severity?: Toaster.Severity,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status | Toaster.Status> {
+  ): Observable<Toaster.Status> {
     this.listenToEscape();
     this.confirmation$.next({
       message,
@@ -59,8 +59,8 @@ export class ConfirmationService {
     return this.status$;
   }
 
-  clear(status?: Toaster.Status | Confirmation.Status) {
-    this.status$.next(status || Confirmation.Status.dismiss);
+  clear(status?: Toaster.Status) {
+    this.status$.next(status || Toaster.Status.dismiss);
   }
 
   listenToEscape() {

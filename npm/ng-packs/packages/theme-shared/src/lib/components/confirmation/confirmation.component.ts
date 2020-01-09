@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ConfirmationService } from '../../services/confirmation.service';
-import { Confirmation } from '../../models';
+import { Confirmation, Toaster } from '../../models';
 import { LocalizationService } from '@abp/ng.core';
 
 @Component({
@@ -9,9 +9,9 @@ import { LocalizationService } from '@abp/ng.core';
   styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent {
-  confirm = Confirmation.Status.confirm;
-  reject = Confirmation.Status.reject;
-  dismiss = Confirmation.Status.dismiss;
+  confirm = Toaster.Status.confirm;
+  reject = Toaster.Status.reject;
+  dismiss = Toaster.Status.dismiss;
 
   visible = false;
 
@@ -56,7 +56,7 @@ export class ConfirmationComponent {
     });
   }
 
-  close(status: Confirmation.Status) {
+  close(status: Toaster.Status) {
     this.confirmationService.clear(status);
     this.visible = false;
   }

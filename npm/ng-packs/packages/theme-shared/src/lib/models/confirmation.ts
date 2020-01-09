@@ -21,10 +21,4 @@ export namespace Confirmation {
   }
 
   export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
-
-  export enum Status {
-    confirm = 'confirm',
-    reject = 'reject',
-    dismiss = 'dismiss',
-  }
 }
