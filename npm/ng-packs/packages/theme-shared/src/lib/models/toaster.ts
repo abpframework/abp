@@ -1,17 +1,25 @@
 export namespace Toaster {
-  export interface Options {
-    id?: any;
-    closable?: boolean;
+  export interface ToastOptions {
     life?: number;
     sticky?: boolean;
-    data?: any;
+    closable?: boolean;
+    tapToDismiss?: boolean;
     messageLocalizationParams?: string[];
     titleLocalizationParams?: string[];
+    id: any;
+    containerKey?: string;
   }
 
-  export type Severity = 'success' | 'info' | 'warn' | 'error';
+  export interface Toast {
+    message: string;
+    title?: string;
+    severity?: string;
+    options?: ToastOptions;
+  }
 
-  export const enum Status {
+  export type Severity = 'neutral' | 'success' | 'info' | 'warning' | 'error';
+
+  export enum Status {
     confirm = 'confirm',
     reject = 'reject',
     dismiss = 'dismiss',
