@@ -14,7 +14,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status> | Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status | Toaster.Status> {
     return this.show(message, title, 'info', options);
   }
 
@@ -22,7 +22,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status> | Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status | Toaster.Status> {
     return this.show(message, title, 'success', options);
   }
 
@@ -30,7 +30,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status> | Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status | Toaster.Status> {
     return this.show(message, title, 'warning', options);
   }
 
@@ -38,7 +38,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status> | Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status | Toaster.Status> {
     return this.show(message, title, 'error', options);
   }
 
@@ -47,7 +47,7 @@ export class ConfirmationService {
     title: Config.LocalizationParam,
     severity?: Toaster.Severity,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Confirmation.Status> | Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status | Toaster.Status> {
     this.listenToEscape();
     this.confirmation$.next({
       message,
