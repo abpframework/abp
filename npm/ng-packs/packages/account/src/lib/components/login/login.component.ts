@@ -34,7 +34,7 @@ export class LoginComponent {
 
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: ['', [required, maxLength(32)]],
+      password: ['', [required, maxLength(128)]],
       remember: [false],
     });
   }

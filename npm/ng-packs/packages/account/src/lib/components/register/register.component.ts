@@ -67,7 +67,7 @@ export class RegisterComponent implements OnInit {
       username: ['', [required, maxLength(255)]],
       password: [
         '',
-        [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)],
+        [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(128)],
       ],
       email: ['', [required, email]],
     });
