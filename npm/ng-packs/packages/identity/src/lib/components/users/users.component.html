@@ -28,37 +28,28 @@
           (input.debounce)="onSearch($event.target.value)"
       /></label>
     </div>
-    <p-table
+    <abp-table
       *ngIf="[150, 250, 250, 250] as columnWidths"
-      [value]="data$ | async"
+      [abpLoading]="loading"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
-      [lazy]="true"
-      [lazyLoadOnInit]="false"
-      [paginator]="true"
-      [rows]="10"
+      [colgroupTemplate]="tableColGroup"
+      [headerTemplate]="tableHeader"
+      [bodyTemplate]="tableBody"
+      [value]="data$ | async"
+      [rows]="pageQuery.maxResultCount"
       [totalRecords]="totalCount$ | async"
-      [loading]="loading"
-      [resizableColumns]="true"
       [scrollable]="true"
-      (onLazyLoad)="onPageChange($event)"
+      (pageChange)="onPageChange($event)"
     >
-      <ng-template pTemplate="colgroup">
+      <ng-template #tableColGroup>
         <colgroup>
           <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr
-          abp-table-empty-message
-          [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentity"
-          localizationProp="NoDataAvailableInDatatable"
-        ></tr>
-      </ng-template>
-      <ng-template pTemplate="header">
+      <ng-template #tableHeader>
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('userName')">
+          <th (click)="sortOrderIcon.sort('userName')">
             {{ 'AbpIdentity::UserName' | abpLocalization }}
             <abp-sort-order-icon
               #sortOrderIcon
@@ -68,7 +59,7 @@
             >
             </abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('email')">
+          <th (click)="sortOrderIcon.sort('email')">
             {{ 'AbpIdentity::EmailAddress' | abpLocalization }}
             <abp-sort-order-icon
               sortKey="email"
@@ -76,7 +67,7 @@
               [(order)]="sortOrder"
             ></abp-sort-order-icon>
           </th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('phoneNumber')">
+          <th (click)="sortOrderIcon.sort('phoneNumber')">
             {{ 'AbpIdentity::PhoneNumber' | abpLocalization }}
             <abp-sort-order-icon
               sortKey="phoneNumber"
@@ -87,7 +78,7 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-data>
+      <ng-template #tableBody let-data>
         <tr>
           <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
@@ -129,7 +120,7 @@
           <td>{{ data.phoneNumber }}</td>
         </tr>
       </ng-template>
-    </p-table>
+    </abp-table>
   </div>
 </div>
 
