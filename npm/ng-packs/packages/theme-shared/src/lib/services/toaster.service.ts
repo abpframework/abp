@@ -71,7 +71,7 @@ export class ToasterService {
       message,
       title,
       severity,
-      options: { closable: true, ...options, id },
+      options: { closable: true, id, ...options },
     });
     this.toasts$.next(this.toasts);
     return id;
@@ -89,8 +89,8 @@ export class ToasterService {
   /**
    * Removes all open toasts at once.
    */
-  removeAll() {
-    this.toasts = [];
+  clear(key?: string) {
+    this.toasts = !key ? [] : this.toasts.filter(toast => toast.options.containerKey !== key);
     this.toasts$.next(this.toasts);
   }
 }
