@@ -6,7 +6,8 @@
     <abp-pagination
       *ngIf="rows"
       [totalPages]="totalPages"
-      (valueChange)="page = $event; pageChange.emit($event)"
+      [(value)]="page"
+      (valueChange)="pageChange.emit($event)"
     ></abp-pagination>
   </div>
 </div>
@@ -60,9 +61,9 @@
     <ng-container *ngIf="value && value.length; else emptyTemplate">
       <ng-template
         #bodyTemplateWrapper
-        *ngFor="let val of slicedValue; trackBy: trackByFn"
+        *ngFor="let val of slicedValue; let index = index; trackBy: trackByFn"
         [ngTemplateOutlet]="bodyTemplate"
-        [ngTemplateOutletContext]="{ $implicit: val }"
+        [ngTemplateOutletContext]="{ $implicit: val, rowIndex: index }"
       ></ng-template>
     </ng-container>
   </tbody>

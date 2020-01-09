@@ -11,6 +11,8 @@ export class PaginationComponent implements OnInit {
     return this._value;
   }
   set value(newValue: number) {
+    if (this._value === newValue) return;
+
     this._value = newValue;
     this.valueChange.emit(newValue);
   }

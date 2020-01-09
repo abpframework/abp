@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   EventEmitter,
@@ -8,10 +9,7 @@ import {
   TrackByFunction,
   ViewChild,
   ViewEncapsulation,
-  AfterViewInit,
 } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-table',
@@ -20,11 +18,11 @@ import { delay } from 'rxjs/operators';
     `
       .ui-table .ui-table-tbody > tr:nth-child(even):hover,
       .ui-table .ui-table-tbody > tr:hover {
-        background-color: #eaeaea;
+        filter: brightness(90%);
       }
 
       .ui-table .ui-table-tbody > tr.empty-row:hover {
-        background-color: transparent;
+        filter: none;
       }
 
       .ui-table .ui-table-tbody > tr.empty-row > div {
@@ -35,8 +33,9 @@ import { delay } from 'rxjs/operators';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class TableComponent implements AfterViewInit {
+export class TableComponent {
   private _totalRecords: number;
+  bodyScrollLeft = 0;
 
   @Input()
   value: any[];
@@ -60,6 +59,9 @@ export class TableComponent implements AfterViewInit {
   rows: number;
 
   @Input()
+  page = 1;
+
+  @Input()
   trackingProp = 'id';
 
   @Input()
@@ -70,16 +72,6 @@ export class TableComponent implements AfterViewInit {
 
   @ViewChild('wrapper', { read: ElementRef, static: false })
   wrapperRef: ElementRef<HTMLDivElement>;
-
-  page = 1;
-
-  bodyScrollLeft = 0;
-
-  colspan: number;
-
-  trackByFn: TrackByFunction<any> = (_, value) => {
-    return typeof value === 'object' ? value[this.trackingProp] || value : value;
-  };
 
   @Input()
   get totalRecords(): number {
@@ -108,9 +100,7 @@ export class TableComponent implements AfterViewInit {
     return this.value.slice(start, start + this.rows);
   }
 
-  ngAfterViewInit() {
-    setTimeout(() => {
-      this.colspan = this.wrapperRef.nativeElement.querySelectorAll('th').length;
-    }, 0);
-  }
+  trackByFn: TrackByFunction<any> = (_, value) => {
+    return typeof value === 'object' ? value[this.trackingProp] || value : value;
+  };
 }
