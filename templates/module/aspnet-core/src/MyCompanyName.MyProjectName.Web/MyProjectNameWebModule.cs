@@ -42,6 +42,7 @@ namespace MyCompanyName.MyProjectName.Web
                 options.FileSets.AddEmbedded<MyProjectNameWebModule>("MyCompanyName.MyProjectName.Web");
             });
 
+            context.Services.AddAutoMapperObjectMapper<MyProjectNameWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddMaps<MyProjectNameWebModule>(validate: true);

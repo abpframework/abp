@@ -37,6 +37,7 @@ using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.Web;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.UI;
+using Volo.Abp.UI.Navigation;
 using Volo.Abp.VirtualFileSystem;
 
 namespace MyCompanyName.MyProjectName
@@ -76,6 +77,7 @@ namespace MyCompanyName.MyProjectName
             var hostingEnvironment = context.Services.GetHostingEnvironment();
             var configuration = context.Services.GetConfiguration();
 
+            ConfigureMenu(configuration);
             ConfigureCache(configuration);
             ConfigureUrls(configuration);
             ConfigureAuthentication(context, configuration);
@@ -85,7 +87,15 @@ namespace MyCompanyName.MyProjectName
             ConfigureMultiTenancy();
             ConfigureRedis(context, configuration, hostingEnvironment);
         }
-        
+
+        private void ConfigureMenu(IConfiguration configuration)
+        {
+            Configure<AbpNavigationOptions>(options =>
+            {
+                options.MenuContributors.Add(new MyProjectNameWebHostMenuContributor(configuration));
+            });
+        }
+
         private void ConfigureCache(IConfiguration configuration)
         {
             Configure<AbpDistributedCacheOptions>(options =>

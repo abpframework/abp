@@ -8,6 +8,7 @@ using MyCompanyName.MyProjectName.MultiTenancy;
 using Volo.Abp.Account.Localization;
 using Volo.Abp.TenantManagement.Web.Navigation;
 using Volo.Abp.UI.Navigation;
+using Volo.Abp.Users;
 
 namespace MyCompanyName.MyProjectName.Web.Menus
 {
@@ -51,11 +52,15 @@ namespace MyCompanyName.MyProjectName.Web.Menus
         {
             var l = context.ServiceProvider.GetRequiredService<IStringLocalizer<MyProjectNameResource>>();
             var accountStringLocalizer = context.ServiceProvider.GetRequiredService<IStringLocalizer<AccountResource>>();
+            var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
 
             var identityServerUrl = _configuration["AuthServer:Authority"] ?? "";
 
-            context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["ManageYourProfile"], $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage", icon: "fa fa-cog", order: 1000, null, "_blank"));
-            context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000));
+            if (currentUser.IsAuthenticated)
+            {
+                context.Menu.AddItem(new ApplicationMenuItem("Account.Manage", accountStringLocalizer["ManageYourProfile"], $"{identityServerUrl.EnsureEndsWith('/')}Account/Manage", icon: "fa fa-cog", order: 1000, null, "_blank"));
+                context.Menu.AddItem(new ApplicationMenuItem("Account.Logout", l["Logout"], url: "/Account/Logout", icon: "fa fa-power-off", order: int.MaxValue - 1000));
+            }
 
             return Task.CompletedTask;
         }
