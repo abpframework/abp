@@ -55,10 +55,10 @@ describe('LoadingDirective', () => {
     });
 
     it('should remove the loading component to the DOM', done => {
-      const spy = jest.spyOn(spectator.directive['renderer'], 'removeChild');
+      const rendererSpy = jest.spyOn(spectator.directive['renderer'], 'removeChild');
       spectator.setHostInput({ status: false });
       setTimeout(() => {
-        expect(spy).toHaveBeenCalled();
+        expect(rendererSpy).toHaveBeenCalled();
         expect(spectator.directive.rootNode).toBeFalsy();
         done();
       }, 0);
