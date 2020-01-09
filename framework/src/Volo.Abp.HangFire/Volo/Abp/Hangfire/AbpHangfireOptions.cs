@@ -18,6 +18,19 @@ namespace Volo.Abp.Hangfire
         [CanBeNull]
         public IEnumerable<IBackgroundProcess> AdditionalProcesses { get; set; }
 
+        public string EmptyQueueName
+        {
+            get => _emptyQueueName;
+            set
+            {
+                if (value == EnqueuedState.DefaultQueue)
+                {
+                    throw new ArgumentException("empty queue name can not be default", nameof(EmptyQueueName));
+                }
+                _emptyQueueName = value;
+            }
+        }
+
         [CanBeNull]
         public JobStorage Storage { get; set; }
 
@@ -28,6 +41,7 @@ namespace Volo.Abp.Hangfire
             set => _backgroundJobServerFactory = Check.NotNull(value, nameof(value));
         }
         private Func<IServiceProvider, BackgroundJobServer> _backgroundJobServerFactory;
+        private string _emptyQueueName = "None";
 
         public AbpHangfireOptions()
         {
