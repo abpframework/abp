@@ -30,6 +30,7 @@ export default `
 
 .ui-table-scrollable-body::-webkit-scrollbar {
   height: 5px !important;
+  width: 5px !important;
 }
 
 .ui-table-scrollable-body::-webkit-scrollbar-track {

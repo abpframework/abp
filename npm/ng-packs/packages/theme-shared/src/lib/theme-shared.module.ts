@@ -15,6 +15,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
 import { ToastContainerComponent } from './components/toast-container/toast-container.component';
+import { TableComponent } from './components/table/table.component';
 import { ToastComponent } from './components/toast/toast.component';
 import styles from './constants/styles';
 import { TableSortDirective } from './directives/table-sort.directive';
@@ -23,6 +24,9 @@ import { RootParams } from './models/common';
 import { httpErrorConfigFactory, HTTP_ERROR_CONFIG } from './tokens/http-error.token';
 import { DateParserFormatter } from './utils/date-parser-formatter';
 import { chartJsLoaded$ } from './utils/widget-utils';
+import { PaginationComponent } from './components/pagination/pagination.component';
+import { LoadingComponent } from './components/loading/loading.component';
+import { LoadingDirective } from './directives/loading.directive';
 
 export function appendScript(injector: Injector) {
   const fn = () => {
@@ -44,11 +48,15 @@ export function appendScript(injector: Injector) {
     ConfirmationComponent,
     HttpErrorWrapperComponent,
     LoaderBarComponent,
+    LoadingComponent,
     ModalComponent,
+    PaginationComponent,
+    TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    LoadingDirective,
     TableSortDirective,
   ],
   exports: [
@@ -57,15 +65,19 @@ export function appendScript(injector: Injector) {
     ChartComponent,
     ConfirmationComponent,
     LoaderBarComponent,
+    LoadingComponent,
     ModalComponent,
+    PaginationComponent,
+    TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
     ToastContainerComponent,
     SortOrderIconComponent,
+    LoadingDirective,
     TableSortDirective,
   ],
   providers: [DatePipe],
-  entryComponents: [HttpErrorWrapperComponent],
+  entryComponents: [HttpErrorWrapperComponent, LoadingComponent],
 })
 export class ThemeSharedModule {
   constructor(private errorHandler: ErrorHandler) {}

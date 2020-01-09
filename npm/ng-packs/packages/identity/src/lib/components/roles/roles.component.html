@@ -20,37 +20,28 @@
   </div>
 
   <div class="card-body">
-    <p-table
+    <abp-table
       *ngIf="[150, 0] as columnWidths"
-      [value]="data$ | async"
+      [abpLoading]="loading"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
-      [lazy]="true"
-      [lazyLoadOnInit]="false"
-      [paginator]="true"
-      [rows]="10"
+      [colgroupTemplate]="tableColGroup"
+      [headerTemplate]="tableHeader"
+      [bodyTemplate]="tableBody"
+      [value]="data$ | async"
+      [rows]="pageQuery.maxResultCount"
       [totalRecords]="totalCount$ | async"
-      [loading]="loading"
-      [resizableColumns]="true"
       [scrollable]="true"
-      (onLazyLoad)="onPageChange($event)"
+      (pageChange)="onPageChange($event)"
     >
-      <ng-template pTemplate="colgroup">
+      <ng-template #tableColGroup>
         <colgroup>
           <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr
-          abp-table-empty-message
-          [attr.colspan]="columnWidths.length"
-          localizationResource="AbpIdentity"
-          localizationProp="NoDataAvailableInDatatable"
-        ></tr>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
+      <ng-template #tableHeader>
         <tr>
           <th>{{ 'AbpIdentity::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
+          <th (click)="sortOrderIcon.sort('name')">
             {{ 'AbpIdentity::RoleName' | abpLocalization }}
             <abp-sort-order-icon
               #sortOrderIcon
@@ -61,7 +52,7 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-data>
+      <ng-template #tableBody let-data>
         <tr>
           <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
@@ -109,7 +100,7 @@
           </td>
         </tr>
       </ng-template>
-    </p-table>
+    </abp-table>
   </div>
 </div>
 
