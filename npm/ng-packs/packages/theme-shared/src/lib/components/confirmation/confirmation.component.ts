@@ -1,61 +1,63 @@
 import { Component } from '@angular/core';
 import { ConfirmationService } from '../../services/confirmation.service';
-import { Toaster } from '../../models/toaster';
+import { Confirmation } from '../../models';
+import { LocalizationService } from '@abp/ng.core';
 
 @Component({
   selector: 'abp-confirmation',
-  // tslint:disable-next-line: component-max-inline-declarations
-  template: `
-    <p-toast
-      position="center"
-      key="abpConfirmation"
-      (onClose)="close(dismiss)"
-      [modal]="true"
-      [baseZIndex]="1000"
-      styleClass="abp-confirm"
-    >
-      <ng-template let-message pTemplate="message">
-        <i class="fa fa-exclamation-circle abp-confirm-icon"></i>
-        <div *ngIf="message.summary" class="abp-confirm-summary">
-          {{ message.summary | abpLocalization: message.titleLocalizationParams }}
-        </div>
-        <div class="abp-confirm-body">
-          {{ message.detail | abpLocalization: message.messageLocalizationParams }}
-        </div>
-
-        <div class="abp-confirm-footer justify-content-center">
-          <button
-            *ngIf="!message.hideCancelBtn"
-            id="cancel"
-            type="button"
-            class="btn btn-sm btn-primary"
-            (click)="close(reject)"
-          >
-            {{ message.cancelText || message.cancelCopy || 'AbpIdentity::Cancel' | abpLocalization }}
-          </button>
-          <button
-            *ngIf="!message.hideYesBtn"
-            id="confirm"
-            type="button"
-            class="btn btn-sm btn-primary"
-            (click)="close(confirm)"
-            autofocus
-          >
-            <span>{{ message.yesText || message.yesCopy || 'AbpIdentity::Yes' | abpLocalization }}</span>
-          </button>
-        </div>
-      </ng-template>
-    </p-toast>
-  `,
+  templateUrl: './confirmation.component.html',
+  styleUrls: ['./confirmation.component.scss'],
 })
 export class ConfirmationComponent {
-  confirm = Toaster.Status.confirm;
-  reject = Toaster.Status.reject;
-  dismiss = Toaster.Status.dismiss;
+  confirm = Confirmation.Status.confirm;
+  reject = Confirmation.Status.reject;
+  dismiss = Confirmation.Status.dismiss;
 
-  constructor(private confirmationService: ConfirmationService) {}
+  visible = false;
 
-  close(status: Toaster.Status) {
+  data: Confirmation.DialogData;
+
+  get iconClass(): string {
+    switch (this.data.severity) {
+      case 'info':
+        return 'info-circle';
+      case 'success':
+        return 'check-circle';
+      case 'warning':
+        return 'exclamation-triangle';
+      case 'error':
+        return 'times-circle';
+      default:
+        return 'question-circle-o';
+    }
+  }
+
+  get titleLocalizationParams(): string {
+    return this.localizationService.instant(
+      this.data.title,
+      ...this.data.options.titleLocalizationParams,
+    );
+  }
+
+  get messageLocalizationParams(): string {
+    return this.localizationService.instant(
+      this.data.message,
+      ...this.data.options.messageLocalizationParams,
+    );
+  }
+
+  constructor(
+    private confirmationService: ConfirmationService,
+    private localizationService: LocalizationService,
+  ) {
+    this.confirmationService.confirmation$.subscribe(confirmation => {
+      this.data = confirmation;
+      this.visible = true;
+    });
+  }
+
+  close(status: Confirmation.Status) {
     this.confirmationService.clear(status);
+    this.visible = false;
   }
 }

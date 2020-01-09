@@ -1,0 +1,32 @@
+<div class="confirmation show" *ngIf="visible">
+  <div class="confirmation-backdrop"></div>
+  <div class="confirmation-dialog">
+    <div class="icon-container">
+      <i class="fa icon" [ngClass]="iconClass"></i>
+    </div>
+    <div class="content">
+      <h1 class="title" *ngIf="data.title">
+        {{ data.title | abpLocalization: titleLocalizationParams }}
+      </h1>
+      <p class="message" *ngIf="data.message">
+        {{ data.message | abpLocalization: messageLocalizationParams }}
+      </p>
+    </div>
+    <div class="footer">
+      <button
+        class="confirmation-button confirmation-button-reject"
+        *ngIf="data.options || !data.options.hideCancelBtn"
+        (click)="close(reject)"
+      >
+        {{ data.options?.cancelText || 'AbpUi:Cancel' }}
+      </button>
+      <button
+        class="confirmation-button confirmation-button-approve"
+        *ngIf="data.options || !data.options.hideYesBtn"
+        (click)="close(confirm)"
+      >
+        {{ data.options?.yesText || 'AbpUi:Yes' }}
+      </button>
+    </div>
+  </div>
+</div>
