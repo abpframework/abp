@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Volo.Abp.EntityFrameworkCore.ValueComparers
 {
-    public class AbpDictionaryValueComparer : ValueComparer<Dictionary<string, object>>
+    public class AbpDictionaryValueComparer<TKey, TValue> : ValueComparer<Dictionary<TKey, TValue>>
     {
         public AbpDictionaryValueComparer()
             : base(
