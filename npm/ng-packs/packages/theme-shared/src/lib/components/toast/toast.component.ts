@@ -32,20 +32,6 @@ export class ToastComponent implements OnInit {
     }
   }
 
-  get titleLocalizationParams(): string {
-    return this.localizationService.instant(
-      this.toast.title,
-      ...this.toast.options.titleLocalizationParams,
-    );
-  }
-
-  get messageLocalizationParams() {
-    return this.localizationService.instant(
-      this.toast.message,
-      ...this.toast.options.messageLocalizationParams,
-    );
-  }
-
   constructor(
     private toastService: ToasterService,
     private localizationService: LocalizationService,

@@ -32,20 +32,6 @@ export class ConfirmationComponent {
     }
   }
 
-  get title(): string {
-    return this.localizationService.instant(
-      this.data.title,
-      ...(this.data.options.titleLocalizationParams || []),
-    );
-  }
-
-  get message(): string {
-    return this.localizationService.instant(
-      this.data.message,
-      ...(this.data.options.messageLocalizationParams || []),
-    );
-  }
-
   constructor(
     private confirmationService: ConfirmationService,
     private localizationService: LocalizationService,

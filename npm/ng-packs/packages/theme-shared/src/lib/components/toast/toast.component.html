@@ -7,10 +7,10 @@
       <i class="fa fa-times"></i>
     </button>
     <div class="toast-title">
-      {{ toast.title | abpLocalization: messageLocalizationParams }}
+      {{ toast.title | abpLocalization: toast.options?.titleLocalizationParams }}
     </div>
     <div class="toast-message">
-      {{ toast.message | abpLocalization: titleLocalizationParams }}
+      {{ toast.message | abpLocalization: toast.options?.messageLocalizationParams }}
     </div>
   </div>
 </div>

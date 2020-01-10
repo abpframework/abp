@@ -6,10 +6,10 @@
     </div>
     <div class="content">
       <h1 class="title" *ngIf="data.title">
-        {{ title }}
+        {{ data.title | abpLocalization: data.options?.titleLocalizationParams }}
       </h1>
       <p class="message" *ngIf="data.message">
-        {{ message }}
+        {{ data.message | abpLocalization: data.options?.messageLocalizationParams }}
       </p>
     </div>
     <div class="footer">
