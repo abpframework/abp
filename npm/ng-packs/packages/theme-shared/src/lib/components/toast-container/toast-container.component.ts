@@ -13,16 +13,16 @@ export class ToastContainerComponent implements OnInit {
   toasts = [] as Toaster.Toast[];
 
   @Input()
-  top: number;
+  top: string;
 
   @Input()
-  right: number;
+  right: string = '30px';
 
   @Input()
-  bottom: number;
+  bottom: string = '30px';
 
   @Input()
-  left: number;
+  left: string;
 
   @Input()
   toastKey: string;
