@@ -2,6 +2,7 @@
 {
     public enum NuGetPackageTarget : byte
     {
+        Undefined = 0,
         DomainShared = 1,
         Domain = 2,
         ApplicationContracts = 3,
