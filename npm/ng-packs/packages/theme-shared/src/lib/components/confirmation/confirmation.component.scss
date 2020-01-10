@@ -40,8 +40,27 @@
         width: 100px;
         height: 100px;
         stroke-width: 1;
-        stroke: #f89406;
         fill: #fff;
+        font-size: 80px;
+        text-align: center;
+      }
+      &.neutral .icon {
+      }
+      &.info .icon {
+        stroke: #2f96b4;
+        color: #2f96b4;
+      }
+      &.success .icon {
+        stroke: #51a351;
+        color: #51a351;
+      }
+      &.warning .icon {
+        stroke: #f89406;
+        color: #f89406;
+      }
+      &.error .icon {
+        stroke: #bd362f;
+        color: #bd362f;
       }
     }
     .content {
