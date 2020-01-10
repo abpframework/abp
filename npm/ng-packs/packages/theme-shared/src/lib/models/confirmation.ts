@@ -1,4 +1,3 @@
-import { Toaster } from './toaster';
 import { Config } from '@abp/ng.core';
 
 export namespace Confirmation {

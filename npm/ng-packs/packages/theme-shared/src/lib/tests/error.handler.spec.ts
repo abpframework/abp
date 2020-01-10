@@ -73,10 +73,10 @@ describe('ErrorHandler', () => {
   it('should display the confirmation when not found error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 404 })));
     spectator.detectChanges();
-    expect(spectator.query('.abp-confirm-summary')).toHaveText(
+    expect(spectator.query('.confirmation .title')).toHaveText(
       DEFAULT_ERROR_MESSAGES.defaultError404.title,
     );
-    expect(spectator.query('.abp-confirm-body')).toHaveText(
+    expect(spectator.query('.confirmation .message')).toHaveText(
       DEFAULT_ERROR_MESSAGES.defaultError404.details,
     );
   });
@@ -84,10 +84,10 @@ describe('ErrorHandler', () => {
   it('should display the confirmation when default error occurs', () => {
     store.dispatch(new RestOccurError(new HttpErrorResponse({ status: 412 })));
     spectator.detectChanges();
-    expect(spectator.query('.abp-confirm-summary')).toHaveText(
+    expect(spectator.query('.confirmation .title')).toHaveText(
       DEFAULT_ERROR_MESSAGES.defaultError.title,
     );
-    expect(spectator.query('.abp-confirm-body')).toHaveText(
+    expect(spectator.query('.confirmation .message')).toHaveText(
       DEFAULT_ERROR_MESSAGES.defaultError.details,
     );
   });
@@ -128,8 +128,9 @@ describe('ErrorHandler', () => {
     );
     spectator.detectChanges();
 
-    expect(spectator.query('.abp-confirm-summary')).toHaveText('test message');
-    expect(spectator.query('.abp-confirm-body')).toHaveText('test detail');
+    console.warn(spectator.query('.confirmation'));
+    expect(spectator.query('.title')).toHaveText('test message');
+    expect(spectator.query('.confirmation .message')).toHaveText('test detail');
   });
 });
 

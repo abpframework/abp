@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
+import { Config } from '@abp/ng.core';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,11 @@ export class ToasterService {
    * @param title Title of the toast
    * @param options Spesific style or structural options for individual toast
    */
-  info(message: string, title?: string, options?: Partial<Toaster.ToastOptions>) {
+  info(
+    message: Config.LocalizationParam,
+    title?: Config.LocalizationParam,
+    options?: Partial<Toaster.ToastOptions>,
+  ) {
     return this.show(message, title, 'info', options);
   }
 
@@ -28,7 +33,11 @@ export class ToasterService {
    * @param title Title of the toast
    * @param options Spesific style or structural options for individual toast
    */
-  success(message: string, title?: string, options?: Partial<Toaster.ToastOptions>) {
+  success(
+    message: Config.LocalizationParam,
+    title?: Config.LocalizationParam,
+    options?: Partial<Toaster.ToastOptions>,
+  ) {
     return this.show(message, title, 'success', options);
   }
 
@@ -38,7 +47,11 @@ export class ToasterService {
    * @param title Title of the toast
    * @param options Spesific style or structural options for individual toast
    */
-  warn(message: string, title?: string, options?: Partial<Toaster.ToastOptions>) {
+  warn(
+    message: Config.LocalizationParam,
+    title?: Config.LocalizationParam,
+    options?: Partial<Toaster.ToastOptions>,
+  ) {
     return this.show(message, title, 'warning', options);
   }
 
@@ -48,7 +61,11 @@ export class ToasterService {
    * @param title Title of the toast
    * @param options Spesific style or structural options for individual toast
    */
-  error(message: string, title?: string, options?: Partial<Toaster.ToastOptions>) {
+  error(
+    message: Config.LocalizationParam,
+    title?: Config.LocalizationParam,
+    options?: Partial<Toaster.ToastOptions>,
+  ) {
     return this.show(message, title, 'error', options);
   }
 
@@ -61,8 +78,8 @@ export class ToasterService {
    */
 
   show(
-    message: string,
-    title: string = null,
+    message: Config.LocalizationParam,
+    title: Config.LocalizationParam = null,
     severity: Toaster.Severity = 'neutral',
     options: Partial<Toaster.ToastOptions> = null,
   ) {

@@ -1,3 +1,5 @@
+import { Config } from '@abp/ng.core';
+
 export namespace Toaster {
   export interface ToastOptions {
     life?: number;
@@ -11,8 +13,8 @@ export namespace Toaster {
   }
 
   export interface Toast {
-    message: string;
-    title?: string;
+    message: Config.LocalizationParam;
+    title?: Config.LocalizationParam;
     severity?: string;
     options?: ToastOptions;
   }

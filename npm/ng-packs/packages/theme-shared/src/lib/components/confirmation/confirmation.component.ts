@@ -32,17 +32,17 @@ export class ConfirmationComponent {
     }
   }
 
-  get titleLocalizationParams(): string {
+  get title(): string {
     return this.localizationService.instant(
       this.data.title,
-      ...this.data.options.titleLocalizationParams,
+      ...(this.data.options.titleLocalizationParams || []),
     );
   }
 
-  get messageLocalizationParams(): string {
+  get message(): string {
     return this.localizationService.instant(
       this.data.message,
-      ...this.data.options.messageLocalizationParams,
+      ...(this.data.options.messageLocalizationParams || []),
     );
   }
 

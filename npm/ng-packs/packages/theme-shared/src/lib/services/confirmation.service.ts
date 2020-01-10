@@ -48,7 +48,6 @@ export class ConfirmationService {
     severity?: Toaster.Severity,
     options?: Partial<Confirmation.Options>,
   ): Observable<Toaster.Status> {
-    this.listenToEscape();
     this.confirmation$.next({
       message,
       title: title || 'AbpUi:AreYouSure',
@@ -56,6 +55,7 @@ export class ConfirmationService {
       options,
     });
     this.status$ = new Subject();
+    this.listenToEscape();
     return this.status$;
   }
 
