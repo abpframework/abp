@@ -6,6 +6,7 @@ import { NgxsModule } from '@ngxs/store';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ToasterService } from '../services/toaster.service';
 import { ThemeSharedModule } from '../theme-shared.module';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'abp-dummy',
@@ -24,6 +25,7 @@ describe('ToasterService', () => {
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
     providers: [MessageService],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {
@@ -67,10 +69,9 @@ describe('ToasterService', () => {
       { summary: 'summary2', detail: 'detail2' },
     ]);
     spectator.detectChanges();
-    expect(spectator.queryAll('div.ui-toast-summary').map(node => node.textContent.trim())).toEqual([
-      'summary1',
-      'summary2',
-    ]);
+    expect(
+      spectator.queryAll('div.ui-toast-summary').map(node => node.textContent.trim()),
+    ).toEqual(['summary1', 'summary2']);
     expect(spectator.queryAll('div.ui-toast-detail').map(node => node.textContent.trim())).toEqual([
       'detail1',
       'detail2',

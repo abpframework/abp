@@ -6,6 +6,7 @@ import { NgxsModule } from '@ngxs/store';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ConfirmationService } from '../services/confirmation.service';
 import { ThemeSharedModule } from '../theme-shared.module';
+import { OAuthModule, OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'abp-dummy',
@@ -24,6 +25,7 @@ describe('ConfirmationService', () => {
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
     providers: [MessageService],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {

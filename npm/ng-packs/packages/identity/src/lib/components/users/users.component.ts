@@ -144,7 +144,7 @@ export class UsersComponent implements OnInit {
       const passwordValidators = [
         validatePassword(this.passwordRulesArr),
         Validators.minLength(this.requiredPasswordLength),
-        Validators.maxLength(32),
+        Validators.maxLength(128),
       ];
 
       this.form.addControl('password', new FormControl('', [...passwordValidators]));

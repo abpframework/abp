@@ -6,7 +6,7 @@
 
     <div class="abp-account-container">
       <div
-        *ngIf="(enableLocalLogin$ | async) !== 'False'; else disableLocalLoginTemplate"
+        *ngIf="enableLocalLogin; else disableLocalLoginTemplate"
         class="card mt-3 shadow-sm rounded"
       >
         <div class="card-body p-5">
