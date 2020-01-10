@@ -204,8 +204,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 identityResource.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
                 identityResource.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
                 identityResource.Property(x => x.Properties)
-                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, object>>())
-                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer());
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, string>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, string>());
 
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
@@ -229,8 +229,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiResource.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 apiResource.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
                 apiResource.Property(x => x.Properties)
-                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, object>>())
-                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer());
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, string>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, string>());
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();

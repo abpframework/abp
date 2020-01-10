@@ -59,7 +59,7 @@ namespace Volo.Abp.EntityFrameworkCore.Modeling
                 b.Property<Dictionary<string, object>>(nameof(IHasExtraProperties.ExtraProperties))
                     .HasColumnName(nameof(IHasExtraProperties.ExtraProperties))
                     .HasConversion(new AbpJsonValueConverter<Dictionary<string, object>>())
-                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer());
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, object>());
             }
         }
 

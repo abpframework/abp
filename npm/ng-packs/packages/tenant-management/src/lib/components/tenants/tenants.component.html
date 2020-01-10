@@ -28,37 +28,29 @@
           (input.debounce)="onSearch($event.target.value)"
       /></label>
     </div>
-    <p-table
+    <abp-table
       *ngIf="[150, 0] as columnWidths"
+      [abpLoading]="loading"
+      [abpTableSort]="{ key: sortKey, order: sortOrder }"
+      [colgroupTemplate]="tableColGroup"
+      [headerTemplate]="tableHeader"
+      [bodyTemplate]="tableBody"
       [value]="data$ | async"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
-      [lazy]="true"
-      [lazyLoadOnInit]="false"
-      [paginator]="true"
-      [rows]="10"
+      [rows]="pageQuery.maxResultCount"
       [totalRecords]="totalCount$ | async"
-      [loading]="loading"
-      [resizableColumns]="true"
       [scrollable]="true"
-      (onLazyLoad)="onPageChange($event)"
+      (pageChange)="onPageChange($event)"
     >
-      <ng-template pTemplate="colgroup">
+      <ng-template #tableColGroup>
         <colgroup>
           <col *ngFor="let width of columnWidths" [ngStyle]="{ 'width.px': width || undefined }" />
         </colgroup>
       </ng-template>
-      <ng-template pTemplate="emptymessage" let-columns>
-        <tr
-          abp-table-empty-message
-          [attr.colspan]="columnWidths.length"
-          localizationResource="AbpTenantManagement"
-          localizationProp="NoDataAvailableInDatatable"
-        ></tr>
-      </ng-template>
-      <ng-template pTemplate="header" let-columns>
+      <ng-template #tableHeader let-columns>
         <tr>
           <th>{{ 'AbpTenantManagement::Actions' | abpLocalization }}</th>
-          <th pResizableColumn (click)="sortOrderIcon.sort('name')">
+          <th (click)="sortOrderIcon.sort('name')">
             {{ 'AbpTenantManagement::TenantName' | abpLocalization }}
             <abp-sort-order-icon
               #sortOrderIcon
@@ -70,7 +62,7 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-data>
+      <ng-template #tableBody let-data>
         <tr>
           <td class="text-center">
             <div ngbDropdown container="body" class="d-inline-block">
@@ -117,7 +109,7 @@
           <td>{{ data.name }}</td>
         </tr>
       </ng-template>
-    </p-table>
+    </abp-table>
   </div>
 </div>
 
