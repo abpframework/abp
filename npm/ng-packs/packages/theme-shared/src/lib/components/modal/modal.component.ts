@@ -24,6 +24,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
   animations: [fadeAnimation],
+  styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -115,7 +116,8 @@ export class ModalComponent implements OnDestroy {
     }
 
     const nodes = getFlatNodes(
-      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement).childNodes,
+      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement)
+        .childNodes,
     );
 
     if (hasNgDirty(nodes)) {
@@ -123,7 +125,10 @@ export class ModalComponent implements OnDestroy {
 
       this.isConfirmationOpen = true;
       this.confirmationService
-        .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
+        .warn(
+          'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
+          'AbpAccount::AreYouSure',
+        )
         .subscribe((status: Toaster.Status) => {
           this.isConfirmationOpen = false;
           if (status === Toaster.Status.confirm) {
@@ -162,7 +167,10 @@ export class ModalComponent implements OnDestroy {
 
 function getFlatNodes(nodes: NodeList): HTMLElement[] {
   return Array.from(nodes).reduce(
-    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
+    (acc, val) => [
+      ...acc,
+      ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val]),
+    ],
     [],
   );
 }

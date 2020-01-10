@@ -1,0 +1,25 @@
+.modal {
+  &.show {
+    display: block !important;
+  }
+
+  &-backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #ddd;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #8a8686;
+  }
+
+  &-dialog {
+    z-index: 1050;
+  }
+}
