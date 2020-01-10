@@ -14,6 +14,7 @@ import { LoaderBarComponent } from './components/loader-bar/loader-bar.component
 import { ModalComponent } from './components/modal/modal.component';
 import { SortOrderIconComponent } from './components/sort-order-icon/sort-order-icon.component';
 import { TableEmptyMessageComponent } from './components/table-empty-message/table-empty-message.component';
+import { ToastContainerComponent } from './components/toast-container/toast-container.component';
 import { TableComponent } from './components/table/table.component';
 import { ToastComponent } from './components/toast/toast.component';
 import styles from './constants/styles';
@@ -53,6 +54,7 @@ export function appendScript(injector: Injector) {
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
+    ToastContainerComponent,
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
@@ -69,6 +71,7 @@ export function appendScript(injector: Injector) {
     TableComponent,
     TableEmptyMessageComponent,
     ToastComponent,
+    ToastContainerComponent,
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
