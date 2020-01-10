@@ -137,14 +137,13 @@ export class ConfigState {
     key: string | Config.LocalizationWithDefault,
     ...interpolateParams: string[]
   ) {
+    if (!key) key = '';
     let defaultValue: string;
 
     if (typeof key !== 'string') {
       defaultValue = key.defaultValue;
       key = key.key;
     }
-
-    if (!key) key = '';
 
     const keys = key.split('::') as string[];
     const selector = createSelector([ConfigState], (state: Config.State) => {

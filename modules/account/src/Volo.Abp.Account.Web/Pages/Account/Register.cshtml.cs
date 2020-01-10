@@ -45,7 +45,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         protected virtual async Task CheckSelfRegistrationAsync()
         {
-            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled).ConfigureAwait(false))
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled).ConfigureAwait(false) ||
+                !await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false))
             {
                 throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
             }

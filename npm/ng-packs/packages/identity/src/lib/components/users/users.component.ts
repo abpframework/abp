@@ -51,7 +51,7 @@ export class UsersComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {};
+  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
 
   isModalVisible: boolean;
 
@@ -111,7 +111,7 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  onSearch(value) {
+  onSearch(value: string) {
     this.pageQuery.filter = value;
     this.get();
   }
@@ -144,7 +144,7 @@ export class UsersComponent implements OnInit {
       const passwordValidators = [
         validatePassword(this.passwordRulesArr),
         Validators.minLength(this.requiredPasswordLength),
-        Validators.maxLength(32),
+        Validators.maxLength(128),
       ];
 
       this.form.addControl('password', new FormControl('', [...passwordValidators]));
@@ -226,9 +226,8 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  onPageChange(data) {
-    this.pageQuery.skipCount = data.first;
-    this.pageQuery.maxResultCount = data.rows;
+  onPageChange(page: number) {
+    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
 
     this.get();
   }

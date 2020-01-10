@@ -95,7 +95,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(ResourceOwnerPasswordValidationContext context)
         {
-            if (!ValidationHandler.IsValidEmailAddress(context.UserName))
+            if (!ValidationHelper.IsValidEmailAddress(context.UserName))
             {
                 return;
             }

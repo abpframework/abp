@@ -68,7 +68,7 @@ namespace Volo.Abp.Cli.ProjectModification
                 var targetProjectFile = ProjectFinder.FindNuGetTargetProjectFile(projectFiles, nugetPackage.Target);
                 if (targetProjectFile == null)
                 {
-                    Logger.LogDebug($"Target project is not available for NuGet package '{nugetPackage.Name}'");
+                    Logger.LogDebug($"Target project is not available for this NuGet package '{nugetPackage.Name}'");
                     continue;
                 }
 

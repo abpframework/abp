@@ -61,6 +61,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "Options",
+          "path": "Options.md"
+        },
+        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -83,7 +87,14 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "Validation"
+          "text": "Validation",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation Integration",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
           "text": "Authorization",
@@ -281,6 +292,10 @@
                 {
                   "text": "Switch to SQLite",
                   "path": "Entity-Framework-Core-SQLite.md"
+                },
+                {
+                  "text": "Switch to another DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md"
                 }
               ]
             },

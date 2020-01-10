@@ -12,7 +12,6 @@
     "@ngx-validate/core",
     "bootstrap",
     "font-awesome",
-    "ngx-perfect-scrollbar",
     "primeicons",
     "primeng",
     "chart.js"

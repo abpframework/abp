@@ -27,6 +27,8 @@ Framework solution is located under the `framework` folder. It has no external d
 
 [Modules](modules/) and [Templates](templates/) have their own solutions and have **local references** to the framework and each other.
 
+Visual Studio can not work properly with the local references out of the solution folder. When you open a module/sample solution in the Visual Studio, you may get some errors related to the dependencies. In this case, run the `dotnet restore` on the command prompt for the related solution's folder. You need to run it after you first open the solution or change a dependency.
+
 ### Contribution
 
 ABP is an open source platform. Check [the contribution guide](docs/en/Contribution/Index.md) if you want to contribute to the project.
