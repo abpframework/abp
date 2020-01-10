@@ -10,7 +10,6 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
-  HostListener,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
