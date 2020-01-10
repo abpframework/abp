@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;
@@ -32,7 +33,7 @@ namespace Volo.Abp.PermissionManagement.Identity
                 return;
             }
 
-            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync("R", eventData.OldName).ConfigureAwait(false);
+            var permissionGrantsInRole = await PermissionGrantRepository.GetListAsync(RolePermissionValueProvider.ProviderName, eventData.OldName).ConfigureAwait(false);
             foreach (var permissionGrant in permissionGrantsInRole)
             {
                 await PermissionManager.UpdateProviderKeyAsync(permissionGrant, eventData.IdentityRole.Name).ConfigureAwait(false);
