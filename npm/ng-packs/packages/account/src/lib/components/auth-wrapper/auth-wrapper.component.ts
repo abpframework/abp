@@ -1,8 +1,7 @@
-import { Component, Input, TemplateRef, OnInit, OnDestroy } from '@angular/core';
+import { ConfigState, takeUntilDestroy } from '@abp/ng.core';
+import { Component, Input, OnDestroy, OnInit, TemplateRef } from '@angular/core';
+import { Store } from '@ngxs/store';
 import { Account } from '../../models/account';
-import { Select, Store } from '@ngxs/store';
-import { ConfigState } from '@abp/ng.core';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'abp-auth-wrapper',
@@ -26,11 +25,14 @@ export class AuthWrapperComponent
   constructor(private store: Store) {}
 
   ngOnInit() {
-    this.store.select(ConfigState.getSetting('Abp.Account.EnableLocalLogin')).subscribe(value => {
-      if (value) {
-        this.enableLocalLogin = value.toLowerCase() !== 'false';
-      }
-    });
+    this.store
+      .select(ConfigState.getSetting('Abp.Account.EnableLocalLogin'))
+      .pipe(takeUntilDestroy(this))
+      .subscribe(value => {
+        if (value) {
+          this.enableLocalLogin = value.toLowerCase() !== 'false';
+        }
+      });
   }
 
   ngOnDestroy() {}
