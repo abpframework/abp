@@ -10,6 +10,7 @@ import {
   TemplateRef,
   ViewChild,
   ViewChildren,
+  HostListener,
 } from '@angular/core';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
@@ -101,15 +102,7 @@ export class ModalComponent implements OnDestroy {
 
   destroy$ = new Subject<void>();
 
-  constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-  }
-
-  close() {
-    if (this.busy) return;
-
+  get isFormDirty(): boolean {
     let node: HTMLDivElement;
     if (!this.modalContent) {
       node = document.getElementById('modal-container') as HTMLDivElement;
@@ -120,7 +113,19 @@ export class ModalComponent implements OnDestroy {
         .childNodes,
     );
 
-    if (hasNgDirty(nodes)) {
+    return hasNgDirty(nodes);
+  }
+
+  constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+  }
+
+  close() {
+    if (this.busy) return;
+
+    if (this.isFormDirty) {
       if (this.isConfirmationOpen) return;
 
       this.isConfirmationOpen = true;
@@ -149,6 +154,16 @@ export class ModalComponent implements OnDestroy {
       )
       .subscribe(() => {
         this.close();
+      });
+
+    fromEvent(window, 'beforeunload')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (this.isFormDirty) {
+          event.returnValue = true;
+        } else {
+          delete event.returnValue;
+        }
       });
 
     setTimeout(() => {
