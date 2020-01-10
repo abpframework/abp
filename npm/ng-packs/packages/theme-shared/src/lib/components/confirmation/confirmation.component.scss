@@ -6,6 +6,7 @@
   left: 0;
   display: none;
   place-items: center;
+  z-index: 1060;
   &.show {
     display: grid;
   }
@@ -16,7 +17,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(#000, 0.7);
-    z-index: 1040;
+    z-index: 1061 !important;
   }
   .confirmation-dialog {
     display: flex;
@@ -29,7 +30,7 @@
     min-height: 300px;
     background-color: #fff;
     box-shadow: 0 0 10px -5px rgba(#000, 0.5);
-    z-index: 1050;
+    z-index: 1062 !important;
     .icon-container {
       display: flex;
       align-items: center;
@@ -40,8 +41,27 @@
         width: 100px;
         height: 100px;
         stroke-width: 1;
-        stroke: #f89406;
         fill: #fff;
+        font-size: 80px;
+        text-align: center;
+      }
+      &.neutral .icon {
+      }
+      &.info .icon {
+        stroke: #2f96b4;
+        color: #2f96b4;
+      }
+      &.success .icon {
+        stroke: #51a351;
+        color: #51a351;
+      }
+      &.warning .icon {
+        stroke: #f89406;
+        color: #f89406;
+      }
+      &.error .icon {
+        stroke: #bd362f;
+        color: #bd362f;
       }
     }
     .content {
