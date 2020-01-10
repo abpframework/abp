@@ -16,7 +16,13 @@
       'AbpAccount::Login' | abpLocalization
     }}</a>
   </strong>
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" validateOnSubmit class="mt-4">
+  <form
+    *ngIf="isSelfRegistrationEnabled"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    validateOnSubmit
+    class="mt-4"
+  >
     <div class="form-group">
       <label for="input-user-name">{{ 'AbpAccount::UserName' | abpLocalization }}</label
       ><span> * </span

@@ -64,7 +64,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
         {
-            if (!ValidationHandler.IsValidEmailAddress(login.UserNameOrEmailAddress))
+            if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress))
             {
                 return;
             }

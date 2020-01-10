@@ -5,6 +5,7 @@ import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { NgxsModule } from '@ngxs/store';
 import { ToasterService } from '../services/toaster.service';
 import { ThemeSharedModule } from '../theme-shared.module';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'abp-dummy',
@@ -22,6 +23,7 @@ describe('ToasterService', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {

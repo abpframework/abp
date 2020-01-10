@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 import { createComponentFactory, Spectator } from '@ngneat/spectator/jest';
 import { NgxsModule } from '@ngxs/store';
+import { OAuthService } from 'angular-oauth2-oidc';
 import { ConfirmationService } from '../services/confirmation.service';
 import { ThemeSharedModule } from '../theme-shared.module';
 
@@ -22,6 +23,7 @@ describe('ConfirmationService', () => {
   const createComponent = createComponentFactory({
     component: DummyComponent,
     imports: [CoreModule, ThemeSharedModule.forRoot(), NgxsModule.forRoot(), RouterTestingModule],
+    mocks: [OAuthService],
   });
 
   beforeEach(() => {

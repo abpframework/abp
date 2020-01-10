@@ -2,7 +2,7 @@
 
 namespace Volo.Abp.Validation
 {
-    public class ValidationHandler
+    public class ValidationHelper
     {
         private const string EmailRegEx = @"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?";
 

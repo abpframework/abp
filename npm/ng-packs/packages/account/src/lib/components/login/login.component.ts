@@ -1,15 +1,12 @@
-import { GetAppConfiguration, ConfigState, SessionState } from '@abp/ng.core';
-import { Component, Inject, Optional } from '@angular/core';
+import { AuthService, SetRemember, ConfigState } from '@abp/ng.core';
+import { ToasterService } from '@abp/ng.theme.shared';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Navigate } from '@ngxs/router-plugin';
 import { Store } from '@ngxs/store';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { from, throwError } from 'rxjs';
-import { Options } from '../../models/options';
-import { ToasterService } from '@abp/ng.theme.shared';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { throwError } from 'rxjs';
+import { catchError, finalize } from 'rxjs/operators';
 import snq from 'snq';
-import { HttpHeaders } from '@angular/common/http';
 
 const { maxLength, minLength, required } = Validators;
 
@@ -17,47 +14,43 @@ const { maxLength, minLength, required } = Validators;
   selector: 'abp-login',
   templateUrl: './login.component.html',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   form: FormGroup;
 
   inProgress: boolean;
+
+  isSelfRegistrationEnabled = true;
 
   constructor(
     private fb: FormBuilder,
     private oauthService: OAuthService,
     private store: Store,
     private toasterService: ToasterService,
-    @Optional() @Inject('ACCOUNT_OPTIONS') private options: Options,
-  ) {
-    this.oauthService.configure(this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig);
-    this.oauthService.loadDiscoveryDocument();
+    private authService: AuthService,
+  ) {}
+
+  ngOnInit() {
+    this.isSelfRegistrationEnabled =
+      (
+        (this.store.selectSnapshot(
+          ConfigState.getSetting('Abp.Account.IsSelfRegistrationEnabled'),
+        ) as string) || ''
+      ).toLowerCase() !== 'false';
 
     this.form = this.fb.group({
       username: ['', [required, maxLength(255)]],
-      password: ['', [required, maxLength(32)]],
+      password: ['', [required, maxLength(128)]],
       remember: [false],
     });
   }
 
   onSubmit() {
     if (this.form.invalid) return;
-    // this.oauthService.setStorage(this.form.value.remember ? localStorage : sessionStorage);
 
     this.inProgress = true;
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
-    from(
-      this.oauthService.fetchTokenUsingPasswordFlow(
-        this.form.get('username').value,
-        this.form.get('password').value,
-        new HttpHeaders({ ...(tenant && tenant.id && { __tenant: tenant.id }) }),
-      ),
-    )
+    this.authService
+      .login(this.form.get('username').value, this.form.get('password').value)
       .pipe(
-        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
-        tap(() => {
-          const redirectUrl = snq(() => window.history.state).redirectUrl || (this.options || {}).redirectUrl || '/';
-          this.store.dispatch(new Navigate([redirectUrl]));
-        }),
         catchError(err => {
           this.toasterService.error(
             snq(() => err.error.error_description) ||
@@ -69,6 +62,8 @@ export class LoginComponent {
         }),
         finalize(() => (this.inProgress = false)),
       )
-      .subscribe();
+      .subscribe(() => {
+        this.store.dispatch(new SetRemember(this.form.get('remember').value));
+      });
   }
 }

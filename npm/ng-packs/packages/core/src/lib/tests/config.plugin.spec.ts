@@ -10,6 +10,7 @@ import { ABP } from '../models';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from '../plugins';
 import { ConfigState } from '../states';
 import { addAbpRoutes } from '../utils';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 addAbpRoutes([
   {
@@ -323,6 +324,7 @@ describe('ConfigPlugin', () => {
     service: ConfigPlugin,
     imports: [
       CoreModule,
+      OAuthModule.forRoot(),
       NgxsModule.forRoot([]),
       RouterTestingModule.withRoutes([
         {
