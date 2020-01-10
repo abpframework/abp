@@ -67,7 +67,7 @@ export class SessionState {
 
         this.store.dispatch(new ModifyOpenedTabCount('increase'));
 
-        fromEvent(window, 'beforeunload').subscribe(() => {
+        fromEvent(window, 'unload').subscribe(event => {
           this.store.dispatch(new ModifyOpenedTabCount('decrease'));
         });
       });
