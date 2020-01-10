@@ -1,0 +1,29 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Volo.Abp.Auditing;
+
+namespace Volo.Abp.AspNetCore.Mvc.Auditing
+{
+    [Route("api/audit-test")]
+    public class AuditTestController : AbpController
+    {
+        private readonly AbpAuditingOptions _options;
+
+        public AuditTestController(IOptions<AbpAuditingOptions> options)
+        {
+            _options = options.Value;
+        }
+
+        [Route("audit-success")]
+        public IActionResult AuditSuccessForGetRequests()
+        {
+            return Ok();
+        }
+
+        [Route("audit-fail")]
+        public IActionResult AuditFailForGetRequests()
+        {
+            throw new UserFriendlyException("Exception occurred!");
+        }
+    }
+}

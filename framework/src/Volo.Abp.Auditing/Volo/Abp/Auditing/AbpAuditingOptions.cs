@@ -29,7 +29,13 @@ namespace Volo.Abp.Auditing
         /// <summary>
         /// Default: true.
         /// </summary>
-        public bool IsEnabledForAnonymousUsers { get; set; }
+        public bool IsEnabledForAnonymousUsers { get; set; } = false;
+
+        /// <summary>
+        /// Audit log e xceptions.
+        /// Default: false.
+        /// </summary>
+        public bool AlwaysLogOnException { get; set; }
 
         public List<AuditLogContributor> Contributors { get; }
 

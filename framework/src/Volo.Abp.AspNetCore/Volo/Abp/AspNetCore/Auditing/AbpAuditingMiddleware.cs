@@ -40,6 +40,10 @@ namespace Volo.Abp.AspNetCore.Auditing
                 {
                     await next(context).ConfigureAwait(false);
                 }
+                catch (Exception ex)
+                {
+                    await scope.SaveAsync(ex).ConfigureAwait(false);
+                }
                 finally
                 {
                     await scope.SaveAsync().ConfigureAwait(false);
@@ -49,6 +53,13 @@ namespace Volo.Abp.AspNetCore.Auditing
 
         private bool ShouldWriteAuditLog(HttpContext httpContext)
         {
+            // IF selected, save audit logs on exception on GET requests even if audit log is disabled for GET requests.
+            if (Options.AlwaysLogOnException &&
+                string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
             if (!Options.IsEnabled)
             {
                 return false;
@@ -59,7 +70,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 return false;
             }
 
-            if (!Options.IsEnabledForGetRequests && 
+            if (!Options.IsEnabledForGetRequests &&
                 string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
             {
                 return false;
