@@ -1,6 +1,6 @@
 # FluentValidation Integration
 
-ABP Validation infrastructure is extensible. [Volo.Abp.FluentValidation](https://www.nuget.org/packages/Volo.Abp.FluentValidation) NuGet package extends the validation system to work with the [FluentValidation](https://fluentvalidation.net/) library.
+ABP [Validation](Validation.md) infrastructure is extensible. [Volo.Abp.FluentValidation](https://www.nuget.org/packages/Volo.Abp.FluentValidation) NuGet package extends the validation system to work with the [FluentValidation](https://fluentvalidation.net/) library.
 
 ## Installation
 
@@ -8,7 +8,7 @@ It is suggested to use the [ABP CLI](CLI.md) to install this package.
 
 ### Using the ABP CLI
 
-Open a command line window in the folder of the project you want to install the Volo.Abp.FluentValidation NuGet package and type the following command:
+Open a command line window in the folder of the project (.csproj file) and type the following command:
 
 ````bash
 abp add-package Volo.Abp.FluentValidation
@@ -52,3 +52,7 @@ public class CreateUpdateBookDtoValidator : AbstractValidator<CreateUpdateBookDt
 ````
 
 ABP will automatically find this class and associate with the `CreateUpdateBookDto` on object validation.
+
+## See Also
+
+* [Validation System](Validation.md)
