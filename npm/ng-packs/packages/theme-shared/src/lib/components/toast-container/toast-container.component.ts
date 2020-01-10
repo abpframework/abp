@@ -16,10 +16,10 @@ export class ToastContainerComponent implements OnInit {
   top: string;
 
   @Input()
-  right: string = '30px';
+  right = '30px';
 
   @Input()
-  bottom: string = '30px';
+  bottom = '30px';
 
   @Input()
   left: string;
