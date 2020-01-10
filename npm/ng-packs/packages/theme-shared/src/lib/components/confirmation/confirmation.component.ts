@@ -38,12 +38,11 @@ export class ConfirmationComponent {
   ) {
     this.confirmationService.confirmation$.subscribe(confirmation => {
       this.data = confirmation;
-      this.visible = true;
+      this.visible = !!confirmation;
     });
   }
 
   close(status: Toaster.Status) {
     this.confirmationService.clear(status);
-    this.visible = false;
   }
 }

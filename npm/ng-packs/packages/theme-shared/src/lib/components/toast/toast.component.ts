@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Toaster } from '../../models';
 import { ToasterService } from '../../services/toaster.service';
 import { LocalizationService } from '@abp/ng.core';
+import snq from 'snq';
 
 @Component({
   selector: 'abp-toast',
@@ -38,8 +39,8 @@ export class ToastComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.toast.options && this.toast.options.sticky) return;
-    const timeout = this.toast.options.life || 5000;
+    if (snq(() => this.toast.options.sticky)) return;
+    const timeout = snq(() => this.toast.options.life) || 5000;
     setTimeout(() => {
       this.close();
     }, timeout);

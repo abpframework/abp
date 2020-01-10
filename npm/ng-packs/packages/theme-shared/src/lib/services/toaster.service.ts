@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Toaster } from '../models';
 import { ReplaySubject } from 'rxjs';
 import { Config } from '@abp/ng.core';
+import snq from 'snq';
 
 @Injectable({
   providedIn: 'root',
@@ -81,7 +82,7 @@ export class ToasterService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam = null,
     severity: Toaster.Severity = 'neutral',
-    options: Partial<Toaster.ToastOptions> = null,
+    options = {} as Partial<Toaster.ToastOptions>,
   ) {
     const id = ++this.lastId;
     this.toasts.push({
@@ -99,7 +100,7 @@ export class ToasterService {
    * @param id ID of the toast to be removed.
    */
   remove(id: number) {
-    this.toasts = this.toasts.filter(toast => toast.options.id !== id);
+    this.toasts = this.toasts.filter(toast => snq(() => toast.options.id) !== id);
     this.toasts$.next(this.toasts);
   }
 
@@ -107,7 +108,9 @@ export class ToasterService {
    * Removes all open toasts at once.
    */
   clear(key?: string) {
-    this.toasts = !key ? [] : this.toasts.filter(toast => toast.options.containerKey !== key);
+    this.toasts = !key
+      ? []
+      : this.toasts.filter(toast => snq(() => toast.options.containerKey) !== key);
     this.toasts$.next(this.toasts);
   }
 }

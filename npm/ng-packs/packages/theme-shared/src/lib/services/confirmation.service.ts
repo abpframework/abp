@@ -60,6 +60,7 @@ export class ConfirmationService {
   }
 
   clear(status?: Toaster.Status) {
+    this.confirmation$.next();
     this.status$.next(status || Toaster.Status.dismiss);
   }
 
