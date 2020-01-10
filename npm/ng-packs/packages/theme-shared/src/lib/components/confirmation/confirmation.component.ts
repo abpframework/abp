@@ -20,15 +20,15 @@ export class ConfirmationComponent {
   get iconClass(): string {
     switch (this.data.severity) {
       case 'info':
-        return 'info-circle';
+        return 'fa-info-circle';
       case 'success':
-        return 'check-circle';
+        return 'fa-check-circle';
       case 'warning':
-        return 'exclamation-triangle';
+        return 'fa-exclamation-triangle';
       case 'error':
-        return 'times-circle';
+        return 'fa-times-circle';
       default:
-        return 'question-circle-o';
+        return 'fa-question-circle';
     }
   }
 
