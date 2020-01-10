@@ -7,7 +7,7 @@ ABP is compatible with the ASP.NET Core Model Validation system and everything w
 In addition, ABP adds the following benefits:
 
 * Defines `IValidationEnabled` to add automatic validation to an arbitrary class. Since all the [application services](Application-Services.md) inherently implements it, they are also validated automatically.
-* Automatically localize the validation errors.
+* Automatically localize the validation errors for the data annotation attributes.
 * Provides extensible services to validate a method call or an object state.
 * Provides [FluentValidation](https://fluentvalidation.net/) integration.
 
