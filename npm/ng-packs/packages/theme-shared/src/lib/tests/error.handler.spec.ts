@@ -128,7 +128,6 @@ describe('ErrorHandler', () => {
     );
     spectator.detectChanges();
 
-    console.warn(spectator.query('.confirmation'));
     expect(spectator.query('.title')).toHaveText('test message');
     expect(spectator.query('.confirmation .message')).toHaveText('test detail');
   });
