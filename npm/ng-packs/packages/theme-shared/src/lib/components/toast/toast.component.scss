@@ -18,9 +18,11 @@
   padding: 10px;
   border-radius: 0px;
   width: 350px;
-  @include fillColor(#f0f0f0, #000);
   user-select: none;
   box-shadow: 0 0 10px -5px rgba(#000, 0.4);
+  z-index: 9999;
+  @include fillColor(#f0f0f0, #000);
+  opacity: 1;
   &.toast-success {
     @include fillColor(#51a351, #fff);
   }
@@ -38,6 +40,7 @@
     align-items: center;
     justify-content: center;
     .icon {
+      font-size: 36px;
     }
   }
   .toast-content {
