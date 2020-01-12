@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -55,16 +56,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
         public class PostInput
         {
             [Required]
-            [StringLength(32)]
+            [StringLength(IdentityUserConsts.MaxUserNameLength)]
             public string UserName { get; set; }
 
             [Required]
             [EmailAddress]
-            [StringLength(255)]
+            [StringLength(IdentityUserConsts.MaxEmailLength)]
             public string EmailAddress { get; set; }
 
             [Required]
-            [StringLength(32)]
+            [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
             public string Password { get; set; }
         }
