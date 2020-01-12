@@ -38,14 +38,13 @@ namespace Volo.Abp.Application.Services
 
         protected virtual string DeletePolicyName { get; set; }
 
+        internal bool isEntityWithIdProperty => Volo.Abp.Reflection.ReflectionHelper.IsAssignableToGenericType(typeof(TEntity), typeof(IEntity<>));
+
         public BaseCrudAppService(IRepository<TEntity> repository)
         {
             Repository = repository;
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;
         }
-
-
-
 
         public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
         {
@@ -73,7 +72,7 @@ namespace Volo.Abp.Application.Services
             return CreatePagedResultDto<TGetOutputDto>(result);
         }
 
-        public async Task<TGetOutputDto> CreateAsync(TCreateInput input)
+        public virtual async Task<TGetOutputDto> CreateAsync(TCreateInput input)
         {
             await CheckCreatePolicyAsync().ConfigureAwait(false);
 
@@ -86,7 +85,7 @@ namespace Volo.Abp.Application.Services
             return MapToDto<TGetOutputDto>(entity);
         }
 
-        public async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
+        public virtual async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
         {
             await CheckUpdatePolicyAsync().ConfigureAwait(false);
 
@@ -99,18 +98,23 @@ namespace Volo.Abp.Application.Services
             return MapToDto<TGetOutputDto>(entity);
         }
 
-        public async Task DeleteAsync(TKey id)
+        public virtual async Task DeleteAsync(TKey id)
         {
             await CheckDeletePolicyAsync().ConfigureAwait(false);
 
-            await Repository.DeleteAsync(createEqualityExpression(new { Id = id })).ConfigureAwait(false);
+            if (isEntityWithIdProperty)
+            {
+                await Repository.DeleteAsync(createEqualityExpression(new { Id = id })).ConfigureAwait(false);
+            }
+            else
+            {
+                await Repository.DeleteAsync(createEqualityExpression(id)).ConfigureAwait(false);
+            }
         }
 
         protected virtual Task<TEntity> GetEntityByIdAsync<TGetById>(TGetById id)
         {
-            var isEntityWithIdKey = Volo.Abp.Reflection.ReflectionHelper.IsAssignableToGenericType(typeof(TEntity), typeof(IEntity<>));
-
-            if (isEntityWithIdKey)
+            if (isEntityWithIdProperty)
             {
                 return Task.FromResult(Repository.FirstOrDefault(createEqualityExpression(new { Id = id })));
             }
@@ -169,10 +173,6 @@ namespace Volo.Abp.Application.Services
         {
             return Repository;
         }
-
-
-
-
 
         protected virtual PagedResultDto<TDto> CreatePagedResultDto<TDto>((int TotalCount, System.Collections.Generic.List<TEntity> Entities) queryResult)
         {

@@ -12,9 +12,9 @@ namespace Volo.Abp.Application.Services
         where TGetListOutputDto : IEntityDto
     {
         Task<PagedResultDto<TGetOutputDto>> GetListWithDetailsAsync(TGetListInput input);
-        Task<TGetOutputDto> CreateAsync(TCreateInput input);
-        Task DeleteAsync(TKey id);
         Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input);
+        Task<TGetOutputDto> CreateAsync(TCreateInput input);
         Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input);
+        Task DeleteAsync(TKey id);
     }
 }

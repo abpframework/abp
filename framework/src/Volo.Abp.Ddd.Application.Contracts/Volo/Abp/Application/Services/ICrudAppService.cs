@@ -38,12 +38,4 @@ namespace Volo.Abp.Application.Services
     {
         Task<TGetOutputDto> GetAsync(TKey id);
     }
-
-    public interface ICrudAppService<TGetOutputDto, TGetListOutputDto, in TKey,in TFind, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : IBaseCrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-        where TGetOutputDto : IEntityDto
-        where TGetListOutputDto : IEntityDto
-    {
-        Task<TGetOutputDto> GetFindAsync(TFind key);
-    }
 }

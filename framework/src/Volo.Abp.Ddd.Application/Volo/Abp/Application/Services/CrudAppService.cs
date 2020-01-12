@@ -84,25 +84,4 @@ namespace Volo.Abp.Application.Services
         }
     }
 
-    public abstract class CrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TFind, TGetListInput, TCreateInput, TUpdateInput>
-       : BaseCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
-        ICrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TFind, TGetListInput, TCreateInput, TUpdateInput>
-           where TEntity : class, IEntity
-        where TGetOutputDto : IEntityDto
-        where TGetListOutputDto : IEntityDto
-    {
-        protected CrudAppService(IRepository<TEntity> repository)
-            : base(repository) { }
-
-        public async Task<TGetOutputDto> GetFindAsync(TFind key)
-        {
-            await CheckGetPolicyAsync().ConfigureAwait(false);
-
-            var entity = await GetEntityByIdAsync(key).ConfigureAwait(false);
-
-            return MapToDto<TGetOutputDto>(entity);
-
-        }
-    }
-
 }
