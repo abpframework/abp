@@ -33,23 +33,6 @@ namespace Volo.Abp.AspNetCore.Auditing
                 await next(context).ConfigureAwait(false);
                 return;
             }
-            if (Options.AlwaysLogOnException)
-            {
-                using (var scope = _auditingManager.BeginScope())
-                {
-                    try
-                    {
-                        await next(context).ConfigureAwait(false);
-                        return;
-                    }
-                    catch (Exception)
-                    {
-                        await scope.SaveAsync().ConfigureAwait(false);
-                        if (!Options.HideErrors)
-                            throw;
-                    }
-                }
-            }
 
             using (var scope = _auditingManager.BeginScope())
             {
@@ -59,6 +42,10 @@ namespace Volo.Abp.AspNetCore.Auditing
                 }
                 catch (Exception)
                 {
+                    if (!Options.HideErrors)
+                    {
+                        throw;
+                    }
                 }
                 finally
                 {
@@ -69,6 +56,11 @@ namespace Volo.Abp.AspNetCore.Auditing
 
         private bool ShouldWriteAuditLog(HttpContext httpContext)
         {
+            if (Options.AlwaysLogOnException)
+            {
+                return true;
+            }
+
             if (!Options.IsEnabled)
             {
                 return false;

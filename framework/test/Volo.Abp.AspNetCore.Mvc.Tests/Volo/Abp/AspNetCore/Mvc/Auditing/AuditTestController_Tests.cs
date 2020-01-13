@@ -40,6 +40,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             _options.IsEnabled = false;
             _options.AlwaysLogOnException = false;
+            _options.HideErrors = false;
             await GetResponseAsync("api/audit-test/audit-fail", System.Net.HttpStatusCode.BadRequest);
             //await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
         }
