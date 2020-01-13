@@ -75,7 +75,14 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "验证"
+          "text": "验证",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation集成",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
           "text": "授权"

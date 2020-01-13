@@ -12,6 +12,7 @@ using Volo.Abp.Account;
 using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.Autofac;
 using Volo.Abp.Data;
@@ -56,7 +57,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
-        typeof(AbpAspNetCoreMvcUiBasicThemeModule)
+        typeof(AbpAspNetCoreMvcUiBasicThemeModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebUnifiedModule : AbpModule
     {
@@ -137,6 +139,7 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
             app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())

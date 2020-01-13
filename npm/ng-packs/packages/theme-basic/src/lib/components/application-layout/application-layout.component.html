@@ -34,7 +34,8 @@
           <ng-template #defaultLink let-route>
             <li class="nav-item" *abpPermission="route.requiredPolicy">
               <a class="nav-link" [routerLink]="[route.url]"
-                ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}</a
+                ><i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+                {{ route.name | abpLocalization }}</a
               >
             </li>
           </ng-template>
@@ -47,7 +48,9 @@
               class="nav-item dropdown"
               display="static"
               (click)="
-                navbarRootDropdown.expand ? (navbarRootDropdown.expand = false) : (navbarRootDropdown.expand = true)
+                navbarRootDropdown.expand
+                  ? (navbarRootDropdown.expand = false)
+                  : (navbarRootDropdown.expand = true)
               "
             >
               <a
@@ -57,7 +60,8 @@
                 aria-expanded="false"
                 href="javascript:void(0)"
               >
-                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i> {{ route.name | abpLocalization }}
+                <i *ngIf="route.iconClass" [ngClass]="route.iconClass"></i>
+                {{ route.name | abpLocalization }}
               </a>
               <div
                 #routeContainer
@@ -146,12 +150,15 @@
   </div>
 </nav>
 
-<div [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path" class="container">
+<div
+  [@slideFromBottom]="outlet && outlet.activatedRoute && outlet.activatedRoute.routeConfig.path"
+  class="container"
+>
   <router-outlet #outlet="outlet"></router-outlet>
 </div>
 
 <abp-confirmation></abp-confirmation>
-<abp-toast></abp-toast>
+<abp-toast-container right="30px" bottom="30px"></abp-toast-container>
 
 <ng-template #appName>
   {{ appInfo.name }}
@@ -213,12 +220,12 @@
         [class.d-block]="smallScreen"
         [class.abp-mh-25]="smallScreen && currentUserDropdown.isOpen()"
       >
-        <a class="dropdown-item" routerLink="/account/manage-profile"><i class="fa fa-cog mr-1"></i>{{
-          'AbpAccount::ManageYourProfile' | abpLocalization
-        }}</a>
-        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"><i class="fa fa-power-off mr-1"></i>{{
-          'AbpUi::Logout' | abpLocalization
-        }}</a>
+        <a class="dropdown-item" routerLink="/account/manage-profile"
+          ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a
+        >
+        <a class="dropdown-item" href="javascript:void(0)" (click)="logout()"
+          ><i class="fa fa-power-off mr-1"></i>{{ 'AbpUi::Logout' | abpLocalization }}</a
+        >
       </div>
     </div>
   </li>

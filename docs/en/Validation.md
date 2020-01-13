@@ -120,6 +120,39 @@ Once ABP determines a validation error, it throws an exception of type `AbpValid
 * Log level of the `AbpValidationException` is set to `Warning`. It logs all the validation errors to the [logging system](Logging.md).
 * `AbpValidationException` is automatically caught by the ABP framework and converted to a usable error into with HTTP 400 status code. See the [exception handling](Exception-Handling.md) document for more.
 
+## Advanced Topics
+
+### IObjectValidator
+
+In addition to the automatic validation, you may want to manually validate an object. In this case, [inject](Dependency-Injection.md) and use the `IObjectValidator` service:
+
+* `Validate` method validates the given object based on the validation rules and throws an `AbpValidationException` if it is not in a valid state.
+* `GetErrors` doesn't throw an exception, but only returns the validation errors.
+
+`IObjectValidator` is implemented by the `ObjectValidator` by default. `ObjectValidator` is extensible; you can implement `IObjectValidationContributor` interface to contribute a custom logic. Example:
+
+````csharp
+public class MyObjectValidationContributor
+    : IObjectValidationContributor, ITransientDependency
+{
+    public void AddErrors(ObjectValidationContext context)
+    {
+        //Get the validating object
+        var obj = context.ValidatingObject;
+
+        //Add the validation errors if available
+        context.Errors.Add(...);
+    }
+}
+````
+
+* Remember to register your class to the [DI](Dependency-Injection.md) (implementing `ITransientDependency` does it just like in this example)
+* ABP will automatically discover your class and use on any type of object validation (including automatic method call validation).
+
+### IMethodInvocationValidator
+
+`IMethodInvocationValidator` is used to validate a method call. It internally uses the `IObjectValidator` to validate objects passes to the method call. You normally don't need to this service since it is automatically used by the framework, but you may want to reuse or replace it on your application in rare cases.
+
 ## FluentValidation Integration
 
-Volo.Abp.FluentValidation package integrates the FluentValidation library to the validation system. See the [FluentValidation Integration document](FluentValidation.md) for more.
+Volo.Abp.FluentValidation package integrates the FluentValidation library to the validation system (by implementing the `IObjectValidationContributor`). See the [FluentValidation Integration document](FluentValidation.md) for more.
