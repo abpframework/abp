@@ -29,7 +29,7 @@
     "DisplayName:Surname": "姓",
     "DisplayName:Password": "密码",
     "DisplayName:EmailAddress": "电子邮件地址",
-    "DisplayName:PhoneNumber": "电话号码",
+    "DisplayName:PhoneNumber": "手机号码",
     "PersonalSettings": "个人设置",
     "PersonalSettingsSaved": "个人设置已保存",
     "PasswordChanged": "修改密码",
