@@ -18,6 +18,7 @@ using Volo.Abp.DependencyInjection;
 using Microsoft.CSharp;
 using System.Collections.Generic;
 using System.Linq;
+using static System.String;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -36,246 +37,259 @@ namespace Volo.Abp.Cli.Commands
 
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
-            try
+            var apiUrl = commandLineArgs.Options.GetOrNull(Options.ApiUrl.Short, Options.ApiUrl.Long);
+            var uiFramework = GetUiFramework(commandLineArgs); 
+
+            //WebClient client = new WebClient();
+            //string json = client.DownloadString(apiUrl);
+            var sr = File.OpenText("api-definition.json");
+            var json = sr.ReadToEnd();
+
+            Logger.LogInformation("Downloading api definition...");
+            Logger.LogInformation("Api Url: " + apiUrl);
+
+            var data = JObject.Parse(json);  
+
+            Logger.LogInformation("Modules are combining"); 
+            var moduleList = GetCombinedModules(data);
+                 
+            Logger.LogInformation("Modules and types are creating"); 
+
+            var serviceIndexList = new List<string>();
+            var modelIndexList = new List<string>();
+                 
+            foreach (var module in moduleList)
             {
-                var apiUrl = commandLineArgs.Options.GetOrNull(Options.ApiUrl.Short, Options.ApiUrl.Long);
-                var uiFramework = commandLineArgs.Options.GetOrNull(Options.UiFramework.Short, Options.UiFramework.Long);
+                var moduleValue = JObject.Parse(module.Value); 
 
-                //WebClient client = new WebClient();
-                //string json = client.DownloadString(apiUrl);
-                StreamReader sr = File.OpenText("api-definition.json");
-                string json = sr.ReadToEnd();
+                var rootPath = module.Key;
+                var controllerName = "";
+                var controllerServiceName = "";
 
-                Logger.LogInformation("Downloading api definition...");
-                Logger.LogInformation("Api Url: " + apiUrl);
+                Logger.LogInformation($"{rootPath} directory is creating");
 
-                JObject data = JObject.Parse(json); 
+                Directory.CreateDirectory($"src/app/{rootPath}/shared/models");
+                Directory.CreateDirectory($"src/app/{rootPath}/shared/services");
 
-                var serviceIndexList = new List<string>();
-                var modelIndexList = new List<string>();
+                var serviceFileText = new StringBuilder();
 
-                var moduleList = new Dictionary<string, string>();
+                serviceFileText.AppendLine("[firstTypeList]");
+                serviceFileText.AppendLine("import { Injectable } from '@angular/core';");
+                serviceFileText.AppendLine("import { Observable } from 'rxjs';");
+                serviceFileText.AppendLine("[secondTypeList]");
+                serviceFileText.AppendLine("");
+                serviceFileText.AppendLine("@Injectable()");
+                serviceFileText.AppendLine("export class [controllerName]Service {");
+                serviceFileText.AppendLine("  constructor(private restService: RestService) {}");
+                serviceFileText.AppendLine("");
 
-                foreach (var module in data["modules"])
+                var firstTypeList = new List<string>();
+                var secondTypeList = new List<string>();
+
+                foreach (var controller in moduleValue.Root.ToList().Select(item => item.First))
                 {
-                    string rootPath = ((string)module.First["rootPath"]).ToLower();
+                    controllerName = (string)controller["controllerName"];
+                    controllerServiceName = controllerName.PascalToKebabCase() + ".service.ts"; 
 
-                    if (moduleList.Any(p => p.Key == rootPath))
+                    foreach (var actionItem in controller["actions"])
                     {
-                        var value = moduleList[rootPath];
+                        var action = actionItem.First;
+                        var actionName = (string)action["uniqueName"];
 
-                        moduleList[rootPath] = value.TrimEnd('}') + "," + module.First["controllers"].ToString().TrimStart('{');
-                    }
-                    else {
-                        moduleList.Add(rootPath, module.First["controllers"].ToString());
-                    }                    
-                }
+                        actionName = (char.ToLower(actionName[0]) + actionName.Substring(1)).Replace("Async", "").Replace("Controller", "");
 
+                        var returnValueType = (string)action["returnValue"]["type"];
 
-                foreach (var module in moduleList)
-                {
-                    JObject moduleValue = JObject.Parse(module.Value); 
+                        var parameters = action["parameters"];
+                        var parametersText = new StringBuilder();
+                        var parametersIndex = 0;
+                        var bodyExtra = "";
+                        var modelBindingExtra = "";
+                        var modelBindingExtraList = new List<string>();
 
-                    string rootPath = module.Key;
-                    var controllerName = "";
-                    var controllerServiceName = "";
-
-                    Directory.CreateDirectory(string.Format("src/app/{0}/shared/models", rootPath));
-                    Directory.CreateDirectory(string.Format("src/app/{0}/shared/services", rootPath));
-
-                    StringBuilder serviceFileText = new StringBuilder();
-
-                    serviceFileText.AppendLine("firstTypeList");
-                    serviceFileText.AppendLine("import { Injectable } from '@angular/core';");
-                    serviceFileText.AppendLine("import { Observable } from 'rxjs';");
-                    serviceFileText.AppendLine("secondTypeList");
-                    serviceFileText.AppendLine("");
-                    serviceFileText.AppendLine("@Injectable()");
-                    serviceFileText.AppendLine(string.Format("export class {0}Service ", "[ControllerName]") + "{");
-                    serviceFileText.AppendLine("  constructor(private restService: RestService) {}");
-                    serviceFileText.AppendLine("");
-
-                    var firstTypeList = new List<string>();
-                    var secondTypeList = new List<string>();
-
-                    foreach (var item in moduleValue.Root.ToList())
-                    {
-                        var controller = item.First;
-
-                        controllerName = (string)controller["controllerName"];
-                        controllerServiceName = controllerName.PascalToKebabCase() + ".service.ts"; 
-
-                        foreach (var actionItem in controller["actions"])
+                        foreach (var parameter in parameters)
                         {
-                            var action = actionItem.First;
-                            var actionName = (string)action["uniqueName"];
+                            parametersIndex++;
 
-                            actionName = (char.ToLower(actionName[0]) + actionName.Substring(1)).Replace("Async", "").Replace("Controller", "");
-
-                            var returnValueType = (string)action["returnValue"]["type"];
-
-                            var parameters = action["parameters"];
-                            StringBuilder parametersText = new StringBuilder();
-                            var parametersIndex = 0;
-                            var bodyExtra = "";
-                            var modelBindingExtra = "";
-                            var modelBindingExtraList = new List<string>();
-
-                            foreach (var parameter in parameters)
+                            if (parametersIndex > 1)
                             {
-                                parametersIndex++;
-
-                                if (parametersIndex > 1)
-                                    parametersText.Append(", ");
-
-                                var bindingSourceId = (string)parameter["bindingSourceId"];
-                                bindingSourceId = char.ToLower(bindingSourceId[0]) + bindingSourceId.Substring(1);
-
-                                if (bindingSourceId == "body")
-                                {
-                                    bodyExtra = ", body";
-                                    var typeArray = ((string)parameter["type"]).Split(".");
-                                    var type = typeArray[typeArray.Length - 1];
-
-                                    parametersText.Append(bindingSourceId + ": " + type);
-                                    secondTypeList.Add(type);
-                                }
-                                else if (bindingSourceId == "path")
-                                {
-                                    parametersText.Append((string)parameter["name"] + ": " + (string)parameter["typeSimple"]);
-                                }
-                                else if (bindingSourceId == "modelBinding")
-                                {
-                                    var typeSimple = "";
-                                    var type = "";
-
-                                    var parameterNameOnMethod = (string)parameter["nameOnMethod"];
-
-                                    var parametersOnMethod = action["parametersOnMethod"];
-                                    foreach (var parameterOnMethod in parametersOnMethod)
-                                    {
-                                        var parametersOnMethodName = (string)parameterOnMethod["name"];
-                                        if (parametersOnMethodName == parameterNameOnMethod)
-                                        {
-                                            typeSimple = (string)parameterOnMethod["typeSimple"];
-
-                                            var typeArray = ((string)parameterOnMethod["type"]).Split(".");
-                                            type = typeArray[typeArray.Length - 1];
-                                        }
-                                    }
-
-                                    if (typeSimple == "string" || typeSimple == "boolean" || typeSimple == "number")
-                                    {
-                                        parametersText.Append((string)parameter["name"] + ": " + (string)parameter["typeSimple"]);
-                                        modelBindingExtraList.Add((string)parameter["name"]);
-                                    }
-                                    else
-                                    {
-                                        parametersText.Append(string.Format("params = {{}} as {0}", type));
-                                        modelBindingExtra = ", params";
-                                        secondTypeList.Add(type);
-                                        break;
-                                    }
-                                }
+                                parametersText.Append(", ");
                             }
 
-                            if (returnValueType != null)
+                            var bindingSourceId = (string)parameter["bindingSourceId"];
+                            bindingSourceId = char.ToLower(bindingSourceId[0]) + bindingSourceId.Substring(1);
+
+                            if (bindingSourceId == "body")
                             {
-                                if (returnValueType.IndexOf('<') > -1)
+                                bodyExtra = ", body";
+                                var typeArray = ((string)parameter["type"]).Split(".");
+                                var type = typeArray[typeArray.Length - 1];
+
+                                parametersText.Append(bindingSourceId + ": " + type);
+                                secondTypeList.Add(type);
+                            }
+                            else if (bindingSourceId == "path")
+                            {
+                                parametersText.Append((string)parameter["name"] + ": " + (string)parameter["typeSimple"]);
+                            }
+                            else if (bindingSourceId == "modelBinding")
+                            {
+                                var typeSimple = "";
+                                var type = "";
+
+                                var parameterNameOnMethod = (string)parameter["nameOnMethod"];
+
+                                var parametersOnMethod = action["parametersOnMethod"];
+                                foreach (var parameterOnMethod in parametersOnMethod)
                                 {
-                                    var firstTypeArray = returnValueType.Split("<")[0].Split(".");
-                                    var firstType = firstTypeArray[firstTypeArray.Length - 1];
+                                    var parametersOnMethodName = (string)parameterOnMethod["name"];
+                                    if (parametersOnMethodName == parameterNameOnMethod)
+                                    {
+                                        typeSimple = (string)parameterOnMethod["typeSimple"];
 
-                                    var secondTypeArray = returnValueType.Split("<")[1].Split(".");
-                                    var secondType = secondTypeArray[secondTypeArray.Length - 1].TrimEnd('>');
+                                        var typeArray = ((string)parameterOnMethod["type"]).Split(".");
+                                        type = typeArray[typeArray.Length - 1];
+                                    }
+                                }
 
-                                    serviceFileText.AppendLine(string.Format(" {0}({1}): Observable<{2}<{3}>> {{", actionName, parametersText.ToString(), firstType, secondType));
-
-                                    firstTypeList.Add(firstType);
-                                    secondTypeList.Add(secondType);
+                                if (typeSimple == "string" || typeSimple == "boolean" || typeSimple == "number")
+                                {
+                                    parametersText.Append((string)parameter["name"] + ": " + (string)parameter["typeSimple"]);
+                                    modelBindingExtraList.Add((string)parameter["name"]);
                                 }
                                 else
                                 {
-                                    var typeArray = returnValueType.Split(".");
-                                    var type = typeArray[typeArray.Length - 1].TrimEnd('>');
-
-                                    if (type == "Void")
-                                        type = "void";
-
-                                    serviceFileText.AppendLine(string.Format(" {0}({1}): Observable<{2}> {{", actionName, parametersText.ToString(), type));
+                                    parametersText.Append($"params = {{}} as {type}");
+                                    modelBindingExtra = ", params";
                                     secondTypeList.Add(type);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (returnValueType != null)
+                        {
+                            if (returnValueType.IndexOf('<') > -1)
+                            {
+                                var firstTypeArray = returnValueType.Split("<")[0].Split(".");
+                                var firstType = firstTypeArray[firstTypeArray.Length - 1];
+
+                                var secondTypeArray = returnValueType.Split("<")[1].Split(".");
+                                var secondType = secondTypeArray[secondTypeArray.Length - 1].TrimEnd('>');
+
+                                serviceFileText.AppendLine(
+                                    $" {actionName}({parametersText}): Observable<{firstType}<{secondType}>> {{");
+
+                                firstTypeList.Add(firstType);
+                                secondTypeList.Add(secondType);
+                            }
+                            else
+                            {
+                                var typeArray = returnValueType.Split(".");
+                                var type = typeArray[typeArray.Length - 1].TrimEnd('>');
+
+                                if (type == "Void")
+                                {
+                                    type = "void";
                                 }
 
-                                var modelIndex = CreateType(data, returnValueType, rootPath);
+                                serviceFileText.AppendLine(
+                                    $" {actionName}({parametersText}): Observable<{type}> {{");
 
-                                if (!string.IsNullOrWhiteSpace(modelIndex))
-                                    modelIndexList.Add(modelIndex);
-
+                                secondTypeList.Add(type);
                             }
 
-                            if (modelBindingExtraList != null && modelBindingExtraList.Count > 0)
+                            var modelIndex = CreateType(data, returnValueType, rootPath);
+
+                            if (!IsNullOrWhiteSpace(modelIndex))
                             {
-                                modelBindingExtra = ", params: { " + String.Join(", ", modelBindingExtraList.ToArray()) + " }";
+                                modelIndexList.Add(modelIndex);
                             }
+                        }
 
-                            var url = ((string)action["url"]).Replace("/{", "/${");
-                            var httpMethod = (string)action["httpMethod"];
-                            serviceFileText.AppendLine(string.Format("   return this.restService.request({{ url: '/{0}', method: '{1}'{2}{3} }});", url, httpMethod, bodyExtra, modelBindingExtra));
+                        if (modelBindingExtraList != null && modelBindingExtraList.Count > 0)
+                        {
+                            modelBindingExtra = ", params: { " + Join(", ", modelBindingExtraList.ToArray()) + " }";
+                        }
 
-                            serviceFileText.AppendLine(" }");
-                        } 
+                        var url = ((string)action["url"]).Replace("/{", "/${");
+                        var httpMethod = (string)action["httpMethod"];
+                        serviceFileText.AppendLine(
+                            $"   return this.restService.request({{ url: '/{url}', method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }});");
 
-                        serviceIndexList.Add(controllerServiceName.Replace(".ts", ""));
-                    }
-
-                    if (firstTypeList != null && firstTypeList.Count > 0)
-                    {
-                        var firstTypeListDistinct = ", " + String.Join(", ", firstTypeList.Where(p => p != "void").Distinct().ToArray());
-                        serviceFileText.Replace("firstTypeList", string.Format("import {{ RestService {0}}} from '@abp/ng.core';", firstTypeListDistinct));
-                    }
-                    else
-                    {
-                        serviceFileText.Replace("firstTypeList", "");
-                    }
-
-                    if (secondTypeList != null && secondTypeList.Count > 0)
-                    {
-                        var secondTypeListDistinct = String.Join(", ", secondTypeList.Where(p => p != "void").Distinct().ToArray());
-                        serviceFileText.Replace("secondTypeList", string.Format("import {{{0}}} from '../models';", secondTypeListDistinct));
-                    }
-                    else
-                    {
-                        serviceFileText.Replace("secondTypeList", "");
+                        serviceFileText.AppendLine(" }");
                     } 
 
-                    serviceFileText.AppendLine("}");
-
-                    serviceFileText.Replace("[ControllerName]", controllerName);
-                    System.IO.File.WriteAllText(string.Format("src/app/{0}/shared/services/{1}", rootPath, controllerServiceName), serviceFileText.ToString());
+                    serviceIndexList.Add(controllerServiceName.Replace(".ts", ""));
                 }
 
-                //StringBuilder serviceIndexFileText = new StringBuilder();
+                if (firstTypeList != null && firstTypeList.Count > 0)
+                {
+                    var firstTypeListDistinct = ", " + Join(", ", firstTypeList.Where(p => p != "void").Distinct().ToArray());
+                    serviceFileText.Replace("[firstTypeList]",
+                        $"import {{ RestService {firstTypeListDistinct}}} from '@abp/ng.core';");
+                }
+                else
+                {
+                    serviceFileText.Replace("[firstTypeList]", "");
+                }
 
-                //foreach (var serviceIndexItem in serviceIndexList)
-                //{
-                //    serviceIndexFileText.AppendLine(string.Format("export * from './{0}';", serviceIndexItem));
-                //}
+                if (secondTypeList != null && secondTypeList.Count > 0)
+                {
+                    var secondTypeListDistinct = Join(", ", secondTypeList.Where(p => p != "void").Distinct().ToArray());
+                    serviceFileText.Replace("[secondTypeList]",
+                        $"import {{{secondTypeListDistinct}}} from '../models';");
+                }
+                else
+                {
+                    serviceFileText.Replace("[secondTypeList]", "");
+                } 
 
-                //System.IO.File.WriteAllText(string.Format("src/app/{0}/shared/services/index.ts", rootPath), serviceIndexFileText.ToString());
+                serviceFileText.AppendLine("}");
 
-                //StringBuilder modelIndexFileText = new StringBuilder();
+                serviceFileText.Replace("[controllerName]", controllerName);
+                File.WriteAllText($"src/app/{rootPath}/shared/services/{controllerServiceName}", serviceFileText.ToString());
 
-                //foreach (var modelIndexItem in modelIndexList)
-                //{
-                //    modelIndexFileText.AppendLine(string.Format("export * from './{0}';", modelIndexItem));
-                //}
+                var serviceIndexFileText = new StringBuilder();
 
-                //System.IO.File.WriteAllText(string.Format("src/app/{0}/shared/models/index.ts", rootPath), modelIndexFileText.ToString());
+                foreach (var serviceIndexItem in serviceIndexList)
+                {
+                    serviceIndexFileText.AppendLine($"export * from './{serviceIndexItem}';");
+                }
+
+                File.WriteAllText($"src/app/{rootPath}/shared/services/index.ts", serviceIndexFileText.ToString());
+
+                var modelIndexFileText = new StringBuilder();
+
+                foreach (var modelIndexItem in modelIndexList)
+                {
+                    modelIndexFileText.AppendLine($"export * from './{modelIndexItem}';");
+                }
+
+                File.WriteAllText($"src/app/{rootPath}/shared/models/index.ts", modelIndexFileText.ToString());
             }
-            catch (Exception ex)
+        }
+
+        private Dictionary<string, string> GetCombinedModules(JToken data)
+        {
+            var moduleList = new Dictionary<string, string>();
+            foreach (var module in data["modules"])
             {
-                throw;
+                var rootPath = ((string)module.First["rootPath"]).ToLower();
+
+                if (moduleList.Any(p => p.Key == rootPath))
+                {
+                    var value = moduleList[rootPath];
+
+                    moduleList[rootPath] = value.TrimEnd('}') + "," + module.First["controllers"].ToString().TrimStart('{');
+                }
+                else
+                {
+                    moduleList.Add(rootPath, module.First["controllers"].ToString());
+                }
             }
+
+            return moduleList;
         }
 
         private string CreateType(JObject data, string returnValueType, string rootPath)
@@ -290,59 +304,63 @@ namespace Volo.Abp.Cli.Commands
                  || returnValueType.Contains("IStringValueType")
                  || returnValueType.Contains("IValueValidator")
                  )
+            {
                 return null;
+            }
 
             var typeNameSplit = returnValueType.Split(".");
             var typeName = typeNameSplit[typeNameSplit.Length - 1];
 
             var typeModelName = typeName.Replace("<", "").Replace(">", "").PascalToKebabCase() + ".ts";
 
-            var path = string.Format("src/app/{0}/shared/models/{1}", rootPath, typeModelName);
+            var path = $"src/app/{rootPath}/shared/models/{typeModelName}";
             if (File.Exists(path))
+            {
                 return null;
+            }
 
-
-            StringBuilder modelFileText = new StringBuilder();
-
+            var modelFileText = new StringBuilder(); 
 
             var baseType = (string)type["baseType"];
             var extends = "";
 
-            if (!string.IsNullOrWhiteSpace(baseType) && baseType != "System.Enum")
+            if (!IsNullOrWhiteSpace(baseType) && baseType != "System.Enum")
             {
                 var baseTypeSplit = baseType.Split(".");
                 var baseTypeName = baseTypeSplit[baseTypeSplit.Length - 1].Replace("<", "").Replace(">", "");
                 var baseTypeKebabCase = "./" + baseTypeName.PascalToKebabCase();
 
                 if (baseType.Contains("Volo.Abp.Application.Dtos.EntityDto"))
+                {
                     baseTypeKebabCase = "@abp/ng.core";
+                }
 
                 if (baseTypeName.Contains("guid") || baseTypeName.Contains("Guid"))
+                {
                     baseTypeName = "string";
+                }
 
-                modelFileText.AppendLine(string.Format("import {{ {0} }} from '{1}';", baseTypeName, baseTypeKebabCase));
+                modelFileText.AppendLine($"import {{ {baseTypeName} }} from '{baseTypeKebabCase}';");
                 extends = "extends " + baseTypeName;
             }
 
             if (baseType == "System.Enum" && (string)type.First["isEnum"] == "True")
             {
-                modelFileText.AppendLine(string.Format("export enum {0} {{", typeName));
-
-                var enumDictionary = new Dictionary<string, string>();
+                modelFileText.AppendLine($"export enum {typeName} {{");
 
                 var enumNameList = type.First["enumNames"].ToArray();
                 var enumValueList = type.First["enumValues"].ToArray();
 
-                for (int i = 0; i < enumNameList.Length; i++)
+                for (var i = 0; i < enumNameList.Length; i++)
                 {
-                    modelFileText.AppendLine(string.Format("{0} = {1},", enumNameList[i], enumValueList[i]));
+                    modelFileText.AppendLine($"{enumNameList[i]} = {enumValueList[i]},");
                 }
 
                 modelFileText.AppendLine("}");
             }
             else
             {
-                modelFileText.AppendLine(string.Format("export class {0} {1} {{", typeName, extends));
+                modelFileText.AppendLine($"export class {typeName} {extends} {{");
 
                 foreach (var property in type["properties"])
                 {
@@ -352,7 +370,9 @@ namespace Volo.Abp.Cli.Commands
                     var typeSimple = (string)property["typeSimple"];
 
                     if (typeSimple.IndexOf("[") > -1 && typeSimple.IndexOf("]") > -1)
+                    {
                         typeSimple = typeSimple.Replace("[", "").Replace("]", "") + "[]";
+                    }
 
                     if (typeSimple.StartsWith("Volo.Abp"))
                     {
@@ -382,14 +402,14 @@ namespace Volo.Abp.Cli.Commands
                         typeSimple = "any" + (typeSimple.Contains("[]") ? "[]" : "");
                     }
 
-                    modelFileText.AppendLine(string.Format("  {0}: {1};", propertyName, typeSimple));
+                    modelFileText.AppendLine($"  {propertyName}: {typeSimple};");
                 }
 
                 modelFileText.AppendLine("");
 
-                modelFileText.AppendLine(string.Format("  constructor(initialValues: Partial<{0}> = {{}}) {{", typeName));
+                modelFileText.AppendLine($"  constructor(initialValues: Partial<{typeName}> = {{}}) {{");
 
-                if (!string.IsNullOrWhiteSpace(baseType))
+                if (!IsNullOrWhiteSpace(baseType))
                 {
                     modelFileText.AppendLine("    super(initialValues);");
                     modelFileText.AppendLine("  }");
@@ -410,7 +430,7 @@ namespace Volo.Abp.Cli.Commands
                 modelFileText.AppendLine("}");
             }
 
-            System.IO.File.WriteAllText(string.Format("src/app/{0}/shared/models/{1}", rootPath, typeModelName), modelFileText.ToString());
+            File.WriteAllText($"src/app/{rootPath}/shared/models/{typeModelName}", modelFileText.ToString());
 
             return typeModelName.Replace(".ts", "");
         }
@@ -478,7 +498,7 @@ namespace Volo.Abp.Cli.Commands
     {
         public static string PascalToKebabCase(this string value)
         {
-            if (string.IsNullOrEmpty(value))
+            if (IsNullOrEmpty(value))
                 return value;
 
             return Regex.Replace(
