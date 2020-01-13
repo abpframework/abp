@@ -39,7 +39,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         public async Task Should_Trigger_Middleware_And_AuditLog_Exception_Always()
         {
             _options.IsEnabled = false;
-            _options.AlwaysLogOnException = true;
+            _options.AlwaysLogOnException = false;
             await GetResponseAsync("api/audit-test/audit-fail", System.Net.HttpStatusCode.BadRequest);
             //await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
         }
