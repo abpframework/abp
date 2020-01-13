@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Toaster } from '../../models';
-import { toastInOut } from '../../animations';
+import { Toaster } from '../../models/toaster';
+import { toastInOut } from '../../animations/toast.animations';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({

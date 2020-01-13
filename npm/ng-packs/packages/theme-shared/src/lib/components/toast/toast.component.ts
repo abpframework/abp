@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Toaster } from '../../models';
+import { Toaster } from '../../models/toaster';
 import { ToasterService } from '../../services/toaster.service';
 import { LocalizationService } from '@abp/ng.core';
 import snq from 'snq';
