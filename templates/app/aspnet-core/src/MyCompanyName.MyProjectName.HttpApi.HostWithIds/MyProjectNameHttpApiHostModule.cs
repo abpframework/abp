@@ -36,7 +36,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
         typeof(AbpAccountWebIdentityServerModule),
-        typeof(AbpSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {

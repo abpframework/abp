@@ -30,7 +30,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
         typeof(MyProjectNameApplicationModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
-        typeof(AbpSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {

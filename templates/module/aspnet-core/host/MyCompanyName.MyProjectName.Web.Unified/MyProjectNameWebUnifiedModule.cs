@@ -58,7 +58,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementApplicationModule),
         typeof(AbpTenantManagementEntityFrameworkCoreModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
-        typeof(AbpSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebUnifiedModule : AbpModule
     {

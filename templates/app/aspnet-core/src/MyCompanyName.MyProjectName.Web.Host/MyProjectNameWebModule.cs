@@ -51,7 +51,7 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityWebModule),
         typeof(AbpTenantManagementWebModule),
-        typeof(AbpSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {

@@ -8,7 +8,7 @@ namespace Volo.Abp.AspNetCore.Serilog
         typeof(AbpMultiTenancyModule),
         typeof(AbpAspNetCoreModule)
     )]
-    public class AbpSerilogModule : AbpModule
+    public class AbpAspNetCoreSerilogModule : AbpModule
     {
     }
 }

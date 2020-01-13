@@ -37,7 +37,7 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpAccountApplicationModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
-        typeof(AbpSerilogModule)
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameIdentityServerModule : AbpModule
     {

@@ -13,7 +13,7 @@ namespace Volo.Abp.AspNetCore.App
         typeof(AbpAspNetCoreTestBaseModule),
         typeof(AbpAspNetCoreMvcModule),
         typeof(AbpAspNetCoreMultiTenancyModule),
-        typeof(AbpSerilogModule),
+        typeof(AbpAspNetCoreSerilogModule),
         typeof(AbpAutofacModule)
     )]
     public class AbpSerilogTestModule : AbpModule
