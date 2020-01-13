@@ -42,7 +42,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 }
                 catch (Exception ex)
                 {
-                    await scope.SaveAsync(ex).ConfigureAwait(false);
+                    scope.AddException(ex);
                 }
                 finally
                 {

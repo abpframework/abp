@@ -150,16 +150,13 @@ namespace Volo.Abp.Auditing
                 StopWatch = stopWatch;
             }
 
-            public async Task SaveAsync(Exception exception = null)
+            public async Task SaveAsync()
             {
-                if (exception != null)
-                {
-                    this.AuditLog.Exceptions.Add(exception);
-                }
-                else
-                {
                     await _auditingManager.SaveAsync(this).ConfigureAwait(false);
-                }
+            }
+            public void AddException(Exception exception)
+            {
+                this.AuditLog.Exceptions.Add(exception);
             }
 
             public void Dispose()
