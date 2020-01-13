@@ -218,7 +218,7 @@ namespace MyCompanyName.MyProjectName.Web
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
             app.UseAuditing();
-            app.UseSerilogEnrichers();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

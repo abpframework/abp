@@ -243,7 +243,7 @@ namespace MyCompanyName.MyProjectName.Web
             });
 
             app.UseAuditing();
-            app.UseSerilogEnrichers();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

@@ -139,7 +139,7 @@ namespace MyCompanyName.MyProjectName
 
             app.UseAbpRequestLocalization();
             app.UseAuditing();
-            app.UseSerilogEnrichers();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())

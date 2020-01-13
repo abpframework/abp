@@ -151,7 +151,7 @@ namespace MyCompanyName.MyProjectName
             app.UseAuthorization();
             app.UseAbpRequestLocalization();
             app.UseAuditing();
-            app.UseSerilogEnrichers();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

@@ -4,7 +4,7 @@ namespace Microsoft.AspNetCore.Builder
 {
     public static class AbpAspNetCoreSerilogApplicationBuilderExtensions
     {
-        public static IApplicationBuilder UseSerilogEnrichers(this IApplicationBuilder app)
+        public static IApplicationBuilder UseAbpSerilogEnrichers(this IApplicationBuilder app)
         {
             return app
                 .UseMiddleware<AbpSerilogMiddleware>();

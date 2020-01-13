@@ -251,7 +251,7 @@ namespace MyCompanyName.MyProjectName
             });
 
             app.UseAuditing();
-            app.UseSerilogEnrichers();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

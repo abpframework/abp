@@ -32,7 +32,7 @@ namespace Volo.Abp.AspNetCore.App
             app.UseAuthorization();
             app.UseMultiTenancy();
             app.UseAuditing();
-            app.UseSerilogEnrichers();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }
