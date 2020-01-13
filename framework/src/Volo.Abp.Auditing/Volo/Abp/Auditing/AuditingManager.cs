@@ -152,7 +152,7 @@ namespace Volo.Abp.Auditing
 
             public async Task SaveAsync()
             {
-                    await _auditingManager.SaveAsync(this).ConfigureAwait(false);
+                await _auditingManager.SaveAsync(this).ConfigureAwait(false);
             }
             public void AddException(Exception exception)
             {
