@@ -13,20 +13,20 @@ using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Serilog
 {
-    public class SerilogMiddleware : IMiddleware, ITransientDependency
+    public class AbpSerilogMiddleware : IMiddleware, ITransientDependency
     {
         private readonly ICurrentClient _currentClient;
         private readonly ICurrentTenant _currentTenant;
         private readonly ICurrentUser _currentUser;
         private readonly ICorrelationIdProvider _correlationIdProvider;
-        private readonly AbpAspNetCoreSerilogEnrichersOptions _options;
+        private readonly AbpAspNetCoreSerilogOptions _options;
 
-        public SerilogMiddleware(
+        public AbpSerilogMiddleware(
             ICurrentTenant currentTenant,
             ICurrentUser currentUser,
             ICurrentClient currentClient,
             ICorrelationIdProvider correlationIdProvider,
-            IOptions<AbpAspNetCoreSerilogEnrichersOptions> options)
+            IOptions<AbpAspNetCoreSerilogOptions> options)
         {
             _currentTenant = currentTenant;
             _currentUser = currentUser;
@@ -41,23 +41,23 @@ namespace Volo.Abp.AspNetCore.Serilog
 
             if (_currentTenant?.Id != null)
             {
-                enrichers.Add(new PropertyEnricher(_options.TenantIdEnricherPropertyName, _currentTenant.Id));
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.TenantId, _currentTenant.Id));
             }
 
             if (_currentUser?.Id != null)
             {
-                enrichers.Add(new PropertyEnricher(_options.UserIdEnricherPropertyName, _currentUser.Id));
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.UserId, _currentUser.Id));
             }
 
             if (_currentClient?.Id != null)
             {
-                enrichers.Add(new PropertyEnricher(_options.ClientIdEnricherPropertyName, _currentClient.Id));
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.ClientId, _currentClient.Id));
             }
 
             var correlationId = _correlationIdProvider.Get();
             if (!string.IsNullOrEmpty(correlationId))
             {
-                enrichers.Add(new PropertyEnricher(_options.CorrelationIdPropertyName, correlationId));
+                enrichers.Add(new PropertyEnricher(_options.EnricherPropertyNames.CorrelationId, correlationId));
             }
 
             using (LogContext.Push(enrichers.ToArray()))

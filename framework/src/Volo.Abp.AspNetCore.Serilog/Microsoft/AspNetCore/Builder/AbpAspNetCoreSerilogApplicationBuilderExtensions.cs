@@ -7,7 +7,7 @@ namespace Microsoft.AspNetCore.Builder
         public static IApplicationBuilder UseSerilogEnrichers(this IApplicationBuilder app)
         {
             return app
-                .UseMiddleware<SerilogMiddleware>();
+                .UseMiddleware<AbpSerilogMiddleware>();
         }
     }
 }

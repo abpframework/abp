@@ -22,14 +22,14 @@ namespace Volo.Abp.AspNetCore.Serilog
         private readonly string _testTenantName = "acme";
 
         private readonly AbpAspNetCoreMultiTenancyOptions _tenancyOptions;
-        private readonly AbpAspNetCoreSerilogEnrichersOptions _serilogEnrichersOptions;
+        private readonly AbpAspNetCoreSerilogOptions _serilogOptions;
         private readonly ILogger<Serilog_Enrichers_Tests> _logger;
 
         public Serilog_Enrichers_Tests()
         {
             _tenancyOptions = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
-            _serilogEnrichersOptions =
-                ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreSerilogEnrichersOptions>>().Value;
+            _serilogOptions =
+                ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreSerilogOptions>>().Value;
             _logger = ServiceProvider.GetRequiredService<ILogger<Serilog_Enrichers_Tests>>();
         }
 
@@ -56,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Serilog
             var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
             executedLogEvent.ShouldNotBeNull();
-            executedLogEvent.Properties.ContainsKey(_serilogEnrichersOptions.TenantIdEnricherPropertyName)
+            executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.TenantId)
                 .ShouldBe(false);
         }
 
@@ -71,9 +71,9 @@ namespace Volo.Abp.AspNetCore.Serilog
             var executedLogEvent = GetLogEvent(ExecutedEndpointLogEventText);
 
             executedLogEvent.ShouldNotBeNull();
-            executedLogEvent.Properties.ContainsKey(_serilogEnrichersOptions.TenantIdEnricherPropertyName)
+            executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.TenantId)
                 .ShouldBe(true);
-            ((ScalarValue) executedLogEvent.Properties[_serilogEnrichersOptions.TenantIdEnricherPropertyName]).Value
+            ((ScalarValue) executedLogEvent.Properties[_serilogOptions.EnricherPropertyNames.TenantId]).Value
                 .ShouldBe(_testTenantId);
         }
 
@@ -87,10 +87,10 @@ namespace Volo.Abp.AspNetCore.Serilog
 
             executedLogEvent.ShouldNotBeNull();
 
-            executedLogEvent.Properties.ContainsKey(_serilogEnrichersOptions.CorrelationIdPropertyName)
+            executedLogEvent.Properties.ContainsKey(_serilogOptions.EnricherPropertyNames.CorrelationId)
                 .ShouldNotBeNull();
 
-            ((ScalarValue) executedLogEvent.Properties[_serilogEnrichersOptions.CorrelationIdPropertyName]).Value
+            ((ScalarValue) executedLogEvent.Properties[_serilogOptions.EnricherPropertyNames.CorrelationId]).Value
                 .ShouldBe(result);
         }
     }

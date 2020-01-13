@@ -1,4 +1,3 @@
-using Volo.Abp.AspNetCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
 
