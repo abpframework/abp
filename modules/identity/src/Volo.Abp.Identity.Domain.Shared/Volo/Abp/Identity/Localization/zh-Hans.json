@@ -82,7 +82,7 @@
     "DisplayName:Abp.Identity.Lockout.LockoutDuration": "锁定时间(秒)",
     "DisplayName:Abp.Identity.Lockout.MaxFailedAccessAttempts": "最大失败访问尝试次数",
     "DisplayName:Abp.Identity.SignIn.RequireConfirmedEmail": "要求验证的电子邮箱",
-    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "要求验证的电话号码",
+    "DisplayName:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "要求验证的手机号码",
     "DisplayName:Abp.Identity.User.IsUserNameUpdateEnabled": "启用用户名更新",
     "DisplayName:Abp.Identity.User.IsEmailUpdateEnabled": "启用电子邮箱更新",
     "Description:Abp.Identity.Password.RequiredLength": "密码的最小长度.",
@@ -95,7 +95,7 @@
     "Description:Abp.Identity.Lockout.LockoutDuration": "当锁定发生时用户被的锁定的时间(秒).",
     "Description:Abp.Identity.Lockout.MaxFailedAccessAttempts": "如果启用锁定, 当用户被锁定前失败的访问尝试次数.",
     "Description:Abp.Identity.SignIn.RequireConfirmedEmail": "登录时是否需要验证的电子邮箱.",
-    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "登录时是否需要验证的电话号码.",
+    "Description:Abp.Identity.SignIn.RequireConfirmedPhoneNumber": "登录时是否需要验证的手机号码.",
     "Description:Abp.Identity.User.IsUserNameUpdateEnabled": "是否允许用户更新用户名.",
     "Description:Abp.Identity.User.IsEmailUpdateEnabled": "是否允许用户更新电子邮箱."
 
