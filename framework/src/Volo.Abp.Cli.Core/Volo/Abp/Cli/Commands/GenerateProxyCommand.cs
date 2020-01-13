@@ -53,43 +53,41 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation("Modules are combining"); 
             var moduleList = GetCombinedModules(data);
                  
-            Logger.LogInformation("Modules and types are creating"); 
-
-            var serviceIndexList = new List<string>();
-            var modelIndexList = new List<string>();
+            Logger.LogInformation("Modules and types are creating");  
                  
             foreach (var module in moduleList)
             {
                 var moduleValue = JObject.Parse(module.Value); 
 
                 var rootPath = module.Key;
-                var controllerName = "";
-                var controllerServiceName = "";
 
                 Logger.LogInformation($"{rootPath} directory is creating");
 
                 Directory.CreateDirectory($"src/app/{rootPath}/shared/models");
                 Directory.CreateDirectory($"src/app/{rootPath}/shared/services");
 
-                var serviceFileText = new StringBuilder();
-
-                serviceFileText.AppendLine("[firstTypeList]");
-                serviceFileText.AppendLine("import { Injectable } from '@angular/core';");
-                serviceFileText.AppendLine("import { Observable } from 'rxjs';");
-                serviceFileText.AppendLine("[secondTypeList]");
-                serviceFileText.AppendLine("");
-                serviceFileText.AppendLine("@Injectable()");
-                serviceFileText.AppendLine("export class [controllerName]Service {");
-                serviceFileText.AppendLine("  constructor(private restService: RestService) {}");
-                serviceFileText.AppendLine("");
-
-                var firstTypeList = new List<string>();
-                var secondTypeList = new List<string>();
+                var serviceIndexList = new List<string>();
+                var modelIndexList = new List<string>();
 
                 foreach (var controller in moduleValue.Root.ToList().Select(item => item.First))
                 {
-                    controllerName = (string)controller["controllerName"];
-                    controllerServiceName = controllerName.PascalToKebabCase() + ".service.ts"; 
+                    var serviceFileText = new StringBuilder();
+
+                    serviceFileText.AppendLine("[firstTypeList]");
+                    serviceFileText.AppendLine("import { Injectable } from '@angular/core';");
+                    serviceFileText.AppendLine("import { Observable } from 'rxjs';");
+                    serviceFileText.AppendLine("[secondTypeList]");
+                    serviceFileText.AppendLine("");
+                    serviceFileText.AppendLine("@Injectable()");
+                    serviceFileText.AppendLine("export class [controllerName]Service {");
+                    serviceFileText.AppendLine("  constructor(private restService: RestService) {}");
+                    serviceFileText.AppendLine("");
+
+                    var firstTypeList = new List<string>();
+                    var secondTypeList = new List<string>(); 
+
+                    var controllerName = (string)controller["controllerName"];
+                    var controllerServiceName = controllerName.PascalToKebabCase() + ".service.ts"; 
 
                     foreach (var actionItem in controller["actions"])
                     {
@@ -221,38 +219,38 @@ namespace Volo.Abp.Cli.Commands
                     } 
 
                     serviceIndexList.Add(controllerServiceName.Replace(".ts", ""));
-                }
 
-                if (firstTypeList != null && firstTypeList.Count > 0)
-                {
-                    var firstTypeListDistinct = ", " + Join(", ", firstTypeList.Where(p => p != "void").Distinct().ToArray());
-                    serviceFileText.Replace("[firstTypeList]",
-                        $"import {{ RestService {firstTypeListDistinct}}} from '@abp/ng.core';");
-                }
-                else
-                {
-                    serviceFileText.Replace("[firstTypeList]", "");
-                }
+                    if (firstTypeList != null && firstTypeList.Count > 0)
+                    {
+                        var firstTypeListDistinct = ", " + Join(", ", firstTypeList.Where(p => p != "void").Distinct().ToArray());
+                        serviceFileText.Replace("[firstTypeList]",
+                            $"import {{ RestService {firstTypeListDistinct}}} from '@abp/ng.core';");
+                    }
+                    else
+                    {
+                        serviceFileText.Replace("[firstTypeList]", "");
+                    }
 
-                if (secondTypeList != null && secondTypeList.Count > 0)
-                {
-                    var secondTypeListDistinct = Join(", ", secondTypeList.Where(p => p != "void").Distinct().ToArray());
-                    serviceFileText.Replace("[secondTypeList]",
-                        $"import {{{secondTypeListDistinct}}} from '../models';");
-                }
-                else
-                {
-                    serviceFileText.Replace("[secondTypeList]", "");
+                    if (secondTypeList != null && secondTypeList.Count > 0)
+                    {
+                        var secondTypeListDistinct = Join(", ", secondTypeList.Where(p => p != "void").Distinct().ToArray());
+                        serviceFileText.Replace("[secondTypeList]",
+                            $"import {{{secondTypeListDistinct}}} from '../models';");
+                    }
+                    else
+                    {
+                        serviceFileText.Replace("[secondTypeList]", "");
+                    }
+
+                    serviceFileText.AppendLine("}");
+
+                    serviceFileText.Replace("[controllerName]", controllerName);
+                    File.WriteAllText($"src/app/{rootPath}/shared/services/{controllerServiceName}", serviceFileText.ToString());
                 } 
-
-                serviceFileText.AppendLine("}");
-
-                serviceFileText.Replace("[controllerName]", controllerName);
-                File.WriteAllText($"src/app/{rootPath}/shared/services/{controllerServiceName}", serviceFileText.ToString());
 
                 var serviceIndexFileText = new StringBuilder();
 
-                foreach (var serviceIndexItem in serviceIndexList)
+                foreach (var serviceIndexItem in serviceIndexList.Distinct())
                 {
                     serviceIndexFileText.AppendLine($"export * from './{serviceIndexItem}';");
                 }
@@ -261,7 +259,7 @@ namespace Volo.Abp.Cli.Commands
 
                 var modelIndexFileText = new StringBuilder();
 
-                foreach (var modelIndexItem in modelIndexList)
+                foreach (var modelIndexItem in modelIndexList.Distinct())
                 {
                     modelIndexFileText.AppendLine($"export * from './{modelIndexItem}';");
                 }
