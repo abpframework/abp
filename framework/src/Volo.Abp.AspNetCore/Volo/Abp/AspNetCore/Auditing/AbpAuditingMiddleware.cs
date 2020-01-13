@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 await next(context).ConfigureAwait(false);
                 return;
             }
-
+            bool hasError = false;
             using (var scope = _auditingManager.BeginScope())
             {
                 try
@@ -42,6 +42,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 }
                 catch (Exception)
                 {
+                    hasError = true;
                     if (!Options.HideErrors)
                     {
                         throw;
@@ -49,22 +50,25 @@ namespace Volo.Abp.AspNetCore.Auditing
                 }
                 finally
                 {
-                    await scope.SaveAsync().ConfigureAwait(false);
+                    if (ShouldWriteAuditLog(context, hasError))
+                    {
+                        await scope.SaveAsync().ConfigureAwait(false);
+                    }                    
                 }
             }
         }
 
-        private bool ShouldWriteAuditLog(HttpContext httpContext)
+        private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError = false)
         {
-            if (Options.AlwaysLogOnException)
-            {
-                return true;
-            }
-
             if (!Options.IsEnabled)
             {
                 return false;
             }
+
+            if (Options.AlwaysLogOnException || hasError)
+            {
+                return true;
+            }            
 
             if (!Options.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
             {
