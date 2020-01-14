@@ -3,6 +3,7 @@ using System.IO;
 using System.Net.Http;
 using System.Text;
 using IdentityModel.Client;
+using Volo.Abp.Cli.Auth;
 
 namespace Volo.Abp.Cli.Http
 {
@@ -29,7 +30,7 @@ namespace Volo.Abp.Cli.Http
 
         private static void AddAuthentication(HttpClient client)
         {
-            if (!File.Exists(CliPaths.AccessToken))
+            if (!AuthService.IsLoggedIn())
             {
                 return;
             }
