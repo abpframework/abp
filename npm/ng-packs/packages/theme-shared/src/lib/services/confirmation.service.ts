@@ -50,7 +50,7 @@ export class ConfirmationService {
   ): Observable<Toaster.Status> {
     this.confirmation$.next({
       message,
-      title: title || 'AbpUi:AreYouSure',
+      title,
       severity: severity || 'neutral',
       options,
     });
