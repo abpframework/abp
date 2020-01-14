@@ -140,7 +140,10 @@ namespace Volo.Abp.Identity.MongoDB
         {
             var user = await GetAsync(id, cancellationToken: GetCancellationToken(cancellationToken)).ConfigureAwait(false);
             var organizationUnitIds = user.OrganizationUnits.Select(r => r.OrganizationUnitId);
-            return await DbContext.OrganizationUnits.AsQueryable().Where(ou => organizationUnitIds.Contains(ou.Id)).ToListAsync().ConfigureAwait(false);
+            return await DbContext.OrganizationUnits.AsQueryable()
+                            .Where(ou => organizationUnitIds.Contains(ou.Id))
+                            .ToListAsync(GetCancellationToken(cancellationToken))
+                            .ConfigureAwait(false);
         }
 
         public async Task<long> GetCountAsync(
@@ -155,6 +158,39 @@ namespace Volo.Abp.Identity.MongoDB
                         u.Email.Contains(filter)
                 )
                 .LongCountAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
+        public async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+            Guid organizationUnitId,
+            CancellationToken cancellationToken = default)
+        {
+            var organizationUnitUserIds = await DbContext.Users.AsQueryable()
+                .SelectMany(u => u.OrganizationUnits)
+                .Where(ou => ou.OrganizationUnitId == organizationUnitId)
+                .Select(ouu => ouu.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken))
+                .ConfigureAwait(false);
+
+            return await GetMongoQueryable()
+                     .Where(u => u.OrganizationUnits.Any(uou => organizationUnitUserIds.Contains(uou.Id)))
+                     .ToListAsync(GetCancellationToken(cancellationToken))
+                     .ConfigureAwait(false);
+        }
+
+        public async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+            string code,
+            CancellationToken cancellationToken = default)
+        {
+            var organizationUnitIds = await DbContext.OrganizationUnits.AsQueryable()
+                .Where(ou => ou.Code.StartsWith(code))
+                .Select(ou => ou.Id)
+                .ToListAsync(GetCancellationToken(cancellationToken))
+                .ConfigureAwait(false);
+
+            return await GetMongoQueryable()
+                     .Where(u => u.OrganizationUnits.Any(uou => organizationUnitIds.Contains(uou.OrganizationUnitId)))
+                     .ToListAsync(GetCancellationToken(cancellationToken))
+                     .ConfigureAwait(false);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Volo.Abp.Identity.MongoDB
                     .Where(t => ids.Contains(t.Id)).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
-        public async Task<OrganizationUnit> GetOrganizationUnit(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<OrganizationUnit> GetOrganizationUnitAsync(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await DbContext.OrganizationUnits.AsQueryable()
                     .FirstOrDefaultAsync(

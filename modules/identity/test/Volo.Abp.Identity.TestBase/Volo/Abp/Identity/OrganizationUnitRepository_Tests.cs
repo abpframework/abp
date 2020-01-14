@@ -52,9 +52,9 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
-        public async Task GetOrganizationUnit()
+        public async Task GetOrganizationUnitAsync()
         {
-            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnit("OU111").ConfigureAwait(false);
+            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync("OU111").ConfigureAwait(false);
             organizationUnit.ShouldNotBeNull();
         }
 

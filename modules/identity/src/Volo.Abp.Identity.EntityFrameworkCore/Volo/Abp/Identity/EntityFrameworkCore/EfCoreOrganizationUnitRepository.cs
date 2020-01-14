@@ -42,7 +42,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
-        public async Task<OrganizationUnit> GetOrganizationUnit(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default)
+        public async Task<OrganizationUnit> GetOrganizationUnitAsync(string displayName, bool includeDetails = false, CancellationToken cancellationToken = default)
         {
             return await DbSet
                 .IncludeDetails(includeDetails)

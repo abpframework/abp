@@ -71,6 +71,16 @@ namespace Volo.Abp.Identity
             bool includeDetails = false,
             CancellationToken cancellationToken = default);
 
+        Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+            Guid organizationUnitId,
+            CancellationToken cancellationToken = default
+            );
+
+        Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+            string code,
+            CancellationToken cancellationToken = default
+            );
+
         Task<long> GetCountAsync(
             string filter = null,
             CancellationToken cancellationToken = default

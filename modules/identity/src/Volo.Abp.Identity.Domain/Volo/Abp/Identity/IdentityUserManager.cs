@@ -93,8 +93,8 @@ namespace Volo.Abp.Identity
         public virtual async Task<bool> IsInOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             return await IsInOrganizationUnitAsync(
-                await GetByIdAsync(userId),
-                await _organizationUnitRepository.GetAsync(ouId)
+                await GetByIdAsync(userId).ConfigureAwait(false),
+                await _organizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
                 );
         }
 
@@ -106,8 +106,8 @@ namespace Volo.Abp.Identity
         public virtual async Task AddToOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await AddToOrganizationUnitAsync(
-                await _identityUserRepository.GetAsync(userId, true),
-                await _organizationUnitRepository.GetAsync(ouId)
+                await _identityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
+                await _organizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
                 );
         }
 
@@ -130,8 +130,8 @@ namespace Volo.Abp.Identity
         public virtual async Task RemoveFromOrganizationUnitAsync(Guid userId, Guid ouId)
         {
             await RemoveFromOrganizationUnitAsync(
-                await _identityUserRepository.GetAsync(userId, true),
-                await _organizationUnitRepository.GetAsync(ouId)
+                await _identityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
+                await _organizationUnitRepository.GetAsync(ouId).ConfigureAwait(false)
                 );
         }
 
@@ -145,7 +145,7 @@ namespace Volo.Abp.Identity
         public virtual async Task SetOrganizationUnitsAsync(Guid userId, params Guid[] organizationUnitIds)
         {
             await SetOrganizationUnitsAsync(
-                await _identityUserRepository.GetAsync(userId, true),
+                await _identityUserRepository.GetAsync(userId, true).ConfigureAwait(false),
                 organizationUnitIds
                 );
         }
@@ -164,7 +164,7 @@ namespace Volo.Abp.Identity
             {
                 if (!organizationUnitIds.Contains(currentOu.Id))
                 {
-                    await RemoveFromOrganizationUnitAsync(user.Id, currentOu.Id);
+                    await RemoveFromOrganizationUnitAsync(user.Id, currentOu.Id).ConfigureAwait(false);
                 }
             }
 
@@ -175,7 +175,7 @@ namespace Volo.Abp.Identity
                 {
                     await AddToOrganizationUnitAsync(
                         user,
-                        await _organizationUnitRepository.GetAsync(organizationUnitId)
+                        await _organizationUnitRepository.GetAsync(organizationUnitId).ConfigureAwait(false)
                         );
                 }
             }
@@ -197,7 +197,24 @@ namespace Volo.Abp.Identity
 
             var ouOfUser = user.OrganizationUnits;
 
-            return await _organizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId));
+            return await _organizationUnitRepository.GetListAsync(ouOfUser.Select(t => t.OrganizationUnitId)).ConfigureAwait(false);
+        }
+
+        [UnitOfWork]
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(OrganizationUnit organizationUnit, bool includeChildren = false)
+        {
+            if (includeChildren)
+            {
+                return await _identityUserRepository
+                    .GetUsersInOrganizationUnitWithChildrenAsync(organizationUnit.Code)
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                return await _identityUserRepository
+                    .GetUsersInOrganizationUnitAsync(organizationUnit.Id)
+                    .ConfigureAwait(false);
+            }
         }
     }
 }

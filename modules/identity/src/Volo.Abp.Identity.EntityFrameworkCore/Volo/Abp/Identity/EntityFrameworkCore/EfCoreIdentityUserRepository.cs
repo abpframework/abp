@@ -170,6 +170,32 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
             return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
+            Guid organizationUnitId,
+            CancellationToken cancellationToken = default
+            )
+        {
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in DbSet on userOu.UserId equals user.Id
+                        where userOu.OrganizationUnitId == organizationUnitId
+                        select user;
+            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
+
+        public virtual async Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
+            string code,
+            CancellationToken cancellationToken = default
+            )
+        {
+            var query = from userOu in DbContext.Set<IdentityUserOrganizationUnit>()
+                        join user in DbSet on userOu.UserId equals user.Id
+                        join ou in DbContext.Set<OrganizationUnit>() on userOu.OrganizationUnitId equals ou.Id
+                        where ou.Code.StartsWith(code)
+                        select user;
+            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+        }
+
         public override IQueryable<IdentityUser> WithDetails()
         {
             return GetQueryable().IncludeDetails();

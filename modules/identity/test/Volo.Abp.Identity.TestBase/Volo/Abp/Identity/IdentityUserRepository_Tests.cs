@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Identity.Organizations;
 using Volo.Abp.Modularity;
 using Xunit;
 
@@ -15,11 +16,13 @@ namespace Volo.Abp.Identity
     {
         protected IIdentityUserRepository UserRepository { get; }
         protected ILookupNormalizer LookupNormalizer { get; }
+        protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
 
         protected IdentityUserRepository_Tests()
         {
             UserRepository = ServiceProvider.GetRequiredService<IIdentityUserRepository>();
             LookupNormalizer = ServiceProvider.GetRequiredService<ILookupNormalizer>();
+            OrganizationUnitRepository = ServiceProvider.GetRequiredService<IOrganizationUnitRepository>();
         }
 
         [Fact]
@@ -129,6 +132,22 @@ namespace Volo.Abp.Identity
         }
 
         [Fact]
+        public async Task GetUsersInOrganizationUnitAsync()
+        {
+            var users = await UserRepository.GetUsersInOrganizationUnitAsync((await GetOU("OU111").ConfigureAwait(false)).Id).ConfigureAwait(false);
+            users.ShouldNotBeNull();
+            users.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
+        public async Task GetUsersInOrganizationUnitWithChildrenAsync()
+        {
+            var users = await UserRepository.GetUsersInOrganizationUnitWithChildrenAsync((await GetOU("OU111").ConfigureAwait(false)).Code).ConfigureAwait(false);
+            users.ShouldNotBeNull();
+            users.Count.ShouldBeGreaterThan(0);
+        }
+
+        [Fact]
         public async Task Should_Eager_Load_User_Collections()
         {
             var john = await UserRepository.FindByNormalizedUserNameAsync(LookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
@@ -147,6 +166,13 @@ namespace Volo.Abp.Identity
 
             john.OrganizationUnits.ShouldNotBeNull();
             john.OrganizationUnits.Any().ShouldBeTrue();
+        }
+
+        private async Task<OrganizationUnit> GetOU(string diplayName)
+        {
+            var organizationUnit = await OrganizationUnitRepository.GetOrganizationUnitAsync(diplayName).ConfigureAwait(false);
+            organizationUnit.ShouldNotBeNull();
+            return organizationUnit;
         }
     }
 }
