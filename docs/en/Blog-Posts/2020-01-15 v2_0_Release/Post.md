@@ -10,7 +10,7 @@ In addition to the v2.0 release, we have also announced **ABP Commercial** which
 
 It was planned to release v1.2 after the [v1.1.2](https://github.com/abpframework/abp/releases/tag/1.1.2) release. However, [it is reported](https://github.com/abpframework/abp/issues/2026) that v1.x has some **performance** and **stability** issues on Linux, especially when you deploy your application to **Linux** containers with **low CPU and memory** resources.
 
-We have investigated the problem deeply and have seen that the root cause of the problem was related to the implementation of **intercepting `async ` methods**. Besides, there were some **`async` over `sync`** usages that effected the thread pool optimization.
+We have investigated the problem deeply and have seen that the root cause of the problem was related to the implementation of **intercepting `async` methods**. Besides, there were some **`async` over `sync`** usages that effected the thread pool optimization.
 
 Finally, we **solved all the problems** with the great help of the **community**. But we also had some important **design decisions** which cause some **breaking changes** and we had to change the major version number of the framework because of the **semantic versioning**.
 
@@ -28,7 +28,7 @@ To avoid this problem, we have removed:
 
 - `sync` [repository](https://docs.abp.io/en/abp/latest/Repositories) methods (like `insert`, `update`, etc...),
 - `sync` APIs of the [unit of work](https://docs.abp.io/en/abp/latest/Unit-Of-Work),
-- `sync  ` APIs of the [background jobs](https://docs.abp.io/en/abp/latest/Background-Jobs),
+- `sync` APIs of the [background jobs](https://docs.abp.io/en/abp/latest/Background-Jobs),
 - `sync` APIs of the [audit logging](https://docs.abp.io/en/abp/latest/Audit-Logging),
 - some other rarely used `sync` APIs.
 
