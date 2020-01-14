@@ -25,8 +25,8 @@ import {
         filter: none;
       }
 
-      .ui-table .ui-table-tbody > tr.empty-row > div {
-        margin: 10px;
+      .ui-table .ui-table-tbody > tr.empty-row > div.empty-row-content {
+        padding: 10px;
         text-align: center;
       }
     `,

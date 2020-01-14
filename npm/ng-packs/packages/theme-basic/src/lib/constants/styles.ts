@@ -64,4 +64,8 @@ export default `
 .field-validation-error {
     font-size: 0.8em;
 }
+
+.ui-table .ui-table-tbody > tr.empty-row > div.empty-row-content {
+    border: 1px solid #c8c8c8;
+  }
 `;
