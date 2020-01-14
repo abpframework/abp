@@ -81,8 +81,7 @@ namespace Volo.Abp.Cli.Licensing
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiKeyResult = JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
 
-                if (apiKeyResult == null ||
-                    string.IsNullOrEmpty(apiKeyResult.ApiKey))
+                if (string.IsNullOrEmpty(apiKeyResult?.ApiKey))
                 {
                     _logger.LogError("Couldn't retrieve your NuGet API key!");
                     _logger.LogWarning(File.Exists(CliPaths.AccessToken)
