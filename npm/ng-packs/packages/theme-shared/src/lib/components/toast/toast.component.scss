@@ -45,7 +45,7 @@
   }
   .toast-content {
     position: relative;
-    .close-button {
+    .toast-close-button {
       position: absolute;
       top: 0;
       right: 0;
@@ -53,19 +53,15 @@
       align-items: center;
       justify-content: center;
       margin: 0;
-      padding: 5px 10px 5px 5px;
+      padding: 0px 5px 0 0;
       width: 25px;
       height: 25px;
       border: none;
       border-radius: 50%;
       background: transparent;
+      color: inherit;
       &:focus {
         outline: none;
-      }
-      .close-icon {
-        width: 16px;
-        height: 16px;
-        stroke: #000;
       }
     }
     .toast-title {
@@ -75,6 +71,8 @@
       font-weight: 600;
     }
     .toast-message {
+      margin: 0;
+      padding: 0;
     }
   }
 }
