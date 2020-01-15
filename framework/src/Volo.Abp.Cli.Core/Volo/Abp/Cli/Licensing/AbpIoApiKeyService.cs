@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Polly;
 using Polly.Extensions.Http;
+using Volo.Abp.Cli.Auth;
 using Volo.Abp.Cli.Http;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.DependencyInjection;
@@ -31,6 +32,11 @@ namespace Volo.Abp.Cli.Licensing
 
         public async Task<DeveloperApiKeyResult> GetApiKeyOrNullAsync(bool invalidateCache = false)
         {
+            if (!AuthService.IsLoggedIn())
+            {
+                return null;
+            }
+
             if (invalidateCache)
             {
                 _apiKeyResult = null;
@@ -80,17 +86,6 @@ namespace Volo.Abp.Cli.Licensing
 
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var apiKeyResult = JsonSerializer.Deserialize<DeveloperApiKeyResult>(responseContent);
-
-                if (apiKeyResult == null ||
-                    string.IsNullOrEmpty(apiKeyResult.ApiKey))
-                {
-                    _logger.LogError("Couldn't retrieve your NuGet API key!");
-                    _logger.LogWarning(File.Exists(CliPaths.AccessToken)
-                        ? "Make sure you have an active session and license on commercial.abp.io. To re-sign in you can use the CLI command \"abp login <username>\"."
-                        : "You are not signed in to commercial.abp.io. Use the CLI command \"abp login <username>\" to sign in.");
-
-                    return null;
-                }
 
                 return apiKeyResult;
             }

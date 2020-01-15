@@ -21,6 +21,7 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -55,7 +56,8 @@ namespace MyCompanyName.MyProjectName
         typeof(AbpTenantManagementWebModule),
         typeof(AbpTenantManagementHttpApiClientModule),
         typeof(AbpFeatureManagementHttpApiClientModule),
-        typeof(AbpPermissionManagementHttpApiClientModule)
+        typeof(AbpPermissionManagementHttpApiClientModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebHostModule : AbpModule
     {
@@ -249,7 +251,7 @@ namespace MyCompanyName.MyProjectName
             });
 
             app.UseAuditing();
-
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

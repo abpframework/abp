@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ConfirmationService } from '../../services/confirmation.service';
-import { Confirmation, Toaster } from '../../models';
+import { Confirmation } from '../../models/confirmation';
 import { LocalizationService } from '@abp/ng.core';
+import { Toaster } from '../../models/toaster';
 
 @Component({
   selector: 'abp-confirmation',

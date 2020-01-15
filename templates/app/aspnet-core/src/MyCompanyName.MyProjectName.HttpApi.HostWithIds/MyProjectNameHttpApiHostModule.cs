@@ -18,6 +18,7 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
 using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -34,7 +35,8 @@ namespace MyCompanyName.MyProjectName
         typeof(MyProjectNameEntityFrameworkCoreDbMigrationsModule),
         typeof(AbpAspNetCoreMvcUiBasicThemeModule),
         typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
-        typeof(AbpAccountWebIdentityServerModule)
+        typeof(AbpAccountWebIdentityServerModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameHttpApiHostModule : AbpModule
     {
@@ -172,6 +174,7 @@ namespace MyCompanyName.MyProjectName
             });
 
             app.UseAuditing();
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

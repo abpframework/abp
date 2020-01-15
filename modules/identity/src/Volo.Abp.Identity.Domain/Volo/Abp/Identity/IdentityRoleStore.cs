@@ -165,7 +165,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            role.Name = roleName;
+            role.ChangeName(roleName);
             return Task.CompletedTask;
         }
 

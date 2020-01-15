@@ -32,6 +32,13 @@ namespace Volo.Abp.Cli.Commands
                 return Task.CompletedTask;
             }
 
+            if (!AbpCliOptions.Commands.ContainsKey(commandLineArgs.Target))
+            {
+                Logger.LogWarning($"There is no command named {commandLineArgs.Target}.");
+                Logger.LogInformation(GetUsageInfo());
+                return Task.CompletedTask;
+            }
+
             var commandType = AbpCliOptions.Commands[commandLineArgs.Target];
 
             using (var scope = ServiceScopeFactory.CreateScope())

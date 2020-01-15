@@ -36,9 +36,8 @@ export class SortOrderIconComponent {
   iconClass: string;
 
   get icon(): string {
-    if (!this.selectedSortKey) return 'sorting';
     if (this.selectedSortKey === this.sortKey) return `sorting_${this.order}`;
-    else return '';
+    else return 'sorting';
   }
 
   sort(key: string) {

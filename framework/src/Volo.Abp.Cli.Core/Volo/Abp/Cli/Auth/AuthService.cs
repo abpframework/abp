@@ -45,5 +45,10 @@ namespace Volo.Abp.Cli.Auth
             FileHelper.DeleteIfExists(CliPaths.AccessToken);
             return Task.CompletedTask;
         }
+
+        public static bool IsLoggedIn()
+        {
+            return File.Exists(CliPaths.AccessToken);
+        }
     }
 }

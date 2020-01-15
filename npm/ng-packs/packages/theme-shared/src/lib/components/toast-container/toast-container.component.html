@@ -5,7 +5,7 @@
   [style.bottom]="bottom || 'auto'"
   [style.left]="left || 'auto'"
   [style.display]="toasts.length ? 'flex' : 'none'"
-  [@toastInOut]="toasts.length - 1 || 0"
+  [@toastInOut]="toasts.length"
 >
   <abp-toast [toast]="toast" *ngFor="let toast of toasts; trackBy: trackByFunc"></abp-toast>
 </div>

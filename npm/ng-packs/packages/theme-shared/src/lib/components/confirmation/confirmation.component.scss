@@ -26,7 +26,7 @@
     padding: 0;
     border: none;
     border-radius: 10px;
-    min-width: 450px;
+    width: 450px;
     min-height: 300px;
     background-color: #fff;
     box-shadow: 0 0 10px -5px rgba(#000, 0.5);
@@ -78,7 +78,7 @@
       .message {
         display: block;
         margin: 10px auto;
-        padding: 0;
+        padding: 20px;
         color: #777;
         font-size: 16px;
         font-weight: 400;

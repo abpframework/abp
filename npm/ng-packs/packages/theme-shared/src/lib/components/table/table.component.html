@@ -71,7 +71,7 @@
 
 <ng-template #emptyTemplate>
   <tr class="empty-row" #emptyRow>
-    <div [style.width.px]="emptyRow.offsetWidth">
+    <div class="empty-row-content" [style.width.px]="emptyRow.offsetWidth">
       {{ emptyMessage | abpLocalization }}
     </div>
   </tr>
