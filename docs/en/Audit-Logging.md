@@ -2,9 +2,9 @@
 
 [Wikipedia](https://en.wikipedia.org/wiki/Audit_trail): "*An audit trail (also called **audit log**) is a security-relevant chronological record, set of records, and/or destination and source of records that provide documentary evidence of the sequence of activities that have affected at any time a specific operation, procedure, or event*".
 
-ABP Framework automates the audit logging by convention and provides configuration points to control the level of the audit logs.
+ABP Framework provides an **extensible audit logging system** that automates the audit logging by **convention** and provides **configuration** points to control the level of the audit logs.
 
-An audit log object (see the Audit Log Object section below) is typically created & saved per web request. It includes;
+An **audit log object** (see the Audit Log Object section below) is typically created & saved per web request. It includes;
 
 * **Request & response details** (like URL, Http method, Browser info, HTTP status code... etc.).
 * **Performed actions** (controller actions and application service method calls with their parameters).
@@ -38,7 +38,7 @@ Here, a list of the options you can configure:
 * `ApplicationName`: If multiple applications saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications.
 * `IgnoredTypes`: A list of `Type`s to be ignored for audit logging. If this is an entity type, changes for this type of entities will not be saved. This list is also used while serializing the action parameters.
 * `EntityHistorySelectors`: A list of selectors those are used to determine if an entity type is selected for saving the entity change. See the section below for details.
-* `Contributors`: A list of `AuditLogContributor` implementations. The only pre-built contributor is the `AspNetCoreAuditLogContributor` class which sets the related properties for an HTTP request. You can build your own contributors. See the Audit Log Contributors section below for details.
+* `Contributors`: A list of `AuditLogContributor` implementations. A contributor is a way of extending the audit log system. See the "Audit Log Contributors" section below.
 
 ### Entity History Selectors
 
@@ -83,9 +83,9 @@ The condition `typeof(IEntity).IsAssignableFrom(type)` will be `true` for any cl
 
 `options.EntityHistorySelectors` is a flexible and dynamic way of selecting the entities for audit logging. Another way is to use the `Audited` and `DisableAuditing` attributes per entity.
 
-## Enabling/Disabling Audit Logging for Objects
+## Enabling/Disabling Audit Logging for Services
 
-### Enable/Disable for Controllers & Their Actions
+### Enable/Disable for Controllers & Actions
 
 All the controller actions are logged by default (see `IsEnabledForGetRequests` above for GET requests). 
 
@@ -117,17 +117,17 @@ public class HomeController : AbpController
 }
 ````
 
-### Enable/Disable for Application Services & Their Methods
+### Enable/Disable for Application Services & Methods
 
 [Application service](Application-Services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
 
 #### Enable/Disable for Other Services
 
-Action audit logging can be enabled for any type of services (registered to and resolved from the [dependency injection](Dependency-Injection.md)) while it is only enabled for the controllers and the application services by default.
+Action audit logging can be enabled for any type of class (registered to and resolved from the [dependency injection](Dependency-Injection.md)) while it is only enabled for the controllers and the application services by default.
 
 Use `[Audited]` and `[DisableAuditing]` for any class or method that need to be audit logged. In addition, your class can (directly or inherently) implement the `IAuditingEnabled` interface to enable the audit logging for that class by default.
 
-### Enable/Disable for Entities & Their Properties
+### Enable/Disable for Entities & Properties
 
 An entity is ignored on entity change audit logging in the following cases;
 
@@ -243,7 +243,44 @@ In addition to the standard properties explained above, `AuditLogInfo`, `AuditLo
 
 ## Audit Log Contributors
 
-TODO
+You can extend the auditing system by creating a class that is derived from the `AuditLogContributor` class which defines the `PreContribute` and the `PostContribute` methods.
+
+The only pre-built contributor is the `AspNetCoreAuditLogContributor` class which sets the related properties for an HTTP request.
+
+A contributor can set properties and collections of the `AuditLogInfo` class to add more information.
+
+Example:
+
+````csharp
+public class MyAuditLogContributor : AuditLogContributor
+{
+    public override void PreContribute(AuditLogContributionContext context)
+    {
+        var currentUser = context.ServiceProvider.GetRequiredService<ICurrentUser>();
+        context.AuditInfo.SetProperty(
+            "MyCustomClaimValue",
+            currentUser.FindClaimValue("MyCustomClaim")
+        );
+    }
+
+    public override void PostContribute(AuditLogContributionContext context)
+    {
+        context.AuditInfo.Comments.Add("Some comment...");
+    }
+}
+````
+
+* `context.ServiceProvider` can be used to resolve services from the [dependency injection](Dependency-Injection.md).
+* `context.AuditInfo` can be used to access to the current audit log object to manipulate it.
+
+After creating such a contributor, you must add it to the `AbpAuditingOptions.Contributors` list:
+
+````csharp
+Configure<AbpAuditingOptions>(options =>
+{
+    options.Contributors.Add(new MyAuditLogContributor());
+});
+````
 
 ## The Audit Logging Module
 
