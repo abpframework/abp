@@ -201,7 +201,7 @@ public class MyUser : Entity<Guid>
 
 An **audit log object** is created for each **web request** is by default. An audit log object can be represented by the following relation diagram:
 
-![**auditlog-object-diagram**](D:\Github\abp\docs\en\images\auditlog-object-diagram.png)
+![**auditlog-object-diagram**](images/auditlog-object-diagram.png)
 
 * **AuditLogInfo**: The root object with the following properties:
   * `ApplicationName`: When you save audit logs of different applications to the same database, this property is used to distinguish the logs of the applications.
