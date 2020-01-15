@@ -160,7 +160,7 @@ namespace Volo.Abp.Identity.Organizations
         {
             var currentRoles = ou.Roles;
 
-            if (currentRoles.Any(r => r.Id == role.Id))
+            if (currentRoles.Any(r => r.OrganizationUnitId == ou.Id && r.RoleId == role.Id))
             {
                 return Task.FromResult(0);
             }

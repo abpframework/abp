@@ -7,7 +7,7 @@ namespace Volo.Abp.Identity.Organizations
     /// <summary>
     /// Represents membership of a User to an OU.
     /// </summary>
-    public class OrganizationUnitRole : CreationAuditedEntity<Guid>, IMultiTenant, ISoftDelete
+    public class OrganizationUnitRole : CreationAuditedEntity, IMultiTenant, ISoftDelete
     {
         /// <summary>
         /// TenantId of this entity.
@@ -50,5 +50,9 @@ namespace Volo.Abp.Identity.Organizations
             OrganizationUnitId = organizationUnitId;
         }
 
+        public override object[] GetKeys()
+        {
+            return new object[] { OrganizationUnitId, RoleId };
+        }
     }
 }

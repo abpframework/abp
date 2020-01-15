@@ -117,7 +117,7 @@ namespace Volo.Abp.Identity
             
             var currentOus = user.OrganizationUnits;
 
-            if (currentOus.Any(cou => cou.Id == ou.Id))
+            if (currentOus.Any(cou => cou.OrganizationUnitId == ou.Id && cou.UserId == user.Id))
             {
                 return;
             }

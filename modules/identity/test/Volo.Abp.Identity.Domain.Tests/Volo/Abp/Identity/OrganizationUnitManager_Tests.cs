@@ -93,7 +93,7 @@ namespace Volo.Abp.Identity
             
             //TODO: This method has a bug: add role not work
             ou = await _organizationUnitRepository.GetOrganizationUnitAsync("OU1", includeDetails: true).ConfigureAwait(false);
-            ou.Roles.FirstOrDefault().Id.ShouldBe(adminRole.Id);
+            ou.Roles.FirstOrDefault().RoleId.ShouldBe(adminRole.Id);
         }
 
         [Fact]
