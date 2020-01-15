@@ -26,20 +26,20 @@ namespace Volo.Abp.Application.Services
         [RemoteService(false)]//disable for http api,because of id is a object type,can't bind to url path
         public override async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
         {
-            return await base.UpdateAsync(id, input);
+            return await base.UpdateAsync(id, input).ConfigureAwait(false);
         }
 
         public virtual async Task<TGetOutputDto> UpdateAsync(TUpdateInput input)
         {
             var keys = ObjectMapper.Map<TUpdateInput, TKey>(input);
 
-            return await this.UpdateAsync(keys, input);
+            return await this.UpdateAsync(keys, input).ConfigureAwait(false);
 
         }
 
         public override async Task DeleteAsync(TKey input)//Tkey is a object type,so change name from id to input 
         {
-            await base.DeleteAsync(input);
+            await base.DeleteAsync(input).ConfigureAwait(false);
         }
 
 
