@@ -34,14 +34,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         {
             ValidateLoginInfo(login);
 
-            await ReplaceEmailToUsernameOfInputIfNeeds(login).ConfigureAwait(false);
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
 
             return GetAbpLoginResult(await _signInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
                 login.RememberMe,
                 true
-            ).ConfigureAwait(false));
+            ));
         }
 
         [HttpPost]
@@ -50,16 +50,16 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         {
             ValidateLoginInfo(login);
 
-            await ReplaceEmailToUsernameOfInputIfNeeds(login).ConfigureAwait(false);
+            await ReplaceEmailToUsernameOfInputIfNeeds(login);
 
-            var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress).ConfigureAwait(false);
+            var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
 
             if (identityUser == null)
             {
                 return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
             }
 
-            return GetAbpLoginResult(await _signInManager.CheckPasswordSignInAsync(identityUser, login.Password, true).ConfigureAwait(false));
+            return GetAbpLoginResult(await _signInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
         }
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
@@ -69,13 +69,13 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
                 return;
             }
 
-            var userByUsername = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress).ConfigureAwait(false);
+            var userByUsername = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
             if (userByUsername != null)
             {
                 return;
             }
 
-            var userByEmail = await _userManager.FindByEmailAsync(login.UserNameOrEmailAddress).ConfigureAwait(false);
+            var userByEmail = await _userManager.FindByEmailAsync(login.UserNameOrEmailAddress);
             if (userByEmail == null)
             {
                 return;

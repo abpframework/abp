@@ -20,13 +20,13 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task FindByNormalizedNameAsync()
         {
-            (await apiResourceRepository.FindByNameAsync("NewApiResource2").ConfigureAwait(false)).ShouldNotBeNull();
+            (await apiResourceRepository.FindByNameAsync("NewApiResource2")).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetListByScopesAsync()
         {
-            (await apiResourceRepository.GetListByScopesAsync(new[] { "NewApiResource2", "NewApiResource3" }).ConfigureAwait(false)).Count.ShouldBe(2);
+            (await apiResourceRepository.GetListByScopesAsync(new[] { "NewApiResource2", "NewApiResource3" })).Count.ShouldBe(2);
         }
     }
 }

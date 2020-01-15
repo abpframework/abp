@@ -26,7 +26,7 @@ namespace Volo.Abp.PermissionManagement
 
         public async Task<bool> IsGrantedAsync(string name, string providerName, string providerKey)
         {
-            return (await GetCacheItemAsync(name, providerName, providerKey).ConfigureAwait(false)).IsGranted;
+            return (await GetCacheItemAsync(name, providerName, providerKey)).IsGranted;
         }
 
         protected virtual async Task<PermissionGrantCacheItem> GetCacheItemAsync(string name, string providerName, string providerKey)
@@ -35,7 +35,7 @@ namespace Volo.Abp.PermissionManagement
 
             Logger.LogDebug($"PermissionStore.GetCacheItemAsync: {cacheKey}");
 
-            var cacheItem = await Cache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await Cache.GetAsync(cacheKey);
 
             if (cacheItem != null)
             {
@@ -55,7 +55,7 @@ namespace Volo.Abp.PermissionManagement
             await Cache.SetAsync(
                 cacheKey,
                 cacheItem
-            ).ConfigureAwait(false);
+            );
 
             Logger.LogDebug($"Finished setting the cache item: {cacheKey}");
 

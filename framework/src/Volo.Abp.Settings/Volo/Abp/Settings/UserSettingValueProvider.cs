@@ -24,7 +24,7 @@ namespace Volo.Abp.Settings
                 return null;
             }
 
-            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString()).ConfigureAwait(false);
+            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString());
         }
     }
 }

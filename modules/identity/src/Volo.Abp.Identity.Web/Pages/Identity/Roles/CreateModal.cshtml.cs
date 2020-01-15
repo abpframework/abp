@@ -21,7 +21,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             ValidateModel();
 
             var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleCreateDto>(Role);
-            await _identityRoleAppService.CreateAsync(input).ConfigureAwait(false);
+            await _identityRoleAppService.CreateAsync(input);
 
             return NoContent();
         }

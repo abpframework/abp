@@ -34,16 +34,16 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
             {
                 await WithUnitOfWorkAsync(new AbpUnitOfWorkOptions { IsTransactional = true }, async () =>
                 {
-                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
+                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
                     throw new Exception(exceptionMessage);
-                }).ConfigureAwait(false);
+                });
             }
             catch (Exception e) when (e.Message == exceptionMessage)
             {
 
             }
 
-            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await _personRepository.FindAsync(personId);
             person.ShouldBeNull();
         }
 
@@ -56,12 +56,12 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
             {
                 _unitOfWorkManager.Current.ShouldNotBeNull();
 
-                await _personRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
+                await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
 
-                await _unitOfWorkManager.Current.RollbackAsync().ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await _unitOfWorkManager.Current.RollbackAsync();
+            });
 
-            var person = await _personRepository.FindAsync(personId).ConfigureAwait(false);
+            var person = await _personRepository.FindAsync(personId);
             person.ShouldBeNull();
         }
 
@@ -79,17 +79,17 @@ namespace Volo.Abp.EntityFrameworkCore.Transactions
                 {
                     _unitOfWorkManager.Current.ShouldNotBeNull();
 
-                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42)).ConfigureAwait(false);
-                    await _bookRepository.InsertAsync(new BookInSecondDbContext(bookId, bookId.ToString())).ConfigureAwait(false);
+                    await _personRepository.InsertAsync(new Person(personId, "Adam", 42));
+                    await _bookRepository.InsertAsync(new BookInSecondDbContext(bookId, bookId.ToString()));
 
-                    await _unitOfWorkManager.Current.SaveChangesAsync().ConfigureAwait(false);
+                    await _unitOfWorkManager.Current.SaveChangesAsync();
 
                     //Will automatically rollback since not called the Complete!
                 }
             }
 
-            (await _personRepository.FindAsync(personId).ConfigureAwait(false)).ShouldBeNull();
-            (await _bookRepository.FindAsync(bookId).ConfigureAwait(false)).ShouldBeNull();
+            (await _personRepository.FindAsync(personId)).ShouldBeNull();
+            (await _bookRepository.FindAsync(bookId)).ShouldBeNull();
         }
     }
 }

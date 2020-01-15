@@ -29,7 +29,7 @@ namespace Volo.Abp.PermissionManagement.MongoDB
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey,
                     GetCancellationToken(cancellationToken)
-                ).ConfigureAwait(false);
+                );
         }
 
         public async Task<List<PermissionGrant>> GetListAsync(
@@ -41,7 +41,7 @@ namespace Volo.Abp.PermissionManagement.MongoDB
                 .Where(s =>
                     s.ProviderName == providerName &&
                     s.ProviderKey == providerKey
-                ).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                ).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

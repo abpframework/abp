@@ -21,7 +21,7 @@ namespace Volo.Abp.IdentityServer.Clients
         [Fact]
         public async Task FindClientByIdAsync_Should_Return_Null_If_Not_Found()
         {
-            var persistentGrant = await _persistedGrantStore.GetAsync("not-existing-id").ConfigureAwait(false);
+            var persistentGrant = await _persistedGrantStore.GetAsync("not-existing-id");
             persistentGrant.ShouldBeNull();
         }
 
@@ -29,7 +29,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task FindPersistentGrantByIdAsync_Should_Return_The_PersistentGrant_If_Found()
         {
             //Act
-            var client = await _persistedGrantStore.GetAsync("38").ConfigureAwait(false);
+            var client = await _persistedGrantStore.GetAsync("38");
 
             //Assert
             client.ShouldNotBeNull();
@@ -52,10 +52,10 @@ namespace Volo.Abp.IdentityServer.Clients
                 Data = "TestData-39",
                 Expiration = new DateTime(2018, 1, 6, 21, 22, 23),
                 CreationTime = new DateTime(2018, 1, 5, 19, 20, 21)
-            }).ConfigureAwait(false);
+            });
 
             //Assert
-            var persistedGrant = await _persistedGrantStore.GetAsync("39").ConfigureAwait(false);
+            var persistedGrant = await _persistedGrantStore.GetAsync("39");
             persistedGrant.Key.ShouldBe("39");
             persistedGrant.ClientId.ShouldBe("TestClientId-39");
             persistedGrant.Type.ShouldBe("TestType-39");
@@ -92,10 +92,10 @@ namespace Volo.Abp.IdentityServer.Clients
                 Data = "TestData-PersistedGrantKey1",
                 Expiration = new DateTime(2018, 1, 6, 21, 22, 23),
                 CreationTime = new DateTime(2018, 1, 5, 19, 20, 21)
-            }).ConfigureAwait(false);
+            });
 
             //Assert
-            var persistedGrant = await _persistedGrantStore.GetAsync("PersistedGrantKey1").ConfigureAwait(false);
+            var persistedGrant = await _persistedGrantStore.GetAsync("PersistedGrantKey1");
             persistedGrant.Key.ShouldBe("PersistedGrantKey1");
             persistedGrant.ClientId.ShouldBe("TestClientId-PersistedGrantKey1");
             persistedGrant.Type.ShouldBe("TestType-PersistedGrantKey1");
@@ -122,7 +122,7 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task GetAllAsync_Should_Get_All_PersistedGrants_For_A_Given_SubjectId()
         {
             //Act
-            var persistentGrants = await _persistedGrantStore.GetAllAsync("TestSubject").ConfigureAwait(false);
+            var persistentGrants = await _persistedGrantStore.GetAllAsync("TestSubject");
 
             //Assert
             var persistedGrants = persistentGrants as PersistedGrant[] ?? persistentGrants.ToArray();
@@ -142,13 +142,13 @@ namespace Volo.Abp.IdentityServer.Clients
                 Type = "Type",
                 ClientId = "ClientId",
                 Data = ""
-            }).ConfigureAwait(false);
+            });
 
             //Act
-            await _persistedGrantStore.RemoveAsync("#1P3R").ConfigureAwait(false);
+            await _persistedGrantStore.RemoveAsync("#1P3R");
 
             //Assert
-            var persistedGrant = await _persistedGrantStore.GetAsync("#1P3R").ConfigureAwait(false);
+            var persistedGrant = await _persistedGrantStore.GetAsync("#1P3R");
             persistedGrant.ShouldBe(null);
         }
 
@@ -156,16 +156,16 @@ namespace Volo.Abp.IdentityServer.Clients
         public async Task RemoveAllAsync_Should_RemoveAll_PeristedGrants_For_A_Given_Subject_And_ClientId()
         {
             //Arrange
-            var persistedGrantsWithTestSubjectX = await _persistedGrantStore.GetAllAsync("TestSubject-X").ConfigureAwait(false);
+            var persistedGrantsWithTestSubjectX = await _persistedGrantStore.GetAllAsync("TestSubject-X");
             var persistedGrantsWithTestSubjectXBeforeLength = persistedGrantsWithTestSubjectX.ToArray().Length;
 
             //Act
-            await _persistedGrantStore.RemoveAllAsync("TestSubject-X", "TestClientId-X").ConfigureAwait(false);
+            await _persistedGrantStore.RemoveAllAsync("TestSubject-X", "TestClientId-X");
 
             //Assert
             persistedGrantsWithTestSubjectXBeforeLength.ShouldBe(2);
 
-            var persistedGrants = (await _persistedGrantStore.GetAllAsync("TestClientId-37").ConfigureAwait(false)).ToArray();
+            var persistedGrants = (await _persistedGrantStore.GetAllAsync("TestClientId-37")).ToArray();
             persistedGrants.ShouldNotBe(null);
             persistedGrants.Length.ShouldBe(0);
         }

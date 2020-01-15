@@ -32,29 +32,29 @@ namespace Volo.Abp.TestApp
 
         public async Task BuildAsync()
         {
-            await AddCities().ConfigureAwait(false);
-            await AddPeople().ConfigureAwait(false);
-            await AddEntitiesWithPks().ConfigureAwait(false);
+            await AddCities();
+            await AddPeople();
+            await AddEntitiesWithPks();
         }
 
         private async Task AddCities()
         {
             var istanbul = new City(IstanbulCityId, "Istanbul");
             istanbul.Districts.Add(new District(istanbul.Id, "Bakirkoy", 1283999));
-            istanbul.Districts.Add(new District(istanbul.Id, "Mecidiyeköy", 2222321));
+            istanbul.Districts.Add(new District(istanbul.Id, "Mecidiyekï¿½y", 2222321));
             istanbul.Districts.Add(new District(istanbul.Id, "Uskudar", 726172));
 
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Tokyo")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Madrid")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(LondonCityId, "London") { ExtraProperties = { { "Population", 10_470_000 } } }).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(istanbul).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Paris")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Washington")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Sao Paulo")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Berlin")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Amsterdam")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Beijing")).ConfigureAwait(false);
-            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Rome")).ConfigureAwait(false);
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Tokyo"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Madrid"));
+            await _cityRepository.InsertAsync(new City(LondonCityId, "London") { ExtraProperties = { { "Population", 10_470_000 } } });
+            await _cityRepository.InsertAsync(istanbul);
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Paris"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Washington"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Sao Paulo"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Berlin"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Amsterdam"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Beijing"));
+            await _cityRepository.InsertAsync(new City(Guid.NewGuid(), "Rome"));
         }
 
         private async Task AddPeople()
@@ -63,20 +63,20 @@ namespace Volo.Abp.TestApp
             douglas.Phones.Add(new Phone(douglas.Id, "123456789"));
             douglas.Phones.Add(new Phone(douglas.Id, "123456780", PhoneType.Home));
 
-            await _personRepository.InsertAsync(douglas).ConfigureAwait(false);
+            await _personRepository.InsertAsync(douglas);
 
-            await _personRepository.InsertAsync(new Person(UserJohnDeletedId, "John-Deleted", 33) { IsDeleted = true }).ConfigureAwait(false);
+            await _personRepository.InsertAsync(new Person(UserJohnDeletedId, "John-Deleted", 33) { IsDeleted = true });
 
             var tenant1Person1 = new Person(Guid.NewGuid(), TenantId1 + "-Person1", 42, TenantId1);
             var tenant1Person2 = new Person(Guid.NewGuid(), TenantId1 + "-Person2", 43, TenantId1);
 
-            await _personRepository.InsertAsync(tenant1Person1).ConfigureAwait(false);
-            await _personRepository.InsertAsync(tenant1Person2).ConfigureAwait(false);
+            await _personRepository.InsertAsync(tenant1Person1);
+            await _personRepository.InsertAsync(tenant1Person2);
         }
 
         private async Task AddEntitiesWithPks()
         {
-            await _entityWithIntPksRepository.InsertAsync(new EntityWithIntPk("Entity1")).ConfigureAwait(false);
+            await _entityWithIntPksRepository.InsertAsync(new EntityWithIntPk("Entity1"));
         }
     }
 }

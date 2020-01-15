@@ -24,7 +24,7 @@ namespace Volo.Abp.IdentityServer.Grants
         {
             return await DbSet
                 .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                ;
         }
 
         public async Task<List<PersistedGrant>> GetListBySubjectIdAsync(
@@ -33,8 +33,7 @@ namespace Volo.Abp.IdentityServer.Grants
         {
             return await DbSet
                 .Where(x => x.SubjectId == subjectId)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<PersistedGrant>> GetListByExpirationAsync(
@@ -46,8 +45,7 @@ namespace Volo.Abp.IdentityServer.Grants
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task DeleteAsync(
@@ -58,7 +56,7 @@ namespace Volo.Abp.IdentityServer.Grants
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            ).ConfigureAwait(false);
+            );
         }
 
         public async Task DeleteAsync(
@@ -70,7 +68,7 @@ namespace Volo.Abp.IdentityServer.Grants
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

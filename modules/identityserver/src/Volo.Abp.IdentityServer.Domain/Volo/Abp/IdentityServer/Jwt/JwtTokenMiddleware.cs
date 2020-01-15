@@ -13,14 +13,14 @@ namespace Volo.Abp.IdentityServer.Jwt
             {
                 if (ctx.User.Identity?.IsAuthenticated != true)
                 {
-                    var result = await ctx.AuthenticateAsync(schema).ConfigureAwait(false);
+                    var result = await ctx.AuthenticateAsync(schema);
                     if (result.Succeeded && result.Principal != null)
                     {
                         ctx.User = result.Principal;
                     }
                 }
 
-                await next().ConfigureAwait(false);
+                await next();
             });
         }
     }

@@ -19,18 +19,18 @@ namespace Volo.Abp.Account
 
         public virtual async Task<IdentityUserDto> RegisterAsync(RegisterDto input)
         {
-            await CheckSelfRegistrationAsync().ConfigureAwait(false);
+            await CheckSelfRegistrationAsync();
 
             var user = new IdentityUser(GuidGenerator.Create(), input.UserName, input.EmailAddress, CurrentTenant.Id);
 
-            (await UserManager.CreateAsync(user, input.Password).ConfigureAwait(false)).CheckErrors();
+            (await UserManager.CreateAsync(user, input.Password)).CheckErrors();
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
         {
-            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled).ConfigureAwait(false))
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled))
             {
                 throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
             }

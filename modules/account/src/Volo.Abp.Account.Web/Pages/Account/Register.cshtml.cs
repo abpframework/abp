@@ -23,7 +23,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public virtual async Task OnGet()
         {
-            await CheckSelfRegistrationAsync().ConfigureAwait(false);
+            await CheckSelfRegistrationAsync();
         }
 
         [UnitOfWork] //TODO: Will be removed when we implement action filter
@@ -31,23 +31,23 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             ValidateModel();
 
-            await CheckSelfRegistrationAsync().ConfigureAwait(false);
+            await CheckSelfRegistrationAsync();
 
             var user = new IdentityUser(GuidGenerator.Create(), Input.UserName, Input.EmailAddress, CurrentTenant.Id);
 
-            (await UserManager.CreateAsync(user, Input.Password).ConfigureAwait(false)).CheckErrors();
+            (await UserManager.CreateAsync(user, Input.Password)).CheckErrors();
 
-            await UserManager.SetEmailAsync(user, Input.EmailAddress).ConfigureAwait(false);
+            await UserManager.SetEmailAsync(user, Input.EmailAddress);
 
-            await SignInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
+            await SignInManager.SignInAsync(user, isPersistent: false);
 
             return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
         {
-            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled).ConfigureAwait(false) ||
-                !await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false))
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.IsSelfRegistrationEnabled) ||
+                !await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
             {
                 throw new UserFriendlyException(L["SelfRegistrationDisabledMessage"]);
             }

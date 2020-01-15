@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
         {
-            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken).ConfigureAwait(false);
+            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(IdentityUser), id);
@@ -59,15 +59,15 @@ namespace Volo.Abp.Identity
             Check.NotNull(user, nameof(user));
             Check.NotNull(roleNames, nameof(roleNames));
             
-            var currentRoleNames = await GetRolesAsync(user).ConfigureAwait(false);
+            var currentRoleNames = await GetRolesAsync(user);
 
-            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct()).ConfigureAwait(false);
+            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
             if (!result.Succeeded)
             {
                 return result;
             }
 
-            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct()).ConfigureAwait(false);
+            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct());
             if (!result.Succeeded)
             {
                 return result;
