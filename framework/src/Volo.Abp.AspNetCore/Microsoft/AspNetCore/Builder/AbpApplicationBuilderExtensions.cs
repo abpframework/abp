@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Auditing;
 using Volo.Abp.AspNetCore.ExceptionHandling;
@@ -20,7 +21,20 @@ namespace Microsoft.AspNetCore.Builder
             Check.NotNull(app, nameof(app));
 
             app.ApplicationServices.GetRequiredService<ObjectAccessor<IApplicationBuilder>>().Value = app;
-            app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>().Initialize(app.ApplicationServices);
+            var application = app.ApplicationServices.GetRequiredService<IAbpApplicationWithExternalServiceProvider>();
+            var applicationLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
+
+            applicationLifetime.ApplicationStopping.Register(() =>
+            {
+                application.Shutdown();
+            });
+
+            applicationLifetime.ApplicationStopped.Register(() =>
+            {
+                application.Dispose();
+            });
+
+            application.Initialize(app.ApplicationServices);
         }
 
         public static IApplicationBuilder UseAuditing(this IApplicationBuilder app)
@@ -42,7 +56,8 @@ namespace Microsoft.AspNetCore.Builder
                 .UseMiddleware<AbpCorrelationIdMiddleware>();
         }
 
-        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app, Action<RequestLocalizationOptions> optionsAction = null)
+        public static IApplicationBuilder UseAbpRequestLocalization(this IApplicationBuilder app,
+            Action<RequestLocalizationOptions> optionsAction = null)
         {
             app.ApplicationServices
                 .GetRequiredService<IAbpRequestLocalizationOptionsProvider>()

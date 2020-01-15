@@ -14,9 +14,10 @@
 
         var _dataTable = _$table.DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
-            searching:false,
-            paging:false,
-            info:false,
+            searching: false,
+            processing: true,
+            serverSide: true,
+            paging: true,
             ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
             columnDefs: [
                 {

@@ -22,12 +22,12 @@ namespace Volo.Abp.Users.MongoDB
 
         public virtual async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().Where(u => ids.Contains(u.Id)) .ToListAsync(GetCancellationToken(cancellationToken));
+            return await GetMongoQueryable().Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
     }
 }

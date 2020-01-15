@@ -18,12 +18,12 @@ namespace Volo.Abp.SettingManagement.MongoDB
 
         public async Task<Setting> FindAsync(string name, string providerName, string providerKey)
         {
-            return await GetMongoQueryable().FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey);
+            return await GetMongoQueryable().FirstOrDefaultAsync(s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey).ConfigureAwait(false);
         }
 
         public async Task<List<Setting>> GetListAsync(string providerName, string providerKey)
         {
-            return await GetMongoQueryable().Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey).ToListAsync();
+            return await GetMongoQueryable().Where(s => s.ProviderName == providerName && s.ProviderKey == providerKey).ToListAsync().ConfigureAwait(false);
         }
     }
 }

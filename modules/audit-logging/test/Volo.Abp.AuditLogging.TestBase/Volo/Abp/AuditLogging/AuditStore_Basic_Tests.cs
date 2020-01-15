@@ -64,11 +64,11 @@ namespace Volo.Abp.AuditLogging
             };
 
             //Act
-            await _auditingStore.SaveAsync(auditLog);
+            await _auditingStore.SaveAsync(auditLog).ConfigureAwait(false);
 
             //Assert
 
-            var insertedLog = _auditLogRepository.GetList(true)
+            var insertedLog = (await _auditLogRepository.GetListAsync(true))
                 .FirstOrDefault(al => al.UserId == userId);
 
             insertedLog.ShouldNotBeNull();
@@ -170,14 +170,14 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await _auditingStore.SaveAsync(log1);
-            await _auditingStore.SaveAsync(log2);
+            await _auditingStore.SaveAsync(log1).ConfigureAwait(false);
+            await _auditingStore.SaveAsync(log2).ConfigureAwait(false);
 
-            var allLogsCount = await _auditLogRepository.GetCountAsync();
+            var allLogsCount = await _auditLogRepository.GetCountAsync().ConfigureAwait(false);
 
-            var onlyLog1QueryResult = await _auditLogRepository.GetListAsync(includeDetails: true, userName: "Douglas");
+            var onlyLog1QueryResult = await _auditLogRepository.GetListAsync(includeDetails: true, userName: "Douglas").ConfigureAwait(false);
 
-            var onlyLog2QueryResult = await _auditLogRepository.GetListAsync(includeDetails: true, httpStatusCode: HttpStatusCode.BadGateway);
+            var onlyLog2QueryResult = await _auditLogRepository.GetListAsync(includeDetails: true, httpStatusCode: HttpStatusCode.BadGateway).ConfigureAwait(false);
 
 
             allLogsCount.ShouldBe(2);

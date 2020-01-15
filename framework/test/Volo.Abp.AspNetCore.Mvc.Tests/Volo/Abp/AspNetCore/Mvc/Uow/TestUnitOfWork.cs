@@ -19,12 +19,6 @@ namespace Volo.Abp.AspNetCore.Mvc.Uow
             _config = config;
         }
 
-        public override void Complete()
-        {
-            ThrowExceptionIfRequested();
-            base.Complete();
-        }
-
         public override Task CompleteAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             ThrowExceptionIfRequested();

@@ -174,12 +174,12 @@ public static IQueryable<IdentityUser> IncludeDetails(
 
 * **Do** use the `IncludeDetails` extension method in the repository methods just like used in the example code above (see FindByNormalizedUserNameAsync).
 
-- **Do** override `IncludeDetails` method of the repository for aggregates root which have **sub collections**. Example:
+- **Do** override `WithDetails` method of the repository for aggregates root which have **sub collections**. Example:
 
 ````C#
-protected override IQueryable<IdentityUser> IncludeDetails(IQueryable<IdentityUser> queryable)
+public override IQueryable<IdentityUser> WithDetails()
 {
-    return queryable.IncludeDetails(); //uses the extension method defined above
+    return GetQueryable().IncludeDetails(); // Uses the extension method defined above
 }
 ````
 
@@ -206,4 +206,3 @@ public class AbpIdentityEntityFrameworkCoreModule : AbpModule
     }
 }
 ````
-

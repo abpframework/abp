@@ -21,14 +21,14 @@ namespace Volo.Abp.Threading
                 return;
             }
 
-            using (await _semaphore.LockAsync())
+            using (await _semaphore.LockAsync().ConfigureAwait(false))
             {
                 if (_runBefore)
                 {
                     return;
                 }
 
-                await action();
+                await action().ConfigureAwait(false);
 
                 _runBefore = true;
             }

@@ -22,7 +22,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
         {
             Role = ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(
                 await _identityRoleAppService.GetAsync(id)
-            );
+.ConfigureAwait(false));
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -30,7 +30,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             ValidateModel();
 
             var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleUpdateDto>(Role);
-            await _identityRoleAppService.UpdateAsync(Role.Id, input);
+            await _identityRoleAppService.UpdateAsync(Role.Id, input).ConfigureAwait(false);
 
             return NoContent();
         }

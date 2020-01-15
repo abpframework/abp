@@ -1,14 +1,15 @@
 import { ABP, ConfigState } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, TrackByFunction, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, TrackByFunction, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
   FormBuilder,
+  FormControl,
   FormGroup,
   Validators,
-  FormControl,
 } from '@angular/forms';
+import { PasswordRules, validatePassword } from '@ngx-validate/core';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck, switchMap, take } from 'rxjs/operators';
@@ -16,15 +17,14 @@ import snq from 'snq';
 import {
   CreateUser,
   DeleteUser,
+  GetRoles,
   GetUserById,
   GetUserRoles,
   GetUsers,
   UpdateUser,
-  GetRoles,
 } from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
-import { PasswordRules, validatePassword } from '@ngx-validate/core';
 @Component({
   selector: 'abp-users',
   templateUrl: './users.component.html',
@@ -51,7 +51,7 @@ export class UsersComponent implements OnInit {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {};
+  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
 
   isModalVisible: boolean;
 
@@ -68,6 +68,10 @@ export class UsersComponent implements OnInit {
   requiredPasswordLength = 1;
 
   trackByFn: TrackByFunction<AbstractControl> = (index, item) => Object.keys(item)[0] || index;
+
+  onVisiblePermissionChange = event => {
+    this.visiblePermissions = event;
+  };
 
   get roleGroups(): FormGroup[] {
     return snq(() => (this.form.get('roleNames') as FormArray).controls as FormGroup[], []);
@@ -107,7 +111,7 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  onSearch(value) {
+  onSearch(value: string) {
     this.pageQuery.filter = value;
     this.get();
   }
@@ -140,7 +144,7 @@ export class UsersComponent implements OnInit {
       const passwordValidators = [
         validatePassword(this.passwordRulesArr),
         Validators.minLength(this.requiredPasswordLength),
-        Validators.maxLength(32),
+        Validators.maxLength(128),
       ];
 
       this.form.addControl('password', new FormControl('', [...passwordValidators]));
@@ -222,9 +226,8 @@ export class UsersComponent implements OnInit {
       });
   }
 
-  onPageChange(data) {
-    this.pageQuery.skipCount = data.first;
-    this.pageQuery.maxResultCount = data.rows;
+  onPageChange(page: number) {
+    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
 
     this.get();
   }

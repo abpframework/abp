@@ -41,7 +41,7 @@ namespace Volo.Abp.Cli
         {
             Logger.LogInformation("ABP CLI (https://abp.io)");
 
-            await CheckCliVersionAsync();
+            await CheckCliVersionAsync().ConfigureAwait(false);
 
             var commandLineArgs = CommandLineArgumentParser.Parse(args);
             var commandType = CommandSelector.Select(commandLineArgs);
@@ -52,7 +52,7 @@ namespace Volo.Abp.Cli
 
                 try
                 {
-                    await command.ExecuteAsync(commandLineArgs);
+                    await command.ExecuteAsync(commandLineArgs).ConfigureAwait(false);
                 }
                 catch (CliUsageException usageException)
                 {
@@ -69,14 +69,14 @@ namespace Volo.Abp.Cli
         {
             var assembly = typeof(CliService).Assembly;
             var toolPath = GetToolPath(assembly);
-            var currentCliVersion = await GetCurrentCliVersion(toolPath, assembly);
+            var currentCliVersion = await GetCurrentCliVersion(assembly).ConfigureAwait(false);
             var updateChannel = GetUpdateChannel(currentCliVersion);
 
             Logger.LogInformation($"Version {currentCliVersion} ({updateChannel} channel)");
 
             try
             {
-                var latestVersion = await GetLatestVersion(updateChannel);
+                var latestVersion = await GetLatestVersion(updateChannel).ConfigureAwait(false);
 
                 if (latestVersion != null && latestVersion > currentCliVersion)
                 {
@@ -100,25 +100,24 @@ namespace Volo.Abp.Cli
             return assembly.Location.Substring(0, assembly.Location.IndexOf(".store", StringComparison.Ordinal));
         }
 
-        private async Task<SemanticVersion> GetCurrentCliVersion(string toolPath, Assembly assembly)
+        private static async Task<SemanticVersion> GetCurrentCliVersion(Assembly assembly)
         {
             SemanticVersion currentCliVersion = default;
-            if (!string.IsNullOrEmpty(toolPath))
+
+            var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list -g"));
+            string line;
+            while ((line = await consoleOutput.ReadLineAsync().ConfigureAwait(false)) != null)
             {
-                var consoleOutput = new StringReader(CmdHelper.RunCmdAndGetOutput($"dotnet tool list --tool-path {toolPath}"));
-                string line;
-                while ((line = await consoleOutput.ReadLineAsync()) != null)
+                if (line.StartsWith("volo.abp.cli", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (line.StartsWith("Volo.Abp.Cli", StringComparison.InvariantCultureIgnoreCase))
-                    {
-                        var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
+                    var version = line.Split(new char[0], StringSplitOptions.RemoveEmptyEntries)[1];
 
-                        SemanticVersion.TryParse(version, out currentCliVersion);
+                    SemanticVersion.TryParse(version, out currentCliVersion);
 
-                        break;
-                    }
+                    break;
                 }
             }
+
 
             if (currentCliVersion == null)
             {
@@ -156,13 +155,13 @@ namespace Volo.Abp.Cli
             switch (updateChannel)
             {
                 case UpdateChannel.Stable:
-                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli");
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli").ConfigureAwait(false);
 
                 case UpdateChannel.Prerelease:
-                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includePreviews: true);
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includePreviews: true).ConfigureAwait(false);
 
                 case UpdateChannel.Nightly:
-                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true);
+                    return await NuGetService.GetLatestVersionOrNullAsync("Volo.Abp.Cli", includeNightly: true).ConfigureAwait(false);
 
                 default:
                     return default;

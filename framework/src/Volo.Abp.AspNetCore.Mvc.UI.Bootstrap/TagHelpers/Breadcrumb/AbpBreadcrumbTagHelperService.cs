@@ -12,7 +12,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Breadcrumb
         {
             var list = InitilizeFormGroupContentsContext(context, output);
 
-            await output.GetChildContentAsync();
+            await output.GetChildContentAsync().ConfigureAwait(false);
             
             SetInnerOlTag(context, output);
             SetInnerList(context, output, list);

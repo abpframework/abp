@@ -61,6 +61,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "Options",
+          "path": "Options.md"
+        },
+        {
           "text": "Dependency Injection",
           "path": "Dependency-Injection.md",
           "items": [
@@ -83,7 +87,14 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "Validation"
+          "text": "Validation",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation Integration",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
           "text": "Authorization",
@@ -257,25 +268,46 @@
     },
     {
       "text": "Data Access",
-	    "path": "Data-Access.md",
+      "path": "Data-Access.md",
       "items": [
         {
-          "text": "Entity Framework Core Integration",
-          "path": "Entity-Framework-Core.md",
-          "items": [            
+          "text": "Connection Strings",
+          "path": "Connection-Strings.md"
+        },
+        {
+          "text": "Database Providers",
+          "items": [
             {
-              "text": "PostgreSQL Integration",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "text": "Entity Framework Core",
+              "path": "Entity-Framework-Core.md",
+              "items": [
+                {
+                  "text": "Switch to MySQL",
+                  "path": "Entity-Framework-Core-MySQL.md"
+                },
+                {
+                  "text": "Switch to PostgreSQL",
+                  "path": "Entity-Framework-Core-PostgreSQL.md"
+                },
+                {
+                  "text": "Switch to SQLite",
+                  "path": "Entity-Framework-Core-SQLite.md"
+                },
+                {
+                  "text": "Switch to another DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md"
+                }
+              ]
+            },
+            {
+              "text": "MongoDB",
+              "path": "MongoDB.md"
+            },
+            {
+              "text": "Dapper",
+              "path": "Dapper.md"
             }
           ]
-        },
-        {
-          "text": "MongoDB Integration",
-          "path": "MongoDB.md"
-        },
-        {
-          "text": "Dapper Integration",
-          "path": "Dapper.md"
         }
       ]
     },

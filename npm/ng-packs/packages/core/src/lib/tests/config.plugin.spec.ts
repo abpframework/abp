@@ -10,6 +10,7 @@ import { ABP } from '../models';
 import { ConfigPlugin, NGXS_CONFIG_PLUGIN_OPTIONS } from '../plugins';
 import { ConfigState } from '../states';
 import { addAbpRoutes } from '../utils';
+import { OAuthModule } from 'angular-oauth2-oidc';
 
 addAbpRoutes([
   {
@@ -170,6 +171,7 @@ const expectedState = {
               path: 'users',
               name: 'AbpIdentity::Users',
               order: 1,
+              parentName: 'AbpIdentity::Menu:IdentityManagement',
               requiredPolicy: 'AbpIdentity.Users',
               url: '/identity/users',
             },
@@ -177,6 +179,7 @@ const expectedState = {
               path: 'roles',
               name: 'AbpIdentity::Roles',
               order: 2,
+              parentName: 'AbpIdentity::Menu:IdentityManagement',
               requiredPolicy: 'AbpIdentity.Roles',
               url: '/identity/roles',
             },
@@ -194,6 +197,7 @@ const expectedState = {
               path: 'tenants',
               name: 'AbpTenantManagement::Tenants',
               order: 1,
+              parentName: 'AbpTenantManagement::Menu:TenantManagement',
               requiredPolicy: 'AbpTenantManagement.Tenants',
               url: '/tenant-management/tenants',
             },
@@ -215,6 +219,7 @@ const expectedState = {
           path: 'users',
           name: 'AbpIdentity::Users',
           order: 1,
+          parentName: 'AbpIdentity::Menu:IdentityManagement',
           requiredPolicy: 'AbpIdentity.Users',
           url: '/identity/users',
         },
@@ -222,6 +227,7 @@ const expectedState = {
           path: 'roles',
           name: 'AbpIdentity::Roles',
           order: 2,
+          parentName: 'AbpIdentity::Menu:IdentityManagement',
           requiredPolicy: 'AbpIdentity.Roles',
           url: '/identity/roles',
         },
@@ -232,6 +238,7 @@ const expectedState = {
       path: 'users',
       name: 'AbpIdentity::Users',
       order: 1,
+      parentName: 'AbpIdentity::Menu:IdentityManagement',
       requiredPolicy: 'AbpIdentity.Users',
       url: '/identity/users',
     },
@@ -239,6 +246,7 @@ const expectedState = {
       path: 'roles',
       name: 'AbpIdentity::Roles',
       order: 2,
+      parentName: 'AbpIdentity::Menu:IdentityManagement',
       requiredPolicy: 'AbpIdentity.Roles',
       url: '/identity/roles',
     },
@@ -253,6 +261,7 @@ const expectedState = {
           path: 'tenants',
           name: 'AbpTenantManagement::Tenants',
           order: 1,
+          parentName: 'AbpTenantManagement::Menu:TenantManagement',
           requiredPolicy: 'AbpTenantManagement.Tenants',
           url: '/tenant-management/tenants',
         },
@@ -264,6 +273,7 @@ const expectedState = {
       path: 'tenants',
       name: 'AbpTenantManagement::Tenants',
       order: 1,
+      parentName: 'AbpTenantManagement::Menu:TenantManagement',
       requiredPolicy: 'AbpTenantManagement.Tenants',
       url: '/tenant-management/tenants',
     },
@@ -277,12 +287,14 @@ const expectedState = {
           path: 'login',
           name: 'AbpAccount::Login',
           order: 1,
+          parentName: 'AbpAccount::Menu:Account',
           url: '/account/login',
         },
         {
           path: 'register',
           name: 'AbpAccount::Register',
           order: 2,
+          parentName: 'AbpAccount::Menu:Account',
           url: '/account/register',
         },
       ],
@@ -293,12 +305,14 @@ const expectedState = {
       path: 'login',
       name: 'AbpAccount::Login',
       order: 1,
+      parentName: 'AbpAccount::Menu:Account',
       url: '/account/login',
     },
     {
       path: 'register',
       name: 'AbpAccount::Register',
       order: 2,
+      parentName: 'AbpAccount::Menu:Account',
       url: '/account/register',
     },
   ],
@@ -310,6 +324,7 @@ describe('ConfigPlugin', () => {
     service: ConfigPlugin,
     imports: [
       CoreModule,
+      OAuthModule.forRoot(),
       NgxsModule.forRoot([]),
       RouterTestingModule.withRoutes([
         {

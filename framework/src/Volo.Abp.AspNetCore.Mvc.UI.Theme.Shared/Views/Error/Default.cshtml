@@ -2,8 +2,8 @@
 @using System.Collections.Generic
 @using Localization.Resources.AbpUi
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Pages.Error
-@model AbpErrorPageModel
+@using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Views.Error
+@model AbpErrorViewModel
 @inject IHtmlLocalizer<AbpUiResource> L
     @{
         var errorMessage = Model.ErrorInfo.Message;

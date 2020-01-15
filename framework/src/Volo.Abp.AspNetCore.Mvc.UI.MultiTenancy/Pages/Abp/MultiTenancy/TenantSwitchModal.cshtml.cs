@@ -34,7 +34,7 @@ namespace Pages.Abp.MultiTenancy
 
             if (CurrentTenant.IsAvailable)
             {
-                var tenant = await TenantStore.FindAsync(CurrentTenant.GetId());
+                var tenant = await TenantStore.FindAsync(CurrentTenant.GetId()).ConfigureAwait(false);
                 Input.Name = tenant?.Name;
             }
         }
@@ -47,7 +47,7 @@ namespace Pages.Abp.MultiTenancy
             }
             else
             {
-                var tenant = await TenantStore.FindAsync(Input.Name);
+                var tenant = await TenantStore.FindAsync(Input.Name).ConfigureAwait(false);
                 if (tenant == null)
                 {
                     throw new UserFriendlyException(L["GivenTenantIsNotAvailable", Input.Name]);

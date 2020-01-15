@@ -50,20 +50,10 @@ export class ButtonComponent implements OnInit {
   attributes: ABP.Dictionary<string>;
 
   // tslint:disable
-  /**
-   * @deprecated use abpClick instead
-   */
   @Output() readonly click = new EventEmitter<MouseEvent>();
 
-  /**
-   * @deprecated use abpFocus instead
-   */
-  // tslint:disable-next-line: no-output-native
   @Output() readonly focus = new EventEmitter<FocusEvent>();
 
-  /**
-   * @deprecated use abpBlur instead
-   */
   @Output() readonly blur = new EventEmitter<FocusEvent>();
   // tslint:enable
 

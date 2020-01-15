@@ -3,6 +3,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
@@ -46,5 +47,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
         DbSet<ClientProperty> ClientProperties { get; set; }
 
         DbSet<PersistedGrant> PersistedGrants { get; set; }
+
+        DbSet<DeviceFlowCodes> DeviceFlowCodes { get; set; }
     }
 }

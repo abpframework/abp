@@ -12,24 +12,27 @@ namespace Volo.Abp.MongoDB.Repositories
     public class Repository_Basic_Tests : Repository_Basic_Tests<AbpMongoDbTestModule>
     {
         [Fact]
-        public void Linq_Queries()
+        public async Task Linq_Queries()
         {
-            PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
-
-            PersonRepository.Count().ShouldBeGreaterThan(0);
+            await WithUnitOfWorkAsync(() =>
+            {
+                PersonRepository.FirstOrDefault(p => p.Name == "Douglas").ShouldNotBeNull();
+                PersonRepository.Count().ShouldBeGreaterThan(0);
+                return Task.CompletedTask;
+            }).ConfigureAwait(false);
         }
 
         [Fact]
         public async Task UpdateAsync()
         {
-            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId);
+            var person = await PersonRepository.GetAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
 
             person.ChangeName("Douglas-Updated");
             person.Phones.Add(new Phone(person.Id, "6667778899", PhoneType.Office));
 
-            await PersonRepository.UpdateAsync(person);
+            await PersonRepository.UpdateAsync(person).ConfigureAwait(false);
 
-            person = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId);
+            person = await PersonRepository.FindAsync(TestDataBuilder.UserDouglasId).ConfigureAwait(false);
             person.ShouldNotBeNull();
             person.Name.ShouldBe("Douglas-Updated");
             person.Phones.Count.ShouldBe(3);
@@ -42,9 +45,9 @@ namespace Volo.Abp.MongoDB.Repositories
             var person = new Person(Guid.NewGuid(), "New Person", 35);
             person.Phones.Add(new Phone(person.Id, "1234567890"));
 
-            await PersonRepository.InsertAsync(person);
+            await PersonRepository.InsertAsync(person).ConfigureAwait(false);
 
-            person = await PersonRepository.FindAsync(person.Id);
+            person = await PersonRepository.FindAsync(person.Id).ConfigureAwait(false);
             person.ShouldNotBeNull();
             person.Name.ShouldBe("New Person");
             person.Phones.Count.ShouldBe(1);

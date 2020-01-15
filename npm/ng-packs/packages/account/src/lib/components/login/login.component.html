@@ -1,50 +1,74 @@
-<abp-auth-wrapper [mainContentRef]="mainContentRef" [cancelContentRef]="cancelContentRef">
-  <ng-template #mainContentRef>
-    <h4>{{ 'AbpAccount::Login' | abpLocalization }}</h4>
-    <strong>
-      {{ 'AbpAccount::AreYouANewUser' | abpLocalization }}
-      <a class="text-decoration-none" routerLink="/account/register">{{ 'AbpAccount::Register' | abpLocalization }}</a>
-    </strong>
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" validateOnSubmit class="mt-4">
-      <div class="form-group">
-        <label for="login-input-user-name-or-email-address">{{
-          'AbpAccount::UserNameOrEmailAddress' | abpLocalization
-        }}</label>
-        <input
-          class="form-control"
-          type="text"
-          id="login-input-user-name-or-email-address"
-          formControlName="username"
-          autofocus
-        />
-      </div>
-      <div class="form-group">
-        <label for="login-input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label>
-        <input class="form-control" type="password" id="login-input-password" formControlName="password" />
-      </div>
-      <div class="form-check" validationTarget validationStyle>
-        <label class="form-check-label" for="login-input-remember-me">
-          <input class="form-check-input" type="checkbox" id="login-input-remember-me" formControlName="remember" />
-          {{ 'AbpAccount::RememberMe' | abpLocalization }}
-        </label>
-      </div>
-      <abp-button
-        [loading]="inProgress"
-        buttonType="submit"
-        name="Action"
-        buttonClass="btn-block btn-lg mt-3 btn btn-primary"
-      >
-        {{ 'AbpAccount::Login' | abpLocalization }}
-      </abp-button>
-    </form>
-  </ng-template>
-  <ng-template #cancelContentRef>
-    <div class="card-footer text-center border-0">
-      <a routerLink="/">
-        <button type="button" name="Action" value="Cancel" class="px-2 py-0 btn btn-link">
-          {{ 'AbpAccount::Cancel' | abpLocalization }}
-        </button>
-      </a>
-    </div>
-  </ng-template>
+<abp-auth-wrapper
+  *abpReplaceableTemplate="{
+    componentKey: 'Account.AuthWrapperComponent',
+    inputs: {
+      mainContentRef: { value: mainContentRef },
+      cancelContentRef: { value: cancelContentRef }
+    }
+  }"
+  [mainContentRef]="mainContentRef"
+  [cancelContentRef]="cancelContentRef"
+>
 </abp-auth-wrapper>
+<ng-template #mainContentRef>
+  <h4>{{ 'AbpAccount::Login' | abpLocalization }}</h4>
+  <strong *ngIf="isSelfRegistrationEnabled">
+    {{ 'AbpAccount::AreYouANewUser' | abpLocalization }}
+    <a class="text-decoration-none" routerLink="/account/register">{{
+      'AbpAccount::Register' | abpLocalization
+    }}</a>
+  </strong>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" validateOnSubmit class="mt-4">
+    <div class="form-group">
+      <label for="login-input-user-name-or-email-address">{{
+        'AbpAccount::UserNameOrEmailAddress' | abpLocalization
+      }}</label>
+      <input
+        class="form-control"
+        type="text"
+        id="login-input-user-name-or-email-address"
+        formControlName="username"
+        autocomplete="username"
+        autofocus
+      />
+    </div>
+    <div class="form-group">
+      <label for="login-input-password">{{ 'AbpAccount::Password' | abpLocalization }}</label>
+      <input
+        class="form-control"
+        type="password"
+        id="login-input-password"
+        formControlName="password"
+        autocomplete="current-password"
+      />
+    </div>
+    <div class="form-check" validationTarget validationStyle>
+      <label class="form-check-label" for="login-input-remember-me">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="login-input-remember-me"
+          formControlName="remember"
+        />
+        {{ 'AbpAccount::RememberMe' | abpLocalization }}
+      </label>
+    </div>
+    <abp-button
+      [loading]="inProgress"
+      buttonType="submit"
+      name="Action"
+      buttonClass="btn-block btn-lg mt-3 btn btn-primary"
+    >
+      {{ 'AbpAccount::Login' | abpLocalization }}
+    </abp-button>
+  </form>
+</ng-template>
+<ng-template #cancelContentRef>
+  <div class="card-footer text-center border-0">
+    <a routerLink="/">
+      <button type="button" name="Action" value="Cancel" class="px-2 py-0 btn btn-link">
+        {{ 'AbpAccount::Cancel' | abpLocalization }}
+      </button>
+    </a>
+  </div>
+</ng-template>

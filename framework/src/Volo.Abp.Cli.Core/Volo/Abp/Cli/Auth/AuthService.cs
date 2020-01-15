@@ -35,7 +35,7 @@ namespace Volo.Abp.Cli.Auth
                 configuration["[o]abp-organization-name"] = organizationName;
             }
 
-            var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration);
+            var accessToken = await AuthenticationService.GetAccessTokenAsync(configuration).ConfigureAwait(false);
 
             File.WriteAllText(CliPaths.AccessToken, accessToken, Encoding.UTF8);
         }
@@ -44,6 +44,11 @@ namespace Volo.Abp.Cli.Auth
         {
             FileHelper.DeleteIfExists(CliPaths.AccessToken);
             return Task.CompletedTask;
+        }
+
+        public static bool IsLoggedIn()
+        {
+            return File.Exists(CliPaths.AccessToken);
         }
     }
 }

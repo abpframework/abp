@@ -93,24 +93,24 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TGetOutputDto> GetAsync(TKey id)
         {
-            await CheckGetPolicyAsync();
+            await CheckGetPolicyAsync().ConfigureAwait(false);
 
-            var entity = await GetEntityByIdAsync(id);
+            var entity = await GetEntityByIdAsync(id).ConfigureAwait(false);
             return MapToGetOutputDto(entity);
         }
 
         public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
         {
-            await CheckGetListPolicyAsync();
+            await CheckGetListPolicyAsync().ConfigureAwait(false);
 
             var query = CreateFilteredQuery(input);
 
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
+            var totalCount = await AsyncQueryableExecuter.CountAsync(query).ConfigureAwait(false);
 
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            var entities = await AsyncQueryableExecuter.ToListAsync(query);
+            var entities = await AsyncQueryableExecuter.ToListAsync(query).ConfigureAwait(false);
 
             return new PagedResultDto<TGetListOutputDto>(
                 totalCount,
@@ -120,34 +120,34 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TGetOutputDto> CreateAsync(TCreateInput input)
         {
-            await CheckCreatePolicyAsync();
+            await CheckCreatePolicyAsync().ConfigureAwait(false);
 
             var entity = MapToEntity(input);
 
             TryToSetTenantId(entity);
 
-            await Repository.InsertAsync(entity, autoSave: true);
+            await Repository.InsertAsync(entity, autoSave: true).ConfigureAwait(false);
 
             return MapToGetOutputDto(entity);
         }
 
         public virtual async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
         {
-            await CheckUpdatePolicyAsync();
+            await CheckUpdatePolicyAsync().ConfigureAwait(false);
 
-            var entity = await GetEntityByIdAsync(id);
+            var entity = await GetEntityByIdAsync(id).ConfigureAwait(false);
             //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
             MapToEntity(input, entity);
-            await Repository.UpdateAsync(entity, autoSave: true);
+            await Repository.UpdateAsync(entity, autoSave: true).ConfigureAwait(false);
 
             return MapToGetOutputDto(entity);
         }
 
         public virtual async Task DeleteAsync(TKey id)
         {
-            await CheckDeletePolicyAsync();
+            await CheckDeletePolicyAsync().ConfigureAwait(false);
 
-            await Repository.DeleteAsync(id);
+            await Repository.DeleteAsync(id).ConfigureAwait(false);
         }
 
         protected virtual Task<TEntity> GetEntityByIdAsync(TKey id)
@@ -157,27 +157,27 @@ namespace Volo.Abp.Application.Services
 
         protected virtual async Task CheckGetPolicyAsync()
         {
-            await CheckPolicyAsync(GetPolicyName);
+            await CheckPolicyAsync(GetPolicyName).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckGetListPolicyAsync()
         {
-            await CheckPolicyAsync(GetListPolicyName);
+            await CheckPolicyAsync(GetListPolicyName).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckCreatePolicyAsync()
         {
-            await CheckPolicyAsync(CreatePolicyName);
+            await CheckPolicyAsync(CreatePolicyName).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckUpdatePolicyAsync()
         {
-            await CheckPolicyAsync(UpdatePolicyName);
+            await CheckPolicyAsync(UpdatePolicyName).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckDeletePolicyAsync()
         {
-            await CheckPolicyAsync(DeletePolicyName);
+            await CheckPolicyAsync(DeletePolicyName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -321,10 +321,12 @@ namespace Volo.Abp.Application.Services
 
                 var propertyInfo = entity.GetType().GetProperty(nameof(IMultiTenant.TenantId));
 
-                if (propertyInfo != null && propertyInfo.GetSetMethod() != null)
+                if (propertyInfo == null || propertyInfo.GetSetMethod(true) == null)
                 {
-                    propertyInfo.SetValue(entity, tenantId, null);
+                    return;
                 }
+
+                propertyInfo.SetValue(entity, tenantId);
             }
         }
 

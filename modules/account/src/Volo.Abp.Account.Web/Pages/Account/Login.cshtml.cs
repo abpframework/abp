@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Web.Settings;
+using Volo.Abp.Account.Settings;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -62,7 +62,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         {
             LoginInput = new LoginInputModel();
 
-            var schemes = await _schemeProvider.GetAllSchemesAsync();
+            var schemes = await _schemeProvider.GetAllSchemesAsync().ConfigureAwait(false);
 
             var providers = schemes
                 .Where(x => x.DisplayName != null || x.Name.Equals(_accountOptions.WindowsAuthenticationSchemeName, StringComparison.OrdinalIgnoreCase))
@@ -73,7 +73,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 })
                 .ToList();
 
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
 
             ExternalProviders = providers.ToArray();
 
@@ -89,18 +89,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
+            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
 
             ValidateModel();
 
-            await ReplaceEmailToUsernameOfInputIfNeeds();
+            await ReplaceEmailToUsernameOfInputIfNeeds().ConfigureAwait(false);
 
             var result = await SignInManager.PasswordSignInAsync(
                 LoginInput.UserNameOrEmailAddress,
                 LoginInput.Password,
                 LoginInput.RememberMe,
                 true
-            );
+            ).ConfigureAwait(false);
 
             if (result.RequiresTwoFactor)
             {
@@ -131,8 +131,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
 
             //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
-                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false) ??
+                       await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
 
             Debug.Assert(user != null, nameof(user) + " != null");
 
@@ -163,7 +163,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 return RedirectToPage("./Login");
             }
 
-            var loginInfo = await SignInManager.GetExternalLoginInfoAsync();
+            var loginInfo = await SignInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
             if (loginInfo == null)
             {
                 Logger.LogWarning("External login info is not available");
@@ -175,7 +175,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
                 loginInfo.ProviderKey,
                 isPersistent: false,
                 bypassTwoFactor: true
-            );
+            ).ConfigureAwait(false);
 
             if (result.IsLockedOut)
             {
@@ -190,15 +190,15 @@ namespace Volo.Abp.Account.Web.Pages.Account
             //TODO: Handle other cases for result!
 
             // Get the information about the user from the external login provider
-            var info = await SignInManager.GetExternalLoginInfoAsync();
+            var info = await SignInManager.GetExternalLoginInfoAsync().ConfigureAwait(false);
             if (info == null)
             {
                 throw new ApplicationException("Error loading external login information during confirmation.");
             }
 
-            var user = await CreateExternalUserAsync(info);
+            var user = await CreateExternalUserAsync(info).ConfigureAwait(false);
 
-            await SignInManager.SignInAsync(user, false);
+            await SignInManager.SignInAsync(user, false).ConfigureAwait(false);
             return RedirectSafely(returnUrl, returnUrlHash);
         }
 
@@ -208,27 +208,27 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             var user = new IdentityUser(GuidGenerator.Create(), emailAddress, emailAddress, CurrentTenant.Id);
 
-            CheckIdentityErrors(await UserManager.CreateAsync(user));
-            CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress));
-            CheckIdentityErrors(await UserManager.AddLoginAsync(user, info));
+            CheckIdentityErrors(await UserManager.CreateAsync(user).ConfigureAwait(false));
+            CheckIdentityErrors(await UserManager.SetEmailAsync(user, emailAddress).ConfigureAwait(false));
+            CheckIdentityErrors(await UserManager.AddLoginAsync(user, info).ConfigureAwait(false));
 
             return user;
         }
 
         protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds()
         {
-            if (!ValidationHandler.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress))
+            if (!ValidationHelper.IsValidEmailAddress(LoginInput.UserNameOrEmailAddress))
             {
                 return;
             }
 
-            var userByUsername = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress);
+            var userByUsername = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
             if (userByUsername != null)
             {
                 return;
             }
 
-            var userByEmail = await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+            var userByEmail = await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress).ConfigureAwait(false);
             if (userByEmail == null)
             {
                 return;
