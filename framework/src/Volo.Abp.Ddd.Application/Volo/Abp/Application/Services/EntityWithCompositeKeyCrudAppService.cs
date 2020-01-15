@@ -5,12 +5,11 @@ using Volo.Abp.Domain.Repositories;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class EntityWithCompositeKeyCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
-       : BaseCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
-        IEntityWithCompositeKeyCrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class EntityWithCompositeKeyCrudAppService<TEntity, TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+       : BaseCrudAppService<TEntity, TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>,
+        IEntityWithCompositeKeyCrudAppService<TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
            where TEntity : class, IEntity
         where TGetOutputDto : IEntityDto
-        where TGetListOutputDto : IEntityDto
     {
         protected EntityWithCompositeKeyCrudAppService(IRepository<TEntity> repository)
             : base(repository) { }
@@ -24,21 +23,21 @@ namespace Volo.Abp.Application.Services
             return MapToDto<TGetOutputDto>(entity);
 
         }
-        [RemoteService(false)]//disable for http api
-        public override Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
+        [RemoteService(false)]//disable for http api,because of id is a object type,can't bind to url path
+        public override async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
         {
-            return this.UpdateAsync(input);
+            return await base.UpdateAsync(id, input);
         }
 
         public virtual async Task<TGetOutputDto> UpdateAsync(TUpdateInput input)
         {
             var keys = ObjectMapper.Map<TUpdateInput, TKey>(input);
 
-            return await base.UpdateAsync(keys, input);
+            return await this.UpdateAsync(keys, input);
 
         }
 
-        public override async Task DeleteAsync(TKey input)
+        public override async Task DeleteAsync(TKey input)//Tkey is a object type,so change name from id to input 
         {
             await base.DeleteAsync(input);
         }

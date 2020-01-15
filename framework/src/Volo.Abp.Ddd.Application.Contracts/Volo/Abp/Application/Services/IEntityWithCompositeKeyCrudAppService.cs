@@ -3,10 +3,9 @@ using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Application.Services
 {
-    public interface IEntityWithCompositeKeyCrudAppService<TGetOutputDto, TGetListOutputDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : IBaseCrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public interface IEntityWithCompositeKeyCrudAppService<TGetOutputDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
+        : IBaseCrudAppService<TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TGetOutputDto : IEntityDto
-        where TGetListOutputDto : IEntityDto
     {
         Task<TGetOutputDto> GetFindAsync(TKey key);
 

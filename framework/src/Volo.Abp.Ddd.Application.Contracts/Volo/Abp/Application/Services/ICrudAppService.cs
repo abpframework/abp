@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 
@@ -25,17 +26,17 @@ namespace Volo.Abp.Application.Services
     }
 
     public interface ICrudAppService<TEntityDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : ICrudAppService<TEntityDto, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : IBaseCrudAppService<TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TEntityDto : IEntityDto<TKey>
     {
-
+        Task<TEntityDto> GetAsync(TKey id);
     }
 
+    [Obsolete("This class is obsolete.Use ICrudAppService<TEntity, TEntityDto, TKey, TGetListInput, TCreateInput, TUpdateInput> instead.",false)]
     public interface ICrudAppService<TGetOutputDto, TGetListOutputDto, in TKey, in TGetListInput, in TCreateInput, in TUpdateInput>
-        : IBaseCrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+        : ICrudAppService<TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
         where TGetOutputDto : IEntityDto<TKey>
         where TGetListOutputDto : IEntityDto<TKey>
     {
-        Task<TGetOutputDto> GetAsync(TKey id);
     }
 }

@@ -14,12 +14,11 @@ using Volo.Abp.MultiTenancy;
 
 namespace Volo.Abp.Application.Services
 {
-    public abstract class BaseCrudAppService<TEntity, TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+    public abstract class BaseCrudAppService<TEntity, TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
             : Volo.Abp.Application.Services.ApplicationService,
-            Volo.Abp.Application.Services.IBaseCrudAppService<TGetOutputDto, TGetListOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
+            Volo.Abp.Application.Services.IBaseCrudAppService<TGetOutputDto, TKey, TGetListInput, TCreateInput, TUpdateInput>
             where TEntity : class, IEntity
             where TGetOutputDto : IEntityDto
-            where TGetListOutputDto : IEntityDto
     {
         public IAsyncQueryableExecuter AsyncQueryableExecuter { get; set; }
 
@@ -46,26 +45,13 @@ namespace Volo.Abp.Application.Services
             AsyncQueryableExecuter = DefaultAsyncQueryableExecuter.Instance;
         }
 
-        public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
+        public virtual async Task<PagedResultDto<TGetOutputDto>> GetListAsync(TGetListInput input)
         {
             await CheckGetListPolicyAsync().ConfigureAwait(false);
 
             var result = await PagedAndSortedOperation.ListAsync(
                 input,
                 (x) => CreateFilteredQuery(input),
-                (query, i) => this.ApplySorting(query, input),
-                (query, i) => this.ApplyPaging(query, input));
-
-            return CreatePagedResultDto<TGetListOutputDto>(result);
-        }
-
-        public virtual async Task<PagedResultDto<TGetOutputDto>> GetListWithDetailsAsync(TGetListInput input)
-        {
-            await CheckGetListPolicyAsync().ConfigureAwait(false);
-
-            var result = await PagedAndSortedOperation.ListAsync(
-                input,
-                (x) => ((IRepository<TEntity>)CreateFilteredQuery(input)).WithDetails(),
                 (query, i) => this.ApplySorting(query, input),
                 (query, i) => this.ApplyPaging(query, input));
 
@@ -171,7 +157,7 @@ namespace Volo.Abp.Application.Services
 
         protected virtual IQueryable<TEntity> CreateFilteredQuery(TGetListInput input)
         {
-            return Repository;
+            return Repository.WithDetails();
         }
 
         protected virtual PagedResultDto<TDto> CreatePagedResultDto<TDto>((int TotalCount, System.Collections.Generic.List<TEntity> Entities) queryResult)
