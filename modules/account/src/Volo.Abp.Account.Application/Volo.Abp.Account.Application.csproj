@@ -16,4 +16,8 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.UI.Navigation\Volo.Abp.UI.Navigation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Volo\Abp\Account\Settings\" />
+  </ItemGroup>
+
 </Project>
