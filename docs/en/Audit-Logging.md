@@ -4,15 +4,198 @@
 
 ABP Framework automates the audit logging by convention and provides configuration points to control the level of the audit logs.
 
+An audit log object (see the Audit Log Object section below) is typically created & saved per web request. It includes;
+
+* **Request & response details** (like URL, Http method, Browser info, HTTP status code... etc.).
+* **Performed actions** (controller actions and application service method calls with their parameters).
+* **Entity changes** occurred in the web request.
+* **Exception** information (if there was an error while executing the request).
+* **Request duration** (to measure the performance of the application).
+
+> [Startup templates](Startup-Templates/Index.md) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
+
+## UseAuditing()
+
+`UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](Startup-Templates/Index.md), it is already added.
+
+## AbpAuditingOptions
+
+`AbpAuditingOptions` is the main [options object](Options.md) to configure the audit log system. You can configure it in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+
+````csharp
+Configure<AbpAuditingOptions>(options =>
+{
+    options.IsEnabled = false; //Disables the auditing system
+});
+````
+
+Here, a list of the options you can configure:
+
+* `IsEnabled` (default: `true`): A root switch to enable or disable the auditing system. Other options is not used if this value is `false`.
+* `HideErrors` (default: `true`): Audit log system hides and write regular [logs](Logging.md) if any error occurs while saving the audit log objects. If saving the audit logs is critical for your system, set this to `false` to throw exception in case of hiding the errors.
+* `IsEnabledForAnonymousUsers` (default: `true`): If you want to write audit logs only for the authenticated users, set this to `false`. If you save audit logs for anonymous users, you will see `null` for `UserId` values for these users.
+* `IsEnabledForGetRequests` (default: `false`): HTTP GET requests should not make any change in the database normally and audit log system doesn't save audit log objects for GET request. Set this to `true` to enable it also for the GET requests.
+* `ApplicationName`: If multiple applications saving audit logs into a single database, set this property to your application name, so you can distinguish the logs of different applications.
+* `IgnoredTypes`: A list of `Type`s to be ignored for audit logging. If this is an entity type, changes for this type of entities will not be saved. This list is also used while serializing the action parameters.
+* `EntityHistorySelectors`: A list of selectors those are used to determine if an entity type is selected for saving the entity change. See the section below for details.
+* `Contributors`: A list of `AuditLogContributor` implementations. The only pre-built contributor is the `AspNetCoreAuditLogContributor` class which sets the related properties for an HTTP request. You can build your own contributors. See the Audit Log Contributors section below for details.
+
+### Entity History Selectors
+
+Saving all changes of all your entities would require a lot of database space. For this reason, **audit log system doesn't save any change for the entities unless you explicitly configure it**.
+
+To save all changes of all entities, simply use the `AddAllEntities()` extension method.
+
+````csharp
+Configure<AbpAuditingOptions>(options =>
+{
+    options.EntityHistorySelectors.AddAllEntities();
+});
+````
+
+`options.EntityHistorySelectors` actually a list of type predicate. You can write a lambda expression to define your filter.
+
+The example selector below does the same of the `AddAllEntities()` extension method defined above:
+
+````csharp
+Configure<AbpAuditingOptions>(options =>
+{
+    options.EntityHistorySelectors.Add(
+        new NamedTypeSelector(
+            "MySelectorName",
+            type =>
+            {
+                if (typeof(IEntity).IsAssignableFrom(type))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        )
+    );
+});
+````
+
+The condition `typeof(IEntity).IsAssignableFrom(type)` will be `true` for any class implements the `IEntity` interface (this is technically all the entities in your application). You can conditionally check and return `true` or `false` based on your preference.
+
+`options.EntityHistorySelectors` is a flexible and dynamic way of selecting the entities for audit logging. Another way is to use the `Audited` and `DisableAuditing` attributes per entity.
+
+## Enabling/Disabling Audit Logging for Objects
+
+### Enable/Disable for Controllers & Their Actions
+
+All the controller actions are logged by default (see `IsEnabledForGetRequests` above for GET requests). 
+
+You can use the `[DisableAuditing]` to disable it for a specific controller type:
+
+````csharp
+[DisableAuditing]
+public class HomeController : AbpController
+{
+    //...
+}
+````
+
+Use `[DisableAuditing]` for any action to control it in the action level:
+
+````csharp
+public class HomeController : AbpController
+{
+    [DisableAuditing]
+    public async Task<ActionResult> Home()
+    {
+        //...
+    }
+
+    public async Task<ActionResult> OtherActionLogged()
+    {
+        //...
+    }
+}
+````
+
+### Enable/Disable for Application Services & Their Methods
+
+[Application service](Application-Services.md) method calls also included into the audit log by default. You can use the `[DisableAuditing]` in service or method level.
+
+#### Enable/Disable for Other Services
+
+Action audit logging can be enabled for any type of services (registered to and resolved from the [dependency injection](Dependency-Injection.md)) while it is only enabled for the controllers and the application services by default.
+
+Use `[Audited]` and `[DisableAuditing]` for any class or method that need to be audit logged. In addition, your class can (directly or inherently) implement the `IAuditingEnabled` interface to enable the audit logging for that class by default.
+
+### Enable/Disable for Entities & Their Properties
+
+An entity is ignored on entity change audit logging in the following cases;
+
+* If you add an entity type to the `AbpAuditingOptions.IgnoredTypes` (as explained before), it is completely ignored in the audit logging system.
+* If the object is not an [entity](Entities.md) (not implements `IEntity` directly or inherently - All entities implement this interface by default).
+* If entity type is not public.
+
+Otherwise, you can use `Audited` to enable entity change audit logging for an entity:
+
+````csharp
+[Audited]
+public class MyEntity : Entity<Guid>
+{
+    //...
+}
+````
+
+Or disable it for an entity:
+
+````csharp
+[DisableAuditing]
+public class MyEntity : Entity<Guid>
+{
+    //...
+}
+````
+
+Disabling audit logging can be necessary only if the entity is being selected by the `AbpAuditingOptions.EntityHistorySelectors` that explained before.
+
+You can disable auditing only some properties of your entities for a detailed control over the audit logging:
+
+````csharp
+[Audited]
+public class MyUser : Entity<Guid>
+{
+    public string Name { get; set; }
+        
+    public string Email { get; set; }
+
+    [DisableAuditing] //Ignore the Passoword on audit logging
+    public string Password { get; set; }
+}
+````
+
+Audit log system will save changes for the `MyUser` entity while it ignores the `Password` property which can be dangerous to save for security purposes.
+
+In some cases, you may want to save a few properties but ignore all others. Writing `[DisableAuditing]` for all the other properties would be tedious. In such cases, use `[Audited]` only for the desired properties and mark the entity with the `[DisableAuditing]` attribute:
+
+````csharp
+[DisableAuditing]
+public class MyUser : Entity<Guid>
+{
+    [Audited] //Only log the Name change
+    public string Name { get; set; }
+
+    public string Email { get; set; }
+
+    public string Password { get; set; }
+}
+````
+
 ## IAuditingStore
 
-`IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP Framework.
+`IAuditingStore` is an interface that is used to save the audit log objects (explained below) by the ABP Framework. If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](Dependency-Injection.md).
 
 `SimpleLogAuditingStore` is used if no audit store was registered. It simply writes the audit object to the standard [logging system](Logging.md).
 
-However, [the audit logging module](Modules/Audit-Logging.md) has been configured in [the startup templates](Startup-Templates/Index.md) which writes audit log objects to a database (it supports multiple database providers). So, most of the times you don't care about how `IAuditingStore` was implemented and used.
-
-If you need to save the audit log objects to a custom data store, you can implement the `IAuditingStore` in your own application and replace using the [dependency injection system](Dependency-Injection.md).
+[The Audit Logging Module](Modules/Audit-Logging.md) has been configured in [the startup templates](Startup-Templates/Index.md) saves audit log objects to a database (it supports multiple database providers). So, most of the times you don't care about how `IAuditingStore` was implemented and used.
 
 ## Audit Log Object
 
@@ -58,6 +241,12 @@ An **audit log object** is created for each **web request** is by default. An au
 
 In addition to the standard properties explained above, `AuditLogInfo`, `AuditLogActionInfo` and `EntityChangeInfo` objects implement the `IHasExtraProperties` interface, so you can add custom properties to these objects.
 
-## Audit Logging Module
+## Audit Log Contributors
 
 ...
+
+## The Audit Logging Module
+
+The Audit Logging Module basically implements the `IAuditingStore` to save the audit log objects to a database. It supports multiple database providers. This module is added to the startup templates by default.
+
+See [the Audit Logging Module document](Modules/Audit-Logging.md) for more about it.
