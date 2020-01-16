@@ -73,4 +73,64 @@ export default `
 background-color: rgba(0, 0, 0, 0.6);
 }
 
+.confirmation {
+    .confirmation-backdrop {
+        background: rgba(0, 0, 0, 0.7) !important;
+    }
+    .confirmation-dialog {
+        border: none;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 0 10px -5px rgba(#000, 0.5);
+        .icon-container {
+            .icon {
+                stroke: #fff;
+                color: #fff;
+            }
+            &.info .icon {
+                stroke: #2f96b4;
+                color: #2f96b4;
+            }
+            &.success .icon {
+                stroke: #51a351;
+                color: #51a351;
+            }
+            &.warning .icon {
+                stroke: #f89406;
+                color: #f89406;
+            }
+            &.error .icon {
+                stroke: #bd362f;
+                color: #bd362f;
+            }
+        }
+        .content {
+            .title {
+                color: #222;
+            }
+            .message {
+                color: #777;
+            }
+        }
+        .footer {
+            background: transparent;
+            .confirmation-button {
+                background-color: #eee;
+                color: #777;
+                &:hover, &:focus, &:active {
+                    background-color: #bbb;
+                }
+                &--reject {
+                }
+                &--confirm {
+                    background-color: #2f96b4;
+                    color: #fff;
+                    &:hover {
+                        background-color: #2e819b;
+                    }
+                }
+            }
+        }
+    }
+}
 `;
