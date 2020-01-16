@@ -73,64 +73,56 @@ export default `
 background-color: rgba(0, 0, 0, 0.6);
 }
 
-.confirmation {
-    .confirmation-backdrop {
-        background: rgba(0, 0, 0, 0.7) !important;
-    }
-    .confirmation-dialog {
-        border: none;
-        border-radius: 10px;
-        background-color: #fff;
-        box-shadow: 0 0 10px -5px rgba(#000, 0.5);
-        .icon-container {
-            .icon {
-                stroke: #fff;
-                color: #fff;
-            }
-            &.info .icon {
-                stroke: #2f96b4;
-                color: #2f96b4;
-            }
-            &.success .icon {
-                stroke: #51a351;
-                color: #51a351;
-            }
-            &.warning .icon {
-                stroke: #f89406;
-                color: #f89406;
-            }
-            &.error .icon {
-                stroke: #bd362f;
-                color: #bd362f;
-            }
-        }
-        .content {
-            .title {
-                color: #222;
-            }
-            .message {
-                color: #777;
-            }
-        }
-        .footer {
-            background: transparent;
-            .confirmation-button {
-                background-color: #eee;
-                color: #777;
-                &:hover, &:focus, &:active {
-                    background-color: #bbb;
-                }
-                &--reject {
-                }
-                &--confirm {
-                    background-color: #2f96b4;
-                    color: #fff;
-                    &:hover {
-                        background-color: #2e819b;
-                    }
-                }
-            }
-        }
-    }
+.confirmation .confirmation-backdrop {
+	 background: rgba(0, 0, 0, 0.7) !important;
+}
+ .confirmation .confirmation-dialog {
+	 border: none;
+	 border-radius: 10px;
+	 background-color: #fff;
+	 box-shadow: 0 0 10px -5px rgba(0, 0, 0, 0.5);
+}
+ .confirmation .confirmation-dialog .icon-container .icon {
+	 stroke: #fff;
+	 color: #fff;
+}
+ .confirmation .confirmation-dialog .icon-container.info .icon {
+	 stroke: #2f96b4;
+	 color: #2f96b4;
+}
+ .confirmation .confirmation-dialog .icon-container.success .icon {
+	 stroke: #51a351;
+	 color: #51a351;
+}
+ .confirmation .confirmation-dialog .icon-container.warning .icon {
+	 stroke: #f89406;
+	 color: #f89406;
+}
+ .confirmation .confirmation-dialog .icon-container.error .icon {
+	 stroke: #bd362f;
+	 color: #bd362f;
+}
+ .confirmation .confirmation-dialog .content .title {
+	 color: #222;
+}
+ .confirmation .confirmation-dialog .content .message {
+	 color: #777;
+}
+ .confirmation .confirmation-dialog .footer {
+	 background: transparent;
+}
+ .confirmation .confirmation-dialog .footer .confirmation-button {
+	 background-color: #eee;
+	 color: #777;
+}
+ .confirmation .confirmation-dialog .footer .confirmation-button:hover, .confirmation .confirmation-dialog .footer .confirmation-button:focus, .confirmation .confirmation-dialog .footer .confirmation-button:active {
+	 background-color: #bbb;
+}
+ .confirmation .confirmation-dialog .footer .confirmation-button--confirm {
+	 background-color: #2f96b4;
+	 color: #fff;
+}
+ .confirmation .confirmation-dialog .footer .confirmation-button--confirm:hover {
+	 background-color: #2e819b;
 }
 `;
