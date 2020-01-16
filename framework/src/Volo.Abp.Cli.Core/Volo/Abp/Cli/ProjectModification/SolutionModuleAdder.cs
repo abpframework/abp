@@ -106,6 +106,11 @@ namespace Volo.Abp.Cli.ProjectModification
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(startupProject))
+            {
+                startupProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrator.csproj"));
+            }
+
             var dbMigrationsProject = projectFiles.FirstOrDefault(p => p.EndsWith(".DbMigrations.csproj"));
             
             if (dbMigrationsProject == null)
