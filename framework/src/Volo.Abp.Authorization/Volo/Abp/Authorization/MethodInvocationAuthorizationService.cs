@@ -64,7 +64,18 @@ namespace Volo.Abp.Authorization
 
         protected async Task CheckAsync(IAuthorizeData authorizationAttribute)
         {
-            if (authorizationAttribute.Policy == null)
+            if (authorizationAttribute.Policy != null)
+            {
+                await _authorizationService.CheckAsync(authorizationAttribute.Policy).ConfigureAwait(false);
+            }
+            else if (authorizationAttribute.Roles != null)
+            {
+                if(_currentUser.IsInRole(authorizationAttribute.Roles) == false)
+                {
+                    throw new AbpAuthorizationException("Authorization failed! Given roles has not granted: " + authorizationAttribute.Roles);
+                }
+            }
+            else
             {
                 //TODO: Can we find a better, unified, way of checking if current request has been authenticated
                 if (!_currentUser.IsAuthenticated && !_currentClient.IsAuthenticated)
@@ -72,12 +83,7 @@ namespace Volo.Abp.Authorization
                     throw new AbpAuthorizationException("Authorization failed! User has not logged in.");
                 }
             }
-            else
-            {
-                await _authorizationService.CheckAsync(authorizationAttribute.Policy).ConfigureAwait(false);
-            }
 
-            //TODO: What about roles and other props?
         }
     }
 }
