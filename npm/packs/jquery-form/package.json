@@ -1,12 +1,12 @@
 {
-  "version": "1.1.1",
+  "version": "2.0.0",
   "name": "@abp/jquery-form",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@abp/jquery": "^1.1.1",
+    "@abp/jquery": "^2.0.0",
     "jquery-form": "^4.2.2"
   },
-  "gitHead": "b926d7a3fed6365550493ec00bdfe9da9dd6c541"
+  "gitHead": "407ad749bb735eb9b6cc1ef6dd310253b9680883"
 }

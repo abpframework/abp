@@ -5,15 +5,6 @@ const publish = async () => {
   const versions = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
   let nextSemanticVersion = (process.argv[2] || '').toLowerCase();
 
-  if (versions.indexOf(nextSemanticVersion) < 0) {
-    console.log(
-      "Please enter the next semantic version like this: 'npm run publish patch'. Available versions:\n " +
-        JSON.stringify(versions),
-    );
-
-    process.exit(1);
-  }
-
   try {
     await execa('yarn', ['install-new-dependencies'], { stdout: 'inherit' });
 

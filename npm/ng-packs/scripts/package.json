@@ -16,13 +16,13 @@
     "commander": "^4.0.1",
     "execa": "^2.0.3",
     "fs-extra": "^8.1.0",
-    "prompt-confirm": "^2.0.4",
-    "typescript": "^3.7.4"
+    "prompt-confirm": "^2.0.4"
   },
   "devDependencies": {
     "@types/node": "^13.1.2",
     "esm": "^3.2.25",
     "ts-node": "^8.5.4",
-    "tsconfig-paths": "^3.9.0"
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^3.7.4"
   }
 }
