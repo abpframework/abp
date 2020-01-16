@@ -47,6 +47,7 @@ namespace Volo.Abp.AuditLogging
             }
             catch (Exception ex)
             {
+                Logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditInfo.ToString());
                 Logger.LogException(ex, LogLevel.Error);
             }
         }
