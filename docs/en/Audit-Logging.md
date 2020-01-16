@@ -199,7 +199,7 @@ public class MyUser : Entity<Guid>
 
 ## Audit Log Object
 
-An **audit log object** is created for each **web request** is by default. An audit log object can be represented by the following relation diagram:
+An **audit log object** is created for each **web request** by default. An audit log object can be represented by the following relation diagram:
 
 ![**auditlog-object-diagram**](images/auditlog-object-diagram.png)
 
