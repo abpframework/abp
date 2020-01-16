@@ -28,11 +28,6 @@ namespace Volo.Abp.AspNetCore.Auditing
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (!ShouldWriteAuditLog(context))
-            {
-                await next(context).ConfigureAwait(false);
-                return;
-            }
             bool hasError = false;
             using (var scope = _auditingManager.BeginScope())
             {
@@ -53,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                     if (ShouldWriteAuditLog(context, hasError))
                     {
                         await scope.SaveAsync().ConfigureAwait(false);
-                    }                    
+                    }
                 }
             }
         }
@@ -65,10 +60,10 @@ namespace Volo.Abp.AspNetCore.Auditing
                 return false;
             }
 
-            if (Options.AlwaysLogOnException || hasError)
+            if (Options.AlwaysLogOnException && hasError)
             {
                 return true;
-            }            
+            }
 
             if (!Options.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
             {
