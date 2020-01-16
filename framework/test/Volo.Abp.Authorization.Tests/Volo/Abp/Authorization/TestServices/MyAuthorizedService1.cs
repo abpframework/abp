@@ -30,5 +30,11 @@ namespace Volo.Abp.Authorization.TestServices
             await Task.Delay(10).ConfigureAwait(false);
             return 42;
         }
+
+        [Authorize(Roles = "MyRole")]
+        public virtual Task<int> ProtectedByRole()
+        {
+            return Task.FromResult(42);
+        }
     }
 }
