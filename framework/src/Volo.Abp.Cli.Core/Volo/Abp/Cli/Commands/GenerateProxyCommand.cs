@@ -1,21 +1,15 @@
 using System;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using ICSharpCode.SharpZipLib.Core;
-using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Args;
 using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
-using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
-using Microsoft.CSharp;
 using System.Collections.Generic;
 using System.Linq;
 using static System.String;
@@ -497,7 +491,9 @@ namespace Volo.Abp.Cli.Commands
         public static string PascalToKebabCase(this string value)
         {
             if (IsNullOrEmpty(value))
+            {
                 return value;
+            }
 
             return Regex.Replace(
                 value,
