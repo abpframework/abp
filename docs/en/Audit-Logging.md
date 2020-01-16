@@ -14,6 +14,11 @@ An **audit log object** (see the Audit Log Object section below) is typically cr
 
 > [Startup templates](Startup-Templates/Index.md) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
 
+### Database Provider Support
+
+* Fully supported by the [Entity Framework Core](Entity-Framework-Core.md) provider.
+* Entity change logging is not supported by the [MongoDB](MongoDB.md) provider. Other features work as expected.
+
 ## UseAuditing()
 
 `UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](Startup-Templates/Index.md), it is already added.
