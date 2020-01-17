@@ -6,12 +6,10 @@ export default `
 .entry-row {
     margin-bottom: 15px;
 }
-
 #main-navbar-tools a.dropdown-toggle {
     text-decoration: none;
     color: #fff;
 }
-
 .navbar .dropdown-submenu {
     position: relative;
 }
@@ -19,15 +17,15 @@ export default `
     margin: 0;
     padding: 0;
 }
-    .navbar .dropdown-menu a {
-        font-size: .9em;
-        padding: 10px 15px;
-        display: block;
-        min-width: 210px;
-        text-align: left;
-        border-radius: 0.25rem;
-        min-height: 44px;
-    }
+.navbar .dropdown-menu a {
+    font-size: .9em;
+    padding: 10px 15px;
+    display: block;
+    min-width: 210px;
+    text-align: left;
+    border-radius: 0.25rem;
+    min-height: 44px;
+}
 .navbar .dropdown-submenu a::after {
     transform: rotate(-90deg);
     position: absolute;
@@ -48,7 +46,6 @@ export default `
 .container > .card {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
 }
-
 @media screen and (min-width: 768px) {
     .navbar .dropdown:hover > .dropdown-menu {
         display: block;
@@ -64,12 +61,14 @@ export default `
 .field-validation-error {
     font-size: 0.8em;
 }
-
 .ui-table .ui-table-tbody > tr.empty-row > div.empty-row-content {
     border: 1px solid #c8c8c8;
   }
-
 .abp-loading {
     background: rgba(0, 0, 0, 0.1);
 }
+.modal-backdrop {
+background-color: rgba(0, 0, 0, 0.6);
+}
+
 `;

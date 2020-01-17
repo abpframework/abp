@@ -105,7 +105,8 @@
           "path": "Caching.md"
         },
         {
-          "text": "Auditing"
+          "text": "Audit Logging",
+          "path": "Audit-Logging.md"
         },
         {
           "text": "Settings",
