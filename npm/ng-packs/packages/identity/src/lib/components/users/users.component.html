@@ -31,6 +31,7 @@
     <abp-table
       *ngIf="[150, 250, 250, 250] as columnWidths"
       [abpLoading]="loading"
+      [abpLoadingDelay]="500"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [colgroupTemplate]="tableColGroup"
       [headerTemplate]="tableHeader"
@@ -226,8 +227,6 @@
               >
                 <input
                   type="checkbox"
-                  name="Roles[0].IsAssigned"
-                  value="true"
                   class="custom-control-input"
                   [attr.id]="'roles-' + i"
                   [formControl]="roleGroup.controls[roles[i].name]"
