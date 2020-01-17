@@ -36,10 +36,7 @@ namespace Acme.BookStore.EntityFrameworkCore
             builder.ConfigureBackgroundJobs();
             builder.ConfigureAuditLogging();
             builder.ConfigureIdentity();
-            builder.ConfigureIdentityServer(options =>
-            {
-                options.DatabaseProvider = EfCoreDatabaseProvider.MySql;
-            });
+            builder.ConfigureIdentityServer();
             builder.ConfigureFeatureManagement();
             builder.ConfigureTenantManagement();
 

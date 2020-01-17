@@ -9,7 +9,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Acme.BookStore.Domain\Acme.BookStore.Domain.csproj" />
-    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.MySQL\Volo.Abp.EntityFrameworkCore.MySQL.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.EntityFrameworkCore.PostgreSql\Volo.Abp.EntityFrameworkCore.PostgreSql.csproj" />
     <ProjectReference Include="..\..\..\..\modules\permission-management\src\Volo.Abp.PermissionManagement.EntityFrameworkCore\Volo.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\setting-management\src\Volo.Abp.SettingManagement.EntityFrameworkCore\Volo.Abp.SettingManagement.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\..\..\..\modules\identity\src\Volo.Abp.Identity.EntityFrameworkCore\Volo.Abp.Identity.EntityFrameworkCore.csproj" />

@@ -5,64 +5,66 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Acme.BookStore.Migrations
 {
     [DbContext(typeof(BookStoreMigrationsDbContext))]
-    [Migration("20200117140352_Initial")]
+    [Migration("20200117141554_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
                 .HasAnnotation("ProductVersion", "3.1.1")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("Acme.BookStore.Book", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<float>("Price")
-                        .HasColumnType("float");
+                        .HasColumnType("real");
 
                     b.Property<DateTime>("PublishDate")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Type")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -73,98 +75,98 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ApplicationName")
                         .HasColumnName("ApplicationName")
-                        .HasColumnType("varchar(96) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(96)")
                         .HasMaxLength(96);
 
                     b.Property<string>("BrowserInfo")
                         .HasColumnName("BrowserInfo")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(512)")
                         .HasMaxLength(512);
 
                     b.Property<string>("ClientId")
                         .HasColumnName("ClientId")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("ClientIpAddress")
                         .HasColumnName("ClientIpAddress")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("ClientName")
                         .HasColumnName("ClientName")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Comments")
                         .HasColumnName("Comments")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<string>("CorrelationId")
                         .HasColumnName("CorrelationId")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("Exceptions")
                         .HasColumnName("Exceptions")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(4000)")
                         .HasMaxLength(4000);
 
                     b.Property<int>("ExecutionDuration")
                         .HasColumnName("ExecutionDuration")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ExecutionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<string>("HttpMethod")
                         .HasColumnName("HttpMethod")
-                        .HasColumnType("varchar(16) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(16)")
                         .HasMaxLength(16);
 
                     b.Property<int?>("HttpStatusCode")
                         .HasColumnName("HttpStatusCode")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("ImpersonatorTenantId")
                         .HasColumnName("ImpersonatorTenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("ImpersonatorUserId")
                         .HasColumnName("ImpersonatorUserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("TenantName")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<string>("Url")
                         .HasColumnName("Url")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<Guid?>("UserId")
                         .HasColumnName("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("UserName")
                         .HasColumnName("UserName")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -180,41 +182,41 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("ExecutionDuration")
                         .HasColumnName("ExecutionDuration")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("ExecutionTime")
                         .HasColumnName("ExecutionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<string>("MethodName")
                         .HasColumnName("MethodName")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("Parameters")
                         .HasColumnName("Parameters")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("ServiceName")
                         .HasColumnName("ServiceName")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -229,42 +231,42 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("AuditLogId")
                         .HasColumnName("AuditLogId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("ChangeTime")
                         .HasColumnName("ChangeTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<byte>("ChangeType")
                         .HasColumnName("ChangeType")
-                        .HasColumnType("tinyint unsigned");
+                        .HasColumnType("smallint");
 
                     b.Property<string>("EntityId")
                         .IsRequired()
                         .HasColumnName("EntityId")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<Guid?>("EntityTenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("EntityTypeFullName")
                         .IsRequired()
                         .HasColumnName("EntityTypeFullName")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -279,35 +281,35 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("EntityChangeId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("NewValue")
                         .HasColumnName("NewValue")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(512)")
                         .HasMaxLength(512);
 
                     b.Property<string>("OriginalValue")
                         .HasColumnName("OriginalValue")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(512)")
                         .HasMaxLength(512);
 
                     b.Property<string>("PropertyName")
                         .IsRequired()
                         .HasColumnName("PropertyName")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("PropertyTypeFullName")
                         .IsRequired()
                         .HasColumnName("PropertyTypeFullName")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -320,43 +322,43 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsAbandoned")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("JobArgs")
                         .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1048576)")
                         .HasMaxLength(1048576);
 
                     b.Property<string>("JobName")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<DateTime?>("LastTryTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<DateTime>("NextTryTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<byte>("Priority")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint unsigned")
+                        .HasColumnType("smallint")
                         .HasDefaultValue((byte)15);
 
                     b.Property<short>("TryCount")
@@ -375,24 +377,24 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("ProviderName")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.HasKey("Id");
@@ -406,44 +408,44 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsStatic")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("Regex")
-                        .HasColumnType("varchar(512) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(512)")
                         .HasMaxLength(512);
 
                     b.Property<string>("RegexDescription")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<bool>("Required")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("ValueType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -454,43 +456,43 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .IsRequired()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDefault")
                         .HasColumnName("IsDefault")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsPublic")
                         .HasColumnName("IsPublic")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsStatic")
                         .HasColumnName("IsStatic")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedName")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -502,22 +504,22 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityRoleClaim", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1024)")
                         .HasMaxLength(1024);
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -530,132 +532,132 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("AccessFailedCount")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("AccessFailedCount")
-                        .HasColumnType("int")
+                        .HasColumnType("integer")
                         .HasDefaultValue(0);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnName("Email")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("EmailConfirmed")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("LockoutEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("LockoutEnabled")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Name")
                         .HasColumnName("Name")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("NormalizedEmail")
                         .IsRequired()
                         .HasColumnName("NormalizedEmail")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("NormalizedUserName")
                         .IsRequired()
                         .HasColumnName("NormalizedUserName")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("PasswordHash")
                         .HasColumnName("PasswordHash")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnName("PhoneNumber")
-                        .HasColumnType("varchar(16) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(16)")
                         .HasMaxLength(16);
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("SecurityStamp")
                         .IsRequired()
                         .HasColumnName("SecurityStamp")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("Surname")
                         .HasColumnName("Surname")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
                         .HasColumnName("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnName("UserName")
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
@@ -674,22 +676,22 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserClaim", b =>
                 {
                     b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ClaimType")
                         .IsRequired()
-                        .HasColumnType("varchar(256) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(256)")
                         .HasMaxLength(256);
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1024)")
                         .HasMaxLength(1024);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -701,23 +703,23 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserLogin", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
                         .IsRequired()
-                        .HasColumnType("varchar(196) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(196)")
                         .HasMaxLength(196);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("UserId", "LoginProvider");
 
@@ -729,13 +731,13 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserRole", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("UserId", "RoleId");
 
@@ -747,21 +749,21 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.Identity.IdentityUserToken", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Value")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -772,65 +774,65 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(1000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Properties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -840,10 +842,10 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiResourceClaim", b =>
                 {
                     b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("ApiResourceId", "Type");
@@ -854,28 +856,28 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiScope", b =>
                 {
                     b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(1000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Required")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.HasKey("ApiResourceId", "Name");
 
@@ -885,14 +887,14 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiScopeClaim", b =>
                 {
                     b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Type")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("ApiResourceId", "Name", "Type");
@@ -903,22 +905,22 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.ApiResources.ApiSecret", b =>
                 {
                     b.Property<Guid>("ApiResourceId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
-                        .HasColumnType("varchar(250) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasColumnType("character varying(4000)")
+                        .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("ApiResourceId", "Type", "Value");
 
@@ -929,170 +931,170 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<int>("AbsoluteRefreshTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("AccessTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("AccessTokenType")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("AllowAccessTokensViaBrowser")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AllowOfflineAccess")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AllowPlainTextPkce")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AllowRememberConsent")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AlwaysIncludeUserClaimsInIdToken")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("AlwaysSendClientClaims")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("AuthorizationCodeLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("BackChannelLogoutSessionRequired")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("BackChannelLogoutUri")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("ClientClaimsPrefix")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientName")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<int?>("ConsentLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(1000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<int>("DeviceCodeLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("EnableLocalLogin")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("FrontChannelLogoutSessionRequired")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("FrontChannelLogoutUri")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<int>("IdentityTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IncludeJwtId")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("LogoUri")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<string>("PairWiseSubjectSalt")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<int>("RefreshTokenExpiration")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("RefreshTokenUsage")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("RequireClientSecret")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("RequireConsent")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("RequirePkce")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("SlidingRefreshTokenLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("UpdateAccessTokenClaimsOnRefresh")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("UserCodeType")
-                        .HasColumnType("varchar(100) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(100)")
                         .HasMaxLength(100);
 
                     b.Property<int?>("UserSsoLifetime")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -1104,14 +1106,14 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientClaim", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
-                        .HasColumnType("varchar(250) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(250) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("ClientId", "Type", "Value");
@@ -1122,10 +1124,10 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientCorsOrigin", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Origin")
-                        .HasColumnType("varchar(150) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(150)")
                         .HasMaxLength(150);
 
                     b.HasKey("ClientId", "Origin");
@@ -1136,10 +1138,10 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientGrantType", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("GrantType")
-                        .HasColumnType("varchar(250) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.HasKey("ClientId", "GrantType");
@@ -1150,10 +1152,10 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientIdPRestriction", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Provider")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("ClientId", "Provider");
@@ -1164,11 +1166,11 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientPostLogoutRedirectUri", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("PostLogoutRedirectUri")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasColumnType("character varying(2000)")
+                        .HasMaxLength(2000);
 
                     b.HasKey("ClientId", "PostLogoutRedirectUri");
 
@@ -1178,15 +1180,15 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientProperty", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Key")
-                        .HasColumnType("varchar(250) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.HasKey("ClientId", "Key");
@@ -1197,11 +1199,11 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientRedirectUri", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("RedirectUri")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasColumnType("character varying(2000)")
+                        .HasMaxLength(2000);
 
                     b.HasKey("ClientId", "RedirectUri");
 
@@ -1211,10 +1213,10 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientScope", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Scope")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("ClientId", "Scope");
@@ -1225,22 +1227,22 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Clients.ClientSecret", b =>
                 {
                     b.Property<Guid>("ClientId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
-                        .HasColumnType("varchar(250) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(250)")
                         .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar(300) CHARACTER SET utf8mb4")
-                        .HasMaxLength(300);
+                        .HasColumnType("character varying(4000)")
+                        .HasMaxLength(4000);
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(2000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2000)")
                         .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("ClientId", "Type", "Value");
 
@@ -1251,51 +1253,51 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(50000)")
                         .HasMaxLength(50000);
 
                     b.Property<string>("DeviceCode")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<DateTime?>("Expiration")
                         .IsRequired()
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("UserCode")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("Id");
@@ -1314,42 +1316,42 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.Grants.PersistedGrant", b =>
                 {
                     b.Property<string>("Key")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Data")
                         .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
-                        .HasMaxLength(10000);
+                        .HasColumnType("character varying(50000)")
+                        .HasMaxLength(50000);
 
                     b.Property<DateTime?>("Expiration")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("SubjectId")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasColumnType("varchar(50) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(50)")
                         .HasMaxLength(50);
 
                     b.HasKey("Key");
@@ -1364,10 +1366,10 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.IdentityServer.IdentityResources.IdentityClaim", b =>
                 {
                     b.Property<Guid>("IdentityResourceId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Type")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.HasKey("IdentityResourceId", "Type");
@@ -1379,74 +1381,74 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("varchar(1000) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1000)")
                         .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("Enabled")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(200) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(200)")
                         .HasMaxLength(200);
 
                     b.Property<string>("Properties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("Required")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("ShowInDiscoveryDocument")
-                        .HasColumnType("tinyint(1)");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -1457,25 +1459,25 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("ProviderName")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<Guid?>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -1488,24 +1490,24 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(128) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(128)")
                         .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("ProviderName")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("longtext CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(2048)")
                         .HasMaxLength(2048);
 
                     b.HasKey("Id");
@@ -1519,50 +1521,50 @@ namespace Acme.BookStore.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnName("ConcurrencyStamp")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreationTime")
                         .HasColumnName("CreationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("CreatorId")
                         .HasColumnName("CreatorId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("DeleterId")
                         .HasColumnName("DeleterId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DeletionTime")
                         .HasColumnName("DeletionTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("ExtraProperties")
                         .HasColumnName("ExtraProperties")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
                         .ValueGeneratedOnAdd()
                         .HasColumnName("IsDeleted")
-                        .HasColumnType("tinyint(1)")
+                        .HasColumnType("boolean")
                         .HasDefaultValue(false);
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnName("LastModificationTime")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid?>("LastModifierId")
                         .HasColumnName("LastModifierId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.HasKey("Id");
@@ -1575,15 +1577,15 @@ namespace Acme.BookStore.Migrations
             modelBuilder.Entity("Volo.Abp.TenantManagement.TenantConnectionString", b =>
                 {
                     b.Property<Guid>("TenantId")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(64) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasColumnType("varchar(1024) CHARACTER SET utf8mb4")
+                        .HasColumnType("character varying(1024)")
                         .HasMaxLength(1024);
 
                     b.HasKey("TenantId", "Name");
