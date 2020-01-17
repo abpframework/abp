@@ -4,6 +4,7 @@ using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.Users.EntityFrameworkCore;
+using Volo.Abp.IdentityServer.EntityFrameworkCore;
 
 namespace Acme.BookStore.EntityFrameworkCore
 {
