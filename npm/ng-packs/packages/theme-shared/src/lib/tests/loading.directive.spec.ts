@@ -20,8 +20,8 @@ describe('LoadingDirective', () => {
 
   describe('default', () => {
     beforeEach(() => {
-      spectator = createDirective('<div [abpLoading]="status">Testing Loading Directive</div>', {
-        hostProps: { status: true },
+      spectator = createDirective('<div [abpLoading]="loading">Testing Loading Directive</div>', {
+        hostProps: { loading: true },
       });
     });
 
@@ -30,7 +30,7 @@ describe('LoadingDirective', () => {
         expect(spectator.directive.rootNode).toBeTruthy();
         expect(spectator.directive.componentRef).toBeTruthy();
         done();
-      }, 0);
+      }, 20);
     });
   });
 
@@ -40,9 +40,9 @@ describe('LoadingDirective', () => {
 
     beforeEach(() => {
       spectator = createDirective(
-        '<div [abpLoading]="status" [abpLoadingTargetElement]="target">Testing Loading Directive</div>',
+        '<div [abpLoading]="loading" [abpLoadingDelay]="delay" [abpLoadingTargetElement]="target">Testing Loading Directive</div>',
         {
-          hostProps: { status: true, target: mockTarget },
+          hostProps: { loading: true, target: mockTarget, delay: 0 },
         },
       );
     });
@@ -51,24 +51,35 @@ describe('LoadingDirective', () => {
       setTimeout(() => {
         expect(spy).toHaveBeenCalled();
         done();
-      }, 0);
+      }, 20);
     });
 
     it('should remove the loading component to the DOM', done => {
       const rendererSpy = jest.spyOn(spectator.directive['renderer'], 'removeChild');
-      spectator.setHostInput({ status: false });
+      setTimeout(() => spectator.setHostInput({ loading: false }), 0);
       setTimeout(() => {
         expect(rendererSpy).toHaveBeenCalled();
         expect(spectator.directive.rootNode).toBeFalsy();
         done();
-      }, 0);
+      }, 20);
+    });
+
+    it('should appear with delay', done => {
+      spectator.setHostInput({ loading: false, delay: 20 });
+      spectator.detectChanges();
+      setTimeout(() => spectator.setHostInput({ loading: true }), 0);
+      setTimeout(() => expect(spectator.directive.loading).toBe(false), 15);
+      setTimeout(() => {
+        expect(spectator.directive.loading).toBe(true);
+        done();
+      }, 50);
     });
   });
 
   describe('with a component selector', () => {
     beforeEach(() => {
-      spectator = createDirective('<abp-dummy [abpLoading]="status"></abp-dummy>', {
-        hostProps: { status: true },
+      spectator = createDirective('<abp-dummy [abpLoading]="loading"></abp-dummy>', {
+        hostProps: { loading: true },
       });
     });
 
@@ -76,7 +87,7 @@ describe('LoadingDirective', () => {
       setTimeout(() => {
         expect(spectator.directive.targetElement.id).toBe('dummy');
         done();
-      }, 0);
+      }, 20);
     });
   });
 });

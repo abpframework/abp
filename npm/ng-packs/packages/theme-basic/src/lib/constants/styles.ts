@@ -68,4 +68,8 @@ export default `
 .ui-table .ui-table-tbody > tr.empty-row > div.empty-row-content {
     border: 1px solid #c8c8c8;
   }
+
+.abp-loading {
+    background: rgba(0, 0, 0, 0.1);
+}
 `;

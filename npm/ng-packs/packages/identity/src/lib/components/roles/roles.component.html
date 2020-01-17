@@ -15,6 +15,7 @@
           <i class="fa fa-plus mr-1"></i>
           <span>{{ 'AbpIdentity::NewRole' | abpLocalization }}</span>
         </button>
+        <button (click)="get()">Refresh</button>
       </div>
     </div>
   </div>
@@ -23,6 +24,7 @@
     <abp-table
       *ngIf="[150, 0] as columnWidths"
       [abpLoading]="loading"
+      [abpLoadingDelay]="500"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [colgroupTemplate]="tableColGroup"
       [headerTemplate]="tableHeader"
