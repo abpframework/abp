@@ -265,8 +265,7 @@ namespace Volo.Abp.EntityFrameworkCore.EntityHistory
                 }
             }
 
-            var isModified = !(propertyEntry.OriginalValue?.Equals(propertyEntry.CurrentValue) ?? propertyEntry.CurrentValue == null);
-            if (isModified)
+            if (propertyEntry.IsModified)
             {
                 return true;
             }

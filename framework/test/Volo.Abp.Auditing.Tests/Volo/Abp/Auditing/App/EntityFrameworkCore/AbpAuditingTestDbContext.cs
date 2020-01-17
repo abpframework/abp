@@ -8,6 +8,8 @@ namespace Volo.Abp.Auditing.App.EntityFrameworkCore
     {
         public DbSet<AppEntityWithAudited> AppEntityWithAudited { get; set; }
 
+        public DbSet<AppEntityWithAuditedAndPropertyHasDisableAuditing> AppEntityWithAuditedAndPropertyHasDisableAuditing { get; set; }
+
         public DbSet<AppEntityWithDisableAuditing> AppEntityWithDisableAuditing { get; set; }
 
         public DbSet<AppEntityWithDisableAuditingAndPropertyHasAudited> AppEntityWithDisableAuditingAndPropertyHasAudited { get; set; }

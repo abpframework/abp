@@ -2,7 +2,6 @@
 
 namespace Volo.Abp.Auditing
 {
-
     public class AbpAuditingTestBase : AbpIntegratedTest<AbpAuditingTestModule>
     {
         protected override void SetAbpApplicationCreationOptions(AbpApplicationCreationOptions options)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -85,6 +86,24 @@ namespace Volo.Abp.Auditing
 
 #pragma warning disable 4014
             _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+#pragma warning restore 4014
+        }
+
+        [Fact]
+        public virtual async Task Should_Not_Write_AuditLog_For_Property_That_Has_DisableAuditing_Attribute()
+        {
+            using (var scope = _auditingManager.BeginScope())
+            {
+                var repository = ServiceProvider.GetRequiredService<IBasicRepository<AppEntityWithAuditedAndPropertyHasDisableAuditing, Guid>>();
+                await repository.InsertAsync(new AppEntityWithAuditedAndPropertyHasDisableAuditing(Guid.NewGuid(), "test name", "test name2")).ConfigureAwait(false);
+                await scope.SaveAsync().ConfigureAwait(false);
+            }
+
+#pragma warning disable 4014
+            _auditingStore.Received().SaveAsync(Arg.Is<AuditLogInfo>(x =>
+                x.EntityChanges.Count == 1 &&
+                !(x.EntityChanges[0].PropertyChanges.Any(p =>
+                    p.PropertyName == nameof(AppEntityWithDisableAuditingAndPropertyHasAudited.Name2)))));
 #pragma warning restore 4014
         }
 
