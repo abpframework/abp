@@ -26,7 +26,7 @@ public class Book : Entity<Guid>
 If your entity's Id type is `Guid`, there are some good practices to implement:
 
 * Create a constructor that gets the Id as a parameter and passes to the base class.
-  * If you leave it default, ABP Framework sets it on save, but it is good to have a valid Id on the entity even before saving it to the database.
+  * If you don't set a GUID Id, ABP Framework sets it on save, but it is good to have a valid Id on the entity even before saving it to the database.
 * If you create an entity with a constructor that takes parameters, also create a `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
 * Don't use the `Guid.NewGuid()` to set the Id! Use [the `IGuidGenerator` service](Guid-Generation.md) while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
 
