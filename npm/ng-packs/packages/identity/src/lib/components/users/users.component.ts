@@ -134,7 +134,9 @@ export class UsersComponent implements OnInit {
           this.roles.map(role =>
             this.fb.group({
               [role.name]: [
-                !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id)),
+                this.selectedUserRoles.length
+                  ? !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))
+                  : role.isDefault,
               ],
             }),
           ),

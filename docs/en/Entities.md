@@ -21,6 +21,66 @@ public class Book : Entity<Guid>
 
 `Entity<TKey>` class just defines an `Id` property with the given primary **key type**, which is `Guid` in the example above. It can be other types like `string`, `int`, `long` or whatever you need.
 
+### Entities with GUID Keys
+
+If your entity's Id type is `Guid`, there are some good practices to implement:
+
+* Create a constructor that gets the Id as a parameter and passes to the base class.
+  * If you don't set a GUID Id, ABP Framework sets it on save, but it is good to have a valid Id on the entity even before saving it to the database.
+* If you create an entity with a constructor that takes parameters, also create a `protected` empty constructor. This is used while your database provider reads your entity from the database (on deserialization).
+* Don't use the `Guid.NewGuid()` to set the Id! Use [the `IGuidGenerator` service](Guid-Generation.md) while passing the Id from the code that creates the entity. `IGuidGenerator` optimized to generate sequential GUIDs, which is critical for clustered indexes in the relational databases.
+
+An example entity:
+
+````csharp
+public class Book : Entity<Guid>
+{
+    public string Name { get; set; }
+
+    public float Price { get; set; }
+
+    protected Book()
+    {
+
+    }
+
+    public Book(Guid id)
+     : base(id)
+    {
+
+    }
+}
+````
+
+Example usage in an [application service](Application-Services.md):
+
+````csharp
+public class BookAppService : ApplicationService, IBookAppService
+{
+    private readonly IRepository<Book> _bookRepository;
+
+    public BookAppService(IRepository<Book> bookRepository)
+    {
+        _bookRepository = bookRepository;
+    }
+
+    public async Task CreateAsync(CreateBookDto input)
+    {
+        await _bookRepository.InsertAsync(
+            new Book(GuidGenerator.Create())
+            {
+                Name = input.Name,
+                Price = input.Price
+            }
+        );
+    }
+}
+````
+
+* `BookAppService` injects the default [repository](Repositories.md) for the book entity and uses its `InsertAsync` method to insert a `Book` to the database.
+* `GuidGenerator` is type of `IGuidGenerator` which is a property defined in the `ApplicationService` base class. ABP defines such frequently used base properties as pre-injected for you, so you don't need to manually [inject](Dependency-Injection.md) them.
+* If you want to follow the DDD best practices, see the *Aggregate Example* section below.
+
 ### Entities with Composite Keys
 
 Some entities may need to have **composite keys**. In that case, you can derive your entity from the non-generic `Entity` class. Example:
