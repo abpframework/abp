@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
 
         protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
         {
-            ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[]{ "oidc" };
+            ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
         }
 
         [HttpGet]
@@ -42,7 +42,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
         {
             await HttpContext.SignOutAsync().ConfigureAwait(false);
 
-            return RedirectSafely(returnUrl, returnUrlHash);
+            if (HttpContext.User.Identity.AuthenticationType == "Identity.Application")
+            {
+                return RedirectSafely(returnUrl, returnUrlHash);
+            }
+
+            return new SignOutResult(ChallengeAuthenticationSchemas);
         }
 
         protected RedirectResult RedirectSafely(string returnUrl, string returnUrlHash = null)
