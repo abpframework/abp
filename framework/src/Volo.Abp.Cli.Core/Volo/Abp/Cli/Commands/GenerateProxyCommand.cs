@@ -11,8 +11,7 @@ using Volo.Abp.Cli.ProjectBuilding;
 using Volo.Abp.Cli.ProjectBuilding.Building;
 using Volo.Abp.DependencyInjection;
 using System.Collections.Generic;
-using System.Linq;
-using static System.String;
+using System.Linq; 
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -32,7 +31,7 @@ namespace Volo.Abp.Cli.Commands
         public async Task ExecuteAsync(CommandLineArgs commandLineArgs)
         {
             var apiUrl = commandLineArgs.Options.GetOrNull(Options.ApiUrl.Short, Options.ApiUrl.Long);
-            var uiFramework = GetUiFramework(commandLineArgs); 
+            var uiFramework = GetUiFramework(commandLineArgs);
 
             //WebClient client = new WebClient();
             //string json = client.DownloadString(apiUrl);
@@ -42,16 +41,16 @@ namespace Volo.Abp.Cli.Commands
             Logger.LogInformation("Downloading api definition...");
             Logger.LogInformation("Api Url: " + apiUrl);
 
-            var data = JObject.Parse(json);  
+            var data = JObject.Parse(json);
 
-            Logger.LogInformation("Modules are combining"); 
+            Logger.LogInformation("Modules are combining");
             var moduleList = GetCombinedModules(data);
-                 
-            Logger.LogInformation("Modules and types are creating");  
-                 
+
+            Logger.LogInformation("Modules and types are creating");
+
             foreach (var module in moduleList)
             {
-                var moduleValue = JObject.Parse(module.Value); 
+                var moduleValue = JObject.Parse(module.Value);
 
                 var rootPath = module.Key;
 
@@ -78,10 +77,10 @@ namespace Volo.Abp.Cli.Commands
                     serviceFileText.AppendLine("");
 
                     var firstTypeList = new List<string>();
-                    var secondTypeList = new List<string>(); 
+                    var secondTypeList = new List<string>();
 
                     var controllerName = (string)controller["controllerName"];
-                    var controllerServiceName = controllerName.PascalToKebabCase() + ".service.ts"; 
+                    var controllerServiceName = controllerName.PascalToKebabCase() + ".service.ts";
 
                     foreach (var actionItem in controller["actions"])
                     {
@@ -98,37 +97,39 @@ namespace Volo.Abp.Cli.Commands
                         var bodyExtra = "";
                         var modelBindingExtra = "";
                         var modelBindingExtraList = new List<string>();
+                        var parameterModel = new List<ParameterModel>();
 
-                        foreach (var parameter in parameters)
+                        foreach (var parameter in parameters.OrderBy(p => p["bindingSourceId"]))
                         {
-                            parametersIndex++;
-
-                            if (parametersIndex > 1)
-                            {
-                                parametersText.Append(", ");
-                            }
-
                             var bindingSourceId = (string)parameter["bindingSourceId"];
                             bindingSourceId = char.ToLower(bindingSourceId[0]) + bindingSourceId.Substring(1);
+
+                            var name = (string)parameter["name"];
+                            var typeSimple = (string)parameter["typeSimple"];
+                            var typeArray = ((string)parameter["type"]).Split(".");
+                            var type = typeArray[typeArray.Length - 1];
+                            var isOptional = (bool)parameter["isOptional"];
+                            var defaultValue = (string)parameter["defaultValue"];
+
+
+                            var modelIndex = CreateType(data, (string)parameter["type"], rootPath, modelIndexList);
+
+                            if (!string.IsNullOrWhiteSpace(modelIndex))
+                            {
+                                modelIndexList.Add(modelIndex);
+                            }
 
                             if (bindingSourceId == "body")
                             {
                                 bodyExtra = ", body";
-                                var typeArray = ((string)parameter["type"]).Split(".");
-                                var type = typeArray[typeArray.Length - 1];
-
-                                parametersText.Append(bindingSourceId + ": " + type);
-                                secondTypeList.Add(type);
+                                parameterModel = AddParameter(bindingSourceId, type, isOptional, defaultValue, bindingSourceId, parameterModel);
                             }
                             else if (bindingSourceId == "path")
                             {
-                                parametersText.Append((string)parameter["name"] + ": " + (string)parameter["typeSimple"]);
+                                parameterModel = AddParameter(name, typeSimple, isOptional, defaultValue, bindingSourceId, parameterModel);
                             }
                             else if (bindingSourceId == "modelBinding")
                             {
-                                var typeSimple = "";
-                                var type = "";
-
                                 var parameterNameOnMethod = (string)parameter["nameOnMethod"];
 
                                 var parametersOnMethod = action["parametersOnMethod"];
@@ -138,23 +139,55 @@ namespace Volo.Abp.Cli.Commands
                                     if (parametersOnMethodName == parameterNameOnMethod)
                                     {
                                         typeSimple = (string)parameterOnMethod["typeSimple"];
-
-                                        var typeArray = ((string)parameterOnMethod["type"]).Split(".");
+                                        typeArray = ((string)parameterOnMethod["type"]).Split(".");
                                         type = typeArray[typeArray.Length - 1];
+                                        isOptional = (bool)parameterOnMethod["isOptional"];
+                                        defaultValue = (string)parameterOnMethod["defaultValue"];
+
+                                        if (typeSimple == "string" || typeSimple == "boolean" || typeSimple == "number")
+                                        {
+                                            parameterModel = AddParameter(name, typeSimple, isOptional, defaultValue, bindingSourceId, parameterModel);
+                                        }
+
+                                        modelIndex = CreateType(data, (string)parameterOnMethod["type"], rootPath, modelIndexList);
+
+                                        if (!string.IsNullOrWhiteSpace(modelIndex))
+                                        {
+                                            modelIndexList.Add(modelIndex);
+                                        }
                                     }
                                 }
 
-                                if (typeSimple == "string" || typeSimple == "boolean" || typeSimple == "number")
-                                {
-                                    parametersText.Append((string)parameter["name"] + ": " + (string)parameter["typeSimple"]);
-                                    modelBindingExtraList.Add((string)parameter["name"]);
-                                }
-                                else
+                                if (typeSimple != "string" && typeSimple != "boolean" && typeSimple != "number")
                                 {
                                     parametersText.Append($"params = {{}} as {type}");
                                     modelBindingExtra = ", params";
                                     secondTypeList.Add(type);
                                     break;
+                                }
+                            }
+                        }
+
+                        if (parameterModel != null && parameterModel.Count > 0)
+                        {
+                            foreach (var parameterItem in parameterModel.OrderBy(p => p.DisplayOrder))
+                            {
+                                parametersIndex++;
+
+                                if (parametersIndex > 1)
+                                {
+                                    parametersText.Append(", ");
+                                }
+
+                                parametersText.Append(parameterItem.Name + (parameterItem.IsOptional ? "?" : "") + ": " + parameterItem.Type + (parameterItem.Value != null ? (" = " + (string.IsNullOrWhiteSpace(parameterItem.Value) ? "''" : parameterItem.Value)) : ""));
+
+                                if (parameterItem.BindingSourceId == "modelBinding")
+                                {
+                                    modelBindingExtraList.Add(parameterItem.Name);
+                                }
+                                else if (parameterItem.BindingSourceId == "body")
+                                {
+                                    secondTypeList.Add(parameterItem.Type);
                                 }
                             }
                         }
@@ -170,9 +203,14 @@ namespace Volo.Abp.Cli.Commands
                                 var secondType = secondTypeArray[secondTypeArray.Length - 1].TrimEnd('>');
 
                                 serviceFileText.AppendLine(
-                                    $" {actionName}({parametersText}): Observable<{firstType}<{secondType}>> {{");
+                                    firstType == "List"
+                                        ? $" {actionName}({parametersText}): Observable<{secondType}[]> {{"
+                                        : $" {actionName}({parametersText}): Observable<{firstType}<{secondType}>> {{");
 
-                                firstTypeList.Add(firstType);
+                                if (firstType != "List")
+                                {
+                                    firstTypeList.Add(firstType);
+                                }
                                 secondTypeList.Add(secondType);
                             }
                             else
@@ -180,20 +218,26 @@ namespace Volo.Abp.Cli.Commands
                                 var typeArray = returnValueType.Split(".");
                                 var type = typeArray[typeArray.Length - 1].TrimEnd('>');
 
-                                if (type == "Void")
+                                type = type switch
                                 {
-                                    type = "void";
-                                }
+                                    "Void" => "void",
+                                    "String" => "string",
+                                    "IActionResult" => "void",
+                                    _ => type
+                                };
 
                                 serviceFileText.AppendLine(
                                     $" {actionName}({parametersText}): Observable<{type}> {{");
 
-                                secondTypeList.Add(type);
+                                if (type != "void" && type != "string")
+                                {
+                                    secondTypeList.Add(type);
+                                }
                             }
 
-                            var modelIndex = CreateType(data, returnValueType, rootPath);
+                            var modelIndex = CreateType(data, returnValueType, rootPath, modelIndexList);
 
-                            if (!IsNullOrWhiteSpace(modelIndex))
+                            if (!string.IsNullOrWhiteSpace(modelIndex))
                             {
                                 modelIndexList.Add(modelIndex);
                             }
@@ -201,33 +245,38 @@ namespace Volo.Abp.Cli.Commands
 
                         if (modelBindingExtraList != null && modelBindingExtraList.Count > 0)
                         {
-                            modelBindingExtra = ", params: { " + Join(", ", modelBindingExtraList.ToArray()) + " }";
+                            modelBindingExtra = ", params: { " + string.Join(", ", modelBindingExtraList.ToArray()) + " }";
                         }
 
                         var url = ((string)action["url"]).Replace("/{", "/${");
                         var httpMethod = (string)action["httpMethod"];
+
                         serviceFileText.AppendLine(
-                            $"   return this.restService.request({{ url: '/{url}', method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }});");
+                            url.Contains("${")
+                                ? $"   return this.restService.request({{ url: `/{url}`, method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }});"
+                                : $"   return this.restService.request({{ url: '/{url}', method: '{httpMethod}'{bodyExtra}{modelBindingExtra} }});");
+
 
                         serviceFileText.AppendLine(" }");
-                    } 
+                    }
 
                     serviceIndexList.Add(controllerServiceName.Replace(".ts", ""));
 
                     if (firstTypeList != null && firstTypeList.Count > 0)
                     {
-                        var firstTypeListDistinct = ", " + Join(", ", firstTypeList.Where(p => p != "void").Distinct().ToArray());
+                        var firstTypeListDistinct = ", " + string.Join(", ", firstTypeList.Where(p => p != "void").Distinct().ToArray());
                         serviceFileText.Replace("[firstTypeList]",
                             $"import {{ RestService {firstTypeListDistinct}}} from '@abp/ng.core';");
                     }
                     else
                     {
-                        serviceFileText.Replace("[firstTypeList]", "");
+                        serviceFileText.Replace("[firstTypeList]",
+                            $"import {{ RestService }} from '@abp/ng.core';");
                     }
 
                     if (secondTypeList != null && secondTypeList.Count > 0)
                     {
-                        var secondTypeListDistinct = Join(", ", secondTypeList.Where(p => p != "void").Distinct().ToArray());
+                        var secondTypeListDistinct = string.Join(", ", secondTypeList.Where(p => p != "void").Distinct().ToArray());
                         serviceFileText.Replace("[secondTypeList]",
                             $"import {{{secondTypeListDistinct}}} from '../models';");
                     }
@@ -240,7 +289,7 @@ namespace Volo.Abp.Cli.Commands
 
                     serviceFileText.Replace("[controllerName]", controllerName);
                     File.WriteAllText($"src/app/{rootPath}/shared/services/{controllerServiceName}", serviceFileText.ToString());
-                } 
+                }
 
                 var serviceIndexFileText = new StringBuilder();
 
@@ -284,9 +333,14 @@ namespace Volo.Abp.Cli.Commands
             return moduleList;
         }
 
-        private string CreateType(JObject data, string returnValueType, string rootPath)
-        { 
+        private static string CreateType(JObject data, string returnValueType, string rootPath, List<string> modelIndexList)
+        {
             var type = data["types"][returnValueType];
+
+            if (type == null)
+            {
+                return null;
+            }
 
             if (returnValueType.StartsWith("Volo.Abp.Application.Dtos")
                  || returnValueType.StartsWith("System.Collections")
@@ -311,20 +365,24 @@ namespace Volo.Abp.Cli.Commands
                 return null;
             }
 
-            var modelFileText = new StringBuilder(); 
+            var modelFileText = new StringBuilder();
 
             var baseType = (string)type["baseType"];
             var extends = "";
+            var customBaseTypeName = "";
 
-            if (!IsNullOrWhiteSpace(baseType) && baseType != "System.Enum")
+            if (!string.IsNullOrWhiteSpace(baseType) && baseType != "System.Enum")
             {
                 var baseTypeSplit = baseType.Split(".");
                 var baseTypeName = baseTypeSplit[baseTypeSplit.Length - 1].Replace("<", "").Replace(">", "");
                 var baseTypeKebabCase = "./" + baseTypeName.PascalToKebabCase();
 
-                if (baseType.Contains("Volo.Abp.Application.Dtos.EntityDto"))
+                if (baseType.Contains("Volo.Abp.Application.Dtos"))
                 {
                     baseTypeKebabCase = "@abp/ng.core";
+
+                    baseTypeName = baseType.Split("Volo.Abp.Application.Dtos")[1].Split("<")[0].TrimStart('.');
+                    customBaseTypeName = baseType.Split("Volo.Abp.Application.Dtos")[1].Replace("System.Guid", "string").TrimStart('.');
                 }
 
                 if (baseTypeName.Contains("guid") || baseTypeName.Contains("Guid"))
@@ -333,31 +391,44 @@ namespace Volo.Abp.Cli.Commands
                 }
 
                 modelFileText.AppendLine($"import {{ {baseTypeName} }} from '{baseTypeKebabCase}';");
-                extends = "extends " + baseTypeName;
+                extends = "extends " + (!string.IsNullOrWhiteSpace(customBaseTypeName) ? customBaseTypeName : baseTypeName);
             }
 
-            if (baseType == "System.Enum" && (string)type.First["isEnum"] == "True")
+            if (baseType == "System.Enum" && (bool)type["isEnum"])
             {
                 modelFileText.AppendLine($"export enum {typeName} {{");
 
-                var enumNameList = type.First["enumNames"].ToArray();
-                var enumValueList = type.First["enumValues"].ToArray();
+                var enumNameList = type["enumNames"].ToArray();
+                var enumValueList = type["enumValues"].ToArray();
 
                 for (var i = 0; i < enumNameList.Length; i++)
                 {
-                    modelFileText.AppendLine($"{enumNameList[i]} = {enumValueList[i]},");
+                    modelFileText.AppendLine($"    {enumNameList[i]} = {enumValueList[i]},");
                 }
 
                 modelFileText.AppendLine("}");
             }
             else
             {
+                modelFileText.AppendLine("");
                 modelFileText.AppendLine($"export class {typeName} {extends} {{");
 
                 foreach (var property in type["properties"])
                 {
                     var propertyName = (string)property["name"];
                     propertyName = (char.ToLower(propertyName[0]) + propertyName.Substring(1));
+
+                    var modelIndex = CreateType(data, (string)property["type"], rootPath, modelIndexList);
+
+                    if (!string.IsNullOrWhiteSpace(modelIndex))
+                    { 
+                        var propertyTypeSplit = ((string)property["type"]).Split(".");
+                        var propertyType = propertyTypeSplit[propertyTypeSplit.Length - 1];
+                        modelFileText.Insert(0,"");
+                        modelFileText.Insert(0, $"import {{ {propertyType} }} from '../models';"); 
+                        modelFileText.Insert(0, "");
+                        modelIndexList.Add(modelIndex);
+                    }
 
                     var typeSimple = (string)property["typeSimple"];
 
@@ -401,7 +472,7 @@ namespace Volo.Abp.Cli.Commands
 
                 modelFileText.AppendLine($"  constructor(initialValues: Partial<{typeName}> = {{}}) {{");
 
-                if (!IsNullOrWhiteSpace(baseType))
+                if (!string.IsNullOrWhiteSpace(baseType))
                 {
                     modelFileText.AppendLine("    super(initialValues);");
                     modelFileText.AppendLine("  }");
@@ -425,6 +496,44 @@ namespace Volo.Abp.Cli.Commands
             File.WriteAllText($"src/app/{rootPath}/shared/models/{typeModelName}", modelFileText.ToString());
 
             return typeModelName.Replace(".ts", "");
+        }
+
+        private static List<ParameterModel> AddParameter(string parameterName, string type, bool parameterIsOptional, string parameterDefaultValue, string bindingSourceId, List<ParameterModel> parameterModel)
+        {
+            if (parameterDefaultValue != "null")
+            {
+                parameterModel.Add(new ParameterModel
+                {
+                    DisplayOrder = 3,
+                    Name = parameterName,
+                    Type = type,
+                    Value = parameterDefaultValue,
+                    BindingSourceId = bindingSourceId
+                });
+            }
+            else if (parameterDefaultValue == "null" && parameterIsOptional)
+            {
+                parameterModel.Add(new ParameterModel
+                {
+                    DisplayOrder = 2,
+                    Name = parameterName,
+                    IsOptional = true,
+                    Type = type,
+                    BindingSourceId = bindingSourceId
+                });
+            }
+            else
+            {
+                parameterModel.Add(new ParameterModel
+                {
+                    DisplayOrder = 1,
+                    Name = parameterName,
+                    Type = type,
+                    BindingSourceId = bindingSourceId
+                });
+            }
+
+            return parameterModel;
         }
 
         public string GetUsageInfo()
@@ -490,7 +599,7 @@ namespace Volo.Abp.Cli.Commands
     {
         public static string PascalToKebabCase(this string value)
         {
-            if (IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value))
             {
                 return value;
             }
@@ -503,5 +612,15 @@ namespace Volo.Abp.Cli.Commands
                 .Trim()
                 .ToLower();
         }
+    }
+
+    public class ParameterModel
+    {
+        public int DisplayOrder { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+        public string Type { get; set; }
+        public bool IsOptional { get; set; }
+        public string BindingSourceId { get; set; }
     }
 }
