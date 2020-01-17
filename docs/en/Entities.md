@@ -52,7 +52,7 @@ public class Book : Entity<Guid>
 }
 ````
 
-Example usage in an application service:
+Example usage in an [application service](Application-Services.md):
 
 ````csharp
 public class BookAppService : ApplicationService, IBookAppService
