@@ -14,6 +14,11 @@ An **audit log object** (see the Audit Log Object section below) is typically cr
 
 > [Startup templates](Startup-Templates/Index.md) are configured for the audit logging system which is suitable for most of the applications. Use this document for a detailed control over the audit log system.
 
+### Database Provider Support
+
+* Fully supported by the [Entity Framework Core](Entity-Framework-Core.md) provider.
+* Entity change logging is not supported by the [MongoDB](MongoDB.md) provider. Other features work as expected.
+
 ## UseAuditing()
 
 `UseAuditing()` middleware should be added to the ASP.NET Core request pipeline in order to create and save the audit logs. If you've created your applications using [the startup templates](Startup-Templates/Index.md), it is already added.
@@ -281,6 +286,84 @@ Configure<AbpAuditingOptions>(options =>
     options.Contributors.Add(new MyAuditLogContributor());
 });
 ````
+
+## IAuditLogScope & IAuditingManager
+
+This section explains the `IAuditLogScope` & `IAuditingManager` services for advanced use cases.
+
+An **audit log scope** is an [ambient scope](Ambient-Context-Pattern.md) that **builds** and **saves** an audit log object (explained before). By default, an audit log scope is created for a web request by the Audit Log Middleware (see `UseAuditing()` section above).
+
+### Access to the Current Audit Log Scope
+
+Audit log contributors, was explained above, is a global way of manipulating the audit log object. It is good if you can get a value from a service.
+
+If you need to manipulate the audit log object in an arbitrary point of your application, you can access to the current audit log scope and get the current audit log object (independent of how the scope is managed). Example:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IAuditingManager _auditingManager;
+
+    public MyService(IAuditingManager auditingManager)
+    {
+        _auditingManager = auditingManager;
+    }
+
+    public async Task DoItAsync()
+    {
+        var currentAuditLogScope = _auditingManager.Current;
+        if (currentAuditLogScope != null)
+        {
+            currentAuditLogScope.Log.Comments.Add(
+                "Executed the MyService.DoItAsync method :)"
+            );
+            
+            currentAuditLogScope.Log.SetProperty("MyCustomProperty", 42);
+        }
+    }
+}
+````
+
+Always check if `_auditingManager.Current` is null or not, because it is controlled in an outer scope and you can't know if an audit log scope was created before calling your method.
+
+### Manually Create an Audit Log Scope
+
+You rarely need to create a manual audit log scope, but if you need, you can create an audit log scope using the `IAuditingManager` as like in the following example:
+
+````csharp
+public class MyService : ITransientDependency
+{
+    private readonly IAuditingManager _auditingManager;
+
+    public MyService(IAuditingManager auditingManager)
+    {
+        _auditingManager = auditingManager;
+    }
+
+    public async Task DoItAsync()
+    {
+        using (var auditingScope = _auditingManager.BeginScope())
+        {
+            try
+            {
+                //Call other services...
+            }
+            catch (Exception ex)
+            {
+                //Add exceptions
+                _auditingManager.Current.Log.Exceptions.Add(ex);
+            }
+            finally
+            {
+                //Always save the log
+                await auditingScope.SaveAsync();
+            }
+        }
+    }
+}
+````
+
+You can call other services, they may call others, they may change entities and so on. All these interactions are saved as a single audit log object in the finally block.
 
 ## The Audit Logging Module
 
