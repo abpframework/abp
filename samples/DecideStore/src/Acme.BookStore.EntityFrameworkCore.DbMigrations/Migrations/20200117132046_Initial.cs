@@ -48,7 +48,8 @@ namespace Acme.BookStore.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     JobName = table.Column<string>(maxLength: 128, nullable: false),
                     JobArgs = table.Column<string>(maxLength: 1048576, nullable: false),
-                    TryCount = table.Column<short>(nullable: false, defaultValue: (short)0),
+                    TryCount = table.Column<short>(nullable: false, defaultValue: (short)0)
+                        .Annotation("Sqlite:Autoincrement", true),
                     CreationTime = table.Column<DateTime>(nullable: false),
                     NextTryTime = table.Column<DateTime>(nullable: false),
                     LastTryTime = table.Column<DateTime>(nullable: true),
@@ -195,10 +196,32 @@ namespace Acme.BookStore.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false, defaultValue: false),
                     AccessFailedCount = table.Column<int>(nullable: false, defaultValue: 0)
+                        .Annotation("Sqlite:Autoincrement", true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppBooks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
+                    CreatorId = table.Column<Guid>(nullable: true),
+                    LastModificationTime = table.Column<DateTime>(nullable: true),
+                    LastModifierId = table.Column<Guid>(nullable: true),
+                    Name = table.Column<string>(maxLength: 128, nullable: false),
+                    Type = table.Column<int>(nullable: false),
+                    PublishDate = table.Column<DateTime>(nullable: false),
+                    Price = table.Column<float>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppBooks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -997,6 +1020,9 @@ namespace Acme.BookStore.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AppBooks");
 
             migrationBuilder.DropTable(
                 name: "IdentityServerApiClaims");
