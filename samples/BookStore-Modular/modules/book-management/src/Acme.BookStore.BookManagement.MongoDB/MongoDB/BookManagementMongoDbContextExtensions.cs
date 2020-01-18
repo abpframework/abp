@@ -8,7 +8,7 @@ namespace Acme.BookStore.BookManagement.MongoDB
     {
         public static void ConfigureBookManagement(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 

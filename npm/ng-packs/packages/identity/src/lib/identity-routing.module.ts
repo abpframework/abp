@@ -1,10 +1,15 @@
-import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import {
+  AuthGuard,
+  DynamicLayoutComponent,
+  PermissionGuard,
+  CoreModule,
+  ReplaceableRouteContainerComponent,
+  ReplaceableComponents,
+} from '@abp/ng.core';
+import { NgModule, Type } from '@angular/core';
+import { RouterModule, Routes, Router, ActivatedRoute } from '@angular/router';
 import { RolesComponent } from './components/roles/roles.component';
-import { RoleResolver } from './resolvers/roles.resolver';
-import { DynamicLayoutComponent, AuthGuard, PermissionGuard } from '@abp/ng.core';
 import { UsersComponent } from './components/users/users.component';
-import { UserResolver } from './resolvers/users.resolver';
 
 const routes: Routes = [
   { path: '', redirectTo: 'roles', pathMatch: 'full' },
@@ -15,23 +20,32 @@ const routes: Routes = [
     children: [
       {
         path: 'roles',
-        component: RolesComponent,
-        resolve: [RoleResolver],
-        data: { requiredPolicy: 'AbpIdentity.Roles' },
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          requiredPolicy: 'AbpIdentity.Roles',
+          replaceableComponent: {
+            key: 'Identity.RolesComponent',
+            defaultComponent: RolesComponent,
+          } as ReplaceableComponents.RouteData<RolesComponent>,
+        },
       },
       {
         path: 'users',
-        component: UsersComponent,
-        data: { requiredPolicy: 'AbpIdentity.Users' },
-        resolve: [RoleResolver, UserResolver],
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          requiredPolicy: 'AbpIdentity.Users',
+          replaceableComponent: {
+            key: 'Identity.UsersComponent',
+            defaultComponent: UsersComponent,
+          } as ReplaceableComponents.RouteData<UsersComponent>,
+        },
       },
     ],
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), CoreModule],
   exports: [RouterModule],
-  providers: [RoleResolver, UserResolver],
 })
 export class IdentityRoutingModule {}

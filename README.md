@@ -9,10 +9,6 @@ This project is the next generation of the [ASP.NET Boilerplate](https://aspnetb
 
 See the official [web site (abp.io)](https://abp.io/) for more information.
 
-### Status
-
-This project is in **preview** stage and it's not suggested to use it in production yet.
-
 ### Documentation
 
 See the <a href="https://docs.abp.io/" target="_blank">documentation</a>.
@@ -30,6 +26,8 @@ Framework solution is located under the `framework` folder. It has no external d
 #### Modules/Templates
 
 [Modules](modules/) and [Templates](templates/) have their own solutions and have **local references** to the framework and each other.
+
+Visual Studio can not work properly with the local references out of the solution folder. When you open a module/sample solution in the Visual Studio, you may get some errors related to the dependencies. In this case, run the `dotnet restore` on the command prompt for the related solution's folder. You need to run it after you first open the solution or change a dependency.
 
 ### Contribution
 

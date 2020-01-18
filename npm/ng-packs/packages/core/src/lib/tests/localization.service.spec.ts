@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator';
+import { createServiceFactory, SpectatorService, SpyObject } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
 import { Observable, of } from 'rxjs';
 import { LocalizationService } from '../services/localization.service';
@@ -24,7 +24,7 @@ describe('LocalizationService', () => {
   describe('#currentLang', () => {
     it('should be tr', () => {
       store.selectSnapshot.andCallFake((selector: (state: any, ...states: any[]) => string) => {
-        return selector({ SessionState: { getLanguage: 'tr' } });
+        return selector({ SessionState: { language: 'tr' } });
       });
 
       expect(service.currentLang).toBe('tr');
@@ -33,9 +33,7 @@ describe('LocalizationService', () => {
 
   describe('#get', () => {
     it('should be return an observable localization', async () => {
-      store.select.andCallFake((selector: (state: any, ...states: any[]) => Observable<string>) => {
-        return selector({ ConfigState: { getLocalization: (keys, ...interpolateParams) => of(keys) } });
-      });
+      store.select.andReturn(of('AbpTest'));
 
       const localization = await service.get('AbpTest').toPromise();
 
@@ -45,9 +43,13 @@ describe('LocalizationService', () => {
 
   describe('#instant', () => {
     it('should be return a localization', () => {
-      store.selectSnapshot.andCallFake((selector: (state: any, ...states: any[]) => Observable<string>) => {
-        return selector({ ConfigState: { getLocalization: (keys, ...interpolateParams) => keys } });
-      });
+      store.selectSnapshot.andCallFake(
+        (selector: (state: any, ...states: any[]) => Observable<string>) => {
+          return selector({
+            ConfigState: { getLocalization: (keys, ...interpolateParams) => keys },
+          });
+        },
+      );
 
       expect(service.instant('AbpTest')).toBe('AbpTest');
     });
@@ -74,7 +76,7 @@ describe('LocalizationService', () => {
       try {
         const instance = new LocalizationService(null, null, null, {} as any);
       } catch (error) {
-        expect((error as Error).message).toBe('LocaleService should have only one instance.');
+        expect((error as Error).message).toBe('LocalizationService should have only one instance.');
       }
     });
   });

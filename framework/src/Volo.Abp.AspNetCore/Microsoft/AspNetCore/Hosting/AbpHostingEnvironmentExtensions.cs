@@ -7,9 +7,9 @@ namespace Microsoft.AspNetCore.Hosting
     {
         public static IConfigurationRoot BuildConfiguration(
             this IWebHostEnvironment env,
-            ConfigurationBuilderOptions options = null)
+            AbpConfigurationBuilderOptions options = null)
         {
-            options = options ?? new ConfigurationBuilderOptions();
+            options = options ?? new AbpConfigurationBuilderOptions();
 
             if (options.BasePath.IsNullOrEmpty())
             {

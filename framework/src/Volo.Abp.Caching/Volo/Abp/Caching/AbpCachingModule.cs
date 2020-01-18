@@ -21,8 +21,9 @@ namespace Volo.Abp.Caching
             context.Services.AddDistributedMemoryCache();
 
             context.Services.AddSingleton(typeof(IDistributedCache<>), typeof(DistributedCache<>));
+            context.Services.AddSingleton(typeof(IDistributedCache<,>), typeof(DistributedCache<,>));
 
-            context.Services.Configure<CacheOptions>(cacheOptions =>
+            context.Services.Configure<AbpDistributedCacheOptions>(cacheOptions =>
             {
                 cacheOptions.GlobalCacheEntryOptions.SlidingExpiration = TimeSpan.FromMinutes(20);
             });

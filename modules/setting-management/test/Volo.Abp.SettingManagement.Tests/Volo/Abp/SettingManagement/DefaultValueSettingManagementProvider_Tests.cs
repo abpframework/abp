@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Shouldly;
 using Volo.Abp.Settings;
 using Xunit;
@@ -24,7 +21,7 @@ namespace Volo.Abp.SettingManagement
 
             var defaultValueSettingManagementProvider = new DefaultValueSettingManagementProvider();
             (await defaultValueSettingManagementProvider
-                .GetOrNullAsync(mySetting3, DefaultValueSettingValueProvider.ProviderName)).ShouldBe("123");
+                .GetOrNullAsync(mySetting3, DefaultValueSettingValueProvider.ProviderName).ConfigureAwait(false)).ShouldBe("123");
         }
 
         [Fact]
@@ -33,7 +30,7 @@ namespace Volo.Abp.SettingManagement
             var mySetting3 = _settingDefinitionManager.Get("MySetting3");
 
             await Assert.ThrowsAsync<AbpException>(async () => await new DefaultValueSettingManagementProvider().SetAsync(mySetting3, "123",
-                DefaultValueSettingValueProvider.ProviderName));
+                DefaultValueSettingValueProvider.ProviderName).ConfigureAwait(false)).ConfigureAwait(false);
         }
 
         [Fact]
@@ -43,7 +40,7 @@ namespace Volo.Abp.SettingManagement
 
             await Assert.ThrowsAsync<AbpException>(async () =>
                 await new DefaultValueSettingManagementProvider().ClearAsync(mySetting3,
-                    DefaultValueSettingValueProvider.ProviderName));
+                    DefaultValueSettingValueProvider.ProviderName).ConfigureAwait(false)).ConfigureAwait(false);
         }
     }
 }

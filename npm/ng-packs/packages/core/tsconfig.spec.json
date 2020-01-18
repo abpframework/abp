@@ -1,13 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../out-tsc/spec",
-    "types": ["jasmine", "node"],
-    "paths": {
-      "@abp/ng.core": ["packages/core/src/public-api.ts"],
-      "@abp/ng.core/*": ["packages/core/src/lib/*"]
-    }
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"]
   },
-  "files": ["src/test.ts"],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

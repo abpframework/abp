@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using Shouldly;
@@ -17,18 +18,18 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         private readonly Guid _testTenantId = Guid.NewGuid();
         private readonly string _testTenantName = "acme";
 
-        private readonly AspNetCoreMultiTenancyOptions _options;
+        private readonly AbpAspNetCoreMultiTenancyOptions _options;
 
         public AspNetCoreMultiTenancy_Without_DomainResolver_Tests()
         {
-            _options = ServiceProvider.GetRequiredService<IOptions<AspNetCoreMultiTenancyOptions>>().Value;
+            _options = ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreMultiTenancyOptions>>().Value;
         }
 
-        protected override IWebHostBuilder CreateWebHostBuilder()
+        protected override IHostBuilder CreateHostBuilder()
         {
-            return base.CreateWebHostBuilder().ConfigureServices(services =>
+            return base.CreateHostBuilder().ConfigureServices(services =>
             {
-                services.Configure<DefaultTenantStoreOptions>(options =>
+                services.Configure<AbpDefaultTenantStoreOptions>(options =>
                 {
                     options.Tenants = new[]
                     {
@@ -41,7 +42,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         [Fact]
         public async Task Should_Use_Host_If_Tenant_Is_Not_Specified()
         {
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io").ConfigureAwait(false);
             result["TenantId"].ShouldBe("");
         }
 
@@ -49,7 +50,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         public async Task Should_Use_QueryString_Tenant_Id_If_Specified()
         {
 
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantKey}={_testTenantName}");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>($"http://abp.io?{_options.TenantKey}={_testTenantName}").ConfigureAwait(false);
             result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
 
@@ -58,7 +59,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             Client.DefaultRequestHeaders.Add(_options.TenantKey, _testTenantId.ToString());
 
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io").ConfigureAwait(false);
             result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
         
@@ -67,7 +68,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             Client.DefaultRequestHeaders.Add("Cookie", new CookieHeaderValue(_options.TenantKey, _testTenantId.ToString()).ToString());
 
-            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io");
+            var result = await GetResponseAsObjectAsync<Dictionary<string, string>>("http://abp.io").ConfigureAwait(false);
             result["TenantId"].ShouldBe(_testTenantId.ToString());
         }
     }

@@ -5,7 +5,7 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
@@ -16,7 +16,7 @@ namespace DashboardDemo
 {
     [DependsOn(
         typeof(AbpAuditLoggingDomainSharedModule),
-        typeof(BackgroundJobsDomainSharedModule),
+        typeof(AbpBackgroundJobsDomainSharedModule),
         typeof(AbpFeatureManagementDomainSharedModule),
         typeof(AbpIdentityDomainSharedModule),
         typeof(AbpIdentityServerDomainSharedModule),
@@ -28,7 +28,7 @@ namespace DashboardDemo
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DashboardDemoDomainSharedModule>("DashboardDemo");
             });

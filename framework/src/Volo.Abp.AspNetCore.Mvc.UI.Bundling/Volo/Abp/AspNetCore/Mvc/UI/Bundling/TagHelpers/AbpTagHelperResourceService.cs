@@ -16,16 +16,15 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
     public abstract class AbpTagHelperResourceService : ITransientDependency
     {
         public ILogger<AbpTagHelperResourceService> Logger { get; set; }
-
         protected IBundleManager BundleManager { get; }
         protected IWebContentFileProvider WebContentFileProvider { get; }
         protected IWebHostEnvironment HostingEnvironment { get; }
-        protected readonly BundlingOptions Options;
+        protected readonly AbpBundlingOptions Options;
         
         protected AbpTagHelperResourceService(
             IBundleManager bundleManager,
             IWebContentFileProvider webContentFileProvider,
-            IOptions<BundlingOptions> options,
+            IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment)
         {
             BundleManager = bundleManager;
@@ -36,7 +35,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             Logger = NullLogger<AbpTagHelperResourceService>.Instance;
         }
 
-        public virtual Task ProcessAsync(
+        public virtual async Task ProcessAsync(
             [NotNull] TagHelperContext context,
             [NotNull] TagHelperOutput output,
             [NotNull] List<BundleTagHelperItem> bundleItems,
@@ -57,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             CreateBundle(bundleName, bundleItems);
 
-            var bundleFiles = GetBundleFiles(bundleName);
+            var bundleFiles = await GetBundleFilesAsync(bundleName).ConfigureAwait(false);
 
             output.Content.Clear();
 
@@ -74,13 +73,11 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             stopwatch.Stop();
             Logger.LogDebug($"Added bundle '{bundleName}' to the page in {stopwatch.Elapsed.TotalMilliseconds:0.00} ms.");
-
-            return Task.CompletedTask;
         }
 
         protected abstract void CreateBundle(string bundleName, List<BundleTagHelperItem> bundleItems);
 
-        protected abstract IReadOnlyList<string> GetBundleFiles(string bundleName);
+        protected abstract Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName);
 
         protected abstract void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file);
 

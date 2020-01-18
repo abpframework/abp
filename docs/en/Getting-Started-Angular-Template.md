@@ -26,10 +26,10 @@ abp new Acme.BookStore -u angular
 
 The created solution requires;
 
-* [Visual Studio 2017 (v15.9.0+)](https://visualstudio.microsoft.com/tr/downloads/)
-* [.NET Core 2.2+](https://www.microsoft.com/net/download/dotnet-core/)
-* [Node v10.16+](https://nodejs.org)
-* [Yarn v1.17+](https://yarnpkg.com/)
+* [Visual Studio 2019 (v16.3+)](https://visualstudio.microsoft.com/vs/)
+* [.NET Core 3.0+](https://www.microsoft.com/net/download/dotnet-core/)
+* [Node v12+](https://nodejs.org)
+* [Yarn v1.19+](https://yarnpkg.com/)
 
 ### The Solution Structure
 
@@ -75,7 +75,7 @@ Hit F5 (or Ctrl+F5) to run the application. It will have an output like shown be
 
 #### Using EF Core Update-Database Command
 
-Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations. Right click to the `.Web` project and select **Set as StartUp Project**:
+Ef Core has `Update-Database` command which creates database if necessary and applies pending migrations. Right click to the `.HttpApi.Host` project and select **Set as StartUp Project**:
 
 ![set-as-startup-project](images/set-as-startup-project.png)
 

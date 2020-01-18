@@ -1,6 +1,6 @@
 Prism.languages.smalltalk = {
-	'comment': /"(?:""|[^"])+"/,
-	'string': /'(?:''|[^'])+'/,
+	'comment': /"(?:""|[^"])*"/,
+	'string': /'(?:''|[^'])*'/,
 	'symbol': /#[\da-z]+|#(?:-|([+\/\\*~<>=@%|&?!])\1?)|#(?=\()/i,
 	'block-arguments': {
 		pattern: /(\[\s*):[^\[|]*\|/,

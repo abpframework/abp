@@ -40,7 +40,7 @@ using Volo.Abp.Emailing;
 
 namespace MyProject
 {
-    public class EmailSendingJob : BackgroundJob<EmailSendingArgs>
+    public class EmailSendingJob : BackgroundJob<EmailSendingArgs>, ITransientDependency
     {
         private readonly IEmailSender _emailSender;
 

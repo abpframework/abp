@@ -18,7 +18,7 @@ namespace Volo.Abp.AspNetCore.App
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = true;
             });
@@ -41,7 +41,7 @@ namespace Volo.Abp.AspNetCore.App
                 };
 
                 var result = jsonSerializer.Serialize(dictionary, camelCase: false);
-                await ctx.Response.WriteAsync(result);
+                await ctx.Response.WriteAsync(result).ConfigureAwait(false);
             });
         }
     }

@@ -8,7 +8,7 @@ namespace Volo.Abp.Castle
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            context.Services.AddTransient(typeof(CastleAbpInterceptorAdapter<>));
+            context.Services.AddTransient(typeof(AbpAsyncDeterminationInterceptor<>));
         }
     }
 }

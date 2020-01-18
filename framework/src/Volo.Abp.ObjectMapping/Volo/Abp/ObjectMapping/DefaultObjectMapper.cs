@@ -4,11 +4,22 @@ using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.ObjectMapping
 {
-    //TODO: It can be slow to always check if service is available. Test it and optimize if necessary.
+    public class DefaultObjectMapper<TContext> : DefaultObjectMapper, IObjectMapper<TContext>
+    {
+        public DefaultObjectMapper(
+            IServiceProvider serviceProvider, 
+            IAutoObjectMappingProvider<TContext> autoObjectMappingProvider
+            ) : base(
+                serviceProvider, 
+                autoObjectMappingProvider)
+        {
+
+        }
+    }
 
     public class DefaultObjectMapper : IObjectMapper, ITransientDependency
     {
-        protected IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
+        public IAutoObjectMappingProvider AutoObjectMappingProvider { get; }
         protected IServiceProvider ServiceProvider { get; }
 
         public DefaultObjectMapper(
@@ -18,6 +29,8 @@ namespace Volo.Abp.ObjectMapping
             AutoObjectMappingProvider = autoObjectMappingProvider;
             ServiceProvider = serviceProvider;
         }
+        
+        //TODO: It can be slow to always check if service is available. Test it and optimize if necessary.
 
         public virtual TDestination Map<TSource, TDestination>(TSource source)
         {

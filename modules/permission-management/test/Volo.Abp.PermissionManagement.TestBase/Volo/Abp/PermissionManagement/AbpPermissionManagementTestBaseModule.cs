@@ -2,6 +2,7 @@
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.PermissionManagement
 {
@@ -29,9 +30,9 @@ namespace Volo.Abp.PermissionManagement
         {
             using (var scope = context.ServiceProvider.CreateScope())
             {
-                scope.ServiceProvider
+                AsyncHelper.RunSync(() => scope.ServiceProvider
                     .GetRequiredService<PermissionTestDataBuilder>()
-                    .Build();
+                    .BuildAsync());
             }
         }
     }

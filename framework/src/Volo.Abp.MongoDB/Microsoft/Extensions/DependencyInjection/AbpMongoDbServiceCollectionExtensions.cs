@@ -7,10 +7,10 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class AbpMongoDbServiceCollectionExtensions
     {
-        public static IServiceCollection AddMongoDbContext<TMongoDbContext>(this IServiceCollection services, Action<IMongoDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
+        public static IServiceCollection AddMongoDbContext<TMongoDbContext>(this IServiceCollection services, Action<IAbpMongoDbContextRegistrationOptionsBuilder> optionsBuilder = null) //Created overload instead of default parameter
             where TMongoDbContext : AbpMongoDbContext
         {
-            var options = new MongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
+            var options = new AbpMongoDbContextRegistrationOptions(typeof(TMongoDbContext), services);
             optionsBuilder?.Invoke(options);
 
             foreach (var dbContextType in options.ReplacedDbContextTypes)

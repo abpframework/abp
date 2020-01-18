@@ -18,8 +18,8 @@ namespace Volo.Abp.Identity.Web.Navigation
 
             var authorizationService = context.ServiceProvider.GetRequiredService<IAuthorizationService>();
 
-            var hasRolePermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Roles.Default);
-            var hasUserPermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Users.Default);
+            var hasRolePermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Roles.Default).ConfigureAwait(false);
+            var hasUserPermission = await authorizationService.IsGrantedAsync(IdentityPermissions.Users.Default).ConfigureAwait(false);
 
             if (hasRolePermission || hasUserPermission)
             {

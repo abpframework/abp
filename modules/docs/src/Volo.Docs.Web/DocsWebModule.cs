@@ -28,11 +28,16 @@ namespace Volo.Docs
             {
                 options.AddAssemblyResource(typeof(DocsResource), typeof(DocsWebModule).Assembly);
             });
+
+            PreConfigure<IMvcBuilder>(mvcBuilder =>
+            {
+                mvcBuilder.AddApplicationPartIfNotExists(typeof(DocsWebModule).Assembly);
+            });
         }
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<DocsWebModule>("Volo.Docs");
             });
@@ -52,6 +57,7 @@ namespace Volo.Docs
                 options.Conventions.AddPageRoute("/Documents/Project/Index", routePrefix + "{languageCode}/{projectName}/{version}/{*documentName}");
             });
 
+            context.Services.AddAutoMapperObjectMapper<DocsWebModule>();
             Configure<AbpAutoMapperOptions>(options =>
             {
                 options.AddProfile<DocsWebAutoMapperProfile>(validate: true);
@@ -62,7 +68,7 @@ namespace Volo.Docs
                 options.Converters[MarkdownDocumentToHtmlConverter.Type] = typeof(MarkdownDocumentToHtmlConverter);
             });
 
-            Configure<BundleContributorOptions>(options =>
+            Configure<AbpBundleContributorOptions>(options =>
             {
                 options
                     .Extensions<PrismjsStyleBundleContributor>()

@@ -39,13 +39,13 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name)),
+                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name).ConfigureAwait(false)),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
                         TimeSpan.FromMinutes(5) //TODO: Should be configurable.
                 }
-            );
+            ).ConfigureAwait(false);
 
             if (httpContext != null)
             {
@@ -67,7 +67,35 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             tenantConfiguration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id)),
+                async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id).ConfigureAwait(false)),
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow =
+                        TimeSpan.FromMinutes(5) //TODO: Should be configurable.
+                }
+            ).ConfigureAwait(false);
+
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = tenantConfiguration;
+            }
+
+            return tenantConfiguration;
+        }
+
+        public TenantConfiguration Find(string name)
+        {
+            var cacheKey = CreateCacheKey(name);
+            var httpContext = HttpContextAccessor?.HttpContext;
+
+            if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
+            {
+                return tenantConfiguration;
+            }
+
+            tenantConfiguration = Cache.GetOrAdd(
+                cacheKey,
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByNameAsync(name).ConfigureAwait(false))),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow =
@@ -83,14 +111,32 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
             return tenantConfiguration;
         }
 
-        public TenantConfiguration Find(string name)
-        {
-            return AsyncHelper.RunSync(() => FindAsync(name));
-        }
-
         public TenantConfiguration Find(Guid id)
         {
-            return AsyncHelper.RunSync(() => FindAsync(id));
+            var cacheKey = CreateCacheKey(id);
+            var httpContext = HttpContextAccessor?.HttpContext;
+
+            if (httpContext != null && httpContext.Items[cacheKey] is TenantConfiguration tenantConfiguration)
+            {
+                return tenantConfiguration;
+            }
+            
+            tenantConfiguration = Cache.GetOrAdd(
+                cacheKey,
+                () => AsyncHelper.RunSync(async () => CreateTenantConfiguration(await Proxy.Service.FindTenantByIdAsync(id).ConfigureAwait(false))),
+                () => new DistributedCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow =
+                        TimeSpan.FromMinutes(5) //TODO: Should be configurable.
+                }
+            );
+
+            if (httpContext != null)
+            {
+                httpContext.Items[cacheKey] = tenantConfiguration;
+            }
+
+            return tenantConfiguration;
         }
 
         protected virtual TenantConfiguration CreateTenantConfiguration(FindTenantResultDto tenantResultDto)

@@ -5,7 +5,7 @@ namespace Volo.Abp.Settings
 {
     public class UserSettingValueProvider : SettingValueProvider
     {
-        public const string ProviderName = "User";
+        public const string ProviderName = "U";
 
         public override string Name => ProviderName;
 
@@ -24,7 +24,7 @@ namespace Volo.Abp.Settings
                 return null;
             }
 
-            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString());
+            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentUser.Id.ToString()).ConfigureAwait(false);
         }
     }
 }

@@ -49,6 +49,7 @@ namespace Volo.Docs
                 Format = "md",
                 DefaultDocumentName = "index",
                 NavigationDocumentName = "docs-nav.json",
+                ParametersDocumentName = "docs-params.json",
                 MinimumVersion = "1",
                 MainWebsiteUrl = "abp.io",
                 LatestVersionBranchName = "",
@@ -62,6 +63,8 @@ namespace Volo.Docs
 
             //Act
             var projectDto = await _projectAdminAppService.CreateAsync(createProjectDto);
+
+            //Assert
             projectDto.ShouldNotBeNull();
             projectDto.Name.ShouldBe(createProjectDto.Name);
             projectDto.ShortName.ShouldBe(createProjectDto.ShortName);

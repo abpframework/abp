@@ -15,7 +15,11 @@ namespace Volo.Docs.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new DocsModelBuilderConfigurationOptions();
+            var options = new DocsModelBuilderConfigurationOptions(
+                DocsDbProperties.DbTablePrefix,
+                DocsDbProperties.DbSchema
+            );
+
             optionsAction?.Invoke(options);
 
             builder.Entity<Project>(b =>
@@ -29,6 +33,7 @@ namespace Volo.Docs.EntityFrameworkCore
                 b.Property(x => x.ShortName).IsRequired().HasMaxLength(ProjectConsts.MaxShortNameLength);
                 b.Property(x => x.DefaultDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxDefaultDocumentNameLength);
                 b.Property(x => x.NavigationDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxNavigationDocumentNameLength);
+                b.Property(x => x.ParametersDocumentName).IsRequired().HasMaxLength(ProjectConsts.MaxParametersDocumentNameLength);
                 b.Property(x => x.LatestVersionBranchName).HasMaxLength(ProjectConsts.MaxLatestVersionBranchNameLength);
             });
         }

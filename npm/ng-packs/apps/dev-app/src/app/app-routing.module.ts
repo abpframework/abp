@@ -9,6 +9,7 @@ const routes: Routes = [
     data: {
       routes: {
         name: '::Menu:Home',
+        order: 1,
       } as ABP.Route,
     },
   },
@@ -24,6 +25,11 @@ const routes: Routes = [
     path: 'tenant-management',
     loadChildren: () =>
       import('./lazy-libs/tenant-management-wrapper.module').then(m => m.TenantManagementWrapperModule),
+  },
+  {
+    path: 'setting-management',
+    loadChildren: () =>
+      import('./lazy-libs/setting-management-wrapper.module').then(m => m.SettingManagementWrapperModule),
   },
 ];
 

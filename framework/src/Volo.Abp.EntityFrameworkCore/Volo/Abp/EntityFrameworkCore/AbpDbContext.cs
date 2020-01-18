@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -11,17 +11,18 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Newtonsoft.Json;
 using Volo.Abp.Auditing;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
+using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
-using Volo.Abp.Threading;
+using Volo.Abp.Timing;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -30,9 +31,9 @@ namespace Volo.Abp.EntityFrameworkCore
     {
         protected virtual Guid? CurrentTenantId => CurrentTenant?.Id;
 
-        protected virtual bool IsMultiTenantFilterEnabled => DataFilter.IsEnabled<IMultiTenant>();
+        protected virtual bool IsMultiTenantFilterEnabled => DataFilter?.IsEnabled<IMultiTenant>() ?? false;
 
-        protected virtual bool IsSoftDeleteFilterEnabled => DataFilter.IsEnabled<ISoftDelete>();
+        protected virtual bool IsSoftDeleteFilterEnabled => DataFilter?.IsEnabled<ISoftDelete>() ?? false;
 
         public ICurrentTenant CurrentTenant { get; set; }
 
@@ -48,12 +49,28 @@ namespace Volo.Abp.EntityFrameworkCore
 
         public IAuditingManager AuditingManager { get; set; }
 
+        public IClock Clock { get; set; }
+
         public ILogger<AbpDbContext<TDbContext>> Logger { get; set; }
 
         private static readonly MethodInfo ConfigureBasePropertiesMethodInfo
             = typeof(AbpDbContext<TDbContext>)
                 .GetMethod(
                     nameof(ConfigureBaseProperties),
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                );
+
+        private static readonly MethodInfo ConfigureValueConverterMethodInfo
+            = typeof(AbpDbContext<TDbContext>)
+                .GetMethod(
+                    nameof(ConfigureValueConverter),
+                    BindingFlags.Instance | BindingFlags.NonPublic
+                );
+
+        private static readonly MethodInfo ConfigureValueGeneratedMethodInfo
+            = typeof(AbpDbContext<TDbContext>)
+                .GetMethod(
+                    nameof(ConfigureValueGenerated),
                     BindingFlags.Instance | BindingFlags.NonPublic
                 );
 
@@ -75,48 +92,17 @@ namespace Volo.Abp.EntityFrameworkCore
                 ConfigureBasePropertiesMethodInfo
                     .MakeGenericMethod(entityType.ClrType)
                     .Invoke(this, new object[] { modelBuilder, entityType });
+
+                ConfigureValueConverterMethodInfo
+                    .MakeGenericMethod(entityType.ClrType)
+                    .Invoke(this, new object[] { modelBuilder, entityType });
+
+                ConfigureValueGeneratedMethodInfo
+                    .MakeGenericMethod(entityType.ClrType)
+                    .Invoke(this, new object[] { modelBuilder, entityType });
             }
         }
-
-        public override int SaveChanges(bool acceptAllChangesOnSuccess)
-        {
-            //TODO: Reduce duplications with SaveChangesAsync
-            //TODO: Instead of adding entity changes to audit log, write them to uow and add to audit log only if uow succeed
-
-            try
-            {
-                var auditLog = AuditingManager?.Current?.Log;
-
-                List<EntityChangeInfo> entityChangeList = null;
-                if (auditLog != null)
-                {
-                    entityChangeList = EntityHistoryHelper.CreateChangeList(ChangeTracker.Entries().ToList());
-                }
-
-                var changeReport = ApplyAbpConcepts();
-
-                var result = base.SaveChanges(acceptAllChangesOnSuccess);
-
-                AsyncHelper.RunSync(() => EntityChangeEventHelper.TriggerEventsAsync(changeReport));
-
-                if (auditLog != null)
-                {
-                    EntityHistoryHelper.UpdateChangeList(entityChangeList);
-                    auditLog.EntityChanges.AddRange(entityChangeList);
-                }
-
-                return result;
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw new AbpDbConcurrencyException(ex.Message, ex);
-            }
-            finally
-            {
-                ChangeTracker.AutoDetectChangesEnabled = true;
-            }
-        }
-
+        
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             try
@@ -131,9 +117,9 @@ namespace Volo.Abp.EntityFrameworkCore
 
                 var changeReport = ApplyAbpConcepts();
 
-                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+                var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken).ConfigureAwait(false);
 
-                await EntityChangeEventHelper.TriggerEventsAsync(changeReport);
+                await EntityChangeEventHelper.TriggerEventsAsync(changeReport).ConfigureAwait(false);
 
                 if (auditLog != null)
                 {
@@ -224,15 +210,15 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var localEvents = generatesDomainEventsEntity.GetLocalEvents().ToArray();
-            if (localEvents.Any())
+            var localEvents = generatesDomainEventsEntity.GetLocalEvents()?.ToArray();
+            if (localEvents != null && localEvents.Any())
             {
                 changeReport.DomainEvents.AddRange(localEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
                 generatesDomainEventsEntity.ClearLocalEvents();
             }
 
-            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents().ToArray();
-            if (distributedEvents.Any())
+            var distributedEvents = generatesDomainEventsEntity.GetDistributedEvents()?.ToArray();
+            if (distributedEvents != null && distributedEvents.Any())
             {
                 changeReport.DistributedEvents.AddRange(distributedEvents.Select(eventData => new DomainEventEntry(entityAsObj, eventData)));
                 generatesDomainEventsEntity.ClearDistributedEvents();
@@ -316,163 +302,30 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void SetCreationAuditProperties(EntityEntry entry)
         {
-            AuditPropertySetter.SetCreationProperties(entry.Entity);
+            AuditPropertySetter?.SetCreationProperties(entry.Entity);
         }
 
         protected virtual void SetModificationAuditProperties(EntityEntry entry)
         {
-            AuditPropertySetter.SetModificationProperties(entry.Entity);
+            AuditPropertySetter?.SetModificationProperties(entry.Entity);
         }
 
         protected virtual void SetDeletionAuditProperties(EntityEntry entry)
         {
-            AuditPropertySetter.SetDeletionProperties(entry.Entity);
+            AuditPropertySetter?.SetDeletionProperties(entry.Entity);
         }
 
         protected virtual void ConfigureBaseProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
             where TEntity : class
         {
-            ConfigureConcurrencyStampProperty<TEntity>(modelBuilder, mutableEntityType);
-            ConfigureExtraProperties<TEntity>(modelBuilder, mutableEntityType);
-            ConfigureAuditProperties<TEntity>(modelBuilder, mutableEntityType);
-            ConfigureTenantIdProperty<TEntity>(modelBuilder, mutableEntityType);
+            if (mutableEntityType.IsOwned())
+            {
+                return;
+            }
+
+            modelBuilder.Entity<TEntity>().ConfigureByConvention();
+
             ConfigureGlobalFilters<TEntity>(modelBuilder, mutableEntityType);
-        }
-
-        protected virtual void ConfigureConcurrencyStampProperty<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (!typeof(IHasConcurrencyStamp).IsAssignableFrom(typeof(TEntity)))
-            {
-                return;
-            }
-
-            modelBuilder.Entity<TEntity>(b =>
-            {
-                b.Property(x => ((IHasConcurrencyStamp) x).ConcurrencyStamp)
-                    .IsConcurrencyToken()
-                    .HasColumnName(nameof(IHasConcurrencyStamp.ConcurrencyStamp));
-            });
-        }
-
-        protected virtual void ConfigureExtraProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (!typeof(IHasExtraProperties).IsAssignableFrom(typeof(TEntity)))
-            {
-                return;
-            }
-
-            modelBuilder.Entity<TEntity>(b =>
-            {
-                b.Property(x => ((IHasExtraProperties) x).ExtraProperties)
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, object>>(s)
-                    )
-                    .HasColumnName(nameof(IHasExtraProperties.ExtraProperties));
-            });
-        }
-
-        protected virtual void ConfigureAuditProperties<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (typeof(TEntity).IsAssignableTo<IHasCreationTime>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IHasCreationTime)x).CreationTime)
-                        .IsRequired()
-                        .HasColumnName(nameof(IHasCreationTime.CreationTime));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IMayHaveCreator>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IMayHaveCreator)x).CreatorId)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IMayHaveCreator.CreatorId));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IMustHaveCreator>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IMustHaveCreator)x).CreatorId)
-                        .IsRequired()
-                        .HasColumnName(nameof(IMustHaveCreator.CreatorId));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IHasModificationTime>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IHasModificationTime)x).LastModificationTime)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IHasModificationTime.LastModificationTime));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IModificationAuditedObject>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IModificationAuditedObject)x).LastModifierId)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IModificationAuditedObject.LastModifierId));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<ISoftDelete>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((ISoftDelete) x).IsDeleted)
-                        .IsRequired()
-                        .HasDefaultValue(false)
-                        .HasColumnName(nameof(ISoftDelete.IsDeleted));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IHasDeletionTime>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IHasDeletionTime)x).DeletionTime)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IHasDeletionTime.DeletionTime));
-                });
-            }
-
-            if (typeof(TEntity).IsAssignableTo<IDeletionAuditedObject>())
-            {
-                modelBuilder.Entity<TEntity>(b =>
-                {
-                    b.Property(x => ((IDeletionAuditedObject)x).DeleterId)
-                        .IsRequired(false)
-                        .HasColumnName(nameof(IDeletionAuditedObject.DeleterId));
-                });
-            }
-        }
-
-        protected virtual void ConfigureTenantIdProperty<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
-            where TEntity : class
-        {
-            if (!typeof(TEntity).IsAssignableTo<IMultiTenant>())
-            {
-                return;
-            }
-
-            modelBuilder.Entity<TEntity>(b =>
-            {
-                b.Property(x => ((IMultiTenant)x).TenantId)
-                    .IsRequired(false)
-                    .HasColumnName(nameof(IMultiTenant.TenantId));
-            });
         }
 
         protected virtual void ConfigureGlobalFilters<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
@@ -486,6 +339,56 @@ namespace Volo.Abp.EntityFrameworkCore
                     modelBuilder.Entity<TEntity>().HasQueryFilter(filterExpression);
                 }
             }
+        }
+
+        protected virtual void ConfigureValueConverter<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (mutableEntityType.BaseType == null &&
+                !typeof(TEntity).IsDefined(typeof(DisableDateTimeNormalizationAttribute), true) &&
+                !typeof(TEntity).IsDefined(typeof(OwnedAttribute), true) &&
+                !mutableEntityType.IsOwned())
+            {
+                if (Clock == null || !Clock.SupportsMultipleTimezone)
+                {
+                    return;
+                }
+
+                var dateTimeValueConverter = new AbpDateTimeValueConverter(Clock);
+
+                var dateTimePropertyInfos = typeof(TEntity).GetProperties()
+                    .Where(property =>
+                        (property.PropertyType == typeof(DateTime) ||
+                         property.PropertyType == typeof(DateTime?)) &&
+                        property.CanWrite &&
+                        !property.IsDefined(typeof(DisableDateTimeNormalizationAttribute), true)
+                    ).ToList();
+
+                dateTimePropertyInfos.ForEach(property =>
+                {
+                    modelBuilder
+                        .Entity<TEntity>()
+                        .Property(property.Name)
+                        .HasConversion(dateTimeValueConverter);
+                });
+            }
+        }
+
+        protected virtual void ConfigureValueGenerated<TEntity>(ModelBuilder modelBuilder, IMutableEntityType mutableEntityType)
+            where TEntity : class
+        {
+            if (!typeof(IEntity<Guid>).IsAssignableFrom(typeof(TEntity)))
+            {
+                return;
+            }
+
+            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>) x).Id);
+            if (idPropertyBuilder.Metadata.PropertyInfo.IsDefined(typeof(DatabaseGeneratedAttribute), true))
+            {
+                return;
+            }
+
+            idPropertyBuilder.ValueGeneratedNever();
         }
 
         protected virtual bool ShouldFilterEntity<TEntity>(IMutableEntityType entityType) where TEntity : class

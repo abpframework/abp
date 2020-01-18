@@ -12,12 +12,12 @@ namespace Volo.Abp.Emailing.Templates
     {
         protected IEmailTemplateDefinitionManager EmailTemplateDefinitionManager;
         protected ITemplateLocalizer TemplateLocalizer { get; }
-        protected EmailTemplateOptions Options { get; }
+        protected AbpEmailTemplateOptions Options { get; }
         protected IStringLocalizerFactory StringLocalizerFactory;
 
         public EmailTemplateProvider(IEmailTemplateDefinitionManager emailTemplateDefinitionManager,
             ITemplateLocalizer templateLocalizer, IStringLocalizerFactory stringLocalizerFactory,
-            IOptions<EmailTemplateOptions> options)
+            IOptions<AbpEmailTemplateOptions> options)
         {
             EmailTemplateDefinitionManager = emailTemplateDefinitionManager;
             TemplateLocalizer = templateLocalizer;
@@ -27,12 +27,12 @@ namespace Volo.Abp.Emailing.Templates
 
         public async Task<EmailTemplate> GetAsync(string name)
         {
-            return await GetAsync(name, CultureInfo.CurrentUICulture.Name);
+            return await GetAsync(name, CultureInfo.CurrentUICulture.Name).ConfigureAwait(false);
         }
 
         public async Task<EmailTemplate> GetAsync(string name, string cultureName)
         {
-            return await GetInternalAsync(name, cultureName);
+            return await GetInternalAsync(name, cultureName).ConfigureAwait(false);
         }
 
         protected virtual async Task<EmailTemplate> GetInternalAsync(string name, string cultureName)
@@ -59,11 +59,11 @@ namespace Volo.Abp.Emailing.Templates
             {
                 var emailTemplate = new EmailTemplate(emailTemplateString, emailTemplateDefinition);
 
-                await SetLayoutAsync(emailTemplateDefinition, emailTemplate, cultureName);
+                await SetLayoutAsync(emailTemplateDefinition, emailTemplate, cultureName).ConfigureAwait(false);
 
                 if (emailTemplateDefinition.SingleTemplateFile)
                 {
-                    await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName);
+                    await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName).ConfigureAwait(false);
                 }
 
                 return emailTemplate;
@@ -87,7 +87,7 @@ namespace Volo.Abp.Emailing.Templates
                 layout = Options.DefaultLayout;
             }
 
-            var layoutTemplate = await GetInternalAsync(layout, cultureName);
+            var layoutTemplate = await GetInternalAsync(layout, cultureName).ConfigureAwait(false);
 
             emailTemplate.SetLayout(layoutTemplate);
         }
@@ -103,10 +103,10 @@ namespace Volo.Abp.Emailing.Templates
             var localizer = StringLocalizerFactory.Create(emailTemplateDefinition.LocalizationResource);
             if (cultureName != null)
             {
-                emailTemplate.SetContent(
-                    TemplateLocalizer.Localize(localizer.WithCulture(new CultureInfo(cultureName)),
-                        emailTemplate.Content)
-                );
+                using (CultureHelper.Use(new CultureInfo(cultureName)))
+                {
+                    emailTemplate.SetContent(TemplateLocalizer.Localize(localizer, emailTemplate.Content));
+                }
             }
             else
             {

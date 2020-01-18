@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Hosting;
@@ -14,7 +15,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
         public AbpTagHelperScriptService(
             IBundleManager bundleManager,
             IWebContentFileProvider webContentFileProvider,
-            IOptions<BundlingOptions> options,
+            IOptions<AbpBundlingOptions> options,
             IWebHostEnvironment hostingEnvironment
             ) : base(
                 bundleManager,
@@ -33,9 +34,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
             );
         }
 
-        protected override IReadOnlyList<string> GetBundleFiles(string bundleName)
+        protected override async Task<IReadOnlyList<string>> GetBundleFilesAsync(string bundleName)
         {
-            return BundleManager.GetScriptBundleFiles(bundleName);
+            return await BundleManager.GetScriptBundleFilesAsync(bundleName).ConfigureAwait(false);
         }
 
         protected override void AddHtmlTag(TagHelperContext context, TagHelperOutput output, string file)

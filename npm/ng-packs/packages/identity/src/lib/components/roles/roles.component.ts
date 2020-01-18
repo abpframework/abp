@@ -1,19 +1,25 @@
 import { ABP } from '@abp/ng.core';
 import { ConfirmationService, Toaster } from '@abp/ng.theme.shared';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { finalize, pluck } from 'rxjs/operators';
-import { CreateRole, DeleteRole, GetRoleById, GetRoles, UpdateRole } from '../../actions/identity.actions';
+import {
+  CreateRole,
+  DeleteRole,
+  GetRoleById,
+  GetRoles,
+  UpdateRole,
+} from '../../actions/identity.actions';
 import { Identity } from '../../models/identity';
 import { IdentityState } from '../../states/identity.state';
 
 @Component({
   selector: 'abp-roles',
-  templateUrl: './roles.component.html'
+  templateUrl: './roles.component.html',
 })
-export class RolesComponent {
+export class RolesComponent implements OnInit {
   @Select(IdentityState.getRoles)
   data$: Observable<Identity.RoleItem[]>;
 
@@ -30,48 +36,55 @@ export class RolesComponent {
 
   providerKey: string;
 
-  pageQuery: ABP.PageQueryParams = {
-    sorting: 'name'
-  };
+  pageQuery: ABP.PageQueryParams = { maxResultCount: 10 };
 
   loading = false;
 
   modalBusy = false;
 
-  sortOrder = 'asc';
+  sortOrder = '';
 
-  @ViewChild('modalContent', { static: false })
-  modalContent: TemplateRef<any>;
+  sortKey = '';
 
-  constructor(private confirmationService: ConfirmationService, private fb: FormBuilder, private store: Store) {}
+  @ViewChild('formRef', { static: false, read: ElementRef })
+  formRef: ElementRef<HTMLFormElement>;
 
-  onSearch(value) {
-    this.pageQuery.filter = value;
+  onVisiblePermissionChange = event => {
+    this.visiblePermissions = event;
+  };
+
+  constructor(
+    private confirmationService: ConfirmationService,
+    private fb: FormBuilder,
+    private store: Store,
+  ) {}
+
+  ngOnInit() {
     this.get();
   }
 
-  createForm() {
+  buildForm() {
     this.form = this.fb.group({
       name: new FormControl({ value: this.selected.name || '', disabled: this.selected.isStatic }, [
         Validators.required,
-        Validators.maxLength(256)
+        Validators.maxLength(256),
       ]),
       isDefault: [this.selected.isDefault || false],
-      isPublic: [this.selected.isPublic || false]
+      isPublic: [this.selected.isPublic || false],
     });
   }
 
   openModal() {
-    this.createForm();
+    this.buildForm();
     this.isModalVisible = true;
   }
 
-  onAdd() {
+  add() {
     this.selected = {} as Identity.RoleItem;
     this.openModal();
   }
 
-  onEdit(id: string) {
+  edit(id: string) {
     this.store
       .dispatch(new GetRoleById(id))
       .pipe(pluck('IdentityState', 'selectedRole'))
@@ -88,30 +101,30 @@ export class RolesComponent {
     this.store
       .dispatch(
         this.selected.id
-          ? new UpdateRole({ ...this.form.value, id: this.selected.id })
-          : new CreateRole(this.form.value)
+          ? new UpdateRole({ ...this.selected, ...this.form.value, id: this.selected.id })
+          : new CreateRole(this.form.value),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.isModalVisible = false;
+        this.get();
       });
   }
 
   delete(id: string, name: string) {
     this.confirmationService
       .warn('AbpIdentity::RoleDeletionConfirmationMessage', 'AbpIdentity::AreYouSure', {
-        messageLocalizationParams: [name]
+        messageLocalizationParams: [name],
       })
       .subscribe((status: Toaster.Status) => {
         if (status === Toaster.Status.confirm) {
-          this.store.dispatch(new DeleteRole(id));
+          this.store.dispatch(new DeleteRole(id)).subscribe(() => this.get());
         }
       });
   }
 
-  onPageChange(data) {
-    this.pageQuery.skipCount = data.first;
-    this.pageQuery.maxResultCount = data.rows;
+  onPageChange(page: number) {
+    this.pageQuery.skipCount = (page - 1) * this.pageQuery.maxResultCount;
 
     this.get();
   }
@@ -124,7 +137,9 @@ export class RolesComponent {
       .subscribe();
   }
 
-  changeSortOrder() {
-    this.sortOrder = this.sortOrder.toLowerCase() === 'asc' ? 'desc' : 'asc';
+  onClickSaveButton() {
+    this.formRef.nativeElement.dispatchEvent(
+      new Event('submit', { bubbles: true, cancelable: true }),
+    );
   }
 }

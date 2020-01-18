@@ -1,8 +1,8 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
-import { GetProfile, ChangePassword, UpdateProfile } from '../actions/profile.actions';
+import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
+import { ChangePassword, GetProfile, UpdateProfile } from '../actions/profile.actions';
 import { Profile } from '../models/profile';
 import { ProfileService } from '../services/profile.service';
-import { tap } from 'rxjs/operators';
 
 @State<Profile.State>({
   name: 'ProfileState',
@@ -17,7 +17,7 @@ export class ProfileState {
   constructor(private profileService: ProfileService) {}
 
   @Action(GetProfile)
-  profileGet({ patchState }: StateContext<Profile.State>) {
+  getProfile({ patchState }: StateContext<Profile.State>) {
     return this.profileService.get().pipe(
       tap(profile =>
         patchState({
@@ -28,7 +28,7 @@ export class ProfileState {
   }
 
   @Action(UpdateProfile)
-  profileUpdate({ patchState }: StateContext<Profile.State>, { payload }: UpdateProfile) {
+  updateProfile({ patchState }: StateContext<Profile.State>, { payload }: UpdateProfile) {
     return this.profileService.update(payload).pipe(
       tap(profile =>
         patchState({

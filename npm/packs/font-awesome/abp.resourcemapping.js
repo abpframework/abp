@@ -1,6 +1,7 @@
 ﻿module.exports = {
     mappings: {
-        "@node_modules/font-awesome/css/font-awesome.css": "@libs/font-awesome/css/",
-        "@node_modules/font-awesome/fonts/*.*": "@libs/font-awesome/fonts/"
+        "@node_modules/@fortawesome/fontawesome-free/css/all.css": "@libs/@fortawesome/fontawesome-free/css/",
+        "@node_modules/@fortawesome/fontawesome-free/css/v4-shims.css": "@libs/@fortawesome/fontawesome-free/css/",
+        "@node_modules/@fortawesome/fontawesome-free/webfonts/*.*": "@libs/@fortawesome/fontawesome-free/webfonts/"
     }
 }

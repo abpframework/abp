@@ -13,16 +13,13 @@ namespace Acme.BookStore.BookManagement.Books
     {
         private readonly IRepository<Book, Guid> _bookRepository;
         private readonly IAsyncQueryableExecuter _queryableExecuter;
-        private readonly IGuidGenerator _guidGenerator;
 
         public BookManagementDataSeedContributor(
             IRepository<Book, Guid> bookRepository,
-            IAsyncQueryableExecuter queryableExecuter,
-            IGuidGenerator guidGenerator)
+            IAsyncQueryableExecuter queryableExecuter)
         {
             _bookRepository = bookRepository;
             _queryableExecuter = queryableExecuter;
-            _guidGenerator = guidGenerator;
         }
 
         public async Task SeedAsync(DataSeedContext context)
@@ -35,7 +32,6 @@ namespace Acme.BookStore.BookManagement.Books
             await _bookRepository.InsertAsync(
                 new Book
                 {
-                    Id = _guidGenerator.Create(),
                     Name = "Pet Sematary",
                     Price = 42,
                     PublishDate = new DateTime(1995,11,15),

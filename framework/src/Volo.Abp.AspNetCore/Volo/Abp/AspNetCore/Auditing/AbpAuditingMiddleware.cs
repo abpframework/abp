@@ -30,7 +30,7 @@ namespace Volo.Abp.AspNetCore.Auditing
         {
             if (!ShouldWriteAuditLog(context))
             {
-                await next(context);
+                await next(context).ConfigureAwait(false);
                 return;
             }
 
@@ -38,11 +38,11 @@ namespace Volo.Abp.AspNetCore.Auditing
             {
                 try
                 {
-                    await next(context);
+                    await next(context).ConfigureAwait(false);
                 }
                 finally
                 {
-                    await scope.SaveAsync();
+                    await scope.SaveAsync().ConfigureAwait(false);
                 }
             }
         }

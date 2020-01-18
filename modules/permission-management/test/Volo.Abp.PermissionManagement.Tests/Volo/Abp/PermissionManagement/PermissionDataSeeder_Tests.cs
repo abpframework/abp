@@ -21,17 +21,17 @@ namespace Volo.Abp.PermissionManagement
         [Fact]
         public async Task SeedAsync()
         {
-            (await _grantpermissionGrantRepository.FindAsync("MyPermission1", "Test", "Test")).ShouldBeNull();
-            (await _grantpermissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldBeNull();
+            (await _grantpermissionGrantRepository.FindAsync("MyPermission1", "Test", "Test").ConfigureAwait(false)).ShouldBeNull();
+            (await _grantpermissionGrantRepository.FindAsync("MyPermission2", "Test", "Test").ConfigureAwait(false)).ShouldBeNull();
 
             await _permissionDataSeeder.SeedAsync("Test", "Test", new List<string>()
             {
                 "MyPermission1",
                 "MyPermission2"
-            });
+            }).ConfigureAwait(false);
 
-            (await _grantpermissionGrantRepository.FindAsync("MyPermission1", "Test", "Test")).ShouldNotBeNull();
-            (await _grantpermissionGrantRepository.FindAsync("MyPermission2", "Test", "Test")).ShouldNotBeNull();
+            (await _grantpermissionGrantRepository.FindAsync("MyPermission1", "Test", "Test").ConfigureAwait(false)).ShouldNotBeNull();
+            (await _grantpermissionGrantRepository.FindAsync("MyPermission2", "Test", "Test").ConfigureAwait(false)).ShouldNotBeNull();
 
         }
     }

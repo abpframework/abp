@@ -2,9 +2,11 @@ using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Acme.BookStore.BookManagement.EntityFrameworkCore;
 using Acme.BookStore.BookManagement.MultiTenancy;
 using Acme.BookStore.BookManagement.Web;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -58,7 +60,7 @@ namespace Acme.BookStore.BookManagement
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
             var hostingEnvironment = context.Services.GetHostingEnvironment();
-            var configuration = context.Services.BuildConfiguration();
+            var configuration = context.Services.GetConfiguration();
 
             Configure<AbpDbContextOptions>(options =>
             {
@@ -67,7 +69,7 @@ namespace Acme.BookStore.BookManagement
 
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<BookManagementDomainSharedModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Acme.BookStore.BookManagement.Domain.Shared", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<BookManagementDomainModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}src{0}Acme.BookStore.BookManagement.Domain", Path.DirectorySeparatorChar)));
@@ -80,7 +82,7 @@ namespace Acme.BookStore.BookManagement
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "BookManagement API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "BookManagement API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 });
@@ -94,7 +96,7 @@ namespace Acme.BookStore.BookManagement
                 options.Languages.Add(new LanguageInfo("zh-Hans", "zh-Hans", "Chinese"));
             });
 
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
@@ -116,6 +118,13 @@ namespace Acme.BookStore.BookManagement
 
             app.UseHttpsRedirection();
             app.UseVirtualFiles();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            if (MultiTenancyConsts.IsEnabled)
+            {
+                app.UseMultiTenancy();
+            }
 
             app.UseSwagger();
             app.UseSwaggerUI(options =>
@@ -123,14 +132,8 @@ namespace Acme.BookStore.BookManagement
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
             });
 
-            app.UseAuthentication();
-            if (MultiTenancyConsts.IsEnabled)
-            {
-                app.UseMultiTenancy();
-            }
             app.UseAbpRequestLocalization();
             app.UseAuditing();
-
             app.UseMvcWithDefaultRouteAndArea();
 
             using (var scope = context.ServiceProvider.CreateScope())

@@ -6,4 +6,9 @@ namespace Volo.Abp.ObjectMapping
 
         TDestination Map<TSource, TDestination>(TSource source, TDestination destination);
     }
+
+    public interface IAutoObjectMappingProvider<TContext> : IAutoObjectMappingProvider
+    {
+
+    }
 }

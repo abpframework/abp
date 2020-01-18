@@ -19,16 +19,16 @@ namespace Volo.Abp.PermissionManagement
         [Fact]
         public async Task FindAsync()
         {
-            (await PermissionGrantRepository.FindAsync("MyPermission1", UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString())).ShouldNotBeNull();
+            (await PermissionGrantRepository.FindAsync("MyPermission1", UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false)).ShouldNotBeNull();
 
-            (await PermissionGrantRepository.FindAsync("Undefined-Permission", UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString())).ShouldBeNull();
-            (await PermissionGrantRepository.FindAsync("MyPermission1", "Undefined-Provider", "Unknown-Id")).ShouldBeNull();
+            (await PermissionGrantRepository.FindAsync("Undefined-Permission", UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false)).ShouldBeNull();
+            (await PermissionGrantRepository.FindAsync("MyPermission1", "Undefined-Provider", "Unknown-Id").ConfigureAwait(false)).ShouldBeNull();
         }
 
         [Fact]
         public async Task GetListAsync()
         {
-            var permissionGrants = await PermissionGrantRepository.GetListAsync(UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString());
+            var permissionGrants = await PermissionGrantRepository.GetListAsync(UserPermissionValueProvider.ProviderName, PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false);
 
             permissionGrants.ShouldContain(p => p.Name == "MyPermission1");
         }

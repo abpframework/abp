@@ -2,12 +2,11 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
 {
-    public class EditModalModel : AbpPageModel
+    public class EditModalModel : IdentityPageModel
     {
         [BindProperty]
         public RoleInfoModel Role { get; set; }
@@ -23,7 +22,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
         {
             Role = ObjectMapper.Map<IdentityRoleDto, RoleInfoModel>(
                 await _identityRoleAppService.GetAsync(id)
-            );
+.ConfigureAwait(false));
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -31,7 +30,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Roles
             ValidateModel();
 
             var input = ObjectMapper.Map<RoleInfoModel, IdentityRoleUpdateDto>(Role);
-            await _identityRoleAppService.UpdateAsync(Role.Id, input);
+            await _identityRoleAppService.UpdateAsync(Role.Id, input).ConfigureAwait(false);
 
             return NoContent();
         }

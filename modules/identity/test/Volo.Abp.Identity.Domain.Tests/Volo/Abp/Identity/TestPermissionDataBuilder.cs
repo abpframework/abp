@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.PermissionManagement;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.Identity
 {
@@ -25,40 +27,40 @@ namespace Volo.Abp.Identity
             _lookupNormalizer = lookupNormalizer;
         }
 
-        public void Build()
+        public async Task Build()
         {
-            AddRolePermissions();
-            AddUserPermissions();
+            await AddRolePermissions().ConfigureAwait(false);
+            await AddUserPermissions().ConfigureAwait(false);
         }
 
-        private void AddRolePermissions()
+        private async Task AddRolePermissions()
         {
-            AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "admin");
-            AddPermission(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "admin");
-            AddPermission(TestPermissionNames.MyPermission2_ChildPermission1, RolePermissionValueProvider.ProviderName, "admin");
+            await AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "admin").ConfigureAwait(false);
+            await AddPermission(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "admin").ConfigureAwait(false);
+            await AddPermission(TestPermissionNames.MyPermission2_ChildPermission1, RolePermissionValueProvider.ProviderName, "admin").ConfigureAwait(false);
 
-            AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "moderator");
-            AddPermission(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "moderator");
+            await AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "moderator").ConfigureAwait(false);
+            await AddPermission(TestPermissionNames.MyPermission2, RolePermissionValueProvider.ProviderName, "moderator").ConfigureAwait(false);
 
-            AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "supporter");
+            await AddPermission(TestPermissionNames.MyPermission1, RolePermissionValueProvider.ProviderName, "supporter").ConfigureAwait(false);
         }
 
-        private void AddUserPermissions()
+        private async Task AddUserPermissions()
         {
-            var david = _userRepository.FindByNormalizedUserName(_lookupNormalizer.NormalizeName("david"));
-            AddPermission(TestPermissionNames.MyPermission1, UserPermissionValueProvider.ProviderName, david.Id.ToString());
+            var david = AsyncHelper.RunSync(() => _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("david")));
+            await AddPermission(TestPermissionNames.MyPermission1, UserPermissionValueProvider.ProviderName, david.Id.ToString()).ConfigureAwait(false);
         }
 
-        private void AddPermission(string permissionName, string providerName, string providerKey)
+        private async Task AddPermission(string permissionName, string providerName, string providerKey)
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
                     _guidGenerator.Create(),
                     permissionName,
                     providerName,
                     providerKey
                 )
-            );
+            ).ConfigureAwait(false);
         }
     }
 }

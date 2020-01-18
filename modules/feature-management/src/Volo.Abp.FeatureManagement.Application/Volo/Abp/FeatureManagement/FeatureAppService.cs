@@ -13,7 +13,7 @@ using Volo.Abp.Features;
 namespace Volo.Abp.FeatureManagement
 {
     [Authorize]
-    public class FeatureAppService : ApplicationService, IFeatureAppService
+    public class FeatureAppService : FeatureManagementAppServiceBase, IFeatureAppService
     {
         protected FeatureManagementOptions Options { get; }
 
@@ -32,9 +32,9 @@ namespace Volo.Abp.FeatureManagement
             Options = options.Value;
         }
 
-        public async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
+        public virtual async Task<FeatureListDto> GetAsync([NotNull] string providerName, [NotNull] string providerKey)
         {
-            await CheckProviderPolicy(providerName);
+            await CheckProviderPolicy(providerName).ConfigureAwait(false);
 
             var featureDefinitions = _featureDefinitionManager.GetAll();
             var features = new List<FeatureDto>();
@@ -48,7 +48,7 @@ namespace Volo.Abp.FeatureManagement
                     ValueType = featureDefinition.ValueType,
                     Description = featureDefinition.Description?.Localize(_stringLocalizerFactory),
                     ParentName = featureDefinition.Parent?.Name,
-                    Value = await _featureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey)
+                    Value = await _featureManager.GetOrNullAsync(featureDefinition.Name, providerName, providerKey).ConfigureAwait(false)
                 });
             }
 
@@ -57,13 +57,13 @@ namespace Volo.Abp.FeatureManagement
             return new FeatureListDto { Features = features };
         }
 
-        public async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
+        public virtual async Task UpdateAsync([NotNull] string providerName, [NotNull] string providerKey, UpdateFeaturesDto input)
         {
-            await CheckProviderPolicy(providerName);
+            await CheckProviderPolicy(providerName).ConfigureAwait(false);
 
             foreach (var feature in input.Features)
             {
-                await _featureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey);
+                await _featureManager.SetAsync(feature.Name, feature.Value, providerName, providerKey).ConfigureAwait(false);
             }
         }
 
@@ -88,7 +88,7 @@ namespace Volo.Abp.FeatureManagement
                 throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(FeatureManagementOptions)} to map the policy.");
             }
 
-            await AuthorizationService.CheckAsync(policyName);
+            await AuthorizationService.CheckAsync(policyName).ConfigureAwait(false);
         }
     }
 }

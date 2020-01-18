@@ -17,6 +17,9 @@
 
         var _dataTable = _$wrapper.find('table').DataTable(abp.libs.datatables.normalizeConfiguration({
             order: [[1, "asc"]],
+            processing: true,
+            paging: true,
+            serverSide: true,
             ajax: abp.libs.datatables.createAjax(_tenantAppService.getList),
             columnDefs: [
                 {
@@ -46,7 +49,7 @@
                                     visible: abp.auth.isGranted('AbpTenantManagement.Tenants.ManageFeatures'),
                                     action: function (data) {
                                         _featuresModal.open({
-                                            providerName: 'Tenant',
+                                            providerName: 'T',
                                             providerKey: data.record.id
                                         });
                                     }

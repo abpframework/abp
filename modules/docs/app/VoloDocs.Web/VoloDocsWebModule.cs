@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.Account.Web;
@@ -17,7 +18,6 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.Web;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.Identity;
@@ -29,7 +29,9 @@ using Volo.Docs.Admin;
 using Volo.Docs.Localization;
 using VoloDocs.EntityFrameworkCore;
 using Localization.Resources.AbpUi;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Volo.Abp.Validation.Localization;
 
 namespace VoloDocs.Web
 {
@@ -67,7 +69,7 @@ namespace VoloDocs.Web
                 options.RoutePrefix = null;
             });
 
-            Configure<DbConnectionOptions>(options =>
+            Configure<AbpDbConnectionOptions>(options =>
             {
                 options.ConnectionStrings.Default = configuration["ConnectionString"];
             });
@@ -79,7 +81,7 @@ namespace VoloDocs.Web
 
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpAspNetCoreMvcUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.AspNetCore.Mvc.UI", Path.DirectorySeparatorChar)));
@@ -95,7 +97,7 @@ namespace VoloDocs.Web
             context.Services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info
+                    options.SwaggerDoc("v1", new OpenApiInfo
                     {
                         Title = "Docs API",
                         Version = "v1"
@@ -104,7 +106,7 @@ namespace VoloDocs.Web
                     options.CustomSchemaIds(type => type.FullName);
                 });
             
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<VoloDocsWebModule>("VoloDocs.Web");
             });
@@ -123,7 +125,7 @@ namespace VoloDocs.Web
                     .AddVirtualJson("/Localization/Resources/VoloDocs/Web");
             });
 
-            Configure<ThemingOptions>(options =>
+            Configure<AbpThemingOptions>(options =>
             {
                 options.DefaultThemeName = BasicTheme.Name;
             });
@@ -152,6 +154,7 @@ namespace VoloDocs.Web
             app.UseAbpRequestLocalization();
 
             app.UseStatusCodePagesWithReExecute("/error/{0}");
+           
             //app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
             app.UseMvc(routes =>

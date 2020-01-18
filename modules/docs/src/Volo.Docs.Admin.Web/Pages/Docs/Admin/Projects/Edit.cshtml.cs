@@ -14,7 +14,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 {
-    public class EditModel : AbpPageModel
+    public class EditModel : DocsAdminPageModel
     {
         [BindProperty]
         public EditGithubProjectViewModel GithubProject { get; set; }
@@ -95,6 +95,9 @@ namespace Volo.Docs.Admin.Pages.Docs.Admin.Projects
 
             [StringLength(ProjectConsts.MaxNavigationDocumentNameLength)]
             public string NavigationDocumentName { get; set; }
+
+            [StringLength(ProjectConsts.MaxParametersDocumentNameLength)]
+            public string ParametersDocumentName { get; set; }
 
             [StringLength(ProjectConsts.MaxVersionNameLength)]
             public string MinimumVersion { get; set; }

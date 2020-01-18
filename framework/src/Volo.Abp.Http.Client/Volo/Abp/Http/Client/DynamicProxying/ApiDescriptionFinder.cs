@@ -34,7 +34,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         public async Task<ActionApiDescriptionModel> FindActionAsync(string baseUrl, Type serviceType, MethodInfo method)
         {
-            var apiDescription = await GetApiDescriptionAsync(baseUrl);
+            var apiDescription = await GetApiDescriptionAsync(baseUrl).ConfigureAwait(false);
 
             //TODO: Cache finding?
 
@@ -78,7 +78,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         public virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionAsync(string baseUrl)
         {
-            return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(baseUrl));
+            return await Cache.GetAsync(baseUrl, () => GetApiDescriptionFromServerAsync(baseUrl)).ConfigureAwait(false);
         }
 
         protected virtual async Task<ApplicationApiDescriptionModel> GetApiDescriptionFromServerAsync(string baseUrl)
@@ -88,14 +88,14 @@ namespace Volo.Abp.Http.Client.DynamicProxying
                 var response = await client.GetAsync(
                     baseUrl.EnsureEndsWith('/') + "api/abp/api-definition",
                     CancellationTokenProvider.Token
-                );
+                ).ConfigureAwait(false);
 
                 if (!response.IsSuccessStatusCode)
                 {
                     throw new AbpException("Remote service returns error! StatusCode = " + response.StatusCode);
                 }
 
-                var content = await response.Content.ReadAsStringAsync();
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                 var result = JsonConvert.DeserializeObject(
                     content,

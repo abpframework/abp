@@ -11,7 +11,7 @@ namespace Volo.Abp.UI.Navigation
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpUiNavigationModule>();
             });
@@ -23,7 +23,7 @@ namespace Volo.Abp.UI.Navigation
                     .AddVirtualJson("/Volo/Abp/Ui/Navigation/Localization/Resource");
             });
 
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DefaultMenuContributor());
             });

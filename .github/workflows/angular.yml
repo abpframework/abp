@@ -1,0 +1,24 @@
+name: 'Angular'
+on:
+  pull_request:
+    paths:
+      - 'npm/ng-packs/**'
+    branches:
+      #- master
+      - dev
+  push:
+    paths:
+      - 'npm/ng-packs/**'
+    branches:
+      #- master
+      - dev
+jobs:
+  build-test-lint:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - run: yarn && yarn ci
+        working-directory: npm/ng-packs

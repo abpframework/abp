@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task GetByIdAsync()
         {
-            var role = await _identityRoleManager.FindByIdAsync(_testData.RoleModeratorId.ToString());
+            var role = await _identityRoleManager.FindByIdAsync(_testData.RoleModeratorId.ToString()).ConfigureAwait(false);
 
             role.ShouldNotBeNull();
             role.Name.ShouldBe("moderator");
@@ -37,10 +37,10 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task SetRoleNameAsync()
         {
-            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator"));
+            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator")).ConfigureAwait(false);
             role.ShouldNotBeNull();
 
-            (await _identityRoleManager.SetRoleNameAsync(role, "teacher")).Succeeded.ShouldBeTrue();
+            (await _identityRoleManager.SetRoleNameAsync(role, "teacher").ConfigureAwait(false)).Succeeded.ShouldBeTrue();
             
             role.Name.ShouldBe("teacher");
         }
@@ -48,12 +48,12 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task DeleteAsync()
         {
-            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator"));
+            var role = await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator")).ConfigureAwait(false);
             role.ShouldNotBeNull();
 
-            await _identityRoleManager.DeleteAsync(role);
+            await _identityRoleManager.DeleteAsync(role).ConfigureAwait(false);
 
-            (await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator"))).ShouldBeNull();
+            (await _identityRoleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("moderator")).ConfigureAwait(false)).ShouldBeNull();
         }
 
     }

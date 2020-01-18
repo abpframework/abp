@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Volo.Abp.AutoMapper.SampleClasses;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.AutoMapper
@@ -20,6 +21,13 @@ namespace Volo.Abp.AutoMapper
         public void Should_Replace_IAutoObjectMappingProvider()
         {
             Assert.True(ServiceProvider.GetRequiredService<IAutoObjectMappingProvider>() is AutoMapperAutoObjectMappingProvider);
+        }
+
+        [Fact]
+        public void Should_Get_Internal_Mapper()
+        {
+            _objectMapper.GetMapper().ShouldNotBeNull();
+            _objectMapper.AutoObjectMappingProvider.GetMapper().ShouldNotBeNull();
         }
 
         [Fact]
