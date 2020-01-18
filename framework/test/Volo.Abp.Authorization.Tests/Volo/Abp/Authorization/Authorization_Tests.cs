@@ -61,5 +61,21 @@ namespace Volo.Abp.Authorization
                 await _myAuthorizedService1.ProtectedByRole().ConfigureAwait(false);
             }).ConfigureAwait(false);
         }
+
+        [Fact]
+        public async Task Should_Allow_To_Call_Method_If_Has_No_Role_ProtectedByRole_Async()
+        {
+            int result = await _myAuthorizedService1.ProtectedByRole().ConfigureAwait(false);
+            result.ShouldBe(42);
+        }
+
+        [Fact]
+        public async Task Should_Not_Allow_To_Call_Method_If_Has_No_Role_ProtectedByScheme_Async()
+        {
+            await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
+            {
+                await _myAuthorizedService1.ProtectedByScheme().ConfigureAwait(false);
+            }).ConfigureAwait(false);
+        }
     }
 }

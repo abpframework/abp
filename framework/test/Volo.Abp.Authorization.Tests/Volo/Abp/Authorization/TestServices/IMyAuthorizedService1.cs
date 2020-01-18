@@ -13,5 +13,7 @@ namespace Volo.Abp.Authorization.TestServices
         Task<int> ProtectedByClassAsync();
 
         Task<int> ProtectedByRole();
+
+        Task<int> ProtectedByScheme();
     }
 }

@@ -14,15 +14,18 @@ namespace Volo.Abp.Authorization
         private readonly IAuthorizationService _authorizationService;
         private readonly ICurrentUser _currentUser;
         private readonly ICurrentClient _currentClient;
+        private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
 
         public MethodInvocationAuthorizationService(
             IAuthorizationService authorizationService, 
             ICurrentUser currentUser,
-            ICurrentClient currentClient)
+            ICurrentClient currentClient,
+            IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider)
         {
             _authorizationService = authorizationService;
             _currentUser = currentUser;
             _currentClient = currentClient;
+            _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
         }
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
@@ -64,26 +67,10 @@ namespace Volo.Abp.Authorization
 
         protected async Task CheckAsync(IAuthorizeData authorizationAttribute)
         {
-            if (authorizationAttribute.Policy != null)
-            {
-                await _authorizationService.CheckAsync(authorizationAttribute.Policy).ConfigureAwait(false);
-            }
-            else if (authorizationAttribute.Roles != null)
-            {
-                if(_currentUser.IsInRole(authorizationAttribute.Roles) == false)
-                {
-                    throw new AbpAuthorizationException("Authorization failed! Given roles has not granted: " + authorizationAttribute.Roles);
-                }
-            }
-            else
-            {
-                //TODO: Can we find a better, unified, way of checking if current request has been authenticated
-                if (!_currentUser.IsAuthenticated && !_currentClient.IsAuthenticated)
-                {
-                    throw new AbpAuthorizationException("Authorization failed! User has not logged in.");
-                }
-            }
-
+            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
+                                                    _abpAuthorizationPolicyProvider,
+                                                    new List<IAuthorizeData> { authorizationAttribute });
+            await _authorizationService.CheckAsync(authorizationPolicy).ConfigureAwait(false);
         }
     }
 }

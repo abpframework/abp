@@ -36,5 +36,12 @@ namespace Volo.Abp.Authorization.TestServices
         {
             return Task.FromResult(42);
         }
+
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize(Roles = "MyRole")]
+        public virtual Task<int> ProtectedByScheme()
+        {
+            return Task.FromResult(42);
+        }
     }
 }
