@@ -9,12 +9,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
 {
     public class WidgetManager : IWidgetManager
     {
-        protected WidgetOptions Options { get; }
+        protected AbpWidgetOptions Options { get; }
         protected IAuthorizationService AuthorizationService { get; }
         protected ICurrentUser CurrentUser { get; }
 
         public WidgetManager(
-            IOptions<WidgetOptions> widgetOptions,
+            IOptions<AbpWidgetOptions> widgetOptions,
             IAuthorizationService authorizationService,
             ICurrentUser currentUser)
         {
@@ -27,14 +27,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         {
             var widget = Options.Widgets.Find(widgetComponentType);
 
-            return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
+            return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName).ConfigureAwait(false);
         }
 
         public async Task<bool> IsGrantedAsync(string name)
         {
             var widget = Options.Widgets.Find(name);
 
-            return await IsGrantedAsyncInternal(widget, name);
+            return await IsGrantedAsyncInternal(widget, name).ConfigureAwait(false);
         }
 
         private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             {
                 foreach (var requiredPolicy in widget.RequiredPolicies)
                 {
-                    if (!(await AuthorizationService.AuthorizeAsync(requiredPolicy)).Succeeded)
+                    if (!(await AuthorizationService.AuthorizeAsync(requiredPolicy).ConfigureAwait(false)).Succeeded)
                     {
                         return false;
                     }

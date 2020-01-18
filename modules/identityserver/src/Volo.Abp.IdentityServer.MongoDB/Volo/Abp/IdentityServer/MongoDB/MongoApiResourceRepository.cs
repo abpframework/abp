@@ -21,16 +21,16 @@ namespace Volo.Abp.IdentityServer.MongoDB
         public virtual async Task<ApiResource> FindByNameAsync(string name, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar=>ar.Name == name)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+                .Where(ar => ar.Name == name)
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task<List<ApiResource>> GetListByScopesAsync(string[] scopeNames, bool includeDetails = false,
             CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable()
-                .Where(ar=>ar.Scopes.Any(x=> scopeNames.Contains(x.Name)))
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .Where(ar => ar.Scopes.Any(x => scopeNames.Contains(x.Name)))
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task<List<ApiResource>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
@@ -40,17 +40,17 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .OrderBy(sorting ?? nameof(ApiResource.Name))
                 .As<IMongoQueryable<ApiResource>>()
                 .PageBy<ApiResource, IMongoQueryable<ApiResource>>(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken));
+                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
         public virtual async Task<long> GetTotalCount()
         {
-            return await GetCountAsync();
+            return await GetCountAsync().ConfigureAwait(false);
         }
 
         public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken);
+            return await GetMongoQueryable().AnyAsync(ar => ar.Id != expectedId && ar.Name == name, cancellationToken: cancellationToken).ConfigureAwait(false);
         }
     }
 }

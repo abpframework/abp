@@ -20,7 +20,7 @@ namespace Volo.Abp.Identity
             _lookupNormalizer = lookupNormalizer;
         }
 
-        public async Task<IUserData> FindByIdAsync(
+        public virtual async Task<IUserData> FindByIdAsync(
             Guid id, 
             CancellationToken cancellationToken = default)
         {
@@ -30,10 +30,10 @@ namespace Volo.Abp.Identity
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )
-            )?.ToAbpUserData();
+.ConfigureAwait(false))?.ToAbpUserData();
         }
 
-        public async Task<IUserData> FindByUserNameAsync(
+        public virtual async Task<IUserData> FindByUserNameAsync(
             string userName, 
             CancellationToken cancellationToken = default)
         {
@@ -43,7 +43,7 @@ namespace Volo.Abp.Identity
                     includeDetails: false,
                     cancellationToken: cancellationToken
                 )
-            )?.ToAbpUserData();
+.ConfigureAwait(false))?.ToAbpUserData();
         }
     }
 }

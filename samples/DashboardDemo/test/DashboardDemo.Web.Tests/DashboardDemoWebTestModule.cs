@@ -12,7 +12,7 @@ using DashboardDemo.Web.Menus;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.TestBase;
 using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.UI.Navigation;
 
@@ -62,7 +62,7 @@ namespace DashboardDemo
 
         private static void ConfigureNavigationServices(IServiceCollection services)
         {
-            services.Configure<NavigationOptions>(options =>
+            services.Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new DashboardDemoMenuContributor());
             });

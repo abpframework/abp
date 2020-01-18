@@ -11,19 +11,20 @@ import {
   ViewChild,
   ViewChildren,
 } from '@angular/core';
-import { fromEvent, Subject, timer } from 'rxjs';
-import { filter, take, takeUntil, debounceTime } from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
+import { fadeAnimation } from '../../animations/modal.animations';
 import { Toaster } from '../../models/toaster';
 import { ConfirmationService } from '../../services/confirmation.service';
 import { ButtonComponent } from '../button/button.component';
 
 export type ModalSize = 'sm' | 'md' | 'lg' | 'xl';
 
-const ANIMATION_TIMEOUT = 200;
-
 @Component({
   selector: 'abp-modal',
   templateUrl: './modal.component.html',
+  animations: [fadeAnimation],
+  styleUrls: ['./modal.component.scss'],
 })
 export class ModalComponent implements OnDestroy {
   @Input()
@@ -33,26 +34,18 @@ export class ModalComponent implements OnDestroy {
   set visible(value: boolean) {
     if (typeof value !== 'boolean') return;
 
-    if (!this.modalContent) {
-      if (value) {
-        setTimeout(() => {
-          this.showModal = value;
-          this.visible = value;
-        }, 0);
-      }
-      return;
-    }
+    this.isModalOpen = value;
+    this._visible = value;
+    this.visibleChange.emit(value);
 
     if (value) {
-      this.setVisible(value);
-      this.listen();
+      setTimeout(() => this.listen(), 0);
+      this.renderer.addClass(document.body, 'modal-open');
+      this.appear.emit();
     } else {
-      this.closable = false;
-      this.renderer.addClass(this.modalContent.nativeElement, 'fade-out-top');
-      setTimeout(() => {
-        this.setVisible(value);
-        this.ngOnDestroy();
-      }, ANIMATION_TIMEOUT - 10);
+      this.renderer.removeClass(document.body, 'modal-open');
+      this.disappear.emit();
+      this.destroy$.next();
     }
   }
 
@@ -68,19 +61,14 @@ export class ModalComponent implements OnDestroy {
     this._busy = value;
   }
 
-  @Input() centered: boolean = false;
+  @Input() centered = false;
 
-  @Input() modalClass: string = '';
+  @Input() modalClass = '';
 
   @Input() size: ModalSize = 'lg';
 
-  @Input() height: number;
-
-  @Input() minHeight: number;
-
-  @Output() visibleChange = new EventEmitter<boolean>();
-
-  @Output() init = new EventEmitter<void>();
+  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
+  abpSubmit: ButtonComponent;
 
   @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
 
@@ -88,31 +76,44 @@ export class ModalComponent implements OnDestroy {
 
   @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
 
-  @ContentChild('abpClose', { static: false, read: ElementRef }) abpClose: ElementRef<any>;
-
-  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent }) abpSubmit: ButtonComponent;
+  @ContentChild('abpClose', { static: false, read: ElementRef })
+  abpClose: ElementRef<any>;
 
   @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
 
   @ViewChildren('abp-button') abpButtons;
 
-  @Output()
-  show = new EventEmitter();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
-  @Output()
-  hide = new EventEmitter();
+  @Output() readonly init = new EventEmitter<void>();
 
-  _visible: boolean = false;
+  @Output() readonly appear = new EventEmitter();
 
-  _busy: boolean = false;
+  @Output() readonly disappear = new EventEmitter();
 
-  showModal: boolean = false;
+  _visible = false;
 
-  isOpenConfirmation: boolean = false;
+  _busy = false;
 
-  closable: boolean = false;
+  isModalOpen = false;
+
+  isConfirmationOpen = false;
 
   destroy$ = new Subject<void>();
+
+  get isFormDirty(): boolean {
+    let node: HTMLDivElement;
+    if (!this.modalContent) {
+      node = document.getElementById('modal-container') as HTMLDivElement;
+    }
+
+    const nodes = getFlatNodes(
+      ((node || this.modalContent.nativeElement).querySelector('#abp-modal-body') as HTMLElement)
+        .childNodes,
+    );
+
+    return hasNgDirty(nodes);
+  }
 
   constructor(private renderer: Renderer2, private confirmationService: ConfirmationService) {}
 
@@ -120,67 +121,20 @@ export class ModalComponent implements OnDestroy {
     this.destroy$.next();
   }
 
-  setVisible(value: boolean) {
-    this._visible = value;
-    this.visibleChange.emit(value);
-    this.showModal = value;
-
-    if (value) {
-      timer(ANIMATION_TIMEOUT + 100)
-        .pipe(take(1))
-        .subscribe(_ => (this.closable = true));
-
-      this.renderer.addClass(document.body, 'modal-open');
-      this.show.emit();
-    } else {
-      this.closable = false;
-      this.renderer.removeClass(document.body, 'modal-open');
-      this.hide.emit();
-    }
-  }
-
-  listen() {
-    fromEvent(document, 'keyup')
-      .pipe(
-        takeUntil(this.destroy$),
-        debounceTime(150),
-        filter((key: KeyboardEvent) => key && key.code === 'Escape' && this.closable),
-      )
-      .subscribe(_ => {
-        this.close();
-      });
-
-    setTimeout(() => {
-      if (!this.abpClose) return;
-      fromEvent(this.abpClose.nativeElement, 'click')
-        .pipe(
-          takeUntil(this.destroy$),
-          filter(() => !!(this.closable && this.modalContent)),
-        )
-        .subscribe(() => this.close());
-    }, 0);
-
-    this.init.emit();
-  }
-
   close() {
-    if (!this.closable || this.busy) return;
+    if (this.busy) return;
 
-    const nodes = getFlatNodes(
-      (this.modalContent.nativeElement.querySelector('#abp-modal-body') as HTMLElement).childNodes,
-    );
+    if (this.isFormDirty) {
+      if (this.isConfirmationOpen) return;
 
-    if (hasNgDirty(nodes)) {
-      if (this.isOpenConfirmation) return;
-
-      this.isOpenConfirmation = true;
+      this.isConfirmationOpen = true;
       this.confirmationService
-        .warn('AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage', 'AbpAccount::AreYouSure')
+        .warn(
+          'AbpAccount::AreYouSureYouWantToCancelEditingWarningMessage',
+          'AbpAccount::AreYouSure',
+        )
         .subscribe((status: Toaster.Status) => {
-          timer(ANIMATION_TIMEOUT).subscribe(() => {
-            this.isOpenConfirmation = false;
-          });
-
+          this.isConfirmationOpen = false;
           if (status === Toaster.Status.confirm) {
             this.visible = false;
           }
@@ -189,11 +143,48 @@ export class ModalComponent implements OnDestroy {
       this.visible = false;
     }
   }
+
+  listen() {
+    fromEvent(document, 'keyup')
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(150),
+        filter((key: KeyboardEvent) => key && key.key === 'Escape'),
+      )
+      .subscribe(() => {
+        this.close();
+      });
+
+    fromEvent(window, 'beforeunload')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (this.isFormDirty) {
+          event.returnValue = true;
+        } else {
+          delete event.returnValue;
+        }
+      });
+
+    setTimeout(() => {
+      if (!this.abpClose) return;
+      fromEvent(this.abpClose.nativeElement, 'click')
+        .pipe(
+          takeUntil(this.destroy$),
+          filter(() => !!this.modalContent),
+        )
+        .subscribe(() => this.close());
+    }, 0);
+
+    this.init.emit();
+  }
 }
 
 function getFlatNodes(nodes: NodeList): HTMLElement[] {
   return Array.from(nodes).reduce(
-    (acc, val) => [...acc, ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val])],
+    (acc, val) => [
+      ...acc,
+      ...(val.childNodes && val.childNodes.length ? getFlatNodes(val.childNodes) : [val]),
+    ],
     [],
   );
 }

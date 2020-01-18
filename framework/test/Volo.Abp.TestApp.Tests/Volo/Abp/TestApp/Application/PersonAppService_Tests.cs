@@ -19,7 +19,7 @@ namespace Volo.Abp.TestApp.Application
 
         public PersonAppService_Tests()
         {
-            _peopleAppService =  ServiceProvider.GetRequiredService<IPeopleAppService>();
+            _peopleAppService = ServiceProvider.GetRequiredService<IPeopleAppService>();
         }
 
         protected override void AfterAddApplication(IServiceCollection services)
@@ -31,17 +31,20 @@ namespace Volo.Abp.TestApp.Application
         [Fact]
         public async Task GetList()
         {
-            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+            var people = await _peopleAppService.GetListAsync(new PagedAndSortedResultRequestDto())
+                .ConfigureAwait(false);
             people.Items.Count.ShouldBeGreaterThan(0);
         }
 
         [Fact]
         public async Task Create()
         {
-            var personDto = await _peopleAppService.CreateAsync(new PersonDto());
+            var uniquePersonName = Guid.NewGuid().ToString();
+            var personDto = await _peopleAppService.CreateAsync(new PersonDto {Name = uniquePersonName})
+                .ConfigureAwait(false);
 
             var repository = ServiceProvider.GetService<IRepository<Person, Guid>>();
-            var person = await repository.FindAsync(personDto.Id);
+            var person = await repository.FindAsync(personDto.Id).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.TenantId.ShouldBeNull();
@@ -52,10 +55,12 @@ namespace Volo.Abp.TestApp.Application
         {
             _fakeCurrentTenant.Id.Returns(TestDataBuilder.TenantId1);
 
-            var personDto = await _peopleAppService.CreateAsync(new PersonDto());
+            var uniquePersonName = Guid.NewGuid().ToString();
+            var personDto = await _peopleAppService.CreateAsync(new PersonDto {Name = uniquePersonName})
+                .ConfigureAwait(false);
 
             var repository = ServiceProvider.GetService<IRepository<Person, Guid>>();
-            var person = await repository.FindAsync(personDto.Id);
+            var person = await repository.FindAsync(personDto.Id).ConfigureAwait(false);
 
             person.ShouldNotBeNull();
             person.TenantId.ShouldNotBeNull();

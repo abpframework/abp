@@ -1,18 +1,18 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp.Localization;
-using Volo.Abp.Localization.Resources.AbpValidation;
+﻿using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation;
+using Volo.Abp.Validation.Localization;
 using Volo.Blogging.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Blogging
 {
-    [DependsOn(typeof(AbpLocalizationModule))]
+    [DependsOn(typeof(AbpValidationModule))]
     public class BloggingDomainSharedModule : AbpModule
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BloggingDomainSharedModule>();
             });

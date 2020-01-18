@@ -89,7 +89,7 @@ namespace Volo.Abp.EventBus
         {
             var exceptions = new List<Exception>();
 
-            await TriggerHandlersAsync(eventType, eventData, exceptions);
+            await TriggerHandlersAsync(eventType, eventData, exceptions).ConfigureAwait(false);
 
             if (exceptions.Any())
             {
@@ -110,7 +110,7 @@ namespace Volo.Abp.EventBus
             {
                 foreach (var handlerFactory in handlerFactories.EventHandlerFactories)
                 {
-                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions);
+                    await TriggerHandlerAsync(handlerFactory, handlerFactories.EventType, eventData, exceptions).ConfigureAwait(false);
                 }
             }
 
@@ -126,7 +126,7 @@ namespace Volo.Abp.EventBus
                     var baseEventType = eventType.GetGenericTypeDefinition().MakeGenericType(baseArg);
                     var constructorArgs = ((IEventDataWithInheritableGenericArgument)eventData).GetConstructorArgs();
                     var baseEventData = Activator.CreateInstance(baseEventType, constructorArgs);
-                    await PublishAsync(baseEventType, baseEventData);
+                    await PublishAsync(baseEventType, baseEventData).ConfigureAwait(false);
                 }
             }
         }
@@ -171,7 +171,7 @@ namespace Volo.Abp.EventBus
                                 new[] { eventType }
                             );
 
-                        await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData })).ConfigureAwait(false);
                     }
                     else if (ReflectionHelper.IsAssignableToGenericType(handlerType, typeof(IDistributedEventHandler<>)))
                     {
@@ -182,7 +182,7 @@ namespace Volo.Abp.EventBus
                                 new[] { eventType }
                             );
 
-                        await (Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData });
+                        await ((Task)method.Invoke(eventHandlerWrapper.EventHandler, new[] { eventData })).ConfigureAwait(false);
                     }
                     else
                     {

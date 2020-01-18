@@ -46,11 +46,13 @@ abp new Acme.BookStore
         * `--tiered`: Vytvoří stupňovité řešení, kde jsou vrstvy Web a Http API fyzicky odděleny. Pokud není uvedeno, tak vytvoří vrstvené řešení, které je méně složité a vhodné pro většinu scénářů.
       * `angular`: Angular. Pro tuto šablonu jsou dostupné dodatečné možnosti:
         * `--separate-identity-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
+      * `none`: Bez UI. Pro tuto šablonu jsou dostupné dodatečné možnosti:
+        * `--separate-identity-server`: Oddělí identity server aplikaci od API host aplikace. Pokud není uvedeno, bude na straně serveru jediný koncový bod.
     * `--database-provider` nebo `-d`: Určuje poskytovatele databáze. Výchozí poskytovatel je `ef`. Dostupní poskytovatelé:
       * `ef`: Entity Framework Core.
       * `mongodb`: MongoDB.
   *  `module`: [Šablona modulu](Startup-Templates/Module.md). Dodatečné možnosti:
-    * `--no-ui`: Určuje nezahrnutí uživatelského rozhraní. Umožňuje vytvořit moduly pouze pro služby (a.k.a. mikroslužby - bez uživatelského rozhraní).
+      * `--no-ui`: Určuje nezahrnutí uživatelského rozhraní. Umožňuje vytvořit moduly pouze pro služby (a.k.a. mikroslužby - bez uživatelského rozhraní).
 * `--output-folder` nebo `-o`: Určuje výstupní složku. Výchozí hodnota je aktuální adresář.
 * `--version` nebo `-v`: Určuje verzi ABP & šablony. Může to být [štítek vydání](https://github.com/abpframework/abp/releases) nebo [název větve](https://github.com/abpframework/abp/branches). Pokud není uvedeno, používá nejnovější vydání. Většinou budete chtít použít nejnovější verzi.
 
@@ -126,6 +128,24 @@ abp update [možnosti]
 * `--include-previews` nebo `-p`: Zahrne náhledové, beta a rc balíčky při kontrole nových verzí.
 * `--npm`:  Aktualizuje pouze balíčky NPM.
 * `--nuget`: Aktualizuje pouze balíčky NuGet.
+
+### login
+
+Některé funkce CLI vyžadují přihlášení k platformě abp.io. Chcete-li se přihlásit pomocí svého uživatelského jména, napište
+
+```bash
+abp login <username>
+```
+
+Všimněte si, že nové přihlášení s již aktivní relací ukončí předchozí relaci a vytvoří novou.
+
+### logout
+
+Odhlásí vás odebráním tokenu relace z počítače.
+
+```
+abp logout
+```
 
 ### help
 

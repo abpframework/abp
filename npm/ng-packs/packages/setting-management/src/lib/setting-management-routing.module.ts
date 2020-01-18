@@ -1,15 +1,29 @@
-import { DynamicLayoutComponent } from '@abp/ng.core';
+import {
+  DynamicLayoutComponent,
+  ReplaceableComponents,
+  ReplaceableRouteContainerComponent,
+} from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SETTING_MANAGEMENT_ROUTES } from './constants/routes';
-import { SettingLayoutComponent } from './components/setting-layout.component';
+import { SettingManagementComponent } from './components/setting-management.component';
 
 const routes: Routes = [
   {
-    path: 'setting-management',
+    path: '',
     component: DynamicLayoutComponent,
-    children: [{ path: '', component: SettingLayoutComponent }],
-    data: { routes: SETTING_MANAGEMENT_ROUTES, settings: [] },
+    children: [
+      {
+        path: '',
+        component: ReplaceableRouteContainerComponent,
+        data: {
+          requiredPolicy: 'AbpAccount.SettingManagement',
+          replaceableComponent: {
+            key: 'SettingManagement.SettingManagementComponent',
+            defaultComponent: SettingManagementComponent,
+          } as ReplaceableComponents.RouteData,
+        },
+      },
+    ],
   },
 ];
 

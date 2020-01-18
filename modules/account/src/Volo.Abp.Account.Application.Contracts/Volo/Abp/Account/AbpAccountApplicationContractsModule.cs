@@ -2,8 +2,8 @@
 using Volo.Abp.Identity;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Localization.Resources.AbpValidation;
 using Volo.Abp.Modularity;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Volo.Abp.Account
@@ -15,7 +15,7 @@ namespace Volo.Abp.Account
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpAccountApplicationContractsModule>();
             });
@@ -28,7 +28,7 @@ namespace Volo.Abp.Account
                     .AddVirtualJson("/Volo/Abp/Account/Localization/Resources");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("Volo.Account", typeof(AccountResource));
             });

@@ -20,7 +20,11 @@ namespace Volo.Blogging.EntityFrameworkCore
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BloggingModelBuilderConfigurationOptions();
+            var options = new BloggingModelBuilderConfigurationOptions(
+                BloggingDbProperties.DbTablePrefix,
+                BloggingDbProperties.DbSchema
+                );
+
             optionsAction?.Invoke(options);
 
             builder.Entity<BlogUser>(b =>

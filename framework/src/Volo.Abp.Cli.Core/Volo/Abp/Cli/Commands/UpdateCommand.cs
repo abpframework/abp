@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using Volo.Abp.Cli.Args;
-using Volo.Abp.Cli.ProjectBuilding.Analyticses;
 using Volo.Abp.Cli.ProjectModification;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Json;
-using Volo.Abp.Threading;
 
 namespace Volo.Abp.Cli.Commands
 {
@@ -23,21 +17,12 @@ namespace Volo.Abp.Cli.Commands
 
         private readonly VoloNugetPackagesVersionUpdater _nugetPackagesVersionUpdater;
         private readonly NpmPackagesUpdater _npmPackagesUpdater;
-        private readonly ICliAnalyticsCollect _cliAnalyticsCollect;
-        private readonly CliOptions _options;
-        private readonly IJsonSerializer _jsonSerializer;
 
         public UpdateCommand(VoloNugetPackagesVersionUpdater nugetPackagesVersionUpdater,
-            NpmPackagesUpdater npmPackagesUpdater,
-            ICliAnalyticsCollect cliAnalyticsCollect, 
-            IJsonSerializer jsonSerializer, 
-            IOptions<CliOptions> options)
+            NpmPackagesUpdater npmPackagesUpdater)
         {
             _nugetPackagesVersionUpdater = nugetPackagesVersionUpdater;
             _npmPackagesUpdater = npmPackagesUpdater;
-            _cliAnalyticsCollect = cliAnalyticsCollect;
-            _jsonSerializer = jsonSerializer;
-            _options = options.Value;
 
             Logger = NullLogger<UpdateCommand>.Instance;
         }
@@ -47,37 +32,37 @@ namespace Volo.Abp.Cli.Commands
             var updateNpm = commandLineArgs.Options.ContainsKey(Options.Packages.Npm);
             var updateNuget = commandLineArgs.Options.ContainsKey(Options.Packages.NuGet);
 
-            var both = (updateNuget && updateNpm) || (!updateNuget && !updateNpm); 
+            var directory = commandLineArgs.Options.GetOrNull(Options.SolutionPath.Short, Options.SolutionPath.Long) ??
+                            Directory.GetCurrentDirectory();
 
-            if (updateNpm || both)
+            if (updateNuget || !updateNpm)
             {
-                await UpdateNugetPackages(commandLineArgs);
+                await UpdateNugetPackages(commandLineArgs, directory).ConfigureAwait(false);
             }
 
-            if (updateNpm || both)
+            if (updateNpm || !updateNuget)
             {
-                UpdateNpmPackages();
+                UpdateNpmPackages(directory);
             }
-
         }
 
-        private void UpdateNpmPackages()
+        private void UpdateNpmPackages(string directory)
         {
-            _npmPackagesUpdater.Update(Directory.GetCurrentDirectory());
+            _npmPackagesUpdater.Update(directory);
         }
 
-        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs)
+        private async Task UpdateNugetPackages(CommandLineArgs commandLineArgs, string directory)
         {
             var includePreviews =
                 commandLineArgs.Options.GetOrNull(Options.IncludePreviews.Short, Options.IncludePreviews.Long) != null;
 
-            var solution = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.sln").FirstOrDefault();
+            var solution = Directory.GetFiles(directory, "*.sln").FirstOrDefault();
 
             if (solution != null)
             {
                 var solutionName = Path.GetFileName(solution).RemovePostFix(".sln");
 
-                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateSolutionAsync(solution, includePreviews).ConfigureAwait(false);
 
                 Logger.LogInformation($"Volo packages are updated in {solutionName} solution.");
                 return;
@@ -89,7 +74,7 @@ namespace Volo.Abp.Cli.Commands
             {
                 var projectName = Path.GetFileName(project).RemovePostFix(".csproj");
 
-                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews);
+                await _nugetPackagesVersionUpdater.UpdateProjectAsync(project, includePreviews).ConfigureAwait(false);
 
                 Logger.LogInformation($"Volo packages are updated in {projectName} project.");
                 return;
@@ -128,12 +113,17 @@ namespace Volo.Abp.Cli.Commands
 
         public string GetShortDescription()
         {
-            return "Automatically updates all ABP related NuGet packages and NPM packages in a" +
-                   " solution or project to the latest versions";
+            return "Update all ABP related NuGet packages and NPM packages in a solution or project to the latest version.";
         }
 
         public static class Options
         {
+            public static class SolutionPath
+            {
+                public const string Short = "sp";
+                public const string Long = "solution-path";
+            }
+            
             public static class IncludePreviews
             {
                 public const string Short = "p";

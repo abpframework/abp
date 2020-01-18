@@ -1,6 +1,7 @@
 ﻿{
   "culture": "cs",
   "texts": {
+    "DocsTitle": "VoloDocs",
     "WelcomeVoloDocs": "Vítejte ve VoloDocs!",
     "NoProjectWarning": "Zatím zde není žádný projekt!",
     "CreateYourFirstProject": "Klikněte zde k vytvoření vašeho prvního projektu",

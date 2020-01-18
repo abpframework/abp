@@ -5,7 +5,7 @@ namespace Volo.Abp.Settings
 {
     public class TenantSettingValueProvider : SettingValueProvider
     {
-        public const string ProviderName = "Tenant";
+        public const string ProviderName = "T";
 
         public override string Name => ProviderName;
 
@@ -19,7 +19,7 @@ namespace Volo.Abp.Settings
 
         public override async Task<string> GetOrNullAsync(SettingDefinition setting)
         {
-            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString());
+            return await SettingStore.GetOrNullAsync(setting.Name, Name, CurrentTenant.Id?.ToString()).ConfigureAwait(false);
         }
     }
 }

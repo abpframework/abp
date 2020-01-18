@@ -23,12 +23,12 @@ namespace Volo.Abp.EventBus.Local
         /// </summary>
         public ILogger<LocalEventBus> Logger { get; set; }
 
-        protected LocalEventBusOptions Options { get; }
+        protected AbpLocalEventBusOptions Options { get; }
 
         protected ConcurrentDictionary<Type, List<IEventHandlerFactory>> HandlerFactories { get; }
 
         public LocalEventBus(
-            IOptions<LocalEventBusOptions> options,
+            IOptions<AbpLocalEventBusOptions> options,
             IServiceScopeFactory serviceScopeFactory)
             : base(serviceScopeFactory)
         {
@@ -119,7 +119,7 @@ namespace Volo.Abp.EventBus.Local
         {
             var exceptions = new List<Exception>();
 
-            await TriggerHandlersAsync(eventType, eventData, exceptions);
+            await TriggerHandlersAsync(eventType, eventData, exceptions).ConfigureAwait(false);
 
             if (exceptions.Any())
             {

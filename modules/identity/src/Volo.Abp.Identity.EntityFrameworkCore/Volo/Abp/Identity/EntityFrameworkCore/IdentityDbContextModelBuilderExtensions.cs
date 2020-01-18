@@ -10,11 +10,14 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
     {
         public static void ConfigureIdentity(
             [NotNull] this ModelBuilder builder,
-            Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
+            [CanBeNull] Action<IdentityModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new IdentityModelBuilderConfigurationOptions();
+            var options = new IdentityModelBuilderConfigurationOptions(
+                AbpIdentityDbProperties.DbTablePrefix,
+                AbpIdentityDbProperties.DbSchema
+            );
 
             optionsAction?.Invoke(options);
 
@@ -26,7 +29,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 b.ConfigureAbpUser();
 
                 b.Property(u => u.NormalizedUserName).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedUserNameLength).HasColumnName(nameof(IdentityUser.NormalizedUserName));
-                b.Property(u => u.NormalizedEmail).HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength).HasColumnName(nameof(IdentityUser.NormalizedEmail));
+                b.Property(u => u.NormalizedEmail).IsRequired().HasMaxLength(IdentityUserConsts.MaxNormalizedEmailLength).HasColumnName(nameof(IdentityUser.NormalizedEmail));
                 b.Property(u => u.PasswordHash).HasMaxLength(IdentityUserConsts.MaxPasswordHashLength).HasColumnName(nameof(IdentityUser.PasswordHash));
                 b.Property(u => u.SecurityStamp).IsRequired().HasMaxLength(IdentityUserConsts.MaxSecurityStampLength).HasColumnName(nameof(IdentityUser.SecurityStamp));
                 b.Property(u => u.TwoFactorEnabled).HasDefaultValue(false).HasColumnName(nameof(IdentityUser.TwoFactorEnabled));

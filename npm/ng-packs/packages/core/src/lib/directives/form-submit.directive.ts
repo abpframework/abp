@@ -17,16 +17,19 @@ import { takeUntilDestroy } from '../utils';
 type Controls = { [key: string]: FormControl } | FormGroup[];
 
 @Directive({
+  // tslint:disable-next-line: directive-selector
   selector: 'form[ngSubmit][formGroup]',
 })
 export class FormSubmitDirective implements OnInit, OnDestroy {
   @Input()
+  debounce = 200;
+
+  @Input()
   notValidateOnSubmit: string | boolean;
 
-  @Output()
-  ngSubmit = new EventEmitter();
+  @Output() readonly ngSubmit = new EventEmitter();
 
-  executedNgSubmit: boolean = false;
+  executedNgSubmit = false;
 
   constructor(
     @Self() private formGroupDirective: FormGroupDirective,
@@ -42,7 +45,7 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
 
     fromEvent(this.host.nativeElement as HTMLElement, 'keyup')
       .pipe(
-        debounceTime(200),
+        debounceTime(this.debounce),
         filter((key: KeyboardEvent) => key && key.key === 'Enter'),
         takeUntilDestroy(this),
       )
@@ -52,17 +55,6 @@ export class FormSubmitDirective implements OnInit, OnDestroy {
         }
 
         this.executedNgSubmit = false;
-      });
-
-    fromEvent(this.host.nativeElement, 'submit')
-      .pipe(
-        takeUntilDestroy(this),
-        filter(() => !this.notValidateOnSubmit && typeof this.notValidateOnSubmit !== 'string'),
-      )
-      .subscribe(() => {
-        if (!this.executedNgSubmit) {
-          this.markAsDirty();
-        }
       });
   }
 

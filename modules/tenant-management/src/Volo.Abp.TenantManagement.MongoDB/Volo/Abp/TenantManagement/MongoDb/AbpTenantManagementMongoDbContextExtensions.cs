@@ -7,11 +7,13 @@ namespace Volo.Abp.TenantManagement.MongoDB
     {
         public static void ConfigureTenantManagement(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new TenantManagementMongoModelBuilderConfigurationOptions();
+            var options = new TenantManagementMongoModelBuilderConfigurationOptions(
+                AbpTenantManagementDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

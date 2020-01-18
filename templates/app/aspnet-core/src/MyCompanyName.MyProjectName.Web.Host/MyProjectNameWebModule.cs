@@ -12,6 +12,7 @@ using MyCompanyName.MyProjectName.Localization;
 using MyCompanyName.MyProjectName.MultiTenancy;
 using MyCompanyName.MyProjectName.Web.Menus;
 using StackExchange.Redis;
+using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Swagger;
 using Volo.Abp;
 using Volo.Abp.AspNetCore.Authentication.OAuth;
@@ -21,6 +22,7 @@ using Volo.Abp.AspNetCore.Mvc.UI;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic;
 using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
+using Volo.Abp.AspNetCore.Serilog;
 using Volo.Abp.Autofac;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Caching;
@@ -48,7 +50,8 @@ namespace MyCompanyName.MyProjectName.Web
         typeof(AbpFeatureManagementWebModule),
         typeof(AbpHttpClientIdentityModelModule),
         typeof(AbpIdentityWebModule),
-        typeof(AbpTenantManagementWebModule)
+        typeof(AbpTenantManagementWebModule),
+        typeof(AbpAspNetCoreSerilogModule)
         )]
     public class MyProjectNameWebModule : AbpModule
     {
@@ -76,22 +79,19 @@ namespace MyCompanyName.MyProjectName.Web
             ConfigureAutoMapper();
             ConfigureVirtualFileSystem(hostingEnvironment);
             ConfigureNavigationServices(configuration);
-            ConfigureSwaggerServices(context.Services);
             ConfigureMultiTenancy();
-
-            //Disabled swagger since it does not support ASP.NET Core 3.0 yet!
-            //ConfigureSwaggerServices(context.Services);
+            ConfigureSwaggerServices(context.Services);
         }
 
-        private void ConfigureCache(IConfigurationRoot configuration)
+        private void ConfigureCache(IConfiguration configuration)
         {
-            Configure<CacheOptions>(options =>
+            Configure<AbpDistributedCacheOptions>(options =>
             {
                 options.KeyPrefix = "MyProjectName:";
             });
         }
 
-        private void ConfigureUrls(IConfigurationRoot configuration)
+        private void ConfigureUrls(IConfiguration configuration)
         {
             Configure<AppUrlOptions>(options =>
             {
@@ -101,13 +101,13 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureMultiTenancy()
         {
-            Configure<MultiTenancyOptions>(options =>
+            Configure<AbpMultiTenancyOptions>(options =>
             {
                 options.IsEnabled = MultiTenancyConsts.IsEnabled;
             });
         }
 
-        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfigurationRoot configuration)
+        private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
         {
             context.Services.AddAuthentication(options =>
                 {
@@ -151,7 +151,7 @@ namespace MyCompanyName.MyProjectName.Web
         {
             if (hostingEnvironment.IsDevelopment())
             {
-                Configure<VirtualFileSystemOptions>(options =>
+                Configure<AbpVirtualFileSystemOptions>(options =>
                 {
                     //<TEMPLATE-REMOVE>
                     options.FileSets.ReplaceEmbeddedByPhysical<AbpUiModule>(Path.Combine(hostingEnvironment.ContentRootPath, string.Format("..{0}..{0}..{0}..{0}..{0}framework{0}src{0}Volo.Abp.UI", Path.DirectorySeparatorChar)));
@@ -169,9 +169,9 @@ namespace MyCompanyName.MyProjectName.Web
             }
         }
 
-        private void ConfigureNavigationServices(IConfigurationRoot configuration)
+        private void ConfigureNavigationServices(IConfiguration configuration)
         {
-            Configure<NavigationOptions>(options =>
+            Configure<AbpNavigationOptions>(options =>
             {
                 options.MenuContributors.Add(new MyProjectNameMenuContributor(configuration));
             });
@@ -182,7 +182,7 @@ namespace MyCompanyName.MyProjectName.Web
             services.AddSwaggerGen(
                 options =>
                 {
-                    options.SwaggerDoc("v1", new Info { Title = "MyProjectName API", Version = "v1" });
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "MyProjectName API", Version = "v1" });
                     options.DocInclusionPredicate((docName, description) => true);
                     options.CustomSchemaIds(type => type.FullName);
                 }
@@ -191,7 +191,7 @@ namespace MyCompanyName.MyProjectName.Web
 
         private void ConfigureRedis(
             ServiceConfigurationContext context,
-            IConfigurationRoot configuration,
+            IConfiguration configuration,
             IWebHostEnvironment hostingEnvironment)
         {
             context.Services.AddStackExchangeRedisCache(options =>
@@ -236,16 +236,14 @@ namespace MyCompanyName.MyProjectName.Web
 
             app.UseAbpRequestLocalization();
 
-            /* Disabled swagger since it does not support ASP.NET Core 3.0 yet!
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "MyProjectName API");
             });
-            */
 
             app.UseAuditing();
-
+            app.UseAbpSerilogEnrichers();
             app.UseMvcWithDefaultRouteAndArea();
         }
     }

@@ -27,20 +27,20 @@ namespace Volo.Abp.Features
         {
             using (_currentTenant.Change(ParseNullableGuid(tenantIdValue)))
             {
-                Assert.Throws<AbpAuthorizationException>(() =>
+                await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    _classFeatureTestService.NoAdditionalFeature();
-                });
-
-                Assert.Throws<AbpAuthorizationException>(() =>
-                {
-                    _classFeatureTestService.Feature2();
-                });
+                    await _classFeatureTestService.NoAdditionalFeatureAsync().ConfigureAwait(false);
+                }).ConfigureAwait(false);
 
                 await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
                 {
-                    await _methodFeatureTestService.Feature1Async();
-                });
+                    await _classFeatureTestService.Feature2Async().ConfigureAwait(false);
+                }).ConfigureAwait(false);
+
+                await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
+                {
+                    await _methodFeatureTestService.Feature1Async().ConfigureAwait(false);
+                }).ConfigureAwait(false);
             }
         }
 
@@ -50,9 +50,9 @@ namespace Volo.Abp.Features
             //Features were enabled for Tenant 1
             using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
             {
-                _classFeatureTestService.NoAdditionalFeature();
-                _classFeatureTestService.Feature2().ShouldBe(42);
-                (await _methodFeatureTestService.Feature1Async()).ShouldBe(42);
+                await _classFeatureTestService.NoAdditionalFeatureAsync().ConfigureAwait(false);
+                (await _classFeatureTestService.Feature2Async().ConfigureAwait(false)).ShouldBe(42);
+                (await _methodFeatureTestService.Feature1Async().ConfigureAwait(false)).ShouldBe(42);
             }
         }
 
@@ -64,7 +64,7 @@ namespace Volo.Abp.Features
         {
             using (_currentTenant.Change(ParseNullableGuid(tenantIdValue)))
             {
-                await _methodFeatureTestService.NonFeatureAsync();
+                await _methodFeatureTestService.NonFeatureAsync().ConfigureAwait(false);
             }
         }
 

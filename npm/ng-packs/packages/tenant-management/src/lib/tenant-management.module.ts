@@ -24,7 +24,3 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   ],
 })
 export class TenantManagementModule {}
-
-export function TenantManagementProviders(): Provider[] {
-  return [];
-}

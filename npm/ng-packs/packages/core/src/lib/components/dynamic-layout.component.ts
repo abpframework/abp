@@ -13,21 +13,19 @@ import { takeUntilDestroy } from '../utils/rxjs-utils';
   selector: 'abp-dynamic-layout',
   template: `
     <ng-container *ngTemplateOutlet="layout ? componentOutlet : routerOutlet"></ng-container>
-
     <ng-template #routerOutlet><router-outlet></router-outlet></ng-template>
     <ng-template #componentOutlet><ng-container *ngComponentOutlet="layout"></ng-container></ng-template>
-  `,
+  `
 })
 export class DynamicLayoutComponent implements OnDestroy {
-  @Select(ConfigState.getOne('requirements'))
-  requirements$: Observable<Config.Requirements>;
+  @Select(ConfigState.getOne('requirements')) requirements$: Observable<Config.Requirements>;
 
   layout: Type<any>;
 
   constructor(private router: Router, private route: ActivatedRoute, private store: Store) {
     const {
       requirements: { layouts },
-      routes,
+      routes
     } = this.store.selectSnapshot(ConfigState.getAll);
 
     if ((this.route.snapshot.data || {}).layout) {

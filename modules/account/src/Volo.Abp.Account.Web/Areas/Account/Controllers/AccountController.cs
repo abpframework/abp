@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Identity;
+using Volo.Abp.Validation;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 using UserLoginInfo = Volo.Abp.Account.Web.Areas.Account.Controllers.Models.UserLoginInfo;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
@@ -33,12 +34,14 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         {
             ValidateLoginInfo(login);
 
+            await ReplaceEmailToUsernameOfInputIfNeeds(login).ConfigureAwait(false);
+
             return GetAbpLoginResult(await _signInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
                 login.RememberMe,
                 true
-            ));
+            ).ConfigureAwait(false));
         }
 
         [HttpPost]
@@ -46,14 +49,39 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
         {
             ValidateLoginInfo(login);
-            var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress);
+
+            await ReplaceEmailToUsernameOfInputIfNeeds(login).ConfigureAwait(false);
+
+            var identityUser = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress).ConfigureAwait(false);
 
             if (identityUser == null)
             {
                 return new AbpLoginResult(LoginResultType.InvalidUserNameOrPassword);
             }
 
-            return GetAbpLoginResult(await _signInManager.CheckPasswordSignInAsync(identityUser, login.Password, true));
+            return GetAbpLoginResult(await _signInManager.CheckPasswordSignInAsync(identityUser, login.Password, true).ConfigureAwait(false));
+        }
+
+        protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(UserLoginInfo login)
+        {
+            if (!ValidationHelper.IsValidEmailAddress(login.UserNameOrEmailAddress))
+            {
+                return;
+            }
+
+            var userByUsername = await _userManager.FindByNameAsync(login.UserNameOrEmailAddress).ConfigureAwait(false);
+            if (userByUsername != null)
+            {
+                return;
+            }
+
+            var userByEmail = await _userManager.FindByEmailAsync(login.UserNameOrEmailAddress).ConfigureAwait(false);
+            if (userByEmail == null)
+            {
+                return;
+            }
+
+            login.UserNameOrEmailAddress = userByEmail.UserName;
         }
 
         private static AbpLoginResult GetAbpLoginResult(SignInResult result)

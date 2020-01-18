@@ -43,9 +43,9 @@ namespace Volo.Abp.Identity
             _cancellationTokenProvider = cancellationTokenProvider;
         }
 
-        public async Task<IdentityUser> GetByIdAsync(Guid id)
+        public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
         {
-            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
+            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken).ConfigureAwait(false);
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(IdentityUser), id);
@@ -54,20 +54,20 @@ namespace Volo.Abp.Identity
             return user;
         }
 
-        public async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<string> roleNames)
+        public virtual async Task<IdentityResult> SetRolesAsync([NotNull] IdentityUser user, [NotNull] IEnumerable<string> roleNames)
         {
             Check.NotNull(user, nameof(user));
             Check.NotNull(roleNames, nameof(roleNames));
             
-            var currentRoleNames = await GetRolesAsync(user);
+            var currentRoleNames = await GetRolesAsync(user).ConfigureAwait(false);
 
-            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
+            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct()).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 return result;
             }
 
-            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct());
+            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct()).ConfigureAwait(false);
             if (!result.Succeeded)
             {
                 return result;

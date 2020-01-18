@@ -3,7 +3,7 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 
 namespace Acme.BookStore.BookManagement.EntityFrameworkCore
 {
-    public class BookManagementModelBuilderConfigurationOptions : ModelBuilderConfigurationOptions
+    public class BookManagementModelBuilderConfigurationOptions : AbpModelBuilderConfigurationOptions
     {
         public BookManagementModelBuilderConfigurationOptions(
             [NotNull] string tablePrefix = BookManagementConsts.DefaultDbTablePrefix,

@@ -61,11 +61,11 @@ namespace Volo.Abp.Data
             }
         }
 
-        private readonly DataFilterOptions _options;
+        private readonly AbpDataFilterOptions _options;
 
         private readonly AsyncLocal<DataFilterState> _filter;
 
-        public DataFilter(IOptions<DataFilterOptions> options)
+        public DataFilter(IOptions<AbpDataFilterOptions> options)
         {
             _options = options.Value;
             _filter = new AsyncLocal<DataFilterState>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.BackgroundJobs;
+using Volo.Abp.Emailing.Localization;
 using Volo.Abp.Emailing.Templates;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
@@ -25,12 +26,19 @@ namespace Volo.Abp.Emailing
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<AbpEmailingModule>();
             });
 
-            Configure<BackgroundJobOptions>(options =>
+            Configure<AbpLocalizationOptions>(options =>
+            {
+                options.Resources
+                    .Add<EmailingResource>("en")
+                    .AddVirtualJson("/Volo/Abp/Emailing/Localization");
+            });
+
+            Configure<AbpBackgroundJobOptions>(options =>
             {
                 options.AddJob<BackgroundEmailSendingJob>();
             });
@@ -49,7 +57,7 @@ namespace Volo.Abp.Emailing
                 }
             });
 
-            services.Configure<EmailTemplateOptions>(options =>
+            services.Configure<AbpEmailTemplateOptions>(options =>
             {
                 options.DefinitionProviders.AddIfNotContains(definitionProviders);
             });

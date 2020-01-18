@@ -1,6 +1,7 @@
 ﻿using System;
 using Shouldly;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Ldap
@@ -227,7 +228,7 @@ namespace Volo.Abp.Ldap
                 //     "DomainName": "yourdomain.com.cn",
                 //     "DomainDistinguishedName": "DC=yourdomain,DC=com,DC=cn"
                 // }
-                Configure<LdapOptions>(settings =>
+                Configure<AbpLdapOptions>(settings =>
                 {
                     settings.ServerHost = "192.168.101.54";
                     settings.ServerPort = 636;

@@ -3,9 +3,9 @@ using System.Text;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Volo.Abp.AspNetCore.Mvc.UI.Minification;
 using Volo.Abp.AspNetCore.VirtualFileSystem;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Minify;
 
 namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 {

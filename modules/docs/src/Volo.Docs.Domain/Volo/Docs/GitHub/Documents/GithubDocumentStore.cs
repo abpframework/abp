@@ -10,7 +10,6 @@ using Volo.Docs.GitHub.Projects;
 using Volo.Docs.Projects;
 using Newtonsoft.Json.Linq;
 using Octokit;
-using ProductHeaderValue = Octokit.ProductHeaderValue;
 using Project = Volo.Docs.Projects.Project;
 
 namespace Volo.Docs.GitHub.Documents
@@ -37,6 +36,7 @@ namespace Volo.Docs.GitHub.Documents
             var rawDocumentUrl = rawRootUrl + documentName;
             var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
+            var isParameterDocument = documentName == project.ParametersDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + languageCode + "/" + documentName;
             var localDirectory = "";
             var fileName = documentName;
@@ -57,7 +57,7 @@ namespace Volo.Docs.GitHub.Documents
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Contributors = new List<DocumentContributor>(),
-                //Contributors = !isNavigationDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
+                //Contributors = !isNavigationDocument && !isParameterDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
                 Version = version,
                 Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent)
             };

@@ -113,8 +113,11 @@ export class ForDirective implements OnChanges {
 
   private projectItems(items: any[]): void {
     if (!items.length && this.emptyRef) {
+      this.vcRef.clear();
+      // tslint:disable-next-line: no-unused-expression
       this.vcRef.createEmbeddedView(this.emptyRef).rootNodes;
       this.isShowEmptyRef = true;
+      this.differ = null;
 
       return;
     }
@@ -152,7 +155,7 @@ export class ForDirective implements OnChanges {
 
     const compareFn = this.compareFn;
 
-    if (typeof this.filterBy !== 'undefined') {
+    if (typeof this.filterBy !== 'undefined' && typeof this.filterVal !== 'undefined' && this.filterVal !== '') {
       items = items.filter(item => compareFn(item[this.filterBy], this.filterVal));
     }
 

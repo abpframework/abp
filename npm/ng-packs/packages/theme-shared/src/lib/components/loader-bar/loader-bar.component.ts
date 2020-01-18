@@ -1,5 +1,5 @@
 import { StartLoader, StopLoader } from '@abp/ng.core';
-import { ChangeDetectorRef, Component, Input, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, NavigationError, NavigationStart, Router } from '@angular/router';
 import { takeUntilDestroy } from '@ngx-validate/core';
 import { Actions, ofActionSuccessful } from '@ngxs/store';
@@ -22,31 +22,37 @@ import { filter } from 'rxjs/operators';
   `,
   styleUrls: ['./loader-bar.component.scss'],
 })
-export class LoaderBarComponent implements OnDestroy {
+export class LoaderBarComponent implements OnDestroy, OnInit {
   @Input()
-  containerClass: string = 'abp-loader-bar';
+  containerClass = 'abp-loader-bar';
 
   @Input()
-  color: string = '#77b6ff';
+  color = '#77b6ff';
 
   @Input()
-  isLoading: boolean = false;
+  isLoading = false;
 
-  @Input()
-  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
-
-  progressLevel: number = 0;
+  progressLevel = 0;
 
   interval: Subscription;
 
   timer: Subscription;
 
+  intervalPeriod = 350;
+
+  stopDelay = 820;
+
+  @Input()
+  filter = (action: StartLoader | StopLoader) => action.payload.url.indexOf('openid-configuration') < 0;
+
   get boxShadow(): string {
     return `0 0 10px rgba(${this.color}, 0.5)`;
   }
 
-  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {
-    actions
+  constructor(private actions: Actions, private router: Router, private cdRef: ChangeDetectorRef) {}
+
+  ngOnInit() {
+    this.actions
       .pipe(
         ofActionSuccessful(StartLoader, StopLoader),
         filter(this.filter),
@@ -57,7 +63,7 @@ export class LoaderBarComponent implements OnDestroy {
         else this.stopLoading();
       });
 
-    router.events
+    this.router.events
       .pipe(
         filter(
           event =>
@@ -79,7 +85,7 @@ export class LoaderBarComponent implements OnDestroy {
     if (this.isLoading || this.progressLevel !== 0) return;
 
     this.isLoading = true;
-    this.interval = interval(350).subscribe(() => {
+    this.interval = interval(this.intervalPeriod).subscribe(() => {
       if (this.progressLevel < 75) {
         this.progressLevel += Math.random() * 10;
       } else if (this.progressLevel < 90) {
@@ -99,7 +105,7 @@ export class LoaderBarComponent implements OnDestroy {
     this.isLoading = false;
     if (this.timer && !this.timer.closed) return;
 
-    this.timer = timer(820).subscribe(() => {
+    this.timer = timer(this.stopDelay).subscribe(() => {
       this.progressLevel = 0;
       this.cdRef.detectChanges();
     });

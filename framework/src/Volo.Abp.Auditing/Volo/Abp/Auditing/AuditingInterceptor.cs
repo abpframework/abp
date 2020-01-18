@@ -18,38 +18,11 @@ namespace Volo.Abp.Auditing
             _auditingManager = auditingManager;
         }
 
-        public override void Intercept(IAbpMethodInvocation invocation)
-        {
-            if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
-            {
-                invocation.Proceed();
-                return;
-            }
-
-            var stopwatch = Stopwatch.StartNew();
-
-            try
-            {
-                invocation.Proceed();
-            }
-            catch (Exception ex)
-            {
-                auditLog.Exceptions.Add(ex);
-                throw;
-            }
-            finally
-            {
-                stopwatch.Stop();
-                auditLogAction.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                auditLog.Actions.Add(auditLogAction);
-            }
-        }
-
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (!ShouldIntercept(invocation, out var auditLog, out var auditLogAction))
             {
-                await invocation.ProceedAsync();
+                await invocation.ProceedAsync().ConfigureAwait(false);
                 return;
             }
 
@@ -57,7 +30,7 @@ namespace Volo.Abp.Auditing
 
             try
             {
-                await invocation.ProceedAsync();
+                await invocation.ProceedAsync().ConfigureAwait(false);
             }
             catch (Exception ex)
             {

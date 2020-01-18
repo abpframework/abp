@@ -25,11 +25,22 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Owned<District>();
+
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Phone>(b =>
             {
                 b.HasKey(p => new { p.PersonId, p.Number });
+            });
+
+            modelBuilder.Entity<City>(b =>
+            {
+                b.OwnsMany(c => c.Districts, d =>
+                {
+                    d.WithOwner().HasForeignKey(x => x.CityId);
+                    d.HasKey(x => new { x.CityId, x.Name });
+                });
             });
         }
     }

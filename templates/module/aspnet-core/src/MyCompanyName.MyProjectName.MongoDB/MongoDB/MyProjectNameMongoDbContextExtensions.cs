@@ -8,11 +8,13 @@ namespace MyCompanyName.MyProjectName.MongoDB
     {
         public static void ConfigureMyProjectName(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new MyProjectNameMongoModelBuilderConfigurationOptions();
+            var options = new MyProjectNameMongoModelBuilderConfigurationOptions(
+                MyProjectNameDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
         }

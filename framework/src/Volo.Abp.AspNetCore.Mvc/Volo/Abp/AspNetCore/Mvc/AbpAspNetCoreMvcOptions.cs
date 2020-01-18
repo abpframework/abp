@@ -4,11 +4,13 @@ namespace Volo.Abp.AspNetCore.Mvc
 {
     public class AbpAspNetCoreMvcOptions
     {
-        public ConventionalControllerOptions ConventionalControllers { get; }
+        public bool? MinifyGeneratedScript { get; set; }
+
+        public AbpConventionalControllerOptions ConventionalControllers { get; }
 
         public AbpAspNetCoreMvcOptions()
         {
-            ConventionalControllers = new ConventionalControllerOptions();
+            ConventionalControllers = new AbpConventionalControllerOptions();
         }
     }
 }

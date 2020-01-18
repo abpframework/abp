@@ -1,10 +1,10 @@
 {
   "items": [
     {
-      "text": "Começando",
+      "text": "ComeÃ§ando",
       "items": [
         {
-          "text": "De Modelo de Inicialização",
+          "text": "De Modelo de InicializaÃ§Ã£o",
           "items": [
             {
               "text": "Aplicativo com MVC (Razor Pages) UI",
@@ -35,7 +35,7 @@
       "text": "Tutoriais",
       "items": [
         {
-          "text": "Desenvolvimento de Aplicações",
+          "text": "Desenvolvimento de AplicaÃ§Ãµes",
           "items": [
             {
               "text": "Com ASP.NET Core MVC UI",
@@ -57,11 +57,11 @@
       "text": "Fundamentos",
       "items": [
         {
-          "text": "Injeção de Dependência",
+          "text": "InjeÃ§Ã£o de DependÃªncia",
           "path": "Dependency-Injection.md",
           "items": [
             {
-              "text": "Integração com Autofac",
+              "text": "IntegraÃ§Ã£o com Autofac",
               "path": "Autofac-Integration.md"
             }
           ]
@@ -71,18 +71,18 @@
           "path": "Virtual-File-System.md"
         },
         {
-          "text": "Localização",
+          "text": "LocalizaÃ§Ã£o",
           "path": "Localization.md"
         },
         {
-          "text": "Manipulação de Exceção",
+          "text": "ManipulaÃ§Ã£o de ExceÃ§Ã£o",
           "path": "Exception-Handling.md"
         },
         {
-          "text": "Validação"
+          "text": "ValidaÃ§Ã£o"
         },
         {
-          "text": "Autorização"
+          "text": "AutorizaÃ§Ã£o"
         },
         {
           "text": "Armazenamento em Cache"
@@ -91,7 +91,7 @@
           "text": "Auditoria"
         },
         {
-          "text": "Gerenciamento de Configurações"
+          "text": "Gerenciamento de ConfiguraÃ§Ãµes"
         }
       ]
     },
@@ -102,23 +102,23 @@
           "text": "Barramento de Eventos (local)"
         },
         {
-          "text": "Barramento de Eventos Distribuídos",
+          "text": "Barramento de Eventos DistribuÃ­dos",
           "items": [
             {
-              "text": "Integração RabbitMQ"
+              "text": "IntegraÃ§Ã£o RabbitMQ"
             }
           ]
         }
       ]
     },
     {
-      "text": "Serviços",
+      "text": "ServiÃ§os",
       "items": [
         {
-          "text": "Serialização de Objetos"
+          "text": "SerializaÃ§Ã£o de Objetos"
         },
         {
-          "text": "Serialização JSON"
+          "text": "SerializaÃ§Ã£o JSON"
         },
         {
           "text": "Emailing"
@@ -135,60 +135,60 @@
       ]
     },
     {
-      "text": "Múltiplos Inquilinos",
+      "text": "MÃºltiplos Inquilinos",
       "path": "Multi-Tenancy.md"
     },
     {
-      "text": "Desenvolvimento de Módulos",
+      "text": "Desenvolvimento de MÃ³dulos",
       "items": [
         {
           "text": "Fundamentos",
           "path": "Module-Development-Basics.md"
         },
         {
-          "text": "Módulos de plug-in"
+          "text": "MÃ³dulos de plug-in"
         },
         {
-          "text": "Melhores práticas",
+          "text": "Melhores prÃ¡ticas",
           "path": "Best-Practices/Index.md"
         }
       ]
     },
     {
-      "text": "Design Orientado a Domínio",
+      "text": "Design Orientado a DomÃ­nio",
       "path": "Domain-Driven-Design.md",
       "items": [
         {
-          "text": "Camada de Domínio",
+          "text": "Camada de DomÃ­nio",
           "items": [
             {
-              "text": "Entidades & Raízes Agregadas",
+              "text": "Entidades & RaÃ­zes Agregadas",
               "path": "Entities.md"
             },
             {
               "text": "Value Objects"
             },
             {
-              "text": "Repositórios",
+              "text": "RepositÃ³rios",
               "path": "Repositories.md"
             },
             {
-              "text": "Serviços de Domínio"
+              "text": "ServiÃ§os de DomÃ­nio"
             },
             {
-              "text": "Especificações"
+              "text": "EspecificaÃ§Ãµes"
             }
           ]
         },
         {
-          "text": "Camada de Aplicação",
+          "text": "Camada de AplicaÃ§Ã£o",
           "items": [
             {
-              "text": "Serviços de Aplicação",
+              "text": "ServiÃ§os de AplicaÃ§Ã£o",
               "path": "Application-Services.md"
             },
             {
-              "text": "Objetos de Transferência de Dados"
+              "text": "Objetos de TransferÃªncia de Dados"
             },
             {
               "text": "Unidade de Trabalho"
@@ -204,24 +204,24 @@
           "text": "API",
           "items": [
             {
-              "text": "Controladores de API Automática",
+              "text": "Controladores de API AutomÃ¡tica",
               "path": "AspNetCore/Auto-API-Controllers.md"
             },
             {
-              "text": "Clientes da API C # Dinâmica",
+              "text": "Clientes da API C # DinÃ¢mica",
               "path": "AspNetCore/Dynamic-CSharp-API-Clients.md"
             }
           ]
         },
         {
-          "text": "Interface de Usuário",
+          "text": "Interface de UsuÃ¡rio",
           "items": [
             {
               "text": "Gerenciamento de Pacotes do Lado do Cliente",
               "path": "AspNetCore/Client-Side-Package-Management.md"
             },
             {
-              "text": "Compactação & Minificação",
+              "text": "CompactaÃ§Ã£o & MinificaÃ§Ã£o",
               "path": "AspNetCore/Bundling-Minification.md"
             },
             {
@@ -244,21 +244,21 @@
       "text": "Acesso de Dados",
       "items": [
         {
-          "text": "Integração do Entity Framework Core",
+          "text": "IntegraÃ§Ã£o do Entity Framework Core",
           "path": "Entity-Framework-Core.md",
           "items": [
             {
-              "text": "Integração do PostgreSQL",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "text": "IntegraÃ§Ã£o do PostgreSQL",
+              "path": "Entity-Framework-Core-PostgreSQL.md"
             }
           ]
         },
         {
-          "text": "Integração do MongoDB",
+          "text": "IntegraÃ§Ã£o do MongoDB",
           "path": "MongoDB.md"
         },
         {
-          "text": "Integração do Dapper",
+          "text": "IntegraÃ§Ã£o do Dapper",
           "path": "Dapper.md"
         }
       ]
@@ -271,11 +271,11 @@
           "path": "Background-Jobs.md",
           "items": [
             {
-              "text": "Integração do Hangfire",
+              "text": "IntegraÃ§Ã£o do Hangfire",
               "path": "Background-Jobs-Hangfire.md"
             },
             {
-              "text": "Integração do RabbitMQ",
+              "text": "IntegraÃ§Ã£o do RabbitMQ",
               "path": "Background-Jobs-RabbitMq.md"
             }
           ]
@@ -283,7 +283,7 @@
       ]
     },
     {
-      "text": "Modelos de Inicialização",
+      "text": "Modelos de InicializaÃ§Ã£o",
       "path": "Startup-Templates/Index.md",
       "items": [
         {
@@ -291,7 +291,7 @@
           "path": "Startup-Templates/Application.md"
         },
         {
-          "text": "Módulo",
+          "text": "MÃ³dulo",
           "path": "Startup-Templates/Module.md"
         }
       ]
@@ -300,28 +300,28 @@
       "text": "Exemplos",
       "items": [
         {
-          "text": "Demonstração de Microsserviços",
+          "text": "DemonstraÃ§Ã£o de MicrosserviÃ§os",
           "path": "Samples/Microservice-Demo.md"
         }
       ]
     },
     {
-      "text": "Módulos de Aplicação",
+      "text": "MÃ³dulos de AplicaÃ§Ã£o",
       "path": "Modules/Index.md"
     },
     {
-      "text": "Arquitetura de Microsserviços",
+      "text": "Arquitetura de MicrosserviÃ§os",
       "path": "Microservice-Architecture.md"
     },
     {
       "text": "Testando"
     },
     {
-      "text": "Compilações Noturnas",
+      "text": "CompilaÃ§Ãµes Noturnas",
       "path": "Nightly-Builds.md"
     },
     {
-      "text": "Guia de Contribuição",
+      "text": "Guia de ContribuiÃ§Ã£o",
       "path": "Contribution/Index.md"
     }
   ]

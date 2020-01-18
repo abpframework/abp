@@ -11,7 +11,7 @@ import { FeatureManagementService } from '../services/feature-management.service
 export class FeatureManagementState {
   @Selector()
   static getFeatures({ features }: FeatureManagement.State) {
-    return features;
+    return features || [];
   }
 
   constructor(private featureManagementService: FeatureManagementService) {}

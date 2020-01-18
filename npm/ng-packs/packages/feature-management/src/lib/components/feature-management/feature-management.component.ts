@@ -5,13 +5,17 @@ import { GetFeatures, UpdateFeatures } from '../../actions';
 import { FeatureManagement } from '../../models/feature-management';
 import { FeatureManagementState } from '../../states';
 import { FormGroup, FormControl } from '@angular/forms';
-import { pluck, tap } from 'rxjs/operators';
+import { pluck, finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'abp-feature-management',
   templateUrl: './feature-management.component.html',
+  exportAs: 'abpFeatureManagement',
 })
-export class FeatureManagementComponent {
+export class FeatureManagementComponent
+  implements
+    FeatureManagement.FeatureManagementComponentInputs,
+    FeatureManagement.FeatureManagementComponentOutputs {
   @Input()
   providerKey: string;
 
@@ -32,13 +36,12 @@ export class FeatureManagementComponent {
     if (value) this.openModal();
   }
 
-  @Output()
-  visibleChange = new EventEmitter<boolean>();
+  @Output() readonly visibleChange = new EventEmitter<boolean>();
 
   @Select(FeatureManagementState.getFeatures)
   features$: Observable<FeatureManagement.Feature[]>;
 
-  modalBusy: boolean = false;
+  modalBusy = false;
 
   form: FormGroup;
 
@@ -54,7 +57,12 @@ export class FeatureManagementComponent {
 
   getFeatures() {
     this.store
-      .dispatch(new GetFeatures({ providerKey: this.providerKey, providerName: this.providerName }))
+      .dispatch(
+        new GetFeatures({
+          providerKey: this.providerKey,
+          providerName: this.providerName,
+        }),
+      )
       .pipe(pluck('FeatureManagementState', 'features'))
       .subscribe(features => {
         this.buildForm(features);
@@ -72,6 +80,8 @@ export class FeatureManagementComponent {
   }
 
   save() {
+    if (this.modalBusy) return;
+
     this.modalBusy = true;
 
     let features = this.store.selectSnapshot(FeatureManagementState.getFeatures);
@@ -89,8 +99,8 @@ export class FeatureManagementComponent {
           features,
         }),
       )
+      .pipe(finalize(() => (this.modalBusy = false)))
       .subscribe(() => {
-        this.modalBusy = false;
         this.visible = false;
       });
   }

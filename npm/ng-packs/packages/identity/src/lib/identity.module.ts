@@ -26,7 +26,3 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
   ],
 })
 export class IdentityModule {}
-
-export function IdentityProviders(): Provider[] {
-  return [];
-}

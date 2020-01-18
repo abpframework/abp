@@ -26,7 +26,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 });
             }
 
-            await next(context);
+            await next(context).ConfigureAwait(false);
         }
     }
 }

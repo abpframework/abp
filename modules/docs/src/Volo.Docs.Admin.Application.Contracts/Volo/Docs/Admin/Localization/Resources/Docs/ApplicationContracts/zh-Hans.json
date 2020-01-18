@@ -1,5 +1,5 @@
 {
-    "culture": "zh-Hans",
+  "culture": "zh-Hans",
   "texts": {
     "Permission:DocumentManagement": "文档管理",
     "Permission:Projects": "项目",
@@ -29,4 +29,4 @@
     "DisplayName:GitHubAccessToken": "GitHub访问令牌",
     "DisplayName:GitHubUserAgent": "GitHub用户代理"
   }
-  }
+}

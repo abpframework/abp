@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Volo.Abp;
 using Volo.Abp.MongoDB;
 using Volo.Blogging.Blogs;
@@ -14,11 +12,13 @@ namespace Volo.Blogging.MongoDB
     {
         public static void ConfigureBlogging(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new BloggingMongoModelBuilderConfigurationOptions();
+            var options = new BloggingMongoModelBuilderConfigurationOptions(
+                BloggingDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

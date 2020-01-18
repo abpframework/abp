@@ -7,11 +7,13 @@ namespace Volo.Abp.SettingManagement.MongoDB
     {
         public static void ConfigureSettingManagement(
             this IMongoModelBuilder builder,
-            Action<MongoModelBuilderConfigurationOptions> optionsAction = null)
+            Action<SettingManagementMongoModelBuilderConfigurationOptions> optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
-            var options = new SettingManagementMongoModelBuilderConfigurationOptions();
+            var options = new SettingManagementMongoModelBuilderConfigurationOptions(
+                AbpSettingManagementDbProperties.DbTablePrefix
+            );
 
             optionsAction?.Invoke(options);
 

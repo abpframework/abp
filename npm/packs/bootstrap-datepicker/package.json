@@ -1,0 +1,11 @@
+{
+  "version": "2.0.0",
+  "name": "@abp/bootstrap-datepicker",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "bootstrap-datepicker": "^1.9.0"
+  },
+  "gitHead": "407ad749bb735eb9b6cc1ef6dd310253b9680883"
+}

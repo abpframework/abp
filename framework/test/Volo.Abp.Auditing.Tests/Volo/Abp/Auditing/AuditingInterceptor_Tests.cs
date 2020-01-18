@@ -5,6 +5,7 @@ using NSubstitute;
 using Volo.Abp.Autofac;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Xunit;
 
 namespace Volo.Abp.Auditing
@@ -37,8 +38,8 @@ namespace Volo.Abp.Auditing
 
             using (var scope = _auditingManager.BeginScope())
             {
-                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
-                await scope.SaveAsync();
+                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 }).ConfigureAwait(false);
+                await scope.SaveAsync().ConfigureAwait(false);
             }
 
 #pragma warning disable 4014

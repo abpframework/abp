@@ -1,2 +1,2 @@
 export * from './localization.pipe';
-export * from "./sort.pipe";
+export * from './sort.pipe';

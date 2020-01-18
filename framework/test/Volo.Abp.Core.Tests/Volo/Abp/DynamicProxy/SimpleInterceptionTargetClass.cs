@@ -22,9 +22,9 @@ namespace Volo.Abp.DynamicProxy
         public virtual async Task<int> GetValueAsync()
         {
             Logs.Add("EnterGetValueAsync");
-            await Task.Delay(5);
+            await Task.Delay(5).ConfigureAwait(false);
             Logs.Add("MiddleGetValueAsync");
-            await Task.Delay(5);
+            await Task.Delay(5).ConfigureAwait(false);
             Logs.Add("ExitGetValueAsync");
             return 42;
         }
@@ -32,9 +32,9 @@ namespace Volo.Abp.DynamicProxy
         public virtual async Task DoItAsync()
         {
             Logs.Add("EnterDoItAsync");
-            await Task.Delay(5);
+            await Task.Delay(5).ConfigureAwait(false);
             Logs.Add("MiddleDoItAsync");
-            await Task.Delay(5);
+            await Task.Delay(5).ConfigureAwait(false);
             Logs.Add("ExitDoItAsync");
         }
     }

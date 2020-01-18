@@ -1,0 +1,7 @@
+﻿{
+  "culture": "es",
+  "texts": {
+    "ThisFieldIsRequired": "El campo no puede estar vacío",
+    "MaxLenghtErrorMessage": "El campo puede tener un máximo de '{0}' caracteres"
+  }
+}

@@ -24,7 +24,7 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
         public async Task GetAsync()
         {
             var permissionListResultDto = await _permissionAppService.GetAsync(UserPermissionValueProvider.ProviderName,
-                PermissionTestDataBuilder.User1Id.ToString());
+                PermissionTestDataBuilder.User1Id.ToString()).ConfigureAwait(false);
 
             permissionListResultDto.ShouldNotBeNull();
             permissionListResultDto.EntityDisplayName.ShouldBe(PermissionTestDataBuilder.User1Id.ToString());
@@ -43,7 +43,7 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
         public async Task UpdateAsync()
         {
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                "Test")).ShouldBeNull();
+                "Test").ConfigureAwait(false)).ShouldBeNull();
 
             await _permissionAppService.UpdateAsync("Test",
                 "Test", new UpdatePermissionsDto()
@@ -56,25 +56,25 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
                             Name = "MyPermission1"
                         }
                     }
-                });
+                }).ConfigureAwait(false);
 
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                "Test")).ShouldNotBeNull();
+                "Test").ConfigureAwait(false)).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task Update_Revoke_Test()
         {
-            _permissionGrantRepository.Insert(
+            await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
-                    Guid.NewGuid(), 
+                    Guid.NewGuid(),
                     "MyPermission1",
                     "Test",
                     "Test"
                 )
-            );
+            ).ConfigureAwait(false);
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                "Test")).ShouldNotBeNull();
+                "Test").ConfigureAwait(false)).ShouldNotBeNull();
 
             await _permissionAppService.UpdateAsync("Test",
                 "Test", new UpdatePermissionsDto()
@@ -87,10 +87,10 @@ namespace Volo.Abp.PermissionManagement.Application.Tests.Volo.Abp.PermissionMan
                             Name = "MyPermission1"
                         }
                     }
-                });
+                }).ConfigureAwait(false);
 
             (await _permissionGrantRepository.FindAsync("MyPermission1", "Test",
-                "Test")).ShouldBeNull();
+                "Test").ConfigureAwait(false)).ShouldBeNull();
         }
     }
 }

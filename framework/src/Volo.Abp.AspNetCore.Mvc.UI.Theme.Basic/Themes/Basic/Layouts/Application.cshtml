@@ -49,15 +49,17 @@
 
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Head.Last, StandardLayouts.Application)
 </head>
-<body class="abp-application-layout">
+<body class="abp-application-layout bg-light">
     @await Component.InvokeLayoutHookAsync(LayoutHooks.Body.First, StandardLayouts.Application)
 
     @(await Component.InvokeAsync<MainNavbarViewComponent>())
 
     <div class="@containerClass">
         @(await Component.InvokeAsync<PageAlertsViewComponent>())
-        <div id="AbpContentToolbar" class="text-right mb-3">
-            @RenderSection("content_toolbar", false)
+        <div id="AbpContentToolbar">
+            <div class="text-right mb-2">
+                @RenderSection("content_toolbar", false)
+            </div>
         </div>
         @RenderBody()
     </div>

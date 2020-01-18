@@ -2,7 +2,7 @@
 using Volo.Abp.Localization;
 using Acme.BookStore.BookManagement.Localization;
 using Volo.Abp.Localization.ExceptionHandling;
-using Volo.Abp.Localization.Resources.AbpValidation;
+using Volo.Abp.Validation.Localization;
 using Volo.Abp.VirtualFileSystem;
 
 namespace Acme.BookStore.BookManagement
@@ -14,7 +14,7 @@ namespace Acme.BookStore.BookManagement
     {
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            Configure<VirtualFileSystemOptions>(options =>
+            Configure<AbpVirtualFileSystemOptions>(options =>
             {
                 options.FileSets.AddEmbedded<BookManagementDomainSharedModule>("Acme.BookStore.BookManagement");
             });
@@ -27,7 +27,7 @@ namespace Acme.BookStore.BookManagement
                     .AddVirtualJson("/Localization/BookManagement");
             });
 
-            Configure<ExceptionLocalizationOptions>(options =>
+            Configure<AbpExceptionLocalizationOptions>(options =>
             {
                 options.MapCodeNamespace("BookManagement", typeof(BookManagementResource));
             });

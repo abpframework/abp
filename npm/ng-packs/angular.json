@@ -17,11 +17,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/core/src/test.ts",
-            "tsConfig": "packages/core/tsconfig.spec.json",
-            "karmaConfig": "packages/core/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -48,11 +47,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-shared/src/test.ts",
-            "tsConfig": "packages/theme-shared/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-shared/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -79,11 +77,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/theme-basic/src/test.ts",
-            "tsConfig": "packages/theme-basic/tsconfig.spec.json",
-            "karmaConfig": "packages/theme-basic/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -109,11 +106,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/account/src/test.ts",
-            "tsConfig": "packages/account/tsconfig.spec.json",
-            "karmaConfig": "packages/account/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -139,11 +135,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/permission-management/src/test.ts",
-            "tsConfig": "packages/permission-management/tsconfig.spec.json",
-            "karmaConfig": "packages/permission-management/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -172,11 +167,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/identity/src/test.ts",
-            "tsConfig": "packages/identity/tsconfig.spec.json",
-            "karmaConfig": "packages/identity/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -202,11 +196,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/feature-management/src/test.ts",
-            "tsConfig": "packages/feature-management/tsconfig.spec.json",
-            "karmaConfig": "packages/feature-management/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -235,11 +228,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/tenant-management/src/test.ts",
-            "tsConfig": "packages/tenant-management/tsconfig.spec.json",
-            "karmaConfig": "packages/tenant-management/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -268,11 +260,10 @@
           }
         },
         "test": {
-          "builder": "@angular-devkit/build-angular:karma",
+          "builder": "@angular-builders/jest:run",
           "options": {
-            "main": "packages/setting-management/src/test.ts",
-            "tsConfig": "packages/setting-management/tsconfig.spec.json",
-            "karmaConfig": "packages/setting-management/karma.conf.js"
+            "coverage": true,
+            "passWithNoTests": true
           }
         },
         "lint": {
@@ -282,9 +273,240 @@
               "packages/setting-management/tsconfig.lib.json",
               "packages/setting-management/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "setting-management-config": {
+      "projectType": "library",
+      "root": "packages/setting-management-config",
+      "sourceRoot": "packages/setting-management-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/setting-management-config/tsconfig.lib.json",
+            "project": "packages/setting-management-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/setting-management-config/tsconfig.lib.json",
+              "packages/setting-management-config/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "identity-config": {
+      "projectType": "library",
+      "root": "packages/identity-config",
+      "sourceRoot": "packages/identity-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/identity-config/tsconfig.lib.json",
+            "project": "packages/identity-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["packages/identity-config/tsconfig.lib.json", "packages/identity-config/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "account-config": {
+      "projectType": "library",
+      "root": "packages/account-config",
+      "sourceRoot": "packages/account-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/account-config/tsconfig.lib.json",
+            "project": "packages/account-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["packages/account-config/tsconfig.lib.json", "packages/account-config/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "tenant-management-config": {
+      "projectType": "library",
+      "root": "packages/tenant-management-config",
+      "sourceRoot": "packages/tenant-management-config/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "packages/tenant-management-config/tsconfig.lib.json",
+            "project": "packages/tenant-management-config/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/jest:run",
+          "options": {
+            "coverage": true,
+            "passWithNoTests": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/tenant-management-config/tsconfig.lib.json",
+              "packages/tenant-management-config/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
+          }
+        }
+      }
+    },
+    "dev-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "apps/dev-app",
+      "sourceRoot": "apps/dev-app/src",
+      "prefix": "abp",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/dev-app",
+            "index": "apps/dev-app/src/index.html",
+            "main": "apps/dev-app/src/main.ts",
+            "polyfills": "apps/dev-app/src/polyfills.ts",
+            "tsConfig": "apps/dev-app/tsconfig.app.json",
+            "aot": false,
+            "assets": ["apps/dev-app/src/favicon.ico", "apps/dev-app/src/assets"],
+            "extractCss": true,
+            "styles": [
+              "apps/dev-app/src/styles.scss",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+                "lazy": true,
+                "bundleName": "fontawesome-all.min"
+              },
+              {
+                "input": "node_modules/@fortawesome/fontawesome-free/css/v4-shims.min.css",
+                "lazy": true,
+                "bundleName": "fontawesome-v4-shims.min"
+              },
+              {
+                "input": "node_modules/primeng/resources/themes/nova-light/theme.css",
+                "lazy": true,
+                "bundleName": "primeng-nova-light-theme"
+              },
+              {
+                "input": "node_modules/primeicons/primeicons.css",
+                "lazy": true,
+                "bundleName": "primeicons"
+              },
+              {
+                "input": "node_modules/primeng/resources/primeng.min.css",
+                "lazy": true,
+                "bundleName": "primeng.min"
+              }
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/dev-app/src/environments/environment.ts",
+                  "with": "apps/dev-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "dev-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "dev-app:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "dev-app:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": ["apps/dev-app/tsconfig.app.json", "apps/dev-app/tsconfig.spec.json"],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }

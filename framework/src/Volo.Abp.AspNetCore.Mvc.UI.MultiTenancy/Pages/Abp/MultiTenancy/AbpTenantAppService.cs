@@ -17,7 +17,7 @@ namespace Pages.Abp.MultiTenancy
 
         public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
         {
-            var tenant = await TenantStore.FindAsync(name);
+            var tenant = await TenantStore.FindAsync(name).ConfigureAwait(false);
 
             if (tenant == null)
             {
@@ -34,7 +34,7 @@ namespace Pages.Abp.MultiTenancy
         
         public async Task<FindTenantResultDto> FindTenantByIdAsync(Guid id)
         {
-            var tenant = await TenantStore.FindAsync(id);
+            var tenant = await TenantStore.FindAsync(id).ConfigureAwait(false);
 
             if (tenant == null)
             {

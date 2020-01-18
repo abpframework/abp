@@ -12,9 +12,9 @@ namespace Volo.Abp.Security.Encryption
     /// </summary>
     public class StringEncryptionService : IStringEncryptionService, ITransientDependency
     {
-        protected StringEncryptionOptions Options { get; }
+        protected AbpStringEncryptionOptions Options { get; }
 
-        public StringEncryptionService(IOptions<StringEncryptionOptions> options)
+        public StringEncryptionService(IOptions<AbpStringEncryptionOptions> options)
         {
             Options = options.Value;
         }

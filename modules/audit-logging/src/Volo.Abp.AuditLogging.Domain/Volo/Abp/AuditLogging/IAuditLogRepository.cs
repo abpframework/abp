@@ -40,5 +40,9 @@ namespace Volo.Abp.AuditLogging
             bool? hasException = null,
             HttpStatusCode? httpStatusCode = null,
             CancellationToken cancellationToken = default);
+
+        Task<Dictionary<DateTime, double>> GetAverageExecutionDurationPerDayAsync(
+            DateTime startDate,
+            DateTime endDate);
     }
 }

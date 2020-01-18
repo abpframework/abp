@@ -1,4 +1,4 @@
-## ASP.NET Core MVC Tutorial - Part III
+## Angular Tutorial - Part III
 
 ### About this Tutorial
 

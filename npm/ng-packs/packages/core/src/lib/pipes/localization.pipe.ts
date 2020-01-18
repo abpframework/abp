@@ -1,45 +1,21 @@
-import { Pipe, PipeTransform, OnDestroy } from '@angular/core';
+import { Pipe, PipeTransform, Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
+import { Config } from '../models';
 import { ConfigState } from '../states';
-import { takeUntilDestroy } from '../utils';
-import { distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
 
+@Injectable()
 @Pipe({
   name: 'abpLocalization',
-  pure: false, // required to update the value
 })
-export class LocalizationPipe implements PipeTransform, OnDestroy {
-  initialValue: string = '';
-
-  value: string;
-
-  destroy$ = new Subject();
-
+export class LocalizationPipe implements PipeTransform {
   constructor(private store: Store) {}
 
-  transform(value: string = '', ...interpolateParams: string[]): string {
-    if (this.initialValue !== value) {
-      this.initialValue = value;
-      this.destroy$.next();
-
-      this.store
-        .select(
-          ConfigState.getCopy(
-            value,
-            ...interpolateParams.reduce((acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]), []),
-          ),
-        )
-        .pipe(
-          takeUntil(this.destroy$),
-          takeUntilDestroy(this),
-          distinctUntilChanged(),
-        )
-        .subscribe(copy => (this.value = copy));
-    }
-
-    return this.value;
+  transform(value: string | Config.LocalizationWithDefault = '', ...interpolateParams: string[]): string {
+    return this.store.selectSnapshot(
+      ConfigState.getLocalization(
+        value,
+        ...interpolateParams.reduce((acc, val) => (Array.isArray(val) ? [...acc, ...val] : [...acc, val]), []),
+      ),
+    );
   }
-
-  ngOnDestroy() {}
 }
