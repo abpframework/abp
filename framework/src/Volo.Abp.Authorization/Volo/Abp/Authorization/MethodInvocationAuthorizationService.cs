@@ -11,21 +11,15 @@ namespace Volo.Abp.Authorization
 {
     public class MethodInvocationAuthorizationService : IMethodInvocationAuthorizationService, ITransientDependency
     {
-        private readonly IAuthorizationService _authorizationService;
-        private readonly ICurrentUser _currentUser;
-        private readonly ICurrentClient _currentClient;
         private readonly IAbpAuthorizationPolicyProvider _abpAuthorizationPolicyProvider;
+        private readonly IAbpAuthorizationService _abpAuthorizationService;
 
         public MethodInvocationAuthorizationService(
-            IAuthorizationService authorizationService, 
-            ICurrentUser currentUser,
-            ICurrentClient currentClient,
-            IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider)
+            IAbpAuthorizationPolicyProvider abpAuthorizationPolicyProvider,
+            IAbpAuthorizationService abpAuthorizationService)
         {
-            _authorizationService = authorizationService;
-            _currentUser = currentUser;
-            _currentClient = currentClient;
             _abpAuthorizationPolicyProvider = abpAuthorizationPolicyProvider;
+            _abpAuthorizationService = abpAuthorizationService;
         }
 
         public async Task CheckAsync(MethodInvocationAuthorizationContext context)
@@ -70,7 +64,7 @@ namespace Volo.Abp.Authorization
             var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
                                                     _abpAuthorizationPolicyProvider,
                                                     new List<IAuthorizeData> { authorizationAttribute });
-            await _authorizationService.CheckAsync(authorizationPolicy).ConfigureAwait(false);
+            await _abpAuthorizationService.CheckAsync(authorizationPolicy).ConfigureAwait(false);
         }
     }
 }
