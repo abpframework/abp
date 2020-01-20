@@ -1,4 +1,4 @@
-<div class="confirmation show" *ngIf="visible">
+<div class="confirmation" *ngIf="visible">
   <div class="confirmation-backdrop"></div>
   <div class="confirmation-dialog">
     <div class="icon-container" [ngClass]="data.severity" *ngIf="data.severity">
@@ -15,7 +15,7 @@
     <div class="footer">
       <button
         id="cancel"
-        class="confirmation-button confirmation-button-reject"
+        class="confirmation-button confirmation-button--reject"
         *ngIf="!data?.options?.hideCancelBtn"
         (click)="close(reject)"
       >
@@ -23,7 +23,7 @@
       </button>
       <button
         id="confirm"
-        class="confirmation-button confirmation-button-approve"
+        class="confirmation-button confirmation-button--approve"
         *ngIf="!data?.options?.hideYesBtn"
         (click)="close(confirm)"
       >

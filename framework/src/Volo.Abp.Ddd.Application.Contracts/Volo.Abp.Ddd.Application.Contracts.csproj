@@ -15,8 +15,8 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Volo\Abp\Application\Localization\Resources\AbpDdd\*.json" />
+    <Content Remove="Volo\Abp\Application\Localization\Resources\AbpDdd\*.json" />
   </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\Volo.Abp.Auditing\Volo.Abp.Auditing.csproj" />
