@@ -1,5 +1,5 @@
 {
-  "culture": "zh-Hans",
+  "culture": "zh-Hant",
   "texts": {
     "Hello <b>{0}</b>.": "您好 <b>{0}</b>.",
     "Car": "汽車",
