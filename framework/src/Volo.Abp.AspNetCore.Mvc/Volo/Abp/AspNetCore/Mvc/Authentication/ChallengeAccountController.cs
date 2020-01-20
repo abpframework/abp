@@ -8,10 +8,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
     public abstract class ChallengeAccountController : AbpController
     {
         protected string[] ChallengeAuthenticationSchemas { get; }
+        protected string AuthenticationType { get; }
 
         protected ChallengeAccountController(string[] challengeAuthenticationSchemas = null)
         {
             ChallengeAuthenticationSchemas = challengeAuthenticationSchemas ?? new[] { "oidc" };
+            AuthenticationType = "Identity.Application";
         }
 
         [HttpGet]
@@ -42,7 +44,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authentication
         {
             await HttpContext.SignOutAsync().ConfigureAwait(false);
 
-            if (HttpContext.User.Identity.AuthenticationType == "Identity.Application")
+            if (HttpContext.User.Identity.AuthenticationType == AuthenticationType)
             {
                 return RedirectSafely(returnUrl, returnUrlHash);
             }
