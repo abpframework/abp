@@ -9,11 +9,13 @@ namespace Volo.Abp.Authorization
     public class Authorization_Tests : AuthorizationTestBase
     {
         private readonly IMyAuthorizedService1 _myAuthorizedService1;
+        private readonly IMyAuthorizedServiceWithRole _myAuthorizedServiceWithRole;
         private readonly IPermissionDefinitionManager _permissionDefinitionManager;
 
         public Authorization_Tests()
         {
             _myAuthorizedService1 = GetRequiredService<IMyAuthorizedService1>();
+            _myAuthorizedServiceWithRole = GetRequiredService<IMyAuthorizedServiceWithRole>();
             _permissionDefinitionManager = GetRequiredService<IPermissionDefinitionManager>();
         }
 
@@ -58,16 +60,24 @@ namespace Volo.Abp.Authorization
         {
             await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
             {
-                await _myAuthorizedService1.ProtectedByRole().ConfigureAwait(false);
+                await _myAuthorizedServiceWithRole.ProtectedByAnotherRole().ConfigureAwait(false);
             }).ConfigureAwait(false);
         }
+
+        [Fact]
+        public async Task Should_Allow_To_Call_Method_If_Has_No_Role_ProtectedByRole_Async()
+        {
+            int result = await _myAuthorizedServiceWithRole.ProtectedByRole().ConfigureAwait(false);
+            result.ShouldBe(42);
+        }
+
 
         [Fact]
         public async Task Should_Not_Allow_To_Call_Method_If_Has_No_Role_ProtectedByScheme_Async()
         {
             await Assert.ThrowsAsync<AbpAuthorizationException>(async () =>
             {
-                await _myAuthorizedService1.ProtectedByScheme().ConfigureAwait(false);
+                await _myAuthorizedServiceWithRole.ProtectedByScheme().ConfigureAwait(false);
             }).ConfigureAwait(false);
         }
     }
