@@ -24,6 +24,9 @@
     width: 450px;
     min-height: 300px;
     z-index: 1062 !important;
+    @media screen and (max-width: 768px) {
+      width: 90vw;
+    }
     .icon-container {
       display: flex;
       align-items: center;
