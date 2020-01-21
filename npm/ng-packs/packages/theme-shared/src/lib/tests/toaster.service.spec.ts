@@ -41,7 +41,7 @@ describe('ToasterService', () => {
     expect(spectator.query('div.toast')).toBeTruthy();
     expect(spectator.query('.toast-icon i')).toHaveClass('fa-times-circle');
     expect(spectator.query('div.toast-title')).toHaveText('title');
-    expect(spectator.query('div.toast-message')).toHaveText('test');
+    expect(spectator.query('p.toast-message')).toHaveText('test');
   });
 
   test('should display a warning toast', () => {
@@ -71,7 +71,7 @@ describe('ToasterService', () => {
       'summary1',
       'summary2',
     ]);
-    expect(spectator.queryAll('div.toast-message').map(node => node.textContent.trim())).toEqual([
+    expect(spectator.queryAll('p.toast-message').map(node => node.textContent.trim())).toEqual([
       'detail1',
       'detail2',
     ]);

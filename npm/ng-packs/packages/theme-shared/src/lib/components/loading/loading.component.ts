@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'abp-loading',
@@ -7,10 +7,10 @@ import { Component, OnInit } from '@angular/core';
       <i class="fa fa-spinner fa-pulse abp-spinner"></i>
     </div>
   `,
+  encapsulation: ViewEncapsulation.None,
   styles: [
     `
       .abp-loading {
-        background: rgba(0, 0, 0, 0.2);
         position: absolute;
         width: 100%;
         height: 100%;
@@ -23,6 +23,7 @@ import { Component, OnInit } from '@angular/core';
         position: absolute;
         top: 50%;
         left: 50%;
+        font-size: 14px;
         -moz-transform: translateX(-50%) translateY(-50%);
         -o-transform: translateX(-50%) translateY(-50%);
         -ms-transform: translateX(-50%) translateY(-50%);

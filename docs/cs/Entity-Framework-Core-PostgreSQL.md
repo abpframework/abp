@@ -1,74 +1,39 @@
-﻿## Entity Framework Core PostgreSQL integrace
+﻿# Přepnutí na EF Core PostgreSQL providera
 
-> Podívejte se na [Entity Framework Core integrační dokument](../Entity-Framework-Core.md) pro základy integrace EF Core.
+Tento dokument vysvětluje, jak přepnout na poskytovatele databáze **PostgreSQL** pro **[spouštěcí šablonu aplikace](Startup-Templates/Application.md)**, která je dodávána s předem nakonfigurovaným SQL poskytovatelem.
 
-### Aktualizace projektu EntityFrameworkCore
+## Výměna balíku Volo.Abp.EntityFrameworkCore.SqlServer
 
-- V projektu `Acme.BookStore.EntityFrameworkCore` nahraďte balík `Volo.Abp.EntityFrameworkCore.SqlServer` za `Volo.Abp.EntityFrameworkCore.PostgreSql` 
-- Aktualizace pro použití PostgreSQL v `BookStoreEntityFrameworkCoreModule`
-  - Nahraďte `AbpEntityFrameworkCoreSqlServerModule` za `AbpEntityFrameworkCorePostgreSqlModule`
-  - Nahraďte `options.UseSqlServer()` za `options.UsePostgreSql()`
-- V jiných projektech aktualizujte PostgreSQL connection string v nezbytných `appsettings.json` souborech
-  - Více informací v [PostgreSQL connection strings](https://www.connectionstrings.com/postgresql/), v tomto dokumentu věnujte pozornost sekci `Npgsql`
+Projekt `.EntityFrameworkCore` v řešení závisí na NuGet balíku [Volo.Abp.EntityFrameworkCore.SqlServer](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.SqlServer). Odstraňte tento balík a přidejte stejnou verzi balíku [Volo.Abp.EntityFrameworkCore.PostgreSql](https://www.nuget.org/packages/Volo.Abp.EntityFrameworkCore.PostgreSql).
 
-### Aktualizace projektu EntityFrameworkCore.DbMigrations
-- Aktualizace pro použití PostgreSQL v `XXXMigrationsDbContextFactory`
-  - Nahraďte `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseSqlServer()` za `new DbContextOptionsBuilder<XXXMigrationsDbContext>().UseNpgsql()`
+## Nahrazení závislosti modulu
 
+Najděte třídu ***YourProjectName*EntityFrameworkCoreModule** v projektu `.EntityFrameworkCore`, odstraňte `typeof(AbpEntityFrameworkCoreSqlServerModule)` z atributu `DependsOn`, přidejte `typeof(AbpEntityFrameworkCorePostgreSqlModule)` (také nahraďte `using Volo.Abp.EntityFrameworkCore.SqlServer;` za `using Volo.Abp.EntityFrameworkCore.PostgreSql;`).
 
-### Odstranění stávajících migrací
+## UsePostgreSql()
 
-Smažte všechny stavající migrační soubory (včetně `DbContextModelSnapshot`)
+Najděte volání `UseSqlServer()` v *YourProjectName*EntityFrameworkCoreModule.cs uvnitř projektu `.EntityFrameworkCore` a nahraďte za `UsePostgreSql()`.
 
-![postgresql-delete-initial-migrations](images/postgresql-delete-initial-migrations.png)
+Najděte volání `UseSqlServer()` v *YourProjectName*MigrationsDbContextFactory.cs uvnitř projektu `.EntityFrameworkCore.DbMigrations` a nahraďte za `UseNpgsql()`.
 
-### Znovu vygenerujte počáteční migraci
+> V závislosti na struktuře řešení můžete najít více volání `UseSqlServer()`, které je třeba změnit.
 
-Nastavte správný spouštěcí projekt (obvykle web projekt)
+## Změna connection stringů
 
-![set-as-startup-project](../images/set-as-startup-project.png)
+PostgreSql connection stringy se od těch pro SQL Server liší. Je proto potřeba zkontrolovat všechny soubory `appsettings.json` v řešení a connection stringy v nich nahradit. Podívejte se na [connectionstrings.com](https://www.connectionstrings.com/postgresql/) pro více detailů o možnostech PostgreSql connection stringů.
 
-Otevřete **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), zvolte `.EntityFrameworkCore.DbMigrations` jako **Default project** a proveďte následující příkaz:
+Typicky je potřeba změnit `appsettings.json` v projektech `.DbMigrator` a `.Web` projects, ale to záleží na vaší struktuře řešení.
 
-Proveďte příkaz `Add-Migration`:
-````
-PM> Add-Migration Initial
-````
+## Regenerace migrací
 
-### Aktualizace databáze
+Startovací šablona používá [Entity Framework Core Code First migrace](https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/). EF Core migrace závisí na zvoleném DBMS poskytovateli. Tudíž změna DBMS poskytovatele způsobí selhání migrace.
+* Smažte složku Migrations v projektu `.EntityFrameworkCore.DbMigrations` and znovu sestavte řešení.
+* Spusťte `Add-Migration "Initial"` v Package Manager Console (je nutné zvolit `.DbMigrator`  (nebo `.Web`) projekt jako startovací projekt v Solution Explorer a zvolit projekt `.EntityFrameworkCore.DbMigrations` jako výchozí v Package Manager Console).
 
-K vytvoření databáze máte dvě možnosti.
+Tímto vytvoříte migraci databáze se všemi nakonfigurovanými databázovými objekty (tabulkami).
 
-#### Použití DbMigrator aplikace
+Spusťte projekt `.DbMigrator` k vytvoření databáze a vložení počátečních dat.
 
-Řešení obsahuje konzolovou aplikaci (v tomto příkladu nazvanou `Acme.BookStore.DbMigrator`), která může vytvářet databáze, aplikovat migrace a vkládat seed data. Je užitečná jak pro vývojové, tak pro produkční prostředí.
+## Spuštění aplikace
 
-> Projekt `.DbMigrator` má vlastní `appsettings.json`. Takže pokud jste změnili connection string uvedený výše, musíte změnit také tento.
-
-Klikněte pravým na projekt `.DbMigrator` a vyberte **Set as StartUp Project**:
-
-![set-as-startup-project](images/set-as-startup-project.png)
-
-Zmáčkněte F5 (nebo Ctrl+F5) ke spuštění aplikace. Výstup bude vypadat následovně:
-
-![set-as-startup-project](images/db-migrator-app.png)
-
-#### Použití EF Core Update-Database příkazu
-
-Ef Core má `Update-Database` příkaz, který v případě potřeby vytvoří databázi a aplikuje čekající migrace.
-
-Nastavte správný spouštěcí projekt (obvykle web projekt)
-
-![set-as-startup-project](../images/set-as-startup-project.png)
-
-Otevřete **Package Manager Console** (Tools -> Nuget Package Manager -> Package Manager Console), vyberte projekt `.EntityFrameworkCore.DbMigrations` jako **Default Project** and spusťte následující příkaz:
-
-````
-PM> Update-Database
-````
-
-Dojde k vytvoření nové databáze na základě nakonfigurovaného connection stringu.
-
-![postgresql-update-database](images/postgresql-update-database.png)
-
-> Použití nástroje `.DbMigrator` je doporučený způsob, jelikož zároveň vloží seed data nutné k správnému běhu webové aplikace.
+Vše je připraveno. Stačí už jen spustit aplikaci a užívat si kódování.

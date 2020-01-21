@@ -16,7 +16,7 @@ Docs module is an application module and does not offer any hosting solution. Yo
 
 When you use GitHub to store your docs, Docs Module supports versioning. If you have multiple versions for your docs, there will be a combo-box on the UI to switch between versions. If you choose file system to store your docs, it does not support multiple versions. 
 
-[The documents](https://abp.io/documents/) for ABP framework is also using this module.
+[The documents](docs.abp.io) for ABP framework is also using this module.
 
 > Docs module follows the [module architecture best practices](../Best-Practices/Module-Architecture.md) guide.
 
@@ -447,7 +447,7 @@ For example, [en/docs-params.json](https://github.com/abpio/abp-commercial-docs/
 
 Since not every single document in your projects may not have sections or may not need all of those parameters, you have to declare which of those parameters will be used for sectioning the document, as a JSON block anywhere on the document. 
 
-For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/Getting-Started.md):
+For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/blob/master/en/getting-started.md):
 
 ```
 .....
@@ -466,7 +466,7 @@ For example [Getting-Started.md](https://github.com/abpio/abp-commercial-docs/bl
 
 This section will be automatically deleted during render. And f course, those key values must match with the ones in **Parameter document**.
 
-![Interface](..\images\docs-section-ui.png)
+![Interface](../images/docs-section-ui.png)
 
 Now you can use **Scriban** syntax to create sections in your document.
 

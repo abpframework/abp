@@ -421,7 +421,8 @@ $(function () {
 打开`Acme.BookStore.Domain.Shared`项目中的`en.json`并添加以下行:
 
 ````json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?" 
+"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
+"SuccessfullyDeleted": "Successfully deleted"
 ````
 
 运行程序并尝试删除一个book实体.
