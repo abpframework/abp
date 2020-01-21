@@ -15,6 +15,7 @@
             order: [[1, "asc"]],
 			processing: true,
 			serverSide: true,
+            scrollX: true,
 			paging: true,
             ajax: abp.libs.datatables.createAjax(_identityUserAppService.getList),
             columnDefs: [
