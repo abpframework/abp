@@ -3,9 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Volo.Abp.Clients;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Users;
 
 namespace Volo.Abp.Authorization
 {
@@ -29,10 +27,10 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            foreach (var authorizationAttribute in GetAuthorizationDataAttributes(context.Method))
-            {
-                await CheckAsync(authorizationAttribute).ConfigureAwait(false);
-            }
+            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(_abpAuthorizationPolicyProvider,
+                GetAuthorizationDataAttributes(context.Method)).ConfigureAwait(false);
+
+            await _abpAuthorizationService.CheckAsync(authorizationPolicy).ConfigureAwait(false);
         }
 
         protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)
@@ -46,7 +44,7 @@ namespace Volo.Abp.Authorization
                 .GetCustomAttributes(true)
                 .OfType<IAuthorizeData>();
 
-            if (methodInfo.IsPublic)
+            if (methodInfo.IsPublic && methodInfo.DeclaringType != null)
             {
                 attributes = attributes
                     .Union(
@@ -57,14 +55,6 @@ namespace Volo.Abp.Authorization
             }
 
             return attributes;
-        }
-
-        protected async Task CheckAsync(IAuthorizeData authorizationAttribute)
-        {
-            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(
-                                                    _abpAuthorizationPolicyProvider,
-                                                    new List<IAuthorizeData> { authorizationAttribute });
-            await _abpAuthorizationService.CheckAsync(authorizationPolicy).ConfigureAwait(false);
         }
     }
 }
