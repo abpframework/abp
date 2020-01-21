@@ -14,7 +14,7 @@ There are some **free and open source** application modules developed and mainta
 * **Account**: Provides UI for the account management and allows user to login/register to the application.
 * [**Audit Logging**](Audit-Logging.md): Persists audit logs to a database.
 * **Background Jobs**: Persist background jobs when using the default background job manager.
-* **Blogging**: Used to create fancy blogs. ABP's [own blog](https://abp.io/blog/abp/) already using this module.
+* **Blogging**: Used to create fancy blogs. ABP's [own blog](https://blog.abp.io/) already using this module.
 * [**Docs**](Docs.md): Used to create technical documentation pages. ABP's [own documentation](https://docs.abp.io) already using this module.
 * **Identity**: Manages roles, users and their permissions, based on the Microsoft Identity library.
 * **IdentityServer**: Integrates to IdentityServer4.

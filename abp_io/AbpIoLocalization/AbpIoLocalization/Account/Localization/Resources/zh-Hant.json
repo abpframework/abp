@@ -1,0 +1,13 @@
+{
+  "culture": "zh-Hant",
+  "texts": {
+    "Account": "帳號",
+    "Welcome": "歡迎",
+    "UseOneOfTheFollowingLinksToContinue": "使用下面的連結繼續",
+    "FrameworkHomePage": "框架首頁",
+    "FrameworkDocumentation": "框架文件",
+    "OfficialBlog": "官方部落格",
+    "CommercialHomePage": "商業版首頁",
+    "CommercialSupportWebSite": "商業版支援網站"
+  }
+}

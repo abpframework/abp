@@ -219,7 +219,7 @@ An **audit log object** is created for each **web request** by default. An audit
   * `ClientId`: Id of the current client, if the client has been authenticated. A client is generally a 3rd-party application using the system over an HTTP API.
   * `ClientName`: Name of the current client, if available.
   * `ClientIpAddress`: IP address of the client/user device.
-  * `CorrelationId`: Current [Correlation Id]((CorrelationId.md)). Correlation Id is used to relate the audit logs written by different applications (or microservices) in a single logical operation.
+  * `CorrelationId`: Current [Correlation Id](CorrelationId.md). Correlation Id is used to relate the audit logs written by different applications (or microservices) in a single logical operation.
   * `BrowserInfo`: Browser name/version info of the current user, if available.
   * `HttpMethod`: HTTP method of the current request (GET, POST, PUT, DELETE... etc.).
   * `HttpStatusCode`: HTTP response status code for this request.
