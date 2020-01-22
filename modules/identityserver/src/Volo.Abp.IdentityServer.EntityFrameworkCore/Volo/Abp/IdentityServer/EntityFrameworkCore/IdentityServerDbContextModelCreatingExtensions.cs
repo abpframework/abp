@@ -63,16 +63,12 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 grantType.ToTable(options.TablePrefix + "ClientGrantTypes", options.Schema);
 
-                grantType.HasKey(x => new { x.ClientId, x.GrantType });
-
                 grantType.Property(x => x.GrantType).HasMaxLength(ClientGrantTypeConsts.GrantTypeMaxLength).IsRequired();
             });
 
             builder.Entity<ClientRedirectUri>(redirectUri =>
             {
                 redirectUri.ToTable(options.TablePrefix + "ClientRedirectUris", options.Schema);
-
-                redirectUri.HasKey(x => new { x.ClientId, x.RedirectUri });
 
                 if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
                 {
@@ -88,8 +84,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 postLogoutRedirectUri.ToTable(options.TablePrefix + "ClientPostLogoutRedirectUris", options.Schema);
 
-                postLogoutRedirectUri.HasKey(x => new { x.ClientId, x.PostLogoutRedirectUri });
-
                 if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
                 {
                     postLogoutRedirectUri.Property(x => x.PostLogoutRedirectUri).HasMaxLength(300).IsRequired();
@@ -104,16 +98,12 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 scope.ToTable(options.TablePrefix + "ClientScopes", options.Schema);
 
-                scope.HasKey(x => new { x.ClientId, x.Scope });
-
                 scope.Property(x => x.Scope).HasMaxLength(ClientScopeConsts.ScopeMaxLength).IsRequired();
             });
 
             builder.Entity<ClientSecret>(secret =>
             {
                 secret.ToTable(options.TablePrefix + "ClientSecrets", options.Schema);
-
-                secret.HasKey(x => new { x.ClientId, x.Type, x.Value });
 
                 secret.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
 
@@ -133,8 +123,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 claim.ToTable(options.TablePrefix + "ClientClaims", options.Schema);
 
-                claim.HasKey(x => new { x.ClientId, x.Type, x.Value });
-
                 claim.Property(x => x.Type).HasMaxLength(ClientClaimConsts.TypeMaxLength).IsRequired();
                 claim.Property(x => x.Value).HasMaxLength(ClientClaimConsts.ValueMaxLength).IsRequired();
             });
@@ -143,8 +131,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 idPRestriction.ToTable(options.TablePrefix + "ClientIdPRestrictions", options.Schema);
 
-                idPRestriction.HasKey(x => new { x.ClientId, x.Provider });
-
                 idPRestriction.Property(x => x.Provider).HasMaxLength(ClientIdPRestrictionConsts.ProviderMaxLength).IsRequired();
             });
 
@@ -152,16 +138,12 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 corsOrigin.ToTable(options.TablePrefix + "ClientCorsOrigins", options.Schema);
 
-                corsOrigin.HasKey(x => new { x.ClientId, x.Origin });
-
                 corsOrigin.Property(x => x.Origin).HasMaxLength(ClientCorsOriginConsts.OriginMaxLength).IsRequired();
             });
 
             builder.Entity<ClientProperty>(property =>
             {
                 property.ToTable(options.TablePrefix + "ClientProperties", options.Schema);
-
-                property.HasKey(x => new { x.ClientId, x.Key });
 
                 property.Property(x => x.Key).HasMaxLength(ClientPropertyConsts.KeyMaxLength).IsRequired();
                 property.Property(x => x.Value).HasMaxLength(ClientPropertyConsts.ValueMaxLength).IsRequired();
@@ -214,8 +196,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 claim.ToTable(options.TablePrefix + "IdentityClaims", options.Schema);
 
-                claim.HasKey(x => new { x.IdentityResourceId, x.Type });
-
                 claim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
             });
 
@@ -241,8 +221,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 apiSecret.ToTable(options.TablePrefix + "ApiSecrets", options.Schema);
 
-                apiSecret.HasKey(x => new { x.ApiResourceId, x.Type, x.Value });
-
                 apiSecret.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
                 apiSecret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
 
@@ -260,16 +238,12 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             {
                 apiClaim.ToTable(options.TablePrefix + "ApiClaims", options.Schema);
 
-                apiClaim.HasKey(x => new { x.ApiResourceId, x.Type });
-
                 apiClaim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
             });
 
             builder.Entity<ApiScope>(apiScope =>
             {
                 apiScope.ToTable(options.TablePrefix + "ApiScopes", options.Schema);
-
-                apiScope.HasKey(x => new { x.ApiResourceId, x.Name });
 
                 apiScope.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
                 apiScope.Property(x => x.DisplayName).HasMaxLength(ApiScopeConsts.DisplayNameMaxLength);
@@ -281,8 +255,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
             builder.Entity<ApiScopeClaim>(apiScopeClaim =>
             {
                 apiScopeClaim.ToTable(options.TablePrefix + "ApiScopeClaims", options.Schema);
-
-                apiScopeClaim.HasKey(x => new { x.ApiResourceId, x.Name, x.Type });
 
                 apiScopeClaim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
                 apiScopeClaim.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
