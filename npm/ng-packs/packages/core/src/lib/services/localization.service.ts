@@ -46,9 +46,9 @@ export class LocalizationService {
   }
 
   /**
-   * Returns translated text with with given the interpolation parameters in current language
-   * @param key Localizaton key to replace with translation
-   * @param interpolateParams Values to be interpolated in the translation string.
+   * Returns an observable localized text with the given interpolation parameters in current language.
+   * @param key Localizaton key to replace with localized text
+   * @param interpolateParams Values to interpolate
    */
   get(
     key: string | Config.LocalizationWithDefault,
@@ -57,6 +57,11 @@ export class LocalizationService {
     return this.store.select(ConfigState.getLocalization(key, ...interpolateParams));
   }
 
+  /**
+   * Returns localized text with the given interpolation parameters in current language.
+   * @param key Localization key to replace with localized text
+   * @param interpolateParams Values to intepolate.
+   */
   instant(key: string | Config.LocalizationWithDefault, ...interpolateParams: string[]): string {
     return this.store.selectSnapshot(ConfigState.getLocalization(key, ...interpolateParams));
   }
