@@ -10,6 +10,9 @@ type ShouldReuseRoute = (future: ActivatedRouteSnapshot, curr: ActivatedRouteSna
 
 @Injectable({ providedIn: 'root' })
 export class LocalizationService {
+  /**
+   * Returns currently selected language
+   */
   get currentLang(): string {
     return this.store.selectSnapshot(state => state.SessionState.language);
   }
@@ -42,6 +45,11 @@ export class LocalizationService {
     });
   }
 
+  /**
+   * Returns translated text with with given the interpolation parameters in current language
+   * @param key Localizaton key to replace with translation
+   * @param interpolateParams Values to be interpolated in the translation string.
+   */
   get(
     key: string | Config.LocalizationWithDefault,
     ...interpolateParams: string[]
