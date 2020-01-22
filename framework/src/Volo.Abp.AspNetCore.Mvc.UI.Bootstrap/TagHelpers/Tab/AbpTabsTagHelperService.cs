@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
         protected virtual string PlaceInsideColunm(string contents, int columnSize)
         {
-            var surroundedContents = "<div class=\"col-" + columnSize + "\">" + Environment.NewLine +
+            var surroundedContents = "<div class=\"col-md-" + columnSize + "\">" + Environment.NewLine +
                                    contents +
                                    "   </div>";
 
