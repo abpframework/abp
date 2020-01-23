@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -243,7 +244,7 @@ namespace Volo.Abp.AuditLogging
                 UserId = userId,
                 ImpersonatorUserId = Guid.NewGuid(),
                 ImpersonatorTenantId = Guid.NewGuid(),
-                ExecutionTime = DateTime.Parse("2020-01-01 01:00:00"),
+                ExecutionTime = DateTime.SpecifyKind(DateTime.Parse("2020-01-01 01:00:00"), DateTimeKind.Utc),
                 ExecutionDuration = 45,
                 ClientIpAddress = ipAddress,
                 ClientName = "MyDesktop",
@@ -294,7 +295,7 @@ namespace Volo.Abp.AuditLogging
                 UserId = userId2,
                 ImpersonatorUserId = Guid.NewGuid(),
                 ImpersonatorTenantId = Guid.NewGuid(),
-                ExecutionTime = DateTime.Parse("2020-01-01 03:00:00"),
+                ExecutionTime = DateTime.SpecifyKind(DateTime.Parse("2020-01-01 03:00:00"), DateTimeKind.Utc),
                 ExecutionDuration = 55,
                 ClientIpAddress = ipAddress,
                 ClientName = "MyDesktop",
