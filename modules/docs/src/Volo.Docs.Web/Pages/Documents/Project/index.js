@@ -161,7 +161,6 @@
 
                         if (splitted.length > 0 && splitted[0] === key) {
                             keyValues[k] = key + "=" + value;
-                            console.log(keyValues[k]);
                             changed = true;
                         }
                     }
@@ -171,7 +170,10 @@
                     }
                 }
 
-                abp.utils.setCookieValue("AbpDocsPreferences", keyValues.join('|'));
+                var tenYearsLater = new Date();
+                tenYearsLater.setTime(tenYearsLater.getTime() + (365 * 10 * 24 * 60 * 60 * 1000));
+
+                abp.utils.setCookieValue("AbpDocsPreferences", keyValues.join('|'), tenYearsLater, '/');
             };
 
             $(".doc-section-combobox").change(function () {
