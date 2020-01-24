@@ -9,6 +9,7 @@
         serverSide: true,
         paging: false,
         info: false,
+        scrollX: true,
         searching: false,
         autoWidth: false,
         scrollCollapse: true,

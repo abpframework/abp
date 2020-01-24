@@ -20,7 +20,17 @@ $solutionPaths = (
     "modules/background-jobs",
     "modules/client-simulation",
     "templates/module/aspnet-core",
-    "templates/app/aspnet-core"
+    "templates/app/aspnet-core",
+    "samples/BasicAspNetCoreApplication",
+    "samples/BasicConsoleApplication",
+    "samples/BookStore",
+    "samples/BookStore-Angular-MongoDb/aspnet-core",
+    "samples/BookStore-Modular/modules/book-management",
+    "samples/BookStore-Modular/application",
+    "samples/DashboardDemo",
+    "samples/MicroserviceDemo",
+    "samples/RabbitMqEventBus",
+    "abp_io/AbpIoLocalization"
 )
 
 # Test all solutions
