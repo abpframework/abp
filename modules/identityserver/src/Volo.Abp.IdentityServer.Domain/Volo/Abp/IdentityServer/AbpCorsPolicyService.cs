@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer
 
         public async Task<bool> IsOriginAllowedAsync(string origin)
         {
-            var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync);
+            var cacheItem = await Cache.GetOrAddAsync(AllowedCorsOriginsCacheItem.AllOrigins, CreateCacheItemAsync).ConfigureAwait(false);
 
             var isAllowed = cacheItem.AllowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase);
 
@@ -49,7 +49,7 @@ namespace Volo.Abp.IdentityServer
 
                 return new AllowedCorsOriginsCacheItem
                 {
-                    AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync()).ToArray()
+                    AllowedOrigins = (await clientRepository.GetAllDistinctAllowedCorsOriginsAsync().ConfigureAwait(false)).ToArray()
                 };
             }
         }

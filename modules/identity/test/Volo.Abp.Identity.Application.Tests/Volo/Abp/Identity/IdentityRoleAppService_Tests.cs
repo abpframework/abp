@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 using Shouldly;
+using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity
 {
@@ -22,11 +23,11 @@ namespace Volo.Abp.Identity
         {
             //Arrange
 
-            var moderator = await GetRoleAsync("moderator");
+            var moderator = await GetRoleAsync("moderator").ConfigureAwait(false);
 
             //Act
 
-            var result = await _roleAppService.GetAsync(moderator.Id);
+            var result = await _roleAppService.GetAsync(moderator.Id).ConfigureAwait(false);
 
             //Assert
 
@@ -38,7 +39,7 @@ namespace Volo.Abp.Identity
         {
             //Act
 
-            var result = await _roleAppService.GetListAsync();
+            var result = await _roleAppService.GetListAsync(new PagedAndSortedResultRequestDto()).ConfigureAwait(false);
 
             //Assert
 
@@ -57,14 +58,14 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _roleAppService.CreateAsync(input);
+            var result = await _roleAppService.CreateAsync(input).ConfigureAwait(false);
 
             //Assert
 
             result.Id.ShouldNotBe(Guid.Empty);
             result.Name.ShouldBe(input.Name);
 
-            var role = await _roleRepository.GetAsync(result.Id);
+            var role = await _roleRepository.GetAsync(result.Id).ConfigureAwait(false);
             role.Name.ShouldBe(input.Name);
         }
 
@@ -73,7 +74,7 @@ namespace Volo.Abp.Identity
         {
             //Arrange
 
-            var moderator = await GetRoleAsync("moderator");
+            var moderator = await GetRoleAsync("moderator").ConfigureAwait(false);
 
             var input = new IdentityRoleUpdateDto
             {
@@ -85,14 +86,14 @@ namespace Volo.Abp.Identity
 
             //Act
 
-            var result = await _roleAppService.UpdateAsync(moderator.Id, input);
+            var result = await _roleAppService.UpdateAsync(moderator.Id, input).ConfigureAwait(false);
 
             //Assert
 
             result.Id.ShouldBe(moderator.Id);
             result.Name.ShouldBe(input.Name);
 
-            var updatedRole = await _roleRepository.GetAsync(moderator.Id);
+            var updatedRole = await _roleRepository.GetAsync(moderator.Id).ConfigureAwait(false);
             updatedRole.Name.ShouldBe(input.Name);
         }
 
@@ -101,15 +102,15 @@ namespace Volo.Abp.Identity
         {
             //Arrange
 
-            var moderator = await GetRoleAsync("moderator");
+            var moderator = await GetRoleAsync("moderator").ConfigureAwait(false);
 
             //Act
 
-            await _roleAppService.DeleteAsync(moderator.Id);
+            await _roleAppService.DeleteAsync(moderator.Id).ConfigureAwait(false);
 
             //Assert
 
-            (await FindRoleAsync("moderator")).ShouldBeNull();
+            (await FindRoleAsync("moderator").ConfigureAwait(false)).ShouldBeNull();
         }
 
         private async Task<IdentityRole> GetRoleAsync(string roleName)

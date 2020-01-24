@@ -23,5 +23,5 @@ Also, this guide is mostly usable for general **application development**.
   * [Data Transfer Objects](Data-Transfer-Objects.md)
 * Data Access
   * [Entity Framework Core Integration](Entity-Framework-Core-Integration.md)
-    * [MongoDB Integration](MongoDB-Integration.md)  
+  * [MongoDB Integration](MongoDB-Integration.md)  
 

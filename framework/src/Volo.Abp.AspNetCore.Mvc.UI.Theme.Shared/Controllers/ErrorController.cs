@@ -61,7 +61,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.Controllers
 
             if (string.IsNullOrWhiteSpace(page))
             {
-                return "~/Pages/Error/Default.cshtml";
+                return "~/Views/Error/Default.cshtml";
             }
 
             return page;

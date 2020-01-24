@@ -94,7 +94,7 @@ namespace Volo.Abp.Domain.Entities
                 nameof(entity.Id)
             );
 
-            if (idProperty == null)
+            if (idProperty == null || idProperty.GetSetMethod(true) == null)
             {
                 return;
             }

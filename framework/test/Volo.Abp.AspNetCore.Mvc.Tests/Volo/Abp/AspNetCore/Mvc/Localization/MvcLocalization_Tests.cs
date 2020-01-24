@@ -27,22 +27,22 @@ namespace Volo.Abp.AspNetCore.Mvc.Localization
         [Fact]
         public async Task Should_Get_Same_Text_If_Not_Defined_In_Razor_View()
         {
-            var result = await GetResponseAsStringAsync("/LocalizationTest/HelloJohn");
+            var result = await GetResponseAsStringAsync("/LocalizationTest/HelloJohn").ConfigureAwait(false);
             result.ShouldBe("Hello <b>John</b>.");
         }
         
         [Fact]
         public async Task Should_Localize_Display_Attribute()
         {
-            using (AbpCultureHelper.Use("en"))
+            using (CultureHelper.Use("en"))
             {
-                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
+                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm").ConfigureAwait(false);
                 result.ShouldContain("<label for=\"BirthDate\">Birth date</label>");
             }
 
-            using (AbpCultureHelper.Use("tr"))
+            using (CultureHelper.Use("tr"))
             {
-                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm");
+                var result = await GetResponseAsStringAsync("/LocalizationTest/PersonForm").ConfigureAwait(false);
                 result.ShouldContain("<label for=\"BirthDate\">Dogum gunu</label>");
             }
         }

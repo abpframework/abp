@@ -1,4 +1,6 @@
-﻿using Volo.Abp.Data;
+﻿using Acme.BookStore.BookManagement.Books;
+using MongoDB.Driver;
+using Volo.Abp.Data;
 using Volo.Abp.MongoDB;
 
 namespace Acme.BookStore.BookManagement.MongoDB
@@ -7,6 +9,8 @@ namespace Acme.BookStore.BookManagement.MongoDB
     public class BookManagementMongoDbContext : AbpMongoDbContext, IBookManagementMongoDbContext
     {
         public static string CollectionPrefix { get; set; } = BookManagementConsts.DefaultDbTablePrefix;
+
+        public IMongoCollection<Book> Books => Collection<Book>();
 
         /* Add mongo collections here. Example:
          * public IMongoCollection<Question> Questions => Collection<Question>();
@@ -21,5 +25,6 @@ namespace Acme.BookStore.BookManagement.MongoDB
                 options.CollectionPrefix = CollectionPrefix;
             });
         }
+
     }
 }

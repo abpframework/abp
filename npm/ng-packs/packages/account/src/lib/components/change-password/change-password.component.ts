@@ -6,6 +6,7 @@ import { comparePasswords, Validation, PasswordRules, validatePassword } from '@
 import { Store } from '@ngxs/store';
 import snq from 'snq';
 import { finalize } from 'rxjs/operators';
+import { Account } from '../../models/account';
 
 const { minLength, required, maxLength } = Validators;
 
@@ -14,8 +15,10 @@ const PASSWORD_FIELDS = ['newPassword', 'repeatNewPassword'];
 @Component({
   selector: 'abp-change-password-form',
   templateUrl: './change-password.component.html',
+  exportAs: 'abpChangePasswordForm',
 })
-export class ChangePasswordComponent implements OnInit {
+export class ChangePasswordComponent
+  implements OnInit, Account.ChangePasswordComponentInputs, Account.ChangePasswordComponentOutputs {
   form: FormGroup;
 
   inProgress: boolean;
@@ -26,7 +29,11 @@ export class ChangePasswordComponent implements OnInit {
     return errors.concat(groupErrors.filter(({ key }) => key === 'passwordMismatch'));
   };
 
-  constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private toasterService: ToasterService,
+  ) {}
 
   ngOnInit(): void {
     const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
@@ -47,7 +54,9 @@ export class ChangePasswordComponent implements OnInit {
       passwordRulesArr.push('capital');
     }
 
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+    if (
+      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
+    ) {
       passwordRulesArr.push('special');
     }
 
@@ -61,12 +70,24 @@ export class ChangePasswordComponent implements OnInit {
         newPassword: [
           '',
           {
-            validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)],
+            validators: [
+              required,
+              validatePassword(passwordRulesArr),
+              minLength(requiredLength),
+              maxLength(128),
+            ],
           },
         ],
         repeatNewPassword: [
           '',
-          { validators: [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)] },
+          {
+            validators: [
+              required,
+              validatePassword(passwordRulesArr),
+              minLength(requiredLength),
+              maxLength(128),
+            ],
+          },
         ],
       },
       {
@@ -89,12 +110,18 @@ export class ChangePasswordComponent implements OnInit {
       .subscribe({
         next: () => {
           this.form.reset();
-          this.toasterService.success('AbpAccount::PasswordChangedMessage', 'Success', { life: 5000 });
+          this.toasterService.success('AbpAccount::PasswordChangedMessage', 'Success', {
+            life: 5000,
+          });
         },
         error: err => {
-          this.toasterService.error(snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'), 'Error', {
-            life: 7000,
-          });
+          this.toasterService.error(
+            snq(() => err.error.error.message, 'AbpAccount::DefaultErrorMessage'),
+            'Error',
+            {
+              life: 7000,
+            },
+          );
         },
       });
   }

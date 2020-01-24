@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
             TenantConfiguration tenant = null;
             if (resolveResult.TenantIdOrName != null)
             {
-                tenant = await FindTenantAsync(resolveResult.TenantIdOrName);
+                tenant = await FindTenantAsync(resolveResult.TenantIdOrName).ConfigureAwait(false);
                 if (tenant == null)
                 {
                     //TODO: A better exception?
@@ -45,7 +45,7 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
 
             using (_currentTenant.Change(tenant?.Id, tenant?.Name))
             {
-                await next(context);
+                await next(context).ConfigureAwait(false);
             }
         }
 
@@ -53,11 +53,11 @@ namespace Volo.Abp.AspNetCore.MultiTenancy
         {
             if (Guid.TryParse(tenantIdOrName, out var parsedTenantId))
             {
-                return await _tenantStore.FindAsync(parsedTenantId);
+                return await _tenantStore.FindAsync(parsedTenantId).ConfigureAwait(false);
             }
             else
             {
-                return await _tenantStore.FindAsync(tenantIdOrName);
+                return await _tenantStore.FindAsync(tenantIdOrName).ConfigureAwait(false);
             }
         }
     }

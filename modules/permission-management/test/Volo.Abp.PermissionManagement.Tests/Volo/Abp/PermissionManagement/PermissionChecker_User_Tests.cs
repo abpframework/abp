@@ -23,7 +23,7 @@ namespace Volo.Abp.PermissionManagement
             (await _permissionChecker.IsGrantedAsync(
                 CreatePrincipal(PermissionTestDataBuilder.User1Id),
                 "MyPermission1"
-            )).ShouldBeTrue();
+            ).ConfigureAwait(false)).ShouldBeTrue();
         }
 
         [Fact]
@@ -32,7 +32,7 @@ namespace Volo.Abp.PermissionManagement
             (await _permissionChecker.IsGrantedAsync(
                 CreatePrincipal(PermissionTestDataBuilder.User2Id),
                 "MyPermission1"
-            )).ShouldBeFalse();
+            ).ConfigureAwait(false)).ShouldBeFalse();
         }
 
         [Fact]
@@ -41,7 +41,7 @@ namespace Volo.Abp.PermissionManagement
             (await _permissionChecker.IsGrantedAsync(
                 CreatePrincipal(null),
                 "MyPermission1"
-            )).ShouldBeFalse();
+            ).ConfigureAwait(false)).ShouldBeFalse();
         }
 
         [Fact]
@@ -50,7 +50,7 @@ namespace Volo.Abp.PermissionManagement
             (await _permissionChecker.IsGrantedAsync(
                 CreatePrincipal(PermissionTestDataBuilder.User1Id, Guid.NewGuid()),
                 "MyPermission3"
-            )).ShouldBeFalse();
+            ).ConfigureAwait(false)).ShouldBeFalse();
         }
 
         private static ClaimsPrincipal CreatePrincipal(Guid? userId, Guid? tenantId = null)

@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
+using Volo.Abp.Testing;
 using Volo.Abp.Uow;
 
 namespace Volo.Abp.TestApp.Testing
@@ -16,26 +17,6 @@ namespace Volo.Abp.TestApp.Testing
         
         #region WithUnitOfWork
 
-        protected virtual void WithUnitOfWork(Action action)
-        {
-            WithUnitOfWork(new AbpUnitOfWorkOptions(), action);
-        }
-
-        protected virtual void WithUnitOfWork(AbpUnitOfWorkOptions options, Action action)
-        {
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-                using (var uow = uowManager.Begin(options))
-                {
-                    action();
-
-                    uow.Complete();
-                }
-            }
-        }
-
         protected virtual Task WithUnitOfWorkAsync(Func<Task> func)
         {
             return WithUnitOfWorkAsync(new AbpUnitOfWorkOptions(), func);
@@ -49,29 +30,9 @@ namespace Volo.Abp.TestApp.Testing
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    await action();
+                    await action().ConfigureAwait(false);
 
-                    await uow.CompleteAsync();
-                }
-            }
-        }
-
-        protected virtual TResult WithUnitOfWork<TResult>(Func<TResult> func)
-        {
-            return WithUnitOfWork(new AbpUnitOfWorkOptions(), func);
-        }
-
-        protected virtual TResult WithUnitOfWork<TResult>(AbpUnitOfWorkOptions options, Func<TResult> func)
-        {
-            using (var scope = ServiceProvider.CreateScope())
-            {
-                var uowManager = scope.ServiceProvider.GetRequiredService<IUnitOfWorkManager>();
-
-                using (var uow = uowManager.Begin(options))
-                {
-                    var result = func();
-                    uow.Complete();
-                    return result;
+                    await uow.CompleteAsync().ConfigureAwait(false);
                 }
             }
         }
@@ -89,8 +50,8 @@ namespace Volo.Abp.TestApp.Testing
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    var result = await func();
-                    await uow.CompleteAsync();
+                    var result = await func().ConfigureAwait(false);
+                    await uow.CompleteAsync().ConfigureAwait(false);
                     return result;
                 }
             }

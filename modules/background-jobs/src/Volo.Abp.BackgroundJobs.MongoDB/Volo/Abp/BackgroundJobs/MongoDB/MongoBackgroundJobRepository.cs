@@ -21,16 +21,10 @@ namespace Volo.Abp.BackgroundJobs.MongoDB
             Clock = clock;
         }
 
-        public List<BackgroundJobRecord> GetWaitingList(int maxResultCount)
-        {
-            return GetWaitingListQuery(maxResultCount)
-                .ToList();
-        }
-
         public async Task<List<BackgroundJobRecord>> GetWaitingListAsync(int maxResultCount)
         {
             return await GetWaitingListQuery(maxResultCount)
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
         }
 
         private IMongoQueryable<BackgroundJobRecord> GetWaitingListQuery(int maxResultCount)

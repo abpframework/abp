@@ -17,7 +17,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
 
             var items = InitilizeFormGroupContentsContext(context, output);
 
-            await output.GetChildContentAsync();
+            await output.GetChildContentAsync().ConfigureAwait(false);
 
             var headers = GetHeaders(context, output, items);
             var contents = GetConents(context, output, items);
@@ -45,8 +45,8 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
                 var headerColumnSize = GetHeaderColumnSize();
                 var contentColumnSize = 12 - headerColumnSize;
 
-                headers = PlaceInsideColunm(headers, headerColumnSize);
-                contents = PlaceInsideColunm(contents, contentColumnSize);
+                headers = PlaceInsideColumn(headers, headerColumnSize);
+                contents = PlaceInsideColumn(contents, contentColumnSize);
             }
 
 
@@ -79,9 +79,9 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Tab
             return surroundedContents;
         }
 
-        protected virtual string PlaceInsideColunm(string contents, int columnSize)
+        protected virtual string PlaceInsideColumn(string contents, int columnSize)
         {
-            var surroundedContents = "<div class=\"col-" + columnSize + "\">" + Environment.NewLine +
+            var surroundedContents = "<div class=\"col-md-" + columnSize + "\">" + Environment.NewLine +
                                    contents +
                                    "   </div>";
 

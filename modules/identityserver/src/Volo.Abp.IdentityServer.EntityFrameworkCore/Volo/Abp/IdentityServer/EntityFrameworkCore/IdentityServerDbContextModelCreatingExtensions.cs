@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Modeling;
+using Volo.Abp.EntityFrameworkCore.ValueComparers;
+using Volo.Abp.EntityFrameworkCore.ValueConverters;
 using Volo.Abp.IdentityServer.ApiResources;
 using Volo.Abp.IdentityServer.Clients;
+using Volo.Abp.IdentityServer.Devices;
 using Volo.Abp.IdentityServer.Grants;
 using Volo.Abp.IdentityServer.IdentityResources;
 
@@ -202,10 +204,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 identityResource.Property(x => x.DisplayName).HasMaxLength(IdentityResourceConsts.DisplayNameMaxLength);
                 identityResource.Property(x => x.Description).HasMaxLength(IdentityResourceConsts.DescriptionMaxLength);
                 identityResource.Property(x => x.Properties)
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
-                    );
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, string>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, string>());
 
                 identityResource.HasMany(x => x.UserClaims).WithOne().HasForeignKey(x => x.IdentityResourceId).IsRequired();
             });
@@ -229,10 +229,8 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiResource.Property(x => x.DisplayName).HasMaxLength(ApiResourceConsts.DisplayNameMaxLength);
                 apiResource.Property(x => x.Description).HasMaxLength(ApiResourceConsts.DescriptionMaxLength);
                 apiResource.Property(x => x.Properties)
-                    .HasConversion(
-                        d => JsonConvert.SerializeObject(d, Formatting.None),
-                        s => JsonConvert.DeserializeObject<Dictionary<string, string>>(s)
-                    );
+                    .HasConversion(new AbpJsonValueConverter<Dictionary<string, string>>())
+                    .Metadata.SetValueComparer(new AbpDictionaryValueComparer<string, string>());
 
                 apiResource.HasMany(x => x.Secrets).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
                 apiResource.HasMany(x => x.Scopes).WithOne().HasForeignKey(x => x.ApiResourceId).IsRequired();
@@ -246,6 +244,7 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 apiSecret.HasKey(x => new { x.ApiResourceId, x.Type, x.Value });
 
                 apiSecret.Property(x => x.Type).HasMaxLength(SecretConsts.TypeMaxLength).IsRequired();
+                apiSecret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
 
                 if (options.DatabaseProvider == EfCoreDatabaseProvider.MySql)
                 {
@@ -255,8 +254,6 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
                 {
                     apiSecret.Property(x => x.Value).HasMaxLength(SecretConsts.ValueMaxLength).IsRequired();
                 }
-
-                apiSecret.Property(x => x.Description).HasMaxLength(SecretConsts.DescriptionMaxLength);
             });
 
             builder.Entity<ApiResourceClaim>(apiClaim =>
@@ -289,6 +286,24 @@ namespace Volo.Abp.IdentityServer.EntityFrameworkCore
 
                 apiScopeClaim.Property(x => x.Type).HasMaxLength(UserClaimConsts.TypeMaxLength).IsRequired();
                 apiScopeClaim.Property(x => x.Name).HasMaxLength(ApiScopeConsts.NameMaxLength).IsRequired();
+            });
+
+            builder.Entity<DeviceFlowCodes>(b =>
+            {
+                b.ToTable(options.TablePrefix + "DeviceFlowCodes", options.Schema);
+
+                b.ConfigureByConvention();
+
+                b.Property(x => x.DeviceCode).HasMaxLength(200).IsRequired();
+                b.Property(x => x.UserCode).HasMaxLength(200).IsRequired();
+                b.Property(x => x.SubjectId).HasMaxLength(200);
+                b.Property(x => x.ClientId).HasMaxLength(200).IsRequired();
+                b.Property(x => x.Expiration).IsRequired();
+                b.Property(x => x.Data).HasMaxLength(50000).IsRequired();
+
+                b.HasIndex(x => new { x.UserCode }).IsUnique();
+                b.HasIndex(x => x.DeviceCode).IsUnique();
+                b.HasIndex(x => x.Expiration);
             });
         }
     }

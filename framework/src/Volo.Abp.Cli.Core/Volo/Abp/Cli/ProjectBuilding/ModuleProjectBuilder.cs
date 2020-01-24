@@ -43,15 +43,15 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<ProjectBuildResult> BuildAsync(ProjectBuildArgs args)
         {
-            var moduleInfo = await GetModuleInfoAsync(args);
+            var moduleInfo = await GetModuleInfoAsync(args).ConfigureAwait(false);
 
             var templateFile = await SourceCodeStore.GetAsync(
                 args.TemplateName,
                 SourceCodeTypes.Module,
                 args.Version
-            );
+            ).ConfigureAwait(false);
 
-            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync();
+            var apiKeyResult = await ApiKeyService.GetApiKeyOrNullAsync().ConfigureAwait(false);
             if (apiKeyResult?.ApiKey != null)
             {
                 args.ExtraProperties["api-key"] = apiKeyResult.ApiKey;
@@ -96,14 +96,14 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 ProjectName = null,
                 TemplateName = args.TemplateName,
                 TemplateVersion = templateFile.Version
-            });
+            }).ConfigureAwait(false);
 
             return new ProjectBuildResult(context.Result.ZipContent, args.TemplateName);
         }
 
         private async Task<ModuleInfo> GetModuleInfoAsync(ProjectBuildArgs args)
         {
-            return await ModuleInfoProvider.GetAsync(args.TemplateName);
+            return await ModuleInfoProvider.GetAsync(args.TemplateName).ConfigureAwait(false);
         }
     }
 }

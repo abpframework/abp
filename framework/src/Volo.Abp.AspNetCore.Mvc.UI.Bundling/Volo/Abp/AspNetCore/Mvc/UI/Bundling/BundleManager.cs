@@ -61,12 +61,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
         public virtual async Task<IReadOnlyList<string>> GetStyleBundleFilesAsync(string bundleName)
         {
-            return await GetBundleFilesAsync(Options.StyleBundles, bundleName, StyleBundler);
+            return await GetBundleFilesAsync(Options.StyleBundles, bundleName, StyleBundler).ConfigureAwait(false);
         }
 
         public virtual async Task<IReadOnlyList<string>> GetScriptBundleFilesAsync(string bundleName)
         {
-            return await GetBundleFilesAsync(Options.ScriptBundles, bundleName, ScriptBundler);
+            return await GetBundleFilesAsync(Options.ScriptBundles, bundleName, ScriptBundler).ConfigureAwait(false);
         }
 
         protected virtual async Task<IReadOnlyList<string>> GetBundleFilesAsync(BundleConfigurationCollection bundles, string bundleName, IBundler bundler)
@@ -185,17 +185,17 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             foreach (var contributor in contributors)
             {
-                await contributor.PreConfigureBundleAsync(context);
+                await contributor.PreConfigureBundleAsync(context).ConfigureAwait(false);
             }
 
             foreach (var contributor in contributors)
             {
-                await contributor.ConfigureBundleAsync(context);
+                await contributor.ConfigureBundleAsync(context).ConfigureAwait(false);
             }
 
             foreach (var contributor in contributors)
             {
-                await contributor.PostConfigureBundleAsync(context);
+                await contributor.PostConfigureBundleAsync(context).ConfigureAwait(false);
             }
 
             return context.Files;
@@ -207,7 +207,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling
 
             foreach (var contributor in contributors)
             {
-                await contributor.ConfigureDynamicResourcesAsync(context);
+                await contributor.ConfigureDynamicResourcesAsync(context).ConfigureAwait(false);
             }
 
             return context.Files;

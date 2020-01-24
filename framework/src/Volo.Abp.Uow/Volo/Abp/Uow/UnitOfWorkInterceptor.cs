@@ -18,33 +18,18 @@ namespace Volo.Abp.Uow
             _defaultOptions = options.Value;
         }
 
-	    public override void Intercept(IAbpMethodInvocation invocation)
-	    {
-	        if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
-	        {
-				invocation.Proceed();
-	            return;
-            }
-
-	        using (var uow = _unitOfWorkManager.Begin(CreateOptions(invocation, unitOfWorkAttribute)))
-			{
-				invocation.Proceed();
-				uow.Complete();
-			}
-		}
-
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             if (!UnitOfWorkHelper.IsUnitOfWorkMethod(invocation.Method, out var unitOfWorkAttribute))
             {
-                await invocation.ProceedAsync();
+                await invocation.ProceedAsync().ConfigureAwait(false);
                 return;
             }
 
             using (var uow = _unitOfWorkManager.Begin(CreateOptions(invocation, unitOfWorkAttribute)))
             {
-                await invocation.ProceedAsync();
-                await uow.CompleteAsync();
+                await invocation.ProceedAsync().ConfigureAwait(false);
+                await uow.CompleteAsync().ConfigureAwait(false);
             }
         }
 

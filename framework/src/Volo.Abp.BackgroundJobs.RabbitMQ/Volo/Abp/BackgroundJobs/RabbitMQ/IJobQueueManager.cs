@@ -1,9 +1,10 @@
-﻿using Volo.Abp.Threading;
+﻿using System.Threading.Tasks;
+using Volo.Abp.Threading;
 
 namespace Volo.Abp.BackgroundJobs.RabbitMQ
 {
     public interface IJobQueueManager : IRunnable
     {
-        IJobQueue<TArgs> Get<TArgs>();
+        Task<IJobQueue<TArgs>> GetAsync<TArgs>();
     }
 }

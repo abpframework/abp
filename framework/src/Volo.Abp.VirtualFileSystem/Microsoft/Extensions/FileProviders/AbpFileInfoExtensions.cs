@@ -56,7 +56,7 @@ namespace Microsoft.Extensions.FileProviders
 
             using (var stream = fileInfo.CreateReadStream())
             {
-                return await stream.GetAllBytesAsync();
+                return await stream.GetAllBytesAsync().ConfigureAwait(false);
             }
         }
 

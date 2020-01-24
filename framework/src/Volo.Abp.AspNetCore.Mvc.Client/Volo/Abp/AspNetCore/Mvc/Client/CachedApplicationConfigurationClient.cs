@@ -7,6 +7,7 @@ using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.Caching;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Http.Client.DynamicProxying;
+using Volo.Abp.Threading;
 using Volo.Abp.Users;
 
 namespace Volo.Abp.AspNetCore.Mvc.Client
@@ -42,12 +43,12 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
             configuration = await Cache.GetOrAddAsync(
                 cacheKey,
-                async () => await Proxy.Service.GetAsync(),
+                async () => await Proxy.Service.GetAsync().ConfigureAwait(false),
                 () => new DistributedCacheEntryOptions
                 {
                     AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(120) //TODO: Should be configurable. Default value should be higher (5 mins would be good).
                 }
-            );
+            ).ConfigureAwait(false);
 
             if (httpContext != null)
             {

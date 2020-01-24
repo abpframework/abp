@@ -1,4 +1,6 @@
-﻿namespace Volo.Abp.Authorization
+﻿using Volo.Abp.Testing;
+
+namespace Volo.Abp.Authorization
 {
     public class AuthorizationTestBase : AbpIntegratedTest<AbpAuthorizationTestModule>
     {

@@ -1,4 +1,5 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Guids;
 using Volo.Abp.Settings;
 
@@ -20,27 +21,27 @@ namespace Volo.Abp.SettingManagement
             _testData = testData;
         }
 
-        public void Build()
+        public async Task BuildAsync()
         {
-            _settingRepository.Insert(
+            await _settingRepository.InsertAsync(
                 new Setting(
                     _testData.SettingId,
                     "MySetting1",
                     "42",
                     GlobalSettingValueProvider.ProviderName
                 )
-            );
+            ).ConfigureAwait(false);
 
-            _settingRepository.Insert(
+            await _settingRepository.InsertAsync(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting2",
                     "default-store-value",
                     GlobalSettingValueProvider.ProviderName
                 )
-            );
+            ).ConfigureAwait(false);
 
-            _settingRepository.Insert(
+            await _settingRepository.InsertAsync(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting2",
@@ -48,9 +49,9 @@ namespace Volo.Abp.SettingManagement
                     UserSettingValueProvider.ProviderName,
                     _testData.User1Id.ToString()
                 )
-            );
+            ).ConfigureAwait(false);
 
-            _settingRepository.Insert(
+            await _settingRepository.InsertAsync(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySetting2",
@@ -58,18 +59,18 @@ namespace Volo.Abp.SettingManagement
                     UserSettingValueProvider.ProviderName,
                     _testData.User2Id.ToString()
                 )
-            );
+            ).ConfigureAwait(false);
 
-            _settingRepository.Insert(
+            await _settingRepository.InsertAsync(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySettingWithoutInherit",
                     "default-store-value",
                     GlobalSettingValueProvider.ProviderName
                 )
-            );
+            ).ConfigureAwait(false);
 
-            _settingRepository.Insert(
+            await _settingRepository.InsertAsync(
                 new Setting(
                     _guidGenerator.Create(),
                     "MySettingWithoutInherit",
@@ -77,7 +78,7 @@ namespace Volo.Abp.SettingManagement
                     UserSettingValueProvider.ProviderName,
                     _testData.User1Id.ToString()
                 )
-            );
+            ).ConfigureAwait(false);
         }
     }
 }

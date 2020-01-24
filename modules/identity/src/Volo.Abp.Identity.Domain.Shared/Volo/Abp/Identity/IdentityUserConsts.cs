@@ -18,7 +18,7 @@ namespace Volo.Abp.Identity
 
         public const int MaxPhoneNumberLength = AbpUserConsts.MaxPhoneNumberLength;
 
-        public const int MaxPasswordLength = 32;
+        public const int MaxPasswordLength = 128;
 
         public const int MaxPasswordHashLength = 256;
 

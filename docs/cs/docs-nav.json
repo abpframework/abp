@@ -57,6 +57,14 @@
       "text": "Základy",
       "items": [
         {
+          "text": "Konfigurace",
+          "path": "Configuration.md"
+        },
+        {
+          "text": "Možnosti",
+          "path": "Options.md"
+        },
+        {
           "text": "Vkládání závislostí",
           "path": "Dependency-Injection.md",
           "items": [
@@ -79,19 +87,29 @@
           "path": "Exception-Handling.md"
         },
         {
-          "text": "Validace"
+          "text": "Validace",
+          "path": "Validation.md",
+          "items": [
+            {
+              "text": "FluentValidation integrace",
+              "path": "FluentValidation.md"
+            }
+          ]
         },
         {
-          "text": "Autorizace"
+          "text": "Autorizace",
+          "path": "Authorization.md"
         },
         {
-          "text": "Ukládání do mezipaměti"
+          "text": "Ukládání do mezipaměti",
+          "path": "Caching.md"
         },
         {
           "text": "Audit"
         },
         {
-          "text": "Správa nastavení"
+          "text": "Nastavení",
+          "path": "Settings.md"
         }
       ]
     },
@@ -114,6 +132,14 @@
     {
       "text": "Služby",
       "items": [
+        {
+          "text": "Současný uživatel",
+          "path": "CurrentUser.md"
+        },
+        {
+          "text": "Mapování objekt na objekt",
+          "path": "Object-To-Object-Mapping.md"
+        },
         {
           "text": "Serializace objektu"
         },
@@ -242,24 +268,46 @@
     },
     {
       "text": "Přístup k datům",
+      "path": "Data-Access.md",
       "items": [
         {
-          "text": "Entity Framework Core integrace",
-          "path": "Entity-Framework-Core.md",
+          "text": "Connection stringy",
+          "path": "Connection-Strings.md"
+        },
+        {
+          "text": "Poskytovatelé databází",
           "items": [
             {
-              "text": "PostgreSQL integrace",
-              "path": "Best-Practices/PostgreSQL-Integration.md"
+              "text": "Entity Framework Core",
+              "path": "Entity-Framework-Core.md",
+              "items": [
+                {
+                  "text": "Přepnutí na MySQL",
+                  "path": "Entity-Framework-Core-MySQL.md"
+                },
+                {
+                  "text": "Přepnutí na PostgreSQL",
+                  "path": "Entity-Framework-Core-PostgreSQL.md"
+                },
+                {
+                  "text": "Přepnutí na SQLite",
+                  "path": "Entity-Framework-Core-SQLite.md"
+                },
+                {
+                  "text": "Přepnutí na jiný DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md"
+                }
+              ]
+            },
+            {
+              "text": "MongoDB",
+              "path": "MongoDB.md"
+            },
+            {
+              "text": "Dapper",
+              "path": "Dapper.md"
             }
           ]
-        },
-        {
-          "text": "MongoDB integrace",
-          "path": "MongoDB.md"
-        },
-        {
-          "text": "Dapper integrace",
-          "path": "Dapper.md"
         }
       ]
     },

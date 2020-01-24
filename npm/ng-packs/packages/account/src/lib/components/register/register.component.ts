@@ -1,4 +1,4 @@
-import { ConfigState, GetAppConfiguration, ABP, SessionState } from '@abp/ng.core';
+import { ConfigState, GetAppConfiguration, ABP, SessionState, AuthService } from '@abp/ng.core';
 import { ToasterService } from '@abp/ng.theme.shared';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -23,20 +23,36 @@ export class RegisterComponent implements OnInit {
 
   inProgress: boolean;
 
+  isSelfRegistrationEnabled = true;
+
   constructor(
     private fb: FormBuilder,
     private accountService: AccountService,
     private oauthService: OAuthService,
     private store: Store,
     private toasterService: ToasterService,
-  ) {
-    this.oauthService.configure(
-      this.store.selectSnapshot(ConfigState.getOne('environment')).oAuthConfig,
-    );
-    this.oauthService.loadDiscoveryDocument();
-  }
+    private authService: AuthService,
+  ) {}
 
   ngOnInit() {
+    this.isSelfRegistrationEnabled =
+      (
+        this.store.selectSnapshot(
+          ConfigState.getSetting('Abp.Account.IsSelfRegistrationEnabled'),
+        ) || ''
+      ).toLowerCase() !== 'false';
+    if (!this.isSelfRegistrationEnabled) {
+      this.toasterService.warn(
+        {
+          key: 'AbpAccount::SelfRegistrationDisabledMessage',
+          defaultValue: 'Self registration is disabled.',
+        },
+        null,
+        { life: 10000 },
+      );
+      return;
+    }
+
     const passwordRules: ABP.Dictionary<string> = this.store.selectSnapshot(
       ConfigState.getSettings('Identity.Password'),
     );
@@ -55,7 +71,9 @@ export class RegisterComponent implements OnInit {
       passwordRulesArr.push('capital');
     }
 
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+    if (
+      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
+    ) {
       passwordRulesArr.push('special');
     }
 
@@ -67,7 +85,7 @@ export class RegisterComponent implements OnInit {
       username: ['', [required, maxLength(255)]],
       password: [
         '',
-        [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(32)],
+        [required, validatePassword(passwordRulesArr), minLength(requiredLength), maxLength(128)],
       ],
       email: ['', [required, email]],
     });
@@ -85,25 +103,10 @@ export class RegisterComponent implements OnInit {
       appName: 'Angular',
     } as RegisterRequest;
 
-    const tenant = this.store.selectSnapshot(SessionState.getTenant);
-
     this.accountService
       .register(newUser)
       .pipe(
-        switchMap(() =>
-          from(
-            this.oauthService.fetchTokenUsingPasswordFlow(
-              newUser.userName,
-              newUser.password,
-              new HttpHeaders({
-                ...(tenant && tenant.id && { __tenant: tenant.id }),
-              }),
-            ),
-          ),
-        ),
-        switchMap(() => this.store.dispatch(new GetAppConfiguration())),
-        tap(() => this.store.dispatch(new Navigate(['/']))),
-        take(1),
+        switchMap(() => this.authService.login(newUser.userName, newUser.password)),
         catchError(err => {
           this.toasterService.error(
             snq(() => err.error.error_description) ||

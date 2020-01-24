@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Volo.Blogging.Blogs.Dtos
+﻿namespace Volo.Blogging.Blogs.Dtos
 {
     public class UpdateBlogDto
     {

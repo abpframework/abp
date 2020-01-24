@@ -16,6 +16,7 @@
     var _dataTable = $('#ProjectsTable').DataTable(abp.libs.datatables.normalizeConfiguration({
         processing: true,
         serverSide: true,
+        scrollX: true,
         paging: true,
         searching: false,
         autoWidth: false,

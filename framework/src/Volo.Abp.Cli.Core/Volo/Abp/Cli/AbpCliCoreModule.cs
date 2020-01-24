@@ -19,10 +19,6 @@ namespace Volo.Abp.Cli
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            // TODO: workaround until subsequent issues of https://github.com/dotnet/corefx/issues/30166 are resolved
-            // a permanent fix will probably be published with the release of .net core 3.0: https://github.com/dotnet/corefx/issues/36553
-            AppContext.SetSwitch("System.Net.Http.UseSocketsHttpHandler", false);
-
             Configure<AbpCliOptions>(options =>
             {
                 options.Commands["help"] = typeof(HelpCommand);
@@ -33,6 +29,7 @@ namespace Volo.Abp.Cli
                 options.Commands["add-module"] = typeof(AddModuleCommand);
                 options.Commands["login"] = typeof(LoginCommand);
                 options.Commands["logout"] = typeof(LogoutCommand);
+                options.Commands["suite"] = typeof(SuiteCommand);
             });
         }
     }

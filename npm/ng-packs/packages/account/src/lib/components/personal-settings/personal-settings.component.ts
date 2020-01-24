@@ -5,14 +5,20 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take, withLatestFrom, finalize } from 'rxjs/operators';
 import { ToasterService } from '@abp/ng.theme.shared';
+import { Account } from '../../models/account';
 
 const { maxLength, required, email } = Validators;
 
 @Component({
   selector: 'abp-personal-settings-form',
   templateUrl: './personal-settings.component.html',
+  exportAs: 'abpPersonalSettingsForm',
 })
-export class PersonalSettingsComponent implements OnInit {
+export class PersonalSettingsComponent
+  implements
+    OnInit,
+    Account.PersonalSettingsComponentInputs,
+    Account.PersonalSettingsComponentOutputs {
   @Select(ProfileState.getProfile)
   profile$: Observable<Profile.Response>;
 
@@ -20,7 +26,11 @@ export class PersonalSettingsComponent implements OnInit {
 
   inProgress: boolean;
 
-  constructor(private fb: FormBuilder, private store: Store, private toasterService: ToasterService) {}
+  constructor(
+    private fb: FormBuilder,
+    private store: Store,
+    private toasterService: ToasterService,
+  ) {}
 
   ngOnInit() {
     this.buildForm();
@@ -29,10 +39,7 @@ export class PersonalSettingsComponent implements OnInit {
   buildForm() {
     this.store
       .dispatch(new GetProfile())
-      .pipe(
-        withLatestFrom(this.profile$),
-        take(1),
-      )
+      .pipe(withLatestFrom(this.profile$), take(1))
       .subscribe(([, profile]) => {
         this.form = this.fb.group({
           userName: [profile.userName, [required, maxLength(256)]],
