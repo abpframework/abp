@@ -1,13 +1,13 @@
 {
   "name": "@abp/ng.theme.shared",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "homepage": "https://abp.io",
   "repository": {
     "type": "git",
     "url": "https://github.com/abpframework/abp.git"
   },
   "dependencies": {
-    "@abp/ng.core": "^2.0.0",
+    "@abp/ng.core": "^2.0.1",
     "@angular/cdk": "^8.2.3",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
