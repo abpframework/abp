@@ -345,7 +345,7 @@ Open the `Index.cshtml` and change the content as shown below:
 ````
 
 * This code changes the default inheritance of the Razor View Page Model so it **inherits** from the `BookStorePage` class (instead of `PageModel`).  The `BookStorePage` class which comes with the startup template and provides some shared properties/methods used by all pages.
-* Ensure that the `IndexModel` (*Index.cshtml.cs)* has the `Acme.BookStore.Pages.Books` namespace, or update it in the `Index.cshtml`.
+* Ensure that the `IndexModel` (*Index.cshtml.cs)* has the `Acme.BookStore.Web.Pages.Books` namespace, or update it in the `Index.cshtml`.
 
 #### Add Books Page to the Main Menu
 
