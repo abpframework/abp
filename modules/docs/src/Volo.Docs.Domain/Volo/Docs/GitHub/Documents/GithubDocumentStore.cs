@@ -37,6 +37,7 @@ namespace Volo.Docs.GitHub.Documents
             var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var isParameterDocument = documentName == project.ParametersDocumentName;
+            var isPartialTemplatesDocumentName = documentName == project.PartialTemplatesDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + languageCode + "/" + documentName;
             var localDirectory = "";
             var fileName = documentName;
@@ -57,7 +58,7 @@ namespace Volo.Docs.GitHub.Documents
                 LocalDirectory = localDirectory,
                 FileName = fileName,
                 Contributors = new List<DocumentContributor>(),
-                //Contributors = !isNavigationDocument && !isParameterDocument ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
+                //Contributors = !isNavigationDocument && !isParameterDocument && !isPartialTemplatesDocumentName ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
                 Version = version,
                 Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent)
             };

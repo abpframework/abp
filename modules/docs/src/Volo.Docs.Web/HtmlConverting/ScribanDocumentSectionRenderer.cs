@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Scriban;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Volo.Docs.Documents;
 
 namespace Volo.Docs.HtmlConverting
 {
@@ -14,6 +16,7 @@ namespace Volo.Docs.HtmlConverting
         private const string jsonOpener = "````json";
         private const string jsonCloser = "````";
         private const string docs_param = "//[doc-params]";
+        private const string docs_templates = "//[doc-template]";
 
         public ILogger<ScribanDocumentSectionRenderer> Logger { get; set; }
 
@@ -22,8 +25,13 @@ namespace Volo.Docs.HtmlConverting
             Logger = NullLogger<ScribanDocumentSectionRenderer>.Instance;
         }
 
-        public async Task<string> RenderAsync(string document, DocumentRenderParameters parameters = null)
+        public async Task<string> RenderAsync(string document, DocumentRenderParameters parameters = null, List<DocumentPartialTemplateContent> partialTemplates = null)
         {
+            if (partialTemplates != null && partialTemplates.Any())
+            {
+                document = SetPartialTemplates(document, partialTemplates);
+            }
+
             var scribanTemplate = Template.Parse(document);
 
             if (parameters == null)
@@ -99,7 +107,7 @@ namespace Volo.Docs.HtmlConverting
 
                 if (jsonBeginningIndex < 0)
                 {
-                    return (-1,-1,"");
+                    return (-1, -1, "");
                 }
 
                 var jsonEndingIndex = document.Substring(jsonBeginningIndex).IndexOf(jsonCloser, StringComparison.Ordinal) + jsonBeginningIndex;
@@ -115,6 +123,82 @@ namespace Volo.Docs.HtmlConverting
             }
 
             return (-1, -1, "");
+        }
+
+        public async Task<List<PartialTemplateDto>> GetPartialTemplatesInDocumentAsync(string documentContent)
+        {
+            var templates = new List<PartialTemplateDto>();
+
+            while (documentContent.Contains(jsonOpener))
+            {
+                var afterJsonOpener = documentContent.Substring(
+                    documentContent.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
+
+                var json = afterJsonOpener.Substring(0,
+                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
+
+                documentContent = afterJsonOpener.Substring(
+                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
+
+                if (!json.Contains(docs_templates))
+                {
+                    continue;
+                }
+
+                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal));
+
+                var template = JsonConvert.DeserializeObject<PartialTemplateDto>(json);
+
+
+                templates.Add(template);
+            }
+
+            return templates;
+        }
+
+        private string SetPartialTemplates(string document, List<DocumentPartialTemplateContent> templates)
+        {
+            var newDocument = new StringBuilder();
+
+            while (document.Contains(jsonOpener))
+            {
+                var beforeJson = document.Substring(0,
+                    document.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
+
+                var afterJsonOpener = document.Substring(
+                    document.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
+
+                var json = afterJsonOpener.Substring(0,
+                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
+
+
+                if (!json.Contains(docs_templates))
+                {
+                    document = afterJsonOpener.Substring(
+                        afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
+                    newDocument.Append(beforeJson + json + jsonCloser);
+                    continue;
+                }
+
+                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal));
+
+                var templateName = JsonConvert.DeserializeObject<PartialTemplateDto>(json)?.Name;
+
+                var template = templates.FirstOrDefault(t => t.Name == templateName);
+
+                var beforeTemplate = document.Substring(0,
+                    document.IndexOf(jsonOpener, StringComparison.Ordinal));
+
+                var afterTemplate = document.Substring(0,
+                    document.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
+
+                newDocument.Append(beforeTemplate + template?.Content + jsonCloser);
+
+                document = afterJsonOpener.Substring(
+                    afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
+            }
+
+            return newDocument.ToString();
         }
     }
 }

@@ -39,6 +39,11 @@ namespace Volo.Docs.Projects
         /// </summary>
         public virtual string ParametersDocumentName { get; protected set; }
 
+        /// <summary>
+        /// The document to be used for the partial document templates file (index).
+        /// </summary>
+        public virtual string PartialTemplatesDocumentName { get; protected set; }
+
         public virtual string MinimumVersion { get; set; }
 
         /// <summary>
@@ -63,7 +68,8 @@ namespace Volo.Docs.Projects
             [NotNull] string format,
             [NotNull] string defaultDocumentName = "Index", 
             [NotNull] string navigationDocumentName = "docs-nav.json", 
-            [NotNull] string parametersDocumentName = "docs-params.json")
+            [NotNull] string parametersDocumentName = "docs-params.json", 
+            [NotNull] string partialTemplatesDocumentName = "docs-templates.json")
         {
             Id = id;
 
@@ -74,6 +80,7 @@ namespace Volo.Docs.Projects
             DefaultDocumentName = Check.NotNullOrWhiteSpace(defaultDocumentName, nameof(defaultDocumentName));
             NavigationDocumentName = Check.NotNullOrWhiteSpace(navigationDocumentName, nameof(navigationDocumentName));
             ParametersDocumentName = Check.NotNullOrWhiteSpace(parametersDocumentName, nameof(parametersDocumentName));
+            PartialTemplatesDocumentName = Check.NotNullOrWhiteSpace(partialTemplatesDocumentName, nameof(partialTemplatesDocumentName));
 
             ExtraProperties = new Dictionary<string, object>();
         }
@@ -96,6 +103,11 @@ namespace Volo.Docs.Projects
         public void SetParametersDocumentName(string parametersDocumentName)
         {
             ParametersDocumentName = Check.NotNullOrWhiteSpace(parametersDocumentName, nameof(parametersDocumentName));
+        }
+
+        public void SetPartialTemplatesDocumentName(string partialTemplatesDocumentName)
+        {
+            PartialTemplatesDocumentName = Check.NotNullOrWhiteSpace(partialTemplatesDocumentName, nameof(partialTemplatesDocumentName));
         }
 
         public void SetDefaultDocumentName(string defaultDocumentName)

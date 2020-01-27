@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -8,8 +6,17 @@ namespace Volo.Docs.HtmlConverting
 {
     public interface IDocumentSectionRenderer: ITransientDependency
     {
-        Task<string> RenderAsync(string doucment, DocumentRenderParameters parameters);
+        Task<string> RenderAsync(string doucment, DocumentRenderParameters parameters = null, List<DocumentPartialTemplateContent> partialTemplates = null);
 
         Task<Dictionary<string, List<string>>> GetAvailableParametersAsync(string document);
+
+        Task<List<PartialTemplateDto>> GetPartialTemplatesInDocumentAsync(string documentContent);
+    }
+
+    public class DocumentPartialTemplateContent
+    {
+        public string Name { get; set; }
+
+        public string Content { get; set; }
     }
 }

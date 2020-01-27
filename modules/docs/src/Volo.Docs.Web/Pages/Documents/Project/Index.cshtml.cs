@@ -394,10 +394,9 @@ namespace Volo.Docs.Pages.Documents.Project
             await SetDocumentPreferencesAsync();
             SetUserPreferences();
 
-            UserPreferences.Add("Document_Language_Code", LanguageCode);
-            UserPreferences.Add("Document_Version", Version);
+            var partialTemplates = await GetDocumentPartialTemplatesAsync();
 
-            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences);
+            Document.Content = await _documentSectionRenderer.RenderAsync(Document.Content, UserPreferences, partialTemplates);
 
             var converter = _documentToHtmlConverterFactory.Create(Document.Format ?? Project.Format);
             var content = converter.Convert(Project, Document, GetSpecificVersionOrLatest(), LanguageCode);
@@ -418,9 +417,65 @@ namespace Volo.Docs.Pages.Documents.Project
             Document.Content = content;
         }
 
+        private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
+        {
+            var contents = new List<DocumentPartialTemplateContent>();
+
+            var projectPartialTemplates = await _documentAppService.GetPartialTemplatesAsync(
+                new GetDocumentPartialTemplatesInput()
+                {
+                    ProjectId = Project.Id,
+                    LanguageCode = LanguageCode,
+                    Version = Version
+                });
+
+            if (!projectPartialTemplates?.Templates?.Any() ?? true)
+            {
+                return new List<DocumentPartialTemplateContent>();
+            }
+
+            var partialTemplatesInDocument = await _documentSectionRenderer.GetPartialTemplatesInDocumentAsync(Document.Content);
+
+            if (!partialTemplatesInDocument?.Any() ?? true)
+            {
+                return new List<DocumentPartialTemplateContent>();
+            }
+
+            foreach (var partialTemplates in partialTemplatesInDocument)
+            {
+                foreach (var parameter in partialTemplates.Parameters)
+                {
+                    if (!UserPreferences.ContainsKey(parameter.Key))
+                    {
+                       UserPreferences.Add(parameter.Key, parameter.Value);
+                    }
+                }
+            }
+
+            foreach (var partialTemplate in projectPartialTemplates.Templates)
+            {
+                contents.Add(new DocumentPartialTemplateContent
+                {
+                    Name = partialTemplate.Name,
+                    Content = (await _documentAppService.GetAsync(new GetDocumentInput
+                    {
+                        LanguageCode = LanguageCode,
+                        Name = partialTemplate.Path,
+                        ProjectId = Project.Id,
+                        Version = Version
+                    })).Content
+                });
+            }
+
+            return contents;
+        }
+
         private void SetUserPreferences()
         {
-            UserPreferences = new DocumentRenderParameters();
+            UserPreferences = new DocumentRenderParameters
+            {
+                {"Document_Language_Code", LanguageCode}, {"Document_Version", Version}
+            };
 
             var cookie = Request.Cookies["AbpDocsPreferences"];
 
@@ -473,6 +528,7 @@ namespace Volo.Docs.Pages.Documents.Project
                     UserPreferences.Add(parameter.Name + "_Value", parameter.Values.FirstOrDefault().Value);
                 }
             }
+
         }
 
         public async Task SetDocumentPreferencesAsync()
@@ -484,6 +540,7 @@ namespace Volo.Docs.Pages.Documents.Project
                         LanguageCode = LanguageCode,
                         Version = Version
                     });
+
 
             if (projectParameters?.Parameters == null)
             {
