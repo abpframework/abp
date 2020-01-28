@@ -4,6 +4,6 @@ namespace Volo.Docs.Documents
 {
     public class DocumentPartialTemplatesDto
     {
-        public List<DocumentTemplateDto> Templates { get; set; }
+        public List<DocumentPartialTemplateDto> Templates { get; set; }
     }
 }

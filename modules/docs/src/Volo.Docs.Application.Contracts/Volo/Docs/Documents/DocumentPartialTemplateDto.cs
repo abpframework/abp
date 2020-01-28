@@ -2,7 +2,7 @@
 
 namespace Volo.Docs.Documents
 {
-    public class DocumentTemplateDto
+    public class DocumentPartialTemplateDto
     {
         public string Name { get; set; }
 
