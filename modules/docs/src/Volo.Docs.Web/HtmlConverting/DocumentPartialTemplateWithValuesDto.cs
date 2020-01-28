@@ -2,7 +2,7 @@
 
 namespace Volo.Docs.HtmlConverting
 {
-    public class PartialTemplateDto
+    public class DocumentPartialTemplateWithValuesDto
     {
         public string Name { get; set; }
 

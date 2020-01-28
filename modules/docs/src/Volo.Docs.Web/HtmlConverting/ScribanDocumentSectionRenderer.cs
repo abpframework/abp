@@ -125,9 +125,9 @@ namespace Volo.Docs.HtmlConverting
             return (-1, -1, "");
         }
 
-        public async Task<List<PartialTemplateDto>> GetPartialTemplatesInDocumentAsync(string documentContent)
+        public async Task<List<DocumentPartialTemplateWithValuesDto>> GetPartialTemplatesInDocumentAsync(string documentContent)
         {
-            var templates = new List<PartialTemplateDto>();
+            var templates = new List<DocumentPartialTemplateWithValuesDto>();
 
             while (documentContent.Contains(jsonOpener))
             {
@@ -147,7 +147,7 @@ namespace Volo.Docs.HtmlConverting
 
                 var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
-                var template = JsonConvert.DeserializeObject<PartialTemplateDto>(json);
+                var template = JsonConvert.DeserializeObject<DocumentPartialTemplateWithValuesDto>(json);
 
                 templates.Add(template);
             }
@@ -180,7 +180,7 @@ namespace Volo.Docs.HtmlConverting
 
                 var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
-                var templateName = JsonConvert.DeserializeObject<PartialTemplateDto>(json)?.Name;
+                var templateName = JsonConvert.DeserializeObject<DocumentPartialTemplateWithValuesDto>(json)?.Name;
 
                 var template = templates.FirstOrDefault(t => t.Name == templateName);
 
