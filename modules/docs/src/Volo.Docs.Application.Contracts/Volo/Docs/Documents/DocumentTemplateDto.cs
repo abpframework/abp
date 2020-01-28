@@ -8,8 +8,6 @@ namespace Volo.Docs.Documents
 
         public string Path { get; set; }
 
-        public List<string> SelfParameters { get; set; }
-
-        public List<string> ParentParameters { get; set; }
+        public List<string> Parameters { get; set; }
     }
 }

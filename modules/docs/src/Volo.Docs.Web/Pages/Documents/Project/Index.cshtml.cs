@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Volo.Abp;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.RazorPages;
 using Volo.Abp.Domain.Entities;
@@ -60,7 +61,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public DocumentParametersDto DocumentPreferences { get; set; }
 
-        public DocumentRenderParameters UserPreferences { get; set; }
+        public DocumentRenderParameters UserPreferences { get; set; } = new DocumentRenderParameters();
 
         private readonly IDocumentAppService _documentAppService;
         private readonly IDocumentToHtmlConverterFactory _documentToHtmlConverterFactory;
@@ -419,7 +420,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
         {
-            var contents = new List<DocumentPartialTemplateContent>();
 
             var projectPartialTemplates = await _documentAppService.GetPartialTemplatesAsync(
                 new GetDocumentPartialTemplatesInput()
@@ -431,14 +431,14 @@ namespace Volo.Docs.Pages.Documents.Project
 
             if (!projectPartialTemplates?.Templates?.Any() ?? true)
             {
-                return new List<DocumentPartialTemplateContent>();
+                return null;
             }
 
             var partialTemplatesInDocument = await _documentSectionRenderer.GetPartialTemplatesInDocumentAsync(Document.Content);
 
-            if (!partialTemplatesInDocument?.Any() ?? true)
+            if (!partialTemplatesInDocument?.Any(t => t.Parameters != null) ?? true)
             {
-                return new List<DocumentPartialTemplateContent>();
+                return null;
             }
 
             foreach (var partialTemplates in partialTemplatesInDocument)
@@ -447,10 +447,12 @@ namespace Volo.Docs.Pages.Documents.Project
                 {
                     if (!UserPreferences.ContainsKey(parameter.Key))
                     {
-                       UserPreferences.Add(parameter.Key, parameter.Value);
+                        UserPreferences.Add(parameter.Key, parameter.Value);
                     }
                 }
             }
+
+            var contents = new List<DocumentPartialTemplateContent>();
 
             foreach (var partialTemplate in projectPartialTemplates.Templates)
             {
@@ -472,10 +474,8 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private void SetUserPreferences()
         {
-            UserPreferences = new DocumentRenderParameters
-            {
-                {"Document_Language_Code", LanguageCode}, {"Document_Version", Version}
-            };
+            UserPreferences.Add("Document_Language_Code", LanguageCode);
+            UserPreferences.Add("Document_Version", Version);
 
             var cookie = Request.Cookies["AbpDocsPreferences"];
 

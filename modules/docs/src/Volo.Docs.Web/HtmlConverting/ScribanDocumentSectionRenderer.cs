@@ -134,21 +134,20 @@ namespace Volo.Docs.HtmlConverting
                 var afterJsonOpener = documentContent.Substring(
                     documentContent.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
 
-                var json = afterJsonOpener.Substring(0,
+                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
                     afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
 
                 documentContent = afterJsonOpener.Substring(
                     afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
 
-                if (!json.Contains(docs_templates))
+                if (!betweenJsonOpenerAndCloser.Contains(docs_templates))
                 {
                     continue;
                 }
 
-                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
+                var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
                 var template = JsonConvert.DeserializeObject<PartialTemplateDto>(json);
-
 
                 templates.Add(template);
             }
@@ -168,18 +167,18 @@ namespace Volo.Docs.HtmlConverting
                 var afterJsonOpener = document.Substring(
                     document.IndexOf(jsonOpener, StringComparison.Ordinal) + jsonOpener.Length);
 
-                var json = afterJsonOpener.Substring(0,
+                var betweenJsonOpenerAndCloser = afterJsonOpener.Substring(0,
                     afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
 
-                if (!json.Contains(docs_templates))
+                if (!betweenJsonOpenerAndCloser.Contains(docs_templates))
                 {
                     document = afterJsonOpener.Substring(
                         afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
-                    newDocument.Append(beforeJson + json + jsonCloser);
+                    newDocument.Append(beforeJson + betweenJsonOpenerAndCloser + jsonCloser);
                     continue;
                 }
 
-                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
+                var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
                 var templateName = JsonConvert.DeserializeObject<PartialTemplateDto>(json)?.Name;
 
