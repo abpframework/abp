@@ -145,7 +145,7 @@ namespace Volo.Docs.HtmlConverting
                     continue;
                 }
 
-                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal));
+                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
                 var template = JsonConvert.DeserializeObject<PartialTemplateDto>(json);
 
@@ -171,7 +171,6 @@ namespace Volo.Docs.HtmlConverting
                 var json = afterJsonOpener.Substring(0,
                     afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal));
 
-
                 if (!json.Contains(docs_templates))
                 {
                     document = afterJsonOpener.Substring(
@@ -180,7 +179,7 @@ namespace Volo.Docs.HtmlConverting
                     continue;
                 }
 
-                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal));
+                json = json.Substring(json.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
                 var templateName = JsonConvert.DeserializeObject<PartialTemplateDto>(json)?.Name;
 
@@ -189,14 +188,13 @@ namespace Volo.Docs.HtmlConverting
                 var beforeTemplate = document.Substring(0,
                     document.IndexOf(jsonOpener, StringComparison.Ordinal));
 
-                var afterTemplate = document.Substring(0,
-                    document.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
-
                 newDocument.Append(beforeTemplate + template?.Content + jsonCloser);
 
                 document = afterJsonOpener.Substring(
                     afterJsonOpener.IndexOf(jsonCloser, StringComparison.Ordinal) + jsonCloser.Length);
             }
+
+            newDocument.Append(document);
 
             return newDocument.ToString();
         }
