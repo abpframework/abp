@@ -79,6 +79,7 @@
     "UniqueComputerId": "Unique computer id",
     "LastSeenDate": "Last seen date",
     "{0}Computer{1}WillBeRemovedFromRecords": "Computer of {0} ({1}) will be removed from records",
+    "OrganizationDeletionWarningMessage{0}": "Organization named {0} will be deleted",
     "This{0}AlreadyExistInThisOrganization": "This {0} already exist in this organization"
   }
 }
