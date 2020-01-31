@@ -37,7 +37,7 @@
     "NugetPackageTarget.HttpApi": "Http Api",
     "NugetPackageTarget.HttpApiClient": "Http Api Client",
     "NugetPackageTarget.Web": "Web",
-    "NugetPackageTarget.EntityFrameworkCore": "EntityFramework Core",
+    "NugetPackageTarget.EntityFrameworkCore": "DeleteAllEntityFramework Core",
     "NugetPackageTarget.MongoDB": "MongoDB",
     "Edit": "Edit",
     "Delete": "Delete",
@@ -80,6 +80,8 @@
     "LastSeenDate": "Last seen date",
     "{0}Computer{1}WillBeRemovedFromRecords": "Computer of {0} ({1}) will be removed from records",
     "OrganizationDeletionWarningMessage": "Organization will be deleted",
-    "This{0}AlreadyExistInThisOrganization": "This {0} already exist in this organization"
+    "This{0}AlreadyExistInThisOrganization": "This {0} already exist in this organization",
+    "AreYouSureYouWantToDeleteAllComputers": "Are you sure you want to delete all computers?",
+    "DeleteAll": "Delete all"
   }
 }
