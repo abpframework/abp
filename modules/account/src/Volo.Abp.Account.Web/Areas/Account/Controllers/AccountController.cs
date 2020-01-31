@@ -51,7 +51,6 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
            await _signInManager.SignOutAsync();
         }
 
-
         [HttpPost]
         [Route("checkPassword")]
         public virtual async Task<AbpLoginResult> CheckPassword(UserLoginInfo login)
