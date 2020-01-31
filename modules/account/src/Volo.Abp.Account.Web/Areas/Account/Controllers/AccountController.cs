@@ -35,13 +35,20 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
             ValidateLoginInfo(login);
 
             await ReplaceEmailToUsernameOfInputIfNeeds(login).ConfigureAwait(false);
-
+      
             return GetAbpLoginResult(await _signInManager.PasswordSignInAsync(
                 login.UserNameOrEmailAddress,
                 login.Password,
                 login.RememberMe,
                 true
             ).ConfigureAwait(false));
+        }
+
+        [HttpGet]
+        [Route("logout")]
+        public virtual async Task Logout()
+        {
+           await _signInManager.SignOutAsync();
         }
 
         [HttpPost]
