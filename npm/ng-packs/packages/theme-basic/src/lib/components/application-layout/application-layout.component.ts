@@ -33,6 +33,7 @@ import snq from 'snq';
 import { AddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
 import { LayoutState } from '../../states';
+import { AuthService } from 'packages/core/src/lib/services/auth.service';
 
 @Component({
   selector: 'abp-layout-application',
@@ -78,7 +79,10 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   get defaultLanguage$(): Observable<string> {
     return this.languages$.pipe(
       map(
-        languages => snq(() => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName),
+        languages =>
+          snq(
+            () => languages.find(lang => lang.cultureName === this.selectedLangCulture).displayName,
+          ),
         '',
       ),
     );
@@ -86,7 +90,11 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   get dropdownLanguages$(): Observable<ApplicationConfiguration.Language[]> {
     return this.languages$.pipe(
-      map(languages => snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)), []),
+      map(
+        languages =>
+          snq(() => languages.filter(lang => lang.cultureName !== this.selectedLangCulture)),
+        [],
+      ),
     );
   }
 
@@ -100,7 +108,12 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   trackElementByFn: TrackByFunction<ABP.FullRoute> = (_, element) => element;
 
-  constructor(private store: Store, private oauthService: OAuthService, private renderer: Renderer2) {}
+  constructor(
+    private store: Store,
+    private oauthService: OAuthService,
+    private renderer: Renderer2,
+    private authService: AuthService,
+  ) {}
 
   private checkWindowWidth() {
     setTimeout(() => {
@@ -121,7 +134,9 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    const navigations = this.store.selectSnapshot(LayoutState.getNavigationElements).map(({ name }) => name);
+    const navigations = this.store
+      .selectSnapshot(LayoutState.getNavigationElements)
+      .map(({ name }) => name);
 
     if (navigations.indexOf('LanguageRef') < 0) {
       this.store.dispatch(
@@ -145,10 +160,7 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
     this.checkWindowWidth();
 
     fromEvent(window, 'resize')
-      .pipe(
-        takeUntilDestroy(this),
-        debounceTime(150),
-      )
+      .pipe(takeUntilDestroy(this), debounceTime(150))
       .subscribe(() => {
         this.checkWindowWidth();
       });
@@ -161,13 +173,13 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   }
 
   logout() {
-    this.oauthService.logOut();
-    this.store.dispatch(
-      new Navigate(['/'], null, {
-        state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
-      }),
-    );
-    this.store.dispatch(new GetAppConfiguration());
+    this.authService.logout().subscribe(() => {
+      this.store.dispatch(
+        new Navigate(['/'], null, {
+          state: { redirectUrl: this.store.selectSnapshot(RouterState).state.url },
+        }),
+      );
+    });
   }
 
   openChange(event: boolean, childrenContainer: HTMLDivElement) {
