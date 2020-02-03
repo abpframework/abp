@@ -25,7 +25,6 @@ import {
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Select, Store } from '@ngxs/store';
-import { OAuthService } from 'angular-oauth2-oidc';
 import compare from 'just-compare';
 import { fromEvent, Observable } from 'rxjs';
 import { debounceTime, filter, map } from 'rxjs/operators';
@@ -110,7 +109,6 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private store: Store,
-    private oauthService: OAuthService,
     private renderer: Renderer2,
     private authService: AuthService,
   ) {}
