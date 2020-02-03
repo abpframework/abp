@@ -79,6 +79,9 @@
     "UniqueComputerId": "计算机唯一ID",
     "LastSeenDate": "上次查看日期",
     "{0}Computer{1}WillBeRemovedFromRecords": "计算机 {0} ({1}) 将从记录中删除",
-    "This{0}AlreadyExistInThisOrganization": "该组织中已经存在此 {0}"
+    "OrganizationDeletionWarningMessage": "组织将被删除",
+    "This{0}AlreadyExistInThisOrganization": "该组织中已经存在此 {0}",
+    "AreYouSureYouWantToDeleteAllComputers": "您确定要删除所有计算机吗？",
+    "DeleteAll": "删除所有"
   }
 }
