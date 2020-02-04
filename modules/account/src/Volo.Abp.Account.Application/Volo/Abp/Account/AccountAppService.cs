@@ -29,6 +29,8 @@ namespace Volo.Abp.Account
 
             (await UserManager.CreateAsync(user, input.Password).ConfigureAwait(false)).CheckErrors();
 
+            await UserManager.SetEmailAsync(user,input.EmailAddress).ConfigureAwait(false);
+
             await SetDefaultRolesAsync(user);
 
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);

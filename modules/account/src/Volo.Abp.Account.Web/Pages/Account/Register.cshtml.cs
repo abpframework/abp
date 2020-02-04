@@ -14,7 +14,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public class RegisterModel : AccountPageModel
     {
-        private readonly IIdentityRoleRepository _roleRepository;
+        private readonly IAccountAppService _accountAppService;
 
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
@@ -25,9 +25,9 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [BindProperty]
         public PostInput Input { get; set; }
 
-        public RegisterModel(IIdentityRoleRepository roleRepository)
+        public RegisterModel(IAccountAppService accountAppService)
         {
-            _roleRepository = roleRepository;
+            _accountAppService = accountAppService;
         }
 
         public virtual async Task OnGetAsync()
@@ -42,24 +42,20 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             await CheckSelfRegistrationAsync().ConfigureAwait(false);
 
-            var user = new IdentityUser(GuidGenerator.Create(), Input.UserName, Input.EmailAddress, CurrentTenant.Id);
+            var registerDto = new RegisterDto
+            {
+                AppName = "MVC",
+                EmailAddress = Input.EmailAddress,
+                Password = Input.Password,
+                UserName = Input.UserName
+            };
 
-            (await UserManager.CreateAsync(user, Input.Password).ConfigureAwait(false)).CheckErrors();
-
-            await UserManager.SetEmailAsync(user, Input.EmailAddress).ConfigureAwait(false);
-
-            await SetDefaultRolesAsync(user);
+            var userDto = await _accountAppService.RegisterAsync(registerDto);
+            var user = await UserManager.GetByIdAsync(userDto.Id);
 
             await SignInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
 
             return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
-        }
-
-        protected async Task SetDefaultRolesAsync(IdentityUser user)
-        {
-            var defaultRoles = await _roleRepository.GetDefaultOnesAsync().ConfigureAwait(false);
-
-            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name)).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
