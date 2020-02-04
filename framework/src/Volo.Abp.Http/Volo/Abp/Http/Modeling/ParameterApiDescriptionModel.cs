@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Volo.Abp.Http.Modeling
 {
@@ -19,12 +19,14 @@ namespace Volo.Abp.Http.Modeling
 
         public string BindingSourceId { get; set; }
 
+        public string DescriptorName { get; set; }
+
         private ParameterApiDescriptionModel()
         {
             
         }
 
-        public static ParameterApiDescriptionModel Create(string name, string nameOnMethod, Type type, bool isOptional = false, object defaultValue = null, string[] constraintTypes = null, string bindingSourceId = null)
+        public static ParameterApiDescriptionModel Create(string name, string nameOnMethod, Type type, bool isOptional = false, object defaultValue = null, string[] constraintTypes = null, string bindingSourceId = null, string descriptorName = null)
         {
             return new ParameterApiDescriptionModel
             {
@@ -34,7 +36,8 @@ namespace Volo.Abp.Http.Modeling
                 IsOptional = isOptional,
                 DefaultValue = defaultValue,
                 ConstraintTypes = constraintTypes,
-                BindingSourceId = bindingSourceId
+                BindingSourceId = bindingSourceId,
+                DescriptorName = descriptorName
             };
         }
     }
