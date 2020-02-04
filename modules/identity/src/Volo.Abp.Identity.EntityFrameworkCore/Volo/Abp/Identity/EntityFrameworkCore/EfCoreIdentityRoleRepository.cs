@@ -42,9 +42,10 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
         }
 
-        public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(CancellationToken cancellationToken = default)
+        public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
+            bool includeDetails = false, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(r => r.IsDefault).ToListAsync(cancellationToken: cancellationToken);
+            return await DbSet.Where(r => r.IsDefault).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityRole> WithDetails()

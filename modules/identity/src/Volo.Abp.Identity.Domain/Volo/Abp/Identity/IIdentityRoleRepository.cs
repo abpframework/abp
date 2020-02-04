@@ -23,6 +23,7 @@ namespace Volo.Abp.Identity
         );
 
         Task<List<IdentityRole>> GetDefaultOnesAsync(
+            bool includeDetails = false,
             CancellationToken cancellationToken = default
         );
     }
