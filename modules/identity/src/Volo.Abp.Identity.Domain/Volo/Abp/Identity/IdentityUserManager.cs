@@ -25,7 +25,8 @@ namespace Volo.Abp.Identity
             IPasswordHasher<IdentityUser> passwordHasher,
             IEnumerable<IUserValidator<IdentityUser>> userValidators,
             IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
-            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors,
+            ILookupNormalizer keyNormalizer,
+            IdentityErrorDescriber errors,
             IServiceProvider services,
             ILogger<IdentityUserManager> logger,
             ICancellationTokenProvider cancellationTokenProvider)
