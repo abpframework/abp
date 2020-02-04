@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
@@ -12,6 +14,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public class RegisterModel : AccountPageModel
     {
+        private readonly IIdentityRoleRepository _roleRepository;
+
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
 
@@ -21,7 +25,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [BindProperty]
         public PostInput Input { get; set; }
 
-        public virtual async Task OnGet()
+        public RegisterModel(IIdentityRoleRepository roleRepository)
+        {
+            _roleRepository = roleRepository;
+        }
+
+        public virtual async Task OnGetAsync()
         {
             await CheckSelfRegistrationAsync().ConfigureAwait(false);
         }
@@ -39,9 +48,18 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             await UserManager.SetEmailAsync(user, Input.EmailAddress).ConfigureAwait(false);
 
+            await SetDefaultRolesAsync(user);
+
             await SignInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
 
             return Redirect(ReturnUrl ?? "/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+        }
+
+        protected async Task SetDefaultRolesAsync(IdentityUser user)
+        {
+            var defaultRoles = await _roleRepository.GetDefaultOnesAsync().ConfigureAwait(false);
+
+            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name)).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
