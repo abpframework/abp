@@ -28,7 +28,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<ModuleInfo> GetAsync(string name)
         {
-            var moduleList = await GetModuleListAsync().ConfigureAwait(false);
+            var moduleList = await GetModuleListInternalAsync().ConfigureAwait(false);
 
             var module = moduleList.FirstOrDefault(m => m.Name == name);
 
@@ -40,7 +40,12 @@ namespace Volo.Abp.Cli.ProjectBuilding
             return module;
         }
 
-        private async Task<List<ModuleInfo>> GetModuleListAsync()
+        public async Task<List<ModuleInfo>> GetModuleListAsync()
+        {
+            return await GetModuleListInternalAsync();
+        }
+
+        private async Task<List<ModuleInfo>> GetModuleListInternalAsync()
         {
             using (var client = new CliHttpClient())
             {
