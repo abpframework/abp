@@ -119,7 +119,7 @@ export class UsersComponent implements OnInit {
   }
 
   buildForm() {
-    this.store.dispatch(new GetRoles()).subscribe(() => {
+    this.store.dispatch(new GetRoles({ maxResultCount: 1000, skipCount: 0 })).subscribe(() => {
       this.roles = this.store.selectSnapshot(IdentityState.getRoles);
       this.form = this.fb.group({
         userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
