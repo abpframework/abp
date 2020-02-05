@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Identity;
 using Volo.Abp.Settings;
 using Volo.Abp.Uow;
@@ -12,6 +14,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 {
     public class RegisterModel : AccountPageModel
     {
+        private readonly IAccountAppService _accountAppService;
+
         [BindProperty(SupportsGet = true)]
         public string ReturnUrl { get; set; }
 
@@ -21,7 +25,12 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [BindProperty]
         public PostInput Input { get; set; }
 
-        public virtual async Task OnGet()
+        public RegisterModel(IAccountAppService accountAppService)
+        {
+            _accountAppService = accountAppService;
+        }
+
+        public virtual async Task OnGetAsync()
         {
             await CheckSelfRegistrationAsync().ConfigureAwait(false);
         }
@@ -33,11 +42,16 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
             await CheckSelfRegistrationAsync().ConfigureAwait(false);
 
-            var user = new IdentityUser(GuidGenerator.Create(), Input.UserName, Input.EmailAddress, CurrentTenant.Id);
+            var registerDto = new RegisterDto
+            {
+                AppName = "MVC",
+                EmailAddress = Input.EmailAddress,
+                Password = Input.Password,
+                UserName = Input.UserName
+            };
 
-            (await UserManager.CreateAsync(user, Input.Password).ConfigureAwait(false)).CheckErrors();
-
-            await UserManager.SetEmailAsync(user, Input.EmailAddress).ConfigureAwait(false);
+            var userDto = await _accountAppService.RegisterAsync(registerDto);
+            var user = await UserManager.GetByIdAsync(userDto.Id);
 
             await SignInManager.SignInAsync(user, isPersistent: false).ConfigureAwait(false);
 

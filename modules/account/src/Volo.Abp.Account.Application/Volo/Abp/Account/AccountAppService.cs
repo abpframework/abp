@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Account.Settings;
 using Volo.Abp.Application.Services;
@@ -9,11 +10,14 @@ namespace Volo.Abp.Account
 {
     public class AccountAppService : ApplicationService, IAccountAppService
     {
+        private readonly IIdentityRoleRepository _roleRepository;
         protected IdentityUserManager UserManager { get; }
 
         public AccountAppService(
-            IdentityUserManager userManager)
+            IdentityUserManager userManager,
+            IIdentityRoleRepository roleRepository)
         {
+            _roleRepository = roleRepository;
             UserManager = userManager;
         }
 
@@ -25,7 +29,18 @@ namespace Volo.Abp.Account
 
             (await UserManager.CreateAsync(user, input.Password).ConfigureAwait(false)).CheckErrors();
 
+            await UserManager.SetEmailAsync(user,input.EmailAddress).ConfigureAwait(false);
+
+            await SetDefaultRolesAsync(user);
+
             return ObjectMapper.Map<IdentityUser, IdentityUserDto>(user);
+        }
+
+        protected virtual async Task SetDefaultRolesAsync(IdentityUser user)
+        {
+            var defaultRoles = await _roleRepository.GetDefaultOnesAsync().ConfigureAwait(false);
+
+            await UserManager.SetRolesAsync(user, defaultRoles.Select(r => r.Name)).ConfigureAwait(false);
         }
 
         protected virtual async Task CheckSelfRegistrationAsync()
