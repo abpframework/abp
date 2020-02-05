@@ -89,7 +89,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public virtual async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
+            await CheckLocalLoginAsync();
 
             ValidateModel();
 
@@ -235,6 +235,14 @@ namespace Volo.Abp.Account.Web.Pages.Account
             }
 
             LoginInput.UserNameOrEmailAddress = userByEmail.UserName;
+        }
+
+        protected virtual async Task CheckLocalLoginAsync()
+        {
+            if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false))
+            {
+                throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
+            }
         }
 
         public class LoginInputModel

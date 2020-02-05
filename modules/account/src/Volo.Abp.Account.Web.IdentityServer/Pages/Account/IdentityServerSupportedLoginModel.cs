@@ -107,8 +107,6 @@ namespace Volo.Abp.Account.Web.Pages.Account
         [UnitOfWork] //TODO: Will be removed when we implement action filter
         public override async Task<IActionResult> OnPostAsync(string action)
         {
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false);
-
             if (action == "Cancel")
             {
                 var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl).ConfigureAwait(false);
@@ -121,6 +119,8 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
                 return Redirect(ReturnUrl);
             }
+
+            await CheckLocalLoginAsync();
 
             ValidateModel();
 
