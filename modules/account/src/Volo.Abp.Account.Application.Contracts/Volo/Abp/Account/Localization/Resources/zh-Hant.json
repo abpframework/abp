@@ -11,6 +11,7 @@
     "InvalidUserNameOrPassword": "使用者名稱或密碼錯誤!",
     "LoginIsNotAllowed": "無法登入!你需要驗證電子信箱地址/手機號碼.",
     "SelfRegistrationDisabledMessage": "應用程式未開放註冊,請聯絡管理員以加入新使用者.",
+    "LocalLoginDisabledMessage": "應用程序未開放本地賬戶登錄.",
     "Login": "登入",
     "Cancel": "取消",
     "Register": "註冊",
