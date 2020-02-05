@@ -1,39 +1,15 @@
-﻿using System.IO;
+using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using DashboardDemo.Data;
+using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
-using Volo.Abp;
-using Volo.Abp.Threading;
 
 namespace DashboardDemo.DbMigrator
 {
     class Program
     {
-        static void Main(string[] args)
-        {
-            ConfigureLogging();
-
-            using (var application = AbpApplicationFactory.Create<DashboardDemoDbMigratorModule>(options =>
-            {
-                options.UseAutofac();
-                options.Services.AddLogging(c => c.AddSerilog());
-            }))
-            {
-                application.Initialize();
-
-                AsyncHelper.RunSync(
-                    () => application
-                        .ServiceProvider
-                        .GetRequiredService<DashboardDemoDbMigrationService>()
-                        .MigrateAsync()
-                );
-
-                application.Shutdown();
-            }
-        }
-
-        private static void ConfigureLogging()
+        static async Task Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
@@ -48,6 +24,15 @@ namespace DashboardDemo.DbMigrator
                 .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "Logs/logs.txt"))
                 .WriteTo.Console()
                 .CreateLogger();
+
+            await CreateHostBuilder(args).RunConsoleAsync();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<DbMigratorHostedService>();
+                });
     }
 }
