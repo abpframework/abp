@@ -175,7 +175,7 @@ namespace Volo.Abp.Caching
                 cachedBytes = await Cache.GetAsync(
                     NormalizeKey(key),
                     CancellationTokenProvider.FallbackToProvider(token)
-                ).ConfigureAwait(false);
+                );
             }
             catch (Exception ex)
             {
@@ -250,22 +250,22 @@ namespace Volo.Abp.Caching
             CancellationToken token = default)
         {
             token = CancellationTokenProvider.FallbackToProvider(token);
-            var value = await GetAsync(key, hideErrors, token).ConfigureAwait(false);
+            var value = await GetAsync(key, hideErrors, token);
             if (value != null)
             {
                 return value;
             }
 
-            using (await SyncSemaphore.LockAsync(token).ConfigureAwait(false))
+            using (await SyncSemaphore.LockAsync(token))
             {
-                value = await GetAsync(key, hideErrors, token).ConfigureAwait(false);
+                value = await GetAsync(key, hideErrors, token);
                 if (value != null)
                 {
                     return value;
                 }
 
-                value = await factory().ConfigureAwait(false);
-                await SetAsync(key, value, optionsFactory?.Invoke(), hideErrors, token).ConfigureAwait(false);
+                value = await factory();
+                await SetAsync(key, value, optionsFactory?.Invoke(), hideErrors, token);
             }
 
             return value;
@@ -331,7 +331,7 @@ namespace Volo.Abp.Caching
                     Serializer.Serialize(value),
                     options ?? DefaultCacheOptions,
                     CancellationTokenProvider.FallbackToProvider(token)
-                ).ConfigureAwait(false);
+                );
             }
             catch (Exception ex)
             {
@@ -387,7 +387,7 @@ namespace Volo.Abp.Caching
 
             try
             {
-                await Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token)).ConfigureAwait(false);
+                await Cache.RefreshAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
             }
             catch (Exception ex)
             {
@@ -443,7 +443,7 @@ namespace Volo.Abp.Caching
 
             try
             {
-                await Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token)).ConfigureAwait(false);
+                await Cache.RemoveAsync(NormalizeKey(key), CancellationTokenProvider.FallbackToProvider(token));
             }
             catch (Exception ex)
             {

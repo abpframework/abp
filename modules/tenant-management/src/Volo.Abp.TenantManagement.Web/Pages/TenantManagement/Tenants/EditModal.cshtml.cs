@@ -22,7 +22,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
         {
             Tenant = ObjectMapper.Map<TenantDto, TenantInfoModel>(
                 await _tenantAppService.GetAsync(id)
-.ConfigureAwait(false));
+            );
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -30,7 +30,7 @@ namespace Volo.Abp.TenantManagement.Web.Pages.TenantManagement.Tenants
             ValidateModel();
 
             var input = ObjectMapper.Map<TenantInfoModel, TenantUpdateDto>(Tenant);
-            await _tenantAppService.UpdateAsync(Tenant.Id, input).ConfigureAwait(false);
+            await _tenantAppService.UpdateAsync(Tenant.Id, input);
 
             return NoContent();
         }

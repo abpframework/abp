@@ -30,7 +30,7 @@ namespace Volo.Abp.UI.Navigation
 
                 foreach (var contributor in Options.MenuContributors)
                 {
-                    await contributor.ConfigureMenuAsync(context).ConfigureAwait(false);
+                    await contributor.ConfigureMenuAsync(context);
                 }
             }
 

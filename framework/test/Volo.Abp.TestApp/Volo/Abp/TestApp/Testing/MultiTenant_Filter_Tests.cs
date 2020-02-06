@@ -63,7 +63,7 @@ namespace Volo.Abp.TestApp.Testing
                 people.Count.ShouldBe(0);
 
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace Volo.Abp.TestApp.Testing
                 people.Count.ShouldBe(1);
 
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
     }
 }

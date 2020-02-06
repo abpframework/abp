@@ -54,7 +54,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
 
             var auditLogs = await query.OrderBy(sorting ?? "executionTime desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
 
             return auditLogs;
         }
@@ -87,7 +87,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 httpStatusCode
             );
 
-            var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            var totalCount = await query.LongCountAsync(GetCancellationToken(cancellationToken));
 
             return totalCount;
         }
@@ -129,7 +129,7 @@ namespace Volo.Abp.AuditLogging.EntityFrameworkCore
                 .OrderBy(t => t.ExecutionTime)
                 .GroupBy(t => new { t.ExecutionTime.Date })
                 .Select(g => new { Day = g.Min(t => t.ExecutionTime), avgExecutionTime = g.Average(t => t.ExecutionDuration) })
-                .ToListAsync().ConfigureAwait(false);
+                .ToListAsync();
 
             return result.ToDictionary(element => element.Day.ClearTime(), element => element.avgExecutionTime);
         }

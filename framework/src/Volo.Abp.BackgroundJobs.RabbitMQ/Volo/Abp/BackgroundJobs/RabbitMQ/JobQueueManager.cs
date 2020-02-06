@@ -40,7 +40,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             foreach (var jobConfiguration in Options.GetJobs())
             {
                 var jobQueue = (IRunnable)ServiceProvider.GetRequiredService(typeof(IJobQueue<>).MakeGenericType(jobConfiguration.ArgsType));
-                await jobQueue.StartAsync(cancellationToken).ConfigureAwait(false);
+                await jobQueue.StartAsync(cancellationToken);
                 JobQueues[jobConfiguration.JobName] = jobQueue;
             }
         }
@@ -49,7 +49,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
         {
             foreach (var jobQueue in JobQueues.Values)
             {
-                await jobQueue.StopAsync(cancellationToken).ConfigureAwait(false);
+                await jobQueue.StopAsync(cancellationToken);
             }
 
             JobQueues.Clear();
@@ -64,7 +64,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 return (IJobQueue<TArgs>)jobQueue;
             }
 
-            using (await SyncSemaphore.LockAsync().ConfigureAwait(false))
+            using (await SyncSemaphore.LockAsync())
             {
                 if (JobQueues.TryGetValue(jobConfiguration.JobName, out jobQueue))
                 {
@@ -74,7 +74,7 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
                 jobQueue = (IJobQueue<TArgs>)ServiceProvider
                     .GetRequiredService(typeof(IJobQueue<>).MakeGenericType(typeof(TArgs)));
 
-                await jobQueue.StartAsync().ConfigureAwait(false);
+                await jobQueue.StartAsync();
 
                 JobQueues.TryAdd(jobConfiguration.JobName, jobQueue);
 

@@ -34,7 +34,7 @@ namespace Volo.Abp.PermissionManagement
 
         public virtual async Task<GetPermissionListResultDto> GetAsync(string providerName, string providerKey)
         {
-            await CheckProviderPolicy(providerName).ConfigureAwait(false);
+            await CheckProviderPolicy(providerName);
 
             var result = new GetPermissionListResultDto
             {
@@ -74,7 +74,7 @@ namespace Volo.Abp.PermissionManagement
                         GrantedProviders = new List<ProviderInfoDto>()
                     };
 
-                    var grantInfo = await _permissionManager.GetAsync(permission.Name, providerName, providerKey).ConfigureAwait(false);
+                    var grantInfo = await _permissionManager.GetAsync(permission.Name, providerName, providerKey);
 
                     grantInfoDto.IsGranted = grantInfo.IsGranted;
 
@@ -101,11 +101,11 @@ namespace Volo.Abp.PermissionManagement
 
         public virtual async Task UpdateAsync(string providerName, string providerKey, UpdatePermissionsDto input)
         {
-            await CheckProviderPolicy(providerName).ConfigureAwait(false);
+            await CheckProviderPolicy(providerName);
 
             foreach (var permissionDto in input.Permissions)
             {
-                await _permissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted).ConfigureAwait(false);
+                await _permissionManager.SetAsync(permissionDto.Name, providerName, providerKey, permissionDto.IsGranted);
             }
         }
 
@@ -117,7 +117,7 @@ namespace Volo.Abp.PermissionManagement
                 throw new AbpException($"No policy defined to get/set permissions for the provider '{policyName}'. Use {nameof(PermissionManagementOptions)} to map the policy.");
             }
 
-            await AuthorizationService.CheckAsync(policyName).ConfigureAwait(false);
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }

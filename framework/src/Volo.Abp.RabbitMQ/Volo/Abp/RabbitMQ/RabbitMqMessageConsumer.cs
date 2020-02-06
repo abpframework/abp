@@ -63,13 +63,13 @@ namespace Volo.Abp.RabbitMQ
         public virtual async Task BindAsync(string routingKey)
         {
             QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Bind, routingKey));
-            await TrySendQueueBindCommandsAsync().ConfigureAwait(false);
+            await TrySendQueueBindCommandsAsync();
         }
 
         public virtual async Task UnbindAsync(string routingKey)
         {
             QueueBindCommands.Enqueue(new QueueBindCommand(QueueBindType.Unbind, routingKey));
-            await TrySendQueueBindCommandsAsync().ConfigureAwait(false);
+            await TrySendQueueBindCommandsAsync();
         }
 
         protected virtual void TrySendQueueBindCommands()
@@ -166,7 +166,7 @@ namespace Volo.Abp.RabbitMQ
                 var consumer = new EventingBasicConsumer(channel);
                 consumer.Received += async (model, basicDeliverEventArgs) =>
                 {
-                    await HandleIncomingMessage(channel, basicDeliverEventArgs).ConfigureAwait(false);
+                    await HandleIncomingMessage(channel, basicDeliverEventArgs);
                 };
 
                 channel.BasicConsume(
@@ -189,7 +189,7 @@ namespace Volo.Abp.RabbitMQ
             {
                 foreach (var callback in Callbacks)
                 {
-                    await callback(channel, basicDeliverEventArgs).ConfigureAwait(false);
+                    await callback(channel, basicDeliverEventArgs);
                 }
 
                 channel.BasicAck(basicDeliverEventArgs.DeliveryTag, multiple: false);

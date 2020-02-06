@@ -27,7 +27,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output).ConfigureAwait(false);
+            var (innerHtml, isCheckBox) = await GetFormInputGroupAsHtmlAsync(context, output);
 
             var order = TagHelper.AspFor.ModelExplorer.GetDisplayOrder();
 
@@ -57,12 +57,12 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
         protected virtual async Task<(string, bool)> GetFormInputGroupAsHtmlAsync(TagHelperContext context, TagHelperOutput output)
         {
-            var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output).ConfigureAwait(false);
+            var (inputTag, isCheckBox) = await GetInputTagHelperOutputAsync(context, output);
             
             var inputHtml = inputTag.Render(_encoder);
-            var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox).ConfigureAwait(false);
+            var label = await GetLabelAsHtmlAsync(context, output, inputTag, isCheckBox);
             var info = GetInfoAsHtml(context, output, inputTag, isCheckBox);
-            var validation = isCheckBox ? "" : await GetValidationAsHtmlAsync(context, output, inputTag).ConfigureAwait(false);
+            var validation = isCheckBox ? "" : await GetValidationAsHtmlAsync(context, output, inputTag);
 
             return (GetContent(context, output, label, inputHtml, validation, info, isCheckBox), isCheckBox);
         }
@@ -82,7 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             var attributeList = new TagHelperAttributeList { { "class", "text-danger" } };
 
-            return await validationMessageTagHelper.RenderAsync(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag).ConfigureAwait(false);
+            return await validationMessageTagHelper.RenderAsync(attributeList, context, _encoder, "span", TagMode.StartTagAndEndTag);
         }
 
         protected virtual string GetContent(TagHelperContext context, TagHelperOutput output, string label, string inputHtml, string validation, string infoHtml, bool isCheckbox)
@@ -125,7 +125,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
         {
             var tagHelper = GetInputTagHelper(context, output);
 
-            var inputTagHelperOutput = await tagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "input").ConfigureAwait(false);
+            var inputTagHelperOutput = await tagHelper.ProcessAndGetOutputAsync(GetInputAttributes(context, output), context, "input");
 
             ConvertToTextAreaIfTextArea(inputTagHelperOutput);
             AddDisabledAttribute(inputTagHelperOutput);
@@ -227,7 +227,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
 
             if (string.IsNullOrEmpty(TagHelper.Label))
             {
-                return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox).ConfigureAwait(false) + GetRequiredSymbol(context, output);
+                return await GetLabelAsHtmlUsingTagHelperAsync(context, output, isCheckbox) + GetRequiredSymbol(context, output);
             }
 
             var checkboxClass = isCheckbox ? "class=\"custom-control-label\" " : "";
@@ -301,7 +301,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Form
                 attributeList.AddClass("custom-control-label");
             }
 
-            return await labelTagHelper.RenderAsync(attributeList, context, _encoder, "label", TagMode.StartTagAndEndTag).ConfigureAwait(false);
+            return await labelTagHelper.RenderAsync(attributeList, context, _encoder, "label", TagMode.StartTagAndEndTag);
         }
 
         protected virtual void ConvertToTextAreaIfTextArea(TagHelperOutput tagHelperOutput)

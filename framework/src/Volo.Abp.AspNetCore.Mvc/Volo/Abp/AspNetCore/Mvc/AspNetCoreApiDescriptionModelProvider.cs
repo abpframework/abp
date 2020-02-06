@@ -176,8 +176,8 @@ namespace Volo.Abp.AspNetCore.Mvc
                         parameterDescription.RouteInfo?.DefaultValue,
                         parameterDescription.RouteInfo?.Constraints?.Select(c => c.GetType().Name).ToArray(),
                         parameterDescription.Source.Id,
-                        parameterDescription.ModelMetadata.ContainerType != null
-                            ? parameterDescription.ParameterDescriptor.Name
+                        parameterDescription.ModelMetadata?.ContainerType != null
+                            ? parameterDescription.ParameterDescriptor?.Name ?? string.Empty
                             : string.Empty
                     )
                 );

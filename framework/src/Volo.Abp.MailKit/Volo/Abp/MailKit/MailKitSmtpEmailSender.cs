@@ -30,11 +30,11 @@ namespace Volo.Abp.MailKit
 
         protected override async Task SendEmailAsync(MailMessage mail)
         {
-            using (var client = await BuildClientAsync().ConfigureAwait(false))
+            using (var client = await BuildClientAsync())
             {
                 var message = MimeMessage.CreateFromMailMessage(mail);
-                await client.SendAsync(message).ConfigureAwait(false);
-                await client.DisconnectAsync(true).ConfigureAwait(false);
+                await client.SendAsync(message);
+                await client.DisconnectAsync(true);
             }
         }
 
@@ -44,7 +44,7 @@ namespace Volo.Abp.MailKit
 
             try
             {
-                await ConfigureClient(client).ConfigureAwait(false);
+                await ConfigureClient(client);
                 return client;
             }
             catch
@@ -57,20 +57,20 @@ namespace Volo.Abp.MailKit
         protected virtual async Task ConfigureClient(SmtpClient client)
         {
             client.Connect(
-                await SmtpConfiguration.GetHostAsync().ConfigureAwait(false),
-                await SmtpConfiguration.GetPortAsync().ConfigureAwait(false),
+                await SmtpConfiguration.GetHostAsync(),
+                await SmtpConfiguration.GetPortAsync(),
                 await GetSecureSocketOption()
-.ConfigureAwait(false));
+        );
 
-            if (await SmtpConfiguration.GetUseDefaultCredentialsAsync().ConfigureAwait(false))
+            if (await SmtpConfiguration.GetUseDefaultCredentialsAsync())
             {
                 return;
             }
 
             client.Authenticate(
-                await SmtpConfiguration.GetUserNameAsync().ConfigureAwait(false),
+                await SmtpConfiguration.GetUserNameAsync(),
                 await SmtpConfiguration.GetPasswordAsync()
-.ConfigureAwait(false));
+        );
         }
 
         protected virtual async Task<SecureSocketOptions> GetSecureSocketOption()
@@ -81,7 +81,7 @@ namespace Volo.Abp.MailKit
             }
 
             return await SmtpConfiguration.GetEnableSslAsync()
-.ConfigureAwait(false) ? SecureSocketOptions.SslOnConnect
+                ? SecureSocketOptions.SslOnConnect
                 : SecureSocketOptions.StartTlsWhenAvailable;
         }
     }

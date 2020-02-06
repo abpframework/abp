@@ -27,14 +27,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
         {
             var widget = Options.Widgets.Find(widgetComponentType);
 
-            return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName).ConfigureAwait(false);
+            return await IsGrantedAsyncInternal(widget, widgetComponentType.FullName);
         }
 
         public async Task<bool> IsGrantedAsync(string name)
         {
             var widget = Options.Widgets.Find(name);
 
-            return await IsGrantedAsyncInternal(widget, name).ConfigureAwait(false);
+            return await IsGrantedAsyncInternal(widget, name);
         }
 
         private async Task<bool> IsGrantedAsyncInternal(WidgetDefinition widget, string wantedWidgetName)
@@ -48,7 +48,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             {
                 foreach (var requiredPolicy in widget.RequiredPolicies)
                 {
-                    if (!(await AuthorizationService.AuthorizeAsync(requiredPolicy).ConfigureAwait(false)).Succeeded)
+                    if (!(await AuthorizationService.AuthorizeAsync(requiredPolicy)).Succeeded)
                     {
                         return false;
                     }

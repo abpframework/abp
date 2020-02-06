@@ -28,19 +28,19 @@ namespace Volo.Abp.Emailing.Smtp
 
         public async Task<SmtpClient> BuildClientAsync()
         {
-            var host = await SmtpConfiguration.GetHostAsync().ConfigureAwait(false);
-            var port = await SmtpConfiguration.GetPortAsync().ConfigureAwait(false);
+            var host = await SmtpConfiguration.GetHostAsync();
+            var port = await SmtpConfiguration.GetPortAsync();
 
             var smtpClient = new SmtpClient(host, port);
 
             try
             {
-                if (await SmtpConfiguration.GetEnableSslAsync().ConfigureAwait(false))
+                if (await SmtpConfiguration.GetEnableSslAsync())
                 {
                     smtpClient.EnableSsl = true;
                 }
 
-                if (await SmtpConfiguration.GetUseDefaultCredentialsAsync().ConfigureAwait(false))
+                if (await SmtpConfiguration.GetUseDefaultCredentialsAsync())
                 {
                     smtpClient.UseDefaultCredentials = true;
                 }
@@ -48,11 +48,11 @@ namespace Volo.Abp.Emailing.Smtp
                 {
                     smtpClient.UseDefaultCredentials = false;
 
-                    var userName = await SmtpConfiguration.GetUserNameAsync().ConfigureAwait(false);
+                    var userName = await SmtpConfiguration.GetUserNameAsync();
                     if (!userName.IsNullOrEmpty())
                     {
-                        var password = await SmtpConfiguration.GetPasswordAsync().ConfigureAwait(false);
-                        var domain = await SmtpConfiguration.GetDomainAsync().ConfigureAwait(false);
+                        var password = await SmtpConfiguration.GetPasswordAsync();
+                        var domain = await SmtpConfiguration.GetDomainAsync();
                         smtpClient.Credentials = !domain.IsNullOrEmpty()
                             ? new NetworkCredential(userName, password, domain)
                             : new NetworkCredential(userName, password);
@@ -70,9 +70,9 @@ namespace Volo.Abp.Emailing.Smtp
 
         protected override async Task SendEmailAsync(MailMessage mail)
         {
-            using (var smtpClient = await BuildClientAsync().ConfigureAwait(false))
+            using (var smtpClient = await BuildClientAsync())
             {
-                await smtpClient.SendMailAsync(mail).ConfigureAwait(false);
+                await smtpClient.SendMailAsync(mail);
             }
         }
     }
