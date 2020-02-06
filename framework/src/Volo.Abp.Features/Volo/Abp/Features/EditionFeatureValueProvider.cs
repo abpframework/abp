@@ -26,7 +26,7 @@ namespace Volo.Abp.Features
                 return null;
             }
 
-            return await FeatureStore.GetOrNullAsync(feature.Name, Name, editionId.Value.ToString()).ConfigureAwait(false);
+            return await FeatureStore.GetOrNullAsync(feature.Name, Name, editionId.Value.ToString());
         }
     }
 }

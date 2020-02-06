@@ -16,7 +16,7 @@ namespace Volo.Abp.Validation
         public override async Task InterceptAsync(IAbpMethodInvocation invocation)
         {
             Validate(invocation);
-            await invocation.ProceedAsync().ConfigureAwait(false);
+            await invocation.ProceedAsync();
         }
 
         protected virtual void Validate(IAbpMethodInvocation invocation)

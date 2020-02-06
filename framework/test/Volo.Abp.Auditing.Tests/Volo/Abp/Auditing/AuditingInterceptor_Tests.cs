@@ -38,8 +38,8 @@ namespace Volo.Abp.Auditing
 
             using (var scope = _auditingManager.BeginScope())
             {
-                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 }).ConfigureAwait(false);
-                await scope.SaveAsync().ConfigureAwait(false);
+                await myAuditedObject1.DoItAsync(new InputObject { Value1 = "forty-two", Value2 = 42 });
+                await scope.SaveAsync();
             }
 
 #pragma warning disable 4014

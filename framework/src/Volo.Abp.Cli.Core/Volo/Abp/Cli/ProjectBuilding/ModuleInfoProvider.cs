@@ -28,7 +28,7 @@ namespace Volo.Abp.Cli.ProjectBuilding
 
         public async Task<ModuleInfo> GetAsync(string name)
         {
-            var moduleList = await GetModuleListInternalAsync().ConfigureAwait(false);
+            var moduleList = await GetModuleListInternalAsync();
 
             var module = moduleList.FirstOrDefault(m => m.Name == name);
 
@@ -52,10 +52,10 @@ namespace Volo.Abp.Cli.ProjectBuilding
                 var responseMessage = await client.GetAsync(
                     $"{CliUrls.WwwAbpIo}api/download/modules/",
                     CancellationTokenProvider.Token
-                ).ConfigureAwait(false);
+                );
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage).ConfigureAwait(false);
-                var result = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
+                var result = await responseMessage.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<List<ModuleInfo>>(result);
             }
         }

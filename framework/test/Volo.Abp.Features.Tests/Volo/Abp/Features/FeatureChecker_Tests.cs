@@ -20,16 +20,16 @@ namespace Volo.Abp.Features
         public async Task IsEnabledAsync()
         {
             //Tenant is unknown
-            (await _featureChecker.IsEnabledAsync("BooleanTestFeature1").ConfigureAwait(false)).ShouldBeFalse();
+            (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeFalse();
 
             using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
             {
-                (await _featureChecker.IsEnabledAsync("BooleanTestFeature1").ConfigureAwait(false)).ShouldBeTrue();
+                (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeTrue();
             }
 
             using (_currentTenant.Change(TestFeatureStore.Tenant2Id))
             {
-                (await _featureChecker.IsEnabledAsync("BooleanTestFeature1").ConfigureAwait(false)).ShouldBeFalse();
+                (await _featureChecker.IsEnabledAsync("BooleanTestFeature1")).ShouldBeFalse();
             }
         }
 
@@ -37,16 +37,16 @@ namespace Volo.Abp.Features
         public async Task GetOrNullAsync()
         {
             //Tenant is unknown
-            (await _featureChecker.GetOrNullAsync("IntegerTestFeature1").ConfigureAwait(false)).ShouldBe("1");
+            (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("1");
 
             using (_currentTenant.Change(TestFeatureStore.Tenant1Id))
             {
-                (await _featureChecker.GetOrNullAsync("IntegerTestFeature1").ConfigureAwait(false)).ShouldBe("1");
+                (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("1");
             }
 
             using (_currentTenant.Change(TestFeatureStore.Tenant2Id))
             {
-                (await _featureChecker.GetOrNullAsync("IntegerTestFeature1").ConfigureAwait(false)).ShouldBe("34");
+                (await _featureChecker.GetOrNullAsync("IntegerTestFeature1")).ShouldBe("34");
             }
         }
     }

@@ -34,7 +34,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Regular.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //UserCount
             await _featureValueRepository.InsertAsync(
@@ -45,7 +45,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Regular.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //ProjectCount
             await _featureValueRepository.InsertAsync(
@@ -56,7 +56,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Regular.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             #endregion
 
@@ -71,7 +71,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Enterprise.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //EmailSupport
             await _featureValueRepository.InsertAsync(
@@ -82,7 +82,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Enterprise.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //UserCount
             await _featureValueRepository.InsertAsync(
@@ -93,7 +93,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Enterprise.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //ProjectCount
             await _featureValueRepository.InsertAsync(
@@ -104,7 +104,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Enterprise.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //BackupCount
             await _featureValueRepository.InsertAsync(
@@ -115,7 +115,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Enterprise.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             #endregion
 
@@ -130,7 +130,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Ultimate.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //EmailSupport
             await _featureValueRepository.InsertAsync(
@@ -141,7 +141,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Ultimate.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //EmailSupport
             await _featureValueRepository.InsertAsync(
@@ -152,7 +152,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Ultimate.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //UserCount
             await _featureValueRepository.InsertAsync(
@@ -163,7 +163,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Ultimate.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //ProjectCount
             await _featureValueRepository.InsertAsync(
@@ -174,7 +174,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Ultimate.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             //BackupCount
             await _featureValueRepository.InsertAsync(
@@ -185,7 +185,7 @@ namespace Volo.Abp.FeatureManagement
                     EditionFeatureValueProvider.ProviderName,
                     TestEditionIds.Ultimate.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             #endregion
         }

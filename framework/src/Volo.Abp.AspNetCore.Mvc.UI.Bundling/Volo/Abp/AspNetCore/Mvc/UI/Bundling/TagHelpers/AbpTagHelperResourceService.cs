@@ -56,7 +56,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
 
             CreateBundle(bundleName, bundleItems);
 
-            var bundleFiles = await GetBundleFilesAsync(bundleName).ConfigureAwait(false);
+            var bundleFiles = await GetBundleFilesAsync(bundleName);
 
             output.Content.Clear();
 

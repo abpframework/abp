@@ -17,7 +17,7 @@ namespace Volo.Abp.IdentityServer.Clients
 
         public virtual async Task<IdentityServer4.Models.Client> FindClientByIdAsync(string clientId)
         {
-            var client = await _clientRepository.FindByCliendIdAsync(clientId).ConfigureAwait(false);
+            var client = await _clientRepository.FindByCliendIdAsync(clientId);
             return _objectMapper.Map<Client, IdentityServer4.Models.Client>(client);
         }
     }

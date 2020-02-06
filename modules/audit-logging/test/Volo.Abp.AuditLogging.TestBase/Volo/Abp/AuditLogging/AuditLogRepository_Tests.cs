@@ -118,11 +118,11 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1)).ConfigureAwait(false);
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2)).ConfigureAwait(false);
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
-            var logs = await AuditLogRepository.GetListAsync().ConfigureAwait(false);
+            var logs = await AuditLogRepository.GetListAsync();
             logs.ShouldNotBeNull();
             logs.ShouldContain(x => x.UserId == userId);
             logs.ShouldContain(x => x.UserId == userId2);
@@ -222,11 +222,11 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1)).ConfigureAwait(false);
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2)).ConfigureAwait(false);
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
-            var logs = await AuditLogRepository.GetCountAsync().ConfigureAwait(false);
+            var logs = await AuditLogRepository.GetCountAsync();
             logs.ShouldBe(2);
         }
 
@@ -324,12 +324,12 @@ namespace Volo.Abp.AuditLogging
                 }
             };
 
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1)).ConfigureAwait(false);
-            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2)).ConfigureAwait(false);
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log1));
+            await AuditLogRepository.InsertAsync(new AuditLog(GuidGenerator, log2));
 
             //Assert
             var date = DateTime.Parse("2020-01-01");
-            var results = await AuditLogRepository.GetAverageExecutionDurationPerDayAsync(date, date).ConfigureAwait(false);
+            var results = await AuditLogRepository.GetAverageExecutionDurationPerDayAsync(date, date);
             results.Count.ShouldBe(1);
             results.Values.First().ShouldBe(50); // (45 + 55) / 2
         }

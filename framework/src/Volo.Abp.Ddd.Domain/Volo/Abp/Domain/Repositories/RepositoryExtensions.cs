@@ -22,7 +22,7 @@ namespace Volo.Abp.Domain.Repositories
             var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity, TKey>;
             if (repo != null)
             {
-                await repo.EnsureCollectionLoadedAsync(entity, propertyExpression, cancellationToken).ConfigureAwait(false);
+                await repo.EnsureCollectionLoadedAsync(entity, propertyExpression, cancellationToken);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Volo.Abp.Domain.Repositories
             var repo = ProxyHelper.UnProxy(repository) as ISupportsExplicitLoading<TEntity, TKey>;
             if (repo != null)
             {
-                await repo.EnsurePropertyLoadedAsync(entity, propertyExpression, cancellationToken).ConfigureAwait(false);
+                await repo.EnsurePropertyLoadedAsync(entity, propertyExpression, cancellationToken);
             }
         }
     }

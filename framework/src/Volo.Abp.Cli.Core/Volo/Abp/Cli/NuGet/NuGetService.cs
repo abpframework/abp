@@ -50,12 +50,12 @@ namespace Volo.Abp.Cli.NuGet
 
             using (var client = new CliHttpClient(setBearerToken: false))
             {
-                var responseMessage = await GetHttpResponseMessageWithRetryAsync(client, url).ConfigureAwait(false);
+                var responseMessage = await GetHttpResponseMessageWithRetryAsync(client, url);
 
                 if (responseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
-                    var commercialNuGetUrl = await GetNuGetUrlForCommercialPackage(packageId).ConfigureAwait(false);
-                    responseMessage = await GetHttpResponseMessageWithRetryAsync(client, commercialNuGetUrl).ConfigureAwait(false);
+                    var commercialNuGetUrl = await GetNuGetUrlForCommercialPackage(packageId);
+                    responseMessage = await GetHttpResponseMessageWithRetryAsync(client, commercialNuGetUrl);
                 }
 
                 if (!responseMessage.IsSuccessStatusCode)
@@ -63,9 +63,9 @@ namespace Volo.Abp.Cli.NuGet
                     throw new Exception($"ERROR: Remote server returns '{responseMessage.StatusCode}'");
                 }
 
-                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage).ConfigureAwait(false);
+                await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(responseMessage);
 
-                var responseContent = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseContent = await responseMessage.Content.ReadAsStringAsync();
 
                 var versions = JsonSerializer
                     .Deserialize<NuGetVersionResultDto>(responseContent)

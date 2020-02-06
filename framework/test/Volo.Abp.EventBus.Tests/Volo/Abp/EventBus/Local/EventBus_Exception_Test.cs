@@ -14,8 +14,8 @@ namespace Volo.Abp.EventBus.Local
 
             var appException = await Assert.ThrowsAsync<Exception>(async () =>
             {
-                await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            });
 
             appException.Message.ShouldBe("This exception is intentionally thrown!");
         }
@@ -31,8 +31,8 @@ namespace Volo.Abp.EventBus.Local
 
             var aggrException = await Assert.ThrowsAsync<AggregateException>(async () =>
             {
-                await LocalEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            }).ConfigureAwait(false);
+                await LocalEventBus.PublishAsync(new MySimpleEventData(1));
+            });
 
             aggrException.InnerExceptions.Count.ShouldBe(2);
             aggrException.InnerExceptions[0].Message.ShouldBe("This exception is intentionally thrown #1!");

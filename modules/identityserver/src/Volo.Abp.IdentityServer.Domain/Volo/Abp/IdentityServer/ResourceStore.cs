@@ -29,26 +29,26 @@ namespace Volo.Abp.IdentityServer
 
         public virtual async Task<IEnumerable<IdentityServer4.Models.IdentityResource>> FindIdentityResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            var resource = await _identityResourceRepository.GetListByScopesAsync(scopeNames.ToArray(), includeDetails: true).ConfigureAwait(false);
+            var resource = await _identityResourceRepository.GetListByScopesAsync(scopeNames.ToArray(), includeDetails: true);
             return _objectMapper.Map<List<IdentityResource>, List<IdentityServer4.Models.IdentityResource>>(resource);
         }
 
         public virtual async Task<IEnumerable<ApiResource>> FindApiResourcesByScopeAsync(IEnumerable<string> scopeNames)
         {
-            var resources = await _apiResourceRepository.GetListByScopesAsync(scopeNames.ToArray(), includeDetails: true).ConfigureAwait(false);
+            var resources = await _apiResourceRepository.GetListByScopesAsync(scopeNames.ToArray(), includeDetails: true);
             return resources.Select(x => _objectMapper.Map<ApiResources.ApiResource, ApiResource>(x));
         }
 
         public virtual async Task<ApiResource> FindApiResourceAsync(string name)
         {
-            var resource = await _apiResourceRepository.FindByNameAsync(name).ConfigureAwait(false);
+            var resource = await _apiResourceRepository.FindByNameAsync(name);
             return _objectMapper.Map<ApiResources.ApiResource, ApiResource>(resource);
         }
 
         public virtual async Task<Resources> GetAllResourcesAsync()
         {
-            var identityResources = await _identityResourceRepository.GetListAsync(includeDetails: true).ConfigureAwait(false);
-            var apiResources = await _apiResourceRepository.GetListAsync(includeDetails: true).ConfigureAwait(false);
+            var identityResources = await _identityResourceRepository.GetListAsync(includeDetails: true);
+            var apiResources = await _apiResourceRepository.GetListAsync(includeDetails: true);
 
             return new Resources(
                 _objectMapper.Map<List<IdentityResource>, IdentityServer4.Models.IdentityResource[]>(identityResources),
