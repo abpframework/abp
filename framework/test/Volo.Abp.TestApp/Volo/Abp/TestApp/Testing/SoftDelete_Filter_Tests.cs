@@ -30,7 +30,7 @@ namespace Volo.Abp.TestApp.Testing
                 var person = PersonRepository.FirstOrDefault(p => p.Name == "John-Deleted");
                 person.ShouldBeNull();
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -38,9 +38,9 @@ namespace Volo.Abp.TestApp.Testing
         {
             await WithUnitOfWorkAsync(async () =>
             {
-                var person = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId).ConfigureAwait(false);
+                var person = await PersonRepository.FindAsync(TestDataBuilder.UserJohnDeletedId);
                 person.ShouldBeNull();
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Volo.Abp.TestApp.Testing
                 people.Count.ShouldBe(1);
                 people.Any(p => p.Name == "Douglas").ShouldBeTrue();
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -92,7 +92,7 @@ namespace Volo.Abp.TestApp.Testing
                 people.Any(p => p.IsDeleted).ShouldBeFalse();
 
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
     }
 }

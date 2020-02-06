@@ -39,10 +39,10 @@ namespace Volo.Abp.IdentityServer
 
         public async Task BuildAsync()
         {
-            await AddClients().ConfigureAwait(false);
-            await AddPersistentGrants().ConfigureAwait(false);
-            await AddApiResources().ConfigureAwait(false);
-            await AddIdentityResources().ConfigureAwait(false);
+            await AddClients();
+            await AddPersistentGrants();
+            await AddApiResources();
+            await AddIdentityResources();
         }
 
         private async Task AddClients()
@@ -56,7 +56,7 @@ namespace Volo.Abp.IdentityServer
 
             client42.AddScope("api1");
 
-            await _clientRepository.InsertAsync(client42).ConfigureAwait(false);
+            await _clientRepository.InsertAsync(client42);
         }
 
         private async Task AddPersistentGrants()
@@ -68,7 +68,7 @@ namespace Volo.Abp.IdentityServer
                 Type = "TestType-38",
                 SubjectId = "TestSubject",
                 Data = "TestData-38"
-            }).ConfigureAwait(false);
+            });
 
             await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
@@ -77,7 +77,7 @@ namespace Volo.Abp.IdentityServer
                 Type = "TestType-37",
                 SubjectId = "TestSubject",
                 Data = "TestData-37"
-            }).ConfigureAwait(false);
+            });
 
             await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
@@ -86,7 +86,7 @@ namespace Volo.Abp.IdentityServer
                 Type = "TestType-36",
                 SubjectId = "TestSubject-X",
                 Data = "TestData-36"
-            }).ConfigureAwait(false);
+            });
 
             await _persistentGrantRepository.InsertAsync(new PersistedGrant(_guidGenerator.Create())
             {
@@ -95,7 +95,7 @@ namespace Volo.Abp.IdentityServer
                 Type = "TestType-35",
                 SubjectId = "TestSubject-X",
                 Data = "TestData-35"
-            }).ConfigureAwait(false);
+            });
         }
 
         private async Task AddApiResources()
@@ -111,7 +111,7 @@ namespace Volo.Abp.IdentityServer
             apiResource.AddScope("Test-ApiResource-ApiScope-Name-1", "Test-ApiResource-ApiScope-DisplayName-1");
             apiResource.AddUserClaim("Test-ApiResource-Claim-Type-1");
 
-            await _apiResourceRepository.InsertAsync(apiResource).ConfigureAwait(false);
+            await _apiResourceRepository.InsertAsync(apiResource);
         }
 
         private async Task AddIdentityResources()
@@ -126,7 +126,7 @@ namespace Volo.Abp.IdentityServer
 
             identityResource.AddUserClaim("Test-Identity-Resource-1-IdentityClaim-Type-1");
 
-            await _identityResourceRepository.InsertAsync(identityResource).ConfigureAwait(false);
+            await _identityResourceRepository.InsertAsync(identityResource);
         }
     }
 }

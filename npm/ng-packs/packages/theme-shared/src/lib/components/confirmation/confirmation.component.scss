@@ -4,19 +4,16 @@
   right: 0;
   bottom: 0;
   left: 0;
-  display: none;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 1060;
-  &.show {
-    display: grid;
-  }
   .confirmation-backdrop {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(#000, 0.7);
     z-index: 1061 !important;
   }
   .confirmation-dialog {
@@ -24,13 +21,12 @@
     flex-direction: column;
     margin: 20px auto;
     padding: 0;
-    border: none;
-    border-radius: 10px;
     width: 450px;
     min-height: 300px;
-    background-color: #fff;
-    box-shadow: 0 0 10px -5px rgba(#000, 0.5);
     z-index: 1062 !important;
+    @media screen and (max-width: 500px) {
+      width: 90vw;
+    }
     .icon-container {
       display: flex;
       align-items: center;
@@ -41,27 +37,8 @@
         width: 100px;
         height: 100px;
         stroke-width: 1;
-        fill: #fff;
         font-size: 80px;
         text-align: center;
-      }
-      &.neutral .icon {
-      }
-      &.info .icon {
-        stroke: #2f96b4;
-        color: #2f96b4;
-      }
-      &.success .icon {
-        stroke: #51a351;
-        color: #51a351;
-      }
-      &.warning .icon {
-        stroke: #f89406;
-        color: #f89406;
-      }
-      &.error .icon {
-        stroke: #bd362f;
-        color: #bd362f;
       }
     }
     .content {
@@ -79,7 +56,6 @@
         display: block;
         margin: 10px auto;
         padding: 20px;
-        color: #777;
         font-size: 16px;
         font-weight: 400;
         text-align: center;
@@ -98,22 +74,8 @@
         padding: 10px 20px;
         border: none;
         border-radius: 6px;
-        color: #777;
         font-size: 14px;
         font-weight: 600;
-        background-color: #eee;
-        &:hover {
-          background-color: darken(#eee, 5);
-        }
-        &-reject {
-        }
-        &-approve {
-          background-color: #2f96b4;
-          color: #fff;
-          &:hover {
-            background-color: darken(#2f96b4, 5);
-          }
-        }
       }
     }
   }

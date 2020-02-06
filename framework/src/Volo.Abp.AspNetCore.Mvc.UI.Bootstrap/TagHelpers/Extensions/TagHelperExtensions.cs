@@ -19,14 +19,14 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.TagHelpers.Extensions
 
             tagHelper.Init(context);
 
-            await tagHelper.ProcessAsync(innerContext, innerOutput).ConfigureAwait(false);
+            await tagHelper.ProcessAsync(innerContext, innerOutput);
 
             return innerOutput;
         }
 
         public static async Task<string> RenderAsync(this TagHelper tagHelper, TagHelperAttributeList attributeList, TagHelperContext context, HtmlEncoder htmlEncoder, string tagName = "div", TagMode tagMode = TagMode.SelfClosing)
         {
-            var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode).ConfigureAwait(false);
+            var innerOutput = await tagHelper.ProcessAndGetOutputAsync(attributeList, context, tagName, tagMode);
 
             return innerOutput.Render(htmlEncoder);
         }

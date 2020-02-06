@@ -9,7 +9,7 @@ namespace Volo.Abp.Emailing.Templates
         public async Task<string> RenderAsync(string template, object model = null)
         {
             var scribanTemplate = Template.Parse(template);
-            return await scribanTemplate.RenderAsync(model).ConfigureAwait(false);
+            return await scribanTemplate.RenderAsync(model);
         }
     }
 }

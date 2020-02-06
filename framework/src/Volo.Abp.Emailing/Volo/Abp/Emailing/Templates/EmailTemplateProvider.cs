@@ -27,12 +27,12 @@ namespace Volo.Abp.Emailing.Templates
 
         public async Task<EmailTemplate> GetAsync(string name)
         {
-            return await GetAsync(name, CultureInfo.CurrentUICulture.Name).ConfigureAwait(false);
+            return await GetAsync(name, CultureInfo.CurrentUICulture.Name);
         }
 
         public async Task<EmailTemplate> GetAsync(string name, string cultureName)
         {
-            return await GetInternalAsync(name, cultureName).ConfigureAwait(false);
+            return await GetInternalAsync(name, cultureName);
         }
 
         protected virtual async Task<EmailTemplate> GetInternalAsync(string name, string cultureName)
@@ -59,11 +59,11 @@ namespace Volo.Abp.Emailing.Templates
             {
                 var emailTemplate = new EmailTemplate(emailTemplateString, emailTemplateDefinition);
 
-                await SetLayoutAsync(emailTemplateDefinition, emailTemplate, cultureName).ConfigureAwait(false);
+                await SetLayoutAsync(emailTemplateDefinition, emailTemplate, cultureName);
 
                 if (emailTemplateDefinition.SingleTemplateFile)
                 {
-                    await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName).ConfigureAwait(false);
+                    await LocalizeAsync(emailTemplateDefinition, emailTemplate, cultureName);
                 }
 
                 return emailTemplate;
@@ -87,7 +87,7 @@ namespace Volo.Abp.Emailing.Templates
                 layout = Options.DefaultLayout;
             }
 
-            var layoutTemplate = await GetInternalAsync(layout, cultureName).ConfigureAwait(false);
+            var layoutTemplate = await GetInternalAsync(layout, cultureName);
 
             emailTemplate.SetLayout(layoutTemplate);
         }

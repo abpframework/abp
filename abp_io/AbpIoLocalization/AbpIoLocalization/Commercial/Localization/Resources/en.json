@@ -26,6 +26,7 @@
     "MyOrganizations": "My organizations",
     "ApiKey": "API key",
     "UserNameNotFound": "There is no user with username {0}",
-    "SuccessfullyAddedToNewsletter": "Thanks you for subscribing to our newsletter!"
+    "SuccessfullyAddedToNewsletter": "Thanks you for subscribing to our newsletter!",
+    "ManageProfile": "Manage your profile"
   }
 }

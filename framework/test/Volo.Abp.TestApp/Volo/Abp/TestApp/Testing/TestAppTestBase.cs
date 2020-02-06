@@ -30,9 +30,9 @@ namespace Volo.Abp.TestApp.Testing
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    await action().ConfigureAwait(false);
+                    await action();
 
-                    await uow.CompleteAsync().ConfigureAwait(false);
+                    await uow.CompleteAsync();
                 }
             }
         }
@@ -50,8 +50,8 @@ namespace Volo.Abp.TestApp.Testing
 
                 using (var uow = uowManager.Begin(options))
                 {
-                    var result = await func().ConfigureAwait(false);
-                    await uow.CompleteAsync().ConfigureAwait(false);
+                    var result = await func();
+                    await uow.CompleteAsync();
                     return result;
                 }
             }

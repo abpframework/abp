@@ -44,7 +44,7 @@ namespace Volo.Abp.IdentityServer.Devices
                         Expiration = data.CreationTime.AddSeconds(data.Lifetime),
                         Data = Serialize(data)
                     }
-                ).ConfigureAwait(false);
+                );
         }
         
         public async Task<DeviceCode> FindByUserCodeAsync(string userCode)
@@ -53,7 +53,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
             var deviceCodes = await DeviceFlowCodesRepository
                 .FindByUserCodeAsync(userCode)
-                .ConfigureAwait(false);
+                ;
 
             if (deviceCodes == null)
             {
@@ -69,7 +69,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
             var deviceCodes = await DeviceFlowCodesRepository
                 .FindByDeviceCodeAsync(deviceCode)
-                .ConfigureAwait(false);
+                ;
             
             if (deviceCodes == null)
             {
@@ -87,7 +87,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
             var deviceCodes = await DeviceFlowCodesRepository
                 .FindByUserCodeAsync(userCode)
-                .ConfigureAwait(false);
+                ;
 
             if (deviceCodes == null)
             {
@@ -99,7 +99,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
             await DeviceFlowCodesRepository
                 .UpdateAsync(deviceCodes, autoSave: true)
-                .ConfigureAwait(false);
+                ;
         }
 
         public async Task RemoveByDeviceCodeAsync(string deviceCode)
@@ -108,7 +108,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
             var deviceCodes = await DeviceFlowCodesRepository
                 .FindByDeviceCodeAsync(deviceCode)
-                .ConfigureAwait(false);
+                ;
 
             if (deviceCodes == null)
             {
@@ -117,7 +117,7 @@ namespace Volo.Abp.IdentityServer.Devices
 
             await DeviceFlowCodesRepository
                 .DeleteAsync(deviceCodes, autoSave: true)
-                .ConfigureAwait(false);
+                ;
         }
 
         private string Serialize([CanBeNull] DeviceCode deviceCode)

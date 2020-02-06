@@ -19,23 +19,23 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task CreateAsync()
         {
-            var tenant = await _tenantManager.CreateAsync("Test").ConfigureAwait(false);
+            var tenant = await _tenantManager.CreateAsync("Test");
             tenant.Name.ShouldBe("Test");
         }
 
         [Fact]
         public async Task Create_Tenant_Name_Can_Not_Duplicate()
         {
-            await Assert.ThrowsAsync<UserFriendlyException>(async () => await _tenantManager.CreateAsync("volosoft").ConfigureAwait(false)).ConfigureAwait(false);
+            await Assert.ThrowsAsync<UserFriendlyException>(async () => await _tenantManager.CreateAsync("volosoft"));
         }
 
         [Fact]
         public async Task ChangeNameAsync()
         {
-            var tenant = await _tenantRepository.FindByNameAsync("volosoft").ConfigureAwait(false);
+            var tenant = await _tenantRepository.FindByNameAsync("volosoft");
             tenant.ShouldNotBeNull();
 
-            await _tenantManager.ChangeNameAsync(tenant, "newVolosoft").ConfigureAwait(false);
+            await _tenantManager.ChangeNameAsync(tenant, "newVolosoft");
 
             tenant.Name.ShouldBe("newVolosoft");
         }
@@ -43,10 +43,10 @@ namespace Volo.Abp.TenantManagement
         [Fact]
         public async Task ChangeName_Tenant_Name_Can_Not_Duplicate()
         {
-            var tenant = await _tenantRepository.FindByNameAsync("acme").ConfigureAwait(false);
+            var tenant = await _tenantRepository.FindByNameAsync("acme");
             tenant.ShouldNotBeNull();
 
-            await Assert.ThrowsAsync<UserFriendlyException>(async () => await _tenantManager.ChangeNameAsync(tenant, "volosoft").ConfigureAwait(false)).ConfigureAwait(false);
+            await Assert.ThrowsAsync<UserFriendlyException>(async () => await _tenantManager.ChangeNameAsync(tenant, "volosoft"));
         }
     }
 }
