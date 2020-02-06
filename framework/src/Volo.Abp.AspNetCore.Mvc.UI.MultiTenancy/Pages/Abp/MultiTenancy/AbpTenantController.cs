@@ -17,7 +17,6 @@ namespace Pages.Abp.MultiTenancy
         }
 
         [HttpGet]
-        [Route("find-tenant/{name}")] //TODO: Remove on v1.0
         [Route("tenants/by-name/{name}")]
         public async Task<FindTenantResultDto> FindTenantByNameAsync(string name)
         {
