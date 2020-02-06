@@ -36,12 +36,12 @@ namespace Volo.Abp.Cli.Commands
 
                 case "install":
                     Logger.LogInformation("Installing ABP Suite...");
-                    await InstallSuiteAsync().ConfigureAwait(false);
+                    await InstallSuiteAsync();
                     break;
 
                 case "update":
                     Logger.LogInformation("Updating ABP Suite...");
-                    await UpdateSuiteAsync().ConfigureAwait(false);
+                    await UpdateSuiteAsync();
                     break;
 
                 case "remove":
@@ -53,7 +53,7 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task InstallSuiteAsync()
         {
-            var nugetIndexUrl = await GetNuGetIndexUrlAsync().ConfigureAwait(false);
+            var nugetIndexUrl = await GetNuGetIndexUrlAsync();
             
             if (nugetIndexUrl == null)
             {
@@ -71,7 +71,7 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task UpdateSuiteAsync()
         {
-            var nugetIndexUrl = await GetNuGetIndexUrlAsync().ConfigureAwait(false);
+            var nugetIndexUrl = await GetNuGetIndexUrlAsync();
 
             if (nugetIndexUrl == null)
             {
@@ -106,7 +106,7 @@ namespace Volo.Abp.Cli.Commands
 
         private async Task<string> GetNuGetIndexUrlAsync()
         {
-            var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync().ConfigureAwait(false);
+            var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
 
             if (apiKeyResult == null || string.IsNullOrEmpty(apiKeyResult.ApiKey))
             {

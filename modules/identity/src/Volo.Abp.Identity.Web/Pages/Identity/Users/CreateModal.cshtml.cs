@@ -28,7 +28,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
         {
             UserInfo = new UserInfoViewModel();
 
-            var roleDtoList = await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto()).ConfigureAwait(false);
+            var roleDtoList = await _identityRoleAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
             Roles = ObjectMapper.Map<IReadOnlyList<IdentityRoleDto>, AssignedRoleViewModel[]>(roleDtoList.Items);
 
@@ -45,7 +45,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             var input = ObjectMapper.Map<UserInfoViewModel, IdentityUserCreateDto>(UserInfo);
             input.RoleNames = Roles.Where(r => r.IsAssigned).Select(r => r.Name).ToArray();
 
-            await _identityUserAppService.CreateAsync(input).ConfigureAwait(false);
+            await _identityUserAppService.CreateAsync(input);
 
             return NoContent();
         }

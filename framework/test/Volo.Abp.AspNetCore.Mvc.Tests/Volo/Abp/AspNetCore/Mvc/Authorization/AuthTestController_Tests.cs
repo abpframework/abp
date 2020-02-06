@@ -29,7 +29,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
         [Fact]
         public async Task Should_Call_Anonymous_Method_Without_Authentication()
         {
-            var result = await GetResponseAsStringAsync("/AuthTest/AnonymousTest").ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync("/AuthTest/AnonymousTest");
             result.ShouldBe("OK");
         }
 
@@ -41,7 +41,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 new Claim(AbpClaimTypes.UserId, AuthTestController.FakeUserId.ToString())
             });
 
-            var result = await GetResponseAsStringAsync("/AuthTest/SimpleAuthorizationTest").ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync("/AuthTest/SimpleAuthorizationTest");
             result.ShouldBe("OK");
         }
 
@@ -54,7 +54,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 new Claim("MyCustomClaimType", "42")
             });
 
-            var result = await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest").ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest");
             result.ShouldBe("OK");
         }
 
@@ -70,7 +70,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
             //TODO: We can get a real exception if we properly configure authentication schemas for this project
             await Assert.ThrowsAsync<InvalidOperationException>(async () =>
                 await GetResponseAsStringAsync("/AuthTest/CustomPolicyTest")
-.ConfigureAwait(false)).ConfigureAwait(false);
+            );
         }
 
         [Fact]
@@ -81,7 +81,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Authorization
                 new Claim(AbpClaimTypes.UserId, AuthTestController.FakeUserId.ToString())
             });
 
-            var result = await GetResponseAsStringAsync("/AuthTest/PermissionTest").ConfigureAwait(false);
+            var result = await GetResponseAsStringAsync("/AuthTest/PermissionTest");
             result.ShouldBe("OK");
         }
     }

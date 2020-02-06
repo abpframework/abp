@@ -32,7 +32,7 @@ namespace Volo.Abp.EventBus
         /// <param name="eventData"></param>
         public async Task HandleEventAsync(TEvent eventData)
         {
-            await Action(eventData).ConfigureAwait(false);
+            await Action(eventData);
         }
     }
 }

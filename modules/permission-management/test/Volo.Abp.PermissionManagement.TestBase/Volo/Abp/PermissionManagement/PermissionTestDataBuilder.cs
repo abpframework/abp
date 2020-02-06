@@ -29,7 +29,7 @@ namespace Volo.Abp.PermissionManagement
                     UserPermissionValueProvider.ProviderName,
                     User1Id.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
 
             await _permissionGrantRepository.InsertAsync(
                 new PermissionGrant(
@@ -38,7 +38,7 @@ namespace Volo.Abp.PermissionManagement
                     UserPermissionValueProvider.ProviderName,
                     User1Id.ToString()
                 )
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

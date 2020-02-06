@@ -1,28 +1,21 @@
-﻿using System;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Volo.Abp;
+using Microsoft.Extensions.Hosting;
 
 namespace AbpConsoleDemo
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            using (var application = AbpApplicationFactory.Create<AppModule>(options =>
-            {
-                options.UseAutofac(); //Autofac integration
-            }))
-            {
-                application.Initialize();
-
-                //Resolve a service and use it
-                var helloWorldService = 
-                    application.ServiceProvider.GetService<HelloWorldService>();
-                helloWorldService.SayHello();
-
-                Console.WriteLine("Press ENTER to stop application...");
-                Console.ReadLine();
-            }
+            await CreateHostBuilder(args).RunConsoleAsync();
         }
+
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddHostedService<AppHostedService>();
+                });
     }
 }

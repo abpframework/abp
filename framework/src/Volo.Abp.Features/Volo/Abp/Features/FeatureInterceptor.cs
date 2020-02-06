@@ -19,12 +19,12 @@ namespace Volo.Abp.Features
         {
             if (AbpCrossCuttingConcerns.IsApplied(invocation.TargetObject, AbpCrossCuttingConcerns.FeatureChecking))
             {
-                await invocation.ProceedAsync().ConfigureAwait(false);
+                await invocation.ProceedAsync();
                 return;
             }
 
-            await CheckFeaturesAsync(invocation).ConfigureAwait(false);
-            await invocation.ProceedAsync().ConfigureAwait(false);
+            await CheckFeaturesAsync(invocation);
+            await invocation.ProceedAsync();
         }
 
         protected virtual async Task CheckFeaturesAsync(IAbpMethodInvocation invocation)
@@ -33,7 +33,7 @@ namespace Volo.Abp.Features
                 new MethodInvocationFeatureCheckerContext(
                     invocation.Method
                 )
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

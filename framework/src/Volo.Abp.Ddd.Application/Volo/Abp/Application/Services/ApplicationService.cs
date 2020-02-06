@@ -145,7 +145,7 @@ namespace Volo.Abp.Application.Services
                 return;
             }
 
-            await AuthorizationService.CheckAsync(policyName).ConfigureAwait(false);
+            await AuthorizationService.CheckAsync(policyName);
         }
     }
 }

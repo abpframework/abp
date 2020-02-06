@@ -17,13 +17,13 @@ namespace Volo.Abp.Account.Web.Pages.Account
 
         public override async Task<IActionResult> OnGetAsync()
         {
-            await SignInManager.SignOutAsync().ConfigureAwait(false);
+            await SignInManager.SignOutAsync();
 
             var logoutId = Request.Query["logoutId"].ToString();
 
             if (!string.IsNullOrEmpty(logoutId))
             {
-                var logoutContext = await Interaction.GetLogoutContextAsync(logoutId).ConfigureAwait(false);
+                var logoutContext = await Interaction.GetLogoutContextAsync(logoutId);
 
                 var postLogoutUri = logoutContext.PostLogoutRedirectUri;
 

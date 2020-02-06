@@ -46,7 +46,7 @@ namespace Volo.Abp.Domain.Repositories
     {
         public virtual async Task<TEntity> GetAsync(TKey id, bool includeDetails = true, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, includeDetails, cancellationToken).ConfigureAwait(false);
+            var entity = await FindAsync(id, includeDetails, cancellationToken);
 
             if (entity == null)
             {
@@ -60,13 +60,13 @@ namespace Volo.Abp.Domain.Repositories
         
         public virtual async Task DeleteAsync(TKey id, bool autoSave = false, CancellationToken cancellationToken = default)
         {
-            var entity = await FindAsync(id, cancellationToken: cancellationToken).ConfigureAwait(false);
+            var entity = await FindAsync(id, cancellationToken: cancellationToken);
             if (entity == null)
             {
                 return;
             }
 
-            await DeleteAsync(entity, autoSave, cancellationToken).ConfigureAwait(false);
+            await DeleteAsync(entity, autoSave, cancellationToken);
         }
     }
 }

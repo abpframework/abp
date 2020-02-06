@@ -52,7 +52,7 @@ namespace Volo.Abp.PermissionManagement
 
         public async Task<PermissionWithGrantedProviders> GetAsync(string permissionName, string providerName, string providerKey)
         {
-            return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey).ConfigureAwait(false);
+            return await GetInternalAsync(PermissionDefinitionManager.Get(permissionName), providerName, providerKey);
         }
 
         public async Task<List<PermissionWithGrantedProviders>> GetAllAsync(string providerName, string providerKey)
@@ -61,7 +61,7 @@ namespace Volo.Abp.PermissionManagement
 
             foreach (var permissionDefinition in PermissionDefinitionManager.GetPermissions())
             {
-                results.Add(await GetInternalAsync(permissionDefinition, providerName, providerKey).ConfigureAwait(false));
+                results.Add(await GetInternalAsync(permissionDefinition, providerName, providerKey));
             }
 
             return results;
@@ -83,7 +83,7 @@ namespace Volo.Abp.PermissionManagement
                 throw new ApplicationException($"The permission named '{permission.Name}' has multitenancy side '{permission.MultiTenancySide}' which is not compatible with the current multitenancy side '{CurrentTenant.GetMultiTenancySide()}'");
             }
 
-            var currentGrantInfo = await GetInternalAsync(permission, providerName, providerKey).ConfigureAwait(false);
+            var currentGrantInfo = await GetInternalAsync(permission, providerName, providerKey);
             if (currentGrantInfo.IsGranted == isGranted)
             {
                 return;
@@ -96,13 +96,13 @@ namespace Volo.Abp.PermissionManagement
                 throw new AbpException("Unknown permission management provider: " + providerName);
             }
 
-            await provider.SetAsync(permissionName, providerKey, isGranted).ConfigureAwait(false);
+            await provider.SetAsync(permissionName, providerKey, isGranted);
         }
 
         public async Task<PermissionGrant> UpdateProviderKeyAsync(PermissionGrant permissionGrant, string providerKey)
         {
             permissionGrant.ProviderKey = providerKey;
-            return await PermissionGrantRepository.UpdateAsync(permissionGrant).ConfigureAwait(false);
+            return await PermissionGrantRepository.UpdateAsync(permissionGrant);
         }
 
         protected virtual async Task<PermissionWithGrantedProviders> GetInternalAsync(PermissionDefinition permission, string providerName, string providerKey)
@@ -121,7 +121,7 @@ namespace Volo.Abp.PermissionManagement
 
             foreach (var provider in ManagementProviders)
             {
-                var providerResult = await provider.CheckAsync(permission.Name, providerName, providerKey).ConfigureAwait(false);
+                var providerResult = await provider.CheckAsync(permission.Name, providerName, providerKey);
                 if (providerResult.IsGranted)
                 {
                     result.IsGranted = true;

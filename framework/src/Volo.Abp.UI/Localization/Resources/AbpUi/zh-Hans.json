@@ -13,6 +13,7 @@
     "DefaultErrorMessage404": "未找到资源!",
     "DefaultErrorMessage404Detail": "未在服务中找到请求的资源!",
     "EntityNotFoundErrorMessage": "实体 {0} 不存在,id = {1}!",
+    "Languages": "语言",
     "Error": "错误",
     "AreYouSure": "你确定吗?",
     "Cancel": "取消",

@@ -119,7 +119,7 @@ namespace Volo.Abp.EventBus.Local
         {
             var exceptions = new List<Exception>();
 
-            await TriggerHandlersAsync(eventType, eventData, exceptions).ConfigureAwait(false);
+            await TriggerHandlersAsync(eventType, eventData, exceptions);
 
             if (exceptions.Any())
             {
