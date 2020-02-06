@@ -39,11 +39,6 @@ namespace Volo.Docs.Documents
             return DocumentAppService.GetNavigationAsync(input);
         }
 
-        public virtual Task<DocumentPartialTemplatesDto> GetPartialTemplatesAsync(GetDocumentPartialTemplatesInput input)
-        {
-            return DocumentAppService.GetPartialTemplatesAsync(input);
-        }
-
         [HttpGet]
         [Route("resource")]
         public Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)

@@ -420,20 +420,6 @@ namespace Volo.Docs.Pages.Documents.Project
 
         private async Task<List<DocumentPartialTemplateContent>> GetDocumentPartialTemplatesAsync()
         {
-
-            var projectPartialTemplates = await _documentAppService.GetPartialTemplatesAsync(
-                new GetDocumentPartialTemplatesInput()
-                {
-                    ProjectId = Project.Id,
-                    LanguageCode = LanguageCode,
-                    Version = Version
-                });
-
-            if (!projectPartialTemplates?.Templates?.Any() ?? true)
-            {
-                return null;
-            }
-
             var partialTemplatesInDocument = await _documentSectionRenderer.GetPartialTemplatesInDocumentAsync(Document.Content);
 
             if (!partialTemplatesInDocument?.Any(t => t.Parameters != null) ?? true)
@@ -449,23 +435,29 @@ namespace Volo.Docs.Pages.Documents.Project
                     {
                         UserPreferences.Add(parameter.Key, parameter.Value);
                     }
+                    else
+                    {
+                        UserPreferences[parameter.Key] = parameter.Value;
+                    }
                 }
             }
 
             var contents = new List<DocumentPartialTemplateContent>();
 
-            foreach (var partialTemplate in projectPartialTemplates.Templates)
+            foreach (var partialTemplate in partialTemplatesInDocument)
             {
+                var content = (await _documentAppService.GetAsync(new GetDocumentInput
+                {
+                    LanguageCode = LanguageCode,
+                    Name = partialTemplate.Path,
+                    ProjectId = Project.Id,
+                    Version = Version
+                })).Content;
+
                 contents.Add(new DocumentPartialTemplateContent
                 {
-                    Name = partialTemplate.Name,
-                    Content = (await _documentAppService.GetAsync(new GetDocumentInput
-                    {
-                        LanguageCode = LanguageCode,
-                        Name = partialTemplate.Path,
-                        ProjectId = Project.Id,
-                        Version = Version
-                    })).Content
+                    Path = partialTemplate.Path,
+                    Content = content
                 });
             }
 

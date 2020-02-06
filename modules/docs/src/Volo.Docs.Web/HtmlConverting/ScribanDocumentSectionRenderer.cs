@@ -180,9 +180,9 @@ namespace Volo.Docs.HtmlConverting
 
                 var json = betweenJsonOpenerAndCloser.Substring(betweenJsonOpenerAndCloser.IndexOf(docs_templates, StringComparison.Ordinal) + docs_templates.Length);
 
-                var templateName = JsonConvert.DeserializeObject<DocumentPartialTemplateWithValuesDto>(json)?.Name;
+                var templatePath = JsonConvert.DeserializeObject<DocumentPartialTemplateWithValuesDto>(json)?.Path;
 
-                var template = templates.FirstOrDefault(t => t.Name == templateName);
+                var template = templates.FirstOrDefault(t => t.Path == templatePath);
 
                 var beforeTemplate = document.Substring(0,
                     document.IndexOf(jsonOpener, StringComparison.Ordinal));

@@ -4,7 +4,7 @@ namespace Volo.Docs.HtmlConverting
 {
     public class DocumentPartialTemplateWithValuesDto
     {
-        public string Name { get; set; }
+        public string Path { get; set; }
 
         public Dictionary<string, string> Parameters { get; set; }
     }

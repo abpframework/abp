@@ -128,33 +128,6 @@ namespace Volo.Docs.Documents
             }
         }
 
-        public async Task<DocumentPartialTemplatesDto> GetPartialTemplatesAsync(GetDocumentPartialTemplatesInput input)
-        {
-            var project = await _projectRepository.GetAsync(input.ProjectId);
-
-            try
-            {
-                if (string.IsNullOrWhiteSpace(project.PartialTemplatesDocumentName))
-                {
-                    return await Task.FromResult<DocumentPartialTemplatesDto>(null);
-                }
-
-                var document = await GetDocumentWithDetailsDtoAsync(
-                    project,
-                    project.PartialTemplatesDocumentName,
-                    input.LanguageCode,
-                    input.Version
-                );
-
-                return JsonConvert.DeserializeObject<DocumentPartialTemplatesDto>(document.Content);
-            }
-            catch (DocumentNotFoundException)
-            {
-                Logger.LogWarning($"Partial template list file ({project.PartialTemplatesDocumentName}) not found.");
-                return new DocumentPartialTemplatesDto();
-            }
-        }
-
         protected virtual async Task<DocumentWithDetailsDto> GetDocumentWithDetailsDtoAsync(
             Project project,
             string documentName,

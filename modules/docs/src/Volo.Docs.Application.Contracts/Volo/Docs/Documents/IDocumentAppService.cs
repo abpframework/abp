@@ -13,8 +13,6 @@ namespace Volo.Docs.Documents
 
         Task<DocumentParametersDto> GetParametersAsync(GetParametersDocumentInput input);
 
-        Task<DocumentPartialTemplatesDto> GetPartialTemplatesAsync(GetDocumentPartialTemplatesInput input);
-
         Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input);
     }
 }

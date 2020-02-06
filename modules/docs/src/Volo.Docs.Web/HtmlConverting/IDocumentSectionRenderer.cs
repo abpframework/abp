@@ -12,11 +12,4 @@ namespace Volo.Docs.HtmlConverting
 
         Task<List<DocumentPartialTemplateWithValuesDto>> GetPartialTemplatesInDocumentAsync(string documentContent);
     }
-
-    public class DocumentPartialTemplateContent
-    {
-        public string Name { get; set; }
-
-        public string Content { get; set; }
-    }
 }
