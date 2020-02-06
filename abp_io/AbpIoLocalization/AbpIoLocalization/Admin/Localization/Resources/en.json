@@ -82,6 +82,7 @@
     "OrganizationDeletionWarningMessage": "Organization will be deleted",
     "This{0}AlreadyExistInThisOrganization": "This {0} already exist in this organization",
     "AreYouSureYouWantToDeleteAllComputers": "Are you sure you want to delete all computers?",
-    "DeleteAll": "Delete all"
+    "DeleteAll": "Delete all",
+    "DoYouWantToCreateNewUser": "Do you want to create new user?" 
   }
 }
