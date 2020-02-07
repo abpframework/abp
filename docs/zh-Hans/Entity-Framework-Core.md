@@ -165,7 +165,7 @@ public class BookRepository : EfCoreRepository<BookStoreDbContext, Book, Guid>, 
 
     public async Task DeleteBooksByType(BookType type)
     {
-        await DbContext.Database.ExecuteSqlCommandAsync(
+        await DbContext.Database.ExecuteSqlRawAsync(
             $"DELETE FROM Books WHERE Type = {(int)type}"
         );
     }
