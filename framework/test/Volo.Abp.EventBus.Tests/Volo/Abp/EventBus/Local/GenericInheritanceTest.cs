@@ -21,7 +21,7 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(new EntityUpdatedEventData<Person>(new Person(42))).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new EntityUpdatedEventData<Person>(new Person(42)));
 
             triggeredEvent.ShouldBe(true);
         }
@@ -39,7 +39,7 @@ namespace Volo.Abp.EventBus.Local
                     return Task.CompletedTask;
                 });
 
-            await LocalEventBus.PublishAsync(new EntityChangedEventData<Student>(new Student(42))).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new EntityChangedEventData<Student>(new Student(42)));
 
             triggeredEvent.ShouldBe(true);
         }

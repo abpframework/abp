@@ -23,6 +23,7 @@
     <abp-table
       *ngIf="[150, 0] as columnWidths"
       [abpLoading]="loading"
+      [abpLoadingDelay]="500"
       [abpTableSort]="{ key: sortKey, order: sortOrder }"
       [colgroupTemplate]="tableColGroup"
       [headerTemplate]="tableHeader"
@@ -80,7 +81,8 @@
                   {{ 'AbpIdentity::Permissions' | abpLocalization }}
                 </button>
                 <button
-                  *abpPermission="'AbpIdentity.Roles.Delete'"
+                  *ngIf="!data.isStatic"
+                  [abpPermission]="'AbpIdentity.Roles.Delete'"
                   ngbDropdownItem
                   (click)="delete(data.id, data.name)"
                 >
@@ -171,22 +173,3 @@
   (abpInit)="init(abpPermissionManagement)"
 >
 </abp-permission-management>
-
-<!-- <abp-permission-management
-  #abpPermissionManagement="abpPermissionManagement"
-  *abpReplaceableTemplate="{
-    inputs: {
-      providerName: { value: 'R' },
-      providerKey: { value: providerKey },
-      visible: { value: visiblePermissions, twoWay: true },
-      hideBadges: { value: true }
-    },
-    outputs: { visibleChange: onVisiblePermissionChange },
-    componentKey: 'PermissionManagement.PermissionManagementComponent'
-  }"
-  [(visible)]="visiblePermissions"
-  [providerKey]="providerKey"
-  [hideBadges]="true"
-  providerName="R"
->
-</abp-permission-management> -->

@@ -129,6 +129,24 @@ abp update [možnosti]
 * `--npm`:  Aktualizuje pouze balíčky NPM.
 * `--nuget`: Aktualizuje pouze balíčky NuGet.
 
+### login
+
+Některé funkce CLI vyžadují přihlášení k platformě abp.io. Chcete-li se přihlásit pomocí svého uživatelského jména, napište
+
+```bash
+abp login <username>
+```
+
+Všimněte si, že nové přihlášení s již aktivní relací ukončí předchozí relaci a vytvoří novou.
+
+### logout
+
+Odhlásí vás odebráním tokenu relace z počítače.
+
+```
+abp logout
+```
+
 ### help
 
 Vypíše základní informace k používání CLI.

@@ -10,9 +10,9 @@ namespace Volo.Abp.EventBus.Distributed
         {
             DistributedEventBus.Subscribe<MySimpleEventData, MySimpleDistributedTransientEventHandler>();
 
-            await DistributedEventBus.PublishAsync(new MySimpleEventData(1)).ConfigureAwait(false);
-            await DistributedEventBus.PublishAsync(new MySimpleEventData(2)).ConfigureAwait(false);
-            await DistributedEventBus.PublishAsync(new MySimpleEventData(3)).ConfigureAwait(false);
+            await DistributedEventBus.PublishAsync(new MySimpleEventData(1));
+            await DistributedEventBus.PublishAsync(new MySimpleEventData(2));
+            await DistributedEventBus.PublishAsync(new MySimpleEventData(3));
 
             Assert.Equal(3, MySimpleDistributedTransientEventHandler.HandleCount);
             Assert.Equal(3, MySimpleDistributedTransientEventHandler.DisposeCount);

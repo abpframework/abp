@@ -26,15 +26,15 @@ namespace Volo.Abp.AspNetCore
 
         protected virtual async Task<T> GetResponseAsObjectAsync<T>(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode).ConfigureAwait(false);
+            var strResponse = await GetResponseAsStringAsync(url, expectedStatusCode);
             return JsonConvert.DeserializeObject<T>(strResponse, SharedJsonSerializerSettings);
         }
 
         protected virtual async Task<string> GetResponseAsStringAsync(string url, HttpStatusCode expectedStatusCode = HttpStatusCode.OK)
         {
-            using (var response = await GetResponseAsync(url, expectedStatusCode).ConfigureAwait(false))
+            using (var response = await GetResponseAsync(url, expectedStatusCode))
             {
-                return await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                return await response.Content.ReadAsStringAsync();
             }
         }
 
@@ -43,7 +43,7 @@ namespace Volo.Abp.AspNetCore
             using (var requestMessage = new HttpRequestMessage(HttpMethod.Get, url))
             {
                 requestMessage.Headers.Add("Accept-Language", CultureInfo.CurrentUICulture.Name);
-                var response = await Client.SendAsync(requestMessage).ConfigureAwait(false);
+                var response = await Client.SendAsync(requestMessage);
                 response.StatusCode.ShouldBe(expectedStatusCode);
                 return response;
             }

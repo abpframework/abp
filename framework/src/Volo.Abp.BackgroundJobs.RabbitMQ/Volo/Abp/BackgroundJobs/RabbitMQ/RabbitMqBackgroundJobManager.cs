@@ -19,8 +19,8 @@ namespace Volo.Abp.BackgroundJobs.RabbitMQ
             BackgroundJobPriority priority = BackgroundJobPriority.Normal,
             TimeSpan? delay = null)
         {
-            var jobQueue = await _jobQueueManager.GetAsync<TArgs>().ConfigureAwait(false);
-            return await jobQueue.EnqueueAsync(args, priority, delay).ConfigureAwait(false);
+            var jobQueue = await _jobQueueManager.GetAsync<TArgs>();
+            return await jobQueue.EnqueueAsync(args, priority, delay);
         }
     }
 }

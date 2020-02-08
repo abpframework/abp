@@ -29,11 +29,11 @@ namespace Volo.Abp.PermissionManagement
                     "Test",
                     "Test"
                 )
-            ).ConfigureAwait(false);
+            );
 
             var permissionValueProviderGrantInfo = await _permissionManagementProvider.CheckAsync("MyPermission1",
                 "Test",
-                "Test").ConfigureAwait(false);
+                "Test");
 
             permissionValueProviderGrantInfo.IsGranted.ShouldBeTrue();
             permissionValueProviderGrantInfo.ProviderKey.ShouldBe("Test");
@@ -44,7 +44,7 @@ namespace Volo.Abp.PermissionManagement
         {
             var permissionValueProviderGrantInfo = await _permissionManagementProvider.CheckAsync("MyPermission1",
                 "TestNotExist",
-                "Test").ConfigureAwait(false);
+                "Test");
 
             permissionValueProviderGrantInfo.IsGranted.ShouldBeFalse();
             permissionValueProviderGrantInfo.ProviderKey.ShouldBeNull();
@@ -61,18 +61,18 @@ namespace Volo.Abp.PermissionManagement
                     "Test",
                     "Test"
                 )
-            ).ConfigureAwait(false);
+            );
             (await _permissionGrantRepository.FindAsync("MyPermission1",
                 "Test",
-                "Test").ConfigureAwait(false)).ShouldNotBeNull();
+                "Test")).ShouldNotBeNull();
 
             await _permissionManagementProvider.SetAsync("MyPermission1",
                 "Test",
-                false).ConfigureAwait(false);
+                false);
 
             (await _permissionGrantRepository.FindAsync("MyPermission1",
                 "Test",
-                "Test").ConfigureAwait(false)).ShouldBeNull();
+                "Test")).ShouldBeNull();
         }
 
     }

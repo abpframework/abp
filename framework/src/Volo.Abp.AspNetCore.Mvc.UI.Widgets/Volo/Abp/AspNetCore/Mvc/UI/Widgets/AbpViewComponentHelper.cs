@@ -33,10 +33,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             var widget = Options.Widgets.Find(name);
             if (widget == null)
             {
-                return await DefaultViewComponentHelper.InvokeAsync(name, arguments).ConfigureAwait(false);
+                return await DefaultViewComponentHelper.InvokeAsync(name, arguments);
             }
 
-            return await InvokeWidgetAsync(arguments, widget).ConfigureAwait(false);
+            return await InvokeWidgetAsync(arguments, widget);
         }
 
         public virtual async Task<IHtmlContent> InvokeAsync(Type componentType, object arguments)
@@ -44,10 +44,10 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             var widget = Options.Widgets.Find(componentType);
             if (widget == null)
             {
-                return await DefaultViewComponentHelper.InvokeAsync(componentType, arguments).ConfigureAwait(false);
+                return await DefaultViewComponentHelper.InvokeAsync(componentType, arguments);
             }
 
-            return await InvokeWidgetAsync(arguments, widget).ConfigureAwait(false);
+            return await InvokeWidgetAsync(arguments, widget);
         }
 
         public virtual void Contextualize(ViewContext viewContext)
@@ -68,7 +68,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Widgets
             
             return new HtmlContentBuilder()
                 .AppendHtml($"<div {wrapperAttributesBuilder}>")
-                .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments).ConfigureAwait(false))
+                .AppendHtml(await DefaultViewComponentHelper.InvokeAsync(widget.ViewComponentType, arguments))
                 .AppendHtml("</div>");
         }
     }

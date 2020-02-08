@@ -329,6 +329,8 @@ body {
         }
 
         article.docs-body {
+            word-break: break-word;
+
             h1 {
                 padding-top: 1rem;
                 font-size: 2.25rem;

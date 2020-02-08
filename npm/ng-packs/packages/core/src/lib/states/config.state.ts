@@ -249,7 +249,7 @@ export class ConfigState {
       if (index < 0) return;
 
       const parent = flattedRoutes[index];
-      if (parent.url.replace('/', '')) {
+      if ((parent.url || '').replace('/', '')) {
         route.url = `${parent.url}/${route.path}`;
       } else {
         route.url = `/${route.path}`;

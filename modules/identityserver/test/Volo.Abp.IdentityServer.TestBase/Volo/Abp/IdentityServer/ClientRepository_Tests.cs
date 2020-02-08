@@ -21,13 +21,13 @@ namespace Volo.Abp.IdentityServer
         [Fact]
         public async Task FindByCliendIdAsync()
         {
-            (await clientRepository.FindByCliendIdAsync("ClientId2").ConfigureAwait(false)).ShouldNotBeNull();
+            (await clientRepository.FindByCliendIdAsync("ClientId2")).ShouldNotBeNull();
         }
 
         [Fact]
         public async Task GetAllDistinctAllowedCorsOriginsAsync()
         {
-            var origins = await clientRepository.GetAllDistinctAllowedCorsOriginsAsync().ConfigureAwait(false);
+            var origins = await clientRepository.GetAllDistinctAllowedCorsOriginsAsync();
             origins.Any().ShouldBeTrue();
         }
     }

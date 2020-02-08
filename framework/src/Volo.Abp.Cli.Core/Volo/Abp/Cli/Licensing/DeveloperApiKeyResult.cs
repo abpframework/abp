@@ -8,6 +8,7 @@ namespace Volo.Abp.Cli.Licensing
         public string OrganizationName { get; set; }
         public string ApiKey { get; set; }
         public DateTime? LicenseEndTime { get; set; }
+        public bool CanDownloadSourceCode { get; set; }
         public string LicenseCode { get; set; }
     }
 }

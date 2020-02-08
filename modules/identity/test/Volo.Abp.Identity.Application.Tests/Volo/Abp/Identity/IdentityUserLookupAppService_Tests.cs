@@ -24,32 +24,32 @@ namespace Volo.Abp.Identity
         [Fact]
         public async Task FindByIdAsync()
         {
-            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
+            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
-            (await _identityUserLookupAppService.FindByIdAsync(user.Id).ConfigureAwait(false)).UserName.ShouldBe(user.UserName);
+            (await _identityUserLookupAppService.FindByIdAsync(user.Id)).UserName.ShouldBe(user.UserName);
         }
 
         [Fact]
         public async Task FindById_NotExist_Should_Return_Null()
         {
-            var user = await _identityUserLookupAppService.FindByIdAsync(Guid.NewGuid()).ConfigureAwait(false);
+            var user = await _identityUserLookupAppService.FindByIdAsync(Guid.NewGuid());
             user.ShouldBeNull();
         }
 
         [Fact]
         public async Task FindByUserNameAsync()
         {
-            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
+            var user = await _identityUserRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
             user.ShouldNotBeNull();
 
-            (await _identityUserLookupAppService.FindByUserNameAsync(user.UserName).ConfigureAwait(false)).UserName.ShouldBe(user.UserName);
+            (await _identityUserLookupAppService.FindByUserNameAsync(user.UserName)).UserName.ShouldBe(user.UserName);
         }
 
         [Fact]
         public async Task FindByUserName_NotExist_Should_Return_Null()
         {
-            var user = await _identityUserLookupAppService.FindByUserNameAsync(Guid.NewGuid().ToString()).ConfigureAwait(false);
+            var user = await _identityUserLookupAppService.FindByUserNameAsync(Guid.NewGuid().ToString());
             user.ShouldBeNull();
         }
     }

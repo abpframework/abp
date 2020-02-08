@@ -25,7 +25,7 @@ namespace Volo.Abp.IdentityServer.Clients
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(x => x.ClientId == clientId, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<Client>> GetListAsync(string sorting, int skipCount, int maxResultCount, bool includeDetails = false,
@@ -34,7 +34,7 @@ namespace Volo.Abp.IdentityServer.Clients
             return await DbSet
                 .IncludeDetails(includeDetails).OrderBy(sorting ?? nameof(Client.ClientName) + " desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<string>> GetAllDistinctAllowedCorsOriginsAsync(CancellationToken cancellationToken = default)
@@ -42,12 +42,12 @@ namespace Volo.Abp.IdentityServer.Clients
             return await DbContext.ClientCorsOrigins
                 .Select(x => x.Origin)
                 .Distinct()
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<bool> CheckClientIdExistAsync(string clientId, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return await DbSet.AnyAsync(c => c.Id != expectedId && c.ClientId == clientId, cancellationToken: cancellationToken);
         }
 
         public override IQueryable<Client> WithDetails()

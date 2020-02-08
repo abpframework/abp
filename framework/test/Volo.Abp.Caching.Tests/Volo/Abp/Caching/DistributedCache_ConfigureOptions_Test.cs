@@ -26,7 +26,7 @@ namespace Volo.Abp.Caching
             var cacheKey = Guid.NewGuid().ToString();
 
             //Get (not exists yet)
-            var cacheItem = await personCache.GetAsync(cacheKey).ConfigureAwait(false);
+            var cacheItem = await personCache.GetAsync(cacheKey);
             cacheItem.ShouldBeNull();
 
             GetDefaultCachingOptions(personCache).SlidingExpiration.ShouldBe(TimeSpan.FromMinutes(20));

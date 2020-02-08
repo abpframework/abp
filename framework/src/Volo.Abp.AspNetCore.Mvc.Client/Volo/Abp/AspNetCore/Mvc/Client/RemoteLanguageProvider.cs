@@ -16,7 +16,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Client
 
         public async Task<IReadOnlyList<LanguageInfo>> GetLanguagesAsync()
         {
-            var configuration = await ConfigurationClient.GetAsync().ConfigureAwait(false);
+            var configuration = await ConfigurationClient.GetAsync();
             return configuration.Localization.Languages;
         }
     }

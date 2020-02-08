@@ -421,7 +421,8 @@ $(function () {
 Open the `en.json` in the `Acme.BookStore.Domain.Shared` project and add the following line:
 
 ````json
-"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?" 
+"BookDeletionConfirmationMessage": "Are you sure to delete the book {0}?",
+"SuccessfullyDeleted": "Successfully deleted"
 ````
 
 Run the application and try to delete a book.
