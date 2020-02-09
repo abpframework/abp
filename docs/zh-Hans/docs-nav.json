@@ -272,13 +272,16 @@
                   "path": "Entity-Framework-Core-MySQL.md"
                 },
                 {
-                  "text": "切换到PostgreSQL"
+                  "text": "切换到PostgreSQL",
+                  "path": "Entity-Framework-Core-PostgreSQL.md"
                 },
                 {
-                  "text": "切换到SQLite"
+                  "text": "切换到SQLite",
+                  "path": "Entity-Framework-Core-SQLite.md"
                 },
                 {
-                  "text": "切换到其他DBMS"
+                  "text": "切换到其他DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md"
                 }
               ]
             },
