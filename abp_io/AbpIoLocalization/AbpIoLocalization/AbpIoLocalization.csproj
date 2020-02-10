@@ -13,4 +13,8 @@
     <Content Remove="**\Localization\Resources\*.json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Commercial\Localization\Resources\sl.json" />
+  </ItemGroup>
+
 </Project>

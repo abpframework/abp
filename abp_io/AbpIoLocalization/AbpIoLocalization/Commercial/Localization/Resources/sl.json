@@ -1,0 +1,33 @@
+﻿{
+  "culture": "sl",
+  "texts": {
+    "OrganizationManagement": "Upravljanje organizacije",
+    "OrganizationList": "Seznam organizacij",
+    "Volo.AbpIo.Commercial:010003": "Niste lastnik te organizacije!",
+    "OrganizationNotFoundMessage": "Nobene organizacije ni bilo mogoče najti!",
+    "DeveloperCount": "Število razvijalcev",
+    "Owners": "Lastniki",
+    "AddMember": "Dodaj člana",
+    "AddOwner": "Dodajte lastnika",
+    "AddDeveloper": "Dodaj razvijalca",
+    "UserName": "Uporabniško ime",
+    "Name": "Ime",
+    "EmailAddress": "Email naslov",
+    "Developers": "Razvijalci",
+    "LicenseType": "Vrsta licence",
+    "Manage": "Upravljajte",
+    "StartDate": "Začetni datum",
+    "EndDate": "Končni datum",
+    "Modules": "Moduli",
+    "LicenseExtendMessage": "Končni datum veljavnosti licence je razširjen na {0}",
+    "LicenseUpgradeMessage": "Vaša licenca je nadgrajena na {0}",
+    "LicenseAddDeveloperMessage": "{0} razvijalci dodali v vašo licenco",
+    "Volo.AbpIo.Commercial:010004": "Navedenega uporabnika ni mogoče najti! Uporabnik se mora že registrirati.",
+    "MyOrganizations": "Moje organizacije",
+    "ApiKey": "Ključ API-ja",
+    "UserNameNotFound": "Uporabnika z uporabniškim imenom ni {0}",
+    "SuccessfullyAddedToNewsletter": "Hvala, ker ste se naročili na naše novice!",
+    "ManageProfile": "Upravljajte svoj profil",
+    "EmailNotValid": "E-poštni naslov ni veljaven!"
+  }
+}
