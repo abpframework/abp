@@ -53,6 +53,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "选项",
+          "path": "Options.md"
+        },
+        {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
           "items": [
