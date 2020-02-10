@@ -18,6 +18,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bundling\Volo.Abp.AspNetCore.Mvc.UI.Bundling.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap\Volo.Abp.AspNetCore.Mvc.UI.Bootstrap.csproj" />
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Packages\Volo.Abp.AspNetCore.Mvc.UI.Packages.csproj" />
+    <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared\Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared.csproj" />
     <ProjectReference Include="..\Volo.Docs.HttpApi\Volo.Docs.HttpApi.csproj" />
     <PackageReference Include="Markdig.Signed" Version="0.18.0" />
     <PackageReference Include="Scriban" Version="2.1.1" />

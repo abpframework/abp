@@ -1,0 +1,11 @@
+﻿@using Volo.Docs.Pages.Documents.Shared.DocumentNotFoundComponent
+@model DocumentNotFoundPageModel
+@{
+}
+
+<h1>"@Model.DocumentName" not found in "@Model.ProjectName" documents, with "@Model.Version" version and "@Model.LanguageCode" language</h1>
+<br/>
+<a href="@(Model.DocumentsUrlPrefix + Model.LanguageCode + "/" +Model.ProjectName + "/" + Model.Version)">
+    click here to return.
+</a>
+
