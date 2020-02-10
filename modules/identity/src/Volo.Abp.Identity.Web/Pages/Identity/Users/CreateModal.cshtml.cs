@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Volo.Abp.Auditing;
 using Volo.Abp.Application.Dtos;
 
 namespace Volo.Abp.Identity.Web.Pages.Identity.Users
@@ -65,6 +66,7 @@ namespace Volo.Abp.Identity.Web.Pages.Identity.Users
             [Required]
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             [Required]
