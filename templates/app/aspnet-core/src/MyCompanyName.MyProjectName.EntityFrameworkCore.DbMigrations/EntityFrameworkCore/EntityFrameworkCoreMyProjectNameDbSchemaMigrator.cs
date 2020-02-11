@@ -8,15 +8,12 @@ using Volo.Abp.DependencyInjection;
 namespace MyCompanyName.MyProjectName.EntityFrameworkCore
 {
     [Dependency(ReplaceServices = true)]
-    public class EntityFrameworkCoreMyProjectNameDbSchemaMigrator 
+    public class EntityFrameworkCoreMyProjectNameDbSchemaMigrator
         : IMyProjectNameDbSchemaMigrator, ITransientDependency
     {
-        private readonly MyProjectNameMigrationsDbContext _dbContext;
         private readonly IServiceProvider _serviceProvider;
 
-        public EntityFrameworkCoreMyProjectNameDbSchemaMigrator(
-            IServiceProvider serviceProvider
-            )
+        public EntityFrameworkCoreMyProjectNameDbSchemaMigrator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

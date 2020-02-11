@@ -43,12 +43,12 @@ namespace MyCompanyName.MyProjectName.Data
             {
                 using (_currentTenant.Change(tenant.Id))
                 {
-
                     await MigrateTenantDatabasesAsync(tenant);
                 }
             }
             Logger.LogInformation("Successfully completed database migrations.");
         }
+
         private async Task MigrateHostDatabaseAsync()
         {
             Logger.LogInformation("Migrating host database schema...");
@@ -59,6 +59,7 @@ namespace MyCompanyName.MyProjectName.Data
 
             Logger.LogInformation("Successfully completed host database migrations.");
         }
+
         private async Task MigrateTenantDatabasesAsync(Tenant tenant)
         {
             Logger.LogInformation($"Migrating {tenant.Name} database schema...");
@@ -66,6 +67,7 @@ namespace MyCompanyName.MyProjectName.Data
 
             Logger.LogInformation($"Executing {tenant.Name} database seed...");
             await _dataSeeder.SeedAsync(tenant.Id);
+
             Logger.LogInformation($"Successfully completed {tenant.Name} database migrations.");
         }
     }
