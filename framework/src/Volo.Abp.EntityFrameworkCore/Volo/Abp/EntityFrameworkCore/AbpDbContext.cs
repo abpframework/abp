@@ -16,6 +16,7 @@ using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Entities.Events;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore.EntityHistory;
 using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.EntityFrameworkCore.ValueConverters;
@@ -23,6 +24,7 @@ using Volo.Abp.Guids;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.Reflection;
 using Volo.Abp.Timing;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.EntityFrameworkCore
 {
@@ -48,6 +50,7 @@ namespace Volo.Abp.EntityFrameworkCore
         public IEntityHistoryHelper EntityHistoryHelper { get; set; }
 
         public IAuditingManager AuditingManager { get; set; }
+        public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
         public IClock Clock { get; set; }
 
@@ -102,7 +105,7 @@ namespace Volo.Abp.EntityFrameworkCore
                     .Invoke(this, new object[] { modelBuilder, entityType });
             }
         }
-        
+
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
         {
             try
@@ -196,10 +199,37 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
+            if (IsHardDeleteEntity(entry))
+            {
+                changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+                return;
+            }
             CancelDeletionForSoftDelete(entry);
             UpdateConcurrencyStamp(entry);
             SetDeletionAuditProperties(entry);
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
+        }
+
+        protected virtual bool IsHardDeleteEntity(EntityEntry entry)
+        {
+            if (UnitOfWorkManager?.Current?.Items == null)
+            {
+                return false;
+            }
+
+            if (!UnitOfWorkManager.Current.Items.ContainsKey(UnitOfWorkExtensionDataTypes.HardDelete))
+            {
+                return false;
+            }
+
+            var hardDeleteItems = UnitOfWorkManager.Current.Items[UnitOfWorkExtensionDataTypes.HardDelete];
+            if (!(hardDeleteItems is HashSet<string> objects))
+            {
+                return false;
+            }
+            string hardDeleteKey = EntityHelper.GetHardDeleteKey(entry.Entity, CurrentTenantId?.ToString());
+
+            return objects.Contains(hardDeleteKey);
         }
 
         protected virtual void AddDomainEvents(EntityChangeReport changeReport, object entityAsObj)
@@ -382,7 +412,7 @@ namespace Volo.Abp.EntityFrameworkCore
                 return;
             }
 
-            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>) x).Id);
+            var idPropertyBuilder = modelBuilder.Entity<TEntity>().Property(x => ((IEntity<Guid>)x).Id);
             if (idPropertyBuilder.Metadata.PropertyInfo.IsDefined(typeof(DatabaseGeneratedAttribute), true))
             {
                 return;

@@ -111,7 +111,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await ApplyAbpConceptsForDeletedEntityAsync(entity);
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
 
-            if (entity is ISoftDelete softDeleteEntity)
+            if (entity is ISoftDelete softDeleteEntity && !IsHardDeleteEntity(entity))
             {
                 softDeleteEntity.IsDeleted = true;
                 var result = await Collection.ReplaceOneAsync(
@@ -174,6 +174,27 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             return ApplyDataFilters(
                 Collection.AsQueryable()
             );
+        }
+        protected virtual bool IsHardDeleteEntity(TEntity entry)
+        {
+            if (UnitOfWorkManager?.Current?.Items == null)
+            {
+                return false;
+            }
+
+            if (!UnitOfWorkManager.Current.Items.ContainsKey(UnitOfWorkExtensionDataTypes.HardDelete))
+            {
+                return false;
+            }
+
+            var hardDeleteItems = UnitOfWorkManager.Current.Items[UnitOfWorkExtensionDataTypes.HardDelete];
+            if (!(hardDeleteItems is HashSet<string> objects))
+            {
+                return false;
+            }
+            string hardDeleteKey = EntityHelper.GetHardDeleteKey(entry, CurrentTenant?.Id.ToString());
+
+            return objects.Contains(hardDeleteKey);
         }
 
         protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
