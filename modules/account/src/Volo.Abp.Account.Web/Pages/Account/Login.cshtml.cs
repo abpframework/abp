@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
+using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
@@ -254,6 +255,7 @@ namespace Volo.Abp.Account.Web.Pages.Account
             [Required]
             [StringLength(IdentityUserConsts.MaxPasswordLength)]
             [DataType(DataType.Password)]
+            [DisableAuditing]
             public string Password { get; set; }
 
             public bool RememberMe { get; set; }
