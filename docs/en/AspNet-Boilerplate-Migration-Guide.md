@@ -73,7 +73,7 @@ Most of your domain layer code will remain same, while you need to perform some 
 
 ### Aggregate Roots & Entities
 
-ABP Framework and the ASP.NET Boilerplate both have the `IEntity` and `IEntity<T>` interfaces and `Entity` and `Entity<T>` base classes to define entities but they have some differences.
+The ABP Framework and the ASP.NET Boilerplate both have the `IEntity` and `IEntity<T>` interfaces and `Entity` and `Entity<T>` base classes to define entities but they have some differences.
 
 If you have an entity in the ASP.NET Boilerplate application like that:
 
@@ -122,10 +122,131 @@ We suggest & use the GUID as the PK type for all the ABP Framework modules. Howe
 
 The challenging part will be the primary keys of the ASP.NET Boilerplate related entities, like Users, Roles, Tenants, Settings... etc. Our suggestion is to copy data from existing database to the new database tables using a tool or in a manual way (be careful about the foreign key values).
 
+#### Documentation
+
+See the documentation for details on the entities:
+
+* [ASP.NET Boilerplate - Entity documentation](https://aspnetboilerplate.com/Pages/Documents/Entities)
+* [ABP Framework - Entity documentation](https://docs.abp.io/en/abp/latest/Entities)
+
 ### Repositories
+
+> ABP Framework creates default repositories (`IRepository<T>`) **only for the aggregate roots**. It doesn't create for other types derived from the `Entity`. See the "Aggregate Root" section above for more information.
+
+The ABP Framework and the ASP.NET Boilerplate both have the default generic repository system, but has some differences.
+
+#### Injecting the Repositories
+
+In the ASP.NET Boilerplate, there are two default repository interfaces you can directly inject and use:
+
+* `IRepository<TEntity>` (e.g. `IRepository<Person>`) is used for entities with `int` primary key (PK) which is the default PK type.
+* `IRepository<TEntity, TKey>` (e.g. `IRepository<Person, Guid>`) is used for entities with other types of PKs.
+
+ABP Framework doesn't have a default PK type, so you need to **explicitly declare the PK type** of your entity, like `IRepository<Person, int>` or `IRepository<Person, Guid>`.
+
+ABP Framework also has the `IRepository<TEntity>` (without PK), but it is mostly used when your entity has a composite PK (because this repository has no methods work with the `Id` property). See [the documentation](https://docs.abp.io/en/abp/latest/Entities#entities-with-composite-keys) to learn more about the **composite PKs**.
+
+#### Restricted Repositories
+
+ABP Framework additionally provides a few repository interfaces:
+
+* `IBasicRepository<TEntity, TKey>` has the same methods with the `IRepository` except it doesn't have `IQueryable` support. It can be useful if you don't want to expose complex querying code to the application layer. In this case, you typically want to create custom repositories to encapsulate the querying logic. It is also useful for database providers those don't support `IQueryable`.
+* `IReadOnlyRepository<TEntity,TKey>` has the methods get data from the database, but doesn't contain any method change the database.
+* `IReadOnlyBasicRepository<TEntity, TKey>` is similar to the read only repository but also doesn't support `IQueryable`.
+
+All the interfaces also have versions without `TKey` (like ``IReadOnlyRepository<TEntity>`) those can be used for composite PKs just like explained above.
+
+#### GetAll() vs IQueryable
+
+ASP.NET Boilerplate's repository has a `GetAll()` method that is used to obtain an `IQueryable` object to execute LINQ on it. An example application service calls the `GetAll()` method:
+
+````csharp
+public class PersonAppService : ApplicationService, IPersonAppService
+{
+    private readonly IRepository<Person, Guid> _personRepository;
+
+    public PersonAppService(IRepository<Person, Guid> personRepository)
+    {
+        _personRepository = personRepository;
+    }
+
+    public async Task DoIt()
+    {
+        var people = await _personRepository
+            .GetAll() //GetAll() returns IQueryable
+            .Where(p => p.BirthYear > 2000) //Use LINQ extension methods
+            .ToListAsync();
+    }
+}
+````
+
+ABP Framework's repository doesn't have this method. Instead, it implements the `IQueryable` itself. So, you can directly use LINQ on the repository:
+
+````csharp
+public class PersonAppService : ApplicationService, IPersonAppService
+{
+    private readonly IRepository<Person, Guid> _personRepository;
+
+    public PersonAppService(IRepository<Person, Guid> personRepository)
+    {
+        _personRepository = personRepository;
+    }
+
+    public async Task DoIt()
+    {
+        var people = await _personRepository
+            .Where(p => p.BirthYear > 2000) //Use LINQ extension methods
+            .ToListAsync();
+    }
+}
+````
+
+> Note that in order to use the async LINQ extension methods (like `ToListAsync` here), you may need to depend on the database provider (like EF Core) since these methods are defined in the database provider package, they are not standard LINQ methods.
+
+#### FirstOrDefault(predicate), Single()... Methods
+
+ABP Framework repository has not such methods get predicate (expression) since the repository itself is `IQueryable` and all these methods are already standard LINQ extension methods those can be directly used.
+
+However, it provides the following methods those can be used to query a single entity by its Id:
+
+* `FindAsync(id)` returns the entity or null if not found.
+* `GetAsync(id)` method returns the entity or throws an `EntityNotFoundException` (which causes HTTP 404 status code) if not found.
+
+#### Sync vs Async 
+
+ABP Framework repository has no sync methods (like `Insert`). All the methods are async (like `InsertAsync`). So, if your application has sync repository method usages, convert them to async versions. 
+
+In general, ABP Framework forces you to completely use async everywhere, because mixing async & sync methods is not a recommended approach.
+
+#### Documentation
+
+See the documentation for details on the repositories:
+
+* [ASP.NET Boilerplate - Repository documentation](https://aspnetboilerplate.com/Pages/Documents/Repositories)
+* [ABP Framework - Repository documentation](https://docs.abp.io/en/abp/latest/Repositories)
+
+### Domain Services
+
+Your domain service logic mostly remains same on the migration. ABP Framework also defines the base `DomainService` class and the `IDomainService` interface just works like the ASP.NET Boilerplate.
+
+## The Application Layer
+
+TODO
+
+## The Infrastructure Layer
+
+### IAbpSession vs ICurrentUser and ICurrentTenant
+
+TODO
+
+### Unit of Work
 
 TODO
 
 ## Missing Features
 
-TODO: Notification... etc.
+The following features are not present for the ABP Framework. Here, a list of major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
+
+* [Multi-Lingual Entities](https://aspnetboilerplate.com/Pages/Documents/Multi-Lingual-Entities) ([#1754](https://github.com/abpframework/abp/issues/1754))
+
+Most of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework by implementing these yourself.
