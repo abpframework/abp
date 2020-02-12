@@ -39,13 +39,20 @@ namespace MyCompanyName.MyProjectName.Data
 
             await MigrateHostDatabaseAsync();
 
-            foreach (var tenant in await _tenantRepository.GetListAsync())
+            var i = 0;
+            var tenants = await _tenantRepository.GetListAsync();
+            foreach (var tenant in tenants)
             {
+                i++;
+
                 using (_currentTenant.Change(tenant.Id))
                 {
+                    Logger.LogInformation($"Migrating {tenant.Name} database schema... ({i} of {tenants.Count})");
                     await MigrateTenantDatabasesAsync(tenant);
+                    Logger.LogInformation($"Successfully completed {tenant.Name} database migrations.");
                 }
             }
+
             Logger.LogInformation("Successfully completed database migrations.");
         }
 
@@ -62,13 +69,11 @@ namespace MyCompanyName.MyProjectName.Data
 
         private async Task MigrateTenantDatabasesAsync(Tenant tenant)
         {
-            Logger.LogInformation($"Migrating {tenant.Name} database schema...");
+            Logger.LogInformation($"Migrating schema for {tenant.Name} database...");
             await _dbSchemaMigrator.MigrateAsync();
 
-            Logger.LogInformation($"Executing {tenant.Name} database seed...");
+            Logger.LogInformation($"Executing {tenant.Name} tenant database seed...");
             await _dataSeeder.SeedAsync(tenant.Id);
-
-            Logger.LogInformation($"Successfully completed {tenant.Name} database migrations.");
         }
     }
 }
