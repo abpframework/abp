@@ -4,7 +4,8 @@ import program from 'commander';
 
 program
   .option(
-    "-v, --nextVersion <version>', 'next semantic version. Available versions: ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease', 'or type a custom version']",
+    '-v, --nextVersion <version>',
+    'next semantic version. Available versions: ["major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease", "or type a custom version"]',
   )
   .option('-p, --preview', 'publish with preview tag');
 
