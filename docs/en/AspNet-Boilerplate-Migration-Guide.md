@@ -231,15 +231,79 @@ Your domain service logic mostly remains same on the migration. ABP Framework al
 
 ## The Application Layer
 
-TODO
+Your application service logic remains similar on the migration. ABP Framework also defines the base `ApplicationService` class and the `IApplicationService` interface just works like the ASP.NET Boilerplate, but there are some differences in details.
+
+### Declarative Authorization
+
+ASP.NET Boilerplate has `AbpAuthorize` and `AbpMvcAuthorize` attributes for declarative authorization. Example usage:
+
+````csharp
+[AbpAuthorize("MyUserDeletionPermissionName")]
+public async Task DeleteUserAsync(...)
+{
+    ...
+}
+````
+
+ABP Framework doesn't has such a custom attribute. It uses the standard `Authorize` attribute in all layers.
+
+````csharp
+[Authorize("MyUserDeletionPermissionName")]
+public async Task DeleteUserAsync(...)
+{
+    ...
+}
+````
+
+This is possible with the better integration to the Microsoft Authorization Extensions libraries. See the Authorization section below for more information about the authorization system.
+
+### CrudAppService and AsyncCrudAppService Classes
+
+ASP.NET Boilerplate has `CrudAppService` (with sync service methods) and `AsyncCrudAppService` (with async service methods) classes.
+
+ABP Framework only has the `CrudAppService` which actually has only the async methods (instead of sync methods).
+
+ABP Framework's `CrudAppService` method signatures are slightly different than the old one. For example, old update method signature was ` Task<TEntityDto> UpdateAsync(TUpdateInput input) ` while the new one is ` Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input) `. The main difference is that it gets the Id of the updating entity as a separate parameter instead of including in the input DTO.
+
+### Data Transfer Objects (DTOs)
+
+There are similar base DTO classes (like `EntityDto`) in the ABP Framework too. So, you can find the corresponding DTO base class if you need.
+
+#### Validation
+
+You can continue to use the data annotation attributes to validate your DTOs just like in the ASP.NET Boilerplate.
+
+ABP Framework doesn't include the ` ICustomValidate ` that does exists in the ASP.NET Boilerplate. Instead, you should implement the standard `IValidatableObject` interface for your custom validation logic.
 
 ## The Infrastructure Layer
 
 ### IAbpSession vs ICurrentUser and ICurrentTenant
 
-TODO
+ASP.NET Boilerplate's `IAbpSession` service is used to obtain the current user and tenant information, like ` UserId ` and `TenantId`.
+
+ABP Framework doesn't have the same service. Instead, use `ICurrentUser` and `ICurrentTenant` services. These services are defined as base properties in some common classes (like `ApplicationService` and `AbpController`), so you generally don't need to manually inject them. They also have much properties compared to the `IAbpSession`.
+
+### Authorization
+
+ABP Framework extends the [ASP.NET Core Authorization](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/introduction) by adding **permissions** as auto [policies](https://docs.microsoft.com/en-us/aspnet/core/security/authorization/policies) and allowing the authorization system to be usable in the [application services](Application-Services.md) too.
+
+#### AbpAutorize vs Autorize
+
+Use the standard `[Autorize]` and `[AllowAnonymous]` attributes instead of ASP.NET Boilerplate's custom `[AbpAutorize]` and `[AbpAllowAnonymous]` attributes.
+
+#### IPermissionChecker vs IAuthorizationService
+
+Use the standard `IAuthorizationService` to check permissions instead of the ASP.NET Boilerplate's `IPermissionChecker` service. While `IPermissionChecker` also exists in the ABP Framework, it is used to explicitly use the permissions. Using `IAuthorizationService` is the recommended way since it covers other type of policy checks too.
+
+#### AuthorizationProvider vs PermissionDefinitionProvider
+
+You inherit from the `AuthorizationProvider` in the ASP.NET Boilerplate to define your permissions. ABP Framework replaces it by the `PermissionDefinitionProvider` base class. So, define your permissions by inheriting from the `PermissionDefinitionProvider` class.
 
 ### Unit of Work
+
+TODO
+
+### Multi-Tenancy
 
 TODO
 
