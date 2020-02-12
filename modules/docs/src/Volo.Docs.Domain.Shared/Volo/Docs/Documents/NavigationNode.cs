@@ -22,6 +22,10 @@ namespace Volo.Docs.Documents
 
         public bool IsEmpty => Text == null && Path == null;
 
+        public DateTime? LastUpdatedTime { get; set; }
+
+        public int UpdatedCount { get; set; }
+
         public bool IsSelected(string documentName)
         {
             if (documentName == null)
@@ -48,6 +52,26 @@ namespace Volo.Docs.Documents
             }
 
             return false;
+        }
+    }
+
+    public static class NavigationNodeExtension
+    {
+        public static IEnumerable<NavigationNode> GetAllNodes(this IEnumerable<NavigationNode> source, Func<NavigationNode, IEnumerable<NavigationNode>> selector)
+        {
+            if (source == null)
+            {
+                yield break;
+            }
+
+            foreach (var item in source)
+            {
+                yield return item;
+                foreach (var subItem in GetAllNodes(selector(item), selector))
+                {
+                    yield return subItem;
+                }
+            }
         }
     }
 }

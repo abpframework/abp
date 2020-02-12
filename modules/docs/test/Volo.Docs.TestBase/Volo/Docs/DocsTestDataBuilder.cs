@@ -25,7 +25,7 @@ namespace Volo.Docs
                 _testData.PorjectId,
                 "ABP vNext",
                 "ABP",
-                GithubDocumentStore.Type,
+                GithubDocumentSource.Type,
                 "md",
                 "index",
                 "docs-nav.json",

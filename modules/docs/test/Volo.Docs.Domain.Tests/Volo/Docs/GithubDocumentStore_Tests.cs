@@ -9,13 +9,13 @@ namespace Volo.Docs
 {
     public class GithubDocumentStore_Tests : DocsDomainTestBase
     {
-        private readonly IDocumentStoreFactory _documentStoreFactory;
+        private readonly IDocumentSourceFactory _documentStoreFactory;
         private readonly IProjectRepository _projectRepository;
         private readonly DocsTestData _testData;
 
         public GithubDocumentStore_Tests()
         {
-            _documentStoreFactory = GetRequiredService<IDocumentStoreFactory>();
+            _documentStoreFactory = GetRequiredService<IDocumentSourceFactory>();
             _projectRepository = GetRequiredService<IProjectRepository>();
             _testData = GetRequiredService<DocsTestData>();
         }
@@ -23,15 +23,15 @@ namespace Volo.Docs
         [Fact]
         public async Task GetDocumentAsync()
         {
-            var store = _documentStoreFactory.Create(GithubDocumentStore.Type);
+            var source = _documentStoreFactory.Create(GithubDocumentSource.Type);
 
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 
-            var document = await store.GetDocumentAsync(project, "index2", "en", "0.123.0");
+            var document = await source.GetDocumentAsync(project, "index2", "en", "0.123.0");
             document.ShouldNotBeNull();
 
-            document.Title.ShouldBe("index2");
+            document.Name.ShouldBe("index2");
             document.FileName.ShouldBe("index2");
             document.Version.ShouldBe("0.123.0");
             document.Content.ShouldBe("stringContent");
@@ -40,12 +40,12 @@ namespace Volo.Docs
         [Fact]
         public async Task GetVersionsAsync()
         {
-            var store = _documentStoreFactory.Create(GithubDocumentStore.Type);
+            var source = _documentStoreFactory.Create(GithubDocumentSource.Type);
 
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 
-            var document = await store.GetVersionsAsync(project);
+            var document = await source.GetVersionsAsync(project);
             document.ShouldNotBeNull();
 
             document.Count.ShouldBe(1);
@@ -55,12 +55,12 @@ namespace Volo.Docs
         [Fact]
         public async Task GetResource()
         {
-            var store = _documentStoreFactory.Create(GithubDocumentStore.Type);
+            var source = _documentStoreFactory.Create(GithubDocumentSource.Type);
 
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
 
-            var documentResource = await store.GetResource(project, "index.md", "en", "0.123.0");
+            var documentResource = await source.GetResource(project, "index.md", "en", "0.123.0");
             documentResource.ShouldNotBeNull();
 
             documentResource.Content.ShouldBe(new byte[]

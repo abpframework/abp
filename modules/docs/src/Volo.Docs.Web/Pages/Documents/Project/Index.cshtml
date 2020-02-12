@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
@@ -145,7 +145,7 @@
                     </div>
 
 
-                    @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
+                    @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                     {
                         <div class="text-muted p-3">
                             <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
@@ -153,7 +153,7 @@
                     }
                     else
                     {
-                        <ul root-node="@Model.Navigation.RootNode"
+                        <ul root-node="@Model.Navigation"
                             version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                             project-name="@Model.ProjectName"
                             project-format="@Model.Project.Format"
@@ -187,7 +187,7 @@
                     <div class="float-right">
                         @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                         {
-                            <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                            <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @(L["Edit"]) (@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</a>
                         }
                     </div>
                 </div>

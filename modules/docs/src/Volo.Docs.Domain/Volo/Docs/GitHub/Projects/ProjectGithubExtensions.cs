@@ -57,7 +57,7 @@ namespace Volo.Docs.GitHub.Projects
         {
             Check.NotNull(project, nameof(project));
 
-            if (project.DocumentStoreType != GithubDocumentStore.Type)
+            if (project.DocumentStoreType != GithubDocumentSource.Type)
             {
                 throw new ApplicationException("Given project has not a Github document store!");
             }

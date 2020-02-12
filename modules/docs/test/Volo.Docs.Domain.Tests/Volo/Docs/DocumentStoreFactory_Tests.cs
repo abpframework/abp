@@ -8,18 +8,18 @@ namespace Volo.Docs
 {
     public class DocumentStoreFactory_Tests : DocsDomainTestBase
     {
-        private readonly IDocumentStoreFactory _documentStoreFactory;
+        private readonly IDocumentSourceFactory _documentStoreFactory;
 
         public DocumentStoreFactory_Tests()
         {
-            _documentStoreFactory = GetRequiredService<IDocumentStoreFactory>();
+            _documentStoreFactory = GetRequiredService<IDocumentSourceFactory>();
         }
 
         [Fact]
         public void Create()
         {
-            _documentStoreFactory.Create(GithubDocumentStore.Type).GetType().ShouldBe(typeof(GithubDocumentStore));
-            _documentStoreFactory.Create(FileSystemDocumentStore.Type).GetType().ShouldBe(typeof(FileSystemDocumentStore));
+            _documentStoreFactory.Create(GithubDocumentSource.Type).GetType().ShouldBe(typeof(GithubDocumentSource));
+            _documentStoreFactory.Create(FileSystemDocumentSource.Type).GetType().ShouldBe(typeof(FileSystemDocumentSource));
         }
     }
 }
