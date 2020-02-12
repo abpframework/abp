@@ -334,7 +334,7 @@ namespace Volo.Abp.Cli.Commands
         }
 
         private static string CreateType(JObject data, string returnValueType, string rootPath, List<string> modelIndexList)
-        {
+        { 
             var type = data["types"][returnValueType];
 
             if (type == null)
@@ -388,10 +388,16 @@ namespace Volo.Abp.Cli.Commands
                 if (baseTypeName.Contains("guid") || baseTypeName.Contains("Guid"))
                 {
                     baseTypeName = "string";
-                }
+                } 
 
                 modelFileText.AppendLine($"import {{ {baseTypeName} }} from '{baseTypeKebabCase}';");
                 extends = "extends " + (!string.IsNullOrWhiteSpace(customBaseTypeName) ? customBaseTypeName : baseTypeName);
+
+                var modelIndex = CreateType(data, baseType, rootPath, modelIndexList);
+                if (!string.IsNullOrWhiteSpace(modelIndex))
+                { 
+                    modelIndexList.Add(modelIndex);
+                }
             }
 
             if (baseType == "System.Enum" && (bool)type["isEnum"])
@@ -421,11 +427,11 @@ namespace Volo.Abp.Cli.Commands
                     var modelIndex = CreateType(data, (string)property["type"], rootPath, modelIndexList);
 
                     if (!string.IsNullOrWhiteSpace(modelIndex))
-                    { 
+                    {
                         var propertyTypeSplit = ((string)property["type"]).Split(".");
                         var propertyType = propertyTypeSplit[propertyTypeSplit.Length - 1];
                         modelFileText.Insert(0,"");
-                        modelFileText.Insert(0, $"import {{ {propertyType} }} from '../models';"); 
+                        modelFileText.Insert(0, $"import {{ {propertyType} }} from '../models';");
                         modelFileText.Insert(0, "");
                         modelIndexList.Add(modelIndex);
                     }
