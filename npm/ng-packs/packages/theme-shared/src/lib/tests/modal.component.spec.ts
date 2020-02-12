@@ -1,8 +1,6 @@
 import { LocalizationPipe } from '@abp/ng.core';
 import { createHostFactory, SpectatorHost } from '@ngneat/spectator/jest';
 import { Store } from '@ngxs/store';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { ToastModule } from 'primeng/toast';
 import { timer } from 'rxjs';
 import { ButtonComponent, ConfirmationComponent, ModalComponent } from '../components';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -16,9 +14,8 @@ describe('ModalComponent', () => {
   let disappearFn;
   const createHost = createHostFactory({
     component: ModalComponent,
-    imports: [ToastModule, RouterTestingModule],
+    imports: [RouterTestingModule],
     declarations: [ConfirmationComponent, LocalizationPipe, ButtonComponent],
-    providers: [MessageService],
     mocks: [Store],
   });
 

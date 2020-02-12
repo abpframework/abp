@@ -1,4 +1,4 @@
-import { ABP } from '../models';
+import { ABP } from '../models/common';
 
 export class PatchRouteByName {
   static readonly type = '[Config] Patch Route By Name';
