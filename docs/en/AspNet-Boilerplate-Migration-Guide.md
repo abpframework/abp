@@ -426,10 +426,99 @@ public async Task<List<Product>> GetProducts(Guid tenantId)
 
 Pass `null` to the `Change` method to switch to the host side.
 
+### Caching
+
+ASP.NET Boilerplate has its [own distributed caching abstraction](https://aspnetboilerplate.com/Pages/Documents/Caching) which has in-memory and Redis implementations. You typically inject the `ICacheManager` service and use its `GetCache(...)` method to obtain a cache, then get and set objects in the cache.
+
+ABP Framework uses and extends ASP.NET Core's [distributed caching abstraction](Caching.md). It defines the `IDistributedCache<T>` services to inject a cache and get/set objects.
+
+### Logging
+
+ASP.NET Boilerplate uses Castle Windsor's [logging facility](http://docs.castleproject.org/Windsor.Logging-Facility.ashx) as an abstraction and supports multiple logging providers including Log4Net (the default one comes with the startup projects) and Serilog. You typically property-inject the logger:
+
+````csharp
+using Castle.Core.Logging; //1: Import Logging namespace
+
+public class TaskAppService : ITaskAppService
+{    
+    //2: Getting a logger using property injection
+    public ILogger Logger { get; set; }
+
+    public TaskAppService()
+    {
+        //3: Do not write logs if no Logger supplied.
+        Logger = NullLogger.Instance;
+    }
+
+    public void CreateTask(CreateTaskInput input)
+    {
+        //4: Write logs
+        Logger.Info("Creating a new task with description: " + input.Description);
+        //...
+    }
+}
+````
+
+ABP Framework depends on Microsoft's [logging extensions](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging) library which is also an abstraction and there are many providers implement it. Startup templates are using the Serilog as the pre-configured logging libary while it is easy to change in your project. The usage pattern is similar:
+
+````csharp
+//1: Import the Logging namespaces
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
+public class TaskAppService : ITaskAppService
+{
+    //2: Getting a logger using property injection
+    public ILogger<TaskAppService> Logger { get; set; }
+
+    public TaskAppService()
+    {
+        //3: Do not write logs if no Logger supplied.
+        Logger = NullLogger<TaskAppService>.Instance;
+    }
+
+    public void CreateTask(CreateTaskInput input)
+    {
+        //4: Write logs
+        Logger.Info("Creating a new task with description: " + input.Description);
+        //...
+    }
+}
+````
+
+You inject the `ILogger<T>` instead of the `ILogger`.
+
+### Setting Management
+
+#### Defining the Settings
+
+In an ASP.NET Boilerplate based application, you create a class deriving from the `SettingProvider` class, implement the `GetSettingDefinitions` method and add your class to the `Configuration.Settings.Providers` list.
+
+In the ABP Framework, you need to derive your class from the `SettingDefinitionProvider` and implement the `Define` method. You don't need to register your class since the ABP Framework automatically discovers it.
+
+#### Getting the Setting Values
+
+ASP.NET Boilerplate provides the `ISettingManager` to read the setting values in the server side and `abp.setting.get(...)` method in the JavaScript side.
+
+ABP Framework has the `ISettingProvider` service to read the setting values in the server side and `abp.setting.get(...)` method in the JavaScript side.
+
+#### Setting the Setting Values
+
+For ASP.NET Boilerplate, you use the same `ISettingManager` service to change the setting values.
+
+ABP Framework separates it and provides the setting management module (pre-added to the startup projects) which has the ` ISettingManager ` to change the setting values. This separation was introduced to support tiered deployment scenarios (where `ISettingProvider` can also work in the client application while `ISettingManager ` can also work in the server (API) side).
+
+### Clock
+
+ASP.NET Boilerplate has a static `Clock` service ([see](https://aspnetboilerplate.com/Pages/Documents/Timing)) which is used to abstract the `DateTime` kind, so you can easily switch between Local and UTC times. You don't inject it, but just use the `Clock.Now` static method to obtain the current time.
+
+ABP Framework has the `IClock` service ([see](Clock.md)) which has a similar goal, but now you need to inject it whenever you need it.
+
 ## Missing Features
 
 The following features are not present for the ABP Framework. Here, a list of major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
 
 * [Multi-Lingual Entities](https://aspnetboilerplate.com/Pages/Documents/Multi-Lingual-Entities) ([#1754](https://github.com/abpframework/abp/issues/1754))
+* ...TODO
 
 Most of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework by implementing these yourself.
