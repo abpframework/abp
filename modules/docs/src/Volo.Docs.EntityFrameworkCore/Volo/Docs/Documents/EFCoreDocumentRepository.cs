@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
@@ -14,10 +15,15 @@ namespace Volo.Docs.Documents
         {
         }
 
-        public async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version)
+        public async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
         {
-            return await DbSet.FirstOrDefaultAsync(x =>
-                x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode && x.Version == version);
+            return await DbSet.IncludeDetails(includeDetails)
+                .FirstOrDefaultAsync(x =>
+                    x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode &&
+                    x.Version == version,
+                cancellationToken);
         }
     }
 }

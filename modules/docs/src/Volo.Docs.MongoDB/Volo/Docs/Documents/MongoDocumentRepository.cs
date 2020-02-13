@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MongoDB.Driver.Linq;
 using Volo.Abp.Domain.Repositories.MongoDB;
@@ -14,12 +15,14 @@ namespace Volo.Docs.Documents
         {
         }
 
-        public async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version)
+        public async Task<Document> FindAsync(Guid projectId, string name, string languageCode, string version,
+            bool includeDetails = true,
+            CancellationToken cancellationToken = default)
         {
             return await GetMongoQueryable().FirstOrDefaultAsync(x => x.ProjectId == projectId &&
                                                                       x.Name == name &&
                                                                       x.LanguageCode == languageCode &&
-                                                                      x.Version == version);
+                                                                      x.Version == version, cancellationToken);
         }
     }
 }
