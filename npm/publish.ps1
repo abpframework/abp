@@ -2,6 +2,8 @@ param(
   [string]$Version
 )
 
+npm install
+
 $NextVersion = $(node get-version.js)
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
