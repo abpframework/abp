@@ -277,6 +277,31 @@ ABP Framework doesn't include the ` ICustomValidate ` that does exists in the AS
 
 ## The Infrastructure Layer
 
+### Configuration vs Options System
+
+ASP.NET Boilerplate has its own configuration system to configure the framework and the modules. For example, you could disable the audit logging in the `Initialize` method of your [module](https://aspnetboilerplate.com/Pages/Documents/Module-System):
+
+````csharp
+public override void Initialize()
+{
+    Configuration.Auditing.IsEnabled = false;
+}
+````
+
+ABP Framework uses [the options pattern](Options.md) to configure the framework and the modules. You typically configure the options in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpAuditingOptions>(options =>
+    {
+        options.IsEnabled = false;
+    });
+}
+````
+
+Instead of a central configuration object, there are separated option classes for every module and feature those are defined in the related documents.
+
 ### IAbpSession vs ICurrentUser and ICurrentTenant
 
 ASP.NET Boilerplate's `IAbpSession` service is used to obtain the current user and tenant information, like ` UserId ` and `TenantId`.
@@ -301,11 +326,57 @@ You inherit from the `AuthorizationProvider` in the ASP.NET Boilerplate to defin
 
 ### Unit of Work
 
-TODO
+Unit of work system has been designed to work seamlessly. For most of the cases, you don't need to change anything.
+
+`UnitOfWork` attribute of the ABP Framework doesn't have the `ScopeOption` (type of `TransactionScopeOption`) property. Instead, use `IUnitOfWorkManager.Begin()` method with `requiresNew = true`  to create an independent inner transaction in a transaction scope.
+
+#### Data Filters
+
+ASP.NET Boilerplate implements the data filtering system as a part of the unit of work. ABP Framework has a separate `IDataFilter` service.
+
+See the [data filtering document](Data-Filtering.md) to learn how to enable/disable a filter.
+
+See [the UOW documentation](Unit-Of-Work.md) for more about the UOW system.
 
 ### Multi-Tenancy
 
-TODO
+#### IMustHaveTenant & IMayHaveTenant vs IMultiTenant
+
+ASP.NET Boilerplate defines `IMustHaveTenant` and `IMayHaveTenant` interfaces to implement them for your entities. In this way, your entities are automatically filtered according to the current tenant. Because of the design, there was a problem: You had to create a "Default" tenant in the database with "1" as the Id if you want to create a non multi-tenant application (this "Default" tenant was used as the single tenant).
+
+ABP Framework has a single interface for multi-tenant entities: `IMultiTenant` which defines a nullable `TenantId` property of type `Guid`. If your application is not multi-tenant, then your entities will have null TenantId (instead of a default one).
+
+On the migration, you need to change the TenantId field type and replace these interfaces with the `IMultiTenant`
+
+#### Switch Between Tenants
+
+In some cases you might need to switch to a tenant for a code scope and work with the tenant's data in this scope.
+
+In ASP.NET Boilerplate, it is done using the `IUnitOfWorkManager` service:
+
+````csharp
+public async Task<List<Product>> GetProducts(int tenantId)
+{
+    using (_unitOfWorkManager.Current.SetTenantId(tenantId))
+    {
+        return await _productRepository.GetAllListAsync();
+    }
+}
+````
+
+In the ABP Framework it is done with the `ICurrentTenant` service:
+
+````csharp
+public async Task<List<Product>> GetProducts(Guid tenantId)
+{
+    using (_currentTenant.Change(tenantId))
+    {
+        return await _productRepository.GetListAsync();
+    }
+}
+````
+
+Pass `null` to the `Change` method to switch to the host side.
 
 ## Missing Features
 
