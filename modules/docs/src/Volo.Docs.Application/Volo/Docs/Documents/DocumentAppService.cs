@@ -172,16 +172,15 @@ namespace Volo.Docs.Documents
                 return CreateDocumentWithDetailsDto(project, sourceDocument);
             }
 
-            /*
             if (HostEnvironment.IsDevelopment())
             {
                 return await GetDocumentAsync();
-            }*/
+            }
 
             var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
 
             //TODO: Configurable cache time?
-            if (document == null || document.LastCachedTime + TimeSpan.FromHours(12) < DateTime.Now)
+            if (document == null || document.LastCachedTime + TimeSpan.FromDays(30) < DateTime.Now)
             {
                 return await GetDocumentAsync();
             }

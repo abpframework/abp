@@ -34,7 +34,7 @@ namespace Volo.Docs.GitHub.Documents
             var userAgent = project.GetGithubUserAgentOrNull();
             var rawRootUrl = CalculateRawRootUrlWithLanguageCode(rootUrl, languageCode);
             var rawDocumentUrl = rawRootUrl + documentName;
-            var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
+            var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + languageCode + "/" + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var isParameterDocument = documentName == project.ParametersDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + languageCode + "/" + documentName;
@@ -49,7 +49,7 @@ namespace Volo.Docs.GitHub.Documents
 
             var fileCommits = await GetFileCommitsAsync(project, version, $"docs/{languageCode}/{documentName}");
 
-            return new Document(GuidGenerator.Create(), 
+            var document=  new Document(GuidGenerator.Create(), 
                 project.Id, 
                 documentName, 
                 version, 
@@ -64,6 +64,23 @@ namespace Volo.Docs.GitHub.Documents
                 fileCommits.FirstOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
                 fileCommits.Count,
                 DateTime.Now);
+
+            var authors =  fileCommits
+                .Where(x => x.Author != null)
+                .Select(x => x.Author)
+                .GroupBy(x => x.Id)
+                .OrderByDescending(x => x.Count())
+                .Select(x => x.FirstOrDefault()).ToList();
+
+            if (!isNavigationDocument && !isParameterDocument)
+            {
+                foreach (var author in authors)
+                {
+                    document.AddContributor(author.Login, author.HtmlUrl, author.AvatarUrl);
+                }
+            }
+
+            return document;
         }
 
         public async Task<List<VersionInfo>> GetVersionsAsync(Project project)
@@ -195,40 +212,6 @@ namespace Volo.Docs.GitHub.Documents
             }
         }
 
-        /*
-        private async Task<List<DocumentContributor>> GetContributors(string url, string token, string userAgent)
-        {
-            var contributors = new List<DocumentContributor>();
-
-            try
-            {
-                var commitsJsonAsString = await DownloadWebContentAsStringAsync(url, token, userAgent);
-
-                var commits = JArray.Parse(commitsJsonAsString);
-
-                foreach (var commit in commits)
-                {
-                    var author = commit["author"];
-
-                    contributors.Add(new DocumentContributor
-                    {
-                        Username = (string)author["login"],
-                        UserProfileUrl = (string)author["html_url"],
-                        AvatarUrl = (string)author["avatar_url"]
-                    });
-                }
-
-                contributors = contributors.GroupBy(c => c.Username).OrderByDescending(c=>c.Count())
-                    .Select( c => c.FirstOrDefault()).ToList();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWarning(ex.Message);
-            }
-            
-            return contributors;
-        }
-        */
         private static string CalculateRawRootUrlWithLanguageCode(string rootUrl, string languageCode)
         {
             return (rootUrl
