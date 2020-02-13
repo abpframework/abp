@@ -4,7 +4,7 @@ param(
 
 npm install
 
-$NextVersion = $(node get-version.js) + '-preview' + (Get-Date).tostring(“yyyyMMdd”)
+$NextVersion = $(node get-version.js) + '-preview' + (Get-Date).tostring(“yyyyMMdd”) + '-1'
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 if(-Not $Version) {
