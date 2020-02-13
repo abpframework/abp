@@ -140,7 +140,7 @@ ABP framework includes a simple `IBackgroundJobManager` implementation that;
 
 ### Configuration
 
-Use `BackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
+Use `AbpBackgroundJobWorkerOptions` in your [module class](Module-Development-Basics.md) to configure the default background job manager. The example below changes the timeout duration for background jobs:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -148,7 +148,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobWorkerOptions>(options =>
+        Configure<AbpBackgroundJobWorkerOptions>(options =>
         {
             options.DefaultTimeout = 864000; //10 days (as seconds)
         });
