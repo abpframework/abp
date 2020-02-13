@@ -108,7 +108,7 @@ Enqueue method gets some optional arguments to control the background job:
 
 You may want to disable background job execution for your application. This is generally needed if you want to execute background jobs in another process and disable it for the current process.
 
-Use `BackgroundJobOptions` to configure the job execution:
+Use `AbpBackgroundJobOptions` to configure the job execution:
 
 ````csharp
 [DependsOn(typeof(AbpBackgroundJobsModule))]
@@ -116,7 +116,7 @@ public class MyModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<BackgroundJobOptions>(options =>
+        Configure<AbpBackgroundJobOptions>(options =>
         {
             options.IsJobExecutionEnabled = false; //Disables job execution
         });
