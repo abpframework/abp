@@ -111,6 +111,10 @@
         {
           "text": "Settings",
           "path": "Settings.md"
+        },
+        {
+          "text": "Data Filtering",
+          "path": "Data-Filtering.md"
         }
       ]
     },
