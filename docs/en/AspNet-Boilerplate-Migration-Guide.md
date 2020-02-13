@@ -277,6 +277,54 @@ ABP Framework doesn't include the ` ICustomValidate ` that does exists in the AS
 
 ## The Infrastructure Layer
 
+### Namespaces
+
+ASP.NET Boilerplate uses the `Abp.*` namespaces while the ABP Framework uses the `Volo.Abp.*` namespaces for the framework and pre-built fundamental modules.
+
+In addition, there are also some pre-built application modules (like docs and blog modules) those are using the `Volo.*` namespaces (like `Volo.Blogging.*` and `Volo.Docs.*`). We consider these modules as standalone open source products developed by Volosoft rather than add-ons or generic modules completing the ABP Framework and used in the applications. We've developed them as a module to make them re-usable as a part of a bigger solution.
+
+### Module System
+
+Both of the ASP.NET Boilerplate and the ABP Framework have the `AbpModule` while they are a bit different.
+
+ASP.NET Boilerplate's `AbpModule` class has `PreInitialize`, `Initialize` and `PostInitialize` methods you can override and configure the framework and the depended modules. You can also register and resolve dependencies in these methods.
+
+ABP Framework's `AbpModule` class has the `ConfigureServices` and `OnApplicationInitialization` methods (and their Pre and Post versions). It is similar to ASP.NET Core's Startup class. You configure other services and register dependencies in the `ConfigureServices`. However, you can now resolve dependencies in that point. You can resolve dependencies and configure the ASP.NET Core pipeline in the `OnApplicationInitialization` method while you can not register dependencies here. So, the new module classes separate dependency registration phase from dependency resolution phase since it follows the ASP.NET Core's approach.
+
+### Dependency Injection
+
+#### The DI Framework
+
+ASP.NET Boilerplate is using the [Castle Windsor](http://www.castleproject.org/projects/windsor/) as the dependency injection framework. This is a fundamental dependency of the ASP.NET Boilerplate framework. We've got a lot of feedback to make the ASP.NET Boilerplate DI framework agnostic, but it was not so easy because of the design.
+
+ABP Framework is dependency injection framework independent since it uses Microsoft's [Dependency Injection Extensions](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) library as an abstraction. None of the ABP Framework or module packages depends on any specific library.
+
+However, ABP Framework doesn't use the Microsoft's base DI library because it has some missing features ABP Framework needs to: Property Injection and Interception. All the startup templates and the samples are using the [Autofac](https://autofac.org/) as the DI library and it is the only [officially integrated](Autofac-Integration.md) library to the ABP Framework. We suggest you to use the Autofac with the ABP Framework if you have not a good reason. If you have a good reason, please create an [issue](https://github.com/abpframework/abp/issues/new) on GitHub to request it or just implement it and send a pull request :)
+
+#### Registering the Dependencies
+
+Registering the dependencies are similar and mostly handled by the framework conventionally (like repositories, application services, controllers... etc). Implement the same `ITransientDependency`, `ISingletonDependency` and `IScopedDependency` interfaces for the services not registered by conventions.
+
+When you need to manually register dependencies, use the `context.Services` in the `ConfigureServices` method of your module. Example:
+
+````csharp
+public class BlogModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //Register an instance as singleton
+        context.Services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
+
+        //Register a factory method that resolves from IServiceProvider
+        context.Services.AddScoped<ITaxCalculator>(
+            sp => sp.GetRequiredService<TaxCalculator>()
+        );
+    }
+}
+````
+
+See the ABP Framework [dependency injection document](https://docs.abp.io/en/abp/latest/Dependency-Injection) for details.
+
 ### Configuration vs Options System
 
 ASP.NET Boilerplate has its own configuration system to configure the framework and the modules. For example, you could disable the audit logging in the `Initialize` method of your [module](https://aspnetboilerplate.com/Pages/Documents/Module-System):
