@@ -56,12 +56,12 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
             return new ApplicationConfigurationDto
             {
-                Auth = await GetAuthConfigAsync().ConfigureAwait(false),
-                Features = await GetFeaturesConfigAsync().ConfigureAwait(false),
-                Localization = await GetLocalizationConfigAsync().ConfigureAwait(false),
+                Auth = await GetAuthConfigAsync(),
+                Features = await GetFeaturesConfigAsync(),
+                Localization = await GetLocalizationConfigAsync(),
                 CurrentUser = GetCurrentUser(),
                 Setting = await GetSettingConfigAsync()
-.ConfigureAwait(false)
+
             };
         }
 
@@ -82,7 +82,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
             var authConfig = new ApplicationAuthConfigurationDto();
 
-            var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync().ConfigureAwait(false);
+            var policyNames = await _abpAuthorizationPolicyProvider.GetPoliciesNamesAsync();
 
             Logger.LogDebug($"GetPoliciesNamesAsync returns {policyNames.Count} items.");
 
@@ -92,7 +92,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
 
                 Logger.LogDebug($"_authorizationService.IsGrantedAsync? {policyName}");
 
-                if (await _authorizationService.IsGrantedAsync(policyName).ConfigureAwait(false))
+                if (await _authorizationService.IsGrantedAsync(policyName))
                 {
                     authConfig.GrantedPolicies[policyName] = true;
                 }
@@ -175,7 +175,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     continue;
                 }
 
-                result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name).ConfigureAwait(false);
+                result.Values[settingDefinition.Name] = await _settingProvider.GetOrNullAsync(settingDefinition.Name);
             }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetSettingConfigAsync()");
@@ -196,7 +196,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations
                     continue;
                 }
 
-                result.Values[featureDefinition.Name] = await FeatureChecker.GetOrNullAsync(featureDefinition.Name).ConfigureAwait(false);
+                result.Values[featureDefinition.Name] = await FeatureChecker.GetOrNullAsync(featureDefinition.Name);
             }
 
             Logger.LogDebug("Executed AbpApplicationConfigurationAppService.GetFeaturesConfigAsync()");

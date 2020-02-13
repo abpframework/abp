@@ -21,10 +21,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
         [Fact]
         public async Task DateTimeKind_Test()
         {
-            var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind?input=2010-01-01T00:00:00Z").ConfigureAwait(false);
+            var response = await Client.GetAsync("/api/model-Binding-test/DateTimeKind?input=2010-01-01T00:00:00Z");
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var resultAsString = await response.Content.ReadAsStringAsync();
             resultAsString.ShouldBe(DateTimeKind.ToString().ToLower());
         }
 
@@ -32,10 +32,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
         public async Task NullableDateTimeKind_Test()
         {
             var response =
-                await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind?input=2010-01-01T00:00:00Z").ConfigureAwait(false);
+                await Client.GetAsync("/api/model-Binding-test/NullableDateTimeKind?input=2010-01-01T00:00:00Z");
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var resultAsString = await response.Content.ReadAsStringAsync();
             resultAsString.ShouldBe(DateTimeKind.ToString().ToLower());
         }
 
@@ -44,10 +44,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
         {
             var response =
                 await Client.GetAsync(
-                    "/api/model-Binding-test/DisableDateTimeNormalizationDateTimeKind?input=2010-01-01T00:00:00Z").ConfigureAwait(false);
+                    "/api/model-Binding-test/DisableDateTimeNormalizationDateTimeKind?input=2010-01-01T00:00:00Z");
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var resultAsString = await response.Content.ReadAsStringAsync();
             //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is Local.
             resultAsString.ShouldBe(DateTimeKind.Local.ToString().ToLower());
         }
@@ -57,10 +57,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
         {
             var response =
                 await Client.GetAsync(
-                    "/api/model-Binding-test/DisableDateTimeNormalizationNullableDateTimeKind?input=2010-01-01T00:00:00Z").ConfigureAwait(false);
+                    "/api/model-Binding-test/DisableDateTimeNormalizationNullableDateTimeKind?input=2010-01-01T00:00:00Z");
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var resultAsString = await response.Content.ReadAsStringAsync();
             //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is Local.
             resultAsString.ShouldBe(DateTimeKind.Local.ToString().ToLower());
         }
@@ -72,10 +72,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ModelBinding
                                                  "Time1=2010-01-01T00:00:00Z&" +
                                                  "Time2=2010-01-01T00:00:00Z&" +
                                                  "Time3=2010-01-01T00:00:00Z&" +
-                                                 "InnerModel.Time4=2010-01-01T00:00:00Z").ConfigureAwait(false);
+                                                 "InnerModel.Time4=2010-01-01T00:00:00Z");
 
             response.StatusCode.ShouldBe(HttpStatusCode.OK);
-            var resultAsString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+            var resultAsString = await response.Content.ReadAsStringAsync();
             //Time parameter(2010-01-01T00:00:00Z) with time zone information, so the default Kind is Local.
             resultAsString.ShouldBe(
                 $"local_{DateTimeKind.ToString().ToLower()}_{DateTimeKind.ToString().ToLower()}_local");

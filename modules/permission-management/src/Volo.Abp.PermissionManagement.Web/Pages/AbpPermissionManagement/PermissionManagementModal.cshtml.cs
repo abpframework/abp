@@ -42,7 +42,7 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
         {
             ValidateModel();
 
-            var result = await _permissionAppService.GetAsync(ProviderName, ProviderKey).ConfigureAwait(false);
+            var result = await _permissionAppService.GetAsync(ProviderName, ProviderKey);
 
             EntityDisplayName = result.EntityDisplayName;
 
@@ -84,7 +84,7 @@ namespace Volo.Abp.PermissionManagement.Web.Pages.AbpPermissionManagement
                 {
                     Permissions = updatePermissionDtos
                 }
-            ).ConfigureAwait(false);
+            );
 
             return NoContent();
         }

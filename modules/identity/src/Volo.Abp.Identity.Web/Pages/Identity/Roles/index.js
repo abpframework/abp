@@ -17,6 +17,7 @@
             searching: false,
             processing: true,
             serverSide: true,
+            scrollX: true,
             paging: true,
             ajax: abp.libs.datatables.createAjax(_identityRoleAppService.getList),
             columnDefs: [

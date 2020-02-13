@@ -35,7 +35,7 @@ namespace Volo.Abp.IdentityModel
             [NotNull] HttpClient client,
             string identityClientName = null)
         {
-            var accessToken = await GetAccessTokenOrNullAsync(identityClientName).ConfigureAwait(false);
+            var accessToken = await GetAccessTokenOrNullAsync(identityClientName);
             if (accessToken == null)
             {
                 return false;
@@ -55,18 +55,18 @@ namespace Volo.Abp.IdentityModel
                 return null;
             }
 
-            return await GetAccessTokenAsync(configuration).ConfigureAwait(false);
+            return await GetAccessTokenAsync(configuration);
         }
 
         public virtual async Task<string> GetAccessTokenAsync(IdentityClientConfiguration configuration)
         {
-            var discoveryResponse = await GetDiscoveryResponse(configuration).ConfigureAwait(false);
+            var discoveryResponse = await GetDiscoveryResponse(configuration);
             if (discoveryResponse.IsError)
             {
                 throw new AbpException($"Could not retrieve the OpenId Connect discovery document! ErrorType: {discoveryResponse.ErrorType}. Error: {discoveryResponse.Error}");
             }
 
-            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration).ConfigureAwait(false);
+            var tokenResponse = await GetTokenResponse(discoveryResponse, configuration);
             if (tokenResponse.IsError)
             {
                 throw new AbpException($"Could not get token from the OpenId Connect server! ErrorType: {tokenResponse.ErrorType}. Error: {tokenResponse.Error}. ErrorDescription: {tokenResponse.ErrorDescription}. HttpStatusCode: {tokenResponse.HttpStatusCode}");
@@ -104,7 +104,7 @@ namespace Volo.Abp.IdentityModel
                     {
                         RequireHttps = configuration.RequireHttps
                     }
-                }).ConfigureAwait(false);
+                });
             }
         }
 
@@ -118,14 +118,14 @@ namespace Volo.Abp.IdentityModel
                 {
                     case OidcConstants.GrantTypes.ClientCredentials:
                         return await httpClient.RequestClientCredentialsTokenAsync(
-                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration).ConfigureAwait(false),
+                            await CreateClientCredentialsTokenRequestAsync(discoveryResponse, configuration),
                             CancellationTokenProvider.Token
-                        ).ConfigureAwait(false);
+                        );
                     case OidcConstants.GrantTypes.Password:
                         return await httpClient.RequestPasswordTokenAsync(
-                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration).ConfigureAwait(false),
+                            await CreatePasswordTokenRequestAsync(discoveryResponse, configuration),
                             CancellationTokenProvider.Token
-                        ).ConfigureAwait(false);
+                        );
                     default:
                         throw new AbpException("Grant type was not implemented: " + configuration.GrantType);
                 }

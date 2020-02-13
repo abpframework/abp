@@ -25,7 +25,7 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
         {
             return await DbSet
                 .IncludeDetails(includeDetails)
-                .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(r => r.NormalizedName == normalizedRoleName, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<IdentityRole>> GetListAsync(
@@ -39,7 +39,13 @@ namespace Volo.Abp.Identity.EntityFrameworkCore
                 .IncludeDetails(includeDetails)
                 .OrderBy(sorting ?? nameof(IdentityRole.Name))
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
+        }
+
+        public virtual async Task<List<IdentityRole>> GetDefaultOnesAsync(
+            bool includeDetails = false, CancellationToken cancellationToken = default)
+        {
+            return await DbSet.IncludeDetails(includeDetails).Where(r => r.IsDefault).ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityRole> WithDetails()

@@ -54,7 +54,9 @@ export class ChangePasswordComponent
       passwordRulesArr.push('capital');
     }
 
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+    if (
+      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
+    ) {
       passwordRulesArr.push('special');
     }
 

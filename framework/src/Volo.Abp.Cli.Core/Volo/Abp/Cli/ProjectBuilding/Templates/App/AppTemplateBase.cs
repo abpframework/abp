@@ -10,7 +10,6 @@ namespace Volo.Abp.Cli.ProjectBuilding.Templates.App
         protected AppTemplateBase(string templateName)
             : base(templateName, DatabaseProvider.EntityFrameworkCore, UiFramework.Mvc)
         {
-            DocumentUrl = "https://docs.abp.io/en/abp/latest/Startup-Templates/Application";
         }
 
         public static bool IsAppTemplate(string templateName)

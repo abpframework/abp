@@ -1,5 +1,5 @@
 <nav
-  class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
+  class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm flex-column flex-md-row mb-4"
   id="main-navbar"
   style="min-height: 4rem;"
 >
@@ -67,9 +67,7 @@
                 #routeContainer
                 class="dropdown-menu border-0 shadow-sm"
                 (click)="$event.preventDefault(); $event.stopPropagation()"
-                [class.abp-collapsed-height]="smallScreen"
-                [class.d-block]="smallScreen"
-                [class.abp-mh-25]="smallScreen && navbarRootDropdown.expand"
+                [class.d-block]="smallScreen && navbarRootDropdown.expand"
               >
                 <ng-template
                   #forTemplate
@@ -124,9 +122,7 @@
               <div
                 #childrenContainer
                 class="dropdown-menu border-0 shadow-sm"
-                [class.abp-collapsed-height]="smallScreen"
-                [class.d-block]="smallScreen"
-                [class.abp-mh-25]="smallScreen && dropdownSubmenu.isOpen()"
+                [class.d-block]="smallScreen && dropdownSubmenu.isOpen()"
               >
                 <ng-template
                   ngFor
@@ -182,9 +178,7 @@
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
-        [class.abp-collapsed-height]="smallScreen"
-        [class.d-block]="smallScreen"
-        [class.abp-mh-25]="smallScreen && languageDropdown.isOpen()"
+        [class.d-block]="smallScreen && languageDropdown.isOpen()"
       >
         <a
           *ngFor="let lang of dropdownLanguages$ | async"
@@ -216,9 +210,7 @@
       <div
         class="dropdown-menu dropdown-menu-right border-0 shadow-sm"
         aria-labelledby="dropdownMenuLink"
-        [class.abp-collapsed-height]="smallScreen"
-        [class.d-block]="smallScreen"
-        [class.abp-mh-25]="smallScreen && currentUserDropdown.isOpen()"
+        [class.d-block]="smallScreen && currentUserDropdown.isOpen()"
       >
         <a class="dropdown-item" routerLink="/account/manage-profile"
           ><i class="fa fa-cog mr-1"></i>{{ 'AbpAccount::ManageYourProfile' | abpLocalization }}</a

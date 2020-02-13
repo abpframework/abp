@@ -1,6 +1,6 @@
 # ABP Framework v2.0 and the ABP Commercial
 
-ABP Framework v2.0 has been released this week. This post explains why we have released an **early major version** and what is changed with version 2.0.
+ABP Framework v2.0 has been released in this week. This post explains why we have released an **early major version** and what is changed with version 2.0.
 
 In addition to the v2.0 release, we are excited to announce the **ABP Commercial**, which is a set of professional modules, tools, themes, and services built on top of the open-source ABP framework.
 

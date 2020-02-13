@@ -40,7 +40,7 @@ namespace Volo.Abp.FluentValidation
                 {
                     MyStringValue3 = "ccc"
                 }
-            }).ConfigureAwait(false);
+            });
 
             asyncOutput.ShouldBe("aaabbbccc");
         }
@@ -65,7 +65,7 @@ namespace Volo.Abp.FluentValidation
                         }
                     }
                 )
-.ConfigureAwait(false)).ConfigureAwait(false);
+            );
             
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
@@ -83,7 +83,7 @@ namespace Volo.Abp.FluentValidation
                     {
                         MyStringValue3 = "c"
                     }
-                }).ConfigureAwait(false)).ConfigureAwait(false);
+                }));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyStringValue"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput2.MyStringValue2"));
             exception.ValidationErrors.ShouldContain(x => x.MemberNames.Contains("MyMethodInput3.MyStringValue3"));
@@ -95,7 +95,7 @@ namespace Volo.Abp.FluentValidation
             var output = await _myAppService.NotValidateMyMethod(new MyMethodInput4
             {
                 MyStringValue4 = "444"
-            }).ConfigureAwait(false);
+            });
 
             output.ShouldBe("444");
         }

@@ -53,6 +53,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "选项",
+          "path": "Options.md"
+        },
+        {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
           "items": [
@@ -85,7 +89,8 @@
           ]
         },
         {
-          "text": "授权"
+          "text": "授权",
+          "path": "Authorization.md"
         },
         {
           "text": "缓存",
@@ -256,22 +261,43 @@
       "path":"Data-Access.md",
       "items": [
         {
-          "text": "Entity Framework Core 集成",
-          "path": "Entity-Framework-Core.md",
-          "items": [            
+          "text": "连接字符串",
+          "path": "Connection-Strings.md"
+        },
+        {
+          "text": "数据库提供程序",
+          "items": [
             {
-              "text": "PostgreSQL 集成",
-              "path": "Entity-Framework-Core-PostgreSQL.md"
+              "text": "Entity Framework Core",
+              "path": "Entity-Framework-Core.md",
+              "items": [
+                {
+                  "text": "切换到MySql",
+                  "path": "Entity-Framework-Core-MySQL.md"
+                },
+                {
+                  "text": "切换到PostgreSQL",
+                  "path": "Entity-Framework-Core-PostgreSQL.md"
+                },
+                {
+                  "text": "切换到SQLite",
+                  "path": "Entity-Framework-Core-SQLite.md"
+                },
+                {
+                  "text": "切换到其他DBMS",
+                  "path": "Entity-Framework-Core-Other-DBMS.md"
+                }
+              ]
+            },
+            {
+              "text": "MongoDB",
+              "path": "MongoDB.md"
+            },
+            {
+              "text": "Dapper",
+              "path": "Dapper.md"
             }
           ]
-        },
-        {
-          "text": "MongoDB 集成",
-          "path": "MongoDB.md"
-        },
-        {
-          "text": "Dapper 集成",
-          "path": "Dapper.md"
         }
       ]
     },

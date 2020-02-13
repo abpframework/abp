@@ -30,7 +30,7 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
             {
                 _bookRepository.Any().ShouldBeTrue();
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
             {
                 _phoneInSecondDbContextRepository.Any().ShouldBeTrue();
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Volo.Abp.EntityFrameworkCore.Repositories
                 person.Name.ShouldBe("Douglas");
                 person.Phones.Count.ShouldBe(2);
                 return Task.CompletedTask;
-            }).ConfigureAwait(false);
+            });
         }
     }
 }

@@ -93,24 +93,24 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TGetOutputDto> GetAsync(TKey id)
         {
-            await CheckGetPolicyAsync().ConfigureAwait(false);
+            await CheckGetPolicyAsync();
 
-            var entity = await GetEntityByIdAsync(id).ConfigureAwait(false);
+            var entity = await GetEntityByIdAsync(id);
             return MapToGetOutputDto(entity);
         }
 
         public virtual async Task<PagedResultDto<TGetListOutputDto>> GetListAsync(TGetListInput input)
         {
-            await CheckGetListPolicyAsync().ConfigureAwait(false);
+            await CheckGetListPolicyAsync();
 
             var query = CreateFilteredQuery(input);
 
-            var totalCount = await AsyncQueryableExecuter.CountAsync(query).ConfigureAwait(false);
+            var totalCount = await AsyncQueryableExecuter.CountAsync(query);
 
             query = ApplySorting(query, input);
             query = ApplyPaging(query, input);
 
-            var entities = await AsyncQueryableExecuter.ToListAsync(query).ConfigureAwait(false);
+            var entities = await AsyncQueryableExecuter.ToListAsync(query);
 
             return new PagedResultDto<TGetListOutputDto>(
                 totalCount,
@@ -120,34 +120,34 @@ namespace Volo.Abp.Application.Services
 
         public virtual async Task<TGetOutputDto> CreateAsync(TCreateInput input)
         {
-            await CheckCreatePolicyAsync().ConfigureAwait(false);
+            await CheckCreatePolicyAsync();
 
             var entity = MapToEntity(input);
 
             TryToSetTenantId(entity);
 
-            await Repository.InsertAsync(entity, autoSave: true).ConfigureAwait(false);
+            await Repository.InsertAsync(entity, autoSave: true);
 
             return MapToGetOutputDto(entity);
         }
 
         public virtual async Task<TGetOutputDto> UpdateAsync(TKey id, TUpdateInput input)
         {
-            await CheckUpdatePolicyAsync().ConfigureAwait(false);
+            await CheckUpdatePolicyAsync();
 
-            var entity = await GetEntityByIdAsync(id).ConfigureAwait(false);
+            var entity = await GetEntityByIdAsync(id);
             //TODO: Check if input has id different than given id and normalize if it's default value, throw ex otherwise
             MapToEntity(input, entity);
-            await Repository.UpdateAsync(entity, autoSave: true).ConfigureAwait(false);
+            await Repository.UpdateAsync(entity, autoSave: true);
 
             return MapToGetOutputDto(entity);
         }
 
         public virtual async Task DeleteAsync(TKey id)
         {
-            await CheckDeletePolicyAsync().ConfigureAwait(false);
+            await CheckDeletePolicyAsync();
 
-            await Repository.DeleteAsync(id).ConfigureAwait(false);
+            await Repository.DeleteAsync(id);
         }
 
         protected virtual Task<TEntity> GetEntityByIdAsync(TKey id)
@@ -157,27 +157,27 @@ namespace Volo.Abp.Application.Services
 
         protected virtual async Task CheckGetPolicyAsync()
         {
-            await CheckPolicyAsync(GetPolicyName).ConfigureAwait(false);
+            await CheckPolicyAsync(GetPolicyName);
         }
 
         protected virtual async Task CheckGetListPolicyAsync()
         {
-            await CheckPolicyAsync(GetListPolicyName).ConfigureAwait(false);
+            await CheckPolicyAsync(GetListPolicyName);
         }
 
         protected virtual async Task CheckCreatePolicyAsync()
         {
-            await CheckPolicyAsync(CreatePolicyName).ConfigureAwait(false);
+            await CheckPolicyAsync(CreatePolicyName);
         }
 
         protected virtual async Task CheckUpdatePolicyAsync()
         {
-            await CheckPolicyAsync(UpdatePolicyName).ConfigureAwait(false);
+            await CheckPolicyAsync(UpdatePolicyName);
         }
 
         protected virtual async Task CheckDeletePolicyAsync()
         {
-            await CheckPolicyAsync(DeletePolicyName).ConfigureAwait(false);
+            await CheckPolicyAsync(DeletePolicyName);
         }
 
         /// <summary>
