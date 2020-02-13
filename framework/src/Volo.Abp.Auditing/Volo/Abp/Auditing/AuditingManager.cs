@@ -154,11 +154,6 @@ namespace Volo.Abp.Auditing
             {
                 await _auditingManager.SaveAsync(this);
             }
-            
-            public void AddException(Exception exception)
-            {
-                this.AuditLog.Exceptions.Add(exception);
-            }
 
             public void Dispose()
             {
