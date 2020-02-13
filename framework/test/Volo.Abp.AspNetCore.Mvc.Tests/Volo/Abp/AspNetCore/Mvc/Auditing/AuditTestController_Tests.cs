@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _options.IsEnabledForGetRequests = true;
             _options.AlwaysLogOnException = false;
             await GetResponseAsync("api/audit-test/audit-success");
-            //await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
         }
 
         [Fact]
@@ -41,8 +42,14 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             _options.IsEnabled = true;
             _options.AlwaysLogOnException = true;
-            await GetResponseAsync("api/audit-test/audit-fail", System.Net.HttpStatusCode.BadRequest);
-            //await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
+
+            try
+            {
+                await GetResponseAsync("api/audit-test/audit-fail", System.Net.HttpStatusCode.Forbidden);
+            }
+            catch { }
+
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
         }
     }
 }

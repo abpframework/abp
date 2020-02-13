@@ -38,10 +38,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 catch (Exception)
                 {
                     hasError = true;
-                    if (!Options.HideErrors)
-                    {
-                        throw;
-                    }
+                    throw;
                 }
                 finally
                 {
