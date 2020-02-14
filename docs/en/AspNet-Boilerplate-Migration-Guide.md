@@ -38,6 +38,10 @@ We also suggest you to compare the features of two products based on your needs.
 
 If you have an ASP.NET Zero based solution and want to migrate to the ABP Commercial, this guide will also help you.
 
+### ASP.NET MVC 5.x Projects
+
+The ABP Framework doesn't support ASP.NET MVC 5.x, it only works with ASP.NET Core. So, if you migrate your ASP.NET MVC 5.x based projects, you will also deal with the .NET Core migration.
+
 ## The Migration Progress
 
 We've designed the ABP Framework by **getting the best parts** of the ASP.NET Boilerplate framework, so it will be familiar to you if you've developed ASP.NET Boilerplate based applications.
@@ -608,11 +612,47 @@ So, to migrate your code;
 
 > Note that ABP Framework has also an `IEventBus` interface, but it does exists to be a common interface for the local and distributed event bus. It is not injected and directly used.
 
+### Feature Management
+
+Feature system is used in multi-tenant applications to define features of your application check if given feature is available for the current tenant.
+
+#### Defining Features
+
+In the ASP.NET Boilerplate ([see](https://aspnetboilerplate.com/Pages/Documents/Feature-Management)), you create a class inheriting from the `FeatureProvider`, override the `SetFeatures` method and add your class to the `Configuration.Features.Providers` list.
+
+In the ABP Framework ([see](Features.md)), you derive your class from the `FeatureDefinitionProvider` and override the `Define` method. No need to add your class to the configuration, it is automatically discovered by the framework.
+
+#### Checking Features
+
+You can continue to use the `RequiresFeature` attribute and `IFeatureChecker` service to check if a feature is enabled for the current tenant.
+
+#### Changing the Feature Values
+
+In the ABP Framework you use the `IFeatureManager` to change a feature value for a tenant.
+
+### Audit Logging
+
+TODO
+
+### Localization
+
+TODO
+
+### Navigation
+
+TODO
+
+### Background Jobs & Workers
+
+TODO
+
 ## Missing Features
 
 The following features are not present for the ABP Framework. Here, a list of major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
 
 * [Multi-Lingual Entities](https://aspnetboilerplate.com/Pages/Documents/Multi-Lingual-Entities) ([#1754](https://github.com/abpframework/abp/issues/1754))
+* [Real time notification system](https://aspnetboilerplate.com/Pages/Documents/Notification-System) ([#633](https://github.com/abpframework/abp/issues/633))
+* [NHibernate Integration](https://aspnetboilerplate.com/Pages/Documents/NHibernate-Integration) ([#339](https://github.com/abpframework/abp/issues/339)) - We don't intent to work on this, but any community contribution welcome.
 * ...TODO
 
 Most of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework by implementing these yourself.
