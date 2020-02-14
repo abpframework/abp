@@ -488,6 +488,85 @@ public class TaskAppService : ITaskAppService
 
 You inject the `ILogger<T>` instead of the `ILogger`.
 
+### Object to Object Mapping
+
+#### IObjectMapper Service
+
+ASP.NET Boilerplate defines an `IObjectMapper` service ([see](https://aspnetboilerplate.com/Pages/Documents/Object-To-Object-Mapping)) and has an integration to the [AutoMapper](https://automapper.org/) library.
+
+Example usage: Create a `User` object with the given `CreateUserInput` object:
+
+````csharp
+public void CreateUser(CreateUserInput input)
+{
+    var user = ObjectMapper.Map<User>(input);
+    ...
+}
+````
+
+Example: Update an existing `User` properties with the given `UpdateUserInput` object:
+
+````csharp
+public async Task UpdateUserAsync(Guid id, UpdateUserInput input)
+{
+    var user = await _userRepository.GetAsync(id);
+    ObjectMapper.Map(input, user);
+}
+````
+
+ABP Framework has the same `IObjectMapper` service ([see](Object-To-Object-Mapping.md)) and the AutoMapper integration with a slightly different mapping methods.
+
+Example usage: Create a `User` object with the given `CreateUserInput` object:
+
+````csharp
+public void CreateUser(CreateUserInput input)
+{
+    var user = ObjectMapper.Map<CreateUserInput, User>(input);
+}
+````
+
+This time you need to explicitly declare the source type and target type (while ASP.NET Boilerplate was requiring only the target type).
+
+Example: Update an existing `User` properties with the given `UpdateUserInput` object:
+
+````csharp
+public async Task UpdateUserAsync(Guid id, UpdateUserInput input)
+{
+    var user = await _userRepository.GetAsync(id);
+    ObjectMapper.Map<UpdateUserInput, User>(input, user);
+}
+````
+
+Again, ABP Framework expects to explicitly set the source and target types.
+
+#### AutoMapper Integration
+
+##### Auto Mapping Attributes
+
+ASP.NET Boilerplate has `AutoMapTo`, `AutoMapFrom` and `AutoMap` attributes to automatically create mappings for the declared types. Example:
+
+````csharp
+[AutoMapTo(typeof(User))]
+public class CreateUserInput
+{
+    public string Name { get; set; }
+    public string Surname { get; set; }
+    ...
+}
+````
+
+ABP Framework has no such attributes, because AutoMapper as a [similar attribute](https://automapper.readthedocs.io/en/latest/Attribute-mapping.html) now. You need to switch to AutoMapper's attribute.
+
+##### Mapping Definitions
+
+ABP Framework follows AutoMapper principles closely. You can define classes derived from the `Profile` class to define your mappings.
+
+##### Configuration Validation
+
+Configuration validation is a best practice for the AutoMapper to maintain your mapping configuration in a safe way.
+
+See [the documentation](Object-To-Object-Mapping.md) for more information related to the object mapping.
+
 ### Setting Management
 
 #### Defining the Settings
