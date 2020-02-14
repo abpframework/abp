@@ -2,6 +2,8 @@ param(
   [string]$Version
 )
 
+npm install
+
 $NextVersion = $(node get-version.js)
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
@@ -14,7 +16,6 @@ $commands = (
   "npm install",
   "npm run publish-packages -- --nextVersion $Version",
   "cd ../../",
-  "yarn",
   "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish",
   "yarn update:templates",
   "yarn gulp:app",

@@ -277,6 +277,79 @@ ABP Framework doesn't include the ` ICustomValidate ` that does exists in the AS
 
 ## The Infrastructure Layer
 
+### Namespaces
+
+ASP.NET Boilerplate uses the `Abp.*` namespaces while the ABP Framework uses the `Volo.Abp.*` namespaces for the framework and pre-built fundamental modules.
+
+In addition, there are also some pre-built application modules (like docs and blog modules) those are using the `Volo.*` namespaces (like `Volo.Blogging.*` and `Volo.Docs.*`). We consider these modules as standalone open source products developed by Volosoft rather than add-ons or generic modules completing the ABP Framework and used in the applications. We've developed them as a module to make them re-usable as a part of a bigger solution.
+
+### Module System
+
+Both of the ASP.NET Boilerplate and the ABP Framework have the `AbpModule` while they are a bit different.
+
+ASP.NET Boilerplate's `AbpModule` class has `PreInitialize`, `Initialize` and `PostInitialize` methods you can override and configure the framework and the depended modules. You can also register and resolve dependencies in these methods.
+
+ABP Framework's `AbpModule` class has the `ConfigureServices` and `OnApplicationInitialization` methods (and their Pre and Post versions). It is similar to ASP.NET Core's Startup class. You configure other services and register dependencies in the `ConfigureServices`. However, you can now resolve dependencies in that point. You can resolve dependencies and configure the ASP.NET Core pipeline in the `OnApplicationInitialization` method while you can not register dependencies here. So, the new module classes separate dependency registration phase from dependency resolution phase since it follows the ASP.NET Core's approach.
+
+### Dependency Injection
+
+#### The DI Framework
+
+ASP.NET Boilerplate is using the [Castle Windsor](http://www.castleproject.org/projects/windsor/) as the dependency injection framework. This is a fundamental dependency of the ASP.NET Boilerplate framework. We've got a lot of feedback to make the ASP.NET Boilerplate DI framework agnostic, but it was not so easy because of the design.
+
+ABP Framework is dependency injection framework independent since it uses Microsoft's [Dependency Injection Extensions](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection) library as an abstraction. None of the ABP Framework or module packages depends on any specific library.
+
+However, ABP Framework doesn't use the Microsoft's base DI library because it has some missing features ABP Framework needs to: Property Injection and Interception. All the startup templates and the samples are using the [Autofac](https://autofac.org/) as the DI library and it is the only [officially integrated](Autofac-Integration.md) library to the ABP Framework. We suggest you to use the Autofac with the ABP Framework if you have not a good reason. If you have a good reason, please create an [issue](https://github.com/abpframework/abp/issues/new) on GitHub to request it or just implement it and send a pull request :)
+
+#### Registering the Dependencies
+
+Registering the dependencies are similar and mostly handled by the framework conventionally (like repositories, application services, controllers... etc). Implement the same `ITransientDependency`, `ISingletonDependency` and `IScopedDependency` interfaces for the services not registered by conventions.
+
+When you need to manually register dependencies, use the `context.Services` in the `ConfigureServices` method of your module. Example:
+
+````csharp
+public class BlogModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        //Register an instance as singleton
+        context.Services.AddSingleton<TaxCalculator>(new TaxCalculator(taxRatio: 0.18));
+
+        //Register a factory method that resolves from IServiceProvider
+        context.Services.AddScoped<ITaxCalculator>(
+            sp => sp.GetRequiredService<TaxCalculator>()
+        );
+    }
+}
+````
+
+See the ABP Framework [dependency injection document](https://docs.abp.io/en/abp/latest/Dependency-Injection) for details.
+
+### Configuration vs Options System
+
+ASP.NET Boilerplate has its own configuration system to configure the framework and the modules. For example, you could disable the audit logging in the `Initialize` method of your [module](https://aspnetboilerplate.com/Pages/Documents/Module-System):
+
+````csharp
+public override void Initialize()
+{
+    Configuration.Auditing.IsEnabled = false;
+}
+````
+
+ABP Framework uses [the options pattern](Options.md) to configure the framework and the modules. You typically configure the options in the `ConfigureServices` method of your [module](Module-Development-Basics.md):
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpAuditingOptions>(options =>
+    {
+        options.IsEnabled = false;
+    });
+}
+````
+
+Instead of a central configuration object, there are separated option classes for every module and feature those are defined in the related documents.
+
 ### IAbpSession vs ICurrentUser and ICurrentTenant
 
 ASP.NET Boilerplate's `IAbpSession` service is used to obtain the current user and tenant information, like ` UserId ` and `TenantId`.
@@ -301,16 +374,151 @@ You inherit from the `AuthorizationProvider` in the ASP.NET Boilerplate to defin
 
 ### Unit of Work
 
-TODO
+Unit of work system has been designed to work seamlessly. For most of the cases, you don't need to change anything.
+
+`UnitOfWork` attribute of the ABP Framework doesn't have the `ScopeOption` (type of `TransactionScopeOption`) property. Instead, use `IUnitOfWorkManager.Begin()` method with `requiresNew = true`  to create an independent inner transaction in a transaction scope.
+
+#### Data Filters
+
+ASP.NET Boilerplate implements the data filtering system as a part of the unit of work. ABP Framework has a separate `IDataFilter` service.
+
+See the [data filtering document](Data-Filtering.md) to learn how to enable/disable a filter.
+
+See [the UOW documentation](Unit-Of-Work.md) for more about the UOW system.
 
 ### Multi-Tenancy
 
-TODO
+#### IMustHaveTenant & IMayHaveTenant vs IMultiTenant
+
+ASP.NET Boilerplate defines `IMustHaveTenant` and `IMayHaveTenant` interfaces to implement them for your entities. In this way, your entities are automatically filtered according to the current tenant. Because of the design, there was a problem: You had to create a "Default" tenant in the database with "1" as the Id if you want to create a non multi-tenant application (this "Default" tenant was used as the single tenant).
+
+ABP Framework has a single interface for multi-tenant entities: `IMultiTenant` which defines a nullable `TenantId` property of type `Guid`. If your application is not multi-tenant, then your entities will have null TenantId (instead of a default one).
+
+On the migration, you need to change the TenantId field type and replace these interfaces with the `IMultiTenant`
+
+#### Switch Between Tenants
+
+In some cases you might need to switch to a tenant for a code scope and work with the tenant's data in this scope.
+
+In ASP.NET Boilerplate, it is done using the `IUnitOfWorkManager` service:
+
+````csharp
+public async Task<List<Product>> GetProducts(int tenantId)
+{
+    using (_unitOfWorkManager.Current.SetTenantId(tenantId))
+    {
+        return await _productRepository.GetAllListAsync();
+    }
+}
+````
+
+In the ABP Framework it is done with the `ICurrentTenant` service:
+
+````csharp
+public async Task<List<Product>> GetProducts(Guid tenantId)
+{
+    using (_currentTenant.Change(tenantId))
+    {
+        return await _productRepository.GetListAsync();
+    }
+}
+````
+
+Pass `null` to the `Change` method to switch to the host side.
+
+### Caching
+
+ASP.NET Boilerplate has its [own distributed caching abstraction](https://aspnetboilerplate.com/Pages/Documents/Caching) which has in-memory and Redis implementations. You typically inject the `ICacheManager` service and use its `GetCache(...)` method to obtain a cache, then get and set objects in the cache.
+
+ABP Framework uses and extends ASP.NET Core's [distributed caching abstraction](Caching.md). It defines the `IDistributedCache<T>` services to inject a cache and get/set objects.
+
+### Logging
+
+ASP.NET Boilerplate uses Castle Windsor's [logging facility](http://docs.castleproject.org/Windsor.Logging-Facility.ashx) as an abstraction and supports multiple logging providers including Log4Net (the default one comes with the startup projects) and Serilog. You typically property-inject the logger:
+
+````csharp
+using Castle.Core.Logging; //1: Import Logging namespace
+
+public class TaskAppService : ITaskAppService
+{    
+    //2: Getting a logger using property injection
+    public ILogger Logger { get; set; }
+
+    public TaskAppService()
+    {
+        //3: Do not write logs if no Logger supplied.
+        Logger = NullLogger.Instance;
+    }
+
+    public void CreateTask(CreateTaskInput input)
+    {
+        //4: Write logs
+        Logger.Info("Creating a new task with description: " + input.Description);
+        //...
+    }
+}
+````
+
+ABP Framework depends on Microsoft's [logging extensions](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/logging) library which is also an abstraction and there are many providers implement it. Startup templates are using the Serilog as the pre-configured logging libary while it is easy to change in your project. The usage pattern is similar:
+
+````csharp
+//1: Import the Logging namespaces
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+
+public class TaskAppService : ITaskAppService
+{
+    //2: Getting a logger using property injection
+    public ILogger<TaskAppService> Logger { get; set; }
+
+    public TaskAppService()
+    {
+        //3: Do not write logs if no Logger supplied.
+        Logger = NullLogger<TaskAppService>.Instance;
+    }
+
+    public void CreateTask(CreateTaskInput input)
+    {
+        //4: Write logs
+        Logger.Info("Creating a new task with description: " + input.Description);
+        //...
+    }
+}
+````
+
+You inject the `ILogger<T>` instead of the `ILogger`.
+
+### Setting Management
+
+#### Defining the Settings
+
+In an ASP.NET Boilerplate based application, you create a class deriving from the `SettingProvider` class, implement the `GetSettingDefinitions` method and add your class to the `Configuration.Settings.Providers` list.
+
+In the ABP Framework, you need to derive your class from the `SettingDefinitionProvider` and implement the `Define` method. You don't need to register your class since the ABP Framework automatically discovers it.
+
+#### Getting the Setting Values
+
+ASP.NET Boilerplate provides the `ISettingManager` to read the setting values in the server side and `abp.setting.get(...)` method in the JavaScript side.
+
+ABP Framework has the `ISettingProvider` service to read the setting values in the server side and `abp.setting.get(...)` method in the JavaScript side.
+
+#### Setting the Setting Values
+
+For ASP.NET Boilerplate, you use the same `ISettingManager` service to change the setting values.
+
+ABP Framework separates it and provides the setting management module (pre-added to the startup projects) which has the ` ISettingManager ` to change the setting values. This separation was introduced to support tiered deployment scenarios (where `ISettingProvider` can also work in the client application while `ISettingManager ` can also work in the server (API) side).
+
+### Clock
+
+ASP.NET Boilerplate has a static `Clock` service ([see](https://aspnetboilerplate.com/Pages/Documents/Timing)) which is used to abstract the `DateTime` kind, so you can easily switch between Local and UTC times. You don't inject it, but just use the `Clock.Now` static method to obtain the current time.
+
+ABP Framework has the `IClock` service ([see](Clock.md)) which has a similar goal, but now you need to inject it whenever you need it.
 
 ## Missing Features
 
 The following features are not present for the ABP Framework. Here, a list of major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
 
 * [Multi-Lingual Entities](https://aspnetboilerplate.com/Pages/Documents/Multi-Lingual-Entities) ([#1754](https://github.com/abpframework/abp/issues/1754))
+* ...TODO
 
 Most of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework by implementing these yourself.

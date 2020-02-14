@@ -105,12 +105,20 @@
           "path": "Caching.md"
         },
         {
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
           "text": "Audit Logging",
           "path": "Audit-Logging.md"
         },
         {
           "text": "Settings",
           "path": "Settings.md"
+        },
+        {
+          "text": "Data Filtering",
+          "path": "Data-Filtering.md"
         }
       ]
     },
