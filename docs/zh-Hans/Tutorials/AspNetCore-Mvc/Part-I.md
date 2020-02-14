@@ -50,6 +50,18 @@ namespace Acme.BookStore
         public DateTime PublishDate { get; set; }
 
         public float Price { get; set; }
+
+        protected Book()
+        {
+        }
+        public Book(Guid id, string name, BookType type, DateTime publishDate, float price)
+        :base(id)
+        {
+            Name = name;
+            Type = type;
+            PublishDate = publishDate;
+            Price = price;
+        }
     }
 }
 ````
@@ -349,7 +361,7 @@ successfully created the book with id: f3f03580-c1aa-d6a9-072d-39e75c69f5c7
 ````
 
 * 此代码更改了Razor View Page Model的默认继承,因此它从`BookStorePage`类(而不是`PageModel`)继承.启动模板附带的`BookStorePage`类,提供所有页面使用的一些共享属性/方法.
-* 确保`IndexModel`(Index.cshtml.cs)具有`Acme.BookStore.Pages.Books`命名空间,或者在`Index.cshtml`中更新它.
+* 确保`IndexModel`(Index.cshtml.cs)具有`Acme.BookStore.Web.Pages.Books`命名空间,或者在`Index.cshtml`中更新它.
 
 #### 将Books页面添加到主菜单
 
@@ -426,7 +438,7 @@ context.Menu.AddItem(
 ````
 
 * `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro)用于将外部的 **脚本** 添加到页面中.它比标准的`script`标签多了很多额外的功能.它可以处理 **最小化**和 **版本**.查看[捆绑 & 压缩文档](../../AspNetCore/Bundling-Minification.md)获取更多信息.
-* `abp-card` 和 `abp-table` 是为Twitter Bootstrap的[card component](http://getbootstrap.com/docs/4.1/components/card/)封装的 **tag helpers**.ABP中有很多tag helpers,可以很方便的使用大多数[bootstrap](https://getbootstrap.com/)组件.你也可以使用原生的HTML标签代替tag helpers.使用tag helper可以通过智能提示和编译时类型检查减少HTML代码并防止错误.查看[tag helpers 文档](../../AspNetCore/Tag-Helpers.md).
+* `abp-card` 和 `abp-table` 是为Twitter Bootstrap的[card component](http://getbootstrap.com/docs/4.1/components/card/)封装的 **tag helpers**.ABP中有很多tag helpers,可以很方便的使用大多数[bootstrap](https://getbootstrap.com/)组件.你也可以使用原生的HTML标签代替tag helpers.使用tag helper可以通过智能提示和编译时类型检查减少HTML代码并防止错误.查看[tag helpers 文档](../../AspNetCore/Tag-Helpers/Index.md).
 * 你可以像上面本地化菜单一样 **本地化** 列名.
 
 #### 添加脚本文件

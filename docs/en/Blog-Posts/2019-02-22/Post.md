@@ -1,6 +1,6 @@
 # Microservice Demo, Projects Status and Road Map
 
-After [the first announcement](https://abp.io/blog/abp/Abp-vNext-Announcement) on the ABP vNext, we have a lot of improvements on the codebase (1100+ commits on the [GitHub repository](https://github.com/abpframework/abp)). We've created features, samples, documentation and much more. In this post, I want to inform you about some news and the status of the project.
+After [the first announcement](https://blog.abp.io/Abp-vNext-Announcement) on the ABP vNext, we have a lot of improvements on the codebase (1100+ commits on the [GitHub repository](https://github.com/abpframework/abp)). We've created features, samples, documentation and much more. In this post, I want to inform you about some news and the status of the project.
 
 ## Microservice Demo Solution
 
@@ -38,7 +38,7 @@ First release may not include a SPA template. However, we want to prepare a simp
 
 ## Chinese Web Site
 
-There is a big ABP community in China. They have created a Chinese version of the abp.io web site: https://cn.abp.io/ They are keeping it up to date. Thanks to the Chinese developers and especially to [Liming Ma](https://github.com/maliming).
+There is a big ABP community in China. They have created a Chinese version of the abp.io web site: https://abp.io/ They are keeping it up to date. Thanks to the Chinese developers and especially to [Liming Ma](https://github.com/maliming).
 
 ## NDC {London} 2019
 
