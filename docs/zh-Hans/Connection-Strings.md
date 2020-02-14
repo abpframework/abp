@@ -35,6 +35,22 @@ ABP框架的设计是[模块化](Module-Development-Basics.md), [微服务兼容
 
 [预构建的应用程序模块](Modules/Index.md) 为连接字符串名称定义常量. 例如IdentityServer模块在 `AbpIdentityServerDbProperties` 类(位于 `Volo.Abp.IdentityServer` 命名空间)定义了 `ConnectionStringName` 常量 . 其他的模块类似的定义常量,你可以查看连接字符串的名称.
 
+### AbpDbConnectionOptions
+
+ABP实际上使用 `AbpDbConnectionOptions` 获取连接字符串. 如果如上所述设置了连接字符串, `AbpDbConnectionOptions` 会被自动填充. 但是你也可以使用[选项模式](Options.md)设置或覆盖连接字符串. 你可以在[模块](Module-Development-Basics.md)的 `ConfigureServices` 方法配置`AbpDbConnectionOptions`）.
+如下所示:
+
+````csharp
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    Configure<AbpDbConnectionOptions>(options =>
+    {
+        options.ConnectionStrings.Default = "...";
+        options.ConnectionStrings["AbpPermissionManagement"] = "...";
+    });
+}
+````
+
 ## 设置连接字符串名称
 
 模块通常使用 `ConnectionStringName` attribute 为 `DbContext` 类关联一个唯一的连接字符串名称. 示例:
