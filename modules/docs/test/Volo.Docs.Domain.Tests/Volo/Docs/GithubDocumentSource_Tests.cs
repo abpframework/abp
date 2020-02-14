@@ -7,15 +7,15 @@ using Xunit;
 
 namespace Volo.Docs
 {
-    public class GithubDocumentStore_Tests : DocsDomainTestBase
+    public class GithubDocumentSource_Tests : DocsDomainTestBase
     {
-        private readonly IDocumentSourceFactory _documentStoreFactory;
+        private readonly IDocumentSourceFactory _documentSourceFactory;
         private readonly IProjectRepository _projectRepository;
         private readonly DocsTestData _testData;
 
-        public GithubDocumentStore_Tests()
+        public GithubDocumentSource_Tests()
         {
-            _documentStoreFactory = GetRequiredService<IDocumentSourceFactory>();
+            _documentSourceFactory = GetRequiredService<IDocumentSourceFactory>();
             _projectRepository = GetRequiredService<IProjectRepository>();
             _testData = GetRequiredService<DocsTestData>();
         }
@@ -23,7 +23,7 @@ namespace Volo.Docs
         [Fact]
         public async Task GetDocumentAsync()
         {
-            var source = _documentStoreFactory.Create(GithubDocumentSource.Type);
+            var source = _documentSourceFactory.Create(GithubDocumentSource.Type);
 
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
@@ -40,7 +40,7 @@ namespace Volo.Docs
         [Fact]
         public async Task GetVersionsAsync()
         {
-            var source = _documentStoreFactory.Create(GithubDocumentSource.Type);
+            var source = _documentSourceFactory.Create(GithubDocumentSource.Type);
 
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
@@ -55,7 +55,7 @@ namespace Volo.Docs
         [Fact]
         public async Task GetResource()
         {
-            var source = _documentStoreFactory.Create(GithubDocumentSource.Type);
+            var source = _documentSourceFactory.Create(GithubDocumentSource.Type);
 
             var project = await _projectRepository.FindAsync(_testData.PorjectId);
             project.ShouldNotBeNull();
