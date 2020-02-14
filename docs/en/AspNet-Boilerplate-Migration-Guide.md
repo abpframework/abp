@@ -593,6 +593,21 @@ ASP.NET Boilerplate has a static `Clock` service ([see](https://aspnetboilerplat
 
 ABP Framework has the `IClock` service ([see](Clock.md)) which has a similar goal, but now you need to inject it whenever you need it.
 
+### Event Bus
+
+ASP.NET Boilerplate has an in-process event bus system. You typically inject the `IEventBus` (or use the static instance `EventBus.Default`) to trigger an event. It automatically triggers events for entity changes (like `EntityCreatingEventData` and `EntityUpdatedEventData`). You create a class by implementing the `IEventHandler<T>` interface.
+
+ABP Framework separates the event bus into two services: `ILocalEventBus` and `IDistributedEventBus`.
+
+The local event bus is similar to the event bus of the ASP.NET Boilerplate while the distributed event bus is new feature introduced in the ABP Framework.
+
+So, to migrate your code;
+
+* Use the `ILocalEventBus` instead of the `IEventBus`.
+* Implement the `ILocalEventHandler` instead of the `IEventHandler`.
+
+> Note that ABP Framework has also an `IEventBus` interface, but it does exists to be a common interface for the local and distributed event bus. It is not injected and directly used.
+
 ## Missing Features
 
 The following features are not present for the ABP Framework. Here, a list of major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
