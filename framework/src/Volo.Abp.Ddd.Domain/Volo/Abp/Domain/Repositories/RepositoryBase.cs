@@ -18,6 +18,7 @@ namespace Volo.Abp.Domain.Repositories
         public IDataFilter DataFilter { get; set; }
 
         public ICurrentTenant CurrentTenant { get; set; }
+
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
         public virtual Type ElementType => GetQueryable().ElementType;

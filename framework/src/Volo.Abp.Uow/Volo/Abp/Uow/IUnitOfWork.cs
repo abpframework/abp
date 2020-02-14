@@ -9,6 +9,7 @@ namespace Volo.Abp.Uow
     public interface IUnitOfWork : IDatabaseApiContainer, ITransactionApiContainer, IDisposable
     {
         Guid Id { get; }
+
         Dictionary<string, object> Items { get; }
 
         //TODO: Switch to OnFailed (sync) and OnDisposed (sync) methods to be compatible with OnCompleted

@@ -112,26 +112,5 @@ namespace Volo.Abp.Domain.Entities
 
             idProperty.SetValue(entity, idFactory());
         }
-
-        public static object GetEntityId(object entity)
-        {
-            if (!IsEntity(entity.GetType()))
-            {
-                throw new AbpException(entity.GetType() + " is not an Entity !");
-            }
-
-            return ReflectionHelper.GetValueByPath(entity, entity.GetType(), "Id");
-        }
-        public static string GetHardDeleteKey(object entity, string tenantId)
-        {
-            //if (entity is IMultiTenant) // IsMultiTenantEntity
-            if (typeof(IMultiTenant).IsAssignableFrom(entity.GetType()))
-            {
-                var tenantIdString = !string.IsNullOrEmpty(tenantId) ? tenantId : "null";
-                return entity.GetType().FullName + ";TenantId=" + tenantIdString + ";Id=" + GetEntityId(entity);
-            }
-
-            return entity.GetType().FullName + ";Id=" + GetEntityId(entity);
-        }
     }
 }
