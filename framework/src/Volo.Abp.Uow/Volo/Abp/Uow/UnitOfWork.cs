@@ -31,6 +31,8 @@ namespace Volo.Abp.Uow
 
         public IServiceProvider ServiceProvider { get; }
 
+        public Dictionary<string, object> Items { get; }
+
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
         private readonly Dictionary<string, ITransactionApi> _transactionApis;
         private readonly AbpUnitOfWorkDefaultOptions _defaultOptions;
@@ -46,6 +48,7 @@ namespace Volo.Abp.Uow
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
             _transactionApis = new Dictionary<string, ITransactionApi>();
+            Items = new Dictionary<string, object>();
         }
 
         public virtual void Initialize(AbpUnitOfWorkOptions options)
@@ -316,6 +319,11 @@ namespace Volo.Abp.Uow
         public override string ToString()
         {
             return $"[UnitOfWork {Id}]";
+        }
+
+        public Dictionary<string, object> GetHardDeleteItems()
+        {
+            return Items;
         }
     }
 }
