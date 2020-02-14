@@ -1,4 +1,4 @@
-import { ABP } from '../models';
+import { ABP } from '../models/common';
 
 export function organizeRoutes(
   routes: ABP.FullRoute[],
@@ -33,7 +33,10 @@ export function organizeRoutes(
   return filteredRoutes;
 }
 
-export function setChildRoute(routes: ABP.FullRoute[], parentNameArr: ABP.FullRoute[]): ABP.FullRoute[] {
+export function setChildRoute(
+  routes: ABP.FullRoute[],
+  parentNameArr: ABP.FullRoute[],
+): ABP.FullRoute[] {
   return routes.map(route => {
     if (route.children && route.children.length) {
       route.children = setChildRoute(route.children, parentNameArr);

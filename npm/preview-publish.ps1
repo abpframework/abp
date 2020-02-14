@@ -4,22 +4,19 @@ param(
 
 npm install
 
-$NextVersion = $(node get-version.js)
+$NextVersion = $(node get-version.js) + '-preview' + (Get-Date).tostring(“yyyyMMdd”) + '-1'
 $rootFolder = (Get-Item -Path "./" -Verbose).FullName
 
 if(-Not $Version) {
-  $Version = $NextVersion;
+$Version = $NextVersion;
 }
 
 $commands = (
   "cd ng-packs\scripts",
   "npm install",
-  "npm run publish-packages -- --nextVersion $Version",
+  "npm run publish-packages -- --nextVersion $Version --preview",
   "cd ../../",
-  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish",
-  "yarn update:templates",
-  "yarn gulp:app",
-  "yarn gulp:module"
+  "yarn lerna publish $Version --no-push --yes --no-git-reset --no-commit-hooks --no-git-tag-version --force-publish --dist-tag preview"
 )
 
 foreach ($command in $commands) { 

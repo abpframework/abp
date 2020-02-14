@@ -54,7 +54,7 @@ namespace Volo.Abp.Cli.Commands
         private async Task InstallSuiteAsync()
         {
             var nugetIndexUrl = await GetNuGetIndexUrlAsync();
-            
+
             if (nugetIndexUrl == null)
             {
                 return;
@@ -108,13 +108,21 @@ namespace Volo.Abp.Cli.Commands
         {
             var apiKeyResult = await _apiKeyService.GetApiKeyOrNullAsync();
 
-            if (apiKeyResult == null || string.IsNullOrEmpty(apiKeyResult.ApiKey))
+            if (apiKeyResult == null)
             {
-                Logger.LogError("Couldn't retrieve your NuGet API key!");
-                Logger.LogWarning(File.Exists(CliPaths.AccessToken)
-                    ? "Make sure you have an active session and license on commercial.abp.io. To re-sign in you can use the CLI command \"abp login <username>\"."
-                    : "You are not signed in to commercial.abp.io. Use the CLI command \"abp login <username>\" to sign in.");
+                Logger.LogWarning("You are not signed in! Use the CLI command \"abp login <username>\" to sign in, then try again.");
+                return null;
+            }
 
+            if (!string.IsNullOrWhiteSpace(apiKeyResult.ErrorMessage))
+            {
+                Logger.LogWarning(apiKeyResult.ErrorMessage);
+                return null;
+            }
+
+            if (string.IsNullOrEmpty(apiKeyResult.ApiKey))
+            {
+                Logger.LogError("Couldn't retrieve your NuGet API key! You can re-sign in with the CLI command \"abp login <username>\".");
                 return null;
             }
 

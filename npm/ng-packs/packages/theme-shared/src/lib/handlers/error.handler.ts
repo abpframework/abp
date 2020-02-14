@@ -190,8 +190,8 @@ export class ErrorHandler {
       if (body.details) {
         message = body.details;
         title = body.message;
-      } else if (body.code) {
-        title = body.code;
+      } else if (body.message) {
+        title = DEFAULT_ERROR_MESSAGES.defaultError.title;
         message = body.message;
       } else {
         message = body.message || DEFAULT_ERROR_MESSAGES.defaultError.title;
