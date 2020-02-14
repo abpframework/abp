@@ -632,27 +632,103 @@ In the ABP Framework you use the `IFeatureManager` to change a feature value for
 
 ### Audit Logging
 
-TODO
+The ASP.NET Boilerplate ([see](https://aspnetboilerplate.com/Pages/Documents/Audit-Logging)) and the ABP Framework ([see](Audit-Logging.md)) has similar audit logging systems. ABP Framework requires to add `UseAuditing()` middleware to the ASP.NET Core pipeline, which is already added in the startup templates. So, most of the times it will be work out of the box.
 
 ### Localization
 
-TODO
+ASP.NET Boilerplate supports XML and JSON files to define the localization key-values for the UI ([see](https://aspnetboilerplate.com/Pages/Documents/Localization)). ABP Framework only supports the JSON formatter localization files ([see](Localization.md)). So, you need to convert your XML file to JSON.
 
-### Navigation
+The ASP.NET Boilerplate has its own the `ILocalizationManager` service to be injected and used for the localization in the server side.
 
-TODO
+The ABP Framework uses [Microsoft localization extension](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/localization) library, so it is completely integrated to ASP.NET Core. You use the `IStringLocalizer<T>` service to get a localized text. Example:
 
-### Background Jobs & Workers
+````csharp
+public class MyService
+{
+    private readonly IStringLocalizer<TestResource> _localizer;
 
-TODO
+    public MyService(IStringLocalizer<TestResource> localizer)
+    {
+        _localizer = localizer;
+    }
+
+    public void Foo()
+    {
+        var str = _localizer["HelloWorld"]; //Get a localized text
+    }
+}
+````
+
+So, you need to replace `ILocalizationManager` usage by the `IStringLocalizer`.
+
+It also provides API used in the client side:
+
+````js
+var testResource = abp.localization.getResource('Test');
+var str = testResource('HelloWorld');
+````
+
+It was like `abp.localization.localize(...)` in the ASP.NET Boilerplate.
+
+### Navigation vs Menu
+
+In ASP.NET you create a class deriving from the `NavigationProvider` to define your menu elements. Menu items has `requiredPermissionName` attributes to restrict access to a menu element. Menu items were static and your class is executed only one time.
+
+Int the ABP Framework you need to create a class implements the `IMenuContributor` interface. Your class is executed whenever the menu needs to be rendered. So, you can conditionally add menu items.
+
+As an example, this is the menu contributor of the tenant management module:
+
+````csharp
+public class AbpTenantManagementWebMainMenuContributor : IMenuContributor
+{
+    public async Task ConfigureMenuAsync(MenuConfigurationContext context)
+    {
+        //Add items only to the main menu
+        if (context.Menu.Name != StandardMenus.Main)
+        {
+            return;
+        }
+
+        //Get the standard administration menu item
+        var administrationMenu = context.Menu.GetAdministration();
+
+        //Resolve some needed services from the DI container
+        var authorizationService = context.ServiceProvider
+            .GetRequiredService<IAuthorizationService>();
+        var l = context.ServiceProvider
+            .GetRequiredService<IStringLocalizer<AbpTenantManagementResource>>();
+
+        var tenantManagementMenuItem = new ApplicationMenuItem(
+            TenantManagementMenuNames.GroupName,
+            l["Menu:TenantManagement"],
+            icon: "fa fa-users");
+        
+        administrationMenu.AddItem(tenantManagementMenuItem);
+
+        //Conditionally add the "Tenants" menu item based on the permission
+        if (await authorizationService
+            .IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
+        {
+            tenantManagementMenuItem.AddItem(
+                new ApplicationMenuItem(
+                    TenantManagementMenuNames.Tenants,
+                    l["Tenants"], 
+                    url: "/TenantManagement/Tenants"));
+        }
+    }
+}
+````
+
+So, you need to check permission using the `IAuthorizationService` if you want to show a menu item only when the user has the related permission.
+
+> Navigation/Menu system is only for ASP.NET Core MVC / Razor Pages applications. Angular applications has a different system implemented in the startup templates.
 
 ## Missing Features
 
-The following features are not present for the ABP Framework. Here, a list of major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
+The following features are not present for the ABP Framework. Here, a list of some major missing features (and the related issue for that feature waiting on the ABP Framework GitHub repository):
 
 * [Multi-Lingual Entities](https://aspnetboilerplate.com/Pages/Documents/Multi-Lingual-Entities) ([#1754](https://github.com/abpframework/abp/issues/1754))
 * [Real time notification system](https://aspnetboilerplate.com/Pages/Documents/Notification-System) ([#633](https://github.com/abpframework/abp/issues/633))
 * [NHibernate Integration](https://aspnetboilerplate.com/Pages/Documents/NHibernate-Integration) ([#339](https://github.com/abpframework/abp/issues/339)) - We don't intent to work on this, but any community contribution welcome.
-* ...TODO
 
-Most of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework by implementing these yourself.
+Some of these features will eventually be implemented. However, you can implement them yourself if they are important for you. If you want, you can [contribute](Contribution/Index.md) to the framework, it is appreciated.

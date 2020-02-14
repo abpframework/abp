@@ -50,6 +50,10 @@
       ]
     },
     {
+      "text": "ASP.NET Boilerplate Migration Guide",
+      "path": "AspNet-Boilerplate-Migration-Guide.md"
+    },
+    {
       "text": "CLI",
       "path": "CLI.md"
     },
