@@ -178,9 +178,16 @@ namespace Volo.Docs.Documents
             }
 
             var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
+            if (document == null)
+            {
+                return await GetDocumentAsync();
+            }
 
-            //TODO: Configurable cache time?
-            if (document == null || document.LastCachedTime + TimeSpan.FromDays(30) < DateTime.Now)
+            //Only the latest version (dev) of the document needs to update the cache.
+            if (!project.LatestVersionBranchName.IsNullOrWhiteSpace() &&
+                document.Version == project.LatestVersionBranchName &&
+                //TODO: Configurable cache time?
+                document.LastCachedTime + TimeSpan.FromHours(2) < DateTime.Now)
             {
                 return await GetDocumentAsync();
             }
