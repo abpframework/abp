@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.DynamicProxy;
+using Volo.Abp.Uow;
 
 namespace Volo.Abp.Domain.Repositories
 {
@@ -39,6 +41,33 @@ namespace Volo.Abp.Domain.Repositories
             if (repo != null)
             {
                 await repo.EnsurePropertyLoadedAsync(entity, propertyExpression, cancellationToken);
+            }
+        }
+
+        public static async Task HardDeleteAsync<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository, TEntity entity)
+            where TEntity : class, IEntity<TPrimaryKey>, ISoftDelete
+        {
+            var repo = ProxyHelper.UnProxy(repository) as IRepository<TEntity, TPrimaryKey>;
+            if (repo != null)
+            {
+                var uow = ((IUnitOfWorkManagerAccessor)repo).UnitOfWorkManager;
+                var baseRepository = ((RepositoryBase<TEntity>)repo);
+
+                var items = ((IUnitOfWorkManagerAccessor)repo).UnitOfWorkManager.Current.Items;
+                var hardDeleteEntities = items.GetOrAdd(UnitOfWorkExtensionDataTypes.HardDelete, () => new HashSet<string>()) as HashSet<string>;
+
+                var hardDeleteKey = EntityHelper.GetHardDeleteKey(entity, baseRepository.CurrentTenant?.Id?.ToString());
+                hardDeleteEntities.Add(hardDeleteKey);
+
+                await repo.DeleteAsync(entity);
+            }
+        }
+        public static async Task HardDeleteAsync<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository, Expression<Func<TEntity, bool>> predicate)
+            where TEntity : class, IEntity<TPrimaryKey>, ISoftDelete
+        {
+            foreach (var entity in repository.Where(predicate).ToList())
+            {
+                await repository.HardDeleteAsync(entity);
             }
         }
     }
