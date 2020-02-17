@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.FileSystem.Documents
 {
-    public class FileSystemDocumentStore : DomainService, IDocumentStore
+    public class FileSystemDocumentSource : DomainService, IDocumentSource
     {
         public const string Type = "FileSystem";
 
@@ -30,16 +31,21 @@ namespace Volo.Docs.FileSystem.Documents
                 localDirectory = documentName.Substring(0, documentName.LastIndexOf('/'));
             }
 
-            return new Document
-            {
-                Content = content,
-                FileName = Path.GetFileName(path),
-                Format = project.Format,
-                LocalDirectory = localDirectory,
-                Title = documentName,
-                RawRootUrl = $"/document-resources?projectId={project.Id.ToString()}&version={version}&languageCode={languageCode}&name=",
-                RootUrl = "/"
-            };
+            return new Document(GuidGenerator.Create(),
+                project.Id,
+                documentName,
+                version,
+                languageCode,
+                Path.GetFileName(path),
+                content,
+                project.Format,
+                path,
+                "/",
+                $"/document-resources?projectId={project.Id.ToString()}&version={version}&languageCode={languageCode}&name=",
+                localDirectory,
+                File.GetLastWriteTime(path),
+                File.GetLastWriteTime(path) == File.GetCreationTime(path) ? 1 : 2,
+                DateTime.Now);
         }
 
         public Task<List<VersionInfo>> GetVersionsAsync(Project project)

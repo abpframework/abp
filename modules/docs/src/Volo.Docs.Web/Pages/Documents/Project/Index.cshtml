@@ -1,4 +1,4 @@
-﻿@page
+@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
@@ -145,7 +145,7 @@
                     </div>
 
 
-                    @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
+                    @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                     {
                         <div class="text-muted p-3">
                             <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
@@ -153,7 +153,7 @@
                     }
                     else
                     {
-                        <ul root-node="@Model.Navigation.RootNode"
+                        <ul root-node="@Model.Navigation"
                             version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                             project-name="@Model.ProjectName"
                             project-format="@Model.Project.Format"
@@ -187,28 +187,29 @@
                     <div class="float-right">
                         @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                         {
-                            <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                            <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @(L["Edit"]) (@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</a>
                         }
                     </div>
+
+                    <div class="float-right mr-3">
+                        @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                        {
+                            @(L["Contributors"].Value + " :")
+                            @foreach (var contributor in Model.Document.Contributors)
+                            {
+                                <a href="@contributor.UserProfileUrl" target="_blank">
+                                    <img src="@contributor.AvatarUrl"
+                                         class="rounded-circle" height="21" width="21" title="@contributor.Username" />
+                                </a>
+                            }
+                        }
+                    </div>
+
                 </div>
 
                 <div class="docs-content-field">
                     <div class="docs-text-field">
                         <div class="position-relative">
-                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                            {
-                                <div class="contributors">
-                                    <small class="text-muted">@(L["Contributors"].Value + " :")</small>
-                                    @foreach (var contributor in Model.Document.Contributors)
-                                    {
-                                        <a href="@contributor.UserProfileUrl" target="_blank">
-                                            <img src="@contributor.AvatarUrl"
-                                                 class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
-                                        </a>
-                                    }
-                                </div>
-                            }
-
                             @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
                             {
                                 <div class="alert alert-primary alert-criteria">

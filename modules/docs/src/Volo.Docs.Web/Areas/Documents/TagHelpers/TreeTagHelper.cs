@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Docs.Documents;
+using Volo.Docs.Localization;
 using Volo.Docs.Utils;
 
 namespace Volo.Docs.Areas.Documents.TagHelpers
@@ -14,6 +16,8 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
     public class TreeTagHelper : TagHelper
     {
         private readonly DocsUiOptions _uiOptions;
+
+        private readonly IStringLocalizer<DocsResource> _localizer;
 
         private const string LiItemTemplateWithLink = @"<li class='{0}'><span class='plus-icon'><i class='fa fa-{1}'></i></span>{2}{3}</li>";
 
@@ -41,8 +45,9 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
         [HtmlAttributeName("language")]
         public string LanguageCode { get; set; }
 
-        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions)
+        public TreeTagHelper(IOptions<DocsUiOptions> urlOptions, IStringLocalizer<DocsResource> localizer)
         {
+            _localizer = localizer;
             _uiOptions = urlOptions.Value;
         }
 
@@ -118,7 +123,23 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
             else
             {
-                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss, node.Text.IsNullOrEmpty() ? "?" : node.Text);
+                var badge = "";
+                if (!node.Path.IsNullOrWhiteSpace() && node.LastUpdatedTime.HasValue && node.LastUpdatedTime + TimeSpan.FromDays(30) > DateTime.Now)
+                {
+                    if (node.UpdatedCount > 1)
+                    {
+                        badge = "<span class='badge badge-light ml-2'>" + _localizer["Upd"] + "</span>";
+                    }
+                    else
+                    {
+                        badge = "<span class='badge badge-primary ml-2'>" + _localizer["New"] + "</span>";
+                    }
+                }
+
+                listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
+                    node.Text.IsNullOrEmpty()
+                        ? "?"
+                        : node.Text + badge);
             }
 
             return string.Format(LiItemTemplateWithLink,

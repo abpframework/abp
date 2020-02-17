@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace VoloDocs.EntityFrameworkCore.Migrations
 {
-    public partial class Initial20181225 : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -95,8 +95,8 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     NormalizedUserName = table.Column<string>(maxLength: 256, nullable: false),
                     Name = table.Column<string>(maxLength: 64, nullable: true),
                     Surname = table.Column<string>(maxLength: 64, nullable: true),
-                    Email = table.Column<string>(maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: true),
+                    Email = table.Column<string>(maxLength: 256, nullable: false),
+                    NormalizedEmail = table.Column<string>(maxLength: 256, nullable: false),
                     EmailConfirmed = table.Column<bool>(nullable: false, defaultValue: false),
                     PasswordHash = table.Column<string>(maxLength: 256, nullable: true),
                     SecurityStamp = table.Column<string>(maxLength: 256, nullable: false),
@@ -113,6 +113,33 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DocsDocuments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    ExtraProperties = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<Guid>(nullable: false),
+                    Name = table.Column<string>(maxLength: 255, nullable: false),
+                    Version = table.Column<string>(maxLength: 128, nullable: false),
+                    LanguageCode = table.Column<string>(maxLength: 128, nullable: false),
+                    FileName = table.Column<string>(maxLength: 128, nullable: false),
+                    Content = table.Column<string>(nullable: false),
+                    Format = table.Column<string>(maxLength: 128, nullable: true),
+                    EditLink = table.Column<string>(maxLength: 2048, nullable: true),
+                    RootUrl = table.Column<string>(maxLength: 2048, nullable: true),
+                    RawRootUrl = table.Column<string>(maxLength: 2048, nullable: true),
+                    LocalDirectory = table.Column<string>(maxLength: 512, nullable: true),
+                    LastUpdatedTime = table.Column<DateTime>(nullable: false),
+                    UpdatedCount = table.Column<int>(nullable: false),
+                    LastCachedTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocsDocuments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DocsProjects",
                 columns: table => new
                 {
@@ -124,6 +151,7 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     Format = table.Column<string>(nullable: true),
                     DefaultDocumentName = table.Column<string>(maxLength: 128, nullable: false),
                     NavigationDocumentName = table.Column<string>(maxLength: 128, nullable: false),
+                    ParametersDocumentName = table.Column<string>(maxLength: 128, nullable: false),
                     MinimumVersion = table.Column<string>(nullable: true),
                     DocumentStoreType = table.Column<string>(nullable: true),
                     MainWebsiteUrl = table.Column<string>(nullable: true),
@@ -180,9 +208,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserLogins",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     ProviderKey = table.Column<string>(maxLength: 196, nullable: false),
                     ProviderDisplayName = table.Column<string>(maxLength: 128, nullable: true)
                 },
@@ -201,9 +229,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserRoles",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
-                    RoleId = table.Column<Guid>(nullable: false)
+                    RoleId = table.Column<Guid>(nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -226,10 +254,10 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserTokens",
                 columns: table => new
                 {
-                    TenantId = table.Column<Guid>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
                     LoginProvider = table.Column<string>(maxLength: 64, nullable: false),
                     Name = table.Column<string>(maxLength: 128, nullable: false),
+                    TenantId = table.Column<Guid>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -239,6 +267,26 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                         name: "FK_AbpUserTokens_AbpUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DocsDocumentContributors",
+                columns: table => new
+                {
+                    DocumentId = table.Column<Guid>(nullable: false),
+                    Username = table.Column<string>(nullable: false),
+                    UserProfileUrl = table.Column<string>(nullable: true),
+                    AvatarUrl = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocsDocumentContributors", x => new { x.DocumentId, x.Username });
+                    table.ForeignKey(
+                        name: "FK_DocsDocumentContributors_DocsDocuments_DocumentId",
+                        column: x => x.DocumentId,
+                        principalTable: "DocsDocuments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -326,6 +374,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
+                name: "DocsDocumentContributors");
+
+            migrationBuilder.DropTable(
                 name: "DocsProjects");
 
             migrationBuilder.DropTable(
@@ -333,6 +384,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "DocsDocuments");
         }
     }
 }
