@@ -26,5 +26,10 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
         {
             throw new UserFriendlyException("Exception occurred!");
         }
+        [Route("audit-fail-object")]
+        public object AuditFailForGetRequestsReturningObject()
+        {
+            throw new UserFriendlyException("Exception occurred!");
+        }
     }
 }
