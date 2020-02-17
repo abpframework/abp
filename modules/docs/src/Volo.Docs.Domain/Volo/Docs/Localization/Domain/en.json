@@ -19,6 +19,8 @@
     "FilterTopics": "Filter topics",
     "MultipleVersionDocumentInfo": "This document has multiple versions. Select the options best fit for you.",
     "New": "New",
-    "Upd": "Upd"
+    "Upd": "Upd",
+    "NewExplanation": "Created in the last two weeks.",
+    "UpdatedExplanation": "Updated in the last two weeks."
   }
 }

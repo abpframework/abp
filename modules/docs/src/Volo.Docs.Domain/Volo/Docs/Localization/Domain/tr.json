@@ -18,6 +18,8 @@
     "DocumentNotFoundInSelectedLanguage": "İstediğiniz dilde belge bulunamadı. Varsayılan dilde belge gösterilir.",
     "MultipleVersionDocumentInfo": "Bu dökümanın birden çok versiyonu bulunmaktadır. Sizin için en uygun olan seçenekleri seçiniz.",
     "New": "Yeni",
-    "Upd": "güncellenmiş"
+    "Upd": "Günc",
+    "NewExplanation": "Son iki hafta içinde oluşturuldu.",
+    "UpdatedExplanation": "Son iki hafta içinde güncellendi."
   }
 }
