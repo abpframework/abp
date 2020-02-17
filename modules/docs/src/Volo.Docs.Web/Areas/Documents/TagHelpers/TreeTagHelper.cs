@@ -123,10 +123,18 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             }
             else
             {
-                var badge = node.Path.IsNullOrWhiteSpace()
-                    ? ""
-                    : "<span class='badge badge-light ml-2'>" +
-                      (node.LastUpdatedTime + TimeSpan.FromDays(30) > DateTime.Now ? (node.UpdatedCount == 1 ? _localizer["New"] : _localizer["Upd"]) : "") + "</span>";
+                var badge = "";
+                if (!node.Path.IsNullOrWhiteSpace() && node.LastUpdatedTime.HasValue && node.LastUpdatedTime + TimeSpan.FromDays(30) > DateTime.Now)
+                {
+                    if (node.UpdatedCount > 1)
+                    {
+                        badge = "<span class='badge badge-light ml-2'>" + _localizer["Upd"] + "</span>";
+                    }
+                    else
+                    {
+                        badge = "<span class='badge badge-primary ml-2'>" + _localizer["New"] + "</span>";
+                    }
+                }
 
                 listInnerItem = string.Format(ListItemAnchor, NormalizePath(node.Path), textCss,
                     node.Text.IsNullOrEmpty()

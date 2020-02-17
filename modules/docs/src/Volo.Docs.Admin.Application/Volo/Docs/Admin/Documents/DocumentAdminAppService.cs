@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Caching;
 using Volo.Docs.Documents;
 using Volo.Docs.Projects;
 
@@ -16,14 +17,17 @@ namespace Volo.Docs.Admin.Documents
         private readonly IProjectRepository _projectRepository;
         private readonly IDocumentRepository _documentRepository;
         private readonly IDocumentSourceFactory _documentStoreFactory;
+        private readonly IDistributedCache<DocumentUpdateInfo> _documentUpdateCache;
 
         public DocumentAdminAppService(IProjectRepository projectRepository,
             IDocumentRepository documentRepository,
-            IDocumentSourceFactory documentStoreFactory)
+            IDocumentSourceFactory documentStoreFactory, 
+            IDistributedCache<DocumentUpdateInfo> documentUpdateCache)
         {
             _projectRepository = projectRepository;
             _documentRepository = documentRepository;
             _documentStoreFactory = documentStoreFactory;
+            _documentUpdateCache = documentUpdateCache;
         }
 
         public async Task PullAllAsync(PullAllDocumentInput input)
@@ -54,16 +58,12 @@ namespace Volo.Docs.Admin.Documents
 
             foreach (var document in documents)
             {
-                var oldDocument = await _documentRepository.FindAsync(document.ProjectId, document.Name,
+                await _documentRepository.DeleteAsync(document.ProjectId, document.Name,
                     document.LanguageCode,
                     document.Version);
 
-                if (oldDocument != null)
-                {
-                    await _documentRepository.DeleteAsync(oldDocument);
-                }
-
-                await _documentRepository.InsertAsync(document);
+                await _documentRepository.InsertAsync(document, true);
+                await UpdateDocumentUpdateInfoCache(document);
             }
         }
 
@@ -74,15 +74,21 @@ namespace Volo.Docs.Admin.Documents
             var source = _documentStoreFactory.Create(project.DocumentStoreType);
             var sourceDocument = await source.GetDocumentAsync(project, input.Name, input.LanguageCode, input.Version);
 
-            var oldDocument = await _documentRepository.FindAsync(sourceDocument.ProjectId, sourceDocument.Name,
+            await _documentRepository.DeleteAsync(sourceDocument.ProjectId, sourceDocument.Name,
                 sourceDocument.LanguageCode, sourceDocument.Version);
+            await _documentRepository.InsertAsync(sourceDocument, true);
+            await UpdateDocumentUpdateInfoCache(sourceDocument);
+        }
 
-            if (oldDocument != null)
+        private async Task UpdateDocumentUpdateInfoCache(Document document)
+        {
+            var cacheKey = $"DocumentUpdateInfo{document.ProjectId}#{document.Name}#{document.LanguageCode}#{document.Version}";
+            await _documentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
             {
-                await _documentRepository.DeleteAsync(oldDocument);
-            }
-
-            await _documentRepository.InsertAsync(sourceDocument);
+                Name = document.Name,
+                LastUpdatedTime = document.LastUpdatedTime,
+                UpdatedCount = document.UpdatedCount
+            });
         }
 
         private async Task<Document> GetDocumentAsync(
@@ -93,7 +99,8 @@ namespace Volo.Docs.Admin.Documents
         {
             version = string.IsNullOrWhiteSpace(version) ? project.LatestVersionBranchName : version;
             var source = _documentStoreFactory.Create(project.DocumentStoreType);
-            return await source.GetDocumentAsync(project, documentName, languageCode, version);
+            var document = await source.GetDocumentAsync(project, documentName, languageCode, version);
+            return document;
         }
     }
 }

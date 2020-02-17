@@ -18,6 +18,7 @@ namespace Volo.Docs.Documents
         private readonly IDocumentSourceFactory _documentStoreFactory;
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
+        protected IDistributedCache<DocumentUpdateInfo> DocumentUpdateCache { get; }
         protected IHostEnvironment HostEnvironment { get; }
         public DocumentAppService(
             IProjectRepository projectRepository,
@@ -25,6 +26,7 @@ namespace Volo.Docs.Documents
             IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<LanguageConfig> languageCache,
             IDistributedCache<DocumentResourceDto> resourceCache,
+            IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IHostEnvironment hostEnvironment)
         {
             _projectRepository = projectRepository;
@@ -32,6 +34,7 @@ namespace Volo.Docs.Documents
             _documentStoreFactory = documentStoreFactory;
             LanguageCache = languageCache;
             ResourceCache = resourceCache;
+            DocumentUpdateCache = documentUpdateCache;
             HostEnvironment = hostEnvironment;
         }
 
@@ -73,20 +76,18 @@ namespace Volo.Docs.Documents
             var navigationNode = JsonConvert.DeserializeObject<NavigationNode>(navigationDocument.Content);
 
             var leafs = navigationNode.Items.GetAllNodes(x => x.Items)
-                .Where(x => x.IsLeaf && !x.Path.IsNullOrWhiteSpace())
+                .Where(x => !x.Path.IsNullOrWhiteSpace())
                 .ToList();
 
             foreach (var leaf in leafs)
             {
-                var document = await GetDocumentWithDetailsDtoAsync(
-                    project,
-                    leaf.Path,
-                    input.LanguageCode,
-                    input.Version
-                );
-
-                leaf.LastUpdatedTime = document.LastUpdatedTime;
-                leaf.UpdatedCount = document.UpdatedCount;
+                var cacheKey = $"DocumentUpdateInfo{project.Id}#{leaf.Path}#{input.LanguageCode}#{input.Version}";
+                var documentUpdateInfo = await DocumentUpdateCache.GetAsync(cacheKey);
+                if (documentUpdateInfo != null)
+                {
+                    leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
+                    leaf.UpdatedCount = documentUpdateInfo.UpdatedCount;
+                }
             }
 
             return navigationNode;
@@ -165,9 +166,18 @@ namespace Volo.Docs.Documents
                 var source = _documentStoreFactory.Create(project.DocumentStoreType);
                 var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version);
 
-                await _documentRepository.InsertAsync(sourceDocument);
+                await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version);
+                await _documentRepository.InsertAsync(sourceDocument, true);
 
                 Logger.LogInformation($"Document retrieved: {documentName}");
+
+                var cacheKey = $"DocumentUpdateInfo{sourceDocument.ProjectId}#{sourceDocument.Name}#{sourceDocument.LanguageCode}#{sourceDocument.Version}";
+                await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
+                {
+                    Name = sourceDocument.Name,
+                    LastUpdatedTime = sourceDocument.LastUpdatedTime,
+                    UpdatedCount = sourceDocument.UpdatedCount
+                });
 
                 return CreateDocumentWithDetailsDto(project, sourceDocument);
             }
@@ -191,6 +201,14 @@ namespace Volo.Docs.Documents
             {
                 return await GetDocumentAsync();
             }
+
+            var cacheKey = $"DocumentUpdateInfo{document.ProjectId}#{document.Name}#{document.LanguageCode}#{document.Version}";
+            await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
+            {
+                Name = document.Name,
+                LastUpdatedTime = document.LastUpdatedTime,
+                UpdatedCount = document.UpdatedCount
+            });
 
             return CreateDocumentWithDetailsDto(project, document);
         }

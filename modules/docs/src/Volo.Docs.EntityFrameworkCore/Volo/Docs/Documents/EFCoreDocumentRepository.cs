@@ -25,5 +25,12 @@ namespace Volo.Docs.Documents
                     x.Version == version,
                 cancellationToken);
         }
+
+        public async Task DeleteAsync(Guid projectId, string name, string languageCode, string version, CancellationToken cancellationToken = default)
+        {
+            await DeleteAsync(x =>
+                x.ProjectId == projectId && x.Name == name && x.LanguageCode == languageCode &&
+                x.Version == version, cancellationToken: cancellationToken);
+        }
     }
 }

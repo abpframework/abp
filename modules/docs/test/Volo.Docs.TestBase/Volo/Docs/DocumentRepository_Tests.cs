@@ -24,5 +24,15 @@ namespace Volo.Docs
             var document = await DocumentRepository.FindAsync(DocsTestData.PorjectId, "CLI.md", "en", "2.0.0");
             document.ShouldNotBeNull();
         }
+
+        [Fact]
+        public async Task DeleteAsync()
+        {
+            (await DocumentRepository.GetListAsync()).ShouldNotBeEmpty();
+
+            await DocumentRepository.DeleteAsync(DocsTestData.PorjectId, "CLI.md", "en", "2.0.0");
+
+            (await DocumentRepository.GetListAsync()).ShouldBeEmpty();
+        }
     }
 }
