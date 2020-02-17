@@ -34,7 +34,7 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             _options.IsEnabledForGetRequests = true;
             _options.AlwaysLogOnException = false;
             await GetResponseAsync("api/audit-test/audit-success");
-            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
 
         [Fact]
@@ -49,7 +49,17 @@ namespace Volo.Abp.AspNetCore.Mvc.Auditing
             }
             catch { }
 
-            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>()); //Won't work, save happens out of scope
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
+        }
+        [Fact]
+        public async Task Should_Trigger_Middleware_And_AuditLog_Exception_When_Returns_Object()
+        {
+            _options.IsEnabled = true;
+            _options.AlwaysLogOnException = true;
+
+            await GetResponseAsync("api/audit-test/audit-fail-object", System.Net.HttpStatusCode.Forbidden);
+
+            await _auditingStore.Received().SaveAsync(Arg.Any<AuditLogInfo>());
         }
     }
 }
