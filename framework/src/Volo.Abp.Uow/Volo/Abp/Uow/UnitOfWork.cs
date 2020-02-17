@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;
 
@@ -31,6 +32,7 @@ namespace Volo.Abp.Uow
 
         public IServiceProvider ServiceProvider { get; }
 
+        [NotNull]
         public Dictionary<string, object> Items { get; }
 
         private readonly Dictionary<string, IDatabaseApi> _databaseApis;
@@ -48,6 +50,7 @@ namespace Volo.Abp.Uow
 
             _databaseApis = new Dictionary<string, IDatabaseApi>();
             _transactionApis = new Dictionary<string, ITransactionApi>();
+
             Items = new Dictionary<string, object>();
         }
 
@@ -319,11 +322,6 @@ namespace Volo.Abp.Uow
         public override string ToString()
         {
             return $"[UnitOfWork {Id}]";
-        }
-
-        public Dictionary<string, object> GetHardDeleteItems()
-        {
-            return Items;
         }
     }
 }

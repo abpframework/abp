@@ -111,7 +111,7 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
             await ApplyAbpConceptsForDeletedEntityAsync(entity);
             var oldConcurrencyStamp = SetNewConcurrencyStamp(entity);
 
-            if (entity is ISoftDelete softDeleteEntity && !IsHardDeleteEntity(entity))
+            if (entity is ISoftDelete softDeleteEntity && !IsHardDeleted(entity))
             {
                 softDeleteEntity.IsDeleted = true;
                 var result = await Collection.ReplaceOneAsync(
@@ -175,32 +175,21 @@ namespace Volo.Abp.Domain.Repositories.MongoDB
                 Collection.AsQueryable()
             );
         }
-        protected virtual bool IsHardDeleteEntity(TEntity entry)
+        protected virtual bool IsHardDeleted(TEntity entity)
         {
-            if (UnitOfWorkManager?.Current?.Items == null)
+            var hardDeletedEntities = UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) as HashSet<IEntity>;
+            if (hardDeletedEntities == null)
             {
                 return false;
             }
 
-            if (!UnitOfWorkManager.Current.Items.ContainsKey(UnitOfWorkExtensionDataTypes.HardDelete))
-            {
-                return false;
-            }
-
-            var hardDeleteItems = UnitOfWorkManager.Current.Items[UnitOfWorkExtensionDataTypes.HardDelete];
-            if (!(hardDeleteItems is HashSet<string> objects))
-            {
-                return false;
-            }
-            string hardDeleteKey = EntityHelper.GetHardDeleteKey(entry, CurrentTenant?.Id.ToString());
-
-            return objects.Contains(hardDeleteKey);
+            return hardDeletedEntities.Contains(entity);
         }
 
         protected virtual FilterDefinition<TEntity> CreateEntityFilter(TEntity entity, bool withConcurrencyStamp = false, string concurrencyStamp = null)
         {
             throw new NotImplementedException(
-                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overrided and implemented by the deriving class!"
+                $"{nameof(CreateEntityFilter)} is not implemented for MongoDB by default. It should be overriden and implemented by the deriving class!"
             );
         }
 

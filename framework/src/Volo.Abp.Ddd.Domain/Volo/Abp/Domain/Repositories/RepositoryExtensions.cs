@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,31 +43,55 @@ namespace Volo.Abp.Domain.Repositories
             }
         }
 
-        public static async Task HardDeleteAsync<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository, TEntity entity)
-            where TEntity : class, IEntity<TPrimaryKey>, ISoftDelete
+        public static async Task HardDeleteAsync<TEntity>(
+            this IBasicRepository<TEntity> repository,
+            TEntity entity,
+            bool autoSave = false,
+            CancellationToken cancellationToken = default
+        )
+            where TEntity : class, IEntity, ISoftDelete
         {
-            var repo = ProxyHelper.UnProxy(repository) as IRepository<TEntity, TPrimaryKey>;
-            if (repo != null)
+            if (!(ProxyHelper.UnProxy(repository) is IUnitOfWorkManagerAccessor unitOfWorkManagerAccessor))
             {
-                var uow = ((IUnitOfWorkManagerAccessor)repo).UnitOfWorkManager;
-                var baseRepository = ((RepositoryBase<TEntity>)repo);
+                throw new AbpException($"The given repository (of type {repository.GetType().AssemblyQualifiedName}) should implement the {typeof(IUnitOfWorkManagerAccessor).AssemblyQualifiedName} interface in order to invoke the {nameof(HardDeleteAsync)} method!");
+            }
 
-                var items = ((IUnitOfWorkManagerAccessor)repo).UnitOfWorkManager.Current.Items;
-                var hardDeleteEntities = items.GetOrAdd(UnitOfWorkExtensionDataTypes.HardDelete, () => new HashSet<string>()) as HashSet<string>;
+            var uowManager = unitOfWorkManagerAccessor.UnitOfWorkManager;
+            if (uowManager == null)
+            {
+                throw new AbpException($"{nameof(unitOfWorkManagerAccessor.UnitOfWorkManager)} property of the given {nameof(repository)} object is null!");
+            }
 
-                var hardDeleteKey = EntityHelper.GetHardDeleteKey(entity, baseRepository.CurrentTenant?.Id?.ToString());
-                hardDeleteEntities.Add(hardDeleteKey);
-
-                await repo.DeleteAsync(entity);
+            if (uowManager.Current == null)
+            {
+                using (var uow = uowManager.Begin())
+                {
+                    await HardDeleteWithUnitOfWorkAsync(repository, entity, autoSave, cancellationToken, uowManager.Current);
+                    await uow.CompleteAsync(cancellationToken);
+                }
+            }
+            else
+            {
+                await HardDeleteWithUnitOfWorkAsync(repository, entity, autoSave, cancellationToken, uowManager.Current);
             }
         }
-        public static async Task HardDeleteAsync<TEntity, TPrimaryKey>(this IRepository<TEntity, TPrimaryKey> repository, Expression<Func<TEntity, bool>> predicate)
-            where TEntity : class, IEntity<TPrimaryKey>, ISoftDelete
+
+        private static async Task HardDeleteWithUnitOfWorkAsync<TEntity>(
+            IBasicRepository<TEntity> repository, 
+            TEntity entity, 
+            bool autoSave,
+            CancellationToken cancellationToken, IUnitOfWork currentUow
+        )
+            where TEntity : class, IEntity, ISoftDelete
         {
-            foreach (var entity in repository.Where(predicate).ToList())
-            {
-                await repository.HardDeleteAsync(entity);
-            }
+            var hardDeleteEntities = (HashSet<IEntity>) currentUow.Items.GetOrAdd(
+                UnitOfWorkItemNames.HardDeletedEntities,
+                () => new HashSet<IEntity>()
+            );
+
+            hardDeleteEntities.Add(entity);
+
+            await repository.DeleteAsync(entity, autoSave, cancellationToken);
         }
     }
 }

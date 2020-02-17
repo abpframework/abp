@@ -50,6 +50,7 @@ namespace Volo.Abp.EntityFrameworkCore
         public IEntityHistoryHelper EntityHistoryHelper { get; set; }
 
         public IAuditingManager AuditingManager { get; set; }
+
         public IUnitOfWorkManager UnitOfWorkManager { get; set; }
 
         public IClock Clock { get; set; }
@@ -199,37 +200,24 @@ namespace Volo.Abp.EntityFrameworkCore
 
         protected virtual void ApplyAbpConceptsForDeletedEntity(EntityEntry entry, EntityChangeReport changeReport)
         {
-            if (IsHardDeleteEntity(entry))
+            if (TryCancelDeletionForSoftDelete(entry))
             {
-                changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
-                return;
+                UpdateConcurrencyStamp(entry);
+                SetDeletionAuditProperties(entry);
             }
-            CancelDeletionForSoftDelete(entry);
-            UpdateConcurrencyStamp(entry);
-            SetDeletionAuditProperties(entry);
+
             changeReport.ChangedEntities.Add(new EntityChangeEntry(entry.Entity, EntityChangeType.Deleted));
         }
 
-        protected virtual bool IsHardDeleteEntity(EntityEntry entry)
+        protected virtual bool IsHardDeleted(EntityEntry entry)
         {
-            if (UnitOfWorkManager?.Current?.Items == null)
+            var hardDeletedEntities = UnitOfWorkManager?.Current?.Items.GetOrDefault(UnitOfWorkItemNames.HardDeletedEntities) as HashSet<IEntity>;
+            if (hardDeletedEntities == null)
             {
                 return false;
             }
 
-            if (!UnitOfWorkManager.Current.Items.ContainsKey(UnitOfWorkExtensionDataTypes.HardDelete))
-            {
-                return false;
-            }
-
-            var hardDeleteItems = UnitOfWorkManager.Current.Items[UnitOfWorkExtensionDataTypes.HardDelete];
-            if (!(hardDeleteItems is HashSet<string> objects))
-            {
-                return false;
-            }
-            string hardDeleteKey = EntityHelper.GetHardDeleteKey(entry.Entity, CurrentTenantId?.ToString());
-
-            return objects.Contains(hardDeleteKey);
+            return hardDeletedEntities.Contains(entry.Entity);
         }
 
         protected virtual void AddDomainEvents(EntityChangeReport changeReport, object entityAsObj)
@@ -283,16 +271,22 @@ namespace Volo.Abp.EntityFrameworkCore
             entity.ConcurrencyStamp = Guid.NewGuid().ToString("N");
         }
 
-        protected virtual void CancelDeletionForSoftDelete(EntityEntry entry)
+        protected virtual bool TryCancelDeletionForSoftDelete(EntityEntry entry)
         {
             if (!(entry.Entity is ISoftDelete))
             {
-                return;
+                return false;
+            }
+
+            if (IsHardDeleted(entry))
+            {
+                return false;
             }
 
             entry.Reload();
             entry.State = EntityState.Modified;
             entry.Entity.As<ISoftDelete>().IsDeleted = true;
+            return true;
         }
 
         protected virtual void CheckAndSetId(EntityEntry entry)
