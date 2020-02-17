@@ -34,7 +34,6 @@ namespace Volo.Docs.GitHub.Documents
             var userAgent = project.GetGithubUserAgentOrNull();
             var rawRootUrl = CalculateRawRootUrlWithLanguageCode(rootUrl, languageCode);
             var rawDocumentUrl = rawRootUrl + documentName;
-            var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + languageCode + "/" + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var isParameterDocument = documentName == project.ParametersDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + languageCode + "/" + documentName;
