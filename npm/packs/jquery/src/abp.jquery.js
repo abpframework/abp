@@ -364,7 +364,7 @@
                     dataType: 'text'
                 })
                 .done(function (script) {
-                    jQuery.globalEval(script);
+                    $.globalEval(script);
                     urlInfo.succeed();
                 })
                 .fail(function () {
