@@ -43,8 +43,8 @@ namespace Volo.Docs.FileSystem.Documents
                 "/",
                 $"/document-resources?projectId={project.Id.ToString()}&version={version}&languageCode={languageCode}&name=",
                 localDirectory,
+                File.GetCreationTime(path),
                 File.GetLastWriteTime(path),
-                File.GetLastWriteTime(path) == File.GetCreationTime(path) ? 1 : 2,
                 DateTime.Now);
         }
 

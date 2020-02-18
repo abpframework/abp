@@ -7,8 +7,8 @@ namespace Volo.Docs.Documents
     {
         public virtual string Name { get; set; }
 
-        public virtual DateTime LastUpdatedTime { get; set; }
+        public virtual DateTime CreationTime { get; set; }
 
-        public virtual int UpdatedCount { get; set; }
+        public virtual DateTime LastUpdatedTime { get; set; }
     }
 }

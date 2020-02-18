@@ -31,9 +31,9 @@ namespace Volo.Docs.Documents
 
         public virtual string LocalDirectory { get; set; }
 
+        public virtual DateTime CreationTime { get; set; }
+        
         public virtual DateTime LastUpdatedTime { get; set; }
-
-        public virtual int UpdatedCount { get; set; }
 
         public virtual DateTime LastCachedTime { get; set; }
 
@@ -58,8 +58,8 @@ namespace Volo.Docs.Documents
             [NotNull] string rootUrl,
             [NotNull] string rawRootUrl,
             [NotNull] string localDirectory,
+            DateTime creationTime,
             DateTime lastUpdatedTime,
-            int updatedCount,
             DateTime lastCachedTime
         )
         {
@@ -76,8 +76,9 @@ namespace Volo.Docs.Documents
             RootUrl = Check.NotNullOrWhiteSpace(rootUrl, nameof(rootUrl));
             RawRootUrl = Check.NotNullOrWhiteSpace(rawRootUrl, nameof(rawRootUrl));
             LocalDirectory = Check.NotNull(localDirectory, nameof(localDirectory));
+
+            CreationTime = creationTime;
             LastUpdatedTime = lastUpdatedTime;
-            UpdatedCount = updatedCount;
             LastCachedTime = lastCachedTime;
 
             Contributors = new List<DocumentContributor>();

@@ -18,6 +18,8 @@
     "DocumentNotFoundInSelectedLanguage": "本文档不适用于所选语言, 将以默认语言显示文档.",
     "FilterTopics": "过滤主题",
     "New": "新文档",
-    "Upd": "更新"
+    "Upd": "更新",
+    "NewExplanation": "在最近两周内创建.",
+    "UpdatedExplanation": "在最近两周内更新."
   }
 }

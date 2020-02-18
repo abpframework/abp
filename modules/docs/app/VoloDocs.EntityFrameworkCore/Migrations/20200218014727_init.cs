@@ -130,8 +130,8 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     RootUrl = table.Column<string>(maxLength: 2048, nullable: true),
                     RawRootUrl = table.Column<string>(maxLength: 2048, nullable: true),
                     LocalDirectory = table.Column<string>(maxLength: 512, nullable: true),
+                    CreationTime = table.Column<DateTime>(nullable: false),
                     LastUpdatedTime = table.Column<DateTime>(nullable: false),
-                    UpdatedCount = table.Column<int>(nullable: false),
                     LastCachedTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>

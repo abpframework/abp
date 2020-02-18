@@ -60,8 +60,8 @@ namespace Volo.Docs.GitHub.Documents
                 rootUrl,
                 rawRootUrl, 
                 localDirectory,
+                fileCommits.LastOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
                 fileCommits.FirstOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
-                fileCommits.Count,
                 DateTime.Now);
 
             var authors =  fileCommits

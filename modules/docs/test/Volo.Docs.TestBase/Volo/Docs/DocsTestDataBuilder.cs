@@ -47,7 +47,7 @@ namespace Volo.Docs
             await _documentRepository.InsertAsync(new Document(Guid.NewGuid(), project.Id, "CLI.md", "2.0.0", "en", "CLI.md",
                 "this is abp cli", "md", "https://github.com/abpframework/abp/blob/2.0.0/docs/en/CLI.md",
                 "https://github.com/abpframework/abp/tree/2.0.0/docs/",
-                "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, 1,
+                "https://raw.githubusercontent.com/abpframework/abp/2.0.0/docs/en/", "", DateTime.Now, DateTime.Now,
                 DateTime.Now));
         }
     }

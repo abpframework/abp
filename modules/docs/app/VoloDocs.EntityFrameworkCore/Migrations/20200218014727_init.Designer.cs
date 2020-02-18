@@ -10,7 +10,7 @@ using VoloDocs.EntityFrameworkCore;
 namespace VoloDocs.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(VoloDocsDbContext))]
-    [Migration("20200212135141_init")]
+    [Migration("20200218014727_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -464,6 +464,9 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EditLink")
                         .HasColumnType("nvarchar(2048)")
                         .HasMaxLength(2048);
@@ -511,9 +514,6 @@ namespace VoloDocs.EntityFrameworkCore.Migrations
                     b.Property<string>("RootUrl")
                         .HasColumnType("nvarchar(2048)")
                         .HasMaxLength(2048);
-
-                    b.Property<int>("UpdatedCount")
-                        .HasColumnType("int");
 
                     b.Property<string>("Version")
                         .IsRequired()
