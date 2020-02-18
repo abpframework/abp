@@ -85,8 +85,8 @@ namespace Volo.Docs.Documents
                 var documentUpdateInfo = await DocumentUpdateCache.GetAsync(cacheKey);
                 if (documentUpdateInfo != null)
                 {
+                    leaf.CreationTime = documentUpdateInfo.CreationTime;
                     leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
-                    leaf.UpdatedCount = documentUpdateInfo.UpdatedCount;
                 }
             }
 
@@ -175,8 +175,8 @@ namespace Volo.Docs.Documents
                 await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
                 {
                     Name = sourceDocument.Name,
-                    LastUpdatedTime = sourceDocument.LastUpdatedTime,
-                    UpdatedCount = sourceDocument.UpdatedCount
+                    CreationTime = sourceDocument.CreationTime,
+                    LastUpdatedTime = sourceDocument.LastUpdatedTime
                 });
 
                 return CreateDocumentWithDetailsDto(project, sourceDocument);
@@ -206,8 +206,8 @@ namespace Volo.Docs.Documents
             await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
             {
                 Name = document.Name,
+                CreationTime = document.CreationTime,
                 LastUpdatedTime = document.LastUpdatedTime,
-                UpdatedCount = document.UpdatedCount
             });
 
             return CreateDocumentWithDetailsDto(project, document);

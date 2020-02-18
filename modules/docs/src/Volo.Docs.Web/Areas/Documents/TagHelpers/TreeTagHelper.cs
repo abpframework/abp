@@ -125,15 +125,18 @@ namespace Volo.Docs.Areas.Documents.TagHelpers
             {
                 var badge = "";
 
-                if (!node.Path.IsNullOrWhiteSpace() && node.LastUpdatedTime.HasValue && node.LastUpdatedTime + TimeSpan.FromDays(14) > DateTime.Now)
+                if (!node.Path.IsNullOrWhiteSpace() && node.CreationTime.HasValue && node.LastUpdatedTime.HasValue)
                 {
-                    if (node.UpdatedCount > 1)
+                    var newBadge = "<span class='badge badge-primary ml-2' title=\"" + _localizer["NewExplanation"] + "\">" + _localizer["New"] + "</span>";
+                    var updBadge = "<span class='badge badge-light ml-2' title=\"" + _localizer["UpdatedExplanation"] + "\">" + _localizer["Upd"] + "</span>";
+
+                    if(node.CreationTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
-                        badge = "<span class='badge badge-light ml-2' title=\"" + _localizer["UpdatedExplanation"] + "\">" + _localizer["Upd"] + "</span>";
+                        badge = newBadge;
                     }
-                    else
+                    else if (node.LastUpdatedTime + TimeSpan.FromDays(14) > DateTime.Now)
                     {
-                        badge = "<span class='badge badge-primary ml-2' title=\"" + _localizer["NewExplanation"] + "\">" + _localizer["New"] + "</span>";
+                        badge = updBadge;
                     }
                 }
 

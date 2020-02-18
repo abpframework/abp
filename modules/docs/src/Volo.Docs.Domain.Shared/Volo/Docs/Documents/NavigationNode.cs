@@ -22,9 +22,9 @@ namespace Volo.Docs.Documents
 
         public bool IsEmpty => Text == null && Path == null;
 
-        public DateTime? LastUpdatedTime { get; set; }
+        public virtual DateTime? CreationTime { get; set; }
 
-        public int UpdatedCount { get; set; }
+        public virtual DateTime? LastUpdatedTime { get; set; }
 
         public bool IsSelected(string documentName)
         {

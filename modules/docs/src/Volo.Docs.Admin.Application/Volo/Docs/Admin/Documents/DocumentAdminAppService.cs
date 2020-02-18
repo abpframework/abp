@@ -86,8 +86,8 @@ namespace Volo.Docs.Admin.Documents
             await _documentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
             {
                 Name = document.Name,
-                LastUpdatedTime = document.LastUpdatedTime,
-                UpdatedCount = document.UpdatedCount
+                CreationTime = document.CreationTime,
+                LastUpdatedTime = document.LastUpdatedTime
             });
         }
 
