@@ -16,13 +16,13 @@ namespace Volo.Docs.GitHub.Documents
 {
     //TODO: Needs more refactoring
 
-    public class GithubDocumentStore : DomainService, IDocumentStore
+    public class GithubDocumentSource : DomainService, IDocumentSource
     {
         public const string Type = "GitHub";
 
         private readonly IGithubRepositoryManager _githubRepositoryManager;
 
-        public GithubDocumentStore(IGithubRepositoryManager githubRepositoryManager)
+        public GithubDocumentSource(IGithubRepositoryManager githubRepositoryManager)
         {
             _githubRepositoryManager = githubRepositoryManager;
         }
@@ -34,7 +34,6 @@ namespace Volo.Docs.GitHub.Documents
             var userAgent = project.GetGithubUserAgentOrNull();
             var rawRootUrl = CalculateRawRootUrlWithLanguageCode(rootUrl, languageCode);
             var rawDocumentUrl = rawRootUrl + documentName;
-            var commitHistoryUrl = project.GetGitHubUrlForCommitHistory() + documentName;
             var isNavigationDocument = documentName == project.NavigationDocumentName;
             var isParameterDocument = documentName == project.ParametersDocumentName;
             var editLink = rootUrl.ReplaceFirst("/tree/", "/blob/") + languageCode + "/" + documentName;
@@ -47,20 +46,40 @@ namespace Volo.Docs.GitHub.Documents
                 fileName = documentName.Substring(documentName.LastIndexOf('/') + 1);
             }
 
-            return new Document
+            var fileCommits = await GetFileCommitsAsync(project, version, $"docs/{languageCode}/{documentName}");
+
+            var document=  new Document(GuidGenerator.Create(), 
+                project.Id, 
+                documentName, 
+                version, 
+                languageCode,
+                fileName, 
+                await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent),
+                project.Format, 
+                editLink, 
+                rootUrl,
+                rawRootUrl, 
+                localDirectory,
+                fileCommits.LastOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
+                fileCommits.FirstOrDefault()?.Commit.Author.Date.DateTime ?? DateTime.MinValue,
+                DateTime.Now);
+
+            var authors =  fileCommits
+                .Where(x => x.Author != null)
+                .Select(x => x.Author)
+                .GroupBy(x => x.Id)
+                .OrderByDescending(x => x.Count())
+                .Select(x => x.FirstOrDefault()).ToList();
+
+            if (!isNavigationDocument && !isParameterDocument)
             {
-                Title = documentName,
-                EditLink = editLink,
-                RootUrl = rootUrl,
-                RawRootUrl = rawRootUrl,
-                Format = project.Format,
-                LocalDirectory = localDirectory,
-                FileName = fileName,
-                Contributors = new List<DocumentContributor>(),
-                //Contributors = !isNavigationDocument && !isParameterDocument && !isPartialTemplatesDocumentName ? await GetContributors(commitHistoryUrl, token, userAgent): new List<DocumentContributor>(),
-                Version = version,
-                Content = await DownloadWebContentAsStringAsync(rawDocumentUrl, token, userAgent)
-            };
+                foreach (var author in authors)
+                {
+                    document.AddContributor(author.Login, author.HtmlUrl, author.AvatarUrl);
+                }
+            }
+
+            return document;
         }
 
         public async Task<List<VersionInfo>> GetVersionsAsync(Project project)
@@ -124,6 +143,15 @@ namespace Volo.Docs.GitHub.Documents
             return await _githubRepositoryManager.GetReleasesAsync(ownerName, repositoryName, project.GetGitHubAccessTokenOrNull());
         }
 
+        private async Task<IReadOnlyList<GitHubCommit>> GetFileCommitsAsync(Project project, string version, string filename)
+        {
+            var url = project.GetGitHubUrl();
+            var ownerName = GetOwnerNameFromUrl(url);
+            var repositoryName = GetRepositoryNameFromUrl(url);
+            return await _githubRepositoryManager.GetFileCommitsAsync(ownerName, repositoryName,
+                version, filename, project.GetGitHubAccessTokenOrNull());
+        }
+
         protected virtual string GetOwnerNameFromUrl(string url)
         {
             try
@@ -181,39 +209,6 @@ namespace Volo.Docs.GitHub.Documents
                 Logger.LogWarning(ex.Message, ex);
                 throw new ResourceNotFoundException(rawUrl);
             }
-        }
-
-        private async Task<List<DocumentContributor>> GetContributors(string url, string token, string userAgent)
-        {
-            var contributors = new List<DocumentContributor>();
-
-            try
-            {
-                var commitsJsonAsString = await DownloadWebContentAsStringAsync(url, token, userAgent);
-
-                var commits = JArray.Parse(commitsJsonAsString);
-
-                foreach (var commit in commits)
-                {
-                    var author = commit["author"];
-
-                    contributors.Add(new DocumentContributor
-                    {
-                        Username = (string)author["login"],
-                        UserProfileUrl = (string)author["html_url"],
-                        AvatarUrl = (string)author["avatar_url"]
-                    });
-                }
-
-                contributors = contributors.GroupBy(c => c.Username).OrderByDescending(c=>c.Count())
-                    .Select( c => c.FirstOrDefault()).ToList();
-            }
-            catch (Exception ex)
-            {
-                Logger.LogWarning(ex.Message);
-            }
-            
-            return contributors;
         }
 
         private static string CalculateRawRootUrlWithLanguageCode(string rootUrl, string languageCode)

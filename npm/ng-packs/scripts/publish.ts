@@ -1,9 +1,23 @@
 import execa from 'execa';
 import fse from 'fs-extra';
+import program from 'commander';
+
+program
+  .option(
+    '-v, --nextVersion <version>',
+    'next semantic version. Available versions: ["major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease", "or type a custom version"]',
+  )
+  .option('-p, --preview', 'publish with preview tag');
+
+program.parse(process.argv);
 
 const publish = async () => {
   const versions = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
-  let nextSemanticVersion = (process.argv[2] || '').toLowerCase();
+
+  if (!program.nextVersion) {
+    console.error('Please provide a version with --nextVersion attribute');
+    process.exit(1);
+  }
 
   try {
     await execa('yarn', ['install-new-dependencies'], { stdout: 'inherit' });
@@ -12,7 +26,7 @@ const publish = async () => {
 
     await execa(
       'yarn',
-      ['lerna', 'version', nextSemanticVersion, '--yes', '--no-commit-hooks', '--skip-git'],
+      ['lerna', 'version', program.nextVersion, '--yes', '--no-commit-hooks', '--skip-git'],
       { stdout: 'inherit', cwd: '../' },
     );
 
@@ -26,7 +40,14 @@ const publish = async () => {
 
     await execa(
       'yarn',
-      ['lerna', 'exec', '--', '"npm publish --registry https://registry.npmjs.org"'],
+      [
+        'lerna',
+        'exec',
+        '--',
+        `"npm publish --registry https://registry.npmjs.org${
+          program.preview ? ' --tag preview' : ''
+        }"`,
+      ],
       {
         stdout: 'inherit',
         cwd: '../',

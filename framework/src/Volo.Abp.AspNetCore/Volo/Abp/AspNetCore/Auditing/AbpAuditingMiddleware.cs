@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
@@ -28,30 +29,42 @@ namespace Volo.Abp.AspNetCore.Auditing
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            if (!ShouldWriteAuditLog(context))
-            {
-                await next(context);
-                return;
-            }
-
+            bool hasError = false;
             using (var scope = _auditingManager.BeginScope())
             {
                 try
                 {
                     await next(context);
+                    if (_auditingManager.Current.Log.Exceptions.Any())
+                    {
+                        hasError = true;
+                    }
+                }
+                catch (Exception)
+                {
+                    hasError = true;
+                    throw;
                 }
                 finally
                 {
-                    await scope.SaveAsync();
+                    if (ShouldWriteAuditLog(context, hasError))
+                    {
+                        await scope.SaveAsync();
+                    }
                 }
             }
         }
 
-        private bool ShouldWriteAuditLog(HttpContext httpContext)
+        private bool ShouldWriteAuditLog(HttpContext httpContext, bool hasError = false)
         {
             if (!Options.IsEnabled)
             {
                 return false;
+            }
+
+            if (Options.AlwaysLogOnException && hasError)
+            {
+                return true;
             }
 
             if (!Options.IsEnabledForAnonymousUsers && !CurrentUser.IsAuthenticated)
@@ -59,7 +72,7 @@ namespace Volo.Abp.AspNetCore.Auditing
                 return false;
             }
 
-            if (!Options.IsEnabledForGetRequests && 
+            if (!Options.IsEnabledForGetRequests &&
                 string.Equals(httpContext.Request.Method, HttpMethods.Get, StringComparison.OrdinalIgnoreCase))
             {
                 return false;

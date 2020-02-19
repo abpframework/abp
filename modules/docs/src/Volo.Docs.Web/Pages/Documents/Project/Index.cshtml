@@ -1,13 +1,13 @@
-﻿@page
+@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Anchor
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Clipboard
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.MalihuCustomScrollbar
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Popper
+@using Volo.Docs.Pages.Documents.Shared.DocumentNotFoundComponent
 @using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs
 @using Volo.Abp.AspNetCore.Mvc.UI.Theming
-@using Volo.Docs.Pages.Documents.Shared.DocumentNotFoundComponent
 @using Volo.Docs
 @using Volo.Docs.Localization
 @using Volo.Docs.Pages.Documents.Project
@@ -46,6 +46,7 @@
         <div class="row justify-content-end">
             <div class="col-md-3 docs-sidebar dark-sidebar">
                 <div class="docs-sidebar-wrapper">
+
                     <div class="docs-top">
                         <nav class="navbar navbar-logo">
                             @if (!Model.Project.Name.IsNullOrWhiteSpace())
@@ -98,8 +99,8 @@
                         <div class="row">
                             @if (Model.VersionSelectItems.Any())
                             {
-                                <div class="col @(Model.LanguageSelectListItems.Count > 1 ? "pr-0" : "")">
-                                    <div class="docs-version @(Model.LanguageSelectListItems.Count > 1 ? "pr-1" : "")">
+                                <div class="col @(Model.LanguageSelectListItems.Count > 1?"pr-0":"")">
+                                    <div class="docs-version @(Model.LanguageSelectListItems.Count > 1?"pr-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -117,8 +118,8 @@
 
                             @if (Model.LanguageSelectListItems.Count > 1)
                             {
-                                <div class="col  @(Model.VersionSelectItems.Any() ? "pl-0" : "")">
-                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any() ? "pl-1" : "")">
+                                <div class="col  @(Model.VersionSelectItems.Any()?"pl-0":"")">
+                                    <div class="docs-version docs-language @(Model.VersionSelectItems.Any()?"pl-1":"")">
                                         <div class="version-select">
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
@@ -147,7 +148,7 @@
                         </div>
 
 
-                        @if (Model.Navigation == null || Model.Navigation.Content.IsNullOrEmpty())
+                        @if (Model.Navigation == null || !Model.Navigation.HasChildItems)
                         {
                             <div class="text-muted p-3">
                                 <i class="fa fa-warning"></i> @L["NavigationDocumentNotFound"]
@@ -155,7 +156,7 @@
                         }
                         else
                         {
-                            <ul root-node="@Model.Navigation.RootNode"
+                            <ul root-node="@Model.Navigation"
                                 version="@(Model.LatestVersionInfo == null || Model.LatestVersionInfo.IsSelected ? DocsAppConsts.Latest : Model.Version)"
                                 project-name="@Model.ProjectName"
                                 project-format="@Model.Project.Format"
@@ -189,28 +190,29 @@
                         <div class="float-right">
                             @if (!string.IsNullOrEmpty(Model.Document.EditLink))
                             {
-                                <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @L["Edit"]</a>
+                                <a href="@Model.Document.EditLink" target="_blank"> <i class="fa fa-edit"></i> @(L["Edit"]) (@L["LastEditTime"]: @Model.Document.LastUpdatedTime.ToShortDateString())</a>
                             }
                         </div>
+
+                        <div class="float-right mr-3">
+                            @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
+                            {
+                                @(L["Contributors"].Value + " :")
+                                @foreach (var contributor in Model.Document.Contributors)
+                                {
+                                    <a href="@contributor.UserProfileUrl" target="_blank">
+                                        <img src="@contributor.AvatarUrl"
+                                             class="rounded-circle" height="21" width="21" title="@contributor.Username" />
+                                    </a>
+                                }
+                            }
+                        </div>
+
                     </div>
 
                     <div class="docs-content-field">
                         <div class="docs-text-field">
                             <div class="position-relative">
-                                @if (Model.Document.Contributors != null && Model.Document.Contributors.Count > 0)
-                                {
-                                    <div class="contributors">
-                                        <small class="text-muted">@(L["Contributors"].Value + " :")</small>
-                                        @foreach (var contributor in Model.Document.Contributors)
-                                        {
-                                            <a href="@contributor.UserProfileUrl" target="_blank">
-                                                <img src="@contributor.AvatarUrl"
-                                                     class="contributors-avatar" height="21" width="21" title="@contributor.Username" />
-                                            </a>
-                                        }
-                                    </div>
-                                }
-
                                 @if (Model.DocumentPreferences != null && Model.DocumentPreferences.Parameters != null && Model.DocumentPreferences.Parameters.Any())
                                 {
                                     <div class="alert alert-primary alert-criteria">

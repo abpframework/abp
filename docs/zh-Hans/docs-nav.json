@@ -53,6 +53,10 @@
           "path": "Configuration.md"
         },
         {
+          "text": "选项",
+          "path": "Options.md"
+        },
+        {
           "text": "依赖注入",
           "path": "Dependency-Injection.md",
           "items": [
@@ -93,8 +97,13 @@
           "path": "Caching.md"
         },
         {
-          "text": "审计"
-        }, 
+          "text": "日志",
+          "path": "Logging.md"
+        },
+        {
+          "text": "审计日志",
+          "path": "Audit-Logging.md"
+        },
         {
           "text": "设置管理",
           "path": "Settings.md"

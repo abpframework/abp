@@ -40,7 +40,7 @@ builder.ConfigureIdentityServer(options =>
 });
 ````
 
-然后 `ConfigureIdentityServer()` 方法会将字段长度设置为超过MySQL的限制. 如果在创建或执行数据库迁移时遇到任何问题请参考相关的模块文档.
+然后 `ConfigureIdentityServer()` 方法会将字段长度设置为不超过MySQL的限制. 如果在创建或执行数据库迁移时遇到任何问题请参考相关的模块文档.
 
 ## 重新生成迁移
 

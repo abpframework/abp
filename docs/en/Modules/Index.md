@@ -16,6 +16,7 @@ There are some **free and open source** application modules developed and mainta
 * **Background Jobs**: Persist background jobs when using the default background job manager.
 * **Blogging**: Used to create fancy blogs. ABP's [own blog](https://blog.abp.io/) already using this module.
 * [**Docs**](Docs.md): Used to create technical documentation pages. ABP's [own documentation](https://docs.abp.io) already using this module.
+* **Feature Management**: Used to persist and manage the [features](../Features.md).
 * **Identity**: Manages roles, users and their permissions, based on the Microsoft Identity library.
 * **IdentityServer**: Integrates to IdentityServer4.
 * **Permission Management**: Used to persist permissions.
