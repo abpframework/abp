@@ -6,7 +6,7 @@ using Volo.Docs.Projects;
 
 namespace Volo.Docs.Documents
 {
-    public interface IDocumentStore : IDomainService
+    public interface IDocumentSource : IDomainService
     {
         Task<Document> GetDocumentAsync(Project project, string documentName, string languageCode, string version);
 

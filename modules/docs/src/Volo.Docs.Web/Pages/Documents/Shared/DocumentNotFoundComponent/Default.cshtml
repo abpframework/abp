@@ -1,0 +1,53 @@
+﻿@using Volo.Docs.Pages.Documents.Shared.DocumentNotFoundComponent
+@model DocumentNotFoundPageModel
+@{
+}
+<div class="row position-relative vh-100" style="background: #e8e8e8;">
+    <div class="center">
+        <span class="notfound-404">404</span> 
+        <h1>
+            <strong>"@Model.DocumentName"</strong> not found in <strong>@Model.ProjectName</strong> documents, with <strong>@Model.Version</strong> version and <strong>@Model.LanguageCode</strong> language.
+        </h1>
+        <br />
+        <a href="@(Model.DocumentsUrlPrefix + Model.LanguageCode + "/" +Model.ProjectName + "/" + Model.Version)" class="btn btn-primary px-4">
+            Go Back
+        </a>
+    </div>
+</div>
+
+
+<style>
+    h1 {
+        font-size: 1.75em;
+        line-height: 1.75;
+        color: #777; 
+        font-weight: normal;
+    }
+
+        h1 strong {
+            color: #222;
+        }
+
+    .center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        text-align: center;
+    }
+    
+    .notfound-404 {
+    font-size: 300px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0px;
+    color: #fff;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: -150px;
+    z-index: -1;
+    position: relative;
+    } 
+</style>

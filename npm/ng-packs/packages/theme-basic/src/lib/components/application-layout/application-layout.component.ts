@@ -1,10 +1,10 @@
 import {
   ABP,
   ApplicationConfiguration,
+  AuthService,
   Config,
   ConfigState,
   eLayoutType,
-  GetAppConfiguration,
   SessionState,
   SetLanguage,
   takeUntilDestroy,
@@ -14,15 +14,11 @@ import {
   AfterViewInit,
   Component,
   OnDestroy,
-  QueryList,
   Renderer2,
   TemplateRef,
   TrackByFunction,
   ViewChild,
-  ViewChildren,
-  ElementRef,
 } from '@angular/core';
-import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Navigate, RouterState } from '@ngxs/router-plugin';
 import { Select, Store } from '@ngxs/store';
 import compare from 'just-compare';
@@ -32,7 +28,6 @@ import snq from 'snq';
 import { AddNavigationElement } from '../../actions';
 import { Layout } from '../../models/layout';
 import { LayoutState } from '../../states';
-import { AuthService } from 'packages/core/src/lib/services/auth.service';
 
 @Component({
   selector: 'abp-layout-application',

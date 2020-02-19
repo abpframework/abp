@@ -3,8 +3,6 @@ import { DatePipe } from '@angular/common';
 import { APP_INITIALIZER, Injector, ModuleWithProviders, NgModule } from '@angular/core';
 import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
-import { MessageService } from 'primeng/components/common/messageservice';
-import { ToastModule } from 'primeng/toast';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 import { ButtonComponent } from './components/button/button.component';
 import { ChartComponent } from './components/chart/chart.component';
@@ -40,7 +38,7 @@ export function appendScript(injector: Injector) {
 }
 
 @NgModule({
-  imports: [CoreModule, ToastModule, NgxValidateCoreModule],
+  imports: [CoreModule, NgxValidateCoreModule],
   declarations: [
     BreadcrumbComponent,
     ButtonComponent,
@@ -92,7 +90,6 @@ export class ThemeSharedModule {
           deps: [Injector],
           useFactory: appendScript,
         },
-        { provide: MessageService, useClass: MessageService },
         { provide: HTTP_ERROR_CONFIG, useValue: options.httpErrorConfig },
         {
           provide: 'HTTP_ERROR_CONFIG',

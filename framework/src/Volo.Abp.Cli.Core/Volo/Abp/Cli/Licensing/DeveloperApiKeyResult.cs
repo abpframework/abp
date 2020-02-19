@@ -10,5 +10,15 @@ namespace Volo.Abp.Cli.Licensing
         public DateTime? LicenseEndTime { get; set; }
         public bool CanDownloadSourceCode { get; set; }
         public string LicenseCode { get; set; }
+        public string ErrorMessage { get; set; }
+        public LicenseErrorType? ErrorType { get; set; }
+        
+        public enum LicenseErrorType
+        {
+            NotAuthenticated = 1,
+            NotMemberOfAnOrganization = 2,
+            NoActiveLicense = 3,
+            NotDeveloperOfTheOrganization = 4
+        }
     }
 }

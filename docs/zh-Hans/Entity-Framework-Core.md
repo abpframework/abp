@@ -181,7 +181,7 @@ public interface IBookRepository : IRepository<Book, Guid>
 }
 ````
 
-你通常希望从IRepository派生以继承标准存储库方法. 然而,你没有必要这样做. 仓储接口在分层应用程序的领域层中定义,它在数据访问/基础设施层([启动模板](https://cn.abp.io/Templates)中的`EntityFrameworkCore`项目)中实现
+你通常希望从IRepository派生以继承标准存储库方法. 然而,你没有必要这样做. 仓储接口在分层应用程序的领域层中定义,它在数据访问/基础设施层([启动模板](https://abp.io/Templates)中的`EntityFrameworkCore`项目)中实现
 
 IBookRepository接口的实现示例:
 

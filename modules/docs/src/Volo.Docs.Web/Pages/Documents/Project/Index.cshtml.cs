@@ -33,6 +33,8 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string LanguageCode { get; set; }
 
+        public bool DocumentFound { get; set; } = true;
+
         public string DefaultLanguageCode { get; set; }
 
         public ProjectDto Project { get; set; }
@@ -49,7 +51,7 @@ namespace Volo.Docs.Pages.Documents.Project
 
         public List<SelectListItem> ProjectSelectItems { get; private set; }
 
-        public NavigationWithDetailsDto Navigation { get; private set; }
+        public NavigationNode Navigation { get; private set; }
 
         public VersionInfoViewModel LatestVersionInfo { get; private set; }
 
@@ -86,6 +88,21 @@ namespace Volo.Docs.Pages.Documents.Project
         }
 
         public async Task<IActionResult> OnGetAsync()
+        {
+            try
+            {
+                return await SetPageAsync();
+            }
+            catch (DocumentNotFoundException exception)
+            {
+                Logger.LogWarning(exception.Message);
+
+                DocumentFound = false;
+                return Page();
+            }
+        }
+
+        private async Task<IActionResult> SetPageAsync()
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
@@ -271,7 +288,7 @@ namespace Volo.Docs.Pages.Documents.Project
         {
             try
             {
-                var document = await _documentAppService.GetNavigationAsync(
+                Navigation = await _documentAppService.GetNavigationAsync(
                     new GetNavigationDocumentInput
                     {
                         ProjectId = Project.Id,
@@ -279,15 +296,11 @@ namespace Volo.Docs.Pages.Documents.Project
                         Version = Version
                     }
                 );
-
-                Navigation = ObjectMapper.Map<DocumentWithDetailsDto, NavigationWithDetailsDto>(document);
             }
             catch (DocumentNotFoundException) //TODO: What if called on a remote service which may return 404
             {
                 return;
             }
-
-            Navigation.ConvertItems();
         }
 
         public string CreateVersionLink(VersionInfoViewModel latestVersion, string version, string documentName = null)

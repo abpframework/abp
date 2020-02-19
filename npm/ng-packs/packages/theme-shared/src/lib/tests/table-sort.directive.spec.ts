@@ -1,17 +1,21 @@
 import { SpectatorDirective, createDirectiveFactory } from '@ngneat/spectator/jest';
-import { TableModule, Table } from 'primeng/table';
 import { TableSortDirective } from '../directives/table-sort.directive';
+import { TableComponent } from '../components/table/table.component';
+import { DummyLocalizationPipe } from './table.component.spec';
+import { PaginationComponent } from '../components';
 
 describe('TableSortDirective', () => {
   let spectator: SpectatorDirective<TableSortDirective>;
   let directive: TableSortDirective;
   const createDirective = createDirectiveFactory({
     directive: TableSortDirective,
-    imports: [TableModule],
+    declarations: [TableComponent, DummyLocalizationPipe, PaginationComponent],
   });
 
   beforeEach(() => {
-    spectator = createDirective(`<p-table [value]="[1,4,2]" [abpTableSort]="{ order: 'asc' }"></p-table>`);
+    spectator = createDirective(
+      `<abp-table [value]="[1,4,2]" [abpTableSort]="{ order: 'asc' }"></abp-table>`,
+    );
     directive = spectator.directive;
   });
 
@@ -21,7 +25,7 @@ describe('TableSortDirective', () => {
 
   test('should change table value', () => {
     expect(directive.value).toEqual([1, 4, 2]);
-    const table = spectator.query(Table);
+    const table = spectator.query(TableComponent);
     expect(table.value).toEqual([1, 2, 4]);
   });
 });
