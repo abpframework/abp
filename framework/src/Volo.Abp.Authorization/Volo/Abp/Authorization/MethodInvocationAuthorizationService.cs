@@ -27,7 +27,8 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(_abpAuthorizationPolicyProvider, GetAuthorizationDataAttributes(context.Method))
+            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(_abpAuthorizationPolicyProvider,
+                GetAuthorizationDataAttributes(context.Method));
             await _abpAuthorizationService.CheckAsync(authorizationPolicy);
         }
 
