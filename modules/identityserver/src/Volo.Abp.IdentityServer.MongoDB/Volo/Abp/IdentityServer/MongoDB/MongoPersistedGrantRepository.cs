@@ -20,7 +20,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
         {
 
             return await GetMongoQueryable()
-                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(x => x.Key == key, GetCancellationToken(cancellationToken));
         }
 
         public async Task<List<PersistedGrant>> GetListBySubjectIdAsync(string subjectId, CancellationToken cancellationToken = default)
@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             return await GetMongoQueryable()
                 .Where(x => x.SubjectId == subjectId)
                 .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                ;
         }
 
         public async Task<List<PersistedGrant>> GetListByExpirationAsync(DateTime maxExpirationDate, int maxResultCount,
@@ -38,8 +38,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
                 .Where(x => x.Expiration != null && x.Expiration < maxExpirationDate)
                 .OrderBy(x => x.ClientId)
                 .Take(maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken))
-                .ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task DeleteAsync(string subjectId, string clientId, CancellationToken cancellationToken = default)
@@ -47,7 +46,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            ).ConfigureAwait(false);
+            );
         }
 
         public async Task DeleteAsync(string subjectId, string clientId, string type, CancellationToken cancellationToken = default)
@@ -55,7 +54,7 @@ namespace Volo.Abp.IdentityServer.MongoDB
             await DeleteAsync(
                 x => x.SubjectId == subjectId && x.ClientId == clientId && x.Type == type,
                 cancellationToken: GetCancellationToken(cancellationToken)
-            ).ConfigureAwait(false);
+            );
         }
     }
 }

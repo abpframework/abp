@@ -2,19 +2,18 @@ import { Injectable } from '@angular/core';
 import { Confirmation } from '../models/confirmation';
 import { fromEvent, Observable, Subject, ReplaySubject } from 'rxjs';
 import { takeUntil, debounceTime, filter } from 'rxjs/operators';
-import { Toaster } from '../models/toaster';
 import { Config } from '@abp/ng.core';
 
 @Injectable({ providedIn: 'root' })
 export class ConfirmationService {
-  status$: Subject<Toaster.Status>;
+  status$: Subject<Confirmation.Status>;
   confirmation$ = new ReplaySubject<Confirmation.DialogData>(1);
 
   info(
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     return this.show(message, title, 'info', options);
   }
 
@@ -22,7 +21,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     return this.show(message, title, 'success', options);
   }
 
@@ -30,7 +29,7 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     return this.show(message, title, 'warning', options);
   }
 
@@ -38,16 +37,16 @@ export class ConfirmationService {
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     return this.show(message, title, 'error', options);
   }
 
   show(
     message: Config.LocalizationParam,
     title: Config.LocalizationParam,
-    severity?: Toaster.Severity,
+    severity?: Confirmation.Severity,
     options?: Partial<Confirmation.Options>,
-  ): Observable<Toaster.Status> {
+  ): Observable<Confirmation.Status> {
     this.confirmation$.next({
       message,
       title,
@@ -59,9 +58,9 @@ export class ConfirmationService {
     return this.status$;
   }
 
-  clear(status?: Toaster.Status) {
+  clear(status?: Confirmation.Status) {
     this.confirmation$.next();
-    this.status$.next(status || Toaster.Status.dismiss);
+    this.status$.next(status || Confirmation.Status.dismiss);
   }
 
   listenToEscape() {

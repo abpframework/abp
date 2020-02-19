@@ -27,11 +27,11 @@ namespace Microsoft.AspNetCore.RequestLocalization
                 next,
                 new OptionsWrapper<RequestLocalizationOptions>(
                     await _requestLocalizationOptionsProvider.GetLocalizationOptionsAsync()
-.ConfigureAwait(false)),
+),
                 _loggerFactory
             );
 
-            await middleware.Invoke(context).ConfigureAwait(false);
+            await middleware.Invoke(context);
         }
     }
 }

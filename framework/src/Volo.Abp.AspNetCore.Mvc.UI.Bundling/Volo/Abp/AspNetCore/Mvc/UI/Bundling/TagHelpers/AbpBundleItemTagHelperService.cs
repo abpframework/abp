@@ -33,7 +33,7 @@ namespace Volo.Abp.AspNetCore.Mvc.UI.Bundling.TagHelpers
                         TagHelper.CreateBundleTagHelperItem()
                     },
                     TagHelper.GetNameOrNull()
-                ).ConfigureAwait(false);
+                );
             }
         }
     }

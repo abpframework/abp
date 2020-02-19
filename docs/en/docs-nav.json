@@ -50,6 +50,10 @@
       ]
     },
     {
+      "text": "ASP.NET Boilerplate Migration Guide",
+      "path": "AspNet-Boilerplate-Migration-Guide.md"
+    },
+    {
       "text": "CLI",
       "path": "CLI.md"
     },
@@ -105,12 +109,20 @@
           "path": "Caching.md"
         },
         {
+          "text": "Logging",
+          "path": "Logging.md"
+        },
+        {
           "text": "Audit Logging",
           "path": "Audit-Logging.md"
         },
         {
           "text": "Settings",
           "path": "Settings.md"
+        },
+        {
+          "text": "Data Filtering",
+          "path": "Data-Filtering.md"
         }
       ]
     },

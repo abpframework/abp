@@ -21,12 +21,12 @@ namespace Volo.Abp.Users.EntityFrameworkCore
 
         public async Task<TUser> FindByUserNameAsync(string userName, CancellationToken cancellationToken = default)
         {
-            return await this.FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await this.FirstOrDefaultAsync(u => u.UserName == userName, GetCancellationToken(cancellationToken));
         }
 
         public virtual async Task<List<TUser>> GetListAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken = default)
         {
-            return await DbSet.Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await DbSet.Where(u => ids.Contains(u.Id)).ToListAsync(GetCancellationToken(cancellationToken));
         }
     }
 }

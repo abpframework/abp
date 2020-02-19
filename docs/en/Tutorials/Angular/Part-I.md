@@ -343,7 +343,7 @@ Run `yarn start`, wait Angular to run the application and open `http://localhost
 Open the `app-routing.module.ts` and replace `books` as shown below:
 
 ```js
-import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';-
+import { ApplicationLayoutComponent } from '@abp/ng.theme.basic';
 
 //...
 {

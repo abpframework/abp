@@ -36,7 +36,7 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
 
         public async Task OnGetAsync()
         {
-            FeatureListDto = await _featureAppService.GetAsync(ProviderName, ProviderKey).ConfigureAwait(false);
+            FeatureListDto = await _featureAppService.GetAsync(ProviderName, ProviderKey);
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -50,7 +50,7 @@ namespace Volo.Abp.FeatureManagement.Web.Pages.FeatureManagement
                 }).ToList()
             };
 
-            await _featureAppService.UpdateAsync(ProviderName, ProviderKey, features).ConfigureAwait(false);
+            await _featureAppService.UpdateAsync(ProviderName, ProviderKey, features);
 
             return NoContent();
         }

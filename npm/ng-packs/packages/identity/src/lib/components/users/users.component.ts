@@ -102,7 +102,9 @@ export class UsersComponent implements OnInit {
       this.passwordRulesArr.push('capital');
     }
 
-    if (+(passwordRules['Abp.Identity.Password.RequiredUniqueChars'] || 0) > 0) {
+    if (
+      (passwordRules['Abp.Identity.Password.RequireNonAlphanumeric'] || '').toLowerCase() === 'true'
+    ) {
       this.passwordRulesArr.push('special');
     }
 
@@ -117,7 +119,7 @@ export class UsersComponent implements OnInit {
   }
 
   buildForm() {
-    this.store.dispatch(new GetRoles()).subscribe(() => {
+    this.store.dispatch(new GetRoles({ maxResultCount: 1000, skipCount: 0 })).subscribe(() => {
       this.roles = this.store.selectSnapshot(IdentityState.getRoles);
       this.form = this.fb.group({
         userName: [this.selected.userName || '', [Validators.required, Validators.maxLength(256)]],
@@ -134,7 +136,9 @@ export class UsersComponent implements OnInit {
           this.roles.map(role =>
             this.fb.group({
               [role.name]: [
-                !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id)),
+                this.selected.id
+                  ? !!snq(() => this.selectedUserRoles.find(userRole => userRole.id === role.id))
+                  : role.isDefault,
               ],
             }),
           ),
@@ -177,7 +181,7 @@ export class UsersComponent implements OnInit {
       )
       .subscribe((state: Identity.State) => {
         this.selected = state.selectedUser;
-        this.selectedUserRoles = state.selectedUserRoles;
+        this.selectedUserRoles = state.selectedUserRoles || [];
         this.openModal();
       });
   }

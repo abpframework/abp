@@ -10,7 +10,7 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
         [Fact]
         public async Task GetAll()
         {
-            var script = await GetResponseAsStringAsync("/Abp/ServiceProxyScript?minify=true").ConfigureAwait(false);
+            var script = await GetResponseAsStringAsync("/Abp/ServiceProxyScript?minify=true");
             script.Length.ShouldBeGreaterThan(0);
         }
 
@@ -18,10 +18,10 @@ namespace Volo.Abp.AspNetCore.Mvc.ProxyScripting
         public async Task GetAllWithMinify()
         {
             GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.MinifyGeneratedScript = false;
-            var script = await GetResponseAsStringAsync("/Abp/ServiceProxyScript").ConfigureAwait(false);
+            var script = await GetResponseAsStringAsync("/Abp/ServiceProxyScript");
 
             GetRequiredService<IOptions<AbpAspNetCoreMvcOptions>>().Value.MinifyGeneratedScript = true;
-            var minifyScript = await GetResponseAsStringAsync("/Abp/ServiceProxyScript?minify=true").ConfigureAwait(false);
+            var minifyScript = await GetResponseAsStringAsync("/Abp/ServiceProxyScript?minify=true");
 
             script.Length.ShouldBeGreaterThan(0);
             minifyScript.Length.ShouldBeGreaterThan(0);

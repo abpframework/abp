@@ -24,8 +24,8 @@ namespace Volo.Abp.Authorization.Permissions
                 return PermissionGrantResult.Undefined;
             }
 
-            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId)
-.ConfigureAwait(false) ? PermissionGrantResult.Granted
+            return await PermissionStore.IsGrantedAsync(context.Permission.Name, Name, clientId) 
+                ? PermissionGrantResult.Granted
                 : PermissionGrantResult.Undefined;
         }
     }

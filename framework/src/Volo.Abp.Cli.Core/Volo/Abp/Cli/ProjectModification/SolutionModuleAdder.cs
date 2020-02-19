@@ -57,7 +57,7 @@ namespace Volo.Abp.Cli.ProjectModification
             Check.NotNull(solutionFile, nameof(solutionFile));
             Check.NotNull(moduleName, nameof(moduleName));
 
-            var module = await FindModuleInfoAsync(moduleName).ConfigureAwait(false);
+            var module = await FindModuleInfoAsync(moduleName);
 
             Logger.LogInformation($"Installing module '{module.Name}' to the solution '{Path.GetFileNameWithoutExtension(solutionFile)}'");
 
@@ -72,7 +72,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     continue;
                 }
 
-                await ProjectNugetPackageAdder.AddAsync(targetProjectFile, nugetPackage).ConfigureAwait(false);
+                await ProjectNugetPackageAdder.AddAsync(targetProjectFile, nugetPackage);
             }
 
             if (!module.NpmPackages.IsNullOrEmpty())
@@ -86,7 +86,7 @@ namespace Volo.Abp.Cli.ProjectModification
                     {
                         foreach (var npmPackage in module.NpmPackages.Where(p => p.ApplicationType.HasFlag(NpmApplicationType.Mvc)))
                         {
-                            await ProjectNpmPackageAdder.AddAsync(Path.GetDirectoryName(targetProject), npmPackage).ConfigureAwait(false);
+                            await ProjectNpmPackageAdder.AddAsync(Path.GetDirectoryName(targetProject), npmPackage);
                         }
                     }
                 }
@@ -142,7 +142,7 @@ namespace Volo.Abp.Cli.ProjectModification
             {
                 var url = $"{CliUrls.WwwAbpIo}api/app/module/byName/?name=" + moduleName;
 
-                var response = await client.GetAsync(url).ConfigureAwait(false);
+                var response = await client.GetAsync(url);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -151,10 +151,10 @@ namespace Volo.Abp.Cli.ProjectModification
                         throw new CliUsageException($"ERROR: '{moduleName}' module could not be found!");
                     }
 
-                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response).ConfigureAwait(false);
+                    await RemoteServiceExceptionHandler.EnsureSuccessfulHttpResponseAsync(response);
                 }
 
-                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                var responseContent = await response.Content.ReadAsStringAsync();
                 return JsonSerializer.Deserialize<ModuleInfo>(responseContent);
             }
         }

@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         {
             using (_currentTenant.Change(context.Subject.FindTenantId()))
             {
-                await base.GetProfileDataAsync(context).ConfigureAwait(false);
+                await base.GetProfileDataAsync(context);
             }
         }
 
@@ -37,7 +37,7 @@ namespace Volo.Abp.IdentityServer.AspNetIdentity
         {
             using (_currentTenant.Change(context.Subject.FindTenantId()))
             {
-                await base.IsActiveAsync(context).ConfigureAwait(false);
+                await base.IsActiveAsync(context);
             }
         }
     }

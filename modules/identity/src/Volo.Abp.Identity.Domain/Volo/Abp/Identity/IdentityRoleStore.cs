@@ -67,7 +67,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.InsertAsync(role, AutoSaveChanges, cancellationToken).ConfigureAwait(false);
+            await _roleRepository.InsertAsync(role, AutoSaveChanges, cancellationToken);
 
             return IdentityResult.Success;
         }
@@ -86,7 +86,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _roleRepository.UpdateAsync(role, AutoSaveChanges, cancellationToken).ConfigureAwait(false);
+                await _roleRepository.UpdateAsync(role, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
@@ -111,7 +111,7 @@ namespace Volo.Abp.Identity
 
             try
             {
-                await _roleRepository.DeleteAsync(role, AutoSaveChanges, cancellationToken).ConfigureAwait(false);
+                await _roleRepository.DeleteAsync(role, AutoSaveChanges, cancellationToken);
             }
             catch (AbpDbConcurrencyException ex)
             {
@@ -249,7 +249,7 @@ namespace Volo.Abp.Identity
 
             Check.NotNull(role, nameof(role));
 
-            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken).ConfigureAwait(false);
+            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
 
             return role.Claims.Select(c => c.ToClaim()).ToList();
         }
@@ -268,7 +268,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 
-            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken).ConfigureAwait(false);
+            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
 
             role.AddClaim(_guidGenerator, claim);
         }
@@ -285,7 +285,7 @@ namespace Volo.Abp.Identity
             Check.NotNull(role, nameof(role));
             Check.NotNull(claim, nameof(claim));
 
-            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken).ConfigureAwait(false);
+            await _roleRepository.EnsureCollectionLoadedAsync(role, r => r.Claims, cancellationToken);
 
             role.RemoveClaim(claim);
         }

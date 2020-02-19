@@ -27,10 +27,8 @@ namespace Volo.Abp.Authorization
                 return;
             }
 
-            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(_abpAuthorizationPolicyProvider,
-                GetAuthorizationDataAttributes(context.Method)).ConfigureAwait(false);
-
-            await _abpAuthorizationService.CheckAsync(authorizationPolicy).ConfigureAwait(false);
+            var authorizationPolicy = await AuthorizationPolicy.CombineAsync(_abpAuthorizationPolicyProvider, GetAuthorizationDataAttributes(context.Method))
+            await _abpAuthorizationService.CheckAsync(authorizationPolicy);
         }
 
         protected virtual bool AllowAnonymous(MethodInvocationAuthorizationContext context)

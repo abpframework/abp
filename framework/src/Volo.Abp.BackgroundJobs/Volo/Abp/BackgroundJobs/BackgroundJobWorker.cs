@@ -34,7 +34,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             var store = workerContext.ServiceProvider.GetRequiredService<IBackgroundJobStore>();
 
-            var waitingJobs = await store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount).ConfigureAwait(false);
+            var waitingJobs = await store.GetWaitingJobsAsync(WorkerOptions.MaxJobFetchCount);
 
             if (!waitingJobs.Any())
             {
@@ -58,9 +58,9 @@ namespace Volo.Abp.BackgroundJobs
 
                     try
                     {
-                        await jobExecuter.ExecuteAsync(context).ConfigureAwait(false);
+                        await jobExecuter.ExecuteAsync(context);
 
-                        await store.DeleteAsync(jobInfo.Id).ConfigureAwait(false);
+                        await store.DeleteAsync(jobInfo.Id);
                     }
                     catch (BackgroundJobExecutionException)
                     {
@@ -75,14 +75,14 @@ namespace Volo.Abp.BackgroundJobs
                             jobInfo.IsAbandoned = true;
                         }
 
-                        await TryUpdateAsync(store, jobInfo).ConfigureAwait(false);
+                        await TryUpdateAsync(store, jobInfo);
                     }
                 }
                 catch (Exception ex)
                 {
                     Logger.LogException(ex);
                     jobInfo.IsAbandoned = true;
-                    await TryUpdateAsync(store, jobInfo).ConfigureAwait(false);
+                    await TryUpdateAsync(store, jobInfo);
                 }
             }
         }
@@ -91,7 +91,7 @@ namespace Volo.Abp.BackgroundJobs
         {
             try
             {
-                await store.UpdateAsync(jobInfo).ConfigureAwait(false);
+                await store.UpdateAsync(jobInfo);
             }
             catch (Exception updateEx)
             {

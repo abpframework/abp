@@ -24,7 +24,7 @@ namespace Volo.Abp.TenantManagement.Web.Navigation
             var tenantManagementMenuItem = new ApplicationMenuItem(TenantManagementMenuNames.GroupName, l["Menu:TenantManagement"], icon: "fa fa-users");
             administrationMenu.AddItem(tenantManagementMenuItem);
 
-            if (await authorizationService.IsGrantedAsync(TenantManagementPermissions.Tenants.Default).ConfigureAwait(false))
+            if (await authorizationService.IsGrantedAsync(TenantManagementPermissions.Tenants.Default))
             {
                 tenantManagementMenuItem.AddItem(new ApplicationMenuItem(TenantManagementMenuNames.Tenants, l["Tenants"], url: "/TenantManagement/Tenants"));
             }

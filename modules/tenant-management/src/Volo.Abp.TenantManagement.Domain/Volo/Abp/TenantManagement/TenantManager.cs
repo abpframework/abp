@@ -19,7 +19,7 @@ namespace Volo.Abp.TenantManagement
         {
             Check.NotNull(name, nameof(name));
 
-            await ValidateNameAsync(name).ConfigureAwait(false);
+            await ValidateNameAsync(name);
             return new Tenant(GuidGenerator.Create(), name);
         }
 
@@ -28,13 +28,13 @@ namespace Volo.Abp.TenantManagement
             Check.NotNull(tenant, nameof(tenant));
             Check.NotNull(name, nameof(name));
 
-            await ValidateNameAsync(name, tenant.Id).ConfigureAwait(false);
+            await ValidateNameAsync(name, tenant.Id);
             tenant.SetName(name);
         }
 
         protected virtual async Task ValidateNameAsync(string name, Guid? expectedId = null)
         {
-            var tenant = await _tenantRepository.FindByNameAsync(name).ConfigureAwait(false);
+            var tenant = await _tenantRepository.FindByNameAsync(name);
             if (tenant != null && tenant.Id != expectedId)
             {
                 throw new UserFriendlyException("Duplicate tenancy name: " + name); //TODO: A domain exception would be better..?

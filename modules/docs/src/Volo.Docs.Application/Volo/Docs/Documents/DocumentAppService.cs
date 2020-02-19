@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Hosting;
@@ -13,24 +14,27 @@ namespace Volo.Docs.Documents
     public class DocumentAppService : DocsAppServiceBase, IDocumentAppService
     {
         private readonly IProjectRepository _projectRepository;
-        private readonly IDocumentStoreFactory _documentStoreFactory;
-        protected IDistributedCache<DocumentWithDetailsDto> DocumentCache { get; }
+        private readonly IDocumentRepository _documentRepository;
+        private readonly IDocumentSourceFactory _documentStoreFactory;
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
         protected IDistributedCache<DocumentResourceDto> ResourceCache { get; }
+        protected IDistributedCache<DocumentUpdateInfo> DocumentUpdateCache { get; }
         protected IHostEnvironment HostEnvironment { get; }
         public DocumentAppService(
             IProjectRepository projectRepository,
-            IDocumentStoreFactory documentStoreFactory,
-            IDistributedCache<DocumentWithDetailsDto> documentCache,
+            IDocumentRepository documentRepository,
+            IDocumentSourceFactory documentStoreFactory,
             IDistributedCache<LanguageConfig> languageCache,
             IDistributedCache<DocumentResourceDto> resourceCache,
+            IDistributedCache<DocumentUpdateInfo> documentUpdateCache,
             IHostEnvironment hostEnvironment)
         {
             _projectRepository = projectRepository;
+            _documentRepository = documentRepository;
             _documentStoreFactory = documentStoreFactory;
-            DocumentCache = documentCache;
             LanguageCache = languageCache;
             ResourceCache = resourceCache;
+            DocumentUpdateCache = documentUpdateCache;
             HostEnvironment = hostEnvironment;
         }
 
@@ -58,16 +62,35 @@ namespace Volo.Docs.Documents
             );
         }
 
-        public virtual async Task<DocumentWithDetailsDto> GetNavigationAsync(GetNavigationDocumentInput input)
+        public virtual async Task<NavigationNode> GetNavigationAsync(GetNavigationDocumentInput input)
         {
             var project = await _projectRepository.GetAsync(input.ProjectId);
 
-            return await GetDocumentWithDetailsDtoAsync(
+            var navigationDocument = await GetDocumentWithDetailsDtoAsync(
                 project,
                 project.NavigationDocumentName,
                 input.LanguageCode,
                 input.Version
             );
+
+            var navigationNode = JsonConvert.DeserializeObject<NavigationNode>(navigationDocument.Content);
+
+            var leafs = navigationNode.Items.GetAllNodes(x => x.Items)
+                .Where(x => !x.Path.IsNullOrWhiteSpace())
+                .ToList();
+
+            foreach (var leaf in leafs)
+            {
+                var cacheKey = $"DocumentUpdateInfo{project.Id}#{leaf.Path}#{input.LanguageCode}#{input.Version}";
+                var documentUpdateInfo = await DocumentUpdateCache.GetAsync(cacheKey);
+                if (documentUpdateInfo != null)
+                {
+                    leaf.CreationTime = documentUpdateInfo.CreationTime;
+                    leaf.LastUpdatedTime = documentUpdateInfo.LastUpdatedTime;
+                }
+            }
+
+            return navigationNode;
         }
 
         public async Task<DocumentResourceDto> GetResourceAsync(GetDocumentResourceInput input)
@@ -78,8 +101,8 @@ namespace Volo.Docs.Documents
 
             async Task<DocumentResourceDto> GetResourceAsync()
             {
-                var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                var documentResource = await store.GetResource(project, input.Name, input.LanguageCode, input.Version);
+                var source = _documentStoreFactory.Create(project.DocumentStoreType);
+                var documentResource = await source.GetResource(project, input.Name, input.LanguageCode, input.Version);
 
                 return ObjectMapper.Map<DocumentResource, DocumentResourceDto>(documentResource);
             }
@@ -136,15 +159,27 @@ namespace Volo.Docs.Documents
         {
             version = string.IsNullOrWhiteSpace(version) ? project.LatestVersionBranchName : version;
 
-            var cacheKey = $"Document@{project.ShortName}#{languageCode}#{documentName}#{version}";
-
             async Task<DocumentWithDetailsDto> GetDocumentAsync()
             {
-                Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the store...");
-                var store = _documentStoreFactory.Create(project.DocumentStoreType);
-                var document = await store.GetDocumentAsync(project, documentName, languageCode, version);
+                Logger.LogInformation($"Not found in the cache. Requesting {documentName} from the source...");
+
+                var source = _documentStoreFactory.Create(project.DocumentStoreType);
+                var sourceDocument = await source.GetDocumentAsync(project, documentName, languageCode, version);
+
+                await _documentRepository.DeleteAsync(project.Id, sourceDocument.Name, sourceDocument.LanguageCode, sourceDocument.Version);
+                await _documentRepository.InsertAsync(sourceDocument, true);
+
                 Logger.LogInformation($"Document retrieved: {documentName}");
-                return CreateDocumentWithDetailsDto(project, document);
+
+                var cacheKey = $"DocumentUpdateInfo{sourceDocument.ProjectId}#{sourceDocument.Name}#{sourceDocument.LanguageCode}#{sourceDocument.Version}";
+                await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
+                {
+                    Name = sourceDocument.Name,
+                    CreationTime = sourceDocument.CreationTime,
+                    LastUpdatedTime = sourceDocument.LastUpdatedTime
+                });
+
+                return CreateDocumentWithDetailsDto(project, sourceDocument);
             }
 
             if (HostEnvironment.IsDevelopment())
@@ -152,16 +187,30 @@ namespace Volo.Docs.Documents
                 return await GetDocumentAsync();
             }
 
-            return await DocumentCache.GetOrAddAsync(
-                cacheKey,
-                GetDocumentAsync,
-                () => new DistributedCacheEntryOptions
-                {
-                    //TODO: Configurable?
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(2),
-                    SlidingExpiration = TimeSpan.FromMinutes(30)
-                }
-            );
+            var document = await _documentRepository.FindAsync(project.Id, documentName, languageCode, version);
+            if (document == null)
+            {
+                return await GetDocumentAsync();
+            }
+
+            //Only the latest version (dev) of the document needs to update the cache.
+            if (!project.LatestVersionBranchName.IsNullOrWhiteSpace() &&
+                document.Version == project.LatestVersionBranchName &&
+                //TODO: Configurable cache time?
+                document.LastCachedTime + TimeSpan.FromHours(2) < DateTime.Now)
+            {
+                return await GetDocumentAsync();
+            }
+
+            var cacheKey = $"DocumentUpdateInfo{document.ProjectId}#{document.Name}#{document.LanguageCode}#{document.Version}";
+            await DocumentUpdateCache.SetAsync(cacheKey, new DocumentUpdateInfo
+            {
+                Name = document.Name,
+                CreationTime = document.CreationTime,
+                LastUpdatedTime = document.LastUpdatedTime,
+            });
+
+            return CreateDocumentWithDetailsDto(project, document);
         }
 
         protected virtual DocumentWithDetailsDto CreateDocumentWithDetailsDto(Project project, Document document)
@@ -171,6 +220,5 @@ namespace Volo.Docs.Documents
             documentDto.Contributors = ObjectMapper.Map<List<DocumentContributor>, List<DocumentContributorDto>>(document.Contributors);
             return documentDto;
         }
-
     }
 }
