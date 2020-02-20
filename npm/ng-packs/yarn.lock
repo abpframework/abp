@@ -10423,6 +10423,11 @@ primeng@^8.1.1:
   resolved "https://registry.yarnpkg.com/primeng/-/primeng-8.1.1.tgz#3b1f95f503f1bd70834caea775dbfd2e4e322b5c"
   integrity sha512-8dP8A3qkmOvDTe97kCeFvoCk6oPNDdgMTdT4UBzhC4ua5wM7i7pjYXuKzAXm3oEFf+iSEB6WqzzfSqyZdbEA+w==
 
+primeng@^9.0.0-rc.4:
+  version "9.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/primeng/-/primeng-9.0.0-rc.4.tgz#b1dc7b84afe8b412e4a51c8070b445ef326ea8bf"
+  integrity sha512-g8XVsE7hBxtTWe4aYfF1I/27CGWTR7HFmfSKADh1hkO8A4tfQRfYkID1yo6fNd8t3xRMWYIn31nELQHgqiAe6Q==
+
 private@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
