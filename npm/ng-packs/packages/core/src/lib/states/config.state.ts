@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { Action, createSelector, Selector, State, StateContext, Store } from '@ngxs/store';
 import { of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
@@ -19,6 +20,7 @@ import { SessionState } from './session.state';
   name: 'ConfigState',
   defaults: {} as Config.State,
 })
+@Injectable()
 export class ConfigState {
   @Selector()
   static getAll(state: Config.State) {

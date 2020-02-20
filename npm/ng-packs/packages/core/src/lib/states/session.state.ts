@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import {
   Action,
   Selector,
@@ -25,6 +26,7 @@ import { OAuthService } from 'angular-oauth2-oidc';
   name: 'SessionState',
   defaults: { sessionDetail: { openedTabCount: 0 } } as Session.State,
 })
+@Injectable()
 export class SessionState {
   @Selector()
   static getLanguage({ language }: Session.State): string {

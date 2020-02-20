@@ -89,7 +89,7 @@ export function storageFactory(): OAuthStorage {
     StopPropagationDirective,
     LocalizationPipe,
     SortPipe,
-    LocalizationPipe,
+    LocalizationPipe
   ],
   providers: [LocalizationPipe],
   entryComponents: [

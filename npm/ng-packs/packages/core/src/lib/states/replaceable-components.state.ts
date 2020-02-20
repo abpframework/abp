@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { State, Action, StateContext, Selector, createSelector } from '@ngxs/store';
 import { AddReplaceableComponent } from '../actions/replaceable-components.actions';
 import { ReplaceableComponents } from '../models/replaceable-components';
@@ -7,6 +8,7 @@ import snq from 'snq';
   name: 'ReplaceableComponentsState',
   defaults: { replaceableComponents: [] } as ReplaceableComponents.State,
 })
+@Injectable()
 export class ReplaceableComponentsState {
   @Selector()
   static getAll({
