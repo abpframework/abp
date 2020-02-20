@@ -94,7 +94,7 @@ namespace Volo.Abp.Cli.Commands
             sb.AppendLine("");
             sb.AppendLine("Usage:");
             sb.AppendLine("");
-            sb.AppendLine("  abp update  [options]");
+            sb.AppendLine("  abp update [options]");
             sb.AppendLine("");
             sb.AppendLine("Options:");
             sb.AppendLine("-p|--include-previews                       (if supported by the template)");
