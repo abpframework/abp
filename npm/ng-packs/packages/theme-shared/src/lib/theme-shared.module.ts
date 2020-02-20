@@ -56,6 +56,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent
   ],
   exports: [
     BreadcrumbComponent,
@@ -73,6 +74,7 @@ export function appendScript(injector: Injector) {
     SortOrderIconComponent,
     LoadingDirective,
     TableSortDirective,
+    ToastContainerComponent
   ],
   providers: [DatePipe],
   entryComponents: [HttpErrorWrapperComponent, LoadingComponent],
