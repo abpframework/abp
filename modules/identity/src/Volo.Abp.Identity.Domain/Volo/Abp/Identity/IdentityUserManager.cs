@@ -33,7 +33,8 @@ namespace Volo.Abp.Identity
             IPasswordHasher<IdentityUser> passwordHasher,
             IEnumerable<IUserValidator<IdentityUser>> userValidators,
             IEnumerable<IPasswordValidator<IdentityUser>> passwordValidators,
-            ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors,
+            ILookupNormalizer keyNormalizer,
+            IdentityErrorDescriber errors,
             IServiceProvider services,
             ILogger<IdentityUserManager> logger,
             ICancellationTokenProvider cancellationTokenProvider,
@@ -59,7 +60,7 @@ namespace Volo.Abp.Identity
 
         public virtual async Task<IdentityUser> GetByIdAsync(Guid id)
         {
-            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken).ConfigureAwait(false);
+            var user = await Store.FindByIdAsync(id.ToString(), CancellationToken);
             if (user == null)
             {
                 throw new EntityNotFoundException(typeof(IdentityUser), id);
@@ -75,13 +76,13 @@ namespace Volo.Abp.Identity
 
             var currentRoleNames = await GetRolesAsync(user).ConfigureAwait(false);
 
-            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct()).ConfigureAwait(false);
+            var result = await RemoveFromRolesAsync(user, currentRoleNames.Except(roleNames).Distinct());
             if (!result.Succeeded)
             {
                 return result;
             }
 
-            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct()).ConfigureAwait(false);
+            result = await AddToRolesAsync(user, roleNames.Except(currentRoleNames).Distinct());
             if (!result.Succeeded)
             {
                 return result;

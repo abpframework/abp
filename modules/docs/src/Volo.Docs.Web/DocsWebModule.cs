@@ -5,7 +5,9 @@ using Microsoft.Extensions.Options;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bootstrap;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages;
 using Volo.Abp.AspNetCore.Mvc.UI.Packages.Prismjs;
+using Volo.Abp.AspNetCore.Mvc.UI.Theme.Shared;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -18,7 +20,11 @@ namespace Volo.Docs
 {
     [DependsOn(
         typeof(DocsHttpApiModule),
-        typeof(AbpAspNetCoreMvcUiBootstrapModule)
+        typeof(AbpAutoMapperModule),
+        typeof(AbpAspNetCoreMvcUiBootstrapModule),
+        typeof(AbpAspNetCoreMvcUiThemeSharedModule),
+        typeof(AbpAspNetCoreMvcUiPackagesModule),
+        typeof(AbpAspNetCoreMvcUiBundlingModule)
         )]
     public class DocsWebModule : AbpModule
     {

@@ -16,7 +16,7 @@ namespace Volo.Abp.EventBus.Local
             LocalEventBus.Subscribe<EntityChangedEventData<MyEntity>>(handler);
             LocalEventBus.Subscribe<EntityCreatedEventData<MyEntity>>(handler);
 
-            await LocalEventBus.PublishAsync(new EntityCreatedEventData<MyEntity>(new MyEntity())).ConfigureAwait(false);
+            await LocalEventBus.PublishAsync(new EntityCreatedEventData<MyEntity>(new MyEntity()));
 
             handler.EntityCreatedEventCount.ShouldBe(1);
             handler.EntityChangedEventCount.ShouldBe(1);

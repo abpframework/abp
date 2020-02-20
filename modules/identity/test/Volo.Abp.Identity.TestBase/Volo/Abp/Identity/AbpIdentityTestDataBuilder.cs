@@ -55,14 +55,14 @@ namespace Volo.Abp.Identity
 
         private async Task AddRoles()
         {
-            _adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin")).ConfigureAwait(false);
+            _adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName("admin"));
 
             _moderator = new IdentityRole(_testData.RoleModeratorId, "moderator");
             _moderator.AddClaim(_guidGenerator, new Claim("test-claim", "test-value"));
-            await _roleRepository.InsertAsync(_moderator).ConfigureAwait(false);
+            await _roleRepository.InsertAsync(_moderator);
 
             _supporterRole = new IdentityRole(_guidGenerator.Create(), "supporter");
-            await _roleRepository.InsertAsync(_supporterRole).ConfigureAwait(false);
+            await _roleRepository.InsertAsync(_supporterRole);
         }
 
         /* Creates OU tree as shown below:
@@ -95,7 +95,7 @@ namespace Volo.Abp.Identity
             var adminUser = new IdentityUser(_guidGenerator.Create(), "administrator", "admin@abp.io");
             adminUser.AddRole(_adminRole.Id);
             adminUser.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
-            await _userRepository.InsertAsync(adminUser).ConfigureAwait(false);
+            await _userRepository.InsertAsync(adminUser);
 
             var john = new IdentityUser(_testData.UserJohnId, "john.nash", "john.nash@abp.io");
             john.AddRole(_moderator.Id);
@@ -106,15 +106,15 @@ namespace Volo.Abp.Identity
             john.AddLogin(new UserLoginInfo("twitter", "johnx", "John Nash"));
             john.AddClaim(_guidGenerator, new Claim("TestClaimType", "42"));
             john.SetToken("test-provider", "test-name", "test-value");
-            await _userRepository.InsertAsync(john).ConfigureAwait(false);
+            await _userRepository.InsertAsync(john);
 
             var david = new IdentityUser(_testData.UserDavidId, "david", "david@abp.io");
-            await _userRepository.InsertAsync(david).ConfigureAwait(false);
+            await _userRepository.InsertAsync(david);
 
             var neo = new IdentityUser(_testData.UserNeoId, "neo", "neo@abp.io");
             neo.AddRole(_supporterRole.Id);
             neo.AddClaim(_guidGenerator, new Claim("TestClaimType", "43"));
-            await _userRepository.InsertAsync(neo).ConfigureAwait(false);
+            await _userRepository.InsertAsync(neo);
         }
 
 
@@ -122,8 +122,9 @@ namespace Volo.Abp.Identity
         {
             var ageClaim = new IdentityClaimType(_testData.AgeClaimId, "Age", false, false, null, null, null, IdentityClaimValueType.Int);
             await _identityClaimTypeRepository.InsertAsync(ageClaim).ConfigureAwait(false);
+
             var educationClaim = new IdentityClaimType(_testData.EducationClaimId, "Education", true, false, null, null, null);
-            await _identityClaimTypeRepository.InsertAsync(educationClaim).ConfigureAwait(false);
+            await _identityClaimTypeRepository.InsertAsync(educationClaim);
         }
 
         private async Task<OrganizationUnit> CreateOU(string displayName, string code, Guid? parentId = null)

@@ -20,7 +20,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
             return await DbSet
                 .FirstOrDefaultAsync(
                     s => s.Name == name && s.ProviderName == providerName && s.ProviderKey == providerKey
-                ).ConfigureAwait(false);
+                );
         }
 
         public async Task<List<Setting>> GetListAsync(string providerName, string providerKey)
@@ -28,7 +28,7 @@ namespace Volo.Abp.SettingManagement.EntityFrameworkCore
             return await DbSet
                 .Where(
                     s => s.ProviderName == providerName && s.ProviderKey == providerKey
-                ).ToListAsync().ConfigureAwait(false);
+                ).ToListAsync();
         }
     }
 }

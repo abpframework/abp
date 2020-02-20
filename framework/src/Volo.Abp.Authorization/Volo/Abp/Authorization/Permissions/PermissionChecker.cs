@@ -29,7 +29,7 @@ namespace Volo.Abp.Authorization.Permissions
 
         public virtual async Task<bool> IsGrantedAsync(string name)
         {
-            return await IsGrantedAsync(PrincipalAccessor.Principal, name).ConfigureAwait(false);
+            return await IsGrantedAsync(PrincipalAccessor.Principal, name);
         }
 
         public virtual async Task<bool> IsGrantedAsync(ClaimsPrincipal claimsPrincipal, string name)
@@ -56,7 +56,7 @@ namespace Volo.Abp.Authorization.Permissions
                     continue;
                 }
 
-                var result = await provider.CheckAsync(context).ConfigureAwait(false);
+                var result = await provider.CheckAsync(context);
 
                 if (result == PermissionGrantResult.Granted)
                 {

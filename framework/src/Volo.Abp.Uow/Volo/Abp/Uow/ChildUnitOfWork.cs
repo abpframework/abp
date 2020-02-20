@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -25,6 +26,8 @@ namespace Volo.Abp.Uow
         public event EventHandler<UnitOfWorkEventArgs> Disposed;
 
         public IServiceProvider ServiceProvider => _parent.ServiceProvider;
+
+        public Dictionary<string, object> Items => _parent.Items;
 
         private readonly IUnitOfWork _parent;
 

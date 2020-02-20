@@ -40,11 +40,11 @@ namespace Volo.Abp.Identity
         {
             using (var uow = _unitOfWorkManager.Begin())
             {
-                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash")).ConfigureAwait(false);
-                await _userManager.SetEmailAsync(user, "john.nash_UPDATED@abp.io").ConfigureAwait(false);
+                var user = await _userRepository.FindByNormalizedUserNameAsync(_lookupNormalizer.NormalizeName("john.nash"));
+                await _userManager.SetEmailAsync(user, "john.nash_UPDATED@abp.io");
 
                 _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(0);
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
 
             _testCounter.GetValue("EntityUpdatedEto<UserEto>").ShouldBe(1);

@@ -7,7 +7,7 @@
     "UserName": "User name",
     "EmailAddress": "Email address",
     "PhoneNumber": "Phone number",
-    "UserInformations": "User informations",
+    "UserInformations": "User information",
     "DisplayName:IsDefault": "Default",
     "DisplayName:IsStatic": "Static",
     "DisplayName:IsPublic": "Public",

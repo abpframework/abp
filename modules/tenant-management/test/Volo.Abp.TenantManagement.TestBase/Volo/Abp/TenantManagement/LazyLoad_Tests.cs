@@ -22,11 +22,11 @@ namespace Volo.Abp.TenantManagement
         {
             using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
             {
-                var role = await TenantRepository.FindByNameAsync("acme", includeDetails: false).ConfigureAwait(false);
+                var role = await TenantRepository.FindByNameAsync("acme", includeDetails: false);
                 role.ConnectionStrings.ShouldNotBeNull();
                 role.ConnectionStrings.Any().ShouldBeTrue();
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
             }
         }
     }

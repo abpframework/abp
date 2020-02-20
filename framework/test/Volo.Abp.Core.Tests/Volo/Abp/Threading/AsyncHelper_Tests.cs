@@ -41,12 +41,12 @@ namespace Volo.Abp.Threading
 
         private static async Task MyTaskWithoutReturnValueAsync()
         {
-            await Task.Delay(1).ConfigureAwait(false);
+            await Task.Delay(1);
         }
 
         private static async Task<int> MyTaskWithReturnValueAsync(int aNumber)
         {
-            await Task.Delay(1).ConfigureAwait(false);
+            await Task.Delay(1);
             return aNumber;
         }
 

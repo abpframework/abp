@@ -39,7 +39,8 @@ namespace MyCompany.MyProject
 
 ````C#
 <ItemGroup>
-  <None Remove="MyResources\**\*.*" />
+  <EmbeddedResource Include="MyResources\**\*.*" />
+  <Content Remove="MyResources\**\*.*" />
 </ItemGroup>
 ````
 

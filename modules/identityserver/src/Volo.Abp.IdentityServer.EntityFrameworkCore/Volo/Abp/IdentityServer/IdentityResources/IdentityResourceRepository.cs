@@ -28,7 +28,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                         where scopeNames.Contains(identityResource.Name)
                         select identityResource;
 
-            return await query.ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+            return await query.ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public override IQueryable<IdentityResource> WithDetails()
@@ -43,7 +43,7 @@ namespace Volo.Abp.IdentityServer.IdentityResources
                 .IncludeDetails(includeDetails)
                 .OrderBy(sorting ?? "name desc")
                 .PageBy(skipCount, maxResultCount)
-                .ToListAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .ToListAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<IdentityResource> FindByNameAsync(
@@ -54,12 +54,12 @@ namespace Volo.Abp.IdentityServer.IdentityResources
             return await DbSet
                 .IncludeDetails(includeDetails)
                 .Where(x => x.Name == name)
-                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken)).ConfigureAwait(false);
+                .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
         }
 
         public async Task<bool> CheckNameExistAsync(string name, Guid? expectedId = null, CancellationToken cancellationToken = default)
         {
-            return await DbSet.AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken).ConfigureAwait(false);
+            return await DbSet.AnyAsync(ir => ir.Id != expectedId && ir.Name == name, cancellationToken: cancellationToken);
         }
     }
 }

@@ -6,8 +6,8 @@
     "paths": {
       "@abp/ng.core": ["packages/core/src/public-api.ts"],
       "@abp/ng.core/*": ["packages/core/src/lib/*"],
-      // "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
-      // "@abp/ng.theme.shared/*": ["packages/theme-shared/src/lib/*"],
+      "@abp/ng.theme.shared": ["packages/theme-shared/src/public-api.ts"],
+      "@abp/ng.theme.shared/*": ["packages/theme-shared/src/lib/*"],
       "@abp/ng.theme.basic": ["packages/theme-basic/src/public-api.ts"],
       "@abp/ng.theme.basic/*": ["packages/theme-basic/src/lib/*"],
       "@abp/ng.account": ["packages/account/src/public-api.ts"],

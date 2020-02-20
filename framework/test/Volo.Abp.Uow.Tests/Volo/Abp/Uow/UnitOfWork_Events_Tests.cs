@@ -24,10 +24,15 @@ namespace Volo.Abp.Uow
 
             using (var uow = _unitOfWorkManager.Begin())
             {
-                uow.OnCompleted(async () => completed = true);
+                uow.OnCompleted(() =>
+                {
+                    completed = true; 
+                    return Task.CompletedTask;
+                });
+
                 uow.Disposed += (sender, args) => disposed = true;
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
 
                 completed.ShouldBeTrue();
             }
@@ -48,7 +53,7 @@ namespace Volo.Abp.Uow
                     childUow.OnCompleted(async () => completed = true);
                     uow.Disposed += (sender, args) => disposed = true;
 
-                    await childUow.CompleteAsync().ConfigureAwait(false);
+                    await childUow.CompleteAsync();
 
                     completed.ShouldBeFalse(); //Parent has not been completed yet!
                     disposed.ShouldBeFalse();
@@ -57,7 +62,7 @@ namespace Volo.Abp.Uow
                 completed.ShouldBeFalse(); //Parent has not been completed yet!
                 disposed.ShouldBeFalse();
 
-                await uow.CompleteAsync().ConfigureAwait(false);
+                await uow.CompleteAsync();
 
                 completed.ShouldBeTrue(); //It's completed now!
                 disposed.ShouldBeFalse(); //But not disposed yet!
@@ -124,11 +129,11 @@ namespace Volo.Abp.Uow
                 uow.Failed += (sender, args) => { failed = true; args.IsRolledback.ShouldBeTrue(); };
                 uow.Disposed += (sender, args) => disposed = true;
 
-                await uow.RollbackAsync().ConfigureAwait(false);
+                await uow.RollbackAsync();
 
                 if (callComplete)
                 {
-                    await uow.CompleteAsync().ConfigureAwait(false);
+                    await uow.CompleteAsync();
                 }
             }
 

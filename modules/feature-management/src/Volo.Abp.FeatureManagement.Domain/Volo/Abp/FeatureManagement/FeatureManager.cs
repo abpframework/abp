@@ -82,7 +82,7 @@ namespace Volo.Abp.FeatureManagement
                     var providerValue = await provider.GetOrNullAsync(
                         feature,
                         provider.Name == providerName ? providerKey : null
-                    ).ConfigureAwait(false);
+                    );
 
                     if (providerValue != null)
                     {
@@ -123,7 +123,7 @@ namespace Volo.Abp.FeatureManagement
             
             if (providers.Count > 1 && !forceToSet && value != null)
             {
-                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null).ConfigureAwait(false);
+                var fallbackValue = await GetOrNullInternalAsync(name, providers[1].Name, null);
                 if (fallbackValue == value)
                 {
                     //Clear the value if it's same as it's fallback value
@@ -139,14 +139,14 @@ namespace Volo.Abp.FeatureManagement
             {
                 foreach (var provider in providers)
                 {
-                    await provider.ClearAsync(feature, providerKey).ConfigureAwait(false);
+                    await provider.ClearAsync(feature, providerKey);
                 }
             }
             else
             {
                 foreach (var provider in providers)
                 {
-                    await provider.SetAsync(feature, value, providerKey).ConfigureAwait(false);
+                    await provider.SetAsync(feature, value, providerKey);
                 }
             }
         }
@@ -172,7 +172,7 @@ namespace Volo.Abp.FeatureManagement
                 value = await provider.GetOrNullAsync(
                     feature,
                     provider.Name == providerName ? providerKey : null
-                ).ConfigureAwait(false);
+                );
 
                 if (value != null)
                 {

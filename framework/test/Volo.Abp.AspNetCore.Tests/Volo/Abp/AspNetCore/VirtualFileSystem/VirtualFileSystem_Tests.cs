@@ -11,7 +11,7 @@ namespace Volo.Abp.AspNetCore.VirtualFileSystem
         {
             var result = await GetResponseAsStringAsync(
                 "/SampleFiles/test1.js"
-            ).ConfigureAwait(false);
+            );
 
             result.ShouldBe("test1.js-content");
         }

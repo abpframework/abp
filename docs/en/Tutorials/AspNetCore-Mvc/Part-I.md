@@ -50,6 +50,20 @@ namespace Acme.BookStore
         public DateTime PublishDate { get; set; }
 
         public float Price { get; set; }
+
+        protected Book()
+        {
+
+        }
+
+        public Book(Guid id, string name, BookType type, DateTime publishDate, float price)
+        :base(id)
+        {
+            Name = name;
+            Type = type;
+            PublishDate = publishDate;
+            Price = price;
+        }
     }
 }
 ````
@@ -345,7 +359,7 @@ Open the `Index.cshtml` and change the content as shown below:
 ````
 
 * This code changes the default inheritance of the Razor View Page Model so it **inherits** from the `BookStorePage` class (instead of `PageModel`).  The `BookStorePage` class which comes with the startup template and provides some shared properties/methods used by all pages.
-* Ensure that the `IndexModel` (*Index.cshtml.cs)* has the `Acme.BookStore.Pages.Books` namespace, or update it in the `Index.cshtml`.
+* Ensure that the `IndexModel` (*Index.cshtml.cs)* has the `Acme.BookStore.Web.Pages.Books` namespace, or update it in the `Index.cshtml`.
 
 #### Add Books Page to the Main Menu
 
@@ -422,7 +436,7 @@ Change the `Pages/Books/Index.cshtml` as following:
 ````
 
 * `abp-script` [tag helper](https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/intro) is used to add external **scripts** to the page. It has many additional features compared to standard `script` tag. It handles **minification** and **versioning** for example. See the [bundling & minification document](../../AspNetCore/Bundling-Minification.md) for details.
-* `abp-card` and `abp-table` are **tag helpers** for Twitter Bootstrap's [card component](http://getbootstrap.com/docs/4.1/components/card/). There are many tag helpers in ABP to easily use most of the [bootstrap](https://getbootstrap.com/) components. You can also use regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by help of the intellisense and compile time type checking. See the [tag helpers document](../../AspNetCore/Tag-Helpers.md).
+* `abp-card` and `abp-table` are **tag helpers** for Twitter Bootstrap's [card component](http://getbootstrap.com/docs/4.1/components/card/). There are many tag helpers in ABP to easily use most of the [bootstrap](https://getbootstrap.com/) components. You can also use regular HTML tags instead of these tag helpers, but using tag helpers reduces HTML code and prevents errors by help of the intellisense and compile time type checking. See the [tag helpers document](../../AspNetCore/Tag-Helpers/Index.md).
 * You can **localize** the column names in the localization file as you did for the menu items above.
 
 ##### Add a Script File

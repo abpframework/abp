@@ -10,7 +10,7 @@ namespace SimpleConsoleDemo
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             using (var application = AbpApplicationFactory.Create<MyConsoleModule>(options =>
             {
@@ -41,7 +41,6 @@ namespace SimpleConsoleDemo
                 {
                     writer.Write();
                 }
-
 
                 Console.WriteLine();
                 Console.WriteLine("Press ENTER to exit!");

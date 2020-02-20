@@ -2,26 +2,26 @@
 # yarn lockfile v1
 
 
-"@abp/ng.account.config@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.account.config/-/ng.account.config-1.1.1.tgz#43de54dd12606a6bc10caace9e430bdb136206b6"
-  integrity sha512-d0Gj/BtB/YtsVMsyFJI+vcX+KE2CCKNpUQ6YC2rmIwPwOkbqV7UtbzMhxgHoG4lTTfh1pxclIOL6WFzQInI4kg==
+"@abp/ng.account.config@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.account.config/-/ng.account.config-2.0.1.tgz#7777a09e434d2d592790f8598fd5ec0fbed70161"
+  integrity sha512-qyunC9FzC5cYL7IgExyVNIzvhBjKQN1Lk35uzCPr2vJTddyEUW+4bdFfSxtwg23O1LWAuMeE4sTAg/pv0R7AUQ==
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.account@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-1.1.1.tgz#eddce66856d1133c4d7c04e861be019cfea6b25e"
-  integrity sha512-EUG7Hiv21KuOMmVSCxUBjMOlno4oYIUtrOUMNK/A/y42cr8UwUFmsu7HEx5J30Z0KWBn7w4vWvAy6KenqzMclQ==
+"@abp/ng.account@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.account/-/ng.account-2.0.1.tgz#e1e25224a27472a28ff85337000e301174775191"
+  integrity sha512-bR8xolzq/rtQ+HZnOUDKpR/FT6SSGEFq0r0HMttPG9hiTD1HNthHfx8JaQjPBCAw43WhGIIxLgcRkitu6aXAyA==
   dependencies:
-    "@abp/ng.account.config" "^1.1.1"
-    "@abp/ng.theme.shared" "^1.1.1"
+    "@abp/ng.account.config" "^2.0.1"
+    "@abp/ng.theme.shared" "^2.0.1"
     tslib "^1.9.0"
 
-"@abp/ng.core@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-1.1.1.tgz#a08a06fff8fb58a913b619820120d93fa5120a1b"
-  integrity sha512-oCYQJPmiYr6UjnW6L5Dhd7rl0wvE2ABjWYT70IDLSaFjxHRlQ2exA2kKft4RMkCT0iPNzEfmdHZyqX/8AHCy8Q==
+"@abp/ng.core@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.core/-/ng.core-2.0.1.tgz#11471a2bc96f03c97c5bcea6d0c9fd81284a103a"
+  integrity sha512-fa2QK7x0VUovxX5JiXZMoBKuE23xjsW6Pp1+ZuFdKxRG8eP5yoAmkLuNKDEhzy9ancDac8wLUetvnUx/QZKCXQ==
   dependencies:
     "@ngxs/router-plugin" "^3.5.1"
     "@ngxs/storage-plugin" "^3.5.1"
@@ -32,86 +32,86 @@
     snq "^1.0.3"
     tslib "^1.9.0"
 
-"@abp/ng.feature-management@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.feature-management/-/ng.feature-management-1.1.1.tgz#d431a62fd677229421137c83e3ce1beb44f9d92c"
-  integrity sha512-Pji1vp9jWQacrRawBFRh/ao1zXE3ktbGmj1X+nCQ3o6Q7EnNattC7/KC6osqvonpfFDxpjEZP4cMyb3H1wHRIA==
+"@abp/ng.feature-management@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.feature-management/-/ng.feature-management-2.0.1.tgz#884451d35f642f585eb9bdf7361c859e670f030d"
+  integrity sha512-11uoLEnTj2shFz3bFTOHsCKixWDQiuaJbsT66ui0Rs9bWUTwMQUu1s4yzAZPHi/ooAFJUTX+H52rWtUnHwpK2A==
   dependencies:
-    "@abp/ng.theme.shared" "^1.1.1"
+    "@abp/ng.theme.shared" "^2.0.1"
     tslib "^1.9.0"
 
-"@abp/ng.identity.config@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.identity.config/-/ng.identity.config-1.1.1.tgz#da264272ecebfbce99617443048951de317c23f9"
-  integrity sha512-d5BJBwfHsBoeEYF6dCHeoNVX/nRy1T7HOF6sjkFQN0Jihhk/XOv/r6CpgxnUKasXF0R2wadHrZZZOme6UL7AIw==
-  dependencies:
-    tslib "^1.9.0"
-
-"@abp/ng.identity@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.identity/-/ng.identity-1.1.1.tgz#0776db2a4efe96953a7d46ea697689686c75fbf2"
-  integrity sha512-Gzz+/kgsDhTTrEMiNqDLSJvjTgk0ATy6Ud7uswoA3RCDlfcksbS5J7kHEsc6TRh6bZ1bC368Zj1F/XS7QAj/iA==
-  dependencies:
-    "@abp/ng.identity.config" "^1.1.1"
-    "@abp/ng.permission-management" "^1.1.1"
-    "@abp/ng.theme.shared" "^1.1.1"
-    tslib "^1.9.0"
-
-"@abp/ng.permission-management@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.permission-management/-/ng.permission-management-1.1.1.tgz#f0184639f9bf37a24c7dc3b18953bac0a521f926"
-  integrity sha512-3Omhdf/VrYjd4RA9R74ttFP4T+J4Kit8A/PjJIaiwV5j8DJ0WQeBek82P3Q3+EfhuS2ehWuSuz/DYmkcxkt1dw==
-  dependencies:
-    "@abp/ng.theme.shared" "^1.1.1"
-    tslib "^1.9.0"
-
-"@abp/ng.setting-management.config@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.setting-management.config/-/ng.setting-management.config-1.1.1.tgz#6e19cb5f7894d2b6c5193f2e72abdac5be076356"
-  integrity sha512-QvWo8r+dL+IcQW0nRC7sPNhMCScSHcYPqJotUY1QCanEpXU56JIfPYkOKOtt3cJTA9U2jE2hBmv7fi8yTEy6Pg==
+"@abp/ng.identity.config@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.identity.config/-/ng.identity.config-2.0.1.tgz#3f3b2c4f70fecb2e02ac35bdb1546f51e54b87fd"
+  integrity sha512-lNtrKq6+QGYokN59QjteupbMN/LjtwAQlnZ5J75LHK8YoEMMzyVpK2GVKdgO3xrgcvfDSpz+OVjePNxyykbejA==
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.setting-management@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.setting-management/-/ng.setting-management-1.1.1.tgz#38cfd7c8b6cc0e29bd3a655e1aecff7e35aca10a"
-  integrity sha512-kwW9xC7xERo5ZDqGC4TaEXZKiHYZ3lIwGn8wVktX53ulGXrKT9N7BSVP8bBMJnJlIMNg7MpxjOYAR90gXrXdZw==
+"@abp/ng.identity@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.identity/-/ng.identity-2.0.1.tgz#1168ef8186614a229d6e5ada2afecd8885a074af"
+  integrity sha512-+B2I/xsl3qOb56BZn9gZL8icu9/YS8i9CEYJmBvjxmtUzvUV6GfNhDf83BfThJO7wZn9d+GEbHY544kjKl+kwg==
   dependencies:
-    "@abp/ng.setting-management.config" "^1.1.1"
-    "@abp/ng.theme.shared" "^1.1.1"
+    "@abp/ng.identity.config" "^2.0.1"
+    "@abp/ng.permission-management" "^2.0.1"
+    "@abp/ng.theme.shared" "^2.0.1"
     tslib "^1.9.0"
 
-"@abp/ng.tenant-management.config@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management.config/-/ng.tenant-management.config-1.1.1.tgz#1aee4705e6ec06954d5d04ad78bb02c636dc36ae"
-  integrity sha512-KoYPIqsm7a/VrMZumfFKBKYwzZm1zzJeyoWpf84PZ2gvhkuh45gYwvXzMHzQu/HQ6FpJ9+NL7ro/uee1ka+DzQ==
+"@abp/ng.permission-management@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.permission-management/-/ng.permission-management-2.0.1.tgz#9e0abcc014db8bae08b8eb1380fdfbf05e988971"
+  integrity sha512-eKKvFtix8qoA+Il7o+39o9lMfQcSlcLme+H/Ry5crr865PcxJQ9j0nwoRBfkNRpUb8XbjyDkS3Paink7mSBZVQ==
+  dependencies:
+    "@abp/ng.theme.shared" "^2.0.1"
+    tslib "^1.9.0"
+
+"@abp/ng.setting-management.config@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.setting-management.config/-/ng.setting-management.config-2.0.1.tgz#436e6d9ba20f93a7707548057a21cde30cfcd612"
+  integrity sha512-pizWCfGOCNp+zP3Pc7zPQ3NKHG9lZJTVeE+RxHXQ+TTlg9xKSlojvQnzIwTKfQPQv0lREalDimNA2PXWvzsTAQ==
   dependencies:
     tslib "^1.9.0"
 
-"@abp/ng.tenant-management@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management/-/ng.tenant-management-1.1.1.tgz#b08a9498957f8dd54a2089d7d4cffafb48753508"
-  integrity sha512-hjs8U+lRA0y2yVa1tVZgm02kxyQdsmyMtzG8ZB76MFJThmMtf3ogrLHRGZ0etgQHe0bmMjkpdC84wS1VtyK5VA==
+"@abp/ng.setting-management@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.setting-management/-/ng.setting-management-2.0.1.tgz#7fc35fcae6db50ae6c9182feeb066dd91f26dd68"
+  integrity sha512-CiMzvhhimKn0B6jCcejUW5Io9rm7K2H6+gyIi6G3xrewMqVfyROB6bLebtX7KKy5291qzhqZH0MTQxZQnAMxUQ==
   dependencies:
-    "@abp/ng.feature-management" "^1.1.1"
-    "@abp/ng.tenant-management.config" "^1.1.1"
-    "@abp/ng.theme.shared" "^1.1.1"
+    "@abp/ng.setting-management.config" "^2.0.1"
+    "@abp/ng.theme.shared" "^2.0.1"
     tslib "^1.9.0"
 
-"@abp/ng.theme.basic@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.theme.basic/-/ng.theme.basic-1.1.1.tgz#ee3c3a35f4254a0f727b11bb343ceab3aa975773"
-  integrity sha512-1z13+H2UhIGDsbsd5uyhuBi3v4lxim1yIECZ3HxFJxIKthHO1wlVb8ka8WrIrxj7JBOl6f9srMCzuCNm2rMGLg==
+"@abp/ng.tenant-management.config@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management.config/-/ng.tenant-management.config-2.0.1.tgz#f65a0641dbe57f0128c220fa559c75ebee8e0531"
+  integrity sha512-EAk1+GEGFB0Uys9FFlrBo1frr8mFp32ogOviw4fCGl0rNZpI+uh7L7q5OQiP2EvK5CDu1OQd9wZm9IVbIWHpHw==
   dependencies:
-    "@abp/ng.theme.shared" "^1.1.1"
     tslib "^1.9.0"
 
-"@abp/ng.theme.shared@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@abp/ng.theme.shared/-/ng.theme.shared-1.1.1.tgz#436b9c909a25cc5722c2a639399d05668a241262"
-  integrity sha512-eQDrznFKwD63cdO/HPSyGMwIFPmGhv4MAEgITyZkUY76g+owYa/tK+GEjpSqsvQsL//qrHqcG+nwuK9RrCBy+A==
+"@abp/ng.tenant-management@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.tenant-management/-/ng.tenant-management-2.0.1.tgz#182addc7bd800841681e75260173b90ccd88ba07"
+  integrity sha512-zosVzejfuUG/ZLralkZv860AHxVJ9ScED//ulst8IJG4QWg55pOTgMtHn27HkIb/z45QVWeVAbEENG2SS+ezkQ==
   dependencies:
-    "@abp/ng.core" "^1.1.1"
+    "@abp/ng.feature-management" "^2.0.1"
+    "@abp/ng.tenant-management.config" "^2.0.1"
+    "@abp/ng.theme.shared" "^2.0.1"
+    tslib "^1.9.0"
+
+"@abp/ng.theme.basic@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.theme.basic/-/ng.theme.basic-2.0.1.tgz#af7047dba43b2701ea1d4b9cec8c2bfd52227b1f"
+  integrity sha512-ExwgzHoyXgtWNhzcs/c2tmZJrJFZQgC0iDC5AWDmOQDf63U2aDujMHiTHRD4lmnB5O5odE9/aN631QnHXj987w==
+  dependencies:
+    "@abp/ng.theme.shared" "^2.0.1"
+    tslib "^1.9.0"
+
+"@abp/ng.theme.shared@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@abp/ng.theme.shared/-/ng.theme.shared-2.0.1.tgz#16dd66f5b54d9b528a22bc48f209b413dc33f52d"
+  integrity sha512-Yle+dGpYNGMcTEc6/+P1tgKLSgnCkLvG9BfgNdOSFq3vBp5AHj2ip2w2+uX6Svo9Fll8Tth9P6BpRpwvQ3CqwQ==
+  dependencies:
+    "@abp/ng.core" "^2.0.1"
     "@angular/cdk" "^8.2.3"
     "@fortawesome/fontawesome-free" "^5.11.2"
     "@ng-bootstrap/ng-bootstrap" "^5.1.4"
@@ -119,7 +119,6 @@
     bootstrap "^4.3.1"
     chart.js "^2.9.2"
     font-awesome "^4.7.0"
-    ngx-perfect-scrollbar "^8.0.0"
     primeicons "^2.0.0"
     primeng "^8.1.1"
     tslib "^1.9.0"
@@ -8488,14 +8487,6 @@ ng-packagr@^5.7.1:
     terser "^4.1.2"
     update-notifier "^3.0.0"
 
-ngx-perfect-scrollbar@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/ngx-perfect-scrollbar/-/ngx-perfect-scrollbar-8.0.0.tgz#19c1bbf9b1a36d89b00a68f7834e39427d29182f"
-  integrity sha512-IXoFbULQnxyJj0gdCcKCLE/6OW9HCP9KARzMCKS1kNxTuzG4DghjM2AaCBRM5/sFwdbn6rqOKMCINtHA8W8YCA==
-  dependencies:
-    perfect-scrollbar "^1.4.0"
-    resize-observer-polyfill "^1.5.0"
-
 ngxs-reset-plugin@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/ngxs-reset-plugin/-/ngxs-reset-plugin-1.2.0.tgz#38dd8363f45cad7410e00ce346a98001241944f8"
@@ -9409,11 +9400,6 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-perfect-scrollbar@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-1.4.0.tgz#5d014ef9775e1f43058a1dbae9ed1daf0e7091f1"
-  integrity sha512-/2Sk/khljhdrsamjJYS5NjrH+GKEHEwh7zFSiYyxROyYKagkE4kSn2zDQDRTOMo8mpT2jikxx6yI1dG7lNP/hw==
-
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -10250,11 +10236,6 @@ requires-port@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/requires-port/-/requires-port-1.0.0.tgz#925d2601d39ac485e091cf0da5c6e694dc3dcaff"
   integrity sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8=
-
-resize-observer-polyfill@^1.5.0:
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
-  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
 
 resolve-cwd@^2.0.0:
   version "2.0.0"

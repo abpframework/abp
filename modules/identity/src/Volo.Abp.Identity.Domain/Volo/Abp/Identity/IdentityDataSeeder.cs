@@ -47,7 +47,7 @@ namespace Volo.Abp.Identity
             const string adminUserName = "admin";
             var adminUser = await _userRepository.FindByNormalizedUserNameAsync(
                 _lookupNormalizer.NormalizeName(adminUserName)
-            ).ConfigureAwait(false);
+            );
 
             if (adminUser != null)
             {
@@ -64,12 +64,12 @@ namespace Volo.Abp.Identity
                 Name = adminUserName
             };
 
-            (await _userManager.CreateAsync(adminUser, adminPassword).ConfigureAwait(false)).CheckErrors();
+            (await _userManager.CreateAsync(adminUser, adminPassword)).CheckErrors();
             result.CreatedAdminUser = true;
 
             //"admin" role
             const string adminRoleName = "admin";
-            var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName(adminRoleName)).ConfigureAwait(false);
+            var adminRole = await _roleRepository.FindByNormalizedNameAsync(_lookupNormalizer.NormalizeName(adminRoleName));
             if (adminRole == null)
             {
                 adminRole = new IdentityRole(
@@ -82,11 +82,11 @@ namespace Volo.Abp.Identity
                     IsPublic = true
                 };
 
-                (await _roleManager.CreateAsync(adminRole).ConfigureAwait(false)).CheckErrors();
+                (await _roleManager.CreateAsync(adminRole)).CheckErrors();
                 result.CreatedAdminRole = true;
             }
 
-            (await _userManager.AddToRoleAsync(adminUser, adminRoleName).ConfigureAwait(false)).CheckErrors();
+            (await _userManager.AddToRoleAsync(adminUser, adminRoleName)).CheckErrors();
 
             return result;
         }
