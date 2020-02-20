@@ -11387,10 +11387,10 @@ symbol-tree@^3.2.2:
   resolved "https://registry.yarnpkg.com/symbol-tree/-/symbol-tree-3.2.4.tgz#430637d248ba77e078883951fb9aa0eed7c63fa2"
   integrity sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
 
-symlink-manager@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/symlink-manager/-/symlink-manager-1.4.1.tgz#f6e35eb27de9547b36b385192c49a185ee7312a0"
-  integrity sha512-fH0GPsUvdErpg42d8fULAYjR0FE8naC3Ib5OqB9CuUK4S3U80yuPbbZkV9odxwoKYYenjGJIK0Z5qlXApiVPPg==
+symlink-manager@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/symlink-manager/-/symlink-manager-1.4.2.tgz#8ac78ed829637e435cfc61dcd181b26c3ddb61b1"
+  integrity sha512-FObjOy2UqeX84MqT0CtuincfIDwieYF85TdyffJhALhpvSvoSTdcWE7YCf1lPuJfrO3ezft/dEuvqy0/BGZkFg==
   dependencies:
     arg "^4.1.0"
     chokidar "^3.0.2"
