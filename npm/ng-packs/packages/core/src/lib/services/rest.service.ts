@@ -1,5 +1,5 @@
 import { HttpClient, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable, throwError } from 'rxjs';
 import { catchError, take, tap } from 'rxjs/operators';
@@ -11,7 +11,11 @@ import { ConfigState } from '../states/config.state';
   providedIn: 'root',
 })
 export class RestService {
-  constructor(private http: HttpClient, private store: Store) {}
+  constructor(private injector: Injector, private http: HttpClient) {}
+
+  private get store(): Store {
+    return this.injector.get(Store);
+  }
 
   handleError(err: any): Observable<any> {
     this.store.dispatch(new RestOccurError(err));

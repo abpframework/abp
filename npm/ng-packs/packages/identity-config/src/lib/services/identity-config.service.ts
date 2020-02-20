@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class IdentityConfigService {
-  constructor(private router: Router, private restService: RestService) {
+  constructor(private restService: RestService) {
     addAbpRoutes([
       {
         name: 'AbpUiNavigation::Menu:Administration',
