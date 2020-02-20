@@ -70,7 +70,7 @@ export class TableComponent {
   @Output()
   readonly pageChange = new EventEmitter<number>();
 
-  @ViewChild('wrapper', { read: ElementRef, static: false })
+  @ViewChild('wrapper', { read: ElementRef })
   wrapperRef: ElementRef<HTMLDivElement>;
 
   @Input()

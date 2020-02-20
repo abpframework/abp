@@ -99,7 +99,7 @@ export function storageFactory(): OAuthStorage {
   ],
 })
 export class CoreModule {
-  static forRoot(options = {} as ABP.Root): ModuleWithProviders {
+  static forRoot(options = {} as ABP.Root): ModuleWithProviders<CoreModule> {
     return {
       ngModule: CoreModule,
       providers: [

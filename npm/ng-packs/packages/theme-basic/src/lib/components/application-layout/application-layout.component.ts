@@ -50,10 +50,10 @@ export class ApplicationLayoutComponent implements AfterViewInit, OnDestroy {
   @Select(LayoutState.getNavigationElements)
   navElements$: Observable<Layout.NavigationElement[]>;
 
-  @ViewChild('currentUser', { static: false, read: TemplateRef })
+  @ViewChild('currentUser', { read: TemplateRef })
   currentUserRef: TemplateRef<any>;
 
-  @ViewChild('language', { static: false, read: TemplateRef })
+  @ViewChild('language', { read: TemplateRef })
   languageRef: TemplateRef<any>;
 
   isDropdownChildDynamic: boolean;

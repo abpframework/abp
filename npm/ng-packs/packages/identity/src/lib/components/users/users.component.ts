@@ -36,7 +36,7 @@ export class UsersComponent implements OnInit {
   @Select(IdentityState.getUsersTotalCount)
   totalCount$: Observable<number>;
 
-  @ViewChild('modalContent', { static: false })
+  @ViewChild('modalContent')
   modalContent: TemplateRef<any>;
 
   form: FormGroup;

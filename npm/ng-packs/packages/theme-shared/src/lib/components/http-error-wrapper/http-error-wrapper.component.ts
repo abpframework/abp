@@ -42,7 +42,7 @@ export class HttpErrorWrapperComponent implements AfterViewInit, OnDestroy, OnIn
 
   backgroundColor: string;
 
-  @ViewChild('container', { static: false })
+  @ViewChild('container')
   containerRef: ElementRef<HTMLDivElement>;
 
   get statusText(): string {

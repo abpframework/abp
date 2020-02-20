@@ -46,7 +46,7 @@ export class RolesComponent implements OnInit {
 
   sortKey = '';
 
-  @ViewChild('formRef', { static: false, read: ElementRef })
+  @ViewChild('formRef', { read: ElementRef })
   formRef: ElementRef<HTMLFormElement>;
 
   onVisiblePermissionChange = event => {

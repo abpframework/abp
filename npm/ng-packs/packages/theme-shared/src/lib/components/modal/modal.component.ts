@@ -67,19 +67,19 @@ export class ModalComponent implements OnDestroy {
 
   @Input() size: ModalSize = 'lg';
 
-  @ContentChild(ButtonComponent, { static: false, read: ButtonComponent })
+  @ContentChild(ButtonComponent, { read: ButtonComponent })
   abpSubmit: ButtonComponent;
 
-  @ContentChild('abpHeader', { static: false }) abpHeader: TemplateRef<any>;
+  @ContentChild('abpHeader') abpHeader: TemplateRef<any>;
 
-  @ContentChild('abpBody', { static: false }) abpBody: TemplateRef<any>;
+  @ContentChild('abpBody') abpBody: TemplateRef<any>;
 
-  @ContentChild('abpFooter', { static: false }) abpFooter: TemplateRef<any>;
+  @ContentChild('abpFooter') abpFooter: TemplateRef<any>;
 
-  @ContentChild('abpClose', { static: false, read: ElementRef })
+  @ContentChild('abpClose', { read: ElementRef })
   abpClose: ElementRef<any>;
 
-  @ViewChild('abpModalContent', { static: false }) modalContent: ElementRef;
+  @ViewChild('abpModalContent') modalContent: ElementRef;
 
   @ViewChildren('abp-button') abpButtons;
 
