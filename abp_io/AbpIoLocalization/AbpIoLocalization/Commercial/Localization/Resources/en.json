@@ -6,6 +6,7 @@
     "Volo.AbpIo.Commercial:010003": "You are not owner of this organization!",
     "OrganizationNotFoundMessage": "No organization found!",
     "DeveloperCount": "Developer count",
+    "QuestionCount": "Question count",
     "Owners": "Owners",
     "AddMember": "Add member",
     "AddOwner": "Add owner",

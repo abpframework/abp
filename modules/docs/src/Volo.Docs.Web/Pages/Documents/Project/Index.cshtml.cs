@@ -33,6 +33,8 @@ namespace Volo.Docs.Pages.Documents.Project
         [BindProperty(SupportsGet = true)]
         public string LanguageCode { get; set; }
 
+        public bool DocumentFound { get; set; } = true;
+
         public string DefaultLanguageCode { get; set; }
 
         public ProjectDto Project { get; set; }
@@ -86,6 +88,21 @@ namespace Volo.Docs.Pages.Documents.Project
         }
 
         public async Task<IActionResult> OnGetAsync()
+        {
+            try
+            {
+                return await SetPageAsync();
+            }
+            catch (DocumentNotFoundException exception)
+            {
+                Logger.LogWarning(exception.Message);
+
+                DocumentFound = false;
+                return Page();
+            }
+        }
+
+        private async Task<IActionResult> SetPageAsync()
         {
             DocumentsUrlPrefix = _uiOptions.RoutePrefix;
             ShowProjectsCombobox = _uiOptions.ShowProjectsCombobox;
