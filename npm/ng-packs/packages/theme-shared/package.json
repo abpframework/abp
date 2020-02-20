@@ -9,6 +9,7 @@
   "dependencies": {
     "@abp/ng.core": "^2.1.0",
     "@angular/cdk": "^9.0.1",
+    "@angular/localize": "^9.0.2",
     "@fortawesome/fontawesome-free": "^5.11.2",
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "@ngx-validate/core": "^0.0.7",
