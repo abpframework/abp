@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/permission-management",
+  "dest": "../../out-tsc/permission-management",
   "lib": {
     "entryFile": "src/public-api.ts"
   },

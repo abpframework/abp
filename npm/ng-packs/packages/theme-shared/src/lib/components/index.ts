@@ -10,3 +10,4 @@ export * from './sort-order-icon/sort-order-icon.component';
 export * from './table-empty-message/table-empty-message.component';
 export * from './table/table.component';
 export * from './toast/toast.component';
+export * from './toast-container/toast-container.component';
