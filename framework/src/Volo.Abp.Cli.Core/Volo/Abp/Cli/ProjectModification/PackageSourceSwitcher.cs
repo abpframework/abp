@@ -7,21 +7,31 @@ using System.Xml;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.Cli.Args;
+using Volo.Abp.Cli.NuGet;
 using Volo.Abp.DependencyInjection;
 
 namespace Volo.Abp.Cli.ProjectModification
 {
     public class PackageSourceSwitcher : ITransientDependency
     {
+        private readonly MyGetPackageListFinder _myGetPackageListFinder;
+        private readonly NuGetService _nuGetService;
+        private readonly PackageSourceAdder _packageSourceAdder;
+
         public ILogger<PackageSourceSwitcher> Logger { get; set; }
 
-        public PackageSourceSwitcher()
+        public PackageSourceSwitcher(MyGetPackageListFinder myGetPackageListFinder, NuGetService nuGetService, PackageSourceAdder packageSourceAdder)
         {
+            _myGetPackageListFinder = myGetPackageListFinder;
+            _nuGetService = nuGetService;
+            _packageSourceAdder = packageSourceAdder;
             Logger = NullLogger<PackageSourceSwitcher>.Instance;
         }
 
         public async Task SwitchToPreview(CommandLineArgs commandLineArgs)
         {
+            _packageSourceAdder.Add("ABP Nightly", "https://www.myget.org/F/abp-nightly/api/v3/index.json");
+
             await Switch(commandLineArgs, SwitchTarget.Preview);
         }
 
@@ -33,6 +43,7 @@ namespace Volo.Abp.Cli.ProjectModification
         private async Task Switch(CommandLineArgs commandLineArgs, SwitchTarget target)
         {
             var solutionPath = GetSolutionPath(commandLineArgs);
+            var latestStableAbpVersion = target == SwitchTarget.Stable ? (await _nuGetService.GetLatestVersionOrNullAsync("Volo.Abp")).ToString() : null;
 
             Logger.LogInformation($"Packages on solution \"{Path.GetFileName(solutionPath)}\" are being switched to {target}.");
             Logger.LogInformation("");
@@ -49,17 +60,16 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 doc.Load(GenerateStreamFromString(content));
 
-                doc = SwitchPackagesInDocument(doc, content, target);
+                doc = await SwitchPackagesInDocument(doc, content, target, latestStableAbpVersion);
 
                 File.WriteAllText(projectFile, doc.OuterXml);
             }
-
 
             Logger.LogInformation("");
             Logger.LogInformation($"Packages on solution \"{Path.GetFileName(solutionPath)}\" are switched to {target}.");
         }
 
-        private XmlDocument SwitchPackagesInDocument(XmlDocument doc, string content, SwitchTarget target)
+        private async Task<XmlDocument> SwitchPackagesInDocument(XmlDocument doc, string content, SwitchTarget target, string latestStableAbpVersion = null)
         {
             Check.NotNull(content, nameof(content));
 
@@ -76,33 +86,27 @@ namespace Volo.Abp.Cli.ProjectModification
 
                 var version = node.Attributes["Version"].Value;
 
-                XmlNode newNode = GetNewReferenceNode(doc, packageName, version, target);
+                XmlNode newNode = null;
 
-                node.ParentNode.ReplaceChild(newNode, node);
+                if (target == SwitchTarget.Stable)
+                {
+                    newNode = GetNewStableReferenceNode(doc, packageName, version, latestStableAbpVersion);
+                }
+                else if (target == SwitchTarget.Preview)
+                {
+                    var packageList = (await _myGetPackageListFinder.GetPackages()).Packages;
+                    newNode = GetNewPreviewReferenceNode(doc, packageName, version, packageList);
+                }
+
+                node.ParentNode?.ReplaceChild(newNode, node);
             }
 
             return doc;
         }
 
-        private  XmlElement GetNewReferenceNode(XmlDocument doc, string packageName, string version, SwitchTarget target)
+        private XmlElement GetNewStableReferenceNode(XmlDocument doc, string packageName, string version, string newVersion)
         {
             var newNode = doc.CreateElement("PackageReference");
-            var newVersion = "";
-
-            if (target == SwitchTarget.Stable)
-            {
-                var versonSplitted = version.Split("-");
-
-                newVersion = versonSplitted.Length >= 2 ?
-                    version.Split("-")[0] : version;
-            }
-            if (target == SwitchTarget.Preview)
-            {
-                var versonSplitted = version.Split("-");
-
-                newVersion = versonSplitted.Length < 2 ?
-                    version + $"-preview{GetFormattedDate()}" : version;
-            }
 
             var includeAttr = doc.CreateAttribute("Include");
             includeAttr.Value = packageName;
@@ -114,16 +118,20 @@ namespace Volo.Abp.Cli.ProjectModification
             return newNode;
         }
 
-        private string GetFormattedDate()
+        private XmlElement GetNewPreviewReferenceNode(XmlDocument doc, string packageName, string version, List<MyGetPackage> packageList)
         {
-            var formattedDate = "";
-            var today = DateTime.Now;
+            var newVersion = packageList.FirstOrDefault(p => p.Id == packageName)?.Versions.LastOrDefault() ?? version;
 
-            formattedDate += today.Year;
-            formattedDate += (today.Month < 10 ? "0" + today.Month : today.Month.ToString());
-            formattedDate += (today.Day < 10 ? "0" + today.Day : today.Day.ToString());
+            var newNode = doc.CreateElement("PackageReference");
 
-            return formattedDate;
+            var includeAttr = doc.CreateAttribute("Include");
+            includeAttr.Value = packageName;
+            newNode.Attributes.Append(includeAttr);
+
+            var versionAttr = doc.CreateAttribute("Version");
+            versionAttr.Value = newVersion;
+            newNode.Attributes.Append(versionAttr);
+            return newNode;
         }
 
         private List<string> GetCsprojFiles(string slnPath)
