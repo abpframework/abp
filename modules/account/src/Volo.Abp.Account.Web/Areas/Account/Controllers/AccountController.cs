@@ -145,7 +145,7 @@ namespace Volo.Abp.Account.Web.Areas.Account.Controllers
 
         private async Task CheckLocalLoginAsync()
         {
-            if (!await _settingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin).ConfigureAwait(false))
+            if (!await _settingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
             {
                 throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
             }
