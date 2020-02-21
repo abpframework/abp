@@ -1,5 +1,13 @@
-import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { takeUntilDestroy } from '@ngx-validate/core';
+import {
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
+import { takeUntilDestroy } from '../utils/rxjs-utils';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
@@ -16,10 +24,7 @@ export class InputEventDebounceDirective implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     fromEvent(this.el.nativeElement, 'input')
-      .pipe(
-        debounceTime(this.debounce),
-        takeUntilDestroy(this),
-      )
+      .pipe(debounceTime(this.debounce), takeUntilDestroy(this))
       .subscribe((event: Event) => {
         this.debounceEvent.emit(event);
       });
