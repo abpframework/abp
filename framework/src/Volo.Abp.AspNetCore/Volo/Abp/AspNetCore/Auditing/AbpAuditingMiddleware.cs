@@ -65,13 +65,8 @@ namespace Volo.Abp.AspNetCore.Auditing
             }
 
             var endpoint = httpContext.GetEndpoint();
-            if (endpoint == null)
-            {
-                return false;
-            }
-
-            var actionDescriptor = endpoint.Metadata.GetMetadata<ActionDescriptor>();
-            if (actionDescriptor != null && !(actionDescriptor is ControllerActionDescriptor))
+            var actionDescriptor = endpoint?.Metadata.GetMetadata<ActionDescriptor>();
+            if (!(actionDescriptor is ControllerActionDescriptor))
             {
                 return false;
             }
