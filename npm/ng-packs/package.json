@@ -51,7 +51,7 @@
     "@angular/platform-browser-dynamic": "~9.0.2",
     "@angular/router": "~9.0.2",
     "@fortawesome/fontawesome-free": "^5.11.2",
-    "@ng-bootstrap/ng-bootstrap": "^5.1.4",
+    "@ng-bootstrap/ng-bootstrap": "^6.0.0",
     "@ngneat/spectator": "^4.5.0",
     "@ngx-validate/core": "^0.0.7",
     "@ngxs/devtools-plugin": "^3.6.2",

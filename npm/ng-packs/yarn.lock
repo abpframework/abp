@@ -2235,6 +2235,11 @@
   dependencies:
     tslib "^1.9.0"
 
+"@ng-bootstrap/ng-bootstrap@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-6.0.0.tgz#03b80acd711dd38a653b34339224d5063c50bd62"
+  integrity sha512-ho0Ssw+kwpGzc+Rvtu2pRSrcbduECMf9+uekhOMB1nzhUfF2vJQnTDpPfHZQgU/ukTMEJWvby5vcXJoPtHgE+w==
+
 "@ngneat/spectator@^4.5.0":
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/@ngneat/spectator/-/spectator-4.8.0.tgz#3dfb2fe40195a8af35983c76ae4db255b04f573c"
