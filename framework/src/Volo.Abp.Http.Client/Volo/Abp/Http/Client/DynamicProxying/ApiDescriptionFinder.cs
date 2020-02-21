@@ -18,17 +18,21 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
         protected IApiDescriptionCache Cache { get; }
 
+        protected IParameterTypeComparer ParameterTypeComparer { get; }
+
         private static readonly JsonSerializerSettings SharedJsonSerializerSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
         public ApiDescriptionFinder(
-            IApiDescriptionCache cache, 
-            IDynamicProxyHttpClientFactory httpClientFactory)
+            IApiDescriptionCache cache,
+            IDynamicProxyHttpClientFactory httpClientFactory,
+            IParameterTypeComparer parameterTypeComparer)
         {
             Cache = cache;
             HttpClientFactory = httpClientFactory;
+            ParameterTypeComparer = parameterTypeComparer;
             CancellationTokenProvider = NullCancellationTokenProvider.Instance;
         }
 
@@ -57,7 +61,7 @@ namespace Volo.Abp.Http.Client.DynamicProxying
 
                             for (int i = 0; i < methodParameters.Length; i++)
                             {
-                                if (action.ParametersOnMethod[i].TypeAsString != methodParameters[i].ParameterType.GetFullNameWithAssemblyName())
+                                if (!ParameterTypeComparer.TypeMatches(action.ParametersOnMethod[i], methodParameters[i]))
                                 {
                                     found = false;
                                     break;
