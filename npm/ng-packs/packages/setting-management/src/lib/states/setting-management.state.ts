@@ -1,11 +1,13 @@
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { SetSelectedSettingTab } from '../actions/setting-management.actions';
 import { SettingManagement } from '../models/setting-management';
+import { Injectable } from '@angular/core';
 
 @State<SettingManagement.State>({
   name: 'SettingManagementState',
   defaults: { selectedTab: {} } as SettingManagement.State,
 })
+@Injectable()
 export class SettingManagementState {
   @Selector()
   static getSelectedTab({ selectedTab }: SettingManagement.State) {

@@ -3,11 +3,13 @@ import { GetPermissions, UpdatePermissions } from '../actions/permission-managem
 import { PermissionManagement } from '../models/permission-management';
 import { PermissionManagementService } from '../services/permission-management.service';
 import { tap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 
 @State<PermissionManagement.State>({
   name: 'PermissionManagementState',
   defaults: { permissionRes: {} } as PermissionManagement.State,
 })
+@Injectable()
 export class PermissionManagementState {
   @Selector()
   static getPermissionGroups({ permissionRes }: PermissionManagement.State) {
