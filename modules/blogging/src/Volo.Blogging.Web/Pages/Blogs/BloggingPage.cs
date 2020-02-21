@@ -33,7 +33,7 @@ namespace Volo.Blogging.Pages.Blog
         public string GetShortContent(string content) //TODO: This should be moved to its own place!
         {
             var html = RenderMarkdownToString(content);
-            var plainText = Regex.Replace(html, "/<[^>]*>/g", "");
+            var plainText = Regex.Replace(html, "<[^>]*>", "");
 
             if (string.IsNullOrWhiteSpace(plainText))
             {
